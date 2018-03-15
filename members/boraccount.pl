@@ -29,7 +29,6 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
@@ -77,14 +76,6 @@ my @accountlines = Koha::Account::Lines->search(
 my $totalcredit;
 if($total <= 0){
         $totalcredit = 1;
-}
-
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
 }
 
 $template->param(

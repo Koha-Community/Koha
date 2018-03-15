@@ -68,13 +68,13 @@
         [% END %]
     [% END %]
 
-    [% IF ( ExtendedPatronAttributes ) %][% FOREACH extendedattribute IN extendedattributes %]
-        [% IF ( extendedattribute.display_checkout ) %]
-            [% IF ( extendedattribute.value ) %]
-                <li class="patronattribute"><span class="patronattributelabel">[% extendedattribute.description | html %]</span> : [% IF ( extendedattribute.value_description ) %][% extendedattribute.value_description | html %][% ELSE %][% extendedattribute.value | html %][% END %]</li>
+    [% IF Koha.Preference('ExtendedPatronAttributes') %]
+        [% FOREACH extendedattribute IN patron.attributes %]
+            [% IF ( extendedattribute.display_checkout ) %]
+                <li class="patronattribute"><span class="patronattributelabel">[% extendedattribute.type_description | html %]</span> : [% IF ( extendedattribute.value_description ) %][% extendedattribute.value_description | html %][% ELSE %][% extendedattribute.attribute | html %][% END %]</li>
             [% END %]
         [% END %]
-    [% END %][% END %]
+    [% END %]
     <li class="patroncategory">Category: [% patron.category.description | html %] ([% patron.categorycode | html %])</li>
     <li class="patronlibrary">Home library: [% Branches.GetName( patron.branchcode ) | html %]</li>
     <li class="patronborrowernumber">Borrowernumber: [% patron.borrowernumber | html %]</li>

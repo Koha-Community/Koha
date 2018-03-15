@@ -43,7 +43,6 @@ use C4::Reserves;
 use Koha::Holds;
 use C4::Context;
 use CGI::Session;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 use Koha::Patrons;
@@ -552,13 +551,6 @@ if ( Koha::BiblioFrameworks->find('FA') ) {
     $fast_cataloging = 1 
 }
 
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
 my $view = $batch
     ?'batch_checkout_view'
     : 'circview';

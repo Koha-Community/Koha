@@ -31,7 +31,7 @@ use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
 use C4::Items;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Patrons;
 
 use Koha::Items;
 use Koha::Patrons;
@@ -100,15 +100,6 @@ if ($add){
     print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
 
 } else {
-
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $attributes = GetBorrowerAttributes($borrowernumber);
-        $template->param(
-            ExtendedPatronAttributes => 1,
-            extendedattributes => $attributes
-        );
-    }
-
     $template->param(
         patron     => $patron,
         finesview  => 1,

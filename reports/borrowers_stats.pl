@@ -137,7 +137,6 @@ if ($do_it) {
 		CGIsepChoice => $CGIsepChoice,
     );
     if (C4::Context->preference('ExtendedPatronAttributes')) {
-        $template->param(ExtendedPatronAttributes => 1);
         patron_attributes_form($template);
     }
 }

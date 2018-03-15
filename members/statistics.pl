@@ -29,7 +29,6 @@ use C4::Auth;
 use C4::Context;
 use C4::Members;
 use C4::Members::Statistics;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Output;
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -76,14 +75,6 @@ my $count_total_precedent_state = $total->{count_precedent_state} || 0;
 my $count_total_issues = $total->{count_total_issues_today} || 0;
 my $count_total_issues_returned = $total->{count_total_issues_returned_today} || 0;
 my $count_total_actual_state = ($count_total_precedent_state - $count_total_issues_returned + $count_total_issues);
-
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
 
 $template->param(
     patron             => $patron,

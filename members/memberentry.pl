@@ -746,7 +746,6 @@ foreach (qw(dateenrolled dateexpiry dateofbirth)) {
 }
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
-    $template->param(ExtendedPatronAttributes => 1);
     patron_attributes_form($template, $borrowernumber);
 }
 

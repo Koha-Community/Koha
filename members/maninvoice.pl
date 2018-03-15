@@ -30,7 +30,6 @@ use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
 use C4::Items;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Token;
 
 use Koha::Items;
@@ -120,14 +119,6 @@ if ($add){
     push @invoice_types, $row;
   }
   $template->param( invoice_types_loop => \@invoice_types );
-
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $attributes = GetBorrowerAttributes($borrowernumber);
-        $template->param(
-            ExtendedPatronAttributes => 1,
-            extendedattributes => $attributes
-        );
-    }
 
     $template->param(
         csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),

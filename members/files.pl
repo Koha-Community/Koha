@@ -24,7 +24,6 @@ use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Debug;
 
 use Koha::DateUtils;
@@ -105,14 +104,6 @@ else {
         }
     } elsif ( $op eq 'delete' ) {
         $bf->DelFile( id => scalar $cgi->param('file_id') );
-    }
-
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $attributes = GetBorrowerAttributes($borrowernumber);
-        $template->param(
-            ExtendedPatronAttributes => 1,
-            extendedattributes => $attributes
-        );
     }
 
     $template->param(

@@ -25,7 +25,6 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Letters;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
@@ -65,14 +64,6 @@ if ( $op eq 'resend_notice' ) {
 
 # Getting the messages
 my $queued_messages = C4::Letters::GetQueuedMessages({borrowernumber => $borrowernumber});
-
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
 
 $template->param(
     patron             => $patron,

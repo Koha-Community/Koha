@@ -11,7 +11,6 @@ use C4::Output;
 use C4::Auth qw(:DEFAULT :EditPermissions);
 use C4::Context;
 use C4::Members;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 #use C4::Acquisitions;
 
 use Koha::Patron::Categories;
@@ -181,14 +180,6 @@ if ($input->param('newflags')) {
         }
         push @loop, \%row;
     }
-
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($bor->{'borrowernumber'});
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
 
 $template->param(
     patron         => $patron,

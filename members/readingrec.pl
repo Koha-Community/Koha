@@ -29,7 +29,6 @@ use C4::Output;
 use C4::Members;
 use List::MoreUtils qw/any uniq/;
 use Koha::DateUtils;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 use Koha::Patrons;
 use Koha::Patron::Categories;
@@ -94,14 +93,6 @@ if ( $op eq 'export_barcodes' ) {
 
 if (! $limit){
 	$limit = 'full';
-}
-
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($patron->borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
 }
 
 $template->param(

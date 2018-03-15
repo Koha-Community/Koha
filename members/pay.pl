@@ -38,7 +38,6 @@ use C4::Accounts;
 use C4::Stats;
 use C4::Koha;
 use C4::Overdues;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patrons;
 
 use Koha::Patron::Categories;
@@ -149,7 +148,6 @@ sub add_accounts_to_template {
     while ( my $account_line = $account_lines->next ) {
         push @accounts, $account_line;
     }
-    borrower_add_additional_fields($patron);
 
     $template->param(
         patron   => $patron,
@@ -225,23 +223,6 @@ sub writeoff_all {
     }
 
     print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
-    return;
-}
-
-sub borrower_add_additional_fields {
-    my $patron = shift;
-
-# some borrower info is not returned in the standard call despite being assumed
-# in a number of templates. It should not be the business of this script but in lieu of
-# a revised api here it is ...
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $extendedattributes = GetBorrowerAttributes($patron->borrowernumber);
-        $template->param(
-            extendedattributes       => $extendedattributes,
-            ExtendedPatronAttributes => 1,
-        );
-    }
-
     return;
 }
 

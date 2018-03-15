@@ -22,7 +22,6 @@ use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Auth qw/:DEFAULT/;
 use C4::Members;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Context;
 use C4::Serials;
 use Koha::Patrons;
@@ -57,13 +56,5 @@ $template->param(
     branch            => $branch, # FIXME This is confusing
     routinglistview   => 1,
 );
-
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
 
 output_html_with_http_headers $query, $cookie, $template->output;

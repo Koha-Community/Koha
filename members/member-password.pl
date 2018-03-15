@@ -13,7 +13,6 @@ use C4::Context;
 use C4::Members;
 use C4::Circulation;
 use CGI qw ( -utf8 );
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::AuthUtils;
 use Koha::Token;
 
@@ -96,14 +95,6 @@ if ( $newpassword and not @errors) {
             push( @errors, 'BADUSERID' );
         }
     };
-}
-
-if ( C4::Context->preference('ExtendedPatronAttributes') ) {
-    my $attributes = GetBorrowerAttributes( $patron_id );
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes       => $attributes
-    );
 }
 
 $template->param(

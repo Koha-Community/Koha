@@ -345,7 +345,7 @@
                                 </div> [% #/ div#houseboundroles %]
                             [% END %]
 
-                            [% IF ( ExtendedPatronAttributes ) %]
+                            [% IF Koha.Preference('ExtendedPatronAttributes') %]
                                 [% UNLESS ( no_patron_attribute_types ) %]
                                     <div id="patron-extended-attributes" class="patroninfo-section">
                                         [% IF ( attributes_loop ) %]

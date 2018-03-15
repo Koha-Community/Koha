@@ -25,7 +25,6 @@ use C4::Context;
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Accounts;
 use C4::Koha;
 
@@ -180,8 +179,6 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     $total_paid = '0.00';    #TODO not right with pay_individual
 }
 
-borrower_add_additional_fields($patron, $template);
-
 $template->param(%$borrower);
 
 if ( $input->param('error_over') ) {
@@ -193,24 +190,8 @@ $template->param(
     borrowernumber => $borrowernumber,    # some templates require global
     patron        => $patron,
     total         => $total_due,
-    ExtendedPatronAttributes => C4::Context->preference('ExtendedPatronAttributes'),
 
     csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
-
-sub borrower_add_additional_fields {
-    my ( $patron, $template ) = @_;
-
-# some borrower info is not returned in the standard call despite being assumed
-# in a number of templates. It should not be the business of this script but in lieu of
-# a revised api here it is ...
-
-    if (C4::Context->preference('ExtendedPatronAttributes')) {
-        my $extendedattributes = GetBorrowerAttributes($patron->borrowernumber);
-        $template->param( extendedattributes => $extendedattributes );
-    }
-
-    return;
-}

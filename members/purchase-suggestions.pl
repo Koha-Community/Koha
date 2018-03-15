@@ -24,7 +24,6 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Members;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Suggestions;
 use Koha::Patrons;
 
@@ -51,14 +50,6 @@ $template->param(
     patron => $patron,
     suggestionsview  => 1,
 );
-
-if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = GetBorrowerAttributes($borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
 
 my $suggestions = SearchSuggestion( { suggestedby => $borrowernumber } );
 

@@ -28,7 +28,6 @@ use Modern::Perl;
 use CGI;
 use C4::Auth;
 use C4::Context;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Output;
 use DateTime;
 use Koha::DateUtils;
@@ -156,15 +155,6 @@ $method = 'update_or_create' if ( !$houseboundprofile );
 
 # Ensure template has all patron details.
 $template->param( patron => $patron );
-
-# Load extended patron attributes if necessary (taken from members/files.pl).
-if ( C4::Context->preference('ExtendedPatronAttributes') and $patron ) {
-    my $attributes = GetBorrowerAttributes($patron->borrowernumber);
-    $template->param(
-        ExtendedPatronAttributes => 1,
-        extendedattributes => $attributes
-    );
-}
 
 $template->param(
     housebound_profile => $houseboundprofile,

@@ -20,6 +20,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::Exceptions::Patron::Attribute;
 use Koha::Patron::Attribute::Types;
+use Koha::AuthorisedValues;
 
 use base qw(Koha::Object);
 
@@ -77,6 +78,57 @@ sub opac_editable {
     my $self = shift;
 
     return Koha::Patron::Attribute::Types->find( $self->code )->opac_editable;
+}
+
+=head3 display_checkout
+
+    my $attribute = Koha::Patron::Attribute->new({ code => 'a_code', ... });
+    if ( $attribute->display_checkout ) { ... }
+
+=cut
+
+sub display_checkout {
+
+    my $self = shift;
+
+    return $self->type->display_checkout;
+}
+
+=head3 value_description
+
+    my $description = $attribute->value_description
+
+    Return authorised value description or free text based on attribute type settings
+
+=cut
+
+sub value_description {
+
+    my $self = shift;
+
+    if ( $self->type->authorised_value_category ) {
+        my $av = Koha::AuthorisedValues->search({
+            category => $self->type->authorised_value_category,
+            authorised_value => $self->attribute,
+        });
+        return $av->next->lib if $av->count;
+    }
+    return $self->attribute;
+}
+
+=head3 type_description
+
+    my $description = $attribute->type_description
+
+    Return description of attribute type
+
+=cut
+
+sub type_description {
+
+    my $self = shift;
+
+    return $self->type->description;
 }
 
 =head3 type

@@ -267,7 +267,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
     }
 
     $template->param(
-        ExtendedPatronAttributes => 1,
         attributes_loop => \@attributes_loop
     );
 

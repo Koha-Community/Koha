@@ -34,6 +34,7 @@ use Koha::DateUtils;
 use Koha::Exceptions::Password;
 use Koha::Holds;
 use Koha::Old::Checkouts;
+use Koha::Patron::Attributes;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundProfile;
 use Koha::Patron::HouseboundRole;
@@ -1288,6 +1289,22 @@ sub generate_userid {
 
      return $self;
 
+}
+
+=head3 attributes
+
+my $attributes = $patron->attributes
+
+Return object of Koha::Patron::Attributes type with all attributes set for this patron
+
+=cut
+
+sub attributes {
+    my ( $self ) = @_;
+    return Koha::Patron::Attributes->search({
+        borrowernumber => $self->borrowernumber,
+        branchcode     => $self->branchcode,
+    });
 }
 
 =head2 Internal methods

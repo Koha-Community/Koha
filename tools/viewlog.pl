@@ -74,20 +74,11 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 if ( $src eq 'circ' ) {
 
-    # if we were called from circulation, use the circulation menu and get data to populate it -fbcit
-    use C4::Members::Attributes qw(GetBorrowerAttributes);
     my $borrowernumber = $object;
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $circ_info = 1;
     unless ( $patron ) {
          $circ_info = 0;
-    }
-    if ( C4::Context->preference('ExtendedPatronAttributes') ) {
-        my $attributes = GetBorrowerAttributes( $borrowernumber );
-        $template->param(
-            ExtendedPatronAttributes => 1,
-            extendedattributes       => $attributes
-        );
     }
 
     $template->param(
