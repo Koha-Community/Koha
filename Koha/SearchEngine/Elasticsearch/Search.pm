@@ -509,7 +509,7 @@ sub _convert_facets {
         push @facets, $facet if exists $facet->{facets};
     }
 
-    @facets = sort { $a->{order} cmp $b->{order} } @facets;
+    @facets = sort { $a->{order} <=> $b->{order} } @facets;
     return \@facets;
 }
 
