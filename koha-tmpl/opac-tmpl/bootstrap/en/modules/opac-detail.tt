@@ -1179,7 +1179,7 @@
         [% END %]
 
         [% IF ( NovelistSelectProfile && normalized_isbn ) %]
-            <script type="text/javascript" src="https://imageserver.ebscohost.com/novelistselect/ns2init_[% KOHA_VERSION %].js"></script>
+            <script type="text/javascript" src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
         [% END %]
 
         [% IF ( Babeltheque ) %]
@@ -1393,12 +1393,12 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 [% IF ( SocialNetworks ) %]
-    <script type="text/javascript" src="https://apis.google.com/js/plusone_[% KOHA_VERSION %].js">
+    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
     //<![CDATA[
       {lang: '[% lang %]'}
     //]]>
     </script>
-    <script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets_[% KOHA_VERSION %].js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 [% END %]
 [% IF ( OpacStarRatings != 'disable' ) %]<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.rating_[% KOHA_VERSION %].js"></script>[% END %]
 
