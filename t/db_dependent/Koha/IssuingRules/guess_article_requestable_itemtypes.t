@@ -7,15 +7,18 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Koha::Database;
 use Koha::IssuingRules;
+use Koha::Caches;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 our $builder = t::lib::TestBuilder->new;
+our $cache = Koha::Caches->get_instance;
 
 subtest 'guess_article_requestable_itemtypes' => sub {
     plan tests => 12;
 
     t::lib::Mocks::mock_preference('ArticleRequests', 1);
+    $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
     Koha::IssuingRules->delete;
     my $itype1 = $builder->build_object({ class => 'Koha::ItemTypes' });
     my $itype2 = $builder->build_object({ class => 'Koha::ItemTypes' });
@@ -51,7 +54,7 @@ subtest 'guess_article_requestable_itemtypes' => sub {
 
     # Change the rules
     $rule2->itemtype('*')->store;
-    $Koha::IssuingRules::last_article_requestable_guesses = {};
+    $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
     $res = Koha::IssuingRules->guess_article_requestable_itemtypes;
     is( $res->{'*'}, 1, 'Item type * seems permitted' );
     is( $res->{$itype1->itemtype}, 1, 'Item type 1 seems permitted' );
@@ -61,7 +64,7 @@ subtest 'guess_article_requestable_itemtypes' => sub {
     is( $res->{$itype1->itemtype}, 1, 'Item type 1 seems permitted' );
     is( $res->{$itype2->itemtype}, undef, 'Item type 2 seems not permitted' );
 
-    $Koha::IssuingRules::last_article_requestable_guesses = {};
+    $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
 };
 
 $schema->storage->txn_rollback;

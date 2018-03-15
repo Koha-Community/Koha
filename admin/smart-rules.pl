@@ -33,6 +33,7 @@ use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
 use Koha::Libraries;
 use Koha::Patron::Categories;
+use Koha::Caches;
 
 my $input = CGI->new;
 my $dbh = C4::Context->dbh;
@@ -63,6 +64,9 @@ $branch = '*' if $branch eq 'NO_LIBRARY_SET';
 
 my $op = $input->param('op') || q{};
 my $language = C4::Languages::getlanguage();
+
+my $cache = Koha::Caches->get_instance;
+$cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
 
 if ($op eq 'delete') {
     my $itemtype     = $input->param('itemtype');

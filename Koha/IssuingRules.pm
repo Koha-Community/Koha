@@ -21,10 +21,13 @@ package Koha::IssuingRules;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Caches;
 
 use Koha::IssuingRule;
 
 use base qw(Koha::Objects);
+
+use constant GUESSED_ITEMTYPES_KEY => 'Koha_IssuingRules_last_guess';
 
 =head1 NAME
 
@@ -157,13 +160,13 @@ sub article_requestable_rules {
 
 =cut
 
-our $last_article_requestable_guesses; # used during Plack life time
-
 sub guess_article_requestable_itemtypes {
     my ( $class_or_self, $params ) = @_;
     my $category = $params->{categorycode};
     return {} if !C4::Context->preference('ArticleRequests');
 
+    my $cache = Koha::Caches->get_instance;
+    my $last_article_requestable_guesses = $cache->get_from_cache(GUESSED_ITEMTYPES_KEY);
     my $key = $category || '*';
     return $last_article_requestable_guesses->{$key}
         if $last_article_requestable_guesses && exists $last_article_requestable_guesses->{$key};
@@ -176,7 +179,7 @@ sub guess_article_requestable_itemtypes {
     foreach my $rule ( $rules->as_list ) {
         $res->{ $rule->itemtype } = 1;
     }
-    $last_article_requestable_guesses->{$key} = $res;
+    $cache->set_in_cache(GUESSED_ITEMTYPES_KEY, $res);
     return $res;
 }
 

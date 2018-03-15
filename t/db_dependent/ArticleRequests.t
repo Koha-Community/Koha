@@ -30,6 +30,7 @@ use Koha::Notice::Messages;
 use Koha::Patron;
 use Koha::Library::Group;
 use Koha::IssuingRules;
+use Koha::Caches;
 
 BEGIN {
     use_ok('Koha::ArticleRequest');
@@ -40,6 +41,7 @@ BEGIN {
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 my $builder = t::lib::TestBuilder->new;
+our $cache = Koha::Caches->get_instance;
 
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
@@ -223,11 +225,11 @@ subtest 'may_article_request' => sub {
 
     # mocking
     t::lib::Mocks::mock_preference('ArticleRequests', 1);
-    $Koha::IssuingRules::last_article_requestable_guesses = {
+    $cache->set_in_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY, {
         '*'  => { 'CR' => 1 },
         'S'  => { '*'  => 1 },
         'PT' => { 'BK' => 1 },
-    };
+    });
 
     # tests for class method call
     is( Koha::Biblio->may_article_request({ itemtype => 'CR' }), 1, 'SER/* should be true' );
@@ -243,7 +245,7 @@ subtest 'may_article_request' => sub {
     is( $biblio->may_article_request({ categorycode => 'PT' }), 1, 'BK/PT true' );
 
     # Cleanup
-    $Koha::IssuingRules::last_article_requestable_guesses = undef;
+    $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
 };
 
 $schema->storage->txn_rollback();
