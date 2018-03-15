@@ -472,7 +472,7 @@ ModReceiveOrder({
 } );
 
 is ( GetBudgetSpent( $fund ), 6, "total shipping cost is 6");
-is ( GetBudgetOrdered( $fund ), '26', "total ordered price is 20");
+is ( GetBudgetOrdered( $fund ), '20', "total ordered price is 20");
 
 
 # CloneBudgetPeriod

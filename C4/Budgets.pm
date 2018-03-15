@@ -338,7 +338,7 @@ sub GetBudgetSpent {
             datecancellationprinted IS NULL
     |);
 	$sth->execute($budget_id);
-	my $sum =  $sth->fetchrow_array;
+	my $sum = 0 + $sth->fetchrow_array;
 
     $sth = $dbh->prepare(qq|
         SELECT SUM(shipmentcost) AS sum
@@ -369,17 +369,7 @@ sub GetBudgetOrdered {
             datecancellationprinted IS NULL
     |);
 	$sth->execute($budget_id);
-	my $sum =  $sth->fetchrow_array;
-
-    $sth = $dbh->prepare(qq|
-        SELECT SUM(shipmentcost) AS sum
-        FROM aqinvoices
-        WHERE shipmentcost_budgetid = ?
-          AND closedate IS NULL
-    |);
-    $sth->execute($budget_id);
-    my ($shipmentcost_sum) = $sth->fetchrow_array;
-    $sum += $shipmentcost_sum;
+	my $sum =  0 + $sth->fetchrow_array;
 
     my $adjustments = Koha::InvoiceAdjustments->search({budget_id => $budget_id, encumber_open => 1, closedate => undef},{ join => 'invoiceid' });
     while ( my $adj = $adjustments->next ){
