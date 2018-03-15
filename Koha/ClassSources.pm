@@ -35,13 +35,21 @@ Koha::ClassSources - Koha Classification Source Object set class
 
 =cut
 
-=head3 type
+=head3 _type
+
+Returns name of corresponding DBIC resultset
 
 =cut
 
 sub _type {
     return 'ClassSource';
 }
+
+=head3 object_class
+
+Returns name of corresponding Koha object class
+
+=cut
 
 sub object_class {
     return 'Koha::ClassSource';
