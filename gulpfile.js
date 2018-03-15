@@ -26,28 +26,36 @@ var sassOptions = {
     precision: 3
 }
 
+if( gutil.env.view == "opac" ){
+    var css_base = OPAC_CSS_BASE;
+    var js_base = OPAC_JS_BASE;
+} else {
+    var css_base = STAFF_CSS_BASE;
+    var js_base = STAFF_JS_BASE;
+}
+
 gulp.task( "default", ['watch'] );
 
 // CSS processing for development
 gulp.task('css', function() {
-    return gulp.src( STAFF_CSS_BASE + "/src/**/*.scss" )
+    return gulp.src( css_base + "/src/**/*.scss" )
       .pipe(sourcemaps.init())
       .pipe(sass( sassOptions ).on('error', sass.logError))
       .pipe(autoprefixer())
       .pipe(sourcemaps.write('./maps'))
-      .pipe(gulp.dest( STAFF_CSS_BASE ));
+      .pipe(gulp.dest( css_base ));
 });
 
 // CSS processing for production
 
 gulp.task('build', function() {
-    return gulp.src( STAFF_CSS_BASE + "/src/**/*.scss" )
+    return gulp.src( css_base + "/src/**/*.scss" )
       .pipe(sass( sassOptions ).on('error', sass.logError))
       .pipe(autoprefixer())
       .pipe(cssnano())
-      .pipe(gulp.dest( STAFF_CSS_BASE ));
+      .pipe(gulp.dest( css_base ));
 });
 
 gulp.task('watch', function(){
-    gulp.watch( STAFF_CSS_BASE + "/src/**/*.scss", ['css'] );
+    gulp.watch( css_base + "/src/**/*.scss", ['css'] );
 });

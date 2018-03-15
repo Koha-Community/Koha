@@ -1,11 +1,57 @@
 .popup {
-    padding-right : 0;
     padding-left: 0;
+    padding-right: 0;
 }
 
 a {
     &.cancel {
-        padding-right : 1em;
+        padding-right: 1em;
+    }
+
+    &.addtocart,
+    &.addtoshelf,
+    &.highlight_toggle,
+    &.incart,
+    &.print-large,
+    &.reserve {
+        padding-right: 35px;
+    }
+
+    &.brief,
+    &.tag_add,
+    &.detail {
+        padding-right: 27px;
+    }
+
+    &.download {
+        padding-right: 20px;
+    }
+
+    &.editshelf {
+        padding-right: 26px;
+    }
+
+    &.hide {
+        padding-right: 26px;
+    }
+
+    &.empty,
+    &.print-small {
+        padding-right: 30px;
+    }
+
+    &.hold,
+    &.new {
+        padding-right: 23px;
+    }
+
+    &.removeitems,
+    &.deleteshelf {
+        padding-right: 25px;
+    }
+
+    &.send {
+        padding-right: 28px;
     }
 }
 
@@ -14,66 +60,85 @@ h1 {
         float: right !important;
     }
 }
+
+input.hold {
+    padding-right: 23px;
+}
+
 caption {
     text-align: right;
 }
 
 #basketcount {
     span {
-        margin : 0 .9em 0 0;
+        margin: 0 .9em 0 0;
     }
 }
 
 #koha_url p {
-        float : left;
+    float: left;
 }
 
 .actions {
     a {
         &.hold {
-            margin-left : 1em;
-            padding-right : 21px;
+            margin-left: 1em;
+            padding-right: 21px;
         }
+
         &.addtocart {
-            margin-left : 1em;
-            padding-right : 20px;
+            margin-left: 1em;
+            padding-right: 20px;
         }
+
         &.addtoshelf {
-            margin-left : 1em;
-            padding-right : 20px;
+            margin-left: 1em;
+            padding-right: 20px;
         }
+
         &.addtolist {
-            margin-left : 1em;
-            padding-right : 20px;
+            margin-left: 1em;
+            padding-right: 20px;
         }
+
         &.tag_add {
-            margin-left : 1em;
-            padding-right : 20px;
+            margin-left: 1em;
+            padding-right: 20px;
         }
+
         /* List contents remove from list link */
-        &.removefromlist  {
-            margin-left : 1em;
-            padding-right : 15px;
+        &.removefromlist {
+            margin-left: 1em;
+            padding-right: 15px;
         }
     }
 }
 
 .ui-tabs .ui-tabs-nav li {
-    margin-left : .4em;
+    margin-left: .4em;
 }
 
 .statictabs {
     li {
         float: right;
-        margin-left: 0.4em;
+        margin-left: .4em;
+
         a {
             float: right;
         }
     }
 }
 
-#bookcover .no-image {
-    margin-left : 10px;
+#bookcover {
+    float: right;
+
+    img {
+        margin: 0 0 1em 1em;
+    }
+
+     .no-image {
+        margin-left: 10px;
+    }
 }
 
 th.sum {
@@ -81,37 +146,43 @@ th.sum {
 }
 
 th[scope=row] {
-    text-align : left;
+    text-align: left;
 }
 
 fieldset {
     &.rows {
-        float : right;
-        clear : right;
+        clear: right;
+        float: right;
+
         label,
         .label {
             float: right;
             margin-left: 1em;
             text-align: left;
         }
+
         ol {
             &.lradio {
                 label {
-                    margin-left : 0;
+                    margin-left: 0;
+
                     &.lradio {
-                        float : right;
-                        margin-left : 1em;
+                        float: right;
+                        margin-left: 1em;
                     }
                 }
             }
         }
+
         li {
-            float : right;
-            clear : right;
+            clear: right;
+            float: right;
+
             &.lradio {
                 padding-right: 8.5em;
+
                 label {
-                    margin : 0 1em 0 0;
+                    margin: 0 1em 0 0;
                 }
             }
         }
@@ -119,25 +190,30 @@ fieldset {
 }
 
 div.rows {
-    float : right;
-    clear : right;
-    span.label {
+    float: right;
+    clear: right;
+
+    .label {
         float: right;
         margin-left: 1em;
         text-align: right;
     }
+
     ol {
-        margin-right : 0;
+        margin-right: 0;
         padding: .5em 0 0 1em;
     }
+
     li {
 
-        float : right;
-        clear : right;
+        clear: right;
+        float: right;
     }
+
     ul {
         li {
-            margin-right : 7.3em;
+            margin-right: 7.3em;
+
             &:first-child {
                 margin-right: 0;
             }
@@ -146,26 +222,31 @@ div.rows {
 }
 
 .toolbar {
-    padding:3px 5px 5px 3px;
+    padding: 3px 5px 5px 3px;
+
     label {
-        margin-right : .5em;
+        margin-right: .5em;
     }
+
     .hold,
     #tagsel_tag {
         padding-right: 28px;
     }
+
     li {
         a {
-            border-right : 1px solid #e8e8e8;
+            border-right: 1px solid #E8E8E8;
         }
+
         &:first-child {
             a {
-                border-right : 0;
+                border-right: 0;
             }
         }
     }
+
     ul {
-        padding-right : 0;
+        padding-right: 0;
     }
 }
 
@@ -174,12 +255,12 @@ div.rows {
 }
 
 #selections-toolbar {
-    padding-right : 10px;
+    padding-right: 10px;
 }
 
 #tagsel_span input.submit,
 #tagsel_tag {
-    padding-right : 25px;
+    padding-right: 25px;
 }
 
 #tagsel_span input.disabled,
@@ -190,26 +271,16 @@ div.rows {
 #selections-toolbar input.hold.disabled:hover,
 #selections-toolbar a.disabled,
 #selections-toolbar a.disabled:hover {
-    padding-right : 23px;
+    padding-right: 23px;
 }
 
 #views {
-    padding : 0 0.2em 0.2em 2em;
+    padding: 0 .2em .2em 2em;
 }
 
 #bibliodescriptions,
 #isbdcontents {
-    clear : right;
-}
-
-#bookcover {
-    float : right;
-    .no-image {
-        margin-left : 10px;
-    }
-    img {
-        margin : 0 0 1em 1em;
-    }
+    clear: right;
 }
 
 /* pagination */
@@ -219,18 +290,20 @@ div.rows {
 
 
 .back {
-    float:left;
+    float: left;
 }
 
 .pagination_list {
     ul {
-        padding-right:0px;
+        padding-right: 0;
     }
+
     li {
         a {
-            padding-right:0px;
+            padding-right: 0;
         }
     }
+
     .li_pag_index {
         float: right;
         padding-left: 10px;
@@ -242,134 +315,63 @@ div.rows {
     li {
         &.back_results {
             a {
-                border-right: 1px solid #D0D0D0;
                 border-left: 1px solid #D0D0D0;
+                border-right: 1px solid #D0D0D0;
             }
         }
+
         a,
         span {
-            float:right;
+            float: right;
         }
     }
 }
 
 #listResults{
     li {
-        margin-left:1px;
+        margin-left: 1px;
     }
 }
 
 /* nav */
 .nav_pages {
     .close_pagination {
-        padding-left: 10px;
         left: 3px;
+        padding-left: 10px;
     }
+
     li {
-        float:right;
+        float: right;
+
         ul {
-            float:right;
+            float: right;
         }
     }
 }
 
 #format,
 #furthersearches {
-    padding-right : 35px;
+    padding-right: 35px;
 }
 
 .highlight_controls {
     float: right;
 }
 
-a.addtocart {
-    padding-right : 35px;
-}
-
-a.addtoshelf {
-    padding-right : 35px;
-}
-
-a.brief {
-    padding-right : 27px;
-}
-
-a.detail {
-    padding-right : 27px;
-}
-
-a.download {
-    padding-right : 20px;
-}
-
-a.editshelf {
-    padding-right : 26px;
-}
-
-a.empty {
-    padding-right : 30px;
-}
-
-a.hide {
-    padding-right : 26px;
-}
-
-a.highlight_toggle {
-    padding-right : 35px;
-}
-
-a.hold,
-input.hold {
-    padding-right : 23px;
-}
-
-a.incart {
-    padding-right : 35px;
-}
-
-a.new {
-    padding-right : 23px;
-}
-
-a.print-small {
-    padding-right : 30px;
-}
-
-a.print-large {
-    padding-right : 35px;
-}
-
-a.removeitems,
-a.deleteshelf {
-    padding-right : 25px;
-}
-
-a.reserve {
-    padding-right : 35px;
-}
-
-a.send {
-    padding-right : 28px;
-}
-
-a.tag_add {
-    padding-right : 27px;
-}
-
 input.editshelf {
-    padding-right : 29px;
+    padding-right: 29px;
 }
 
 .newshelf {
-    padding-right : 28px;
+    padding-right: 28px;
 }
 
 .deleteshelf {
-    padding-right : 25px;
+    padding-right: 25px;
 }
 
 #login4tags {
-    padding-right : 20px;
+    padding-right: 20px;
 }
 
 .tag_results_input {
@@ -378,27 +380,27 @@ input.editshelf {
 
 #social_networks {
     span {
-        float : right;
-        margin : .5em .5em .5em 0 !important;
+        float: right;
+        margin: .5em .5em .5em 0 !important;
     }
     div {
-        float : right !important;
-        margin : .5em .2em .5em 0 !important;
+        float: right !important;
+        margin: .5em .2em .5em 0 !important;
     }
 }
 
 #marc {
     td,
     th {
-        text-align : right;
+        text-align: right;
     }
     .results_summary {
-        clear :  right;
+        clear:  right;
     }
 }
 
 #plainmarc th {
-    text-align:right;
+    text-align: right;
 }
 
 #renewcontrols {
@@ -427,13 +429,15 @@ input.editshelf {
 }
 
 #menu {
-    border : 0 solid #D8D8D8;
+    border: 0 solid #D8D8D8;
     border-left-width: 1px;
+
     li {
         a {
             border-radius: 0 5px 5px 0;
             margin-left: -1px;
         }
+
         &.active {
             a {
                 border-left-width: 0;
@@ -445,20 +449,20 @@ input.editshelf {
 
 /* Search results add to cart (lists disabled) */
 .addto a.addtocart {
-    padding-right : 33px;
+    padding-right: 33px;
 }
 
 .searchresults {
     a {
         &.highlight_toggle {
-            padding : 0 21px 0 10px;
+            padding: 0 21px 0 10px;
         }
     }
 }
 
 .commentline .avatar {
-    float : left;
-    padding-right : .5em;
+    float: left;
+    padding-right: .5em;
 }
 
 span.sep {
@@ -475,9 +479,9 @@ span.sep {
 
 .pages span:last-child,
 .pages a:last-child {
-    border-width: 1px 0 1px 1px;
     border-bottom-left-radius: 3px;
     border-top-left-radius: 3px;
+    border-width: 1px 0 1px 1px;
 }
 
 .pages .inactive,
@@ -493,7 +497,7 @@ span.sep {
 }
 
 .close {
-    left : auto;
+    left: auto;
 }
 
 /* Redefine a new style for Bootstrap's class "close" since we use that already */
@@ -501,34 +505,37 @@ span.sep {
 .alert .closebtn {
     left:-21px;
 }
+
 .closebtn {
-    float:left;
+    float: left;
 }
 
 #logo {
-    float : right !important;
+    float: right !important;
 }
 
 /* Class to be added to toolbar when it starts being fixed at the top of the screen*/
 .floating {
-    -webkit-box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, .4);
-    box-shadow: 0px 0px 2px 3px rgba(0, 0, 0, .4);
+    box-shadow: 0 0 2px 3px rgba( 0, 0, 0, .4 );
 }
 
 
 .table {
     .sorting_asc {
-        padding-left: 19px;
         background: url("../images/asc.gif") no-repeat scroll left center #ECEDE6;
+        padding-left: 19px;
     }
+
     .sorting_desc {
         padding-left: 19px;
         background: url("../images/desc.gif") no-repeat scroll left center #ECEDE6;
     }
+
     .sorting {
         padding-left: 19px;
         background: url("../images/ascdesc.gif") no-repeat scroll left center #ECEDE6;
     }
+
     .nosort,
     .nosort.sorting_asc,
     .nosort.sorting_desc,
@@ -536,18 +543,19 @@ span.sep {
         padding-left: 19px;
     }
 }
+
 .tags {
     ul {
-        margin-right : 0;
+        margin-right: 0;
     }
 }
 
 .coverimages {
-    float : left;
+    float: left;
 }
 
 #i18nMenu {
-    margin-right : 1em;
+    margin-right: 1em;
 }
 
 #overdrive-results {
@@ -556,6 +564,6 @@ span.sep {
 
 .navbar {
     .pull-right {
-        float : left;
+        float: left;
     }
 }
