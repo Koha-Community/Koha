@@ -381,7 +381,7 @@ $(document).ready(function() {
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
+    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;itemnumber=[% itemnumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
 </form>
 [% END %]
 
@@ -391,7 +391,7 @@ $(document).ready(function() {
     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
     <input type="hidden" name="duedatespec" value="[% duedatespec %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate %]" />
-    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
+    <button class="print" type="submit" onclick="Dopop('hold-transfer-slip.pl?borrowernumber=[% reserveborrowernumber %]&amp;biblionumber=[% itembiblionumber %]&amp;itemnumber=[% itemnumber %]&amp;op=slip');this.form.submit();"><i class="fa fa-print"></i> Don't check out and print slip (P)</button>
 </form>
 [% END %]
 
