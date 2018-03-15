@@ -1868,7 +1868,13 @@ sub RevertWaitingStatus {
 
 =head2 ReserveSlip
 
-  ReserveSlip($branchcode, $borrowernumber, $biblionumber)
+  ReserveSlip($args => {
+      branchcode,
+      borrowernumber,
+      biblionumber,
+      [itemnumber],
+      [barcode],
+  })
 
 Returns letter hash ( see C4::Letters::GetPreparedLetter ) or undef
 
@@ -1885,19 +1891,28 @@ available within the slip:
 =cut
 
 sub ReserveSlip {
-    my ($branch, $borrowernumber, $biblionumber) = @_;
+    my ($args) = @_;
+    my $patron = Koha::Patrons->find( $args->{borrowernumber} );
 
-#   return unless ( C4::Context->boolean_preference('printreserveslips') );
-    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $hold;
+    if ($args->{itemnumber}) {
+        $hold = Koha::Holds->search({biblionumber => $args->{biblionumber}, borrowernumber => $args->{borrowernumber}, itemnumber => $args->{itemnumber} })->next;
+    } elsif ($args->{barcode}) {
+        my $itemnumber = Koha::Items->find({ barcode => $args->{barcode} });
+        if ($args->{itemnumber}) {
+            $hold = Koha::Holds->search({biblionumber => $args->{biblionumber}, borrowernumber => $args->{borrowernumber}, itemnumber => $args->{itemnumber} })->next;
+        }
+    } else {
+        $hold = Koha::Holds->search({biblionumber => $args->{biblionumber}, borrowernumber => $args->{borrowernumber} })->next;
+    }
 
-    my $hold = Koha::Holds->search({biblionumber => $biblionumber, borrowernumber => $borrowernumber })->next;
     return unless $hold;
     my $reserve = $hold->unblessed;
 
     return  C4::Letters::GetPreparedLetter (
         module => 'circulation',
         letter_code => 'HOLD_SLIP',
-        branchcode => $branch,
+        branchcode => $args->{branchcode},
         lang => $patron->lang,
         tables => {
             'reserves'    => $reserve,
