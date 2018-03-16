@@ -315,9 +315,11 @@ sub _handle_one_result {
     my $raw= $zoomrec->raw();
     my $marcrecord;
     if( $servhref->{servertype} eq 'sru' ) {
-        $raw= MARC::Record->new_from_xml( $raw, $servhref->{encoding}, $servhref->{syntax} );
+        $marcrecord= MARC::Record->new_from_xml( $raw, 'UTF-8',
+            $servhref->{syntax} );
+    } else {
+        ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encoding} // "iso-5426" ); #ignores charset return values
     }
-    ($marcrecord) = MarcToUTF8Record($raw, C4::Context->preference('marcflavour'), $servhref->{encoding} // "iso-5426" ); #ignores charset return values
     SetUTF8Flag($marcrecord);
     my $error;
     ( $marcrecord, $error ) = _do_xslt_proc($marcrecord, $servhref, $xslh);
@@ -621,9 +623,10 @@ sub Z3950SearchAuth {
 
                             my ($charset_result, $charset_errors);
                             if( $servers[$k]->{servertype} eq 'sru' ) {
-                                $marcdata = MARC::Record->new_from_xml( $marcdata, $encoding[$k], $servers[$k]->{syntax} );
+                                $marcrecord = MARC::Record->new_from_xml( $marcdata, 'UTF-8', $servers[$k]->{syntax} );
+                            } else {
+                                ( $marcrecord, $charset_result, $charset_errors ) = MarcToUTF8Record( $marcdata, $marc_type, $encoding[$k] );
                             }
-                            ($marcrecord, $charset_result, $charset_errors)= MarcToUTF8Record($marcdata, $marc_type, $encoding[$k]);
                             my $heading;
                             my $heading_authtype_code;
                             $heading_authtype_code = GuessAuthTypeCode($marcrecord);
