@@ -350,7 +350,7 @@
                 <th>Status</th>
                 <th>Match type</th>
                 <th>Match details</th>
-                <th><abbr title="Differences between the original biblio and the imported">Diff</abbr></th>
+                <th><abbr title="Differences between the original bibliographic record and the imported">Diff</abbr></th>
                 <th>Record</th>
             </tr>
         </thead>
@@ -460,7 +460,7 @@
                           [% IF ( record_type == 'auth' ) -%]
                           var matching_msg = _("Matches authority %s (score=%s):%s");
                           [%- ELSE -%]
-                          var matching_msg = _("Matches biblio %s (score=%s):%s");
+                          var matching_msg = _("Matches bibliographic record %s (score=%s):%s");
                           [%- END %]
                           $('td:eq(4)', nRow).html(
                               matching_msg.format(aData['match_id'], aData['score'],

@@ -21,7 +21,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    MARC Details for <i>[% bibliotitle | html %]</i>
+    MARC details for <i>[% bibliotitle | html %]</i>
   [% END %]
 </div>
 
@@ -36,9 +36,7 @@
 [% INCLUDE 'cat-toolbar.inc' %]
 
 [% UNLESS ( popup ) %]
-    <h1>MARC biblio : [% biblionumber | html %]  ( [% bibliotitle | html %] )</h1>
-
-
+    <h1>MARC record: [% biblionumber | html %]  ( [% bibliotitle | html %] )</h1>
 [% END %]
 
     <p><b>With framework : <select name="Frameworks" id="Frameworks">
