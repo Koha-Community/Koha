@@ -1,5 +1,6 @@
 [% IF ( PAGE_NUMBERS ) %]
     <div class="pagination pagination-small noprint">
+     [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]<h6>10000 results loaded, refine your search to view other records</h6>[% END %]
         <ul>
             [% IF ( previous_page_offset.defined ) %]
                 <li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi |html %][% limit_cgi |html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |html %][% END %]">First</a></li>
