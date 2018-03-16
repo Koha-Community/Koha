@@ -49,23 +49,29 @@ my $endrange = 366;
 my $mark_returned;
 my $borrower_category = [];
 my $skip_borrower_category = [];
+my $itemtype = [];
+my $skip_itemtype = [];
 my $help=0;
 my $man=0;
 my $list_categories = 0;
+my $list_itemtypes = 0;
 
 GetOptions(
-    'lost=s%'         => \$lost,
+    'l|lost=s%'       => \$lost,
     'c|charge=s'      => \$charge,
     'confirm'         => \$confirm,
-    'v|verbose'         => \$verbose,
+    'v|verbose'       => \$verbose,
     'quiet'           => \$quiet,
     'maxdays=s'       => \$endrange,
     'mark-returned'   => \$mark_returned,
-    'h|help'            => \$help,
+    'h|help'          => \$help,
     'man|manual'      => \$man,
     'category=s'      => $borrower_category,
     'skip-category=s' => $skip_borrower_category,
     'list-categories' => \$list_categories,
+    'itemtype=s'      => $itemtype,
+    'skip-itemtype=s' => $skip_itemtype,
+    'list-itemtypes'  => \$list_itemtypes,
 );
 
 if ( $man ) {
@@ -88,9 +94,23 @@ if ( scalar @$borrower_category && scalar @$skip_borrower_category) {
             );
 }
 
+if ( scalar @$itemtype && scalar @$skip_itemtype) {
+    pod2usage( -verbose => 1,
+               -message => "The options --itemtype and --skip-itemtype are mually exclusive.\n"
+                           . "Use one or the other.",
+               -exitval => 1
+            );
+}
+
 if ( $list_categories ) {
     my @categories = sort map { uc $_->[0] } @{ C4::Context->dbh->selectall_arrayref(q|SELECT categorycode FROM categories|) };
-    print "\nBorrowrer Categories: " . join( " ", @categories ) . "\n\n";
+    print "\nBorrower Categories: " . join( " ", @categories ) . "\n\n";
+    exit 0;
+}
+
+if ( $list_itemtypes ) {
+    my @itemtypes = sort map { uc $_->[0] } @{ C4::Context->dbh->selectall_arrayref(q|SELECT itemtype FROM itemtypes|) };
+    print "\nItemtypes: " . join( " ", @itemtypes ) . "\n\n";
     exit 0;
 }
 
@@ -162,6 +182,23 @@ May not be used with B<--category>
 
 List borrower categories available for use by B<--category> or
 B<--skip-category>, and exit.
+
+=item B<--itemtype>
+
+Act on the listed itemtype code.
+Exclude all others. This may be specified multiple times to include multiple itemtypes.
+May not be used with B<--skip-itemtype>
+
+=item B<--skip-itemtype>
+
+Act on all available itemtype codes, except those listed.
+This may be specified multiple times, to exclude multiple itemtypes.
+May not be used with B<--itemtype>
+
+=item B<--list-itemtypes>
+
+List itemtypes available for use by B<--itemtype> or
+B<--skip-itemtype>, and exit.
 
 =item B<--help | -h>
 
@@ -255,6 +292,7 @@ sub longoverdue_sth {
 }
 
 my $dbh = C4::Context->dbh;
+
 my @available_categories = map { uc $_->[0] } @{ $dbh->selectall_arrayref(q|SELECT categorycode FROM categories|) };
 $borrower_category = [ map { uc $_ } @$borrower_category ];
 $skip_borrower_category = [ map { uc $_} @$skip_borrower_category ];
@@ -283,6 +321,34 @@ if ( @$skip_borrower_category ) {
 
 my $filter_borrower_categories = ( scalar @$borrower_category || scalar @$skip_borrower_category );
 
+my @available_itemtypes = map { uc $_->[0] } @{ $dbh->selectall_arrayref(q|SELECT itemtype FROM itemtypes|) };
+$itemtype = [ map { uc $_ } @$itemtype ];
+$skip_itemtype = [ map { uc $_} @$skip_itemtype ];
+my %itemtype_to_process;
+for my $it ( @$itemtype ) {
+    unless ( grep { /^$it$/ } @available_itemtypes ) {
+        pod2usage(
+            '-exitval' => 1,
+            '-message' => "The itemtype $it does not exist in the database",
+        );
+    }
+    $itemtype_to_process{$it} = 1;
+}
+if ( @$skip_itemtype ) {
+    for my $it ( @$skip_itemtype ) {
+        unless ( grep { /^$it$/ } @available_itemtypes ) {
+            pod2usage(
+                '-exitval' => 1,
+                '-message' => "The itemtype $it does not exist in the database",
+            );
+        }
+    }
+    %itemtype_to_process = map { $_ => 1 } @available_itemtypes;
+    %itemtype_to_process = ( %itemtype_to_process, map { $_ => 0 } @$skip_itemtype );
+}
+
+my $filter_itemtypes = ( scalar @$itemtype || scalar @$skip_itemtype );
+
 my $count;
 my @report;
 my $total = 0;
@@ -307,6 +373,10 @@ foreach my $startrange (sort keys %$lost) {
             if( $filter_borrower_categories ) {
                 my $category = uc Koha::Patrons->find( $row->{borrowernumber} )->categorycode();
                 next ITEM unless ( $category_to_process{ $category } );
+            }
+            if ($filter_itemtypes) {
+                my $it = uc Koha::Items->find( $row->{itemnumber} )->effective_itemtype();
+                next ITEM unless ( $itemtype_to_process{$it} );
             }
             printf ("Due %s: item %5s from borrower %5s to lost: %s\n", $row->{date_due}, $row->{itemnumber}, $row->{borrowernumber}, $lostvalue) if($verbose);
             if($confirm) {
