@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 7;
 
 use t::lib::TestBuilder;
 use Test::Exception;
@@ -275,3 +275,65 @@ subtest 'type() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'display_checkout() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+    my $attribute_type_1 = $builder->build(
+        {   source => 'BorrowerAttributeType',
+            value  => { display_checkout => 1 }
+        }
+    );
+
+    my $attribute_1 = Koha::Patron::Attribute->new(
+        {   borrowernumber => $patron,
+            code           => $attribute_type_1->{code},
+            attribute      => $patron
+        }
+    );
+    is( $attribute_1->display_checkout, 1, '->display_checkout returns 1' );
+
+    my $attribute_type_2 = $builder->build(
+        {   source => 'BorrowerAttributeType',
+            value  => { display_checkout => 0 }
+        }
+    );
+
+    my $attribute_2 = Koha::Patron::Attribute->new(
+        {   borrowernumber => $patron,
+            code           => $attribute_type_2->{code},
+            attribute      => $patron
+        }
+    );
+    is( $attribute_2->display_checkout, 0, '->display_checkout returns 0' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'type_description() and value_description tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build( { source => 'Borrower' } )->{borrowernumber};
+    my $attribute_type_1 = $builder->build(
+        {   source => 'BorrowerAttributeType',
+            value  => { description => "Type 1" }
+        }
+    );
+
+    my $attribute_1 = Koha::Patron::Attribute->new(
+        {   borrowernumber => $patron,
+            code           => $attribute_type_1->{code},
+            attribute      => "Attribute 1"
+        }
+    );
+    is( $attribute_1->type_description, "Type 1" , '->type_description returns right value' );
+    is( $attribute_1->value_description, "Attribute 1" , '->value_description returns right value' );
+
+    $schema->storage->txn_rollback;
+};

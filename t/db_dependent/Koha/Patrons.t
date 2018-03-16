@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -1393,6 +1393,55 @@ subtest 'generate_userid' => sub {
     # Cleanup
     $patron_1->delete;
     $patron_2->delete;
+};
+
+subtest 'attributes' => sub {
+    plan tests => 2;
+
+    my $library1 = Koha::Library->new({
+        branchcode => 'LIBPATRON',
+        branchname => 'Library of testing patron',
+    })->store;
+
+    my $library2 = Koha::Library->new({
+        branchcode => 'LIBATTR',
+        branchname => 'Library for testing attribute',
+    })->store;
+
+    my $category = Koha::Patron::Category->new({
+        categorycode => 'CAT1',
+        description => 'Category 1',
+    })->store;
+
+    my $patron = Koha::Patron->new({
+        firstname => 'Patron',
+        surname => 'with attributes',
+        branchcode => 'LIBPATRON',
+        categorycode => 'CAT1',
+    })->store;
+
+    my $attribute_type1 = Koha::Patron::Attribute::Type->new({
+        code => 'CODE_A',
+        description => 'Code A desciption',
+    })->store;
+
+    my $attribute_type2 = Koha::Patron::Attribute::Type->new({
+        code => 'CODE_B',
+        description => 'Code A desciption',
+    })->store;
+
+    $attribute_type2->library_limits ( [ $library2->branchcode ] );
+
+    Koha::Patron::Attribute->new({ borrowernumber => $patron->borrowernumber, code => $attribute_type1->code, attribute => 'value 1' } )->store();
+    Koha::Patron::Attribute->new({ borrowernumber => $patron->borrowernumber, code => $attribute_type2->code, attribute => 'value 2' } )->store();
+
+    is( $patron->attributes->count, 1, 'There should be one attribute');
+
+    $attribute_type2->library_limits ( [ $library1->branchcode ] );
+
+    is( $patron->attributes->count, 2, 'There should be 2 attributes');
+
+    $patron->delete;
 };
 
 $nb_of_patrons = Koha::Patrons->search->count;
