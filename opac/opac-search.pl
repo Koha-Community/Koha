@@ -830,8 +830,9 @@ for (my $i=0;$i<@servers;$i++) {
 	    }
             ## Build the page numbers on the bottom of the page
             my @page_numbers;
+            my $hits_to_paginate = C4::Context->preference('SearchEngine') eq 'Elasticsearch' ? 10000 : $hits;
             # total number of pages there will be
-            my $pages = ceil($hits / $results_per_page);
+            my $pages = ceil($hits_to_paginate / $results_per_page);
             my $last_page_offset = ( $pages - 1 ) * $results_per_page;
             # default page number
             my $current_page_number = 1;
