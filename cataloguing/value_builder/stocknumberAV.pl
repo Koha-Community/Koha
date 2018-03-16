@@ -85,7 +85,7 @@ my $launcher = sub {
 
     # If a prefix is submited, we look for the highest stocknumber with this prefix, and return it incremented
     $code =~ s/ *$//g;
-    if ( $code =~ m/^[A-Z]+$/ ) {
+    if ( $code =~ m/^[a-zA-Z]+$/ ) {
         my $sth = $dbh->prepare("SELECT lib FROM authorised_values WHERE category='INVENTORY' AND authorised_value=?");
         $sth->execute( $code);
 

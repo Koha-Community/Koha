@@ -86,7 +86,7 @@ my $launcher = sub {
             );
         }
     # If a prefix is submited, we look for the highest stocknumber with this prefix, and return it incremented
-    } elsif ( $code =~ m/^[A-Z]+$/ ) {
+    } elsif ( $code =~ m/^[a-zA-Z]+$/ ) {
         my $sth = $dbh->prepare("SELECT MAX(CAST(SUBSTRING_INDEX(stocknumber,' ',-1) AS SIGNED)) FROM items WHERE stocknumber LIKE ?");
         $sth->execute($code.' %');
         
