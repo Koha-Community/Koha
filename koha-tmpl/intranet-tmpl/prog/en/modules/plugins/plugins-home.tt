@@ -113,9 +113,7 @@
                                                         [% END %]
                                                     [% END %]
                                                     [% IF ( CAN_user_plugins_manage ) %]
-                                                        [% IF plugin.can('uninstall') %]
                                                             <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class %]"><i class="fa fa-trash"></i> Uninstall</a></li>
-                                                        [% END %]
                                                     [% END %]
                                                 </ul>
                                             </div>
