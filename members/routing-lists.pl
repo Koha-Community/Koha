@@ -51,25 +51,6 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in"
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $query, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $count;
-my @borrowerSubscriptions;
-($count, @borrowerSubscriptions) = GetSubscriptionsFromBorrower($borrowernumber );
-my @subscripLoop;
-
-foreach my $num_res (@borrowerSubscriptions) {
-    my %getSubscrip;
-    $getSubscrip{subscriptionid} = $num_res->{'subscriptionid'};
-    $getSubscrip{title}          = $num_res->{'title'};
-    $getSubscrip{borrowernumber} = $num_res->{'borrowernumber'};
-    push( @subscripLoop, \%getSubscrip );
-}
-
-$template->param(
-    countSubscrip => scalar @subscripLoop,
-    subscripLoop  => \@subscripLoop,
-    routinglistview => 1
-);
-
 $template->param(
     patron            => $patron,
     findborrower      => $findborrower,
