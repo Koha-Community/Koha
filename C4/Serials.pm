@@ -85,7 +85,6 @@ BEGIN {
       &check_routing &updateClaim
       &CountIssues
       HasItems
-      &GetSubscriptionsFromBorrower
       &subscriptionCurrentlyOnOrder
 
     );
@@ -2197,41 +2196,6 @@ sub in_array {    # used in next sub down
     }
     return 0;
 }
-
-=head2 GetSubscriptionsFromBorrower
-
-($count,@routinglist) = GetSubscriptionsFromBorrower($borrowernumber)
-
-this gets the info from subscriptionroutinglist for each $subscriptionid
-
-return :
-a count of the serial subscription routing lists to which a patron belongs,
-with the titles of those serial subscriptions as an array. Each element of the array
-contains a hash_ref with subscriptionID and title of subscription.
-
-=cut
-
-sub GetSubscriptionsFromBorrower {
-    my ($borrowernumber) = @_;
-    my $dbh              = C4::Context->dbh;
-    my $sth              = $dbh->prepare(
-        "SELECT subscription.subscriptionid, biblio.title
-            FROM subscription
-            JOIN biblio ON biblio.biblionumber = subscription.biblionumber
-            JOIN subscriptionroutinglist USING (subscriptionid)
-            WHERE subscriptionroutinglist.borrowernumber = ? ORDER BY title ASC
-                               "
-    );
-    $sth->execute($borrowernumber);
-    my @routinglist;
-    my $count = 0;
-    while ( my $line = $sth->fetchrow_hashref ) {
-        $count++;
-        push( @routinglist, $line );
-    }
-    return ( $count, @routinglist );
-}
-
 
 =head2 GetFictiveIssueNumber
 
