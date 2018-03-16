@@ -22,58 +22,61 @@
 
 <!-- Search Bar -->
 <p class="tip">Search subscriptions:</p>
-<form action="/cgi-bin/koha/serials/serials-home.pl" method="get">[% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing %]" />[% END %]<input type="hidden" name="searched" value="1" /> <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter %]" /> <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter %]" /><input type="submit" value="Search" class="submit" />
+<form action="/cgi-bin/koha/serials/serials-search.pl" method="get">[% IF ( routing ) %]<input type="hidden" name="routing" value="[% routing %]" />[% END %]<input type="hidden" name="searched" value="1" /> <label for="ISSN_filter">ISSN:</label> <input type="text" size="10" maxlength="11" name="ISSN_filter" id="ISSN_filter" value="[% ISSN_filter %]" /> <label for="title_filter">Title:</label> <input type="text" size="20" maxlength="40" name="title_filter" id="title_filter" value="[% title_filter %]" /><input type="submit" value="Search" class="submit" />
 </form>
 <!-- Search Bar End -->
 
 <h1>
-[% IF ( countSubscrip ) %]
-[% countSubscrip %] Subscription routing list(s)
+[% UNLESS ( routinglists ) %]
+0 subscription routing lists
+[% ELSIF ( routinglists.size() == 1 ) %]
+[% routinglists.size() %] subscription routing list
 [% ELSE %]
-0 Subscription routing lists
+[% routinglists.size() %] subscription routing lists
 [% END %]
 </h1>
 
 <div id="subscriptions">
-[% IF ( subscripLoop ) %]
-<table id="subscriptiont">
-              <thead>
-                <tr>
-                  <th>Subscription title</th>
-                  <th>Routing list</th>
-                </tr>
-              </thead>
-              <tbody>
-[% FOREACH subscripLoop IN subscripLoop %]
-<tr>
-    <td>
-    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscripLoop.subscriptionid %]"><strong>
-    [% subscripLoop.title %]
-    </strong>
+
+[% SET routinglists = logged_in_user.get_routing_lists %]
+[% IF ( routinglists ) %]
+    <table id="subscriptiont">
+        <thead>
+            <tr>
+                <th>Subscription title</th>
+                <th>Position</th>
+                <th>Routing list</th>
+            </tr>
+        </thead>
+        <tbody>
+        [% FOREACH routinglist IN routinglists %]
+            <tr>
+                <td>
+                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% routinglist.subscription.subscriptionid %]">
+                        [% routinglist.subscription.biblio.title %]
                     </a>
-                  </td>
-                  <td>
-                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscripLoop.subscriptionid %]"><strong>
-                    Edit routing list
-                      </strong>
+                </td>
+                <td>
+                    [% routinglist.ranking %]
+                </td>
+                <td>
+                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% routinglist.subscription.subscriptionid %]">
+                        Edit routing list
                     </a>
-                    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+                    <input type="hidden" name="biblionumber" value="[% routinglist.subscription.biblionumber %]" />
                     <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
-                  </td>
-                </tr>
-                [% END %]
-                </tbody>
-            </table>
-            </form>
-          [% ELSE %]
-          <p>Patron does not belong to any subscription routing lists.</p>
-          <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-                    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
-                    [% END %]
+                </td>
+            </tr>
+            [% END %]
+        </tbody>
+    </table>
+[% ELSE %]
+    <p>Patron does not belong to any subscription routing lists.</p>
+    <input type="hidden" name="biblionumber" value="[% routinglist.subscription.biblionumber %]" />
+    <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
+[% END %]
 
 </div>
-
-
 
 
 </div>
