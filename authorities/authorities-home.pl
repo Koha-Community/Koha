@@ -217,7 +217,7 @@ if ( $op eq '' ) {
 my $schema = Koha::Database->new()->schema();
 my $servers = $schema->resultset('Z3950server')->search(
         {
-            recordtype => 'biblio',
+            recordtype => 'authority',
             servertype => ['zed', 'sru'],
         },
         {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
