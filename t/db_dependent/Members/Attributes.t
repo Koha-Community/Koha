@@ -25,7 +25,7 @@ use C4::Members::AttributeTypes;
 use Koha::Database;
 use t::lib::TestBuilder;
 
-use Test::More tests => 55;
+use Test::More tests => 48;
 
 use_ok('C4::Members::Attributes');
 
@@ -58,24 +58,12 @@ my $borrowernumber = $patron->{borrowernumber};
 
 my $attribute_type1 = C4::Members::AttributeTypes->new('my code1', 'my description1');
 $attribute_type1->unique_id(1);
-my $attribute_types = C4::Members::Attributes::GetAttributes();
-is( @$attribute_types, 0, 'GetAttributes returns the correct number of attribute types' );
 $attribute_type1->store();
-$attribute_types = C4::Members::Attributes::GetAttributes();
-is( @$attribute_types, 1, 'GetAttributes returns the correct number of attribute types' );
-is( $attribute_types->[0], $attribute_type1->code(), 'GetAttributes returns the correct value for code' );
-$attribute_types = C4::Members::Attributes::GetAttributes(1);
-is( @$attribute_types, 0, 'GetAttributes returns the correct number of attribute types with the filter opac_only' );
 
 my $attribute_type2 = C4::Members::AttributeTypes->new('my code2', 'my description2');
 $attribute_type2->opac_display(1);
 $attribute_type2->staff_searchable(1);
 $attribute_type2->store();
-$attribute_types = C4::Members::Attributes::GetAttributes();
-is( @$attribute_types, 2, 'GetAttributes returns the correct number of attribute types' );
-is( $attribute_types->[1], $attribute_type2->code(), 'GetAttributes returns the correct value for code' );
-$attribute_types = C4::Members::Attributes::GetAttributes(1);
-is( @$attribute_types, 1, 'GetAttributes returns the correct number of attribute types with the filter opac_only' );
 
 my $new_library = $builder->build( { source => 'Branch' } );
 my $attribute_type_limited = C4::Members::AttributeTypes->new('my code3', 'my description3');
