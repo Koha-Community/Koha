@@ -43,6 +43,7 @@ use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
 use Koha::Biblio::Metadata;
 use Koha::Biblio::Metadatas;
+use Koha::Holdings;
 use Koha::Holds;
 use Koha::ItemTypes;
 use Koha::SearchEngine;
@@ -1835,6 +1836,22 @@ sub GetAuthorisedValueDesc {
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "itemtypes" ) {
             my $itemtype = Koha::ItemTypes->find( $value );
             return $itemtype ? $itemtype->translated_description : q||;
+        }
+
+        #---- holdings
+        if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "holdings" ) {
+            my $holding = Koha::Holdings->find( $value );
+            if ( $holding ) {
+                my @parts;
+
+                push @parts, $value;
+                push @parts, $holding->holdingbranch() if $holding->holdingbranch();
+                push @parts, $holding->location() if $holding->location();
+                push @parts, $holding->callnumber() if $holding->callnumber();
+
+                return join(' ', @parts);
+            }
+            return q||;
         }
 
         #---- "true" authorized value

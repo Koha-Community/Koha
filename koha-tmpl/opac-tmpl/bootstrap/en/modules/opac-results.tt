@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Holdings %]
 [% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnList ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnList ) %]
@@ -401,6 +402,15 @@
                                                                     [% END %]
                                                                 [% ELSE %]
                                                                     <span class="unavailable">No items available:</span>
+                                                                    [% IF ( SEARCH_RESULT.summary_holdings ) %]
+                                                                        <span class="summary-holdings">
+                                                                            [% FOREACH holding IN SEARCH_RESULT.summary_holdings %]
+                                                                                [% UNLESS holding.suppress %]
+                                                                                    [% Holdings.GetLocation(holding, 1) | html %],
+                                                                                [% END %]
+                                                                            [% END %]
+                                                                        </span>
+                                                                    [% END %]
                                                                 [% END %]
                                                             [% END # / IF SEARCH_RESULT.available_items_loop.size %]
 

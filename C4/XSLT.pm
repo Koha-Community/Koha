@@ -270,9 +270,10 @@ sub XSLTParse4Display {
     }
 
     my $itemsxml  = buildKohaItemsNamespace($biblionumber, $hidden_items);
+    my $holdingsxml  = buildKohaHoldingsNamespace($biblionumber);
     my $xmlrecord = $record->as_xml(C4::Context->preference('marcflavour'));
 
-    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$componentPartRecordsXML\<\/record\>/;
+    $xmlrecord =~ s/\<\/record\>/$itemsxml$holdingsxml$sysxml$componentPartRecordsXML\<\/record\>/;
     if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
         $xmlrecord =~ s/\&amp;amp;/\&amp;/g;
         $xmlrecord =~ s/\&amp\;lt\;/\&lt\;/g;
@@ -370,6 +371,37 @@ sub buildKohaItemsNamespace {
     $xml = "<items xmlns=\"http://www.koha-community.org/items\">".$xml."</items>";
     return $xml;
 }
+
+sub buildKohaHoldingsNamespace {
+    my ($biblionumber) = @_;
+
+    my $holdings = C4::Holdings::GetHoldingsByBiblionumber( $biblionumber );
+
+    my $shelflocations =
+      { map { $_->{authorised_value} => $_->{opac_description} } Koha::AuthorisedValues->get_descriptions_by_koha_field( { frameworkcode => 'HLD', kohafield => 'holdings.location' } ) };
+
+    my %branches = map { $_->branchcode => $_->branchname } Koha::Libraries->search({}, { order_by => 'branchname' });
+
+    my $location = "";
+    my $ccode = "";
+    my $xml = '';
+    for my $holding ( @{$holdings} ) {
+        my $holdingbranch = $holding->{holdingbranch} ? xml_escape($branches{$holding->{holdingbranch}}) : '';
+        my $location = $holding->{location} ? xml_escape($shelflocations->{$holding->{location}} || $holding->{location}) : '';
+        my $callnumber = xml_escape($holding->{callnumber});
+        my $suppress = $holding->{suppress} || '0';
+        $xml .=
+            "<holding>"
+          . "<holdingbranch>$holdingbranch</holdingbranch>"
+          . "<location>$location</location>"
+          . "<callnumber>$callnumber</callnumber>"
+          . "<suppress>$suppress</suppress>"
+          . "</holding>";
+    }
+    $xml = "<holdings xmlns=\"http://www.koha-community.org/holdings\">$xml</holdings>";
+    return $xml;
+}
+
 
 =head2 engine
 

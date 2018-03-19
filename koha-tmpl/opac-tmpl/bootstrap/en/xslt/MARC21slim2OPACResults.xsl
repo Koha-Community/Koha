@@ -4,9 +4,10 @@
 <xsl:stylesheet version="1.0"
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
+  xmlns:holdings="http://www.koha-community.org/holdings"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
   xmlns:str="http://exslt.org/strings"
-  exclude-result-prefixes="marc items">
+  exclude-result-prefixes="marc items holdings">
     <xsl:import href="MARC21slimUtils.xsl"/>
     <xsl:output method = "html" indent="yes" omit-xml-declaration = "yes" encoding="UTF-8"/>
     <xsl:key name="item-by-status" match="items:item" use="items:status"/>
@@ -1202,7 +1203,21 @@
                             </xsl:for-each>
                             (<xsl:value-of select="$AlternateHoldingsCount"/>)
                             </xsl:when>
-                            <xsl:otherwise>No items available </xsl:otherwise>
+                            <xsl:otherwise>
+                                <xsl:text>No items available</xsl:text>
+                                <xsl:if test="//holdings:holdings/holdings:holding/holdings:suppress[.='0']">:
+                                    <xsl:for-each select="//holdings:holdings/holdings:holding[./holdings:suppress='0']">
+                                        <xsl:if test="position() > 1">, </xsl:if>
+                                        <xsl:value-of select="./holdings:holdingbranch"/>
+                                        <xsl:if test="string-length(./holdings:location) > 0">
+                                        - <xsl:value-of select="./holdings:location"/>
+                                        </xsl:if>
+                                        <xsl:if test="string-length(./holdings:callnumber) > 0">
+                                        - <xsl:value-of select="./holdings:callnumber"/>
+                                        </xsl:if>
+                                    </xsl:for-each>
+                                </xsl:if>
+                            </xsl:otherwise>
                         </xsl:choose>
 				   </xsl:when>
                    <xsl:when test="count(key('item-by-status', 'available'))>0">

@@ -20,6 +20,7 @@ use strict;
 require Exporter;
 use C4::Context;
 use C4::Biblio;    # GetMarcFromKohaField, GetBiblioData
+use C4::Holdings;  # GetHoldingsByBiblionumber
 use C4::Koha;      # getFacets
 use Koha::DateUtils;
 use Koha::Libraries;
@@ -2104,6 +2105,7 @@ sub searchResults {
         my $maxitems_pref = C4::Context->preference('maxItemsinSearchResults');
         my $maxitems = $maxitems_pref ? $maxitems_pref - 1 : 1;
         my @hiddenitems; # hidden itemnumbers based on OpacHiddenItems syspref
+        my $summary_holdings;
 
         # loop through every item
         foreach my $field (@fields) {
@@ -2287,6 +2289,11 @@ sub searchResults {
             push @available_items_loop, $available_items->{$key}
         }
 
+        # Fetch summary holdings
+        if (C4::Context->preference('SummaryHoldings')) {
+            $summary_holdings = C4::Holdings::GetHoldingsByBiblionumber($oldbiblio->{biblionumber});
+        }
+
         # XSLT processing of some stuff
         # we fetched the sysprefs already before the loop through all retrieved record!
         if (!$scan && $xslfile) {
@@ -2319,6 +2326,7 @@ sub searchResults {
         $oldbiblio->{onholdcount}          = $item_onhold_count;
         $oldbiblio->{orderedcount}         = $ordered_count;
         $oldbiblio->{notforloancount}      = $notforloan_count;
+        $oldbiblio->{summary_holdings}     = $summary_holdings;
 
         if (C4::Context->preference("AlternateHoldingsField") && $items_count == 0) {
             my $fieldspec = C4::Context->preference("AlternateHoldingsField");

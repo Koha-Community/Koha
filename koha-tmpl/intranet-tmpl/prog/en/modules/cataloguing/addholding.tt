@@ -1,0 +1,615 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( holding_id ) %]Editing record number [% holding_id %][% ELSE %]Add holding record[% END %]</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
+[% INCLUDE 'browser-strings.inc' %]
+<!--[if lt IE 9]>
+<script type="text/javascript" src="[% interface %]/lib/shims/json2.min_[% KOHA_VERSION %].js"></script>
+<![endif]-->
+<script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript">
+//<![CDATA[
+    var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+    browser.show();
+
+    $(window).load(function() {
+        $("#loading").hide();
+    });
+    $(document).ready(function() {
+        $('#addholdingtabs').tabs().bind('show.ui-tabs', function(e, ui) {
+            $("#"+ui.panel.id+" input:eq(0)").focus();
+        });
+
+        [% IF tab %]
+            $('#addholdingtabs').selectTabByID("#[% tab %]");
+        [% END %]
+
+        $('#toolbar').fixFloat();
+
+        /* check cookie to hide/show marcdocs*/
+        if($.cookie("marcdocs_[% borrowernumber %]") == 'hide'){
+            toggleMARCdocLinks(false);
+        } else {
+            toggleMARCdocLinks(true);
+        }
+
+        $("#marcDocsSelect").click(function(){
+            if($.cookie("marcdocs_[% borrowernumber %]") == 'hide'){
+                toggleMARCdocLinks(true);
+            } else {
+                toggleMARCdocLinks(false);
+            }
+        });
+
+        /* check cookie to hide/show marc tags*/
+        var marctags_cookie = $.cookie("marctags_[% borrowernumber %]");
+        if (marctags_cookie == 'hide'){
+            toggleMARCTagLinks(false);
+        } else if( marctags_cookie == 'show'){
+            toggleMARCTagLinks(true)
+        } else {
+            [% UNLESS Koha.Preference("hide_marc") %]
+                toggleMARCTagLinks(true)
+            [% ELSE %]
+                toggleMARCTagLinks(false);
+            [% END %]
+        }
+
+        $("#marcTagsSelect").click(function(){
+            if( $.cookie("marctags_[% borrowernumber %]") == 'hide'){
+                toggleMARCTagLinks(true)
+            } else {
+                toggleMARCTagLinks(false);
+            }
+        });
+
+        $("#saverecord").click(function(){
+            $(".btn-group").removeClass("open");
+            onOption();
+            return false;
+        });
+
+        $("#saveandview").click(function(){
+            $(".btn-group").removeClass("open");
+            redirect("view");
+            return false;
+        });
+
+        $("#saveanditems").click(function(){
+            $(".btn-group").removeClass("open");
+            redirect("items");
+            return false;
+        });
+        $("#saveandcontinue").click(function(){
+            $(".btn-group").removeClass("open");
+            var tab = $("#addholdingtabs li.ui-tabs-active:first a").attr('href');
+            tab = tab.replace('#', '');
+            $("#current_tab").val(tab);
+            redirect("just_save", tab);
+            return false;
+        });
+
+        $( '#switcheditor' ).click( function() {
+
+            if ( !confirm( _("Any changes will not be saved. Continue?") ) ) return false;
+
+            $.cookie( 'catalogue_editor_[% USER_INFO.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
+
+            var holding_id = [% holding_id || "''" %];
+            window.location = '/cgi-bin/koha/cataloguing/editor.pl#catalog/' + biblionumber + '/holdings/' + holding_id;
+
+            return false;
+        } );
+        $(".change-framework").on("click", function(){
+            var frameworkcode = $(this).data("frameworkcode");
+            $("#frameworkcode").val( frameworkcode );
+            Changefwk();
+        });
+    });
+
+function redirect(dest){
+    $("#redirect").attr("value",dest);
+    return Check();
+}
+
+[% IF ( CAN_user_editcatalogue_edit_items ) %]
+    var onOption = function () {
+        return Check();
+    }
+[% END %]
+
+function Dopop(link,i) {
+    defaultvalue = document.getElementById(i).value;
+    window.open(link+"&result="+defaultvalue,"valuebuilder",'width=700,height=550,toolbar=false,scrollbars=yes');
+}
+
+function PopupMARCFieldDoc(field) {
+    [% IF ( marcflavour == 'MARC21' ) %]
+        _MARC21FieldDoc(field);
+    [% ELSIF ( marcflavour == 'UNIMARC' ) %]
+        _UNIMARCFieldDoc(field);
+    [% END %]
+}
+
+function _MARC21FieldDoc(field) {
+    if(field == 0) {
+        window.open("http://www.loc.gov/marc/holdings/bdleader.html");
+    } else if (field < 900) {
+        window.open("http://www.loc.gov/marc/holdings/bd" + ("000"+field).slice(-3) + ".html");
+    } else {
+        window.open("http://www.loc.gov/marc/holdings/bd9xx.html");
+    }
+}
+
+function _UNIMARCFieldDoc(field) {
+    /* http://archive.ifla.org/VI/3/p1996-1/ is an outdated version of UNIMARC, but
+       seems to be the only version available that can be linked to per tag.  More recent
+       versions of the UNIMARC standard are available on the IFLA website only as
+       PDFs!
+    */
+    var url;
+    if (field == 0) {
+        url = "http://archive.ifla.org/VI/3/p1996-1/uni.htm";
+    } else {
+        var first = field.substring(0,1);
+        url = "http://archive.ifla.org/VI/3/p1996-1/uni" + first + ".htm#";
+        if (first == 0) url = url + "b";
+        url = first == 9
+              ? "http://archive.ifla.org/VI/3/p1996-1/uni9.htm"
+              : url + field;
+    }
+    window.open(url);
+}
+
+/*
+ * Functions to hide/show marc docs and tags links
+ */
+
+function toggleMARCdocLinks(flag){
+    if( flag === true ){
+        $(".marcdocs").show();
+        $.cookie("marcdocs_[% borrowernumber %]",'show', { path: "/", expires: 365 });
+        $("#marcDocsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
+    } else {
+        $(".marcdocs").hide();
+        $.cookie("marcdocs_[% borrowernumber %]",'hide', { path: "/", expires: 365 });
+        $("#marcDocsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
+    }
+}
+
+function toggleMARCTagLinks(flag){
+    if( flag === true ){
+        $(".tagnum").show();
+        $(".subfieldcode").show();
+        $.cookie("marctags_[% borrowernumber %]",'show', { path: "/", expires: 365 });
+        $("#marcTagsSelect i").addClass('fa-check-square-o').removeClass('fa-square-o');
+    } else {
+        $(".tagnum").hide();
+        $(".subfieldcode").hide();
+        $.cookie("marctags_[% borrowernumber %]",'hide', { path: "/", expires: 365 });
+        $("#marcTagsSelect i").removeClass('fa-check-square-o').addClass('fa-square-o');
+    }
+}
+
+/**
+ * check if mandatory subfields are written
+ */
+function AreMandatoriesNotOk(){
+    var mandatories = new Array();
+    var mandatoriesfields = new Array();
+    var tab = new Array();
+    var label = new Array();
+    var flag=0;
+    var tabflag= new Array();
+    [% FOREACH BIG_LOO IN BIG_LOOP %]
+        [% FOREACH innerloo IN BIG_LOO.innerloop %]
+            [% IF ( innerloo.mandatory ) %]
+                mandatoriesfields.push(new Array("[% innerloo.tag %]","[% innerloo.index %][% innerloo.random %]","[% innerloo.index %]"));
+            [% END %]
+            [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+                [% IF ( subfield_loo.mandatory ) %]
+                    mandatories.push("[% subfield_loo.id %]");
+                    tab.push("[% BIG_LOO.number %]");
+                    label.push("[% subfield_loo.marc_lib %]");
+                [% END %]
+            [% END %]
+        [% END %]
+    [% END %]
+    var StrAlert = _("Can't save this record because the following field aren't filled:");
+    StrAlert += "\n\n";
+    for (var i=0,len=mandatories.length; i<len ; i++) {
+        var tag=mandatories[i].substr(4,3);
+        var subfield=mandatories[i].substr(17,1);
+        var tagnumber=mandatories[i].substr(19,mandatories[i].lastIndexOf("_")-19);
+        if (tabflag[tag+subfield+tagnumber] ==  null) {
+            tabflag[tag+subfield+tagnumber]=new Array();
+            tabflag[tag+subfield+tagnumber][0]=0;
+        }
+        if (tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(mandatories[i]) != null && ! document.getElementById(mandatories[i]).value || document.getElementById(mandatories[i]) == null)) {
+            tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
+            document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
+            $('#' + mandatories[i]).focus();
+            tabflag[tag+subfield+tagnumber][1]=label[i];
+            tabflag[tag+subfield+tagnumber][2]=tab[i];
+        } else {
+            tabflag[tag+subfield+tagnumber][0] = 1;
+        }
+    }
+    for (var tagsubfieldid in tabflag) {
+      if (tabflag[tagsubfieldid][0]==0) {
+        var tag=tagsubfieldid.substr(0,3);
+        var subfield=tagsubfieldid.substr(3,1);
+        StrAlert += "\t* "+_("tag %s subfield %s %s in tab %s").format(tag, subfield, tabflag[tagsubfieldid][1], tabflag[tagsubfieldid][2]) + "\n";
+        flag=1;
+      }
+    }
+
+    /* Check for mandatories field(not subfields) */
+    for (var i=0,len=mandatoriesfields.length; i<len; i++) {
+        isempty  = true;
+        arr      = mandatoriesfields[i];
+        divid    = "tag_" + arr[0] + "_" + arr[1];
+        varegexp = new RegExp("^tag_" + arr[0] + "_code_");
+
+        if(parseInt(arr[0]) >= 10) {
+            elem = document.getElementById(divid);
+            eleminputs = elem.getElementsByTagName('input');
+
+            for(var j=0,len2=eleminputs.length; j<len2; j++){
+
+                if(eleminputs[j].name.match(varegexp) && eleminputs[j].value){
+                        inputregexp = new RegExp("^tag_" + arr[0] + "_subfield_" + eleminputs[j].value + "_" + arr[2]);
+
+                        for( var k=0; k<len2; k++){
+                            if(eleminputs[k].id.match(inputregexp) && eleminputs[k].value){
+                                isempty = false
+                            }
+                        }
+
+                        elemselect = elem.getElementsByTagName('select');
+                        for( var k=0; k<elemselect.length; k++){
+                            if(elemselect[k].id.match(inputregexp) && elemselect[k].value){
+                                isempty = false
+                            }
+                        }
+                }
+            }
+
+            elemtextareas = elem.getElementsByTagName('textarea');
+            for(var j=0,len2=elemtextareas.length; j<len2; j++){
+                // this bit assumes that the only textareas in this context would be for subfields
+                if (elemtextareas[j].value) {
+                    isempty = false;
+                }
+            }
+        } else {
+            isempty = false;
+        }
+
+        if (isempty) {
+            flag = 1;
+                    StrAlert += "\t* " + _("Field %s is mandatory, at least one of its subfields must be filled.").format(arr[0]) + "\n";
+        }
+    }
+
+    if (flag) {
+        return StrAlert;
+    } else {
+        return flag;
+    }
+}
+
+/**
+ *
+ *
+ */
+function Check(){
+    var StrAlert = AreMandatoriesNotOk();
+    if( ! StrAlert ){
+        document.f.submit();
+        return true;
+    } else {
+        alert(StrAlert);
+        return false;
+    }
+}
+
+function Changefwk() {
+    var f = document.f;
+    f.op.value = "[% op %]";
+    f.biblionumber.value = "[% biblionumber %]";
+    f.holding_id.value = "[% holding_iddata %]";
+    f.changed_framework.value = "changed";
+    f.submit();
+}
+
+//]]>
+</script>
+<link type="text/css" rel="stylesheet" href="[% interface %]/[% theme %]/css/addholding.css" />
+
+[% INCLUDE 'select2.inc' %]
+<script>
+  $(document).ready(function() {
+    $('.subfield_line select').select2();
+  });
+</script>
+
+[% IF ( bidi ) %]
+   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />
+[% END %]
+</head>
+<body id="cat_addholding" class="cat">
+
+   <div id="loading">
+       <div>Loading, please wait...</div>
+   </div>
+
+[% INCLUDE 'header.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( holding_id ) %]Editing record number [% holding_id %][% ELSE %]Add holding record[% END %]</div>
+
+<div id="doc" class="yui-t7">
+
+<div id="bd">
+        <div id="yui-main">
+        <div class="yui-g">
+
+<h1>
+[% IF ( holding_id ) %]Editing record number [% holding_id %]
+[% ELSE %]Add holdings record
+[% END %]
+</h1>
+
+[% IF ( done ) %]
+    <script type="text/javascript">
+        opener.document.forms['f'].holding_id.value=[% holding_id %];
+        window.close();
+    </script>
+[% ELSE %]
+    <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addholding.pl" onsubmit="return Check();">
+    <input type="hidden" value="[% IF ( holding_id ) %]view[% ELSE %]items[% END %]" id="redirect" name="redirect" />
+    <input type="hidden" value="" id="current_tab" name="current_tab" />
+[% END %]
+
+<div id="toolbar" class="btn-toolbar">
+    [% IF CAN_user_editcatalogue_edit_items %]
+        <div class="btn-group">
+            <button class="btn btn-default btn-sm" id="saverecord"><i class="fa fa-save"></i> Save</button>
+            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a id="saveandview" href="#">Save and view record</a></li>
+                <li><a id="saveanditems" href="#">Save and edit items</a></li>
+                <li><a id="saveandcontinue" href="#">Save and continue editing</a></li>
+            </ul>
+        </div>
+    [% END %]
+
+    <div class="btn-group">
+        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+        <ul id="settings-menu" class="dropdown-menu">
+            [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
+                <li><a href="#" id="switcheditor">Switch to advanced editor</a></li>
+            [% END %]
+            [% IF marcflavour != 'NORMARC' AND NOT advancedMARCEditor %]
+                <li>
+                    <a href="#" id="marcDocsSelect"><i class="fa fa-check-square-o"></i> Show MARC tag documentation links</a>
+                <li>
+                    <a href="#" id="marcTagsSelect"><i class="fa fa-check-square-o"></i> Show tags</a>
+                </li>
+            [% END %]
+            <li class="divider"></li>
+            <li class="nav-header">Change framework</li>
+            <li>
+                <a href="#" class="change-framework" data-frameworkcode="">
+                    [% IF ( frameworkcode ) %]
+                       <i class="fa fa-fw">&nbsp;</i>
+                    [% ELSE %]
+                        <i class="fa fa-fw fa-check"></i>
+                    [% END %]
+                    Default
+                </a>
+            </li>
+            [% FOREACH framework IN frameworks%]
+                <li>
+                    <a href="#" class="change-framework" data-frameworkcode="[% framework.frameworkcode %]">
+                        [% IF framework.frameworkcode == frameworkcode %]
+                            <i class="fa fa-fw fa-check"></i>
+                        [% ELSE %]
+                            <i class="fa fa-fw">&nbsp;</i>
+                        [% END %]
+                        [% framework.frameworktext %]
+                    </a>
+                </li>
+            [% END %]
+        </ul>
+    </div>
+    <div class="btn-group">
+        <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">Cancel</a>
+    </div>
+</div>
+
+[% IF ( popup ) %]
+        <input type="hidden" name="mode" value="popup" />
+[% END %]
+        <input type="hidden" name="op" value="add" />
+        <input type="hidden" id="frameworkcode" name="frameworkcode" value="[% frameworkcode %]" />
+        <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+        <input type="hidden" name="holding_id" value="[% holding_id %]" />
+        <input type="hidden" name="changed_framework" value="" />
+
+<div id="addholdingtabs" class="toptabs numbered">
+    <ul>
+        [% FOREACH BIG_LOO IN BIG_LOOP %]
+        <li><a href="#tab[% BIG_LOO.number %]XX">[% BIG_LOO.number %]</a></li>
+        [% END %]
+    </ul>
+
+[% FOREACH BIG_LOO IN BIG_LOOP %]
+    <div id="tab[% BIG_LOO.number %]XX">
+
+    [% FOREACH innerloo IN BIG_LOO.innerloop %]
+    [% IF ( innerloo.tag ) %]
+    <div class="tag" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
+        <div class="tag_title" id="div_indicator_tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
+            [% IF advancedMARCEditor %]
+                <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;">[% innerloo.tag %]</a>
+            [% ELSE %]
+                <span class="tagnum" title="[% innerloo.tag_lib %]">[% innerloo.tag %]</span>
+                [% IF marcflavour != 'NORMARC' %]<a href="#" class="marcdocs" onclick="PopupMARCFieldDoc('[% innerloo.tag %]'); return false;">&nbsp;?</a>[% END %]
+            [% END %]
+                [% IF ( innerloo.fixedfield ) %]
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        style="display:none;"
+                        name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator1 %]" />
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        style="display:none;"
+                        name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator2 %]" />
+                [% ELSE %]
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        name="tag_[% innerloo.tag %]_indicator1_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator1 %]" />
+                    <input type="text"
+                        tabindex="1"
+                        class="indicator flat"
+                        name="tag_[% innerloo.tag %]_indicator2_[% innerloo.index %][% innerloo.random %]"
+                        size="1"
+                        maxlength="1"
+                        value="[% innerloo.indicator2 %]" />
+                [% END %] -
+
+            [% UNLESS advancedMARCEditor %]
+                <a href="#" tabindex="1" class="expandfield" onclick="ExpandField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Click to Expand this Tag">[% innerloo.tag_lib %]</a>
+            [% END %]
+                <span class="field_controls">
+                [% IF ( innerloo.repeatable ) %]
+                    <a href="#" tabindex="1" class="buttonPlus" onclick="CloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]','0','[% advancedMARCEditor %]'); return false;" title="Repeat this Tag">
+                        <img src="[% interface %]/[% theme %]/img/repeat-tag.png" alt="Repeat this Tag" />
+                    </a>
+                [% END %]
+                    <a href="#" tabindex="1" class="buttonMinus" onclick="UnCloneField('tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]'); return false;" title="Delete this Tag">
+                        <img src="[% interface %]/[% theme %]/img/delete-tag.png" alt="Delete this Tag" />
+                    </a>
+                </span>
+
+        </div>
+
+        [% FOREACH subfield_loo IN innerloo.subfield_loop %]
+            <!--  One line on the marc editor -->
+            <div class="subfield_line" style="[% subfield_loo.visibility %]" id="subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]">
+
+                [% UNLESS advancedMARCEditor %]
+                    [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" style="display:none;" class="labelsubfield">
+                    [% ELSE %]<label for="tag_[% subfield_loo.tag %]_subfield_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]" class="labelsubfield">
+                    [% END %]
+                [% END %]
+
+                <span class="subfieldcode">
+                    [% IF ( subfield_loo.fixedfield ) %]
+                        <img class="buttonUp" style="display:none;" src="[% interface %]/[% theme %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
+                    [% ELSE %]
+                        <img class="buttonUp" src="[% interface %]/[% theme %]/img/up.png" onclick="upSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]')" alt="Move Up" title="Move Up" />
+                    [% END %]
+                        <input type="text"
+                            title="[% subfield_loo.marc_lib %]"
+                            style=" [% IF ( subfield_loo.fixedfield ) %]display:none; [% END %]border:0;"
+                            name="tag_[% subfield_loo.tag %]_code_[% subfield_loo.subfield %]_[% subfield_loo.index %]_[% subfield_loo.index_subfield %]"
+                            value="[% subfield_loo.subfield %]"
+                            size="1"
+                            maxlength="1"
+                            class="flat"
+                            tabindex="0" />
+                </span>
+
+                [% UNLESS advancedMARCEditor %]
+                    [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
+                        [% subfield_loo.marc_lib %]
+                        [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
+                    </span>
+                    </label>
+                [% END %]
+
+                [% SET mv = subfield_loo.marc_value %]
+                [% IF ( mv.type == 'text' ) %]
+                    [% IF ( mv.readonly == 1 ) %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor readonly" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" readonly="readonly" />
+                    [% ELSE %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" />
+                    [% END %]
+                    [% IF ( mv.authtype ) %]
+                    <span class="subfield_controls"><a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtype -%]','holding'); return false;" tabindex="1" title="Tag editor">Tag editor</a></span>
+                    [% END %]
+                [% ELSIF ( mv.type == 'text_complex' ) %]
+                    <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" />
+                    <span class="subfield_controls">
+                        [% IF mv.noclick %]
+                            <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup"></a>
+                        [% ELSE %]
+                            <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
+                        [% END %]
+                    </span>
+                    [% mv.javascript %]
+                [% ELSIF ( mv.type == 'hidden' ) %]
+                    <input tabindex="1" type="hidden" id="[%- mv.id -%]" name="[%- mv.name -%]" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" value="[%- mv.value -%]" />
+                [% ELSIF ( mv.type == 'textarea' ) %]
+                    <textarea cols="70" rows="4" id="[%- mv.id -%]" name="[%- mv.name -%]" class="input_marceditor" tabindex="1">[%- mv.value -%]</textarea>
+                [% ELSIF ( mv.type == 'select' ) %]
+                    <select name="[%- mv.name -%]" tabindex="1" size="1" class="input_marceditor" id="[%- mv.id -%]">
+                    [% FOREACH aval IN mv.values %]
+                        [% IF aval == mv.default %]
+                        <option value="[%- aval -%]" selected="selected">[%- mv.labels.$aval -%]</option>
+                        [% ELSE %]
+                        <option value="[%- aval -%]">[%- mv.labels.$aval -%]</option>
+                        [% END %]
+                    [% END %]
+                    </select>
+                [% END %]
+
+                <span class="subfield_controls">
+                [% IF ( subfield_loo.repeatable ) %]
+                    <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]','[% advancedMARCEditor %]'); return false;">
+                        <img src="[% interface %]/[% theme %]/img/clone-subfield.png" alt="Clone" title="Clone this subfield" />
+                    </a>
+                    <a href="#" class="buttonMinus" tabindex="1" onclick="UnCloneField('subfield[% subfield_loo.tag %][% subfield_loo.subfield %][% subfield_loo.random %]'); return false;">
+                        <img src="[% interface %]/[% theme %]/img/delete-subfield.png" alt="Delete" title="Delete this subfield" />
+                    </a>
+                [% END %]
+                </span>
+
+            </div>
+            <!-- End of the line -->
+        [% END %]
+
+    </div>
+    [% END %]<!-- if innerloo.tag -->
+    [% END %]<!-- BIG_LOO.innerloop -->
+    </div>
+[% END %]<!-- BIG_LOOP -->
+
+</div><!-- tabs -->
+
+</form>
+
+</div>
+</div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

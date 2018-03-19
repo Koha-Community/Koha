@@ -1,0 +1,193 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Holdings &rsaquo; 008 builder</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="cat_marc21_field_008_holdings" class="cat" style="padding:1em;">
+<h3> 008 Fixed-length data elements</h3>
+<form name="f_pop" onsubmit="report()" action="">
+<input type="hidden" name="plugin_name" value="marc21_field_008_holdings.pl" />
+<input name="f1" value="[% f1 %]" type="hidden" />
+<table>
+	<tr>
+		<td>00-05 - Date entered on file</td>
+		<td>[% f1 %]</td>
+	</tr>
+	<tr>
+		<td><label for="f6">06 - Receipt or acquisition status</label></td>
+		<td>
+			<select name="f6" id="f6" size="1">
+                <option value="0"[% IF ( f60 ) %] selected="selected"[% END %]>0 - Unknown</option>
+                <option value="1"[% IF ( f61 ) %] selected="selected"[% END %]>1 - Other receipt or acquisition status</option>
+                <option value="2"[% IF ( f62 ) %] selected="selected"[% END %]>2 - Received and complete or ceased</option>
+                <option value="3"[% IF ( f63 ) %] selected="selected"[% END %]>3 - On order</option>
+                <option value="4"[% IF ( f64 ) %] selected="selected"[% END %]>4 - Currently received</option>
+                <option value="5"[% IF ( f65 ) %] selected="selected"[% END %]>5 - Not currently received</option>
+			</select>
+		</td>
+	</tr>
+    <tr>
+        <td><label for="f7">07 - Method of acquisition</label></td>
+        <td>
+            <select name="f7" id="f7" size="1">
+                <option value="c"[% IF ( f7c ) %] selected="selected"[% END %]>c - Cooperative or consortial purchase</option>
+                <option value="d"[% IF ( f7d ) %] selected="selected"[% END %]>d - Deposit</option>
+                <option value="e"[% IF ( f7e ) %] selected="selected"[% END %]>e - Exchange</option>
+                <option value="f"[% IF ( f7f ) %] selected="selected"[% END %]>f - Free</option>
+                <option value="g"[% IF ( f7g ) %] selected="selected"[% END %]>g - Gift</option>
+                <option value="l"[% IF ( f7l ) %] selected="selected"[% END %]>l - Legal deposit</option>
+                <option value="m"[% IF ( f7m ) %] selected="selected"[% END %]>m - Membership</option>
+                <option value="n"[% IF ( f7n ) %] selected="selected"[% END %]>n - Non-library purchase</option>
+                <option value="p"[% IF ( f7p ) %] selected="selected"[% END %]>p - Purchase</option>
+                <option value="q"[% IF ( f7q ) %] selected="selected"[% END %]>q - Lease</option>
+                <option value="u"[% IF ( f7u ) %] selected="selected"[% END %]>u - Unknown</option>
+                <option value="z"[% IF ( f7z ) %] selected="selected"[% END %]>z - Other method of acquisition</option>
+            </select>
+        </td>
+    </tr>
+	<tr>
+		<td><label for="f8">08-11 - Expected acquisition end date</label></td>
+		<td><input type="text" name="f8" id="f8" maxlength="4" size="5" value="[% f8 %]" /></td>
+	</tr>
+    <tr>
+        <td><label for="f12">12- General retention policy</label></td>
+        <td>
+            <select name="f12" id="f12" size="1">
+                <option value="0"[% IF ( f120 ) %] selected="selected"[% END %]>0 - Unknown</option>
+                <option value="1"[% IF ( f121 ) %] selected="selected"[% END %]>1 - Other general retention policy</option>
+                <option value="2"[% IF ( f122 ) %] selected="selected"[% END %]>2 - Retained except as replaced by updates</option>
+                <option value="3"[% IF ( f123 ) %] selected="selected"[% END %]>3 - Sample issue retained</option>
+                <option value="4"[% IF ( f124 ) %] selected="selected"[% END %]>4 - Retained until replaced by microform</option>
+                <option value="5"[% IF ( f125 ) %] selected="selected"[% END %]>5 - Retained until replaced by cumulation, replacement volume, or revision</option>
+                <option value="6"[% IF ( f126 ) %] selected="selected"[% END %]>6 - Retained for a limited period</option>
+                <option value="7"[% IF ( f127 ) %] selected="selected"[% END %]>7 - Not retained</option>
+                <option value="8"[% IF ( f128 ) %] selected="selected"[% END %]>8 - Permanently retained</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f13">13 - Policy type</label></td>
+        <td>
+            <select name="f13" id="f13" size="1">
+                <option value=" "[% IF ( f13 ) %] selected="selected"[% END %]># - No information provided</option>
+                <option value="l"[% IF ( f13l ) %] selected="selected"[% END %]>l - Latest</option>
+                <option value="p"[% IF ( f13p ) %] selected="selected"[% END %]>p - Previous</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f14">14 - Number of units</label></td>
+        <td>
+            <select name="f14" id="f14" size="1">
+                <option value=" "[% IF ( f14 ) %] selected="selected"[% END %]># - No information provided</option>
+                <option value="1"[% IF ( f141 ) %] selected="selected"[% END %]>1</option>
+                <option value="2"[% IF ( f142 ) %] selected="selected"[% END %]>2</option>
+                <option value="3"[% IF ( f143 ) %] selected="selected"[% END %]>3</option>
+                <option value="4"[% IF ( f144 ) %] selected="selected"[% END %]>4</option>
+                <option value="5"[% IF ( f145 ) %] selected="selected"[% END %]>5</option>
+                <option value="6"[% IF ( f146 ) %] selected="selected"[% END %]>6</option>
+                <option value="7"[% IF ( f147 ) %] selected="selected"[% END %]>7</option>
+                <option value="8"[% IF ( f148 ) %] selected="selected"[% END %]>8</option>
+                <option value="9"[% IF ( f149 ) %] selected="selected"[% END %]>9 </option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f15">15 - Unit type</label></td>
+        <td>
+            <select name="f15" id="f15" size="1">
+                <option value=" "[% IF ( f15 ) %] selected="selected"[% END %]># - No information provided</option>
+                <option value="m"[% IF ( f15m ) %] selected="selected"[% END %]>m - Month(s)</option>
+                <option value="w"[% IF ( f15w ) %] selected="selected"[% END %]>w - Week(s)</option>
+                <option value="y"[% IF ( f15y ) %] selected="selected"[% END %]>y - Year(s)</option>
+                <option value="e"[% IF ( f15e ) %] selected="selected"[% END %]>e - Edition(s)</option>
+                <option value="i"[% IF ( f15i ) %] selected="selected"[% END %]>i - Issue(s)</option>
+                <option value="s"[% IF ( f15s ) %] selected="selected"[% END %]>s - Supplement(s)</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f16">16 - Completeness</label></td>
+        <td>
+            <select name="f16" id="f16" size="1">
+                <option value="0"[% IF ( f160 ) %] selected="selected"[% END %]>0 - Other</option>
+                <option value="1"[% IF ( f161 ) %] selected="selected"[% END %]>1 - Complete</option>
+                <option value="2"[% IF ( f162 ) %] selected="selected"[% END %]>2 - Incomplete</option>
+                <option value="3"[% IF ( f163 ) %] selected="selected"[% END %]>3 - Scattered</option>
+                <option value="4"[% IF ( f164 ) %] selected="selected"[% END %]>4 - Not applicable</option>
+            </select>
+        </td>
+    </tr>
+	<tr>
+		<td><label for="f17">17-19 - Number of copies reported</label></td>
+		<td><input type="text" name="f17" id="f17" maxlength="3" size="4" value="[% f17 %]" /></td>
+	</tr>
+    <tr>
+        <td><label for="f20">20 - Lending policy</label></td>
+        <td>
+            <select name="f20" id="f20" size="1">
+                <option value="a"[% IF ( f20a ) %] selected="selected"[% END %]>a - Will lend</option>
+                <option value="b"[% IF ( f20b ) %] selected="selected"[% END %]>b - Will not lend</option>
+                <option value="c"[% IF ( f20c ) %] selected="selected"[% END %]>c - Will lend hard copy only</option>
+                <option value="l"[% IF ( f20l ) %] selected="selected"[% END %]>l - Limited lending policy</option>
+                <option value="u"[% IF ( f20u ) %] selected="selected"[% END %]>u - Unknown</option>
+            </select>
+        </td>
+    </tr>
+    <tr>
+        <td><label for="f21">21 - Reproduction policy</label></td>
+        <td>
+            <select name="f21" id="f21" size="1">
+                <option value="a"[% IF ( f21a ) %] selected="selected"[% END %]>a - Will reproduce</option>
+                <option value="b"[% IF ( f21b ) %] selected="selected"[% END %]>b - Will not reproduce</option>
+                <option value="u"[% IF ( f21u ) %] selected="selected"[% END %]>u - Unknown</option>
+            </select>
+        </td>
+    </tr>
+	<tr>
+		<td><label for="f22">22-24 - Language</label></td>
+		<td><input type="text" name="f22" id="f22" maxlength="3" size="4" value="[% f22 %]" /></td>
+	</tr>
+    <tr>
+        <td><label for="f25">25 - Separate or composite copy report</label></td>
+        <td>
+            <select name="f25" id="f25" size="1">
+                <option value="0"[% IF ( f250 ) %] selected="selected"[% END %]>0 - Separate copy report</option>
+                <option value="1"[% IF ( f251 ) %] selected="selected"[% END %]>1 - Composite copy report</option>
+            </select>
+        </td>
+    </tr>
+	<tr>
+		<td><label for="f26">26-31 - Date of report</label></td>
+		<td><input type="text" name="f26" id="f26" maxlength="6" size="7" value="[% f26 %]" /></td>
+	</tr>
+</table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+</form>
+<script type="text/javascript">//<![CDATA[
+function report() {
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
+
+            field.value =
+			document.f_pop.f1.value+
+			document.f_pop.f6.value+
+			document.f_pop.f7.value+
+			(document.f_pop.f8.value + '    ').substr(0, 4)+
+			document.f_pop.f12.value+
+			document.f_pop.f13.value+
+			document.f_pop.f14.value+
+			document.f_pop.f15.value+
+			document.f_pop.f16.value+
+			(document.f_pop.f17.value + '   ').substr(0, 3)+
+			document.f_pop.f20.value+
+			document.f_pop.f21.value+
+			(document.f_pop.f22.value + '   ').substr(0, 3)+
+			document.f_pop.f25.value+
+			document.f_pop.f26.value;
+		self.close();
+		return false;
+	}
+	//]]>
+</script>
+
+[% INCLUDE 'popup-bottom.inc' %]

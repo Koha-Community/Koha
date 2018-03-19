@@ -1,0 +1,105 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Holdings &rsaquo; 000 - Leader builder</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="cat_marc21_leader_holdings" class="cat" style="padding:1em;">
+<form name="f_pop" onsubmit="report()" action="">
+<input type="hidden" name="plugin_name" value="marc21_leader_holdings.pl" />
+<h3>000 - Leader</h3>
+<table>
+	<tr>
+        <td><span class="label">0-4 Record size</span></td>
+		<td>(auto-filled)</td>
+	</tr>
+	<tr>
+		<td><label for="f5">5 - Record status</label></td>
+		<td>
+			<select name="f5" id="f5" size="1">
+				<option value="c"[% IF ( f5c ) %] selected="selected"[% END %]>c - Corrected or revised</option>
+				<option value="d"[% IF ( f5d ) %] selected="selected"[% END %]>d - Deleted</option>
+				<option value="n"[% IF ( f5n ) %] selected="selected"[% END %]>n - New</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f6">6 - Type of record</label></td>
+		<td>
+			<select name="f6" id="f6" size="1">
+				<option value="u"[% IF ( f6u ) %] selected="selected"[% END %]>u - Unknown</option>
+				<option value="v"[% IF ( f6v ) %] selected="selected"[% END %]>v - Multipart item holdings</option>
+				<option value="x"[% IF ( f6x ) %] selected="selected"[% END %]>x - Single-part item holdings</option>
+				<option value="y"[% IF ( f6y ) %] selected="selected"[% END %]>y - Serial item holdings</option>
+			</select>
+		</td>
+	</tr>
+    <tr>
+        <tr>07-08 - Undefined</tr>
+        <tr>  </tr>
+    </tr>
+	<tr>
+		<td>9 - Character coding scheme</td>
+		<td>a - UCS/Unicode (auto-filled)</td>
+	</tr>
+	<tr>
+		<td>10-16 - indicator/subfields/size</td>
+		<td>(auto-filled)</td>
+    </tr>
+	<tr>
+		<td><label for="f17">17 - Encoding level</label></td>
+		<td>
+			<select name="f17" id="f17" size="1">
+                <option value="1"[% IF ( f171 ) %] selected="selected"[% END %]>1 - Holdings level 1</option>
+                <option value="2"[% IF ( f172 ) %] selected="selected"[% END %]>2 - Holdings level 2</option>
+                <option value="3"[% IF ( f173 ) %] selected="selected"[% END %]>3 - Holdings level 3</option>
+                <option value="4"[% IF ( f174 ) %] selected="selected"[% END %]>4 - Holdings level 4</option>
+                <option value="5"[% IF ( f175 ) %] selected="selected"[% END %]>5 - Holdings level 4 with piece designation</option>
+                <option value="m"[% IF ( f17m ) %] selected="selected"[% END %]>m - Mixed level</option>
+                <option value="u"[% IF ( f17u ) %] selected="selected"[% END %]>u - Unknown</option>
+                <option value="z"[% IF ( f17z ) %] selected="selected"[% END %]>z - Other level</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td><label for="f18">18 - Item information in record</label></td>
+		<td>
+			<select name="f18" id="f18" size="1">
+                <option value="i"[% IF ( f18i ) %] selected="selected"[% END %]>i - Item information</option>
+                <option value="n"[% IF ( f18n ) %] selected="selected"[% END %]>n - No item information</option>
+			</select>
+		</td>
+	</tr>
+	<tr>
+		<td>19 - Undefined</td>
+		<td></td>
+    </tr>
+	<tr>
+		<td>20-24 - entry map &amp; lengths</td>
+		<td>(auto-filled)</td>
+	</tr>
+
+</table>
+<fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+</form>
+<script type="text/javascript">
+//<![CDATA[
+function report() {
+            var doc   = opener.document;
+            var field = doc.getElementById("[% index %]");
+
+            field.value =
+			'     '+
+			document.f_pop.f5.value+
+			document.f_pop.f6.value+
+			'  '+
+			'a'+ // MARC21 UNICODE flag - must be 'a' for Koha
+			'22     '+
+			document.f_pop.f17.value+
+			document.f_pop.f18.value+
+			' '+
+			'4500';
+		self.close();
+		return false;
+	}
+	//]]>
+</script>
+[% INCLUDE 'popup-bottom.inc' %]

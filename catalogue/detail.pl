@@ -29,6 +29,7 @@ use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
 use C4::Output;
 use C4::Biblio;
+use C4::Holdings;
 use C4::Items;
 use C4::Circulation;
 use C4::Reserves;
@@ -211,6 +212,11 @@ foreach my $subscription (@subscriptions) {
     push @subs, \%cell;
 }
 
+# Summary holdings
+my $summary_holdings;
+if (C4::Context->preference('SummaryHoldings')) {
+    $summary_holdings = C4::Holdings::GetHoldingsByBiblionumber($biblionumber);
+}
 
 # Get acquisition details
 if ( C4::Context->preference('AcquisitionDetails') ) {
@@ -411,7 +417,9 @@ $template->param(
         hostrecords         => $hostrecords,
 	analytics_flag	=> $analytics_flag,
 	C4::Search::enabled_staff_search_views,
-        materials       => $materials_flag,
+    materials       => $materials_flag,
+    show_summary_holdings => C4::Context->preference('SummaryHoldings') ? 1 : 0,
+    summary_holdings => $summary_holdings,
 );
 
 if (C4::Context->preference("AlternateHoldingsField") && scalar @items == 0) {

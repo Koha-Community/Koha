@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE Biblio %]
+[% USE Holdings %]
 [% USE KohaDates %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; [% IF ( searchdesc ) %]Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %][% ELSE %]You did not specify any search criteria[% END %]</title>
@@ -628,6 +629,19 @@ var holdForPatron = function () {
                                 </td>
 
                                 <td><div class="availability">
+                                    [% IF ( SEARCH_RESULT.summary_holdings ) %]
+                                        <div class="holdings">
+                                            <strong>Holdings</strong>
+                                            <ul>
+                                            [% FOREACH holding IN SEARCH_RESULT.summary_holdings %]
+                                                <li>
+                                                    [% Holdings.GetLocation(holding) | html %]
+                                                </li>
+                                            [% END %]
+                                            </ul>
+                                        </div>
+                                    [% END %]
+
                                     [% IF ( SEARCH_RESULT.items_count ) %]
                                         <strong>
                                             [% IF MaxSearchResultsItemsPerRecordStatusCheck && SEARCH_RESULT.items_count > MaxSearchResultsItemsPerRecordStatusCheck %]

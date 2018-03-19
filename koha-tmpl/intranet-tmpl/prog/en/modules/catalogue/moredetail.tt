@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE Branches %]
+[% USE Holdings %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -64,6 +65,7 @@
          [% END %]
          [% END %][% END %]</h4>
             <ol class="bibliodetails">
+            <li><span class="label">Holding:</span> [% Holdings.GetLocation( ITEM_DAT.holding_id ) | html %]&nbsp;</li>
             <li><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) %]&nbsp;</li>
 	    [% IF ( item_level_itypes ) %]
             <li><span class="label">Item type:</span> [% ITEM_DAT.itype %]&nbsp;</li>
