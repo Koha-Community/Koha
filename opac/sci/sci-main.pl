@@ -93,7 +93,7 @@ if ( $op eq 'check_in' ) {
     $template->param( success => \@success, errors => \@errors, checkins => 1 );
 }
 
-# Make sure timeour has a reasonable value
+# Make sure timeout has a reasonable value
 my $timeout = C4::Context->preference('SelfCheckInTimeout') // 120;
 $template->param( refresh_timeout => $timeout );
 

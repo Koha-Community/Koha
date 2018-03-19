@@ -168,7 +168,7 @@
             </div> <!-- / .row-fluid -->
         </div> <!-- / .container-fluid -->
 
-        [% IF ( Koha.Preference('SelfCheckInMainUserBlock' ) ) %]
+        [% IF ( Koha.Preference('SelfCheckInMainUserBlock') ) %]
             <div id="SelfCheckInMainUserBlock">[% Koha.Preference('SelfCheckInMainUserBlock' ) %]</div>
         [% END %]
     </div> <!-- / .main -->
@@ -245,8 +245,8 @@
 
         var idleTime = 0;
         $(document).ready(function () {
-            //Increment the idle time counter every minute.
-            var idleInterval = setInterval(timerIncrement, 1000); // 1 second
+            //Increment the idle time counter every second
+            var idleInterval = setInterval(timerIncrement, 1000);
 
             //Zero the idle timer on mouse movement.
             $(this).mousemove(function (e) {
@@ -262,8 +262,7 @@
                 idleTime = idleTime + 1;
                 idleTimeout = [% refresh_timeout %];
                 if (idleTime >= idleTimeout ) {
-                    if ( $("#sci_finish_button").is(":visible") ) $("#sci_finish_button").click();
-                    if ( $("#sci_refresh_button").is(":visible") ) $("#sci_refresh_button").click();
+                    location.href = '/cgi-bin/koha/sci/sci-main.pl';
                 }
             }
         }
