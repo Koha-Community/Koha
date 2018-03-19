@@ -15626,6 +15626,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 4078 - Add column currency.p_sep_by_space)\n";
 }
 
+$DBversion = '17.12.00.023';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        DELETE FROM systempreferences
+        WHERE variable='checkdigit'
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20264 - Remove system preference 'checkdigit')\n";
+}
+
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
