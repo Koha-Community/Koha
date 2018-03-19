@@ -797,9 +797,7 @@ sub quote_item {
                     );
                 }
 
-                my $basket = Koha::Acquisition::Basket->find( $basketno );
-
-                if ( $basket->effective_create_item eq 'ordering' ) {
+                if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
                     my $new_item = {
                         notforloan       => -1,
                         cn_sort          => q{},
