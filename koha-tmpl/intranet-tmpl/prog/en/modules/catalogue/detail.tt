@@ -393,28 +393,37 @@
                             <span class="intransit">In transit from [% Branches.GetName( item.transfertfrom ) %] to [% Branches.GetName( item.transfertto ) %] since [% item.transfertwhen | $KohaDates %]</span>
                         [% END %]
 
-                        [% itemlost_desc = AuthorisedValues.GetByCode( 'LOST', item.itemlost ) %]
                         [% IF ( item.itemlost ) %]
-                            [% IF itemlost_desc %]
-                                <span class="lost">[% itemlost_desc %]</span>
+                            [% IF itemlostloop %]
+                                [% FOREACH itemlostloo IN itemlostloop %]
+                                    [% IF itemlostloo.authorised_value == item.itemlost %]
+                                        <span class="lost">[% itemlostloo.lib %]</span>
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                 <span class="lost">Unavailable (lost or missing)</span>
                             [% END %]
                         [% END %]
 
-                        [% withdrawn_desc = AuthorisedValues.GetByCode( 'WITHDRAWN', item.withdrawn ) %]
                         [% IF ( item.withdrawn ) %]
-                            [% IF withdrawn_desc %]
-                                <span class="wdn">[% withdrawn_desc %]</span>
+                            [% IF itemwithdrawnloop %]
+                                [% FOREACH itemwithdrawnloo IN itemwithdrawnloop %]
+                                    [% IF itemwithdrawnloo.authorised_value == item.withdrawn %]
+                                        <span class="wdn">[% itemwithdrawnloo.lib %]</span>
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                 <span class="wdn">Withdrawn</span>
                             [% END %]
                         [% END %]
 
-                        [% damaged_desc = AuthorisedValues.GetByCode( 'DAMAGED', item.damaged ) %]
                         [% IF ( item.damaged ) %]
-                            [% IF damaged_desc %]
-                                <span class="dmg">[% damaged_desc %]</span>
+                            [% IF itemdamagedloop %]
+                                [% FOREACH itemdamagedloo IN itemdamagedloop %]
+                                    [% IF itemdamagedloo.authorised_value == item.damaged %]
+                                        <span class="dmg">[% itemdamagedloo.lib %]</span>
+                                    [% END %]
+                                [% END %]
                             [% ELSE %]
                                 <span class="dmg">Damaged</span>
                             [% END %]

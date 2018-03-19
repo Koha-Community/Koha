@@ -203,7 +203,20 @@ my $copynumbers =
 my (@itemloop, @otheritemloop, %itemfields);
 my $norequests = 1;
 
-my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => { not => undef } });
+my $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.itemlost', authorised_value => { not => undef } });
+if ( $mss->count ) {
+    $template->param( itemlostloop => GetAuthorisedValues( $mss->next->authorised_value ) );
+}
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.damaged', authorised_value => { not => undef } });
+if ( $mss->count ) {
+    $template->param( itemdamagedloop => GetAuthorisedValues( $mss->next->authorised_value ) );
+}
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.withdrawn', authorised_value => { not => undef } });
+if ( $mss->count ) {
+    $template->param( itemwithdrawnloop => GetAuthorisedValues( $mss->next->authorised_value) );
+}
+
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => { not => undef } });
 my %materials_map;
 if ($mss->count) {
     my $materials_authvals = GetAuthorisedValues($mss->next->authorised_value);
