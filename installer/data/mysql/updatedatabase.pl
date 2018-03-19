@@ -15613,6 +15613,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 13287 - Add system preference PurgeSuggestionsOlderThan)\n";
 }
 
+$DBversion = '17.12.00.022';
+if( CheckVersion( $DBversion ) ) {
+
+    if( !column_exists( 'currency', 'p_sep_by_space' ) ) {
+        $dbh->do(q|
+            ALTER TABLE currency ADD COLUMN p_sep_by_space tinyint(1) default 0 after archived
+        |);
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 4078 - Add column currency.p_sep_by_space)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
