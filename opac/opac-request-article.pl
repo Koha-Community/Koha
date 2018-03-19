@@ -39,6 +39,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $action = $cgi->param('action') || q{};
 my $biblionumber = $cgi->param('biblionumber');
+my $biblio = Koha::Biblios->find($biblionumber);
 
 if ( $action eq 'create' ) {
     my $branchcode = $cgi->param('branchcode');
@@ -72,9 +73,16 @@ if ( $action eq 'create' ) {
 
     print $cgi->redirect("/cgi-bin/koha/opac-user.pl#opac-user-article-requests");
     exit;
+} elsif ( !$action ) {
+    # Should we redirect?
+    # Conditions: no items, host item entry (MARC21 773)
+    my ( $host, $pageinfo ) = $biblio->host_record({ no_items => 1 });
+    if( $host ) {
+        $template->param( pageinfo => $pageinfo, title => $biblio->title, author => $biblio->author );
+        $biblio = $host;
+    }
 }
 
-my $biblio = Koha::Biblios->find($biblionumber);
 my $patron = Koha::Patrons->find($borrowernumber);
 
 $template->param(

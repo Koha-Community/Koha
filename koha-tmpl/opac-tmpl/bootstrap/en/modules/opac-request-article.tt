@@ -59,20 +59,20 @@
                                     <li>
                                         [% IF mandatory_fields.search('title') %]
                                             <label for="title" class="required">Title:</label>
-                                            <input type="text" required="required" name="title" id="title" size="50"/>
+                                            <input type="text" required="required" name="title" id="title" size="50" value="[% title | html %]"/>
                                         [% ELSE %]
                                             <label for="title">Title:</label>
-                                            <input type="text" name="title" id="title" size="50"/>
+                                            <input type="text" name="title" id="title" size="50" value="[% title | html %]"/>
                                         [% END %]
                                     </li>
 
                                     <li>
                                         [% IF mandatory_fields.search('author') %]
                                             <label for="author" class="required">Author:</label>
-                                            <input type="text" required="required" name="author" id="author" size="50"/>
+                                            <input type="text" required="required" name="author" id="author" size="50" value="[% author | html %]"/>
                                         [% ELSE %]
                                             <label for="author">Author:</label>
-                                            <input type="text" name="author" id="author" size="50"/>
+                                            <input type="text" name="author" id="author" size="50" value="[% author | html %]"/>
                                         [% END %]
                                     </li>
 
@@ -109,10 +109,10 @@
                                     <li>
                                         [% IF mandatory_fields.search('pages') %]
                                             <label for="pages" class="required">Pages:</label>
-                                            <input type="text" required="required" name="pages" id="pages" size="50"/>
+                                            <input type="text" required="required" name="pages" id="pages" size="50" value="[% pageinfo | html %]"/>
                                         [% ELSE %]
                                             <label for="pages">Pages:</label>
-                                            <input type="text" name="pages" id="pages" size="50"/>
+                                            <input type="text" name="pages" id="pages" size="50" value="[% pageinfo | html %]"/>
                                         [% END %]
                                     </li>
 
