@@ -891,6 +891,63 @@ sub to_api_mapping {
     };
 }
 
+=head3 host_record
+
+    $host = $biblio->host_record;
+    # OR:
+    ( $host, $relatedparts ) = $biblio->host_record;
+
+    Returns host biblio record from MARC21 773 (undef if no 773 present).
+    It looks at the first 773 field with MARCorgCode or only a control
+    number. Complete $w or numeric part is used to search host record.
+    The optional parameter no_items triggers a check if $biblio has items.
+    If there are, the sub returns undef.
+    Called in list context, it also returns 773$g (related parts).
+
+=cut
+
+sub host_record {
+    my ($self, $params) = @_;
+    my $no_items = $params->{no_items};
+    return if C4::Context->preference('marcflavour') eq 'UNIMARC'; # TODO
+    return if $params->{no_items} && $self->items->count > 0;
+
+    my $record;
+    eval { $record = $self->metadata->record };
+    return if !$record;
+
+    # We pick the first $w with your MARCOrgCode or the first $w that has no
+    # code (between parentheses) at all.
+    my $orgcode = C4::Context->preference('MARCOrgCode') // q{};
+    my $hostfld;
+    foreach my $f ( $record->field('773') ) {
+        my $w = $f->subfield('w') or next;
+        if( $w =~ /^\($orgcode\)\s*(\d+)/i or $w =~ /^\d+/ ) {
+            $hostfld = $f;
+            last;
+        }
+    }
+    return if !$hostfld;
+    my $rcn = $hostfld->subfield('w');
+
+    # Look for control number with/without orgcode
+    my $engine = Koha::SearchEngine::Search->new({ index => $Koha::SearchEngine::BIBLIOS_INDEX });
+    my $bibno;
+    for my $try (1..2) {
+        my ( $error, $results, $total_hits ) = $engine->simple_search_compat( 'Control-number='.$rcn, 0,1 );
+        if( !$error and $total_hits == 1 ) {
+            $bibno = $engine->extract_biblionumber( $results->[0] );
+            last;
+        }
+        # Extract number from $w (remove orgcode) for second try
+        $rcn= $1 if $try == 1 && $rcn =~ /\)\s*(\d+)/;
+    }
+    if( $bibno ) {
+        my $host = Koha::Biblios->find($bibno) or return;
+        return wantarray ? ( $host, $hostfld->subfield('g') ) : $host;
+    }
+}
+
 =head2 Internal methods
 
 =head3 type
