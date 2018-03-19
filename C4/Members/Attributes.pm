@@ -95,24 +95,6 @@ sub GetBorrowerAttributes {
     return \@results;
 }
 
-=head2 GetAttributes
-
-  my $attributes = C4::Members::Attributes::GetAttributes([$opac_only]);
-
-Retrieve an arrayref of extended attribute codes
-
-=cut
-
-sub GetAttributes {
-    my ($opac_only) = @_;
-
-    my $dbh = C4::Context->dbh();
-    my $query = "SELECT code FROM borrower_attribute_types";
-    $query .= "\nWHERE opac_display = 1" if $opac_only;
-    $query .= "\nORDER BY code";
-    return $dbh->selectcol_arrayref($query);
-}
-
 =head2 GetBorrowerAttributeValue
 
   my $value = C4::Members::Attributes::GetBorrowerAttributeValue($borrowernumber, $attribute_code);
