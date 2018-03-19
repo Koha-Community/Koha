@@ -46,7 +46,8 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use C4::Letters;
-use C4::Members::Attributes;
+
+use Koha::Patron::Attribute::Types;
 
 # $protected_letters = protected_letters()
 # - return a hashref of letter_codes representing letters that should never be deleted
@@ -466,12 +467,14 @@ sub get_columns_for {
         }
     }
     if ($table eq 'borrowers') {
-        if ( my $attributes = C4::Members::Attributes::GetAttributes() ) {
-            foreach (@$attributes) {
-                push @fields, {
-                    value => "borrower-attribute:$_",
-                    text  => "attribute:$_",
-                }
+        my $attribute_types = Koha::Patron::Attribute::Types->search(
+            {},
+            { order_by => 'code' },
+        );
+        while ( my $at = $attribute_types->next ) {
+            push @fields, {
+                value => "borrower-attribute:" . $at->code,
+                text  => "attribute:" . $at->code,
             }
         }
     }
