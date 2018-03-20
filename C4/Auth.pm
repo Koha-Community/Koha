@@ -1573,6 +1573,11 @@ sub check_api_auth {
                 $session->param( 'emailaddress', $emailaddress );
                 $session->param( 'ip',           $session->remote_addr() );
                 $session->param( 'lasttime',     time() );
+                if ( $userid ) {
+                    # track_login also depends on pref TrackLastPatronActivity
+                    my $patron = Koha::Patrons->find({ userid => $userid });
+                    $patron->track_login if $patron;
+                }
             } elsif ( $return == 2 ) {
 
                 #We suppose the user is the superlibrarian
@@ -1704,6 +1709,11 @@ sub check_cookie_auth {
             $session->param( 'lasttime', time() );
             my $flags = haspermission( $userid, $flagsrequired );
             if ($flags) {
+                if ( $userid ) {
+                    # track_login also depends on pref TrackLastPatronActivity
+                    my $patron = Koha::Patrons->find({ userid => $userid });
+                    $patron->track_login if $patron;
+                }
                 return ( "ok", $sessionID );
             } else {
                 $session->delete();

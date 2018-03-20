@@ -119,6 +119,11 @@ sub authenticate {
         print "\n".$cc[3]."\nSESSIONID ".$session->id().", FIRSTNAME ".$session->param('firstname')."\n";
     }
 
+    if ( defined $borrower && $borrower->userid ) {
+        # track_login also depends on pref TrackLastPatronActivity
+        $borrower->track_login if $borrower;
+    }
+
     return ($borrower, $cookie);
 }
 

@@ -30,6 +30,7 @@ use C4::Auth;
 use C4::Context;
 use Koha::AuthUtils;
 use Koha::Database;
+use Koha::DateUtils;
 
 use DateTime::Format::HTTP;
 use Digest::SHA qw( hmac_sha256_hex );
@@ -134,13 +135,15 @@ subtest 'Authorization header tests' => sub {
 };
 
 subtest 'post() test (login & logout)' => sub {
-    plan tests => 41;
+    plan tests => 42;
 
     $schema->storage->txn_begin;
 
     my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
     my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
     my $password = "2anxious? if someone finds out";
+
+    t::lib::Mocks::mock_preference('TrackLastPatronActivity', 1);
 
     my $borrower = $builder->build({
         source => 'Borrower',
@@ -246,6 +249,22 @@ subtest 'post() test (login & logout)' => sub {
       ->json_is('/email', $borrower->{email})
       ->json_has('/sessionid');
     $sessionid = $tx->res->json->{sessionid};
+
+    subtest 'check patron lastseen' => sub {
+        plan tests => 4;
+
+        my $patron_ls = Koha::Patrons->find($borrower->{borrowernumber});
+        ok(defined $patron_ls, 'Found patron');
+        my $lastseen = dt_from_string($patron_ls->lastseen);
+        is(ref($lastseen), 'DateTime', '$lastseen is a DateTime object');
+        my $now = dt_from_string();
+        my $max_accepted = dt_from_string()->subtract( seconds => 5 );
+
+        is(DateTime->compare($max_accepted, $lastseen), -1,
+           'Lastseen greater than now-5 seconds');
+        ok(DateTime->compare($lastseen, $now) <= 0,
+           'Lastseen less or equal than now');
+    };
 
     ($sess_status, $sid) = C4::Auth::check_cookie_auth($sessionid);
     is($sess_status, "ok", "Session is valid before logging out.");
