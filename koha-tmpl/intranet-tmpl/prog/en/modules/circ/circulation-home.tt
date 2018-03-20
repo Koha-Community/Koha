@@ -14,7 +14,7 @@
 
         <div class="row">
 
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-5 col-md-4">
                 <h3>Circulation</h3>
 
                 <ul class="buttons-list">
@@ -42,8 +42,8 @@
                 </ul>
             </div>
 
-            <div class="col-sm-6 col-md-3">
-                <h3>Holds management</h3>
+            <div class="col-sm-5 col-md-4">
+                <h3>Holds</h3>
 
                 <ul class="buttons-list">
                     <li>
@@ -64,9 +64,9 @@
             <!-- Add the extra clearfix for only the required viewport -->
             <div class="clearfix visible-sm-block"></div>
 
-            <div class="col-sm-6 col-md-3">
+            <div class="col-sm-5 col-md-4">
                 [% IF Koha.Preference('ArticleRequests') %]
-                    <h3>Patron request management</h3>
+                    <h3>Patron request</h3>
                     <ul class="buttons-list">
                         <li>
                             <a class="circ-button" href="/cgi-bin/koha/circ/article-requests.pl" title="Article requests"><i class="fa fa-newspaper-o"></i> Article requests</a>
@@ -74,7 +74,7 @@
                     </ul>
                 [% END %]
 
-                <h3>Transfers management</h3>
+                <h3>Transfers</h3>
 
                 <ul class="buttons-list">
                     [% IF Branches.InIndependentBranchesMode %]
@@ -87,7 +87,7 @@
                     </li>
                 </ul>
 
-                <h3>Overdues management</h3>
+                <h3>Overdues</h3>
 
                 <ul class="buttons-list">
                      [% IF ( CAN_user_circulate_overdues_report ) %]
@@ -105,36 +105,28 @@
                     [% END %]
                 </ul>
             </div>
-
-            <div class="col-sm-6 col-md-3">
-                <h3>Offline circulation</h3>
-
-                <ul class="buttons-list">
-                    [% IF (AllowOfflineCirculation) %]
-                        <li>
-                            <a class="circ-button" href="/cgi-bin/koha/circ/offline.pl">Built-in offline circulation interface</a>
-                        </li>
-                    [% END %]
-                    <li>
-                        <a class="circ-button" href="/cgi-bin/koha/offline_circ/process_koc.pl">Upload offline circulation file (.koc)</a>
-                    </li>
-                    <li>
-                        <a class="circ-button" href="/cgi-bin/koha/offline_circ/list.pl">Pending offline circulation actions</a>
-                    </li>
-                </ul>
-
-                <p><a class="document windows-link" href="https://github.com/bywatersolutions/koha-offline-circulation/releases">Get desktop application</a></p>
-
-                <p><a class="document firefox-link" href="https://addons.mozilla.org/[% lang %]/firefox/addon/koct/">Get Firefox add-on</a></p>
-
-            </div>
         </div>
-
         <div class="row" id="intranet-circulation-home-html">
             <div class="col-md-12">
                 [% Koha.Preference('IntranetCirculationHomeHTML') %]
             </div>
         </div>
-    </div>
+        <div class="row" id="offline-circulation">
+            <div class="col-md-12">
+                <h4>Offline circulation</h4>
+                    <div class="col-sm-5 col-md-3">
+                    [% IF (AllowOfflineCirculation) %]
+                        <a href="/cgi-bin/koha/circ/offline.pl">Built-in offline circulation interface</a>
+                    [% END %]
+                       <p><a href="/cgi-bin/koha/offline_circ/process_koc.pl">Upload offline circulation file (.koc)</a></p>
+                       <p><a href="/cgi-bin/koha/offline_circ/list.pl">Pending offline circulation actions</a></p>
+                    </div>
+                    <div class="col-sm-5 col-md-3">
+                    <p><a class="document windows-link" href="https://github.com/bywatersolutions/koha-offline-circulation/releases">Get desktop application</a></p>
+                    <p><a class="document firefox-link" href="https://addons.mozilla.org/[% lang %]/firefox/addon/koct/">Get Firefox add-on</a></p>
+                    </div>
+            </div>
+        </div>
 
+    </div>
 [% INCLUDE 'intranet-bottom.inc' %]
