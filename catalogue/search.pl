@@ -155,6 +155,7 @@ use Koha::Patrons;
 use Koha::SearchEngine::Search;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::Virtualshelves;
+use Koha::SearchFields;
 
 use URI::Escape;
 
@@ -455,6 +456,11 @@ my $expanded_facet = $params->{'expand'};
 # Define some global variables
 my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 
+my ($w_fields, $weight);
+unless ( $cgi->param('advsearch') ) {
+    ($w_fields, $weight) = Koha::SearchFields->weighted_fields();
+}
+
 my $builder = Koha::SearchEngine::QueryBuilder->new(
     { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 my $searcher = Koha::SearchEngine::Search->new(
@@ -467,7 +473,7 @@ my $searcher = Koha::SearchEngine::Search->new(
     $query_type
   )
   = $builder->build_query_compat( \@operators, \@operands, \@indexes, \@limits,
-    \@sort_by, $scan, $lang );
+    \@sort_by, $scan, $lang, { w_fields => @$w_fields, weight => @$weight  } );
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
