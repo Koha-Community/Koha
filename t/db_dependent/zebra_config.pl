@@ -57,6 +57,7 @@ $ENV{'__DB_HOST__'} = C4::Context->config('hostname')  // 'localhost';
 $ENV{'__DB_PORT__'} = C4::Context->config('port')      // '3306';
 $ENV{'__DB_USER__'} = C4::Context->config('user')      // 'kohaadmin';
 $ENV{'__DB_PASS__'} = C4::Context->config('pass')      // 'katikoan';
+$ENV{'__DB_SOCKET__'} = C4::Context->config('socket')  // '';
 
 my @files = ( "$source/etc/koha-conf.xml",
               "$source/etc/searchengine/queryparser.yaml",
