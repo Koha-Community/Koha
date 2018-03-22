@@ -9,6 +9,38 @@
 <style type="text/css"> p { margin-top: 0; }</style>
 </head>
 
+[% BLOCK actions %]
+        <a class="btn btn-default btn-xs dropdown-toggle ar-actions" role="button" data-toggle="dropdown" href="#">
+            Actions <b class="caret"></b>
+        </a>
+
+        <ul class="dropdown-menu [% pull_right %]" role="menu" aria-labelledby="[% aria_menu %]">
+            <li>
+                <a class="ar-process-request" href="#" onclick="HandleMulti( Process, [% id_arg %], $(this) ); return false;">
+                    <i class="fa fa-cog"></i>
+                    Process request
+                </a>
+
+                <a class="ar-complete-request" href="#" onclick="HandleMulti( Complete, [% id_arg %], $(this) ); return false;">
+                    <i class="fa fa-check-circle"></i>
+                    Complete request
+                </a>
+
+                <a class="ar-cancel-request" href="#" onclick="HandleMulti( Cancel, [% id_arg %], $(this) ); return false;">
+                    <i class="fa fa-minus-circle"></i>
+                    Cancel request
+                </a>
+
+                [% IF id_arg %][%# TODO: Does not work with multi-select %]
+                <a class="ar-print-request" href="#" onclick="HandleMulti( PrintSlip, [% id_arg %], $(this) ); return false;">
+                    <i class="fa fa-print"></i>
+                    Print slip
+                </a>
+                [% END %]
+            </li>
+        </ul>
+[% END %]
+
 <body id="circ_article-requests" class="circ">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -62,6 +94,7 @@
                         <table id="article-requests-pending-table">
                             <thead>
                                 <tr>
+                                    <th/>
                                     <th class="ar-title">Title</th>
                                     <th class="ar-request">Requested article</th>
                                     <th class="ar-collection">Collection</th>
@@ -78,13 +111,14 @@
 
                              <tbody>
                                 <tr class="ar-pending-none">
-                                    <td colspan="11">
+                                    <td colspan="12">
                                         There are no pending article requests at this time.
                                     </td>
                                 </tr>
 
                                 [% FOREACH ar IN article_requests_pending %]
                                     <tr class="ar-row ar-pending">
+                                        <td><input type="checkbox" reqid="[% ar.id %]"/></td>
                                         <td class="ar-title">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber %]">
@@ -150,35 +184,9 @@
                                         </td>
                                         <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
                                         <td class="ar-actions">
-                                            <div class="dropdown">
-                                                <a class="btn btn-default btn-xs dropdown-toggle" id="ar-actions" role="button" data-toggle="dropdown" href="#">
-                                                    Actions <b class="caret"></b>
-                                                </a>
-
-                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="ar-actions">
-                                                    <li>
-                                                        <a class="ar-process-request" href="#" onclick="Process( [% ar.id %], $(this) ); return false;">
-                                                            <i class="fa fa-cog"></i>
-                                                            Process request
-                                                        </a>
-
-                                                        <a class="ar-complete-request" href="#" onclick="Complete( [% ar.id %], $(this) ); return false;">
-                                                            <i class="fa fa-check-circle"></i>
-                                                            Complete request
-                                                        </a>
-
-                                                        <a class="ar-cancel-request" href="#" onclick="Cancel( [% ar.id %], $(this) ); return false;">
-                                                            <i class="fa fa-minus-circle"></i>
-                                                            Cancel request
-                                                        </a>
-
-                                                        <a class="ar-print-request" href="#" onclick="PrintSlip('article-request-slip.pl?id=[% ar.id %]'); return false;">
-                                                            <i class="fa fa-print"></i>
-                                                            Print slip
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <div class="dropdown">
+                                            [% PROCESS actions id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
+                                        </div>
                                         </td>
                                     </tr>
                                 [% END %]
@@ -190,6 +198,7 @@
                         <table id="article-requests-processing-table">
                             <thead>
                                 <tr>
+                                    <th/>
                                     <th class="ar-title">Title</th>
                                     <th class="ar-request">Requested article</th>
                                     <th class="ar-collection">Collection</th>
@@ -206,13 +215,14 @@
 
                              <tbody>
                                 <tr class="ar-processing-none">
-                                    <td colspan="11">
+                                    <td colspan="12">
                                         There are no article requests in processing at this time.
                                     </td>
                                 </tr>
 
                                 [% FOREACH ar IN article_requests_processing %]
                                     <tr class="ar-row ar-processing">
+                                        <td><input type="checkbox" reqid="[% ar.id %]"/></td>
                                         <td class="ar-title">
                                             <p>
                                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber %]">
@@ -278,36 +288,20 @@
                                         </td>
                                         <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
                                         <td class="ar-actions">
-                                            <div class="dropdown">
-                                                <a class="btn btn-default btn-xs dropdown-toggle" id="ar-actions" role="button" data-toggle="dropdown" href="#">
-                                                    Actions <b class="caret"></b>
-                                                </a>
-
-                                                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="ar-actions">
-                                                    <li>
-                                                        <a href="#" onclick="Complete( [% ar.id %], $(this) ); return false;">
-                                                            <i class="icon-ok-circle"></i>
-                                                            Complete request
-                                                        </a>
-
-                                                        <a href="#" onclick="Cancel( [% ar.id %], $(this) ); return false;">
-                                                            <i class="icon-remove-circle"></i>
-                                                            Cancel request
-                                                        </a>
-
-                                                        <a href="#" onclick="PrintSlip('article-request-slip.pl?id=[% ar.id %]'); return false;">
-                                                            <i class="icon-print"></i>
-                                                            Print slip
-                                                        </a>
-                                                    </li>
-                                                </ul>
-                                            </div>
+                                        <div class="dropdown">
+                                            [% PROCESS actions id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
+                                        </div>
                                         </td>
                                     </tr>
                                 [% END %]
                             </tbody>
                         </table>
-
+                    </div>
+                    <br/>
+                    <div class="table_controls row" id="table_controls">
+                        <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                        [% PROCESS actions id_arg=0 pull_right='' aria_menu='table_controls' %]
+                    </div>
                 </div>
             </div>
         </div>
@@ -325,9 +319,41 @@
             [% IF article_requests_processing.count %]
                 $(".ar-processing-none").hide();
             [% END %]
+
+            $(".SelectAll").on("click", function(e) {
+                e.preventDefault();
+                if( $('table#article-requests-pending-table').is(":visible") )
+                    var table='article-requests-pending-table';
+                else table='article-requests-processing-table';
+                $("table#"+table+" input[type='checkbox']").prop('checked', true);
+            });
+            $(".ClearAll").on("click", function(e) {
+                e.preventDefault();
+                if( $('table#article-requests-pending-table').is(":visible") )
+                    var table='article-requests-pending-table';
+                else table='article-requests-processing-table';
+                $("table#"+table+" input[type='checkbox']").prop('checked', false);
+            });
+            $("a.ar-actions").on('click', function(e) {
+                // Hide menu option ?
+                if( $('table#article-requests-processing-table').is(":visible") )
+                    $('a.ar-process-request').hide();
+                else $('a.ar-process-request').show();
+            });
         });
 
-        function PrintSlip(link) {
+        function HandleMulti( fnHandler, id, a ) {
+            if( id !== 0 ) { fnHandler( id, a ); return; }
+            if( $('table#article-requests-pending-table').is(":visible") )
+                var table='article-requests-pending-table';
+            else table='article-requests-processing-table';
+            $("table#"+table+" input[type='checkbox']:checked").each(function() {
+                fnHandler( $(this).attr('reqid'), $(this).closest('tr').find('td.ar-actions div a') );
+            });
+        }
+
+        function PrintSlip(id, a) {
+            var link = 'article-request-slip.pl?id='+id;
             window.open(link, 'popup', 'width=600,height=400,resizable=1,toolbar=0,scrollbars=1,top');
         }
 
@@ -337,8 +363,7 @@
                 return;
             }
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
-            a.closest('div').hide();
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -358,9 +383,9 @@
         function Process( id, a ) {
             var table_row = a.closest('tr').clone();
             table_row.find('.ar-process-request').remove();
+            table_row.find('input[type="checkbox"]').prop('checked', false);
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
-            a.closest('div').hide();
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -379,8 +404,7 @@
         }
 
         function Complete( id, a ) {
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>');
-            a.closest('div').hide();
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
