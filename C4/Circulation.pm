@@ -1398,7 +1398,7 @@ sub AddIssue {
                 },
                 $item->{'biblionumber'},
                 $item->{'itemnumber'},
-                0
+                { log_action => 0 }
             );
             ModDateLastSeen( $item->{'itemnumber'} );
 
@@ -1831,7 +1831,7 @@ sub AddReturn {
             $item->{location} = $item->{permanent_location};
         }
 
-        ModItem( $item, $item->{'biblionumber'}, $item->{'itemnumber'}, 0 );
+        ModItem( $item, $item->{'biblionumber'}, $item->{'itemnumber'}, { log_action => 0 } );
     }
 
         # full item data, but no borrowernumber or checkout info (no issue)
@@ -1855,7 +1855,7 @@ sub AddReturn {
             foreach my $key ( keys %$rules ) {
                 if ( $item->{notforloan} eq $key ) {
                     $messages->{'NotForLoanStatusUpdated'} = { from => $item->{notforloan}, to => $rules->{$key} };
-                    ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber, 0 );
+                    ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber, { log_action => 0 } );
                     last;
                 }
             }
@@ -1921,7 +1921,7 @@ sub AddReturn {
 
         }
 
-        ModItem( { onloan => undef }, $item->{biblionumber}, $item->{itemnumber}, 0 );
+        ModItem( { onloan => undef }, $item->{biblionumber}, $item->{itemnumber}, { log_action => 0 } );
     }
 
     # the holdingbranch is updated if the document is returned to another location.
@@ -2157,7 +2157,7 @@ sub MarkIssueReturned {
         # And finally delete the issue
         $issue->delete;
 
-        ModItem( { 'onloan' => undef }, undef, $itemnumber, 0 );
+        ModItem( { 'onloan' => undef }, undef, $itemnumber, { log_action => 0 } );
 
         if ( C4::Context->preference('StoreLastBorrower') ) {
             my $item = Koha::Items->find( $itemnumber );
@@ -2396,7 +2396,7 @@ sub _FixAccountForLostAndReturned {
         }
     );
 
-    ModItem( { paidfor => '' }, undef, $itemnumber, 0 );
+    ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
 
     return $credit_id;
 }
@@ -2821,7 +2821,7 @@ sub AddRenewal {
 
     # Update the renewal count on the item, and tell zebra to reindex
     $renews = $item->{renewals} + 1;
-    ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item->{biblionumber}, $itemnumber, 0 );
+    ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item->{biblionumber}, $itemnumber, { log_action => 0 } );
 
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
@@ -3701,7 +3701,7 @@ sub ProcessOfflineReturn {
                 { renewals => 0, onloan => undef },
                 $issue->{'biblionumber'},
                 $itemnumber,
-                0
+                { log_action => 0 }
             );
             return "Success.";
         } else {

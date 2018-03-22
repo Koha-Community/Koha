@@ -547,7 +547,9 @@ sub ModItem {
     my $item = shift;
     my $biblionumber = shift;
     my $itemnumber = shift;
-    my $log_action = shift // 1;
+    my $additional_params = shift;
+
+    my $log_action = $additional_params->{log_action} // 1;
 
     # if $biblionumber is undefined, get it from the current item
     unless (defined $biblionumber) {
@@ -653,7 +655,7 @@ sub ModDateLastSeen {
     my ($itemnumber) = @_;
 
     my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-    ModItem( { itemlost => 0, datelastseen => $today }, undef, $itemnumber, 0 );
+    ModItem( { itemlost => 0, datelastseen => $today }, undef, $itemnumber, { log_action => 0 } );
 }
 
 =head2 DelItem

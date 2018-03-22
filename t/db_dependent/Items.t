@@ -31,7 +31,7 @@ use Koha::Caches;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 13;
+use Test::More tests => 14;
 
 use Test::Warn;
 
@@ -796,7 +796,7 @@ subtest 'get_hostitemnumbers_of' => sub {
     is( @itemnumbers, 0, );
 };
 
-subtest 'Test logging for AddItem' => sub {
+subtest 'Test logging for ModItem' => sub {
 
     plan tests => 3;
 
@@ -821,13 +821,13 @@ subtest 'Test logging for AddItem' => sub {
 
     # False means no logging
     $schema->resultset('ActionLog')->search()->delete();
-    ModItem({ location => $location }, $bibnum, $itemnumber, 0);
+    ModItem({ location => $location }, $bibnum, $itemnumber, { log_action => 0 });
     is( $schema->resultset('ActionLog')->count(), 0, 'False value does not trigger logging' );
 
     # True means logging
     $schema->resultset('ActionLog')->search()->delete();
-    ModItem({ location => $location }, $bibnum, $itemnumber, 1, 'True value does trigger logging');
-    is( $schema->resultset('ActionLog')->count(), 1 );
+    ModItem({ location => $location }, $bibnum, $itemnumber, { log_action => 1 });
+    is( $schema->resultset('ActionLog')->count(), 1, 'True value does trigger logging' );
 
     # Undefined defaults to true
     $schema->resultset('ActionLog')->search()->delete();
