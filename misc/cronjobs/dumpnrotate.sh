@@ -4,12 +4,28 @@
 
 # GPL3 on later applies.
 
-# Get configuration, you can place your configs in a directory of your choice.
-# /etc/dumpdatabases/ would be a reasonable candidate
+# The dumping is done in three parts so that schema, data and "extra" will
+# be separated. You can also make "partial" dumps that do not contain all
+# three. See the configuration files (dailydump.conf and hourlydump.conf)
+# for how.
+
+# When building new databases from dumps, follow this:
+
+# 1) Run schema into a new database
+
+# 2) Drop triggers from the database if you plan on inserting actual data.
+#    The triggers will be included in data as well as schema, so inserting
+#    data will fail if the triggers from the schema are already in place.
+#    Unfortunately I know of no way to exclude them from one or another.
+
+# 3) Run data into a new database
+
+# 4) Run extra into a new database if you want statistical information and
+#    such to be included also.
 
 expiredumps() {
   IFS='
-  '
+'
   for file in $(ls -rt ${1}*.sql* 2> /dev/null); do
     test $(ls ${1}*.sql* | wc -l) -le $2 && echo "$(date) Preserving $2 $1 files, no more files to remove." && break
     echo "$(date) $(rm -v $file)"
@@ -17,7 +33,7 @@ expiredumps() {
   unset IFS
 }
 
-# For examples see hourlydump.conf and dailydump.conf.
+# Get the config here. For examples see hourlydump.conf and dailydump.conf.
 if test -e "$1"; then
   . "$1"
 else
