@@ -92,7 +92,7 @@ sub suspend_hold {
 
     $self->suspend(1);
     if ( defined $dt ){
-        $self->suspend_until( $dt->ymd );
+        $self->suspend_until( $dt->datetime );
     } else {
         $self->suspend_until( $dt );
     }
