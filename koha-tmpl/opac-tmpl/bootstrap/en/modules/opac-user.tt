@@ -864,8 +864,7 @@ Using this account is not recommended because some parts of Koha will not functi
 
                                                 <td class="article-request-cancel">
                                                     <span class="tdlabel">Cancel:</span>
-                                                    <a class="btn btn-mini btn-danger" href="opac-article-request-cancel.pl?id=[% ar.id %]" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="icon-remove icon-white"></i> Cancel</a>
-                                                    <!-- TODO: replace MSG_CONFIRM_DELETE_HOLD with correct message -->
+                                                    <a class="btn btn-mini btn-danger" href="opac-article-request-cancel.pl?id=[% ar.id %]" onclick="return confirmDelete(MSG_CONFIRM_DELETE_ARTREQ);"><i class="icon-remove icon-white"></i> Cancel</a>
                                                 </td>
                                             </tr>
                                         [% END %]
@@ -898,6 +897,7 @@ Using this account is not recommended because some parts of Koha will not functi
     [% INCLUDE 'datatables.inc' %]
     <script type="text/JavaScript">
         //<![CDATA[
+        var MSG_CONFIRM_DELETE_ARTREQ   = _("Are you sure you want to cancel this article request?");
         var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
         var MSG_CONFIRM_SUSPEND_HOLDS = _("Are you sure you want to suspend all holds?");
         var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended holds?");
