@@ -1,6 +1,6 @@
 #!/bin/sh
-# Dumprotate V170324 - Simple rotating database dumping using mysqldump
-# Written by Pasi Korkalo / OUTI Libraries
+# Dumprotate V180322 - Simple rotating database dumping using mysqldump
+# Written by Pasi Korkalo / Koha-Suomi Oy
 
 # GPL3 on later applies.
 
@@ -26,10 +26,14 @@ else
 fi
 
 # Nag about missing parameters.
-if test -z "$databasename" || test -z "$dumpdir" || test -z "$databaseuser" || test -z "$databasepasswd"; then
+if test -z "$databasename" || test -z "$dumpdir"; then
   echo "Some of the required variables are not defined in the configuration file."
   exit 1
 fi
+
+# Use database username and password if they're defined
+test -n "$databaseuser" && databaseuser="-u$databaseuser"
+test -n "$databasepasswd" && databasepasswd="-p$databasepasswd"
 
 # Keep 100000 dumps if nothing defined
 test $keepnumber -ge 0 2> /dev/null || keepnumber="100000"
@@ -42,20 +46,20 @@ timestamp="$(date +%y%m%d%H%M)"
 # Handle dumps.
 if test "$getschema" = "1"; then
   expiredumps $dumpdir/${databasename}_schema_ $keepnumber
-  echo -n "$(date) Dumping $databasename schema to $dumpdir/${databasename}_schema_${timestamp}.sql"
-  mysqldump -u$databaseuser -p$databasepasswd --no-data --skip-lock-tables --single-transaction $databasename | gzip > $dumpdir/${databasename}_schema_${timestamp}.sql.gz
+  echo "$(date) Dumping $databasename schema to $dumpdir/${databasename}_schema_${timestamp}.sql"
+  mysqldump $databaseuser $databasepasswd --no-data --skip-lock-tables --single-transaction $databasename | gzip > $dumpdir/${databasename}_schema_${timestamp}.sql.gz
 fi
 
 if test "$getdata" = "1"; then
   expiredumps $dumpdir/${databasename}_data_ $keepnumber
-  echo -n "$(date) Dumping $databasename data to $dumpdir/${databasename}_data_${timestamp}.sql"
-  mysqldump -u$databaseuser -p$databasepasswd --no-create-info --skip-lock-tables --ignore-table=${databasename}.statistics --ignore-table=${databasename}.zebraqueue --ignore-table=${databasename}.action_logs --single-transaction $databasename | gzip > $dumpdir/${databasename}_data_${timestamp}.sql.gz
+  echo "$(date) Dumping $databasename data to $dumpdir/${databasename}_data_${timestamp}.sql"
+  mysqldump $databaseuser $databasepasswd --no-create-info --skip-lock-tables --ignore-table=${databasename}.statistics --ignore-table=${databasename}.zebraqueue --ignore-table=${databasename}.action_logs --single-transaction $databasename | gzip > $dumpdir/${databasename}_data_${timestamp}.sql.gz
 fi
 
 if test "$getextra" = "1"; then
   expiredumps $dumpdir/${databasename}_extra_ $keepnumber
-  echo -n "$(date) Dumping $databasename extra data to $dumpdir/${databasename}_extra_${timestamp}.sql"
-  mysqldump -u$databaseuser -p$databasepasswd --no-create-info --skip-lock-tables --single-transaction $databasename statistics zebraqueue action_logs | gzip > $dumpdir/${databasename}_extra_${timestamp}.sql.gz
+  echo "$(date) Dumping $databasename extra data to $dumpdir/${databasename}_extra_${timestamp}.sql"
+  mysqldump $databaseuser $databasepasswd --no-create-info --skip-lock-tables --single-transaction $databasename statistics zebraqueue action_logs | gzip > $dumpdir/${databasename}_extra_${timestamp}.sql.gz
 fi
 
 # All done
