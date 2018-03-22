@@ -343,7 +343,7 @@ sub redirect_add_subscription {
         join(";",@irregularity), $numberpattern, $locale, $callnumber,
         $manualhistory, $internalnotes, $serialsadditems,
         $staffdisplaycount, $opacdisplaycount, $graceperiod, $location, $enddate,
-        $skip_serialseq
+        $skip_serialseq, $itemtype, $previousitemtype
     );
 
     my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription' } );
