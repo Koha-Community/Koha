@@ -381,12 +381,14 @@ test_it($cpvPmappings, "PostReturn");
 my $CBBI_patron = $builder->build({source => 'Borrower'});
 $patron = Koha::Patrons->find( $CBBI_patron->{borrowernumber} );
 # Our Items
+
 my $new_item = $builder->build({
     source => 'Item',
     value => {
         notforloan => 0,
         withdrawn  => 0,
         itemlost   => 0,
+        biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
     },
 });
 my $prev_item = $builder->build({
@@ -395,6 +397,7 @@ my $prev_item = $builder->build({
         notforloan => 0,
         withdrawn  => 0,
         itemlost   => 0,
+        biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
     },
 });
 # Second is Checked Out
