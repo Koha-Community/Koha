@@ -83,6 +83,8 @@ sub cleanup {
 
         # Clean up the Zebra files since the child process was just shot
         rmtree $datadir;
+        # Make sure that following tests are not using our config settings
+        Koha::Caches->get_instance('config')->flush_all;
     }
 }
 
@@ -990,8 +992,5 @@ subtest 'UNIMARC + DOM' => sub {
     plan tests => 14;
     run_unimarc_search_tests('dom');
 };
-
-# Make sure that following tests are not using our config settings
-Koha::Caches->get_instance('config')->flush_all;
 
 1;
