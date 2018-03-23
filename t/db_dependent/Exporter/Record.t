@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Warn;
 use t::lib::TestBuilder;
 
@@ -281,8 +281,129 @@ subtest '_get_biblio_for_export' => sub {
 
 };
 
+subtest '_get_record_for_export MARC field conditions' => sub {
+    plan tests => 11;
+
+    my $biblio = MARC::Record->new();
+    $biblio->leader('00266nam a22001097a 4500');
+    $biblio->append_fields(
+        MARC::Field->new( '100', ' ', ' ', a => 'Thurber, James' ),
+        MARC::Field->new( '245', ' ', ' ', a => 'The 13 Clocks' ),
+        MARC::Field->new( '080', ' ', ' ', a => '12345' ),
+        MARC::Field->new( '035', ' ', ' ', a => '(TEST)123' ),
+        MARC::Field->new( '035', ' ', ' ', a => '(TEST)1234' ),
+    );
+    my ( $biblionumber ) = AddBiblio( $biblio, '' );
+    my $record;
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['080', 'a', '=', '12345']],
+            record_type => 'bibs',
+        }
+    );
+    ok( $record, "Record condition \"080a=12345\" should match" );
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['080', 'a', '!=', '12345']],
+            record_type => 'bibs',
+        }
+    );
+    is( $record, undef, "Record condition \"080a!=12345\" should not match" );
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['080', 'a', '>', '1234']],
+            record_type => 'bibs',
+        }
+    );
+    ok( $record, "Record condition \"080a>1234\" should match" );
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['080', 'a', '<', '123456']],
+            record_type => 'bibs',
+        }
+    );
+    ok( $record, "Record condition \"080a<123456\" should match" );
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['080', 'a', '>', '123456']],
+            record_type => 'bibs',
+        }
+    );
+    is( $record, undef, "Record condition \"080a>123456\" should not match" );
 
 
+    ## Multiple subfields
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['035', 'a', '!=', 'TEST(12345)']],
+            record_type => 'bibs',
+        }
+    );
+    ok( $record, "Record condition \"035a!=TEST(12345)\" should match" );
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['035', 'a', '=', 'TEST(1234)']],
+            record_type => 'bibs',
+        }
+    );
+    is( $record, undef, "Record condition \"035a=TEST(1234)\" should not match" ); # Since matching all subfields required
+
+
+    ## Multiple conditions
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['035', 'a', '!=', 'TEST(12345)'], ['080', 'a', '>', '1234']],
+            record_type => 'bibs',
+        }
+    );
+    ok( $record, "Record condition \"035a!=TEST(12345),080a>1234\" should match" );
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['035', 'a', '!=', 'TEST(12345)'], ['080', 'a', '<', '1234']],
+            record_type => 'bibs',
+        }
+    );
+    is( $record, undef, "Record condition \"035a!=TEST(12345),080a<1234\" should not match" );
+
+
+    ## exists/not_exists
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['035', 'a', '?']],
+            record_type => 'bibs',
+        }
+    );
+    ok( $record, "Record condition \"exists(035a)\" should match" );
+
+    $record = Koha::Exporter::Record::_get_record_for_export(
+        {
+            record_id => $biblionumber,
+            record_conditions => [['035', 'a', '!?']],
+            record_type => 'bibs',
+            record_type => 'bibs',
+        }
+    );
+    is( $record, undef, "Record condition \"not_exists(035a)\" should not match" );
+};
 
 $schema->storage->txn_rollback;
-

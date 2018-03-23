@@ -9,11 +9,13 @@ use C4::Biblio;
 use C4::Record;
 use Koha::CsvProfiles;
 use Koha::Logger;
+use List::Util qw(all any);
 
 sub _get_record_for_export {
     my ($params)           = @_;
     my $record_type        = $params->{record_type};
     my $record_id          = $params->{record_id};
+    my $conditions         = $params->{record_conditions};
     my $dont_export_fields = $params->{dont_export_fields};
     my $clean              = $params->{clean};
 
@@ -25,7 +27,60 @@ sub _get_record_for_export {
     } else {
         Koha::Logger->get->warn( "Record_type $record_type not supported." );
     }
-    return unless $record;
+    if ( !$record ) {
+        Koha::Logger->get->warn( "Record $record_id could not be exported." );
+        return;
+    }
+
+    # If multiple conditions all are required to match (and)
+    # For matching against multiple marc targets all are also required to match
+    my %operators = (
+        '=' => sub {
+            return $_[0] eq $_[1];
+        },
+        '!=' => sub {
+            return $_[0] ne $_[1];
+        },
+        '>' => sub {
+            return $_[0] gt $_[1];
+        },
+        '<' => sub {
+            return $_[0] lt $_[1];
+        },
+    );
+    if ($conditions) {
+        foreach my $condition (@{$conditions}) {
+            my ($field_tag, $subfield, $operator, $match_value) = @{$condition};
+            my @fields = $record->field($field_tag);
+            my $no_target = 0;
+
+            if (!@fields) {
+                $no_target = 1;
+            }
+            else {
+                if ($operator eq '?') {
+                    return unless any { $subfield ? $_->subfield($subfield) : $_->data() } @fields;
+                } elsif ($operator eq '!?') {
+                    return if any { $subfield ? $_->subfield($subfield) : $_->data() } @fields;
+                } else {
+                    my $op;
+                    if (exists $operators{$operator}) {
+                        $op = $operators{$operator};
+                    } else {
+                        die("Invalid operator: $op");
+                    }
+                    my @target_values = map { $subfield ? $_->subfield($subfield) : ($_->data()) } @fields;
+                    if (!@target_values) {
+                        $no_target = 1;
+                    }
+                    else {
+                        return unless all { $op->($_, $match_value) } @target_values;
+                    }
+                }
+            }
+            return if $no_target && $operator ne '!=';
+        }
+    }
 
     if ($dont_export_fields) {
         for my $f ( split / /, $dont_export_fields ) {
@@ -119,6 +174,7 @@ sub export {
     if ( $format eq 'iso2709' ) {
         for my $record_id (@$record_ids) {
             my $record = _get_record_for_export( { %$params, record_id => $record_id } );
+            next unless $record;
             my $errorcount_on_decode = eval { scalar( MARC::File::USMARC->decode( $record->as_usmarc )->warnings() ) };
             if ( $errorcount_on_decode or $@ ) {
                 my $msg = "Record $record_id could not be exported. " .
@@ -137,10 +193,7 @@ sub export {
         print "\n";
         for my $record_id (@$record_ids) {
             my $record = _get_record_for_export( { %$params, record_id => $record_id } );
-            if( !$record ) {
-                Koha::Logger->get->info( "Record $record_id could not be exported." );
-                next;
-            }
+            next unless $record;
             print MARC::File::XML::record($record);
             print "\n";
         }
