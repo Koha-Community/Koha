@@ -63,7 +63,7 @@ SKIP: {
         unless $current_locale eq 'fr_FR.UTF-8';
 
     is( Koha::Number::Price->new(12345678.9)->format( { %$format, with_symbol => 1 } ),
-        '12,345,678.90', 'US: format 12,345,678.90 with symbol' );
+        '$ 12,345,678.90', 'US: format 12,345,678.90 with symbol' );
     is( Koha::Number::Price->new('12,345,678.90')->unformat,
         '12345678.9', 'US: unformat 12345678.9' );
     setlocale(LC_NUMERIC, $orig_locale);
