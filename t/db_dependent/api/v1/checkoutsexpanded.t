@@ -159,6 +159,7 @@ sub create_user_and_session {
             categorycode => $categorycode,
             flags        => $flags,
             lost         => 0,
+            gonenoaddress => 0,
         }
     });
 
@@ -186,7 +187,7 @@ sub create_item {
     my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 
     my $itemtype = $builder->build({
-        source => 'Itemtype', value => { notforloan => 0 }
+        source => 'Itemtype', value => { notforloan => 0, rentalcharge => 0 }
     });
     my $item = {
         barcode       => $barcode,
