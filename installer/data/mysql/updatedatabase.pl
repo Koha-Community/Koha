@@ -15545,7 +15545,7 @@ if( CheckVersion( $DBversion ) ) {
     }
     $dbh->do(q|SET foreign_key_checks = 1|);
 
-    print "Upgrade to $DBversion done (Bug 18336 - Convert DB tables to utf8mb4 💩)\n";
+    print "Upgrade to $DBversion done (Bug 18336 - Convert DB tables to utf8mb4 🎁)\n";
     SetVersion($DBversion);
 }
 
