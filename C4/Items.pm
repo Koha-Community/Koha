@@ -497,7 +497,6 @@ sub ModItemFromMarc {
     my $biblionumber = shift;
     my $itemnumber = shift;
 
-    my $dbh           = C4::Context->dbh;
     my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
     my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
 
@@ -511,13 +510,22 @@ sub ModItemFromMarc {
     }
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
 
-    ModItem($item, $biblionumber, $itemnumber, $dbh, $frameworkcode, $unlinked_item_subfields); 
+    ModItem($item, $biblionumber, $itemnumber, { frameworkcode => $frameworkcode, unlinked_item_subfields => $unlinked_item_subfields } );
     return $item;
 }
 
 =head2 ModItem
 
-  ModItem({ column => $newvalue }, $biblionumber, $itemnumber, $log_action );
+ModItem(
+    { column => $newvalue },
+    $biblionumber,
+    $itemnumber,
+    {
+        [ unlinked_item_subfields => $unlinked_item_subfields, ]
+        [ frameworkcode => $frameworkcode, ]
+        [ log_action => 1, ]
+    }
+);
 
 Change one or more columns in an item record and update
 the MARC representation of the item.
@@ -544,24 +552,23 @@ If log_action is true or undefined, the action will be logged.
 =cut
 
 sub ModItem {
-    my $item = shift;
-    my $biblionumber = shift;
-    my $itemnumber = shift;
+    my $item              = shift;
+    my $biblionumber      = shift;
+    my $itemnumber        = shift;
     my $additional_params = shift;
 
+    my $dbh = C4::Context->dbh;
+
     my $log_action = $additional_params->{log_action} // 1;
+    my $unlinked_item_subfields = $additional_params->{unlinked_item_subfields};
+    my $frameworkcode = $additional_params->{frameworkcode} || C4::Biblio::GetFrameworkCode($biblionumber);
 
     # if $biblionumber is undefined, get it from the current item
     unless (defined $biblionumber) {
         $biblionumber = _get_single_item_column('biblionumber', $itemnumber);
     }
 
-    my $dbh           = @_ ? shift : C4::Context->dbh;
-    my $frameworkcode = @_ ? shift : C4::Biblio::GetFrameworkCode( $biblionumber );
-
-    my $unlinked_item_subfields;
-    if (@_) {
-        $unlinked_item_subfields = shift;
+    if ($unlinked_item_subfields) {
         $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     };
 
