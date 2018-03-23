@@ -46,7 +46,7 @@ subtest 'Tests for CalcDateDue related to dateexpiry' => sub {
 };
 
 sub can_book_be_issued {
-    my $item    = $builder->build( { source => 'Item' } );
+    my $item    = $builder->build( { source => 'Item', value => { biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber} } } );
     my $patron  = $builder->build_object(
         {   class  => 'Koha::Patrons',
             value  => {
@@ -61,7 +61,7 @@ sub can_book_be_issued {
     cmp_ok $duration, '<', 1, "CanBookBeIssued should not be take more than 1s if the patron is expired";
     is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is 9999-*' );
 
-    $item = $builder->build( { source => 'Item' } );
+    $item   = $builder->build( { source => 'Item', value => { biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber} } } );
     $patron = $builder->build_object(
         {   class  => 'Koha::Patrons',
             value  => {
@@ -74,7 +74,7 @@ sub can_book_be_issued {
     is( not( exists $issuingimpossible->{EXPIRED} ), 1, 'The patron should not be considered as expired if dateexpiry is not set' );
 
     my $tomorrow = dt_from_string->add_duration( DateTime::Duration->new( days => 1 ) );
-    $item = $builder->build( { source => 'Item' } );
+    $item   = $builder->build( { source => 'Item', value => { biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber} } } );
     $patron = $builder->build_object(
         {   class  => 'Koha::Patrons',
             value  => {
