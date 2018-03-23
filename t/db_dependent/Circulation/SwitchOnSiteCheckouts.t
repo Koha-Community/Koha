@@ -67,6 +67,12 @@ my $biblio = $builder->build({
         branchcode => $branch->{branchcode},
     },
 });
+$builder->build(
+    {
+        source => 'Biblioitem',
+        value  => { biblionumber => $biblio->{biblionumber} }
+    }
+);
 my $item = $builder->build({
     source => 'Item',
     value => {
