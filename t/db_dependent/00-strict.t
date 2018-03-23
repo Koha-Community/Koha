@@ -21,4 +21,11 @@ my @dirs = ( 'acqui', 'admin', 'authorities', 'basket',
 $Test::Strict::TEST_STRICT = 0;
 $Test::Strict::TEST_SKIP = [ 'misc/kohalib.pl', 'sms/sms_listen_windows_start.pl', 'misc/plack/koha.psgi' ];
 
+my @skip_directories = Test::Strict::_all_files(
+    'misc/translator/Koha-translations/'
+);
+foreach my $file (@skip_directories) {
+    push @{$Test::Strict::TEST_SKIP}, $file;
+}
+
 all_perl_files_ok(@dirs);
