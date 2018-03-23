@@ -217,7 +217,7 @@ sub search_auth_compat {
             # with the record. It's not documented why this is the case, so
             # it's not reproduced here yet.
             my $authtype           = $rs->single;
-            my $auth_tag_to_report = $authtype ? $authtype->auth_tag_to_report : $authtypecode;
+            my $auth_tag_to_report = $authtype ? $authtype->auth_tag_to_report : "";
             my $marc               = $self->json2marc($marc_json);
             my $mainentry          = $marc->field($auth_tag_to_report);
             my $reported_tag;
