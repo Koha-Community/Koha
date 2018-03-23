@@ -29,7 +29,7 @@ Koha::Database::flush_schema_cache();
 fixtures_ok [
     Currency => [
         [ qw/ currency symbol rate active / ],
-        [[ 'my_cur', '€', 1, 1, ]],
+        [ 'my_cur', '€', 1, 1, ],
     ],
     Aqbookseller => [
         [ qw/ id name listincgst invoiceincgst / ],
