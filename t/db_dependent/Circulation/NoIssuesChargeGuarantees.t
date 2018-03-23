@@ -36,6 +36,7 @@ my $item = $builder->build(
     {
         source => 'Item',
         value  => {
+            biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
             notforloan => 0,
             withdrawn  => 0
         }
