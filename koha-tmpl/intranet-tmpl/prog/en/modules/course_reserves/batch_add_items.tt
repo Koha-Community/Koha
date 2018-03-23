@@ -1,0 +1,146 @@
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Course reserves &rsaquo; Add items</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+<body id="courses_add_items_step1" class="course">
+
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/course_reserves/course-reserves.pl">Course reserves</a> &rsaquo; Add reserves for <i><a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]">[% course.course_name %]</a></i></div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-md-8 col-md-offset-2">
+
+        [% IF action == 'display_form' %]
+            <form method="post" action="/cgi-bin/koha/course_reserves/batch_add_items.pl">
+                <input type="hidden" name="course_id" value="[% course.course_id %]" />
+                <input type="hidden" name="action" value="add" />
+
+                <fieldset class="rows">
+                    <legend>Add items: scan barcodes</legend>
+                    <ol>
+                        <li>
+                            <label class="required" for="barcodes">Item barcodes:</label>
+                            <textarea rows="20" cols="50" id="barcodes" name="barcodes" class="focus"></textarea>
+                        </li>
+                        [% IF item_level_itypes %]
+                        <li>
+                            <label class="required" for="itype">Item type:</label>
+                            <select id="itype" name="itype">
+                                <option value="">LEAVE UNCHANGED</option>
+
+                                [% FOREACH it IN itypes %]
+                                    [% IF course_item.itype && ( ( course.enabled == 'yes' && it.itemtype == item.itype ) || ( course.enabled == 'no' && it.itemtype == course_item.itype ) ) %]
+                                        <option value="[% it.itemtype %]" selected="selected">[% it.description %]</option>
+                                    [% ELSE %]
+                                        <option value="[% it.itemtype %]">[% it.description %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+                        [% END %]
+
+                        <li>
+                            <label class="required" for="ccode">Collection code:</label>
+                            <select id="ccode" name="ccode">
+                                <option value="">LEAVE UNCHANGED</option>
+
+                                [% FOREACH c IN ccodes %]
+                                    [% IF course_item.ccode && ( ( course.enabled == 'yes' && c.authorised_value == item.ccode ) || ( course.enabled == 'no' && c.authorised_value == course_item.ccode ) ) %]
+                                        <option value="[% c.authorised_value %]" selected="selected">[% c.lib %]</option>
+                                    [% ELSE %]
+                                        <option value="[% c.authorised_value %]">[% c.lib %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+
+                        <li>
+                            <label class="required" for="location">Shelving location:</label>
+                            <select id="location" name="location">
+                                <option value="">LEAVE UNCHANGED</option>
+
+                                [% FOREACH s IN locations %]
+                                    [% IF course_item.location && ( ( course.enabled == 'yes' && s.authorised_value == item.location ) || ( course.enabled == 'no' && s.authorised_value == course_item.location ) ) %]
+                                        <option value="[% s.authorised_value %]" selected="selected">[% s.lib %]</option>
+                                    [% ELSE %]
+                                        <option value="[% s.authorised_value %]">[% s.lib %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+
+                        <li>
+                            <label class="required" for="holdingbranch">Holding library:</label>
+                            <select id="holdingbranch" name="holdingbranch">
+                                <option value="">LEAVE UNCHANGED</option>
+                                [% FOREACH b IN Branches.all() %]
+                                    [% IF course_item.holdingbranch && ( ( course.enabled == 'yes' && b.value == item.holdingbranch ) || ( course.enabled == 'no' && b.value == course_item.holdingbranch ) ) %]
+                                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
+                                    [% ELSE %]
+                                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                        </li>
+
+                        <li>
+                            <label for="staff_note">Staff note:</label>
+                            <textarea name="staff_note" id="staff_note">[% course_reserve.staff_note %]</textarea>
+                        </li>
+
+                        <li>
+                            <label for="public_note">Public note:</label>
+                            <textarea name="public_note" id="public_note">[% course_reserve.public_note %]</textarea>
+                        </li>
+                    </ol>
+                </fieldset>
+
+                <p>
+                    Any items with existing course reserves will have their <i>on reserve</i> values updated.
+                </p>
+
+                <fieldset class="action">
+                    <input type="submit" value="Submit" class="submit" />
+
+                    <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course.course_id %]" class="cancel">Cancel</a>
+                </fieldset>
+            </form>
+        [% END %]
+
+        [% IF action == 'display_results' %]
+            <h1>Results</h1>
+
+            <h3>Items added</h3>
+            [% IF items_added.size > 0 %]
+                <p>The following items were added or updated:</p>
+                <ul>
+                    [% FOREACH i IN items_added %]
+                        <li>[% i.biblio.title %] ( [% i.barcode %] )</li>
+                    [% END %]
+                </ul>
+            [% ELSE %]
+                No valid item barcodes found.
+            [% END %]
+
+
+            [% IF invalid_barcodes.size > 0 %]
+                <h3>Invalid barcodes</h3>
+                <p>The following invalid barcodes were skipped:</p>
+                <ul>
+                    [% FOREACH b IN invalid_barcodes %]
+                        <li>[% b %]</li>
+                    [% END %]
+                </ul>
+            [% END %]
+
+            <p>
+                <a class='btn btn-default' href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id %]">View course</a>
+            </p>
+        [% END %]
+    </div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' %]

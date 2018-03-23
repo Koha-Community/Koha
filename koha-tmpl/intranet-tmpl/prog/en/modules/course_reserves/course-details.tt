@@ -25,6 +25,7 @@
             <div id="toolbar">
                 [% IF CAN_user_coursereserves_add_reserves %]
                     <a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Add reserves</a>
+                    <a class="btn btn-default btn-sm" id="add_items" href="/cgi-bin/koha/course_reserves/batch_add_items.pl?course_id=[% course.course_id %]"><i class="fa fa-plus"></i> Batch add reserves</a>
                 [% END %]
                 [% IF ( CAN_user_coursereserves_manage_courses ) %]
                     <a class="btn btn-default btn-sm" id="edit_course" href="/cgi-bin/koha/course_reserves/course.pl?course_id=[% course.course_id %]"><i class="fa fa-pencil"></i> Edit course</a>
