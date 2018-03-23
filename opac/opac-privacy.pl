@@ -63,8 +63,13 @@ elsif ( $op eq "delete_record" ) {
     my $rows = eval {
         Koha::Patrons->search({ 'me.borrowernumber' => $borrowernumber })->anonymise_issue_history;
     };
-    $rows = $@ ? 0 : int($rows);
-    $template->param( 'deleted' => $rows );
+    $template->param(
+        (
+              $@    ? ( history_not_deleted => 1 )
+            : $rows ? ( deleted             => int($rows) )
+            :         ( nothing_to_delete => 1 )
+        )
+    );
 }
 
 # get borrower privacy ....

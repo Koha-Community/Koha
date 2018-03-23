@@ -27,7 +27,9 @@
 
                     [% IF deleted %]
                         <div class="alert alert-success">Your reading history has been deleted.</div>
-                    [% ELSE %]
+                    [% ELSIF history_not_deleted %]
+                        <div class="alert">The deletion of your reading history failed, because there is a problem with the configuration of this feature. Please help to fix the system by informing your library of this error</div>
+                    [% ELSIF nothing_to_delete %]
                         <div class="alert">No reading history to delete</div>
                     [% END %]
 
