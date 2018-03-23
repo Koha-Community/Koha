@@ -143,21 +143,31 @@ $timestamp = ($timestamp) ? output_pref({ dt => dt_from_string($timestamp), date
 
 if ( $record_type eq 'bibs' ) {
     if ( $timestamp ) {
-        push @record_ids, $_->{biblionumber} for @{
-            $dbh->selectall_arrayref(q| (
-                SELECT biblio_metadata.biblionumber
-                FROM biblio_metadata
-                  LEFT JOIN items USING(biblionumber)
-                WHERE biblio_metadata.timestamp >= ?
-                  OR items.timestamp >= ?
-            ) UNION (
-                SELECT biblio_metadata.biblionumber
-                FROM biblio_metadata
-                  LEFT JOIN deleteditems USING(biblionumber)
-                WHERE biblio_metadata.timestamp >= ?
-                  OR deleteditems.timestamp >= ?
-            ) |, { Slice => {} }, ( $timestamp ) x 4 );
-        };
+        if (!$dont_export_items) {
+            push @record_ids, $_->{biblionumber} for @{
+                $dbh->selectall_arrayref(q| (
+                    SELECT biblio_metadata.biblionumber
+                    FROM biblio_metadata
+                      LEFT JOIN items USING(biblionumber)
+                    WHERE biblio_metadata.timestamp >= ?
+                      OR items.timestamp >= ?
+                ) UNION (
+                    SELECT biblio_metadata.biblionumber
+                    FROM biblio_metadata
+                      LEFT JOIN deleteditems USING(biblionumber)
+                    WHERE biblio_metadata.timestamp >= ?
+                      OR deleteditems.timestamp >= ?
+                ) |, { Slice => {} }, ( $timestamp ) x 4 );
+            };
+        } else {
+            push @record_ids, $_->{biblionumber} for @{
+                $dbh->selectall_arrayref(q| (
+                    SELECT biblio_metadata.biblionumber
+                    FROM biblio_metadata
+                    WHERE biblio_metadata.timestamp >= ?
+                ) |, { Slice => {} }, $timestamp );
+            };
+        }
     } else {
         my $conditions = {
             ( $starting_biblionumber or $ending_biblionumber )
