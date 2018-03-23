@@ -30,6 +30,7 @@ use C4::Context;
 
 use Koha::Database;
 use Koha::Notice::Messages;
+use Koha::Notice::Templates;
 
 use Crypt::Eksblowfish::Bcrypt qw(en_base64);
 
@@ -47,6 +48,22 @@ subtest 'recovery() tests' => sub {
     plan tests => 35;
 
     $schema->storage->txn_begin;
+
+    unless(Koha::Notice::Templates->search({
+        module => 'members',
+        code => 'PASSWORD_RESET'
+    })->count) {
+        Koha::Notice::Template->new({
+            module => 'members',
+            code => 'PASSWORD_RESET',
+            branchcode => '',
+            name => 'PASSWORD_RESET',
+            title => 'PASSWORD_RESET',
+            content => '<<passwordreseturl>>',
+            message_transport_type => 'email',
+            lang => 'default',
+        })->store;
+    }
 
     my $url = '/api/v1/patrons/password/recovery';
 
