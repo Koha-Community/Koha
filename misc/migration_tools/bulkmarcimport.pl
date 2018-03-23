@@ -8,7 +8,10 @@ BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
     use FindBin;
-    eval { require "$FindBin::Bin/../kohalib.pl" };
+    eval {
+        require "$FindBin::Bin/../kohalib.pl";
+        use lib "$FindBin::Bin";
+    };
 }
 
 # Koha modules used
