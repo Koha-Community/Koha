@@ -51,7 +51,12 @@ my $uuid2   = "WXYZ0987";
 my $uuid3   = "LMNO4561";
 
 my $patron_category = $builder->build({ source => 'Category' });
-my $branch = $builder->build({ source => 'Branch' });
+my $branch = $builder->build({
+    source => 'Branch',
+    value => {
+        branchreturnpath => $email1,
+    },
+});
 
 $schema->resultset('BorrowerPasswordRecovery')->delete_all();
 
@@ -193,8 +198,8 @@ ok( $tempuuid1 ne $tempuuid2, "[SendPasswordRecoveryEmail] UPDATE == ON changes 
 ok( scalar @$letters == 2, "[SendPasswordRecoveryEmail] UPDATE == ON sends a new letter with updated uuid");
 
 foreach my $letter (@$letters) {
-    ok( $letter->{status} eq 'failed',
-        'Test SendPasswordRecoverEmail failed due to TestBuilder Sender not being a valid email address as expected.' );
+    ok( $letter->{status} eq 'sent',
+        'Test SendPasswordRecoverEmail sent due to TestBuilder Sender being a valid email address as expected.' );
 }
 
 $schema->storage->txn_rollback();
