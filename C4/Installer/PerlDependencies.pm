@@ -254,7 +254,7 @@ our $PERL_DEPS = {
     },
     'Cache::Memcached' => {
         'usage'    => 'Caching',
-        'required' => '0',
+        'required' => '1',
         'min_ver'  => '1.30'
     },
     'Cache::Memcached::Fast' => {
