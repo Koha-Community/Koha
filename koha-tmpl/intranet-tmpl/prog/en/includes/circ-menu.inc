@@ -65,7 +65,7 @@
     [% END %][% END %]
     <li class="patroncategory">Category: [% patron.category.description %] ([% patron.categorycode %])</li>
     <li class="patronlibrary">Home library: [% Branches.GetName( patron.branchcode ) %]</li>
-    <li class="patronborrowernumber">Borrower Number: ([% patron.borrowernumber %])</li>
+    <li class="patronborrowernumber">Borrowernumber: [% patron.borrowernumber %]</li>
   </ul></div>
 <div id="menu">
 <ul>
