@@ -862,6 +862,7 @@ sub CheckReserves {
            items.homebranch,
            items.holdingbranch
            FROM   items
+           LEFT JOIN biblioitems ON items.biblioitemnumber = biblioitems.biblioitemnumber
            LEFT JOIN itemtypes   ON biblioitems.itemtype   = itemtypes.itemtype
         ";
     }
