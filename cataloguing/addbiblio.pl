@@ -284,7 +284,7 @@ sub create_input {
 
     # if there is no value provided but a default value in parameters, get it
     if ( $value eq '' ) {
-        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
+        $value = $tagslib->{$tag}->{$subfield}->{defaultvalue} // q{};
 
         # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
         my $today_dt = dt_from_string;
@@ -688,7 +688,7 @@ my $biblionumber  = $input->param('biblionumber'); # if biblionumber exists, it'
 my $parentbiblio  = $input->param('parentbiblionumber');
 my $breedingid    = $input->param('breedingid');
 my $z3950         = $input->param('z3950');
-my $op            = $input->param('op');
+my $op            = $input->param('op') // q{};
 my $mode          = $input->param('mode');
 my $frameworkcode = $input->param('frameworkcode');
 my $redirect      = $input->param('redirect');
@@ -705,7 +705,7 @@ my $fa_duedatespec        = $input->param('duedatespec');
 
 my $userflags = 'edit_catalogue';
 
-my $changed_framework = $input->param('changed_framework');
+my $changed_framework = $input->param('changed_framework') // q{};
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not( defined $frameworkcode) and $op ne 'addbiblio' );
 
