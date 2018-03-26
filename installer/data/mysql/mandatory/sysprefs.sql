@@ -61,6 +61,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ArticleRequestsMandatoryFields', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''yes''', 'multiple'),
 ('ArticleRequestsMandatoryFieldsItemOnly', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''item_only''', 'multiple'),
 ('ArticleRequestsMandatoryFieldsRecordOnly', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''bib_only''', 'multiple'),
+('ArticleRequestsSupportedFormats', 'PHOTOCOPY', 'PHOTOCOPY|SCAN', 'List supported formats between vertical bars', 'free'),
 ('AudioAlerts','0','','Enable circulation sounds during checkin and checkout in the staff interface.  Not supported by all web browsers yet.','YesNo'),
 ('AuthDisplayHierarchy','0','','Display authority hierarchies','YesNo'),
 ('AuthFailureLog','0',NULL,'If enabled, log authentication failures','YesNo'),
