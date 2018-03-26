@@ -458,7 +458,7 @@ sub SendAlerts {
                                     : 'text/plain; charset="utf-8"',
                 }
             );
-            unless( sendmail(%mail) ) {
+            unless( Mail::Sendmail::sendmail(%mail) ) {
                 carp $Mail::Sendmail::error;
                 return { error => $Mail::Sendmail::error };
             }
@@ -603,7 +603,7 @@ sub SendAlerts {
               if C4::Context->preference("ClaimsBccCopy");
         }
 
-        unless ( sendmail(%mail) ) {
+        unless ( Mail::Sendmail::sendmail(%mail) ) {
             carp $Mail::Sendmail::error;
             return { error => $Mail::Sendmail::error };
         }
@@ -652,7 +652,7 @@ sub SendAlerts {
                                 : 'text/plain; charset="utf-8"',
             }
         );
-        unless( sendmail(%mail) ) {
+        unless( Mail::Sendmail::sendmail(%mail) ) {
             carp $Mail::Sendmail::error;
             return { error => $Mail::Sendmail::error };
         }
@@ -1401,7 +1401,7 @@ sub _send_message_by_email {
 
     _update_message_to_address($message->{'message_id'},$to_address) unless $message->{to_address}; #if initial message address was empty, coming here means that a to address was found and queue should be updated
 
-    if ( sendmail( %sendmail_params ) ) {
+    if ( Mail::Sendmail::sendmail( %sendmail_params ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
                 status     => 'sent' } );
         return 1;
