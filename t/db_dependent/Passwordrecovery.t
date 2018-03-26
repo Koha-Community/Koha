@@ -18,12 +18,26 @@
 use Modern::Perl;
 
 use C4::Context;
+use Mail::Sendmail;
 use C4::Letters;
 use Koha::Database;
 use Koha::Patrons;
 use t::lib::TestBuilder;
 
-use Test::More tests => 20;
+use Test::More tests => 22;
+use Test::MockModule;
+use Test::Warn;
+use Carp;
+
+my %mail;
+my $module = Test::MockModule->new('Mail::Sendmail');
+$module->mock(
+    'sendmail',
+    sub {
+        carp 'Fake sendmail!';
+        %mail = @_;
+    }
+);
 
 use_ok('Koha::Patron::Password::Recovery');
 
@@ -180,14 +194,23 @@ ok( Koha::Patron::Password::Recovery::DeleteExpiredPasswordRecovery($borrowernum
 ###############################################################
 
 my $borrower = Koha::Patrons->search( { userid => $userid1 } )->next;
-ok( Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 0) == 1, "[SendPasswordRecoveryEmail] Returns 1 on success" );
+my $success;
+warning_like {
+    $success = Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 0); }
+    qr/Fake sendmail!/,
+    '[SendPasswordRecoveryEmail] expecting fake sendmail';
+ok( $success == 1, '[SendPasswordRecoveryEmail] Returns 1 on success');
+
 my $letters = C4::Letters::GetQueuedMessages( { borrowernumber => $borrowernumber1, limit => 99 } );
 ok( scalar @$letters == 1, "[SendPasswordRecoveryEmail] There is a letter in the queue for our borrower");
 
 my $bpr = $schema->resultset('BorrowerPasswordRecovery')->search( { borrowernumber => $borrowernumber1 } );
 my $tempuuid1 = $bpr->next->uuid;
 
-Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 1);
+warning_like {
+    Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 1); }
+    qr/Fake sendmail!/,
+    '[SendPasswordRecoveryEmail] expecting fake sendmail';
 
 $bpr = $schema->resultset('BorrowerPasswordRecovery')->search( { borrowernumber => $borrowernumber1 } );
 my $tempuuid2 = $bpr->next->uuid;
