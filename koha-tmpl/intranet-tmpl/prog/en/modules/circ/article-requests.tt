@@ -42,6 +42,13 @@
         </ul>
     </div>
 [% END %]
+[% BLOCK item_status %]
+    [% IF myitem.onloan %]<span>Checked out</span>
+    [% ELSIF myitem.holds({ found => ['W', 'T'] }).count > 0 %]<span>On hold</span>
+    [% ELSIF myitem.notforloan > 0 OR myitem.itemtype.notforloan %]<span>Not for loan</span>
+    [% ELSIF myitem.notforloan < 0 %]<span>On order</span>
+    [% END %]
+[% END %]
 
 <body id="circ_article-requests" class="circ">
     [% INCLUDE 'header.inc' %]
@@ -107,6 +114,7 @@
                                     <th class="ar-collection">Collection</th>
                                     <th class="ar-itemtype">Item type</th>
                                     <th class="ar-callnumber">Call number</th>
+                                    <th class="ar-status">Status</th>
                                     <th class="ar-copynumber">Copy number</th>
                                     <th class="ar-enumchron">Enumeration</th>
                                     <th class="ar-barcode">Barcode</th>
@@ -176,6 +184,7 @@
 
                                             [% ar.item.itemcallnumber | html %]
                                         </td>
+                                        <td class="ar-status">[% PROCESS 'item_status' myitem = ar.item IF ar.item %]</td>
                                         <td class="ar-copynumber">[% ar.item.copynumber | html %]</td>
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
@@ -212,6 +221,7 @@
                                     <th class="ar-collection">Collection</th>
                                     <th class="ar-itemtype">Item type</th>
                                     <th class="ar-callnumber">Call number</th>
+                                    <th class="ar-status">Status</th>
                                     <th class="ar-copynumber">Copy number</th>
                                     <th class="ar-enumchron">Enumeration</th>
                                     <th class="ar-barcode">Barcode</th>
@@ -281,6 +291,7 @@
 
                                             [% ar.item.itemcallnumber | html %]
                                         </td>
+                                        <td class="ar-status">[% PROCESS 'item_status' myitem = ar.item IF ar.item %]</td>
                                         <td class="ar-copynumber">[% ar.item.copynumber | html %]</td>
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
