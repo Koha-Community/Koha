@@ -186,7 +186,7 @@ sub search {
 
         if( $patron->{dateexpiry} ) {
             # FIXME We should not format the date here, do it in template-side instead
-            $patron->{dateexpiry} = output_pref( { dt => dt_from_string( $patron->{dateexpiry}, 'iso'), dateonly => 1} );
+            $patron->{dateexpiry} = output_pref( { dt => scalar dt_from_string( $patron->{dateexpiry}, 'iso'), dateonly => 1} );
         } else {
             $patron->{dateexpiry} = '';
         }
