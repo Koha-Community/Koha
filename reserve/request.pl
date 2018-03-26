@@ -181,6 +181,7 @@ if ($borrowernumber_hold && !$action) {
 
     my $amount_outstanding = $patron->account->balance;
     $template->param(
+                patron              => $patron,
                 expiry              => $expiry,
                 diffbranch          => $diffbranch,
                 messages            => $messages,
@@ -635,7 +636,6 @@ if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
 }
 
 $template->param(
-    patron => $patron,
     SuspendHoldsIntranet => C4::Context->preference('SuspendHoldsIntranet'),
     AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
 );
