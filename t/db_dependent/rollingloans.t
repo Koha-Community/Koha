@@ -31,18 +31,21 @@ my $item1 = $builder->build_object({
     class => 'Koha::Items',
     value => {
         barcode => $test_item_fic,
+        biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
     }
 });
 my $item2 = $builder->build_object({
     class => 'Koha::Items',
     value => {
         barcode => $test_item_24,
+        biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
     }
 });
 my $item3 = $builder->build_object({
     class => 'Koha::Items',
     value => {
         barcode => $test_item_48,
+        biblionumber => $builder->build( { source => 'Biblioitem' } )->{biblionumber},
     }
 });
 
