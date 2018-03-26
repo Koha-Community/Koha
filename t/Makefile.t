@@ -26,6 +26,7 @@ my @MakeFile = split "\n", $MakeFile;
 
 my @ignored = qw(
     .editorconfig
+    .gitignore
     .mailmap
     LICENSE
     README.md
