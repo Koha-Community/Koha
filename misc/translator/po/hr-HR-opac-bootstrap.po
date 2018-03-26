@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
-"POT-Creation-Date: 2018-02-18 23:33-0300\n"
-"PO-Revision-Date: 2017-10-04 13:16+0000\n"
+"POT-Creation-Date: 2018-03-20 20:20-0300\n"
+"PO-Revision-Date: 2018-03-12 13:50+0000\n"
 "Last-Translator: Marijana <mglavica@ffzg.hr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hr\n"
@@ -17,7 +17,7 @@ msgstr ""
 "Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
 "%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "X-Generator: Pootle 2.5.1.1\n"
-"X-POOTLE-MTIME: 1507122968.000000\n"
+"X-POOTLE-MTIME: 1520862611.000000\n"
 
 #. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
 #. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
@@ -407,7 +407,7 @@ msgstr ""
 #. %29$s:  ACCOUNT_LINE.title 
 #. %30$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:106
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
@@ -416,13 +416,13 @@ msgid ""
 "%sProcessing fee %sPayment %sWriteoff %sCredit %sCredit %s%s %s %s, %s%s "
 "%s(%s)%s "
 msgstr ""
-"%s %sPlaćanje, hvala %sPlaćanje, hvala (cash via SIP2) %sPlaćanje, hvala "
-"(VISA preko SIP2) %sPlaćanje, hvala (kreditna kartica preko SIP2) %sNova "
-"kartica %sNovčana kazna %sNaknada za vođenje računa %sSredstva na "
+"%s %sPlaćanje, hvala %sPlaćanje, hvala (gotovina preko SIP2) %sPlaćanje, "
+"hvala (VISA preko SIP2) %sPlaćanje, hvala (kreditna kartica preko SIP2) "
+"%sNova kartica %sNovčana kazna %sNaknada za vođenje računa %sSredstva na "
 "privremenom računu %sIzgubljeni primjerak %sOtpis %sNakupljene kazne "
 "%sRezervacija čeka predugo  %sCijena najma %sOprošteno %sPovrat novca za "
-"izgubljeni primjerak %sPlaćanje %sOtpis %sIznos %sIznos %s%s %s %s, %s%s "
-"%s(%s)%s "
+"izgubljeni primjerak%sCijena obrade%sPlaćanje %sOtpis %sIznos %sIznos%s%s %s "
+"%s, %s%s %s(%s)%s "
 
 #. %1$s:  IF s.is_private 
 #. %2$s:  IF s.is_shared 
@@ -442,7 +442,7 @@ msgstr "%s %sDijeljeno%sPrivatno%s %s Javno %s "
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:115
 #, c-format
 msgid "%s %stag%stags%s successfully added."
-msgstr "%s %soznaka%soznake%s - uspješno dodano."
+msgstr "%s %soznaka%soznake%s uspješno dodano."
 
 #. %1$s:  deleted_count 
 #. %2$s:  IF ( deleted_count == 1 ) 
@@ -451,7 +451,7 @@ msgstr "%s %soznaka%soznake%s - uspješno dodano."
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:118
 #, c-format
 msgid "%s %stag%stags%s successfully deleted."
-msgstr "%s %soznaka%soznake%s - uspješno obrisano."
+msgstr "%s %soznaka%soznake%s  uspješno obrisano."
 
 #. %1$s:  IF loop.index == 0 
 #. %2$s:  ELSE 
@@ -511,11 +511,9 @@ msgstr "%s Automatsko produženje "
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
-#, fuzzy, c-format
+#, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
-msgstr ""
-"%s Ne može se više produžiti %s Automatsko produživanje nije uspjelo jer "
-"imate neplaćena dugovanja. "
+msgstr "%s Automatsko produženje nije uspjelo, vaš račun je istekao. "
 
 #. %1$s:  IF ( GROUP_RESULT.onloancount ) 
 #. %2$s:  GROUP_RESULT.onloancount 
@@ -580,9 +578,9 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: opac-tmpl/bootstrap/en/modules/clubs/clubs-tab.tt:27
-#, c-format
+#, fuzzy, c-format
 msgid "%s Contact your library to be disenrolled from this club. %s "
-msgstr ""
+msgstr "%s Kontaktirajte knjižnicu kako bi se ispisali iz ovog kluba. %s "
 
 #. %1$s:  IF (errcode==1) 
 #. %2$s:  ELSE 
@@ -792,16 +790,14 @@ msgstr "%s Oznake drugih korisnika za prikaz %s Oznake za prikaz %s: "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
 #, fuzzy, c-format
 msgid "%s The link you clicked is either invalid, or expired. "
-msgstr ""
-"Lozinka mora sadržavati najmanje %s znakova. %s Ova poveznica nije valjana "
-"ili je istekla. "
+msgstr "%s Ova poveznica nije valjana ili je istekla. "
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF password_too_short 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "%s The passwords do not match. %s "
-msgstr "Lozinke se ne podudaraju! "
+msgstr "%s Lozinke se ne podudaraju. %s "
 
 #. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
 #. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
@@ -988,15 +984,15 @@ msgstr "%s silazni"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:550
 #, fuzzy, c-format
 msgid "%s holdings"
-msgstr "Fond"
+msgstr "%s fonda"
 
 #. For the first occurrence,
 #. %1$s:  acquisition_details.total_quantity 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:662
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:689
-#, c-format
+#, fuzzy, c-format
 msgid "%s items are on order."
-msgstr ""
+msgstr "%s  primjeraka je u narudžbi."
 
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
@@ -1620,7 +1616,8 @@ msgstr "%s%s%sKoha online%s katalog &rsaquo; Obnovljeni podaci su poslani"
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:4
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your Interlibrary loan requests"
-msgstr "%s%s%sKoha online%s katalog &rsaquo; Naslovnica moje knjižnice"
+msgstr ""
+"%s%s%sKoha online%s katalog &rsaquo; Zahtjevi za međuknjižničnom posudbom"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -2769,9 +2766,9 @@ msgstr "(prekoračen rok)"
 #. %1$s:  priority 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:672
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1352
-#, fuzzy, c-format
+#, c-format
 msgid "(priority %s)"
-msgstr "Prioritet"
+msgstr "(prioritet %s)"
 
 #. %1$s:  koha_new.newdate 
 #. %2$s:  IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) 
@@ -2874,7 +2871,7 @@ msgstr "0000-00-00"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:687
 #, c-format
 msgid "1 item is on order."
-msgstr ""
+msgstr "1 primjerak je u narudžbi"
 
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:11
 #, c-format
@@ -3118,7 +3115,7 @@ msgstr "Dodatne informacije"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:730
 #, fuzzy, c-format
 msgid "Address 2:"
-msgstr "%s Adresa 2:"
+msgstr "Adresa 2:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:387
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:389
@@ -3128,7 +3125,7 @@ msgstr "%s Adresa 2:"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:717
 #, fuzzy, c-format
 msgid "Address:"
-msgstr "%s Adresa:"
+msgstr "Adresa:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:278
 #, c-format
@@ -3178,7 +3175,7 @@ msgstr "Sve knjižnice"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:15
 #, c-format
 msgid "Allow changes to contents from: "
-msgstr ""
+msgstr "Dozvoli promjene sadržaja iz: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:106
@@ -3313,7 +3310,7 @@ msgstr "Bilo tko"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:26
 #, fuzzy, c-format
 msgid "Anyone seeing this list"
-msgstr "Izbriši ovaj popis"
+msgstr "Svatko tko vidi ovaj popis"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
@@ -3393,7 +3390,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
 #, c-format
 msgid "Article requests "
-msgstr "Zahtjev za člankom "
+msgstr "Zatraženi članci "
 
 #. %1$s:  borrower.article_requests_current.count 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:157
@@ -3457,7 +3454,7 @@ msgstr "Kolovoz"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:807
 #, c-format
 msgid "AuthenticatePatron"
-msgstr "AuthenticatePatron"
+msgstr "AutentifikacijaKorisnika"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:483
 #, c-format
@@ -4069,7 +4066,7 @@ msgstr "%s Grad:"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:874
 #, c-format
 msgid "Claimed"
-msgstr ""
+msgstr "Preuzeto"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:189
 #, c-format
@@ -6092,14 +6089,14 @@ msgstr "Instruktori:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:577
 #, c-format
 msgid "Interlibrary loan request"
-msgstr ""
+msgstr "Zahtjev za međuknjižničnom posudbom."
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:24
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:31
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:77
 #, c-format
 msgid "Interlibrary loan requests"
-msgstr ""
+msgstr "Zahtjevi za međuknjižničnom posudbom."
 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:37
 #, c-format
@@ -6815,7 +6812,7 @@ msgstr "Vaše poruke"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:867
 #, c-format
 msgid "Missing"
-msgstr ""
+msgstr "Nedostaje"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:870
 #, c-format
@@ -7226,7 +7223,7 @@ msgstr "Uz ovaj naslov nema niti jednog taga."
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:18
 #, c-format
 msgid "Nobody"
-msgstr ""
+msgstr "Nitko"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
 #, c-format
@@ -7282,7 +7279,7 @@ msgstr "Nije za posudbu (%s)"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:872
 #, c-format
 msgid "Not issued"
-msgstr ""
+msgstr "Nije izdano"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:411
 #, c-format
@@ -7645,7 +7642,7 @@ msgstr "Prekoračenje roka za vraćanje "
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:23
 #, c-format
 msgid "Owner only"
-msgstr ""
+msgstr "Samo vlasnik"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:793
 #, c-format
@@ -7988,7 +7985,7 @@ msgstr "Molimo unesite samo brojke. "
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/password_check.inc:3
 msgid "Please enter the same password as above"
-msgstr ""
+msgstr "Molimo ponovite prethodno unesenu lozinku"
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:308
 #, c-format
@@ -8047,6 +8044,8 @@ msgid ""
 "Please note, the last person to return an item is tracked for the management "
 "of items returned damaged."
 msgstr ""
+"Primite na znanje, zadnja osoba koja je vratila primjerak je zabilježena "
+"zbog praćenja primjeraka koji su vraćeni oštećeni."
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:70
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:83
@@ -8112,6 +8111,8 @@ msgid ""
 "Please use the field 'Login' as well. %s The process of password recovery "
 "has already been started for this account %s (\""
 msgstr ""
+"Molim koristite i polje 'Login'. %s Proces obnavljanja lozinke je već "
+"započet za ovaj račun %s (\""
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -8360,7 +8361,7 @@ msgstr "Prijedlozi za nabavu"
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:55
 #, c-format
 msgid "Quantity:"
-msgstr ""
+msgstr "Količina"
 
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:97
 #, c-format
@@ -9428,6 +9429,8 @@ msgid ""
 "Some charges for text messages may be incurred when using this service. "
 "Please check with your mobile service provider if you have questions."
 msgstr ""
+"Korištenje SMS poruka za ovu uslugu može biti naplaćeno. Molimo obratite se "
+"svojem pružatelju mobilnih usluga ukoliko imate pitanja."
 
 #. %1$s:  failaddress 
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:73
@@ -9660,7 +9663,7 @@ msgstr "Korak dva: Skeniraj barkod za svaki primjerak, jedan po jedan"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:875
 #, c-format
 msgid "Stopped"
-msgstr ""
+msgstr "Zaustavljeno"
 
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:374
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:376
@@ -10075,6 +10078,7 @@ msgid ""
 "The Anyone permission has no actual effect while this list is strictly "
 "private."
 msgstr ""
+"Dopuštenje \"Bilo tko\" nema učinka ukoliko je ovaj popis striktno privatan."
 
 #: opac-tmpl/bootstrap/en/modules/opac-tags_subject.tt:51
 #, c-format
@@ -10434,6 +10438,7 @@ msgstr "Ovaj primjerak ne postoji."
 msgid ""
 "This item has been scheduled for automatic renewal and cannot be renewed"
 msgstr ""
+"Primjerak je na rasporedu za automatsko produženje i ne može biti produžen."
 
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:100
 #, c-format
@@ -10642,7 +10647,7 @@ msgstr "Ukupno duguje"
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:668
 #, c-format
 msgid "Total holds: %s"
-msgstr ""
+msgstr "Ukupan broj rezervacija: %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:346
 #, c-format
@@ -11086,7 +11091,7 @@ msgstr "Prijavljeni ste kao %s."
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:52
 #, c-format
 msgid "You are logging from a different IP address. Please log in again."
-msgstr ""
+msgstr "Prijavljujete se s druge IP adrese. Molimo prijavite se ponovno."
 
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:165
 #, c-format
@@ -11297,6 +11302,8 @@ msgid ""
 "Once the library has processed those suggestions you will be able to place "
 "more."
 msgstr ""
+"Dosegli ste limit prijedloga koje u ovom trenutku možete poslati (%s). Kada "
+"knjižnica obradi te prijedloge moći ćete ih poslati još."
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:260
 #, c-format
@@ -11791,6 +11798,8 @@ msgstr "već je u košarici"
 msgid ""
 "an identifier indicating the location to which to deliver the item for pickup"
 msgstr ""
+"identifikator ukazuje na lokaciju na koju treba dostaviti primjerak za "
+"preuzimanje"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:457
 #, c-format
@@ -11916,6 +11925,8 @@ msgid ""
 "defines the type of record identifier being used in the request, possible "
 "values: "
 msgstr ""
+"definira tip identifikatora zapisa koji se koristi u zahtjevu, moguće "
+"vrijednosti: "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:686
 #, c-format
@@ -12328,7 +12339,7 @@ msgstr "administrator sustava"
 #, c-format
 msgid ""
 "specifies the metadata schema of records to be returned, possible values: "
-msgstr ""
+msgstr "specificira shemu metapodataka vraćenih zapisa, moguće vrijednosti:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:51
 #, c-format
@@ -12396,12 +12407,12 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:739
 #, c-format
 msgid "the ILS identifier for the patron for whom the request is placed"
-msgstr ""
+msgstr "ILS identifikator za korisnika za koga je zahtjev poslan"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
 #, c-format
 msgid "the ILS identifier for the specific item on which the request is placed"
-msgstr ""
+msgstr "ILS identifikator za određen primjerak za koji je poslan zahtjev"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
 #, c-format
@@ -12510,11 +12521,12 @@ msgid ""
 "whether or not to return extended patron attributes information in the "
 "response"
 msgstr ""
+"uključiti ili ne informacije o proširenim ovlastima korisnika u odgovor"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:515
 #, c-format
 msgid "whether or not to return fine information in the response"
-msgstr ""
+msgstr "uključiti ili ne informacije o kazni u odgovor"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:517
 #, c-format
@@ -12524,12 +12536,12 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:519
 #, c-format
 msgid "whether or not to return loan information in the response"
-msgstr ""
+msgstr "uključiti ili ne informacije o posudbi u odgovor"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:513
 #, c-format
 msgid "whether or not to return patron's contact information in the response"
-msgstr ""
+msgstr "uključiti ili ne informacije o korisniku u odgovor"
 
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:3
 msgid "width=device-width, initial-scale=1"
@@ -12574,7 +12586,7 @@ msgstr "novčane naknade"
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:114
 #, c-format
 msgid "your interlibrary loan requests"
-msgstr ""
+msgstr "vaši zahtjevi za međuknjižničnu posudbu"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:96
 #, c-format
@@ -12588,9 +12600,9 @@ msgstr "poruke"
 
 #. %1$s:  payment 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:62
-#, c-format
+#, fuzzy, c-format
 msgid "your payment of %s has been applied to your account"
-msgstr ""
+msgstr "vaša uplata od %s je dodana na vaš račun"
 
 #: opac-tmpl/bootstrap/en/includes/usermenu.inc:25
 #, c-format
