@@ -233,6 +233,7 @@ if ($op eq "show"){
             push @contentlist, $content if $content;
         }
 
+        @contentlist = uniq @contentlist;
         if ($filecontent eq 'barcode_file') {
             foreach my $barcode (@contentlist) {
 
