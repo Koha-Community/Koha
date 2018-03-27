@@ -72,3 +72,13 @@ sub uninstall {
     my ( $self, $args ) = @_;
     return "Koha::Plugin::Test::uninstall";
 }
+
+sub test_output {
+    my ( $self ) = @_;
+    $self->output( '¡Hola output!', 'json' );
+}
+
+sub test_output_html {
+    my ( $self ) = @_;
+    $self->output_html( '¡Hola output_html!' );
+}
