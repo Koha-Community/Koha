@@ -1647,8 +1647,12 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 subtest 'SendCirculationAlert test' => sub {
     plan tests => 4;
 
+    t::lib::Mocks::mock_preference('ValidatePhoneNumber', '');
+
     my $library = $builder->build( { source => 'Branch' } );
-    my $patron  = $builder->build( { source => 'Borrower' } );
+    my $patron  = $builder->build( { source => 'Borrower', value => {
+        email => 'nobody@example.com'
+    } } );
     my $attribute = Koha::Patron::Message::Attributes->find({
         message_name => 'Item_Checkout',
     });
