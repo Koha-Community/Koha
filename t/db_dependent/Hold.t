@@ -29,7 +29,7 @@ use Koha::Item;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
-use Test::More tests => 31;
+use Test::More tests => 33;
 use Test::Warn;
 
 use_ok('Koha::Hold');
@@ -92,6 +92,9 @@ $hold->suspend_hold( $dt );
 $dt->truncate( to => 'day' );
 is( $hold->suspend, 1, "Hold is suspended" );
 is( $hold->suspend_until, "$dt", "Hold is suspended with a date, truncation takes place automatically" );
+$hold->suspend_hold;
+is( $hold->suspend, 1, "Hold is suspended" );
+is( $hold->suspend_until, undef, "Hold is suspended without a date" );
 $hold->resume();
 is( $hold->suspend, 0, "Hold is not suspended" );
 is( $hold->suspend_until, undef, "Hold no longer has suspend_until date" );
