@@ -34,7 +34,7 @@ my $module = Test::MockModule->new('Mail::Sendmail');
 $module->mock(
     'sendmail',
     sub {
-        carp 'Fake sendmail!';
+        carp 'Fake sendmail';
         %mail = @_;
     }
 );
@@ -195,9 +195,9 @@ ok( Koha::Patron::Password::Recovery::DeleteExpiredPasswordRecovery($borrowernum
 
 my $borrower = Koha::Patrons->search( { userid => $userid1 } )->next;
 my $success;
-warning_like {
+warning_is {
     $success = Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 0); }
-    qr/Fake sendmail!/,
+    "Fake sendmail",
     '[SendPasswordRecoveryEmail] expecting fake sendmail';
 ok( $success == 1, '[SendPasswordRecoveryEmail] Returns 1 on success');
 
@@ -207,9 +207,9 @@ ok( scalar @$letters == 1, "[SendPasswordRecoveryEmail] There is a letter in the
 my $bpr = $schema->resultset('BorrowerPasswordRecovery')->search( { borrowernumber => $borrowernumber1 } );
 my $tempuuid1 = $bpr->next->uuid;
 
-warning_like {
+warning_is {
     Koha::Patron::Password::Recovery::SendPasswordRecoveryEmail($borrower, $email1, 1); }
-    qr/Fake sendmail!/,
+    "Fake sendmail",
     '[SendPasswordRecoveryEmail] expecting fake sendmail';
 
 $bpr = $schema->resultset('BorrowerPasswordRecovery')->search( { borrowernumber => $borrowernumber1 } );
