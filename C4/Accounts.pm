@@ -448,9 +448,18 @@ sub purge_zero_balance_fees {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare(
         q{
-            DELETE FROM accountlines
-            WHERE date < date_sub(curdate(), INTERVAL ? DAY)
-              AND ( amountoutstanding = 0 or amountoutstanding IS NULL );
+            DELETE a1 FROM accountlines a1
+
+            LEFT JOIN account_offsets credit_offset ON ( a1.accountlines_id = credit_offset.credit_id )
+            LEFT JOIN accountlines a2 ON ( credit_offset.debit_id = a2.accountlines_id )
+
+            LEFT JOIN account_offsets debit_offset ON ( a1.accountlines_id = debit_offset.debit_id )
+            LEFT JOIN accountlines a3 ON ( debit_offset.credit_id = a3.accountlines_id )
+
+            WHERE a1.date < date_sub(curdate(), INTERVAL ? DAY)
+              AND ( a1.amountoutstanding = 0 OR a1.amountoutstanding IS NULL )
+              AND ( a2.amountoutstanding = 0 OR a2.amountoutstanding IS NULL )
+              AND ( a3.amountoutstanding = 0 OR a3.amountoutstanding IS NULL )
         }
     );
     $sth->execute($days) or die $dbh->errstr;
