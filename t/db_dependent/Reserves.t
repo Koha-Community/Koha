@@ -725,6 +725,8 @@ subtest '_koha_notify_reserve() tests' => sub {
 
     plan tests => 2;
 
+    t::lib::Mocks::mock_preference('ValidatePhoneNumber', '');
+
     $dbh->do('DELETE FROM letter');
 
     my $email_hold_notice = $builder->build({
