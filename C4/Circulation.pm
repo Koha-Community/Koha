@@ -2802,7 +2802,7 @@ sub CanBookBeRenewed {
             my @borrowernumbers;
             while (1) {
                 my ( $reserve_found, $reserve, undef ) =
-                  C4::Reserves::CheckReserves( $itemnumber, undef, undef, $size, \@borrowernumbers );
+                  C4::Reserves::CheckReserves( $itemnumber, undef, undef, $size+1, \@borrowernumbers );
                   
                 if ($reserve_found) {
                     push( @borrowernumbers, $reserve->{borrowernumber} );
