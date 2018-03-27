@@ -37,16 +37,6 @@
     #col1, #col2 { width:45%; float:left; }
     #col1 ins, #col2 del { display: none; }
     .show_sql { font-family: monospace; }
-    .send_to_item_mod {
-        background-color: #EBF3FF;
-        border: 1px solid #88b0e8;
-        border-radius: 5px;
-        display: inline-block;
-        font-size: 75%;
-        margin: 3px 5px;
-        padding: 3px 5px;
-        white-space: nowrap;
-    }
 </style>
 [% IF ( saved1 ) %]
     <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
@@ -715,14 +705,14 @@ canned reports and writing custom SQL reports.</p>
 
 <div class="pages">[% pagination_bar %]</div>
 [% UNLESS ( errors ) %]
-    <form method="POST" id="report_results">
+    <form method="POST" action="/cgi-bin/koha/tools/batchMod.pl" id="report_results">
         <input type="hidden" name="op" value="show" />
         <table>
             <tr>
                 [% FOREACH header_ro IN header_row %]
                     [% IF header_ro.cell == 'itemnumber' %]
                         <th>
-                            [% header_ro.cell %] <a href="#" data-toggle="tooltip" title="Send visible items to batch modification" class="send_to_item_mod"><i class="fa fa-pencil"></i> Batch modify</a>
+                            [% header_ro.cell %] <button type="submit" data-toggle="tooltip" title="Send visible items to batch modification" class="btn btn-xs btn-default send_to_item_mod"><i class="fa fa-pencil"></i> Batch modify</button>
                         </th>
                     [% ELSE %]
                         <th>[% header_ro.cell %]</th>
@@ -1006,12 +996,6 @@ Sub report:<select name="subreport">
 
             $("#delColumn").on("click",function(){
                 delColumn();
-            });
-
-            $(".send_to_item_mod").click(function(e){
-                e.preventDefault();
-                $("#report_results").attr("action","/cgi-bin/koha/tools/batchMod.pl");
-                $("#report_results").submit();
             });
 
             [% IF (saved1) %]
