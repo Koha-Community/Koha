@@ -25,6 +25,7 @@ use Cwd qw(abs_path);
 use base qw{Module::Bundled::Files};
 
 use C4::Context;
+use C4::Output qw(output_with_http_headers output_html_with_http_headers);
 
 =head1 NAME
 
@@ -38,7 +39,7 @@ sub new {
     return unless ( C4::Context->config("enable_plugins") || $args->{'enable_plugins'} );
 
     $args->{'class'} = $class;
-    $args->{'template'} = Template->new( { ABSOLUTE => 1 } );
+    $args->{'template'} = Template->new( { ABSOLUTE => 1, ENCODING => 'UTF-8' } );
 
     my $self = bless( $args, $class );
 
@@ -175,6 +176,46 @@ sub go_home {
     my ( $self, $params ) = @_;
 
     print $self->{'cgi'}->redirect("/cgi-bin/koha/plugins/plugins-home.pl");
+}
+
+=head2 output_html
+
+    $self->output_html( $data, $status, $extra_options );
+
+Outputs $data setting the right headers for HTML content.
+
+Note: this is a wrapper function for C4::Output::output_with_http_headers
+
+=cut
+
+sub output_html {
+    my ( $self, $data, $status, $extra_options ) = @_;
+    output_with_http_headers( $self->{cgi}, undef, $data, 'html', $status, $extra_options );
+}
+
+=head2 output
+
+   $self->output( $data, $content_type[, $status[, $extra_options]]);
+
+Outputs $data with the appropriate HTTP headers,
+the authentication cookie and a Content-Type specified in
+$content_type.
+
+$content_type is one of the following: 'html', 'js', 'json', 'xml', 'rss', or 'atom'.
+
+$status is an HTTP status message, like '403 Authentication Required'. It defaults to '200 OK'.
+
+$extra_options is hashref.  If the key 'force_no_caching' is present and has
+a true value, the HTTP headers include directives to force there to be no
+caching whatsoever.
+
+Note: this is a wrapper function for C4::Output::output_with_http_headers
+
+=cut
+
+sub output {
+    my ( $self, $data, $content_type, $status, $extra_options ) = @_;
+    output_with_http_headers( $self->{cgi}, undef, $data, $content_type, $status, $extra_options );
 }
 
 1;
