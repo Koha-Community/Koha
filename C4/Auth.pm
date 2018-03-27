@@ -196,6 +196,7 @@ sub get_template_and_user {
         elsif (
 # If the user logged in is the SCI user and they try to go out of the SCI module,
 # kick them out unless it is SCO with a valid permission
+# or they are a superlibrarian
                $in->{template_name} !~ m|sci/|
             && $user
             && haspermission( $user, { self_check => 'self_checkin_module' } )
@@ -203,7 +204,7 @@ sub get_template_and_user {
                 $in->{template_name} =~ m|sco/| && haspermission(
                     $user, { self_check => 'self_checkout_module' }
                 )
-            )
+            ) && Koha::Patrons->find({userid=>$user})->flags != 1
           )
         {
             $kick_out = 1;
