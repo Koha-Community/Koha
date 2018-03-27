@@ -92,11 +92,17 @@
                 <ul class="buttons-list">
                      [% IF ( CAN_user_circulate_overdues_report ) %]
                         <li>
-                            <a class="circ-button" href="/cgi-bin/koha/circ/overdue.pl"><i class="fa fa-clock-o"></i> Overdues</a>
+                            <a class="circ-button"
+                                href="/cgi-bin/koha/circ/overdue.pl"
+                                title="Warning: This report is very resource intensive on systems with large numbers of overdue items."
+                            ><i class="fa fa-clock-o"></i> Overdues</a>
                         </li>
                     [% END %]
                     <li>
-                        <a class="circ-button" href="/cgi-bin/koha/circ/branchoverdues.pl"><i class="fa fa-clock-o"></i> Overdues with fines</a>
+                        <a class="circ-button"
+                            href="/cgi-bin/koha/circ/branchoverdues.pl"
+                            title="Limited to your library.  See report help for other details."
+                        ><i class="fa fa-clock-o"></i> Overdues with fines</a>
                     </li>
                     [% IF Koha.Preference('OnSiteCheckouts') %]
                         <li>
