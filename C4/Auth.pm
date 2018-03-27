@@ -179,14 +179,13 @@ sub get_template_and_user {
         );
     }
 
-    if ( $in->{type} eq 'opac' ) {
+    if ( $in->{type} eq 'opac' && $user ) {
         my $kick_out;
 
         if (
 # If the user logged in is the SCO user and they try to go out of the SCO module,
 # log the user out removing the CGISESSID cookie
                $in->{template_name} !~ m|sco/|
-            && $user
             && C4::Context->preference('AutoSelfCheckID')
             && $user eq C4::Context->preference('AutoSelfCheckID')
           )
@@ -198,7 +197,6 @@ sub get_template_and_user {
 # kick them out unless it is SCO with a valid permission
 # or they are a superlibrarian
                $in->{template_name} !~ m|sci/|
-            && $user
             && haspermission( $user, { self_check => 'self_checkin_module' } )
             && !(
                 $in->{template_name} =~ m|sco/| && haspermission(
