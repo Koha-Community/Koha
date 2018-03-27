@@ -14670,6 +14670,12 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Koha 17.05.09)\n";
 }
 
+$DBversion = "17.05.10.000";
+if ( CheckVersion($DBversion) ) {
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Koha 17.05.10)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
