@@ -2119,16 +2119,15 @@ Returns 1 if the remote address is in the provided ipset, or 0 otherwise.
 =cut
 
 sub in_ipset {
- my ($ipset) = @_;
- my @allowedipranges = split(' ', $ipset);
- if (scalar @allowedipranges > 0) {
-    my @rangelist;
-    eval { @rangelist = Net::CIDR::range2cidr(@allowedipranges); }; return 0 if $@;
-    unless (Net::CIDR::cidrlookup($ENV{'REMOTE_ADDR'}, @rangelist)) {
-      return 0;
-    }
- }
- return 1;
+    my ($ipset) = @_;
+    my $result = 1;
+    my @allowedipranges = $ipset ? split(' ', $ipset) : ();
+    if (scalar @allowedipranges > 0) {
+        my @rangelist;
+        eval { @rangelist = Net::CIDR::range2cidr(@allowedipranges); }; return 0 if $@;
+        eval { $result = Net::CIDR::cidrlookup($ENV{'REMOTE_ADDR'}, @rangelist) } || ( $ENV{DEBUG} && warn 'cidrlookup failed for ' . join(' ',@rangelist) );
+     }
+     return $result ? 1 : 0;
 }
 
 sub getborrowernumber {

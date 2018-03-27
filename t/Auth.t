@@ -16,10 +16,10 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 10;
+use Test::More tests => 13;
+use Test::Warn;
 
 use C4::Auth qw / in_ipset /;
-use warnings;
 
 $ENV{REMOTE_ADDR} = '192.168.1.30';
 my $ipset1 = "192.168.1.30";
@@ -34,3 +34,9 @@ ok(in_ipset("192.168.1.10-192.168.1.30"), 'validly represented ip range with rem
 ok(in_ipset("127.0.0.1 192.168.1.30 192.168.2.10-192.168.2.25"), 'multiple ips and ranges, including the remote ip');
 ok(!in_ipset("127.0.0.1 8.8.8.8 192.168.2.1/24 192.168.3.1/24 192.168.1.1-192.168.1.29"), "multiple ip and ip ranges, with the remote ip in none of them");
 ok(in_ipset(""), "blank list given, no preference set - implies everything goes through.");
+ok(in_ipset(), "no list given, no preference set - implies everything goes through.");
+ok(in_ipset("192.168.1.1/36"), 'simple invalid ip range/36 with remote ip in it');
+$ENV{DEBUG} = 1;
+warning_like { in_ipset("192.168.1.1/36") }
+    qr/cidrlookup failed for/,
+    'noisy simple invalid ip range/36 with remote ip in it';
