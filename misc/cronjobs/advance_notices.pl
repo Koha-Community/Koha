@@ -333,7 +333,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
 
 # Now, run through all the people that want digests and send them
 
-$sth = $dbh->prepare(<<'END_SQL');
+my $sth_digest = $dbh->prepare(<<'END_SQL');
 SELECT biblio.*, items.*, issues.*
   FROM issues,items,biblio
   WHERE items.itemnumber=issues.itemnumber
@@ -341,119 +341,33 @@ SELECT biblio.*, items.*, issues.*
     AND issues.borrowernumber = ?
     AND (TO_DAYS(date_due)-TO_DAYS(NOW()) = ?)
 END_SQL
-PATRON: while ( my ( $borrowernumber, $digest ) = each %$upcoming_digest ) {
-    @letters = ();
-    my $count = $digest->{count};
-    my $from_address = $digest->{email};
 
-    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
-                                                                                  message_name   => 'advance_notice' } );
-    next PATRON unless $borrower_preferences; # how could this happen?
-
-
-    my $letter_type = 'PREDUEDGST';
-
-    $sth->execute($borrowernumber,$borrower_preferences->{'days_in_advance'});
-    my $titles = "";
-    while ( my $item_info = $sth->fetchrow_hashref()) {
-        $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
+send_digests({
+    sth => $sth_digest,
+    digests => $upcoming_digest,
+    letter_code => 'PREDUEDGST',
+    get_item_info => sub {
+        my $params = shift;
+        $params->{sth}->execute($params->{borrowernumber},
+                      $params->{borrower_preferences}->{'days_in_advance'});
+        return sub {
+            $params->{sth}->fetchrow_hashref;
+        };
     }
+});
 
-    ## Get branch info for borrowers home library.
-    my %branch_info = get_branch_info( $borrowernumber );
-
-    foreach my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
-        my $letter = parse_letter(
-            {
-                letter_code    => $letter_type,
-                borrowernumber => $borrowernumber,
-                substitute     => {
-                    count           => $count,
-                    'items.content' => $titles,
-                    %branch_info,
-                },
-                branchcode             => $branch_info{"branches.branchcode"},
-                message_transport_type => $transport,
-            }
-          )
-          or warn "no letter of type '$letter_type' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
-        push @letters, $letter if $letter;
+send_digests({
+    sth => $sth_digest,
+    digest => $due_digest,
+    letter_code => 'DUEGST',
+    get_item_info => sub {
+        my $params = shift;
+        $params->{sth}->execute($params->{borrowernumber}, 0);
+        return sub {
+            $params->{sth}->fetchrow_hashref;
+        };
     }
-
-    if ( @letters ) {
-      if ($nomail) {
-        for my $letter ( @letters ) {
-            local $, = "\f";
-            print $letter->{'content'};
-        }
-      }
-      else {
-        for my $letter ( @letters ) {
-            C4::Letters::EnqueueLetter( { letter                 => $letter,
-                                          borrowernumber         => $borrowernumber,
-                                          from_address           => $from_address,
-                                          message_transport_type => $letter->{message_transport_type} } );
-        }
-      }
-    }
-}
-
-# Now, run through all the people that want digests and send them
-PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
-    @letters = ();
-    my $count = $digest->{count};
-    my $from_address = $digest->{email};
-
-    my $borrower_preferences = C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $borrowernumber,
-                                                                                  message_name   => 'item_due' } );
-    next PATRON unless $borrower_preferences; # how could this happen?
-
-    my $letter_type = 'DUEDGST';
-    $sth->execute($borrowernumber,'0');
-    my $titles = "";
-    while ( my $item_info = $sth->fetchrow_hashref()) {
-        $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
-    }
-
-    ## Get branch info for borrowers home library.
-    my %branch_info = get_branch_info( $borrowernumber );
-
-    for my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
-        my $letter = parse_letter(
-            {
-                letter_code    => $letter_type,
-                borrowernumber => $borrowernumber,
-                substitute     => {
-                    count           => $count,
-                    'items.content' => $titles,
-                    %branch_info,
-                },
-                branchcode             => $branch_info{"branches.branchcode"},
-                message_transport_type => $transport,
-            }
-          )
-          or warn "no letter of type '$letter_type' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
-        push @letters, $letter if $letter;
-    }
-
-    if ( @letters ) {
-      if ($nomail) {
-        for my $letter ( @letters ) {
-            local $, = "\f";
-            print $letter->{'content'};
-        }
-      }
-      else {
-        for my $letter ( @letters ) {
-            C4::Letters::EnqueueLetter( { letter                 => $letter,
-                                          borrowernumber         => $borrowernumber,
-                                          from_address           => $from_address,
-                                          message_transport_type => $letter->{message_transport_type} } );
-        }
-      }
-    }
-
-}
+});
 
 =head1 METHODS
 
@@ -463,6 +377,7 @@ PATRON: while ( my ( $borrowernumber, $digest ) = each %$due_digest ) {
 
 sub parse_letter {
     my $params = shift;
+
     foreach my $required ( qw( letter_code borrowernumber ) ) {
         return unless exists $params->{$required};
     }
@@ -510,6 +425,112 @@ sub get_branch_info {
 
     return %branch_info;
 }
+
+=head2 send_digests
+
+    send_digests({
+        digests => ...,
+        sth => ...,
+        letter_code => ...,
+        get_item_info => ...,
+    })
+
+Enqueue digested letters (or print them if -n was passed at command line).
+
+Parameters:
+
+=over 4
+
+=item C<$digests>
+
+Reference to the array of digested messages.
+
+=item C<$sth>
+
+Prepared statement handle for fetching overdue issues.
+
+=item C<$letter_code>
+
+String that denote the letter code.
+
+=item C<$get_item_info>
+
+Subroutine for executing prepared statement.  Takes parameters $sth,
+$borrowernumber and $borrower_parameters and return a generator
+function that produce the matching rows.
+
+=back
+
+=cut
+
+sub send_digests {
+    my $params = shift;
+
+    PATRON: while ( my ( $borrowernumber, $digest ) = each %{$params->{digests}} ) {
+        @letters = ();
+        my $count = $digest->{count};
+        my $from_address = $digest->{email};
+
+        my $borrower_preferences =
+            C4::Members::Messaging::GetMessagingPreferences(
+                {
+                    borrowernumber => $borrowernumber,
+                    message_name   => 'advance_notice'
+                }
+            );
+
+        next PATRON unless $borrower_preferences; # how could this happen?
+
+        my $next_item_info = $params->{get_item_info}->({
+            sth => $params->{sth},
+            borrowernumber => $borrowernumber,
+            borrower_preferences => $borrower_preferences
+        });
+        my $titles = "";
+        while ( my $item_info = $next_item_info->()) {
+            $titles .= C4::Letters::get_item_content( { item => $item_info, item_content_fields => \@item_content_fields } );
+        }
+
+        ## Get branch info for borrowers home library.
+        my %branch_info = get_branch_info( $borrowernumber );
+
+        foreach my $transport ( keys %{ $borrower_preferences->{'transports'} } ) {
+            my $letter = parse_letter(
+                {
+                    letter_code    => $params->{letter_code},
+                    borrowernumber => $borrowernumber,
+                    substitute     => {
+                        count           => $count,
+                        'items.content' => $titles,
+                        %branch_info,
+                    },
+                    branchcode             => $branch_info{"branches.branchcode"},
+                    message_transport_type => $transport,
+                }
+                )
+                or warn "no letter of type '$params->{letter_type}' found for borrowernumber $borrowernumber. Please see sample_notices.sql";
+            push @letters, $letter if $letter;
+        }
+
+        if ( @letters ) {
+            if ($nomail) {
+                for my $letter ( @letters ) {
+                    local $, = "\f";
+                    print $letter->{'content'};
+                }
+            }
+            else {
+                for my $letter ( @letters ) {
+                    C4::Letters::EnqueueLetter( { letter                 => $letter,
+                                                  borrowernumber         => $borrowernumber,
+                                                  from_address           => $from_address,
+                                                  message_transport_type => $letter->{message_transport_type} } );
+                }
+            }
+        }
+    }
+}
+
 
 1;
 
