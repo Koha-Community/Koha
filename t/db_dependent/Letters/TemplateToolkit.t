@@ -552,7 +552,7 @@ EOF
         my $letter_for_item2 = C4::Reserves::ReserveSlip( $library->{branchcode}, $patron->{borrowernumber}, $biblio2->{biblionumber} );
 
         my $tt_template = <<EOF;
-<h5>Date: [% today | \$KohaDates with_hours => 1 %]</h5>
+<h5>Date: [% today | \$KohaDates with_hours => 0 %]</h5>
 
 <h3> Transfer to/Hold in [% branch.branchname %]</h3>
 
