@@ -501,8 +501,7 @@ sub get_template_and_user {
             EnableBorrowerFiles                                                        => C4::Context->preference('EnableBorrowerFiles'),
             UseKohaPlugins                                                             => C4::Context->preference('UseKohaPlugins'),
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
-            useDischarge                                                               => C4::Context->preference('useDischarge'),
-            KOHA_VERSION                                                               => C4::Context->preference('Version'),
+            useDischarge                                                               => C4::Context->preference('useDischarge')
         );
     }
     else {
@@ -576,7 +575,6 @@ sub get_template_and_user {
             OpacTopissue                          => C4::Context->preference("OpacTopissue"),
             RequestOnOpac                         => C4::Context->preference("RequestOnOpac"),
             'Version'                             => C4::Context->preference('Version'),
-            KOHA_VERSION                          => C4::Context->preference('Version'),
             hidelostitems                         => C4::Context->preference("hidelostitems"),
             mylibraryfirst                        => ( C4::Context->preference("SearchMyLibraryFirst") && C4::Context->userenv ) ? C4::Context->userenv->{'branch'} : '',
             opaclayoutstylesheet                  => "" . C4::Context->preference("opaclayoutstylesheet"),
@@ -1292,8 +1290,7 @@ sub checkauth {
         PatronSelfRegistration                => C4::Context->preference("PatronSelfRegistration"),
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
-        too_many_login_attempts               => ( $patron and $patron->account_locked ),
-        KOHA_VERSION                          => C4::Context->preference('Version'),
+        too_many_login_attempts               => ( $patron and $patron->account_locked )
     );
 
     $template->param( SCO_login => 1 ) if ( $query->param('sco_user_login') );
