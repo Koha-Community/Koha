@@ -52,7 +52,7 @@ SKIP: {
         # Navigate to the Administration area and create an item type
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
-        $s->click( { href => '/admin/itemtypes.pl', main => 'doc' } );  # Item Types
+        $s->click( { href => '/admin/itemtypes.pl', main_class => 'main container-fluid' } );  # Item Types
         $s->click( { href => '/admin/itemtypes.pl?op=add_form', main => 'doc3' } )
           ;    # New item type
         $s->fill_form(
@@ -70,7 +70,7 @@ SKIP: {
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
-        $s->click( { href => '/admin/smart-rules.pl', main => 'doc' } )
+        $s->click( { href => '/admin/smart-rules.pl', main_class => 'main container-fluid' } )
           ;    # Circulation and fines rules
                # TODO Create smart navigation here
     };
@@ -79,7 +79,7 @@ SKIP: {
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
-        $s->click( { href => '/admin/biblio_framework.pl', main => 'doc' } )
+        $s->click( { href => '/admin/biblio_framework.pl', main_class => 'main container-fluid' } )
           ;    # MARC bibliographic framework
         $s->click(
             { href => '/admin/biblio_framework.pl?op=add_form', main => 'doc3' } )
@@ -105,7 +105,7 @@ SKIP: {
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
-        $s->click( { href => '/admin/branches.pl', main => 'doc' } )
+        $s->click( { href => '/admin/branches.pl', main_class => 'main container-fluid' } )
           ;    # Libraries and groups
         $s->click( { href => '/admin/branches.pl?op=add_form', main => 'doc3' } )
           ;    # New library
@@ -130,7 +130,7 @@ SKIP: {
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } ); #Koha administration
 
-        $s->click( { href => '/admin/authorised_values.pl', main => 'doc' } ); #Authorized values
+        $s->click( { href => '/admin/authorised_values.pl', main_class => 'main container-fluid' } ); #Authorized values
 
         $s->click( { href => { 'ends-with' => '/admin/authorised_values.pl?op=add_form' }, main => 'doc3' } ); # New category
         $s->fill_form( { category => $av_category } );
@@ -166,7 +166,7 @@ SKIP: {
     { # Patron categories
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } ); # Koha administration
-        $s->click( { href => '/admin/categories.pl', main => 'doc' } ); # Patron categories
+        $s->click( { href => '/admin/categories.pl', main_class => 'main container-fluid' } ); # Patron categories
         $s->click( { href => '/admin/categories.pl?op=add_form', main => 'doc3' } ); # New patron category
 
         $s->fill_form( { categorycode => $category_code, description => 'Test category', enrolmentperiod => 12, category_type => 'A' } );

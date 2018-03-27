@@ -97,6 +97,8 @@ sub click {
     my $xpath_selector;
     if ( exists $params->{main} ) {
         $xpath_selector = '//div[@id="'.$params->{main}.'"]';
+    } elsif ( exists $params->{main_class} ) {
+        $xpath_selector = '//div[@class="'.$params->{main_class}.'"]';
     }
     if ( exists $params->{href} ) {
         if ( ref( $params->{href} ) ) {
