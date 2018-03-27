@@ -21,7 +21,15 @@ var dataTablesDefaults = {
         "sLoadingRecords"   : window.MSG_DT_LOADING_RECORDS || "Loading...",
         "sProcessing"       : window.MSG_DT_PROCESSING || "Processing...",
         "sSearch"           : window.MSG_DT_SEARCH || "Search:",
-        "sZeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found"
+        "sZeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found",
+        buttons: {
+            "copyTitle"     : window.MSG_DT_COPY_TITLE || "Copy to clipboard",
+            "copyKeys"      : window.MSG_DT_COPY_KEYS || "Press <i>ctrl</i> or <i>⌘</i> + <i>C</i> to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.",
+            "copySuccess": {
+                _: window.MSG_DT_COPY_SUCCESS_X || "Copied %d rows to clipboard",
+                1: window.MSG_DT_COPY_SUCCESS_ONE || "Copied one row to clipboard"
+            }
+        }
     },
     "dom": '<"top pager"ilpfB>tr<"bottom pager"ip>',
     "buttons": [],

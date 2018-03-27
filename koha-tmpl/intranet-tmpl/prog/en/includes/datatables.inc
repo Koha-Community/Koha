@@ -24,6 +24,10 @@
     var MSG_DT_ZERO_RECORDS = _("No matching records found");
     var MSG_DT_ALL = _("All");
     var CONFIG_EXCLUDE_ARTICLES_FROM_SORT = _("a an the");
+    var MSG_DT_COPY_TITLE = _("Copy to clipboard");
+    var MSG_DT_COPY_KEYS = _("Press ctrl or ⌘ + C to copy the table data<br>to your system clipboard.<br><br>To cancel, click this message or press escape.");
+    var MSG_DT_COPY_SUCCESS_ONE = _("Copied one row to clipboard");
+    var MSG_DT_COPY_SUCCESS_X = _("Copied %d rows to clipboard");
 //]]>
 </script>
 [% Asset.js("js/datatables.js") %]
