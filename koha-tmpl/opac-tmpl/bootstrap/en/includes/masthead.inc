@@ -196,7 +196,7 @@
                                 [% ELSE %]
                                     <option value="se">Series</option>
                                 [% END # /ms_se %]
-                                [% IF ( numbersphr ) %]
+                                [% IF ( Koha.Preference('OPACNumbersPreferPhrase') ) %]
                                     [% IF ( ms_callnum ) %]
                                             <option selected="selected" value="callnum,phr">Call number</option>
                                     [% ELSE %]
@@ -208,7 +208,7 @@
                                     [% ELSE %]
                                         <option value="callnum">Call number</option>
                                     [% END # /ms_callnum %]
-                                [% END # /numbersphr %]
+                                [% END # /IF OPACNumbersPreferPhrase %]
                                 </select>
 
                                 [% UNLESS ( Koha.Preference( 'OpacAddMastheadLibraryPulldown' ) == 1 ) %]
