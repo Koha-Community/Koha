@@ -79,10 +79,14 @@ my $librarian = $builder->build({
     value => {
         branchcode   => $branchcode,
         categorycode => $categorycode,
-        flags        => 16,
         lost         => 0,
         password     => Koha::AuthUtils::hash_password("test"),
         othernames   => 'librarian_othernames',
+    }
+});
+Koha::Auth::PermissionManager->grantPermissions({
+    $librarian->{borrowernumber}, {
+        borrowers => 'view_borrowers'
     }
 });
 
@@ -122,19 +126,23 @@ $tx = $t->ua->build_tx(GET => "/api/v1/patrons/".$librarian->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is('/required_permissions', {"borrowers" => "*"});
+  ->json_is('/required_permissions', {"borrowers" => "view_borrowers"});
 
 $tx = $t->ua->build_tx(GET => "/api/v1/patrons?guarantorid=".$librarian->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is('/required_permissions', {"borrowers" => "*"});
+  ->json_is('/required_permissions', {"borrowers" => "view_borrowers"});
 
 $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/" . $patron->{ borrowernumber });
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is('/required_permissions', {"borrowers" => "*"});
+  ->json_is('/required_permissions', {"borrowers" => "1"});
+
+Koha::Auth::PermissionManager->grantAllSubpermissions(
+    $librarian->{borrowernumber}, 'borrowers'
+);
 
 # User without permissions, but is the owner of the object
 $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron->{borrowernumber});
