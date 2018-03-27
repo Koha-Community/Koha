@@ -54,6 +54,9 @@ subtest 'list_report_containers() tests' => sub {
     my $testContext = {};
     my ($patron, $session) = create_user_and_session();
 
+    my $dbh = C4::Context->dbh;
+    $dbh->do("update marc_subfield_structure set kohafield='biblio.frameworkcode'"
+             ."where tagfield='999' and tagsubfield='b'");
     C4::Context->_new_userenv('DUMMY SESSION');
     C4::Context->set_userenv(
         $patron->borrowernumber,
@@ -100,6 +103,9 @@ subtest 'list_reports() tests' => sub {
 
     my ($patron, $session) = create_user_and_session();
 
+    my $dbh = C4::Context->dbh;
+    $dbh->do("update marc_subfield_structure set kohafield='biblio.frameworkcode'"
+             ."where tagfield='999' and tagsubfield='b'");
     C4::Context->_new_userenv('DUMMY SESSION');
     C4::Context->set_userenv(
         $patron->borrowernumber,
