@@ -29,7 +29,7 @@ use Mojolicious::Lite;
 use Try::Tiny;
 
 my $config = {
-    'log4perl.logger.rest.Koha.REST.V1' => 'DEBUG, TEST',
+    'log4perl.logger.rest.Koha.REST.V1' => 'TRACE, TEST',
     'log4perl.appender.TEST' => 'Log::Log4perl::Appender::TestBuffer',
     'log4perl.appender.TEST.layout' => 'SimpleLayout',
 };
@@ -122,8 +122,8 @@ subtest 'log_request() and log_response() tests' => sub {
       ->status_is(200)
       ->json_is('/wow' => 'it worked');
     is($appender->buffer,
-       "DEBUG - Request JSON body null\nDEBUG - Request params {}\n".
-       "DEBUG - Rendering response {\"json\":{\"wow\":\"it worked\"},\"status\":200}\n",
+       "TRACE - Request JSON body null\nTRACE - Request params {}\n".
+       "TRACE - Rendering response {\"json\":{\"wow\":\"it worked\"},\"status\":200}\n",
        'Found request and response content'
     );
     $appender->{appender}->{buffer} = undef;
@@ -132,8 +132,8 @@ subtest 'log_request() and log_response() tests' => sub {
       ->status_is(200)
       ->content_is('<b>ERROR!</b>');
     is($appender->buffer,
-       "DEBUG - Request JSON body null\nDEBUG - Request params {\"param1\":\"value\"}\n".
-       "DEBUG - Rendering response {\"data\":\"<b>ERROR!<\\/b>\",\"status\":200}\n",
+       "TRACE - Request JSON body null\nTRACE - Request params {\"param1\":\"value\"}\n".
+       "TRACE - Rendering response {\"data\":\"<b>ERROR!<\\/b>\",\"status\":200}\n",
        'Found request and response content'
     );
     $appender->{appender}->{buffer} = undef;
@@ -142,9 +142,9 @@ subtest 'log_request() and log_response() tests' => sub {
       ->status_is(500)
       ->json_is('/error' => 'Something went wrong, check the logs.');
     like($appender->buffer,
-qr{DEBUG - Request JSON body \{"param2":"value"\}\nDEBUG - Request params \{\}
+qr{TRACE - Request JSON body \{"param2":"value"\}\nTRACE - Request params \{\}
 ERROR - Died at .* line \d+\.\n
-DEBUG - Rendering response \{"json":\{"error":"Something went wrong, check the logs\."\},"status":500\}
+TRACE - Rendering response \{"json":\{"error":"Something went wrong, check the logs\."\},"status":500\}
 }msi,
        'Found request and response content'
     );
