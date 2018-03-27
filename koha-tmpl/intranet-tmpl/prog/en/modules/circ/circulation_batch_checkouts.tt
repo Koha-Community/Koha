@@ -198,6 +198,9 @@
                 </ul>
               [% END %]
 
+              [% IF checkout_info.alert.RETURNED_FROM_ANOTHER %]
+                  <div class="dialog alert">Item was checked out to [% alert.RETURNED_FROM_ANOTHER.patron.firstname %] [% alert.RETURNED_FROM_ANOTHER.patron.surname %] ([% alert.RETURNED_FROM_ANOTHER.patron.cardnumber %]) and was returned automatically.</div>
+              [% END %]
 
               [% IF checkout_info.IMPOSSIBLE %]
                 <ul class="fa-ul error">
