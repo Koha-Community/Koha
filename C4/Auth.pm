@@ -204,7 +204,8 @@ sub get_template_and_user {
                 $in->{template_name} =~ m|sco/| && haspermission(
                     $user, { self_check => 'self_checkout_module' }
                 )
-            ) && Koha::Patrons->find({userid=>$user}) && Koha::Patrons->find({userid=>$user})->flags != 1
+            )
+            && $flags && $flags->{superlibrarian} != 1
           )
         {
             $kick_out = 1;
