@@ -230,7 +230,7 @@ subtest 'build_query tests' => sub {
 };
 
 subtest "_convert_sort_fields" => sub {
-    plan tests => 1;
+    plan tests => 2;
     my @sort_by = $builder->_convert_sort_fields(qw( call_number_asc author_dsc ));
     is_deeply(
         \@sort_by,
@@ -242,13 +242,13 @@ subtest "_convert_sort_fields" => sub {
     );
 
     # We could expect this to pass, but direction is undef instead of 'desc'
-    #@sort_by = $builder->_convert_sort_fields(qw( call_number_asc author_desc ));
-    #is_deeply(
-    #    \@sort_by,
-    #    [
-    #        { field => 'callnum', direction => 'asc' },
-    #        { field => 'author',  direction => 'desc' }
-    #    ],
-    #    'sort fields should have been split correctly'
-    #);
+    @sort_by = $builder->_convert_sort_fields(qw( call_number_asc author_desc ));
+    is_deeply(
+        \@sort_by,
+        [
+            { field => 'callnum', direction => 'asc' },
+            { field => 'author',  direction => 'desc' }
+        ],
+        'sort fields should have been split correctly'
+    );
 };
