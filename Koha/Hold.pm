@@ -83,7 +83,7 @@ my $hold = $hold->suspend_hold( $suspend_until_dt );
 sub suspend_hold {
     my ( $self, $dt ) = @_;
 
-    $dt = $dt ? $dt->clone()->truncate( to => 'day' ) : undef;
+    my $date = $dt ? $dt->clone()->truncate( to => 'day' )->datetime : undef;
 
     if ( $self->is_waiting ) {    # We can't suspend waiting holds
         carp "Unable to suspend waiting hold!";
@@ -91,7 +91,7 @@ sub suspend_hold {
     }
 
     $self->suspend(1);
-    $self->suspend_until( $dt->datetime ) if ( defined $dt );
+    $self->suspend_until( $date );
     $self->store();
 
     logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, Dumper($self->unblessed) )
