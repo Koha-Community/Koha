@@ -94,18 +94,9 @@ if ( $op eq "do_search" ) {
         [$marclist], [$and_or], [$excluding], [$operator],
         [$value], $authtypecode, $orderby
     );
-    my $offset = ( $startfrom - 1 ) * $resultsperpage + 1;
-    my ( $results, $total ) =
-      $searcher->search_auth_compat( $search_query, $offset,
-        $resultsperpage );
-    #my ( $results, $total ) = SearchAuthorities(
-    #    [$marclist],  [$and_or],
-    #    [$excluding], [$operator],
-    #    [$value], ( $startfrom - 1 ) * $resultsperpage,
-    #    $resultsperpage, $authtypecode,
-    #    $orderby
-    #);
-
+    my ( $results, $total ) = $searcher->search_auth_compat(
+        $search_query, $startfrom, $resultsperpage
+    );
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         {
