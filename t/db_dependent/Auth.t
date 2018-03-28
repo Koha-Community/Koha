@@ -62,7 +62,7 @@ subtest 'checkauth() tests' => sub {
             else { return; }
         });
     ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, $authnotrequired );
-    is ( $userid, $db_user_id, 'If DB user is logging in, it should be considered as logged in, i.e. checkauth return the relevant userid' );
+    is ( $userid, undef, 'If DB user is used, it should not be logged in' );
     C4::Context->_new_userenv; # For next tests
 
 };

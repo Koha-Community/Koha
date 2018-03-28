@@ -122,11 +122,8 @@ my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
 my $patron         = Koha::Patrons->find( $borrowernumber );
-my $userenv = C4::Context->userenv;
-if ( $userenv and $userenv->{number} ) { # Allow DB user to create a superlibrarian patron
-    my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
-    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
-}
+my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
+output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $issues        = $patron->checkouts;
 my $balance       = $patron->account->balance;
@@ -206,6 +203,7 @@ if ( C4::Context->preference("IndependentBranches") ) {
         $samebranch = 1;
     }
     else {
+        my $userenv = C4::Context->userenv;
         $samebranch = ( $data->{'branchcode'} eq $userenv->{branch} );
     }
 }

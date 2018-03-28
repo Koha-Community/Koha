@@ -1048,10 +1048,8 @@ sub checkauth {
                 }
             }
 
-            # $return: 1 = valid user, 2 = superlibrarian
+            # $return: 1 = valid user
             if ($return) {
-                # If DB user is logged in
-                $userid ||= $q_userid if $return == 2;
 
                 #_session_log(sprintf "%20s from %16s logged in  at %30s.\n", $userid,$ENV{'REMOTE_ADDR'},(strftime '%c', localtime));
                 if ( $flags = haspermission( $userid, $flagsrequired ) ) {
@@ -1150,22 +1148,6 @@ sub checkauth {
                     $session->param( 'lasttime',     time() );
                     $session->param( 'shibboleth',   $shibSuccess );
                     $debug and printf STDERR "AUTH_4: (%s)\t%s %s - %s\n", map { $session->param($_) } qw(cardnumber firstname surname branch);
-                }
-                elsif ( $return == 2 ) {
-
-                    #We suppose the user is the superlibrarian
-                    $borrowernumber = 0;
-                    $session->param( 'number',       0 );
-                    $session->param( 'id',           C4::Context->config('user') );
-                    $session->param( 'cardnumber',   C4::Context->config('user') );
-                    $session->param( 'firstname',    C4::Context->config('user') );
-                    $session->param( 'surname',      C4::Context->config('user') );
-                    $session->param( 'branch',       'NO_LIBRARY_SET' );
-                    $session->param( 'branchname',   'NO_LIBRARY_SET' );
-                    $session->param( 'flags',        1 );
-                    $session->param( 'emailaddress', C4::Context->preference('KohaAdminEmailAddress') );
-                    $session->param( 'ip',           $session->remote_addr() );
-                    $session->param( 'lasttime',     time() );
                 }
                 $session->param('cas_ticket', $cas_ticket) if $cas_ticket;
                 C4::Context->set_userenv(
@@ -1598,20 +1580,6 @@ sub check_api_auth {
                 $session->param( 'emailaddress', $emailaddress );
                 $session->param( 'ip',           $session->remote_addr() );
                 $session->param( 'lasttime',     time() );
-            } elsif ( $return == 2 ) {
-
-                #We suppose the user is the superlibrarian
-                $session->param( 'number',       0 );
-                $session->param( 'id',           C4::Context->config('user') );
-                $session->param( 'cardnumber',   C4::Context->config('user') );
-                $session->param( 'firstname',    C4::Context->config('user') );
-                $session->param( 'surname',      C4::Context->config('user') );
-                $session->param( 'branch',       'NO_LIBRARY_SET' );
-                $session->param( 'branchname',   'NO_LIBRARY_SET' );
-                $session->param( 'flags',        1 );
-                $session->param( 'emailaddress', C4::Context->preference('KohaAdminEmailAddress') );
-                $session->param( 'ip',           $session->remote_addr() );
-                $session->param( 'lasttime',     time() );
             }
             $session->param( 'cas_ticket', $cas_ticket);
             C4::Context->set_userenv(
@@ -1805,7 +1773,6 @@ sub checkpw {
     # 1 if auth is ok
     # 0 if auth is nok
     # -1 if user bind failed (LDAP only)
-    # 2 if DB user is used (internal only)
 
     if ( $patron and $patron->account_locked ) {
         # Nothing to check, account is locked
@@ -1877,18 +1844,6 @@ sub checkpw_internal {
 
     $password = Encode::encode( 'UTF-8', $password )
       if Encode::is_utf8($password);
-
-    if ( $userid && $userid eq C4::Context->config('user') ) {
-        if ( $password && $password eq C4::Context->config('pass') ) {
-
-            # Koha superuser account
-            #     C4::Context->set_userenv(0,0,C4::Context->config('user'),C4::Context->config('user'),C4::Context->config('user'),"",1);
-            return 2;
-        }
-        else {
-            return 0;
-        }
-    }
 
     my $sth =
       $dbh->prepare(
