@@ -82,7 +82,6 @@ sub BasketTotal {
             $total = $total + ( $order->{ecost_tax_excluded} * $order->{quantity} );
         }
     }
-    $total .= " " . ($bookseller->invoiceprice // 0);
     return $total;
 }
 

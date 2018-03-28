@@ -1,5 +1,6 @@
 [% USE Asset %]
 [% USE Branches %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Basket grouping for [% booksellername |html %]</title>
 [% Asset.css("css/datatables.css") %]
@@ -174,7 +175,7 @@ function submitForm(form) {
                                                                         No name, basketnumber: [% basket.basketno %]
                                                                     [% END %]
                                                                 </a>, <br />
-                                                                Total: [% basket.total %]
+                                                                Total: [% basket.total | $Price %]
                                                                 <input type="hidden" class="basket" name="basket" value="[% basket.basketno %]" />
                                                             </li>
                                                         [% END %]
@@ -260,7 +261,7 @@ function submitForm(form) {
                                                                 No name, basketnumber: [% selectedbasket.basketno %]
                                                             [% END %]
                                                         </a>, <br />
-                                                        Total: [% selectedbasket.total %]
+                                                        Total: [% selectedbasket.total | $Price %]
                                                         <input type="hidden" class="basket" name="basket" value="[% selectedbasket.basketno %]" />
                                                     </li>
                                                 [% END %]
