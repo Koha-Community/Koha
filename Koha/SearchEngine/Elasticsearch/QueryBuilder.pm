@@ -487,7 +487,7 @@ sub _convert_sort_fields {
         pubdate     => 'pubdate',
     );
     my %sort_order_convert =
-      ( qw( dsc desc ), qw( asc asc ), qw( az asc ), qw( za desc ) );
+      ( qw( desc desc ), qw( dsc desc ), qw( asc asc ), qw( az asc ), qw( za desc ) );
 
     # Convert the fields and orders, drop anything we don't know about.
     grep { $_->{field} } map {
