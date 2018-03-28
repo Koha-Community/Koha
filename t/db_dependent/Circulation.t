@@ -1545,7 +1545,7 @@ subtest 'MultipleReserves' => sub {
 
     {
         my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber1, 1);
-        is($renewokay, 0, 'Bug 17641 - should cover the case where 2 books are both reserved, so failing');
+        is($renewokay, 0, 'Bug 17941 - should cover the case where 2 books are both reserved, so failing');
     }
 
     my $barcode3 = 'R00110003';
@@ -1562,7 +1562,7 @@ subtest 'MultipleReserves' => sub {
 
     {
         my ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber1, 1);
-        is($renewokay, 1, 'Bug 17641 - should cover the case where 2 books are reserved, but a third one is available');
+        is($renewokay, 1, 'Bug 17941 - should cover the case where 2 books are reserved, but a third one is available');
     }
 };
 
