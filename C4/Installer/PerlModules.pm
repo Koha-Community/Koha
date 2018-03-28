@@ -78,6 +78,7 @@ sub version_info {
     my ( $self, $module ) = @_;
     return -1 unless grep { /^$module$/ } keys(%$PERL_DEPS);
 
+    $Readonly::XS::MAGIC_COOKIE="Do NOT use or require Readonly::XS unless you're me.";
     eval "require $module";
     my $pkg_version = $module->can("VERSION") ? $module->VERSION : 0;
     my $min_version = $PERL_DEPS->{$module}->{'min_ver'} // 0;
