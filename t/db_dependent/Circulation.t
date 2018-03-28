@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 118;
+use Test::More tests => 119;
 
 use Data::Dumper;
 use DateTime;
@@ -2356,6 +2356,16 @@ subtest 'CanBookBeIssued | notforloan' => sub {
     };
 
     # TODO test with AllowNotForLoanOverride = 1
+};
+
+subtest 'AddReturn should clear items.onloan for unissued items' => sub {
+    plan tests => 1;
+
+    t::lib::Mocks::mock_preference( "AllowReturnToBranch", 'anywhere' );
+    my $item = $builder->build_object({ class => 'Koha::Items', value  => { onloan => '2018-01-01' }});
+    AddReturn( $item->barcode, $item->homebranch );
+    $item->discard_changes; # refresh
+    is( $item->onloan, undef, 'AddReturn did clear items.onloan' );
 };
 
 $schema->storage->txn_rollback;

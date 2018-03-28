@@ -1817,6 +1817,7 @@ sub AddReturn {
                 . Dumper($issue->unblessed) . "\n";
     } else {
         $messages->{'NotIssued'} = $barcode;
+        ModItem({ onloan => undef }, $item->{biblionumber}, $item->{itemnumber}) if defined $item->{onloan};
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
         $doreturn = 0;
         # No issue, no borrowernumber.  ONLY if $doreturn, *might* you have a $borrower later.
