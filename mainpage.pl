@@ -84,11 +84,4 @@ $template->param(
     pending_article_requests       => $pending_article_requests,
 );
 
-#
-# warn user if they are using mysql/admin login
-#
-unless ($loggedinuser) {
-    $template->param(adminWarning => 1);
-}
-
 output_html_with_http_headers $query, $cookie, $template->output;
