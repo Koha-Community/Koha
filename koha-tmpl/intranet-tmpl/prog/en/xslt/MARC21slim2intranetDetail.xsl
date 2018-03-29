@@ -154,10 +154,10 @@
                                     </xsl:choose>
                                     </a>
                                 </span>
-                                <xsl:if test="datafield[@tag=100]/subfield[@code='a']">
+                                <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
                                     -
                                     <span class="componentPartRecordAuthor">
-                                        <xsl:value-of select="datafield[@tag=100]/subfield[@code='a']" />
+                                        <xsl:value-of select="marc:datafield[@tag=100]/marc:subfield[@code='a']" />
                                     </span>
                                 </xsl:if>
                             </span>
