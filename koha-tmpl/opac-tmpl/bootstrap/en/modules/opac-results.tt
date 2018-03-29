@@ -588,11 +588,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% IF ( LibraryThingForLibrariesID ) %]
-    [% IF ( using_https ) %]
-        <script src="https://ltfl.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]&amp;systype=koha" type="text/javascript"></script>
-    [% ELSE %]
-        <script src="http://ltfl.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]&amp;systype=koha" type="text/javascript"></script>
-    [% END %]
+    <script src="https://ltfl.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]&amp;systype=koha" type="text/javascript"></script>
 [% END %]
 [% IF ( OpacStarRatings == 'all' || Koha.Preference('Babeltheque') ) %]<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.rating_[% KOHA_VERSION %].js"></script>[% END %]
 [% IF ( OverDriveEnabled ) %]<script type="text/javascript" src="[% interface %]/[% theme %]/js/overdrive_[% KOHA_VERSION %].js"></script>[% END %]

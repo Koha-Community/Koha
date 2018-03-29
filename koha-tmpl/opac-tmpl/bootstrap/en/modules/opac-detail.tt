@@ -577,15 +577,10 @@
                                 <li id="tab_reviews"> <a href="#reviews">Reviews</a></li>
                                 [% IF ( LibraryThingForLibrariesID ) %]
                                     <li id="tab_LTFLreviews">
-                                        [% IF ( using_https ) %]
-                                            <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
-                                            <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
-                                        [% ELSE %]
-                                            <script src="http://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
-                                            <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="http://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
-                                        [% END %]
+                                        <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
+                                        <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
+                                    </li>
                                 [% END %]
-                                </li>
                             [% END %]
                             [% IF ( SyndeticsAuthorNotes && SYNDETICS_ANOTES ) %]
                                 <li id="tab_anotes"> <a href="#anotes">About the author</a></li>
@@ -1166,16 +1161,9 @@
     </div> <!-- / .row-fluid -->
     <div class="row-fluid">
         [% IF ( LibraryThingForLibrariesID ) %]
-            [% IF ( using_https ) %]
-                <script src="https://ltfl.librarything.com/forlibraries/widget.js?systype=koha&amp;id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
-                <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking
-                <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
-            [% ELSE %]
-                <script src="http://ltfl.librarything.com/forlibraries/widget.js?systype=koha&amp;id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
-                <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking
-                <a href="http://www.librarything.com/forlibraries/noscript.php?id=
-                [% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
-            [% END %]
+            <script src="https://ltfl.librarything.com/forlibraries/widget.js?systype=koha&amp;id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
+            <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking
+            <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
         [% END %]
 
         [% IF ( NovelistSelectProfile && normalized_isbn ) %]
