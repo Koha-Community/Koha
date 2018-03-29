@@ -51,6 +51,7 @@ if ( $op eq 'edit' ) {
     my @field_name = $input->param('search_field_name');
     my @field_label = $input->param('search_field_label');
     my @field_type = $input->param('search_field_type');
+    my @field_weight = $input->param('search_field_weight');
 
     my @index_name          = $input->param('mapping_index_name');
     my @search_field_name  = $input->param('mapping_search_field_name');
@@ -65,9 +66,12 @@ if ( $op eq 'edit' ) {
             my $field_name = $field_name[$i];
             my $field_label = $field_label[$i];
             my $field_type = $field_type[$i];
+            my $field_weight = $field_weight[$i];
+
             my $search_field = Koha::SearchFields->find( { name => $field_name }, { key => 'name' } );
             $search_field->label($field_label);
             $search_field->type($field_type);
+            $search_field->weight($field_weight || '');
             $search_field->store;
         }
 
@@ -136,8 +140,14 @@ for my $index_name (qw| biblios authorities |) {
     push @indexes, { index_name => $index_name, mappings => \@mappings };
 }
 
-my $search_fields = $schema->resultset('SearchField')->search;
-my @all_search_fields = $search_fields->search( {}, { order_by => ['name'] } );
+my $search_fields = Koha::SearchFields->search( {}, { order_by => ['name'] } );
+my @all_search_fields;
+while ( my $search_field = $search_fields->next ) {
+    my $search_field_unblessed = $search_field->unblessed;
+    $search_field_unblessed->{mapped_biblios} = 1 if $search_field->is_mapped_biblios;
+    push @all_search_fields, $search_field_unblessed;
+}
+
 $template->param(
     indexes           => \@indexes,
     all_search_fields => \@all_search_fields,
