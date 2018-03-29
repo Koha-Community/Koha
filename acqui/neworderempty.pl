@@ -418,7 +418,6 @@ sub MARCfindbreeding {
             {
                 my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author", '');
 
-#                 my $summary = C4::Context->preference("z3950authortemplate");
                 my $auth_fields =
                 C4::Context->preference("z3950AuthorAuthFields");
                 my @auth_fields = split /,/, $auth_fields;
@@ -427,7 +426,6 @@ sub MARCfindbreeding {
                 if ( $record->field($tag) ) {
                     foreach my $tmpfield ( $record->field($tag)->subfields ) {
 
-    #                        foreach my $subfieldcode ($tmpfield->subfields){
                         my $subfieldcode  = shift @$tmpfield;
                         my $subfieldvalue = shift @$tmpfield;
                         if ($field) {
@@ -451,16 +449,12 @@ sub MARCfindbreeding {
                     my $title     = $record->field($fieldtag)->subfield('c');
                     my $number    = $record->field($fieldtag)->subfield('d');
                     if ($title) {
-
-#                         $field->add_subfields("$subfield"=>"[ ".ucfirst($title).ucfirst($firstname)." ".$number." ]");
                         $field->add_subfields(
                                 "$subfield" => ucfirst($title) . " "
                             . ucfirst($firstname) . " "
                             . $number );
                     }
                     else {
-
-#                       $field->add_subfields("$subfield"=>"[ ".ucfirst($firstname).", ".ucfirst($lastname)." ]");
                         $field->add_subfields(
                             "$subfield" => ucfirst($firstname) . ", "
                             . ucfirst($lastname) );
