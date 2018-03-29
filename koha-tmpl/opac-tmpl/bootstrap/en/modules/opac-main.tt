@@ -119,9 +119,9 @@
                                         <fieldset class="action">
                                             <input type="submit" value="Log in" class="btn" />
                                         </fieldset>
-                                        [% IF Koha.Preference( 'NoLoginInstructions' ) %]
+                                        [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
                                             <div id="nologininstructions-main" class="nologininstructions">
-                                                [% Koha.Preference( 'NoLoginInstructions' ) %]
+                                                [% Koha.Preference( 'OpacLoginInstructions' ) %]
                                             </div>
                                         [% END %]
                                         [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]

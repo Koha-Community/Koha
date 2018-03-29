@@ -182,14 +182,14 @@
                                 </div>
                             [% END %]
                             <div id="nologininstructions">
-                            [% IF Koha.Preference('NoLoginInstructions') %]
-                                [% Koha.Preference('NoLoginInstructions') %]
+                            [% IF Koha.Preference('OpacLoginInstructions') %]
+                                [% Koha.Preference('OpacLoginInstructions') %]
                             [% ELSE %]
                                 <h5>Don't have a password yet?</h5>
                                 <p>If you don't have a password yet, stop by the circulation desk the next time you're in the library. We'll happily set one up for you.</p>
                                 <h5>Don't have a library card?</h5>
                                 <p>If you don't have a library card, stop by your local library to sign up.</p>
-                            [% END # / IF Koha.Preference('NoLoginInstructions') %]
+                            [% END # / IF Koha.Preference('OpacLoginInstructions') %]
 
                             [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]<span id="registrationinstructions"><a href="/cgi-bin/koha/opac-memberentry.pl">You may register here.</a></span>
                             [% END %]

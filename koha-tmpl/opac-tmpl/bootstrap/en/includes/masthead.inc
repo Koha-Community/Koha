@@ -323,9 +323,9 @@
                 <fieldset class="brief">
                     <label for="muserid">Login:</label><input type="text" id="muserid" name="userid" />
                     <label for="mpassword">Password:</label><input type="password" id="mpassword" name="password" />
-                    [% IF Koha.Preference( 'NoLoginInstructions' ) %]
+                    [% IF Koha.Preference( 'OpacLoginInstructions' ) %]
                         <div id="nologininstructions-modal" class="nologininstructions">
-                            [% Koha.Preference( 'NoLoginInstructions' ) %]
+                            [% Koha.Preference( 'OpacLoginInstructions' ) %]
                         </div>
                     [% END %]
                     [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
