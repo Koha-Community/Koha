@@ -19,7 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Members qw( ModMember );
 use Koha::Patrons;
 
 use Scalar::Util qw(blessed);
@@ -196,23 +195,9 @@ sub update {
     return try {
         my $body = _to_model($c->validation->param('body'));
 
-        ## TODO: Use ModMember until it has been moved to Koha-namespace
-        # Add borrowernumber to $body, as required by ModMember
-        $body->{borrowernumber} = $patron_id;
-
-        if ( ModMember(%$body) ) {
-            # Fetch the updated Koha::Patron object
-            $patron->discard_changes;
-            return $c->render( status => 200, openapi => $patron );
-        }
-        else {
-            return $c->render(
-                status  => 500,
-                openapi => {
-                    error => 'Something went wrong, check Koha logs for details.'
-                }
-            );
-        }
+        $patron->set($body)->store;
+        $patron->discard_changes;
+        return $c->render( status => 200, openapi => $patron );
     }
     catch {
         unless ( blessed $_ && $_->can('rethrow') ) {
