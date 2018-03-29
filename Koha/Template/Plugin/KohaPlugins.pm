@@ -48,10 +48,13 @@ to output to the head section of opac pages.
 
 sub get_plugins_opac_head {
     return q{}
-      unless C4::Context->preference('UseKohaPlugins')
-      && C4::Context->config("enable_plugins");
+      unless C4::Context->preference('UseKohaPlugins');
 
-    my @plugins = Koha::Plugins->new()->GetPlugins(
+    my $p = Koha::Plugins->new();
+
+    return q{} unless $p;
+
+    my @plugins = $p->GetPlugins(
         {
             method => 'opac_head',
         }
@@ -73,10 +76,13 @@ to output to the javascript section of at the bottom of opac pages.
 
 sub get_plugins_opac_js {
     return q{}
-      unless C4::Context->preference('UseKohaPlugins')
-      && C4::Context->config("enable_plugins");
+      unless C4::Context->preference('UseKohaPlugins');
 
-    my @plugins = Koha::Plugins->new()->GetPlugins(
+    my $p = Koha::Plugins->new();
+
+    return q{} unless $p;
+
+    my @plugins = $p->GetPlugins(
         {
             method => 'opac_js',
         }
