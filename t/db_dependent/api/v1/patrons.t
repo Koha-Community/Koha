@@ -254,7 +254,7 @@ subtest 'update() tests' => sub {
     $schema->storage->txn_rollback;
 
     subtest 'librarian access tests' => sub {
-        plan tests => 23;
+        plan tests => 22;
 
         $schema->storage->txn_begin;
 
@@ -284,11 +284,9 @@ subtest 'update() tests' => sub {
         $newpatron->{category_id} = $deleted_category_id;
         $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/$patron_id_2" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $session_id});
-        warning_like {
-            $t->request_ok($tx)
-              ->status_is(400)
-              ->json_is('/error' => "Given category_id does not exist"); }
-            qr/^DBD::mysql::st execute failed: Cannot add or update a child row: a foreign key constraint fails/;
+        $t->request_ok($tx)
+          ->status_is(400)
+          ->json_is('/error' => "Given category_id does not exist");
         $newpatron->{category_id} = $patron_2->categorycode;
 
         # Create a library just to make sure its ID doesn't exist on the DB
