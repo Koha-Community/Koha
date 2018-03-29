@@ -831,18 +831,6 @@ sub is_child {
     return $self->category->category_type eq 'C' ? 1 : 0;
 }
 
-=head3 store
-
-=cut
-
-sub store {
-    my ($self) = @_;
-
-    # $self->_validate();
-
-    return $self->SUPER::store();
-}
-
 =head2 Internal methods
 
 =head3 _type
