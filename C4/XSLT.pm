@@ -406,20 +406,10 @@ sub _prepareComponentPartRecords {
         #  There might be dozens of component part records and in such a case string concatenation is extremely slow.
         my @componentPartRecordXML = ('<componentPartRecords>');
         for my $cb ( @{$componentPartBiblios} ) {
-            push @componentPartRecordXML, '  <componentPart>';
-
-
-            push @componentPartRecordXML, '    <title>'.C4::Koha::xml_escape($cb->{'title'}).'</title>'                               if $cb->{'title'};
-            push @componentPartRecordXML, '    <unititle>'.C4::Koha::xml_escape($cb->{'unititle'}).'</unititle>'                      if $cb->{'unititle'};
-            push @componentPartRecordXML, '    <biblionumber>'.C4::Koha::xml_escape($cb->{'biblionumber'}).'</biblionumber>'          if $cb->{'biblionumber'};
-            push @componentPartRecordXML, '    <author>'.C4::Koha::xml_escape($cb->{'author'}).'</author>'                            if $cb->{'author'};
-            push @componentPartRecordXML, '    <publishercode>'.C4::Koha::xml_escape($cb->{'publishercode'}).'</publishercode>'       if $cb->{'publishercode'};
-            push @componentPartRecordXML, '    <publicationyear>'.C4::Koha::xml_escape($cb->{'publicationyear'}).'</publicationyear>' if $cb->{'publicationyear'};
-
-            push @componentPartRecordXML, '  </componentPart>';
+            $cb =~ s/^<\?xml.*?\?>//;
+            push @componentPartRecordXML, decode('utf8', $cb);
         }
         push @componentPartRecordXML, '</componentPartRecords>';
-        push @componentPartRecordXML, ''; #Just to make the join operation end with a newline
 
         #Build the real XML string.
         return join "\n", @componentPartRecordXML;

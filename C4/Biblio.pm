@@ -4333,17 +4333,7 @@ sub getHostRecord {
 sub getComponentRecords {
     my ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize) = _getComponentParts(@_);
 
-    my $marcflavour = C4::Context->preference('marcflavour');
-
-    my @componentBiblios;
-    if ($resultSetSize && !$error) {
-        foreach my $componentRecordXML (@$componentPartRecordXMLs) {
-            my $marcrecord = MARC::Record->new_from_xml( $componentRecordXML, 'UTF-8', $marcflavour );
-            my $componentBiblio = TransformMarcToKoha($marcrecord);
-            push @componentBiblios, $componentBiblio;
-        }
-    }
-    return \@componentBiblios;
+    return \@$componentPartRecordXMLs;
 }
 
 #Get biblionumbers the fast way.
