@@ -1193,7 +1193,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 }
 
 subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
-    plan tests => 23;
+    plan tests => 24;
 
     my $homebranch    = $builder->build( { source => 'Branch' } );
     my $holdingbranch = $builder->build( { source => 'Branch' } );
@@ -1225,6 +1225,10 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
 
     # AllowReturnToBranch == anywhere
     t::lib::Mocks::mock_preference( 'AllowReturnToBranch', 'anywhere' );
+    ## Test that unknown barcodes don't generate internal server errors
+    set_userenv($homebranch);
+    ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, 'KohaIsAwesome' );
+    ok( $error->{UNKNOWN_BARCODE}, '"KohaIsAwesome" is not a valid barcode as expected.' );
     ## Can be issued from homebranch
     set_userenv($homebranch);
     ( $error, $question, $alerts ) = CanBookBeIssued( $patron_2, $item->{barcode} );
