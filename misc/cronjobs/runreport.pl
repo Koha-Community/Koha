@@ -21,6 +21,7 @@
 use Modern::Perl;
 
 use C4::Reports::Guided; # 0.12
+use Koha::Reports;
 use C4::Context;
 use C4::Log;
 use Koha::Email;
@@ -231,14 +232,14 @@ my $today = dt_from_string();
 my $date = $today->ymd();
 
 foreach my $report_id (@ARGV) {
-    my $report = get_saved_report($report_id);
+    my $report = Koha::Reports->find( $report_id );
     unless ($report) {
         warn "ERROR: No saved report $report_id found";
         next;
     }
-    my $sql         = $report->{savedsql};
-    my $report_name = $report->{report_name};
-    my $type        = $report->{type};
+    my $sql         = $report->savedsql;
+    my $report_name = $report->report_name;
+    my $type        = $report->type;
 
     $verbose and print "SQL: $sql\n\n";
     if ( $subject eq "" )

@@ -24,6 +24,7 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use C4::Context;
 use Koha::Database;
+use Koha::Reports;
 
 use_ok('C4::Reports::Guided');
 can_ok(

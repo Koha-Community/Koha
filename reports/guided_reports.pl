@@ -25,6 +25,7 @@ use URI::Escape;
 use File::Temp;
 use File::Basename qw( dirname );
 use C4::Reports::Guided;
+use Koha::Reports;
 use C4::Auth qw/:DEFAULT get_session/;
 use C4::Output;
 use C4::Debug;
@@ -109,22 +110,22 @@ elsif ( $phase eq 'Build new' ) {
 
     if ( $op eq 'convert' ) {
         my $report_id = $input->param('report_id');
-        my $report    = C4::Reports::Guided::get_saved_report($report_id);
+        my $report    = Koha::Reports->find($report_id);
         if ($report) {
-            my $updated_sql = C4::Reports::Guided::convert_sql( $report->{savedsql} );
+            my $updated_sql = C4::Reports::Guided::convert_sql( $report->savedsql );
             C4::Reports::Guided::update_sql(
                 $report_id,
                 {
                     sql          => $updated_sql,
-                    name         => $report->{report_name},
-                    group        => $report->{report_group},
-                    subgroup     => $report->{report_subgroup},
-                    notes        => $report->{notes},
-                    public       => $report->{public},
-                    cache_expiry => $report->{cache_expiry},
+                    name         => $report->report_name,
+                    group        => $report->report_group,
+                    subgroup     => $report->report_subgroup,
+                    notes        => $report->notes,
+                    public       => $report->public,
+                    cache_expiry => $report->cache_expiry,
                 }
             );
-            $template->param( report_converted => $report->{report_name} );
+            $template->param( report_converted => $report->report_name );
         }
     }
 
@@ -172,29 +173,29 @@ elsif ( $phase eq 'Delete Saved') {
 elsif ( $phase eq 'Show SQL'){
 	
     my $id = $input->param('reports');
-    my $report = get_saved_report($id);
+    my $report = Koha::Reports->find($id);
     $template->param(
         'id'      => $id,
-        'reportname' => $report->{report_name},
-        'notes'      => $report->{notes},
-	'sql'     => $report->{savedsql},
-	'showsql' => 1,
+        'reportname' => $report->report_name,
+        'notes'      => $report->notes,
+        'sql'     => $report->savedsql,
+        'showsql' => 1,
     );
 }
 
 elsif ( $phase eq 'Edit SQL'){
     my $id = $input->param('reports');
-    my $report = get_saved_report($id);
-    my $group = $report->{report_group};
-    my $subgroup  = $report->{report_subgroup};
+    my $report = Koha::Reports->find($id);
+    my $group = $report->report_group;
+    my $subgroup  = $report->report_subgroup;
     $template->param(
-        'sql'        => $report->{savedsql},
-        'reportname' => $report->{report_name},
+        'sql'        => $report->savedsql,
+        'reportname' => $report->report_name,
         'groups_with_subgroups' => groups_with_subgroups($group, $subgroup),
-        'notes'      => $report->{notes},
+        'notes'      => $report->notes,
         'id'         => $id,
-        'cache_expiry' => $report->{cache_expiry},
-        'public' => $report->{public},
+        'cache_expiry' => $report->cache_expiry,
+        'public' => $report->public,
         'usecache' => $usecache,
         'editsql'    => 1,
     );
@@ -686,10 +687,10 @@ elsif ($phase eq 'Run this report'){
     );
 
     my ( $sql, $original_sql, $type, $name, $notes );
-    if (my $report = get_saved_report($report_id)) {
-        $sql   = $original_sql = $report->{savedsql};
-        $name  = $report->{report_name};
-        $notes = $report->{notes};
+    if (my $report = Koha::Reports->find($report_id)) {
+        $sql   = $original_sql = $report->savedsql;
+        $name  = $report->report_name;
+        $notes = $report->notes;
 
         my @rows = ();
         # if we have at least 1 parameter, and it's not filled, then don't execute but ask for parameters
@@ -850,8 +851,8 @@ elsif ($phase eq 'Export'){
 
 	# export results to tab separated text or CSV
     my $report_id      = $input->param('report_id');
-    my $report         = get_saved_report($report_id);
-    my $sql            = $report->{savedsql};
+    my $report         = Koha::Reports->find($report_id);
+    my $sql            = $report->savedsql;
     my @param_names    = $input->multi_param('param_name');
     my @sql_params     = $input->multi_param('sql_params');
     my $format         = $input->param('format');

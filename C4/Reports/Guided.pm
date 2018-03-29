@@ -39,7 +39,7 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
       get_report_types get_report_areas get_report_groups get_columns build_query get_criteria
-      save_report get_saved_reports execute_query get_saved_report
+      save_report get_saved_reports execute_query
       get_column_type get_distinct_values save_dictionary get_from_dictionary
       delete_definition delete_report format_results get_sql
       nb_rows update_sql
@@ -622,8 +622,8 @@ sub delete_report {
     my (@ids) = @_;
     return unless @ids;
     foreach my $id (@ids) {
-        my $data = get_saved_report($id);
-        logaction( "REPORTS", "DELETE", $id, "$data->{'report_name'} | $data->{'savedsql'}  " ) if C4::Context->preference("ReportsLog");
+        my $data = Koha::Reports->find($id);
+        logaction( "REPORTS", "DELETE", $id, $data->report_name." | ".$data->savedsql ) if C4::Context->preference("ReportsLog");
     }
     my $dbh = C4::Context->dbh;
     my $query = 'DELETE FROM saved_sql WHERE id IN (' . join( ',', ('?') x @ids ) . ')';
@@ -693,31 +693,6 @@ sub get_saved_reports {
 
     return $result;
 }
-
-sub get_saved_report {
-    my $dbh   = C4::Context->dbh();
-    my $query;
-    my $report_arg;
-    if ($#_ == 0 && ref $_[0] ne 'HASH') {
-        ($report_arg) = @_;
-        $query = " SELECT * FROM saved_sql WHERE id = ?";
-    } elsif (ref $_[0] eq 'HASH') {
-        my ($selector) = @_;
-        if ($selector->{name}) {
-            $query = " SELECT * FROM saved_sql WHERE report_name = ?";
-            $report_arg = $selector->{name};
-        } elsif ($selector->{id} || $selector->{id} eq '0') {
-            $query = " SELECT * FROM saved_sql WHERE id = ?";
-            $report_arg = $selector->{id};
-        } else {
-            return;
-        }
-    } else {
-        return;
-    }
-    return $dbh->selectrow_hashref($query, undef, $report_arg);
-}
-
 
 =head2 get_column_type($column)
 

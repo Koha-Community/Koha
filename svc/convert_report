@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use C4::Auth;
 use C4::Reports::Guided;
+use Koha::Reports;
 use C4::Output;
 use CGI qw ( -utf8 );
 
@@ -37,11 +38,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $report = get_saved_report( $report_id );
+my $report = Koha::Reports->find( $report_id );
 
 my $params;
 if ( $report ) {
-    my $sql = $report->{savedsql};
+    my $sql = $report->savedsql;
     my $updated_sql = C4::Reports::Guided::convert_sql( $sql );
     $params = { msg => 'can_be_updated', updated_sql => $updated_sql, current_sql => $sql };
 } else {

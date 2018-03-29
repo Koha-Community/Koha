@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use C4::Auth;
 use C4::Reports::Guided;
+use Koha::Reports;
 use JSON;
 use CGI qw ( -utf8 );
 
@@ -33,7 +34,7 @@ my $report_id = $query->param('id');
 my $report_name = $query->param('name');
 my $report_annotation = $query->param('annotated');
 
-my $report_rec = get_saved_report( $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
+my $report_rec = Koha::Reports->find( $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
 if (!$report_rec) { die "There is no such report.\n"; }
 
 my @sql_params  = $query->param('sql_params');
@@ -60,7 +61,7 @@ if ($cache_active) {
 unless ($json_text) {
     my $offset = 0;
     my $limit  = C4::Context->preference("SvcMaxReportRows") || 10;
-    my $sql = $report_rec->{savedsql};
+    my $sql = $report_rec->savedsql;
 
     # convert SQL parameters to placeholders
     $sql =~ s/(<<.*?>>)/\?/g;
@@ -77,7 +78,7 @@ unless ($json_text) {
         $json_text = encode_json($lines);
 
         if ($cache_active) {
-            $cache->set_in_cache( $cache_key, $json_text, { expiry => $report_rec->{cache_expiry} } );
+            $cache->set_in_cache( $cache_key, $json_text, { expiry => $report_rec->cache_expiry } );
         }
     }
     else {
