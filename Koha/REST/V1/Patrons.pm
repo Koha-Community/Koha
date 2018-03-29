@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Members qw( AddMember ModMember );
+use C4::Members qw( ModMember );
 use Koha::Patrons;
 
 use Scalar::Util qw(blessed);
@@ -126,9 +126,8 @@ sub add {
 
         my $body = _to_model( $c->validation->param('body') );
 
-        # TODO: Use AddMember until it has been moved to Koha-namespace
-        my $patron_id = AddMember( %{ _to_model($body) } );
-        my $patron    = _to_api( Koha::Patrons->find($patron_id)->TO_JSON );
+        my $patron = Koha::Patron->new( _to_model($body) )->store;
+        $patron    = _to_api( $patron->TO_JSON );
 
         return $c->render( status => 201, openapi => $patron );
     }
