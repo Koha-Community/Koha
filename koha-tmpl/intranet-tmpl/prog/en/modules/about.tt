@@ -414,6 +414,14 @@
                         Also note that you need to properly set the OPACBaseURL preference for the file upload plugin to work.
                     </td>
                 </tr>
+                [% ELSIF config_entry.error == 'uploadtmppath_entry_missing' %]
+                <tr>
+                    <th scope="row"><b>Warning</b></th>
+                    <td>You are missing the &lt;upload_tmp_path&gt; entry in your koha-conf.xml file. Please
+                        add it, pointing to the configured temporary file upload directory for your Koha instance.
+                        The effective temporary file upload directory is '[% config_entry.effective_upload_tmp_dir %]'
+                    </td>
+                </tr>
                 [% END %]
             [% END %]
             </table>
