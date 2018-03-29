@@ -93,6 +93,13 @@ a.add, a.delete {
     <h1>Search engine configuration</h1>
     <div class="warning">
         Warning: Any changes to the configuration will only take effect after a full reindex. Until then searching may not work correctly.
+
+        <p>Weight: define weight between 1 and 99.</p>
+        <ol>
+          <li>only search fields mapped with biblios can be weighted</li>
+          <li>search will be done on weighted fields only</li>
+          <li>if no field is weighted, search will be done on all the record</li>
+        </ol>
     </div>
     [% IF errors %]
         <div class="error">
@@ -142,6 +149,7 @@ a.add, a.delete {
                     <th>Name</th>
                     <th>Label</th>
                     <th>Type</th>
+                    <th>Weight</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -191,6 +199,17 @@ a.add, a.delete {
                           [% END %]
                         </select>
                       </td>
+                      [% IF search_field.mapped_biblios %]
+                        <td>
+                          [% IF search_field.weight %]
+                            <input type="number" name="search_field_weight" value="[% search_field.weight %]" min="1" max="99" />
+                          [% ELSE %]
+                            <input type="number" name="search_field_weight" min="1" max="99" />
+                          [% END %]
+                        </td>
+                      [% ELSE %]
+                        <td><input type="hidden" name="search_field_weight" value=""></td>
+                      [% END %]
                     </tr>
                   [% END %]
                 </tbody>
