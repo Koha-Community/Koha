@@ -669,18 +669,18 @@ sub CanBookBeIssued {
     my $override_high_holds = $params->{override_high_holds} || 0;
 
     my $item = GetItem(undef, $barcode );
+    # MANDATORY CHECKS - unless item exists, nothing else matters
+    unless ( $item->{barcode} ) {
+        $issuingimpossible{UNKNOWN_BARCODE} = 1;
+    }
+    return ( \%issuingimpossible, \%needsconfirmation ) if %issuingimpossible;
+
     my $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
     my $biblio = Koha::Biblios->find( $item->{biblionumber} );
     my $biblioitem = $biblio->biblioitem;
     my $effective_itemtype = $item->{itype}; # GetItem deals with that
     my $dbh             = C4::Context->dbh;
     my $patron_unblessed = $patron->unblessed;
-
-    # MANDATORY CHECKS - unless item exists, nothing else matters
-    unless ( $item->{barcode} ) {
-        $issuingimpossible{UNKNOWN_BARCODE} = 1;
-    }
-	return ( \%issuingimpossible, \%needsconfirmation ) if %issuingimpossible;
 
     #
     # DUE DATE is OK ? -- should already have checked.
