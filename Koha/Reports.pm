@@ -35,13 +35,21 @@ Koha::Reports - Koha Report Object set class
 
 =cut
 
-=head3 type
+=head3 _type
+
+Returns name of corresponding DBIC resultset
 
 =cut
 
 sub _type {
     return 'SavedSql';
 }
+
+=head3 object_class
+
+Returns name of corresponding Koha Object Class
+
+=cut
 
 sub object_class {
     return 'Koha::Report';

@@ -33,7 +33,9 @@ Koha::Report - Koha Report Object class
 
 =cut
 
-=head3 type
+=head3 _type
+
+Returns name of corresponding DBIC resultset
 
 =cut
 
