@@ -36,6 +36,7 @@ use Koha::Edifact;
 use Log::Log4perl;
 use Text::Unidecode;
 use Koha::Plugins::Handler;
+use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 
 our $VERSION = 1.1;
@@ -545,11 +546,11 @@ sub quote_item {
     my ( $item, $quote, $basketno ) = @_;
 
     my $schema = Koha::Database->new()->schema();
-
-    # create biblio record
     my $logger = Log::Log4perl->get_logger();
-    if ( !$basketno ) {
-        $logger->error('Skipping order creation no basketno');
+
+    my $basket = Koha::Acquisition::Baskets->find( $basketno );
+    unless ( $basket ) {
+        $logger->error('Skipping order creation no valid basketno');
         return;
     }
     $logger->trace( 'Checking db for matches with ', $item->item_number_id() );
@@ -796,8 +797,6 @@ sub quote_item {
                         }
                     );
                 }
-
-                my $basket = Koha::Acquisition::Basket->find( $basketno );
 
                 if ( $basket->effective_create_item eq 'ordering' ) {
                     my $new_item = {
