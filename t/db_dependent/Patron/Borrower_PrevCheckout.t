@@ -378,7 +378,8 @@ test_it($cpvPmappings, "PostReturn");
 # - $checkprevcheckout pref (first hardno, then hardyes)
 
 # Our Patron
-my $CBBI_patron = $builder->build({source => 'Borrower'});
+my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'P', enrolmentfee => 0 } });
+my $CBBI_patron = $builder->build({source => 'Borrower', value => { categorycode => $patron_category->{categorycode} }});
 $patron = Koha::Patrons->find( $CBBI_patron->{borrowernumber} );
 # Our Items
 
