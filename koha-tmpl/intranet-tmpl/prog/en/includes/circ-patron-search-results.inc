@@ -24,8 +24,6 @@
                 [% END %]
                 <tr class="clickable" data-url="[% data_url %]">
                     <td><a href="[% data_url %]">[% borrower.surname %], [% borrower.firstname %]</a></td>
-            [% ELSE %]
-                [%# This does not exist %]
             [% END %]
                 <td>[% borrower.cardnumber %]</td>
                 <td>[% borrower.dateofbirth | $KohaDates %]</td>
