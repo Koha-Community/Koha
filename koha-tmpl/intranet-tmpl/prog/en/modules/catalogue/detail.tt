@@ -63,13 +63,19 @@
   <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
 [% ELSE %]
 
+[%
+    IntranetCoce    = Koha.Preference('IntranetCoce')
+    CoceProviders   = Koha.Preference('CoceProviders')
+    CoceHost        = Koha.Preference('CoceHost')
+%]
+
 [% INCLUDE 'cat-toolbar.inc' %]
     [% IF ( ocoins ) %]
         <!-- COinS / OpenURL -->
         <span class="Z3988" title="[% ocoins | html %]"></span>
     [% END %]
 
-    [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled ) %]
+    [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce ) %]
         <div id="catalogue_detail_biblio" class="col-xs-9">
     [% ELSE %]
         <div id="catalogue_detail_biblio" class="col-xs-12">
@@ -121,7 +127,7 @@
             </span>
         [% END %]
 
-        [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled ) %]
+        [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce ) %]
         </div><div class="col-xs-3" id="bookcoverimg">
         [% IF ( LocalCoverImages ) %]
             <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
@@ -134,6 +140,16 @@
             <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
                 <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="" />
         </a></div>
+        [% END %]
+        [% IF ( IntranetCoce && CoceProviders ) %]
+          [% coce_id = normalized_ean || normalized_isbn %]
+            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% biblionumber |url %]">
+          [% IF ( coce_id ) %]
+            <span style="block" title="[% biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail-preview"></span>
+          [% ELSE %]
+            <span class="no-image">No cover image available</span>
+          [% END %]
+            </a>
         [% END %]
         [% END %]
 
@@ -754,6 +770,7 @@
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
+    <script type="text/javascript" src="[% interface %]/prog/js/coce_[% KOHA_VERSION %].js"></script>
     <script>
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
@@ -916,6 +933,10 @@
             [% IF LocalCoverImages %]
                 KOHA.LocalCover.GetCoverFromBibnumber(true);
             [% END %]
+            [% IF ( IntranetCoce && CoceProviders ) %]
+                KOHA.coce.getURL('[% CoceHost %]', '[% CoceProviders %]');
+            [% END %]
+
             $("body").on("click",".previewMARC", function(e){
                 e.preventDefault();
                 var page = $(this).attr("href");

@@ -27,6 +27,12 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
+[%
+    IntranetCoce    = Koha.Preference('IntranetCoce')
+    CoceProviders   = Koha.Preference('CoceProviders')
+    CoceHost        = Koha.Preference('CoceHost')
+%]
+
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
@@ -382,7 +388,7 @@
                                     [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
                                     [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                         <tr>
-                                            [% IF ( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled ) %]
+                                            [% IF ( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled || IntranetCoce ) %]
                                                 <td>
                                                     [% IF ( LocalCoverImages) %]
                                                         <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
@@ -402,8 +408,18 @@
                                                         [% END %]
                                                         </a>
                                                     [% END # /IF AmazonCoverImages %]
+                                                    [% IF ( IntranetCoce && CoceProviders ) %]
+                                                        [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]
+                                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                                        [% IF ( coce_id ) %]
+                                                            <span style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail[% loop.count %]"></span>
+                                                        [% ELSE %]
+                                                            <span class="no-image">No cover image available</span>
+                                                        [% END %]
+                                                        </a>
+                                                    [% END %]
                                                 </td>
-                                            [% END # /IF( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled )%]
+                                            [% END # /IF( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled || IntranetCoce )%]
 
                                             <td>
                                                 <input type="checkbox" class="selection" id="bib[% SEARCH_RESULT.biblionumber | html %]" name="biblionumber" value="[% SEARCH_RESULT.biblionumber | html %]" style="display:none" />
@@ -650,6 +666,7 @@
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+    [% Asset.js("prog/js/coce.js") %]
     <script>
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
@@ -791,6 +808,10 @@
 
             [% IF LocalCoverImages %]
                 KOHA.LocalCover.LoadResultsCovers();
+            [% END %]
+
+            [% IF ( IntranetCoce && CoceProviders ) %]
+                KOHA.coce.getURL('[% CoceHost %]', '[% CoceProviders %]');
             [% END %]
 
             $("#select_all").on("click",function(e){

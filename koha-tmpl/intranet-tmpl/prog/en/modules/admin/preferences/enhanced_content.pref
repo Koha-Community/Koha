@@ -412,11 +412,17 @@ Enhanced Content:
             - pref: RecordedBooksDomain
     Coce Cover images cache:
         -
-            - pref: Coce
+            - pref: OpacCoce
               choices:
                   yes: Enable
                   no: "Don't enable"
-            - a Coce image cache service.
+            - a Coce image cache service in the OPAC.
+        -
+            - pref: IntranetCoce
+              choices:
+                  yes: Enable
+                  no: "Don't enable"
+            - a Coce image cache service in the staff intranet.
         -
             - Coce server URL
             - pref: CoceHost
