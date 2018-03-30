@@ -157,6 +157,7 @@ my @orders_loop = ();
 my $orders = $details->{'orders'};
 my @foot_loop;
 my %foot;
+my $shipmentcost = $details->{shipmentcost} || 0;
 my $total_quantity = 0;
 my $total_tax_excluded = 0;
 my $total_tax_included = 0;
@@ -211,15 +212,15 @@ $template->param(
     shipmentdate     => $details->{'shipmentdate'},
     billingdate      => $details->{'billingdate'},
     invoiceclosedate => $details->{'closedate'},
-    shipmentcost     => $details->{'shipmentcost'},
+    shipmentcost     => $shipmentcost,
     orders_loop      => \@orders_loop,
     foot_loop        => \@foot_loop,
     total_quantity   => $total_quantity,
     total_tax_excluded => $total_tax_excluded,
     total_tax_included => $total_tax_included,
     total_tax_value  => $total_tax_value,
-    total_tax_excluded_shipment => $total_tax_excluded + $details->{shipmentcost},
-    total_tax_included_shipment => $total_tax_included + $details->{shipmentcost},
+    total_tax_excluded_shipment => $total_tax_excluded + $shipmentcost,
+    total_tax_included_shipment => $total_tax_included + $shipmentcost,
     invoiceincgst    => $bookseller->invoiceincgst,
     currency         => Koha::Acquisition::Currencies->get_active,
     budgets_loop     => \@budgets_loop,

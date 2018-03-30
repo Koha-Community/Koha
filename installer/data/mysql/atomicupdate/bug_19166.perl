@@ -15,6 +15,7 @@ if( CheckVersion( $DBversion ) ) {
             CONSTRAINT invoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
         )
         " );
+    $dbh->do("INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('ADJ_REASON')");
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 19166 - Add the ability to add adjustments to an invoice)\n";
 }

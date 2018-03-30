@@ -106,7 +106,7 @@
                       <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id %]" value="[% adjustment.adjustment | $Price %]" /></td>
                       <td>
                           [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
-                          [% IF reasons %]
+                          [% IF reasons.0 %]
                           <select id="reason_[% adjustment.adjustment_id %]" name="reason">
                                   <option value="">No reason</option>
                               [% FOREACH reason IN reasons %]
@@ -159,7 +159,7 @@
                       <td><input type="text" name="adjustment" id="adjustment_new]" /></td>
                       <td>
                           [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
-                          [% IF reasons %]
+                          [% IF reasons.0 %]
                           <select id="reason_[% adjustment.adjustment_id %]" name="reason">
                                   <option value="">No reason</option>
                                 [% FOREACH reason IN reasons %]
@@ -286,7 +286,7 @@
           </table>
         [% ELSE %]
             <div class="dialog message"><p>No orders yet</p>
-            [% IF adjustments.count > 0 || shipmentcost > 0 %]
+            [% IF adjustments && adjustments.count > 0 || shipmentcost && shipmentcost > 0 %]
             <p>Adjustments plus shipping:[% total_adj + shipmentcost | $Price %]</p>
             [% END %]
             </div>
