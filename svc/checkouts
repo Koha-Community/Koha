@@ -90,7 +90,7 @@ my $sql = '
         items.itype,
         biblioitems.itemtype,
 
-        items.ccode,
+        items.ccode AS collection,
 
         borrowernumber,
         surname,
@@ -156,6 +156,11 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         my $av = Koha::AuthorisedValues->search({ category => 'LOC', authorised_value => $c->{location} });
         $location = $av->count ? $av->next->lib : '';
     }
+    my $collection;
+    if ( $c->{collection} ) {
+        my $av = Koha::AuthorisedValues->search({ category => 'CCODE', authorised_value => $c->{collection} });
+        $collection = $av->count ? $av->next->lib : '';
+    }
     my $lost;
     if ( $c->{itemlost} ) {
         my $av = Koha::AuthorisedValues->search({ category => 'LOST', authorised_value => $c->{itemlost} });
@@ -173,7 +178,7 @@ while ( my $c = $sth->fetchrow_hashref() ) {
         barcode              => $c->{barcode},
         itemtype             => $item_level_itypes ? $c->{itype} : $c->{itemtype},
         itemtype_description => $itemtype ? $itemtype->translated_description : q{},
-        ccode                => $c->{ccode},
+        collection           => $collection,
         location             => $location,
         homebranch           => $c->{homebranch},
         itemnotes            => $c->{itemnotes},

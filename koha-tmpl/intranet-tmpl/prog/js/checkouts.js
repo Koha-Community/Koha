@@ -297,7 +297,7 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
-                        return oObj.ccode.escapeHtml();
+                        return oObj.collection.escapeHtml();
                     }
                 },
                 {
@@ -638,7 +638,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            return oObj.ccode.escapeHtml();
+                            return oObj.collection.escapeHtml();
                         }
                     },
                     {
