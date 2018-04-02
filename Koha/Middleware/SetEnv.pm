@@ -68,7 +68,8 @@ my $allowed_setenvs = qr/^(
     OVERRIDE_SYSPREF_NAMES |
     OPAC_CSS_OVERRIDE |
     OPAC_SEARCH_LIMIT |
-    OPAC_LIMIT_OVERRIDE
+    OPAC_LIMIT_OVERRIDE |
+    TZ
 )\ /x;
 
 sub call {
