@@ -3613,9 +3613,20 @@ sub ReturnLostItem{
 
 
 sub LostItem{
-    my ($itemnumber, $mark_returned) = @_;
+    my ($itemnumber, $mark_lost_from, $force_mark_returned) = @_;
 
-    $mark_returned //= C4::Context->preference('MarkLostItemsAsReturned');
+    unless ( $mark_lost_from ) {
+        # Temporary check to avoid regressions
+        die q|LostItem called without $mark_lost_from, check the API.|;
+    }
+
+    my $mark_returned;
+    if ( $force_mark_returned ) {
+        $mark_returned = 1;
+    } else {
+        my $pref = C4::Context->preference('MarkLostItemsAsReturned') // q{};
+        $mark_returned = ( $pref =~ m|$mark_lost_from| );
+    }
 
     my $dbh = C4::Context->dbh();
     my $sth=$dbh->prepare("SELECT issues.*,items.*,biblio.title 

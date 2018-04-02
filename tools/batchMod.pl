@@ -207,7 +207,7 @@ if ($op eq "action") {
                 if ( $modified ) {
                     eval {
                         if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
-                            LostItem($itemnumber) if $item->{itemlost} and not $itemdata->{itemlost};
+                            LostItem($itemnumber, 'batchmod') if $item->{itemlost} and not $itemdata->{itemlost};
                         }
                     };
                 }

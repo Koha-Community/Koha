@@ -695,7 +695,7 @@ if ($op eq "additem") {
         $itemnumber = q{};
         my $olditemlost = $item->{itemlost};
         my $newitemlost = $newitem->{itemlost};
-        LostItem( $item->{itemnumber} )
+        LostItem( $item->{itemnumber}, 'additem' )
             if $newitemlost && $newitemlost ge '1' && !$olditemlost;
     }
     $nextop="additem";

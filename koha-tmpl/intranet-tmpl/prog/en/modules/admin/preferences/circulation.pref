@@ -413,11 +413,14 @@ Circulation:
                   nothing : "do nothing"
             - .
         -
+            - "Mark items as returned when flagged as lost "
             - pref: MarkLostItemsAsReturned
-              choices:
-                  yes: "Mark"
-                  no: "Do not mark"
-            - "items as returned when flagged as lost"
+              multiple:
+                cronjob: "from the longoverdue cronjob"
+                batchmod: "from the batch item modification tool"
+                additem: "when cataloguing an item"
+                moredetail: "from the items tab of the catalog module"
+            - .
         -
             - pref: AllowMultipleIssuesOnABiblio
               choices:

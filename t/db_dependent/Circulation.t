@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 114;
+use Test::More tests => 116;
 
 use DateTime;
 use POSIX qw( floor );
@@ -846,10 +846,12 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     t::lib::Mocks::mock_preference('WhenLostForgiveFine','0');
     t::lib::Mocks::mock_preference('WhenLostChargeReplacementFee','0');
 
-    LostItem( $itemnumber, 1 );
+    LostItem( $itemnumber, 'test', 1 );
 
     my $item = Koha::Database->new()->schema()->resultset('Item')->find($itemnumber);
     ok( !$item->onloan(), "Lost item marked as returned has false onloan value" );
+    my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
+    is( $checkout, undef, 'LostItem called with forced return has checked in the item' );
 
     my $total_due = $dbh->selectrow_array(
         'SELECT SUM( amountoutstanding ) FROM accountlines WHERE borrowernumber = ?',
@@ -871,10 +873,11 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         }
     );
 
-    LostItem( $itemnumber2, 0 );
+    LostItem( $itemnumber2, 'test', 0 );
 
     my $item2 = Koha::Database->new()->schema()->resultset('Item')->find($itemnumber2);
     ok( $item2->onloan(), "Lost item *not* marked as returned has true onloan value" );
+    ok( Koha::Checkouts->find({ itemnumber => $itemnumber2 }), 'LostItem called without forced return has checked in the item' );
 
     $total_due = $dbh->selectrow_array(
         'SELECT SUM( amountoutstanding ) FROM accountlines WHERE borrowernumber = ?',

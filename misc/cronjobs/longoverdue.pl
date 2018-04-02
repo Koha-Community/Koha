@@ -310,7 +310,7 @@ foreach my $startrange (sort keys %$lost) {
             if($confirm) {
                 ModItem({ itemlost => $lostvalue }, $row->{'biblionumber'}, $row->{'itemnumber'});
                 if ( $charge && $charge eq $lostvalue ) {
-                    LostItem( $row->{'itemnumber'}, $mark_returned );
+                    LostItem( $row->{'itemnumber'}, 'cronjob', $mark_returned );
                 } elsif ( $mark_returned ) {
                     my $patron = Koha::Patrons->find( $row->{borrowernumber} );
                     MarkIssueReturned($row->{borrowernumber},$row->{itemnumber},undef,undef,$patron->privacy)

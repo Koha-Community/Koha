@@ -261,7 +261,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('MarcFieldDocURL', NULL, NULL, 'URL used for MARC field documentation. Following substitutions are available: {MARC} = marc flavour, eg. "MARC21" or "UNIMARC". {FIELD} = field number, eg. "000" or "048". {LANG} = user language, eg. "en" or "fi-FI"', 'free'),
 ('MarcFieldsToOrder','',NULL,'Set the mapping values for a new order line created from a MARC record in a staged file. In a YAML format.','textarea'),
 ('MarcItemFieldsToOrder','',NULL,'Set the mapping values for new item records created from a MARC record in a staged file. In a YAML format.','textarea'),
-('MarkLostItemsAsReturned','1','','Mark items as returned when flagged as lost','YesNo'),
+('MarkLostItemsAsReturned','batchmod|moredetail|cronjob|additem','batchmod|moredetail|cronjob|additem','Mark items as returned when flagged as lost','multiple'),
 ('MARCOrgCode','OSt','','Define MARC Organization Code for MARC21 records - http://www.loc.gov/marc/organizations/orgshome.html','free'),
 ('MaxFine',NULL,'','Maximum fine a patron can have for all late returns at one moment. Single item caps are specified in the circulation rules matrix.','Integer'),
 ('MaxItemsToDisplayForBatchDel','1000',NULL,'Display up to a given number of items in a single item deletionbatch.','Integer'),
