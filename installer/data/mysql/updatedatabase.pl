@@ -15707,6 +15707,22 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 15492: Add a standalone self-checkin module)\n";
 }
 
+$DBversion = '17.12.00.025';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES ('StaffLoginInstructions','','HTML to go into the login box for the staff client',NULL,'Free')
+    |);
+    $dbh->do(q|
+        UPDATE systempreferences
+        SET variable = 'OpacLoginInstructions'
+        WHERE variable = 'NoLoginInstructions'
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20291 - Add StaffLoginInstructions system preference and rename NoLoginInstructions with OpacLoginInstructions)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
