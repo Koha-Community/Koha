@@ -36,7 +36,7 @@ sub can_be_discharged {
     my $patron = Koha::Patrons->find( $params->{borrowernumber} );
     return unless $patron;
 
-    my $has_pending_checkouts = $patron->pending_checkouts->count;
+    my $has_pending_checkouts = $patron->checkouts->count;
     return $has_pending_checkouts ? 0 : 1;
 }
 
