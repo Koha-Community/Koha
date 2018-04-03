@@ -201,7 +201,7 @@ sub send_payment {
 
     my $content = $payment; # content will be JSON string, payment will be HASH
     my $response = eval {
-        $content = JSON->new->utf8->canonical(1)->encode($payment);
+        $content = JSON->new->canonical(1)->encode($payment);
 
         my $transaction = Koha::PaymentsTransactions->find($payment->{Id});
         return { error => "Error: No transaction found with id ".$payment->{Id}, status => 0 }
