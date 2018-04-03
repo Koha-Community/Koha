@@ -144,6 +144,14 @@
                                         </li>
 
                                         <li>
+                                            <label for="format">Format:</label>
+                                            <select name="format" id="format">
+                                                <option value="PHOTOCOPY">Photocopy</option>
+                                                <option value="SCAN">Digital scan</option>
+                                            </select>
+                                        </li>
+
+                                        <li>
                                             <label for="branchcode">Pickup library:</label>
                                             <select name="branchcode" id="branchcode">
                                                 [% FOREACH b IN Branches.all %]
@@ -244,6 +252,7 @@
                                     <th>Pages</th>
                                     <th>Chapters</th>
                                     <th>Patron notes</th>
+                                    <th>Format</th>
                                     <th>Item</th>
                                     <th>Status</th>
                                     <th>Pickup library</th>
@@ -262,6 +271,7 @@
                                         <td>[% ar.pages | html %]</td>
                                         <td>[% ar.chapters | html %]</td>
                                         <td>[% ar.patron_notes | html %]</td>
+                                        <td>[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
                                         <td>
                                             [% IF ar.item %]
                                                 <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% ar.itemnumber | uri %]&biblionumber=[% ar.biblionumber | uri %]">[% ar.item.barcode | html %]</a>
@@ -408,6 +418,19 @@
                     });
                 }
             });
+
+            // Initialize format(s)
+            var supported_formats = "[% Koha.Preference('ArticleRequestsSupportedFormats') %]";
+            if( !supported_formats.match(/PHOTOCOPY/) )
+                $('#format option[value="PHOTOCOPY"]').remove();
+            if( !supported_formats.match(/SCAN/) )
+                $('#format option[value="SCAN"]').remove();
+
+            if( $('#format option').length > 1 ) {
+            // Select first listed format
+                var first_format = supported_formats.split('|')[0].replace(/^\s*|\s*$/g, '');
+                $('#format option[value="'+first_format+'"]').attr('selected', true);
+            }
         });
     </script>
 [% END %]

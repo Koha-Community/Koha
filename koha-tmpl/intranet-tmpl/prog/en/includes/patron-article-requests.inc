@@ -13,6 +13,7 @@
                 <th class="article-request-pages">Pages</th>
                 <th class="article-request-chapters">Chapters</th>
                 <th class="article-request-notes">Notes</th>
+                <th class="article-request-format">Format</th>
                 <th class="article-request-status">Status</th>
                 <th class="article-request-branchcode">Pickup library</th>
             </tr>
@@ -65,6 +66,8 @@
                     <td class="article-request-patron-notes">
                         [% ar.patron_notes | html %]
                     </td>
+
+                    <td class="article-request-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
 
                     <td class="article-request-status">
                         [% IF ar.status == 'PENDING' %]

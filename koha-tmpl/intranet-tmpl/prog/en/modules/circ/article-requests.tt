@@ -127,6 +127,7 @@
                                     <th class="ar-copynumber">Copy number</th>
                                     <th class="ar-enumchron">Enumeration</th>
                                     <th class="ar-barcode">Barcode</th>
+                                    <th class="ar-format">Format</th>
                                     <th class="ar-patron">Patron</th>
                                     <th class="ar-date">Date</th>
                                     <th class="ar-actions noExport">Actions</th>
@@ -191,6 +192,7 @@
                                         <td class="ar-copynumber">[% ar.item.copynumber | html %]</td>
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
+                                        <td class="ar-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
                                         <td class="ar-patron">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
@@ -228,6 +230,7 @@
                                     <th class="ar-copynumber">Copy number</th>
                                     <th class="ar-enumchron">Enumeration</th>
                                     <th class="ar-barcode">Barcode</th>
+                                    <th class="ar-format">Format</th>
                                     <th class="ar-patron">Patron</th>
                                     <th class="ar-date">Date</th>
                                     <th class="ar-actions noExport">Actions</th>
@@ -290,6 +293,7 @@
                                         <td class="ar-copynumber">[% ar.item.copynumber | html %]</td>
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
+                                        <td class="ar-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
                                         <td class="ar-patron">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">

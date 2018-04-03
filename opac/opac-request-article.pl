@@ -57,6 +57,7 @@ if ( $action eq 'create' ) {
     my $pages        = $cgi->param('pages')        || undef;
     my $chapters     = $cgi->param('chapters')     || undef;
     my $patron_notes = $cgi->param('patron_notes') || undef;
+    my $format       = $cgi->param('format')       || undef;
 
     my $ar = Koha::ArticleRequest->new(
         {
@@ -72,6 +73,7 @@ if ( $action eq 'create' ) {
             pages          => $pages,
             chapters       => $chapters,
             patron_notes   => $patron_notes,
+            format         => $format,
         }
     )->store();
 
