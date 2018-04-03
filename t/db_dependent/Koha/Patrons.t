@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::Warn;
 use Time::Fake;
 use DateTime;
