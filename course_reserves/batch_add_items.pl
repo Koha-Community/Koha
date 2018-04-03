@@ -20,7 +20,8 @@
 
 use Modern::Perl;
 
-use CGI qw ( -utf8 );
+use CGI qw( -utf8 );
+use List::MoreUtils qw( uniq );
 
 use C4::Auth;
 use C4::Output;
@@ -56,18 +57,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 $template->param( course => GetCourse($course_id) );
 
 if ( !$action ) {
-
-    my $itemtypes = Koha::ItemTypes->search;
-    $template->param(
-        action    => 'display_form',
-        ccodes    => GetAuthorisedValues('CCODE'),
-        locations => GetAuthorisedValues('LOC'),
-        itypes    => $itemtypes,
-    );
-
+    $template->param( action => 'display_form' );
 }
 elsif ( $action eq 'add' ) {
-    my @barcodes = split( "\r\n", $barcodes );
+    my @barcodes = uniq( split( /\s\n/, $barcodes ) );
 
     my @items;
     my @invalid_barcodes;

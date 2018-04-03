@@ -1,4 +1,7 @@
+[% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE ItemTypes %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo; Add items</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -32,12 +35,8 @@
                             <select id="itype" name="itype">
                                 <option value="">LEAVE UNCHANGED</option>
 
-                                [% FOREACH it IN itypes %]
-                                    [% IF course_item.itype && ( ( course.enabled == 'yes' && it.itemtype == item.itype ) || ( course.enabled == 'no' && it.itemtype == course_item.itype ) ) %]
-                                        <option value="[% it.itemtype %]" selected="selected">[% it.description %]</option>
-                                    [% ELSE %]
-                                        <option value="[% it.itemtype %]">[% it.description %]</option>
-                                    [% END %]
+                                [% FOREACH it IN ItemTypes.Get() %]
+                                    <option value="[% it.itemtype %]">[% it.description %]</option>
                                 [% END %]
                             </select>
                         </li>
@@ -47,13 +46,8 @@
                             <label class="required" for="ccode">Collection code:</label>
                             <select id="ccode" name="ccode">
                                 <option value="">LEAVE UNCHANGED</option>
-
-                                [% FOREACH c IN ccodes %]
-                                    [% IF course_item.ccode && ( ( course.enabled == 'yes' && c.authorised_value == item.ccode ) || ( course.enabled == 'no' && c.authorised_value == course_item.ccode ) ) %]
-                                        <option value="[% c.authorised_value %]" selected="selected">[% c.lib %]</option>
-                                    [% ELSE %]
-                                        <option value="[% c.authorised_value %]">[% c.lib %]</option>
-                                    [% END %]
+                                [% FOREACH c IN AuthorisedValues.Get('CCODE') %]
+                                    <option value="[% c.authorised_value %]">[% c.lib %]</option>
                                 [% END %]
                             </select>
                         </li>
@@ -62,13 +56,8 @@
                             <label class="required" for="location">Shelving location:</label>
                             <select id="location" name="location">
                                 <option value="">LEAVE UNCHANGED</option>
-
-                                [% FOREACH s IN locations %]
-                                    [% IF course_item.location && ( ( course.enabled == 'yes' && s.authorised_value == item.location ) || ( course.enabled == 'no' && s.authorised_value == course_item.location ) ) %]
-                                        <option value="[% s.authorised_value %]" selected="selected">[% s.lib %]</option>
-                                    [% ELSE %]
-                                        <option value="[% s.authorised_value %]">[% s.lib %]</option>
-                                    [% END %]
+                                [% FOREACH s IN AuthorisedValues.Get('LOC') %]
+                                    <option value="[% s.authorised_value %]">[% s.lib %]</option>
                                 [% END %]
                             </select>
                         </li>
@@ -78,11 +67,7 @@
                             <select id="holdingbranch" name="holdingbranch">
                                 <option value="">LEAVE UNCHANGED</option>
                                 [% FOREACH b IN Branches.all() %]
-                                    [% IF course_item.holdingbranch && ( ( course.enabled == 'yes' && b.value == item.holdingbranch ) || ( course.enabled == 'no' && b.value == course_item.holdingbranch ) ) %]
-                                        <option value="[% b.branchcode %]" selected="selected">[% b.branchname %]</option>
-                                    [% ELSE %]
-                                        <option value="[% b.branchcode %]">[% b.branchname %]</option>
-                                    [% END %]
+                                    <option value="[% b.branchcode %]">[% b.branchname %]</option>
                                 [% END %]
                             </select>
                         </li>
