@@ -260,23 +260,25 @@ sub merge {
 
     my $results;
 
-    foreach my $borrowernumber (@borrowernumbers) {
-        my $patron = Koha::Patrons->find( $borrowernumber );
+    $self->_resultset->result_source->schema->txn_do( sub {
+        foreach my $borrowernumber (@borrowernumbers) {
+            my $patron = Koha::Patrons->find( $borrowernumber );
 
-        next unless $patron;
+            next unless $patron;
 
-        # Unbless for safety, the patron will end up being deleted
-        $results->{merged}->{$borrowernumber}->{patron} = $patron->unblessed;
+            # Unbless for safety, the patron will end up being deleted
+            $results->{merged}->{$borrowernumber}->{patron} = $patron->unblessed;
 
-        while (my ($r, $field) = each(%$RESULTSET_PATRON_ID_MAPPING)) {
-            my $rs = $schema->resultset($r)->search({ $field => $borrowernumber} );
-            $results->{merged}->{ $borrowernumber }->{updated}->{$r} = $rs->count();
-            $rs->update( { $field => $keeper });
+            while (my ($r, $field) = each(%$RESULTSET_PATRON_ID_MAPPING)) {
+                my $rs = $schema->resultset($r)->search({ $field => $borrowernumber} );
+                $results->{merged}->{ $borrowernumber }->{updated}->{$r} = $rs->count();
+                $rs->update( { $field => $keeper });
+            }
+
+            $patron->move_to_deleted();
+            $patron->delete();
         }
-
-        $patron->move_to_deleted();
-        $patron->delete();
-    }
+    });
 
     $results->{keeper} = $patron_to_keep;
 

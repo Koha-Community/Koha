@@ -47,8 +47,13 @@ if ( $action eq 'show' ) {
     $template->param( patrons => $patrons );
 } elsif ( $action eq 'merge' ) {
     my $keeper = $cgi->param('keeper');
-    my $results = Koha::Patrons->merge( { keeper => $keeper, patrons => \@ids } );
-    $template->param( results => $results );
+    my $results;
+    eval { $results = Koha::Patrons->merge( { keeper => $keeper, patrons => \@ids } ); };
+    if ($@) {
+        $template->param( results => $results );
+    } else {
+        $template->param( error => $@ );
+    }
 }
 
 $template->param( action => $action );

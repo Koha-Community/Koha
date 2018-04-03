@@ -104,26 +104,30 @@ $(document).ready(function() {
             [% ELSIF action == 'merge' %]
                 <h4>Results</h4>
 
-                <p>
-                    Patron records merged into <a href="moremember.pl?borrowernumber=[% results.keeper.id %]">[% results.keeper.firstname %] [% results.keeper.surname %] ([% results.keeper.cardnumber | html %])</a>
-                </p>
+                [% IF error %]
+                    <div class="dialog alert">Merge failed! The following error was reported: [% error %].</div>
+                [% ELSE %]
+                    <p>
+                        Patron records merged into <a href="moremember.pl?borrowernumber=[% results.keeper.id %]">[% results.keeper.firstname %] [% results.keeper.surname %] ([% results.keeper.cardnumber | html %])</a>
+                    </p>
 
-                [% FOREACH pair IN results.merged.pairs %]
-                    [% SET patron = pair.value.patron %]
+                    [% FOREACH pair IN results.merged.pairs %]
+                        [% SET patron = pair.value.patron %]
 
-                    <h5>[% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</h5>
+                        <h5>[% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</h5>
 
-                    [% USE Dumper %]
-                    [% FOREACH r IN pair.value.updated.pairs %]
-                        [% SET name = r.key %]
-                        [% SET count = r.value %]
-                        [% IF count %]
-                            <p>
-                                [% count %] [% PROCESS display_names rs = name %] transferred.
-                                [% IF name == 'Reserve' %]
-                                    <strong>It is advisable to check for and resolve duplicate holds due to merging.</strong>
-                                [% END %]
-                            </p>
+                        [% USE Dumper %]
+                        [% FOREACH r IN pair.value.updated.pairs %]
+                            [% SET name = r.key %]
+                            [% SET count = r.value %]
+                            [% IF count %]
+                                <p>
+                                    [% count %] [% PROCESS display_names rs = name %] transferred.
+                                    [% IF name == 'Reserve' %]
+                                        <strong>It is advisable to check for and resolve duplicate holds due to merging.</strong>
+                                    [% END %]
+                                </p>
+                            [% END %]
                         [% END %]
                     [% END %]
                 [% END %]
