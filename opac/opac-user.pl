@@ -184,7 +184,7 @@ my $overdues_count = 0;
 my @overdues;
 my @issuedat;
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-my $pending_checkouts = $patron->pending_checkouts({}, { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] });
+my $pending_checkouts = $patron->pending_checkouts->search({}, { order_by => [ { -desc => 'date_due' }, { -asc => 'issue_id' } ] });
 if ( $pending_checkouts->count ) { # Useless test
     while ( my $c = $pending_checkouts->next ) {
         my $issue = $c->unblessed_all_relateds;
