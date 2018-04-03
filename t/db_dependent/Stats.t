@@ -3,16 +3,14 @@
 use Modern::Perl;
 use C4::Stats;
 
-use Test::More tests => 20;
+use Test::More tests => 19;
 
 BEGIN {
     use_ok('C4::Stats');
 }
 can_ok(
     'C4::Stats',
-    qw(UpdateStats
-    TotalPaid
-      )
+    qw(UpdateStats)
 );
 
 #Start transaction
@@ -164,11 +162,6 @@ $line = ${ $sth->fetchall_arrayref( {} ) }[0];
 is( $line->{location}, undef,
     "UpdateStats sets location to NULL if undef is passed in." );
 
-#
-# Test TotalPaid
-#
-
-is (TotalPaid (),undef,"TotalPaid returns undef if no params are given");
 # More tests to write!
 
 #End transaction

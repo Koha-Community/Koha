@@ -32,7 +32,6 @@ BEGIN {
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
 		&UpdateStats
-		&TotalPaid
 	);
 }
 
@@ -141,51 +140,6 @@ sub UpdateStats {
         $itemnumber, $itemtype, $location, $borrowernumber,
         $accountno,  $ccode
     );
-}
-
-=head2 TotalPaid
-
-  @total = &TotalPaid ( $time, [$time2], [$spreadsheet ]);
-
-Returns an array containing the payments and writeoffs made between two dates
-C<$time> and C<$time2>, or on a specific one, or from C<$time> onwards.
-
-C<$time> param is mandatory.
-If C<$time> eq 'today', returns are limited to the current day
-If C<$time2> eq '', results are returned from C<$time> onwards.
-If C<$time2> is undef, returns are limited to C<$time>
-C<$spreadsheet> param is optional and controls the sorting of the results.
-
-Returns undef if no param is given
-
-=cut
-
-sub TotalPaid {
-    my ( $time, $time2, $spreadsheet ) = @_;
-    return () unless (defined $time);
-    $time2 = $time unless $time2;
-    my $dbh   = C4::Context->dbh;
-    my $query = "SELECT * FROM statistics 
-  LEFT JOIN borrowers ON statistics.borrowernumber= borrowers.borrowernumber
-  WHERE (statistics.type='payment' OR statistics.type='writeoff') ";
-    if ( $time eq 'today' ) {
-# FIXME wrong condition. Now() will not get all the payments of the day but of a specific timestamp
-        $query .= " AND datetime = now()";
-    } else {
-        $query .= " AND datetime > '$time'";    # FIXME: use placeholders
-    }
-    if ( $time2 ne '' ) {
-        $query .= " AND datetime < '$time2'";   # FIXME: use placeholders
-    }
-# FIXME if $time2 is undef, query will be "AND datetime > $time AND AND datetime < $time"
-# Operators should probably be <= and >=
-    if ($spreadsheet) {
-        $query .= " ORDER BY branch, type";
-    }
-    $debug and warn "TotalPaid query: $query";
-    my $sth = $dbh->prepare($query);
-    $sth->execute();
-    return @{$sth->fetchall_arrayref({})};
 }
 
 1;
