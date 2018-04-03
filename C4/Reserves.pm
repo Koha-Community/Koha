@@ -957,7 +957,8 @@ sub CancelExpiredReserves {
 
     while ( my $res = $sth->fetchrow_hashref() ) {
         my $calendar = Koha::Calendar->new( branchcode => $res->{'branchcode'} );
-        my $cancel_params = { reserve_id => $res->{'reserve_id'} };
+        my $cancel_params = { reserve_id => $res->{'reserve_id'}, 
+                              pickupexpired => $today }; # Bug-2818 PK/180329/KS
 
         next if !$cancel_on_holidays && $calendar->is_holiday( $today );
 
