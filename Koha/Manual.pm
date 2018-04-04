@@ -17,12 +17,12 @@ sub _get_help_version {
 }
 
 sub _get_base_url {
-    # FIXME /en/ must be configurable (or guessed)
     my $KohaManualBaseURL = C4::Context->preference('KohaManualBaseURL') || 'http://koha-community.org/manual';
+    my $KohaManualLanguage = C4::Context->preference('KohaManualLanguage') || 'en';
     if ( $KohaManualBaseURL =~ m|^/| ) {
         $KohaManualBaseURL = C4::Context->preference('staffClientBaseURL') . $KohaManualBaseURL;
     }
-    return $KohaManualBaseURL . '/' . _get_help_version . '/en/html';
+    return $KohaManualBaseURL . '/' . _get_help_version . '/' . $KohaManualLanguage . '/html'; # TODO html could be a KohaManualFormat with pdf, html, epub
 }
 
 our $mapping = {
