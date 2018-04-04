@@ -21,6 +21,7 @@
           <thead>
             <tr>
               <th>Patron</th>
+              <th>Library</th>
               <th>Allow</th>
             </tr>
           </thead>
@@ -28,6 +29,7 @@
             [% FOREACH d IN pending_discharges %]
               <tr>
                 <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber %]">[% d.borrower.surname %], [% d.borrower.firstname %]</a></td>
+                <td>[% d.borrower.branchcode.branchname %]</td>
                 <td><a href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber %]">Allow</a></td>
               </tr>
             [% END %]
