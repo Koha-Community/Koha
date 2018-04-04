@@ -798,7 +798,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
 };
 
 subtest "Koha::Account::non_issues_charges tests" => sub {
-    plan tests => 6;
+    plan tests => 9;
 
     my $patron = $builder->build_object(
         {
@@ -820,8 +820,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     my $credit_2 = Koha::Account::Lines->find( $credit->id );
     ok( $debit_2, 'Debit was correctly not deleted when credit has balance' );
     ok( $credit_2, 'Credit was correctly not deleted when credit has balance' );
+    is( Koha::Account::Lines->count({ borrowernumber => $patron->id }), 2, "The 2 account lines still exists" );
 
-    $dbh->do(q|DELETE FROM accountlines WHERE borrowernumber=?|, undef, $patron->id);
     $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 5 })->store();
     $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
     $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment' })->store();
@@ -831,8 +831,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $credit_2 = Koha::Account::Lines->find( $credit->id );
     ok( $debit_2, 'Debit was correctly not deleted when debit has balance' );
     ok( $credit_2, 'Credit was correctly not deleted when debit has balance' );
+    is( Koha::Account::Lines->count({ borrowernumber => $patron->id }), 2 + 2, "The 2 + 2 account lines still exists" );
 
-    $dbh->do(q|DELETE FROM accountlines WHERE borrowernumber=?|, undef, $patron->id);
     $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
     $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
     $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment' })->store();
@@ -841,6 +841,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     $credit_2 = Koha::Account::Lines->find( $credit->id );
     ok( !$debit_2, 'Debit was correctly deleted' );
     ok( !$credit_2, 'Credit was correctly deleted' );
+    is( Koha::Account::Lines->count({ borrowernumber => $patron->id }), 2 + 2, "The 2 + 2 account lines still exists, the last 2 have been deleted ok" );
 };
 
 1;
