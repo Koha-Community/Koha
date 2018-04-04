@@ -63,31 +63,34 @@
       </ul>
     </div>
     [% END %]
-    <div id="messages" class="circmessage">
-        <h4>Messages:</h4>
-        <ul>
-            [% FOREACH patron_message IN patron_messages %]
-                <li>
-                    [% IF(patron_message.message_type == "L") %]
-                        <span class="circ-hlt">
-                    [% ELSE %]
-                        <span>
-                    [% END %]
-                        [% patron_message.message_date | $KohaDates %]
-                        [% Branches.GetName( patron_message.branchcode ) %]
-                        [% IF patron_message.manager_id %]
-                            ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id %]">[% patron_message.get_column('manager_firstname') %] [% patron_message.get_column('manager_surname') %]</a> )
+
+    [% IF ( patron_messages ) %]
+        <div id="messages" class="circmessage">
+            <h4>Messages:</h4>
+            <ul>
+                [% FOREACH patron_message IN patron_messages %]
+                    <li>
+                        [% IF(patron_message.message_type == "L") %]
+                            <span class="circ-hlt">
+                        [% ELSE %]
+                            <span>
                         [% END %]
-                        <i>"[% patron_message.message | html %]"</i>
-                    </span>
-                    [% IF patron_message.branchcode == branchcode OR Koha.Preference('AllowAllMessageDeletion') %]
-                        <a class="btn btn-link btn-sm" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id %]&amp;borrowernumber=[% patron_message.borrowernumber %]&amp;from=moremember" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>
-                    [% END %]
-                </li>
-            [% END %]
-        </ul>
-        <a id="addnewmessageLabel" href="#add_message_form" class="btn btn-link btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
-    </div>
+                            [% patron_message.message_date | $KohaDates %]
+                            [% Branches.GetName( patron_message.branchcode ) %]
+                            [% IF patron_message.manager_id %]
+                                ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id %]">[% patron_message.get_column('manager_firstname') %] [% patron_message.get_column('manager_surname') %]</a> )
+                            [% END %]
+                            <i>"[% patron_message.message | html %]"</i>
+                        </span>
+                        [% IF patron_message.branchcode == branchcode OR Koha.Preference('AllowAllMessageDeletion') %]
+                            <a class="btn btn-link btn-sm" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id %]&amp;borrowernumber=[% patron_message.borrowernumber %]&amp;from=moremember" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>
+                        [% END %]
+                    </li>
+                [% END %]
+            </ul>
+            <a id="addnewmessageLabel" href="#add_message_form" class="btn btn-link btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Add a new message</a>
+        </div>
+    [% END %]
 
     [% IF ( flagged ) %]
     <div id="circmessages" class="circmessage attention">

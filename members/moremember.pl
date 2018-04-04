@@ -216,7 +216,7 @@ my $library = Koha::Libraries->find( $data->{branchcode})->unblessed;
 @{$data}{keys %$library} = values %$library; # merge in all branch columns # FIXME This is really ugly, we should pass the library instead
 
 # If printing a page, send the account informations to the template
-if ($print eq "page") {
+if (defined $print and $print eq "page") {
     my $accts = Koha::Account::Lines->search(
         { borrowernumber => $patron->borrowernumber, amountoutstanding => { '>' => 0 } },
         { order_by       => { -desc => 'accountlines_id' } }
@@ -328,6 +328,9 @@ my $patron_messages = Koha::Patron::Messages->search(
     }
 );
 
+if( $patron_messages->count > 0 ){
+    $template->param( patron_messages => $patron_messages );
+}
 
 # Display the language description instead of the code
 # Note that this is certainly wrong
@@ -353,7 +356,6 @@ $template->param(
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
-    patron_messages       => $patron_messages,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
