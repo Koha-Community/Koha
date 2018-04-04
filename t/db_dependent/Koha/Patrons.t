@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 29;
+use Test::More tests => 30;
 use Test::Warn;
 use Time::Fake;
 use DateTime;
@@ -1334,8 +1334,52 @@ subtest 'Log cardnumber change' => sub {
     is( scalar @logs, 2, 'With BorrowerLogs, Change in cardnumber should be logged, as well as general alert of patron mod.' );
 };
 
-
 $schema->storage->txn_rollback;
+
+subtest 'Test Koha::Patrons::merge' => sub {
+    plan tests => 98;
+
+    my $schema = Koha::Database->new()->schema();
+
+    my $resultsets = $Koha::Patron::RESULTSET_PATRON_ID_MAPPING;
+
+    $schema->storage->txn_begin;
+
+    my $keeper  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $loser_1 = $builder->build({ source => 'Borrower' })->{borrowernumber};
+    my $loser_2 = $builder->build({ source => 'Borrower' })->{borrowernumber};
+
+    while (my ($r, $field) = each(%$resultsets)) {
+        $builder->build({ source => $r, value => { $field => $keeper->id } });
+        $builder->build({ source => $r, value => { $field => $loser_1 } });
+        $builder->build({ source => $r, value => { $field => $loser_2 } });
+
+        my $keeper_rs =
+          $schema->resultset($r)->search( { $field => $keeper->id } );
+        is( $keeper_rs->count(), 1, "Found 1 $r rows for keeper" );
+
+        my $loser_1_rs =
+          $schema->resultset($r)->search( { $field => $loser_1 } );
+        is( $loser_1_rs->count(), 1, "Found 1 $r rows for loser_1" );
+
+        my $loser_2_rs =
+          $schema->resultset($r)->search( { $field => $loser_2 } );
+        is( $loser_2_rs->count(), 1, "Found 1 $r rows for loser_2" );
+    }
+
+    my $results = $keeper->merge_with([ $loser_1, $loser_2 ]);
+
+    while (my ($r, $field) = each(%$resultsets)) {
+        my $keeper_rs =
+          $schema->resultset($r)->search( {$field => $keeper->id } );
+        is( $keeper_rs->count(), 3, "Found 2 $r rows for keeper" );
+    }
+
+    is( Koha::Patrons->find($loser_1), undef, 'Loser 1 has been deleted' );
+    is( Koha::Patrons->find($loser_2), undef, 'Loser 2 has been deleted' );
+
+    $schema->storage->txn_rollback;
+};
 
 # TODO Move to t::lib::Mocks and reuse it!
 sub set_logged_in_user {

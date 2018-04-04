@@ -108,7 +108,7 @@ $(document).ready(function() {
                     <div class="dialog alert">Merge failed! The following error was reported: [% error %].</div>
                 [% ELSE %]
                     <p>
-                        Patron records merged into <a href="moremember.pl?borrowernumber=[% results.keeper.id %]">[% results.keeper.firstname %] [% results.keeper.surname %] ([% results.keeper.cardnumber | html %])</a>
+                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id %]">[% keeper.firstname %] [% keeper.surname %] ([% keeper.cardnumber | html %])</a>
                     </p>
 
                     [% FOREACH pair IN results.merged.pairs %]

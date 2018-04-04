@@ -19,6 +19,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use Try::Tiny;
 
 use C4::Auth;
 use C4::Output;
@@ -33,26 +34,30 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { borrowers => 1 },
-        debug           => 1,
+        flagsrequired   => { borrowers => 1 }
     }
 );
 
 my $action = $cgi->param('action') || 'show';
-my @ids = $cgi->multi_param('id');
+my @ids    = $cgi->multi_param('id');
 
 if ( $action eq 'show' ) {
-    my $patrons =
-      Koha::Patrons->search( { borrowernumber => { -in => \@ids } } );
+    my $patrons = Koha::Patrons->search({ borrowernumber => { -in => \@ids } });
     $template->param( patrons => $patrons );
 } elsif ( $action eq 'merge' ) {
-    my $keeper = $cgi->param('keeper');
+    my $keeper_id = $cgi->param('keeper');
     my $results;
-    eval { $results = Koha::Patrons->merge( { keeper => $keeper, patrons => \@ids } ); };
-    if ($@) {
-        $template->param( results => $results );
-    } else {
-        $template->param( error => $@ );
+
+    try {
+        my $keeper = Koha::Patrons->find( $keeper_id );
+        $results = $keeper->merge_with( \@ids );
+        $template->param(
+            keeper  => $keeper,
+            results => $results
+        );
+    }
+    catch {
+        $template->param( error => $_ );
     }
 }
 

@@ -42,6 +42,33 @@ use Koha::Account;
 
 use base qw(Koha::Object);
 
+our $RESULTSET_PATRON_ID_MAPPING = {
+    Accountline          => 'borrowernumber',
+    ArticleRequest       => 'borrowernumber',
+    BorrowerAttribute    => 'borrowernumber',
+    BorrowerDebarment    => 'borrowernumber',
+    BorrowerFile         => 'borrowernumber',
+    BorrowerModification => 'borrowernumber',
+    ClubEnrollment       => 'borrowernumber',
+    Issue                => 'borrowernumber',
+    ItemsLastBorrower    => 'borrowernumber',
+    Linktracker          => 'borrowernumber',
+    Message              => 'borrowernumber',
+    MessageQueue         => 'borrowernumber',
+    OldIssue             => 'borrowernumber',
+    OldReserve           => 'borrowernumber',
+    Rating               => 'borrowernumber',
+    Reserve              => 'borrowernumber',
+    Review               => 'borrowernumber',
+    Statistic            => 'borrowernumber',
+    SearchHistory        => 'userid',
+    Suggestion           => 'suggestedby',
+    TagAll               => 'borrowernumber',
+    Virtualshelfcontent  => 'borrowernumber',
+    Virtualshelfshare    => 'borrowernumber',
+    Virtualshelve        => 'owner',
+};
+
 =head1 NAME
 
 Koha::Patron - Koha Patron Object class
@@ -200,6 +227,54 @@ sub siblings {
         }
     );
 }
+
+=head3 merge_with
+
+    my $patron = Koha::Patrons->find($id);
+    $patron->merge_with( \@patron_ids );
+
+    This subroutine merges a list of patrons into the patron record. This is accomplished by finding
+    all related patron ids for the patrons to be merged in other tables and changing the ids to be that
+    of the keeper patron.
+
+=cut
+
+sub merge_with {
+    my ( $self, $patron_ids ) = @_;
+
+    my @patron_ids = @{ $patron_ids };
+
+    # Ensure the keeper isn't in the list of patrons to merge
+    @patron_ids = grep { $_ ne $self->id } @patron_ids;
+
+    my $schema = Koha::Database->new()->schema();
+
+    my $results;
+
+    $self->_result->result_source->schema->txn_do( sub {
+        foreach my $patron_id (@patron_ids) {
+            my $patron = Koha::Patrons->find( $patron_id );
+
+            next unless $patron;
+
+            # Unbless for safety, the patron will end up being deleted
+            $results->{merged}->{$patron_id}->{patron} = $patron->unblessed;
+
+            while (my ($r, $field) = each(%$RESULTSET_PATRON_ID_MAPPING)) {
+                my $rs = $schema->resultset($r)->search({ $field => $patron_id });
+                $results->{merged}->{ $patron_id }->{updated}->{$r} = $rs->count();
+                $rs->update({ $field => $self->id });
+            }
+
+            $patron->move_to_deleted();
+            $patron->delete();
+        }
+    });
+
+    return $results;
+}
+
+
 
 =head3 wants_check_for_previous_checkout
 
