@@ -114,7 +114,7 @@ function logOut(){
 }
 
 function openHelp(){
-    openWindow("/cgi-bin/koha/help.pl","KohaHelp",600,600);
+    window.open( "/cgi-bin/koha/help.pl", "_blank");
 }
 
 jQuery.fn.preventDoubleFormSubmit = function() {
