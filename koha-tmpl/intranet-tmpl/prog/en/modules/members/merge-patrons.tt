@@ -116,7 +116,6 @@ $(document).ready(function() {
 
                         <h5>[% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</h5>
 
-                        [% USE Dumper %]
                         [% FOREACH r IN pair.value.updated.pairs %]
                             [% SET name = r.key %]
                             [% SET count = r.value %]
