@@ -592,6 +592,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '1.09',
     },
+    'Test::MockTime' => {
+        usage      => 'Testing suite',
+        required   => 0,
+        min_ver    => '0.13',
+    },
     'Test::More' => {
         'usage'    => 'Core',
         'required' => '1',
@@ -882,11 +887,6 @@ our $PERL_DEPS = {
         usage      => 'Testing suite',
         required   => 0,
         min_ver    => '0.52',
-    },
-    'Test::MockTime' => {
-        usage      => 'Testing suite',
-        required   => 0,
-        min_ver    => '0.17',
     },
 };
 
