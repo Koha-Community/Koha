@@ -97,6 +97,7 @@ use POSIX ();
 use DateTime::TimeZone;
 use Module::Load::Conditional qw(can_load);
 use Carp;
+use DateTime::TimeZone;
 
 use C4::Boolean;
 use C4::Debug;
@@ -981,6 +982,10 @@ sub timezone {
     my $self = shift;
 
     my $timezone = C4::Context->config('timezone') || $ENV{TZ} || 'local';
+    if ( !DateTime::TimeZone->is_valid_name( $timezone ) ) {
+        warn "Invalid timezone in koha-conf.xml ($timezone)";
+        $timezone = 'local';
+    }
 
     return $timezone;
 }

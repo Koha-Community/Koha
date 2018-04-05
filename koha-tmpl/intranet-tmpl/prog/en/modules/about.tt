@@ -112,10 +112,24 @@
             <tr><th scope="row"><b>Warning</b> </th><td>Error message from Zebra: [% ( errZebraConnection ) %] </td></tr>
             [% END %]
             <tr>
+              [% timezone_config_class = (time_zone.config_invalid) ? 'status_warn' : '' %]
+              [% timezone_env_class    = (time_zone.env_invalid)    ? 'status_warn' : '' %]
               <th scope="row">Time zone: </th>
-              <td>Used: <span class="status_ok">[% time_zone.actual %]</span> |
-                  Config: [% IF time_zone.config != '' %][% time_zone.config %][% ELSE %]<span>Undefined</span>[% END %] |
-                  ENV: [% IF time_zone.environment != '' %][% time_zone.environment %][% ELSE %]<span>Undefined</span>[% END %]
+              <td>Used: <span>[% time_zone.actual %]</span>
+                          [% IF time_zone.actual_bad_tz_fallback %]
+                             <span>(This is a fallback value due to a bad configuration)</span>
+                          [% END %]
+                           |
+                  Config: [% IF time_zone.config != '' %]
+                            <span class="[% timezone_config_class %]">[% time_zone.config %]</span>
+                          [% ELSE %]
+                            <span>Undefined</span>
+                          [% END %] |
+                  Environment (TZ):  [% IF time_zone.environment != '' %]
+                          <span class="[% timezone_env_class %]">[% time_zone.environment %]</span>
+                        [% ELSE %]
+                          <span>Undefined</span>
+                        [% END %]
               </td>
             </tr>
         </table>

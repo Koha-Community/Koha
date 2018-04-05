@@ -23,6 +23,7 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use DateTime::TimeZone;
 use List::MoreUtils qw/ any /;
 use LWP::Simple;
 use XML::Simple;
@@ -61,10 +62,31 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $config_timezone = C4::Context->config('timezone');
+my $config_invalid  = !DateTime::TimeZone->is_valid_name( $config_timezone );
+my $env_timezone    = $ENV{TZ};
+my $env_invalid     = !DateTime::TimeZone->is_valid_name( $env_timezone );
+my $actual_bad_tz_fallback = 0;
+
+if ( $config_timezone ne '' &&
+     $config_invalid ) {
+    # Bad config
+    $actual_bad_tz_fallback = 1;
+}
+elsif ( $config_timezone eq '' &&
+        $env_timezone    ne '' &&
+        $env_invalid ) {
+    # No config, but bad ENV{TZ}
+    $actual_bad_tz_fallback = 1;
+}
+
 my $time_zone = {
-    actual      => C4::Context->timezone(),
-    config      => C4::Context->config('timezone'),
-    environment => $ENV{TZ},
+    actual                 => C4::Context->timezone(),
+    actual_bad_tz_fallback => $actual_bad_tz_fallback,
+    config                 => $config_timezone,
+    config_invalid         => $config_invalid,
+    environment            => $env_timezone,
+    environment_invalid    => $env_invalid
 };
 $template->param( 'time_zone' => $time_zone );
 
