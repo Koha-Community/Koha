@@ -3,6 +3,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Pending discharge requests</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
 </head>
 <body id="pat_discharges" class="pat">
 [% INCLUDE 'header.inc' %]
@@ -47,6 +48,21 @@
 
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+
+    [% INCLUDE 'datatables.inc' %]
+    <script>
+        $(document).ready(function() {
+            $('#pending_updates table').DataTable($.extend(true, {}, dataTablesDefaults, {
+                paging: false,
+                info: false,
+                searching: false,
+                order: [],
+                columnDefs: [
+                    { targets: -1, orderable: false },
+                ],
+            }));
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
