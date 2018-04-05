@@ -71,6 +71,7 @@ Options:
                             conjunction with --defaultsql and --populate-db.
   --template-cache-dir      Set a user defined template_cache_dir. It defaults to
                             /var/cache/koha/<instance>/templates
+  --timezone time/zone      Specify a timezone. e.g. America/Argentina
   --upload-path dir         Set a user defined upload_path. It defaults to
                             /var/lib/koha/<instance>/uploads
   --letsencrypt             Set up a https-only site with letsencrypt certificates
@@ -115,6 +116,7 @@ generate_config_file() {
         -e "s/__UNIXUSER__/$username/g" \
         -e "s/__UNIXGROUP__/$username/g" \
         -e "s#__TEMPLATE_CACHE_DIR__#$TEMPLATE_CACHE_DIR#g" \
+        -e "s#__TIMEZONE__#$TIMEZONE#g" \
         -e "s#__UPLOAD_PATH__#$UPLOAD_PATH#g" \
         -e "s/__LOG_DIR__/\/var\/log\/koha\/$name/g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
@@ -413,6 +415,8 @@ DEFAULT_MEMCACHED_PREFIX="koha_"
 UPLOAD_PATH_BASE="/var/lib/koha"
 UPLOAD_DIR="uploads"
 UPLOAD_PATH=""
+# timezone defaults to empty
+TIMEZONE=""
 # cache base dir
 CACHE_DIR_BASE="/var/cache/koha"
 # Generate a randomizaed API secret
@@ -443,7 +447,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,upload-path:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -461,6 +465,7 @@ CLO_MEMCACHED_PREFIX=""
 CLO_UPLOAD_PATH=""
 CLO_LETSENCRYPT=""
 CLO_TEMPLATE_CACHE_DIR=""
+CLO_TIMEZONE=""
 
 while true ; do
     case "$1" in
@@ -502,6 +507,8 @@ while true ; do
             SRU_SERVER_PORT="$2" ; shift 2 ;;
         --template-cache-dir)
             CLO_TEMPLATE_CACHE_DIR="$2" ; shift 2 ;;
+        --timezone)
+            CLO_TIMEZONE="$2" ; shift 2 ;;
         --upload-path)
             CLO_UPLOAD_PATH="$2" ; shift 2 ;;
         --letsencrypt)
@@ -546,6 +553,10 @@ fi
 if [ "$CLO_PASSWDFILE" != "" ]
 then
     PASSWDFILE="$CLO_PASSWDFILE"
+fi
+
+if [ "$CLO_TIMEZONE" != "" ]; then
+    TIMEZONE=$CLO_TIMEZONE
 fi
 
 if [ "$CLO_BIBLIOS_INDEXING_MODE" !=  "" ]; then
