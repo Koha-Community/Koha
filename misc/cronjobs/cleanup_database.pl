@@ -66,9 +66,6 @@ Usage: $0 [-h|--help] [--sessions] [--sessdays DAYS] [-v|--verbose] [--zebraqueu
                       amountoutstanding is 0 or NULL.
                       In the case of --fees, DAYS must be greater than
                       or equal to 1.
-                      WARNING: Fees and payments may not be deleted together.
-                      This will not affect the account balance but may be
-                      confusing to staff.
    --logs DAYS        purge entries from action_logs older than DAYS days.
                       Defaults to 180 days if no days specified.
    --searchhistory DAYS  purge entries from search_history older than DAYS days.
