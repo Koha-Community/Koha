@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use CGI;
+use CGI qw ( -utf8 );
 use JSON qw(to_json);
 
 use C4::Auth qw(check_cookie_auth);
@@ -56,6 +56,11 @@ if ($ar) {
     elsif ( $action eq 'update_branchcode' ) {
         my $branchcode = $cgi->param('branchcode');
         $ar->branchcode( $branchcode ) if $branchcode;
+        $ar = $ar->store();
+    }
+    elsif( $action eq 'update_urls' ) {
+        my $urls = $cgi->param('urls') // q{};
+        $ar->urls( $urls );
         $ar = $ar->store();
     }
 }

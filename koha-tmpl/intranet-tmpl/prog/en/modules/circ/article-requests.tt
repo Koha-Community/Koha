@@ -24,6 +24,13 @@
                     Process request
                 </a>
 
+                [% IF id_arg && format=='SCAN' %]
+                <a class="ar-edit-urls" href="#" onclick="HandleMulti( EditURLs, [% id_arg %], $(this) ); return false;">
+                    <i class="fa fa-edit"></i>
+                    Edit URLs
+                </a>
+                [% END %]
+
                 <a class="ar-complete-request" href="#" onclick="HandleMulti( Complete, [% id_arg | html %], $(this) ); return false;">
                     <i class="fa fa-check-circle"></i>
                     Complete request
@@ -51,6 +58,23 @@
     [% ELSIF myitem.notforloan < 0 %]<span>On order</span>
     [% END %]
 [% END %]
+[% BLOCK urls_modal %]
+    <div id="myModal" class="modal fade modal-lg" role="dialog">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+             <h4 class="modal-title">Edit URL(s)</h4>
+          </div>
+          <div class="modal-body">
+            <textarea id="urls" style="width:100%;"></textarea>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Save</button>
+          </div>
+        </div>
+      </div>
+    </div>
+[% END %]
 
 <body id="circ_article-requests" class="circ">
     [% INCLUDE 'header.inc' %]
@@ -76,6 +100,7 @@
             <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 
                 <h1>Article requests</h1>
+                [% PROCESS urls_modal %]
 
                 <form id="ar-branchcode-form" method="post">
                     <select name="branchcode" id="branchcode">
@@ -128,6 +153,7 @@
                                     <th class="ar-enumchron">Enumeration</th>
                                     <th class="ar-barcode">Barcode</th>
                                     <th class="ar-format">Format</th>
+                                    <th class="ar-urls">URLs</th>
                                     <th class="ar-patron">Patron</th>
                                     <th class="ar-date">Date</th>
                                     <th class="ar-actions noExport">Actions</th>
@@ -193,6 +219,7 @@
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
+                                        <td class="ar-urls">[% IF ar.format == 'SCAN' %]<span id="url_yesno_[% ar.id %]">[% IF ar.urls %]Yes[% ELSE %]No[% END%]</span><span id="url_[% ar.id%]" style="display:none;">[% ar.urls %]</span>[% END %]</td>
                                         <td class="ar-patron">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
@@ -204,7 +231,7 @@
                                         </td>
                                         <td class="ar-date" data-order="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</td>
                                         <td class="ar-actions">
-                                            [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
+                                            [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id format=ar.format pull_right='pull-right' aria_menu='ar-actions' %]
                                         </td>
                                     </tr>
                                 [% END %]
@@ -231,6 +258,7 @@
                                     <th class="ar-enumchron">Enumeration</th>
                                     <th class="ar-barcode">Barcode</th>
                                     <th class="ar-format">Format</th>
+                                    <th class="ar-urls">URLs</th>
                                     <th class="ar-patron">Patron</th>
                                     <th class="ar-date">Date</th>
                                     <th class="ar-actions noExport">Actions</th>
@@ -294,6 +322,7 @@
                                         <td class="ar-enumchron">[% ar.item.enumchron | html %]</td>
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-format">[% IF ar.format == 'PHOTOCOPY' %]Copy[% ELSIF ar.format == 'SCAN' %]Scan[% END %]</td>
+                                        <td class="ar-urls">[% IF ar.format == 'SCAN' %]<span id="url_yesno_[% ar.id %]">[% IF ar.urls %]Yes[% ELSE %]No[% END%]</span><span id="url_[% ar.id%]" style="display:none;">[% ar.urls %]</span>[% END %]</td>
                                         <td class="ar-patron">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
@@ -305,7 +334,7 @@
                                         </td>
                                         <td class="ar-date" data-order="[% ar.created_on | html %]">[% ar.created_on | $KohaDates %]</td>
                                         <td class="ar-actions">
-                                            [% PROCESS actions menuid="table_" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
+                                            [% PROCESS actions menuid="table_" _ ar.id id_arg=ar.id format=ar.format pull_right='pull-right' aria_menu='ar-actions' %]
                                         </td>
                                     </tr>
                                 [% END %]
@@ -354,6 +383,19 @@
                 if( $('#article-requests-processing-table').is(":visible") )
                     $('a.ar-process-request').hide();
                 else $('a.ar-process-request').show();
+            });
+
+            $('#myModal').on("shown.bs.modal", function () {
+                $('#myModal textarea').focus();
+            });
+            $('#myModal').on("hidden.bs.modal", function () {
+                // Set focus back to dropdown
+                var id = $('#myModal textarea').attr('ar_id');
+                var link = $('span#url_'+ id).parent().parent().find('td.ar-actions').find('div.dropdown a');
+                if( link.length > 0 ) link[0].focus();
+            });
+            $( '#myModal button' ).on("click", function () {
+                SaveURLs( $('#myModal textarea').val() );
             });
 
             pending_datatable = $("#article-requests-pending-table").DataTable($.extend(true, {}, dataTablesDefaults, {
@@ -451,6 +493,12 @@
         }
 
         function Complete( id, a ) {
+            // if it is a scan, check if urls field is filled
+            var urlspan = $('span#url_'+id);
+            if( urlspan.length>0 && urlspan.text() === '' ) {
+                alert( _("Please fill URL before completing request.") );
+                return;
+            }
             a.closest('td').prepend('<img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
@@ -471,6 +519,31 @@
         function UpdateTabCounts() {
             $("#ar_pending_count").html( pending_datatable.rows().count() );
             $("#ar_processing_count").html( processing_datatable.rows().count() );
+        }
+
+        function EditURLs(id) {
+            var urls = $('span#url_'+ id).text();
+            $('#myModal textarea').val(urls);
+            $('#myModal textarea').attr('ar_id', id);
+            $('#myModal').modal('show');
+        }
+
+        function SaveURLs(newurl) {
+            var id = $('#myModal textarea').attr('ar_id');
+            $('span#url_'+ id).text(newurl);
+            if(newurl)
+                $('span#url_yesno_'+id).text(_("Yes"));
+            else
+                $('span#url_yesno_'+id).text(_("No"));
+
+            $.ajax({
+                type: "POST",
+                url: '/cgi-bin/koha/svc/article_request',
+                data: { action: 'update_urls', id: id, urls: newurl },
+                dataType: 'json',
+                error: function() { alert('Error: Saving URL failed!'); },
+                success: function(data) { if(!data.success) alert('Saving URL failed!'); },
+            });
         }
     </script>
 [% END %]
