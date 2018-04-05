@@ -89,7 +89,7 @@ KOHA.RecordedBooks = new function() {
         $('<div id="action_'+item.isbn+'" class="actions-menu">')
             .append(actions)
             .appendTo(line);
-
+        $('<span id="waiting_'+item.isbn+'" style="display:none;"><img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>').appendTo(line);
         $(ul_el).append(line);
     }
 
@@ -156,6 +156,8 @@ KOHA.RecordedBooks = new function() {
 
     function item_action (params, el) {
         var isbn = params.isbn;
+        $("#action_"+isbn).hide();
+        $("#waiting_"+isbn).show();
         svc_ajax('post', params, function(data) {
             if (data.checkouts) {
                 details.checkouts = data.checkouts;
@@ -164,6 +166,8 @@ KOHA.RecordedBooks = new function() {
                 details.holds = data.holds;
             }
             display_actions(el, isbn);
+              $("#action_"+isbn).show();
+              $("#waiting_"+isbn).hide();
         });
     }
 
@@ -233,6 +237,8 @@ KOHA.RecordedBooks = new function() {
             if(checkout_popup) {
                 $(el).append( ajax_button(MSG_CHECK_OUT, function() {
                     if( confirm(MSG_CHECK_OUT_CONFIRM) ) {
+                       $("#action_"+isbn).hide();
+                       $("#waiting_"+isbn).show();
                         svc_ajax('post', {action: "checkout", isbn: isbn}, function(data) {
                             if (data.checkouts) {
                                 details.checkouts = data.checkouts;
@@ -241,6 +247,8 @@ KOHA.RecordedBooks = new function() {
                                 details.holds = data.holds;
                             }
                             item = display_actions(el, isbn);
+                            $("#action_"+isbn).show();
+                            $("#waiting_"+isbn).hide();
                         });
                     }
                 }) );
@@ -304,6 +312,7 @@ KOHA.RecordedBooks = new function() {
         $('<div id="action_'+isbn+'" class="actions-menu">')
             .append(actions)
             .appendTo(el);
+        $("#action_"+isbn).before('<span id="waiting_'+isbn+'" style="display:none;"><img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>');
     };
 
     this.search = function( q, page_size, page, callback ) {
