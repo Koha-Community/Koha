@@ -20,6 +20,7 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 use Test::MockModule;
+use Test::MockTime qw( set_fixed_time );
 use t::lib::TestBuilder;
 
 use C4::Biblio;
@@ -46,6 +47,7 @@ $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM letter|);
 
 my $builder = t::lib::TestBuilder->new;
+set_fixed_time(CORE::time());
 
 my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
