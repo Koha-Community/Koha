@@ -25,11 +25,9 @@ use List::MoreUtils qw( uniq );
 
 use C4::Auth;
 use C4::Output;
-use C4::Koha;
 use C4::CourseReserves qw(ModCourseItem ModCourseReserve GetCourse);
 
 use Koha::Items;
-use Koha::ItemTypes;
 
 my $cgi = new CGI;
 
