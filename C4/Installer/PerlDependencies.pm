@@ -883,6 +883,11 @@ our $PERL_DEPS = {
         required   => 0,
         min_ver    => '0.52',
     },
+    'Test::MockTime' => {
+        usage      => 'Testing suite',
+        required   => 0,
+        min_ver    => '0.17',
+    },
 };
 
 1;
