@@ -13,6 +13,14 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") %]
+<style>
+    input[type="file"] { display: inline-block; }
+    .patroninfo-section { padding: .5em; margin: .5em; }
+    .patroninfo-section .rows { padding: .5em; }
+    .patroninfo-heading { background-color: rgba(237, 244, 246, .4); padding: .5em; margin-bottom: .3em; clear:both;}
+    .patroninfo-heading h3 { display: inline-block; }
+    .patroninfo-heading .btn { float: right; }
+</style>
 </head>
 
 <body id="pat_moremember" class="pat">
@@ -136,15 +144,27 @@
                         </h3>
                         <div class="yui-u first">
 
-                            <div id="patron-information" style="padding : .5em;">
+                            <div id="patron-information" class="patroninfo-section">
+
+                                <div class="patroninfo-heading">
+                                    <h3>Contact information</h3>
+                                    [% IF ( guarantor.borrowernumber ) %]
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=1&amp;guarantorid=[% guarantor.borrowernumber %]"><i class="fa fa-pencil"></i> Edit</a>
+                                    [% ELSE %]
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=1"><i class="fa fa-pencil"></i> Edit</a>
+                                    [% END %]
+                                </div>
+
                                 [% IF ( patron.othernames ) %]&ldquo;[% patron.othernames | html %]&rdquo;[% END %]
 
                                 <div class="address">
-                                    [% IF Koha.Preference( 'AddressFormat' ) %]
-                                        [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-                                    [% ELSE %]
-                                        [% INCLUDE 'member-display-address-style-us.inc' %]
-                                    [% END %]
+                                    <ul>
+                                        [% IF Koha.Preference( 'AddressFormat' ) %]
+                                            [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+                                        [% ELSE %]
+                                            [% INCLUDE 'member-display-address-style-us.inc' %]
+                                        [% END %]
+                                    </ul>
                                 </div>
 
                                 <div class="rows">
@@ -230,117 +250,131 @@
                                         [% END %]
                                     </ol>
                                 </div> [% # /div.rows %]
-                                <div class="action">
-                                    [% IF ( guarantor.borrowernumber ) %]
-                                        <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=1&amp;guarantorid=[% guarantor.borrowernumber %]">Edit</a>
-                                    [% ELSE %]
-                                        <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=1">Edit</a>
-                                    [% END %]
-                                </div>
-
                             </div> [% # /div#patron-information %]
 
                             [% IF ( patronimages ) %]
                                 [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
-                                    <div id="manage-patron-image">
-                                        <form method="post" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
-                                            <fieldset class="brief">
-                                                [% IF ( patron.image ) %]
-                                                    <legend>Manage patron image</legend>
-                                                    <div class="hint">To update the image for [% patron.title | html %] [% patron.surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.
-                                                [% ELSE %]
-                                                    <legend>Upload patron image</legend>
-                                                    <div class="hint">[% patron.title %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title %] [% patron.surname | html %], enter the name of an image file to upload.
-                                                [% END %]
-                                                <br />Only PNG, GIF, JPEG, XPM formats are supported.
-                                                </div>
+                                    <div id="manage-patron-image" class="patroninfo-section">
+                                        [% IF ( patron.image ) %]
+                                            <div class="patroninfo-heading">
+                                                <h3>Manage patron image</h3>
+                                                <a class="btn btn-default btn-xs" id="show-picture-upload" href="#"><i class="fa fa-pencil"></i> Edit</a>
+                                            </div>
+                                        [% ELSE %]
+                                            <div class="patroninfo-heading">
+                                                <h3>Upload patron image</h3>
+                                                <a class="btn btn-default btn-xs" id="show-picture-upload" href="#"><i class="fa fa-plus"></i> Add</a>
+                                            </div>
+                                        [% END %]
+                                        <form method="post" id="picture-upload" style="display:none;" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
+                                            [% IF ( patron.image ) %]
+                                                <div class="hint">To update the image for [% patron.title | html %] [% patron.surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.</div>
+                                            [% ELSE %]
+                                                <div class="hint">[% patron.title %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title %] [% patron.surname | html %], enter the name of an image file to upload.</div>
+                                            [% END %]
+                                            <p>Only PNG, GIF, JPEG, XPM formats are supported.</p>
+                                            <label for="uploadfile">Select the file to upload: </label>
+                                            <input type="file" id="uploadfile" name="uploadfile" required="required" />
+                                            <div class="action">
+                                                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                                                 <input type="hidden" id="image" name="filetype" value="image" />
                                                 <input type="hidden" id="cardnumber" name="cardnumber" value="[% patron.cardnumber | html %]" />
                                                 <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
-                                                <ol>
-                                                    <li>
-                                                       <label for="uploadfile">Select the file to upload: </label>
-                                                       <input type="file" id="uploadfile" name="uploadfile" />
-                                                    </li>
-                                                </ol>
-                                                <fieldset class="action">
-                                                    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
-                                                    <input type="submit" value="Upload" class="submit" />
-                                                    <input name="op" type="hidden" value="Upload" />
-                                                    [% IF ( patron.image ) %]
-                                                        <a id="delpicture" href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;borrowernumber=[% patron.borrowernumber %]&amp;csrf_token=[% csrf_token %]" class="delete">Delete</a>
-                                                    [% END %]
-                                                </fieldset>
-                                            </fieldset>
+                                                <button type="submit" class="btn btn-default btn-xs"><i class="fa fa-upload"></i> Upload</button>
+                                                <input name="op" type="hidden" value="Upload" />
+                                                [% IF ( patron.image ) %]
+                                                    <a id="delpicture" href="/cgi-bin/koha/tools/picture-upload.pl?op=Delete&amp;borrowernumber=[% patron.borrowernumber %]&amp;csrf_token=[% csrf_token %]" class="btn btn-default btn-xs delete"><i class="fa fa-trash"></i> Delete</a>
+                                                [% END %]
+                                                <a href="#" id="cancel-picture-upload" class="cancel">Cancel</a>
+                                            </div>
                                         </form>
                                     </div> [% # /div#manage-patron-image %]
                                 [% END %]
                             [% END %]
 
                             [% IF Koha.Preference('HouseboundModule') %]
-                                <div id="houseboundroles">
-                                    <h3>Housebound roles</h3>
-                                    <div class="rows">
-                                        <ol>
-                                            <li>
-                                                <span class="label">Chooser:</span>
-                                                [% IF ( housebound_role.housebound_chooser == 1 ) %]
-                                                    Yes
-                                                [% ELSE %]
-                                                    No
-                                                [% END %]
-                                            </li>
-                                            <li>
-                                                <span class="label">Deliverer:</span>
-                                                [% IF ( housebound_role.housebound_deliverer == 1 ) %]
-                                                    Yes
-                                                [% ELSE %]
-                                                    No
-                                                [% END %]
-                                            </li>
-                                        </ol>
-                                    </div>
-                                </div>
-                                <div class="action">
-                                    <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=7">Edit</a>
-                                </div>
+                                <div id="houseboundroles" class="patroninfo-section">
+                                    [% IF ( housebound_role.housebound_chooser == 1 OR housebound_role.housebound_deliverer == 1 ) %]
+                                        <div class="patroninfo-heading">
+                                            <h3>Housebound roles</h3>
+                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=4"><i class="fa fa-pencil"></i> Edit</a>
+                                        </div>
+                                        <div class="rows">
+                                            <ol>
+                                                <li>
+                                                    <span class="label">Chooser:</span>
+                                                    [% IF ( housebound_role.housebound_chooser == 1 ) %]
+                                                        Yes
+                                                    [% ELSE %]
+                                                        No
+                                                    [% END %]
+                                                </li>
+                                                <li>
+                                                    <span class="label">Deliverer:</span>
+                                                    [% IF ( housebound_role.housebound_deliverer == 1 ) %]
+                                                        Yes
+                                                    [% ELSE %]
+                                                        No
+                                                    [% END %]
+                                                </li>
+                                            </ol>
+                                        </div>
+                                    [% ELSE %]
+                                        <div class="patroninfo-heading">
+                                            <h3>Housebound roles</h3>
+                                            <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=7"><i class="fa fa-plus"></i> Add</a>
+                                        </div>
+                                    [% END %]
+                                </div> [% #/ div#houseboundroles %]
                             [% END %]
 
                             [% IF ( ExtendedPatronAttributes ) %]
                                 [% UNLESS ( no_patron_attribute_types ) %]
-                                    <div id="patron-extended-attributes" style="padding-top: 1em;">
-                                        <h3>Additional attributes and identifiers</h3>
-                                        [% FOREACH attribute IN attributes_loop %]
-                                            [% IF attribute.class %]
-                                                <div id="aai_[% attribute.class %]" class="rows">
-                                            [% ELSE %]
-                                                <div id="aai" class="rows">
+                                    <div id="patron-extended-attributes" class="patroninfo-section">
+                                        [% IF ( attributes_loop ) %]
+                                            <div class="patroninfo-heading">
+                                                <h3>Additional attributes and identifiers</h3>
+                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=4"><i class="fa fa-pencil"></i> Edit</a>
+                                            </div>
+                                            [% FOREACH attribute IN attributes_loop %]
+                                                [% IF attribute.class %]
+                                                    <div id="aai_[% attribute.class %]" class="rows">
+                                                [% ELSE %]
+                                                    <div id="aai" class="rows">
+                                                [% END %]
+                                                    <h4>[% attribute.lib %]</h4>
+                                                    <ol>
+                                                        [% FOREACH item IN attribute.items %]
+                                                            <li>
+                                                                <span class="label">[% item.description %]: </span>
+                                                                [% IF ( item.value_description ) %]
+                                                                    [% item.value_description %]
+                                                                [% ELSE %]
+                                                                    [% item.value| html_line_break %]
+                                                                [% END %]
+                                                            </li>
+                                                        [% END %]
+                                                    </ol>
+                                                </div>
                                             [% END %]
-                                                <h4>[% attribute.lib %]</h4>
-                                                <ol>
-                                                    [% FOREACH item IN attribute.items %]
-                                                        <li>
-                                                            <span class="label">[% item.description %]: </span>
-                                                            [% IF ( item.value_description ) %]
-                                                                [% item.value_description %]
-                                                            [% ELSE %]
-                                                                [% item.value| html_line_break %]
-                                                            [% END %]
-                                                        </li>
-                                                    [% END %]
-                                                </ol>
+                                            <div class="action">
+                                            </div>
+                                        [% ELSE %]
+                                            <div class="patroninfo-heading">
+                                                <h3>Additional attributes and identifiers</h3>
+                                                <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=4"><i class="fa fa-plus"></i> Add</a>
                                             </div>
                                         [% END %]
-                                    </div>
-                                    <div class="action">
-                                        <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=4">Edit</a>
-                                    </div>
+                                    </div> [% # /div#patron-extended-attributes %]
                                 [% END %]
                             [% END %]
 
                             [% IF ( EnhancedMessagingPreferences ) %]
-                                <div id="patron-messaging-prefs" style="padding-top: 1em;">
-                                    <h3>Patron messaging preferences</h3>
+                                <div id="patron-messaging-prefs" class="patroninfo-section">
+                                    <div class="patroninfo-heading">
+                                        <h3>Patron messaging preferences</h3>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=5"><i class="fa fa-pencil"></i> Edit</a>
+                                    </div>
                                     [% INCLUDE 'messaging-preference-form.inc' %]
                                     [% IF ( SMSSendDriver ) %]
                                         <div class="rows">
@@ -352,17 +386,17 @@
                                             </ol>
                                         </div>
                                     [% END %]
-                                </div>
-                                <div class="action">
-                                    <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=5">Edit</a>
-                                </div>
+                                </div> [% # /div#patron-messaging-prefs %]
                             [% END %]
 
                         </div> [% # /div.yui-u.first %]
 
                         <div class="yui-u">
-                            <div id="patron-library-details">
-                                <h3>Library use</h3>
+                            <div id="patron-library-details" class="patroninfo-section">
+                                <div class="patroninfo-heading">
+                                    <h3>Library use</h3>
+                                    <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=3"><i class="fa fa-pencil"></i> Edit</a>
+                                </div>
                                 <div class="rows">
                                     <ol>
                                         <li>
@@ -507,100 +541,126 @@
                                     </ol>
                                 </div> [% # /div.rows %]
                             </div> [% # /div#patron-library-details %]
-                            <div class="action">
-                                <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=3">Edit</a>
-                            </div>
 
-                            <div id="patron-alternate-address" style="padding-top: 1em;">
-                                <h3>Alternate address</h3>
+                            <div id="patron-alternate-address" class="patroninfo-section">
+                                [% IF ( patron.B_phone || patron.B_email || patron.contactnote || patron.B_address || patron.B_address2 || patron.B_city || patron.B_zipcode || patron.B_country ) %]
+                                    <div class="patroninfo-heading">
+                                        <h3>Alternate address</h3>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=6"><i class="fa fa-pencil"></i> Edit</a>
+                                    </div>
+                                    <div class="address">
+                                        <ul>
+                                            [% IF Koha.Preference( 'AddressFormat' ) %]
+                                                [% INCLUDE "member-display-alt-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+                                            [% ELSE %]
+                                                [% INCLUDE 'member-display-alt-address-style-us.inc' %]
+                                            [% END %]
+                                        </ul>
+                                    </div>
+                                    <div class="rows">
+                                        <ol>
+                                            [% IF ( patron.B_phone ) %]
+                                                <li>
+                                                    <span class="label">Phone: </span>
+                                                    <a href="tel:[% patron.B_phone %]">[% patron.B_phone |html  %]</a>
+                                                </li>
+                                            [% END %]
 
-                                [% IF Koha.Preference( 'AddressFormat' ) %]
-                                    [% INCLUDE "member-display-alt-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+                                            [% IF ( patron.B_email ) %]
+                                                <li class="email">
+                                                    <span class="label">Email: </span>
+                                                    <a title="[% patron.B_email %]" href="mailto:[% patron.B_email | url %]">[% B_email |html %]</a>
+                                                </li>
+                                            [% END %]
+
+                                            [% IF ( patron.contactnote ) %]
+                                                <li>
+                                                    <span class="label">Contact note: </span>
+                                                    [% patron.contactnote |html %]
+                                                </li>
+                                            [% END %]
+                                        </ol>
+                                    </div>
                                 [% ELSE %]
-                                    [% INCLUDE 'member-display-alt-address-style-us.inc' %]
+                                    <div class="patroninfo-heading">
+                                      <h3 class="inline">Alternate address</h3>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=6"><i class="fa fa-plus"></i> Add</a>
+                                    </div>
                                 [% END %]
-
-                                <div class="rows">
-                                    <ol>
-                                        [% IF ( patron.B_phone ) %]
-                                            <li>
-                                                <span class="label">Phone: </span>
-                                                <a href="tel:[% patron.B_phone %]">[% patron.B_phone |html  %]</a>
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.B_email ) %]
-                                            <li class="email">
-                                                <span class="label">Email: </span>
-                                                <a title="[% patron.B_email %]" href="mailto:[% patron.B_email | url %]">[% B_email |html %]</a>
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.contactnote ) %]
-                                            <li>
-                                                <span class="label">Contact note: </span>
-                                                [% patron.contactnote |html %]
-                                            </li>
-                                        [% END %]
-                                    </ol>
-                                </div>
                             </div> [% # /div#patron-alternate-address %]
-                            <div class="action">
-                                <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=6">Edit</a>
-                            </div>
 
-                            <div id="patron-alternative-contact" style="padding-top: 1em;">
-                                <h3>Alternative contact</h3>
-                                <div class="rows">
-                                    <ol>
-                                        <li>
-                                            <span class="label">Surname: </span>
-                                            [% patron.altcontactsurname | html %]
-                                        </li>
-                                        <li>
-                                            <span class="label">First name: </span>
-                                            [% patron.altcontactfirstname | html %]
-                                        </li>
-                                        <li>
-                                            <span class="label">Address: </span>
-                                            [% patron.altcontactaddress1 | html %]
-                                        </li>
-                                        <li>
-                                            <span class="label">Address 2: </span>
-                                            [% patron.altcontactaddress2 | html %]
-                                        </li>
-                                        <li>
-                                            <span class="label">City: </span>
-                                            [% patron.altcontactaddress3 | html %]
-                                        </li>
+                            <div id="patron-alternative-contact" class="patroninfo-section">
+                                [% IF ( patron.altcontactsurname || patron.altcontactfirstname || patron.altcontactaddress1 || patron.altcontactaddress2 || patron.altcontactaddress3 || patron.altcontactstate || patron.altcontactzipcode || patron.altcontactcountry || patron.altcontactphone ) %]
+                                    <div class="patroninfo-heading">
+                                        <h3>Alternative contact</h3>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=2"><i class="fa fa-pencil"></i> Edit</a>
+                                    </div>
+                                    <div class="rows">
+                                        <ol>
+                                            [% IF ( patron.altcontactsurname ) %]
+                                                <li>
+                                                    <span class="label">Surname: </span>
+                                                    [% patron.altcontactsurname | html %]
+                                                </li>
+                                            [% END %]
+                                            [% IF ( patron.altcontactfirstname ) %]
+                                                <li>
+                                                    <span class="label">First name: </span>
+                                                    [% patron.altcontactfirstname | html %]
+                                                </li>
+                                            [% END %]
+                                            [% IF ( patron.altcontactaddress1 ) %]
+                                                <li>
+                                                    <span class="label">Address: </span>
+                                                    [% patron.altcontactaddress1 | html %]
+                                                </li>
+                                            [% END %]
+                                            [% IF ( patron.altcontactaddress2 ) %]
+                                                <li>
+                                                    <span class="label">Address 2: </span>
+                                                    [% patron.altcontactaddress2 | html %]
+                                                </li>
+                                            [% END %]
+                                            [% IF ( patron.altcontactaddress3 ) %]
+                                                <li>
+                                                    <span class="label">City: </span>
+                                                    [% patron.altcontactaddress3 | html %]
+                                                </li>
+                                            [% END %]
 
-                                        [% IF ( patron.altcontactstate ) %]
-                                            <li>
-                                                <span class="label">State: </span>
-                                                [% patron.altcontactstate | html %]
-                                            </li>
-                                        [% END %]
-
-                                        <li>
-                                            <span class="label">ZIP/Postal code: </span>
-                                            [% patron.altcontactzipcode | html %]
-                                        </li>
-                                        [% IF ( patron.altcontactcountry ) %]
-                                            <li>
-                                                <span class="label">Country: </span>
-                                                [% patron.altcontactcountry | html %]
-                                            </li>
-                                        [% END %]
-                                        [% IF ( patron.altcontactphone ) %]
-                                            <li>
-                                                <span class="label">Phone: </span>
-                                                <a href="tel:[% patron.altcontactphone | url %]">[% patron.altcontactphone | html %]</a>
-                                            </li>
-                                        [% END %]
-                                    </ol>
-                                </div> [% # /div.rows %]
+                                            [% IF ( patron.altcontactstate ) %]
+                                                <li>
+                                                    <span class="label">State: </span>
+                                                    [% patron.altcontactstate | html %]
+                                                </li>
+                                            [% END %]
+                                            [% IF ( patron.altcontactzipcode ) %]
+                                                <li>
+                                                    <span class="label">ZIP/Postal code: </span>
+                                                    [% patron.altcontactzipcode | html %]
+                                                </li>
+                                            [% END %]
+                                            [% IF ( patron.altcontactcountry ) %]
+                                                <li>
+                                                    <span class="label">Country: </span>
+                                                    [% patron.altcontactcountry | html %]
+                                                </li>
+                                            [% END %]
+                                            [% IF ( patron.altcontactphone ) %]
+                                                <li>
+                                                    <span class="label">Phone: </span>
+                                                    <a href="tel:[% patron.altcontactphone | url %]">[% patron.altcontactphone | html %]</a>
+                                                </li>
+                                            [% END %]
+                                        </ol>
+                                    </div> [% # /div.rows %]
+                                [% ELSE %]
+                                    <div class="patroninfo-heading">
+                                        <h3>Alternative contact</h3>
+                                        <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=2"><i class="fa fa-plus"></i> Add</a>
+                                    </div>
+                                [% END %]
                             </div> [% # /div#patron-alternative-contact %]
-                            <div class="action">
-                                <a href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber %]&amp;step=2">Edit</a>
-                            </div>
                         </div> [% # /div.yui-u %]
                     </div> [% # /div.yui-g %]
 
@@ -846,6 +906,18 @@
             $("#view_restrictions").on("click",function(){
                 $('#debarments-tab-link').click();
             });
+
+            $("#show-picture-upload").on("click", function(e){
+                e.preventDefault();
+                $(this).toggle();
+                $("#picture-upload").toggle();
+            });
+
+            $("#cancel-picture-upload").on("click", function(e){
+                e.preventDefault();
+                $("#picture-upload, #show-picture-upload").toggle();
+            });
+
          });
         function uncheck_sibling(me){
             nodename=me.getAttribute("name");
