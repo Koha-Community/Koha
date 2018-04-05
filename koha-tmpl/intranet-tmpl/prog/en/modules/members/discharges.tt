@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Pending discharge requests</title>
@@ -23,6 +24,7 @@
             <tr>
               <th>Patron</th>
               <th>Library</th>
+              <th class="title-string">Date requested</th>
               <th>Allow</th>
             </tr>
           </thead>
@@ -31,7 +33,8 @@
               <tr>
                 <td><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% d.borrower.borrowernumber %]">[% d.borrower.surname %], [% d.borrower.firstname %]</a></td>
                 <td>[% d.borrower.branchcode.branchname %]</td>
-                <td><a href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber %]">Allow</a></td>
+                <td><span title="[% d.needed %]">[% d.needed | $KohaDates %]</span></td>
+                <td><a class="btn btn-xs btn-default" href="/cgi-bin/koha/members/discharges.pl?op=allow&borrowernumber=[% d.borrower.borrowernumber %]"><i class="fa fa-check"></i> Allow</a></td>
               </tr>
             [% END %]
           </tbody>
@@ -54,11 +57,12 @@
         $(document).ready(function() {
             $('#pending_updates table').DataTable($.extend(true, {}, dataTablesDefaults, {
                 paging: false,
-                info: false,
-                searching: false,
-                order: [],
+                info: true,
+                searching: true,
+                order: [[2, "asc"]],
                 columnDefs: [
                     { targets: -1, orderable: false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
             }));
         });
