@@ -703,7 +703,13 @@ function verify_images() {
                             [% item.translated_description %]
                         </td>
                     [% END %]
-                    <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.branchcode ) %] [% END %]</td>
+                    <td class="location">[% UNLESS ( singlebranchmode ) %]
+                             [% IF ( item.transfertwhen ) %]
+                                 <span class="intransit">In transit to [% Branches.GetName( item.transfertto ) %]</span>
+                             [% ELSE %]
+                                 [% Branches.GetName( item.branchcode ) %]
+                             [% END %]
+                         [% END %]</td>
                     <td class="homebranch">[% Branches.GetName( item.homebranch ) %]<span class="shelvingloc">[% item.location %][% IF ( item.sub_location ) %] ([% item.sub_location %])[% END %]</span><span class="genre">[% item.genre %]</span>
                     [% IF item.itemsCollection %]
                         <span class="shelvingloc">(Col.: <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% item.itemsCollection %]">[% item.itemsCollection%]</a>)</span> </td>
