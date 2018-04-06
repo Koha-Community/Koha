@@ -33,14 +33,14 @@ sub run_tests {
 
     my ( $tags, $subfields );
     if ( $marc_flavour eq 'UNIMARC' ) {
-        $tags= [ '001', '600',  '200', '200' ];
-        $subfields = [ '', 'a', 'a', 'c' ];
+        $tags= [ '001', '600',  '200', '200', '400' ];
+        $subfields = [ '', 'a', 'a', 'c', 'a' ];
     } else {
-        $tags= [ '001', '100',  '245', '245' ];
-        $subfields = [ '', 'a', 'a', 'c' ];
+        $tags= [ '001', '100',  '245', '245', '400' ];
+        $subfields = [ '', 'a', 'a', 'c', 'a' ];
     }
-    my $values = [ '12345', 'author', 'title', 'resp' ];
-    my $ind = [ '  ', '00', ' 9', '  ' ];
+    my $values = [ '12345', 'author', 'title', 'resp', '' ];
+    my $ind = [ '  ', '00', ' 9', '  ', ' ' ];
 
     my $xml = TransformHtmlToXml( $tags, $subfields, $values, $ind, undef, $marc_flavour );
     my $xmlh = XML::Simple->new->XMLin( $xml );

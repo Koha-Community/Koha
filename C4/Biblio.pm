@@ -2263,6 +2263,7 @@ sub TransformHtmlToXml {
     my $prevtag = -1;
     my $first   = 1;
     my $j       = -1;
+    my $close_last_tag;
     for ( my $i = 0 ; $i < @$tags ; $i++ ) {
 
         if ( C4::Context->preference('marcflavour') eq 'UNIMARC' and @$tags[$i] eq "100" and @$subfields[$i] eq "a" ) {
@@ -2283,6 +2284,7 @@ sub TransformHtmlToXml {
         @$values[$i] =~ s/'/&apos;/g;
 
         if ( ( @$tags[$i] ne $prevtag ) ) {
+            $close_last_tag = 0;
             $j++ unless ( @$tags[$i] eq "" );
             my $indicator1 = eval { substr( @$indicator[$j], 0, 1 ) };
             my $indicator2 = eval { substr( @$indicator[$j], 1, 1 ) };
@@ -2301,6 +2303,7 @@ sub TransformHtmlToXml {
                     $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                     $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                     $first = 0;
+                    $close_last_tag = 1;
                 } else {
                     $first = 1;
                 }
@@ -2320,6 +2323,7 @@ sub TransformHtmlToXml {
                         $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                         $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
                         $first = 0;
+                        $close_last_tag = 1;
                     }
                 }
             }
@@ -2339,13 +2343,14 @@ sub TransformHtmlToXml {
                 if ($first) {
                     $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                     $first = 0;
+                    $close_last_tag = 1;
                 }
                 $xml .= "<subfield code=\"@$subfields[$i]\">@$values[$i]</subfield>\n";
             }
         }
         $prevtag = @$tags[$i];
     }
-    $xml .= "</datafield>\n" if $xml =~ m/<datafield/;
+    $xml .= "</datafield>\n" if $close_last_tag;
     if ( C4::Context->preference('marcflavour') eq 'UNIMARC' and !$unimarc_and_100_exist ) {
 
         #     warn "SETTING 100 for $auth_type";
@@ -2362,6 +2367,7 @@ sub TransformHtmlToXml {
     }
     $xml .= "</record>\n";
     $xml .= MARC::File::XML::footer();
+    use Data::Printer colored => 1; warn p $xml;
     return $xml;
 }
 
