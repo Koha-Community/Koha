@@ -115,6 +115,15 @@
 [% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
 [% IF ( enter ) %]
     <form action="updatesupplier.pl" name="updatesupplier" class="validated" method="post">
+        <div id="toolbar" class="btn-toolbar">
+            <button class="btn btn-default btn-sm" type="submit"><i class="fa fa-save"></i> Save</button>
+            [% IF ( booksellerid ) %]
+                <a class="btn btn-default btn-sm cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">
+            [% ELSE %]
+                <a class="btn btn-default btn-sm cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
+            [% END %] <i class="fa fa-remove"></i> Cancel</a>
+        </div>
+    <div class="yui-g">
         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
         <fieldset class="rows">
             <legend>Company details</legend>
@@ -242,6 +251,7 @@
         <fieldset class="action"><input type="submit" value="Save" /> [% IF ( booksellerid ) %]
         <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% ELSE %]<a class="cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
         [% END %]Cancel</a></fieldset>
+        </div>
     </form>
 [% ELSE %]
     <h1>[% name | html %]</h1>
@@ -351,9 +361,9 @@
     </aside>
 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
 </div> <!-- /.row -->
-
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         function confirm_deletion() {
@@ -424,6 +434,7 @@
             $('body').on('click', '.contact_claimissues', null, function () {
                 $(this).next('.contact_claimissues_hidden').val($(this).is(':checked') ? '1' : '0');
             });
+            $('#toolbar').fixFloat();
         });
     </script>
 [% END %]
