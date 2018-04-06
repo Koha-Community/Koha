@@ -418,7 +418,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     ModItem({ notforloan => 1 }, $biblionumber, $itemnumber);
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
     is( $renewokay, 1, 'Can renew, item is marked not for loan, hold does not block');
-    ModItem({ notforloan => 0, itype => $itemtype }, $biblionumber, $itemnumber,1);
+    ModItem({ notforloan => 0, itype => $itemtype }, $biblionumber, $itemnumber);
 
     # FIXME: Add more for itemtype not for loan etc.
 
