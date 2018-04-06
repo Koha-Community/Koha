@@ -299,7 +299,7 @@
                 <li>
                   <input type="hidden" name="message_transport_type" value="[% letter.message_transport_type %]" />
                   <input type="hidden" name="lang" value="[% lang %]" />
-                  <label for="is_html_[% letter.message_transport_type %]">HTML message:</label>
+                  <label for="is_html_[% letter.message_transport_type %]_[% lang %]">HTML message:</label>
                   [% IF letter.is_html %]
                     <input type="checkbox" name="is_html_[% letter.message_transport_type %]" id="is_html_[% letter.message_transport_type %]_[% lang %]" value="1" checked="checked" />
                   [% ELSE %]
@@ -307,10 +307,10 @@
                   [% END %]
                 </li>
                 <li>
-                  <label for="title_[% letter.message_transport_type %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type %]_[% lang %]" name="title" size="60" value="[% letter.title %]" />
+                  <label for="title_[% letter.message_transport_type %]_[% lang %]">Message subject:</label><input type="text" id="title_[% letter.message_transport_type %]_[% lang %]" name="title" size="60" value="[% letter.title %]" />
                 </li>
                 <li>
-                  <label for="SQLfieldname_[% letter.message_transport_type %]">Message body:</label>
+                  <label for="SQLfieldname_[% letter.message_transport_type %]_[% lang %]">Message body:</label>
                   [% IF letter.message_transport_type == 'sms' %]
                     <span class="sms_counter" id="sms_counter_[% lang %]">[% IF letter.content && letter.content.length > 0 %][% letter.content.length %][% ELSE %]0[% END %]/160 characters</span>
                   [% END %]
