@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging authority plugin</title>
@@ -15,7 +16,7 @@
         var index = "[% index %]";
         var authtypecode = "[% authtypecode %]";
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/auth-finder-search_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/auth-finder-search.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window = 1 %]

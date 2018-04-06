@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -289,8 +290,8 @@ you can supply dates in ISO format (e.g., '2010-10-28').
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function() {
             [%# Make date fields have the datepicker %]

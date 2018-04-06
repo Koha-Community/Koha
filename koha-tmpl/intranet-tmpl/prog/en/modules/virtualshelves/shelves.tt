@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET PRIVATE = 1 %]
@@ -6,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; [% IF op == 'view' %]Lists &rsaquo; Contents of [% shelf.shelfname | html %][% ELSE %]Lists[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list [% shelf.shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 <style type="text/css">textarea { width: 100%; }</style>
 
 [% BLOCK list_permissions %]
@@ -415,7 +416,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") %]
     [% IF print %]
         <script type="text/javascript">
             $( document ).ready(function() {
@@ -426,8 +427,8 @@
     [% END %]
 
     [% IF op == 'view' %]
-        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
+        [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+        [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
     [% END %]
     <script type="text/javascript">
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");

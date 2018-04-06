@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Branches %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
@@ -140,8 +141,8 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acq.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

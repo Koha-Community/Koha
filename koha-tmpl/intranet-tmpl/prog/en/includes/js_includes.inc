@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE AudioAlerts %]
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
@@ -11,17 +12,17 @@
     </script>
 [% END %]
 
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-2.2.3.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/jquery-ui-1.11.4.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/shortcut/shortcut_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.highlight-3_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/bootstrap/bootstrap.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.validate.min_[% KOHA_VERSION %].js"></script>
+[% Asset.js("lib/jquery/jquery-2.2.3.min.js") %]
+[% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") %]
+[% Asset.js("lib/jquery/jquery-ui-1.11.4.min.js") %]
+[% Asset.js("lib/shortcut/shortcut.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") %]
+[% Asset.js("lib/bootstrap/bootstrap.min.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
 <!-- koha core js -->
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/staff-global_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/commons_[% KOHA_VERSION %].js"></script>
+[% Asset.js("js/staff-global.js") %]
+[% Asset.js("js/commons.js") %]
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
@@ -52,11 +53,11 @@
     //]]>
     </script>
 
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/basket_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/basket.js") %]
 [% END %]
 
 [% IF LocalCoverImages %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/localcovers_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/localcovers.js") %]
     <script type="text/javascript">
         //<![CDATA[
             var NO_LOCAL_JACKET = _("No cover image available");

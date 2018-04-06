@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -136,8 +137,8 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
     <script type= "text/javascript">
         function enableCheckboxActions(){
             // Enable/disable controls if checkboxes are checked

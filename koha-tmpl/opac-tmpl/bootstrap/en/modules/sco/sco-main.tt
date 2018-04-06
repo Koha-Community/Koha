@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE AudioAlerts %]
@@ -7,9 +8,9 @@
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="Koha [% Version %]" /> <!-- leave this for stats -->
 <link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon') ) %][% Koha.Preference('OpacFavicon') %][% ELSE %][% interface %]/[% theme %]/images/favicon.ico[% END %]" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/bootstrap/css/bootstrap.min_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/lib/jquery/jquery-ui_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/sco_[% KOHA_VERSION %].css" />
+[% Asset.css("lib/bootstrap/css/bootstrap.min.css") %]
+[% Asset.css("lib/jquery/jquery-ui.css") %]
+[% Asset.css("css/sco.css") %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') %]</style>[% END %]
 [% IF ( Koha.Preference('SCOUserCSS') ) %]<style>[% Koha.Preference('SCOUserCSS') %]</style>[% END %]
 <!--[if lt IE 9]>
@@ -18,7 +19,7 @@
 <script type="text/javascript">
     function _(s) { return s } // dummy function for gettext
 </script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/lib/modernizr.min_[% KOHA_VERSION %].js"></script>
+[% Asset.js("lib/modernizr.min.js") %]
 </head>
 <body id="sco_main" class="sco" onload="dofocus();" onunload="mungeHistory();">
 [% INCLUDE 'masthead-sco.inc' %]

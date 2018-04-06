@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( opsearch ) %]
@@ -6,7 +7,7 @@
     <title>Koha &rsaquo; Z39.50 authority search results</title>
     [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 <style type="text/css">
     #marcPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #marcPreview { margin: 0; width : auto; } }
 </style>
@@ -166,7 +167,7 @@
 [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending %] servers to search</h3>[% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function(){
@@ -221,7 +222,7 @@
         });
     </script>
     [% INCLUDE 'z3950_search.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/z3950_search_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/z3950_search.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

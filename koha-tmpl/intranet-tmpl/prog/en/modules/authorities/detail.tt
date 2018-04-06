@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% PROCESS 'authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -96,7 +97,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'authorities_js.inc' %]
     [% IF ( displayhierarchy ) %]
-        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.jstree_[% KOHA_VERSION %].js"></script>
+        [% Asset.js("lib/jquery/plugins/jquery.jstree.js") %]
     [% END %]
     <script type="text/javascript">
         $(document).ready(function() {

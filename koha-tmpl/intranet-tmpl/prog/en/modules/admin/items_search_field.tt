@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -41,7 +42,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

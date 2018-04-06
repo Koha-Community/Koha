@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
@@ -6,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Circulation History for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="pat_readingrec" class="pat">
@@ -118,7 +119,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript" id="js">
         $(document).ready(function() {

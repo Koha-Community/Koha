@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -396,8 +397,8 @@
 [% END %]
 
 [% BLOCK jsinclude %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.deserialize.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.cookie.min_[% KOHA_VERSION %].js"></script>
+[% Asset.js("lib/jquery/plugins/jquery.deserialize.min.js") %]
+[% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") %]
 <script type="text/javascript">//<![CDATA[
 $(document).ready(function() {
     $('#advsearches').tabs();

@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Rotating collections &rsaquo; Collection [% colTitle %] &rsquo; Add or remove items</title>
@@ -121,8 +122,8 @@
     </div> <!-- /#bd -->
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/rotating-collections_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/rotating-collections.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

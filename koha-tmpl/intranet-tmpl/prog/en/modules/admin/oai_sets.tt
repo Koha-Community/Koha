@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF ( op_new ) %]OAI sets configuration &rsaquo; Add a new OAI set[% ELSE %]OAI sets configuration[% END %]</title>
@@ -113,7 +114,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     <script type="text/javascript">
         function newDescField() {
             $("#adddescription").before(

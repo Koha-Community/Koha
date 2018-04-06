@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -10,10 +11,10 @@
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Confirm holds</title>
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/circ-patron-search-results_[% KOHA_VERSION %].js"></script>
+[% Asset.js("js/circ-patron-search-results.js") %]
 <script type="text/javascript">
     // <![CDATA[
 var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");

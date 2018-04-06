@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% USE Price %]
@@ -262,12 +263,12 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/acquisitions-menu.js") %]
 [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'additem.js.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/additem_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/prevent_submit_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/additem.js") %]
+    [% Asset.js("js/cataloging.js") %]
+    [% Asset.js("js/prevent_submit.js") %]
     <script type="text/javascript">
         function Check(form) {
             [% IF (AcqCreateItemReceiving) %]

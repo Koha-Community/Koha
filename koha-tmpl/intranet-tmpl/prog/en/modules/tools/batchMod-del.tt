@@ -1,8 +1,9 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item deletion</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 <!--[if IE]>
 <style type="text/css">#selections { display: none; }</style>
 <![endif]-->
@@ -184,10 +185,10 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/batchMod_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/pages/batchMod.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
     <script type="text/javascript">
         // Prepare array of all column headers, incrementing each index by
         // two to accommodate control and title columns

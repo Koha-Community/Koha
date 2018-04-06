@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Upload patron images</title>
@@ -140,8 +141,8 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function() {
             $("#zipfile").click(function(){

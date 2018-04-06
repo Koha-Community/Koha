@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
@@ -1155,9 +1156,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function() {
 
@@ -1314,8 +1315,8 @@
         [% END %]
 
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/messaging-preference-form_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members.js") %]
+    [% Asset.js("js/messaging-preference-form.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

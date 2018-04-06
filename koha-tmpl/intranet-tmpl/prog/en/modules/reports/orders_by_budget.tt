@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -8,7 +9,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/reports/reports-home.pl">Reports</a>[% IF ( get_orders ) %] &rsaquo; <a href="/cgi-bin/koha/reports/orders_by_fund.pl">Orders by fund</a> &rsaquo; Results[% ELSE %] &rsaquo; Orders by fund[% END %]</div>
 
 <div id="doc3" class="yui-t2">

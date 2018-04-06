@@ -1,13 +1,14 @@
+[% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch item modification</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.js("js/background-job-progressbar.js") %]
+[% Asset.js("js/cataloging.js") %]
+[% Asset.css("css/datatables.css") %]
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/batchMod_[% KOHA_VERSION %].js"></script>
+[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+[% Asset.js("js/pages/batchMod.js") %]
 <script type="text/javascript">
 //<![CDATA[
 
@@ -41,7 +42,7 @@ $(document).ready(function(){
 <style type="text/css">#selections { display: none; }</style>
 <![endif]-->
 <style type="text/css">input[type=checkbox]{ margin : 0 .5em; }</style>
-<link type="text/css" rel="stylesheet" href="[% interface %]/[% theme %]/css/addbiblio_[% KOHA_VERSION %].css" />
+[% Asset.css("css/addbiblio.css") %]
 
 [% INCLUDE 'select2.inc' %]
 <script type="text/javascript">

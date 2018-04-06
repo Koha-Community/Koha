@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% USE Price %]
 [% SET footerjs = 1 %]
@@ -34,9 +35,9 @@
 
 [% INCLUDE 'doc-head-open.inc' %]
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 [% IF close_form %]
-    <link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable_[% KOHA_VERSION %].css" rel="stylesheet" type="text/css" />
+    [% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") %]
 [% END %]
 
 <title>
@@ -495,9 +496,9 @@
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% IF close_form %]
-        <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable_[% KOHA_VERSION %].js"></script>
+        [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") %]
     [% END %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/acq.js") %]
     <script type="text/javascript">
     // #################################################################################
     // Javascript

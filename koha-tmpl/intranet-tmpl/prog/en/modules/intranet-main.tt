@@ -1,8 +1,9 @@
+[% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha staff client</title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/mainpage_[% KOHA_VERSION %].css" />
+[% Asset.css("css/mainpage.css") %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="main_intranet-main" class="intranet-main">

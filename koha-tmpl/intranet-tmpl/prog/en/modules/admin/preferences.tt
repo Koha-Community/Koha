@@ -1,12 +1,13 @@
+[% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; System preferences</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/preferences_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/plugins/multiple-select/multiple-select_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/humanmsg_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/preferences.css") %]
+[% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.css") %]
+[% Asset.css("css/humanmsg.css") %]
 </head>
 <body id="admin_preferences" class="admin">
 [% INCLUDE 'header.inc' %]
@@ -154,8 +155,8 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/multiple-select/jquery.multiple.select_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    [% Asset.js("lib/jquery/plugins/multiple-select/jquery.multiple.select.js") %]
     <script type="text/javascript">
         [% UNLESS ( searchfield ) %]$(document).ready(function(){
                 $('#toolbar').fixFloat();

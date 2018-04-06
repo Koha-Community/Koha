@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Comments &rsaquo; [% IF ( status ) %] Approved comments[% ELSE %] Comments awaiting moderation[% END %]</title>
@@ -75,7 +76,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

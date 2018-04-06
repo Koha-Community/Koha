@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; 008 builder</title>
@@ -32,7 +33,7 @@
 </form>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src='[% interface %]/[% theme %]/js/xmlControlfield_[% KOHA_VERSION %].js'></script>
+    [% Asset.js("js/xmlControlfield.js") %]
     <script type="text/javascript">
         var objXmlControlField;
         var tr_result;

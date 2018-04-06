@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo;[% IF ( add_form ) %][% IF ( use_heading_flags_p ) %][% IF ( heading_edit_subfields_p ) %] MARC subfield structure &rsaquo; Edit MARC subfields constraints[% END %][% ELSE %] MARC subfield structure &rsaquo; [% action %][% END %][% END %]
@@ -318,7 +319,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/marc_subfields_structure_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/marc_subfields_structure.js") %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

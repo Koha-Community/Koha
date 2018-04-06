@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
@@ -15,7 +16,7 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="circ_circulation" class="circ">
@@ -975,14 +976,14 @@ No patron matched <span class="ex">[% message | html %]</span>
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery-ui-timepicker-addon.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") %]
     [% INCLUDE 'timepicker.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.rowGrouping_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/circulation_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/checkouts_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/holds_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/circ-patron-search-results_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.dataTables.rowGrouping.js") %]
+    [% Asset.js("js/pages/circulation.js") %]
+    [% Asset.js("js/checkouts.js") %]
+    [% Asset.js("js/holds.js") %]
+    [% Asset.js("js/circ-patron-search-results.js") %]
     <script type="text/javascript">
         /* Set some variable needed in circulation.js */
         var MSG_DT_LOADING_RECORDS = _("Loading... you may continue scanning.");
@@ -1103,7 +1104,7 @@ No patron matched <span class="ex">[% message | html %]</span>
             [% END %]
         });
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -276,7 +277,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
     <script type="text/JavaScript">
         /**
          *  Function add_field();

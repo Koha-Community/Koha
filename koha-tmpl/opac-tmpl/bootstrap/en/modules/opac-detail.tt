@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Math %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -34,13 +35,13 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title |html %][% FOREACH subtitl IN subtitle %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %] [% subtitl.subfield |html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( bidi ) %]
-  [% BLOCK cssinclude %]<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />[% END %]
+  [% BLOCK cssinclude %][% Asset.css("css/right-to-left.css") %][% END %]
 [% END %]
 [% IF ( OpacStarRatings != 'disable' ) %]
-    [% BLOCK cssinclude %]<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/jquery.rating_[% KOHA_VERSION %].css" />[% END %]
+    [% BLOCK cssinclude %][% Asset.css("css/jquery.rating.css") %][% END %]
 [% END %]
 [% INCLUDE greybox.inc %]
-    <link href="[% interface %]/lib/emoji-picker/css/emoji_[% KOHA_VERSION %].css" rel="stylesheet">
+    [% Asset.css("lib/emoji-picker/css/emoji.css") %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
@@ -1388,9 +1389,9 @@
     </script>
     <script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 [% END %]
-[% IF ( OpacStarRatings != 'disable' ) %]<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.rating_[% KOHA_VERSION %].js"></script>[% END %]
+[% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.rating.js") %][% END %]
 
-[% IF ( OpacHighlightedWords ) %]<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.highlight-3_[% KOHA_VERSION %].js"></script>[% END %]
+[% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") %][% END %]
 
 <script type="text/javascript">
 //<![CDATA[

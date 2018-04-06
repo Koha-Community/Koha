@@ -1,9 +1,10 @@
+[% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% PROCESS 'permissions.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Set permissions for [% patron.surname %], [% patron.firstname %]</title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/treeview/jquery.treeview_[% KOHA_VERSION %].css"/>
+[% Asset.css("css/treeview/jquery.treeview.css") %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -76,8 +77,8 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.treeview.pack_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.treeview.pack.js") %]
     <!-- set up tree -->
     <script type="text/javascript">
         $(document).ready(function() {

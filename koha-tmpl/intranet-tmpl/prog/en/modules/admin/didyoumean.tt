@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% BLOCK pluginlist %]
 <div class="pluginlist">
@@ -68,7 +69,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function() {
             $( ".pluginlist" ).sortable();

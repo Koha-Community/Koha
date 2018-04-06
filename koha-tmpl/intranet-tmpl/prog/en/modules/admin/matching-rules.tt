@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Record matching rules
@@ -579,7 +580,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     <script type="text/javascript">
         var maxMatchPoint = [% max_matchpoint %];
         var maxMatchCheck = [% max_matchcheck %];

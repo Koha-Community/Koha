@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Categories %]
 [% USE Koha %]
@@ -933,7 +934,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/plugins/jquery.validate.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
     [% PROCESS 'password_check.inc' %]
     [% PROCESS 'add_password_check' new_password => 'borrower_password' %]
     <script type="text/javascript">

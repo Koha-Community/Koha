@@ -1,6 +1,7 @@
+[% USE Asset %]
 <script src="[% interface %]/lib/select2/js/select2.min.js"></script>
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/select2/css/select2.min_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/select2_[% KOHA_VERSION %].css" />
+[% Asset.css("lib/select2/css/select2.min.css") %]
+[% Asset.css("css/select2.css") %]
 <script>
   jQuery.extend($.fn.select2.defaults, {
     allowClear: true,

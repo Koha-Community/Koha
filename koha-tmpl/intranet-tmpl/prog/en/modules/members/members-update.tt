@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Categories %]
@@ -186,7 +187,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(function() {
             $( "#pending_updates" ).accordion();

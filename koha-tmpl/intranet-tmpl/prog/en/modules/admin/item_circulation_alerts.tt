@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -158,7 +159,7 @@ table.grid td.default {
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     <script type="text/javascript">
         var $branch = "[% branch %]";
         $(function(){

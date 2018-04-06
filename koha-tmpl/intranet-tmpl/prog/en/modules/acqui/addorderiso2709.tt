@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
@@ -9,7 +10,7 @@
  &rsaquo; Batch list
 [% END %]
 </title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 <style type="text/css">#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
@@ -425,10 +426,10 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/acquisitions-menu.js") %]
 [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acq_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("js/acq.js") %]
     <script type="text/JavaScript">
         $(document).ready(function() {
             $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {

@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% USE Price %]
 [% USE ItemTypes %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports [% IF ( do_it ) %]&rsaquo; Cash register statistics &rsaquo; Results[% ELSE %]&rsaquo; Cash register statistics[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="cash_register_stats" class="rep">

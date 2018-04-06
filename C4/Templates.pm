@@ -242,9 +242,6 @@ sub gettemplate {
             languages_loop       => $languages_loop,
             one_language_enabled => $one_language_enabled,
     ) unless $one_language_enabled;
-    $template->param(
-        KOHA_VERSION => C4::Context->preference('Version')
-    );
 
     return $template;
 }

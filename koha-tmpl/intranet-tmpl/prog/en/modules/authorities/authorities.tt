@@ -1,8 +1,9 @@
+[% USE Asset %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authorities &rsaquo; [% IF ( authid ) %]Modify authority #[% authid %] ([% authtypetext %])[% ELSE %]Adding authority ([% authtypetext %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
+[% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+[% Asset.js("js/cataloging.js") %]
 
 <script type="text/javascript">
 //<![CDATA[
@@ -152,7 +153,7 @@ function confirmnotdup(redirect){
 }
 //]]>
 </script>
-<link type="text/css" rel="stylesheet" href="[% interface %]/[% theme %]/css/addbiblio_[% KOHA_VERSION %].css" />
+[% Asset.css("css/addbiblio.css") %]
 
 [% INCLUDE 'select2.inc' %]
 <script>
@@ -162,7 +163,7 @@ function confirmnotdup(redirect){
 </script>
 
 [% IF ( bidi ) %]
-   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />
+   [% Asset.css("css/right-to-left.css") %]
 [% END %]
 </head>
 <body id="auth_authorities" class="auth">

@@ -1,8 +1,9 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Koha to MARC mapping</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="admin_koha2marclinks" class="admin">
@@ -68,7 +69,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     <script type="text/javascript">
         function AddFld(kohafield) {
             var fieldstr = prompt( _("Adding a mapping for: %s.").format(kohafield) + "\n" + _("Please enter field tag and subfield code, separated by a comma. (For control fields: add '@' as subfield code.)\nThe change will be applied immediately.") );

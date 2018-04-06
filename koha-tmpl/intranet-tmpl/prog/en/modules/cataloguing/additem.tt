@@ -1,15 +1,16 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE ColumnsSettings %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% title |html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber %]) &rsaquo; Items</title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
+[% Asset.js("js/cataloging.js") %]
 [% INCLUDE 'columns_settings.inc' %]
 [% INCLUDE 'browser-strings.inc' %]
-<script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
+[% Asset.js("js/browser.js") %]
 <script type="text/javascript">
 //<![CDATA[
     var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
@@ -129,7 +130,7 @@ function confirm_deletion() {
 
 //]]>
 </script>
-<link type="text/css" rel="stylesheet" href="[% interface %]/[% theme %]/css/addbiblio_[% KOHA_VERSION %].css" />
+[% Asset.css("css/addbiblio.css") %]
 
 [% INCLUDE 'select2.inc' %]
 <script type="text/javascript">
@@ -139,7 +140,7 @@ function confirm_deletion() {
 </script>
 
 [% IF ( bidi ) %]
-   <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />
+   [% Asset.css("css/right-to-left.css") %]
 [% END %]
 </head>
 <body id="cat_additem" class="cat">

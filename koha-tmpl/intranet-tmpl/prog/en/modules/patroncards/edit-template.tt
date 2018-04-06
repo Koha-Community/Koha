@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Patron card creator &rsaquo; Templates &rsaquo; [% IF (template_id) %]Edit ([% template_id %])[% ELSE %]New[% END %]</title>
@@ -158,7 +159,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
     <script>
         $(document).ready(function(){
             var selectedUnit = $("#units option:selected").attr("value");

@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -77,7 +78,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

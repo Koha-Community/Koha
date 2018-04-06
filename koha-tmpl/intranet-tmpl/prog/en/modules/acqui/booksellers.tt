@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -8,7 +9,7 @@
 	vertical-align: top;
 }
 </style>
-<link rel="stylesheet" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="acq_booksellers" class="acq">
@@ -186,7 +187,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/acquisitions-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

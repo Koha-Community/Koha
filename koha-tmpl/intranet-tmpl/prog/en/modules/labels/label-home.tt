@@ -1,8 +1,9 @@
+[% USE Asset %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator</title>
     [% INCLUDE 'doc-head-close.inc' %]
     [% IF ( bidi ) %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />
+    [% Asset.css("css/right-to-left.css") %]
     [% END %]
 </head>
 <body id="labels_label-home" class="tools labels">

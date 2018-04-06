@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records &rsaquo; Compare matched records</title>
@@ -47,8 +48,8 @@
 <p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid %]">Return to staged MARC batch [% batchid %]</a></p>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jsdiff/jsdiff.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("lib/jsdiff/jsdiff.min.js") %]
     <script type="text/javascript">
         $(document).ready(function(){
           var diff1 = $("#col1 pre").text();

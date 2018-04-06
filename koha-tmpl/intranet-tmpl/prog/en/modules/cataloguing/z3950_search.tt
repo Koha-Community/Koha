@@ -1,8 +1,9 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Z39.50/SRU search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 <style type="text/css">
 #dataPreview { width : 90%; top: 5%; } .modal-body { max-height: 380px; } .modal-header { padding: 0 14px; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }
 </style>
@@ -187,8 +188,8 @@
 [% IF ( numberpending ) %]<h3 align="center">Still [% numberpending %] servers to search</h3>[% END %]
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/z3950_search_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("js/z3950_search.js") %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function(){

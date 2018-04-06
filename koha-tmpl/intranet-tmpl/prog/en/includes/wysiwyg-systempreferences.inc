@@ -1,5 +1,6 @@
+[% USE Asset %]
 [% #Enable tinymce for system preferences %]
-<script type="text/javascript" src="[% interface %]/lib/tiny_mce/tiny_mce_[% KOHA_VERSION %].js"></script>
+[% Asset.js("lib/tiny_mce/tiny_mce.js") %]
 <script>
 
 [%# Save TinyMCE content and trigger an event on the original element %]

@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
@@ -6,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( date ) %]
             Receipt summary for [% name %] [% IF ( invoice ) %]invoice [% invoice %][% END %] on [% datereceived | $KohaDates %][% ELSE %]Receive orders from [% name %][% END %]</title>
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -422,10 +423,10 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/acquisitions-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/acquisitions-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.dataTables.columnFilter_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.cookie.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") %]
     <style type="text/css">#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
     <script type="text/javascript">
 

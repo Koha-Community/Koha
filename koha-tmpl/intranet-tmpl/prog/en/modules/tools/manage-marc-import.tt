@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Manage staged MARC records
@@ -6,7 +7,7 @@
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 <style type="text/css">
     #jobpanel,#jobstatus,#jobfailed { display : none; }
     span.change-status { font-style:italic; color:#666; display:none; }
@@ -380,8 +381,8 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
+[% Asset.js("js/background-job-progressbar.js") %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function(){

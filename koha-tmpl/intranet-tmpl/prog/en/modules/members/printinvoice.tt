@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Print receipt for [% patron.cardnumber %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/printreceiptinvoice_[% KOHA_VERSION %].css" />
+[% Asset.css("css/printreceiptinvoice.css") %]
 </head>
 
 <body id="printinvoice" class="pat">

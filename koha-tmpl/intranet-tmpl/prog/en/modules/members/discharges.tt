@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Branches %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
@@ -50,7 +51,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
 
     [% INCLUDE 'datatables.inc' %]
     <script>

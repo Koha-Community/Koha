@@ -1,9 +1,10 @@
+[% USE Asset %]
 <!DOCTYPE html>
 [% IF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]">[% ELSE %]<html lang="[% lang %]">[% END %]
 <head>
 <title>Koha &rsaquo; Tools &rsaquo; Spine labels</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/spinelabel_[% KOHA_VERSION %].css" />
+[% Asset.css("css/spinelabel.css") %]
 
 		<style type="text/css">
 		@media print {
@@ -12,8 +13,8 @@
 	</style>
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 [% IF ( IntranetUserJS ) %]
-    <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-2.2.3.min_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/jquery-migrate-1.3.0.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("lib/jquery/jquery-2.2.3.min.js") %]
+    [% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") %]
     <script type="text/javascript">
     //<![CDATA[
     [% IntranetUserJS %]

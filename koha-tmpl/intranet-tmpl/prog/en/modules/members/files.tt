@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
@@ -84,7 +85,7 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function(){
             $(".confirmdelete").on("click", function(){

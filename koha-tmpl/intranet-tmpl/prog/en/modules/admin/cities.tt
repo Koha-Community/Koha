@@ -1,8 +1,9 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; [% IF op =='add_form' %]Cities &rsaquo; [% IF city.cityid %] Modify city[% ELSE %] New city[% END %][% ELSE %][% IF op == 'delete_confirm' %]Cities &rsaquo; Confirm deletion of city[% ELSE %] Cities[% END %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="admin_cities" class="admin">
@@ -174,7 +175,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         $(document).ready(function() {

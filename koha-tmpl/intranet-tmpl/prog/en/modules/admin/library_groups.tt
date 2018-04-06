@@ -1,9 +1,10 @@
+[% USE Asset %]
 [% USE KohaSpan %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library groups</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link href="[% interface %]/lib/jquery/plugins/treetable/stylesheets/jquery.treetable_[% KOHA_VERSION %].css" rel="stylesheet" type="text/css" />
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/treetable/jquery.treetable_[% KOHA_VERSION %].js"></script>
+[% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") %]
+[% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") %]
 <script type="text/javascript">
 //<![CDATA[
     $(document).ready(function() {

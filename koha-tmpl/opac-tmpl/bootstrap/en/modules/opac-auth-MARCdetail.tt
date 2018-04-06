@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% PROCESS 'opac-authorities.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -63,7 +64,7 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-<script type="text/javascript" src="/opac-tmpl/lib/jquery/plugins/jquery.jstree_[% KOHA_VERSION %].js"></script>
+[% Asset.js("/opac-tmpl/lib/jquery/plugins/jquery.jstree.js") %]
 <script type="text/javascript">
     //<![CDATA[
         $(document).ready(function() {

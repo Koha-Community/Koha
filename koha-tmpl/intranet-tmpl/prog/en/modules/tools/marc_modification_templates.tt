@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; MARC modification templates</title>
@@ -335,7 +336,7 @@
   </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
     <script type="text/javascript">
         var MSG_MMT_SUBFIELDS_MATCH = _("Both subfield values should be filled or empty.");
         var MSG_MMT_DESTINATION_REQUIRED = _("The destination should be filled.");
@@ -350,7 +351,7 @@
         var MSG_MMT_EDIT_ACTION = _("Edit action %s");
         var MSG_MMT_UPDATE_ACTION = _("Update action");
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/marc_modification_templates_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/marc_modification_templates.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

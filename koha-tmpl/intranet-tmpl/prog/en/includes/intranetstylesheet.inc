@@ -1,8 +1,9 @@
-[% SET intranetstylesheet='staff-global_' _ KOHA_VERSION _ '.css' UNLESS intranetstylesheet %]
+[% USE Asset %]
+[% SET intranetstylesheet='staff-global.css' UNLESS intranetstylesheet %]
 [% IF (intranetstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% intranetstylesheet %]" />
 [% ELSE %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/[% intranetstylesheet %]" />
+    [% Asset.css("css/" _ intranetstylesheet) %]
 [% END %]
 
 <!-- local colors -->

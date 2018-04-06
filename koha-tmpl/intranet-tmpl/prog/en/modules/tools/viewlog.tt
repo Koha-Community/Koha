@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
@@ -288,7 +289,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

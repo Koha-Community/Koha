@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE Biblio %]
 [% USE KohaDates %]
@@ -622,9 +623,9 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'browser-strings.inc' %]
-    <script type="text/javascript" src="[% interface %]/js/browser_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/browser.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
     <script type="text/javascript">
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");

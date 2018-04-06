@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -23,7 +24,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/serials-toolbar_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/serials-toolbar.js") %]
     <script type="text/javascript">
         var subscriptionid = "[% subscriptionid %]";
         var MSG_CLOSE_SUBSCRIPTION = _("Are you sure you want to close this subscription?");

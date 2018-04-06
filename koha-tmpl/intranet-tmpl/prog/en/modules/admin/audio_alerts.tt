@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -132,12 +133,12 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     <script type="text/javascript">
         var MSG_AUDIO_EMPTY_SOUND = _("Please select or enter a sound.");
         var MSG_AUDIO_CONFIRM_DELETE = _("Are you sure you want to delete the selected audio alerts?");
         var MSG_AUDIO_CHECK_CHECKBOXES = _("Check the box next to the alert you want to delete.")
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/audio_alerts_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/audio_alerts.js") %]
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

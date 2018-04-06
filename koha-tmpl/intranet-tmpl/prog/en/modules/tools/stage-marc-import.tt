@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Stage MARC records for import</title>
@@ -197,9 +198,9 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/background-job-progressbar_[% KOHA_VERSION %].js"></script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/file-upload_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/tools-menu.js") %]
+    [% Asset.js("js/background-job-progressbar.js") %]
+    [% Asset.js("js/file-upload.js") %]
     <script type="text/javascript">
         var xhr;
         $(document).ready(function(){

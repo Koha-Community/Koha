@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -109,11 +110,11 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/admin-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/admin-menu.js") %]
     <script type="text/javascript">
         var MSG_ITEM_SEARCH_DELETE_CONFIRM = _("Are you sure you want to delete this field?");
     </script>
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/item_search_fields_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/item_search_fields.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

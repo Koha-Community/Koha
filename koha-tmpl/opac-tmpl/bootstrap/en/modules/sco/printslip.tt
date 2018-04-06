@@ -1,16 +1,17 @@
+[% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha [% END %] &rsaquo; Self checkout &rsaquo; Print Receipt for [% borrowernumber %]</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( OpacFavicon  ) %][% OpacFavicon  %][% ELSE %][% interface %]/[% theme %]/images/favicon.ico[% END %]" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/print_[% KOHA_VERSION %].css" />
+[% Asset.css("css/print.css") %]
 [% IF stylesheet %]
 <link rel="stylesheet" type="text/css" href="[% stylesheet %]" />
 [% END %]
 
 <!-- JavaScript includes -->
-<script type="text/javascript" src="[% interface %]/[% theme %]/lib/jquery/jquery_[% KOHA_VERSION %].js"></script>
-<script type="text/javascript" src="[% interface %]/[% theme %]/js/global_[% KOHA_VERSION %].js"></script>
+[% Asset.js("lib/jquery/jquery.js") %]
+[% Asset.js("js/global.js") %]
 
 [% INCLUDE 'slip-print.inc' %]
 

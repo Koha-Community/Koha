@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% PROCESS 'merge-record.inc' %]
 
@@ -186,7 +187,7 @@ div#result { margin-top: 1em; }
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/merge-record_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/merge-record.js") %]
     [% INCLUDE 'merge-record-strings.inc' %]
     <script type="text/javascript">
         [% UNLESS (result) %]

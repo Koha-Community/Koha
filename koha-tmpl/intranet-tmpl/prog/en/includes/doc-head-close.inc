@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE String %]
 [% PROCESS 'html_helpers.inc' %]
@@ -10,16 +11,16 @@
 
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
 
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/jquery/jquery-ui-1.11.4.min_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap.min_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/bootstrap/bootstrap-theme.min_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/lib/font-awesome/css/font-awesome.min_[% KOHA_VERSION %].css" />
-<link rel="stylesheet" type="text/css" media="print" href="[% interface %]/[% theme %]/css/print_[% KOHA_VERSION %].css" />
+[% Asset.css("lib/jquery/jquery-ui-1.11.4.min.css") %]
+[% Asset.css("lib/bootstrap/bootstrap.min.css") %]
+[% Asset.css("lib/bootstrap/bootstrap-theme.min.css") %]
+[% Asset.css("lib/font-awesome/css/font-awesome.min.css") %]
+[% Asset.css("css/print.css", { media = "print" }) %]
 [% INCLUDE intranetstylesheet.inc %]
-[% IF ( bidi ) %]<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/right-to-left_[% KOHA_VERSION %].css" />[% END %]
+[% IF ( bidi ) %][% Asset.css("css/right-to-left.css") %][% END %]
 
 [% IF ( login ) %]
-    <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/login_[% KOHA_VERSION %].css" />
+    [% Asset.css("css/login.css") %]
 [% END %]
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
 

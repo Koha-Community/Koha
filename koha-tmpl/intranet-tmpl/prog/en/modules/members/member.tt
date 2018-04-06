@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% USE ColumnsSettings %]
 [% USE Branches %]
@@ -6,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; Search results[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="pat_member" class="pat">
@@ -224,7 +225,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    <script type="text/javascript" src="[% interface %]/[% theme %]/js/members-menu_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function() {
             $('#add_to_patron_list_submit').prop('disabled', true);

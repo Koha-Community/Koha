@@ -1,3 +1,4 @@
+[% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% IF ( caller == 'hold-transfer' ) %]
@@ -12,7 +13,7 @@
 [% INCLUDE 'doc-head-close.inc' %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
-<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/print_[% KOHA_VERSION %].css" />
+[% Asset.css("css/print.css") %]
 [% IF ( Koha.Preference('SlipCSS') ) %]
 <link rel="stylesheet" type="text/css" href="[% Koha.Preference('SlipCSS') %]" />
 [% END %]
