@@ -729,9 +729,9 @@
         [% END %]
     [% ELSE %]
         [% IF field.mandatory %]
-        <input type="text" name="bib_field_value" value="[% field.value %]" required="required"/>
+        <input type="text" name="bib_field_value" value="[% field.value %]" required="required" size="50" />
         [% ELSE %]
-        <input type="text" name="bib_field_value" value="[% field.value %]"/>
+        <input type="text" name="bib_field_value" value="[% field.value %]" size="50" />
         [% END %]
 
     [% END %]
