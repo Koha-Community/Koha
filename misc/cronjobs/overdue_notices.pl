@@ -548,6 +548,7 @@ END_SQL
                 $borrower_sql .= ' AND borrowers.categorycode=? ';
                 push @borrower_parameters, $overdue_rules->{categorycode};
             }
+            $borrower_sql .= '  AND issues.date_due >= DATE_SUB('.$date.', INTERVAL '.$maxdays.' DAY)';
             $borrower_sql .= '  AND categories.overduenoticerequired=1 ORDER BY issues.borrowernumber';
 
             # $sth gets borrower info iff at least one overdue item has triggered the overdue action.
