@@ -705,7 +705,7 @@ function verify_images() {
                     [% END %]
                     <td class="location">[% UNLESS ( singlebranchmode ) %]
                              [% IF ( item.transfertwhen ) %]
-                                 <span class="intransit">In transit to [% Branches.GetName( item.transfertto ) %]</span>
+                                 <span class="intransit">[% Branches.GetName( item.transfertfrom ) %]</span>
                              [% ELSE %]
                                  [% Branches.GetName( item.branchcode ) %]
                              [% END %]
