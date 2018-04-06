@@ -15,16 +15,15 @@
             </div>
         </div>
 
-
 [% MACRO jsinclude BLOCK %]
     <script type="text/javascript">
         $(document).ready(function(){
-            [% IF tag_number == 'rancor' %]
+            [% IF rancor %]
             function RancorReplaceField( new_text, ind_1, ind_2 ){
                 var cur_field = opener.opener.jQuery(".CodeMirror")[0].CodeMirror.marceditor.getCurrentField();
                 cur_field.setText(new_text);
-                cur_field.setIndicator1(ind_1);
-                cur_field.setIndicator2(ind_2);
+                [% IF update_ind1 %]cur_field.setIndicator1(ind_1);[% END %]
+                [% IF update_ind2 %]cur_field.setIndicator2(ind_2);[% END %]
                 return true;
             }
                 [% IF ( clear ) %]
@@ -47,7 +46,6 @@
             } catch(e) {
                 return;
             }
-
             var field_start = whichfield.parentNode.parentNode;
 
             // Sets the good number of form fields for the specified subfield
@@ -107,7 +105,6 @@
                     i++;
                 });
             }
-
             [% UNLESS ( clear ) %]
                 [% FOREACH SUBFIELD_LOO IN SUBFIELD_LOOP %]
                     SetSubfieldValues(
@@ -117,7 +114,6 @@
                     [% END %]
                     );
                 [% END %]
-            [% END %]
                 var indicators = field_start.getElementsByClassName('indicator flat');
                 [% IF update_ind1 %]
                     indicators[0].value="[% indicator1 %]";

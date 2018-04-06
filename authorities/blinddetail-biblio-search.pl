@@ -112,6 +112,8 @@ if ($authid) {
     $template->param( "clear" => 1 );
 }
 
+
+
 $template->param(
     authid          => $authid ? $authid : "",
     index           => $index,
@@ -122,6 +124,8 @@ $template->param(
     indicator2      => $indicator2,
     SUBFIELD_LOOP   => \@subfield_loop,
     tag_number      => $tag_number,
+    rancor          => $index =~ /rancor$/,
 );
+
 
 output_html_with_http_headers $query, $cookie, $template->output;
