@@ -510,7 +510,7 @@ sub ModItemFromMarc {
     }
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
 
-    ModItem($item, $biblionumber, $itemnumber, { frameworkcode => $frameworkcode, unlinked_item_subfields => $unlinked_item_subfields } );
+    ModItem( $item, $biblionumber, $itemnumber, { unlinked_item_subfields => $unlinked_item_subfields } );
     return $item;
 }
 
@@ -522,7 +522,6 @@ ModItem(
     $itemnumber,
     {
         [ unlinked_item_subfields => $unlinked_item_subfields, ]
-        [ frameworkcode => $frameworkcode, ]
         [ log_action => 1, ]
     }
 );
@@ -533,9 +532,11 @@ the MARC representation of the item.
 The first argument is a hashref mapping from item column
 names to the new values.  The second and third arguments
 are the biblionumber and itemnumber, respectively.
+The fourth, optional parameter (additional_params) may contain the keys
+unlinked_item_subfields and log_action.
 
-The fourth, optional parameter, C<$unlinked_item_subfields>, contains
-an arrayref containing subfields present in the original MARC
+C<$unlinked_item_subfields> contains an arrayref containing
+subfields present in the original MARC
 representation of the item (e.g., from the item editor) that are
 not mapped to C<items> columns directly but should instead
 be stored in C<items.more_subfields_xml> and included in 
@@ -552,16 +553,9 @@ If log_action is true or undefined, the action will be logged.
 =cut
 
 sub ModItem {
-    my $item              = shift;
-    my $biblionumber      = shift;
-    my $itemnumber        = shift;
-    my $additional_params = shift;
-
-    my $dbh = C4::Context->dbh;
-
+    my ( $item, $biblionumber, $itemnumber, $additional_params ) = @_;
     my $log_action = $additional_params->{log_action} // 1;
     my $unlinked_item_subfields = $additional_params->{unlinked_item_subfields};
-    my $frameworkcode = $additional_params->{frameworkcode} || C4::Biblio::GetFrameworkCode($biblionumber);
 
     # if $biblionumber is undefined, get it from the current item
     unless (defined $biblionumber) {
