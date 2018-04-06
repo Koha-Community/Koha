@@ -3343,7 +3343,7 @@ sub ModBiblioMarc {
     $m_rs->metadata( $record->as_xml_record($encoding) );
     $m_rs->store;
 
-    ModZebra( $biblionumber, "specialUpdate", "biblioserver", $record );
+    ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
     return $biblionumber;
 }
 
