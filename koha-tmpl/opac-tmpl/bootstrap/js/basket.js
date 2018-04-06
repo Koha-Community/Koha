@@ -57,9 +57,9 @@ function delCookie(name) {
     var exp = new Date();
     exp.setTime(exp.getTime()-1);
     if(parent.opener){
-        parent.opener.document.cookie = name + "=null; expires=" + exp.toGMTString();
+        parent.opener.document.cookie = name + "=null; path=/; expires=" + exp.toGMTString();
     } else {
-        document.cookie = name + "=null; expires=" + exp.toGMTString();
+        document.cookie = name + "=null; path=/; expires=" + exp.toGMTString();
     }
 }
 
