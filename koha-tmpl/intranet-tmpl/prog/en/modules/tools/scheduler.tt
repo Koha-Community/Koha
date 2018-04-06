@@ -46,11 +46,13 @@
 [% END %]
 </select>
 </li>
-<li><label for="format">Output format:</label>
-<select name="format" id="format">
-<option value="text">Text</option>
-<option value="url">URL</option>
-</select>
+<li>
+    <label for="format">Output format:</label>
+    <select name="format" id="format">
+        <option value="text">Text (TSV)</option>
+        <option value="csv">CSV</option>
+        <option value="html">HTML</option>
+    </select>
 </li>
 <li><label for="email">Email:</label>
 
@@ -59,7 +61,7 @@
 </ol></fieldset>
 <fieldset class="action"><input class="submit-button" type="submit" value="Save" /></fieldset>
 </form>
-  
+
 [% IF ( JOBS ) %]<h2>Jobs already entered</h2>
 <table>
 <tr>
