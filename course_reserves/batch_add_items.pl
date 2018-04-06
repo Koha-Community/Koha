@@ -52,50 +52,56 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-$template->param( course => GetCourse($course_id) );
+my $course = GetCourse($course_id);
 
-if ( !$action ) {
-    $template->param( action => 'display_form' );
-}
-elsif ( $action eq 'add' ) {
-    my @barcodes = uniq( split( /\s\n/, $barcodes ) );
+if ( $course_id && $course ) {
+    $template->param( course => $course );
 
-    my @items;
-    my @invalid_barcodes;
-    for my $b (@barcodes) {
-        my $item = Koha::Items->find( { barcode => $b } );
-
-        if ($item) {
-            push( @items, $item );
-        }
-        else {
-            push( @invalid_barcodes, $b );
-        }
+    if ( !$action ) {
+        $template->param( action => 'display_form' );
     }
+    elsif ( $action eq 'add' ) {
+        my @barcodes = uniq( split( /\s\n/, $barcodes ) );
 
-    foreach my $item (@items) {
-        my $ci_id = ModCourseItem(
-            itemnumber    => $item->id,
-            itype         => $itype,
-            ccode         => $ccode,
-            holdingbranch => $holdingbranch,
-            location      => $location,
-        );
+        my @items;
+        my @invalid_barcodes;
+        for my $b (@barcodes) {
+            my $item = Koha::Items->find( { barcode => $b } );
 
-        my $cr_id = ModCourseReserve(
-            course_id   => $course_id,
-            ci_id       => $ci_id,
-            staff_note  => $staff_note,
-            public_note => $public_note,
+            if ($item) {
+                push( @items, $item );
+            }
+            else {
+                push( @invalid_barcodes, $b );
+            }
+        }
+
+        foreach my $item (@items) {
+            my $ci_id = ModCourseItem(
+                itemnumber    => $item->id,
+                itype         => $itype,
+                ccode         => $ccode,
+                holdingbranch => $holdingbranch,
+                location      => $location,
+            );
+
+            my $cr_id = ModCourseReserve(
+                course_id   => $course_id,
+                ci_id       => $ci_id,
+                staff_note  => $staff_note,
+                public_note => $public_note,
+            );
+        }
+
+        $template->param(
+            action           => 'display_results',
+            items_added      => \@items,
+            invalid_barcodes => \@invalid_barcodes,
+            course_id        => $course_id,
         );
     }
-
-    $template->param(
-        action           => 'display_results',
-        items_added      => \@items,
-        invalid_barcodes => \@invalid_barcodes,
-        course_id        => $course_id,
-    );
+} else {
+    $template->param( action => 'invalid_course' );
 }
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

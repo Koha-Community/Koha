@@ -16,6 +16,9 @@
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+        [% IF action == 'invalid_course' %]
+            <div id="invalid-course-error" class="dialog alert">Invalid course!</div>
+        [% END %]
 
         [% IF action == 'display_form' %]
             <form method="post" action="/cgi-bin/koha/course_reserves/batch_add_items.pl">
