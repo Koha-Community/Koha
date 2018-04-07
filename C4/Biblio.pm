@@ -2367,7 +2367,6 @@ sub TransformHtmlToXml {
     }
     $xml .= "</record>\n";
     $xml .= MARC::File::XML::footer();
-    use Data::Printer colored => 1; warn p $xml;
     return $xml;
 }
 
