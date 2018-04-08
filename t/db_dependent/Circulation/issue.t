@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -207,8 +207,10 @@ $sth = $dbh->prepare($query);
 $sth->execute;
 my $countaccount = $sth -> fetchrow_array;
 is ($countaccount,0,"0 accountline exists");
-is( ref( C4::Circulation::AddIssuingCharge( $item_id1, $borrower_id1, 10 ) ),
-    'Koha::Account::Offset', "An issuing charge has been added" );
+my $offset = C4::Circulation::AddIssuingCharge( $item_id1, $borrower_id1, $issue_id1, 10 );
+is( ref( $offset ), 'Koha::Account::Offset', "An issuing charge has been added" );
+my $charge = Koha::Account::Lines->find( $offset->debit_id );
+is( $charge->issue_id, $issue_id1, 'Issue id is set correctly for issuing charge' );
 my $account_id = $dbh->last_insert_id( undef, undef, 'accountlines', undef );
 $sth->execute;
 $countaccount = $sth -> fetchrow_array;
