@@ -1416,7 +1416,7 @@ sub AddIssue {
            # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item->{'itemnumber'}, $borrower->{'borrowernumber'} );
             if ( $charge > 0 ) {
-                AddIssuingCharge( $item->{'itemnumber'}, $borrower->{'borrowernumber'}, $charge );
+                AddIssuingCharge( $item->{'itemnumber'}, $borrower->{'borrowernumber'}, $issue->id, $charge );
                 $item->{'charge'} = $charge;
             }
 
@@ -3181,12 +3181,12 @@ sub _get_discount_from_rule {
 
 =head2 AddIssuingCharge
 
-  &AddIssuingCharge( $itemno, $borrowernumber, $charge )
+  &AddIssuingCharge( $itemno, $borrowernumber, $issue_id, $charge )
 
 =cut
 
 sub AddIssuingCharge {
-    my ( $itemnumber, $borrowernumber, $charge ) = @_;
+    my ( $itemnumber, $borrowernumber, $issue_id, $charge ) = @_;
 
     my $nextaccntno = getnextacctno($borrowernumber);
 
@@ -3197,6 +3197,7 @@ sub AddIssuingCharge {
         {
             borrowernumber    => $borrowernumber,
             itemnumber        => $itemnumber,
+            issue_id          => $issue_id,
             accountno         => $nextaccntno,
             amount            => $charge,
             amountoutstanding => $charge,
