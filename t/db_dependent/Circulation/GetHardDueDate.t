@@ -146,6 +146,7 @@ my $sampleissuingrule1 = {
     article_requests   => 'yes',
     no_auto_renewal_after => undef,
     no_auto_renewal_after_hard_limit => undef,
+    suspension_chargeperiod => 1,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
