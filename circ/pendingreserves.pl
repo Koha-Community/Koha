@@ -65,7 +65,7 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
     my $item = $hold->item;
     if ( $item and C4::Context->preference('CanMarkHoldsToPullAsLost') =~ m|^allow| ) {
         my $patron = $hold->borrower;
-        C4::Circulation::LostItem( $item->itemnumber );
+        C4::Circulation::LostItem( $item->itemnumber, "pendingreserves" );
         if ( $op eq 'mark_as_lost_and_notify' and C4::Context->preference('CanMarkHoldsToPullAsLost') eq 'allow_and_notify' ) {
             my $library = $hold->branch;
             my $letter = C4::Letters::GetPreparedLetter(

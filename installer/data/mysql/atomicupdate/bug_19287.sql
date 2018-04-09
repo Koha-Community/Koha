@@ -3,3 +3,5 @@ INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanat
 INSERT IGNORE INTO letter(module, code, branchcode, name, is_html, title, content, message_transport_type, lang) VALUES ('reserves', 'CANCEL_HOLD_ON_LOST', '', 'Hold has been cancelled', 0, "Hold has been cancelled", "Dear [% borrower.firstname %] [% borrower.surname %],\n\nWe regret to inform you that the following item cannot longer be placed on hold, it has been marked as lost\n\nTitle: [% biblio.title %]\nAuthor: [% biblio.author %]\nCopy: [% item.copynumber %]\nLocation: [% branch.branchname %]", 'email', 'default');
 
 INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('UpdateItemWhenLostFromHoldList','',NULL,'This is a list of values to update an item when it is marked as lost from the holds to pull screen','Free');
+
+update systempreferences set options="batchmod|moredetail|cronjob|additem|pendingreserves", value="batchmod|moredetail|cronjob|additem|pendingreserves" where variable="MarkLostItemsAsReturned";
