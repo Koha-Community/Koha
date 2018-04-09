@@ -128,7 +128,7 @@
                         <input type="submit" value="Mark item as lost" />
                     [% ELSIF Koha.Preference('CanMarkHoldsToPullAsLost') == 'allow_and_notify' %]
                         <input type="hidden" name="op" value="mark_as_lost_and_notify" />
-                        <input type="submit" value="Mark item as lost and notify the patron" />
+                        <input type="submit" value="Mark lost and notify patron" />
                     [% END %]
                 </form>
             [% ELSE %]
