@@ -28,7 +28,7 @@
                         <li><a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a></li>
                     [% END %]
                     <li><a href="/cgi-bin/koha/authorities/authorities-home.pl">Authorities</a></li>
-                    [% IF ( Koha.Preference('ILLModule') && (CAN_user_ill || CAN_user_superlibrarian) ) %]
+                    [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
                         <li><a href="/cgi-bin/koha/ill/ill-requests.pl">ILL Requests</a></li>
                     [% END %]
                     [% IF ( CAN_user_serials ) %]
