@@ -15723,6 +15723,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20291 - Add StaffLoginInstructions system preference and rename NoLoginInstructions with OpacLoginInstructions)\n";
 }
 
+$DBversion = '17.12.00.026';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'issuingrules', 'suspension_chargeperiod' ) ) {
+        $dbh->do(q|
+            ALTER TABLE issuingrules ADD COLUMN suspension_chargeperiod int(11) DEFAULT '1' AFTER maxsuspensiondays;
+        |);
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19804: Add issuingrules.suspension_chargeperiod)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
