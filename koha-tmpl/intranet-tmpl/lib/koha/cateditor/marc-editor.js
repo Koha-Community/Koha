@@ -181,6 +181,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             var mainstring= '';
             for(i=0;i < subfields.length ;i++){
                 if ( authInfo[field.tag].subfield == subfields[i].code ) continue;
+                if( subfields[i].code == '9' ) continue;
                 mainstring += subfields[i].text+' ';
             }
             newin=window.open("../authorities/auth_finder.pl?source=biblio&authtypecode="+authtype+"&index="+index+"&value_mainstr="+encodeURI(mainmainstring)+"&value_main="+encodeURI(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
