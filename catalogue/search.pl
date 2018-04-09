@@ -170,6 +170,7 @@ my $template_type;
 my @params = $cgi->multi_param("limit");
 if ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
     $template_name = 'catalogue/results.tt';
+    $template_type = 'results';
 }
 else {
     $template_name = 'catalogue/advsearch.tt';
@@ -449,7 +450,6 @@ my $offset = $params->{'offset'} || 0;
 $offset = 0 if $offset < 0;
 my $page = $cgi->param('page') || 1;
 #my $offset = ($page-1)*$results_per_page;
-my $hits;
 my $expanded_facet = $params->{'expand'};
 
 # Define some global variables
@@ -474,42 +474,47 @@ my @query_inputs;
 my $scan_index_to_use;
 my $scan_search_term_to_use;
 
-for my $this_cgi ( split('&',$query_cgi) ) {
-    next unless $this_cgi;
-    $this_cgi =~ m/(.*?)=(.*)/;
-    my $input_name = $1;
-    my $input_value = $2;
-    push @query_inputs, { input_name => $input_name, input_value => Encode::decode_utf8( uri_unescape( $input_value ) ) };
-    if ($input_name eq 'idx') {
-        $scan_index_to_use = $input_value; # unless $scan_index_to_use;
-    }
-    if ($input_name eq 'q') {
-        $scan_search_term_to_use = Encode::decode_utf8( uri_unescape( $input_value ));
+if ($query_cgi) {
+    for my $this_cgi ( split('&', $query_cgi) ) {
+        next unless $this_cgi;
+        $this_cgi =~ m/(.*?)=(.*)/;
+        my $input_name = $1;
+        my $input_value = $2;
+        push @query_inputs, { input_name => $input_name, input_value => Encode::decode_utf8( uri_unescape( $input_value ) ) };
+        if ($input_name eq 'idx') {
+            $scan_index_to_use = $input_value; # unless $scan_index_to_use;
+        }
+        if ($input_name eq 'q') {
+            $scan_search_term_to_use = Encode::decode_utf8( uri_unescape( $input_value ));
+        }
     }
 }
+
 $template->param ( QUERY_INPUTS => \@query_inputs,
                    scan_index_to_use => $scan_index_to_use,
                    scan_search_term_to_use => $scan_search_term_to_use );
 
 ## parse the limit_cgi string and put it into a form suitable for <input>s
 my @limit_inputs;
-for my $this_cgi ( split('&',$limit_cgi) ) {
-    next unless $this_cgi;
-    # handle special case limit-yr
-    if ($this_cgi =~ /yr,st-numeric/) {
-        push @limit_inputs, { input_name => 'limit-yr', input_value => $limit_yr_value };   
-        next;
+if ($limit_cgi) {
+    for my $this_cgi ( split('&', $limit_cgi) ) {
+        next unless $this_cgi;
+        # handle special case limit-yr
+        if ($this_cgi =~ /yr,st-numeric/) {
+            push @limit_inputs, { input_name => 'limit-yr', input_value => $limit_yr_value };
+            next;
+        }
+        $this_cgi =~ m/(.*=)(.*)/;
+        my $input_name = $1;
+        my $input_value = $2;
+        $input_name =~ s/=$//;
+        push @limit_inputs, { input_name => $input_name, input_value => Encode::decode_utf8( uri_unescape($input_value) ) };
     }
-    $this_cgi =~ m/(.*=)(.*)/;
-    my $input_name = $1;
-    my $input_value = $2;
-    $input_name =~ s/=$//;
-    push @limit_inputs, { input_name => $input_name, input_value => Encode::decode_utf8( uri_unescape($input_value) ) };
 }
 $template->param ( LIMIT_INPUTS => \@limit_inputs );
 
 ## II. DO THE SEARCH AND GET THE RESULTS
-my $total; # the total results for the whole set
+my $total = 0; # the total results for the whole set
 my $facets; # this object stores the faceted results that display on the left-hand of the results page
 my $results_hashref;
 
@@ -534,11 +539,11 @@ my @sup_results_array;
 for (my $i=0;$i<@servers;$i++) {
     my $server = $servers[$i];
     if ($server =~/biblioserver/) { # this is the local bibliographic server
-        $hits = $results_hashref->{$server}->{"hits"};
+        my $hits = $results_hashref->{$server}->{"hits"} // 0;
         my $page = $cgi->param('page') || 0;
         my @newresults = searchResults('intranet', $query_desc, $hits, $results_per_page, $offset, $scan,
                                        $results_hashref->{$server}->{"RECORDS"});
-        $total = $total + $results_hashref->{$server}->{"hits"};
+        $total = $total + $hits;
 
         # Search history
         if (C4::Context->preference('EnableSearchHistory')) {
@@ -586,9 +591,11 @@ for (my $i=0;$i<@servers;$i++) {
 
         if ($hits) {
             $template->param(total => $hits);
-            my $limit_cgi_not_availablity = $limit_cgi;
-            $limit_cgi_not_availablity =~ s/&limit=available//g;
-            $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
+            if ($limit_cgi) {
+                my $limit_cgi_not_availablity = $limit_cgi;
+                $limit_cgi_not_availablity =~ s/&limit=available//g;
+                $template->param(limit_cgi_not_availablity => $limit_cgi_not_availablity);
+            }
             $template->param(limit_cgi => $limit_cgi);
             $template->param(query_cgi => $query_cgi);
             $template->param(query_desc => $query_desc);
@@ -703,13 +710,13 @@ for (my $i=0;$i<@servers;$i++) {
 $template->{'VARS'}->{'searchid'} = $cgi->param('searchid');
 
 my $gotonumber = $cgi->param('gotoNumber');
-if ($gotonumber eq 'last' || $gotonumber eq 'first') {
+if ( $gotonumber && ( $gotonumber eq 'last' || $gotonumber eq 'first' ) ) {
     $template->{'VARS'}->{'gotoNumber'} = $gotonumber;
 }
 $template->{'VARS'}->{'gotoPage'}   = 'detail.pl';
 my $gotopage = $cgi->param('gotoPage');
 $template->{'VARS'}->{'gotoPage'} = $gotopage
-  if $gotopage =~ m/^(ISBD|labeledMARC|MARC|more)?detail.pl$/;
+  if $gotopage && $gotopage =~ m/^(ISBD|labeledMARC|MARC|more)?detail.pl$/;
 
 for my $facet ( @$facets ) {
     for my $entry ( @{ $facet->{facets} } ) {
