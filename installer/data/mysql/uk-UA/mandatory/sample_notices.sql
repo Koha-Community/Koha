@@ -49,6 +49,7 @@ INSERT INTO `letter` (module, code, name, title, content, message_transport_type
 ('reserves', 'HOLD', 'резервування, що очікує на отримання', 'Резервування, що очікує на отримання у бібліотеці (повідомлення для друку)',
 '<<branches.branchname>>\r\n<<branches.branchaddress1>>\r\n<<branches.branchaddress2>>\r\n\r\n\r\n Звернення про зміну стану обслуговування\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>>\r\n<<borrowers.address>>\r\n<<borrowers.city>> <<borrowers.zipcode>>\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> <<borrowers.cardnumber>>\r\n\r\n У Вас є зарезервований примірник, що вже доступний щоб забрати до <<reserves.waitingdate>>:\r\n\r\n Заголовок: „<<biblio.title>>“\r\n Автор: <<biblio.author>>\r\n Номер примірника: <<items.copynumber>>\r\n',
  'print'),
+('reserves', 'CANCEL_HOLD_ON_LOST', 'Hold has been cancelled', "Hold has been cancelled", "Dear [% borrower.firstname %] [% borrower.surname %],\n\nWe regret to inform you, that the following item can not be provided due to it being missing. Your hold was cancelled.\n\nTitle: [% biblio.title %]\nAuthor: [% biblio.author %]\nCopy: [% item.copynumber %]\nLocation: [% branch.branchname %]", 'email'),
 
 ('circulation','CHECKIN','повернення примірників (збірка)', 'Повернення',
  'Наступні примірники були повернуті:\r\n----\r\n„<<biblio.title>>“\r\n----\r\n Спасибі.',
