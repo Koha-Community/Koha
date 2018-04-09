@@ -317,19 +317,7 @@
 
                 [% IF query_type == 'create' %]
                     <h1>New ILL request</h1>
-                    [% IF whole.stage == 'copyrightclearance' %]
-                        <div>
-                            <p>
-                                [% Koha.Preference('ILLModuleCopyrightClearance') | $raw %]
-                            </p>
-                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend | html %]"
-                               class="btn btn-sm btn-default btn-group"><i class="fa fa-check">Yes</i></a>
-                            <a href="/cgi-bin/koha/ill/ill-requests.pl"
-                               class="btn btn-sm btn-default btn-group"><i class="fa fa-times">No</i></a>
-                        </div>
-                    [% ELSE %]
-                        [% PROCESS $whole.template %]
-                    [% END %]
+                    [% PROCESS $whole.template %]
 
                 [% ELSIF query_type == 'confirm' %]
                     <h1>Confirm ILL request</h1>

@@ -112,6 +112,7 @@ if ( $op eq 'list' ) {
         $params->{cardnumber} = Koha::Patrons->find({
             borrowernumber => $loggedinuser
         })->cardnumber;
+        $params->{opac} = 1;
         my $backend_result = $request->backend_create($params);
         if ($backend_result->{stage} eq 'copyrightclearance') {
             $template->param(
