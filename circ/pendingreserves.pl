@@ -177,7 +177,7 @@ my $strsth =
                     ORDER BY items.itemnumber SEPARATOR '|') l_holdingbranch,
             reserves.biblionumber,
             reserves.branchcode as l_branch,
-            items.itemnumber,
+            reserves.itemnumber,
             items.holdingbranch,
             items.homebranch,
             GROUP_CONCAT(DISTINCT items.itype 
