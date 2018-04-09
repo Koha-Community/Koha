@@ -17,8 +17,18 @@ sub _get_help_version {
 }
 
 sub _get_base_url {
+    my ( $preferred_language ) = @_;
+
+    my @available_languages = qw( en ar cs es fr it pt_BZ tz zh_TW );
+
+    my ( $language ) = grep {
+        my $preferred_short = substr $preferred_language, 0, 2;
+        my $avail_short = substr $_, 0, 2;
+        $preferred_short eq $avail_short ? $_ : ()
+    } @available_languages;
+
+    my $KohaManualLanguage = $language || C4::Context->preference('KohaManualLanguage') || 'en';
     my $KohaManualBaseURL = C4::Context->preference('KohaManualBaseURL') || 'http://koha-community.org/manual';
-    my $KohaManualLanguage = C4::Context->preference('KohaManualLanguage') || 'en';
     if ( $KohaManualBaseURL =~ m|^/| ) {
         $KohaManualBaseURL = C4::Context->preference('staffClientBaseURL') . $KohaManualBaseURL;
     }
@@ -221,7 +231,7 @@ our $mapping = {
 };
 
 sub get_url {
-    my $url = shift;
+    my ( $url, $preferred_language ) = @_;
     my $file;
     if ($url =~ /koha\/(.*)\.pl/) {
         $file = $1;
@@ -230,7 +240,7 @@ sub get_url {
     }
     $file =~ s/[^a-zA-Z0-9_\-\/]*//g;
 
-    my $base_url = _get_base_url;
+    my $base_url = _get_base_url( $preferred_language );
     return $base_url . ( exists $mapping->{$file} ? $mapping->{$file} : $mapping->{mainpage} );
 }
 
