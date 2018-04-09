@@ -41,6 +41,7 @@ $builder->build(
             firstremind  => 0,
             finedays     => 2,
             lengthunit   => 'days',
+            suspension_chargeperiod => 1,
         }
     }
 );
