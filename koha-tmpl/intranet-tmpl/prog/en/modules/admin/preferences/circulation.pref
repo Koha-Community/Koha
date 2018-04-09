@@ -721,10 +721,11 @@ Circulation:
                   allow_and_notify: "Allow to mark items as lost and notify the patron"
             - "from the 'Holds to pull' screen"
         -
-            - Update item's values when marked as lost from the hold to pull screen
+            - Update item's values when marked as lost from the hold to pull screen.
+            - This is a list of values to update an item when it is marked as lost from the holds to pull screen.
             - pref: UpdateItemWhenLostFromHoldList
               type: textarea
-            - This is a list of values to update an item when it is marked as lost from the holds to pull screen.
+            - (for instance "itemlost: 1" to set items.itemlost to 1 when the item is marked as lost)
     Interlibrary Loans:
         -
             - pref: ILLModule
