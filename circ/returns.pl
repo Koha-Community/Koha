@@ -399,7 +399,6 @@ if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
         my $patron = Koha::Patrons->find( $reserve->{'borrowernumber'} );
         my $name = $patron->surname . ", " . $patron->title . " " . $patron->firstname;
         $template->param(
-            wname  => $name,
             patron => $patron,
         );
     }
@@ -433,10 +432,9 @@ if ( $messages->{'ResFound'}) {
         $template->param(
             # FIXME The full patron object should be passed to the template
             found          => 1,
-            name           => $patron->surname . ", " . $patron->title . " " . $patron->firstname,
+            patron         => $patron,
             barcode        => $barcode,
             destbranch     => $reserve->{'branchcode'},
-            borrowernumber => $reserve->{'borrowernumber'},
             itemnumber     => $reserve->{'itemnumber'},
             reservenotes   => $reserve->{'reservenotes'},
             reserve_id     => $reserve->{reserve_id},

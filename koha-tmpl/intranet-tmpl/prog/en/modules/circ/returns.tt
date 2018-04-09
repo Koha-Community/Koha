@@ -326,7 +326,7 @@
         <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber %]">[% title |html %]</a></caption>
         <tr>
             <th>Hold for:</th>
-            <td>[% name %]</td>
+            <td>[% INCLUDE 'patron-title.inc' patron=patron %]</td>
         </tr>
         </table>
         <form method="post" action="returns.pl"><input type="submit" value="OK" />
@@ -368,10 +368,7 @@
                     [% END %]
                     <h5>Hold for:</h5>
                         <li>
-                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber %]">
-                                [% patron.surname %], [% patron.firstname %]
-                            </a>
-                            ([% patron.cardnumber %])
+                            [% INCLUDE 'patron-title.inc' patron=patron %]
                             <span class="patron-category"> - [% patron.category.description %]</span>
                         </li>
 
