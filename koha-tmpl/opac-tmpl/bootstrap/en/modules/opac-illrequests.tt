@@ -54,24 +54,37 @@
             <div id="illrequests" class="maincontent">
                 [% IF method == 'create' %]
                     <h2>New Interlibrary loan request</h2>
-                    [% INCLUDE messages %]
-                    [% IF backends %]
-                        <form method="post" id="illrequestcreate-form" novalidate="novalidate">
-                            <fieldset class="rows">
-                                <label for="backend">Provider:</label>
-                                <select name="backend">
-                                    [% FOREACH backend IN backends %]
-                                        <option value="[% backend %]">[% backend %]</option>
-                                    [% END %]
-                                </select>
-                            </fieldset>
-                            <fieldset class="action">
-                                <input type="hidden" name="method" value="create">
-                                <input type="submit" name="create_select_backend" value="Next">
-                            </fieldset>
-                        </form>
+                    [% IF stage == 'copyrightclearance' %]
+                        [% INCLUDE messages %]
+                        <div>
+                            <p>
+                                [% Koha.Preference('ILLModuleCopyrightClearance') %]
+                            </p>
+                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend %]"
+                               class="btn btn-sm btn-default"><i class="fa fa-check"></i> Yes</a>
+                            <a href="/cgi-bin/koha/opac-illrequests.pl"
+                               class="btn btn-sm btn-default"><i class="fa fa-times"></i> No</a>
+                        </div>
                     [% ELSE %]
-                        [% PROCESS $whole.opac_template %]
+                        [% INCLUDE messages %]
+                        [% IF backends %]
+                            <form method="post" id="illrequestcreate-form" novalidate="novalidate">
+                                <fieldset class="rows">
+                                    <label for="backend">Provider:</label>
+                                    <select name="backend">
+                                        [% FOREACH backend IN backends %]
+                                            <option value="[% backend %]">[% backend %]</option>
+                                        [% END %]
+                                    </select>
+                                </fieldset>
+                                <fieldset class="action">
+                                    <input type="hidden" name="method" value="create">
+                                    <input type="submit" name="create_select_backend" value="Next">
+                                </fieldset>
+                            </form>
+                        [% ELSE %]
+                            [% PROCESS $whole.opac_template %]
+                        [% END %]
                     [% END %]
                 [% ELSIF method == 'list' %]
                     <h2>Interlibrary loan requests</h2>

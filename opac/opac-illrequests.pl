@@ -112,15 +112,23 @@ if ( $op eq 'list' ) {
             borrowernumber => $loggedinuser
         })->cardnumber;
         my $backend_result = $request->backend_create($params);
-        $template->param(
-            media       => [ "Book", "Article", "Journal" ],
-            branches    => Koha::Libraries->search->unblessed,
-            whole       => $backend_result,
-            request     => $request
-        );
-        if ($backend_result->{stage} eq 'commit') {
-            print $query->redirect('/cgi-bin/koha/opac-illrequests.pl?message=2');
+        if ($backend_result->{stage} eq 'copyrightclearance') {
+            $template->param(
+                stage       => $backend_result->{stage},
+                whole       => $backend_result
+            );
+        } else {
+            $template->param(
+                media       => [ "Book", "Article", "Journal" ],
+                branches    => Koha::Libraries->search->unblessed,
+                whole       => $backend_result,
+                request     => $request
+            );
+            if ($backend_result->{stage} eq 'commit') {
+                print $query->redirect('/cgi-bin/koha/opac-illrequests.pl?message=2');
+            }
         }
+
     }
 }
 
