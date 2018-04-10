@@ -264,6 +264,7 @@ sub handle_commit_maybe {
                 '/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id='.
                 $request->id
             );
+            exit;
         } else {
             # Redirect to a requests list view
             redirect_to_list();
