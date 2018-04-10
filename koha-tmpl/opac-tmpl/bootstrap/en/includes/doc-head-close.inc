@@ -17,7 +17,11 @@
     [% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
 [% END %]
 
-[% SET opaclayoutstylesheet='opac.css' UNLESS opaclayoutstylesheet %]
+<!--Fonts -->
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/noto-sans-condensed" type="text/css"/>
+<link rel="stylesheet" media="screen" href="https://fontlibrary.org/face/noto-sans-normal" type="text/css"/>
+
+[% SET opaclayoutstylesheet='opac_' _ KOHA_VERSION _ '.css' UNLESS opaclayoutstylesheet %]
 [% IF (opaclayoutstylesheet.match('^https?:|^\/')) %]
     <link rel="stylesheet" type="text/css" href="[% opaclayoutstylesheet | html %]" />
 [% ELSE %]
