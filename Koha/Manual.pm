@@ -28,7 +28,7 @@ sub _get_base_url {
     } @available_languages;
 
     my $KohaManualLanguage = $language || C4::Context->preference('KohaManualLanguage') || 'en';
-    my $KohaManualBaseURL = C4::Context->preference('KohaManualBaseURL') || 'http://koha-community.org/manual';
+    my $KohaManualBaseURL = C4::Context->preference('KohaManualBaseURL') || 'https://koha-community.org/manual';
     if ( $KohaManualBaseURL =~ m|^/| ) {
         $KohaManualBaseURL = C4::Context->preference('staffClientBaseURL') . $KohaManualBaseURL;
     }
