@@ -3,7 +3,7 @@
     <div id="search-facets">
         <h4><a href="#" class="menu-collapse-toggle">Refine your search</a></h4>
         <ul class="menu-collapse">
-            <li id="availability_facet">Availability
+            <li id="availability_facet"><h5 id="facet-availability">Availability</h5>
                 <ul>
                     <li>
                         [% IF ( available ) %]
@@ -27,8 +27,8 @@
                         [% IF facets_loo.type_label_ItemTypes %]<h5 id="facet-itemtypes">Item types</h5>[% END %]
                         [% IF facets_loo.type_label_CollectionCodes %]<h5 id="facet-itemtypes">Collections</h5>[% END %]
                         [% UNLESS singleBranchMode %]
-                            [% IF ( facets_loo.type_label_HomeLibrary ) %]<span id="facet-home-libraries">Home libraries</span>[% END %]
-                            [% IF ( facets_loo.type_label_HoldingLibrary ) %]<span id="facet-holding-libraries">Holding libraries</span>[% END %]
+                            [% IF ( facets_loo.type_label_HomeLibrary ) %]<h5 id="facet-home-libraries">Home libraries</h5>[% END %]
+                            [% IF ( facets_loo.type_label_HoldingLibrary ) %]<h5 id="facet-holding-libraries">Holding libraries</h5>[% END %]
                         [% END %]
                         [% IF facets_loo.type_label_Location %]<h5 id="facet-locations">Locations</h5>[% END %]
                         <ul>
