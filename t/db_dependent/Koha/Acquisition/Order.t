@@ -77,6 +77,7 @@ subtest 'store' => sub {
                 basketno     => $o->basketno,
                 biblionumber => $o->biblionumber,
                 budget_id    => $o->budget_id,
+                quantity     => 1,
             }
         )->store;
         $order->discard_changes;
@@ -88,6 +89,7 @@ subtest 'store' => sub {
                 basketno     => $o->basketno,
                 biblionumber => $o->biblionumber,
                 budget_id    => $o->budget_id,
+                quantity     => 1,
             }
         )->store;
         $order->discard_changes;
