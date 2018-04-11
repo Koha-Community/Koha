@@ -233,9 +233,9 @@ if ( %$letter_params ) {
             letter => $fake_tt_letter,
             %$letter_params,
         );
+        $messages_are_similar =
+          $rendered_message->{content} eq $rendered_tt_message->{content};
     }
-    $messages_are_similar =
-      $rendered_message->{content} eq $rendered_tt_message->{content};
 }
 
 $template->param(
