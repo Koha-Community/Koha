@@ -37,6 +37,7 @@ use C4::Context;
 use C4::Installer;
 
 use Koha;
+use Koha::DateUtils qw(dt_from_string output_pref);
 use Koha::Acquisition::Currencies;
 use Koha::Patron::Categories;
 use Koha::Patrons;
@@ -62,9 +63,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $config_timezone = C4::Context->config('timezone');
+my $config_timezone = C4::Context->config('timezone') // '';
 my $config_invalid  = !DateTime::TimeZone->is_valid_name( $config_timezone );
-my $env_timezone    = $ENV{TZ};
+my $env_timezone    = $ENV{TZ} // '';
 my $env_invalid     = !DateTime::TimeZone->is_valid_name( $env_timezone );
 my $actual_bad_tz_fallback = 0;
 
@@ -81,14 +82,18 @@ elsif ( $config_timezone eq '' &&
 }
 
 my $time_zone = {
-    actual                 => C4::Context->timezone(),
+    actual                 => C4::Context->tz->name,
     actual_bad_tz_fallback => $actual_bad_tz_fallback,
     config                 => $config_timezone,
     config_invalid         => $config_invalid,
     environment            => $env_timezone,
     environment_invalid    => $env_invalid
 };
-$template->param( 'time_zone' => $time_zone );
+
+$template->param(
+    time_zone              => $time_zone,
+    current_date_and_time  => output_pref({ dt => dt_from_string(), dateformat => 'iso' })
+);
 
 my $perl_path = $^X;
 if ($^O ne 'VMS') {

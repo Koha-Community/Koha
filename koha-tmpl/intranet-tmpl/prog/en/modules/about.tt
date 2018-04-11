@@ -1,5 +1,6 @@
 [% USE HtmlTags %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; About Koha</title>
@@ -111,6 +112,10 @@
             [% ELSIF (errZebraConnection) %]
             <tr><th scope="row"><b>Warning</b> </th><td>Error message from Zebra: [% ( errZebraConnection ) %] </td></tr>
             [% END %]
+            <tr>
+              <th scope="row">Date and time: </th>
+              <td>[% current_date_and_time | $KohaDates with_hours => 1 %]</td>
+            </tr>
             <tr>
               [% timezone_config_class = (time_zone.config_invalid) ? 'status_warn' : '' %]
               [% timezone_env_class    = (time_zone.env_invalid)    ? 'status_warn' : '' %]
