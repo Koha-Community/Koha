@@ -65,6 +65,9 @@ $context->mock( 'config', \&mockedConfig );
 my $OPACBaseURL = "testopac.com";
 $context->mock( 'preference', \&mockedPref );
 
+### Mock ->tz
+$context->mock( 'timezone', sub { return 'local'; } );
+
 ## Mock Database
 my $database = new Test::MockModule('Koha::Database');
 
