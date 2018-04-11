@@ -15735,6 +15735,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19804: Add issuingrules.suspension_chargeperiod)\n";
 }
 
+$DBversion = '17.12.00.027';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`)
+        VALUES ('UseACQFrameworkForBiblioRecords','0','','Use the ACQ framework for the catalog details','YesNo')
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19289 - Add system preference UseACQFrameworkForBiblioRecords)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
