@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 119;
+use Test::More tests => 120;
 
 use Data::Dumper;
 use DateTime;
@@ -904,6 +904,12 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     is( $renewokay, 0, '(Bug 8236), Cannot renew, one of the items is overdue');
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber7);
     is( $renewokay, 0, '(Bug 8236), Cannot renew, one of the items is overdue');
+
+    t::lib::Mocks::mock_preference('WhenLostChargeReplacementFee','1');
+    $checkout = Koha::Checkouts->find( { itemnumber => $itemnumber3 } );
+    LostItem( $itemnumber3, 'test', 0 );
+    my $accountline = Koha::Account::Lines->find( { itemnumber => $itemnumber3 } );
+    is( $accountline->issue_id, $checkout->id, "Issue id added for lost replacement fee charge" );
 
   }
 

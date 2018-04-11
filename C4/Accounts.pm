@@ -99,7 +99,7 @@ FIXME : if no replacement price, borrower just doesn't get charged?
 
 sub chargelostitem{
     my $dbh = C4::Context->dbh();
-    my ($borrowernumber, $itemnumber, $amount, $description) = @_;
+    my ($borrowernumber, $itemnumber, $issue_id, $amount, $description) = @_;
     my $itype = Koha::ItemTypes->find({ itemtype => Koha::Items->find($itemnumber)->effective_itemtype() });
     my $replacementprice = $amount;
     my $defaultreplacecost = $itype->defaultreplacecost;
@@ -127,6 +127,7 @@ sub chargelostitem{
             my $accountline = Koha::Account::Line->new(
                 {
                     borrowernumber    => $borrowernumber,
+                    issue_id          => $issue_id,
                     accountno         => getnextacctno($borrowernumber),
                     date              => \'NOW()',
                     amount            => $processfee,
@@ -167,6 +168,7 @@ sub chargelostitem{
             my $accountline = Koha::Account::Line->new(
                 {
                     borrowernumber    => $borrowernumber,
+                    issue_id          => $issue_id,
                     accountno         => getnextacctno($borrowernumber),
                     date              => \'NOW()',
                     amount            => $replacementprice,
