@@ -31,6 +31,7 @@ use Encode;
 use Koha::Exception::ConnectionFailed;
 use Koha::Exception::SMSDeliveryFailure;
 use Koha::Hdiacritic;
+use Koha::Notice::Messages;
 
 use Try::Tiny;
 
@@ -128,10 +129,8 @@ sub send_sms {
     if ($message ne $gsm0388 and C4::Context->config('smsProviders')->{'labyrintti'}->{'Unicode'} eq "yes"){
         $parameters->{'unicode'} = 'yes';
         $parameters->{'text'} = encode('UTF-8', $message);
-        C4::Letters::UpdateQueuedMessage({
-               message_id => $params->{_message_id},
-               metadata   => 'UTF-16',
-        });
+        my $notice = Koha::Notice::Messages->find($params->{_message_id});
+        $notice->set({ metadata   => 'UTF-16' })->store if defined $notice;
     } else {
         $parameters->{'text'} = encode('ISO-8859-1', hdiacritic($message));
         $parameters->{'unicode'} = 'no';

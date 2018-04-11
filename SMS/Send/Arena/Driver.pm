@@ -22,6 +22,7 @@ use C4::Context;
 use Encode;
 use Koha::Exception::ConnectionFailed;
 use Koha::Exception::SMSDeliveryFailure;
+use Koha::Notice::Messages;
 
 use Try::Tiny;
 
@@ -122,10 +123,8 @@ sub send_sms {
 
     if ($message ne $gsm0388 and C4::Context->config('smsProviders')->{'arena'}->{'Unicode'} eq "yes"){
         $parameters->{'unicode'} = 'yes';
-        C4::Letters::UpdateQueuedMessage({
-               message_id => $params->{_message_id},
-               metadata   => 'UTF-16',
-        });
+        my $notice = Koha::Notice::Messages->find($params->{_message_id});
+        $notice->set({ metadata   => 'UTF-16' })->store if defined $notice;
     } else {
         #$parameters->{'unicode'} = 'no';
     }
