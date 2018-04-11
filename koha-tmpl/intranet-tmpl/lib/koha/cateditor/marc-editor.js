@@ -164,7 +164,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             cm.execCommand('deleteLine');
         },
 
-        'Ctrl-L': function( cm ) {
+        'Shift-Ctrl-L': function( cm ) {
             // Launch the auth search popup
             var field = cm.marceditor.getCurrentField();
 
