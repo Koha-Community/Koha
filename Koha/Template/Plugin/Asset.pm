@@ -1,7 +1,7 @@
 package Koha::Template::Plugin::Asset;
 
-# Copyright Marc Véron / marc veron ag, Switzerland
-
+# Copyright 2018 BibLibre
+#
 # This file is part of Koha.
 #
 # Koha is free software; you can redistribute it and/or modify it
