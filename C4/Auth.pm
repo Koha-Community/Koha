@@ -1947,22 +1947,7 @@ sub getuserflags {
         no warnings 'numeric';
         $flags += 0;
     }
-    my $subperms = get_user_subpermissions($userid);
-    my $all_perms = Koha::Auth::PermissionManager->listKohaPermissionsAsHASH();
-    foreach my $perm (keys %$subperms) {
-        if (ref($subperms->{$perm}) eq 'HASH' && keys %{$subperms->{$perm}} eq
-                keys %{$all_perms->{$perm}->{'permissions'}}) {
-            $userflags->{$perm} = 1;
-        } else {
-            $userflags->{$perm} = $subperms->{$perm};
-        }
-    }
-    foreach my $perm (keys %$all_perms) {
-        $userflags->{$perm} //= 0;
-    }
-
-    return $userflags;
-
+    return get_user_subpermissions($userid);
     #@DEPRECATED, USE THE Koha::Auth::PermissionManager
     my $sth = $dbh->prepare("SELECT bit, flag, defaulton FROM userflags");
     $sth->execute;
@@ -2095,6 +2080,11 @@ sub haspermission {
     my ( $userid, $flagsrequired ) = @_;
 
     my $flags = getuserflags( undef, $userid );
+    #Sanitate 1 to * because we no longer have 1's from the koha.borrowers.flags.
+    foreach my $module (%$flagsrequired) {
+        $flagsrequired->{$module} = '*' if $flagsrequired->{$module} && $flagsrequired->{$module} eq '1';
+    }
+
     if ( defined $userid && $userid eq C4::Context->config('user') ) {
 
         # Super User Account from /etc/koha.conf
@@ -2111,7 +2101,7 @@ sub haspermission {
     foreach my $module ( keys %$flagsrequired ) {
         my $subperm = $flagsrequired->{$module};
         if ( $subperm eq '*' ) {
-            return 0 unless ( $flags->{$module} == 1 or ref( $flags->{$module} ) );
+            return 0 unless ( ref( $flags->{$module} ) );
         } else {
             return 0 unless (
                 ( defined $flags->{$module} and
