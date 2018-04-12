@@ -59,10 +59,9 @@
                 [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
                     <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber %]">Discharge</a></li>
                 [% END %]
-                [% IF CAN_user_borrowers_edit_borrowers %]
 
-                [% IF ( CAN_user_borrowers ) %]
-                    <li><a id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?borrowernumber=[% borrowernumber %]">Manage API keys</a></li>
+                [% IF CAN_user_borrowers_edit_borrowers %]
+                    <li><a id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% borrowernumber %]">Manage API keys</a></li>
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
                 [% END %]

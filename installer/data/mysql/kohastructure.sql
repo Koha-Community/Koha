@@ -16,22 +16,6 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table api_keys
---
-
-DROP TABLE IF EXISTS api_keys;
-CREATE TABLE api_keys (
-    borrowernumber int(11) NOT NULL, -- foreign key to the borrowers table
-    api_key VARCHAR(255) NOT NULL, -- API key used for API authentication
-    active int(1) DEFAULT 1, -- 0 means this API key is revoked
-    PRIMARY KEY (borrowernumber, api_key),
-    CONSTRAINT api_keys_fk_borrowernumber
-      FOREIGN KEY (borrowernumber)
-      REFERENCES borrowers (borrowernumber)
-      ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
 -- Table structure for table `auth_header`
 --
 
@@ -1727,6 +1711,28 @@ CREATE TABLE borrower_sync (
   PRIMARY KEY (borrowersyncid),
   KEY borrowernumber (borrowernumber),
   CONSTRAINT borrower_sync_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table api_keys
+--
+
+DROP TABLE IF EXISTS `api_keys`;
+CREATE TABLE `api_keys` (
+    `id`          INT(11) NOT NULL AUTO_INCREMENT, -- API key internal identifier
+    `patron_id`   INT(11) NOT NULL,                -- Foreign key to the borrowers table
+    `client_id`   VARCHAR(191) NOT NULL,           -- API client ID
+    `secret`      VARCHAR(191) NOT NULL,           -- API client secret used for API authentication
+    `description` VARCHAR(255) NOT NULL,           -- API client description
+    `active`      TINYINT(1) DEFAULT 1 NOT NULL,   -- 0 means this API key is revoked
+    PRIMARY KEY (`id`),
+    KEY `patron_id` (`patron_id`),
+    UNIQUE KEY `client_id` (`client_id`),
+    UNIQUE KEY `secret` (`secret`),
+    CONSTRAINT `api_keys_fk_patron_id`
+      FOREIGN KEY (`patron_id`)
+      REFERENCES `borrowers` (`borrowernumber`)
+      ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

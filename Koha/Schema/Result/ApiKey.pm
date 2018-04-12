@@ -23,13 +23,31 @@ __PACKAGE__->table("api_keys");
 
 =head1 ACCESSORS
 
-=head2 borrowernumber
+=head2 id
+
+  data_type: 'integer'
+  is_auto_increment: 1
+  is_nullable: 0
+
+=head2 patron_id
 
   data_type: 'integer'
   is_foreign_key: 1
   is_nullable: 0
 
-=head2 api_key
+=head2 client_id
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 191
+
+=head2 secret
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 191
+
+=head2 description
 
   data_type: 'varchar'
   is_nullable: 0
@@ -37,38 +55,68 @@ __PACKAGE__->table("api_keys");
 
 =head2 active
 
-  data_type: 'integer'
+  data_type: 'tinyint'
   default_value: 1
-  is_nullable: 1
+  is_nullable: 0
 
 =cut
 
 __PACKAGE__->add_columns(
-  "borrowernumber",
+  "id",
+  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
+  "patron_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
-  "api_key",
+  "client_id",
+  { data_type => "varchar", is_nullable => 0, size => 191 },
+  "secret",
+  { data_type => "varchar", is_nullable => 0, size => 191 },
+  "description",
   { data_type => "varchar", is_nullable => 0, size => 255 },
   "active",
-  { data_type => "integer", default_value => 1, is_nullable => 1 },
+  { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
 
 =over 4
 
-=item * L</borrowernumber>
-
-=item * L</api_key>
+=item * L</id>
 
 =back
 
 =cut
 
-__PACKAGE__->set_primary_key("borrowernumber", "api_key");
+__PACKAGE__->set_primary_key("id");
+
+=head1 UNIQUE CONSTRAINTS
+
+=head2 C<client_id>
+
+=over 4
+
+=item * L</client_id>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("client_id", ["client_id"]);
+
+=head2 C<secret>
+
+=over 4
+
+=item * L</secret>
+
+=back
+
+=cut
+
+__PACKAGE__->add_unique_constraint("secret", ["secret"]);
 
 =head1 RELATIONS
 
-=head2 borrowernumber
+=head2 patron
 
 Type: belongs_to
 
@@ -77,16 +125,19 @@ Related object: L<Koha::Schema::Result::Borrower>
 =cut
 
 __PACKAGE__->belongs_to(
-  "borrowernumber",
+  "patron",
   "Koha::Schema::Result::Borrower",
-  { borrowernumber => "borrowernumber" },
+  { borrowernumber => "patron_id" },
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2015-03-24 07:35:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dvujXVM5Vfu3SA2UfiVPtw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-04-14 00:56:23
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:b7AUAgl2SClXJ2lzPVV0FA
 
+__PACKAGE__->add_columns(
+    '+active' => { is_boolean => 1 }
+);
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;

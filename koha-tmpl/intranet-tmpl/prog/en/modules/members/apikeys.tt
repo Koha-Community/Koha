@@ -24,15 +24,22 @@
         <h1>API keys for [% INCLUDE 'patron-title.inc' %]</h1>
         <div>
           <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
-            <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
+            <input type="hidden" name="patron_id" value="[% patron.id %]">
             <input type="hidden" name="op" value="generate">
-            <input type="submit" value="Generate new key">
+            <label for="description">Description: </label>
+            <input type="text" name="description">
+            <button class="btn btn-default btn-sm" type="submit"><i class="fa fa-plus"></i> Generate a new key</span></button>
           </form>
         </div>
-        [% IF api_keys.size > 0 %]
+
+        <br/>
+
+        <div id="keys">
+        [% IF api_keys && api_keys.size > 0 %]
           <table>
             <thead>
               <tr>
+                <th>Description</th>
                 <th>Key</th>
                 <th>Active</th>
                 <th>Actions</th>
@@ -41,18 +48,19 @@
             <tbody>
               [% FOREACH key IN api_keys %]
                 <tr>
-                  <td>[% key.api_key %]</td>
+                  <td>[% key.description %]</td>
+                  <td>[% key.value %]</td>
                   <td>[% IF key.active %]Yes[% ELSE %]No[% END %]</td>
                   <td>
                     <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
-                      <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
-                      <input type="hidden" name="key" value="[% key.api_key %]">
+                      <input type="hidden" name="patron_id" value="[% patron.id %]">
+                      <input type="hidden" name="key" value="[% key.value %]">
                       <input type="hidden" name="op" value="delete">
                       <input type="submit" value="Delete">
                     </form>
                     <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
-                      <input type="hidden" name="borrowernumber" value="[% borrowernumber %]">
-                      <input type="hidden" name="key" value="[% key.api_key %]">
+                      <input type="hidden" name="patron_id" value="[% patron.id %]">
+                      <input type="hidden" name="key" value="[% key.value %]">
                       [% IF key.active %]
                         <input type="hidden" name="op" value="revoke">
                         <input type="submit" value="Revoke">
@@ -66,7 +74,10 @@
               [% END %]
             </tbody>
           </table>
+        [% ELSE %]
+            <span class="warn">No keys defined for the current patron.</span>
         [% END %]
+        </div>
       </div>
     </div>
     <div class="yui-b">

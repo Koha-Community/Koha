@@ -22,8 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
-
-use Koha::Borrower;
+use Koha::ApiKey;
 
 use base qw(Koha::Objects);
 
@@ -33,17 +32,21 @@ Koha::ApiKeys - Koha API Keys Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Internal methods
 
 =cut
 
-=head3 type
+=head3 _type
 
 =cut
 
-sub type {
+sub _type {
     return 'ApiKey';
 }
+
+=head3 object_class
+
+=cut
 
 sub object_class {
     return 'Koha::ApiKey';
