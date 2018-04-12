@@ -45,7 +45,7 @@ my $pending_onsite_checkouts = C4::Circulation::GetPendingOnSiteCheckouts();
 
 $template->param(
     pending_onsite_checkouts => $pending_onsite_checkouts,
-    pending_onsite_notes     => $pending_onsite_notes,
+    pending_checkout_notes   => $pending_checkout_notes,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

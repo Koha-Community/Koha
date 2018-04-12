@@ -1,79 +1,11 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Home &rsaquo; Circulation &rsaquo; Checkout Notes</title>
+<title>Home &rsaquo; Circulation &rsaquo; Checkout notes</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
-[% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function(){
-        $("#notestable").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ 0, -1 ], "bSearchable": false, "bSortable": false },
-            ],
-            "sPaginationType": "four_button"
-        }));
-
-        $(".SelectAll").on("click", function(){
-            $("input[name='issue_ids'][type='checkbox']").prop("checked", true);
-            $(".btn-sm").prop("disabled", false);
-        });
-
-        $(".ClearAll").on("click", function(){
-            $("input[name='issue_ids'][type='checkbox']").prop("checked", false);
-            $(".btn-sm").prop("disabled", true);
-        });
-
-        $("#error").hide();
-
-        $("input[type='checkbox']").click(function(event){
-            if ( $("input[type='checkbox']").is(":checked") ) {
-                $(".btn-sm").prop("disabled", false);
-            } else {
-                $(".btn-sm").prop("disabled", true);
-            }
-        });
-
-        $(".btn-xs").click(function(event){
-            event.preventDefault(); // prevent form submission
-            var $action = $(this).attr("name");
-            var $issue_id = $(this).data('issue_id');
-            var ajaxData = {
-                'action': $action,
-                'issue_id': $issue_id,
-            };
-
-            $.ajax({
-                url: '/cgi-bin/koha/svc/checkout_notes/',
-                type: 'POST',
-                dataType: 'json',
-                data: ajaxData,
-            })
-
-            .done(function(data){
-                if (data.status == 'success'){
-                    if ( $action == 'notseen' ){
-                        $("#status_" + $issue_id).text("Not seen");
-                        $(event.target).siblings(".seen").prop("disabled", false);
-                        $(event.target).prop("disabled", true);
-                    } else {
-                        $("#status_" + $issue_id).text("Seen");
-                        $(event.target).siblings(".notseen").prop("disabled", false);
-                        $(event.target).prop("disabled", true);
-                    }
-                } else {
-                    $("#error").text(_("Unable to change status of note."));
-                    $("#error").show();
-                }
-            });
-        });
-    });
-//]]>
-</script>
-[% INCLUDE 'calendar.inc' %]
-<script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min.js"></script>
 </head>
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -131,7 +63,7 @@
                                         <td>[% note.item.biblio.title %] - [% note.item.biblio.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber %]">[% note.item.barcode %]</a>)</td>
                                         <td>[% note.note %]</td>
                                         <td>[% note.notedate | $KohaDates %]</td>
-                                        <td>[% IF note.patron.title %][% note.patron.title [% END %][% note.patron.firstname %] [% note.patron.surname %] (<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% note.patron.borrowernumber %]">[% note.patron.cardnumber %]</a>)</td>
+                                        <td>[% IF note.patron.title %][% note.patron.title %][% END %][% note.patron.firstname %] [% note.patron.surname %] (<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% note.patron.borrowernumber %]">[% note.patron.cardnumber %]</a>)</td>
                                         <td>
                                             [% IF ( note.noteseen == 0 ) %]
                                                 <span id="status_[% note.issue_id %]">Not seen</span>
@@ -174,5 +106,77 @@
 
     </div> <!-- bd -->
 </div> <!-- doc3 -->
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.checkboxes.min_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function(){
+            $("#notestable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ 0, -1 ], "bSearchable": false, "bSortable": false },
+                ],
+                "sPaginationType": "four_button"
+            }));
+
+            $(".SelectAll").on("click", function(){
+                $("input[name='issue_ids'][type='checkbox']").prop("checked", true);
+                $(".btn-sm").prop("disabled", false);
+            });
+
+            $(".ClearAll").on("click", function(){
+                $("input[name='issue_ids'][type='checkbox']").prop("checked", false);
+                $(".btn-sm").prop("disabled", true);
+            });
+
+            $("#error").hide();
+
+            $("input[type='checkbox']").click(function(event){
+                if ( $("input[type='checkbox']").is(":checked") ) {
+                    $(".btn-sm").prop("disabled", false);
+                } else {
+                    $(".btn-sm").prop("disabled", true);
+                }
+            });
+
+            $(".btn-xs").click(function(event){
+                event.preventDefault(); // prevent form submission
+                var $action = $(this).attr("name");
+                var $issue_id = $(this).data('issue_id');
+                var ajaxData = {
+                    'action': $action,
+                    'issue_id': $issue_id,
+                };
+
+                $.ajax({
+                    url: '/cgi-bin/koha/svc/checkout_notes/',
+                    type: 'POST',
+                    dataType: 'json',
+                    data: ajaxData,
+                })
+
+                .done(function(data){
+                    if (data.status == 'success'){
+                        if ( $action == 'notseen' ){
+                            $("#status_" + $issue_id).text(_("Not seen"));
+                            $(event.target).siblings(".seen").prop("disabled", false);
+                            $(event.target).prop("disabled", true);
+                        } else {
+                            $("#status_" + $issue_id).text(_("Seen"));
+                            $(event.target).siblings(".notseen").prop("disabled", false);
+                            $(event.target).prop("disabled", true);
+                        }
+                    } else {
+                        $("#error").text(_("Unable to change status of note."));
+                        $("#error").show();
+                    }
+                });
+            });
+        });
+    //]]>
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

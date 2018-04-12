@@ -125,7 +125,7 @@
                 <div class="row">
                     <div class="col-sm-12">
                         [%# Following statement must be in one line for translatability %]
-                        [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers_edit_borrowers && pending_borrower_modifications ) || ( CAN_user_acquisition && pendingsuggestions ) || ( CAN_user_borrowers_edit_borrowers && pending_discharge_requests ) || pending_article_requests) %]
+                        [% IF ( ( CAN_user_tools_moderate_comments  && pendingcomments ) || ( CAN_user_tools_moderate_tags && pendingtags ) || ( CAN_user_borrowers_edit_borrowers && pending_borrower_modifications ) || ( CAN_user_acquisition && pendingsuggestions ) || ( CAN_user_borrowers_edit_borrowers && pending_discharge_requests ) || pending_article_requests) || ( Koha.Preference('AllowCheckoutNotes') && CAN_user_circulate_manage_checkout_notes && pending_checkout_notes ) %]
                             <div id="area-pending">
                                 [% IF pending_article_requests %]
                                 <div class="pending-info" id="article_requests_pending">
