@@ -15704,7 +15704,7 @@ if( CheckVersion( $DBversion ) ) {
     });
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 15492: Add a standalone self-checkin module)\n";
+    print "Upgrade to $DBversion done (Bug 15492 - Add a standalone self-checkin module)\n";
 }
 
 $DBversion = '17.12.00.025';
@@ -15732,7 +15732,7 @@ if( CheckVersion( $DBversion ) ) {
     }
 
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 19804: Add issuingrules.suspension_chargeperiod)\n";
+    print "Upgrade to $DBversion done (Bug 19804 - Add issuingrules.suspension_chargeperiod)\n";
 }
 
 $DBversion = '17.12.00.027';
@@ -15744,6 +15744,20 @@ if( CheckVersion( $DBversion ) ) {
 
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 19289 - Add system preference UseACQFrameworkForBiblioRecords)\n";
+}
+
+$DBversion = '17.12.00.028';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'marc_tag_structure', 'ind1_defaultvalue' ) ) {
+        $dbh->do(q|
+            ALTER TABLE marc_tag_structure
+            ADD COLUMN ind2_defaultvalue VARCHAR(1) NOT NULL DEFAULT '' AFTER authorised_value,
+            ADD COLUMN ind1_defaultvalue VARCHAR(1) NOT NULL DEFAULT '' AFTER authorised_value;
+        |);
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 9701 - Add default indicators (marc_tag_structure.indX_defaultvalue))\n";
 }
 
 # SEE bug 13068
