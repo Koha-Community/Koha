@@ -864,7 +864,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                                 ([% ItemTypes.GetDescription( w.item.effective_itemtype ) %]),
                                 [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
                                 [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber %]] [% END %]
-                                Hold placed on [% w.reservedate | $KohaDates %].
+                                <span class="hold-placed-on-date">Hold placed on [% w.reservedate | $KohaDates %].</span>
 
                                 <br/>
                                 [% IF ( w.branch.branchcode == Branches.GetLoggedInBranchcode()  ) %]<strong class="waitinghere">[% ELSE %]<strong>[% END %]
