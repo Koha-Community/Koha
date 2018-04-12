@@ -277,7 +277,7 @@ $newdata{'lang'}    = $input->param('lang')    if defined($input->param('lang'))
 # builds default userid
 # userid input text may be empty or missing because of syspref BorrowerUnwantedField
 if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_BorrowerUnwantedField =~ /userid/ && !defined $data{'userid'} ) {
-    if ( ( defined $newdata{'firstname'} ) && ( defined $newdata{'surname'} ) ) {
+    if ( ( defined $newdata{'firstname'} || $category_type eq 'I' ) && ( defined $newdata{'surname'} ) ) {
         # Full page edit, firstname and surname input zones are present
         $patron->firstname($newdata{firstname});
         $patron->surname($newdata{surname});
