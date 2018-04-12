@@ -17,6 +17,29 @@ package Koha::Template::Plugin::Asset;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+=head1 NAME
+
+Koha::Template::Plugin::Asset
+
+=head1 DESCRIPTION
+
+The Asset plugin is a helper that generates HTML tags for JS and CSS files
+
+=head1 SYNOPSYS
+
+    [% USE Asset %]
+
+    [% Asset.css("css/datatables.css") %]
+    [% Asset.js("js/datatables.js") %]
+
+    [%# With attributes %]
+    [% Asset.css("css/print.css", { media = "print" }) %]
+
+    [%# If you only want the url and not the HTML tag %]
+    [% url = Asset.url("css/datatables.css") %]
+
+=cut
+
 use Modern::Perl;
 
 use Template::Plugin;
@@ -25,6 +48,14 @@ use base qw( Template::Plugin );
 use File::Basename;
 use File::Spec;
 use C4::Context;
+
+=head1 FUNCTIONS
+
+=head2 new
+
+Constructor. Do not use this directly.
+
+=cut
 
 sub new {
     my ($class, $context) = @_;
@@ -35,6 +66,14 @@ sub new {
 
     return bless $self, $class;
 }
+
+=head2 js
+
+Returns a <script> tag for the given JS file
+
+    [% Asset.js('js/datatables.js') %]
+
+=cut
 
 sub js {
     my ( $self, $filename, $attributes ) = @_;
@@ -49,6 +88,15 @@ sub js {
 
     return $self->tag('script', $attributes) . '</script>';
 }
+
+=head2 css
+
+Returns a <link> tag for the given CSS file
+
+    [% Asset.css('css/datatables.css') %]
+    [% Asset.css('css/print.css', { media = "print" }) %]
+
+=cut
 
 sub css {
     my ( $self, $filename, $attributes ) = @_;
@@ -65,6 +113,14 @@ sub css {
 
     return $self->tag('link', $attributes);
 }
+
+=head2 url
+
+Returns the URL for the given file
+
+    [% Asset.url('css/datatables.css') %]
+
+=cut
 
 sub url {
     my ( $self, $filename ) = @_;
@@ -92,6 +148,15 @@ sub url {
         }
     }
 }
+
+=head2 tag
+
+Returns an HTML tag with given name and attributes.
+This shouldn't be used directly.
+
+    [% Asset.tag("script", { src = "/koha-tmpl/intranet-tmpl/prog/css/datatables.css" }) %]
+
+=cut
 
 sub tag {
     my ($self, $name, $attributes) = @_;
