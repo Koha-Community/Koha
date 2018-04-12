@@ -21,6 +21,7 @@ use Test::More tests => 1;
 use Test::Mojo;
 
 use Koha::Database;
+use Koha::Patrons;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -34,13 +35,14 @@ subtest '/oauth/token tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build({
+    my $borrower = $builder->build({
         source => 'Borrower',
         value  => {
             surname => 'Test OAuth',
             flags => 0,
         },
     });
+    my $patron = Koha::Patrons->find($borrower->{borrowernumber});
 
     # Missing parameter grant_type
     $t->post_ok('/api/v1/oauth/token')
@@ -60,7 +62,7 @@ subtest '/oauth/token tests' => sub {
     t::lib::Mocks::mock_config('api_client', {
         'client_id' => $client_id,
         'client_secret' => $client_secret,
-        patron_id => $patron->{borrowernumber},
+        patron_id => $patron->borrowernumber,
     });
 
     my $formData = {
@@ -85,14 +87,7 @@ subtest '/oauth/token tests' => sub {
     $t->request_ok($tx)->status_is(403);
 
     # With access token and permissions, it returns 200
-    $builder->build({
-        source => 'UserPermission',
-        value  => {
-            borrowernumber => $patron->{borrowernumber},
-            module_bit => 4, # borrowers
-            code => 'edit_borrowers',
-        },
-    });
+    $patron->flags(2**4)->store;
     $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
     $tx->req->headers->authorization("Bearer $access_token");
     $t->request_ok($tx)->status_is(200);
