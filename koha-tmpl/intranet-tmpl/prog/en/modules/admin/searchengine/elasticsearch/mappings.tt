@@ -93,11 +93,11 @@ a.add, a.delete {
     <div class="dialog message">
         Warning: Any changes to the configuration will only take effect after a full reindex. Until then searching may not work correctly.
 
-        <p>Weight: define weight between 1 and 99.</p>
+        <p>Weight: define weight between 1 and 99. Higher numbers indicate increased relevancy.
+        <strong>Note that fields weighting works only for simple search.</strong></p>
         <ol>
           <li>only search fields mapped with biblios can be weighted</li>
-          <li>search will be done on weighted fields only</li>
-          <li>if no field is weighted, search will be done on all the record</li>
+          <li>search will boost/increase weighted field(s) relevancy</li>
         </ol>
     </div>
     [% IF errors %]
