@@ -20,8 +20,6 @@ package Koha::Authority::ControlledIndicators;
 use Modern::Perl;
 use C4::Context;
 
-our $cached_indicators;
-
 =head1 NAME
 
 Koha::Authority::ControlledIndicators - Obtain biblio indicators, controlled by authority record
@@ -39,7 +37,6 @@ Koha::Authority::ControlledIndicators - Obtain biblio indicators, controlled by 
 sub new {
     my ( $class, $params ) = @_;
     $params = {} if ref($params) ne 'HASH';
-    $cached_indicators = undef;
     return bless $params, $class;
 }
 
@@ -66,11 +63,11 @@ sub get {
     $flavour = uc($flavour);
     $flavour = 'UNIMARC' if $flavour eq 'UNIMARCAUTH';
 
-    $cached_indicators //= _load_pref();
+    $self->{_parsed} //= _load_pref();
     my $result = {};
-    return $result if !exists $cached_indicators->{$flavour};
-    my $rule = $cached_indicators->{$flavour}->{$tag} //
-        $cached_indicators->{$flavour}->{'*'} //
+    return $result if !exists $self->{_parsed}->{$flavour};
+    my $rule = $self->{_parsed}->{$flavour}->{$tag} //
+        $self->{_parsed}->{$flavour}->{'*'} //
         {};
     my $report_fld = $record ? $record->field( $report_tag ) : undef;
 
@@ -144,17 +141,6 @@ sub _thesaurus_info {
             : q{};
     }
     return ( $ind, $sub2 );
-}
-
-=head3 clear
-
-    Clear internal cache.
-
-=cut
-
-sub clear {
-    my ( $self, $params ) = @_;
-    $cached_indicators = undef;
 }
 
 =head1 AUTHOR

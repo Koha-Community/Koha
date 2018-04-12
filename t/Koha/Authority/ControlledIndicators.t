@@ -10,7 +10,7 @@ use t::lib::Mocks;
 use Koha::Authority::ControlledIndicators;
 
 subtest "Simple tests" => sub {
-    plan tests => 10;
+    plan tests => 8;
 
     t::lib::Mocks::mock_preference('AuthorityControlledIndicators', q|
 marc21,600,ind1:auth1,ind2:x
@@ -52,24 +52,6 @@ marc21,800,ind1:,
     });
     is( $res->{ind1}, '', 'ind1: clears 1st indicator' );
     is( exists $res->{ind2}, '', 'Check if 2nd indicator key does not exist' );
-
-    # Test caching
-    t::lib::Mocks::mock_preference('AuthorityControlledIndicators', q{} );
-    $res = $oInd->get({
-        flavour => "MARC21",
-        report_tag  => '100',
-        auth_record => $record,
-        biblio_tag  => '700',
-    });
-    is( $res->{ind1}, '4', 'Cache not cleared yet' );
-    $oInd->clear;
-    $res = $oInd->get({
-        flavour => "MARC21",
-        report_tag  => '100',
-        auth_record => $record,
-        biblio_tag  => '700',
-    });
-    is_deeply( $res, {}, 'Cache cleared' );
 };
 
 subtest "Tests for sub _thesaurus_info" => sub {
