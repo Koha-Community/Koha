@@ -670,7 +670,7 @@ sub CanBookBeIssued {
 
     my $item = GetItem(undef, $barcode );
     # MANDATORY CHECKS - unless item exists, nothing else matters
-    unless ( $item->{barcode} ) {
+    unless ( $item ) {
         $issuingimpossible{UNKNOWN_BARCODE} = 1;
     }
     return ( \%issuingimpossible, \%needsconfirmation ) if %issuingimpossible;
