@@ -113,27 +113,36 @@ sub authenticate_api_request {
     my $spec = $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
     my $authorization = $spec->{'x-koha-authorization'};
 
-    if (my $oauth = $c->oauth) {
-        my $clients = C4::Context->config('api_client');
-        $clients = [ $clients ] unless ref $clients eq 'ARRAY';
-        my ($client) = grep { $_->{client_id} eq $oauth->{client_id} } @$clients;
+    my $authorization_header = $c->req->headers->authorization;
+    if ($authorization_header and $authorization_header =~ /^Bearer /) {
+        if (my $oauth = $c->oauth) {
+            my $clients = C4::Context->config('api_client');
+            $clients = [ $clients ] unless ref $clients eq 'ARRAY';
+            my ($client) = grep { $_->{client_id} eq $oauth->{client_id} } @$clients;
 
-        my $patron = Koha::Patrons->find($client->{patron_id});
-        my $permissions = $authorization->{'permissions'};
-        # Check if the patron is authorized
-        if ( haspermission($patron->userid, $permissions)
-            or allow_owner($c, $authorization, $patron)
-            or allow_guarantor($c, $authorization, $patron) ) {
+            my $patron = Koha::Patrons->find($client->{patron_id});
+            my $permissions = $authorization->{'permissions'};
+            # Check if the patron is authorized
+            if ( haspermission($patron->userid, $permissions)
+                or allow_owner($c, $authorization, $patron)
+                or allow_guarantor($c, $authorization, $patron) ) {
 
-            validate_query_parameters( $c, $spec );
+                validate_query_parameters( $c, $spec );
 
-            # Everything is ok
-            return 1;
+                # Everything is ok
+                return 1;
+            }
+
+            Koha::Exceptions::Authorization::Unauthorized->throw(
+                error => "Authorization failure. Missing required permission(s).",
+                required_permissions => $permissions,
+            );
         }
 
-        Koha::Exceptions::Authorization::Unauthorized->throw(
-            error => "Authorization failure. Missing required permission(s).",
-            required_permissions => $permissions,
+        # If we have "Authorization: Bearer" header and oauth authentication
+        # failed, do not try other authentication means
+        Koha::Exceptions::Authentication::Required->throw(
+            error => 'Authentication failure.'
         );
     }
 
