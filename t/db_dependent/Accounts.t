@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 27;
+use Test::More tests => 28;
 use Test::MockModule;
 use Test::Warn;
 
@@ -28,6 +28,8 @@ use t::lib::Mocks;
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::Notice::Messages;
+use Koha::Notice::Templates;
 use Koha::DateUtils qw( dt_from_string );
 
 BEGIN {
@@ -956,6 +958,64 @@ subtest "Koha::Account::Offset credit & debit tests" => sub {
 
     is( $account_offset->debit, undef, "Koha::Account::Offset->debit returns undef if no associated debit" );
     is( $account_offset->credit, undef, "Koha::Account::Offset->credit returns undef if no associated credit" );
+};
+
+subtest "Payment notice tests" => sub {
+
+    plan tests => 8;
+
+    Koha::Account::Lines->delete();
+    Koha::Patrons->delete();
+    Koha::Notice::Messages->delete();
+    # Create a borrower
+    my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+    my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
+
+    my $borrower = Koha::Patron->new(
+        {
+            cardnumber   => 'chelseahall',
+            surname      => 'Hall',
+            firstname    => 'Chelsea',
+            email        => 'chelsea@example.com',
+            categorycode => $categorycode,
+            branchcode   => $branchcode,
+        }
+    )->store();
+
+    my $account = Koha::Account->new({ patron_id => $borrower->id });
+
+    my $line = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 27 })->store();
+
+    my $letter = Koha::Notice::Templates->find( { code => 'ACCOUNT_PAYMENT' } );
+    $letter->content('[%- USE Price -%]A payment of [% credit.amount * -1 | $Price %] has been applied to your account.');
+    $letter->store();
+
+    t::lib::Mocks::mock_preference('UseEmailReceipts', '0');
+
+    my $id = $account->pay( { amount => 1 } );
+    is( Koha::Notice::Messages->search()->count(), 0, 'Notice for payment not sent if UseEmailReceipts is disabled' );
+
+    $id = $account->pay( { amount => 1, type => 'writeoff' } );
+    is( Koha::Notice::Messages->search()->count(), 0, 'Notice for writeoff not sent if UseEmailReceipts is disabled' );
+
+    t::lib::Mocks::mock_preference('UseEmailReceipts', '1');
+
+    $id = $account->pay( { amount => 12 } );
+    my $notice = Koha::Notice::Messages->search()->next();
+    is( $notice->subject, 'Account payment', 'Notice subject is correct for payment' );
+    is( $notice->letter_code, 'ACCOUNT_PAYMENT', 'Notice letter code is correct for payment' );
+    is( $notice->content, 'A payment of 12.00 has been applied to your account.', 'Notice content is correct for payment' );
+    $notice->delete();
+
+    $letter = Koha::Notice::Templates->find( { code => 'ACCOUNT_WRITEOFF' } );
+    $letter->content('[%- USE Price -%]A writeoff of [% credit.amount * -1 | $Price %] has been applied to your account.');
+    $letter->store();
+
+    $id = $account->pay( { amount => 13, type => 'writeoff' } );
+    $notice = Koha::Notice::Messages->search()->next();
+    is( $notice->subject, 'Account writeoff', 'Notice subject is correct for payment' );
+    is( $notice->letter_code, 'ACCOUNT_WRITEOFF', 'Notice letter code is correct for writeoff' );
+    is( $notice->content, 'A writeoff of 13.00 has been applied to your account.', 'Notice content is correct for writeoff' );
 };
 
 1;
