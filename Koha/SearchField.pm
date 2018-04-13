@@ -20,7 +20,6 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
-use Koha::SearchMarcMaps;
 
 use base qw(Koha::Object);
 

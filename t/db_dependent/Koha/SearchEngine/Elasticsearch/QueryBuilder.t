@@ -23,6 +23,8 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::More tests => 6;
 
+use List::Util qw( all );
+
 use Koha::Database;
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
 
@@ -81,8 +83,14 @@ $se->mock( 'get_elasticsearch_mappings', sub {
     return $all_mappings{$self->index};
 });
 
+my $cache = Koha::Caches->get_instance();
+my $clear_search_fields_cache = sub {
+    $cache->clear_from_cache('elasticsearch_search_fields_staff_client');
+    $cache->clear_from_cache('elasticsearch_search_fields_opac');
+};
+
 subtest 'build_authorities_query_compat() tests' => sub {
-    plan tests => 37;
+    plan tests => 47;
 
     my $qb;
 
@@ -107,34 +115,40 @@ subtest 'build_authorities_query_compat() tests' => sub {
     $search_term = 'Donald Duck';
     foreach my $koha_name ( keys %{ $koha_to_index_name } ) {
         my $query = $qb->build_authorities_query_compat( [ $koha_name ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
+        is( $query->{query}->{bool}->{must}[0]->{query_string}->{query}, "(Donald*) AND (Duck*)" );
         if ( $koha_name eq 'all' || $koha_name eq 'any' ) {
-            is( $query->{query}->{bool}->{must}[0]->{query_string}->{query},
-                "(Donald*) AND (Duck*)");
+            isa_ok( $query->{query}->{bool}->{must}[0]->{query_string}->{fields}, 'ARRAY')
         } else {
-            is( $query->{query}->{bool}->{must}[0]->{query_string}->{query},
-                "(Donald*) AND (Duck*)");
+            is( $query->{query}->{bool}->{must}[0]->{query_string}->{default_field}, $koha_to_index_name->{$koha_name} );
         }
     }
 
     foreach my $koha_name ( keys %{ $koha_to_index_name } ) {
         my $query = $qb->build_authorities_query_compat( [ $koha_name ],  undef, undef, ['is'], [$search_term], 'AUTH_TYPE', 'asc' );
         if ( $koha_name eq 'all' || $koha_name eq 'any' ) {
-            is( $query->{query}->{bool}->{must}[0]->{match_phrase}->{"_all.phrase"},
-                "donald duck");
+            is(
+                $query->{query}->{bool}->{must}[0]->{multi_match}->{query},
+                "Donald Duck"
+            );
+            my $all_matches = all { /\.ci_raw$/ }
+                @{$query->{query}->{bool}->{must}[0]->{multi_match}->{fields}};
+            ok( $all_matches, 'Correct fields parameter for "is" query in "any" or "all"' );
         } else {
-            is( $query->{query}->{bool}->{must}[0]->{match_phrase}->{$koha_to_index_name->{$koha_name}.".phrase"},
-                "donald duck");
+            is(
+                $query->{query}->{bool}->{must}[0]->{term}->{$koha_to_index_name->{$koha_name} . ".ci_raw"},
+                "Donald Duck"
+            );
         }
     }
 
     foreach my $koha_name ( keys %{ $koha_to_index_name } ) {
         my $query = $qb->build_authorities_query_compat( [ $koha_name ],  undef, undef, ['start'], [$search_term], 'AUTH_TYPE', 'asc' );
         if ( $koha_name eq 'all' || $koha_name eq 'any' ) {
-            is( $query->{query}->{bool}->{must}[0]->{match_phrase_prefix}->{"_all.phrase"},
-                "donald duck");
+            my $all_matches = all { (%{$_->{prefix}})[0] =~ /\.ci_raw$/ && (%{$_->{prefix}})[1] eq "Donald Duck" }
+                @{$query->{query}->{bool}->{must}[0]->{bool}->{should}};
+            ok( $all_matches, "Correct multiple prefix query" );
         } else {
-            is( $query->{query}->{bool}->{must}[0]->{match_phrase_prefix}->{$koha_to_index_name->{$koha_name}.".phrase"},
-                "donald duck");
+            is( $query->{query}->{bool}->{must}[0]->{prefix}->{$koha_to_index_name->{$koha_name} . ".ci_raw"}, "Donald Duck" );
         }
     }
 
@@ -452,19 +466,21 @@ subtest 'build query from form subtests' => sub {
 };
 
 subtest 'build_query with weighted fields tests' => sub {
-    plan tests => 4;
+    plan tests => 2;
 
     my $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'mydb' } );
     my $db_builder = t::lib::TestBuilder->new();
 
     Koha::SearchFields->search({})->delete;
+    $clear_search_fields_cache->();
 
     $db_builder->build({
         source => 'SearchField',
         value => {
             name    => 'acqdate',
             label   => 'acqdate',
-            weight  => undef
+            weight  => undef,
+            staff_client => 1
         }
     });
 
@@ -473,7 +489,8 @@ subtest 'build_query with weighted fields tests' => sub {
         value => {
             name    => 'title',
             label   => 'title',
-            weight  => 25
+            weight  => 25,
+            staff_client => 1
         }
     });
 
@@ -482,7 +499,8 @@ subtest 'build_query with weighted fields tests' => sub {
         value => {
             name    => 'subject',
             label   => 'subject',
-            weight  => 15
+            weight  => 15,
+            staff_client => 1
         }
     });
 
@@ -490,10 +508,12 @@ subtest 'build_query with weighted fields tests' => sub {
     undef, undef, undef, { weighted_fields => 1 });
 
     my $fields = $query->{query}{query_string}{fields};
-    is(scalar(@$fields), 3, 'Search is done on 3 fields');
-    is($fields->[0], '_all', 'First search field is _all');
-    is($fields->[1], 'title^25.00', 'Second search field is title');
-    is($fields->[2], 'subject^15.00', 'Third search field is subject');
+
+    my @found = grep { $_ eq 'title^25.00' } @{$fields};
+    is(@found, 1, 'Search field is title has correct weight'); # Fails
+
+    @found = grep { $_ eq 'subject^15.00' } @{$fields};
+    is(@found, 1, 'Search field subject has correct weight'); # Fails
 };
 
 subtest "_convert_sort_fields() tests" => sub {

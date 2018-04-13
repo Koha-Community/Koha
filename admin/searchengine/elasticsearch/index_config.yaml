@@ -3,29 +3,29 @@
 index:
   analysis:
     analyzer:
-      # Phrase analyzer is used for phrases (phrase match, sorting)
-      analyser_phrase:
+      # Phrase analyzer is used for phrases (exact phrase match)
+      analyzer_phrase:
         tokenizer: keyword
         filter:
           - icu_folding
         char_filter:
           - punctuation
-      analyser_standard:
+      analyzer_standard:
         tokenizer: icu_tokenizer
         filter:
           - icu_folding
-      analyser_stdno:
+      analyzer_stdno:
         tokenizer: whitespace
         filter:
           - icu_folding
         char_filter:
           - punctuation
     normalizer:
-      normalizer_keyword:
+      icu_folding_normalizer:
         type: custom
         filter:
           - icu_folding
-      my_normalizer:
+      nfkc_cf_normalizer:
         type: custom
         char_filter: icu_normalizer
     char_filter:

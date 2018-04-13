@@ -1,9 +1,6 @@
 ---
 # General field configuration
 general:
-  _all:
-    type: string
-    analyzer: analyser_standard
   properties:
     marc_data:
       store: true
@@ -29,31 +26,30 @@ search:
     null_value: 0
   stdno:
     type: text
-    analyzer: analyser_stdno
-    search_analyzer: analyser_stdno
+    analyzer: analyzer_stdno
+    search_analyzer: analyzer_stdno
     fields:
       phrase:
         type: text
-        analyzer: analyser_stdno
-        search_analyzer: analyser_stdno
+        analyzer: analyzer_phrase
+        search_analyzer: analyzer_phrase
       raw:
         type: keyword
-    copy_to: _all
   default:
     type: text
-    analyzer: analyser_standard
-    search_analyzer: analyser_standard
+    analyzer: analyzer_standard
+    search_analyzer: analyzer_standard
     fields:
       phrase:
         type: text
-        analyzer: analyser_phrase
-        search_analyzer: analyser_phrase
+        analyzer: analyzer_phrase
+        search_analyzer: analyzer_phrase
       raw:
         type: keyword
-      lc_raw:
+        normalizer: nfkc_cf_normalizer
+      ci_raw:
         type: keyword
-        normalizer: my_normalizer
-    copy_to: _all
+        normalizer: icu_folding_normalizer
 # Facets
 facet:
   default:
@@ -67,9 +63,5 @@ suggestible:
 # Sort
 sort:
   default:
-    type: text
-    analyzer: analyser_phrase
-    search_analyzer: analyser_phrase
-    fields:
-      phrase:
-        type: keyword
+    type: icu_collation_keyword
+    index: false

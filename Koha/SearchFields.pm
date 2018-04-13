@@ -35,21 +35,6 @@ Koha::SearchFields - Koha SearchField Object set class
 
 =cut
 
-=head3 weighted_fields
-
-my (@w_fields, @weight) = Koha::SearchFields->weighted_fields();
-
-=cut
-
-sub weighted_fields {
-    my ($self) = @_;
-
-    return $self->search(
-        { weight => { '>' => 0, '!=' => undef } },
-        { order_by => { -desc => 'weight' } }
-    );
-}
-
 =head3 type
 
 =cut

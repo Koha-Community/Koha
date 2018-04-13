@@ -554,18 +554,23 @@ if (C4::Context->preference('OpacSuppression')) {
     }
 }
 
-my $build_params = {
-    suppress => $suppress
-};
-
-unless ( $cgi->param('advsearch') ) {
-    $build_params->{weighted_fields} = 1;
-}
-
 ## I. BUILD THE QUERY
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type)
-  = $builder->build_query_compat( \@operators, \@operands,
-    \@indexes, \@limits, \@sort_by, 0, $lang, $build_params);
+  = $builder->build_query_compat(
+    \@operators,
+    \@operands,
+    \@indexes,
+    \@limits,
+    \@sort_by,
+    0,
+    $lang,
+    {
+        expanded_facet => $expanded_facet,
+        suppress => $suppress,
+        is_opac => 1,
+        weighted_fields => !$cgi->param('advsearch')
+    }
+);
 
 sub _input_cgi_parse {
     my @elements;

@@ -471,11 +471,6 @@ my $page = $cgi->param('page') || 1;
 # Define some global variables
 my ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 
-my $build_params;
-unless ( $cgi->param('advsearch') ) {
-    $build_params->{weighted_fields} = 1;
-}
-
 my $builder = Koha::SearchEngine::QueryBuilder->new(
     { index => $Koha::SearchEngine::BIBLIOS_INDEX } );
 my $searcher = Koha::SearchEngine::Search->new(
@@ -488,7 +483,7 @@ my $searcher = Koha::SearchEngine::Search->new(
     $query_type
   )
   = $builder->build_query_compat( \@operators, \@operands, \@indexes, \@limits,
-    \@sort_by, $scan, $lang, $build_params );
+    \@sort_by, $scan, $lang, { weighted_fields => !$cgi->param('advsearch') });
 
 ## parse the query_cgi string and put it into a form suitable for <input>s
 my @query_inputs;
