@@ -105,6 +105,14 @@
                 var rowid = $(this).data("noticeid");
                 $("#notice"+rowid).toggle();
                 $("#resend_notice"+rowid).toggle();
+                var iframe = $("#notice"+rowid).children('iframe');
+                // Adding some padding to the height and width to remove scrollbars
+                var height = iframe.get(0).contentWindow.document.body.scrollHeight + 25;
+                var width = iframe.get(0).contentWindow.document.body.scrollWidth + 25;
+                iframe.css({
+                    'width':  width + 'px',
+                    'height': height + 'px'
+                });
             });
         });
     </script>
