@@ -15818,6 +15818,17 @@ unimarc, *, ind1:auth1, ind2:auth2|;
     print "Upgrade to $DBversion done (Bug 14769 - Authorities merge: Set correct indicators in biblio field (new system preference AuthorityControlledIndicators))\n";
 }
 
+$DBversion = '17.12.00.030';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+        VALUES ('NovelistSelectStaffProfile',NULL,'Novelist staff client user Profile',NULL,'free')
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19882 - Add system preference NovelistSelectStaffProfile)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
