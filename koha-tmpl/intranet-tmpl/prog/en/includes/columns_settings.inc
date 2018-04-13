@@ -25,22 +25,37 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             extend: 'colvis',
             columns: included_ids,
             text: _("Column visibility"),
+            exportOptions: {
+                columns: ':visible'
+            },
         },
         {
             extend: 'excelHtml5',
             text: _("Excel"),
+            exportOptions: {
+                columns: ':visible'
+            },
         },
         {
             extend: 'csvHtml5',
             text: _("CSV"),
+            exportOptions: {
+                columns: ':visible'
+            },
         },
         {
             extend: 'copyHtml5',
             text: _("Copy"),
+            exportOptions: {
+                columns: ':visible'
+            },
         },
         {
             extend: 'print',
             text: _("Print"),
+            exportOptions: {
+                columns: ':visible'
+            },
         },
     ];
 
