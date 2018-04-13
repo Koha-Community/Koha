@@ -26,6 +26,7 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patron::Category;
 use Koha::Patron::Categories;
+use t::lib::Dates;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -75,11 +76,11 @@ subtest 'get_expiry_date' => sub {
     is( $category->get_expiry_date( $next_year ), $next_month, 'Without enrolmentperiod, ->get_expiry_date should return enrolmentperiodadate even if a parameter is given' );
 
     $category->enrolmentperiod( 12 )->store;
-    is( $category->get_expiry_date, $next_year, 'With enrolmentperiod defined and no parameter, ->get_expiry_date should return today + enrolmentperiod' );
-    is( $category->get_expiry_date( $yesterday ), $next_year->clone->add( days => -1 ), 'With enrolmentperiod defined and a date given in parameter, ->get_expiry_date should take this date + enrolmentperiod' );
+    is( t::lib::Dates::compare($category->get_expiry_date, $next_year), 0, 'With enrolmentperiod defined and no parameter, ->get_expiry_date should return today + enrolmentperiod' );
+    is( t::lib::Dates::compare($category->get_expiry_date( $yesterday ), $next_year->clone->add( days => -1 )), 0, 'With enrolmentperiod defined and a date given in parameter, ->get_expiry_date should take this date + enrolmentperiod' );
 
     my $hardcoded_date = '2000-01-31';
-    is( $category->get_expiry_date( $hardcoded_date ), dt_from_string( $hardcoded_date )->add( months => 12 ), 'get_expiry_date accepts strings as well'  );
+    is( t::lib::Dates::compare($category->get_expiry_date( $hardcoded_date ), dt_from_string( $hardcoded_date )->add( months => 12 )), 0, 'get_expiry_date accepts strings as well'  );
 
     $category->delete;
 };
