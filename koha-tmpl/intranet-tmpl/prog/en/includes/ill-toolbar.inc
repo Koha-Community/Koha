@@ -1,5 +1,5 @@
 [% USE Koha %]
-[% IF Koha.Preference('ILLModule ') %]
+[% IF Koha.Preference('ILLModule ') && CAN_user_ill %]
     <div id="toolbar" class="btn-toolbar">
         [% IF backends_available %]
           [% IF backends.size > 1 %]

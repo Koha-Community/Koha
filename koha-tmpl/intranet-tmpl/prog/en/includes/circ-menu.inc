@@ -118,7 +118,7 @@
     [% IF Koha.Preference('HouseboundModule') %]
         [% IF houseboundview %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/housebound.pl?borrowernumber=[% patron.borrowernumber %]">Housebound</a></li>
     [% END %]
-    [% IF Koha.Preference('ILLModule') %]
+    [% IF Koha.Preference('ILLModule') && CAN_user_ill %]
         <li><a href="/cgi-bin/koha/ill/ill-requests.pl?borrowernumber=[% patron.borrowernumber %]">Interlibrary loans</a></li>
     [% END %]
 </ul></div>
