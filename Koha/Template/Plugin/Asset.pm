@@ -86,7 +86,7 @@ sub js {
 
     $attributes->{src} = $url;
 
-    return $self->tag('script', $attributes) . '</script>';
+    return $self->_tag('script', $attributes) . '</script>';
 }
 
 =head2 css
@@ -111,7 +111,7 @@ sub css {
     $attributes->{type} = 'text/css';
     $attributes->{href} = $url;
 
-    return $self->tag('link', $attributes);
+    return $self->_tag('link', $attributes);
 }
 
 =head2 url
@@ -149,16 +149,14 @@ sub url {
     }
 }
 
-=head2 tag
+=head2 _tag
 
 Returns an HTML tag with given name and attributes.
 This shouldn't be used directly.
 
-    [% Asset.tag("script", { src = "/koha-tmpl/intranet-tmpl/prog/css/datatables.css" }) %]
-
 =cut
 
-sub tag {
+sub _tag {
     my ($self, $name, $attributes) = @_;
 
     my @attributes_strs;
