@@ -363,6 +363,9 @@
                                             [% request.statusalias.lib | html %]
                                         [% ELSE %]
                                             [% request.capabilities.$req_status.name | html%]
+                                            [% IF request.requested_partners.length > 0 %]
+                                                ([% request.requested_partners | html %])
+                                            [% END %]
                                         [% END %]
                                     </li>
                                     <li class="updated">
@@ -787,21 +790,29 @@
                         var status_name = meta.settings.oInit.originalData[0].capabilities[
                             row.status
                         ].name;
-                        return getStatusName(status_name);
+                        return getStatusName(status_name, row);
                     } else {
                         return '';
                     }
                 }
             };
 
-            var getStatusName = function(origName) {
+            var getStatusName = function(origName, row) {
                 switch( origName ) {
                     case "New request":
                         return _("New request");
                     case "Requested":
                         return _("Requested");
                     case "Requested from partners":
-                        return _("Requested from partners");
+                        var statStr = _("Requested from partners");
+                        if (
+                            row.hasOwnProperty('requested_partners') &&
+                            row.requested_partners &&
+                            row.requested_partners.length > 0
+                        ) {
+                            statStr += ' (' + row.requested_partners + ')';
+                        }
+                        return statStr;
                     case "Request reverted":
                         return _("Request reverted");
                     case "Queued request":

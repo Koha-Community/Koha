@@ -161,6 +161,9 @@ sub list {
         if ($embed{status_alias}) {
             $to_push->{status_alias} = $req->statusalias;
         }
+        if ($embed{requested_partners}) {
+            $to_push->{requested_partners} = $req->requested_partners;
+        }
         push @output, $to_push;
     }
 
