@@ -899,7 +899,9 @@ No patron matched <span class="ex">[% message | html %]</span>
                         [% message.message_date | $KohaDates %]
                         [% Branches.GetName( message.branchcode ) %]
                         [% IF message.manager_id %]
+                           <span class="circmessage-manager-id">
                             ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id %]">[% message.get_column('manager_firstname') %] [% message.get_column('manager_surname') %]</a> )
+                           </span>
                         [% END %]
                         <i>"[% message.message %]"</i>
                     </span>
