@@ -301,7 +301,8 @@ sub AUTOLOAD {
         }
     }
 
-    my @known_methods = qw( is_changed id in_storage get_column discard_changes update );
+    my @known_methods = qw( is_changed id in_storage get_column discard_changes update make_column_dirty );
+
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw( "The method $method is not covered by tests!" ) unless grep {/^$method$/} @known_methods;
 
     my $r = eval { $self->_result->$method(@_) };
