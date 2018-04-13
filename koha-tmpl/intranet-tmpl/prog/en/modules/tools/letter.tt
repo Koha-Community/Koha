@@ -6,6 +6,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form or copy_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate or copy_validate) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") %]
+<style type="text/css">#preview_template .modal-dialog { width : 80%; } .spinner { display: none; } @media (max-width: 767px) { #preview_template { margin: 0; width : auto; } }</style>
 </head>
 
 <body id="tools_letter" class="tools">
@@ -446,213 +447,22 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
     [% Asset.js("lib/jquery/plugins/jquery.insertatcaret.js") %]
-    <script type="text/javascript">
-        $(document).ready(function() {
-            [% IF add_form or copy_form %]
-                $('#toolbar').fixFloat();
-            [% END %]
-            $("#lettert:has(tbody tr)").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sDom": 't',
-                "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'nosort' ] }
-                ],
-                "bPaginate": false
-            }));
-            [% IF no_op_set %]
-                $('#branch').change(function() {
-                    $('#op').val("");
-                    $('#selectlibrary').submit();
-                });
-                $('#newnotice').click(function() {
-                    $('#op').val("add_form");
-                    return true;
-                });
-            [% END %]
-
-            $("#newmodule").on("change",function(){
-                if( $("#branch").val() == ""){
-                    var branchcode = "*";
-                } else {
-                    var branchcode = $("#branch").val();
-                }
-                window.location.href = "/cgi-bin/koha/tools/letter.pl?op=add_form&module=" + $(this).val() + "&branchcode=" + branchcode;
-            });
-
-            $("#submit_form").click( function(event) {
-                event.preventDefault();
-                var at_least_one_exists = 0;
-                var are_valid = 1;
-                $("fieldset.mtt").each( function(){
-                    var title = $(this).find('input[name="title"]').val();
-                    var content = $(this).find('textarea[name="content"]').val();
-                    if (
-                            ( title.length == 0 && content.length > 0 )
-                         || ( title.length > 0 && content.length == 0 )
-                    ) {
-                        var mtt = $(this).find('input[name="message_transport_type"]').val();
-                        var msg = _("Please specify title and content for %s");
-                        msg = msg.replace( "%s", mtt );
-                        at_least_one_exists = 1;
-                        alert(msg);
-                        return are_valid = false;
-                    } else if ( title.length > 0 && content.length > 0 ) {
-                        at_least_one_exists = 1;
-                    }
-                } );
-                if ( ! at_least_one_exists ) {
-                    alert( _("Please fill at least one template.") );
-                    return false;
-                }
-                if ( ! are_valid ) {
-                    return false;
-                }
-
-                // Test if code already exists in DB
-                var new_lettercode = $("#code").val();
-                var new_branchcode = $("#branch").val();
-                [% IF ( add_form and code ) # IF edit %]
-                    if ( new_lettercode != '[% code %]' ) {
-                [% END %]
-                    $.ajax({
-                        data: { code: new_lettercode, branchcode: new_branchcode },
-                        type: 'GET',
-                        url: '/cgi-bin/koha/svc/letters/get/',
-                        success: function (data) {
-                             if ( data.letters.length > 0 ) {
-                                 if( new_branchcode == '' ) {
-                                     alert( _("A default letter with the code '%s' already exists.").format(new_lettercode) );
-                                 } else {
-                                     alert( _("A letter with the code '%s' already exists for '%s'.").format(new_lettercode, new_branchcode) );
-                                 }
-                                 return false;
-                             } else {
-                                 $("#add_notice").submit();
-                             }
-                        },
-                    });
-                [% IF ( add_form and code ) %]
-                    } else {
-                        $("#add_notice").submit();
-                    }
-                [% END %]
-            });
-
-            var sms_limit = 160;
-            $(".content_sms").on("keyup", function(){
-                var length = $(this).val().length;
-                var sms_counter = ("#sms_counter_" + $(this).data('lang'));
-                $(sms_counter).html(length + "/" + sms_limit + _(" characters"));
-                if ( length  > sms_limit ) {
-                    $(sms_counter).css("color", "red");
-                } else {
-                    $(sms_counter).css("color", "black");
-                }
-            });
-            $( ".transport-types" ).accordion({ collapsible: true, active:false, animate: 200 });
-            $(".insert").on("click",function(){
-                var containerid = $(this).data("containerid");
-                insertValueQuery( containerid );
-            })
-
-            $("#tabs").tabs();
-
-            $("#saveandcontinue").on("click",function(e){
-                e.preventDefault();
-                $("#redirect").val("just_save");
-                $("#submit_form").click();
-            });
-
-            $("body").on("click", ".preview_template", function(e){
-                e.preventDefault();
-                var mtt = $(this).data("mtt");
-                var lang = $(this).data("lang");
-
-                var code = $("#code").val();
-                var content = $("#content_"+mtt+"_"+lang).val();
-                var title = $("#title_"+mtt+"_"+lang).val();
-
-                var is_html = $("#is_html_"+mtt+"_"+lang).val();
-                var page = $(this).attr("href");
-                var data_preview = $("#data_preview").val();
-                page += '?code='+encodeURIComponent(code);
-                page += '&title='+encodeURIComponent(title);
-                page += '&content='+encodeURIComponent(content);
-                page += '&data_preview='+encodeURIComponent(data_preview);
-                page += '&is_html='+encodeURIComponent(is_html);
-                $("#preview_template .modal-body").load(page);
-                $('#preview_template').modal('show');
-                $("#preview_template_button").attr("href", "/cgi-bin/koha/svc/letters/convert?code="+code+"&mtt="+mtt+"&lang="+lang);
-            });
-            $("#preview_template").on("hidden", function(){
-                $("#preview_template_label").html("");
-                $("#preview_template .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-            });
-            $("body").on("click", "#convert_template", function(e){
-                e.preventDefault();
-                var mtt = $(this).data("mtt");
-                var lang = $(this).data("lang");
-
-                var code = $("#code").val();
-                var content = $("#content_"+mtt+"_"+lang).val();
-                var title = $("#title_"+mtt+"_"+lang).val();
-
-                var is_html = $("#is_html_"+mtt+"_"+lang).val();
-                var page = $(this).attr("href");
-                var data_preview = $("#data_preview").val();
-                page += '?code='+encodeURIComponent(code);
-                page += '&title='+encodeURIComponent(title);
-                page += '&content='+encodeURIComponent(content);
-                page += '&data_preview='+encodeURIComponent(data_preview);
-                page += '&is_html='+encodeURIComponent(is_html);
-                $("#preview_template .modal-body").load(page + " div");
-                $('#preview_template').modal('show');
-                $("#preview_template_button").attr("href", "/cgi-bin/koha/svc/letters/convert?code="+code+"&branchcode="+branchcode+"&mtt="+mtt+"&lang="+lang);
-            });
-            $("#convert_template").on("hidden", function(){
-                $("#convert_template_label").html("");
-                $("#convert_template .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
-            });
-
-        });
-        [% IF add_form or copy_form %]
-            function cancel(f) {
-                $('#op').val("");
-                f.method = "get";
-                f.submit();
-            }
-
-            function isNotNull(f,noalert) {
-              if (f.value.length ==0) {
-                  return false;
-              }
-              return true;
-            }
-
-            function isNum(v,maybenull) {
-                var n = new Number(v.value);
-                if (isNaN(n)) {
-                    return false;
-                }
-                if (maybenull==0 && v.value==''){
-                  return false;
-                }
-                return true;
-            }
-            function insertValueQuery(containerid) {
-                var fieldset = $("#" + containerid);
-                var myQuery = $(fieldset).find('textarea[name="content"]');
-                var myListBox = $(fieldset).find('select[name="SQLfieldname"]');
-
-                if($(myListBox).find('option').length > 0) {
-                    $(myListBox).find('option').each( function (){
-                        if ( $(this).attr('selected') && $(this).val().length > 0 ) {
-                            $(myQuery).insertAtCaret("<<" + $(this).val() + ">>");
-                        }
-                    });
-                }
-            }
-        [% END %]
-    </script>
+    <script>
+        var no_op_set = '[% no_op_set %]';
+        var interface = '[% interface %]';
+        var theme = '[% theme %]';
+        var add_form = '[% add_form %]';
+        var copy_form = '[% copy_form %]';
+        var code = '[% code %]';
+        var new_lettercode = '[% new_lettercode %]';
+        var new_branchcode = '[% new_branchcode %]';
+        var MSG_CODE_EXISTS = _("A default letter with the code '%s' already exists.");
+        var MSG_CODE_EXISTS_FOR_LIBRARY = _("A letter with the code '%s' already exists for '%s'.");
+        var MSG_EMPTY_TITLE_AND_CONTENT = _("Please specify title and content for %s");
+        var MSG_EMPTY_TEMPLATES = _("Please fill at least one template.");
+        var MSG_LOADING = _("Loading");
+     </script>
+    [% Asset.js("js/letter.js") %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

@@ -29,27 +29,47 @@
             [% END %]
 
             [% IF rendered_message %]
-                <fieldset class="brief">
-                    <legend>Original version</legend>
-                    <pre>[% original_content | html %]</pre>
-                </fieldset>
-
-                <fieldset class="brief">
-                    <legend>Rendered message:</legend>
-                    <pre>[% rendered_message.content | html %]</pre>
-                </fieldset>
+                <div class="yui-g">
+                    <div class="yui-u first">
+                        <h3>Original version</h3>
+                        <span style="font-family:monospace">
+                            [% FILTER html_line_break %]
+                                [% original_content | html %]
+                            [% END %]
+                        </span>
+                    </div>
+                    <div class="yui-u">
+                        <h3>Original message, rendered:</h3>
+                        <span style="font-family:monospace">
+                            [% FILTER html_line_break %]
+                                [% rendered_message.content | html %]
+                            [% END %]
+                        </span>
+                    </div>
+                </div>
             [% END %]
 
-            [% IF rendered_tt_message %]
-                <fieldset class="brief">
-                    <legend>Converted version</legend>
-                    <pre>[% tt_content | html %]</pre>
-                </fieldset>
 
-                <fieldset class="brief">
-                    <legend>Rendered message:</legend>
-                    <pre>[% rendered_tt_message.content | html %]</pre>
-                </fieldset>
+            [% IF rendered_tt_message %]
+            <hr />
+                <div class="yui-g">
+                    <div class="yui-u first">
+                        <h3>Converted version</h3>
+                        <span style="font-family:monospace">
+                            [% FILTER html_line_break %]
+                                [% tt_content | html %]
+                            [% END %]
+                        </span>
+                    </div>
+                    <div class="yui-u">
+                        <h3>Converted message, rendered:</h3>
+                        <span style="font-family:monospace">
+                            [% FILTER html_line_break %]
+                                [% rendered_tt_message.content | html %]
+                            [% END %]
+                        </span>
+                    </div>
+                </div>
             [% END %]
         </div>
 
