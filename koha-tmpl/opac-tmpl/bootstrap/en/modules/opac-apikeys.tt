@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your API keys</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -11,7 +11,7 @@
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
         <li>
           <a href="/cgi-bin/koha/opac-user.pl">
-            [% INCLUDE 'patron-title.inc' category_type = borrower.category_type firstname = borrower.firstname surname = borrower.surname othernames = borrower.othernames %]
+            [% INCLUDE 'patron-title.inc' category_type=patron.category.category_type firstname=patron.firstname surname=patron.surname othernames=patron.othernames %]
           </a>
           <span class="divider">&rsaquo;</span>
         </li>
@@ -30,14 +30,18 @@
                   <h1>Your API keys</h1>
                   <div>
                     <form action="/cgi-bin/koha/opac-apikeys.pl" method="post">
-                      <input type="hidden" name="op" value="generate">
-                      <input type="submit" value="Generate new key">
+                        <input type="hidden" name="patron_id" value="[% patron.id %]">
+                        <input type="hidden" name="op" value="generate">
+                        <label for="description">Description: </label>
+                        <input type="text" name="description">
+                        <button class="btn btn-default btn-sm" type="submit"><i class="fa fa-plus"></i> Generate a new key</span></button>
                     </form>
                   </div>
-                  [% IF api_keys.size > 0 %]
+                  [% IF api_keys && api_keys.size > 0 %]
                     <table class="table table-bordered table-striped">
                       <thead>
                         <tr>
+                          <th>Description</th>
                           <th>Key</th>
                           <th>Active</th>
                           <th>Actions</th>
@@ -46,22 +50,23 @@
                       <tbody>
                         [% FOREACH key IN api_keys %]
                           <tr>
-                            <td>[% key.api_key %]</td>
+                            <td>[% key.description %]</td>
+                            <td>[% key.value %]</td>
                             <td>[% IF key.active %]Yes[% ELSE %]No[% END %]</td>
                             <td>
                               <form action="/cgi-bin/koha/opac-apikeys.pl" method="post" class="form-inline">
-                                <input type="hidden" name="key" value="[% key.api_key %]">
+                                <input type="hidden" name="key" value="[% key.value %]">
                                 <input type="hidden" name="op" value="delete">
-                                <input type="submit" value="Delete">
+                                <button class="btn btn-default btn-sm" type="submit">Delete</button>
                               </form>
                               <form action="/cgi-bin/koha/opac-apikeys.pl" method="post" class="form-inline">
-                                <input type="hidden" name="key" value="[% key.api_key %]">
+                                <input type="hidden" name="key" value="[% key.value %]">
                                 [% IF key.active %]
                                   <input type="hidden" name="op" value="revoke">
-                                  <input type="submit" value="Revoke">
+                                  <button class="btn btn-default btn-sm" type="submit">Revoke</button>
                                 [% ELSE %]
                                   <input type="hidden" name="op" value="activate">
-                                  <input type="submit" value="Activate">
+                                  <button class="btn btn-default btn-sm" type="submit">Activate</button>
                                 [% END %]
                               </form>
                             </td>
@@ -69,6 +74,8 @@
                         [% END %]
                       </tbody>
                     </table>
+                  [% ELSE %]
+                    <span class="warn">No keys defined for the current patron.</span>
                   [% END %]
                 </div> <!-- /#apikeys -->
             </div> <!-- /.span10 -->

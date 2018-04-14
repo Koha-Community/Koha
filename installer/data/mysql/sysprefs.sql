@@ -30,6 +30,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowNotForLoanOverride','0','','If ON, Koha will allow the librarian to loan a not for loan item.','YesNo'),
 ('AllowOfflineCirculation','0','','If on, enables HTML5 offline circulation functionality.','YesNo'),
 ('AllowPatronToSetCheckoutsVisibilityForGuarantor',  '0', NULL, 'If enabled, the patron can set checkouts to be visible to his or her guarantor',  'YesNo'),
+('AllowPatronsManageAPIKeysInOPAC', '0', NULL, 'If enabled, patrons can manage their own API keys in the OPAC',  'YesNo'),
 ('AllowPKIAuth','None','None|Common Name|emailAddress','Use the field from a client-side SSL certificate to look a user in the Koha database','Choice'),
 ('AllowPurchaseSuggestionBranchChoice','0','1','Allow user to choose branch when making a purchase suggestion','YesNo'),
 ('AllowRenewalIfOtherItemsAvailable','0',NULL,'If enabled, allow a patron to renew an item with unfilled holds if other available items can fill that hold.','YesNo'),

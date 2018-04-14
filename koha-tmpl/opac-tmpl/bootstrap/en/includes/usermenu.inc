@@ -124,12 +124,15 @@
                 <a href="/cgi-bin/koha/opac-illrequests.pl">your interlibrary loan requests</a></li>
             [% END %]
 
-            [% IF apikeysview %]
-              <li class="active">
-            [% ELSE %]
-              <li>
+
+            [% IF Koha.Preference('AllowPatronsManageAPIKeysInOPAC') %]
+                [% IF apikeysview %]
+                  <li class="active">
+                [% ELSE %]
+                  <li>
+                [% END %]
+                  <a href="/cgi-bin/koha/opac-apikeys.pl">your API keys</a>
             [% END %]
-              <a href="/cgi-bin/koha/opac-apikeys.pl">your API keys</a>
             </li>
         </ul>
     </div>

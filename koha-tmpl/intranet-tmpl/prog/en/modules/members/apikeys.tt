@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons [% IF ( searching ) %]&rsaquo; API Keys[% END %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; API Keys</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="pat_apikeys" class="pat">
@@ -56,17 +56,17 @@
                       <input type="hidden" name="patron_id" value="[% patron.id %]">
                       <input type="hidden" name="key" value="[% key.value %]">
                       <input type="hidden" name="op" value="delete">
-                      <input type="submit" value="Delete">
+                      <button class="btn btn-default btn-sm" type="submit">Delete</button>
                     </form>
                     <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
                       <input type="hidden" name="patron_id" value="[% patron.id %]">
                       <input type="hidden" name="key" value="[% key.value %]">
                       [% IF key.active %]
                         <input type="hidden" name="op" value="revoke">
-                        <input type="submit" value="Revoke">
+                        <button class="btn btn-default btn-sm" type="submit">Revoke</button>
                       [% ELSE %]
                         <input type="hidden" name="op" value="activate">
-                        <input type="submit" value="Activate">
+                        <button class="btn btn-default btn-sm" type="submit">Activate</button>
                       [% END %]
                     </form>
                   </td>
