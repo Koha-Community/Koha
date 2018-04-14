@@ -1719,16 +1719,14 @@ CREATE TABLE borrower_sync (
 
 DROP TABLE IF EXISTS `api_keys`;
 CREATE TABLE `api_keys` (
-    `id`          INT(11) NOT NULL AUTO_INCREMENT, -- API key internal identifier
-    `patron_id`   INT(11) NOT NULL,                -- Foreign key to the borrowers table
     `client_id`   VARCHAR(191) NOT NULL,           -- API client ID
     `secret`      VARCHAR(191) NOT NULL,           -- API client secret used for API authentication
     `description` VARCHAR(255) NOT NULL,           -- API client description
+    `patron_id`   INT(11) NOT NULL,                -- Foreign key to the borrowers table
     `active`      TINYINT(1) DEFAULT 1 NOT NULL,   -- 0 means this API key is revoked
-    PRIMARY KEY (`id`),
-    KEY `patron_id` (`patron_id`),
-    UNIQUE KEY `client_id` (`client_id`),
+    PRIMARY KEY `client_id` (`client_id`),
     UNIQUE KEY `secret` (`secret`),
+    KEY `patron_id` (`patron_id`),
     CONSTRAINT `api_keys_fk_patron_id`
       FOREIGN KEY (`patron_id`)
       REFERENCES `borrowers` (`borrowernumber`)

@@ -23,18 +23,6 @@ __PACKAGE__->table("api_keys");
 
 =head1 ACCESSORS
 
-=head2 id
-
-  data_type: 'integer'
-  is_auto_increment: 1
-  is_nullable: 0
-
-=head2 patron_id
-
-  data_type: 'integer'
-  is_foreign_key: 1
-  is_nullable: 0
-
 =head2 client_id
 
   data_type: 'varchar'
@@ -53,6 +41,12 @@ __PACKAGE__->table("api_keys");
   is_nullable: 0
   size: 255
 
+=head2 patron_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 0
+
 =head2 active
 
   data_type: 'tinyint'
@@ -62,35 +56,19 @@ __PACKAGE__->table("api_keys");
 =cut
 
 __PACKAGE__->add_columns(
-  "id",
-  { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
-  "patron_id",
-  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "client_id",
   { data_type => "varchar", is_nullable => 0, size => 191 },
   "secret",
   { data_type => "varchar", is_nullable => 0, size => 191 },
   "description",
   { data_type => "varchar", is_nullable => 0, size => 255 },
+  "patron_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "active",
   { data_type => "tinyint", default_value => 1, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
-
-=over 4
-
-=item * L</id>
-
-=back
-
-=cut
-
-__PACKAGE__->set_primary_key("id");
-
-=head1 UNIQUE CONSTRAINTS
-
-=head2 C<client_id>
 
 =over 4
 
@@ -100,7 +78,9 @@ __PACKAGE__->set_primary_key("id");
 
 =cut
 
-__PACKAGE__->add_unique_constraint("client_id", ["client_id"]);
+__PACKAGE__->set_primary_key("client_id");
+
+=head1 UNIQUE CONSTRAINTS
 
 =head2 C<secret>
 
@@ -132,8 +112,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-04-14 00:56:23
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:b7AUAgl2SClXJ2lzPVV0FA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-04-14 14:48:10
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qnu4QSACpOSQaZgd52ozmw
 
 __PACKAGE__->add_columns(
     '+active' => { is_boolean => 1 }
