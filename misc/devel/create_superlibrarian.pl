@@ -21,45 +21,31 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 
-use C4::Installer;
-use C4::Context;
 use C4::Members;
 
-use Koha::DateUtils;
-use Koha::Libraries;
-use Koha::Patrons;
-use Koha::Patron::Categories;
-
-my $library         = Koha::Libraries->search->next;
-my $patron_category = Koha::Patron::Categories->search->next;
-
-die
-"Not enough data in the database, library and/or patron category does not exist"
-  unless $library and $patron_category;
-
-die "A patron with userid 'koha' already exists"
-  if Koha::Patrons->find( { userid => 'koha' } );
-die "A patron with cardnumber '42' already exists"
-  if Koha::Patrons->find( { cardnumber => 'koha' } );
-
-my $userid   = 'koha';
-my $password = 'koha';
-my $help;
-
+my ( $help, $surname, $userid, $password, $branchcode, $categorycode, $cardnumber );
 GetOptions(
-    'help|?'   => \$help,
-    'userid=s'   => \$userid,
-    'password=s' => \$password
+    'help|?'         => \$help,
+    'userid=s'       => \$userid,
+    'password=s'     => \$password,
+    'branchcode=s'   => \$branchcode,
+    'categorycode=s' => \$categorycode,
+    'cardnumber=s'   => \$cardnumber,
 );
 
 pod2usage(1) if $help;
+pod2usage("userid is mandatory")       unless $userid;
+pod2usage("password is mandatory")     unless $password;
+pod2usage("branchcode is mandatory")   unless $branchcode;
+pod2usage("categorycode is mandatory") unless $categorycode;
+pod2usage("cardnumber is mandatory")   unless $cardnumber;
 
-AddMember(
-    surname      => 'koha',
+C4::Members::AddMember(
+    surname      => $surname,
     userid       => $userid,
-    cardnumber   => 42,
-    branchcode   => $library->branchcode,
-    categorycode => $patron_category->categorycode,
+    cardnumber   => $cardnumber,
+    branchcode   => $branchcode,
+    categorycode => $categorycode,
     password     => $password,
     flags        => 1,
 );
@@ -71,12 +57,15 @@ create_superlibrarian.pl - create a user in Koha with superlibrarian permissions
 =head1 SYNOPSIS
 
 create_superlibrarian.pl
-  [ --userid <userid> ] [ --password <password> ]
+  --userid <userid> --password <password> --branchcode <branchcode> --categorycode <categorycode> --cardnumber <cardnumber>
 
  Options:
    -?|--help        brief help message
-   --userid         specify the userid to be set (defaults to koha)
-   --password       specify the password to be set (defaults to koha)
+   --userid         specify the userid to be set
+   --password       specify the password to be set
+   --branchcode     specify the library code
+   --categorycode   specify the patron category code
+   --cardnumber     specify the cardnumber to be set
 
 =head1 OPTIONS
 
@@ -88,11 +77,23 @@ Print a brief help message and exits
 
 =item B<--userid>
 
-Allows you to specify the userid to be set in the database
+To specify the userid to be set in the database
 
 =item B<--password>
 
-Allows you to specify the password to be set in the database
+To specify the password to be set in the database
+
+=item B<--branchcode>
+
+Library code
+
+=item B<--categorycode>
+
+Patron category's code
+
+=item B<--cardnumber>
+
+Patron's cardnumber
 
 =back
 
