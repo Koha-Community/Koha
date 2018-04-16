@@ -28,12 +28,15 @@ use C4::Letters;
 use C4::Output;
 use C4::Context;
 
+use Koha::DateUtils qw( dt_from_string );
+
 use List::MoreUtils qw/uniq/;
 
 
 my $query = new CGI;
 my $op = $query->param('op') || q{};
 my $nbissues=$query->param('nbissues');
+my $date_received_today = $query->param('date_received_today') || 0;
 my $dbh = C4::Context->dbh;
 
 my ($template, $loggedinuser, $cookie)
@@ -66,8 +69,9 @@ if($op eq 'gennext' && @subscriptionid){
         $sth->execute($subscriptionid);
         # modify actual expected issue, to generate the next
         if ( my $issue = $sth->fetchrow_hashref ) {
+            my $planneddate = $date_received_today ? dt_from_string : $issue->{planneddate};
             ModSerialStatus( $issue->{serialid}, $issue->{serialseq},
-                    $issue->{planneddate}, $issue->{publisheddate},
+                    $planneddate, $issue->{publisheddate},
                     $issue->{publisheddatetext}, $status, "" );
         } else {
             require C4::Serials::Numberpattern;
@@ -81,9 +85,10 @@ if($op eq 'gennext' && @subscriptionid){
 
              ## We generate the next publication date
              my $nextpublisheddate = GetNextDate($subscription, $expected->{publisheddate}, 1);
+             my $planneddate = $date_received_today ? dt_from_string : $nextpublisheddate;
              ## Creating the new issue
              NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
-                     1, $nextpublisheddate, $nextpublisheddate );
+                     1, $planneddate, $nextpublisheddate );
 
              ## Updating the subscription seq status
              my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?
