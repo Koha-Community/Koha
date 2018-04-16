@@ -15829,6 +15829,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19882 - Add system preference NovelistSelectStaffProfile)\n";
 }
 
+$DBversion = '17.12.00.031';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`)
+        VALUES ('MarcFieldDocURL', NULL, NULL, 'URL used for MARC field documentation. Following substitutions are available: {MARC} = marc flavour, eg. \"MARC21\" or \"UNIMARC\". {FIELD} = field number, eg. \"000\" or \"048\". {LANG} = user language, eg. \"en\" or \"fi-FI\"', 'free')
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 11674 - Add system preference MarcFieldDocURL)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
