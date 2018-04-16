@@ -27,7 +27,7 @@
                     <input type="hidden" name="patron_id" value="[% patron.id %]" />
                     <input type="hidden" name="op" value="generate" />
                     <fieldset class="brief">
-                        <legend>Generate new key</legend>
+                        <legend>Generate new client id/secret pair</legend>
                         <ol>
                             <li>
                                 <label for="description">Description: </label>
@@ -42,13 +42,14 @@
                 <div id="keys">
                     [% IF api_keys && api_keys.size > 0 %]
                         <p>
-                            <button class="btn btn-default btn-xs toggle_element" type="submit" id="show-api-form" data-element="#add-api-key"><i class="fa fa-plus"></i> Generate a new key</button>
+                            <button class="btn btn-default btn-xs toggle_element" type="submit" id="show-api-form" data-element="#add-api-key"><i class="fa fa-plus"></i> Generate a new client id/key pair</button>
                         </p>
                         <table>
                             <thead>
                                 <tr>
                                     <th>Description</th>
-                                    <th>Key</th>
+                                    <th>Client ID</th>
+                                    <th>Secret</th>
                                     <th>Active</th>
                                     <th>Actions</th>
                                 </tr>
@@ -57,18 +58,19 @@
                                 [% FOREACH key IN api_keys %]
                                     <tr>
                                         <td>[% key.description %]</td>
-                                        <td>[% key.value %]</td>
+                                        <td>[% key.client_id %]</td>
+                                        <td>[% key.secret %]</td>
                                         <td>[% IF key.active %]Yes[% ELSE %]No[% END %]</td>
                                         <td>
                                             <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
                                                 <input type="hidden" name="patron_id" value="[% patron.id %]" />
-                                                <input type="hidden" name="key" value="[% key.value %]" />
+                                                <input type="hidden" name="key" value="[% key.id %]" />
                                                 <input type="hidden" name="op" value="delete" />
                                                 <button class="btn btn-default btn-xs delete" type="submit"><i class="fa fa-trash"></i> Delete</button>
                                             </form>
                                             <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
                                                 <input type="hidden" name="patron_id" value="[% patron.id %]" />
-                                                <input type="hidden" name="key" value="[% key.value %]" />
+                                                <input type="hidden" name="key" value="[% key.id %]" />
                                                 [% IF key.active %]
                                                     <input type="hidden" name="op" value="revoke" />
                                                     <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-remove"></i> Revoke</button>
@@ -83,7 +85,7 @@
                             </tbody>
                         </table>
                     [% ELSE %]
-                        <div class="dialog message">No keys defined for the current patron. <a href="#" class="toggle_element" data-element="#add-api-key" id="show-api-form"><i class="fa fa-plus"></i> Generate a new key</div>
+                        <div class="dialog message">No keys defined for the current patron. <a href="#" class="toggle_element" data-element="#add-api-key" id="show-api-form"><i class="fa fa-plus"></i> Generate a new client id/secret pair</div>
                     [% END %]
                 </div>
             </div>

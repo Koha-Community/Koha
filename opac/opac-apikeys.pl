@@ -47,7 +47,6 @@ if ( not defined $patron
     exit;
 }
 
-
 my $op = $cgi->param('op');
 
 if ($op) {
@@ -63,8 +62,8 @@ if ($op) {
     }
 
     if ($op eq 'delete') {
-        my $key = $cgi->param('key');
-        my $api_key = Koha::ApiKeys->find({ patron_id => $patron_id, value => $key});
+        my $key_id  = $cgi->param('key');
+        my $api_key = Koha::ApiKeys->find({ patron_id => $patron_id, id => $key_id });
         if ($api_key) {
             $api_key->delete;
         }
@@ -73,8 +72,8 @@ if ($op) {
     }
 
     if ($op eq 'revoke') {
-        my $key = $cgi->param('key');
-        my $api_key = Koha::ApiKeys->find({ patron_id => $patron_id, value => $key });
+        my $key_id  = $cgi->param('key');
+        my $api_key = Koha::ApiKeys->find({ patron_id => $patron_id, id => $key_id });
         if ($api_key) {
             $api_key->active(0);
             $api_key->store;
@@ -84,8 +83,8 @@ if ($op) {
     }
 
     if ($op eq 'activate') {
-        my $key = $cgi->param('key');
-        my $api_key = Koha::ApiKeys->find({ patron_id => $patron_id, value => $key });
+        my $key_id  = $cgi->param('key');
+        my $api_key = Koha::ApiKeys->find({ patron_id => $patron_id, id => $key_id });
         if ($api_key) {
             $api_key->active(1);
             $api_key->store;
