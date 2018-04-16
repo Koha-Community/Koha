@@ -1406,7 +1406,7 @@ sub AddIssue {
            # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item->{'itemnumber'}, $borrower->{'borrowernumber'} );
             if ( $charge > 0 ) {
-                AddIssuingCharge( $item->{'itemnumber'}, $borrower->{'borrowernumber'}, $issue->id, $charge );
+                AddIssuingCharge( $issue, $charge );
                 $item->{'charge'} = $charge;
             }
 
@@ -3165,23 +3165,25 @@ sub _get_discount_from_rule {
 
 =head2 AddIssuingCharge
 
-  &AddIssuingCharge( $itemno, $borrowernumber, $issue_id, $charge )
+  &AddIssuingCharge( $checkout, $charge )
 
 =cut
 
 sub AddIssuingCharge {
-    my ( $itemnumber, $borrowernumber, $issue_id, $charge ) = @_;
+    my ( $checkout, $charge ) = @_;
 
-    my $nextaccntno = getnextacctno($borrowernumber);
+    # FIXME What if checkout does not exist?
+
+    my $nextaccntno = getnextacctno($checkout->borrowernumber);
 
     my $manager_id  = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
 
     my $accountline = Koha::Account::Line->new(
         {
-            borrowernumber    => $borrowernumber,
-            itemnumber        => $itemnumber,
-            issue_id          => $issue_id,
+            borrowernumber    => $checkout->borrowernumber,
+            itemnumber        => $checkout->itemnumber,
+            issue_id          => $checkout->issue_id,
             accountno         => $nextaccntno,
             amount            => $charge,
             amountoutstanding => $charge,
