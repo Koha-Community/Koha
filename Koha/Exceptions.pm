@@ -1,13 +1,10 @@
 package Koha::Exceptions;
 
 use Modern::Perl;
+use Koha::Exceptions::Exception;
 
 use Exception::Class (
 
-    # General exceptions
-    'Koha::Exceptions::Exception' => {
-        description => 'Something went wrong!',
-    },
     'Koha::Exceptions::BadParameter' => {
         isa => 'Koha::Exceptions::Exception',
         description => 'A bad parameter was given',

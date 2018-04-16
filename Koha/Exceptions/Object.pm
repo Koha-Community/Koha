@@ -3,9 +3,8 @@ package Koha::Exceptions::Object;
 use Modern::Perl;
 
 use Exception::Class (
-
     'Koha::Exceptions::Object' => {
-        description => 'Something went wrong!',
+        isa         => 'Koha::Exceptions::Exception',
     },
     'Koha::Exceptions::Object::DuplicateID' => {
         isa         => 'Koha::Exceptions::Object',
@@ -15,7 +14,7 @@ use Exception::Class (
     'Koha::Exceptions::Object::FKConstraint' => {
         isa         => 'Koha::Exceptions::Object',
         description => "Foreign key constraint broken",
-        fields      =>  ['broken_fk']
+        fields      =>  ['broken_fk', 'value'],
     },
     'Koha::Exceptions::Object::MethodNotFound' => {
         isa => 'Koha::Exceptions::Object',

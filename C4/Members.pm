@@ -400,9 +400,9 @@ sub AddMember {
 
     my $category = Koha::Patron::Categories->find( $data{categorycode} );
     unless ($category) {
-        Koha::Exceptions::BadParameter->throw(
-            error => 'Invalid parameter passed',
-            parameter => 'categorycode'
+        Koha::Exceptions::Object::FKConstraint->throw(
+            broken_fk => 'categorycode',
+            value     => $data{categorycode},
         );
     }
 
