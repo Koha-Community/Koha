@@ -40,7 +40,7 @@ my $patron_id = $loggedinuser;
 my $patron = Koha::Patrons->find( $patron_id );
 
 if ( not defined $patron
-    or C4::Context->preference('AllowPatronsManageAPIKeysInOPAC') )
+    or !C4::Context->preference('AllowPatronsManageAPIKeysInOPAC') )
 {
     # patron_id invalid -> exit
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl");    # escape early
