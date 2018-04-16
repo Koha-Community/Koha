@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Items;
 use C4::Members;
 use C4::Reserves;
+use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;
@@ -191,11 +192,10 @@ like(
     qr/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/,
     "Koha::Schema::Result::Issue->date_due() returns a date"
 );
-my $issue_id1 = $dbh->last_insert_id( undef, undef, 'issues', undef );
+my $issue_id1 = $issue1->issue_id;
 
 my $issue2 = C4::Circulation::AddIssue( $borrower_1, 'nonexistent_barcode' );
 is( $issue2, undef, "AddIssue returns undef if no datedue is specified" );
-my $issue_id2 = $dbh->last_insert_id( undef, undef, 'issues', undef );
 
 $sth->execute;
 $countissue = $sth -> fetchrow_array;
@@ -207,7 +207,8 @@ $sth = $dbh->prepare($query);
 $sth->execute;
 my $countaccount = $sth -> fetchrow_array;
 is ($countaccount,0,"0 accountline exists");
-my $offset = C4::Circulation::AddIssuingCharge( $item_id1, $borrower_id1, $issue_id1, 10 );
+my $checkout = Koha::Checkouts->find( $issue_id1 );
+my $offset = C4::Circulation::AddIssuingCharge( $checkout, 10 );
 is( ref( $offset ), 'Koha::Account::Offset', "An issuing charge has been added" );
 my $charge = Koha::Account::Lines->find( $offset->debit_id );
 is( $charge->issue_id, $issue_id1, 'Issue id is set correctly for issuing charge' );
