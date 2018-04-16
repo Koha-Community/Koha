@@ -70,7 +70,7 @@
                                     [% IF (sub.alreadyOnOrder) %]
                                         Outstanding order (only one order per subscription is allowed)
                                     [% ELSIF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid%]
-                                        <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;biblionumber=[% sub.biblionumber %]&amp;subscriptionid=[% sub.subscriptionid %]" title="Order this one">
+                                        <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]&amp;biblionumber=[% sub.biblionumber %]&amp;from_subscriptionid=[% sub.subscriptionid %]" title="Order this one">
                                             Order
                                         </a>
                                     [% ELSE %]

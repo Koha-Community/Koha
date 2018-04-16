@@ -108,7 +108,7 @@ my $suggestionid    = $input->param('suggestionid');
 my $close           = $input->param('close');
 my $uncertainprice  = $input->param('uncertainprice');
 my $import_batch_id = $input->param('import_batch_id'); # if this is filled, we come from a staged file, and we will return here after saving the order !
-my $subscriptionid  = $input->param('subscriptionid');
+my $from_subscriptionid  = $input->param('from_subscriptionid');
 my $data;
 my $new = 'no';
 
@@ -262,6 +262,10 @@ else {    #modify order
     $biblionumber = $data->{'biblionumber'};
     $budget_id = $data->{'budget_id'};
 
+    $template->param(
+        subscriptionid => $data->{subscriptionid},
+    );
+
     $basket   = GetBasket( $data->{'basketno'} );
     $basketno = $basket->{'basketno'};
 
@@ -358,8 +362,8 @@ if ($basketobj->effective_create_items eq 'ordering' && !$ordernumber) {
 my @itemtypes;
 @itemtypes = Koha::ItemTypes->search unless C4::Context->preference('item-level_itypes');
 
-if ( defined $subscriptionid ) {
-    my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $subscriptionid;
+if ( defined $from_subscriptionid ) {
+    my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $from_subscriptionid;
     if ( defined $lastOrderReceived ) {
         $budget_id              = $lastOrderReceived->{budgetid};
         $data->{listprice}      = $lastOrderReceived->{listprice};
@@ -377,6 +381,8 @@ if ( defined $subscriptionid ) {
 
         $basket = GetBasket( $input->param('basketno') );
     }
+
+    $template->param( subscriptionid => $from_subscriptionid );
 }
 
 # Find the items.barcode subfield for barcode validations
@@ -457,7 +463,6 @@ $template->param(
     publishercode    => $data->{'publishercode'},
     barcode_subfield => $barcode_subfield,
     import_batch_id  => $import_batch_id,
-    subscriptionid   => $subscriptionid,
     acqcreate        => $basketobj->effective_create_items eq "ordering" ? 1 : "",
     users_ids        => join(':', @order_user_ids),
     users            => \@order_users,
