@@ -81,7 +81,7 @@ KOHA.browser = function (searchid, biblionumber) {
 
             $(document).ready(function () {
                 if (me.curPos > -1) {
-                    var searchURL = '/cgi-bin/koha/catalogue/search.pl?' + decodeURIComponent(current_search.query) + '&limit=' + decodeURIComponent(current_search.limit) + '&sort_by=' + current_search.sort + '&searchid=' + me.searchid + '&offset=' + me.offset;
+                    var searchURL = '/cgi-bin/koha/catalogue/search.pl?' + current_search.query + '&limit=' + decodeURIComponent(current_search.limit) + '&sort_by=' + current_search.sort + '&searchid=' + me.searchid + '&offset=' + me.offset;
                     var prevbutton;
                     var nextbutton;
                     if (me.curPos === 0 && parseInt(current_search.offset) === 1) {
