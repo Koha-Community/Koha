@@ -208,12 +208,13 @@ sub SetOwnerToFundHierarchy {
 
 # -------------------------------------------------------------------
 sub GetBudgetsPlanCell {
-    my ( $cell, $period, $budget ) = @_;
+    my ( $cell, $period, $budget ) = @_; #FIXME we don't use $period or $budget
     my ($actual, $sth);
     my $dbh = C4::Context->dbh;
     my $roundsql = _get_rounding_sql(qq|ecost_tax_included|);
     if ( $cell->{'authcat'} eq 'MONTHS' ) {
         # get the actual amount
+        # FIXME we should consider quantity
         $sth = $dbh->prepare( qq|
 
             SELECT SUM(| .  $roundsql . qq|) AS actual FROM aqorders
@@ -223,6 +224,7 @@ sub GetBudgetsPlanCell {
         $sth->execute( $cell->{'budget_id'} );
     } elsif ( $cell->{'authcat'} eq 'BRANCHES' ) {
         # get the actual amount
+        # FIXME we should consider quantity
         $sth = $dbh->prepare( qq|
 
             SELECT SUM(| . $roundsql . qq|) FROM aqorders
