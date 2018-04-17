@@ -108,4 +108,7 @@
     [% IF ( CAN_user_tools_upload_general_files ) %]
        <li><a href="/cgi-bin/koha/tools/upload.pl">Upload any file</a></li>
     [% END %]
+    [% IF ( CAN_user_tools_access_files ) %]
+    <li><a href="/cgi-bin/koha/tools/access_files.pl">Report/log files</a></li>
+    [% END %]
 </ul></div></div>

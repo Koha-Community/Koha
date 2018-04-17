@@ -1,0 +1,71 @@
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Report/log files</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+</head>
+<body>
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Report/log files</div>
+
+<div id="doc3" class="yui-t2">
+   <div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+    <h1>Report/log files</h1>
+
+[% IF ( error_no_dir ) %]
+    <div class="dialog alert"><strong>Error : </strong>Report/log files could not be found because the "access_dir" option was not set in "koha-conf.xml". Contact your system administrator to add this option.</div>
+[% ELSE %]
+    [% IF ( files_loop ) %]
+        <table id="files">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Size (bytes)</th>
+                    <th>Date last modified</th>
+                </tr>
+            </thead>
+            <tbody>
+                [% FOREACH file IN files_loop %]
+                <tr>
+                    <td><a href="/cgi-bin/koha/tools/access_files.pl?id=[% file.id |url %]">[% file.name %]</a></td>
+                    <td align="right">[% file.size %]</td>
+                    <td>[% file.date %]</td>
+                </tr>
+                [% END %]
+            </tbody>
+        </table>
+    [% ELSE %]
+        No file found.
+    [% END %]
+[% END %]
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'tools-menu.inc' %]
+</div>
+</div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript" src="[% interface %]/[% theme %]/js/tools-menu_[% KOHA_VERSION %].js"></script>
+    [% INCLUDE 'datatables.inc' %]
+    <script type="text/javascript">
+    //<![CDATA[
+        $(document).ready(function() {
+            $("#files").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sDom": 't',
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "asSorting" : [ "desc", "asc" ], "bSearchable": false }
+                ],
+                "bPaginate": false
+            }));
+    });
+    //]]>
+</script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

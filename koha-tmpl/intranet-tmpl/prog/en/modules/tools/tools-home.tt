@@ -113,6 +113,12 @@
     <dt><a href="/cgi-bin/koha/tools/upload.pl">Upload</a></dt>
     <dd>Upload any type of file, manage uploads</dd>
     [% END %]
+
+    [% IF CAN_user_tools_access_files %]
+    <dt><a href="/cgi-bin/koha/tools/access_files.pl">Report/log files</a></dt>
+    <dd>Access report or log files</dd>
+    [% END %]
+
 </dl>
 </div>
 

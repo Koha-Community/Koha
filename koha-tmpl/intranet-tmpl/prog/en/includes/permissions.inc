@@ -107,6 +107,7 @@
     [%- CASE 'delete_public_lists' -%]<span>Delete public lists</span>
     [%- CASE 'upload_general_files' -%]<span>Upload any file</span>
     [%- CASE 'upload_manage' -%]<span>Manage uploaded files (<i>Useless without upload_general_files</i>)</span>
+    [%- CASE 'access_files' -%]<span>Access to the files stored on the server</span>
     [%- CASE 'edit_clubs' -%]<span>Create and edit clubs</span>
     [%- CASE 'edit_templates' -%]<span>Create and edit club templates</span>
     [%- CASE 'enroll' -%]<span>Enroll patrons in clubs</span>
