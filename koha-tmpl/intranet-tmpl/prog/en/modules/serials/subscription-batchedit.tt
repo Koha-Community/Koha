@@ -32,10 +32,14 @@
                                 <tr>
                                     <th>ISSN</th>
                                     <th>Title</th>
-                                    <th>Notes</th>
-                                    <th>Library</th>
+                                    <th>Vendor</th>
                                     <th>Location</th>
+                                    <th>Library</th>
+                                    <th>Item type</th>
+                                    <th>Public notes</th>
+                                    <th>Nonpublic notes</th>
                                     <th>Call number</th>
+                                    <th>Create item when receiving</th>
                                     <th>Expiration date</th>
                                 </tr>
                             </thead>
@@ -44,10 +48,20 @@
                                     <tr>
                                         <td>[% subscription.biblio.biblioitem.issn %]</td>
                                         <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid %]">[% subscription.biblio.title %] (#[% subscription.subscriptionid %])</a></td>
-                                        <td>[% subscription.notes %] [% IF subscription.internalnotes %]([% subscription.internalnotes %])[% END %]</td>
-                                        <td>[% Branches.GetName(subscription.branchcode) %]</td>
+                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% subscription.vendor.id %]">[% subscription.vendor.name |html %]</a></td>
                                         <td>[% AuthorisedValues.GetByCode('LOC', subscription.location) %]</td>
+                                        <td>[% Branches.GetName(subscription.branchcode) %]</td>
+                                        <td>[% ItemTypes.GetDescription( subscription.itemtype ) %]</td>
+                                        <td>[% subscription.notes %]</td>
+                                        <td>[% subscription.internalnotes %]</td>
                                         <td>[% subscription.callnumber %]</td>
+                                        <td>
+                                            [% IF subscription.serialsadditems %]
+                                                <span>Yes</span>
+                                            [% ELSE %]
+                                                <span>No</span>
+                                            [% END %]
+                                        </td>
                                         <td>[% subscription.enddate | $KohaDates %]</td>
                                     </tr>
                                 [% END %]
@@ -140,7 +154,8 @@
                         </fieldset>
 
                         <fieldset class="action">
-                            <button type="submit" name="batchedit" value="1">Start batch edit</button>
+                            <button type="submit" name="batchedit" value="1">Save</button>
+                            <a class="cancel" href="[% referrer %]">Cancel</a>
                         </fieldset>
                     </form>
                 </div>

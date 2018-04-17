@@ -17,23 +17,31 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; [% IF ( done_searched ) %]<a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Search results[% ELSE %]Serials [% END %] </div>
 
+[% url_params = [] %]
+[% FOREACH param IN CGI.params.pairs %]
+    [% escaped_value = BLOCK %][% param.value | uri %][% END %]
+    [% url_params.push(param.key _ '=' _ escaped_value) %]
+[% END %]
+[% SET referrer = '/cgi-bin/koha/serials/serials-search.pl?' %]
+[% referrer = BLOCK %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
+[% SET edit_action_link = '/cgi-bin/koha/serials/subscription-batchedit.pl?referrer=' _ referrer %]
 
 [% BLOCK subscriptions_table %]
   <form method="post">
 
-    [% url_params = [] %]
-    [% FOREACH param IN CGI.params.pairs %]
-        [% escaped_value = BLOCK %][% param.value | uri %][% END %]
-        [% url_params.push(param.key _ '=' _ escaped_value) %]
+    [% IF closed %]
+        [% SET tab = 'closed' %]
+    [% ELSE %]
+        [% SET tab = 'opened' %]
     [% END %]
-    <input type="hidden" name="referrer" value="/cgi-bin/koha/serials/serials-search.pl?[% url_params.join('&') %]"/>
-
     <div class="actions">
-        <a class="select-all" href="#"><i class="fa fa-check"></i> Select all</a>
+        <a class="select-all" href="#" data-tab="[% tab %]"><i class="fa fa-check"></i> Select all</a>
         |
-        <a class="clear-all" href="#"><i class="fa fa-remove"></i> Clear all</a>
-        |
-        <button class="btn btn-default btn-xs" type="submit" formaction="/cgi-bin/koha/serials/subscription-batchedit.pl"><i class="fa fa-pencil"></i> Edit</button>
+        <a class="clear-all" href="#" data-tab="[% tab %]"><i class="fa fa-remove"></i> Clear all</a>
+        <span class="itemselection_actions">
+            | Actions:
+            <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Modify selected serials</a>
+        </span>
     </div>
     <table>
       <thead>
@@ -392,6 +400,32 @@
     </script>
     [% Asset.js("js/serials-toolbar.js") %]
     <script type="text/javascript">
+
+            function itemSelectionBuildModifyLink(div) {
+                var subscription_ids = new Array();
+                $("input[name='subscriptionid'][type='checkbox']:checked", div).each(function() {
+                    subscription_ids.push($(this).val());
+                });
+                if (subscription_ids.length > 0) {
+                    var url = "[% edit_action_link %]";
+                    url += '&subscriptionid=' + subscription_ids.join('&subscriptionid=');
+                    $('a.itemselection_action_modify').attr('href', url);
+                } else {
+                    return false;
+                }
+                return true;
+            }
+
+            function itemSelectionBuildActionLinks(tab) {
+                var div = $("#" + tab);
+                var modify_link_ok = itemSelectionBuildModifyLink(div);
+                if (modify_link_ok) {
+                    $('.itemselection_actions', div).show();
+                } else {
+                    $('.itemselection_actions', div).hide();
+                }
+            }
+
         $(document).ready(function() {
             var osrlt = $("#opened table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sPaginationType": "four_button",
@@ -423,7 +457,17 @@
                 e.preventDefault();
                 var checkboxes = $(this).parents('form').find('input[type="checkbox"]');
                 checkboxes.prop('checked', $(this).hasClass('select-all'));
+                var tab = $(this).data("tab");
+                itemSelectionBuildActionLinks(tab);
             });
+
+            itemSelectionBuildActionLinks("opened");
+            itemSelectionBuildActionLinks("closed");
+            $("input[name='subscriptionid'][type='checkbox']").change(function() {
+                var div = $(this).parents('form').parent().attr("id");
+                itemSelectionBuildActionLinks(div);
+            });
+
         });
     </script>
 [% END %]
