@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use Net::OAuth2::AuthorizationServer;
+
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 use C4::Context;
 
@@ -115,10 +117,17 @@ sub authenticate_api_request {
 
     my $authorization_header = $c->req->headers->authorization;
     if ($authorization_header and $authorization_header =~ /^Bearer /) {
-        if (my $oauth = $c->oauth) {
+        my $server = Net::OAuth2::AuthorizationServer->new;
+        my $grant = $server->client_credentials_grant(Koha::OAuth::config);
+        my ($type, $token) = split / /, $authorization_header;
+        my ($valid_token, $error) = $grant->verify_access_token(
+            access_token => $token,
+        );
+
+        if ($valid_token) {
             my $clients = C4::Context->config('api_client');
             $clients = [ $clients ] unless ref $clients eq 'ARRAY';
-            my ($client) = grep { $_->{client_id} eq $oauth->{client_id} } @$clients;
+            my ($client) = grep { $_->{client_id} eq $valid_token->{client_id} } @$clients;
 
             my $patron = Koha::Patrons->find($client->{patron_id});
             my $permissions = $authorization->{'permissions'};

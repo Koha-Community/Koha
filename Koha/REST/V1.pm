@@ -19,8 +19,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious';
 
-use Koha::OAuth;
-
 use C4::Context;
 
 =head1 NAME
@@ -53,7 +51,6 @@ sub startup {
         $self->secrets([$secret_passphrase]);
     }
 
-    $self->plugin('OAuth2::Server' => Koha::OAuth::config);
     $self->plugin(OpenAPI => {
         url => $self->home->rel_file("api/v1/swagger/swagger.json"),
         route => $self->routes->under('/api/v1')->to('Auth#under'),
