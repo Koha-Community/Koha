@@ -23,6 +23,7 @@ use Carp;
 
 use Koha::Database;
 use Koha::Biblios;
+use Koha::Acquisition::Booksellers;
 
 use base qw(Koha::Object);
 
@@ -46,6 +47,17 @@ sub biblio {
     my ($self) = @_;
 
     return scalar Koha::Biblios->find($self->biblionumber);
+}
+
+=head3 vendor
+
+Returns the vendor/supplier linked to this subscription as a Koha::Acquisition::Bookseller object
+
+=cut
+
+sub vendor {
+    my ($self) = @_;
+    return scalar Koha::Acquisition::Booksellers->find($self->aqbooksellerid);
 }
 
 =head3 type

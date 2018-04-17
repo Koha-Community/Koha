@@ -19,15 +19,19 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
-use Koha::Subscription;
+use Koha::Subscriptions;
 use Koha::Biblio;
+
+use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
-subtest 'Koha::Subscription::biblio' => sub {
+my $builder = t::lib::TestBuilder->new;
+
+subtest 'Koha::Subscription->biblio' => sub {
     plan tests => 1;
 
     my $biblio = Koha::Biblio->new()->store();
@@ -37,6 +41,20 @@ subtest 'Koha::Subscription::biblio' => sub {
 
     my $b = $subscription->biblio;
     is($b->biblionumber, $biblio->biblionumber, 'Koha::Subscription::biblio returns the correct biblio');
+};
+
+subtest 'Koha::Subscription->vendor' => sub {
+    plan tests => 2;
+    my $vendor = $builder->build( { source => 'Aqbookseller' } );
+    my $subscription = $builder->build(
+        {
+            source => 'Subscription',
+            value  => { aqbooksellerid => $vendor->{id} }
+        }
+    );
+    my $object = Koha::Subscriptions->find( $subscription->{subscriptionid} );
+    is( ref($object->vendor), 'Koha::Acquisition::Bookseller', 'Koha::Subscription->vendor should return a Koha::Acquisition::Bookseller' );
+    is( $object->vendor->id, $subscription->{aqbooksellerid}, 'Koha::Subscription->vendor should return the correct vendor' );
 };
 
 $schema->storage->txn_rollback;
