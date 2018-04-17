@@ -3648,10 +3648,9 @@ sub LostItem{
     if ( my $borrowernumber = $issues->{borrowernumber} ){
         my $patron = Koha::Patrons->find( $borrowernumber );
 
-        if (C4::Context->preference('WhenLostForgiveFine')){
-            my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, 1, 0); # 1, 0 = exemptfine, no-dropbox
-            defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $itemnumber...) failed!";  # zero is OK, check defined
-        }
+        my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, C4::Context->preference('WhenLostForgiveFine'), 0); # 1, 0 = exemptfine, no-dropbox
+        defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $itemnumber...) failed!";  # zero is OK, check defined
+
         if (C4::Context->preference('WhenLostChargeReplacementFee')){
             C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}");
             #FIXME : Should probably have a way to distinguish this from an item that really was returned.
