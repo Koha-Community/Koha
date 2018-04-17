@@ -14,6 +14,7 @@ use Koha::Acquisition::Orders;
 use Koha::Acquisition::Funds;
 use Koha::Patrons;
 use Koha::Number::Price;
+use Koha::Items;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -966,11 +967,12 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
     is( @$hierarchy[0]->{total_ordered},6,"After adding invoice adjustment on child budget, budget hierarchy shows 6 ordered");
 };
 
-subtest 'OrderPriceRounding GetBudgetSpent GetBudgetOrdered tests' => sub {
+subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 
-    plan tests => 8;
+    plan tests => 12;
 
 #Let's build an order, we need a couple things though
+    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
 
     my $spent_biblio = $builder->build({ source => 'Biblio' });
     my $spent_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
@@ -1016,6 +1018,35 @@ subtest 'OrderPriceRounding GetBudgetSpent GetBudgetOrdered tests' => sub {
     t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
     $spent_ordered = GetBudgetOrdered( $spent_order->{budget_id} );
     is($spent_ordered,'78.8',"We expect the ordered amount to be equal to the estimated price rounded times quantity");
+
+#Let's test some budget planning
+#Regression tests for bug 18736
+    #We need an item to test by BRANCHES
+    my $item_1 = $builder->build({ source => 'Item' });
+    my $order_item_1 = $builder->build({ source => 'AqordersItem', value => { ordernumber => $spent_order->{ordernumber}, itemnumber => $item_1->{itemnumber}  } });
+    my $spent_fund = Koha::Acquisition::Funds->find( $spent_order->{budget_id} );
+    my $cell = {
+        authcat => 'MONTHS',
+        cell_authvalue => $spent_order->{entrydate}, #normally this is just the year/month but full won't hurt us here
+        budget_id => $spent_order->{budget_id},
+        budget_period_id => $spent_fund->budget_period_id,
+    };
+    t::lib::Mocks::mock_preference('OrderPriceRounding','');
+    my ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
+    is ( $actual, '9.854200', "We expect this to be an exact order cost"); #really we should expect cost*quantity but we don't
+    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
+    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
+    is ( $actual, '9.8500', "We expect this to be a rounded order cost"); #really we should expect cost*quantity but we don't
+    $cell->{authcat} = 'BRANCHES';
+    $cell->{authvalue} = $item_1->{homebranch};
+    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
+    t::lib::Mocks::mock_preference('OrderPriceRounding','');
+    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
+    is ( $actual, '9.854200', "We expect this to be full cost for items from the branch"); #here we rely on items having been created for each order, again quantity should be considered
+    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
+    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
+    is ( $actual, '9.8500', "We expect this to be rounded cost for items from the branch"); #here we rely on items having been created for each order, again quantity should be considered
+
 
 #Okay, now we can receive the order, giving the price as the user would
 
