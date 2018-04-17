@@ -31,6 +31,7 @@ use Koha::Email;
 use Koha::Exceptions::Ill;
 use Koha::Illcomments;
 use Koha::Illrequestattributes;
+use Koha::AuthorisedValue;
 use Koha::Patron;
 
 use base qw(Koha::Object);
@@ -109,6 +110,19 @@ available for request.
 
 =head2 Class methods
 
+=head3 statusalias
+
+=cut
+
+sub statusalias {
+    my ( $self ) = @_;
+    return $self->status_alias ?
+        Koha::AuthorisedValue->_new_from_dbic(
+            scalar $self->_result->status_alias
+        ) :
+        undef;
+}
+
 =head3 illrequestattributes
 
 =cut
@@ -140,6 +154,22 @@ sub patron {
     return Koha::Patron->_new_from_dbic(
         scalar $self->_result->borrowernumber
     );
+}
+
+=head3 status
+
+Overloaded getter/setter for request status,
+also nullifies status_alias
+
+=cut
+
+sub status {
+    my ( $self, $newval) = @_;
+    if ($newval) {
+        $self->status_alias(undef);
+        return $self->SUPER::status($newval);
+    }
+    return $self->SUPER::status;
 }
 
 =head3 load_backend
