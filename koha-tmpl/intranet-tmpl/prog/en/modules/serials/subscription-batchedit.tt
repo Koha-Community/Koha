@@ -65,7 +65,7 @@
                         <fieldset class="rows">
                             <ol>
                                 <li>
-                                    <label for="booksellerid">Bookseller</label>
+                                    <label for="booksellerid">Vendor:  </label>
                                     <select id="booksellerid" name="booksellerid">
                                         <option value="">No change</option>
                                         [% FOREACH bookseller IN booksellers %]
@@ -74,7 +74,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="location">Location</label>
+                                    <label for="location">Location: </label>
                                     <select id="location" name="location">
                                         <option value="">No change</option>
                                         [% FOREACH av IN AuthorisedValues.Get('LOC') %]
@@ -83,7 +83,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="branchcode">Library</label>
+                                    <label for="branchcode">Library: </label>
                                     <select id="branchcode" name="branchcode">
                                         <option value="">No change</option>
                                         [% FOREACH branch IN Branches.all %]
@@ -92,7 +92,7 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="itemtype">Item type</label>
+                                    <label for="itemtype">Item type: </label>
                                     <select id="itemtype" name="itemtype">
                                         <option value="">No change</option>
                                         [% FOREACH itemtype IN ItemTypes.Get() %]
@@ -101,15 +101,15 @@
                                     </select>
                                 </li>
                                 <li>
-                                    <label for="notes">Public note</label>
+                                    <label for="notes">Public note: </label>
                                     <textarea id="notes" name="notes" placeholder="No change"></textarea>
                                 </li>
                                 <li>
-                                    <label for="internalnotes">Nonpublic note</label>
+                                    <label for="internalnotes">Nonpublic note: </label>
                                     <textarea id="internalnotes" name="internalnotes" placeholder="No change"></textarea>
                                 </li>
                                 <li>
-                                    <label for="serialsadditems">Create item when receiving</label>
+                                    <label for="serialsadditems">Create item when receiving: </label>
                                     <select id="serialsadditems" name="serialsadditems">
                                         <option value="">No change</option>
                                         <option value="0">No</option>
@@ -118,8 +118,8 @@
 
                                 </li>
                                 <li>
-                                    <label for="enddate">Expiration date</label>
-                                    <input type="date" class="datepicker" id="enddate" name="enddate" placeholder="No change"/>
+                                    <label for="enddate">Expiration date: </label>
+                                    <input type="text" class="datepicker" id="enddate" name="enddate" placeholder="No change"/>
                                 </li>
                                 [% FOREACH field IN additional_fields %]
                                     <li>
