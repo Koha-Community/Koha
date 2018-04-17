@@ -208,7 +208,7 @@ sub SetOwnerToFundHierarchy {
 
 # -------------------------------------------------------------------
 sub GetBudgetsPlanCell {
-    my ( $cell, $period, $budget ) = @_; #FIXME we don't use $period or $budget
+    my ( $cell, $period, $budget ) = @_; #FIXME we don't use $period
     my ($actual, $sth);
     my $dbh = C4::Context->dbh;
     my $roundsql = _get_rounding_sql(qq|ecost_tax_included|);

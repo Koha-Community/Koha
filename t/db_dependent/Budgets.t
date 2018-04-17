@@ -969,32 +969,46 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
 
 subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 
-    plan tests => 12;
+    plan tests => 16;
 
 #Let's build an order, we need a couple things though
     t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
 
-    my $spent_biblio = $builder->build({ source => 'Biblio' });
-    my $spent_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
-    my $spent_invoice = $builder->build({ source => 'Aqinvoice'});
+    my $spent_biblio   = $builder->build({ source => 'Biblio' });
+    my $item_1         = $builder->build({ source => 'Item', value => { biblionumber => $spent_biblio->{biblionumber} } });
+    my $biblioitem_1   = $builder->build({ source => 'Biblioitem', value => { biblionumber => $spent_biblio->{biblionumber}, itemnumber => $item_1->{itemnumber} } });
+    my $spent_basket   = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
+    my $spent_invoice  = $builder->build({ source => 'Aqinvoice'});
     my $spent_currency = $builder->build({ source => 'Currency', value => { active => 1, archived => 0, symbol => 'F', rate => 2, isocode => undef, currency => 'FOO' }  });
-    my $spent_vendor = $builder->build({ source => 'Aqbookseller',value => { listincgst => 0, listprice => $spent_currency->{currency}, invoiceprice => $spent_currency->{currency} } });
+    my $spent_vendor   = $builder->build({ source => 'Aqbookseller',value => { listincgst => 0, listprice => $spent_currency->{currency}, invoiceprice => $spent_currency->{currency} } });
+    my $budget_authcat = $builder->build({ source => 'AuthorisedValueCategory', value => {} });
+    my $spent_sort1    = $builder->build({ source => 'AuthorisedValue', value => {
+            category => $budget_authcat->{category_name},
+            authorised_value => 'PICKLE',
+        }
+    });
+    my $spent_budget = $builder->build({ source => 'Aqbudget', value => {
+            sort1_authcat => $budget_authcat->{category_name},
+        }
+    });
     my $spent_orderinfo = {
-        basketno => $spent_basket->{basketno},
-        booksellerid => $spent_vendor->{id},
-        rrp => 16.99,
-        discount => .42,
-        ecost => 16.91,
-        biblionumber => $spent_biblio->{biblionumber},
-        currency => $spent_currency->{currency},
-        tax_rate_on_ordering => 0,
-        tax_value_on_ordering => 0,
-        tax_rate_on_receiving => 0,
-        tax_value_on_receiving => 0,
-        quantity => 8,
-        quantityreceived => 0,
+        basketno                => $spent_basket->{basketno},
+        booksellerid            => $spent_vendor->{id},
+        rrp                     => 16.99,
+        discount                => .42,
+        ecost                   => 16.91,
+        biblionumber            => $spent_biblio->{biblionumber},
+        currency                => $spent_currency->{currency},
+        tax_rate_on_ordering    => 0,
+        tax_value_on_ordering   => 0,
+        tax_rate_on_receiving   => 0,
+        tax_value_on_receiving  => 0,
+        quantity                => 8,
+        quantityreceived        => 0,
         datecancellationprinted => undef,
-        datereceived => undef,
+        datereceived            => undef,
+        budget_id               => $spent_budget->{budget_id},
+        sort1                   => $spent_sort1->{authorised_value},
     };
 
 #Okay we have basically what the user would enter, now we do some maths
@@ -1022,7 +1036,6 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 #Let's test some budget planning
 #Regression tests for bug 18736
     #We need an item to test by BRANCHES
-    my $item_1 = $builder->build({ source => 'Item' });
     my $order_item_1 = $builder->build({ source => 'AqordersItem', value => { ordernumber => $spent_order->{ordernumber}, itemnumber => $item_1->{itemnumber}  } });
     my $spent_fund = Koha::Acquisition::Funds->find( $spent_order->{budget_id} );
     my $cell = {
@@ -1030,23 +1043,46 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
         cell_authvalue => $spent_order->{entrydate}, #normally this is just the year/month but full won't hurt us here
         budget_id => $spent_order->{budget_id},
         budget_period_id => $spent_fund->budget_period_id,
+        sort1_authcat => $spent_order->{sort1_authcat},
+        sort2_authcat => $spent_order->{sort1_authcat},
     };
-    t::lib::Mocks::mock_preference('OrderPriceRounding','');
-    my ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
-    is ( $actual, '9.854200', "We expect this to be an exact order cost"); #really we should expect cost*quantity but we don't
-    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
-    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
-    is ( $actual, '9.8500', "We expect this to be a rounded order cost"); #really we should expect cost*quantity but we don't
-    $cell->{authcat} = 'BRANCHES';
-    $cell->{authvalue} = $item_1->{homebranch};
-    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
-    t::lib::Mocks::mock_preference('OrderPriceRounding','');
-    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
-    is ( $actual, '9.854200', "We expect this to be full cost for items from the branch"); #here we rely on items having been created for each order, again quantity should be considered
-    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
-    ( $actual ) = GetBudgetsPlanCell( $cell, undef, undef); #we are only testing the actual for now
-    is ( $actual, '9.8500', "We expect this to be rounded cost for items from the branch"); #here we rely on items having been created for each order, again quantity should be considered
+    my $test_values = {
+        'MONTHS' => {
+            authvalue => $spent_order->{entrydate},
+            expected_rounded => 9.85,
+            expected_exact   => 9.8542,
+        },
+        'BRANCHES' => {
+            authvalue => $item_1->{homebranch},
+            expected_rounded => 9.85,
+            expected_exact   => 9.8542,
+        },
+        'ITEMTYPES' => {
+            authvalue => $biblioitem_1->{itemtype},
+            expected_rounded => 78.80,
+            expected_exact   => 78.8336,
+        },
+        'ELSE' => {
+            authvalue => $spent_sort1->{authorised_value},
+            expected_rounded => 78.8,
+            expected_exact   => 78.8336,
+        },
+    };
 
+    for my $authcat ( keys %$test_values ) {
+        my $test_val         = $test_values->{$authcat};
+        my $authvalue        = $test_val->{authvalue};
+        my $expected_rounded = $test_val->{expected_rounded};
+        my $expected_exact   = $test_val->{expected_exact};
+        $cell->{authcat} = $authcat;
+        $cell->{authvalue} = $authvalue;
+        t::lib::Mocks::mock_preference('OrderPriceRounding','');
+        my ( $actual ) = GetBudgetsPlanCell( $cell, undef, $spent_budget); #we are only testing the actual for now
+        is ( $actual+0, $expected_exact, "We expect this to be an exact order cost ($authcat)"); #really we should expect cost*quantity but we don't
+        t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
+        ( $actual ) = GetBudgetsPlanCell( $cell, undef, $spent_budget); #we are only testing the actual for now
+        is ( $actual+0, $expected_rounded, "We expect this to be a rounded order cost ($authcat)"); #really we should expect cost*quantity but we don't
+    }
 
 #Okay, now we can receive the order, giving the price as the user would
 
