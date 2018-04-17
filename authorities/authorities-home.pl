@@ -211,9 +211,6 @@ my $servers = Koha::Z3950Servers->search(
         recordtype => 'authority',
         servertype => ['zed', 'sru'],
     },
-    {   result_class => 'DBIx::Class::ResultClass::HashRefInflator',
-        order_by     => ['rank', 'servername'],
-    },
 );
 
 $template->param(

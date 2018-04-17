@@ -134,7 +134,12 @@ for my $resultsbr (@resultsbr) {
     };
 }
 
-my $servers = Koha::Z3950Servers->search();
+my $servers = Koha::Z3950Servers->search(
+    {
+        recordtype => 'biblio',
+        servertype => ['zed','sru'],
+    }
+);
 
 my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
 $template->param(
