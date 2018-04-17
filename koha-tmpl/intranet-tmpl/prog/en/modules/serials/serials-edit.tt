@@ -8,12 +8,12 @@
 [% INCLUDE 'calendar.inc' %]
 <script language="JavaScript" type="text/javascript">
 //<![CDATA[
-function generateReceive() {
-    var subscriptionid =  document.getElementsByName("subscriptionid")[0].value;
-    if(nbissues=prompt(_("How many issues do you want to receive ?"))){
-        document.location = 'serials-collection.pl?op=gennext&subscriptionid='+subscriptionid+'&nbissues='+nbissues;
-    }
-}
+    $(document).ready(function() {
+        $('#multi_receiving').on('show', function () {
+           $(this).find(".modal-body").html($(".serials_multi_receiving")[0].outerHTML);
+        });
+    });
+
 function popup(subscriptionid) {
 	window.open("subscription-renew.pl?subscriptionid="+subscriptionid,"subscription_renewal",'width=700,height=400,toolbar=false,scrollbars=yes');
 }
@@ -90,6 +90,8 @@ $(document).ready(function() {
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
+
+    [% INCLUDE 'modals/serials_multi_receiving.inc' %]
 
 <h1>Serial edition <i>[% bibliotitle %]</i>
     [% IF location %] ([% AuthorisedValues.GetByCode('LOC', location) %])[% END %]
@@ -423,8 +425,11 @@ $(document).ready(function() {
 
 </table>
     <fieldset class="action">
-       <input type="submit" value="Save"  class="button" accesskey="w" />
-       [% UNLESS ( serialsadditems ) %]&nbsp;&nbsp;<input type="button" onclick="javascript:generateReceive()" value="Multi receiving">[% END %]
+        <div class="btn-group"><input type="submit" value="Save" class="btn btn-default btn-sm"  accesskey="w" /></div>
+        [% UNLESS ( serialsadditems ) %]&nbsp;&nbsp;
+            <div class="btn-group"><a href="#multi_receiving" role="button" class="btn btn-default btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Multi receiving</a></div>
+        [% END %]
+
     </fieldset>
 </form>
 

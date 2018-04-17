@@ -421,6 +421,7 @@ my $location = $serialdatalist[0]->{'location'};
 my $default_bib_view = get_default_view();
 
 $template->param(
+    subscriptionid  => $serialdatalist[0]->{subscriptionid},
     serialsadditems => $serialdatalist[0]->{'serialsadditems'},
     callnumber	     => $serialdatalist[0]->{'callnumber'},
     internalnotes   => $serialdatalist[0]->{'internalnotes'},
