@@ -155,6 +155,9 @@ sub list {
         if ($embed{comments}) {
             $to_push->{comments} = $req->illcomments->count;
         }
+        if ($embed{status_alias}) {
+            $to_push->{status_alias} = $req->statusalias;
+        }
         push @output, $to_push;
     }
 
