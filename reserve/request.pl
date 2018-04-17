@@ -590,6 +590,7 @@ foreach my $biblionumber (@biblionumbers) {
         $reserve{'reserve_id'}     = $res->reserve_id();
         $reserve{itemtype}         = $res->itemtype();
         $reserve{branchcode}       = $res->branchcode();
+        $reserve{object}           = $res;
 
         push( @reserveloop, \%reserve );
     }
