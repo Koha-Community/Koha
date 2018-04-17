@@ -162,8 +162,11 @@ if ( $backends_available ) {
                 value   => {}
             };
             $template->param(
-                whole   => $backend_result,
-                request => $request
+                whole          => $backend_result,
+                request        => $request,
+                status_aliases => scalar Koha::AuthorisedValues->search(
+                    { category => 'ILLSTATUS' }
+                )
             );
         } else {
             # Commit:
@@ -174,6 +177,10 @@ if ( $backends_available ) {
             $request->price_paid($params->{price_paid});
             $request->notesopac($params->{notesopac});
             $request->notesstaff($params->{notesstaff});
+            my $alias = ($params->{status_alias} =~ /\d/) ?
+                $params->{status_alias} :
+                undef;
+            $request->status_alias($alias);
             $request->store;
             my $backend_result = {
                 error   => 0,
