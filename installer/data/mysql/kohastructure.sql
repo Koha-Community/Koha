@@ -4172,6 +4172,7 @@ CREATE TABLE illrequests (
     biblio_id integer DEFAULT NULL,             -- Potential bib linked to request
     branchcode varchar(50) NOT NULL,            -- The branch associated with the request
     status varchar(50) DEFAULT NULL,            -- Current Koha status of request
+    status_alias integer DEFAULT NULL,          -- Foreign key to relevant authorised_values.id
     placed date DEFAULT NULL,                   -- Date the request was placed
     replied date DEFAULT NULL,                  -- Last API response
     updated timestamp DEFAULT CURRENT_TIMESTAMP -- Last modification to request
@@ -4193,6 +4194,10 @@ CREATE TABLE illrequests (
       FOREIGN KEY (`branchcode`)
       REFERENCES `branches` (`branchcode`)
       ON UPDATE CASCADE ON DELETE CASCADE
+    CONSTRAINT `illrequests_safk`
+      FOREIGN KEY (`status_alias`)
+      REFERENCES `authorised_values` (`id`)
+      ON UPDATE CASCADE ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

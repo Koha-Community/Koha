@@ -58,3 +58,7 @@ INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
 -- For Housebound
 INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
     ('HSBND_FREQ');
+
+-- For Interlibrary loans
+INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES
+    ('ILLSTATUS');
