@@ -35,14 +35,13 @@ subtest '/oauth/token tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $borrower = $builder->build({
-        source => 'Borrower',
+    my $patron = $builder->build_object({
+        class => 'Koha::Patrons',
         value  => {
             surname => 'Test OAuth',
             flags => 0,
         },
     });
-    my $patron = Koha::Patrons->find($borrower->{borrowernumber});
 
     # Missing parameter grant_type
     $t->post_ok('/api/v1/oauth/token')
