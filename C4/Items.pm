@@ -543,6 +543,9 @@ sub ModItem {
     my $log_action = $additional_params->{log_action} // 1;
     my $unlinked_item_subfields = $additional_params->{unlinked_item_subfields};
 
+    return unless %$item;
+    $item->{'itemnumber'} = $itemnumber or return;
+
     # if $biblionumber is undefined, get it from the current item
     unless (defined $biblionumber) {
         $biblionumber = _get_single_item_column('biblionumber', $itemnumber);
@@ -551,8 +554,6 @@ sub ModItem {
     if ($unlinked_item_subfields) {
         $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     };
-
-    $item->{'itemnumber'} = $itemnumber or return;
 
     my @fields = qw( itemlost withdrawn damaged );
 
