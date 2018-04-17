@@ -22,13 +22,15 @@ use Koha::Database;
 use Koha::Illrequestattributes;
 use Koha::Illrequest::Config;
 use Koha::Patrons;
+use Koha::AuthorisedValueCategories;
+use Koha::AuthorisedValues;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 use Test::MockObject;
 use Test::MockModule;
 use Test::Exception;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -792,6 +794,59 @@ subtest 'Checking Limits' => sub {
     is($illrq_obj->check_limits({patron => $illrq_obj->patron,
                                  librarycode => $illrq_obj->branchcode}),
        0, "check_limits: branch veto overrides patron category OK.");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Custom statuses' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $cat = Koha::AuthorisedValueCategories->search(
+        {
+            category_name => 'ILLSTATUS'
+        }
+    );
+
+    if ($cat->count == 0) {
+        $cat  = $builder->build_object(
+            {
+                class => 'Koha::AuthorisedValueCategory',
+                value => {
+                    category_name => 'ILLSTATUS'
+                }
+            }
+        );
+    };
+
+    my $av = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => {
+                category => 'ILLSTATUS'
+            }
+        }
+    );
+
+    is($av->category, 'ILLSTATUS',
+       "Successfully created authorised value for custom status");
+
+    my $ill_req = $builder->build_object(
+        {
+            class => 'Koha::Illrequests',
+            value => {
+                status_alias => $av->id
+            }
+        }
+    );
+    isa_ok($ill_req->statusalias, 'Koha::AuthorisedValue',
+           "statusalias correctly returning Koha::AuthorisedValue object");
+
+    $ill_req->status("COMP");
+    is($ill_req->statusalias, undef,
+        "Koha::Illrequest->status overloading resetting status_alias");
 
     $schema->storage->txn_rollback;
 };
