@@ -4161,6 +4161,18 @@ CREATE TABLE library_groups (
     UNIQUE KEY title ( title )
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table 'oauth_access_tokens'
+--
+
+DROP TABLE IF EXISTS `oauth_access_tokens`;
+CREATE TABLE `oauth_access_tokens` (
+    `access_token` VARCHAR(191) NOT NULL, -- generarated access token
+    `client_id`    VARCHAR(191) NOT NULL, -- the client id the access token belongs to
+    `expires`      INT NOT NULL,          -- expiration time in seconds
+    PRIMARY KEY (`access_token`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
