@@ -43,9 +43,6 @@ can_ok( 'C4::Accounts',
         chargelostitem
         manualinvoice
         getcharges
-        ModNote
-        getcredits
-        getrefunds
         ReversePayment
         purge_zero_balance_fees )
 );

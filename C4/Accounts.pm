@@ -41,9 +41,6 @@ BEGIN {
       &manualinvoice
       &getnextacctno
       &getcharges
-      &ModNote
-      &getcredits
-      &getrefunds
       &chargelostitem
       &ReversePayment
       &purge_zero_balance_fees
@@ -329,54 +326,6 @@ sub getcharges {
     while ( my $data = $sth->fetchrow_hashref ) {
         push @results,$data;
     }
-    return (@results);
-}
-
-sub ModNote {
-    my ( $accountlines_id, $note ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare('UPDATE accountlines SET note = ? WHERE accountlines_id = ?');
-    $sth->execute( $note, $accountlines_id );
-}
-
-sub getcredits {
-	my ( $date, $date2 ) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare(
-			        "SELECT * FROM accountlines,borrowers
-      WHERE amount < 0 AND accounttype not like 'Pay%' AND accountlines.borrowernumber = borrowers.borrowernumber
-	  AND timestamp >=TIMESTAMP(?) AND timestamp < TIMESTAMP(?)"
-      );  
-
-    $sth->execute( $date, $date2 );
-    my @results;          
-    while ( my $data = $sth->fetchrow_hashref ) {
-		$data->{'date'} = $data->{'timestamp'};
-		push @results,$data;
-	}
-    return (@results);
-} 
-
-
-sub getrefunds {
-	my ( $date, $date2 ) = @_;
-	my $dbh = C4::Context->dbh;
-	
-	my $sth = $dbh->prepare(
-			        "SELECT *,timestamp AS datetime                                                                                      
-                  FROM accountlines,borrowers
-                  WHERE (accounttype = 'REF'
-					  AND accountlines.borrowernumber = borrowers.borrowernumber
-					                  AND date  >=?  AND date  <?)"
-    );
-
-    $sth->execute( $date, $date2 );
-
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-		push @results,$data;
-		
-	}
     return (@results);
 }
 
