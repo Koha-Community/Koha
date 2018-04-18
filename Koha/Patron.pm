@@ -44,6 +44,9 @@ use base qw(Koha::Object);
 
 our $RESULTSET_PATRON_ID_MAPPING = {
     Accountline          => 'borrowernumber',
+    Aqbasketuser         => 'borrowernumber',
+    Aqbudget             => 'budget_owner_id',
+    Aqbudgetborrower     => 'borrowernumber',
     ArticleRequest       => 'borrowernumber',
     BorrowerAttribute    => 'borrowernumber',
     BorrowerDebarment    => 'borrowernumber',
@@ -60,8 +63,8 @@ our $RESULTSET_PATRON_ID_MAPPING = {
     Rating               => 'borrowernumber',
     Reserve              => 'borrowernumber',
     Review               => 'borrowernumber',
-    Statistic            => 'borrowernumber',
     SearchHistory        => 'userid',
+    Statistic            => 'borrowernumber',
     Suggestion           => 'suggestedby',
     TagAll               => 'borrowernumber',
     Virtualshelfcontent  => 'borrowernumber',
