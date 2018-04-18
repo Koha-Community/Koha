@@ -26,10 +26,12 @@ use Net::OAuth2::AuthorizationServer;
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 use C4::Context;
 
+use Koha::ApiKeys;
 use Koha::Account::Lines;
 use Koha::Checkouts;
 use Koha::Holds;
 use Koha::OAuth;
+use Koha::OAuthAccessTokens;
 use Koha::Old::Checkouts;
 use Koha::Patrons;
 
@@ -125,11 +127,8 @@ sub authenticate_api_request {
         );
 
         if ($valid_token) {
-            my $clients = C4::Context->config('api_client');
-            $clients = [ $clients ] unless ref $clients eq 'ARRAY';
-            my ($client) = grep { $_->{client_id} eq $valid_token->{client_id} } @$clients;
-
-            my $patron = Koha::Patrons->find($client->{patron_id});
+            my $patron_id   = Koha::ApiKeys->find( $valid_token->{client_id} )->patron_id;
+            my $patron      = Koha::Patrons->find($patron_id);
             my $permissions = $authorization->{'permissions'};
             # Check if the patron is authorized
             if ( haspermission($patron->userid, $permissions)

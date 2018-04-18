@@ -17,6 +17,7 @@ package Koha::OAuth;
 
 use Modern::Perl;
 
+use Koha::ApiKeys;
 use Koha::OAuthAccessTokens;
 
 =head1 NAME
@@ -53,17 +54,18 @@ and allowed to get authorization.
 sub _verify_client_cb {
     my (%args) = @_;
 
-    my ($client_id, $client_secret)
-        = @args{ qw/ client_id client_secret / };
+    my ($client_id, $client_secret) = @args{ qw/ client_id client_secret / };
 
-    return (0, 'unauthorized_client') unless $client_id;
+    my $api_key;
 
-    my $clients = C4::Context->config('api_client');
-    $clients = [ $clients ] unless ref $clients eq 'ARRAY';
-    my ($client) = grep { $_->{client_id} eq $client_id } @$clients;
-    return (0, 'unauthorized_client') unless $client;
+    if ($client_id) {
+        $api_key = Koha::ApiKeys->find( $client_id );
+    }
 
-    return (0, 'access_denied') unless $client_secret eq $client->{client_secret};
+    # client_id mandatory and exists on the DB
+    return (0, 'unauthorized_client') unless $api_key && $api_key->active;
+
+    return (0, 'access_denied') unless $api_key->secret eq $client_secret;
 
     return (1, undef, []);
 }
