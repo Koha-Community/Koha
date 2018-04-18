@@ -43,5 +43,7 @@
     var SUSPEND_HOLD_ERROR_NOT_FOUND = _("Unable to suspend hold, hold not found");
     var RESUME_HOLD_ERROR_NOT_FOUND = _("Unable to resume, hold not found");
     var CURRENT = _(" (current) ");
+    var MSG_NO_ITEMTYPE = _("No itemtype");
+    var MSG_CHECKOUTS_BY_ITEMTYPE = _("Number of checkouts by item type");
 //]]>
 </script>
