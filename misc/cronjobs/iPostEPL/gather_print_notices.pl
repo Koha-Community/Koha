@@ -36,6 +36,7 @@ use C4::Letters;
 use C4::Templates;
 use C4::Items;
 use C4::Reserves;
+use Koha::Items;
 use File::Spec;
 use Getopt::Long;
 
@@ -202,8 +203,11 @@ sub fetchPickupLocations {
     my %targetBranches; #The same letter can have Items from multiple pickup locations so we need to send this letter to each separate pickup branch.
     foreach my $barcode (@barcodes) {
         my $itemnumber = C4::Items::GetItemnumberFromBarcode( $barcode );
-        my ( $reservedate, $borrowernumber, $branchcode, $reserve_id, $waitingdate ) = GetReservesFromItemnumber($itemnumber);
-        $targetBranches{ $branchcode } = 1 if $branchcode; #Set the branches which receives this print notification.
+        my $item = Koha::Items->find($itemnumber);
+        my $holds = $item->current_holds if $item;
+        if ( my $first_hold = $holds->next ) {
+            $targetBranches{ $first_hold->branchcode } = 1 if $first_hold->branchcode;
+        }
     }
 
     if (%targetBranches) { #Send the same message to each branch from which there are pickup locations.
