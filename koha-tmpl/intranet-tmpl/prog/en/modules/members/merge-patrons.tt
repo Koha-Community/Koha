@@ -70,7 +70,7 @@
                                 <tr>
                                     <td><input class='keeper' type='radio' name='keeper' value='[% p.id %]' /></td>
                                     <td>[% p.cardnumber | html %]</td>
-                                    <td>[% p.firstname | html %] [% p.surname | html %]</td>
+                                    <td>[% INCLUDE 'patron-title.inc' patron = p %]</td>
                                     <td>[% p.dateofbirth | $KohaDates %]</td>
                                     <td>[% Categories.GetName( p.categorycode ) %] ([% p.categorycode %])</td>
                                     <td>[% Branches.GetName( p.branchcode ) %]</td>
@@ -95,13 +95,13 @@
                     <div class="dialog alert">Merge failed! The following error was reported: [% error %].</div>
                 [% ELSE %]
                     <p>
-                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id %]">[% keeper.firstname %] [% keeper.surname %] ([% keeper.cardnumber | html %])</a>
+                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a>
                     </p>
 
                     [% FOREACH pair IN results.merged.pairs %]
                         [% SET patron = pair.value.patron %]
 
-                        <h5>[% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</h5>
+                        <h5>[% INCLUDE 'patron-title.inc' %]</h5>
 
                         [% FOREACH r IN pair.value.updated.pairs %]
                             [% SET name = r.key %]
