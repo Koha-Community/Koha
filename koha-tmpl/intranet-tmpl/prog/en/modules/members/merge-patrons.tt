@@ -1,24 +1,11 @@
+[% USE Asset %]
 [% USE Branches %]
 [% USE Categories %]
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Merge patron records</title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-<script type="text/javascript">
-//<![CDATA[
-$(document).ready(function() {
-    $('#merge-patrons').prop('disabled', true);
-    $('#patron-merge-table').on('change', 'input', function() {
-        if ( $('.keeper:checked').length > 0 ) {
-            $('#merge-patrons').prop('disabled', false);
-        } else {
-            $('#merge-patrons').prop('disabled', true);
-        }
-    });
-});
-//]]>
-</script>
 
 </head>
 <body id="pat_merge" class="pat">
@@ -133,4 +120,22 @@ $(document).ready(function() {
             [% END %]
         </div>
     </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/members-menu.js") %]
+
+    <script>
+    $(document).ready(function() {
+        $('#merge-patrons').prop('disabled', true);
+        $('#patron-merge-table').on('change', 'input', function() {
+            if ( $('.keeper:checked').length > 0 ) {
+                $('#merge-patrons').prop('disabled', false);
+            } else {
+                $('#merge-patrons').prop('disabled', true);
+            }
+        });
+    });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
