@@ -56,6 +56,7 @@ use Koha::ItemTypes;
 use Koha::LibraryCategories;
 use Koha::Ratings;
 use Koha::Virtualshelves;
+use Koha::SearchFields;
 
 use POSIX qw(ceil floor strftime);
 use URI::Escape;
@@ -560,18 +561,19 @@ if (C4::Context->preference('OpacSuppression')) {
     }
 }
 
+my $build_params = {
+    expanded_facet => $expanded_facet,
+    suppress => $suppress
+};
+
+unless ( $cgi->param('advsearch') ) {
+    $build_params->{weighted_fields} = 1;
+}
+
 ## I. BUILD THE QUERY
 ( $error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type)
-  = $builder->build_query_compat(
-    \@operators,
-    \@operands,
-    \@indexes,
-    \@limits,
-    \@sort_by,
-    0,
-    $lang,
-    { expanded_facet => $expanded_facet, suppress => $suppress }
-    );
+  = $builder->build_query_compat( \@operators, \@operands,
+    \@indexes, \@limits, \@sort_by, 0, $lang, $build_params);
 
 sub _input_cgi_parse {
     my @elements;
