@@ -136,7 +136,11 @@
             $(".renew_subscription").on("click",function(e){
                 e.preventDefault();
                 var subscriptionid = $(this).data("subscriptionid");
-                popup( subscriptionid );
+                newin=window.open("/cgi-bin/koha/serials/subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
+            });
+            $('a.itemselection_action_renew').on("click", function(e){
+                e.preventDefault();
+                newin=window.open($(this).attr('href'),'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
             });
             function itemSelectionBuildRenewLink() {
                 var subscription_ids= new Array();
@@ -176,9 +180,6 @@
             });
 
         });
-        function popup(subscriptionid) {
-           newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
-        }
     </script>
 [% END %]
 

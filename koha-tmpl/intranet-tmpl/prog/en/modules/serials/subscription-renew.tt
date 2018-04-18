@@ -11,16 +11,16 @@
 <body id="ser_subscription-renew" class="ser">
     <div class="container-fluid">
 
-[% IF op == 'renew' %]
-  Subscription renewed.
-  
-<script type="text/javascript">
-//<![CDATA[
-  //opener.document.location.reload();
-  window.opener.location.reload(false);
-  self.close();
-  //]]>
-</script>
+[% IF op == 'renew' OR op =='multi_renew' %]
+    [% IF op == 'renew' %]
+        <span>Subscription renewed.<span>
+    [% ELSE %]
+        <span>Subscriptions renewed.<span>
+    [% END %]
+
+    <div id="closewindow">
+        <a class="btn btn-default btn-default close" href="#">Close</a>
+    </div>
 [% ELSE %]
       <div id="bd">
 <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
@@ -46,6 +46,15 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $(".close").on("click", function(e){
+                e.preventDefault();
+                window.opener.location.reload(false);
+                self.close();
+            });
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
