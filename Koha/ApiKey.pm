@@ -49,8 +49,10 @@ sub store {
 
     my ( $uuid, $uuidstring );
 
-    $self->client_id($self->_generate_unused_uuid('client_id'));
-    $self->secret($self->_generate_unused_uuid('secret'));
+    $self->client_id($self->_generate_unused_uuid('client_id'))
+        unless $self->client_id;
+    $self->secret($self->_generate_unused_uuid('secret'))
+        unless $self->secret;
 
     return $self->SUPER::store();
 }
