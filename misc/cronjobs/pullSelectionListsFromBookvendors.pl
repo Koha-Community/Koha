@@ -213,12 +213,14 @@ sub getAllKirjavalitysSelectionlists {
     foreach my $clients (@$ftpfiles) {
         my $client = $ftpcon->ls($clients);
         foreach my $file (@$client) {
-            if ($file =~ /kvmarcxmlenn\d{8}\.xml/) {
+            if ($file =~ /^kvmarcxmlenn\d{8}\.xml/) {
                 print "Kirjavalitys: Found file: $file\n" if $verbose;
                 push @$kvenn_selectionlist_filenames, $file;
-            }elsif ($file =~ /kvmarcxmlulk\d{8}\.xml/) {
+            }elsif ($file =~ /^kvmarcxmlulk\d{8}\.xml/) {
                 print "Kirjavalitys: Found file: $file\n" if $verbose;
                 push @$kvulk_selectionlist_filenames, $file;
+            }elsif ($file =~ /^marcarkisto\/kvmarc/) {
+                #Allowed, do nothing about them
             }elsif ($kvFtpExceptionFiles->{$file}) {
                 #We have a list of files that are allowed to be in the KV ftp directory and we won't warn about.
             }
