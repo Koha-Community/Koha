@@ -408,7 +408,7 @@
           <xsl:variable name="agelimit" select="translate(marc:subfield[@code='a'], ' .-;', '')"/>
           <xsl:choose>
             <xsl:when test="starts-with($agelimit, 'K')">
-              <span class="results_summary age_limit">Suitable for <xsl:value-of select="substring($agelimit, 2)"/> years and older.</span>
+              <span class="results_summary age_limit">Age restriction: <xsl:value-of select="substring($agelimit, 2)"/>.</span>
             </xsl:when>
             </xsl:choose>
         </xsl:for-each>
