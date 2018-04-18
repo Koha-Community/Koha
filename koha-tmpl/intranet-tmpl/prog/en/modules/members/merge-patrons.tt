@@ -108,7 +108,7 @@
                             [% SET count = r.value %]
                             [% IF count %]
                                 <p>
-                                    [% count %] [% PROCESS display_names rs = name %] transferred.
+                                    <span>[% count %] [% PROCESS display_names rs = name %] transferred.</span>
                                     [% IF name == 'Reserve' %]
                                         <strong>It is advisable to check for and resolve duplicate holds due to merging.</strong>
                                     [% END %]
