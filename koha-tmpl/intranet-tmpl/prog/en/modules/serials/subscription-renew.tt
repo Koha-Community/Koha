@@ -1,18 +1,23 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Serials subscription renew #[% subscriptionid %]</title>
+[% IF subscription %]
+<title>Koha &rsaquo; Serials subscription renew #[% subscription.subscriptionid %]</title>
+[% ELSE %]
+<title>Koha &rsaquo; Serials subscription renew</title>
+[% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="ser_subscription-renew" class="ser">
     <div class="container-fluid">
 
-[% IF ( renew ) %]
+[% IF op == 'renew' %]
   Subscription renewed.
   
 <script type="text/javascript">
 //<![CDATA[
-  opener.document.location.reload();
+  //opener.document.location.reload();
+  window.opener.location.reload(false);
   self.close();
   //]]>
 </script>
@@ -20,8 +25,8 @@
       <div id="bd">
 <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
 		<input type="hidden" name="op" value="renew" />
-		<input type="hidden" name="subscriptionid" value="[% subscriptionid %]" />
-		<fieldset class="rows"><legend>Subscription renewal for [% bibliotitle %]</legend>
+		<input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid %]" />
+		<fieldset class="rows"><legend>Subscription renewal for [% subscription.bibliotitle %]</legend>
         <ol>
             <li>
                 <label for="startdate">Start date: </label>
@@ -30,9 +35,9 @@
             </li>
 		<li><fieldset>
 		<legend>Subscription length:</legend>
-		<ol><li><label for="numberlength">Number of num:</label><input type="text" id="numberlength" name="numberlength" value="[% numberlength %]" /></li>
-		<li><label for="weeklength">Number of weeks: </label><input type="text" id="weeklength" name="weeklength" value="[% weeklength %]" /></li>
-		<li><label for="monthlength">Number of months: </label><input type="text" id="monthlength" name="monthlength" value="[% monthlength %]" /></li></ol></fieldset></li>
+		<ol><li><label for="numberlength">Number of num:</label><input type="text" id="numberlength" name="numberlength" value="[% subscription.numberlength %]" /></li>
+		<li><label for="weeklength">Number of weeks: </label><input type="text" id="weeklength" name="weeklength" value="[% subscription.weeklength %]" /></li>
+		<li><label for="monthlength">Number of months: </label><input type="text" id="monthlength" name="monthlength" value="[% subscription.monthlength %]" /></li></ol></fieldset></li>
 		<li><label for="note">Note for the librarian that will manage your renewal request: </label>
 		<textarea name="note" id="note" rows="5" cols="50"></textarea></li></ol></fieldset>
 		<fieldset class="action"><input type="submit" value="Submit" class="button" /></fieldset>

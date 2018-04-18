@@ -61,8 +61,20 @@
     [% END %]
         will expire before <b>[% date | $KohaDates %]</b>
 </p>
+
+<div class="checkexpiration-table_table_controls">
+    <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> |
+    <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+    <span class="itemselection_actions">
+      | Actions:
+          <a class="itemselection_action_renew" title="Renew selected subscriptions"><i class="fa fa-refresh"></i> Renew selected subscriptions</a>
+    </span>
+</div>
+
+
 <table>
         <tr>
+            <th></th>
             <th>ISSN</th>
             <th>Title</th>
             [% IF can_change_library %]<th>Library</th>[% END %]
@@ -73,6 +85,9 @@
         </tr>
     [% FOREACH subscriptions_loo IN subscriptions_loop %]
         <tr>
+            <td style="text-align:center;vertical-align:middle">
+                <input type="checkbox" value="[% subscriptions_loo.subscriptionid %]" name="subscriptionid" />
+            </td>
             <td>
                 [% subscriptions_loo.issn %]
             </td>
@@ -123,6 +138,43 @@
                 var subscriptionid = $(this).data("subscriptionid");
                 popup( subscriptionid );
             });
+            function itemSelectionBuildRenewLink() {
+                var subscription_ids= new Array();
+                $("input[name='subscriptionid'][type='checkbox']:checked").each(function() {
+                    subscription_ids.push($(this).val());
+                });
+                if (subscription_ids.length > 0) {
+                    var url = '/cgi-bin/koha/serials/subscription-renew.pl?op=multi_renew';
+                    url += '&subscriptionid=' + subscription_ids.join('&subscriptionid=');
+                    $('a.itemselection_action_renew').attr('href', url);
+                } else {
+                    return false;
+                }
+                return true;
+            }
+
+            function itemSelectionBuildActionLinks() {
+                var export_link_ok = itemSelectionBuildRenewLink();
+                if (export_link_ok) {
+                    $('.itemselection_actions').show();
+                } else {
+                    $('.itemselection_actions').hide();
+                }
+            }
+
+            itemSelectionBuildActionLinks();
+
+            $("input[name='subscriptionid'][type='checkbox']").change(function() {
+                itemSelectionBuildActionLinks();
+            });
+
+            $(".SelectAll, .ClearAll").on("click",function(e){
+                e.preventDefault();
+                var checkboxes = $(this).parent().siblings('table').first().find('input[type="checkbox"]');
+                checkboxes.prop('checked', $(this).hasClass('SelectAll'));
+                itemSelectionBuildActionLinks();
+            });
+
         });
         function popup(subscriptionid) {
            newin=window.open("subscription-renew.pl?mode=popup&subscriptionid="+subscriptionid,'popup','width=590,height=440,toolbar=false,scrollbars=yes,resize=yes');
