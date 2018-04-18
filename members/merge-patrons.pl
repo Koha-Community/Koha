@@ -34,7 +34,7 @@ my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
         query           => $cgi,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { borrowers => 1 }
+        flagsrequired   => { borrowers => 'edit_borrowers' },
     }
 );
 

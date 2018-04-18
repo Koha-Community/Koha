@@ -53,7 +53,7 @@
             <div id="searchheader">
               <h3>Patrons found for: <span id="searchpattern">[% IF searchmember %] for '[% searchmember | html %]'[% END %]</span></h3>
             </div>
-            [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers %]
+            [% IF CAN_user_tools_manage_patron_lists || CAN_user_borrowers_edit_borrowers %]
               <div id="searchheader">
                   <div>
                     [% IF CAN_user_tools_manage_patron_lists %]
@@ -82,11 +82,11 @@
                       </span>
                     [% END %]
 
-                    [% IF CAN_user_tools_manage_patron_lists && CAN_user_borrowers %]
+                    [% IF CAN_user_tools_manage_patron_lists && CAN_user_borrowers_edit_borrowers %]
                         |
                     [% END %]
 
-                    [% IF CAN_user_borrowers %]
+                    [% IF CAN_user_borrowers_edit_borrowers %]
                           <button id="merge-patrons" type="submit">Merge selected patrons</button>
                     [% END %]
                   </div>
