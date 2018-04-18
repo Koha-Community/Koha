@@ -31,15 +31,14 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
 
 subtest '/oauth/token tests' => sub {
-    plan tests => 19;
+    plan tests => 24;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({
         class => 'Koha::Patrons',
         value  => {
-            surname => 'Test OAuth',
-            flags => 0,
+            flags => 0 # no permissions
         },
     });
 
@@ -57,17 +56,12 @@ subtest '/oauth/token tests' => sub {
         ->status_is(403)
         ->json_is({error => 'unauthorized_client'});
 
-    my ($client_id, $client_secret) = ('client1', 'secr3t');
-    t::lib::Mocks::mock_config('api_client', {
-        'client_id' => $client_id,
-        'client_secret' => $client_secret,
-        patron_id => $patron->borrowernumber,
-    });
+    my $api_key = Koha::ApiKey->new({ patron_id => $patron->id, description => 'blah' })->store;
 
     my $formData = {
-        grant_type => 'client_credentials',
-        client_id => $client_id,
-        client_secret => $client_secret,
+        grant_type    => 'client_credentials',
+        client_id     => $api_key->client_id,
+        client_secret => $api_key->secret
     };
     $t->post_ok('/api/v1/oauth/token', form => $formData)
         ->status_is(200)
@@ -90,6 +84,20 @@ subtest '/oauth/token tests' => sub {
     $tx = $t->ua->build_tx(GET => '/api/v1/patrons');
     $tx->req->headers->authorization("Bearer $access_token");
     $t->request_ok($tx)->status_is(200);
+
+    # expire token
+    my $token = Koha::OAuthAccessTokens->find($access_token);
+    $token->expires( time - 1 )->store;
+    $tx = $t->ua->build_tx( GET => '/api/v1/patrons' );
+    $tx->req->headers->authorization("Bearer $access_token");
+    $t->request_ok($tx)
+      ->status_is(401);
+
+    # revoke key
+    $api_key->active(0)->store;
+    $t->post_ok('/api/v1/oauth/token', form => $formData)
+        ->status_is(403)
+        ->json_is({ error => 'unauthorized_client' });
 
     $schema->storage->txn_rollback;
 };
