@@ -35,6 +35,7 @@
                         <fieldset>
                             <legend>Generate new client id/secret pair</legend>
                             <input type="hidden" name="patron_id" value="[% patron.id %]" />
+                            <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                             <input type="hidden" name="op" value="generate" />
                             <label for="description">Description: </label>
                             <input type="text" name="description" />
@@ -64,11 +65,13 @@
                                         <td>
                                             <form action="/cgi-bin/koha/opac-apikeys.pl" method="post" class="form-inline">
                                                 <input type="hidden" name="key" value="[% key.id %]" />
+                                                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                                                 <input type="hidden" name="op" value="delete" />
                                                 <button class="btn btn-link btn-xs delete-key" type="submit"><i class="fa fa-trash"></i> Delete</button>
                                             </form>
                                             <form action="/cgi-bin/koha/opac-apikeys.pl" method="post" class="form-inline">
                                                 <input type="hidden" name="key" value="[% key.id %]" />
+                                                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                                                 [% IF key.active %]
                                                     <input type="hidden" name="op" value="revoke" />
                                                     <button class="btn btn-link btn-xs" type="submit"><i class="fa fa-remove"></i> Revoke</button>

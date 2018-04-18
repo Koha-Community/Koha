@@ -25,6 +25,7 @@
                 <h1>API keys for [% INCLUDE 'patron-title.inc' %]</h1>
                 <form id="add-api-key" action="/cgi-bin/koha/members/apikeys.pl" method="post" style="display:none">
                     <input type="hidden" name="patron_id" value="[% patron.id %]" />
+                    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                     <input type="hidden" name="op" value="generate" />
                     <fieldset class="brief">
                         <legend>Generate new client id/secret pair</legend>
@@ -65,12 +66,14 @@
                                             <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
                                                 <input type="hidden" name="patron_id" value="[% patron.id %]" />
                                                 <input type="hidden" name="key" value="[% key.id %]" />
+                                                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                                                 <input type="hidden" name="op" value="delete" />
                                                 <button class="btn btn-default btn-xs delete" type="submit"><i class="fa fa-trash"></i> Delete</button>
                                             </form>
                                             <form action="/cgi-bin/koha/members/apikeys.pl" method="post">
                                                 <input type="hidden" name="patron_id" value="[% patron.id %]" />
                                                 <input type="hidden" name="key" value="[% key.id %]" />
+                                                <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
                                                 [% IF key.active %]
                                                     <input type="hidden" name="op" value="revoke" />
                                                     <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-remove"></i> Revoke</button>

@@ -26,6 +26,7 @@ use C4::Output;
 
 use Koha::ApiKeys;
 use Koha::Patrons;
+use Koha::Token;
 
 my $cgi = new CGI;
 
@@ -51,7 +52,19 @@ if ( not defined $patron ) {
     exit;
 }
 
-my $op = $cgi->param('op');
+my $op = $cgi->param('op') // '';
+
+if ( $op eq 'generate' or
+     $op eq 'delete' or
+     $op eq 'revoke' or
+     $op eq 'activate' ) {
+
+    die "Wrong CSRF token"
+    unless Koha::Token->new->check_csrf({
+        session_id => scalar $cgi->cookie('CGISESSID'),
+        token      => scalar $cgi->param('csrf_token'),
+    });
+}
 
 if ($op) {
     if ( $op eq 'generate' ) {
@@ -102,8 +115,9 @@ if ($op) {
 my @api_keys = Koha::ApiKeys->search({ patron_id => $patron_id });
 
 $template->param(
-    api_keys => \@api_keys,
-    patron   => $patron
+    api_keys   => \@api_keys,
+    csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $cgi->cookie('CGISESSID') }),
+    patron     => $patron
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
