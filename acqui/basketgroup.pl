@@ -330,7 +330,7 @@ if ( $op eq "add" ) {
     $template->param(listclosed => 1);
     $template->param(orderErrorList => $errorsList) if $errorsList;
     my $basketgroups = &GetBasketgroups($booksellerid);
-    my $bookseller = Koha::Acquisition::Bookseller->fetch({ id => $booksellerid });
+    my $bookseller = Koha::Acquisition::Booksellers->find($booksellerid);
 
     my $baskets = &GetBasketsByBookseller($booksellerid);
     $template->param(  orderInterface => C4::KohaSuomi::AcquisitionIntegration::GetOrderInterface( $bookseller )  );
