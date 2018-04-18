@@ -24,7 +24,7 @@
 
                 <div class="modal-footer">
                     <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
-                    <input type="submit" class="btn btn-default approve" value="Multi receiving" />
+                    <input type="submit" class="btn btn-default approve" value="OK" />
                 </div>
             </form>
         </div>
