@@ -497,12 +497,13 @@ $(document).ready(function() {
                 var ul = $('<ul>');
                 Object.keys(checkoutsByItype).sort().forEach(function (itype) {
                     var li = $('<li>')
-                        .append($('<strong>').html(itype || _("No itemtype")))
+                        .append($('<strong>').html(itype || MSG_NO_ITEMTYPE))
                         .append(': ' + checkoutsByItype[itype]);
                     ul.append(li);
                 })
                 $('<details>')
-                    .append($('<summary>').html(_("Number of checkouts by item type")))
+                    .addClass('checkouts-by-itemtype')
+                    .append($('<summary>').html(MSG_CHECKOUTS_BY_ITEMTYPE))
                     .append(ul)
                     .insertBefore(oSettings.nTableWrapper)
             },
