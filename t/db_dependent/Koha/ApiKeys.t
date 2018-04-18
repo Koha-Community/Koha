@@ -35,7 +35,7 @@ my $uuid_gen_secret_counter    = 0;
 
 subtest 'store() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -64,6 +64,16 @@ subtest 'store() tests' => sub {
         'API secret is generated' );
     is( $api_key->description, $description, 'Description is correctly stored' );
     is( $api_key->active,      1,            'Key is active by default' );
+
+    # revoke, to call store
+    my $original_api_key = $api_key->unblessed;
+    $api_key->active(0)->store;
+    $api_key->discard_changes;
+
+    is( $api_key->client_id, $original_api_key->{client_id}, '->store() preserves the client_id' );
+    is( $api_key->secret, $original_api_key->{secret}, '->store() preserves the secret' );
+    is( $api_key->patron_id, $original_api_key->{patron_id}, '->store() preserves the patron_id' );
+    is( $api_key->active, 0, '->store() preserves the active value' );
 
     my $patron_to_delete = $builder->build_object( { class => 'Koha::Patrons' } );
     my $deleted_id = $patron_to_delete->id;
