@@ -139,6 +139,7 @@ C<$status> is a hasref like this example:
 sub GetLogStatus {
     my %hash;
     $hash{BorrowersLog}    = C4::Context->preference("BorrowersLog");
+    $hash{BorrowersViewLog}    = C4::Context->preference("BorrowersViewLog");
     $hash{CataloguingLog}  = C4::Context->preference("CataloguingLog");
     $hash{HoldsLog}        = C4::Context->preference("HoldsLog");
     $hash{IssueLog}        = C4::Context->preference("IssueLog");

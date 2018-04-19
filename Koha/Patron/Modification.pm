@@ -26,6 +26,8 @@ use Email::Valid;
 use Koha::Database;
 use Koha::Exceptions;
 use Koha::Patrons;
+use C4::Log; # logaction
+use C4::Members;
 
 use Koha::Patron::Modifications;
 use Koha::Exceptions::Patron::Modification;
@@ -141,6 +143,8 @@ sub approve {
     return unless $patron;
 
     $patron->set($data);
+    my $logdata = getModifiedPatronFieldsForLogs($data);
+    logaction("MEMBERS", "MODIFY", $self->borrowernumber, "Approved patron's change request: $logdata") if C4::Context->preference("BorrowersLog");
 
     # Take care of extended attributes
     if ( $self->extended_attributes ) {
@@ -203,6 +207,34 @@ sub approve {
             };
         }
     );
+
+    return $self->delete();
+}
+
+=head2 deny
+
+$m->deny();
+
+Logs denied requests
+
+=cut
+
+sub deny {
+    my ($self) = @_;
+
+    my $data = $self->unblessed();
+
+    delete $data->{timestamp};
+    delete $data->{verification_token};
+    delete $data->{extended_attributes};
+
+    foreach my $key ( keys %$data ) {
+        delete $data->{$key} unless ( defined( $data->{$key} ) );
+    }
+
+    my $logdata = C4::Members::getModifiedPatronFieldsForLogs($data);
+
+    logaction("MEMBERS", "MODIFY", $self->borrowernumber, "Denied patron's change request: $logdata") if C4::Context->preference("BorrowersLog");
 
     return $self->delete();
 }

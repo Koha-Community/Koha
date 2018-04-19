@@ -368,4 +368,6 @@ $template->param(
     relatives_borrowernumbers => \@relatives,
 );
 
+C4::Log::logaction("MEMBERS", "VIEW", $borrowernumber, "Details page") if C4::Context->preference("BorrowersViewLog");
+
 output_html_with_http_headers $input, $cookie, $template->output;

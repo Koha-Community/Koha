@@ -107,4 +107,6 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
 my $patron_image = Koha::Patron::Images->find($borrower->{borrowernumber});
 $template->param( picture => 1 ) if $patron_image;
 
+C4::Log::logaction("MEMBERS", "VIEW", $borrowernumber, "Routing lists page") if C4::Context->preference("BorrowersViewLog");
+
 output_html_with_http_headers $query, $cookie, $template->output;

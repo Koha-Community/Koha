@@ -25,6 +25,7 @@ Koha::Patron::Modifications
 use Modern::Perl;
 
 use C4::Context;
+use C4::Log; # logaction
 
 use Koha::Patron::Attribute;
 use Koha::Patron::Modification;
@@ -115,6 +116,7 @@ sub pending {
         }
 
         push( @m, $row );
+        logaction("MEMBERS", "VIEW", $row->{borrowernumber}, "Pending patron modifications page") if C4::Context->preference("BorrowersViewLog");
     }
 
     return \@m;

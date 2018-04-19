@@ -30,6 +30,7 @@ use DateTime::Duration;
 use C4::Output;
 use C4::Print;
 use C4::Auth qw/:DEFAULT get_session haspermission/;
+use C4::Log;
 use C4::Koha;   # GetPrinter
 use C4::Circulation;
 use C4::Utils::DataTables::Members;
@@ -661,5 +662,7 @@ $template->param(
     override_high_holds       => $override_high_holds,
     nopermission              => scalar $query->param('nopermission'),
 );
+
+C4::Log::logaction("MEMBERS", "VIEW", $borrowernumber, "Check out page") if (C4::Context->preference("BorrowersViewLog") && $borrowernumber);
 
 output_html_with_http_headers $query, $cookie, $template->output;

@@ -110,6 +110,8 @@ $template->param(
     RoutingSerials => C4::Context->preference('RoutingSerials'),
 );
 
+C4::Log::logaction("MEMBERS", "VIEW", $borrower->{borrowernumber}, "Statistics page") if C4::Context->preference("BorrowersViewLog");
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
 

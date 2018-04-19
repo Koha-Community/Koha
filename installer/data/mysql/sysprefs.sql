@@ -92,6 +92,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('borrowerRelationship','father|mother','','Define valid relationships between a guarantor & a guarantee (separated by | or ,)','free'),
 ('BorrowerRenewalPeriodBase','now','dateexpiry|now|combination','Set whether the borrower renewal date should be counted from the dateexpiry, from the current date or by combination: if the dateexpiry is in future use dateexpiry, else use current date ','Choice'),
 ('BorrowersLog','1',NULL,'If ON, log edit/create/delete actions on patron data','YesNo'),
+('BorrowersViewLog','0',NULL,'If ON, log view actions on patron data','YesNo'),
 ('BorrowersTitles','Mr|Mrs|Miss|Ms',NULL,'Define appropriate Titles for patrons','free'),
 ('BorrowerUnwantedField','',NULL,'Name the fields you don\'t need to store for a patron\'s account','free'),
 ('BranchTransferLimitsType','ccode','itemtype|ccode','When using branch transfer limits, choose whether to limit by itemtype or collection code.','Choice'),

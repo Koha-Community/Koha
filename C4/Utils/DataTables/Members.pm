@@ -180,6 +180,7 @@ sub search {
         } else {
             $patron->{dateexpiry} = '';
         }
+        C4::Log::logaction("MEMBERS", "VIEW", $patron->{borrowernumber}, "Patron selection") if C4::Context->preference("BorrowersViewLog");
     }
 
     return {

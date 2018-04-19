@@ -84,6 +84,7 @@ BEGIN {
         &GenMemberPasswordSuggestion
         &ValidateMemberPassword
         &minPasswordLength
+        &getModifiedPatronFieldsForLogs
     );
 
     #Modify data
@@ -402,7 +403,7 @@ sub ModMember {
     my $patron = Koha::Patrons->find( $new_borrower->{borrowernumber} );
 
     delete $new_borrower->{userid} if exists $new_borrower->{userid} and not $new_borrower->{userid};
-
+    my $logdata = getModifiedPatronFieldsForLogs($new_borrower);
     my $execute_success = $patron->store if $patron->set($new_borrower);
 
     if ($execute_success) { # only proceed if the update was a success
@@ -440,8 +441,7 @@ sub ModMember {
             # Try to do the live sync
             Koha::NorwegianPatronDB::NLSync({ 'borrowernumber' => $data{'borrowernumber'} });
         }
-
-        logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATE (executed w/ arg: $data{'borrowernumber'})") if C4::Context->preference("BorrowersLog");
+        logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATED FIELD(S): $logdata") if C4::Context->preference("BorrowersLog");
     }
     return $execute_success;
 }
@@ -1626,6 +1626,31 @@ sub minPasswordLength {
     }
     return $minpasslen;
 }
+
+
+=head2 getModifiedPatronFieldsForLogs
+
+    $updatedfields = getModifiedPatronFieldsForLogs($data);
+
+Returns string of fields that will be changed
+
+=cut
+
+sub getModifiedPatronFieldsForLogs {
+    my ($data) = @_;
+
+    my $logdata;
+    my $olddata = Koha::Patrons->find( $data->{borrowernumber} )->unblessed;
+
+    foreach my $key ( keys %$data ) {
+        $logdata .= $key." => ".$data->{$key}.", " if ( $olddata->{$key} ne $data->{$key});
+    }
+
+    $logdata =~ s/,\s+$//;
+
+    return $logdata;
+}
+
 
 END { }    # module clean-up code here (global destructor)
 

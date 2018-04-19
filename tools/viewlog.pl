@@ -177,7 +177,7 @@ if ($do_it) {
         foreach my $module (@modules) {
             $template->param( $module => 1 );
         }
-
+        C4::Log::logaction("MEMBERS", "VIEW", $object, "Log page") if C4::Context->preference("BorrowersViewLog");
         output_html_with_http_headers $input, $cookie, $template->output;
     }
     else {
@@ -210,6 +210,7 @@ if ($do_it) {
             -type       => 'text/csv',
             -attachment => $basename . '.csv',
         );
+        C4::Log::logaction("MEMBERS", "VIEW", $object, "Exporting logs to csv") if C4::Context->preference("BorrowersViewLog");
         print $content;
     }
     exit;

@@ -116,6 +116,11 @@ $template->param(
     selection_type => $selection_type,
 );
 
+foreach my $patron (@{$results->{patrons}}) {
+    C4::Log::logaction("MEMBERS", "VIEW", $patron->{borrowernumber}, "Patrons page") if C4::Context->preference("BorrowersViewLog");
+}
+
+
 output_with_http_headers $input, $cookie, $template->output, 'json';
 
 __END__

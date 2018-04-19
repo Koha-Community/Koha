@@ -122,6 +122,8 @@ $template->param(
 
 add_accounts_to_template();
 
+C4::Log::logaction("MEMBERS", "VIEW", $borrowernumber, "Fines page") if C4::Context->preference("BorrowersViewLog");
+
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub add_accounts_to_template {
