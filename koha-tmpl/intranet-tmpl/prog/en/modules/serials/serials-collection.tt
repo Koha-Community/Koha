@@ -117,7 +117,7 @@
             [% UNLESS subscription.closed %]
                 <div class="btn-group"><input type="button" value="Generate next" onclick="javascription:generateNext([% subscriptionidlist %])" class="btn btn-default btn-sm" /></div>
                 [% IF ( subscriptions.size == 1 and !serialsadditems ) %]&nbsp;
-                    <div class="btn-group"><a href="#multi_receiving" role="button" class="btn btn-default btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Multi receiving</a></div>
+                    <div class="btn-group"><input type="button" value="Multi receiving" href="#multi_receiving" class="btn btn-default btn-sm" data-toggle="modal"></div>
                 [% END %]
             [% END %]
         </p>
