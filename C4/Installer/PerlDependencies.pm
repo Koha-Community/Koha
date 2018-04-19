@@ -927,6 +927,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '1.17',
     },
+    'MongoDB' => {
+        'usage'    => 'Datawarehouse for storing patron data',
+        'required' => '0',
+        'min_ver'  => '1.8.0',
+    },
     'JSON::Validator' => {
         'usage'    => 'REST API',
         'required' => '1',
