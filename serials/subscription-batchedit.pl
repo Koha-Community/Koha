@@ -69,6 +69,7 @@ if ($batchedit) {
     }
 
     foreach my $subscription (@subscriptions) {
+        next unless C4::Serials::can_edit_subscription( $subscription->unblessed ); # This should be moved to Koha::Subscription->can_edit
         while (my ($key, $value) = each %params) {
             if (defined $value and $value ne '') {
                 $subscription->$key($value);

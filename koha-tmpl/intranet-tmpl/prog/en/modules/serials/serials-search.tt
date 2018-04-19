@@ -34,15 +34,17 @@
     [% ELSE %]
         [% SET tab = 'opened' %]
     [% END %]
-    <div class="actions">
-        <a class="select-all" href="#" data-tab="[% tab %]"><i class="fa fa-check"></i> Select all</a>
-        |
-        <a class="clear-all" href="#" data-tab="[% tab %]"><i class="fa fa-remove"></i> Clear all</a>
-        <span class="itemselection_actions">
-            | Actions:
-            <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Modify selected serials</a>
-        </span>
-    </div>
+    [% IF CAN_user_serials_edit_subscription %]
+        <div class="actions">
+            <a class="select-all" href="#" data-tab="[% tab %]"><i class="fa fa-check"></i> Select all</a>
+            |
+            <a class="clear-all" href="#" data-tab="[% tab %]"><i class="fa fa-remove"></i> Clear all</a>
+            <span class="itemselection_actions">
+                | Actions:
+                <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Modify selected serials</a>
+            </span>
+        </div>
+    [% END %]
     <table>
       <thead>
         <tr>
@@ -84,7 +86,13 @@
         [% FOREACH subscription IN subscriptions %]
         [% UNLESS subscription.cannotdisplay %]
           <tr>
-            <td><input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid %]"/></td>
+            <td>
+                [% UNLESS subscription.cannotedit %]
+                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid %]" />
+                [% ELSE %]
+                    <input type="checkbox" name="subscriptionid" value="[% subscription.subscriptionid %]" disabled="disabled" title="You cannot edit this subscription" />
+                [% END %]
+            </td>
             <td>
             [% IF ( subscription.issn ) %][% subscription.issn %]
             [% END %]
