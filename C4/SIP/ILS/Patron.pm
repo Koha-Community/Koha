@@ -126,6 +126,7 @@ sub new {
     $self = \%ilspatron;
     $debug and warn Dumper($self);
     C4::SIP::Sip::get_logger()->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
+    C4::Log::logaction("MEMBERS", "LOGIN", $kp->{borrowernumber}, "SIP login", "sip") if C4::Context->preference("BorrowersLog");
     bless $self, $type;
     return $self;
 }
