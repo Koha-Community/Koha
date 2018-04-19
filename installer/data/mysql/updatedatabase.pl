@@ -15872,6 +15872,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18786 - Add ability to create custom payment types)\n";
 }
 
+$DBversion = '17.12.00.034';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+        INSERT IGNORE INTO account_offset_types ( type ) VALUES ('Void Payment')
+    } );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18790 - Add ability to void payment)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
