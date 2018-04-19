@@ -885,8 +885,8 @@ subtest "Koha::Account::Line::void tests" => sub {
 
     $line1->_result->discard_changes();
     $line2->_result->discard_changes();
-    is( $line1->amountoutstanding, '0.000000', 'First fee has amount outstanding of 0' );
-    is( $line2->amountoutstanding, '0.000000', 'Second fee has amount outstanding of 0' );
+    is( $line1->amountoutstanding+0, 0, 'First fee has amount outstanding of 0' );
+    is( $line2->amountoutstanding+0, 0, 'Second fee has amount outstanding of 0' );
 
     $account_payment->void();
 
@@ -897,11 +897,11 @@ subtest "Koha::Account::Line::void tests" => sub {
     $line2->_result->discard_changes();
 
     is( $account_payment->accounttype, 'VOID', 'Voided payment accounttype is VOID' );
-    is( $account_payment->amount, '0.000000', 'Voided payment amount is 0' );
-    is( $account_payment->amountoutstanding, '0.000000', 'Voided payment amount outstanding is 0' );
+    is( $account_payment->amount+0, 0, 'Voided payment amount is 0' );
+    is( $account_payment->amountoutstanding+0, 0, 'Voided payment amount outstanding is 0' );
 
-    is( $line1->amountoutstanding, '10.000000', 'First fee again has amount outstanding of 10' );
-    is( $line2->amountoutstanding, '20.000000', 'Second fee again has amount outstanding of 20' );
+    is( $line1->amountoutstanding+0, 10, 'First fee again has amount outstanding of 10' );
+    is( $line2->amountoutstanding+0, 20, 'Second fee again has amount outstanding of 20' );
 };
 
 1;
