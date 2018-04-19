@@ -1337,7 +1337,7 @@ subtest 'Log cardnumber change' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'Test Koha::Patrons::merge' => sub {
-    plan tests => 98;
+    plan tests => 110;
 
     my $schema = Koha::Database->new()->schema();
 

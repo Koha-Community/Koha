@@ -50,49 +50,54 @@
             <h3>Merge patron records</h3>
 
             [% IF action == 'show' %]
-                <p>Select patron to keep. Data from the other patrons will be transferred to this patron record and the remaining patron records will be deleted.</p>
-                <form type="post" action="merge-patrons.pl">
-                    <table id="patron-merge-table" class="datatable">
-                        <thead>
-                            <tr>
-                                <th>&nbsp;</th>
-                                <th>Card</th>
-                                <th>Name</th>
-                                <th>Date of birth</th>
-                                <th>Category</th>
-                                <th>Library</th>
-                                <th>Expires on</th>
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            [% FOREACH p IN patrons %]
+                [% IF patrons.count > 1 %]
+                    <p>Select patron to keep. Data from the other patrons will be transferred to this patron record and the remaining patron records will be deleted.</p>
+                    <form type="post" action="merge-patrons.pl">
+                        <table id="patron-merge-table" class="datatable">
+                            <thead>
                                 <tr>
-                                    <td><input class='keeper' type='radio' name='keeper' value='[% p.id %]' /></td>
-                                    <td>[% p.cardnumber | html %]</td>
-                                    <td>[% INCLUDE 'patron-title.inc' patron = p %]</td>
-                                    <td>[% p.dateofbirth | $KohaDates %]</td>
-                                    <td>[% Categories.GetName( p.categorycode ) %] ([% p.categorycode %])</td>
-                                    <td>[% Branches.GetName( p.branchcode ) %]</td>
-                                    <td>[% p.dateexpiry | $KohaDates %]</td>
-                            [% END %]
-                        </tbody>
-                    </table>
+                                    <th>&nbsp;</th>
+                                    <th>Card</th>
+                                    <th>Name</th>
+                                    <th>Date of birth</th>
+                                    <th>Category</th>
+                                    <th>Library</th>
+                                    <th>Expires on</th>
+                                </tr>
+                            </thead>
 
-                    [% FOREACH p IN patrons %]
-                        <input type="hidden" name="id" value="[% p.id %]" />
+                            <tbody>
+                                [% FOREACH p IN patrons %]
+                                    <tr>
+                                        <td><input class='keeper' type='radio' name='keeper' value='[% p.id %]' /></td>
+                                        <td>[% p.cardnumber | html %]</td>
+                                        <td>[% INCLUDE 'patron-title.inc' patron = p %]</td>
+                                        <td>[% p.dateofbirth | $KohaDates %]</td>
+                                        <td>[% Categories.GetName( p.categorycode ) %] ([% p.categorycode %])</td>
+                                        <td>[% Branches.GetName( p.branchcode ) %]</td>
+                                        <td>[% p.dateexpiry | $KohaDates %]</td>
+                                [% END %]
+                            </tbody>
+                        </table>
+
+                        [% FOREACH p IN patrons %]
+                            <input type="hidden" name="id" value="[% p.id %]" />
+                        [% END %]
+
+                        <p/>
+
+                        <input type="hidden" name="action" value="merge" />
+                        <input id="merge-patrons" type="submit" value="Merge patrons" />
+                    [% ELSE %]
+                        <div class="dialog alert">Error: Two or more patrons need to be selected for merging</div>
                     [% END %]
-
-                    <p/>
-
-                    <input type="hidden" name="action" value="merge" />
-                    <input id="merge-patrons" type="submit" value="Merge patrons" />
                 </form>
             [% ELSIF action == 'merge' %]
                 <h4>Results</h4>
-
                 [% IF error %]
                     <div class="dialog alert">Merge failed! The following error was reported: [% error %].</div>
+                [% ELSIF !results.merged.keys.size %]
+                    <div class="dialog alert">No valid patrons to merge were found.</div>
                 [% ELSE %]
                     <p>
                         Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a>
