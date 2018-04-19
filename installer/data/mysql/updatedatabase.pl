@@ -15840,6 +15840,22 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 11674 - Add system preference MarcFieldDocURL)\n";
 }
 
+$DBversion = '17.12.00.032';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        UPDATE letter SET code = "SERIAL_ALERT" WHERE code = "RLIST";
+    |);
+    $dbh->do(q|
+        UPDATE letter SET name = "New serial issue" WHERE name = "Routing List";
+    |);
+    $dbh->do(q|
+        UPDATE subscription SET letter = "SERIAL_ALERT" WHERE letter = "RLIST";
+    |);
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19794 - Rename RLIST notice to SERIAL_ALERT)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
