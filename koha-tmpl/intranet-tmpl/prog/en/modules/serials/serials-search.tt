@@ -41,7 +41,7 @@
             <a class="clear-all" href="#" data-tab="[% tab %]"><i class="fa fa-remove"></i> Clear all</a>
             <span class="itemselection_actions">
                 | Actions:
-                <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Modify selected serials</a>
+                <a class="itemselection_action_modify"><i class="fa fa-pencil"></i> Edit selected serials</a>
             </span>
         </div>
     [% END %]
@@ -409,7 +409,7 @@
     [% Asset.js("js/serials-toolbar.js") %]
     <script type="text/javascript">
 
-            function itemSelectionBuildModifyLink(div) {
+            function itemSelectionBuildEditLink(div) {
                 var subscription_ids = new Array();
                 $("input[name='subscriptionid'][type='checkbox']:checked", div).each(function() {
                     subscription_ids.push($(this).val());
@@ -426,7 +426,7 @@
 
             function itemSelectionBuildActionLinks(tab) {
                 var div = $("#" + tab);
-                var modify_link_ok = itemSelectionBuildModifyLink(div);
+                var modify_link_ok = itemSelectionBuildEditLink(div);
                 if (modify_link_ok) {
                     $('.itemselection_actions', div).show();
                 } else {
