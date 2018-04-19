@@ -279,7 +279,7 @@ subtest "AddReturn logging on statistics table (item-level_itypes=0)" => sub {
 };
 
 subtest 'Handle ids duplication' => sub {
-    plan tests => 6;
+    plan tests => 8;
 
     t::lib::Mocks::mock_preference( 'item-level_itypes', 1 );
     t::lib::Mocks::mock_preference( 'CalculateFinesOnReturn', 1 );
@@ -304,8 +304,12 @@ subtest 'Handle ids duplication' => sub {
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
     my $original_checkout = AddIssue( $patron->unblessed, $item->{barcode}, dt_from_string->subtract( days => 50 ) );
-
     my $issue_id = $original_checkout->issue_id;
+    my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $issue_id });
+    is( $account_lines->count, 1, '1 account line should exist for this issue_id' );
+    is( $account_lines->next->description, 'Rental', 'patron has been charged the rentalcharge' );
+    $account_lines->delete;
+
     # Create an existing entry in old_issue
     $builder->build({ source => 'OldIssue', value => { issue_id => $issue_id } });
 
@@ -326,7 +330,7 @@ subtest 'Handle ids duplication' => sub {
     is( $messages->{WasReturned}, 0, 'messages should have the WasReturned flag set to 0' );
     is( $messages->{DataCorrupted}, 1, 'messages should have the DataCorrupted flag set to 1' );
 
-    my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $issue_id });
+    $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $issue_id });
     is( $account_lines->count, 0, 'No account lines should exist for this issue_id, patron should not have been charged' );
 
     is( Koha::Checkouts->find( $issue_id )->issue_id, $issue_id, 'The issues entry should not have been removed' );
