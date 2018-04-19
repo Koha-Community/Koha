@@ -38,7 +38,7 @@ use C4::Acquisition qw/GetOrders GetBasketsByBasketgroup GetBasketgroup GetBaske
 use Koha::Acquisition::Bookseller;
 use C4::Members qw/GetMember/;
 use C4::Contract qw/GetContract/;
-use C4::Biblio qw/GetBiblioData/;
+use C4::Biblio qw/GetBiblioData GetXmlBiblio/;
 use C4::KohaSuomi::VendorConfig;
 
 use vars qw($VERSION @ISA @EXPORT); #This is required for getting data from marcxml files
@@ -410,6 +410,7 @@ sub GetOrderInterface {
 sub getSubfieldFromMARCXML {
     my ($bd, $field, $subfield) = @_;
 
+    $bd->{marcxml} = GetXmlBiblio($bd->{biblionumber});
     if ($bd->{marcxml} =~ m|<datafield tag="$field".*?>(.*?)</datafield>|s) {
         if ($1 =~ m|<subfield code="$subfield">(.*?)</subfield>|s) {
             return $1;
