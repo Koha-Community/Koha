@@ -38,7 +38,7 @@ function reset_tester_results() {
     });
 }
 
-function tester_submit() {
+function tester_submit(coloring_row) {
     var url = "/api/v1/issuingrules/effective";
     var query_params = {};
     $.each($("input[name^=tester_input_], select[name^=tester_input_]"), function () {
@@ -79,6 +79,9 @@ function tester_submit() {
                         val = _("All");
                     }
                     $("#tester_res_"+key).html("" + val);
+                    if (coloring_row) {
+                        color_row($("#row_"+response.issuingrules_id));
+                    }
                 });
             },
             400: function(xhr) {
@@ -107,6 +110,15 @@ function tester_submit() {
             }
         },
         dataType: "json"
+    });
+}
+
+function color_row (tr_el) {
+    $("td.highlighted-row").each(function() {
+        $(this).removeClass("highlighted-row");
+    });
+    $(tr_el).find('td').each(function() {
+        $(this).addClass("highlighted-row")
     });
 }
 
@@ -196,11 +208,14 @@ $(document).ready(function() {
             change_tester_input(this);
         });
 
-        tester_submit();
+        tester_submit(false);
         $("#tester_submit").click(function () {
-            tester_submit();
+            tester_submit(true);
         });
 
+        $("#default-circulation-rules tr").not('#edit_row').on("click", function() {
+            color_row(this);
+        });
 
 });
 //]]>
@@ -296,7 +311,7 @@ $(document).ready(function() {
             </thead>
             <tbody>
 				[% FOREACH rule IN rules %]
-					<tr id="row_[% loop.count %]">
+					<tr id="row_[% rule.issuingrules_id %]">
 							<td>[% IF ( rule.default_circulation_level ) %]
 									<em>All</em>
 								[% ELSE %]
