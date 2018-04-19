@@ -123,8 +123,9 @@ my $copynumbers =
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
-$data->{'itemtypename'} = $itemtypes->{$data->{'itemtype'}}->{'translated_description'};
-$data->{'rentalcharge'} = sprintf( "%.2f", $data->{'rentalcharge'} );
+$data->{'itemtypename'} = $itemtypes->{ $data->{'itemtype'} }->{'translated_description'}
+  if $data->{itemtype} && exists $itemtypes->{ $data->{itemtype} };
+$data->{'rentalcharge'} = sprintf( "%.2f", $data->{'rentalcharge'} || 0); # Price formatting should be done template-side
 foreach ( keys %{$data} ) {
     $template->param( "$_" => defined $data->{$_} ? $data->{$_} : '' );
 }
@@ -132,9 +133,9 @@ foreach ( keys %{$data} ) {
 ($itemnumber) and @items = (grep {$_->{'itemnumber'} == $itemnumber} @items);
 foreach my $item (@items){
     $item->{object} = Koha::Items->find( $item->{itemnumber} );
-    $item->{'collection'}              = $ccodes->{ $item->{ccode} } if ($ccodes);
-    $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'translated_description'};
-    $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} );
+    $item->{'collection'}              = $ccodes->{ $item->{ccode} } if $ccodes && $item->{ccode} && exists $ccodes->{ $item->{ccode} };
+    $item->{'itype'}                   = $itemtypes->{ $item->{'itype'} }->{'translated_description'} if exists $itemtypes->{ $item->{'itype'} };
+    $item->{'replacementprice'}        = sprintf( "%.2f", $item->{'replacementprice'} || 0 ); # Price formatting should be done template-side
     if ( defined $item->{'copynumber'} ) {
         $item->{'displaycopy'} = 1;
         if ( defined $copynumbers->{ $item->{'copynumber'} } ) {
