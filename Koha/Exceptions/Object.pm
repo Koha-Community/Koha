@@ -2,6 +2,8 @@ package Koha::Exceptions::Object;
 
 use Modern::Perl;
 
+use Koha::Exceptions::Exception;
+
 use Exception::Class (
     'Koha::Exceptions::Object' => {
         isa         => 'Koha::Exceptions::Exception',
