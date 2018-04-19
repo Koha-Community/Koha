@@ -139,14 +139,6 @@
     <div class="container-fluid">
         <div class="row-fluid">
             <div id="opac-main-search">
-    <!--             <div class="span2">
-        [% IF ( opacsmallimage ) %]
-            <h1 id="libraryname" style="background-image: url('[% opacsmallimage %]');">
-        [% ELSE %]
-            <h1 id="libraryname">
-        [% END %]
-            <a href="/cgi-bin/koha/opac-main.pl">[% IF ( LibraryName ) %][% LibraryName %][% ELSE %]Koha Online Catalog[% END %]</a></h1>
-    </div> /.span2 -->
             <div class="span12">
                 [% IF ( OpacPublic ) %]
                     [% UNLESS ( advsearch ) %]
