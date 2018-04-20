@@ -22,6 +22,7 @@ use Koha::Illrequestattributes;
 use Koha::Libraries;
 use Koha::Patrons;
 use Koha::Libraries;
+use Koha::DateUtils qw( format_sqldatetime );
 
 =head1 NAME
 
@@ -39,6 +40,9 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     my $args = $c->req->params->to_hash // {};
+    my $filter;
+    my $output = [];
+    my @format_dates = ( 'placed', 'updated' );
 
     # Create a hash where all keys are embedded values
     # Enables easy checking
@@ -51,6 +55,22 @@ sub list {
 
     # Get all requests
     my @requests = Koha::Illrequests->as_list;
+
+    # Create new "formatted" columns for each date column
+    # that needs formatting
+    foreach(@requests) {
+        foreach my $field(@format_dates) {
+            if (defined $_->{$field}) {
+                $_->{$field . "_formatted"} = format_sqldatetime(
+                    $_->{$field},
+                    undef,
+                    undef,
+                    1
+                );
+            }
+        }
+
+    }
 
     # Identify patrons & branches that
     # we're going to need and get them

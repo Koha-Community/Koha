@@ -10,11 +10,29 @@
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
-<script>
+[% INCLUDE 'calendar.inc' %]
+<script type="text/javascript">
     //<![CDATA[
     $(document).ready(function() {
 
         // Illview Datatable setup
+
+        var table;
+
+        // Filters that are active
+        var activeFilters = {};
+
+        // Date format for datepickers
+        var dateMap = {
+            dmydot: 'dd.mm.yy',
+            iso: 'yy-mm-dd',
+            metric: 'dd/mm/yy',
+            us: 'mm/dd/yy'
+        };
+        var dateFormat = dateMap['[% Koha.Preference('dateformat') %]'];
+        $('#illfilter_dateplaced, #illfilter_datemodified').datepicker(
+            'option', 'dateFormat', dateFormat
+        );
 
         // Fields we don't want to display
         var ignore = [
@@ -27,7 +45,6 @@
             'medium',
             'notesopac',
             'notesstaff',
-            'placed',
             'replied'
         ];
 
@@ -46,14 +63,149 @@
             'metadata_author',
             'metadata_title',
             'borrowername',
+            'patron_cardnumber',
             'biblio_id',
             'library',
             'status',
+            'placed',
+            'placed_formatted',
             'updated',
+            'updated_formatted',
             'illrequest_id',
             'comments',
             'action' // Action should always be last
         ];
+
+        // Filterable columns
+        var filterable = {
+            status: {
+                prep: function(tableData, oData) {
+                    var uniques = {};
+                    tableData.forEach(function(row) {
+                        var resolvedName = getStatusName(
+                            oData[0].capabilities[row.status].name
+                        );
+                        uniques[resolvedName] = 1
+                    });
+                    Object.keys(uniques).sort().forEach(function(unique) {
+                        $('#illfilter_status').append(
+                            '<option value="' + unique  +
+                            '">' + unique +  '</option>'
+                        );
+                    });
+                },
+                listener: function() {
+                    var me = 'status';
+                    $('#illfilter_status').change(function() {
+                        var sel = $('#illfilter_status option:selected').val();
+                        if (sel && sel.length > 0) {
+                            activeFilters[me] = function() {
+                                table.column(6).search(sel);
+                            }
+                        } else {
+                            if (activeFilters.hasOwnProperty(me)) {
+                                delete activeFilters[me];
+                            }
+                        }
+                    });
+                },
+                clear: function() {
+                    $('#illfilter_status').val('');
+                }
+            },
+            pickupBranch: {
+                prep: function(tableData, oData) {
+                    var uniques = {};
+                    tableData.forEach(function(row) {
+                        uniques[row.library.branchname] = 1
+                    });
+                    Object.keys(uniques).sort().forEach(function(unique) {
+                        $('#illfilter_branchname').append(
+                            '<option value="' + unique  +
+                            '">' + unique +  '</option>'
+                        );
+                    });
+                },
+                listener: function() {
+                    var me = 'pickupBranch';
+                    $('#illfilter_branchname').change(function() {
+                        var sel = $('#illfilter_branchname option:selected').val();
+                        if (sel && sel.length > 0) {
+                            activeFilters[me] = function() {
+                                table.column(5).search(sel);
+                            }
+                        } else {
+                            if (activeFilters.hasOwnProperty(me)) {
+                                delete activeFilters[me];
+                            }
+                        }
+                    });
+                },
+                clear: function() {
+                    $('#illfilter_branchname').val('');
+                }
+            },
+            barcode: {
+                listener: function() {
+                    var me = 'barcode';
+                    $('#illfilter_barcode').change(function() {
+                        var val = $('#illfilter_barcode').val();
+                        if (val && val.length > 0) {
+                            activeFilters[me] = function() {
+                                table.column(3).search(val);
+                            }
+                        } else {
+                            if (activeFilters.hasOwnProperty(me)) {
+                                delete activeFilters[me];
+                            }
+                        }
+                    });
+                },
+                clear: function() {
+                    $('#illfilter_barcode').val('');
+                }
+            },
+            dateModified: {
+                listener: function() {
+                    var me = 'dateModified';
+                    $('#illfilter_datemodified').change(function() {
+                        var val = $('#illfilter_datemodified').val();
+                        if (val && val.length > 0) {
+                            activeFilters[me] = function() {
+                                table.column(10).search(val);
+                            }
+                        } else {
+                            if (activeFilters.hasOwnProperty(me)) {
+                                delete activeFilters[me];
+                            }
+                        }
+                    });
+                },
+                clear: function() {
+                    $('#illfilter_datemodified').val('');
+                }
+            },
+            datePlaced: {
+                listener: function() {
+                    var me = 'datePlaced';
+                    $('#illfilter_dateplaced').change(function() {
+                        var val = $('#illfilter_dateplaced').val();
+                        if (val && val.length > 0) {
+                            activeFilters[me] = function() {
+                                table.column(8).search(val);
+                            }
+                        } else {
+                            if (activeFilters.hasOwnProperty(me)) {
+                                delete activeFilters[me];
+                            }
+                        }
+                    });
+                },
+                clear: function() {
+                    $('#illfilter_dateplaced').val('');
+                }
+            }
+        };
 
         // Remove any fields we're ignoring
         var removeIgnore = function(dataObj) {
@@ -147,28 +299,32 @@
                 var status_name = meta.settings.oInit.originalData[0].capabilities[
                     row.status
                 ].name;
-                switch( status_name ) {
-                    case "New request":
-                        return _("New request");
-                    case "Requested":
-                        return _("Requested");
-                    case "Requested from partners":
-                        return _("Requested from partners");
-                    case "Request reverted":
-                        return _("Request reverted");
-                    case "Queued request":
-                        return _("Queued request");
-                    case "Cancellation requested":
-                        return _("Cancellation requested");
-                    case "Completed":
-                        return _("Completed");
-                    case "Delete request":
-                        return _("Delete request");
-                    default:
-                        return status_name;
-                }
+                return getStatusName(status_name);
             } else {
                 return '';
+            }
+        };
+
+        var getStatusName = function(origName) {
+            switch( origName ) {
+                case "New request":
+                    return _("New request");
+                case "Requested":
+                    return _("Requested");
+                case "Requested from partners":
+                    return _("Requested from partners");
+                case "Request reverted":
+                    return _("Request reverted");
+                case "Queued request":
+                    return _("Queued request");
+                case "Cancellation requested":
+                    return _("Cancellation requested");
+                case "Completed":
+                    return _("Completed");
+                case "Delete request":
+                    return _("Delete request");
+                default:
+                    return origName;
             }
         };
 
@@ -206,6 +362,12 @@
             library: {
                 name: _("Library"),
                 func: createLibrary
+            },
+            updated: {
+                name: _("Updated on"),
+            },
+            patron_cardnumber: {
+                name: _("Patron barcode")
             }
         };
 
@@ -268,7 +430,8 @@
                     // Create the base column object
                     var colObj = {
                         name: thisCol,
-                        className: thisCol
+                        className: thisCol,
+                        defaultContent: ''
                     };
                     // We may need to process the data going in this
                     // column, so do it if necessary
@@ -284,26 +447,89 @@
                 });
 
                 // Initialise the datatable
-                $('#ill-requests').DataTable($.extend(true, {}, dataTablesDefaults, {
-                    'aoColumnDefs': [  // Last column shouldn't be sortable or searchable
-                        {
+                table = $('#ill-requests').DataTable($.extend(true, {}, dataTablesDefaults, {
+                    'aoColumnDefs': [
+                        { // Last column shouldn't be sortable or searchable
                             'aTargets': [ 'actions' ],
                             'bSortable': false,
                             'bSearchable': false
                         },
+                        { // Hide the two date columns we use just for sorting
+                            'aTargets': [ 'placed', 'updated' ],
+                            'bVisible': false,
+                            'bSearchable': false
+                        },
+                        { // When sorting 'placed', we want to use the
+                          // unformatted column
+                          'aTargets': [ 'placed_formatted'],
+                          'iDataSort': 7
+                        },
+                        { // When sorting 'updated', we want to use the
+                          // unformatted column
+                          'aTargets': [ 'updated_formatted'],
+                          'iDataSort': 9
+                        }
                     ],
-                    'aaSorting': [[ 6, 'desc' ]], // Default sort, updated descending
+                    'aaSorting': [[ 9, 'desc' ]], // Default sort, updated descending
                     'processing': true, // Display a message when manipulating
                     'iDisplayLength': 10, // 10 results per page
                     'sPaginationType': "full_numbers", // Pagination display
                     'deferRender': true, // Improve performance on big datasets
                     'data': dataCopy,
                     'columns': colData,
-                    'originalData': data // Enable render functions to access
-                                       // our original data
+                    'originalData': data, // Enable render functions to access
+                                          // our original data
+                    'initComplete': function() {
+
+                        // Prepare any filter elements that need it
+                        for (var el in filterable) {
+                            if (filterable.hasOwnProperty(el)) {
+                                if (filterable[el].hasOwnProperty('prep')) {
+                                    filterable[el].prep(dataCopy, data);
+                                }
+                                if (filterable[el].hasOwnProperty('listener')) {
+                                    filterable[el].listener();
+                                }
+                            }
+                        }
+
+                    }
                 }));
+
             }
         );
+
+        var clearSearch = function() {
+            table.search('').columns().search('');
+            activeFilters = {};
+            for (var filter in filterable) {
+                if (
+                    filterable.hasOwnProperty(filter) &&
+                    filterable[filter].hasOwnProperty('clear')
+                ) {
+                    filterable[filter].clear();
+                }
+            }
+            table.draw();
+        };
+
+        // Apply any search filters, or clear any previous
+        // ones
+        $('#illfilter_form').submit(function(event) {
+            event.preventDefault();
+            table.search('').columns().search('');
+            for (var active in activeFilters) {
+                if (activeFilters.hasOwnProperty(active)) {
+                    activeFilters[active]();
+                }
+            }
+            table.draw();
+        });
+
+        // Clear all filters
+        $('#clear_search').click(function() {
+            clearSearch();
+        });
 
     });
     //]]>
@@ -326,6 +552,45 @@
 
 <div id="doc3" class="yui-t2">
     <div id="bd">
+        [% IF query_type == 'illlist' %]
+        <div id="illfilter_yui_column" class="yui-b">
+            <form method="get" id="illfilter_form">
+                <fieldset class="brief">
+                    <h3>Filters</h3>
+                    <ol>
+                        <li>
+                            <label for="illfilter_status">Status:</label>
+                            <select name="illfilter_status" id="illfilter_status">
+                                <option value=""></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="illfilter_dateplaced">Date placed:</label>
+                            <input type="text" name="illfilter_dateplaced" id="illfilter_dateplaced" class="datepicker">
+                        </li>
+                        <li>
+                            <label for="illfilter_datemodified">Updated on:</label>
+                            <input type="text" name="illfilter_datemodified" id="illfilter_datemodified" class="datepicker">
+                        </li>
+                        <li>
+                            <label for="illfilter_branchname">Library:</label>
+                            <select name="illfilter_branchname" id="illfilter_branchname">
+                                <option value=""></option>
+                            </select>
+                        </li>
+                        <li>
+                            <label for="illfilter_barcode">Patron barcode:</label>
+                            <input type="text" name="illfilter_barcode" id="illfilter_barcode">
+                        </li>
+                    </ol>
+                    <fieldset class="action">
+                        <input type="submit" value="Search" />
+                        <input type="button" value="Clear" id="clear_search" />
+                    </fieldset>
+                </fieldset>
+            </form>
+        </div>
+        [% END %]
         <div id="yui-main">
             <div id="interlibraryloans" class="yui-b">
         [% IF !backends_available || !has_branch %]
@@ -715,7 +980,10 @@
                                     <th>Bibliographic record ID</th>
                                     <th>Library</th>
                                     <th>Status</th>
-                                    <th>Updated on</th>
+                                    <th class="placed">&nbsp;</th>
+                                    <th class="placed_formatted">Date placed</th>
+                                    <th class="updated">&nbsp;</th>
+                                    <th class="updated_formatted">Updated on</th>
                                     <th>Request number</th>
                                     <th>Comments</th>
                                     <th class="actions"></th>
