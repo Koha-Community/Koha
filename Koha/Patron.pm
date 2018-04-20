@@ -667,18 +667,18 @@ sub get_overdues {
     );
 }
 
-=head3 get_routinglists
+=head3 get_routing_lists
 
-my @routinglists = $patron->get_routinglists
+my @routinglists = $patron->get_routing_lists
 
 Returns the routing lists a patron is subscribed to.
 
 =cut
 
-sub get_routinglists {
+sub get_routing_lists {
     my ($self) = @_;
-    my @subscribed_routings = Koha::Subscription::Routinglists->search({ borrowernumber => $self->borrowernumber });
-    return @subscribed_routings;
+    my $routing_list_rs = $self->_result->subscriptionroutinglists;
+    return Koha::Subscription::Routinglists->_new_from_dbic($routing_list_rs);
 }
 
 =head3 get_age

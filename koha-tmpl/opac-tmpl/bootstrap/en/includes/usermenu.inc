@@ -96,7 +96,7 @@
                 <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1">your lists</a></li>
             [% END %]
 
-            [% IF Koha.Preference( 'RoutingSerials' ) && routing_lists_exist %]
+            [% IF Koha.Preference( 'RoutingSerials' ) && logged_in_user && logged_in_user.get_routing_lists.count %]
                 [% IF ( routinglistsview ) %]
                     <li class="active">
                 [% ELSE %]

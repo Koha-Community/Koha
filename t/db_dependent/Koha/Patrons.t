@@ -529,7 +529,7 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
     $module->unmock('userenv');
 };
 
-subtest 'get_routinglists' => sub {
+subtest 'get_routing_lists' => sub {
     plan tests => 5;
 
     my $biblio = Koha::Biblio->new()->store();
@@ -541,7 +541,7 @@ subtest 'get_routinglists' => sub {
     my $patron = $builder->build( { source => 'Borrower' } );
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
-    is( $patron->get_routinglists, 0, 'Retrieves correct number of routing lists: 0' );
+    is( $patron->get_routing_lists->count, 0, 'Retrieves correct number of routing lists: 0' );
 
     my $routinglist_count = Koha::Subscription::Routinglists->count;
     my $routinglist = Koha::Subscription::Routinglist->new({
@@ -550,11 +550,11 @@ subtest 'get_routinglists' => sub {
         subscriptionid   => $subscription->subscriptionid
     })->store;
 
-    is ($patron->get_routinglists, 1, "Retrieves correct number of routing lists: 1");
+    is ($patron->get_routing_lists->count, 1, "Retrieves correct number of routing lists: 1");
 
-    my @routinglists = $patron->get_routinglists;
+    my @routinglists = $patron->get_routing_lists;
     is ($routinglists[0]->ranking, 5, "Retrieves ranking: 5");
-    is( ref($routinglists[0]),   'Koha::Subscription::Routinglist', 'get_routinglists returns Koha::Subscription::Routinglist objects' );
+    is( ref($routinglists[0]),   'Koha::Subscription::Routinglist', 'get_routing_lists returns Koha::Subscription::Routinglist objects' );
 
     my $subscription2 = Koha::Subscription->new({
         biblionumber => $biblio->biblionumber,
@@ -566,7 +566,7 @@ subtest 'get_routinglists' => sub {
         subscriptionid   => $subscription2->subscriptionid
     })->store;
 
-    is ($patron->get_routinglists, 2, "Retrieves correct number of routing lists: 2");
+    is ($patron->get_routing_lists->count, 2, "Retrieves correct number of routing lists: 2");
 
     $patron->delete; # Clean up for later tests
 

@@ -32,7 +32,8 @@
 
                     <h3>Routing lists</h3>
 
-                    [% IF ( routinglists ) %]
+                    [% SET routinglists = logged_in_user.get_routing_lists %]
+                    [% IF ( routinglists.count ) %]
                         <p id="routing-list-intro">You are subscribed to the routing lists for following serial titles. If you wish to make changes, please contact the library.</p>
 
                         <table class="table table-bordered table-striped" id="routingtable">

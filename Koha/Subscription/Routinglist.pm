@@ -45,7 +45,7 @@ Returns the subscription for a routing list.
 
 sub subscription {
     my ( $self ) = @_;
-    return scalar Koha::Subscriptions->find( $self->subscriptionid );
+    return Koha::Subscription->_new_from_dbic($self->_result->subscriptionid);
 }
 
 =head2 Internal methods

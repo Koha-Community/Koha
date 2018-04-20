@@ -48,11 +48,8 @@ $borrower->{description} = $category->description;
 $borrower->{category_type} = $category->category_type;
 $template->param( BORROWER_INFO => $borrower );
 
-my @routinglists = $patron->get_routinglists();
-
 $template->param(
-    routinglists  => \@routinglists,
-    routinglistview => 1,
+    routinglistsview => 1,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
