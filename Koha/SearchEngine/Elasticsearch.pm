@@ -972,6 +972,14 @@ sub _read_configuration {
     return $configuration;
 }
 
+=head2
+
+my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
+
+Returns the list of Koha::SearchFields marked to be faceted in the ES configuration
+
+=cut
+
 sub get_facetable_fields {
     my ($self) = @_;
 
