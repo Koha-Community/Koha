@@ -1,21 +1,21 @@
 #!/usr/bin/perl
 
 use MongoDB;
-use File::Basename;
-use XML::Simple;
-use Data::Dumper;
-use Koha::Patrons;
-use C4::Log;
 use Pod::Usage;
 use Getopt::Long;
+use Data::Dumper;
 use Koha::DateUtils;
 use DateTime;
 use POSIX qw{strftime};
 
+use Koha::MongoDB::Config;
+use Koha::MongoDB::Users;
+use Koha::MongoDB::Logs;
+
 my $verbose     = 0;
 my $help        = 0;
-my $days        = 0;
-my $today = DateTime->today();
+my $minutes     = 15;
+my $today = DateTime->now();
 my $startdate;
 my $enddate;
 my $count = 0;
@@ -23,7 +23,7 @@ my $count = 0;
 GetOptions( 
     'v|verbose'   => \$verbose,
     'h|help'      => \$help,
-    'd|days=i'    => \$days
+    'm|minutes=i'    => \$minutes
 );
 
 my $usage = << 'ENDUSAGE';
@@ -33,7 +33,7 @@ This script fetches action logs and pushes them to MongoDB from long time keepin
 This script has the following parameters :
     -h --help: this message
     -v --verbose
-    -d --days: Look x days to past to pull data, default is today.
+    -m --minutes: Look x minutes to past to pull data, default is 15.
 
 
 ENDUSAGE
@@ -44,180 +44,41 @@ if ($help) {
 }
 
 my $starttime = time();
-print "Start time: ".strftime("\%H:\%M:\%S", gmtime($starttime))."\n";
+print "Start time: ".strftime("\%H:\%M:\%S", localtime($starttime))."\n";
 
 
-if ($days) {
-    my $dt = $today->clone();
-    $dt->add(days => -$days);
-    $startdate = $dt->ymd();
+my $timeago = $starttime - ($minutes*60);
+$startdate = strftime("\%Y-\%m-\%d \%H:\%M", localtime($timeago));
+$enddate = strftime("\%Y-\%m-\%d \%H:\%M", localtime($starttime));
 
-    $dt = $today->clone();
-    $dt->add(days => -1);
-    $enddate = $dt->ymd();
-} else {
-    $startdate = $today->ymd();
-    $enddate = $today->ymd();
-}
+my $config = new Koha::MongoDB::Config;
+my $users = new Koha::MongoDB::Users;
+my $logs = new Koha::MongoDB::Logs;
+my $client = $config->mongoClient();
 
 
-my $settings = getSettings();
-my $client = mongoClient($settings);
+my $actionlogs = $logs->getActionLogs($startdate, $enddate);
 
-
-my $actionlogs = getActionLogs($startdate,$enddate);
 foreach my $actionlog (@{$actionlogs}) {
 
-    my $user = checkUser($actionlog->{user});
-    my $object = checkUser($actionlog->{object});
-    my $findlog = checkLog($actionlog, $user, $object);
+    my $user = $users->checkUser($actionlog->{user});
+    my $object = $users->checkUser($actionlog->{object});
+    my $findlog = $logs->checkLog($actionlog, $user, $object);
 
     if($actionlog->{object} && !$findlog) {
-        my $objectuser = getPatron($actionlog->{object});
-        my $objectuserId = setUser($objectuser);
+        my $objectuser = $users->getUser($actionlog->{object});
+        my $objectuserId = $users->setUser($objectuser);
 
-        my $sourceuser = getPatron($actionlog->{user});
-        my $sourceuserId = setUser($sourceuser);
+        my $sourceuser = $users->getUser($actionlog->{user});
+        my $sourceuserId = $users->setUser($sourceuser);
 
-        my $success = setUserLogs($actionlog, $sourceuserId, $objectuserId, $objectuser->{cardnumber}, $objectuser->{borrowernumber});
+        my $result = $logs->setUserLogs($actionlog, $sourceuserId, $objectuserId, $objectuser->{cardnumber}, $objectuser->{borrowernumber});
+        print Dumper $result if $verbose;
         $count++;
     }
 }
 
 my $endtime = time();
-print "End time: ".strftime("\%H:\%M:\%S", gmtime($endtime))."\n";
+print "End time: ".strftime("\%H:\%M:\%S", localtime($endtime))."\n";
 my $time = $endtime - $starttime;
 print "Count: ".$count." - Time: ".strftime("\%H:\%M:\%S", gmtime($time))."\n";
-
-sub getPatron{
-    my $borrowernumber = shift;
-    return Koha::Patrons->find( $borrowernumber )->unblessed;
-}
-
-sub setUser{
-    my $user = shift;
-
-    my $users = $client->ns($settings->{database}.'.users');
-    my $finduser = checkUser($user->{borrowernumber});
-    my $objectId;
-
-    unless ($finduser) {
-
-        my $result = $users->insert_one({ 
-            borrowernumber => $user->{borrowernumber},
-            firsname => $user->{firstname},
-            surname => $user->{surname},
-            date => DateTime->today()->ymd(),
-            library => $user->{branchcode},
-            cardnumber => $user->{cardnumber}
-            });
-        $objectId = $result->inserted_id;
-
-    } else {
-        $objectId = $finduser->{_id};
-    }
-
-    return $objectId;
-}
-
-sub getActionLogs{
-    my $startdate = shift;
-    my $enddate = shift;
-    my @modules = ['MEMBERS', 'CIRCULATION', 'FINES', 'NOTICES', 'SS'];
-    my $results = GetLogs( $startdate, $enddate, undef, @modules, undef, undef, undef, undef );
-
-    return $results;
-}
-
-sub setUserLogs{
-    my $actionlog = shift;
-    my $sourceuserId = shift;
-    my $objectuserId = shift;
-    my $cardnumber = shift;
-    my $borrowernumber = shift;
-
-    my $success = 0;
-
-    my $logs = $client->ns($settings->{database}.'.user_logs');
-    my $result = $logs->insert_one({
-        sourceuser       => $sourceuserId,
-        objectuser       => $objectuserId,
-        objectcardnumber => $cardnumber,
-        objectborrowernumber => $borrowernumber,
-        action           => $actionlog->{action},
-        info             => $actionlog->{info},
-        timestamp        => $actionlog->{timestamp}
-
-        });
-    $success = 1;
-    print Dumper $actionlog if $verbose;    
-
-    return $success;
-}
-
-sub checkLog {
-    my $actionlog = shift;
-    my $sourceuserId = shift;
-    my $objectuserId = shift;
-
-    my $logs = $client->ns($settings->{database}.'.user_logs');
-    my $findlog = $logs->find_one({
-        sourceuser => $sourceuserId->{_id}, 
-        objectuser => $objectuserId->{_id}, 
-        action => $actionlog->{action}, 
-        timestamp => $actionlog->{timestamp}});
-    return $findlog;
-}
-
-sub checkUser {
-    my $borrowernumber = shift;
-
-    my $users = $client->ns($settings->{database}.'.users');
-    my $finduser = $users->find_one({borrowernumber => $borrowernumber});
-    return $finduser;
-}
-
-sub mongoClient {
-    my $settings = shift;
-
-    my $connection = MongoDB::MongoClient->new(
-        host => $settings->{host},
-        username => $settings->{username},
-        password => $settings->{password},
-        db_name => $settings->{database}
-    );
-
-    return $connection;
-}
-
-sub loadConfigXml{
-    my $configs = {};
-    my $xmlPath = getConfigXmlPath();
-
-    if( -e $xmlPath ){
-        my $simple = XML::Simple->new;
-        $configs = $simple->XMLin($xmlPath);
-    }
-    return $configs;
-}
-
-sub getConfigXmlPath{
-    my $kohaConfigPath = $ENV{'KOHA_CONF'};
-    my $kohaPath = $ENV{KOHA_PATH};
-    my $configFile = "mongodb-config.xml";
-    my($file, $path, $ext) = fileparse($kohaConfigPath);
-    my $procurementConfigPath = $path . $configFile; # use the same path as koha_config.xml file
-    return $procurementConfigPath;
-}
-
-sub getSettings{
-    my $settings;
-    if(!$settings){
-        my $confs = loadConfigXml();
-        if($confs){
-            $settings = $confs;
-        }
-    }
-
-    return $settings;
-}
