@@ -87,6 +87,7 @@
 $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 [% Asset.js("lib/bootstrap/js/bootstrap.min.js") | $raw %]
+[% Asset.js("lib/fontfaceobserver.min.js") | $raw %]
 [% Asset.js("js/global.js") | $raw %]
 <script>
     Modernizr.load([

@@ -1,9 +1,50 @@
 @import "mixins";
 
+@font-face {
+    font-family: 'NotoSans';
+    font-style: normal;
+    font-weight: 400;
+    src: local('Noto Sans Regular'),
+        url('fonts/NotoSans-Regular-webfont.woff2') format('woff2'),
+        url('fonts/NotoSans-Regular-webfont.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'NotoSans';
+    font-style: bold;
+    font-weight: 700;
+    src: local('Noto Sans Bold'),
+        url('fonts/NotoSans-Bold-webfont.woff2') format('woff2'),
+        url('fonts/NotoSans-Bold-webfont.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'NotoSans';
+    font-style: italic;
+    font-weight: 400;
+    src: local('Noto Sans Italic'),
+        url('fonts/NotoSans-Italic-webfont.woff2') format('woff2'),
+        url('fonts/NotoSans-Italic-webfont.woff') format('woff');
+}
+
+@font-face {
+    font-family: 'NotoSans';
+    font-style: italic;
+    font-weight: 700;
+    src: local('Noto Sans Bold Italic'),
+        url('fonts/NotoSans-BoldItalic-webfont.woff2') format('woff2'),
+        url('fonts/NotoSans-BoldItalic-webfont.woff') format('woff');
+}
+
+
 body {
     background: #FCF9FC none;
-    font-family: 'NotoSansRegular';
+    font-family: sans-serif;
     font-size: 16px;
+}
+
+.fonts-loaded body {
+    font-family: 'NotoSans';
 }
 
 /* Sticky footer styles */
@@ -414,7 +455,7 @@ th {
         background-color: #85ca11;
         color: #FFF;
         display: inline;
-        font-family: 'NotoSansRegular';
+        font-family: 'NotoSans';
         font-size: 80%;
         font-weight: normal;
         margin: 0 0 0 .9em;
@@ -659,7 +700,7 @@ th {
     background-color: #85ca11;
     background-image: linear-gradient(to bottom, #85ca11, #77b50f);
     background-position: 0;
-    font-family: 'NotoSansRegular';
+    font-family: 'NotoSans';
     &:hover {
         background-color: #85ca11;
         background-image: linear-gradient(to bottom, #85ca11, #77b50f);
@@ -726,6 +767,7 @@ input[type="text"]:focus {
             > a {
                 color: #727272;
                 font-weight: bold;
+                text-shadow: none;
                 &:hover {
                     color: #85ca11;
                 }
@@ -819,7 +861,7 @@ input[type="text"]:focus {
 .ui-widget select,
 .ui-widget textarea,
 .ui-widget button {
-    font-family: 'NotoSansRegular';
+    font-family: 'NotoSans';
     font-size: inherit;
 }
 

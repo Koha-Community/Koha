@@ -1,3 +1,19 @@
+(function( w ){
+    // if the class is already set, the font has already been loaded
+    if( w.document.documentElement.className.indexOf( "fonts-loaded" ) > -1 ){
+        return;
+    }
+    var PrimaryFont = new w.FontFaceObserver( "NotoSans", {
+        weight: 400
+    });
+
+    PrimaryFont.load(null, 5000).then(function(){
+        w.document.documentElement.className += " fonts-loaded";
+    }, function(){
+        console.log("Failed");
+    });
+}( this ));
+
 // http://stackoverflow.com/questions/1038746/equivalent-of-string-format-in-jquery/5341855#5341855
 String.prototype.format = function() { return formatstr(this, arguments) }
 function formatstr(str, col) {
