@@ -95,7 +95,11 @@
             [% ELSIF action == 'merge' %]
                 <h4>Results</h4>
                 [% IF error %]
-                    <div class="dialog alert">Merge failed! The following error was reported: [% error %].</div>
+                    [% IF error == 'INVALID_KEEPER' %]
+                        <div class="dialog alert">Merge failed! The patron to keep was invalid.</div>
+                    [% ELSE %]
+                        <div class="dialog alert">Merge failed! The following error was reported: [% error %].</div>
+                    [% END %]
                 [% ELSIF !results.merged.keys.size %]
                     <div class="dialog alert">No valid patrons to merge were found.</div>
                 [% ELSE %]
@@ -123,7 +127,9 @@
                     [% END %]
                 [% END %]
 
-                <a class="btn btn-default btn-sm" href="moremember.pl?borrowernumber=[% keeper.id %]">View patron record</a>
+                [% UNLESS error %]
+                    <a class="btn btn-default btn-sm" href="moremember.pl?borrowernumber=[% keeper.id %]">View patron record</a>
+                [% END %]
             [% END %]
         </div>
     </div>

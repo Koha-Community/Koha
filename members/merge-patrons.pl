@@ -48,16 +48,21 @@ if ( $action eq 'show' ) {
     my $keeper_id = $cgi->param('keeper');
     my $results;
 
-    try {
-        my $keeper = Koha::Patrons->find( $keeper_id );
-        $results = $keeper->merge_with( \@ids );
-        $template->param(
-            keeper  => $keeper,
-            results => $results
-        );
-    }
-    catch {
-        $template->param( error => $_ );
+    my $keeper = Koha::Patrons->find( $keeper_id );
+
+    if ( $keeper ) {
+        try {
+            $results = $keeper->merge_with( \@ids );
+            $template->param(
+                keeper  => $keeper,
+                results => $results
+            );
+        }
+        catch {
+            $template->param( error => $_ );
+        }
+    } else {
+        $template->param( error => 'INVALID_KEEPER' );
     }
 }
 
