@@ -86,6 +86,7 @@ if ( $op eq 'list' ) {
         '/cgi-bin/koha/opac-illrequests.pl?method=view&illrequest_id=' .
         $params->{illrequest_id} .
         '&message=1'
+    exit;
     );
 } elsif ( $op eq 'cancreq') {
     my $request = Koha::Illrequests->find({
@@ -97,6 +98,7 @@ if ( $op eq 'list' ) {
         '/cgi-bin/koha/opac-illrequests.pl?method=view&illrequest_id=' .
         $params->{illrequest_id} .
         '&message=1'
+    exit;
     );
 
 } elsif ( $op eq 'create' ) {
@@ -126,6 +128,7 @@ if ( $op eq 'list' ) {
             );
             if ($backend_result->{stage} eq 'commit') {
                 print $query->redirect('/cgi-bin/koha/opac-illrequests.pl?message=2');
+                exit;
             }
         }
 
