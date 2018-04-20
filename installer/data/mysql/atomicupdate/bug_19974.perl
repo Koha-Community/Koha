@@ -8,7 +8,7 @@ if( CheckVersion( $DBversion ) ) {
             UPDATE systempreferences
             SET type="multiple",
                 options="batchmod|moredetail|cronjob|additem",
-                value="batchmod|moredetail|cronjob|additem"
+                value="batchmod,moredetail,cronjob,additem"
             WHERE variable="MarkLostItemsAsReturned"
         });
     } else {
