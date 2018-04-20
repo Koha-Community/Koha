@@ -37,6 +37,9 @@
     <li><a href="/cgi-bin/koha/admin/matching-rules.pl">Record matching rules</a></li>
     <li><a href="/cgi-bin/koha/admin/oai_sets.pl">OAI sets configuration</a></li>
     <li><a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a></li>
+    [% IF Koha.Preference('SearchEngine') == 'Elasticsearch' %]
+        <li><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration</a></li>
+    [% END %]
 </ul>
 
 <h5>Acquisition parameters</h5>
