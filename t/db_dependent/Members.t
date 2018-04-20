@@ -417,7 +417,7 @@ subtest 'AddMember (invalid categorycode) tests' => sub {
 
     throws_ok
         { AddMember( %{ $patron_data } ); }
-        'Koha::Exceptions::BadParameter',
+        'Koha::Exceptions::Object::FKConstraint',
         'AddMember raises an exception on invalid categorycode';
 
     $schema->storage->txn_rollback;
