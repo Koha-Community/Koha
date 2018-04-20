@@ -263,31 +263,33 @@ sub pay {
         );
     }
 
-    require C4::Letters;
-    if (
-        my $letter = C4::Letters::GetPreparedLetter(
-            module                 => 'circulation',
-            letter_code            => uc("ACCOUNT_$type"),
-            message_transport_type => 'email',
-            lang    => Koha::Patrons->find( $self->{patron_id} )->lang,
-            tables => {
-                borrowers       => $self->{patron_id},
-                branches        => $self->{library_id},
-            },
-            substitute => {
-                credit => $payment,
-                offsets => scalar Koha::Account::Offsets->search( { id => { -in => [ map { $_->id } @account_offsets ] } } ),
-            },
-          )
-      )
-    {
-        C4::Letters::EnqueueLetter(
-            {
-                letter                 => $letter,
-                borrowernumber         => $self->{patron_id},
+    if ( C4::Context->preference('UseEmailReceipts') ) {
+        require C4::Letters;
+        if (
+            my $letter = C4::Letters::GetPreparedLetter(
+                module                 => 'circulation',
+                letter_code            => uc("ACCOUNT_$type"),
                 message_transport_type => 'email',
-            }
-        ) or warn "can't enqueue letter $letter";
+                lang    => Koha::Patrons->find( $self->{patron_id} )->lang,
+                tables => {
+                    borrowers       => $self->{patron_id},
+                    branches        => $self->{library_id},
+                },
+                substitute => {
+                    credit => $payment,
+                    offsets => scalar Koha::Account::Offsets->search( { id => { -in => [ map { $_->id } @account_offsets ] } } ),
+                },
+              )
+          )
+        {
+            C4::Letters::EnqueueLetter(
+                {
+                    letter                 => $letter,
+                    borrowernumber         => $self->{patron_id},
+                    message_transport_type => 'email',
+                }
+            ) or warn "can't enqueue letter $letter";
+        }
     }
 
     return $payment->id;

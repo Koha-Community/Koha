@@ -597,6 +597,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('useDaysMode','Calendar','Calendar|Days|Datedue','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Choice'),
 ('useDefaultReplacementCost', '0', NULL, 'default replacement cost defined in item type', 'YesNo'),
 ('useDischarge','','','Allows librarians to discharge borrowers and borrowers to request a discharge','YesNo'),
+('UseEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo'),
 ('UseICU','0','1','Tell Koha if ICU indexing is in use for Zebra or not.','YesNo'),
 ('UseKohaPlugins','0','','Enable or disable the ability to use Koha Plugins.','YesNo'),
 ('UseQueryParser','0',NULL,'If enabled, try to use QueryParser for queries.','YesNo'),
