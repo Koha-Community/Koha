@@ -15883,6 +15883,33 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18790 - Add ability to void payment)\n";
 }
 
+$DBversion = '17.12.00.035';
+if( CheckVersion( $DBversion ) ) {
+    my ( $original_value ) = $dbh->selectrow_array(q|
+        SELECT value FROM systempreferences WHERE variable="MarkLostItemsAsReturned"
+    |);
+    if ( $original_value and $original_value eq '1' ) {
+        $dbh->do(q{
+            UPDATE systempreferences
+            SET type="multiple",
+                options="batchmod|moredetail|cronjob|additem",
+                value="batchmod,moredetail,cronjob,additem"
+            WHERE variable="MarkLostItemsAsReturned"
+        });
+    } else {
+        $dbh->do(q{
+            UPDATE systempreferences
+            SET type="multiple",
+                options="batchmod|moredetail|cronjob|additem",
+                value=""
+            WHERE variable="MarkLostItemsAsReturned"
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19974 - Make MarkLostItemsAsReturned multiple)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
