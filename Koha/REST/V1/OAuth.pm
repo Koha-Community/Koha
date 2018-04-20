@@ -48,8 +48,6 @@ sub token {
         expires_in   => $expires_in,
     );
 
-    my $at = Koha::OAuthAccessTokens->search({ access_token => $token })->next;
-
     my $response = {
         access_token => $token,
         token_type => 'Bearer',
