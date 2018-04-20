@@ -194,7 +194,10 @@ sub printbasketgrouppdf{
                 }
             }
 
-            $ord->{itemtype} = ( $ord->{itemtype} and $biblioitem->itemtype ) ? Koha::ItemTypes->find( $biblioitem->itemtype )->description : undef;
+            my $item_has_type_description = ($ord->{itemtype}
+                                         and $biblioitem->itemtype
+                                         and Koha::ItemTypes->find( $biblioitem->itemtype ));
+            $ord->{itemtype} = $item_has_type_description ? Koha::ItemTypes->find( $biblioitem->itemtype )->description : undef;
             $ord->{en} = $en ? $en : undef;
             $ord->{edition} = $edition ? $edition : undef;
 
