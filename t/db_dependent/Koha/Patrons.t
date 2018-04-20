@@ -552,9 +552,9 @@ subtest 'get_routing_lists' => sub {
 
     is ($patron->get_routing_lists->count, 1, "Retrieves correct number of routing lists: 1");
 
-    my @routinglists = $patron->get_routing_lists;
-    is ($routinglists[0]->ranking, 5, "Retrieves ranking: 5");
-    is( ref($routinglists[0]),   'Koha::Subscription::Routinglist', 'get_routing_lists returns Koha::Subscription::Routinglist objects' );
+    my $routinglists = $patron->get_routing_lists;
+    is ($routinglists->next->ranking, 5, "Retrieves ranking: 5");
+    is( ref($routinglists),   'Koha::Subscription::Routinglists', 'get_routing_lists returns Koha::Subscription::Routinglists' );
 
     my $subscription2 = Koha::Subscription->new({
         biblionumber => $biblio->biblionumber,
