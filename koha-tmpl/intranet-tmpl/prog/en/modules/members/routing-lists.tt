@@ -26,19 +26,19 @@
 </form>
 <!-- Search Bar End -->
 
+[% SET routinglists = patron.get_routing_lists %]
 <h1>
 [% UNLESS ( routinglists ) %]
 0 subscription routing lists
-[% ELSIF ( routinglists.size() == 1 ) %]
-[% routinglists.size() %] subscription routing list
+[% ELSIF ( routinglists.count == 1 ) %]
+[% routinglists.count %] subscription routing list
 [% ELSE %]
-[% routinglists.size() %] subscription routing lists
+[% routinglists.count %] subscription routing lists
 [% END %]
 </h1>
 
 <div id="subscriptions">
 
-[% SET routinglists = logged_in_user.get_routing_lists %]
 [% IF ( routinglists ) %]
     <table id="subscriptiont">
         <thead>
