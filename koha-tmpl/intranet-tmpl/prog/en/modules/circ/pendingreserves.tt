@@ -149,7 +149,7 @@
         <td><input type="text" class="filter" data-column_num="6" placeholder="Call number" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="7" placeholder="Available copy" style="width:95%"/></td>
         <td><input type="text" class="filter" data-column_num="8" placeholder="Available enumeration" style="width:95%"/></td>
-        <td id="type-filter"></td>
+        <td id="itemtype-filter"></td>
         <td id="locationfilter"></td>
         <td></td>
         <td></td>
@@ -245,7 +245,7 @@
                   holdst.fnFilter( filter_value, 5, true );
               });
           });
-          $("#type-filter").each( function () {
+          $("#itemtype-filter").each( function () {
               $(this).html( createSelect( holdst.fnGetColumnData(9) ) );
               $('select', this).change( function () {
                   holdst.fnFilter( $(this).val(), 9 );
