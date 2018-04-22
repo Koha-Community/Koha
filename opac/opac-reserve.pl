@@ -623,6 +623,10 @@ if ( $numBibsAvailable == 0 || $anyholdable == 0) {
     $template->param( none_available => 1 );
 }
 
+if (scalar @biblionumbers > 1) {
+    $template->param( multi_hold => 1);
+}
+
 my $show_notes=C4::Context->preference('OpacHoldNotes');
 $template->param(OpacHoldNotes=>$show_notes);
 

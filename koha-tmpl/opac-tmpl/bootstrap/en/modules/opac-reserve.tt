@@ -22,7 +22,7 @@
         <div id="holds">
             [% IF ( message ) %]
                 <div id="holdmessages" class="alert">
-                    <p><strong>Sorry</strong>, you cannot place holds.</strong></p>
+                    <p>Sorry, you cannot place holds.</p>
                     <ul>
                         [% IF ( GNA ) %]
                             <li id="gna">
@@ -106,9 +106,9 @@
 
                     [% ELSE %]
 
-                        [% IF ( none_available ) %]
+                        [% IF ( none_available && multi_hold ) %]
                             <div id="none_available" class="alert">
-                                <strong>Sorry</strong>, none of these items can be placed on hold.
+                                Sorry, none of these titles can be placed on hold.
                             </div>
                         [% END %]
                 </div>
@@ -174,7 +174,7 @@
                                                 <div class="alert">You have already requested this title.</div>
                                             [% ELSE %]
                                                 [% UNLESS ( bibitemloo.bib_available ) %]
-                                                    <div class="alert">No available items.</div>
+                                                    <div class="alert">There are no items that can be placed on hold.</div>
                                                 [% ELSE %]
                                                     [% IF ( bibitemloo.already_patron_possession ) %]
                                                         <div class="alert">This title cannot be requested because it's already in your possession.</div>
