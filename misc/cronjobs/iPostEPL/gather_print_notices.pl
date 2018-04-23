@@ -205,6 +205,7 @@ sub fetchPickupLocations {
         my $itemnumber = C4::Items::GetItemnumberFromBarcode( $barcode );
         my $item = Koha::Items->find($itemnumber);
         my $holds = $item->current_holds if $item;
+        next unless $holds;
         if ( my $first_hold = $holds->next ) {
             $targetBranches{ $first_hold->branchcode } = 1 if $first_hold->branchcode;
         }
