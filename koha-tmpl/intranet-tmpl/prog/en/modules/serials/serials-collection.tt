@@ -324,7 +324,7 @@
             $("form[name='edition']").on('submit', function(e){
                 if ( $(this).find("input[name='serialid']:checked").size() == 0 ) {
                     e.preventDefault();
-                    alert("You must select at least one serial to edit");
+                    alert(_("You must select at least one serial to edit"));
                     return 0;
                 }
                 return 1;
