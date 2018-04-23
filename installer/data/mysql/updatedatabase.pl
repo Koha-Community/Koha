@@ -15910,6 +15910,26 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19974 - Make MarkLostItemsAsReturned multiple)\n";
 }
 
+$DBversion = '17.12.00.036';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('CanMarkHoldsToPullAsLost','do_not_allow','do_not_allow|allow|allow_and_notify','Add a button to the "Holds to pull" screen to mark an item as lost and notify the patron.','Choice');
+    } );
+    $dbh->do( q{
+        INSERT IGNORE INTO letter(module, code, branchcode, name, is_html, title, content, message_transport_type, lang) VALUES ('reserves', 'CANCEL_HOLD_ON_LOST', '', 'Hold has been cancelled', 0, "Hold has been cancelled", "Dear [% borrower.firstname %] [% borrower.surname %],\n\nWe regret to inform you, that the following item can not be provided due to it being missing. Your hold was cancelled.\n\nTitle: [% biblio.title %]\nAuthor: [% biblio.author %]\nCopy: [% item.copynumber %]\nLocation: [% branch.branchname %]", 'email', 'default');
+    } );
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('UpdateItemWhenLostFromHoldList','',NULL,'This is a list of values to update an item when it is marked as lost from the holds to pull screen','Free');
+    } );
+    $dbh->do( q{
+        UPDATE systempreferences SET options="batchmod|moredetail|cronjob|additem|pendingreserves", value="batchmod|moredetail|cronjob|additem|pendingreserves" WHERE variable="MarkLostItemsAsReturned";
+    } );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19287 - Add ability to mark an item 'Lost' from 'Holds to pull' list (CanMarkHoldsToPullAsLost, UpdateItemWhenLostFromHoldList and CANCEL_HOLD_ON_LOST))\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
