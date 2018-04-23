@@ -34,8 +34,19 @@ use Encode;
 
 my $input = new CGI;
 my $file_id = $input->param("id");
-my $access_dir = C4::Context->config('access_dir');
-my @directories = $access_dir ? (ref $access_dir ? @{$access_dir} : ($access_dir)) : ();
+my $access_dirs = C4::Context->config('access_dirs');
+
+my @directories;
+
+if ($access_dirs){
+    if (ref $access_dirs->{access_dir} ){
+        @directories = @{$access_dirs->{access_dir}};
+    } else {
+        @directories =($access_dirs->{access_dir});
+    }
+} else {
+    @directories = ();
+}
 
 my ($template, $borrowernumber, $cookie)
     = get_template_and_user({template_name => "tools/access_files.tt",
