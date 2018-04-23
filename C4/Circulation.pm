@@ -2246,8 +2246,18 @@ sub _debar_user_on_return {
                 );
             }
 
-            my $new_debar_dt =
-              $return_date->clone()->add_duration( $suspension_days );
+            my $new_debar_dt;
+            # Use the calendar or not to calculate the debarment date
+            if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
+                my $calendar = Koha::Calendar->new(
+                    branchcode => $branchcode,
+                    days_mode  => 'Calendar'
+                );
+                $new_debar_dt = $calendar->addDate( $return_date, $suspension_days );
+            }
+            else {
+                $new_debar_dt = $return_date->clone()->add_duration($suspension_days);
+            }
 
             Koha::Patron::Debarments::AddUniqueDebarment({
                 borrowernumber => $borrower->{borrowernumber},

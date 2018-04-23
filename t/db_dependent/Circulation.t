@@ -24,6 +24,7 @@ use POSIX qw( floor );
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use C4::Calendar;
 use C4::Circulation;
 use C4::Biblio;
 use C4::Items;
@@ -47,6 +48,11 @@ my $dbh = C4::Context->dbh;
 
 # Start transaction
 $dbh->{RaiseError} = 1;
+
+my $cache = Koha::Caches->get_instance();
+$dbh->do(q|DELETE FROM special_holidays|);
+$dbh->do(q|DELETE FROM repeatable_holidays|);
+$cache->clear_from_cache('single_holidays');
 
 # Start with a clean slate
 $dbh->do('DELETE FROM issues');
@@ -1758,7 +1764,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
-    plan tests => 6;
+    plan tests => 8;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
@@ -1863,8 +1869,71 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     Koha::Patron::Debarments::DelUniqueDebarment(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
 
-};
 
+    # We want to charge 2 days every days, with 0 day of grace (to not burn brains)
+    $rule->finedays(2)->store;
+    $rule->suspension_chargeperiod(1)->store;
+    $rule->firstremind(0)->store;
+    t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
+
+    # Adding a holiday 2 days ago
+    my $calendar = C4::Calendar->new(branchcode => $library->{branchcode});
+    my $two_days_ago = dt_from_string->subtract( days => 2 );
+    $calendar->insert_single_holiday(
+        day             => $two_days_ago->day,
+        month           => $two_days_ago->month,
+        year            => $two_days_ago->year,
+        title           => 'holidayTest-2d',
+        description     => 'holidayDesc 2 days ago'
+    );
+
+    # With 5 days of overdue, only 4 (x finedays=2) days must charged (one was an holiday)
+    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
+
+    AddReturn( $item_1->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+    Koha::Patron::Debarments::DelUniqueDebarment(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+
+
+    my $two_days_ahead = dt_from_string->add( days => 2 );
+    $calendar->insert_single_holiday(
+        day             => $two_days_ahead->day,
+        month           => $two_days_ahead->month,
+        year            => $two_days_ahead->year,
+        title           => 'holidayTest+2d',
+        description     => 'holidayDesc 2 days ahead'
+    );
+
+    # Same as above, but we should skip D+2
+    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
+
+    AddReturn( $item_1->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    $expected_expiration = output_pref(
+        {
+            dt         => dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) + 1 ),
+            dateformat => 'sql',
+            dateonly   => 1
+        }
+    );
+    is( $debarments->[0]->{expiration}, $expected_expiration );
+    Koha::Patron::Debarments::DelUniqueDebarment(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+
+};
 
 subtest 'AddReturn | is_overdue' => sub {
     plan tests => 5;
@@ -2162,6 +2231,10 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
     is( $needsconfirmation->{TOO_MANY}, undef, "Not too many, is a renewal");
 
 };
+
+
+$schema->storage->txn_rollback;
+$cache->clear_from_cache('single_holidays');
 
 sub set_userenv {
     my ( $library ) = @_;

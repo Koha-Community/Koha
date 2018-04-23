@@ -47,7 +47,7 @@ sub _init {
           1;
     }
 
-    $self->{days_mode}       = C4::Context->preference('useDaysMode');
+    $self->{days_mode}       ||= C4::Context->preference('useDaysMode');
     $self->{test}            = 0;
     return;
 }
