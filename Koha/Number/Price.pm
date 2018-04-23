@@ -89,7 +89,7 @@ sub _format_params {
     my $currency        = Koha::Acquisition::Currencies->get_active;
     my $currency_format = C4::Context->preference("CurrencyFormat");
 
-    my $int_curr_symbol = $with_symbol ? $currency->symbol : q||;
+    my $int_curr_symbol = ( $with_symbol and $currency ) ? $currency->symbol : q||;
     my %format_params = (
         decimal_fill      => '2',
         decimal_point     => '.',
@@ -123,7 +123,7 @@ sub _format_params {
 
 
     $format_params{p_cs_precedes}  = $p_cs_precedes  if defined $p_cs_precedes;
-    $format_params{p_sep_by_space} = $currency->p_sep_by_space ? 1 : 0;
+    $format_params{p_sep_by_space} = ( $currency and $currency->p_sep_by_space ) ? 1 : 0;
 
     return \%format_params;
 }
