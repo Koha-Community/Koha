@@ -25,11 +25,13 @@ use DateTime::Duration;
 use Koha::Caches;
 use Koha::DateUtils;
 
+use t::lib::Mocks;
+
 use Module::Load::Conditional qw/check_install/;
 
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
-        plan tests => 38;
+        plan tests => 39;
     } else {
         plan skip_all => "Need Test::DBIx::Class"
     }
@@ -320,6 +322,17 @@ my $holiday_for_another_branch = DateTime->new(
     is ( $cal->is_holiday($single_holiday), 0, 'Single holiday for MPL, not CPL' );
     is ( $cal->is_holiday($holiday_for_another_branch), 1, 'Holiday defined for CPL should be defined as an holiday' );
 }
+
+subtest 'days_mode parameter' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('useDaysMode', 'Days');
+    my $cal = Koha::Calendar->new( branchcode => 'CPL' );
+    is( $cal->{days_mode}, 'Days', q|If not set, days_mode defaults to syspref's value|);
+
+    $cal = Koha::Calendar->new( branchcode => 'CPL', days_mode => 'Calendar' );
+    is( $cal->{days_mode}, 'Calendar', q|If set, days_mode is correctly set|);
+};
 
 END {
     $cache->clear_from_cache( 'single_holidays' ) ;
