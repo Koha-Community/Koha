@@ -186,7 +186,7 @@ if ($op eq "action") {
 			if ( $del_records ) {
                             my $itemscount = Koha::Biblios->find( $itemdata->{'biblionumber'} )->items->count;
                             if ( $itemscount == 0 ) {
-			        my $error = DelBiblio($itemdata->{'biblionumber'});
+			        my $error = DelBiblio($itemdata->{'biblionumber'}, 1);
 			        $deleted_records++ unless ( $error );
                             }
                         }

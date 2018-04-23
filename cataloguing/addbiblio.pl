@@ -944,7 +944,7 @@ if ( $op eq "addbiblio" ) {
 }
 elsif ( $op eq "delete" ) {
     
-    my $error = &DelBiblio($biblionumber);
+    my $error = &DelBiblio($biblionumber, 1);
     if ($error) {
         warn "ERROR when DELETING BIBLIO $biblionumber : $error";
         print "Content-Type: text/html\n\n<html><body><h1>ERROR when DELETING BIBLIO $biblionumber : $error</h1></body></html>";

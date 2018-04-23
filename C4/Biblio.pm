@@ -376,18 +376,20 @@ sub _strip_item_fields {
 =head2 DelBiblio
 
   my $error = &DelBiblio($biblionumber);
+  my $error = &DelBiblio($biblionumber, 1);
 
 Exported function (core API) for deleting a biblio in koha.
 Deletes biblio record from Zebra and Koha tables (biblio & biblioitems)
 Also backs it up to deleted* tables.
 Checks to make sure that the biblio has no items attached.
+If second parameter is defined and true, also deletes component records.
 return:
 C<$error> : undef unless an error occurs
 
 =cut
 
 sub DelBiblio {
-    my ($biblionumber) = @_;
+    my ($biblionumber, $deleteComponents) = @_;
     my $dbh = C4::Context->dbh;
     my $error;    # for error handling
 
@@ -411,10 +413,12 @@ sub DelBiblio {
 
     # We delete any existing holds
     my $biblio = Koha::Biblios->find( $biblionumber );
-    my $holds = $biblio->holds;
-    require C4::Reserves;
-    while ( my $hold = $holds->next ) {
-        C4::Reserves::CancelReserve({ reserve_id => $hold->reserve_id }); # TODO Replace with $hold->cancel
+    if (defined($biblio)) {
+	my $holds = $biblio->holds;
+	require C4::Reserves;
+	while ( my $hold = $holds->next ) {
+	    C4::Reserves::CancelReserve({ reserve_id => $hold->reserve_id }); # TODO Replace with $hold->cancel
+	}
     }
 
     # Delete in Zebra. Be careful NOT to move this line after _koha_delete_biblio
@@ -433,6 +437,11 @@ sub DelBiblio {
         return $error if $error;
     }
 
+    # delete component records?
+    if (defined($deleteComponents) && $deleteComponents) {
+	$error = delComponentBiblios($biblionumber);
+	return $error if $error;
+    }
 
     # delete biblio from Koha tables and save in deletedbiblio
     # must do this *after* _koha_delete_biblioitems, otherwise
@@ -445,6 +454,34 @@ sub DelBiblio {
     return;
 }
 
+=head2 delComponentBiblios
+
+  my $error = &delComponentBiblios($biblionumber);
+
+Deletes component records of a biblio, by calling DelBiblio for each
+component record.
+return:
+C<$error> : undef unless an error occurs
+
+=cut
+
+sub delComponentBiblios {
+    my ($biblionumber) = @_;
+    my $record = GetMarcBiblio($biblionumber);
+    my @removalErrors;
+
+    foreach my $componentPartBiblionumber (  @{ getComponentBiblionumbers( $record )}  ) {
+	my $error = DelBiblio($componentPartBiblionumber);
+	if ($error) {
+	    my $html = "<a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber=$componentPartBiblionumber'>$componentPartBiblionumber</a>";
+	    push(@removalErrors, $html.' : '.$error);
+	}
+    }
+    if (@removalErrors) {
+	return join("\n", @removalErrors);
+    }
+    return undef;
+}
 
 =head2 BiblioAutoLink
 
