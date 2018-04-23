@@ -1764,7 +1764,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
-    plan tests => 8;
+    plan tests => 10;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
@@ -1803,73 +1803,49 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     $rule->store();
 
     my $five_days_ago = dt_from_string->subtract( days => 5 );
-    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
-
     # We want to charge 2 days every day, without grace
     # With 5 days of overdue: 5 * Z
-    AddReturn( $item_1->{barcode}, $library->{branchcode},
-        undef, undef, dt_from_string );
-    my $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1 );
-
-    my $expected_expiration = output_pref(
+    my $expected_expiration = dt_from_string->add( days => ( 5 * 2 ) / 1 );
+    test_debarment_on_checkout(
         {
-            dt         => dt_from_string->add( days => ( 5 * 2 ) / 1 ),
-            dateformat => 'sql',
-            dateonly   => 1
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $five_days_ago,
+            expiration_date => $expected_expiration,
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
-    Koha::Patron::Debarments::DelUniqueDebarment(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
 
     # We want to charge 2 days every 2 days, without grace
     # With 5 days of overdue: (5 * 2) / 2
     $rule->suspension_chargeperiod(2)->store;
-    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
-
-    AddReturn( $item_1->{barcode}, $library->{branchcode},
-        undef, undef, dt_from_string );
-    $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1 );
-
-    $expected_expiration = output_pref(
+    $expected_expiration = dt_from_string->add( days => floor( 5 * 2 ) / 2 );
+    test_debarment_on_checkout(
         {
-            dt         => dt_from_string->add( days => floor( 5 * 2 ) / 2 ),
-            dateformat => 'sql',
-            dateonly   => 1
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $five_days_ago,
+            expiration_date => $expected_expiration,
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
-    Koha::Patron::Debarments::DelUniqueDebarment(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
 
     # We want to charge 2 days every 3 days, with 1 day of grace
     # With 5 days of overdue: ((5-1) / 3 ) * 2
     $rule->suspension_chargeperiod(3)->store;
     $rule->firstremind(1)->store;
-    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
-
-    AddReturn( $item_1->{barcode}, $library->{branchcode},
-        undef, undef, dt_from_string );
-    $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    is( scalar(@$debarments), 1 );
-
-    $expected_expiration = output_pref(
+    $expected_expiration = dt_from_string->add( days => floor( ( ( 5 - 1 ) / 3 ) * 2 ) );
+    test_debarment_on_checkout(
         {
-            dt         => dt_from_string->add( days => floor( ( ( 5 - 1 ) / 3 ) * 2 ) ),
-            dateformat => 'sql',
-            dateonly   => 1
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $five_days_ago,
+            expiration_date => $expected_expiration,
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
-    Koha::Patron::Debarments::DelUniqueDebarment(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
 
-
+    # Use finesCalendar to know if holiday must be skipped to calculate the due date
     # We want to charge 2 days every days, with 0 day of grace (to not burn brains)
     $rule->finedays(2)->store;
     $rule->suspension_chargeperiod(1)->store;
@@ -1886,26 +1862,19 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
         title           => 'holidayTest-2d',
         description     => 'holidayDesc 2 days ago'
     );
-
     # With 5 days of overdue, only 4 (x finedays=2) days must charged (one was an holiday)
-    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
-
-    AddReturn( $item_1->{barcode}, $library->{branchcode},
-        undef, undef, dt_from_string );
-    $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    $expected_expiration = output_pref(
+    $expected_expiration = dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) );
+    test_debarment_on_checkout(
         {
-            dt         => dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) ),
-            dateformat => 'sql',
-            dateonly   => 1
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $five_days_ago,
+            expiration_date => $expected_expiration,
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
-    Koha::Patron::Debarments::DelUniqueDebarment(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
 
-
+    # Adding a holiday 2 days ahead, with finesCalendar=noFinesWhenClosed it should be skipped
     my $two_days_ahead = dt_from_string->add( days => 2 );
     $calendar->insert_single_holiday(
         day             => $two_days_ahead->day,
@@ -1916,23 +1885,16 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     );
 
     # Same as above, but we should skip D+2
-    AddIssue( $patron, $item_1->{barcode}, $five_days_ago );    # Add an overdue
-
-    AddReturn( $item_1->{barcode}, $library->{branchcode},
-        undef, undef, dt_from_string );
-    $debarments = Koha::Patron::Debarments::GetDebarments(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-    $expected_expiration = output_pref(
+    $expected_expiration = dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) + 1 );
+    test_debarment_on_checkout(
         {
-            dt         => dt_from_string->add( days => floor( ( ( 5 - 0 - 1 ) / 1 ) * 2 ) + 1 ),
-            dateformat => 'sql',
-            dateonly   => 1
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $five_days_ago,
+            expiration_date => $expected_expiration,
         }
     );
-    is( $debarments->[0]->{expiration}, $expected_expiration );
-    Koha::Patron::Debarments::DelUniqueDebarment(
-        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-
 };
 
 subtest 'AddReturn | is_overdue' => sub {
@@ -2271,4 +2233,35 @@ sub add_biblio {
     }
 
     return AddBiblio($biblio, '');
+}
+
+sub test_debarment_on_checkout {
+    my ($params) = @_;
+    my $item     = $params->{item};
+    my $library  = $params->{library};
+    my $patron   = $params->{patron};
+    my $due_date = $params->{due_date} || dt_from_string;
+    my $expected_expiration_date = $params->{expiration_date};
+
+    $expected_expiration_date = output_pref(
+        {
+            dt         => $expected_expiration_date,
+            dateformat => 'sql',
+            dateonly   => 1,
+        }
+    );
+    my @caller      = caller;
+    my $line_number = $caller[2];
+    AddIssue( $patron, $item->{barcode}, $due_date );
+
+    AddReturn( $item->{barcode}, $library->{branchcode},
+        undef, undef, dt_from_string );
+    my $debarments = Koha::Patron::Debarments::GetDebarments(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
+    is( scalar(@$debarments), 1, 'Test at line ' . $line_number );
+
+    is( $debarments->[0]->{expiration},
+        $expected_expiration_date, 'Test at line ' . $line_number );
+    Koha::Patron::Debarments::DelUniqueDebarment(
+        { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
 }
