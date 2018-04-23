@@ -230,13 +230,9 @@ sub build_query_compat {
         join( ' ', $self->_create_query_string(@search_params) ) || (),
         $self->_join_queries( $self->_convert_index_strings(@$limits) ) || () );
 
-    my @weights = $params->{weight};
-    my @w_fields = $params->{w_fields};
     my @fields = '_all';
-    if ( defined $weights[0] ) {
-        for (my $i = 0 ; $i < (scalar @weights) ; $i++ ){
-            push @fields, "$w_fields[$i]^$weights[$i]";
-        }
+    if ( defined($params->{weighted_fields}) && $params->{weighted_fields} ) {
+        push @fields, sprintf("%s^%s", $_->name, $_->weight) for Koha::SearchFields->weighted_fields;
     }
 
     # If there's no query on the left, let's remove the junk left behind

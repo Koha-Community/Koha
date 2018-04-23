@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 16;
+use Test::More tests => 15;
 
 use Koha::Database;
 use Koha::SearchFields;
@@ -73,11 +73,12 @@ my $smtf2 = $builder->build({
 });
 
 my $search_field = Koha::SearchFields->find($sf->{id});
-my @marc_map = $search_field->search_marc_maps;
-is(scalar(@marc_map), 1, 'search_marc_maps should return 1 marc map');
-is($marc_map[0]->index_name, 'biblios', 'Marc map index name is biblios');
-is($marc_map[0]->marc_type, 'marc21', 'Marc map type is marc21');
-is($marc_map[0]->marc_field, '410abcdef', 'Marc map field is 410abcdef');
+my $marc_maps = $search_field->search_marc_maps;
+my $marc_map = $marc_maps->next;
+is($marc_maps->count, 1, 'search_marc_maps should return 1 marc map');
+is($marc_map->get_column('index_name'), 'biblios', 'Marc map index name is biblios');
+is($marc_map->get_column('marc_type'), 'marc21', 'Marc map type is marc21');
+is($marc_map->get_column('marc_field'), '410abcdef', 'Marc map field is 410abcdef');
 
 ok($search_field->is_mapped_biblios, 'Search field 1 is mapped with biblios');
 
@@ -188,16 +189,14 @@ $builder->build({
     }
 });
 
-my ($w_fields, $weight) = Koha::SearchFields->weighted_fields();
-is(scalar(@$w_fields), 3, 'weighted_fields should return 3 weighted fields.');
-is(scalar(@$weight), 3, 'weighted_fields should return 3 weight.');
+my @w_fields = Koha::SearchFields->weighted_fields();
+is(scalar(@w_fields), 3, 'weighted_fields should return 3 weighted fields.');
 
-is($w_fields->[0], 'title', 'First field is title.');
-is($w_fields->[1], 'subject', 'Second field is subject.');
-is($w_fields->[2], 'author', 'Third field is author.');
-
-is($weight->[0], 25, 'Title weight is 25.');
-is($weight->[1], 15, 'Subject weight is 15.');
-is($weight->[2], 5, 'Author weight is 5.');
+is($w_fields[0]->name, 'title', 'First field is title.');
+is($w_fields[0]->weight, 25, 'Title weight is 25.');
+is($w_fields[1]->name, 'subject', 'Second field is subject.');
+is($w_fields[1]->weight, 15, 'Subject weight is 15.');
+is($w_fields[2]->name, 'author', 'Third field is author.');
+is($w_fields[2]->weight, 5, 'Author weight is 5.');
 
 $schema->storage->txn_rollback;
