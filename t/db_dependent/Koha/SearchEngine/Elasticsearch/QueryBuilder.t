@@ -18,10 +18,15 @@
 use Modern::Perl;
 
 use Test::More tests => 2;
+use C4::Context;
 use Test::Exception;
+use Test::More tests => 3;
 
 use Koha::Database;
-use Koha::SearchEngine::Elasticsearch::QueryBuilder
+use Koha::SearchEngine::Elasticsearch::QueryBuilder;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 subtest 'build_authorities_query_compat() tests' => sub {
     plan tests => 37;
@@ -115,3 +120,51 @@ subtest 'build query from form subtests' => sub {
 
 
 };
+
+subtest 'build_query with weighted fields tests' => sub {
+    plan tests => 4;
+
+    my $builder = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'mydb' } );
+    my $db_builder = t::lib::TestBuilder->new();
+
+    Koha::SearchFields->search({})->delete;
+
+    $db_builder->build({
+        source => 'SearchField',
+        value => {
+            name    => 'acqdate',
+            label   => 'acqdate',
+            weight  => undef
+        }
+    });
+
+    $db_builder->build({
+        source => 'SearchField',
+        value => {
+            name    => 'title',
+            label   => 'title',
+            weight  => 25
+        }
+    });
+
+    $db_builder->build({
+        source => 'SearchField',
+        value => {
+            name    => 'subject',
+            label   => 'subject',
+            weight  => 15
+        }
+    });
+
+    my ( undef, $query ) = $builder->build_query_compat( undef, ['title:"donald duck"'], undef, undef,
+    undef, undef, undef, { weighted_fields => 1 });
+
+    my $fields = $query->{query}{query_string}{fields};
+
+    is(scalar(@$fields), 3, 'Search is done on 3 fields');
+    is($fields->[0], '_all', 'First search field is _all');
+    is($fields->[1], 'title^25', 'Second search field is title');
+    is($fields->[2], 'subject^15', 'Third search field is subject');
+};
+
+$schema->storage->txn_rollback;
