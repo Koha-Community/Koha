@@ -320,6 +320,15 @@
             $('#multi_receiving').on('show', function () {
                $(this).find(".modal-body").html($(".serials_multi_receiving")[0].outerHTML);
             });
+
+            $("form[name='edition']").on('submit', function(e){
+                if ( $(this).find("input[name='serialid']:checked").size() == 0 ) {
+                    e.preventDefault();
+                    alert("You must select at least one serial to edit");
+                    return 0;
+                }
+                return 1;
+            });
         });
 
     </script>
