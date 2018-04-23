@@ -481,6 +481,7 @@ sub _cors_response_check_origin {
   $errors = [] unless $errors;
   my $origin = $c->req->headers->origin;
   my $originOk;
+  $allowedOrigins = ['*'] unless $allowedOrigins; # default allow all
   if (ref $allowedOrigins eq 'ARRAY') {
     foreach my $ao (@$allowedOrigins) {
       if ((ref $ao eq 'Regexp' && $origin =~ /$ao/ms) || #Match regexp
@@ -503,6 +504,7 @@ sub _cors_response_check_method {
 
   my $method = $c->req->headers->header('Access-Control-Request-Method');
   my $methodOk;
+  $allowedMethods = { '*' => 1 } unless $allowedMethods; # default allow all
   if (ref $allowedMethods eq 'HASH') {
     if ($allowedMethods->{'*'}) {
       $methodOk = 1;
