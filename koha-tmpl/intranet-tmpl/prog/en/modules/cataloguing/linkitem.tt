@@ -6,7 +6,10 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; Link a host item to <i>[% bibliotitle |html %]</i></div>
-<div id="doc3" class="yui-t2">
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
 
 [% IF ( error ) %]
     <div class="dialog alert">
@@ -19,7 +22,7 @@
     </form>
 [% ELSE %]
     [% IF ( success ) %]
-	<div class="dialog">The item has successfully been linked to <i>[% bibliotitle |html %]</i>.</div>    
+    <div class="dialog message">The item has successfully been linked to <i>[% bibliotitle |html %]</i>.</div>
 	<form action="/cgi-bin/koha/catalogue/MARCdetail.pl" method="post">
 	    <input type="submit" value="OK" />
 	    <input type="hidden" name="biblionumber" value="[% biblionumber %]" />

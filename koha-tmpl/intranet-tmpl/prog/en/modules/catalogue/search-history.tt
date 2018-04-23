@@ -17,11 +17,10 @@
   <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Search history
 </div>
 
-<div id="doc3" class="yui-t2">
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-12 col-md-8 col-md-offset-2">
 
-<div id="bd">
-  <div id="yui-main">
-    <div class="yui-b">
       <h1>Search history</h1>
       <div id="tabs" class="toptabs">
         <ul>
@@ -186,11 +185,10 @@
           [% IF !current_authority_searches && !previous_authority_searches %]
             <p>Your authority search history is empty.</p>
           [% END %]
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
+        </div> [% # /authority_tab %]
+      </div> [% # /tabs %]
+    </div> [% # /div.col-md-8 %]
+  </div> [% # /div.row %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]

@@ -19,10 +19,10 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'acquisitions-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid %]">[% booksellername %]</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno %]">Basket [% basketno %]</a> &rsaquo;  Add orders from iso2709 file</div>
-<div id="doc3" class="yui-t2">
-   <div id="bd">
-       <div id="yui-main">
-           <div class="yui-b">
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 col-md-8 col-md-offset-2">
              [% IF ( allmatch ) %]<div class="dialog alert">
               <h4>No records imported</h4>
              No record have been imported because they all match an existing record in your catalog.<br />You'll have to treat them individually.
@@ -420,10 +420,8 @@
                   </table>
                 </div>
                 [% END %]
-           </div>
-       </div>
-   </div>
-</div>
+            </div> [% # /div.col-sm-6 %]
+       </div> [% # /div.row %]
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") %]

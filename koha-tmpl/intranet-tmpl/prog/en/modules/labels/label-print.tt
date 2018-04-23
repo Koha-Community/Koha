@@ -42,7 +42,7 @@
                     <input type="button" class="gb-close" value="Done" />
                 </fieldset>
             </form>
-            [% ELSE %]
+        [% ELSE %]
             <h3>
                 [% IF ( label_ids ) %]
                     [% IF ( label_count == 1 ) %]Exporting [% label_count %] label[% ELSE %]Exporting [% label_count %] labels[% END %]
@@ -93,8 +93,8 @@
                     <a href="#" class="cancel gb-close">Cancel</a>
                 </fieldset>
             </form>
-            [% END %]
-        </div>
+        [% END %]
+    </div>
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") %]
