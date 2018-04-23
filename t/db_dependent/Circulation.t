@@ -1764,7 +1764,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
-    plan tests => 10;
+    plan tests => 12;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
@@ -1893,6 +1893,26 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             patron          => $patron,
             due_date        => $five_days_ago,
             expiration_date => $expected_expiration,
+        }
+    );
+
+    # Adding another holiday, day of expiration date
+    my $expected_expiration_dt = dt_from_string($expected_expiration);
+    $calendar->insert_single_holiday(
+        day             => $expected_expiration_dt->day,
+        month           => $expected_expiration_dt->month,
+        year            => $expected_expiration_dt->year,
+        title           => 'holidayTest_exp',
+        description     => 'holidayDesc on expiration date'
+    );
+    # Expiration date will be the day after
+    test_debarment_on_checkout(
+        {
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            due_date        => $five_days_ago,
+            expiration_date => $expected_expiration_dt->clone->add( days => 1 ),
         }
     );
 };
