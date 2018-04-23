@@ -20,7 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
-use Koha::Account::Line;
+use Koha::Account::Lines;
 
 use base qw(Koha::Object);
 
@@ -38,6 +38,10 @@ Account offsets are used to track the changes in account lines
 
 =head3 debit
 
+my $debit = $account_offset->debit;
+
+Returns the related accountline that increased the amount owed by the patron.
+
 =cut
 
 sub debit {
@@ -48,6 +52,10 @@ sub debit {
 }
 
 =head3 credit
+
+my $credit = $account_offset->credit;
+
+Returns the related accountline that decreased the amount owed by the patron.
 
 =cut
 

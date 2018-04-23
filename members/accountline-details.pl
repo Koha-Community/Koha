@@ -35,7 +35,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         type            => "intranet",
         authnotrequired => 0,
         flagsrequired   => {
-            borrowers     => 1,
+            borrowers     => 'edit_borrowers',
             updatecharges => 'remaining_permissions'
         },
     }
@@ -49,12 +49,15 @@ if ($accountline) {
     my $type = $accountline->amount < 0 ? 'credit' : 'debit';
     my $column = $type eq 'credit' ? 'credit_id' : 'debit_id';
 
-    my @account_offsets = Koha::Account::Offsets->search( { $column => $accountlines_id } );
+    my $account_offsets = Koha::Account::Offsets->search(
+        { $column  => $accountlines_id },
+        { order_by => 'created_on' },
+    );
 
     $template->param(
         type            => $type,
         accountline     => $accountline,
-        account_offsets => \@account_offsets,
+        account_offsets => $account_offsets,
 
         finesview => 1,
     );

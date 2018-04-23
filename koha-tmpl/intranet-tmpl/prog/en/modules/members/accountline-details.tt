@@ -94,7 +94,7 @@
                         </thead>
 
                         <tbody>
-                            [% FOREACH ao IN account_offsets.sort('created_on') %]
+                            [% FOREACH ao IN account_offsets %]
                                 [% IF type == 'credit' %]
                                     [% SET offset_accountline = ao.debit %]
                                 [% ELSIF type == 'debit' %]
