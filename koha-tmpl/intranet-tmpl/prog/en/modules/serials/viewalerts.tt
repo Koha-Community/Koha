@@ -26,8 +26,9 @@
         </tr>
         [% FOREACH subscriber IN subscribers %]
         <tr>
-            [%# FIXME use patron-title when 18403 will be pushed %]
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber %]">[% subscriber.firstname %] [% subscriber.surname %]</a></td>
+            <td>
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber %]">[% INCLUDE 'patron-title.inc' patron=subscriber %]</a>
+            </td>
         </tr>
         [% END %]
     </table>
