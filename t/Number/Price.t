@@ -1,6 +1,6 @@
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 
 use Test::MockModule;
 use t::lib::Mocks;
@@ -19,6 +19,9 @@ my $orig_locale = setlocale(LC_NUMERIC);
 my $format = {
     p_cs_precedes => 1, # Force to place the symbol at the beginning
 };
+
+is( Koha::Number::Price->new->format( $format ),    '0.00', 'There is no currency defined yet, do not explode!' );
+
 t::lib::Mocks::mock_preference( 'CurrencyFormat', 'US' );
 $currency = Koha::Acquisition::Currency->new({
     currency => 'USD',
