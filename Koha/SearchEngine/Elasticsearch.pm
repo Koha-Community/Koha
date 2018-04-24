@@ -284,23 +284,12 @@ sub reset_elasticsearch_mappings {
 
     while ( my ( $index_name, $fields ) = each %$indexes ) {
         while ( my ( $field_name, $data ) = each %$fields ) {
-            my $field_type = $data->{type};
-            my $field_label = $data->{label};
+            my %sf_params = map { $_ => $data->{$_} } grep { exists $data->{$_} } qw/ type label weight facet_order /;
+            $sf_params{name} = $field_name;
+
+            my $search_field = Koha::SearchFields->find_or_create( \%sf_params, { key => 'name' } );
+
             my $mappings = $data->{mappings};
-            my $facet_order = $data->{facet_order};
-            my $search_field = Koha::SearchFields->find_or_create({
-                name  => $field_name,
-                label => $field_label,
-                type  => $field_type,
-            },
-            {
-                key => 'name'
-            });
-            $search_field->update(
-                {
-                    facet_order => $facet_order
-                }
-            );
             for my $mapping ( @$mappings ) {
                 my $marc_field = Koha::SearchMarcMaps->find_or_create({ index_name => $index_name, marc_type => $mapping->{marc_type}, marc_field => $mapping->{marc_field} });
                 $search_field->add_to_search_marc_maps($marc_field, { facet => $mapping->{facet} || 0, suggestible => $mapping->{suggestible} || 0, sort => $mapping->{sort} } );
