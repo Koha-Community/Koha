@@ -145,12 +145,12 @@
 
             [% IF ( searchdesc ) %]
                 [% BLOCK sort_search_query ~%]
-                    [% FOREACH QUERY_INPUT IN QUERY_INPUTS ~%]
+                    [%~ FOREACH QUERY_INPUT IN QUERY_INPUTS ~%]
                         &amp;[% QUERY_INPUT.input_name |html %]=[% QUERY_INPUT.input_value |html %]
-                    [%~ END %]
-                    [% FOREACH LIMIT_INPUT IN LIMIT_INPUTS ~%]
+                    [%~ END ~%]
+                    [%~ FOREACH LIMIT_INPUT IN LIMIT_INPUTS ~%]
                         &amp;[% LIMIT_INPUT.input_name |html %]=[% LIMIT_INPUT.input_value |html %]
-                    [%~ END %]
+                    [%~ END ~%]
                 [%~ END %]
             [% END %]
 
