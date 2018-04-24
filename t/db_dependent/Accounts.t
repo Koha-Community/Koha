@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::MockModule;
 use Test::Warn;
 
@@ -846,7 +846,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
 
 subtest "Koha::Account::Line::void tests" => sub {
 
-    plan tests => 14;
+    plan tests => 12;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -877,11 +877,6 @@ subtest "Koha::Account::Line::void tests" => sub {
         }
     );
 
-    # Test debit and credit methods fo Koha::Account::Offset
-    my $account_offset = Koha::Account::Offsets->find( { credit_id => $id, debit_id => $line1->id } );
-    is( $account_offset->debit->id, $line1->id, "Koha::Account::Offset->debit gets correct accountline" );
-    is( $account_offset->credit->id, $id, "Koha::Account::Offset->credit gets correct accountline" );
-
     my $account_payment = Koha::Account::Lines->find( $id );
 
     is( $account->balance(), 0, "Account balance is 0" );
@@ -905,6 +900,53 @@ subtest "Koha::Account::Line::void tests" => sub {
 
     is( $line1->amountoutstanding+0, 10, 'First fee again has amount outstanding of 10' );
     is( $line2->amountoutstanding+0, 20, 'Second fee again has amount outstanding of 20' );
+};
+
+subtest "Koha::Account::Offset credit & debit tests" => sub {
+
+    plan tests => 4;
+
+    # Create a borrower
+    my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
+    my $branchcode   = $builder->build({ source => 'Branch' })->{ branchcode };
+
+    my $borrower = Koha::Patron->new( {
+        cardnumber => 'kyliehall',
+        surname => 'Hall',
+        firstname => 'Kylie',
+    } );
+    $borrower->categorycode( $categorycode );
+    $borrower->branchcode( $branchcode );
+    $borrower->store;
+
+    my $account = Koha::Account->new({ patron_id => $borrower->id });
+
+    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 10, amountoutstanding => 10 })->store();
+    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 20, amountoutstanding => 20 })->store();
+
+    my $id = $account->pay(
+        {
+            lines  => [$line1, $line2],
+            amount => 30,
+        }
+    );
+
+    # Test debit and credit methods for Koha::Account::Offset
+    my $account_offset = Koha::Account::Offsets->find( { credit_id => $id, debit_id => $line1->id } );
+    is( $account_offset->debit->id, $line1->id, "Koha::Account::Offset->debit gets correct accountline" );
+    is( $account_offset->credit->id, $id, "Koha::Account::Offset->credit gets correct accountline" );
+
+    $account_offset = Koha::Account::Offset->new(
+        {
+            credit_id => undef,
+            debit_id  => undef,
+            type      => 'Payment',
+            amount    => 0,
+        }
+    )->store();
+
+    is( $account_offset->debit, undef, "Koha::Account::Offset->debit returns undef if no associated debit" );
+    is( $account_offset->credit, undef, "Koha::Account::Offset->credit returns undef if no associated credit" );
 };
 
 1;
