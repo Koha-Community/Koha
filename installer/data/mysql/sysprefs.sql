@@ -218,6 +218,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IdRef','0','','Disable/enable the IdRef webservice from the OPAC detail page.','YesNo'),
 ('ILLModule','0','If ON, enables the interlibrary loans module.','','YesNo'),
 ('ILLModuleCopyrightClearance','','70|10','Enter text to enable the copyright clearance stage of request creation. Text will be displayed','Textarea'),
+('ILLOpacbackends',NULL,NULL,'ILL backends to enabled for OPAC initiated requests','multiple'),
 ('ILS-DI','0','','Enables ILS-DI services at OPAC.','YesNo'),
 ('ILS-DI:AuthorizedIPs','','Restricts usage of ILS-DI to some IPs','.','Free'),
 ('ImageLimit','5','','Limit images stored in the database by the Patron Card image manager to this number.','Integer'),

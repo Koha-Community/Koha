@@ -50,7 +50,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 });
 
 # Are we able to actually work?
-my $backends = Koha::Illrequest::Config->new->available_backends;
+my $reduced  = C4::Context->preference('ILLOpacbackends');
+my $backends = Koha::Illrequest::Config->new->available_backends($reduced);
 my $backends_available = ( scalar @{$backends} > 0 );
 $template->param( backends_available => $backends_available );
 

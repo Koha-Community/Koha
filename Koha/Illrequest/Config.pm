@@ -104,16 +104,21 @@ sub backend_dir {
 
 =head3 available_backends
 
-Return a list of available backends.
+  $backends = $config->available_backends;
+  $backends = $config->abailable_backends($reduced);
+
+Return a list of available backends, if passed a | delimited list it
+will filter those backends down to only those present in the list.
 
 =cut
 
 sub available_backends {
-    my ( $self ) = @_;
+    my ( $self, $reduce ) = @_;
     my $backend_dir = $self->backend_dir;
     my @backends = ();
     @backends = glob "$backend_dir/*" if ( $backend_dir );
     @backends = map { basename($_) } @backends;
+    @backends = grep { $_ =~ /$reduce/ } @backends if $reduce;
     return \@backends;
 }
 
