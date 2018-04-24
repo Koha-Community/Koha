@@ -119,6 +119,7 @@ It includes 4 enhancements, 28 bugfixes.
 ### Test Suite
 
 - [[20311]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20311) get_age tests can fail on February 28th
+- [[20474]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20474) Passwordrecovery.t should mock Mail::Sendmail::sendmail
 
 ### Tools
 
