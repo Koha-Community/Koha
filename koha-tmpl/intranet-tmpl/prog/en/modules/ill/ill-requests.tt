@@ -193,12 +193,6 @@
             }
         };
 
-        // Toggle request attributes in Illview
-        $('#toggle_requestattributes').on('click', function(e) {
-            e.preventDefault();
-            $('#requestattributes').toggleClass('content_hidden');
-        });
-
         // Filter partner list
         $('#partner_filter').keyup(function() {
             var needle = $('#partner_filter').val();
@@ -214,6 +208,12 @@
                     $(this).hide();
                 }
             });
+        });
+
+        // Display the modal containing request supplier metadata
+        $('#ill-request-display-metadata').on('click', function(e) {
+            e.preventDefault();
+            $('#dataPreview').modal({show:true});
         });
 
         // Get our data from the API and process it prior to passing
@@ -496,6 +496,10 @@
                                 </a>
                             [% END %]
                         [% END %]
+                        <a title="Display supplier metadata" id="ill-request-display-metadata" class="btn btn-sm btn-default pull-right" href="#">
+                            <span class="fa fa-eye"></span>
+                            Display supplier metadata
+                        </a>
                     </div>
                     <div id="ill-view-panel" class="panel panel-default">
                         <div class="panel-heading">
@@ -562,17 +566,29 @@
                                     </div>
                                 [% END %]
                             </div>
-                            <div class="rows">
-                                <h3><a id="toggle_requestattributes" href="#">Toggle full supplier metadata</a></h3>
-                                <div id="requestattributes" class="content_hidden">
-                                    [% FOREACH attr IN request.illrequestattributes %]
+                        </div>
+                    </div>
+
+                    <div id="dataPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="dataPreviewLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+                                    <h3 id="dataPreviewLabel"> Supplier metadata</h3>
+                                </div>
+                                <div class="modal-body">
+                                    <div id="requestattributes">
+                                        [% FOREACH attr IN request.illrequestattributes %]
                                         <div class="requestattr-[% attr.type %]">
                                             <span class="label">[% attr.type %]:</span>
                                             [% attr.value %]
                                         </div>
-                                    [% END %]
+                                            [% END %]
+                                    </div>
                                 </div>
-
+                                <div class="modal-footer">
+                                    <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+                                </div>
                             </div>
                         </div>
                     </div>
