@@ -28,7 +28,7 @@
               [% search_options = default_fields.merge(pref_fields).unique %]
               [% FOREACH s_o IN search_options %]
                   [% display_name = PROCESS patron_fields name=s_o %]
-                  [% NEXT IF display_name.length == 5 %]
+                  [% NEXT IF !display_name.length %]
                   [% IF searchfieldstype == s_o %]
                       <option selected="selected" value=[% s_o | html %]>[% display_name | $raw %]</option>
                   [% ELSE %]
