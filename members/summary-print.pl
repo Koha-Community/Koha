@@ -49,7 +49,7 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 my $total = $patron->account->balance;
 my $accts = Koha::Account::Lines->search(
-    { borrowernumber => $patron->borrowernumber },
+    { borrowernumber => $patron->borrowernumber, amountoutstanding => { '!=' => 0 } },
     { order_by       => { -desc => 'accountlines_id' } }
 );
 
