@@ -15941,6 +15941,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20073 - Add new types for Elasticsearch fields)\n";
 }
 
+$DBversion = '17.12.00.038';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+        UPDATE language_rfc4646_to_iso639 SET iso639_2_code = 'slo' WHERE iso639_2_code = 'slk' AND rfc4646_subtag = 'sk';
+    } );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20245 - Use Bibliographic code value for Slovak language)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
