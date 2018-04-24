@@ -70,6 +70,12 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->{location}, $location, "The location should not have been modified" );
     is( $getitem->{permanent_location}, $location, "The permanent_location should have been set to the location value" );
 
+
+    # Do not modify anything, and do not explode!
+    my $dbh = C4::Context->dbh;
+    local $dbh->{RaiseError} = 1;
+    ModItem({}, $bibnum, $itemnumber);
+
     # Modify item; setting barcode.
     ModItem({ barcode => '987654321' }, $bibnum, $itemnumber);
     my $moditem = GetItem($itemnumber);
