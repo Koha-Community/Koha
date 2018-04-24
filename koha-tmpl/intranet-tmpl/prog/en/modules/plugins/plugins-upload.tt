@@ -1,5 +1,5 @@
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Plugins &rsaquo; Upload Plugin
+<title>Koha &rsaquo; Tools &rsaquo; Plugins &rsaquo; Upload plugin
  </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
@@ -11,16 +11,14 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a>
 &rsaquo; <a href="/cgi-bin/koha/plugins/plugins-home.pl">Plugins</a>
-&rsaquo; Upload Plugins
+&rsaquo; Upload plugins
 </div>
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
-        <div id="yui-main">
-    <div class="yui-b">
-        <div class="yui-g">
-            <div class="yui-u first">
-                <h1>Upload Koha Plugin</h1>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-3 col-md-6 col-md-offset-3">
+
+                <h1>Upload Koha plugin</h1>
                 [% IF ( ERRORS ) %]
                 <div class="dialog alert">
                     [% FOREACH ERROR IN ERRORS %]
@@ -50,6 +48,5 @@
 
             </div>
         </div>
-    </div>
-</div>
+
 [% INCLUDE 'intranet-bottom.inc' %]
