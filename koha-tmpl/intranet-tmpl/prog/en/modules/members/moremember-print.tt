@@ -93,31 +93,35 @@
         </table>
     [% END %]
     [% IF accounts && totaldue != 0 %]
-        <table>
+        <table id="table_account_fines">
             <caption>Account fines and payments</caption>
-            <tr>
-                <th>Description of charges</th>
-                <th>Date</th>
-                <th>Amount</th>
-                <th>Outstanding</th>
-            </tr>
+            <thead>
+              <tr>
+                  <th>Date</th>
+                  <th>Description of charges</th>
+                  <th>Note</th>
+                  <th>Amount</th>
+                  <th>Outstanding</th>
+                </tr>
+            </thead>
 
             [% FOREACH account IN accounts %]
-                <tr>
-                    <td>
-                        [% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | html %]&amp;itemnumber=[% account.itemnumber | html %]">[% END %]
-                        [% account.description | html %]&nbsp;[% IF account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' %] [% account.item.biblio.title | html %][% END %]
-                        [% IF ( account.itemnumber ) %]</a>[% END %]
-                    </td>
-                    <td>[% account.date | $KohaDates %]</td>
-                    <td style="text-align:right;">[% account.amount | $Price | html %]</td>
-                    <td style="text-align:right;">[% account.amountoutstanding | $Price | html %]</td>
+               <tr>
+                  <td>[% account.date | $KohaDates %]</td>
+                  <td>
+                    [% INCLUDE 'accounttype.inc' accountline => account %]
+                    [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
+                    [%- IF account.description %], [% account.description | html %][% END %]
+                    &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber | html %]">[% account.item.biblio.title | html %]</a>[% END %]</td>
+                  <td>[% account.note | html_line_break %]</td>
+                  [% IF ( account.amount < 0 ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price | html %]</td>
+                  [% IF ( account.amountoutstanding < 0 ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price | html %]</td>
                 </tr>
             [% END %]
 
             <tfoot>
                 <tr>
-                    <td colspan="3">Total due</td>
+                    <td colspan="4">Total due</td>
                     <td colspan="2" style="text-align:right;">[% totaldue | $Price | html %]</td>
                 </tr>
             </tfoot>
