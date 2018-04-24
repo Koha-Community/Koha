@@ -89,7 +89,7 @@
         [% END %]
         <td>
             [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
-                [% Branches.GetName ( holdingbranch ) %]<br>
+                [% Branches.GetName ( holdingbranch ) %]
             [% END %]
         </td>
         <td><p>[% reserveloo.itemcallnumber %]</p></td>
@@ -102,7 +102,7 @@
         </td>
         <td>
         [% FOREACH loc IN reserveloo.locations %]
-            [% AuthorisedValues.GetByCode('LOC', loc) %]<br>
+            [% AuthorisedValues.GetByCode('LOC', loc) %]
         [% END %]
         </td>
         <td>
@@ -208,7 +208,7 @@
             "aoColumnDefs": [
                 { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] },
-                { "sType": "string", "aTargets": [ "string-sort" ] } //Target columns that use <br> separators and pull-down menus.
+                { "sType": "string", "aTargets": [ "string-sort" ] }
             ],
             "sPaginationType": "full_numbers"
           }, columns_settings);
@@ -218,7 +218,7 @@
             var cD = ColumnData;
             var new_array = new Array();
             for ( j=0 ; j<cD.length ; j++ ) {
-                var split_array = cD[j].split(/<br>/gi);
+                var split_array = cD[j].split(/\n/gi);
                 for ( k=0 ; k<split_array.length ; k++ ){
                     var str = $.trim(split_array[k].replace(/[\n\r]/g, ''));
                     if ($.inArray(str, new_array) == -1 && str.length > 0 ) {
