@@ -15952,6 +15952,23 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20245 - Use Bibliographic code value for Slovak language)\n";
 }
 
+$DBversion = '17.12.00.039';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+        UPDATE language_rfc4646_to_iso639 SET iso639_2_code = 'baq' WHERE iso639_2_code = 'eus' AND rfc4646_subtag = 'eu';
+    } );
+    $dbh->do( q{
+        UPDATE language_rfc4646_to_iso639 SET iso639_2_code = 'mao' WHERE iso639_2_code = 'mri' AND rfc4646_subtag = 'mi';
+    } );
+    $dbh->do( q{
+        UPDATE language_rfc4646_to_iso639 SET iso639_2_code = 'alb' WHERE iso639_2_code = 'sqi' AND rfc4646_subtag = 'sq';
+    } );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20482 - Use Bibliographic code value for Basque, Maori and Albanian languages)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
