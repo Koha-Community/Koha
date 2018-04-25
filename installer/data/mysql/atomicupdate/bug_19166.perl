@@ -13,7 +13,7 @@ if( CheckVersion( $DBversion ) ) {
             PRIMARY KEY (adjustment_id),
             CONSTRAINT invoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
             CONSTRAINT invoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
-        )
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         " );
     $dbh->do("INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('ADJ_REASON')");
     SetVersion( $DBversion );
