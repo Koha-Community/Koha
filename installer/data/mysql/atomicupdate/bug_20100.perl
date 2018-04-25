@@ -1,7 +1,7 @@
 $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( q|
-INSERT IGNORE INTO systempreferences ( value, variable, options, explanation, type ) VALUES ( '0', 'ProtectSuperlibPrivs', NULL, 'If enabled, non-superlibrarians cannot set superlibrarian privileges', 'YesNo' );
+INSERT IGNORE INTO systempreferences ( value, variable, options, explanation, type ) VALUES ( '0', 'ProtectSuperlibrarianPrivileges', NULL, 'If enabled, non-superlibrarians cannot set superlibrarian privileges', 'YesNo' );
     |);
 
     SetVersion( $DBversion );

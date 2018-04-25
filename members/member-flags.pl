@@ -84,7 +84,7 @@ if ($input->param('newflags')) {
     }
     
     $sth = $dbh->prepare("UPDATE borrowers SET flags=? WHERE borrowernumber=?");
-    if( !C4::Context->preference('ProtectSuperlibPrivs') || C4::Context->IsSuperLibrarian ) {
+    if( !C4::Context->preference('ProtectSuperlibrarianPrivileges') || C4::Context->IsSuperLibrarian ) {
         $sth->execute($module_flags, $member);
     } else {
         my $old_flags = $patron->flags // 0;
@@ -206,7 +206,7 @@ $template->param(
     loop           => \@loop,
     csrf_token =>
         Koha::Token->new->generate_csrf( { session_id => scalar $input->cookie('CGISESSID'), } ),
-    disable_superlibrarian_privs => C4::Context->preference('ProtectSuperlibPrivs') ? !C4::Context->IsSuperLibrarian : 0,
+    disable_superlibrarian_privs => C4::Context->preference('ProtectSuperlibrarianPrivileges') ? !C4::Context->IsSuperLibrarian : 0,
 );
 
     output_html_with_http_headers $input, $cookie, $template->output;
