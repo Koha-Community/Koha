@@ -117,6 +117,10 @@ sub run_template_test {
 sub create_template_test {
     my $includes = shift;
     my @exclusions = @_;
+
+    my $interface = $includes =~ s|^.*/([^/]*-tmpl).*$|$1|r;
+    my $theme = ($interface =~ /opac/) ? 'bootstrap' : 'prog';
+
     return sub {
         my $tt = Template->new(
             {
@@ -131,7 +135,7 @@ sub create_template_test {
                 return;
             }
         }
-        my $vars;
+        my $vars = { interface => $interface, theme => $theme };
         my $output;
         if ( ! -d $_ ) {    # skip dirs
             if ( !ok( $tt->process( $_, $vars, \$output ), $_ ) ) {
