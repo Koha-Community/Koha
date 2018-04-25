@@ -36,6 +36,7 @@
         <xsl:variable name="biblionumber" select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/>
         <xsl:variable name="controlField008" select="marc:controlfield[@tag=008]"/>
         <xsl:variable name="controlField003" select="marc:controlfield[@tag=003]"/>
+        <xsl:variable name="primaryauthor" select="marc:datafield[@tag=100 or @tag=110]/marc:subfield[@code='a']"/>
         <xsl:variable name="typeOf008">
             <xsl:choose>
                 <xsl:when test="$leader19='a'">ST</xsl:when>
@@ -328,7 +329,8 @@
                             </xsl:when>
                             <xsl:when test="@code='c'">
                                 <!--  13381 Span class around subfield c so it can be suppressed via css -->
-                                <span class="title_resp_stmt"><xsl:apply-templates/> <xsl:text> </xsl:text> </span>
+                                <!--<span class="title_resp_stmt"><xsl:apply-templates/> <xsl:text> </xsl:text> </span>-->
+			      <xsl:value-of select="$primaryauthor"/>
                             </xsl:when>
                             <xsl:otherwise>
                                 <xsl:apply-templates/>
