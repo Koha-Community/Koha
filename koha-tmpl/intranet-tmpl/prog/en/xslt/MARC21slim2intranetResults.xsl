@@ -928,8 +928,18 @@
         </span>
     </xsl:if>
 
-    <xsl:if test="marc:datafield[@tag=300]">
+    <xsl:if test="marc:datafield[@tag=300] or marc:datafield[@tag=942]/marc:subfield[@code='c']">
     <span class="results_summary description"><span class="label">Description: </span>
+        <xsl:for-each select="marc:datafield[@tag=942]">
+          <xsl:call-template name="subfieldSelect">
+            <xsl:with-param name="codes">c</xsl:with-param>
+            <xsl:with-param name="delimeter"><xsl:text>, </xsl:text></xsl:with-param>
+          </xsl:call-template>
+          <xsl:choose><xsl:when test="position()=last()"><xsl:text></xsl:text></xsl:when><xsl:otherwise><xsl:text> | </xsl:text></xsl:otherwise></xsl:choose>
+	</xsl:for-each>
+	<xsl:if test="marc:datafield[@tag=300] and marc:datafield[@tag=942]/marc:subfield[@code='c']">
+	  <xsl:text>, </xsl:text>
+	</xsl:if>
         <xsl:for-each select="marc:datafield[@tag=300]">
             <xsl:call-template name="chopPunctuation">
               <xsl:with-param name="chopString">
