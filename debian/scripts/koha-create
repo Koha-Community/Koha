@@ -617,8 +617,6 @@ then
         mysql $MYSQL_OPTIONS <<eof
 CREATE DATABASE \`$mysqldb\`;
 CREATE USER \`$mysqluser\`@'$mysql_hostname' IDENTIFIED BY '$mysqlpwd';
-CREATE USER \`$mysqluser\`@'%' IDENTIFIED BY '$mysqlpwd';
-GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`;
 GRANT ALL PRIVILEGES ON \`$mysqldb\`.* TO \`$mysqluser\`@'$mysql_hostname';
 FLUSH PRIVILEGES;
 eof
