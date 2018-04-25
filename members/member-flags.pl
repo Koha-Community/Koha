@@ -84,18 +84,13 @@ if ($input->param('newflags')) {
     }
     
     $sth = $dbh->prepare("UPDATE borrowers SET flags=? WHERE borrowernumber=?");
-    if( !C4::Context->preference('ProtectSuperlibrarianPrivileges') || C4::Context->IsSuperLibrarian ) {
-        $sth->execute($module_flags, $member);
-    } else {
-        my $old_flags = $patron->flags // 0;
-        if( ( $old_flags == 1 || $module_flags == 1 ) &&
-              $old_flags != $module_flags ) {
-           die "Non-superlibrarian is changing superlibrarian privileges"; # Interface should not allow this, so we can just die here
-        } else {
-            $sth->execute($module_flags, $member);
-        }
+    my $old_flags = $patron->flags // 0;
+    if( ( $old_flags == 1 || $module_flags == 1 ) &&
+      $old_flags != $module_flags ) {
+        die "Non-superlibrarian is changing superlibrarian privileges" if !C4::Context->IsSuperLibrarian && C4::Context->preference('ProtectSuperlibrarianPrivileges'); # Interface should not allow this, so we can just die here
     }
-    
+    $sth->execute($module_flags, $member);
+
     # deal with subpermissions
     $sth = $dbh->prepare("DELETE FROM user_permissions WHERE borrowernumber = ?");
     $sth->execute($member); 
