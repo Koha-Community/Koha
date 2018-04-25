@@ -4,6 +4,7 @@
 [% USE Branches %]
 [% USE Categories %]
 [% USE ItemTypes %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title |html %]</title>
@@ -12,218 +13,8 @@
 [% END %]
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") %]
-[% INCLUDE 'datatables.inc' %]
-[% INCLUDE 'calendar.inc' %]
-[% Asset.js("js/circ-patron-search-results.js") %]
-<script type="text/javascript">
-    // <![CDATA[
-var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
-var patron_homebranch = "[% Branches.GetName( patron.branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
-var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
-    [% itemloo.itemnumber %]: {
-        homebranch: "[% Branches.GetName( itemloo.homebranch ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
-        holdallowed: [% itemloo.holdallowed %]
-    },
-[% END %][% END %][% END %]
-};
-var MSG_NO_ITEMS_AVAILABLE = _("A hold cannot be requested on any of these items.");
-
-$(document).ready(function() {
-    function ToggleHoldsToPlace() {
-        if ( $("#requestany").prop('checked') ) {
-            $("#holds_to_place_count").prop('disabled', false);
-        } else {
-            $("#holds_to_place_count").prop('disabled', true);
-        }
-    }
-    ToggleHoldsToPlace();
-    $("#requestany").on('change', function(){
-        ToggleHoldsToPlace();
-    });
-
-    [% IF AutoResumeSuspendedHolds %]
-        $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
-    [% END %]
-
-    var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
-        'bPaginate': false,
-        "sDom": '<"top pager"ilf>t',
-        "aoColumnDefs": [
-            { "sType": "title-string", "aTargets" : [ "title-string" ] }
-        ]
-    }));
-
-    //Override fieldset styling for dataTables search box
-    $("div.top.pager").css("margin-left","1em");
-    $(".dataTables_filter label").css({
-        "width":"auto",
-        "margin-right":"0em"
-    });
-
-});
-
-function check() {
-    var msg = "";
-    var count_reserv = 0;
-
-    // check if we have checkitem form
-    if (document.form.checkitem){
-        for (i=0;i<document.form.checkitem.length;i++){
-            if (document.form.checkitem[i].checked == true) {
-                count_reserv++ ;
-            }
-        }
-        // for only one item, check the checkitem without consider the loop checkitem
-        if (i==0){
-            if (document.form.checkitem.checked == true) {
-                count_reserv++;
-            }
-        }
-    }
-
-    if (document.form.requestany.checked == true){
-        count_reserv++ ;
-    }
-
-    if (count_reserv == "0"){
-        msg += (_("- Please select an item to place a hold") + "\n");
-    }
-
-    if (msg == "") {
-        $('#hold-request-form').preventDoubleFormSubmit();
-        return(true);
-    } else {
-        alert(msg);
-        return(false);
-    }
-}
-
-function checkMultiHold() {
-    var spans = $(".multi_hold_item");
-    if ($(spans).size() == 0) {
-        alert(MSG_NO_ITEMS_AVAILABLE);
-        return false;
-    }
-
-    var biblionumbers = "";
-    $(spans).each(function() {
-        var bibnum = $(this).attr("title");
-        biblionumbers += bibnum + "/";
-    });
-
-    var badSpans = $(".not_holdable");
-    var badBibs = "";
-    $(badSpans).each(function() {
-        var bibnum = $(this).attr("title");
-        badBibs += bibnum + "/";
-    });
-
-    $("#multi_hold_bibs").val(biblionumbers);
-    $("#bad_bibs").val(badBibs);
-
-    $('#hold-request-form').preventDoubleFormSubmit();
-
-    return true;
-}
-
- $(document).ready(function() {
-    $("input.needsoverride").click(function() { // This must be before the radio button/checkbox switch logic
-        var itemnumber = this.value;
-        var msg = '';
-
-        switch (override_items[itemnumber].holdallowed) {
-            case 0: msg = _("This item normally cannot be put on hold."); break;
-            case 1: msg = _("This item normally cannot be put on hold except for patrons from %s.").format(override_items[itemnumber].homebranch); break;
-        }
-
-        msg += "\n\n" + _("Place hold on this item?");
-
-        return confirm(msg);
-    });
-    $("input.warning").click(function() {
-        return confirm( _("None of these items can normally be put on hold for this patron.") + "\n\n" + _("Place hold?") );
-    });
-    $("#requestany").click(function() {
-        if(this.checked){
-            $("input[name=checkitem]").each(function() {
-                $(this).prop("checked", false);
-            });
-        }
-    });
-    $("input[name=checkitem]").click(function() {
-        onechecked = 0;
-        $("input[name=checkitem]").each(function() {
-            if(this.checked){
-                onechecked = 1;
-            }
-        });
-        if(onechecked == 1){
-            $("#requestany").prop("checked", false);
-        } else {
-            $("#requestany").prop("checked",true);
-        }
-    });
-    var prev_rank_request;
-    $("select[name=rank-request]").on("focus", function() {
-        prev_rank_request = $(this).val();
-    }).change(function() {
-        var row = $(this).parents("tr:first");
-        var value = parseInt($(this).val());
-        var after = row.parent().find("tr:nth-child("+(value+1)+")");
-
-        if (prev_rank_request > value) {
-            row.insertBefore(after);
-        } else {
-            row.insertAfter(after);
-        }
-
-        var next_priority = 1;
-        $("select[name=rank-request]").each(function () {
-            $(this).val(next_priority);
-            next_priority++;
-        });
-    });
-
-    $(".clear-date").on("click",function(e){
-        e.preventDefault();
-        var fieldID = this.id.replace("clear-date-","");
-        $("#" + fieldID).val("");
-    });
-
-    // Confirm cancelation of hold
-    $(".cancel-hold").on("click",function(e) {
-        return confirmDelete(MSG_CONFIRM_DELETE_HOLD);
-    });
-
-
-[% UNLESS ( patron || patron.borrowernumber || borrowers || noitems ) %]
-    [% IF ( CircAutocompl ) %]
-    $( "#patron" ).autocomplete({
-        source: "/cgi-bin/koha/circ/ysearch.pl",
-        minLength: 3,
-        select: function( event, ui ) {
-            $( "#patron" ).val( ui.item.cardnumber );
-            $( "#holds_patronsearch" ).submit();
-            return false;
-        }
-    })
-    .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-        return $( "<li></li>" )
-        .data( "ui-autocomplete-item", item )
-        .append( "<a>" + item.surname + ", " + item.firstname +
-                 " (" + item.cardnumber + ") <small>" + item.address +
-                 " " + item.city + " " + item.zipcode + " " +
-                 item.country + "</small></a>" )
-        .appendTo( ul );
-    };
-    [% END %]
-[% END %]
-
- });
-
-// ]]>
-</script>
 </head>
+
 <body id="circ_request" class="catalog">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
@@ -921,4 +712,215 @@ function checkMultiHold() {
 
 </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'calendar.inc' %]
+    [% Asset.js("js/circ-patron-search-results.js") %]
+    <script>
+        var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
+        var patron_homebranch = "[% Branches.GetName( patron.branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]";
+        var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
+        [% itemloo.itemnumber %]: {
+            homebranch: "[% Branches.GetName( itemloo.homebranch ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]",
+            holdallowed: [% itemloo.holdallowed %]
+            },
+            [% END %][% END %][% END %]
+        };
+        var MSG_NO_ITEMS_AVAILABLE = _("A hold cannot be requested on any of these items.");
+
+        $(document).ready(function() {
+            function ToggleHoldsToPlace() {
+                if ( $("#requestany").prop('checked') ) {
+                    $("#holds_to_place_count").prop('disabled', false);
+                } else {
+                    $("#holds_to_place_count").prop('disabled', true);
+                }
+            }
+            ToggleHoldsToPlace();
+            $("#requestany").on('change', function(){
+                ToggleHoldsToPlace();
+            });
+
+            [% IF AutoResumeSuspendedHolds %]
+                $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);
+            [% END %]
+
+            var my_table = $("#requestspecific").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'bPaginate': false,
+                "sDom": '<"top pager"ilf>t',
+                "aoColumnDefs": [
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ]
+            }));
+
+            //Override fieldset styling for dataTables search box
+            $("div.top.pager").css("margin-left","1em");
+            $(".dataTables_filter label").css({
+                "width":"auto",
+                "margin-right":"0em"
+            });
+
+        });
+
+        function check() {
+            var msg = "";
+            var count_reserv = 0;
+
+            // check if we have checkitem form
+            if (document.form.checkitem){
+                for (i=0;i<document.form.checkitem.length;i++){
+                    if (document.form.checkitem[i].checked == true) {
+                        count_reserv++ ;
+                    }
+                }
+                // for only one item, check the checkitem without consider the loop checkitem
+                if (i==0){
+                    if (document.form.checkitem.checked == true) {
+                        count_reserv++;
+                    }
+                }
+            }
+
+            if (document.form.requestany.checked == true){
+                count_reserv++ ;
+            }
+
+            if (count_reserv == "0"){
+                msg += (_("- Please select an item to place a hold") + "\n");
+            }
+
+            if (msg == "") {
+                $('#hold-request-form').preventDoubleFormSubmit();
+                return(true);
+            } else {
+                alert(msg);
+                return(false);
+            }
+        }
+
+        function checkMultiHold() {
+            var spans = $(".multi_hold_item");
+            if ($(spans).size() == 0) {
+                alert(MSG_NO_ITEMS_AVAILABLE);
+                return false;
+            }
+
+            var biblionumbers = "";
+            $(spans).each(function() {
+                var bibnum = $(this).attr("title");
+                biblionumbers += bibnum + "/";
+            });
+
+            var badSpans = $(".not_holdable");
+            var badBibs = "";
+            $(badSpans).each(function() {
+                var bibnum = $(this).attr("title");
+                badBibs += bibnum + "/";
+            });
+
+            $("#multi_hold_bibs").val(biblionumbers);
+            $("#bad_bibs").val(badBibs);
+
+            $('#hold-request-form').preventDoubleFormSubmit();
+
+            return true;
+        }
+
+         $(document).ready(function() {
+            $("input.needsoverride").click(function() { // This must be before the radio button/checkbox switch logic
+                var itemnumber = this.value;
+                var msg = '';
+
+                switch (override_items[itemnumber].holdallowed) {
+                    case 0: msg = _("This item normally cannot be put on hold."); break;
+                    case 1: msg = _("This item normally cannot be put on hold except for patrons from %s.").format(override_items[itemnumber].homebranch); break;
+                }
+
+                msg += "\n\n" + _("Place hold on this item?");
+
+                return confirm(msg);
+            });
+            $("input.warning").click(function() {
+                return confirm( _("None of these items can normally be put on hold for this patron.") + "\n\n" + _("Place hold?") );
+            });
+            $("#requestany").click(function() {
+                if(this.checked){
+                    $("input[name=checkitem]").each(function() {
+                        $(this).prop("checked", false);
+                    });
+                }
+            });
+            $("input[name=checkitem]").click(function() {
+                onechecked = 0;
+                $("input[name=checkitem]").each(function() {
+                    if(this.checked){
+                        onechecked = 1;
+                    }
+                });
+                if(onechecked == 1){
+                    $("#requestany").prop("checked", false);
+                } else {
+                    $("#requestany").prop("checked",true);
+                }
+            });
+            var prev_rank_request;
+            $("select[name=rank-request]").on("focus", function() {
+                prev_rank_request = $(this).val();
+            }).change(function() {
+                var row = $(this).parents("tr:first");
+                var value = parseInt($(this).val());
+                var after = row.parent().find("tr:nth-child("+(value+1)+")");
+
+                if (prev_rank_request > value) {
+                    row.insertBefore(after);
+                } else {
+                    row.insertAfter(after);
+                }
+
+                var next_priority = 1;
+                $("select[name=rank-request]").each(function () {
+                    $(this).val(next_priority);
+                    next_priority++;
+                });
+            });
+
+            $(".clear-date").on("click",function(e){
+                e.preventDefault();
+                var fieldID = this.id.replace("clear-date-","");
+                $("#" + fieldID).val("");
+            });
+
+            // Confirm cancelation of hold
+            $(".cancel-hold").on("click",function(e) {
+                return confirmDelete(MSG_CONFIRM_DELETE_HOLD);
+            });
+
+            [% UNLESS ( patron || patron.borrowernumber || borrowers || noitems ) %]
+                [% IF ( CircAutocompl ) %]
+                $( "#patron" ).autocomplete({
+                    source: "/cgi-bin/koha/circ/ysearch.pl",
+                    minLength: 3,
+                    select: function( event, ui ) {
+                        $( "#patron" ).val( ui.item.cardnumber );
+                        $( "#holds_patronsearch" ).submit();
+                        return false;
+                    }
+                })
+                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    return $( "<li></li>" )
+                    .data( "ui-autocomplete-item", item )
+                    .append( "<a>" + item.surname + ", " + item.firstname +
+                             " (" + item.cardnumber + ") <small>" + item.address +
+                             " " + item.city + " " + item.zipcode + " " +
+                             item.country + "</small></a>" )
+                    .appendTo( ul );
+                };
+                [% END %]
+            [% END %]
+
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
