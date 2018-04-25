@@ -443,7 +443,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('printcirculationslips','1','','If ON, enable printing circulation receipts','YesNo'),
 ('PrintNoticesMaxLines','0','','If greater than 0, sets the maximum number of lines an overdue notice will print. If the number of items is greater than this number, the notice will end with a warning asking the borrower to check their online account for a full list of overdue items.','Integer'),
 ('ProcessingFeeNote', '', NULL, 'Set the text to be recorded in the column note, table accountlines when the processing fee (defined in item type) is applied', 'textarea'),
-('ProtectSuperlibrarianPrivileges','0',NULL,'If enabled, non-superlibrarians cannot set superlibrarian privileges','YesNo'),
+('ProtectSuperlibrarianPrivileges','1',NULL,'If enabled, non-superlibrarians cannot set superlibrarian privileges','YesNo'),
 ('PurgeSuggestionsOlderThan', '', NULL, 'If this script is called without the days parameter', 'Integer'),
 ('QueryAutoTruncate','1',NULL,'If ON, query truncation is enabled by default','YesNo'),
 ('QueryFuzzy','1',NULL,'If ON, enables fuzzy option for searches','YesNo'),
