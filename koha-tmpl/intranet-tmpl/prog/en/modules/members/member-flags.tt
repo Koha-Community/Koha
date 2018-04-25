@@ -37,14 +37,14 @@
         [% END %]
 			[% IF ( loo.checked ) %]
           [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-              <input type="checkbox" disabled="disabled" class="flag parent superlib" id="flag-[% loo.bit %]_disabled" name="flag" value="[% loo.flag %]" checked="checked" />
+              <input type="checkbox" disabled="disabled" class="flag parent superlib" id="flag-[% loo.bit %]_disabled" name="flag" value="[% loo.flag %]" checked="checked" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
               <input type="hidden" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" >
           [% ELSE %]
               <input type="checkbox" class="flag parent" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" checked="checked" />
           [% END %]
 			[% ELSE %]
           [% IF disable_superlibrarian_privs && loo.bit == 0 %]
-              <input type="checkbox" disabled="disabled" class="flag parent" id="flag-[% loo.bit %]_disabled" name="flag" value="[% loo.flag %]" />
+              <input type="checkbox" disabled="disabled" class="flag parent" id="flag-[% loo.bit %]_disabled" name="flag" value="[% loo.flag %]" title="The system preference ProtectSuperlibrarianPrivileges is enabled" />
           [% ELSE %]
               <input type="checkbox" class="flag parent" id="flag-[% loo.bit %]" name="flag" value="[% loo.flag %]" />
           [% END %]
