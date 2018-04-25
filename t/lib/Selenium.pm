@@ -22,7 +22,7 @@ use Carp qw( croak );
 use C4::Context;
 
 use base qw(Class::Accessor);
-__PACKAGE__->mk_accessors(qw(login password base_url selenium_addr selenium_port driver));
+__PACKAGE__->mk_accessors(qw(login password base_url opac_base_url selenium_addr selenium_port driver));
 
 sub new {
     my ( $class, $params ) = @_;
@@ -31,6 +31,7 @@ sub new {
     $self->{login}    = $params->{login}    || $config->{login};
     $self->{password} = $params->{password} || $config->{password};
     $self->{base_url} = $params->{base_url} || $config->{base_url};
+    $self->{opac_base_url} = $params->{opac_base_url} || $config->{opac_base_url};
     $self->{selenium_addr} = $params->{selenium_addr} || $config->{selenium_addr};
     $self->{selenium_port} = $params->{selenium_port} || $config->{selenium_port};
     $self->{driver} = Selenium::Remote::Driver->new(
@@ -54,6 +55,7 @@ sub config {
         login    => $ENV{KOHA_USER} || 'koha',
         password => $ENV{KOHA_PASS} || 'koha',
         base_url => ( $ENV{KOHA_INTRANET_URL} || C4::Context->preference("staffClientBaseURL") ) . "/cgi-bin/koha/",
+        opac_base_url => ( $ENV{KOHA_OPAC_URL} || C4::Context->preference("OPACBaseURL") ) . "/cgi-bin/koha/",
         selenium_addr => $ENV{SELENIUM_ADDR} || 'localhost',
         selenium_port => $ENV{SELENIUM_PORT} || 4444,
     };
@@ -65,6 +67,19 @@ sub auth {
     $login ||= $self->login;
     $password ||= $self->password;
     my $mainpage = $self->base_url . 'mainpage.pl';
+
+    $self->driver->get($mainpage);
+    $self->fill_form( { userid => $login, password => $password } );
+    my $login_button = $self->driver->find_element('//input[@id="submit"]');
+    $login_button->submit();
+}
+
+sub opac_auth {
+    my ( $self, $login, $password ) = @_;
+
+    $login ||= $self->login;
+    $password ||= $self->password;
+    my $mainpage = $self->base_url . 'opac-main.pl';
 
     $self->driver->get($mainpage);
     $self->fill_form( { userid => $login, password => $password } );
