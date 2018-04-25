@@ -226,6 +226,11 @@ EOS
         $issue_date = $yesterday->clone;
         AddIssue( $borrower, $barcode2, $date_due_in_time, undef, $issue_date );
 
+        # Set timestamps to the same value to avoid a different order
+        Koha::Checkouts->search(
+            { borrowernumber => $borrower->{borrowernumber} }
+        )->update( { timestamp => dt_from_string } );
+
         $expected_slip = <<EOS;
 Checked out:
 
