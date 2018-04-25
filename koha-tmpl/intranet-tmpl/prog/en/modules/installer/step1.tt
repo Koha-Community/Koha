@@ -14,84 +14,88 @@
     [% END %]
 </title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
+</head>
 
-<div class="container-fluid">
-    <div class="row">
-        <div id="installer-step1" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
 
-            <h1 id="logo"><a href="#">Koha</a></h1>
+<body id="installer" class="installer">
+    <div class="container-fluid">
+        <div class="row">
+            <div id="installer-step1" class="installer-main col-sm-8 col-sm-offset-2 col-md-8 col-md-offset-2">
 
-            [% UNLESS ( language ) %]
-                <h2>Web installer &rsaquo; Choose your language</h2>
-                <p>You are about to install Koha.</p>
+                <h1 id="logo"><a href="#">Koha</a></h1>
 
-                <p>Please pick your language from the following list. If your language is not listed, please inform your system administrator.</p>
+                [% UNLESS ( language ) %]
+                    <h2>Web installer &rsaquo; Choose your language</h2>
+                    <p>You are about to install Koha.</p>
 
-                <form name="language" method="post" action="install.pl">
-                    <div class="form-group">
-                        <label for="language">Select a language: </label>
-                        <select id="language" name="language">
-                            [% IF ( installer_languages_loop ) %]
-                                [% FOREACH installer_languages_loo IN installer_languages_loop %]
-                                    [% IF ( installer_languages_loo.plural ) %]
-                                        <optgroup label="[% installer_languages_loo.language | html %]">
-                                            [% FOREACH sublanguages_loo IN installer_languages_loo.sublanguages_loop %]
-                                                <option value="[% sublanguages_loo.rfc4646_subtag | html %]">[% IF ( sublanguages_loo.native_description ) %][% sublanguages_loo.native_description | html %][% ELSE %][% sublanguages_loo.rfc4646_subtag | html %][% END %]</option>
-                                            [% END %]
-                                        </optgroup>
-                                    [% ELSE %]
-                                        <option value="[% installer_languages_loo.rfc4646_subtag | html %]">[% IF ( installer_languages_loo.native_description ) %][% installer_languages_loo.native_description | html %][% ELSE %][% installer_languages_loo.rfc4646_subtag | html %][% END %]</option>
+                    <p>Please pick your language from the following list. If your language is not listed, please inform your system administrator.</p>
+
+                    <form name="language" method="post" action="install.pl">
+                        <div class="form-group">
+                            <label for="language">Select a language: </label>
+                            <select id="language" name="language">
+                                [% IF ( installer_languages_loop ) %]
+                                    [% FOREACH installer_languages_loo IN installer_languages_loop %]
+                                        [% IF ( installer_languages_loo.plural ) %]
+                                            <optgroup label="[% installer_languages_loo.language | html %]">
+                                                [% FOREACH sublanguages_loo IN installer_languages_loo.sublanguages_loop %]
+                                                    <option value="[% sublanguages_loo.rfc4646_subtag | html %]">[% IF ( sublanguages_loo.native_description ) %][% sublanguages_loo.native_description | html %][% ELSE %][% sublanguages_loo.rfc4646_subtag | html %][% END %]</option>
+                                                [% END %]
+                                            </optgroup>
+                                        [% ELSE %]
+                                            <option value="[% installer_languages_loo.rfc4646_subtag | html %]">[% IF ( installer_languages_loo.native_description ) %][% installer_languages_loo.native_description | html %][% ELSE %][% installer_languages_loo.rfc4646_subtag | html %][% END %]</option>
+                                        [% END %]
                                     [% END %]
                                 [% END %]
-                            [% END %]
-                        </select>
-                    </div>
-                    <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
-                </form>
-            [% END %]
-
-            [% IF ( language ) %]
-                [% UNLESS ( checkmodule ) %]
-                    [% IF ( missing_modules ) %]
-                        <h2>Web installer &rsaquo; Perl modules missing</h2>
-                        <p>Some Perl modules are missing. <span class="label label-danger">Important: </span>Required modules must be installed before you may continue.<br />
-                        <ul>
-                            [% FOREACH missing_module IN missing_modules %]
-                                <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
-                                    <br /> Version: [% missing_module.version | html %]
-                                    <br /> Usage: [% missing_module.usage | html %]
-                                </li>
-                            [% END %]
-                        </ul>
-                    [% END %]
-
-                    [% IF ( problems ) %]
-                        <h2>Web installer &rsaquo; Perl version too old</h2>
-                        <p>I encountered some problems.</p>
-                        <ul>
-                            [% IF ( perlversion ) %]
-                                <li>Your Perl version is out of date. Please upgrade to a newer version of Perl (at least version 5.10).</li>
-                            [% END %]
-                        </ul>
-                    [% END %]
-
-                    <form name="checkmodules" action="install.pl">
-                        <input type="hidden" name="step" value="1" />
-                        <p> <input value="Recheck dependencies" class="btn btn-primary" type="submit" /></p>
+                            </select>
+                        </div>
+                        <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
                     </form>
+                [% END %]
 
-                [% ELSE # IF checkmodule %]
-                    <h2>Web installer &rsaquo; Check Perl dependencies</h2>
-                    <p>All required Perl modules appear to be installed.</p>
-                    <p> All dependencies installed.</p>
+                [% IF ( language ) %]
+                    [% UNLESS ( checkmodule ) %]
+                        [% IF ( missing_modules ) %]
+                            <h2>Web installer &rsaquo; Perl modules missing</h2>
+                            <p>Some Perl modules are missing. <span class="label label-danger">Important: </span>Required modules must be installed before you may continue.<br />
+                            <ul>
+                                [% FOREACH missing_module IN missing_modules %]
+                                    <li><strong>[% missing_module.name | html %]</strong> [% IF ( missing_module.require ) %]<span class="label label-danger">Required</span>[% END %]
+                                        <br /> Version: [% missing_module.version | html %]
+                                        <br /> Usage: [% missing_module.usage | html %]
+                                    </li>
+                                [% END %]
+                            </ul>
+                        [% END %]
 
-                    <form name="checkmodules" role="form" action="install.pl">
-                        <input type="hidden" name="step" value="2" />
-                        <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
-                    </form>
-                [% END # IF checkmodule%]
-            [% END # IF language %]
-        </div> <!-- / #installer-step1 -->
-    </div> <!-- / .row -->
+                        [% IF ( problems ) %]
+                            <h2>Web installer &rsaquo; Perl version too old</h2>
+                            <p>I encountered some problems.</p>
+                            <ul>
+                                [% IF ( perlversion ) %]
+                                    <li>Your Perl version is out of date. Please upgrade to a newer version of Perl (at least version 5.10).</li>
+                                [% END %]
+                            </ul>
+                        [% END %]
 
-[% INCLUDE 'intranet-bottom.inc' %]
+                        <form name="checkmodules" action="install.pl">
+                            <input type="hidden" name="step" value="1" />
+                            <p> <input value="Recheck dependencies" class="btn btn-primary" type="submit" /></p>
+                        </form>
+
+                    [% ELSE # IF checkmodule %]
+                        <h2>Web installer &rsaquo; Check Perl dependencies</h2>
+                        <p>All required Perl modules appear to be installed.</p>
+                        <p> All dependencies installed.</p>
+
+                        <form name="checkmodules" role="form" action="install.pl">
+                            <input type="hidden" name="step" value="2" />
+                            <p> <input value="Continue to the next step" class="btn btn-primary" type="submit" /> </p>
+                        </form>
+                    [% END # IF checkmodule%]
+                [% END # IF language %]
+            </div> <!-- / #installer-step1 -->
+        </div> <!-- / .row -->
+    </div><!-- / .container-fluid -->
+
+[% INCLUDE 'installer-intranet-bottom.inc' %]

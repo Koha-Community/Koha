@@ -1,9 +1,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Web installer &rsaquo; Create a new item type </title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
-[% INCLUDE 'validator-strings.inc' %]
-[% INCLUDE 'installer-strings.inc' %]
-<script type="text/javascript" src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
 </head>
 
 <body id="installer" class="installer">
@@ -47,5 +44,12 @@
                 </form>
             </div> <!-- / #onboarding-step4 -->
         </div> <!-- / .row -->
+    </div><!-- / .container-fluid -->
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'validator-strings.inc' %]
+    [% INCLUDE 'installer-strings.inc' %]
+    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
+[% END %]
+
+[% INCLUDE 'installer-intranet-bottom.inc' %]
