@@ -2,9 +2,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Web installer &rsaquo; Create Koha administrator patron</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
-[% INCLUDE 'validator-strings.inc' %]
-[% INCLUDE 'installer-strings.inc' %]
-<script type="text/javascript" src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
 </head>
 
 <body id="installer" class="installer">
@@ -111,7 +108,15 @@
                 </form>
             </div> <!-- / #onboarding-step3 -->
         </div> <!-- / .row -->
+    </div><!-- / .container-fluid -->
 
-[% INCLUDE 'intranet-bottom.inc' %]
-[% PROCESS 'password_check.inc' %]
-[% PROCESS 'add_password_check' new_password => 'password' %]
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'validator-strings.inc' %]
+    [% INCLUDE 'installer-strings.inc' %]
+    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
+    [% PROCESS 'password_check.inc' %]
+    [% PROCESS 'add_password_check' new_password => 'password' %]
+[% END %]
+
+[% INCLUDE 'installer-intranet-bottom.inc' %]
+

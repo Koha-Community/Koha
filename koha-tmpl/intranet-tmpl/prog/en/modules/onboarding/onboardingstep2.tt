@@ -11,9 +11,6 @@
     <meta http-equiv="refresh" content="0; url=/cgi-bin/koha/installer/onboarding.pl?step=3">
 [% END %]
 [% INCLUDE 'installer-doc-head-close.inc' %]
-[% INCLUDE 'validator-strings.inc' %]
-[% INCLUDE 'installer-strings.inc' %]
-<script type="text/javascript" src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
 </head>
 
 <body id="installer" class="installer">
@@ -127,5 +124,12 @@
                 </form>
             </div> <!-- / #onboarding-step2 -->
         </div> <!-- / .row -->
+    </div><!-- / .container-fluid -->
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'validator-strings.inc' %]
+    [% INCLUDE 'installer-strings.inc' %]
+    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
+[% END %]
+
+[% INCLUDE 'installer-intranet-bottom.inc' %]

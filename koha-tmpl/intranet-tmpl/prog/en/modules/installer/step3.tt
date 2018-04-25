@@ -262,23 +262,26 @@
                [% END # / IF updatestructure %]
             </div> <!-- / #installer-step3 -->
         </div> <!-- / .row -->
+    </div><!-- / .container-fluid -->
 
 [% IF ( selectframeworks ) %]
-    <script type="text/javascript">
-        $(document).ready(function(){
-            $(".selectall,.deselectall").on("click",function(e){
-                e.preventDefault();
-                var container = $(this).parent().parent();
-                if( $(this).hasClass("selectall") ){
-                    var state = true;
-                } else {
-                    var state = false;
-                }
-                $( container ).find("input").prop("checked", state);
-                $( container ).find(".selectall,.deselectall").toggle();
+    [% MACRO jsinclude BLOCK %]
+        <script>
+            $(document).ready(function(){
+                $(".selectall,.deselectall").on("click",function(e){
+                    e.preventDefault();
+                    var container = $(this).parent().parent();
+                    if( $(this).hasClass("selectall") ){
+                        var state = true;
+                    } else {
+                        var state = false;
+                    }
+                    $( container ).find("input").prop("checked", state);
+                    $( container ).find(".selectall,.deselectall").toggle();
+                });
             });
-        });
-    </script>
+        </script>
+    [% END %]
 [% END %]
 
-[% INCLUDE 'intranet-bottom.inc' %]
+[% INCLUDE 'installer-intranet-bottom.inc' %]
