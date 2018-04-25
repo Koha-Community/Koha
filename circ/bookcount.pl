@@ -39,22 +39,6 @@ my $biblionumber = $input->param('biblionumber');
 my $biblio = Koha::Biblios->find( $biblionumber );
 my $item   = Koha::Items->find( $itm );
 
-if ( !defined $biblio or !defined $item ) {
-    print $input->redirect("/cgi-bin/koha/errors/400.pl");
-}
-
-my $lastmove = lastmove($itm);
-
-my $lastdate;
-my $count;
-if ( not $lastmove ) {
-    $count = issuessince( $itm, 0 );
-} else {
-    $lastdate = $lastmove->{'datearrived'};
-    $count = issuessince( $itm, $lastdate );
-}
-
-# make the page ...
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -66,6 +50,21 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         debug           => 1,
     }
 );
+
+output_and_exit( $input, $cookie, $template, 'unknown_biblio')
+    unless $biblio;
+output_and_exit( $input, $cookie, $template, 'unknown_item')
+    unless $item;
+
+my $lastdate;
+my $count;
+my $lastmove = lastmove($itm);
+if ( not $lastmove ) {
+    $count = issuessince( $itm, 0 );
+} else {
+    $lastdate = $lastmove->{'datearrived'};
+    $count = issuessince( $itm, $lastdate );
+}
 
 my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;
 for my $library ( @$libraries ) {

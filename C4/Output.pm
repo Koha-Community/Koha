@@ -50,7 +50,7 @@ BEGIN {
     );
     push @EXPORT, qw(
         &output_html_with_http_headers &output_ajax_with_http_headers &output_with_http_headers
-        &output_and_exit_if_error
+        &output_and_exit_if_error &output_and_exit
     );
 
 }
@@ -338,12 +338,15 @@ sub output_and_exit_if_error {
         }
     }
 
-    if ( $error ) {
-        $template->param( blocking_error => $error );
-        output_html_with_http_headers ( $query, $cookie, $template->output );
-        exit;
-    }
+    output_and_exit( $query, $cookie, $template, $error ) if $error;
     return;
+}
+
+sub output_and_exit {
+    my ( $query, $cookie, $template, $error ) = @_;
+    $template->param( blocking_error => $error );
+    output_html_with_http_headers ( $query, $cookie, $template->output );
+    exit;
 }
 
 sub parametrized_url {

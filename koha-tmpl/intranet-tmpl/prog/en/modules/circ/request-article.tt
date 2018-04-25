@@ -19,12 +19,15 @@
         <a href="/cgi-bin/koha/mainpage.pl">Home</a>
         &rsaquo;
         <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
+        [% UNLESS blocking_error %]
         &rsaquo;
         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber %]">[% biblio.title | html %]</a>
         &rsaquo;
         Request article
+        [% END %]
     </div>
 
+    [% INCLUDE 'blocking_errors.inc' %]
     <div id="doc3" class="yui-t2">
         <div id="bd">
             <div id="yui-main">
