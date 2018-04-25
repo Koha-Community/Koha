@@ -956,8 +956,7 @@
     <xsl:if test="marc:datafield[@tag=020]/marc:subfield[@code='a']">
     <span class="results_summary isbn"><span class="label">ISBN: </span>
     <xsl:for-each select="marc:datafield[@tag=020]/marc:subfield[@code='a']">
-    <xsl:variable name="isbn" select="marc:subfield[@code='a']"/>
-            <xsl:value-of select="marc:subfield[@code='a']"/>
+            <xsl:value-of select="."/>
             <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
     </xsl:for-each>
     </span>
@@ -966,7 +965,7 @@
     <xsl:if test="marc:datafield[@tag=022]/marc:subfield[@code='a']">
     <span class="results_summary issn"><span class="label">ISSN: </span>
     <xsl:for-each select="marc:datafield[@tag=022]/marc:subfield[@code='a']">
-            <xsl:value-of select="marc:subfield[@code='a']"/>
+            <xsl:value-of select="."/>
             <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
     </xsl:for-each>
     </span>
