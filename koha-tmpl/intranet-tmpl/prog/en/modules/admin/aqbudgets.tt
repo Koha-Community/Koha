@@ -401,7 +401,7 @@
         <ol>
         <li>
             <label for="filter_budgetbranch2">Library: </label>
-            <select name="filter_budgetbranch" id="filter_budgetbranch2" style="width:10em;">
+            <select name="filter_budgetbranch" id="filter_budgetbranch2">
                 <option value=""></option>
                 [% PROCESS options_for_libraries libraries => Branches.all( selected => budget_branchcode, unfiltered => 1 ) %]
             </select>

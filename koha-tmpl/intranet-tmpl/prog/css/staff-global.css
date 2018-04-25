@@ -125,11 +125,6 @@ input[type="checkbox"], input[type="radio"] {
     margin: 0;
 }
 
-/*Set width of filter input text boxes*/
-input[name="borname"], input[id="searchmember_filter"], input[id="bookseller"], input[id="publisher"], input[id="callnumber"], input[id="title"], input[id="issn"], input[id="invoicenumber"], input[id="isbneanissn"], input[id="author"], input[id="publicationyear"], input[id="summaryfilter"], input[id="basketfilter"], input[id="basketgroupnamefilter"], input[id="orderfilter"] {
-    width:140px;
-}
-
 label, .label {
     display: inline;
     font-weight: normal;
@@ -633,9 +628,11 @@ div.yui-b fieldset.brief ol {
 	padding : 0;
 }
 
-div.yui-b fieldset.brief select {
-	width: 12em;
+div.yui-b fieldset.brief select,
+div.yui-b fieldset.brief input[type=text] {
+    width: 100%;
 }
+
 div.yui-b fieldset.brief li.radio {
 	padding : .7em 0;
 }
@@ -658,6 +655,11 @@ div.yui-b fieldset.brief fieldset {
 
 div.yui-b fieldset.brief fieldset legend {
 	font-size : 85%;
+}
+
+#yui-main div.yui-b fieldset.brief select,
+#yui-main div.yui-b fieldset.brief input[type=text] {
+    width: auto;
 }
 
 #tools_holidays fieldset.brief li.radio input,

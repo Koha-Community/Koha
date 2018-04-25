@@ -202,7 +202,7 @@ function submitForm(form) {
                                         <li>
                                             [% UNLESS (closedbg) %]
                                                 <label for="billingplace">Billing place:</label>
-                                                <select name="billingplace" id="billingplace" style="width:13em;">
+                                                <select name="billingplace" id="billingplace">
                                                     <option value="">--</option>
                                                     [% PROCESS options_for_libraries libraries => Branches.all( selected => billingplace ) %]
                                                 </select>
@@ -214,7 +214,7 @@ function submitForm(form) {
                                         [% UNLESS (closedbg) %]
                                             <li>
                                                 <label for="deliveryplace">Delivery place:</label>
-                                                <select name="deliveryplace" id="deliveryplace" style="width:13em;">
+                                                <select name="deliveryplace" id="deliveryplace">
                                                     <option value="">--</option>
                                                     [% PROCESS options_for_libraries libraries => Branches.all( selected => deliveryplace ) %]
                                                 <select>
