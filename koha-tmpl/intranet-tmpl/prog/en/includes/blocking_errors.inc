@@ -6,5 +6,6 @@
     [% CASE %][% blocking_error %]
     [% END %]
 
+    [% INCLUDE 'intranet-bottom.inc' %]
     [% STOP %] [%# Will stop gracefully without processing any more of the template document.%]
 [% END %]
