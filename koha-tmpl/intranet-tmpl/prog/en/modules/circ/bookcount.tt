@@ -10,7 +10,11 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Circulation statistics for [% title |html %]</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a>
+    [% UNLESS blocking_error %]&rsaquo; Circulation statistics for [% title |html %][% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -18,8 +22,8 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
-<h2>
-[% title |html %] [% IF ( author ) %] by [% author |html %][% END %]</h2>
+[% INCLUDE 'blocking_errors.inc' %]
+<h2>[% title |html %] [% IF ( author ) %] by [% author |html %][% END %]</h2>
 <h3>Barcode [% barcode %]</h3>
 <table>
         <tr><th>Home library</th><th>Current library</th><th>Date arrived<br />at current library </th><th>Number of checkouts<br />since last transfer</th></tr>

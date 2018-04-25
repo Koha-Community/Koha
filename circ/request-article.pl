@@ -44,6 +44,9 @@ my $patron_cardnumber = $cgi->param('patron_cardnumber');
 my $patron_id         = $cgi->param('patron_id');
 
 my $biblio = Koha::Biblios->find($biblionumber);
+output_and_exit( $cgi, $cookie, $template, 'unknown_biblio')
+    unless $biblio;
+
 my $patron =
     $patron_id         ? Koha::Patrons->find($patron_id)
   : $patron_cardnumber ? Koha::Patrons->find( { cardnumber => $patron_cardnumber } )
