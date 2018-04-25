@@ -18,6 +18,7 @@
 
 use Modern::Perl;
 
+use Data::Dumper; # REMOVEME with diag
 use Test::More tests => 3;
 use Test::MockModule;
 use Test::MockTime qw( set_fixed_time );
@@ -242,7 +243,8 @@ Overdues:
 
 EOS
         $slip = IssueSlip( $branchcode, $borrowernumber );
-        is( $slip->{content}, $expected_slip, 'IssueSlip should return a slip with 2 checkouts' );
+        is( $slip->{content}, $expected_slip, 'IssueSlip should return a slip with 2 checkouts' )
+            or diag(Dumper(Koha::Checkouts->search({borrowernumber => $borrower->{borrowernumber}})->unblessed));
 
         AddReturn( $barcode1, $branchcode );
         AddReturn( $barcode2, $branchcode );
