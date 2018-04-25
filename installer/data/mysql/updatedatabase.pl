@@ -15969,6 +15969,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20482 - Use Bibliographic code value for Basque, Maori and Albanian languages)\n";
 }
 
+$DBversion = '17.12.00.040';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences ( value, variable, options, explanation, type )
+        VALUES ( '0', 'ProtectSuperlibrarianPrivileges', NULL, 'If enabled, non-superlibrarians cannot set superlibrarian privileges', 'YesNo' )
+    } );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20100 - Add new system preference ProtectSuperlibrarianPrivileges)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
