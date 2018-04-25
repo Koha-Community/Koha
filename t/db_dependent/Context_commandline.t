@@ -32,7 +32,7 @@ is($commandlineSuperuser->cardnumber, "commandlineadmin", "_enforceCommandlineSu
 
 C4::Context->setCommandlineEnvironment();
 my $env = C4::Context->userenv();
-is($env->{id}, $commandlineSuperuser->{userid}, "setCommandlineEnvironment userenv set with 'commandlineadmin'");
+is($env->{id}, $commandlineSuperuser->userid, "setCommandlineEnvironment userenv set with 'commandlineadmin'");
 
 $schema->storage->txn_rollback;
 
