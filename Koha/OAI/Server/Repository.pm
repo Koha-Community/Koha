@@ -115,6 +115,10 @@ sub new {
 
     # OAI-PMH handles dates in UTC, so do that on the database level to avoid need for
     # any conversions
+    my $sth = C4::Context->dbh->prepare('SELECT @@session.time_zone');
+    $sth->execute();
+    my ( $orig_tz ) = $sth->fetchrow();
+    $self->{ mysql_orig_tz } = $orig_tz;
     C4::Context->dbh->prepare("SET time_zone='+00:00'")->execute();
 
     # Check for grammatical errors in the request
@@ -149,6 +153,15 @@ sub new {
 
     bless $self, $class;
     return $self;
+}
+
+
+sub DESTROY {
+    my ( $self ) = @_;
+
+    # Reset time zone to the original value
+    C4::Context->dbh->prepare("SET time_zone='" . $self->{ mysql_orig_tz } . "'")->execute()
+        if $self->{ mysql_orig_tz };
 }
 
 
