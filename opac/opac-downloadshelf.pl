@@ -31,7 +31,7 @@ use C4::Ris;
 use Koha::CsvProfiles;
 use Koha::RecordProcessor;
 use Koha::Virtualshelves;
-
+use C4::Shelfconv;
 use utf8;
 my $query = new CGI;
 
@@ -51,6 +51,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 );
 
 my $shelfnumber = $query->param('shelfnumber');
+my $shelfname = $query->param('shelfname');
 my $format  = $query->param('format');
 my $context = $query->param('context');
 
@@ -65,16 +66,27 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         my $output;
         my $extension;
         my $type;
+        my @biblios;
 
        # CSV
         if ($format =~ /^\d+$/) {
-            my @biblios;
+            
             while ( my $content = $contents->next ) {
                 push @biblios, $content->biblionumber;
             }
             $output = marc2csv(\@biblios, $format);
-        # Other formats
-        } else {
+        }
+        #finna
+        elsif($format=='Finna')
+        {
+          
+            while ( my $content = $contents->next ) {
+                push @biblios, $content->biblionumber;
+            }
+            $output = finnajson(\@biblios,$shelfname);
+        } 
+        # other format
+        else {
             my $record_processor = Koha::RecordProcessor->new({
                 filters => 'ViewPolicy'
             });
@@ -114,11 +126,24 @@ if ( $shelf and $shelf->can_be_viewed( $borrowernumber ) ) {
         # If it was a CSV export we change the format after the export so the file extension is fine
         $format = "csv" if ($format =~ m/^\d+$/);
 
-        print $query->header(
+        ##if format is Finna, file name will be "shelf"+shelf number+".json"
+        if($format eq "Finna") {
+            
+             my $filename="shelf".$shelfnumber.".json";
+             print $query->header(
+                                   -type => ($type) ? $type : 'application/octet-stream',
+            -'Content-Transfer-Encoding' => 'binary',
+                             -attachment => "$filename"
+            );
+
+        } else {
+
+            print $query->header(
                                    -type => ($type) ? $type : 'application/octet-stream',
             -'Content-Transfer-Encoding' => 'binary',
                              -attachment => ($extension) ? "shelf.$format.$extension" : "shelf.$format"
-        );
+            );
+        }
         print $output;
 
     } else {

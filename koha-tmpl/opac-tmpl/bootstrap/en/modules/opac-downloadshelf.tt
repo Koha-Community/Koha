@@ -56,6 +56,7 @@
                                             <option value="bibtex">BibTeX</option>
                                             <option value="isbd">ISBD</option>
                                             <option value="iso2709">MARC</option>
+                                            <option value="Finna">FINNA</option>
                                             [% FOREACH csv_profile IN csv_profiles %]
                                             <option value="[% csv_profile.export_format_id |html %]">CSV - [% csv_profile.profile |html %]</option>
                                             [% END %]
@@ -65,6 +66,7 @@
 
                                     <fieldset class="action">
                                         <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                        <input type="hidden" name="shelfname" value="[% shelf.shelfname | html %]" />
                                         <input type="submit" name="save" class="btn" value="Go" />
                                         <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]" class="cancel close" data-dismiss="modal">Cancel</a>
                                     </fieldset>
