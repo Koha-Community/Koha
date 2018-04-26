@@ -2,14 +2,14 @@
 
 use Modern::Perl;
 
-use Test::More tests => 35;
+use Archive::Extract;
 use CGI;
 use File::Basename;
 use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
-use Archive::Extract;
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
+use Test::More tests => 37;
 
 use C4::Context;
 
@@ -49,6 +49,7 @@ ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
 ok( $plugin->can('opac_js'), 'Test plugin can opac_js' );
 ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
+ok( $plugin->can('upgrade'), 'Test plugin can upgrade' );
 ok( $plugin->can('uninstall'), 'Test plugin can install' );
 
 is( Koha::Plugins::Handler->run({ class => "Koha::Plugin::Test", method => 'report', enable_plugins => 1 }), "Koha::Plugin::Test::report", 'Test run plugin report method' );
@@ -150,4 +151,16 @@ subtest 'output and output_html tests' => sub {
     like($stdout, qr/Cache-control: no-cache/, 'force_no_caching sets Cache-control as desired');
     like($stdout, qr{Content-Type: text/html; charset=UTF-8}, 'Correct content-type');
     like($stdout, qr{¡Hola output_html!}, 'Correct data');
+};
+
+subtest 'Test _version_compare' => sub {
+
+    plan tests => 6;
+
+    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '2.2.2' ),   -1, "1.1.1 is less then 2.2.2" );
+    is( Koha::Plugins::Base::_version_compare( '2.2.2',    '1.1.1' ),    1, "1.1.1 is greater then 2.2.2" );
+    is( Koha::Plugins::Base::_version_compare( '1.1.1',    '1.1.1' ),    0, "1.1.1 is equal to 1.1.1" );
+    is( Koha::Plugins::Base::_version_compare( '1.01.001', '1.1.1' ),    0, "1.01.001 is equal to 1.1.1" );
+    is( Koha::Plugins::Base::_version_compare( '1',        '1.0.0' ),    0, "1 is equal to 1.0.0" );
+    is( Koha::Plugins::Base::_version_compare( '1.0',      '1.0.0' ),    0, "1.0 is equal to 1.0.0" );
 };
