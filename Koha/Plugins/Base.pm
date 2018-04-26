@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Module::Pluggable require => 1;
 use Cwd qw(abs_path);
+use List::Util qw(max);
 
 use base qw{Module::Bundled::Files};
 
@@ -43,12 +44,25 @@ sub new {
 
     my $self = bless( $args, $class );
 
+    my $plugin_version = $self->get_metadata->{version};
+    my $database_version = $self->retrieve_data('__INSTALLED_VERSION__');
+
     ## Run the installation method if it exists and hasn't been run before
     if ( $self->can('install') && !$self->retrieve_data('__INSTALLED__') ) {
         if ( $self->install() ) {
             $self->store_data( { '__INSTALLED__' => 1 } );
+            if ( my $version = $plugin_version ) {
+                $self->store_data({ '__INSTALLED_VERSION__' => $version });
+            }
         } else {
             warn "Plugin $class failed during installation!";
+        }
+    } elsif ( $self->can('upgrade') && $plugin_version && $database_version ) {
+        if ( _version_compare( $plugin_version, $database_version ) == 1 ) {
+            if ( $self->upgrade() ) {
+                $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
+                warn "Plugin $class failed during upgrade!";
+            }
         }
     }
 
@@ -216,6 +230,43 @@ Note: this is a wrapper function for C4::Output::output_with_http_headers
 sub output {
     my ( $self, $data, $content_type, $status, $extra_options ) = @_;
     output_with_http_headers( $self->{cgi}, undef, $data, $content_type, $status, $extra_options );
+}
+
+=head2 _version_compare
+
+Utility method to compare two version numbers.
+Returns 1 if the first argument is the higher version
+Returns -1 if the first argument is the lower version
+Returns 0 if both versions are equal
+
+if ( _version_compare( '2.6.26', '2.6.0' ) == 1 ) {
+    print "2.6.26 is greater than 2.6.0\n";
+}
+
+=cut
+
+sub _version_compare {
+    my $ver1 = shift || 0;
+    my $ver2 = shift || 0;
+
+    my @v1 = split /[.+:~-]/, $ver1;
+    my @v2 = split /[.+:~-]/, $ver2;
+
+    for ( my $i = 0 ; $i < max( scalar(@v1), scalar(@v2) ) ; $i++ ) {
+
+        # Add missing version parts if one string is shorter than the other
+        # i.e. 0 should be lt 0.2.1 and not equal, so we append .0
+        # 0.0.0 <=> 0.2.1 = -1
+        push( @v1, 0 ) unless defined( $v1[$i] );
+        push( @v2, 0 ) unless defined( $v2[$i] );
+        if ( int( $v1[$i] ) > int( $v2[$i] ) ) {
+            return 1;
+        }
+        elsif ( int( $v1[$i] ) < int( $v2[$i] ) ) {
+            return -1;
+        }
+    }
+    return 0;
 }
 
 1;
