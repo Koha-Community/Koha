@@ -371,7 +371,7 @@ function moneyFormat(textObj) {
     </form>
 [% ELSE %]
 
-    <form name="payfine" id="payfine" method="post" action="/cgi-bin/koha/members/paycollect.pl">
+    <form name="payfine" id="payfine" method="post" onsubmit="return validatePayment(this)" action="/cgi-bin/koha/members/paycollect.pl">
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrower.borrowernumber %]" />
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
     <input type="hidden" name="total" id="total" value="[% total %]" />
