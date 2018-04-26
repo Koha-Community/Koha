@@ -352,12 +352,14 @@ capabilities & custom_capability and their callers.
 sub _backend_capability {
     my ( $self, $name, $args ) = @_;
     my $capability = 0;
+    # See if capability is defined in backend
     try {
         $capability = $self->_backend->capabilities($name);
     } catch {
         return 0;
     };
-    if ( $capability ) {
+    # Try to invoke it
+    if ( $capability && ref($capability) eq 'CODE' ) {
         return &{$capability}($args);
     } else {
         return 0;
@@ -818,6 +820,20 @@ sub backend_create {
 
     # ...Updating status!
     $self->status('QUEUED')->store unless ( $permitted );
+
+    ## Handle Unmediated ILLs
+
+    # For the unmediated workflow we only need to delegate to our backend. If
+    # that backend supports unmediateld_ill, it will do its thing and return a
+    # proper response.  If it doesn't then _backend_capability returns 0, so
+    # we keep the current result.
+    if ( C4::Context->preference("ILLModuleUnmediated") && $permitted ) {
+        my $unmediated_result = $self->_backend_capability(
+            'unmediated_ill',
+            $args
+        );
+        $result = $unmediated_result if $unmediated_result;
+    }
 
     return $self->expandTemplate($result);
 }
