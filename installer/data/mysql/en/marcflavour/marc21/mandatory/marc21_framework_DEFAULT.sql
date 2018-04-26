@@ -7,7 +7,7 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 22 (April 2016)
+--           Revised to Update No. 25 (December 2017)
 -- *************************************************************
 
 
