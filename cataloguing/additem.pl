@@ -156,7 +156,7 @@ sub generate_subfield_form {
             my $CNsubfield2 = substr($pref_itemcallnumber, 4, 1);
             my $temp2 = $temp->field($CNtag);
             if ($temp2) {
-                my $value = join ' ', $temp2->subfield($CNsubfield) || q{}, $temp2->subfield($CNsubfield2) || q{};
+                $value = join ' ', $temp2->subfield($CNsubfield) || q{}, $temp2->subfield($CNsubfield2) || q{};
                 #remove any trailing space incase one subfield is used
                 $value =~ s/^\s+|\s+$//g;
             }
