@@ -20,7 +20,7 @@
 use Modern::Perl;
 use Test::MockTime qw/set_fixed_time restore_time/;
 
-use Test::More tests => 29;
+use Test::More tests => 30;
 use DateTime;
 use Test::MockModule;
 use Test::Warn;
@@ -375,5 +375,27 @@ subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_me
         },
     });
 };
+
+subtest 'Bug 20665: OAI-PMH Provider should reset the MySQL connection time zone' => sub {
+    plan tests => 2;
+
+    # Set time zone to SYSTEM so that it can be checked later
+    $dbh->do("SET time_zone='SYSTEM'");
+
+
+    test_query('ListIdentifiers without metadataPrefix', {verb => 'ListIdentifiers'}, {
+        error => {
+            code => 'badArgument',
+            content => "Required argument 'metadataPrefix' was undefined",
+        },
+    });
+
+    my $sth = C4::Context->dbh->prepare('SELECT @@session.time_zone');
+    $sth->execute();
+    my ( $tz ) = $sth->fetchrow();
+
+    ok ( $tz eq 'SYSTEM', 'MySQL connection time zone is SYSTEM' );
+};
+
 
 $schema->storage->txn_rollback;
