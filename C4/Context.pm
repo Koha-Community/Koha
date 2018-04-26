@@ -1032,7 +1032,7 @@ sub setCommandlineEnvironment {
    C4::Context->interface('commandline'); #Set interface for logger and friends
    C4::Context->_new_userenv('commandline');
    my $clisu = _enforceCommandlineSuperuserBorrowerExists();
-   C4::Context::set_userenv($clisu->borrowernumber,$clisu->userid,$clisu->cardnumber,$clisu->firstname,$clisu->surname, $clisu->branchcode, '', {}, '', '', '');
+   C4::Context->set_userenv($clisu->borrowernumber,$clisu->userid,$clisu->cardnumber,$clisu->firstname,$clisu->surname, $clisu->branchcode, '', {}, '', '', '');
 }
 
 sub _enforceCommandlineSuperuserBorrowerExists {

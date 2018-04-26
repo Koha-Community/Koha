@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 use Test::More;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Database;
 
@@ -33,6 +33,7 @@ is($commandlineSuperuser->cardnumber, "commandlineadmin", "_enforceCommandlineSu
 C4::Context->setCommandlineEnvironment();
 my $env = C4::Context->userenv();
 is($env->{id}, $commandlineSuperuser->userid, "setCommandlineEnvironment userenv set with 'commandlineadmin'");
+is($env->{number}, $commandlineSuperuser->borrowernumber, "setCommandlineEnvironment userenv set with 'commandlineadmin'");
 
 $schema->storage->txn_rollback;
 
