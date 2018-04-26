@@ -812,6 +812,13 @@ sub delete_definition {
 	$sth->execute($id);
 }
 
+=head2 get_sql($report_id)
+
+Given a report id, return the SQL statement for that report.
+Otherwise, it just returns.
+
+=cut
+
 sub get_sql {
 	my ($id) = @_ or return;
 	my $dbh = C4::Context->dbh();
