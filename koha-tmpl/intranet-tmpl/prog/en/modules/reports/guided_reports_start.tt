@@ -794,31 +794,6 @@ $(document).ready(function() {
 </form>
 [% END %]
 
-[% IF ( compound ) %]
-<form action="/cgi-bin/koha/reports/guided_reports.pl" method="post">
-Master: <select name="master">
-[% FOREACH savedreport IN savedreports %]
-<option value="[% savedreport.id %]">[% savedreport.report_name %]</option>
-[% END %]
-</select>
-&nbsp;
-Sub report:<select name="subreport">
-[% FOREACH savedreport IN savedreports %]
-<option value="[% savedreport.id %]">[% savedreport.report_name %]</option>
-[% END %]
-</select>
-<br />
-<input type="hidden" name="phase" value="Save Compound" />
-<input type="submit" name="submit" value="Save compound" />
-</form>
-[% END %]
-
-[% IF ( save_compound ) %]
-[% master %] <br />
-[% subsql %]
-[% END %]
-
-
 [% IF saved_results %]
 <h1>Saved report results</h1>
 <h2>[% name %]</h2>

@@ -39,7 +39,7 @@ BEGIN {
     @ISA    = qw(Exporter);
     @EXPORT = qw(
       get_report_types get_report_areas get_report_groups get_columns build_query get_criteria
-      save_report get_saved_reports execute_query get_saved_report create_compound run_compound
+      save_report get_saved_reports execute_query get_saved_report
       get_column_type get_distinct_values save_dictionary get_from_dictionary
       delete_definition delete_report format_results get_sql
       nb_rows update_sql
@@ -718,35 +718,6 @@ sub get_saved_report {
     return $dbh->selectrow_hashref($query, undef, $report_arg);
 }
 
-=head2 create_compound($masterID,$subreportID)
-
-This will take 2 reports and create a compound report using both of them
-
-=cut
-
-sub create_compound {
-    my ( $masterID, $subreportID ) = @_;
-    my $dbh = C4::Context->dbh();
-
-    # get the reports
-    my $master = get_saved_report($masterID);
-    my $mastersql = $master->{savedsql};
-    my $mastertype = $master->{type};
-    my $sub = get_saved_report($subreportID);
-    my $subsql = $master->{savedsql};
-    my $subtype = $master->{type};
-
-    # now we have to do some checking to see how these two will fit together
-    # or if they will
-    my ( $mastertables, $subtables );
-    if ( $mastersql =~ / from (.*) where /i ) {
-        $mastertables = $1;
-    }
-    if ( $subsql =~ / from (.*) where /i ) {
-        $subtables = $1;
-    }
-    return ( $mastertables, $subtables );
-}
 
 =head2 get_column_type($column)
 

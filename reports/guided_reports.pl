@@ -974,22 +974,6 @@ elsif ( $phase eq 'Create report from SQL' ) {
     );
 }
 
-elsif ($phase eq 'Create Compound Report'){
-	$template->param( 'savedreports' => get_saved_reports(),
-		'compound' => 1,
-	);
-}
-
-elsif ($phase eq 'Save Compound'){
-    my $master    = $input->param('master');
-	my $subreport = $input->param('subreport');
-	my ($mastertables,$subtables) = create_compound($master,$subreport);
-	$template->param( 'save_compound' => 1,
-		master=>$mastertables,
-		subsql=>$subtables
-	);
-}
-
 # pass $sth, get back an array of names for the column headers
 sub header_cell_values {
     my $sth = shift or return ();
