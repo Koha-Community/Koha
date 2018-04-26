@@ -473,7 +473,8 @@ div#reserves,div#checkouts {
 }
 
 
-div.yui-b h5 {
+div.yui-b h5,
+aside h5 {
 	font-size : 100%;
 	margin : .5em 0;
 }
@@ -622,47 +623,64 @@ fieldset.rows div.hint {
     margin-left : 7.5em;
 }
 
-div.yui-b fieldset.brief {
-	padding : .4em .7em;
+div.yui-b fieldset.brief,
+aside fieldset.brief {
+    margin: 0;
+    padding : .4em .7em;
 }
 
-div.yui-b fieldset.brief ol {
+div.yui-b fieldset.brief ol,
+aside fieldset.brief ol {
 	font-size : 85%;
 	margin : 0;
 	padding : 0;
 }
 
 div.yui-b fieldset.brief select,
-div.yui-b fieldset.brief input[type=text] {
+div.yui-b fieldset.brief input[type=text],
+aside fieldset.brief select,
+aside fieldset.brief input[type=text] {
     width: 100%;
 }
 
-div.yui-b fieldset.brief li.radio {
+div.yui-b fieldset.brief li.radio,
+aside fieldset.brief li.radio {
 	padding : .7em 0;
 }
+
 div.yui-b fieldset.brief li.radio label,
 div.yui-b fieldset.brief li.checkbox label,
 div.yui-b fieldset.brief li.dateinsert label,
 div.yui-b fieldset.brief li.dateinsert span.label,
-div.yui-b fieldset.brief li.radio span.label {
+div.yui-b fieldset.brief li.radio span.label,
+aside fieldset.brief li.radio label,
+aside fieldset.brief li.checkbox label,
+aside fieldset.brief li.dateinsert label,
+aside fieldset.brief li.dateinsert span.label,
+aside fieldset.brief li.radio span.label {
 	display : inline;
 }
 
-div.yui-b fieldset.brief li.radio input {
+div.yui-b fieldset.brief li.radio input,
+aside fieldset.brief li.radio input {
 	padding:0.3em 0;
 }
 
-div.yui-b fieldset.brief fieldset {
-	margin : 0 .3em;
-	padding : .5em;
+div.yui-b fieldset.brief fieldset,
+aside fieldset.brief fieldset {
+    margin : 0;
+    padding : .5em 0;
 }
 
-div.yui-b fieldset.brief fieldset legend {
+div.yui-b fieldset.brief fieldset legend,
+aside fieldset.brief fieldset legend {
 	font-size : 85%;
 }
 
 #yui-main div.yui-b fieldset.brief select,
-#yui-main div.yui-b fieldset.brief input[type=text] {
+#yui-main div.yui-b fieldset.brief input[type=text],
+main div.yui-b fieldset.brief select,
+main div.yui-b fieldset.brief input[type=text] {
     width: auto;
 }
 

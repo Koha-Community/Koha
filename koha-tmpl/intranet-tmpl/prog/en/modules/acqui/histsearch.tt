@@ -14,12 +14,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( order_loop ) %]<a href="/cgi-bin/koha/acqui/histsearch.pl">Orders search</a> &rsaquo; Search results[% ELSE %]Order search[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-	
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
 [% UNLESS ( order_loop ) %]<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
 <fieldset class="rows">
     <legend>Search orders</legend>
@@ -200,11 +199,14 @@
       There is no order for this search.
     [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'acquisitions-menu.inc' %]
-</div>
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+        [% INCLUDE 'acquisitions-menu.inc' %]
+    </aside>
+</div> <!-- /.col-sm-2.col-sm-pull-10 -->
 </div>
 
 [% MACRO jsinclude BLOCK %]
@@ -213,7 +215,7 @@
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/autocomplete/patrons.js") %]
-    <script type="text/javascript">
+    <script>
         var MSG_REMOVE_PATRON = _("Remove");
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) %];

@@ -15,11 +15,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; Invoices</div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-<div id="bd">
-  <div id="yui-main">
-    <div class="yui-b">
       <h1>Invoices</h1>
       [% IF ( do_search ) %]
         [% IF invoices %]
@@ -201,11 +201,13 @@
       [% ELSE %]
         <p>Use the search form on the left to find invoices.</p>
       [% END %]<!-- do_search -->
-    </div>
-  </div>
-  <div class="yui-b">
+    </main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+<div class="col-sm-2 col-sm-pull-10">
+<aside>
     <form action="" method="get">
-      <fieldset class="brief">
+      <fieldset class="sidebar brief">
         <h3>Search filters</h3>
         <ol>
           <li>
@@ -291,14 +293,15 @@
       <input type="hidden" name="op" id="op" value="do_search" />
     </form>
     [% INCLUDE 'acquisitions-menu.inc' %]
-  </div>
-</div>
+  </aside>
+</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $(".delete_invoice").click(function(){
                 return confirmDelete(_("Are you sure you want to delete this invoice?"));

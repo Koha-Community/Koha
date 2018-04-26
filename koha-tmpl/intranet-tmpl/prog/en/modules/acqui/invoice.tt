@@ -15,11 +15,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoices.pl">Invoices</a> &rsaquo; <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid %]">[% invoicenumber %]</a></div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-<div id="bd">
-  <div id="yui-main">
-    <div class="yui-b">
       [% IF ( modified ) %]
         <div class="dialog message">
           <p>Invoice has been modified</p>
@@ -142,7 +142,8 @@
               [% FOR tf IN foot_loop %]
                 <tr>
                     <th colspan="2">Total (GST [% tf.tax_rate * 100 %] %)</th>
-                    <th class="tax_excluded"/><th class="tax_included"/>
+                    <th class="tax_excluded"></th>
+                    <th class="tax_included"></th>
                     <th>[% tf.quantity %]</th>
                     <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
                     <th class="tax_included">[% tf.total_tax_included | $Price %]</th>
@@ -152,8 +153,9 @@
                 </tr>
               [% END %]
               <tr>
-                <th colspan='2'>Total ([% currency.symbol %])</th>
-                <th class="tax_excluded"/><th class="tax_included"/>
+                <th colspan="2">Total ([% currency.symbol %])</th>
+                <th class="tax_excluded"></th>
+                <th class="tax_included"></th>
                 <th>[% total_quantity %]</th>
                 <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
                 <th class="tax_included">[% total_tax_included | $Price %]</th>
@@ -203,18 +205,21 @@
                 </tbody>
             </table>
         [% END %]
-    </div>
-  </div>
-  <div class="yui-b">
-    [% INCLUDE 'acquisitions-menu.inc' %]
-  </div>
-</div>
+    </main>
+  </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+    <aside>
+        <div class="col-sm-2 col-sm-pull-10">
+            [% INCLUDE 'acquisitions-menu.inc' %]
+        </div>
+    </aside>
+</div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         function updateColumnsVisibility(visible) {
             if ( visible ) {
                 $("table .tax_excluded, .tax_included").show();
