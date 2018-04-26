@@ -801,6 +801,13 @@ Circulation:
             - pref: ILLOpacbackends
               class: multi
             - (separated with |). If left empty, all installed backends will be enabled.
+        -
+            - Allow unmediated Interlibrary loan requests
+            - pref: ILLModuleUnmediated
+              default: 0
+              choices:
+                  yes: Enable
+                  no: Disable
     Fines Policy:
         -
             - Calculate fines based on days overdue
