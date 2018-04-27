@@ -152,6 +152,7 @@ BIBLIOTITLE
         <tr>
 CHANGE
             foreach my $v (@$c) {
+                next unless defined $v;
                 push(@sb, <<CHANGE);
             <td>$v</td>
 CHANGE
