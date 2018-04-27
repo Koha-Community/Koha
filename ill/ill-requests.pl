@@ -86,6 +86,28 @@ if ( $backends_available ) {
         );
         handle_commit_maybe($backend_result, $request);
 
+    } elsif ( $op eq 'migrate' ) {
+        # We're in the process of migrating a request
+        my $request = Koha::Illrequests->find($params->{illrequest_id});
+        my $backend_result;
+        if ( $params->{backend} ) {
+            my $new_request = Koha::Illrequest->new->load_backend( $params->{backend} );
+            $backend_result = $new_request->backend_migrate($params);
+            $template->param(
+                whole   => $backend_result,
+                request => $new_request
+            );
+        }
+        else {
+            $request = Koha::Illrequests->find( $params->{illrequest_id} );
+            $backend_result = $request->backend_migrate($params);
+            $template->param(
+                whole   => $backend_result,
+                request => $request
+            );
+        }
+        handle_commit_maybe( $backend_result, $request );
+
     } elsif ( $op eq 'confirm' ) {
         # Backend 'confirm' method
         # confirm requires a specific request, so first, find it.
@@ -287,16 +309,29 @@ output_html_with_http_headers( $cgi, $cookie, $template->output );
 
 sub handle_commit_maybe {
     my ( $backend_result, $request ) = @_;
+
     # We need to special case 'commit'
     if ( $backend_result->{stage} eq 'commit' ) {
         if ( $backend_result->{next} eq 'illview' ) {
+
             # Redirect to a view of the newly created request
-            print $cgi->redirect(
-                '/cgi-bin/koha/ill/ill-requests.pl?method=illview&illrequest_id='.
-                $request->id
-            );
+            print $cgi->redirect( '/cgi-bin/koha/ill/ill-requests.pl'
+                  . '?method=illview'
+                  . '&illrequest_id='
+                  . $request->id );
             exit;
-        } else {
+        }
+        elsif ( $backend_result->{next} eq 'emigrate' ) {
+
+            # Redirect to a view of the newly created request
+            print $cgi->redirect( '/cgi-bin/koha/ill/ill-requests.pl'
+                  . '?method=migrate'
+                  . '&stage=emigrate'
+                  . '&illrequest_id='
+                  . $request->id );
+            exit;
+        }
+        else {
             # Redirect to a requests list view
             redirect_to_list();
         }

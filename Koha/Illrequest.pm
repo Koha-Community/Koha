@@ -527,6 +527,22 @@ sub mark_completed {
     };
 }
 
+=head2 backend_migrate
+
+Migrate a request from one backend to another.
+
+=cut
+
+sub backend_migrate {
+    my ( $self, $params ) = @_;
+
+    my $response = $self->_backend->migrate({
+            request    => $self,
+            other      => $params,
+        });
+    return $self->expandTemplate($response);
+}
+
 =head2 backend_confirm
 
 Confirm a request. The backend handles setting of mandatory fields in the commit stage:
