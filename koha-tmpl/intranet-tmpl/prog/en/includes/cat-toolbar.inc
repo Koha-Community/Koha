@@ -211,7 +211,7 @@ CAN_user_serials_create_subscription ) %]
     </div>
 [% END %]
 
-    <div class="btn-group">
+    <div id="saveDropdownContainer" class="btn-group">
     <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=bibtex&amp;op=export&amp;bib=[% biblionumber %]">BIBTEX</a></li>
