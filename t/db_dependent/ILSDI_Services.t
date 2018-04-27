@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -122,6 +122,102 @@ subtest 'AuthenticatePatron test' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'GetPatronInfo test for holds' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+    $schema->resultset( 'Issue' )->delete_all;
+    $schema->resultset( 'Reserve' )->delete_all;
+    $schema->resultset( 'Borrower' )->delete_all;
+    $schema->resultset( 'Category' )->delete_all;
+    $schema->resultset( 'Item' )->delete_all; # 'Branch' deps. on this
+    $schema->resultset( 'Branch' )->delete_all;
+
+    # Configure Koha to enable ILS-DI server
+    t::lib::Mocks::mock_preference( 'ILS-DI', 1 );
+
+    my $library = $builder->build_object({
+        class => 'Koha::Libraries',
+    });
+
+    # Create new users:
+    my $brwr = $builder->build_object( {
+        class => 'Koha::Patrons',
+        value  => {
+            branchcode   => $library->branchcode,
+        }
+    } );
+    my $brwr2 = $builder->build_object( {
+        class => 'Koha::Patrons',
+        value  => {
+            branchcode   => $library->branchcode,
+        }
+    } );
+    my $brwr3 = $builder->build_object( {
+        class => 'Koha::Patrons',
+        value  => {
+            branchcode   => $library->branchcode,
+        }
+    } );
+
+    my $module = Test::MockModule->new('C4::Context');
+    $module->mock('userenv', sub { { branch => $library->branchcode } });
+
+    # Place a loan
+    my $biblio = $builder->build_object( { class => 'Koha::Biblios' } );
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems', value => { biblionumber => $biblio->biblionumber } } );
+    my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber, library => $library->branchcode, itype => $itemtype->itemtype });
+    my $issue = AddIssue($brwr, $item->barcode);
+
+    # Prepare and send web request for IL-SDI server:
+    my $query = new CGI;
+    $query->param( 'service', 'GetPatronInfo' );
+    $query->param( 'patron_id', $brwr->borrowernumber );
+    $query->param( 'show_loans', '1' );
+    my $reply = C4::ILSDI::Services::GetPatronInfo( $query );
+
+    # Check that this loan is not on hold
+    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "0", "Record is not on hold");
+    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "0", "Item is not on hold");
+
+    # Place a loan
+    # Add a hold on the biblio
+    my $biblioreserve = AddReserve({ branchcode => $library->branchcode, borrowernumber => $brwr2->borrowernumber, biblionumber => $biblio->biblionumber });
+
+    # Check that it is on hold on biblio level
+    $reply = C4::ILSDI::Services::GetPatronInfo( $query );
+    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "1", "Record is on hold");
+    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "0", "Item is on hold");
+
+    # Delete holds
+    $schema->resultset( 'Reserve' )->delete_all;
+
+    # Add a hold on the item
+    my $itemreserve = AddReserve({
+             branchcode => $library->branchcode,
+             borrowernumber => $brwr2->borrowernumber,
+             biblionumber => $biblio->biblionumber,
+             itemnumber => $item->itemnumber
+     });
+
+    # When a specific item has a reserve, the item is on hold as well as the record
+    $reply = C4::ILSDI::Services::GetPatronInfo( $query );
+    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "1", "Record is on hold");
+    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "1", "Item is on hold");
+
+    # Add another hold on the biblio
+    $biblioreserve = AddReserve({ branchcode => $library->branchcode, borrowernumber => $brwr3->borrowernumber, biblionumber => $biblio->biblionumber });
+
+    # Check that there are 2 holds on the biblio and 1 on this specific item
+    $reply = C4::ILSDI::Services::GetPatronInfo( $query );
+    is ( $reply->{loans}->{loan}[0]->{recordonhold}, "2", "Record is on hold twice");
+    is ( $reply->{loans}->{loan}[0]->{itemonhold}, "1", "Item is on hold");
+
+    # Cleanup
+    $schema->storage->txn_rollback;
+
+};
 
 subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes' => sub {
 

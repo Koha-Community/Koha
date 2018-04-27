@@ -529,6 +529,13 @@ sub GetPatronInfo {
             # FIXME We should only retrieve what is needed in the template
             my $issue = $c->unblessed_all_relateds;
             delete $issue->{'more_subfields_xml'};
+
+            # Is the item already on hold by another user?
+            $issue->{'itemonhold'} = Koha::Holds->search({ itemnumber => $issue->{'itemnumber'} })->count;
+
+            # Is the record (next available item) on hold by another user?
+            $issue->{'recordonhold'} = Koha::Holds->search({ biblionumber => $issue->{'biblionumber'} })->count;
+
             push @checkouts, $issue
         }
         $borrower->{'loans'}->{'loan'} = \@checkouts;
