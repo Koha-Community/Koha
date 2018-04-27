@@ -142,7 +142,7 @@
                 <li>
                     <label for="paid">Writeoff amount: </label>
                     <!-- default to writing off all -->
-                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price %]" />
+                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 %]" />
                 </li>
             </ol>
         </fieldset>
