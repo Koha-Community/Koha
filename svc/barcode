@@ -58,6 +58,13 @@ COOP2of5
 
 If ommited,it defaults to Code39.
 
+=item I<notext>
+
+Unless I<notext=1> is specified in the parameter list, the
+value of the barcode will included as text below the
+scannable barcode.
+
+
 =back
 
 =head2 EXAMPLES
@@ -72,7 +79,13 @@ Returns a Code39 barcode image for barcode 123456789
 
 Returns a UPCE barcode image for barcode 123456789
 
-=cut
+=item /cgi-bin/koha/svc/barcode?barcode=123456789&notext=1
+
+Returns a Code39 barcode image for barcode 123456789
+which does not include the human readable text '123456789'
+below the scannable barcode.
+
+=back
 
 my $input = new CGI;
 
@@ -86,10 +99,11 @@ binmode(STDOUT);
 
 my $type = $input->param('type') || 'Code39';
 my $barcode = $input->param('barcode');
+my $notext = $input->param('notext') ? 1 : 0;
 my $image;
 
 eval {
-    $image = GD::Barcode->new( $type, $barcode )->plot()->png();
+    $image = GD::Barcode->new( $type, $barcode )->plot( NoText => $notext )->png();
 };
 
 if ( $@ ) {
