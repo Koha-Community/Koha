@@ -796,8 +796,13 @@
                 }
             });
             var prev_rank_request;
+            var priorities;
             $("select[name=rank-request]").on("focus", function() {
                 prev_rank_request = $(this).val();
+                var row = $(this).parents("tr:first");
+                priorities = row.parent().find("select[name=rank-request]").map( function() {
+                    return $(this).val();
+                }).get();
             }).change(function() {
                 var row = $(this).parents("tr:first");
                 var value = parseInt($(this).val());
@@ -811,9 +816,9 @@
                     row.insertAfter(after);
                 }
 
-                var next_priority = 1;
+                var next_priority = 0;
                 row.parent().find("select[name=rank-request]").each(function () {
-                    $(this).val(next_priority);
+                    $(this).val(priorities[next_priority]);
                     next_priority++;
                 });
             });
