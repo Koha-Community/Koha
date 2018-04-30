@@ -69,6 +69,7 @@ my $select_lines = $input->param('selected');
 my $select       = $input->param('selected_accts');
 my $payment_note = uri_unescape scalar $input->param('payment_note');
 my $payment_type = scalar $input->param('payment_type');
+my $type         = scalar $input->param('type') || 'payment',
 my $accountlines_id;
 
 if ( $individual || $writeoff ) {
@@ -153,6 +154,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     }
                   )->pay(
                     {
+                        type         => $type,
                         amount       => $total_paid,
                         lines        => \@lines,
                         note         => $note,
@@ -187,6 +189,7 @@ if ( $input->param('error_over') ) {
 }
 
 $template->param(
+    type           => $type,
     borrowernumber => $borrowernumber,    # some templates require global
     patron        => $patron,
     total         => $total_due,

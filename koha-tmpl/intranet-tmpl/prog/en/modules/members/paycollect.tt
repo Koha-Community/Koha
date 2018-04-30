@@ -12,7 +12,7 @@
 <body id="pat_paycollect" class="pat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Pay fines for [% patron.firstname %] [% patron.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %]Pay an amount toward selected fines[% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber %]">Pay fines for [% patron.firstname %] [% patron.surname %]</a> &rsaquo; [% IF ( pay_individual ) %]Pay an individual fine[% ELSIF ( writeoff_individual ) %]Write off an individual fine[% ELSE %][% IF ( selected_accts ) %][% IF type == 'write    off' %]Write off an amount toward selected fines[% ELSE %]Pay an amount toward selected fines[% END %][% ELSE %]Pay an amount toward all fines[% END %][% END %]</div>
 
 <div id="doc3" class="yui-t2">
 
@@ -158,16 +158,30 @@
     <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
     <input type="hidden" name="selected_accts" id="selected_accts" value="[% selected_accts %]" />
     <input type="hidden" name="total" id="total" value="[% total %]" />
+    <input type="hidden" name="type" value="[% type %]" />
 
     <fieldset class="rows">
-    [% IF ( selected_accts ) %]<legend>Pay an amount toward selected fines</legend>[% ELSE %]<legend>Pay an amount toward all fines</legend>[% END %]
+    [% IF ( selected_accts ) %]
+        [% IF type == 'writeoff' %]
+            <legend>Write off an amount toward selected fines</legend>
+        [% ELSE %]
+            <legend>Pay an amount toward selected fines</legend>
+        [% END %]
+    [% ELSE %]
+        <legend>Pay an amount toward all fines</legend>
+    [% END %]
+
     <ol>
         <li>
             <span class="label">Total amount outstanding: </span>
             <span class="debit">[% total | format('%.2f') %]</span>
         </li>
     <li>
-        <label for="paid">Collect from patron: </label>
+        [% IF type == 'writeoff' %]
+            <label for="paid">Writeoff amount: </label>
+        [% ELSE %]
+            <label for="paid">Collect from patron: </label>
+        [% END %]
         <!-- default to paying all -->
         <input name="paid" id="paid" value="[% total | format('%.2f') %]" />
     </li>
@@ -189,8 +203,10 @@
     </li>
     </ol>
     </fieldset>
-    <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a></div>
+    <div class="action">
+        <input type="submit" name="submitbutton" value="Confirm" />
+        <a class="cancel" href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber %]">Cancel</a>
+    </div>
     </form>
 [% END %]
 </div></div>

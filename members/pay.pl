@@ -74,24 +74,23 @@ $user ||= q{};
 
 our $branch = C4::Context->userenv->{'branch'};
 
-my $writeoff_item = $input->param('confirm_writeoff');
-my $paycollect    = $input->param('paycollect');
-if ($paycollect) {
+if ( $input->param('paycollect') ) {
     print $input->redirect(
         "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber");
 }
-my $payselected = $input->param('payselected');
-if ($payselected) {
-    payselected(@names);
+elsif ( $input->param('payselected') ) {
+    payselected({ params => \@names });
 }
-
-my $writeoff_all = $input->param('woall');    # writeoff all fines
-if ($writeoff_all) {
+elsif ( $input->param('writeoff_selected') ) {
+    payselected({ params => \@names, type => 'writeoff' });
+}
+elsif ( $input->param('woall') ) {
     writeoff_all(@names);
-} elsif ($writeoff_item) {
+}
+elsif ( $input->param('confirm_writeoff') ) {
     my $accountlines_id = $input->param('accountlines_id');
-    my $amount       = $input->param('amountwrittenoff');
-    my $payment_note = $input->param("payment_note");
+    my $amount          = $input->param('amountwrittenoff');
+    my $payment_note    = $input->param("payment_note");
 
     my $accountline = Koha::Account::Lines->find( $accountlines_id );
 
@@ -252,7 +251,11 @@ sub borrower_add_additional_fields {
 }
 
 sub payselected {
-    my @params = @_;
+    my $parameters = shift;
+
+    my @params = @{ $parameters->{params} };
+    my $type = $parameters->{type} || 'payment';
+
     my $amt    = 0;
     my @lines_to_pay;
     foreach (@params) {
@@ -267,6 +270,7 @@ sub payselected {
     my $notes = '&notes=' . join("%0A", map { scalar $input->param("payment_note_$_") } @lines_to_pay );
     my $redirect =
         "/cgi-bin/koha/members/paycollect.pl?borrowernumber=$borrowernumber"
+      . "&type=$type"
       . $amt
       . $sel
       . $notes;
