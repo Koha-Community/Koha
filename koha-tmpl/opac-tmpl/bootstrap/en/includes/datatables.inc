@@ -1,6 +1,6 @@
 [% USE Asset %]
 [% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") %]
-<script type="text/javascript">
+<script>
 //<![CDATA[
     var MSG_DT_FIRST = _("First");
     var MSG_DT_LAST = _("Last");

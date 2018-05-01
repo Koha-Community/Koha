@@ -578,7 +578,7 @@
                                 <li id="tab_reviews"> <a href="#reviews">Reviews</a></li>
                                 [% IF ( LibraryThingForLibrariesID ) %]
                                     <li id="tab_LTFLreviews">
-                                        <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
+                                        <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]"></script>
                                         <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
                                     </li>
                                 [% END %]
@@ -1162,17 +1162,17 @@
     </div> <!-- / .row-fluid -->
     <div class="row-fluid">
         [% IF ( LibraryThingForLibrariesID ) %]
-            <script src="https://ltfl.librarything.com/forlibraries/widget.js?systype=koha&amp;id=[% LibraryThingForLibrariesID %]" type="text/javascript"></script>
+            <script src="https://ltfl.librarything.com/forlibraries/widget.js?systype=koha&amp;id=[% LibraryThingForLibrariesID %]"></script>
             <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking
             <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID %]&amp;accessibility=1">here</a>.</noscript>
         [% END %]
 
         [% IF ( NovelistSelectProfile && normalized_isbn ) %]
-            <script type="text/javascript" src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
+            <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
         [% END %]
 
         [% IF ( Babeltheque ) %]
-            <script type="text/javascript" src="[% Babeltheque_url_js %]"></script>
+            <script src="[% Babeltheque_url_js %]"></script>
         [% END %]
     </div> <!-- / .row-fluid -->
 </div> <!-- / .container-fluid -->
@@ -1382,18 +1382,18 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 [% IF ( SocialNetworks ) %]
-    <script type="text/javascript" src="https://apis.google.com/js/plusone.js">
+    <script src="https://apis.google.com/js/plusone.js"></script>
     //<![CDATA[
       {lang: '[% lang %]'}
     //]]>
     </script>
-    <script type="text/javascript">!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 [% END %]
 [% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.rating.js") %][% END %]
 
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") %][% END %]
 
-<script type="text/javascript">
+<script>
 //<![CDATA[
 
     [% IF ( OpacBrowseResults && busc ) %]
@@ -1865,7 +1865,7 @@
 </script>
 
 [% IF OPACPopupAuthorsSearch %]
-    <script type="text/javascript">
+    <script>
     //<![CDATA[
         function showAuthors(element){
             var authornumber = $(element).attr("data-count");

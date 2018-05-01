@@ -1,5 +1,5 @@
 [% USE Asset %]
-<script type="text/javascript">
+<script>
     var GB_ROOT_DIR = "[% interface %]/[% theme %]/lib/greybox/";
 </script>
 [% Asset.js("lib/greybox/AJS.js") %]

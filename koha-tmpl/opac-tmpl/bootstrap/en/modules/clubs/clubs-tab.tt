@@ -68,7 +68,7 @@
     </table>
 [% END %]
 
-<script type="text/javascript">
+<script>
 function loadEnrollmentForm( id ) {
     $("body").css("cursor", "progress");
     $('#opac-user-clubs').load('/cgi-bin/koha/clubs/enroll.pl?borrowernumber=[% borrower.borrowernumber %]&id=' + id, function() {

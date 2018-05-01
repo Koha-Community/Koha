@@ -70,7 +70,7 @@
                                     </fieldset>
                                 </form>
                                 [% IF ( modal ) %]
-                                    <script type="text/javascript">
+                                    <script>
                                         //<![CDATA[
                                             $(document).ready(function(){
                                                 $("#userdownloadshelf form").on("submit",function(e){
@@ -104,7 +104,7 @@
         </div> <!-- / .main -->
     [% INCLUDE 'opac-bottom.inc' %]
     [% BLOCK jsinclude %]
-        <script type="text/javascript">
+        <script>
             //<![CDATA[
                 $(document).ready(function(){
                     $("#userdownloadshelf form").on("submit",function(e){

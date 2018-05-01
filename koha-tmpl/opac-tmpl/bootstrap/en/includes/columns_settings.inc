@@ -1,6 +1,6 @@
 [% USE ColumnsSettings %]
 
-<script type="text/javascript">
+<script>
 function KohaTable(selector, dt_parameters, columns_settings) {
     var id = 0;
     var hidden_ids = [];

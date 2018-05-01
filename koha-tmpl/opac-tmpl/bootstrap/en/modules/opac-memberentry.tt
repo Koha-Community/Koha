@@ -937,7 +937,7 @@
     [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
     [% PROCESS 'password_check.inc' %]
     [% PROCESS 'add_password_check' new_password => 'borrower_password' %]
-    <script type="text/javascript">
+    <script>
         //<![CDATA[
         $(document).ready(function() {
             [% IF action == 'edit' && !OPACPatronDetails %]
