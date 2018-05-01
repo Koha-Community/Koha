@@ -90,7 +90,7 @@
     [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
     [% PROCESS 'password_check.inc' %]
     [% PROCESS 'add_password_check' new_password => 'Newkey' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $("#mainform").validate({
                 rules: {

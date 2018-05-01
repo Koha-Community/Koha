@@ -589,13 +589,13 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% IF ( LibraryThingForLibrariesID ) %]
-    <script src="https://ltfl.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]&amp;systype=koha" type="text/javascript"></script>
+    <script src="https://ltfl.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID %]&amp;systype=koha"></script>
 [% END %]
 [% IF ( OpacStarRatings == 'all' || Koha.Preference('Babeltheque') ) %][% Asset.js("lib/jquery/plugins/jquery.rating.js") %][% END %]
 [% IF ( OverDriveEnabled ) %][% Asset.js("js/overdrive.js") %][% END %]
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") %]
-[% END %]<script type="text/javascript">
+[% END %]<script>
 //<![CDATA[
 [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]
 function holdMultiple() {

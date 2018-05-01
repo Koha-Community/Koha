@@ -62,7 +62,7 @@
 [% BLOCK jsinclude %]
 [% Asset.js("js/overdrive.js") %]
 [% Asset.js("lib/jquery/plugins/jquery.rating.js") %]
-<script type="text/javascript">
+<script>
 var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) |html %]";
 var results_per_page = [% OPACnumSearchResults %];
 

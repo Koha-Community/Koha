@@ -13,7 +13,7 @@
 <!--[if lt IE 9]>
     <script src="[% interface %]/[% theme %]/lib/respond.min.js"></script>
 <![endif]-->
-<script type="text/javascript">
+<script>
     function _(s) { return s } // dummy function for gettext
 </script>
 [% Asset.js("lib/modernizr.min.js") %]
@@ -62,5 +62,5 @@ The Submit button only needs to be clicked if you enter the barcode manually.</p
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% IF ( SCOUserJS ) %]<script type="text/javascript">[% SCOUserJS %]</script>[% END %]
+[% IF ( SCOUserJS ) %]<script>[% SCOUserJS %]</script>[% END %]
 [% END %]

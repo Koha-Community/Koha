@@ -885,7 +885,7 @@
 [% BLOCK jsinclude %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/JavaScript">
+    <script>
         //<![CDATA[
         var MSG_CONFIRM_DELETE_ARTREQ   = _("Are you sure you want to cancel this article request?");
         var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
@@ -1034,7 +1034,7 @@
     </script>
     [% IF Koha.Preference('OverDriveCirculation') %]
     [% Asset.js("js/overdrive.js") %]
-    <script type="text/JavaScript">
+    <script>
     $(document).ready(function() {
         [% IF ( overdrive_error ) %]
             KOHA.OverDriveCirculation.display_error("#opac-user-overdrive", "[% overdrive_error.dquote %]");

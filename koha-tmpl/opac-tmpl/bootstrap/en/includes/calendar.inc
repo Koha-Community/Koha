@@ -1,5 +1,5 @@
 [% USE Koha %]
-<script type="text/javascript">
+<script>
     //<![CDATA[
         var debug    = "[% debug %]";
         var dformat  = "[% dateformat %]";

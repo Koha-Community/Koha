@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% BLOCK add_password_check %]
-<script type="text/javascript">
+<script>
     var pwd_title = "";
     var pattern_title = "";
     var new_password_node_name = "[% new_password %]";

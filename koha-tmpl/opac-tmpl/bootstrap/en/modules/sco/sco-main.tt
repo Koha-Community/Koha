@@ -16,7 +16,7 @@
 <!--[if lt IE 9]>
     <script src="[% interface %]/[% theme %]/lib/respond.min.js"></script>
 <![endif]-->
-<script type="text/javascript">
+<script>
     function _(s) { return s } // dummy function for gettext
 </script>
 [% Asset.js("lib/modernizr.min.js") %]
@@ -333,7 +333,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         //<![CDATA[
         function mungeHistory() {
             // prevent back button from allowing form resubmission
@@ -420,5 +420,5 @@
     //]]>
     </script>
 
-    [% IF ( Koha.Preference('SCOUserJS') ) %]<script type="text/javascript">[% Koha.Preference('SCOUserJS') %]</script>[% END %]
+    [% IF ( Koha.Preference('SCOUserJS') ) %]<script>[% Koha.Preference('SCOUserJS') %]</script>[% END %]
 [% END %]

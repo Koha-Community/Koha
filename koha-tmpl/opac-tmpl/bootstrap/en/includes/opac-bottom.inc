@@ -81,13 +81,13 @@
 <!-- JavaScript includes -->
 [% Asset.js("lib/jquery/jquery.js") %]
 [% Asset.js("lib/jquery/jquery-ui.js") %]
-<script type="text/javascript">
+<script>
 // Resolve name collision between jQuery UI and Twitter Bootstrap
 $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 [% Asset.js("lib/bootstrap/js/bootstrap.min.js") %]
 [% Asset.js("js/global.js") %]
-<script type="text/javascript">
+<script>
     Modernizr.load([
         // Test need for polyfill
         {
@@ -103,7 +103,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     $.fn.modal.Constructor.prototype.enforceFocus = function () {};
 </script>
 [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
-<script type="text/javascript">//<![CDATA[
+<script>//<![CDATA[
         var NO_AMAZON_IMAGE = _("No cover image available");
     //]]>
 </script>
@@ -115,7 +115,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% Asset.js("lib/emoji-picker/js/jquery.emojiarea.js") %]
 [% Asset.js("lib/emoji-picker/js/emoji-picker.js") %]
 
-<script type="text/javascript">
+<script>
     //<![CDATA[
     var MSG_CONFIRM_AGAIN = _("Warning: Cannot be undone. Please confirm once again")
     var MSG_DELETE_SEARCH_HISTORY = _("Are you sure you want to delete your search history?");
@@ -183,13 +183,13 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% ELSIF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
     [% Asset.js("js/basket.js") %]
 [% ELSE %]
-    <script type="text/javascript">var readCookie;</script>
+    <script>var readCookie;</script>
 [% END %]
 
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %][% IF Koha.Preference( 'TagsEnabled' ) == 1 %][% Asset.js("js/tags.js") %][% END %][% ELSE %][% END %]
 [% IF ( GoogleJackets ) %]
     [% Asset.js("js/google-jackets.js") %]
-    <script type="text/javascript">
+    <script>
         //<![CDATA[
         var NO_GOOGLE_JACKET = _("No cover image available");
         //]]>
@@ -197,7 +197,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% END %]
 [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
     [% Asset.js("js/coce.js") %]
-    <script type="text/javascript">
+    <script>
         //<![CDATA[
         var NO_COCE_JACKET = _("No cover image available");
         //]]>
@@ -206,7 +206,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
 [% IF OpenLibraryCovers || OpenLibrarySearch %]
     [% Asset.js("js/openlibrary.js") %]
-    <script type="text/javascript">
+    <script>
     //<![CDATA[
     var NO_OL_JACKET = _("No cover image available");
     var OL_PREVIEW = _("Preview");
@@ -216,7 +216,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
 [% IF OPACLocalCoverImages %]
     [% Asset.js("js/localcovers.js") %]
-    <script type="text/javascript">
+    <script>
     //<![CDATA[
     var NO_LOCAL_JACKET = _("No cover image available");
     //]]>
@@ -225,7 +225,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 
 [% IF ( BakerTaylorEnabled ) %]
     [% Asset.js("js/bakertaylorimages.js") %]
-    <script type="text/javascript">
+    <script>
         //<![CDATA[
         var NO_BAKERTAYLOR_IMAGE = _("No cover image available");
         $(window).load(function(){
@@ -235,12 +235,12 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     </script>
 [% END %]
 [% IF ( GoogleIndicTransliteration ) %]
-    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+    <script src="https://www.google.com/jsapi"></script>
     [% Asset.js("js/googleindictransliteration.js") %]
 [% END %]
 
 [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
-<script type="text/javascript">
+<script>
     $("#news-branch-select").change(function() {
         $( "#news-branch-select" ).submit();
     });
@@ -248,7 +248,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 [% END %]
 
 [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") %]
-<script type="text/javascript">
+<script>
 $(document).ready(function() {
     if($('#searchsubmit').length) {
         $(document).on("click", '#searchsubmit', function(e) {
@@ -270,7 +270,7 @@ $(document).ready(function() {
 </script>
 [% PROCESS jsinclude %]
 [% IF ( OPACUserJS ) %]
-    <script type="text/javascript">
+    <script>
         //<![CDATA[
         [% OPACUserJS %]
         //]]>
@@ -279,7 +279,7 @@ $(document).ready(function() {
 [% IF SCO_login %]
     [% SET SCOUserJS = Koha.Preference('SCOUserJS') %]
     [% IF ( SCOUserJS ) %]
-        <script type="text/javascript">
+        <script>
             //<![CDATA[
             [% SCOUserJS %]
             //]]>
