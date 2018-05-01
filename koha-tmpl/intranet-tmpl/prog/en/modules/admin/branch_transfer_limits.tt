@@ -15,11 +15,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Set library checkin and transfer policy</div>
 
-<div id="doc3" class="yui-t1">
-
-<div id="bd">
-     <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 <h1>Library [% branchcode | html %] - [% Branches.GetName( branchcode ) | html %] Checkin and transfer policy</h1>
     <form method="get" action="/cgi-bin/koha/admin/branch_transfer_limits.pl" id="selectlibrary">
@@ -79,18 +78,22 @@
 		</fieldset>
 		</form>
 		</div>
-  </div>
-</div>
-<div class="yui-b">
-  [% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function(){
             $("#CheckAll").click(function(){ $("#transferlimit_tabs").checkCheckboxes(); return false; });
             $("#UncheckAll").click(function(){ $("#transferlimit_tabs").unCheckCheckboxes(); return false; });
