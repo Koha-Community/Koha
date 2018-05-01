@@ -1741,7 +1741,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
-    plan tests => 12;
+    plan tests => 14;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
@@ -1890,6 +1890,16 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             patron          => $patron,
             due_date        => $five_days_ago,
             expiration_date => $expected_expiration_dt->clone->add( days => 1 ),
+        }
+    );
+
+    test_debarment_on_checkout(
+        {
+            item            => $item_1,
+            library         => $library,
+            patron          => $patron,
+            return_date     => dt_from_string->add(days => 5),
+            expiration_date => dt_from_string->add(days => 5 + (5 * 2 - 1) ),
         }
     );
 };
@@ -2393,6 +2403,7 @@ sub test_debarment_on_checkout {
     my $library  = $params->{library};
     my $patron   = $params->{patron};
     my $due_date = $params->{due_date} || dt_from_string;
+    my $return_date = $params->{return_date} || dt_from_string;
     my $expected_expiration_date = $params->{expiration_date};
 
     $expected_expiration_date = output_pref(
@@ -2407,7 +2418,7 @@ sub test_debarment_on_checkout {
     AddIssue( $patron, $item->{barcode}, $due_date );
 
     AddReturn( $item->{barcode}, $library->{branchcode},
-        undef, undef, dt_from_string );
+        undef, undef, $return_date );
     my $debarments = Koha::Patron::Debarments::GetDebarments(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
     is( scalar(@$debarments), 1, 'Test at line ' . $line_number );
