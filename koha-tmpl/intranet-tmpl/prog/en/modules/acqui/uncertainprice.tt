@@ -14,11 +14,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( booksellername ) %]<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo; Uncertain prices for vendor [% booksellername | html %][% ELSE %]Uncertain prices[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-
-    <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% INCLUDE 'acquisitions-toolbar.inc' %]
         [% IF ( validate ) %]
@@ -132,17 +131,20 @@
 	</form>
 	[% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'vendor-menu.inc' %]
-</div>
-</div>
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+        [% INCLUDE 'vendor-menu.inc' %]
+    </aside>
+</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             var uncertainpricet = $("#uncertainpricet").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [

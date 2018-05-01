@@ -28,11 +28,12 @@
     [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
 
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
 	[% IF ( receive_error ) %]
 	<div class="dialog alert">
 	<h3>Error adding items:</h3>
@@ -387,11 +388,12 @@
 
 [% END %]
 
-</div>
-</div>
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
 
+<div class="col-sm-2 col-sm-pull-10">
+<aside>
 
-<div class="yui-b">
 <form action="/cgi-bin/koha/acqui/parcel.pl" id="filterform" method="post">
   <fieldset class="brief">
     <h4>Filter</h4>
@@ -428,17 +430,17 @@
   </fieldset>
 </form>
 [% INCLUDE 'acquisitions-menu.inc' %]
-</div>
-</div>
+    </aside>
+</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
-    <style type="text/css">#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
-    <script type="text/javascript">
-
+    <style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
+    <script>
         dt_overwrite_html_sorting_localeCompare();
         var sticky_filters = [% sticky_filters | html %];
 

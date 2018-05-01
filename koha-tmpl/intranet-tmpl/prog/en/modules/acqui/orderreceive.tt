@@ -15,18 +15,17 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]][% END %] (order #[% ordernumber | html %])</div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 <h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% ordernumber | html %])</h1>
 
 [% IF ( count ) %]
     <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post" onsubmit="return Check(this);">
-<div class="yui-g">
-<div class="yui-u first">
+<div class="row">
+<div class="col-sm-6">
     <div class="error" style="display:none"></div>
 
     <fieldset class="rows">
@@ -152,7 +151,7 @@
     <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
     <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
 	</div>
-	<div class="yui-u">
+    <div class="col-sm-6">
     <fieldset class="rows">
     <legend>Accounting details</legend>
         <ol>
@@ -254,7 +253,7 @@
     </fieldset>
 
 </div>
-</div><div class="yui-g"><fieldset class="action">
+</div><div class="row"><fieldset class="action">
         <input type="submit"  value="Save" class="button" accesskey="w" />
         <a class="cancel" href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&sticky_filters=1">Cancel</a>
 </fieldset></div>    </form>
@@ -262,13 +261,15 @@
     This ordernumber does not exist.
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'acquisitions-menu.inc' %]
-</div>
-</div>
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
 
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+        [% INCLUDE 'acquisitions-menu.inc' %]
+    </aside>
+</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
 [% INCLUDE 'calendar.inc' %]
@@ -276,7 +277,7 @@
     [% Asset.js("js/additem.js") | $raw %]
     [% Asset.js("js/cataloging.js") | $raw %]
     [% Asset.js("js/prevent_submit.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         function Check(form) {
             [% IF (AcqCreateItemReceiving) %]
                 var total_errors = CheckMandatorySubfields(form);

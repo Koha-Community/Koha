@@ -14,11 +14,14 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>  &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; Receive shipment from vendor [% name | html %]</div>
 
-[% IF ( count ) %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc" class="yui-t7">[% END %]
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        [% IF ( count ) %]
+            <div class="col-sm-10 col-sm-push-2">
+        [% ELSE %]
+            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        [% END %]
+            <main>
 
 [% IF ( error_failed_to_create_invoice ) %]
     <div id="error" class="dialog alert">
@@ -172,10 +175,13 @@
             <fieldset class="action"><input type="submit" class="button" value="Next" /> <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">Cancel</a></fieldset>
         </form>
     </div>
-</div>
-</div>
-<div class="yui-b">
-[% IF ( count ) %]<form method="get" action="parcels.pl">
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+[% IF ( count ) %]
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+    <form method="get" action="parcels.pl">
     <fieldset class="brief">
 	<h4>Filter</h4>
         <ol>
@@ -198,9 +204,11 @@
         </ol>
 	<fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | html %]">Clear</a></fieldset>
 	</fieldset>
-</form>[% END %]
-</div>
-</div>
+</form>
+</aside>
+</div>  <!-- /.col-sm-2.col-sm-pull-10 -->
+[% END %]
+</div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]

@@ -100,11 +100,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; [% IF ( enter ) %][% IF ( booksellerid ) %] <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a> &rsaquo; Update: [% name | html %][% ELSE %]Add vendor[% END %] [% ELSE %][% name | html %][% END %]</div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-<div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
     [% IF ( enter ) %]
         [% IF ( booksellerid ) %]
         <h1>Update: [% name | html %]</h1>
@@ -115,7 +115,6 @@
 [% UNLESS ( enter ) %][% INCLUDE 'acquisitions-toolbar.inc' %][% END %]
 [% IF ( enter ) %]
     <form action="updatesupplier.pl" name="updatesupplier" class="validated" method="post">
-    <div class="yui-g">
         <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
         <fieldset class="rows">
             <legend>Company details</legend>
@@ -148,8 +147,7 @@
             [% END %]
             <button id="add-contact" class="btn btn-default"><i class="fa fa-plus"></i> Add another contact</button>
         </fieldset>
-    </div>
-        <div class="yui-g">
+
         <fieldset class="rows">
             <legend>Ordering information</legend>
             <ol class="radio"><li><label for="activestatus" class="radio">Vendor is:</label>
@@ -244,12 +242,11 @@
         <fieldset class="action"><input type="submit" value="Save" /> [% IF ( booksellerid ) %]
         <a class="cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% ELSE %]<a class="cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
         [% END %]Cancel</a></fieldset>
-        </div>
     </form>
 [% ELSE %]
     <h1>[% name | html %]</h1>
-        <div class="yui-g">
-            <div id="supplier-company-details" class="yui-u first">
+        <div class="row">
+            <div id="supplier-company-details" class="col-sm-6">
                 <h2>Vendor details</h2>
                 <p><span class="label">Company name: </span>[% name | html %]</p>
                 <p><span class="label">Postal address: </span>[% postal | html %]</p>
@@ -292,7 +289,7 @@
             </div>
             </div>
 
-            <div class="supplier-contact-details yui-u">
+            <div class="supplier-contact-details col-sm-6">
                 <h2>Contact</h2>
                 [% FOREACH contact IN contacts %]
                     [% INCLUDE show_contact %]
@@ -311,7 +308,7 @@
         </div>
 
         [% IF ( contracts ) %]
-            <div id="supplier-contracts" class="yui-g">
+            <div id="supplier-contracts">
                 <h2>Contract(s)</h2>
                 <table id="contractst">
                   <thead>
@@ -345,17 +342,20 @@
 
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'vendor-menu.inc' %]
-</div>
-</div>
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+        [% INCLUDE 'vendor-menu.inc' %]
+    </aside>
+</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         function confirm_deletion() {
             if (confirm(_("Confirm deletion of this vendor ?"))) {
                 window.location="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]&op=delete";
