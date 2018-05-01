@@ -9,11 +9,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basketno | html %]">Basket [% basketno | html %]</a> &rsaquo; Duplicate warning</div>
 
-<div id="doc3" class="yui-t2">
-
-<div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 <div class="dialog alert">
 <h4>Duplicate warning</h4>
@@ -23,8 +22,8 @@
 [% ELSE %]<a class="popup" target="_blank" title="Open in new window" href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber |url %]">[% END %][% duplicatetitle | html %]</a></p>
 </div>
 
-<div class="yui-gb">
-<div class="yui-u first">
+<div class="row">
+<div class="col-sm-4">
 <div style="border: 1px solid #DDD; padding:1em;">
 <form action="/cgi-bin/koha/acqui/neworderempty.pl">
 <h4>Use existing record</h4>
@@ -37,7 +36,7 @@
 </div>
 </div>
 
-<div class="yui-u">
+<div class="col-sm-4">
 <div style="border: 1px solid #DDD; padding:1em;">
 <form action="/cgi-bin/koha/acqui/basket.pl">
 <h4>Cancel and return to order</h4>
@@ -48,7 +47,7 @@
 </div>
 </div>
 
-<div class="yui-u">
+<div class="col-sm-4">
 <div style="border: 1px solid #DDD; padding:1em;">
 <form action="/cgi-bin/koha/acqui/neworderempty.pl">
 <h4>Create new record</h4>
@@ -64,10 +63,14 @@
 
 </div>
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'acquisitions-menu.inc' %]
-</div>
-</div>
+</main>
+</div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
+        [% INCLUDE 'acquisitions-menu.inc' %]
+    </aside>
+</div> <!-- /.col-sm-2.col-sm-pull-10 -->
+</div> <!-- /.row -->
+
 [% INCLUDE 'intranet-bottom.inc' %]
