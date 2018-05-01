@@ -97,10 +97,11 @@
 [% INCLUDE 'prefs-admin-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Columns settings</div>
 
-<div id="doc3" class="yui-t2">
-  <div id="bd">
-    <div id="yui-main">
-      <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
         <h2>Columns settings</h2>
         <div id="modules">
           <h3><a href="#acqui">Acquisition</a></h3>
@@ -158,17 +159,19 @@
           </div>
 
         </div>
-      </div>
-    </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-    <div class="yui-b">
-      [% INCLUDE 'admin-menu.inc' %]
-    </div>
-  </div>
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready( function() {
             var accordion = $( "#modules" ).accordion({
                 collapsible: true,

@@ -22,10 +22,10 @@
 [% IF op == 'delete_confirmed' %] <a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a> &rsaquo; Category deleted[% END %]
 [% IF op == 'list' %]Patron categories[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">
@@ -485,19 +485,22 @@
     [% END %]
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         var MSG_CATEGORYCODE_CHARS = _("Category code can only contain the following characters: letters, numbers, - and _.");
         var MSG_ONE_ENROLLMENTPERIOD = ("Please choose an enrollment period in months OR by date.");
     </script>
