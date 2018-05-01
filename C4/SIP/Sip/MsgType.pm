@@ -9,7 +9,6 @@ package C4::SIP::Sip::MsgType;
 use strict;
 use warnings;
 use Exporter;
-use Sys::Syslog qw(syslog);
 
 use C4::SIP::Sip qw(:all);
 use C4::SIP::Sip::Constants qw(:all);

@@ -6,7 +6,7 @@ package C4::SIP::ILS;
 
 use warnings;
 use strict;
-use Sys::Syslog qw(syslog);
+use C4::SIP::Sip qw(syslog);
 use Data::Dumper;
 
 use C4::SIP::ILS::Item;

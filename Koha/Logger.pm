@@ -159,11 +159,14 @@ sub _check_conf {    # check logfiles in log4perl config (at initialization)
         if ( $l =~ /(OPAC|INTRANET)\.filename\s*=\s*(.*)\s*$/i ) {
 
             # we only check the two default logfiles, skipping additional ones
-            return if !-w $2;
+            if ( !-w $2 ) {
+                warn "Log file $2 is not writable!";
+                return;
+            };
             push @logs, $1 . ':' . $2;
         }
     }
-    return if !@logs;    # we should find one
+    return unless @logs; # we should find one
     return \@logs;
 }
 

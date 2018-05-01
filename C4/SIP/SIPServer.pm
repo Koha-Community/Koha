@@ -5,17 +5,22 @@ use strict;
 use warnings;
 use FindBin qw($Bin);
 use lib "$Bin";
-use Sys::Syslog qw(syslog);
 use Net::Server::PreFork;
 use IO::Socket::INET;
 use Socket qw(:DEFAULT :crlf);
+use Scalar::Util qw(blessed);
 require UNIVERSAL::require;
 
 use C4::Context;
+use C4::SIP::Sip qw(syslog);
 use C4::SIP::Sip::Constants qw(:all);
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType qw( handle login_core );
+
+use Koha::Logger;
+use C4::SIP::Trapper;
+tie *STDERR, "C4::SIP::Trapper";
 
 use base qw(Net::Server::PreFork);
 
@@ -80,6 +85,9 @@ __PACKAGE__ ->run(@parms);
 # Child
 #
 
+my $activeSIPServer;
+my $activeLogger;
+
 # process_request is the callback used by Net::Server to handle
 # an incoming connection request.
 
@@ -90,6 +98,13 @@ sub process_request {
     my $transport;
 
     $self->{config} = $config;
+
+    $self->{account} = undef;  # Clear out the account from the last request, it may be different
+    $self->{logger} = _set_logger( Koha::Logger->get( { interface => 'sip' } ) );
+
+    # Flush previous MDCs to prevent accidentally leaking incorrect MDC-entries
+    Log::Log4perl::MDC->put( "accountid", undef );
+    Log::Log4perl::MDC->put( "peeraddr",  undef );
 
     my $sockname = getsockname(STDIN);
 
@@ -155,6 +170,19 @@ sub raw_transport {
             C4::SIP::Sip::MsgType::handle($input, $self, LOGIN);
     }
     alarm 0;
+
+    $self->{logger} = _set_logger(
+        Koha::Logger->get(
+            {
+                interface => 'sip',
+                category  => $self->{account}->{id}, # Add id to namespace
+            }
+        )
+    );
+
+    # Set MDCs after properly authenticating
+    Log::Log4perl::MDC->put( "accountid", $self->{account}->{id} );
+    Log::Log4perl::MDC->put( "peeraddr",  $self->{server}->{peeraddr} );
 
     syslog("LOG_DEBUG", "raw_transport: uname/inst: '%s/%s'",
         $self->{account}->{id},
@@ -391,6 +419,58 @@ sub get_timeout {
     } else {
         return $fallback;
     }
+}
+
+=head2 get_SIPServer
+
+    my $sipServer = C4::SIP::SIPServer::get_SIPServer()
+
+@RETURNS C4::SIP::SIPServer, the current server's child-process used to handle this SIP-transaction
+
+=cut
+
+sub get_SIPServer {
+    unless($activeSIPServer) {
+        my @cc = caller(1);
+        die "$cc[3]() asks for \$activeSIPServer, but he is not defined yet";
+    }
+    return $activeSIPServer;
+}
+
+sub _set_SIPServer {
+    my ($sipServer) = @_;
+    unless (blessed($sipServer) && $sipServer->isa('C4::SIP::SIPServer')) {
+        my @cc = caller(0);
+        die "$cc[3]():> \$sipServer '$sipServer' is not a C4::SIP::SIPServer-object";
+    }
+    $activeSIPServer = $sipServer;
+    return $activeSIPServer;
+}
+
+=head2 get_logger
+
+    my $logger = C4::SIP::SIPServer::get_logger()
+
+@RETURNS Koha::Logger, the logger used to log this SIP-transaction
+
+=cut
+
+sub get_logger {
+    unless($activeLogger) {
+        my @cc = caller(1);
+        die "$cc[3]() asks for \$activeLogger, but he is not defined yet";
+    }
+    return $activeLogger;
+}
+
+sub _set_logger {
+    my ($logger) = @_;
+    unless (blessed($logger) && $logger->isa('Koha::Logger')) {
+        my @cc = caller(0);
+        die "$cc[3]():> \$logger '$logger' is not a Koha::Logger-object";
+    }
+    $activeLogger = $logger;
+    return $activeLogger;
 }
 
 1;
