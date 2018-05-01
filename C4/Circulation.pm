@@ -1988,6 +1988,7 @@ sub AddReturn {
 
         if ( $issue and $issue->is_overdue ) {
         # fix fine days
+            $today = $return_date if $return_date;
             $today = $dropboxdate if $dropbox;
             my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item, dt_from_string($issue->date_due), $today );
             if ($reminder){
