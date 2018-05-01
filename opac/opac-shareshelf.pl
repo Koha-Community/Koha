@@ -134,29 +134,29 @@ sub show_accept {
 
     # We could have used ->find with the share id, but we don't want to change
     # the url sent to the patron
-    my $shared_shelf = Koha::Virtualshelfshares->search(
+    my $shared_shelves = Koha::Virtualshelfshares->search(
         {
             shelfnumber => $param->{shelfnumber},
         },
         {
             order_by => { -desc => 'sharedate' },
-            limit => 1,
         }
     );
 
-    if ( $shared_shelf ) {
-        $shared_shelf = $shared_shelf->next;
+    if ( $shared_shelves ) {
         my $key = keytostring( stringtokey( $param->{key}, 0 ), 1 );
-        my $is_accepted = eval { $shared_shelf->accept( $key, $param->{loggedinuser} ) };
-        if ( $is_accepted ) {
-            notify_owner($param);
+        while ( my $shared_shelf = $shared_shelves->next ) {
+            my $is_accepted = eval { $shared_shelf->accept( $key, $param->{loggedinuser} ) };
+            if ( $is_accepted ) {
+                notify_owner($param);
 
-            #redirect to view of this shared list
-            print $param->{query}->redirect(
-                -uri    => SHELVES_URL . $param->{shelfnumber},
-                -cookie => $param->{cookie}
-            );
-            exit;
+                #redirect to view of this shared list
+                print $param->{query}->redirect(
+                    -uri    => SHELVES_URL . $param->{shelfnumber},
+                    -cookie => $param->{cookie}
+                );
+                exit;
+            }
         }
         $param->{errcode} = 7;    #not accepted (key not found or expired)
     } else {
