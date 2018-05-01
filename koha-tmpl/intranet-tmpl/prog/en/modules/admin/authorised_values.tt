@@ -29,11 +29,10 @@
 	   [% IF ( action_add_category ) %]New category[% END %][% END %]
 [% IF op == 'list' %]Authorized values[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% IF op == 'add_form' %]
 	<h1>
@@ -275,17 +274,20 @@
 
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $("#table_authorized_values").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [

@@ -25,11 +25,10 @@
     [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
-<div id="bd">
-<div id="yui-main">
-<div class="yui-b" id="content">
-
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% UNLESS op == 'delete_confirm' %][% INCLUDE 'budgets-admin-toolbar.inc' %][% END %]
 
@@ -393,9 +392,12 @@
     </div>
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+
 [% IF op == 'list' %]
   <form action="/cgi-bin/koha/admin/aqbudgets.pl" method="get">
     <a href="#" id="filterbutton">Filters</a>
@@ -440,12 +442,15 @@
         <input type="submit" class="submit" name="filter" value="Go" />
     </fieldset>
 </form>[% END %]
-[% INCLUDE 'acquisitions-menu.inc' %]
-</div>
-</div>
+
+                [% INCLUDE 'acquisitions-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acq.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var MSG_BUDGET_PARENT_ALLOCATION = "- " + _("Fund amount exceeds parent allocation") + "\n";
         var MSG_BUDGET_PERIOD_ALLOCATION = "- " + _("Fund amount exceeds period allocation") + "\n";
         var MSG_PARENT_BENEATH_BUDGET = "- " + _("New budget-parent is beneath budget") + "\n";
@@ -453,7 +458,7 @@
 
     [% Asset.js("js/acq.js") | $raw %]
     [% IF op == 'add_form' %]
-        <script type="text/javascript">
+        <script>
         //<![CDATA[
 
             function userPopup() {
@@ -612,7 +617,7 @@
         [% INCLUDE 'datatables.inc' %]
         [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
 
-        <script type="text/javascript">
+        <script>
         //<![CDATA[
             //
             $(document).ready(function() {
