@@ -187,7 +187,7 @@ $( document ).ready( function() {
     [% IF ( overdrive_error ) %]
     KOHA.OverDriveCirculation.display_error("#breadcrumbs", "[% overdrive_error.dquote %]");
     [% END %]
-    [% IF ( loggedinusername ) %]
+    [% IF ( loggedinusername and OverDriveCirculation ) %]
     KOHA.OverDriveCirculation.with_account_details("#breadcrumbs", function() {
         search( 0 );
     });
