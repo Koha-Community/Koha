@@ -31,7 +31,7 @@ my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
 
 subtest '/oauth/token tests' => sub {
-    plan tests => 24;
+    plan tests => 27;
 
     $schema->storage->txn_begin;
 
@@ -50,6 +50,8 @@ subtest '/oauth/token tests' => sub {
     $t->post_ok('/api/v1/oauth/token', form => { grant_type => 'password' })
         ->status_is(400)
         ->json_is({error => 'Unimplemented grant type'});
+
+    t::lib::Mocks::mock_preference('RESTOAuth2ClientCredentials', 1);
 
     # No client_id/client_secret
     $t->post_ok('/api/v1/oauth/token', form => { grant_type => 'client_credentials' })
@@ -98,6 +100,16 @@ subtest '/oauth/token tests' => sub {
     $t->post_ok('/api/v1/oauth/token', form => $formData)
         ->status_is(403)
         ->json_is({ error => 'unauthorized_client' });
+
+    # disable client credentials grant
+    t::lib::Mocks::mock_preference('RESTOAuth2ClientCredentials', 0);
+
+    # enable API key
+    $api_key->active(1)->store;
+    # Wrong grant type
+    $t->post_ok('/api/v1/oauth/token', form => $formData )
+        ->status_is(400)
+        ->json_is({ error => 'Unimplemented grant type' });
 
     $schema->storage->txn_rollback;
 };
