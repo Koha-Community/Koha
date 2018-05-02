@@ -57,10 +57,14 @@ if ( $op eq 'new' ) {
 
 } elsif ( $op eq 'search' ) {
     my $uploads;
-    if( $id ) {
-        my $rec = Koha::UploadedFiles->find( $id );
-        undef $rec if $rec && $plugin && !$rec->public;
-        push @$uploads, $rec->unblessed if $rec;
+    if( $id ) { # might be a comma separated list
+        my @id = split /,/, $id;
+        foreach my $recid (@id) {
+            my $rec = Koha::UploadedFiles->find( $recid );
+            push @$uploads, $rec->unblessed
+                if $rec && ( $rec->public || !$plugin );
+                # Do not show private uploads in the plugin mode (:editor)
+        }
     } else {
         $uploads = Koha::UploadedFiles->search_term({
             term => $term,
