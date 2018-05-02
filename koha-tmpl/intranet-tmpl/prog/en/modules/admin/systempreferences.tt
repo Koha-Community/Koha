@@ -16,11 +16,10 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; [% IF ( add_form ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; [% IF ( modify ) %]Modify system preference '[% searchfield | html %]'[% ELSE %]Add a system preference[% END %][% END %][% IF ( add_validate ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Data added[% END %]
 [% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System Preferences</a> &rsaquo; <a href="/cgi-bin/koha/admin/systempreferences.pl?op=add_form&amp;searchfield=[% searchfield | html %]">[% searchfield | html %]</a> &rsaquo; Confirm deletion of parameter '[% searchfield | html %]'[% END %][% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/systempreferences.pl">System preferences</a> &rsaquo; Parameter deleted[% END %][% IF ( else ) %]System preferences[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% IF ( add_form ) %]
         [% IF ( type_upload ) %]
@@ -372,19 +371,22 @@
     
     [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'prefs-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [%# Add WYSIWYG editor for htmlarea system preferences %]
     [% INCLUDE 'wysiwyg-systempreferences.inc' %]
     [% IF ( else ) %]
         [% INCLUDE 'datatables.inc' %]
-        <script type="text/javascript">
+        <script>
              $(document).ready(function() {
                 [% IF ( loop ) %]$("#sysprefst").dataTable($.extend(true, {}, dataTablesDefaults, {
                     "sDom": '<"top pager"ilf>t',
@@ -396,7 +398,7 @@
              });
         </script>
     [% END %]
-    <script type="text/javascript">
+    <script>
         [% IF ( add_form ) %]
             $(document).ready(function() {
                 $('.variabletype').css({ color: "#0000CC", cursor: "pointer" });

@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Transport cost matrix</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
+<style>
 .disabled-transfer {
     background-color: #FF8888;
 }
@@ -18,11 +18,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Transport cost matrix</div>
 
-<div id="doc3" class="yui-t1">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-<div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
     <h1 class="parameters">
             Defining transport costs between libraries
     </h1>
@@ -85,16 +85,20 @@
                 <input type="submit" value="Save" class="submit" /> <a href="/cgi-bin/koha/admin/transport-cost-matrix.pl" class="cancel">Cancel</a>
             </fieldset>
         </form>
-    </div>
-    </div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         function check_transport_cost(e) {
             var val = e.value;
             if (val && val != '' && !isNaN(parseFloat(val)) && val >= 0.0) {

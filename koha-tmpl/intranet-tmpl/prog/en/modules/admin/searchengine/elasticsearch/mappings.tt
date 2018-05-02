@@ -4,7 +4,7 @@
 <title>Koha &rsaquo; Administration &rsaquo; Search engine configuration</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("lib/jquery/plugins/jquery.tablednd.js") | $raw %]
-<script type="text/javascript">
+<script>
     function clean_line( line ) {
         $(line).find('input[type="text"]').val("");
         $(line).find('select').find('option:first').attr("selected", "selected");
@@ -54,7 +54,7 @@
         });
     });
 </script>
-<style type="text/css">
+<style>
 a.add, a.delete {
     cursor: pointer;
 }
@@ -66,11 +66,10 @@ a.add, a.delete {
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Search engine configuration</div>
 
-<div id="doc3" class="yui-t1">
-
-  <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
     [% FOR m IN messages %]
       <div class="dialog [% m.type | html %]">
@@ -317,11 +316,15 @@ a.add, a.delete {
             <button class="btn btn-default" type="submit" name="op" value="reset_confirm"><i class="fa fa-refresh" aria-hidden="true"></i> Reset Mappings</button>
         </p>
     </form>
-</div>
 
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
 [% INCLUDE 'intranet-bottom.inc' %]

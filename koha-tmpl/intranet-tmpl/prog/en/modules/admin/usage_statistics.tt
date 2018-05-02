@@ -16,10 +16,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Usage statistics</div>
 
-<div id="doc3" class="yui-t2">
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">
@@ -50,170 +50,187 @@
 
     <form id="category_form" action="/cgi-bin/koha/admin/usage_statistics.pl" method="post">
         <h1>Modify the statistics you share with the Koha community</h1>
-        <fieldset class="rows">
-            <ol style="float:left;">
-                <li>
-                    <label for="UsageStats">Share my Koha usage statistics: </label>
-                    <select name="UsageStats" id="UsageStats">
-                    [% IF Koha.Preference('UsageStats') %]
-                        <option value="1" selected="selected">Yes</option>
-                        <option value="0">No</option>
-                    [% ELSE %]
-                        <option value="1">Yes</option>
-                        <option value="0" selected="selected">No</option>
-                    [% END %]
-                    </select>
-                </li>
-                <li>
-                    <label for="UsageStatsCountry">Your country: </label>
-                    [% SET UsageStatsCountry = Koha.Preference('UsageStatsCountry') %]
-                    [% SET IsUsageStatsCountryValid = 0 %]
-                    [% IF NOT UsageStatsCountry %]
-                        [% SET IsUsageStatsCountryValid = 1 %]
-                    [% END %]
-                    [% PROCESS 'country-list.inc' %]
-                    <select name="UsageStatsCountry" id="UsageStatsCountry">
-                        <option value="">&nbsp;</option>
-                        [% FOR country IN countries %]
-                            [% IF country == UsageStatsCountry %]
-                                <option value="[% country | html %]" selected="selected">[% country | html %]</option>
-                                [% SET IsUsageStatsCountryValid = 1 %]
-                            [% ELSE %]
-                                <option value="[% country | html %]">[% country | html %]</option>
-                            [% END %]
-                        [% END %]
-                    </select>
-                    [% UNLESS IsUsageStatsCountryValid %]
-                        Note: The value of your system preference 'UsageStatsCountry' is not valid ([% UsageStatsCountry | html %]).
-                        Please select a valid one.
-                    [% END %]
-                </li>
-                <li>
-                    <label for="UsageStatsLibraryName">Library name: </label>
-                    <input type="text" value="[% Koha.Preference('UsageStatsLibraryName') | html %]" name="UsageStatsLibraryName" id="UsageStatsLibraryName" />
-                </li>
-                <li>
-                    <label for="UsageStatsLibraryType">Library type: </label>
-                    [% SET UsageStatsLibraryType = Koha.Preference('UsageStatsLibraryType') %]
-                    <select name="UsageStatsLibraryType" id="UsageStatsLibraryType">
-                        <option value="">&nbsp;</option>
-                        [% IF UsageStatsLibraryType == 'public' %]
-                            <option value="public" selected="selected">Public</option>
-                        [% ELSE %]
-                            <option value="public">Public</option>
-                        [% END %]
-
-                        [% IF UsageStatsLibraryType == 'school' %]
-                            <option value="school" selected="selected">School</option>
-                        [% ELSE %]
-                            <option value="school">School</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'academic' %]
-                            <option value="academic" selected="selected">Academic</option>
-                        [% ELSE %]
-                            <option value="academic">Academic</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'research' %]
-                            <option value="research" selected="selected">Research</option>
-                        [% ELSE %]
-                            <option value="research">Research</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'private' %]
-                            <option value="private" selected="selected">Private</option>
-                        [% ELSE %]
-                            <option value="private">Private</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'societyAssociation' %]
-                            <option value="societyAssociation" selected="selected">Society or association</option>
-                        [% ELSE %]
-                            <option value="societyAssociation">Society or association</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'corporate' %]
-                            <option value="corporate" selected="selected">Corporate</option>
-                        [% ELSE %]
-                            <option value="corporate">Corporate</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'government' %]
-                            <option value="government" selected="selected">Government</option>
-                        [% ELSE %]
-                            <option value="government">Government</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'religiousOrg' %]
-                            <option value="religiousOrg" selected="selected">Religious organization</option>
-                        [% ELSE %]
-                            <option value="religiousOrg">Religious organization</option>
-                        [% END %]
-                        [% IF UsageStatsLibraryType == 'subscription' %]
-                            <option value="subscription" selected="selected">Subscription</option>
-                        [% ELSE %]
-                            <option value="subscription">Subscription</option>
-                        [% END %]
-                    </select>
-                </li>
-                <li>
-                    <label for="UsageStatsLibraryUrl">Library URL: </label>
-                    <input type="text" name="UsageStatsLibraryUrl" value="[% Koha.Preference('UsageStatsLibraryUrl') | html %]" id="UsageStatsLibraryUrl" />
-                </li>
-                <li>
-                    <span class="label">Last update: </span>
-                    [% IF UsageStatsLastUpdateTime %]
-                        [% UsageStatsLastUpdateTime | html %]
-                    [% ELSE %]
-                        Your data have never been shared
-                    [% END %]
-                </li>
-                <li>
-                    <label for="UsageStatsGeolocation">Geolocation: </label>
-                    <input id="UsageStatsGeolocation" name="UsageStatsGeolocation" value="[% Koha.Preference('UsageStatsGeolocation') | html %]" type="text" value="[% Koha.Preference('UsageStatsLibrariesInfo') | html %]" size="35" readonly="readonly" />
-                    <a href="#" class="change_geolocation" data-branchname="" data-id="UsageStatsGeolocation"><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation" style="max-height: 2em;" /></a>
-                </li>
-                <li>
-                    <label for="UsageStatsLibrariesInfo">Libraries informations: </label>
-                    <select name="UsageStatsLibrariesInfo" id="UsageStatsLibrariesInfo">
-                        [% IF Koha.Preference('UsageStatsLibrariesInfo') %]
-                            <option value="1" selected="selected">Yes</option>
-                            <option value="0">No</option>
-                        [% ELSE %]
-                            <option value="1">Yes</option>
-                            <option value="0" selected="selected">No</option>
-                        [% END %]
-                    </select>
-                </li>
-
-                <li id="libraries_info">
-                    <fieldset class="rows">
-                    <legend>Libraries</legend>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6">
+                <fieldset class="rows">
                     <ol>
-                        [% FOR l IN libraries %]
                         <li>
-                            <label for="[% l.branchcode | html %]">[% l.branchname | html %]: </label>
-                            <div style="float:left;">
-                                <div>Country: [% l.branchcountry | html %]</div>
-                                <div>Url: [% l.branchurl | html %]</div>
-                                <div>
-                                    Geolocation: <input type="text" id="geolocation_[% l.branchcode | html %]" name="geolocation_[% l.branchcode | html %]" value="[% l.geolocation | html %]" size="35" readonly="readonly" />
-                                    <a href="#" class="change_geolocation" data-branchname="[% l.branchname | html %]" data-id="geolocation_[% l.branchcode | html %]"><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation for [% l.branchname | html %]" style="max-height: 2em;" /></a>
-                                </div>
-                            </div>
+                            <label for="UsageStats">Share my Koha usage statistics: </label>
+                            <select name="UsageStats" id="UsageStats">
+                            [% IF Koha.Preference('UsageStats') %]
+                                <option value="1" selected="selected">Yes</option>
+                                <option value="0">No</option>
+                            [% ELSE %]
+                                <option value="1">Yes</option>
+                                <option value="0" selected="selected">No</option>
+                            [% END %]
+                            </select>
                         </li>
-                        [% END %]
-                    </ol>
-                    </fieldset>
-                </li>
-                <li>
-                    <label for="MyPublicLink">See your public page: </label>
-                    [% IF Koha.Preference('UsageStatsPublicID') %]
-                        [% SET my_url = 'https://hea.koha-community.org/libraries/' _  Koha.Preference('UsageStatsPublicID') %]
-                        <a href="[% my_url | html %]">[% my_url | html %]</a>
-                    [% ELSE %]
-                        You do not have anything public yet.
-                    [% END %]
-                </li>
+                        <li>
+                            <label for="UsageStatsCountry">Your country: </label>
+                            [% SET UsageStatsCountry = Koha.Preference('UsageStatsCountry') %]
+                            [% SET IsUsageStatsCountryValid = 0 %]
+                            [% IF NOT UsageStatsCountry %]
+                                [% SET IsUsageStatsCountryValid = 1 %]
+                            [% END %]
+                            [% PROCESS 'country-list.inc' %]
+                            <select name="UsageStatsCountry" id="UsageStatsCountry">
+                                <option value="">&nbsp;</option>
+                                [% FOR country IN countries %]
+                                    [% IF country == UsageStatsCountry %]
+                                        <option value="[% country | html %]" selected="selected">[% country | html %]</option>
+                                        [% SET IsUsageStatsCountryValid = 1 %]
+                                    [% ELSE %]
+                                        <option value="[% country | html %]">[% country | html %]</option>
+                                    [% END %]
+                                [% END %]
+                            </select>
+                            [% UNLESS IsUsageStatsCountryValid %]
+                                Note: The value of your system preference 'UsageStatsCountry' is not valid ([% UsageStatsCountry | html %]).
+                                Please select a valid one.
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="UsageStatsLibraryName">Library name: </label>
+                            <input type="text" value="[% Koha.Preference('UsageStatsLibraryName') | html %]" name="UsageStatsLibraryName" id="UsageStatsLibraryName" />
+                        </li>
+                        <li>
+                            <label for="UsageStatsLibraryType">Library type: </label>
+                            [% SET UsageStatsLibraryType = Koha.Preference('UsageStatsLibraryType') %]
+                            <select name="UsageStatsLibraryType" id="UsageStatsLibraryType">
+                                <option value="">&nbsp;</option>
+                                [% IF UsageStatsLibraryType == 'public' %]
+                                    <option value="public" selected="selected">Public</option>
+                                [% ELSE %]
+                                    <option value="public">Public</option>
+                                [% END %]
 
-            </ol>
-            <div style="clear:right"></div>
-        <div id="mapid" style="width: 600px; height: 400px; margin-left: 40%:"></div>
-    </fieldset>
+                                [% IF UsageStatsLibraryType == 'school' %]
+                                    <option value="school" selected="selected">School</option>
+                                [% ELSE %]
+                                    <option value="school">School</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'academic' %]
+                                    <option value="academic" selected="selected">Academic</option>
+                                [% ELSE %]
+                                    <option value="academic">Academic</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'research' %]
+                                    <option value="research" selected="selected">Research</option>
+                                [% ELSE %]
+                                    <option value="research">Research</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'private' %]
+                                    <option value="private" selected="selected">Private</option>
+                                [% ELSE %]
+                                    <option value="private">Private</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'societyAssociation' %]
+                                    <option value="societyAssociation" selected="selected">Society or association</option>
+                                [% ELSE %]
+                                    <option value="societyAssociation">Society or association</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'corporate' %]
+                                    <option value="corporate" selected="selected">Corporate</option>
+                                [% ELSE %]
+                                    <option value="corporate">Corporate</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'government' %]
+                                    <option value="government" selected="selected">Government</option>
+                                [% ELSE %]
+                                    <option value="government">Government</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'religiousOrg' %]
+                                    <option value="religiousOrg" selected="selected">Religious organization</option>
+                                [% ELSE %]
+                                    <option value="religiousOrg">Religious organization</option>
+                                [% END %]
+                                [% IF UsageStatsLibraryType == 'subscription' %]
+                                    <option value="subscription" selected="selected">Subscription</option>
+                                [% ELSE %]
+                                    <option value="subscription">Subscription</option>
+                                [% END %]
+                            </select>
+                        </li>
+                        <li>
+                            <label for="UsageStatsLibraryUrl">Library URL: </label>
+                            <input type="text" name="UsageStatsLibraryUrl" value="[% Koha.Preference('UsageStatsLibraryUrl') | html %]" id="UsageStatsLibraryUrl" />
+                        </li>
+                        <li>
+                            <span class="label">Last update: </span>
+                            [% IF UsageStatsLastUpdateTime %]
+                                [% UsageStatsLastUpdateTime | html %]
+                            [% ELSE %]
+                                Your data have never been shared
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="UsageStatsGeolocation">Geolocation: </label>
+                            <input id="UsageStatsGeolocation" name="UsageStatsGeolocation" value="[% Koha.Preference('UsageStatsGeolocation') | html %]" type="text" value="[% Koha.Preference('UsageStatsLibrariesInfo') | html %]" size="35" readonly="readonly" />
+                            <a href="#" class="change_geolocation" data-branchname="" data-id="UsageStatsGeolocation"><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation" style="max-height: 2em;" /></a>
+                        </li>
+                        <li>
+                            <label for="UsageStatsLibrariesInfo">Libraries informations: </label>
+                            <select name="UsageStatsLibrariesInfo" id="UsageStatsLibrariesInfo">
+                                [% IF Koha.Preference('UsageStatsLibrariesInfo') %]
+                                    <option value="1" selected="selected">Yes</option>
+                                    <option value="0">No</option>
+                                [% ELSE %]
+                                    <option value="1">Yes</option>
+                                    <option value="0" selected="selected">No</option>
+                                [% END %]
+                            </select>
+                        </li>
+
+                        <li id="libraries_info">
+                            <fieldset class="rows">
+                            <legend>Libraries</legend>
+                            <ol>
+                                [% FOR l IN libraries %]
+                                <li>
+                                    <label for="[% l.branchcode | html %]">[% l.branchname | html %]: </label>
+                                    <div style="float:left;">
+                                        <div>Country: [% l.branchcountry | html %]</div>
+                                        <div>Url: [% l.branchurl | html %]</div>
+                                        <div>
+                                            Geolocation: <input type="text" id="geolocation_[% l.branchcode | html %]" name="geolocation_[% l.branchcode | html %]" value="[% l.geolocation | html %]" size="35" readonly="readonly" />
+                                            <a href="#" class="change_geolocation" data-branchname="[% l.branchname | html %]" data-id="geolocation_[% l.branchcode | html %]"><img src="[% interface | html %]/lib/leaflet/images/marker-icon.png" title="Set geolocation for [% l.branchname | html %]" style="max-height: 2em;" /></a>
+                                        </div>
+                                    </div>
+                                </li>
+                                [% END %]
+                            </ol>
+                            </fieldset>
+                        </li>
+                        <li>
+                            <label for="MyPublicLink">See your public page: </label>
+                            [% IF Koha.Preference('UsageStatsPublicID') %]
+                                [% SET my_url = 'https://hea.koha-community.org/libraries/' _  Koha.Preference('UsageStatsPublicID') %]
+                                <a href="[% my_url | html %]">[% my_url | html %]</a>
+                            [% ELSE %]
+                                You do not have anything public yet.
+                            [% END %]
+                        </li>
+                        <li>
+                            <label for="MyPublicLink">See your public page: </label>
+                            [% IF Koha.Preference('UsageStatsPublicID') %]
+                                [% SET my_url = 'https://hea.koha-community.org/libraries/' _  Koha.Preference('UsageStatsPublicID') %]
+                                <a href="[% my_url | html %]">[% my_url | html %]</a>
+                            [% ELSE %]
+                                You do not have anything public yet.
+                            [% END %]
+                        </li>
+
+                    </ol>
+                </fieldset>
+            </div>
+            <div class="col-xs-12 col-sm-6">
+                <div>
+                    <div id="mapid" style="width:100%;height: 400px;"></div>
+                </div>
+            </div>
+
+        </div>
 
         <fieldset class="action">
             <input type="hidden" name="op" value="update" />
@@ -221,18 +238,22 @@
             <a class="cancel" href="/cgi-bin/koha/admin/usage_statistics.pl">Cancel</a>
         </fieldset>
     </form>
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script src="[% interface | html %]/lib/leaflet/leaflet.js"></script>
-    <script type="text/javascript">
+    [% Asset.js("/lib/leaflet/leaflet.js") | $raw %]
+    <script>
         function positionMap() {
             var tbh = $("#mapid");
             var mapContainer = tbh.parent();

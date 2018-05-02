@@ -8,10 +8,11 @@
 
 <body id="admin_sru_modmapping" class="admin">
 
-<div id="custom-doc" class="yui-t7">
+<div class="main container-fluid">
 
-    <div id="bd">
+    <main>
         <h1>Modify SRU search fields mapping for bibliographic records</h1>
+
         <form id="form01" method="post">
             <fieldset class="rows">
                 <div class="yui-g">
@@ -70,11 +71,12 @@
                 <a class="close cancel" href="#">Cancel</a>
             </fieldset>
         </form>
-    </div>
+    </main>
+
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $("#form01").submit(function(event) {
                 if(window.opener) {

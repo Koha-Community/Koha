@@ -11,7 +11,7 @@
 [% IF ( loop ) %]
 [% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
+<script>
 //<![CDATA[
     $(document).ready(function() {
         $("#printerst").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -36,11 +36,10 @@
 [% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/printers.pl">Printers</a> &rsaquo; Printer deleted[% END %]
 [% IF ( else ) %]Printers[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% IF ( add_form ) %]
 
@@ -162,10 +161,14 @@
     </table>[% ELSE %]<div class="dialog message">No printers defined.</div>[% END %]
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
 [% INCLUDE 'intranet-bottom.inc' %]
