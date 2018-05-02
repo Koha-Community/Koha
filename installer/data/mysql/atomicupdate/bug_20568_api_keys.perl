@@ -20,13 +20,6 @@ if(CheckVersion($DBversion)) {
         });
     }
 
-    $dbh->do(q{
-        INSERT IGNORE INTO `systempreferences`
-            (variable,value,explanation,options,type)
-        VALUES
-            ('AllowPatronsManageAPIKeysInOPAC', '0', 'If enabled, patrons can manage their own API keys in the OPAC', NULL, 'YesNo');
-    });
-
     print "Upgrade to $DBversion done (Bug 20568 - Add API key management interface for patrons)\n";
     SetVersion($DBversion);
 }
