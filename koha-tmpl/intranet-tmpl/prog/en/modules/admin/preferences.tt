@@ -16,11 +16,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; System preferences</div>
 
-<div id="doc3" class="yui-t2">
-
-   <div id="bd">
-    <div id="yui-main">
-	    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
     [% IF ( jump_not_found ) %]
     <h2>System preferences</h2>
@@ -147,18 +146,22 @@
     </form>
     </div>
     [% END %]
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'prefs-menu.inc' %]
-</div>
-</div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/multiple-select/jquery.multiple.select.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         [% UNLESS ( searchfield ) %]$(document).ready(function(){
                 $('#toolbar').fixFloat();
             });[% END %]
@@ -191,9 +194,9 @@
         var MSG_DATA_NOT_SAVED = _( "Error; your data might not have been saved" );
         var MSG_LOADING = _( "Loading..." );
     </script>
-    <script src="[% interface | html %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
-    <script src="[% interface | html %]/[% theme | html %]/js/ajax.js" type="text/javascript"></script>
-    <script src="[% interface | html %]/[% theme | html %]/js/pages/preferences.js" type="text/javascript"></script>
+    [% Asset.js("lib/jquery/plugins/humanmsg.js") | $raw %]
+    [% Asset.js("js/ajax.js") | $raw %]
+    [% Asset.js("js/pages/preferences.js") | $raw %]
     [%# Add WYSIWYG editor for htmlarea system preferences %]
     [% INCLUDE 'wysiwyg-systempreferences.inc' %]
 [% END %]

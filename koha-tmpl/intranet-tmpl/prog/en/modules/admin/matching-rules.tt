@@ -49,7 +49,7 @@
     </select>
 [% END %]
 
-<style type="text/css">
+<style>
   fieldset.rows fieldset.rows { border-width : 0; }
   fieldset.rows fieldset.rows fieldset.rows { border-width : 1px; }
   fieldset, fieldset.rows { width : 90%; padding: .3em .6em .3em .6em; }
@@ -74,11 +74,10 @@
 [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
-
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% IF ( matching_rule_form ) %]
   [% IF ( edit_matching_rule ) %]
@@ -573,16 +572,19 @@
 </div>
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var maxMatchPoint = [% max_matchpoint | html %];
         var maxMatchCheck = [% max_matchcheck | html %];
 
