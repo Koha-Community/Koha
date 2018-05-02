@@ -9,7 +9,7 @@
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css">
+<style>
     .sql { display: none; }
     .ulined { text-decoration: underline; }
     .ratiolimit { color: blue; cursor: pointer; }
@@ -23,10 +23,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Hold ratios</div>
 
-<div id="doc3" class="yui-t2">
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
 <h1>Hold ratios to calculate items needed</h1>
    <h3>Calculated on [% todaysdate | $KohaDates %]. From [% from | $KohaDates %]
     to [% to | $KohaDates %]</h3>
@@ -113,9 +114,13 @@
     [% ELSE %]
         <b>No items found.</b>
     [% END %]
-</div>
-</div>
-<div class="yui-b">
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+
 <form action="/cgi-bin/koha/circ/reserveratios.pl" method="post" >
 <fieldset class="brief">
 <h4>Refine results:</h4>
@@ -154,13 +159,14 @@
 [% END %]
 </form>
 
-</div>
-</div>
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
   [% INCLUDE 'calendar.inc' %]
   [% INCLUDE 'datatables.inc' %]
-  <script type="text/javascript">
+  <script>
        $(document).ready(function() {
           $(".ratiolimit").click(function () {
               $("#ratio").val($(this).html());
