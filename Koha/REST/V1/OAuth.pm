@@ -13,7 +13,7 @@ sub token {
     my $c = shift->openapi->valid_input or return;
 
     my $grant_type = $c->validation->param('grant_type');
-    unless ($grant_type eq 'client_credentials') {
+    unless ( $grant_type eq 'client_credentials' and C4::Context->preference('RESTOAuth2ClientCredentials') ) {
         return $c->render(status => 400, openapi => {error => 'Unimplemented grant type'});
     }
 
