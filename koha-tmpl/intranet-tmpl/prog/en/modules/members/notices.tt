@@ -9,7 +9,7 @@
 <title>Sent notices for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css">
+<style>
     .notice { display: none; }
     .notice-title { font-weight: bold; display: block; }
 </style>
@@ -21,10 +21,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Sent notices for [% INCLUDE 'patron-title.inc' %]</div>
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
 [% INCLUDE 'members-toolbar.inc' %]
 <h1>Sent notices for [% INCLUDE 'patron-title.inc' %]</h1>
 
@@ -82,18 +83,19 @@
     <div class="dialog message">There is no record of any messages that have been sent to this patron.</div>
 [% END %]
 
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-<div class="yui-b">
-[% INCLUDE 'circ-menu.inc' %]
-</div>
-</div>
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'circ-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
-
+    <script>
         $(document).ready(function() {
             $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aaSorting": [[ 3, "desc" ]],
