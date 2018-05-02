@@ -32,14 +32,14 @@
 &rsaquo; Search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
 </div>
 
-<div id="doc3" class="yui-t1">
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
     [% IF ( outer_sup_results_loop ) %]
-    <div class="yui-ge">
-    <div class="yui-u first">
+        <div class="row">
+            <div class="col-sm-8">
     [% END %]
 
     [% IF ( koha_spsuggest ) %]
@@ -594,7 +594,7 @@
     [% END %]
 [% IF ( outer_sup_results_loop ) %]
 </div>
-<div class="yui-u">
+<div class="col-sm-4">
 [% FOREACH outer_sup_results_loo IN outer_sup_results_loop %]
 <!-- <div class="yui-b"> -->
     [% IF ( outer_sup_results_loo.inner_sup_results_loop ) %]
@@ -622,19 +622,22 @@
     <input type="hidden" name="multi_listadd" value="1"/>
 </form>
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'facets.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'browser-strings.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
         var q_array = new Array();  // will hold search terms, if present

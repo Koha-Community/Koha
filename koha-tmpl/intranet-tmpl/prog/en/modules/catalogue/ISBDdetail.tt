@@ -24,14 +24,15 @@
   [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% IF ( unknownbiblionumber ) %]
-  <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
+    <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
 [% ELSE %]
-   <div id="bd">
-      <div id="yui-main">
-	<div class="yui-b">
+
 	[% INCLUDE 'cat-toolbar.inc' %]
     [% IF ( ocoins ) %]
     <!-- COinS / OpenURL -->
@@ -40,20 +41,24 @@
 	  <div id="catalogue_ISBDdetail">
           [% ISBD | $raw %]
 	  </div>
-	</div>
-      </div>
-      <div class="yui-b">
-      [% INCLUDE 'biblio-view-menu.inc' %]
-      </div>
-    </div>
 [% END %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'biblio-view-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% INCLUDE 'browser-strings.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
     </script>

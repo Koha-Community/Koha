@@ -127,9 +127,9 @@
                                             [% END %]
                                         </select>
                                         <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-plus"></i> Add to rota</button>
-                                        <input type="hidden" name="op" value="add_item_to_rota"></input>
-                                        <input type="hidden" name="item_id" value="[% item.bib_item.id | uri %]"></input>
-                                        <input type="hidden" name="biblionumber" value="[% biblionumber | uri %]"></input>
+                                        <input type="hidden" name="op" value="add_item_to_rota" />
+                                        <input type="hidden" name="item_id" value="[% item.bib_item.id | uri %]" />
+                                        <input type="hidden" name="biblionumber" value="[% biblionumber | uri %]" />
                                     </form>
                                 [% END %]
                             </td>
@@ -166,11 +166,10 @@
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
     </div> <!-- /.row -->
 
-
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'browser-strings.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
         browser.show();
     </script>
