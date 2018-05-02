@@ -274,6 +274,11 @@
 				[% ELSE %]
 					<option value="i">i- ISBD punctuation included</option>
 				[% END %]
+                [% IF ( f18n ) %]
+                    <option value="n" selected="selected">n- Non-ISBD punctuation omitted</option>
+                [% ELSE %]
+                    <option value="n">n- Non-ISBD punctuation omitted</option>
+                [% END %]
 				[% IF ( f18u ) %]
 					<option value="u" selected="selected">u- Unknown</option>
 				[% ELSE %]
