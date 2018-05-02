@@ -19,12 +19,17 @@
 &rsaquo; <a href="/cgi-bin/koha/circ/waitingreserves.pl">Holds awaiting pickup</a>
 </div>
 
-[% IF Koha.Preference('CircSidebar') %]<div id="doc3" class="yui-t2">[% ELSE %]<div id="doc3" class="yui-t7">[% END %]
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <main>
+                <div class="row">
 
-   <div id="bd">
-    <div id="yui-main">
-    [% IF Koha.Preference('CircSidebar') %]<div class="yui-b">[% END %]
-    <div class="yui-g">
+                [% IF Koha.Preference('CircSidebar') %]
+                    <div class="col-sm-10 col-sm-push-2">
+                [% ELSE %]
+                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                [% END %]
 
         <h2>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]
             [% IF ( all_branches_link ) %]
@@ -99,19 +104,23 @@
         </div>
     [% END %]
 
-</div>
-</div>
-[% IF Koha.Preference('CircSidebar') %]
-</div>
-<div class="yui-b noprint">
-    [% INCLUDE 'circ-nav.inc' %]
-</div>
-[% END %]
-</div>
+                    [% IF Koha.Preference('CircSidebar') %]
+                            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                            <div class="col-sm-2 col-sm-pull-10">
+                                <aside>
+                                    [% INCLUDE 'circ-nav.inc' %]
+                                </aside>
+                            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                        </div> <!-- /.row -->
+                    [% END %]
+
+            </main>
+        </div> <!-- /.col-sm-12 -->
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $('#resultlist').tabs();
             $("th a").hide();
