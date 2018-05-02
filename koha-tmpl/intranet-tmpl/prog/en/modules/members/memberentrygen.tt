@@ -30,12 +30,17 @@
 <strong>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron ([%IF ( categoryname ) %][% categoryname | html %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</strong>
     [% END %]
 </div>
-[% IF ( opadd ) %]<div id="doc" class="yui-t7">[% ELSE %]<div id="doc3" class="yui-t2">[% END %]
 
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-    [% INCLUDE 'blocking_errors.inc' %]
+<div class="main container-fluid">
+    <div class="row">
+        [% IF ( opadd ) %]
+            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        [% ELSE %]
+            <div class="col-sm-10 col-sm-push-2">
+        [% END %]
+            <main class="clearfix">
+                [% INCLUDE 'blocking_errors.inc' %]
+
     [% IF error_alert %]
         [% IF ( error_alert == "no_email" ) %]
             <div class="dialog alert">This member has no email</div>
@@ -1095,7 +1100,7 @@
         [% UNLESS nosms_provider_id %]
         <p>
             <label for="sms_provider_id">SMS provider:</label>
-            <select id="sms_provider_id" name="sms_provider_id"/>
+            <select id="sms_provider_id" name="sms_provider_id">
                 <option value="">Unknown</option>
                 [% FOREACH s IN sms_providers %]
                     [% IF s.id == sms_provider_id %]
@@ -1121,21 +1126,26 @@
         </fieldset>
     </form>
 [% END %]
-</div>
-</div>
 
-[% UNLESS ( opadd ) %]<div class="yui-b">
-[% INCLUDE 'circ-menu.inc' %]
-</div>[% END %]
 [% END %]
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        [% UNLESS ( opadd ) %]
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                    [% INCLUDE 'circ-menu.inc' %]
+                </aside>
+            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        [% END %]
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
 
                 $("#saverecord").css({ 'margin-left': 0 });
@@ -1294,8 +1304,8 @@
     </script>
     [% Asset.js("js/members.js") | $raw %]
     [% Asset.js("js/messaging-preference-form.js") | $raw %]
+    [% PROCESS 'password_check.inc' %]
+    [% PROCESS 'add_password_check' new_password => 'password' %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
-[% PROCESS 'password_check.inc' %]
-[% PROCESS 'add_password_check' new_password => 'password' %]

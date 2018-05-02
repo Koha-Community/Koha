@@ -17,11 +17,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; [% IF ( searching ) %]<a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Search results[% ELSE %]Patrons[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-  <div id="bd">
-    <div id="yui-main">
-      <div class="yui-b">
-        <div class="yui-g">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
           [% IF CAN_user_tools_manage_patron_lists %]
             <div id="patron_list_dialog" class="dialog alert">
               Added <span class="patrons-length"></span> patrons to <a></a>.
@@ -110,127 +110,130 @@
               <tbody></tbody>
             </table>
           </div>
-        </div>
-      </div>
-    </div>
-    <div class="yui-b">
-      <form method="get" id="searchform">
-        <input type="hidden" id="firstletter_filter" value="" />
-        <fieldset class="brief">
-          <h3>Filters</h3>
-          <ol>
-            <li>
-              <label for="searchmember_filter">Search:</label>
-              <input type="text" id="searchmember_filter" value="[% searchmember | html %]"/>
-            </li>
-            <li>
-              <label for="searchfieldstype_filter">Search fields:</label>
-              <select name="searchfieldstype" id="searchfieldstype_filter">
-                [% IF searchfieldstype == "standard" %]
-                  <option selected="selected" value='standard'>Standard</option>
-                [% ELSE %]
-                  <option value='standard'>Standard</option>
-                [% END %]
-                [% IF searchfieldstype == "surname" %]
-                  <option selected="selected" value='surname'>Surname</option>
-                [% ELSE %]
-                  <option value='surname'>Surname</option>
-                [% END %]
-                [% IF searchfieldstype == "email" %]
-                  <option selected="selected" value='email'>Email</option>
-                [% ELSE %]
-                  <option value='email'>Email</option>
-                [% END %]
-                [% IF searchfieldstype == "borrowernumber" %]
-                  <option selected="selected" value='borrowernumber'>Borrower number</option>
-                [% ELSE %]
-                  <option value='borrowernumber'>Borrower number</option>
-                [% END %]
-                [% IF searchfieldstype == "userid" %]
-                  <option selected="selected" value='userid'>Username</option>
-                [% ELSE %]
-                  <option value='userid'>Username</option>
-                [% END %]
-                [% IF searchfieldstype == "phone" %]
-                  <option selected="selected" value='phone'>Phone number</option>
-                [% ELSE %]
-                  <option value='phone'>Phone number</option>
-                [% END %]
-                [% IF searchfieldstype == "address" %]
-                  <option selected="selected" value='address'>Street address</option>
-                [% ELSE %]
-                  <option value='address'>Street address</option>
-                [% END %]
-                [% IF searchfieldstype == "dateofbirth" %]
-                  <option selected="selected" value='dateofbirth'>Date of birth</option>
-                [% ELSE %]
-                  <option value='dateofbirth'>Date of birth</option>
-                [% END %]
-                [% IF searchfieldstype == "sort1" %]
-                  <option selected="selected" value='sort1'>Sort field 1</option>
-                [% ELSE %]
-                  <option value='sort1'>Sort field 1</option>
-                [% END %]
-                [% IF searchfieldstype == "sort2" %]
-                  <option selected="selected" value='sort2'>Sort field 2</option>
-                [% ELSE %]
-                  <option value='sort2'>Sort field 2</option>
-                [% END %]
-              </select>
-            </li>
-            <li>
-              <label for="searchtype_filter">Search type:</label>
-              <select name="searchtype" id="searchtype_filter">
-                [% IF searchtype == "start_with" %]
-                  <option value='start_with' selected="selected">Starts with</option>
-                  <option value="contain">Contains</option>
-                [% ELSE %]
-                  <option value='start_with'>Starts with</option>
-                  <option value="contain" selected="selected">Contains</option>
-                [% END %]
-              </select>
-            </li>
-            <li>
-              <label for="categorycode_filter">Category:</label>
-              [% SET categories = Categories.all() %]
-              <select id="categorycode_filter">
-                <option value="">Any</option>
-                [% FOREACH cat IN categories %]
-                  [% IF cat.categorycode == categorycode_filter %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                <form method="get" id="searchform">
+                  <input type="hidden" id="firstletter_filter" value="" />
+                  <fieldset class="brief">
+                    <h3>Filters</h3>
+                    <ol>
+                      <li>
+                        <label for="searchmember_filter">Search:</label>
+                        <input type="text" id="searchmember_filter" value="[% searchmember | html %]"/>
+                      </li>
+                      <li>
+                        <label for="searchfieldstype_filter">Search fields:</label>
+                        <select name="searchfieldstype" id="searchfieldstype_filter">
+                          [% IF searchfieldstype == "standard" %]
+                            <option selected="selected" value='standard'>Standard</option>
+                          [% ELSE %]
+                            <option value='standard'>Standard</option>
+                          [% END %]
+                          [% IF searchfieldstype == "surname" %]
+                            <option selected="selected" value='surname'>Surname</option>
+                          [% ELSE %]
+                            <option value='surname'>Surname</option>
+                          [% END %]
+                          [% IF searchfieldstype == "email" %]
+                            <option selected="selected" value='email'>Email</option>
+                          [% ELSE %]
+                            <option value='email'>Email</option>
+                          [% END %]
+                          [% IF searchfieldstype == "borrowernumber" %]
+                            <option selected="selected" value='borrowernumber'>Borrower number</option>
+                          [% ELSE %]
+                            <option value='borrowernumber'>Borrower number</option>
+                          [% END %]
+                          [% IF searchfieldstype == "userid" %]
+                            <option selected="selected" value='userid'>Username</option>
+                          [% ELSE %]
+                            <option value='userid'>Username</option>
+                          [% END %]
+                          [% IF searchfieldstype == "phone" %]
+                            <option selected="selected" value='phone'>Phone number</option>
+                          [% ELSE %]
+                            <option value='phone'>Phone number</option>
+                          [% END %]
+                          [% IF searchfieldstype == "address" %]
+                            <option selected="selected" value='address'>Street address</option>
+                          [% ELSE %]
+                            <option value='address'>Street address</option>
+                          [% END %]
+                          [% IF searchfieldstype == "dateofbirth" %]
+                            <option selected="selected" value='dateofbirth'>Date of birth</option>
+                          [% ELSE %]
+                            <option value='dateofbirth'>Date of birth</option>
+                          [% END %]
+                          [% IF searchfieldstype == "sort1" %]
+                            <option selected="selected" value='sort1'>Sort field 1</option>
+                          [% ELSE %]
+                            <option value='sort1'>Sort field 1</option>
+                          [% END %]
+                          [% IF searchfieldstype == "sort2" %]
+                            <option selected="selected" value='sort2'>Sort field 2</option>
+                          [% ELSE %]
+                            <option value='sort2'>Sort field 2</option>
+                          [% END %]
+                        </select>
+                      </li>
+                      <li>
+                        <label for="searchtype_filter">Search type:</label>
+                        <select name="searchtype" id="searchtype_filter">
+                          [% IF searchtype == "start_with" %]
+                            <option value='start_with' selected="selected">Starts with</option>
+                            <option value="contain">Contains</option>
+                          [% ELSE %]
+                            <option value='start_with'>Starts with</option>
+                            <option value="contain" selected="selected">Contains</option>
+                          [% END %]
+                        </select>
+                      </li>
+                      <li>
+                        <label for="categorycode_filter">Category:</label>
+                        [% SET categories = Categories.all() %]
+                        <select id="categorycode_filter">
+                          <option value="">Any</option>
+                          [% FOREACH cat IN categories %]
+                            [% IF cat.categorycode == categorycode_filter %]
                     <option selected="selected" value="[% cat.categorycode | html %]">[% cat.description | html %]</option>
-                  [% ELSE %]
+                            [% ELSE %]
                     <option value="[% cat.categorycode | html %]">[% cat.description | html %]</option>
-                  [% END %]
-                [% END %]
-              </select>
-            </li>
-            <li>
-              <label for="branchcode_filter">Library:</label>
-              [% SET branches = Branches.all( selected => branchcode_filter, only_from_group => 1 ) %]
-              <select id="branchcode_filter">
-                [% IF branches.size != 1 %]
-                  <option value="">Any</option>
-                [% END %]
-                [% PROCESS options_for_libraries libraries => branches %]
-              </select>
-            </li>
-          </ol>
-          <fieldset class="action">
-            <input type="submit" value="Search" />
-            <input type="button" value="Clear" id="clear_search" />
-          </fieldset>
-        </fieldset>
-      </form>
-    </div>
-  </div>
-</div>
+
+                            [% END %]
+                          [% END %]
+                        </select>
+                      </li>
+                      <li>
+                        <label for="branchcode_filter">Library:</label>
+                        [% SET branches = Branches.all( selected => branchcode_filter, only_from_group => 1 ) %]
+                        <select id="branchcode_filter">
+                          [% IF branches.size != 1 %]
+                            <option value="">Any</option>
+                          [% END %]
+                          [% PROCESS options_for_libraries libraries => branches %]
+                        </select>
+                      </li>
+                    </ol>
+                    <fieldset class="action">
+                      <input type="submit" value="Search" />
+                      <input type="button" value="Clear" id="clear_search" />
+                    </fieldset>
+                  </fieldset>
+                </form>
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $('#merge-patrons').prop('disabled', true);
             $('#memberresultst').on('change', 'input.selection', function() {
