@@ -14,19 +14,15 @@
         <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=profile">Profiles</a> &rsaquo;
         [% IF ( profile_id ) %]Edit ([% profile_id | html %])[% ELSE %]New[% END%]
     </div>
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-        <div id="yui-main">
-            <div class="yui-b">
-                    <div class="yui-g">
-                    [% INCLUDE 'patroncards-toolbar.inc' %]
-                        <div class="yui-u first">
 
-                        </div>
-                    </div>
-                        <div class="yui-g">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+
+                    [% INCLUDE 'patroncards-toolbar.inc' %]
+
                             <h3>[% IF (profile_id) %]Edit[% ELSE %]Create[% END%] printer profile[% IF (profile_id) %] ([% profile_id | html %])[% END %]</h3>
-                                <div class="yui-g first">
                                     <form name="input" action="/cgi-bin/koha/patroncards/edit-profile.pl" method="get">
                                     <fieldset class="rows"><legend>Profile settings</legend>
                                         <ol>
@@ -98,14 +94,16 @@
                                         <input type="hidden" name="profile_id" value="[% profile_id | html %]" />
                                     </fieldset>
                     </form>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="yui-b">
-                  [% INCLUDE 'tools-menu.inc' %]
-                </div>
-            </div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

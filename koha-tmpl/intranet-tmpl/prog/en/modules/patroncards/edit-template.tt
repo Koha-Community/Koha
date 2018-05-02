@@ -16,20 +16,17 @@
         <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=template">Templates</a> &rsaquo;
         [% IF (template_id) %]Edit ([% template_id | html %])[% ELSE %]New[% END %]
     </div>
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-            <div id="yui-main">
-                <div class="yui-b">
-                    <div class="yui-g">
-                    [% INCLUDE 'patroncards-toolbar.inc' %]
-                        <div class="yui-u first">
 
-                        </div>
-                    </div>
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+
+                    [% INCLUDE 'patroncards-toolbar.inc' %]
                     <form name="input" action="/cgi-bin/koha/patroncards/edit-template.pl" method="get">
-                    <div class="yui-g">
                         <h3>[% IF (template_id) %]Edit[% ELSE %]Create[% END %] patron card template[% IF (template_id) %] ([% template_id | html %])[% END %]</h3>
-                        <div class="yui-u first">
+                        <div class="row">
+                        <div class="col-sm-6">
                             <fieldset class="rows">
                                 <ol>
                                     <li>
@@ -92,7 +89,7 @@
                                 </ol>
                             </fieldset>
                         </div>
-                        <div class="yui-u">
+                        <div class="col-sm-6">
                             <fieldset class="rows">
                                 <ol><li>
                                     <label for="top_margin">Top page margin:</label>
@@ -141,23 +138,26 @@
                             </fieldset>
                         </div>
                     </div>
-                    <div class="yui-g">
-                        <fieldset class="action">
-                            <input type="submit" class="submit" value="Save" />
-                            <a class="cancel" href="/cgi-bin/koha/patroncards/manage.pl?card_element=template">Cancel</a>
-                            <input type="hidden" name="op" value="save" />
-                            [% IF ( template_id ) %]
-                            <input type="hidden" name="template_id" value="[% template_id | html %]" />
-                            [% END %]
-                        </fieldset>
-                    </div>
+
+                    <fieldset class="action">
+                        <input type="submit" class="submit" value="Save" />
+                        <a class="cancel" href="/cgi-bin/koha/patroncards/manage.pl?card_element=template">Cancel</a>
+                        <input type="hidden" name="op" value="save" />
+                        [% IF ( template_id ) %]
+                        <input type="hidden" name="template_id" value="[% template_id | html %]" />
+                        [% END %]
+                    </fieldset>
                 </form>
-            </div>
-        </div>
-        <div class="yui-b">
-          [% INCLUDE 'tools-menu.inc' %]
-        </div>
-    </div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]

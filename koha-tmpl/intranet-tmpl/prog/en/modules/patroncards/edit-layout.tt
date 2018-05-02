@@ -14,21 +14,18 @@
         <a href="/cgi-bin/koha/patroncards/manage.pl?card_element=layout">Layouts</a> &rsaquo;
         [% IF ( layout_id ) %]Edit ([% layout_id | html %])[% ELSE %]New[% END %]
     </div>
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-            <div id="yui-main">
-                <div class="yui-b">
-                    <div class="yui-g">
-                    [% INCLUDE 'patroncards-toolbar.inc' %]
-                        <div class="yui-u first">
 
-                        </div>
-                    </div>
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+
+                    [% INCLUDE 'patroncards-toolbar.inc' %]
 
                 <!-- NOTE: The order of the elements on this form is crictical to correct processing. You've been warned...  -->
                 <form name="input" action="/cgi-bin/koha/patroncards/edit-layout.pl" method="get">
-                <div class="yui-g">
-                <div class="yui-g first">
+                <div class="row">
+                <div class="col-sm-6">
                         <fieldset class="rows">
                             <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card text layout</legend>
                             <ol>
@@ -259,7 +256,7 @@
                             </ol>
                         </fieldset>
                 </div>
-                <div class="yui-g">
+                <div class="col-sm-6">
                     <fieldset class="rows">
                     <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] patron card graphic layout</legend>
                     <ol>
@@ -460,12 +457,16 @@
                         <input type="hidden" name="layout_id" value="[% layout_id | html %]" />
                     </fieldset>
                 </form>
-                </div>
-            </div>
-            <div class="yui-b">
-              [% INCLUDE 'tools-menu.inc' %]
-            </div>
-        </div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     <script>

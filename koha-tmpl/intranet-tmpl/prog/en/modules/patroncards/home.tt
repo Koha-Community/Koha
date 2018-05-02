@@ -10,19 +10,23 @@
         <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
         Patron card creator
     </div>
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-            <div id="yui-main">
-                <div class="yui-b">
-                    <div class="yui-g">
-                    [% INCLUDE 'patroncards-toolbar.inc' %]
-                        <div class="yui-u first">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="yui-b">
-              [% INCLUDE 'tools-menu.inc' %]
-            </div>
-        </div>
-        [% INCLUDE 'intranet-bottom.inc' %]
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+                [% INCLUDE 'patroncards-toolbar.inc' %]
+
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- .col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% INCLUDE 'intranet-bottom.inc' %]
