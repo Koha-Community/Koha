@@ -25,7 +25,7 @@ Data deleted
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css">
+<style>
 	fieldset.rows div.toptabs li { clear:none;margin-right:.5em;padding-bottom:0;width:auto; }
   fieldset.rows div.toptabs .ui-tabs-nav li.ui-tabs-active {background-color : #F4F8F9; }
 	fieldset.rows .ui-tabs-panel { margin-right : 10px; margin-left : 10px;margin-bottom:10px;}
@@ -58,12 +58,10 @@ Data deleted
 Item types administration
 [% END %]</div>
 
-<div id="doc3" class="yui-t2">
-
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
-	
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% IF op == 'list' %]<div id="toolbar" class="btn-toolbar">
     <a class="btn btn-default btn-sm" id="newitemtype" href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form"><i class="fa fa-plus"></i> New item type</a>
@@ -389,18 +387,21 @@ Item types administration
     [% END %]
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
          $(document).ready(function() {
             $('#icons').tabs();
             $("#table_item_type").dataTable($.extend(true, {}, dataTablesDefaults, {
