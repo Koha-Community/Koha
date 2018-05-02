@@ -2007,19 +2007,18 @@ sub searchResults {
         foreach my $hostfield ( $marcrecord->field($analyticsfield)) {
             my $hostbiblionumber = $hostfield->subfield("0");
             my $linkeditemnumber = $hostfield->subfield("9");
-            if(!$hostbiblionumber eq undef){
+            if( $hostbiblionumber ) {
                 my $hostbiblio = GetMarcBiblio({
                     biblionumber => $hostbiblionumber,
                     embed_items  => 1 });
                 my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
-                if(!$hostbiblio eq undef){
+                if( $hostbiblio ) {
                     my @hostitems = $hostbiblio->field($itemfield);
                     foreach my $hostitem (@hostitems){
                         if ($hostitem->subfield("9") eq $linkeditemnumber){
                             my $linkeditem =$hostitem;
                             # append linked items if they exist
-                            if (!$linkeditem eq undef){
-                                push (@fields, $linkeditem);}
+                            push @fields, $linkeditem if $linkeditem;
                         }
                     }
                 }
