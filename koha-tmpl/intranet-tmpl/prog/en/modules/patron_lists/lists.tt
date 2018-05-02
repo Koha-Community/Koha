@@ -13,10 +13,10 @@
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Patron lists</div>
 
-<div id="doc3" class="yui-t2">
-   <div id="bd">
-    <div id="yui-main">
-        <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
         <div id="toolbar" class="btn-toolbar">
             <div class="btn-group">
@@ -111,18 +111,21 @@
            <div class="dialog message">There are no patron lists.</div>
         [% END %]
 
-            </div>
-        </div>
-        <div class="yui-b noprint">
-            [% INCLUDE 'tools-menu.inc' %]
-        </div>
-    </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
 
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             var patronExportModal = $("#patronExportModal");
             var patronExportModalBody = $("#patronExportModal .modal-body")
