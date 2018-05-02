@@ -15,10 +15,11 @@
 [% INCLUDE 'cat-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="clubs.pl">Patron clubs</a> &rsaquo; Club enrollments</div>
 
-<div id="doc3" class="yui-t2">
-   <div id="bd">
-        <div id="yui-main">
-            <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
                 <h1>Club enrollments for <i>[% club.name | html %]</i></h1>
 
                 <table id="enrollments-table">
@@ -43,18 +44,21 @@
                         [% END %]
                     </tbody>
                 </table>
-            </div>
-        </div>
-        <div class="yui-b noprint">
-            [% INCLUDE 'tools-menu.inc' %]
-        </div>
-    </div>
-</div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             eTable = $('#enrollments-table').dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sPaginationType": "four_button",
