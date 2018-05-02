@@ -808,6 +808,15 @@
                     _("r- Remote") +
                     '</option> \
                                  [% END %] \
+                     [% IF ( f1s ) %] \
+                                  <option value="s" selected="selected">' +
+                    _("s- Standalone device") +
+                    '</option> \
+                                 [% ELSE %] \
+                                  <option value="r">' +
+                    _("s- Standalone device") +
+                    '</option> \
+                                 [% END %] \
                      [% IF ( f1u ) %] \
                                   <option value="u" selected="selected">' +
                     _("u- Unspecified") +
@@ -7548,6 +7557,15 @@
                     _("q- Roll") +
                     '</option> \
                                  [% END %] \
+                     [% IF ( f1r ) %] \
+                                  <option value="r" selected="selected">' +
+                    _("r- Remote") +
+                    '</option> \
+                                 [% ELSE %] \
+                                  <option value="r">' +
+                    _("r- Remote") +
+                    '</option> \
+                                 [% END %] \
                      [% IF ( f1s ) %] \
                                   <option value="s" selected="selected">' +
                     _("s- Sound cassette") +
@@ -7726,6 +7744,15 @@
                                  [% ELSE %] \
                                   <option value="m">' +
                     _("m- 3/34 ips (tapes)") +
+                    '</option> \
+                                 [% END %] \
+                                 [% IF ( f3n ) %] \
+                                  <option value="n" selected="selected">' +
+                    _("n- Not applicable") +
+                    '</option> \
+                                 [% ELSE %] \
+                                  <option value="n">' +
+                    _("n- Not applicable") +
                     '</option> \
                                  [% END %] \
                                  [% IF ( f3o ) %] \
@@ -8410,6 +8437,15 @@
                                  [% ELSE %] \
                                   <option value="m">' +
                     _("m- Plastic with metal") +
+                    '</option> \
+                                 [% END %] \
+                                 [% IF ( f10n ) %] \
+                                  <option value="n" selected="selected">' +
+                    _("n- Not applicable") +
+                    '</option> \
+                                 [% ELSE %] \
+                                  <option value="n">' +
+                    _("n- Not applicable") +
                     '</option> \
                                  [% END %] \
                      [% IF ( f10p ) %] \
