@@ -19,10 +19,11 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Holds history for [% INCLUDE 'patron-title.inc' %]</div>
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
 [% INCLUDE 'members-toolbar.inc' %]
 <h1>Holds history</h1>
 
@@ -39,6 +40,7 @@
 <div id="holdshistory" style="overflow:hidden">
   <table id="table_holdshistory">
       <thead>
+        <tr>
         <th class="anti-the">Title</th>
         <th>Author</th>
         <th>Barcode</th>
@@ -51,9 +53,11 @@
           <th>Requested item type</th>
         [% END %]
         <th>Status</th>
+        </tr>
       </thead>
       <tbody>
       [% FOREACH hold IN holds %]
+        <tr>
           <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblio.biblionumber | uri %]">[% hold.biblio.title | html %]</a></td>
           <td>[% hold.biblio.author | html %]</td>
           <td>[% hold.item.barcode | html %]</td>
@@ -109,20 +113,23 @@
 </div>
 
 [% END %]
-</div>
-</div>
 
-<div class="yui-b">
-[% INCLUDE 'circ-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'circ-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
-    <script type="text/javascript" id="js">
+    <script>
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
             [% UNLESS show_itemtype_column %]
