@@ -60,10 +60,12 @@
                     <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber %]">Discharge</a></li>
                 [% END %]
 
-                [% IF CAN_user_borrowers_edit_borrowers %]
-                    <li><a id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% patron.borrowernumber %]">Manage API keys</a></li>
-                [% ELSE %]
-                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
+                [% IF Koha.Preference('RESTOAuth2ClientCredentials') %]
+                    [% IF CAN_user_borrowers_edit_borrowers %]
+                        <li><a id="apikeys" href="/cgi-bin/koha/members/apikeys.pl?patron_id=[% patron.borrowernumber %]">Manage API keys</a></li>
+                    [% ELSE %]
+                        <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
+                    [% END %]
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers %]

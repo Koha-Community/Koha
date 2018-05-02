@@ -45,7 +45,8 @@ my $api_key   = $cgi->param('key')       // '';
 
 $patron = Koha::Patrons->find($patron_id) if $patron_id;
 
-if ( not defined $patron ) {
+if ( not defined $patron or
+     not C4::Context->preference('RESTOAuth2ClientCredentials') ) {
 
     # patron_id invalid -> exit
     print $cgi->redirect("/cgi-bin/koha/errors/404.pl"); # escape early
