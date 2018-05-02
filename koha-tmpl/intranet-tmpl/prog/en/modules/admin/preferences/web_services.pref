@@ -4,7 +4,13 @@ Web services:
             - "Set the default number of results returned by the REST API endpoints to"
             - pref: "RESTdefaultPageSize"
               class: integer
-            - "per page"
+            - "per page."
+        -
+            - pref: RESTOAuth2ClientCredentials
+              choices:
+                  yes: Enable
+                  no: "Disable"
+            - "the OAuth2 client credentials grant for the REST API."
     OAI-PMH:
         -
             - pref: OAI-PMH

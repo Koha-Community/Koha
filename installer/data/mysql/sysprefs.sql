@@ -467,6 +467,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ReservesMaxPickUpDelay','7','','Define the Maximum delay to pick up an item on hold','Integer'),
 ('ReservesNeedReturns','1','','If ON, a hold placed on an item available in this library must be checked-in, otherwise, a hold on a specific item, that is in the library & available is considered available','YesNo'),
 ('RESTdefaultPageSize','20','','Default page size for endpoints listing objects','Integer'),
+('RESTOAuth2ClientCredentials','0',NULL,'If enabled, the OAuth2 client credentials flow is enabled for the REST API.','YesNo'),
 ('RestrictedPageLocalIPs','',NULL,'Beginning of IP addresses considered as local (comma separated ex: "127.0.0,127.0.2")','Free'),
 ('RestrictedPageContent','',NULL,'HTML content of the restricted page','TextArea'),
 ('RestrictedPageTitle','',NULL,'Title of the restricted page (breadcrumb and header)','Free'),
