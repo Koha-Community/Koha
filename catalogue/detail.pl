@@ -298,7 +298,7 @@ foreach my $item (@items) {
     }
 	
     #count if item is used in analytical bibliorecords
-    my $countanalytics= GetAnalyticsCount($item->{itemnumber});
+    my $countanalytics = C4::Context->preference('EasyAnalyticalRecords') ? GetAnalyticsCount($item->{itemnumber}) : 0;
     if ($countanalytics > 0){
         $analytics_flag=1;
         $item->{countanalytics} = $countanalytics;
