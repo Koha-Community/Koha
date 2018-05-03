@@ -44,7 +44,7 @@ sub config {
     };
 }
 
-=head3 _verify_client_db
+=head3 _verify_client_cb
 
 A callback to verify if the client asking for authorization is known to the authorization server
 and allowed to get authorization.
