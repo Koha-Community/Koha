@@ -52,6 +52,57 @@
 [% IF Koha.Preference('CircSidebar') %]<div class="yui-b">[% END %]
 <div class="yui-g">
 
+    [% IF hold_auto_filled %]
+        <div class="dialog alert hold-auto-filled">
+            [% IF ( reservenotes ) %]
+                <h4>Notes: [% reservenotes %]</h4>
+            [% END %]
+            <h3>Hold filled for:</h3>
+                <li>
+                    [% INCLUDE 'patron-title.inc' patron=patron %]
+                    <span class="patron-category"> - [% patron.category.description %]</span>
+                </li>
+
+                [% INCLUDE display_holdpatron_address %]
+
+                [% IF ( patron.phone ) %]
+                    <li>[% patron.phone  %]</li>
+                [% END %]
+
+                [% IF ( patron.email ) %]
+                    <li>
+                        [% IF ( transfertodo ) %]
+                            [% patron.email %]
+                        [% ELSE %]
+                            <a id="boremail" href="mailto:[% patron.email %]">[% patron.email %]</a>
+                        [% END %]
+                    </li>
+                [% END %]
+
+                [% UNLESS ( transfertodo) %]
+                    [% INCLUDE display_bormessagepref %]
+                [% END %]
+
+                [% IF ( patron.debarred ) %]
+                    <li class="error">Patron is RESTRICTED</li>
+                [% END %]
+
+                [% IF ( patron.gonenoaddress ) %]
+                    <li class="error">Patron's address is in doubt</li>
+                [% END %]
+
+            [% IF ( transfertodo ) %]
+                <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
+            [% ELSE %]
+                <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) %]</h4>
+            [% END %]
+
+            <a href="#" class="btn btn-default print print-slip">
+                <i class="fa fa-print"></i> Print
+            </a>
+        </div>
+    [% END %]
+
 [% IF privacy == 2 AND NOT Koha.Preference('AnonymousPatron') %]
     <div class="dialog alert"><strong>Error:</strong> This patron has requested their circulation history be anonymized on check-in, but the AnonymousPatron system preference is empty or incorrect.</div>
 [% ELSIF NOT Koha.Preference('AnonymousPatron') AND Koha.Preference('OPACPrivacy') %]
@@ -713,6 +764,11 @@
             });
 
             $(".modal").on('hidden.bs.modal', function (e) { $("#barcode").focus(); });
+
+            $(".print-slip").on('click', function(e) {
+                e.preventDefault();
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber %]&amp;biblionumber=[% biblionumber %]');
+            });
 
             [% IF print_slip %]
                 Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber | html %]&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% itemnumber | html %]');

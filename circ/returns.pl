@@ -415,7 +415,38 @@ if ( $messages->{'ResFound'}) {
     my $reserve    = $messages->{'ResFound'};
     my $patron = Koha::Patrons->find( $reserve->{borrowernumber} );
     my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
-    if ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
+
+    if ( $reserve->{'ResFound'} eq "Reserved" && C4::Context->preference('HoldsAutoFill') ) {
+        my $item = Koha::Items->find( $itemnumber );
+        my $biblio = $item->biblio;
+
+        my $diffBranchSend = ($userenv_branch ne $reserve->{branchcode}) ? $reserve->{branchcode} : undef;
+        ModReserveAffect( $reserve->{itemnumber}, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id} );
+        my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
+
+        my $patron = Koha::Patrons->find( $nextreservinfo );
+        my $name   = $patron ? $patron->surname . ", " . $patron->title . " " . $patron->firstname : '';
+
+        $template->param(
+            hold_auto_filled => 1,
+            print_slip       => C4::Context->preference('HoldsAutoFillPrintSlip'),
+            patron           => $patron,
+            borrowernumber   => $patron->id,
+            biblionumber     => $biblio->id,
+        );
+
+        if ( $messages->{'transfert'} ) {
+            $template->param(
+                itemtitle      => $biblio->title,
+                itemnumber     => $item->itemnumber,
+                itembiblionumber => $biblio->biblionumber,
+                iteminfo       => $biblio->author,
+                name           => $name,
+                diffbranch     => 1,
+            );
+        }
+    }
+    elsif ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
         if ( $reserve->{'ResFound'} eq "Waiting" ) {
             $template->param(
                 waiting      => ($userenv_branch eq $reserve->{'branchcode'} ? 1 : 0 ),
@@ -429,19 +460,20 @@ if ( $messages->{'ResFound'}) {
             );
         }
 
-        # same params for Waiting or Reserved
-        $template->param(
-            # FIXME The full patron object should be passed to the template
-            found          => 1,
-            patron         => $patron,
-            barcode        => $barcode,
-            destbranch     => $reserve->{'branchcode'},
-            itemnumber     => $reserve->{'itemnumber'},
-            reservenotes   => $reserve->{'reservenotes'},
-            reserve_id     => $reserve->{reserve_id},
-            bormessagepref => $holdmsgpreferences->{'transports'},
-        );
     } # else { ; }  # error?
+
+    # same params for Waiting or Reserved
+    $template->param(
+        # FIXME The full patron object should be passed to the template
+        found          => 1,
+        patron         => $patron,
+        barcode        => $barcode,
+        destbranch     => $reserve->{'branchcode'},
+        itemnumber     => $reserve->{'itemnumber'},
+        reservenotes   => $reserve->{'reservenotes'},
+        reserve_id     => $reserve->{reserve_id},
+        bormessagepref => $holdmsgpreferences->{'transports'},
+    );
 }
 
 # Error Messages

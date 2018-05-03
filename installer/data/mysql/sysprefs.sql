@@ -191,6 +191,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('HighlightOwnItemsOnOPAC','0','','If on, and a patron is logged into the OPAC, items from his or her home library will be emphasized and shown first in search results and item details.','YesNo'),
 ('HighlightOwnItemsOnOPACWhich','PatronBranch','PatronBranch|OpacURLBranch','Decides which branch\'s items to emphasize. If PatronBranch, emphasize the logged in user\'s library\'s items. If OpacURLBranch, highlight the items of the Apache var BRANCHCODE defined in Koha\'s Apache configuration file.','Choice'),
 ('HoldFeeMode','not_always','any_time_is_placed|not_always|any_time_is_collected','Set the hold fee mode','Choice'),
+('HoldsAutoFill','0',NULL,'If on, librarian will not be asked if hold should be filled, it will be filled automatically','YesNo'),
+('HoldsAutoFillPrintSlip','0',NULL,'If on, hold slip print dialog will be displayed automatically','YesNo'),
 ('HoldsLog','0',NULL,'If ON, log create/cancel/suspend/resume actions on holds.','YesNo'),
 ('HoldsQueueSkipClosed', '0', NULL, 'If enabled, any libraries that are closed when the holds queue is built will be ignored for the purpose of filling holds.', 'YesNo'),
 ('HoldsToPullStartDate','2',NULL,'Set the default start date for the Holds to pull list to this many days ago','Integer'),
