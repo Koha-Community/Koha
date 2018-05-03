@@ -9,7 +9,7 @@
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css">
+<style>
     #jobpanel,#jobstatus,#jobfailed { display : none; }
     span.change-status { font-style:italic; color:#666; display:none; }
 </style>
@@ -28,11 +28,10 @@
 [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 <h1>Manage staged MARC records
 [% IF ( import_batch_id ) %]
@@ -374,18 +373,21 @@
     </div>
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'tools-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- .col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-[% Asset.js("js/background-job-progressbar.js") | $raw %]
+    [% Asset.js("js/background-job-progressbar.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function(){
             $("#staged-record-matching-rules select").change(function(){
                 var str = $(this).attr("id");

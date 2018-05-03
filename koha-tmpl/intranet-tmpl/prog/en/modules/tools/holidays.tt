@@ -6,7 +6,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; [% Branches.GetName( branch ) | html %] calendar</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css"> .key { padding : 3px; white-space:nowrap; line-height:230%; }
+<style> .key { padding : 3px; white-space:nowrap; line-height:230%; }
 .ui-datepicker { font-size : 150%; }
 .ui-datepicker th, .ui-datepicker .ui-datepicker-title select { font-size : 80%; }
 .ui-datepicker td a { padding : .5em; }
@@ -23,7 +23,7 @@ td.repeatableweekly a.ui-state-default {  background:  #FFFF99 none; color :  Bl
 td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Black;  border : 1px solid #BCBCBC; }
 .information { z-index : 1; background-color :  #DCD2F1; width : 300px; display : none; border : 1px solid #000000; color :  #000000; font-size :  8pt; font-weight :  bold; background-color :  #FFD700; cursor :  pointer; padding : 2px; }
 .panel { z-index : 1; display : none; border : 3px solid #CCC; padding : 3px; margin-top: .3em;  background-color: #FEFEFE; } fieldset.brief { border : 0; margin-top: 0; }
-#showHoliday { margin : .5em 0; } h1 select { width: 20em; } div.yui-b fieldset.brief ol { font-size:100%; } div.yui-b fieldset.brief li, div.yui-b fieldset.brief li.radio  { padding:0.2em 0; } .help { margin:.3em 0;border:1px solid #EEE;padding:.3em .7em; font-size : 90%; } #holidayweeklyrepeatable, #holidaysyearlyrepeatable, #holidaysunique, #holidayexceptions { font-size : 90%; margin-bottom : 1em;} .calendar td, .calendar th, .calendar .button, .calendar tbody .day { padding : .7em; font-size: 110%; } .calendar { width: auto; border : 0; }
+#showHoliday { margin : .5em 0; } h1 select { width: 20em; } fieldset.brief ol { font-size:100%; } fieldset.brief li, fieldset.brief li.radio  { padding:0.2em 0; } .help { margin:.3em 0;border:1px solid #EEE;padding:.3em .7em; font-size : 90%; } #holidayweeklyrepeatable, #holidaysyearlyrepeatable, #holidaysunique, #holidayexceptions { font-size : 90%; margin-bottom : 1em;} .calendar td, .calendar th, .calendar .button, .calendar tbody .day { padding : .7em; font-size: 110%; } .calendar { width: auto; border : 0; }
 </style>
 </head>
 <body id="tools_holidays" class="tools">
@@ -32,14 +32,15 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% Branches.GetName( branch ) | html %] calendar</div>
 
-<div id="doc3" class="yui-t1">
-   
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
     <h2>[% Branches.GetName( branch ) | html %] calendar</h2>
-    <div class="yui-g">
-    <div class="yui-u first">
+
+    <div class="row">
+    <div class="col-sm-6">
         <label for="branch">Define the holidays for:</label>
             <select id="branch" name="branch">
                 [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
@@ -215,7 +216,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 </div>
 
 </div>
-<div class="yui-u">
+<div class="col-sm-6">
 <div class="help">
 <h4>Hints</h4>
     <ul>
@@ -331,19 +332,22 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 </div>
 </div>
 </div>
-</div>
-</div>
 
-<div class="yui-b noprint">
-[% INCLUDE 'tools-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- .col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var weekdays = new Array(_("Sundays"),_("Mondays"),_("Tuesdays"),_("Wednesdays"),_("Thursdays"),_("Fridays"),_("Saturdays"));
 
         /* Creates all the structures to deal with all different kinds of holidays */
