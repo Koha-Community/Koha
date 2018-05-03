@@ -20,10 +20,11 @@
     <a href="/cgi-bin/koha/tools/modborrowers.pl">Batch patron modification</a>
 </div>
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
-        <div id="yui-main">
-            <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
                 [% IF ( op == 'show_form' ) %]
                 <h1>Batch patron modification</h1>
                 <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/modborrowers.pl">
@@ -288,18 +289,22 @@
                     <a href="/cgi-bin/koha/tools/modborrowers.pl" title="New batch patrons modification">New batch patron modification</a>
                 </p>
                 [% END %]
-            </div>
-            </div>
-            <div class="yui-b">
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
                 [% INCLUDE 'tools-menu.inc' %]
-            </div>
-        </div>
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var patron_attributes_lib = new Array();
         var patron_attributes_values = new Array();
         $(document).ready(function() {
