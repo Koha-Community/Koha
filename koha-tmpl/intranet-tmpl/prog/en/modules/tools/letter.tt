@@ -360,7 +360,7 @@
                         <td class="actions">
                             <button type="button" data-containerid="[% letter.message_transport_type %]_[% lang %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
                         </td>
-                      <td><textarea name="content" data-lang="[% lang %]" class="content_[% letter.message_transport_type %]" id="content_[% letter.message_transport_type %]_[% lang %]" cols="80" rows="15">[% letter.content %]</textarea></td>
+                      <td><textarea name="content" data-lang="[% lang %]" class="content_[% letter.message_transport_type %]" id="content_[% letter.message_transport_type %]_[% lang %]" cols="80" rows="15">[% letter.content | html %]</textarea></td>
                     </tr>
                   </table>
                 </li>
