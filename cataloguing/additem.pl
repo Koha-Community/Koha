@@ -798,22 +798,16 @@ foreach my $field (@fields) {
         }
         $this_row{itemnumber} = $subfieldvalue if ($field->tag() eq $itemtagfield && $subfieldcode eq $itemtagsubfield);
 
-	if ( C4::Context->preference('EasyAnalyticalRecords') ) {
-	    foreach my $hostitemnumber (@hostitemnumbers){
-            my $item = Koha::Items->find( $hostitemnumber );
-		if ($this_row{itemnumber} eq $hostitemnumber){
-			$this_row{hostitemflag} = 1;
-            $this_row{hostbiblionumber}= $item->biblio->biblionumber;
-			last;
-		}
-	    }
-
-#	    my $countanalytics=GetAnalyticsCount($this_row{itemnumber});
-#           if ($countanalytics > 0){
-#                $this_row{countanalytics} = $countanalytics;
-#           }
-	}
-
+        if ( C4::Context->preference('EasyAnalyticalRecords') ) {
+            foreach my $hostitemnumber (@hostitemnumbers) {
+                my $item = Koha::Items->find( $hostitemnumber );
+                if ($this_row{itemnumber} eq $hostitemnumber) {
+                    $this_row{hostitemflag} = 1;
+                    $this_row{hostbiblionumber}= $item->biblio->biblionumber;
+                    last;
+                }
+            }
+        }
     }
     if (%this_row) {
         push(@big_array, \%this_row);
