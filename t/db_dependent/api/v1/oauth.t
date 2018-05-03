@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
+use Test::MockModule;
 use Test::Mojo;
 
 use Koha::Database;
@@ -112,4 +113,41 @@ subtest '/oauth/token tests' => sub {
         ->json_is({ error => 'Unimplemented grant type' });
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'Net::OAuth2::AuthorizationServer missing tests' => sub {
+
+    plan tests => 10;
+
+    my $load_conditional = Test::MockModule->new('Module::Load::Conditional');
+
+    # Enable the client credentials grant syspref
+    t::lib::Mocks::mock_preference( 'RESTOAuth2ClientCredentials', 1 );
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 2**4 } });
+    my $api_key = Koha::ApiKey->new({ patron_id => $patron->id, description => 'blah' })->store;
+
+    my $form_data = {
+        grant_type    => 'client_credentials',
+        client_id     => $api_key->client_id,
+        client_secret => $api_key->secret
+    };
+
+    $t->post_ok( '/api/v1/oauth/token', form => $form_data )->status_is(200)
+      ->json_is( '/expires_in' => 3600 )->json_is( '/token_type' => 'Bearer' )
+      ->json_has('/access_token');
+
+    my $access_token = $t->tx->res->json->{access_token};
+
+    $load_conditional->mock( 'can_load', sub { return 0; } );
+
+    my $tx = $t->ua->build_tx( GET => '/api/v1/patrons' );
+    $tx->req->headers->authorization("Bearer $access_token");
+    $t->request_ok($tx)
+      ->status_is(403);
+
+    $t->post_ok( '/api/v1/oauth/token', form => $form_data )
+      ->status_is(400)
+      ->json_is( { error => 'Unimplemented grant type' } );
+
 };
