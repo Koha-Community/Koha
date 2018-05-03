@@ -21,8 +21,6 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use Net::OAuth2::AuthorizationServer;
-
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 use C4::Context;
 
@@ -39,6 +37,7 @@ use Koha::Exceptions;
 use Koha::Exceptions::Authentication;
 use Koha::Exceptions::Authorization;
 
+use Module::Load::Conditional;
 use Scalar::Util qw( blessed );
 use Try::Tiny;
 
@@ -118,7 +117,18 @@ sub authenticate_api_request {
     my $authorization = $spec->{'x-koha-authorization'};
 
     my $authorization_header = $c->req->headers->authorization;
+
     if ($authorization_header and $authorization_header =~ /^Bearer /) {
+        # attempt to use OAuth2 authentication
+        if ( ! Module::Load::Conditional::can_load('Net::OAuth2::AuthorizationServer') ) {
+            Koha::Exceptions::Authorization::Unauthorized->throw(
+                error => 'Authentication failure.'
+            );
+        }
+        else {
+            require Net::OAuth2::AuthorizationServer;
+        }
+
         my $server = Net::OAuth2::AuthorizationServer->new;
         my $grant = $server->client_credentials_grant(Koha::OAuth::config);
         my ($type, $token) = split / /, $authorization_header;
