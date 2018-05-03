@@ -183,7 +183,7 @@ borrower_add_additional_fields($borrower, $template);
 $template->param(%$borrower);
 
 if ( $input->param('error_over') ) {
-    $template->param( error_over => 1, total_due => $input->param('amountoutstanding') );
+    $template->param( error_over => 1, total_due => scalar $input->param('amountoutstanding') );
 }
 
 $template->param(
