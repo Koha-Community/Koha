@@ -36,6 +36,7 @@
 [% END %]
 [% ELSE %]
 <form action="/cgi-bin/koha/members/maninvoice.pl" method="post" id="maninvoice"><input type="hidden" name="borrowernumber" id="borrowernumber" value="[% patron.borrowernumber %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
 	<fieldset class="rows">
 	<legend>Manual invoice</legend>
 	<ol>

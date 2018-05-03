@@ -31,6 +31,7 @@ use C4::Members;
 use C4::Accounts;
 use C4::Items;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Token;
 
 use Koha::Patrons;
 
@@ -50,6 +51,11 @@ unless ( $patron ) {
 my $add=$input->param('add');
 if ($add){
     if ( checkauth( $input, 0, $flagsrequired, 'intranet' ) ) {
+        die "Wrong CSRF token"
+            unless Koha::Token->new->check_csrf( {
+                session_id => scalar $input->cookie('CGISESSID'),
+                token => scalar $input->param('csrf_token'),
+            });
         # Note: If the logged in user is not allowed to see this patron an invoice can be forced
         # Here we are trusting librarians not to hack the system
         my $barcode=$input->param('barcode');
@@ -75,6 +81,7 @@ if ($add){
             if ( $error =~ /FOREIGN KEY/ && $error =~ /itemnumber/ ) {
                 $template->param( 'ITEMNUMBER' => 1 );
             }
+            $template->param( csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }) );
             $template->param( 'ERROR' => $error );
             output_html_with_http_headers $input, $cookie, $template->output;
         } else {
@@ -122,6 +129,7 @@ if ($add){
     }
 
     $template->param(
+        csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
         patron         => $patron,
         finesview      => 1,
     );
