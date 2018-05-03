@@ -15981,6 +15981,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20100 - Add new system preference ProtectSuperlibrarianPrivileges)\n";
 }
 
+$DBversion = '17.12.00.041';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( q{
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (13, 'access_files', 'Access to the files stored on the server');
+    } );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 11317 - Add a new permission to access files stored on the server)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
