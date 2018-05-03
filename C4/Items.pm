@@ -1206,44 +1206,40 @@ sub GetItemsLocationInfo {
 
 =head2 GetHostItemsInfo
 
-	$hostiteminfo = GetHostItemsInfo($hostfield);
-	Returns the iteminfo for items linked to records via a host field
+    $hostiteminfo = GetHostItemsInfo($hostfield);
+    Returns the iteminfo for items linked to records via a host field
 
 =cut
 
 sub GetHostItemsInfo {
-	my ($record) = @_;
-	my @returnitemsInfo;
+    my ($record) = @_;
+    my @returnitemsInfo;
 
-	if (C4::Context->preference('marcflavour') eq 'MARC21' ||
-        C4::Context->preference('marcflavour') eq 'NORMARC'){
-	    foreach my $hostfield ( $record->field('773') ) {
-        	my $hostbiblionumber = $hostfield->subfield("0");
-	        my $linkeditemnumber = $hostfield->subfield("9");
-        	my @hostitemInfos = GetItemsInfo($hostbiblionumber);
-	        foreach my $hostitemInfo (@hostitemInfos){
-        	        if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
-                	        push (@returnitemsInfo,$hostitemInfo);
-				last;
-                	}
-        	}
-	    }
-	} elsif ( C4::Context->preference('marcflavour') eq 'UNIMARC'){
-	    foreach my $hostfield ( $record->field('461') ) {
-        	my $hostbiblionumber = $hostfield->subfield("0");
-	        my $linkeditemnumber = $hostfield->subfield("9");
-        	my @hostitemInfos = GetItemsInfo($hostbiblionumber);
-	        foreach my $hostitemInfo (@hostitemInfos){
-        	        if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
-                	        push (@returnitemsInfo,$hostitemInfo);
-				last;
-                	}
-        	}
-	    }
-	}
-	return @returnitemsInfo;
+    if( !C4::Context->preference('EasyAnalyticalRecords') ) {
+        return @returnitemsInfo;
+    }
+
+    my @fields;
+    if( C4::Context->preference('marcflavour') eq 'MARC21' ||
+      C4::Context->preference('marcflavour') eq 'NORMARC') {
+        @fields = $record->field('773');
+    } elsif( C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        @fields = $record->field('461');
+    }
+
+    foreach my $hostfield ( @fields ) {
+        my $hostbiblionumber = $hostfield->subfield("0");
+        my $linkeditemnumber = $hostfield->subfield("9");
+        my @hostitemInfos = GetItemsInfo($hostbiblionumber);
+        foreach my $hostitemInfo (@hostitemInfos) {
+            if( $hostitemInfo->{itemnumber} eq $linkeditemnumber ) {
+                push @returnitemsInfo, $hostitemInfo;
+                last;
+            }
+        }
+    }
+    return @returnitemsInfo;
 }
-
 
 =head2 GetLastAcquisitions
 
