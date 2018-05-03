@@ -60,11 +60,11 @@ sub void {
     my ($self) = @_;
 
     # Make sure it is a payment we are voiding
-    return unless $self->accounttype =~ /^Pay/;
+    return unless $self->amount < 0;
 
     my @account_offsets =
       Koha::Account::Offsets->search(
-        { credit_id => $self->id, type => 'Payment' } );
+        { credit_id => $self->id, amount => { '<' => 0 }  } );
 
     $self->_result->result_source->schema->txn_do(
         sub {

@@ -72,10 +72,14 @@
         [% END %]
         <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>
         [% IF ( reverse_col) %]
-          [% IF ( account.payment ) %]
-            <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
-            <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-ban"></i> Void</a>
-          [% ELSE %][% SET footerjs = 1 %]
+          [% IF ( account.payment || account.amount < 0 ) %]
+                [% IF account.payment %]
+                    <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
+                [% END %]
+                [% IF account.amount < 0 %]
+                    <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-ban"></i> Void</a>
+                [% END %]
+          [% ELSE %]
             &nbsp;
           [% END %]
         [% END %]

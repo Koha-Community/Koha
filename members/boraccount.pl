@@ -104,8 +104,10 @@ while ( my $line = $accts->next ) {
 
     $accountline->{amount} = sprintf '%.2f', $accountline->{amount};
     $accountline->{amountoutstanding} = sprintf '%.2f', $accountline->{amountoutstanding};
-    if ($accountline->{accounttype} =~ /^Pay/) {
-        $accountline->{payment} = 1;
+    if ($accountline->{amount} < 0) {
+        $accountline->{payment} = 1
+          if ( $accountline->{accounttype} =~ /^Pay/ );
+
         $reverse_col = 1;
     }
 

@@ -846,7 +846,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
 
 subtest "Koha::Account::Line::void tests" => sub {
 
-    plan tests => 12;
+    plan tests => 15;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -886,8 +886,9 @@ subtest "Koha::Account::Line::void tests" => sub {
     is( $line1->amountoutstanding+0, 0, 'First fee has amount outstanding of 0' );
     is( $line2->amountoutstanding+0, 0, 'Second fee has amount outstanding of 0' );
 
-    $account_payment->void();
+    my $ret = $account_payment->void();
 
+    is( ref($ret), 'Koha::Account::Line', 'Void returns the account line' );
     is( $account->balance(), 30, "Account balance is again 30" );
 
     $account_payment->_result->discard_changes();
@@ -900,6 +901,14 @@ subtest "Koha::Account::Line::void tests" => sub {
 
     is( $line1->amountoutstanding+0, 10, 'First fee again has amount outstanding of 10' );
     is( $line2->amountoutstanding+0, 20, 'Second fee again has amount outstanding of 20' );
+
+    # Accountlines that are not credits should be un-voidable
+    my $line1_pre = $line1->unblessed();
+    $ret = $line1->void();
+    $line1->_result->discard_changes();
+    my $line1_post = $line1->unblessed();
+    is( $ret, undef, 'Attempted void on non-credit returns undef' );
+    is_deeply( $line1_pre, $line1_post, 'Non-credit account line cannot be voided' )
 };
 
 subtest "Koha::Account::Offset credit & debit tests" => sub {
