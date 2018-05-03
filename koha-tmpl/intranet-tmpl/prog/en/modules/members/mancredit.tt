@@ -36,6 +36,7 @@ $(document).ready(function(){
 
 <form action="/cgi-bin/koha/members/mancredit.pl" method="post" id="mancredit">
 <input type="hidden" name="borrowernumber" id="borrowernumber" value="[% borrowernumber %]" />
+    <input type="hidden" name="csrf_token" value="[% csrf_token %]" />
 
 <fieldset class="rows">
 <legend>Manual credit</legend><ol>
