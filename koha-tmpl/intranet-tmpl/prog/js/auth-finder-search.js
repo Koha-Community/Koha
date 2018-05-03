@@ -21,7 +21,7 @@ $(document).ready(function(){
                     op: "do_search",
                     type: "intranet",
                     and_or: "and",
-                    operator: "contains",
+                    operator: "start",
                     orderby: "HeadingAsc",
                     querytype: "all"
                 },
@@ -49,7 +49,7 @@ $(document).ready(function(){
                     op: "do_search",
                     type: "intranet",
                     and_or: "and",
-                    operator: "contains",
+                    operator: "start",
                     orderby: "HeadingAsc",
                     querytype: "mainentry"
                 },
@@ -77,7 +77,7 @@ $(document).ready(function(){
                     op: "do_search",
                     type: "intranet",
                     and_or: "and",
-                    operator: "contains",
+                    operator: "start",
                     orderby: "HeadingAsc",
                     querytype: "mainmainentry"
                 },
