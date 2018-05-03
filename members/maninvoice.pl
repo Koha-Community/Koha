@@ -32,6 +32,7 @@ use C4::Members;
 use C4::Accounts;
 use C4::Items;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
+use Koha::Token;
 
 use Koha::Patrons;
 
@@ -50,6 +51,11 @@ unless ( $patron ) {
 
 my $add=$input->param('add');
 if ($add){
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf( {
+            session_id => $input->cookie('CGISESSID'),
+            token => scalar $input->param('csrf_token'),
+        });
     if ( checkauth( $input, 0, $flagsrequired, 'intranet' ) ) {
         #  print $input->header;
         my $barcode=$input->param('barcode');
@@ -75,6 +81,7 @@ if ($add){
             if ( $error =~ /FOREIGN KEY/ && $error =~ /itemnumber/ ) {
                 $template->param( 'ITEMNUMBER' => 1 );
             }
+            $template->param( csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }) );
             $template->param( 'ERROR' => $error );
             output_html_with_http_headers $input, $cookie, $template->output;
         } else {
@@ -123,6 +130,7 @@ if ($add){
 
     $template->param(%{ $patron->unblessed });
     $template->param(
+        csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),
         finesview      => 1,
         borrowernumber => $borrowernumber,
         categoryname   => $patron->category->description,
