@@ -64,7 +64,7 @@ sub dbh {
     my $dsn = sprintf(
         'dbi:%s:database=%s;host=%s;port=%s',
         $driver,
-        $config->get("database"),
+        $config->get("database_test") || $config->get("database"),
         $config->get("hostname"),
         $config->get("port") || '',
     );

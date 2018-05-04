@@ -73,7 +73,7 @@ sub new {
     my $self = {};
 
     # get basic information from context
-    $self->{'dbname'}   = C4::Context->config("database");
+    $self->{'dbname'}   = C4::Context->config("database_test") || C4::Context->config("database");
     $self->{'dbms'}     = C4::Context->config("db_scheme") ? C4::Context->config("db_scheme") : "mysql";
     $self->{'hostname'} = C4::Context->config("hostname");
     $self->{'port'}     = C4::Context->config("port");

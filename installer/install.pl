@@ -54,7 +54,7 @@ if ( defined($language) ) {
 
 my $installer = C4::Installer->new();
 my %info;
-$info{'dbname'} = C4::Context->config("database");
+$info{'dbname'} = C4::Context->config("database_test") || C4::Context->config("database");
 $info{'dbms'}   = (
       C4::Context->config("db_scheme")
     ? C4::Context->config("db_scheme")
