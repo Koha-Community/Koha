@@ -90,7 +90,7 @@ subtest 'CRUD' => sub {
 };
 
 subtest 'Sharing' => sub {
-    plan tests => 18;
+    plan tests => 21;
     my $patron_wants_to_share = $builder->build({
         source => 'Borrower',
     });
@@ -152,6 +152,14 @@ subtest 'Sharing' => sub {
     $number_of_shelves_shared = Koha::Virtualshelfshares->search->count;
     is( $number_of_shelves_shared, 2, 'To be sure no shares have been removed' );
 
+    # Test double accept (BZ 11943) before removing the accepted share
+    my $third_share = $shelf_to_share->share('valid key number 2');
+    is( Koha::Virtualshelfshares->search->count, 3, 'Three shares' );
+    $is_accepted = $third_share->accept( 'valid key number 2', $share_with_me->{borrowernumber} );
+    is( $is_accepted->shelfnumber, $shelf_to_share->shelfnumber, 'Accept returned the existing share' );
+    is( Koha::Virtualshelfshares->search->count, 2, 'Check that number of shares went down again' );
+
+    # Remove the first accept
     is( $shelf_to_share->remove_share( $share_with_me->{borrowernumber} ), 1, '1 share should have been removed if the shelf was shared with this patron' );
     $number_of_shelves_shared = Koha::Virtualshelfshares->search->count;
     is( $number_of_shelves_shared, 1, 'To be sure the share has been removed' );
