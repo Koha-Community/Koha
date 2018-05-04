@@ -127,6 +127,13 @@ sub fill_form {
 sub submit_form {
     my ( $self ) = @_;
 
+    # If there is only one submit element on the page we use it
+    my @submit_elements = $self->driver->find_elements('//input[@type="submit"]');
+    if ( @submit_elements == 1 ) {
+        $self->click_when_visible('//input[@type="submit"]');
+        return;
+    }
+
     my $default_submit_selector = '//fieldset[@class="action"]/input[@type="submit"]';
     $self->driver->find_element($default_submit_selector)->click
 }
