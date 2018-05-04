@@ -1013,7 +1013,7 @@ subtest "Payment notice tests" => sub {
 
     $id = $account->pay( { amount => 13, type => 'writeoff' } );
     $notice = Koha::Notice::Messages->search()->next();
-    is( $notice->subject, 'Account Writeoff', 'Notice subject is correct for payment' );
+    is( $notice->subject, 'Account writeoff', 'Notice subject is correct for payment' );
     is( $notice->letter_code, 'ACCOUNT_WRITEOFF', 'Notice letter code is correct for writeoff' );
     is( $notice->content, 'A writeoff of 13.00 has been applied to your account.', 'Notice content is correct for writeoff' );
 };
