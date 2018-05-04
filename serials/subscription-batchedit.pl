@@ -26,7 +26,7 @@ use C4::Output;
 use C4::Serials;
 use Koha::Subscriptions;
 use Koha::Acquisition::Booksellers;
-use Koha::AdditionalField;
+use Koha::AdditionalFields;
 use Koha::DateUtils;
 
 my $cgi = new CGI;
@@ -48,7 +48,7 @@ foreach my $subscriptionid (@subscriptionids) {
     push @subscriptions, $subscription if $subscription;
 }
 
-my $additional_fields = Koha::AdditionalField->all({tablename => 'subscription'});
+my @additional_fields = Koha::AdditionalFields->search({tablename => 'subscription'});
 
 my $batchedit = $cgi->param('batchedit');
 if ($batchedit) {
@@ -64,9 +64,9 @@ if ($batchedit) {
     );
 
     my $field_values = {};
-    foreach my $field (@$additional_fields) {
-        my $value = $cgi->param('field_' . $field->{id});
-        $field_values->{$field->{id}} = $value;
+    foreach my $field (@additional_fields) {
+        my $value = $cgi->param('field_' . $field->id);
+        $field_values->{$field->id} = $value;
     }
 
     foreach my $subscription (@subscriptions) {
@@ -77,21 +77,19 @@ if ($batchedit) {
             }
         }
 
-        foreach my $field (@$additional_fields) {
-            my $value = $field_values->{$field->{id}};
+        my @additional_field_values;
+        foreach my $field (@additional_fields) {
+            my $value = $field_values->{$field->id};
             if (defined $value and $value ne '') {
-                $field->{values} //= {};
-                $field->{values}->{$subscription->subscriptionid} = $value;
+                push @additional_field_values, {
+                    id => $field->id,
+                    value => $value,
+                };
             }
         }
+        $subscription->set_additional_fields(\@additional_field_values);
 
         $subscription->store;
-    }
-
-    foreach my $field (@$additional_fields) {
-        if (defined $field->{values}) {
-            $field->insert_values();
-        }
     }
 
     my $redirect_url = $cgi->param('referrer') // '/cgi-bin/koha/serials/serials-home.pl';
@@ -102,7 +100,7 @@ if ($batchedit) {
 $template->param(
     subscriptions => \@subscriptions,
     booksellers => [ Koha::Acquisition::Booksellers->search() ],
-    additional_fields => $additional_fields,
+    additional_fields => \@additional_fields,
     referrer => scalar $cgi->param('referrer'),
 );
 

@@ -29,7 +29,7 @@ use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
 use C4::Letters;
-use Koha::AdditionalField;
+use Koha::AdditionalFields;
 use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::ItemTypes;
@@ -144,7 +144,7 @@ $template->param(
     locations_loop=>$locations_loop,
 );
 
-$template->param( additional_fields_for_subscription => scalar Koha::AdditionalField->all( { tablename => 'subscription' } ) );
+$template->param( additional_fields_for_subscription => [ Koha::AdditionalFields->search( { tablename => 'subscription' } ) ] );
 
 my $typeloop = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
@@ -370,12 +370,22 @@ sub redirect_add_subscription {
         $template->param( mana_msg => $result->{msg} );
     }
 
-    Koha::AdditionalField->update_fields_from_query( {
-        tablename => 'subscription',
-        record_id => $subscriptionid,
-        query => $query,
-        marc_record => GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 })
-    } );
+    my @additional_fields;
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
+    for my $field (Koha::AdditionalFields->search({ tablename => 'subscription' })) {
+        my $value = $query->param('additional_field_' . $field->id);
+        if ($field->marcfield) {
+            my ($field, $subfield) = split /\$/, $field->marcfield;
+            if ( $record and $field and $subfield ) {
+                $value = $record->subfield( $field, $subfield );
+            }
+        }
+        push @additional_fields, {
+            id => $field->id,
+            value => $value,
+        };
+    }
+    Koha::Subscriptions->find($subscriptionid)->set_additional_fields(\@additional_fields);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     return;
@@ -478,12 +488,22 @@ sub redirect_mod_subscription {
         $skip_serialseq, $itemtype, $previousitemtype, $mana_id
     );
 
-    Koha::AdditionalField->update_fields_from_query( {
-        tablename => 'subscription',
-        record_id => $subscriptionid,
-        query => $query,
-        marc_record => GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 })
-    } );
+    my @additional_fields;
+    my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
+    for my $field (Koha::AdditionalFields->search({ tablename => 'subscription' })) {
+        my $value = $query->param('additional_field_' . $field->id);
+        if ($field->marcfield) {
+            my ($field, $subfield) = split /\$/, $field->marcfield;
+            if ( $record and $field and $subfield ) {
+                $value = $record->subfield( $field, $subfield );
+            }
+        }
+        push @additional_fields, {
+            id => $field->id,
+            value => $value,
+        };
+    }
+    Koha::Subscriptions->find($subscriptionid)->set_additional_fields(\@additional_fields);
 
     print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
     return;

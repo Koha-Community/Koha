@@ -12,6 +12,9 @@
 [% Asset.css('css/datatables.css') %]
 </head>
 
+[% marcfield_tables = ['subscription'] %]
+[% show_marcfield = marcfield_tables.grep('^' _ tablename _ '$').size ? 1 : 0 %]
+
 <body id="ser_add_fields" class="ser">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -77,7 +80,9 @@
                     <tr>
                         <th>Name</th>
                         <th>Authorised value category</th>
-                        <th>MARC field</th>
+                        [% IF show_marcfield %]
+                            <th>MARC field</th>
+                        [% END %]
                         <th>Searchable</th>
                         <th>Actions</th>
                     </tr>
@@ -87,13 +92,15 @@
                         <tr>
                             <td>[% field.name %]</td>
                             <td>[% field.authorised_value_category %]</td>
-                            <td>[% field.marcfield %]</td>
+                            [% IF show_marcfield %]
+                                <td>[% field.marcfield %]</td>
+                            [% END %]
                             <td>
                                 [% IF field.searchable %]Yes[% ELSE %]No[% END %]
                             </td>
                             <td class="actions">
                                 <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id %]"><i class="fa fa-trash"></i> Delete</a>
+                                <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id %]&amp;tablename=[% tablename %]"><i class="fa fa-trash"></i> Delete</a>
                             </td>
                         </tr>
                     [% END %]
@@ -127,10 +134,12 @@
                             %]
                         </select>
                     </li>
-                    <li>
-                        <label for="marcfield">MARC field: </label>
-                        <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield %]" />
-                    </li>
+                    [% IF show_marcfield %]
+                        <li>
+                            <label for="marcfield">MARC field: </label>
+                            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield %]" />
+                        </li>
+                    [% END %]
                     <li>
                         <label for="searchable">Searchable: </label>
                         [% IF field.searchable %]

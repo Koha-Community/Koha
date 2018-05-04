@@ -30,7 +30,7 @@ use Koha::Subscription::Frequencies;
 use Koha::Subscription::Numberpatterns;
 use JSON;
 
-use base qw(Koha::Object);
+use base qw(Koha::Object Koha::Object::Mixin::AdditionalFields);
 
 =head1 NAME
 

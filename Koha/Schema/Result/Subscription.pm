@@ -455,6 +455,22 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-23 12:56:39
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dTb/JOO3KQ3NZGypFbRiEw
 
+__PACKAGE__->has_many(
+  "additional_field_values",
+  "Koha::Schema::Result::AdditionalFieldValue",
+  sub {
+    my ($args) = @_;
+
+    return {
+        "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.subscriptionid" },
+
+        # TODO Add column additional_field_values.tablename to avoid subquery ?
+        "$args->{foreign_alias}.field_id" =>
+            { -in => \'(SELECT id FROM additional_fields WHERE tablename = "subscription")' },
+    };
+  },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 # You can replace this text with custom content, and it will be preserved on regeneration
 1;

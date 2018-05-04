@@ -25,7 +25,7 @@ use Koha::Database;
 
 use Koha::Subscription;
 
-use base qw(Koha::Objects);
+use base qw(Koha::Objects Koha::Objects::Mixin::AdditionalFields);
 
 =head1 NAME
 

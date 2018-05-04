@@ -35,7 +35,7 @@ use C4::Context;
 use C4::Koha qw( GetAuthorisedValues );
 use C4::Output;
 use C4::Serials;
-use Koha::AdditionalField;
+use Koha::AdditionalFields;
 
 use Koha::DateUtils;
 use Koha::SharedContent;
@@ -79,11 +79,17 @@ if ( $op and $op eq "close" ) {
 }
 
 
-my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription', searchable => 1 } );
-my $additional_field_filters = Koha::AdditionalField->get_filters_from_query( {
-    tablename => 'subscription',
-    query => $query,
-} );
+my @additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription', searchable => 1 } );
+my @additional_field_filters;
+for my $field ( @additional_fields ) {
+    my $value = $query->param( 'additional_field_' . $field->id );
+    if ( defined $value and $value ne '' ) {
+        push @additional_field_filters, {
+            id => $field->id,
+            value => $value,
+        };
+    }
+}
 
 my $expiration_date_dt = $expiration_date ? dt_from_string( $expiration_date ) : undef;
 my @subscriptions;
@@ -110,7 +116,7 @@ if ($searched){
             publisher    => $publisher,
             bookseller   => $bookseller,
             branch       => $branch,
-            additional_fields => $additional_field_filters,
+            additional_fields => \@additional_field_filters,
             location     => $location,
             expiration_date => $expiration_date_dt,
         });
@@ -188,8 +194,8 @@ else
         branches_loop => \@branches_loop,
         done_searched => $searched,
         routing       => $routing,
-        additional_field_filters => Koha::AdditionalField->get_filters_as_values( $additional_field_filters ),
-        additional_fields_for_subscription => $additional_fields,
+        additional_field_filters => { map { $_->{id} => $_->{value} } @additional_field_filters },
+        additional_fields_for_subscription => \@additional_fields,
         marcflavour   => (uc(C4::Context->preference("marcflavour"))),
         mana => $mana
     );

@@ -33,6 +33,7 @@ use C4::Biblio;
 use C4::Items;
 use C4::Suggestions;
 use Koha::Biblios;
+use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Libraries;
@@ -43,7 +44,7 @@ use Koha::EDI qw( create_edi_order get_edifact_ean );
 use Koha::CsvProfiles;
 use Koha::Patrons;
 
-use Koha::AdditionalField;
+use Koha::AdditionalFields;
 
 =head1 NAME
 
@@ -432,11 +433,10 @@ if ( $op eq 'list' ) {
         has_budgets          => $has_budgets,
         duplinbatch          => $duplinbatch,
         csv_profiles         => [ Koha::CsvProfiles->search({ type => 'sql', used_for => 'export_basket' }) ],
-        available_additional_fields => Koha::AdditionalField->all( { tablename => 'aqbasket' } ),
-        additional_field_values => Koha::AdditionalField->fetch_all_values( {
-            tablename => 'aqbasket',
-            record_id => $basketno,
-        } )->{$basketno},
+        available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'aqbasket' } ) ],
+        additional_field_values => { map {
+            $_->field->name => $_->value
+        } Koha::Acquisition::Baskets->find($basketno)->additional_field_values },
     );
 }
 

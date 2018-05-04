@@ -30,7 +30,7 @@ use C4::Log;    # logaction
 use C4::Debug;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
-use Koha::AdditionalField;
+use Koha::AdditionalFieldValues;
 use Koha::DateUtils;
 use Koha::Serial;
 use Koha::Subscriptions;
@@ -275,11 +275,10 @@ sub GetSubscription {
     $subscription->{cannotedit} = not can_edit_subscription( $subscription );
 
     # Add additional fields to the subscription into a new key "additional_fields"
-    my $additional_field_values = Koha::AdditionalField->fetch_all_values({
-            tablename => 'subscription',
-            record_id => $subscriptionid,
-    });
-    $subscription->{additional_fields} = $additional_field_values->{$subscriptionid};
+    my %additional_field_values = map {
+        $_->field->name => $_->value
+    } Koha::Subscriptions->find($subscriptionid)->additional_field_values;
+    $subscription->{additional_fields} = \%additional_field_values;
 
     if ( my $mana_id = $subscription->{mana_id} ) {
         my $mana_subscription = Koha::SharedContent::get_entity_by_id(
@@ -529,12 +528,13 @@ sub SearchSubscriptions {
     my $additional_fields = $args->{additional_fields} // [];
     my $matching_record_ids_for_additional_fields = [];
     if ( @$additional_fields ) {
-        $matching_record_ids_for_additional_fields = Koha::AdditionalField->get_matching_record_ids({
-                fields => $additional_fields,
-                tablename => 'subscription',
-                exact_match => 0,
-        });
-        return () unless @$matching_record_ids_for_additional_fields;
+        my @subscriptions = Koha::Subscriptions->search_additional_fields($additional_fields);
+
+        return () unless @subscriptions;
+
+        $matching_record_ids_for_additional_fields = [ map {
+            $_->subscriptionid
+        } @subscriptions ];
     }
 
     my $query = q|
@@ -631,11 +631,10 @@ sub SearchSubscriptions {
         $subscription->{cannotedit} = not can_edit_subscription( $subscription );
         $subscription->{cannotdisplay} = not can_show_subscription( $subscription );
 
-        my $additional_field_values = Koha::AdditionalField->fetch_all_values({
-            record_id => $subscription->{subscriptionid},
-            tablename => 'subscription'
-        });
-        $subscription->{additional_fields} = $additional_field_values->{$subscription->{subscriptionid}};
+        my %additional_field_values = map {
+            $_->field->name => $_->value
+        } Koha::Subscriptions->find($subscription->{subscriptionid})->additional_field_values;
+        $subscription->{additional_fields} = \%additional_field_values;
     }
 
     return @$results;
@@ -1700,10 +1699,10 @@ sub DelSubscription {
     $dbh->do("DELETE FROM subscriptionhistory WHERE subscriptionid=?", undef, $subscriptionid);
     $dbh->do("DELETE FROM serial WHERE subscriptionid=?", undef, $subscriptionid);
 
-    my $afs = Koha::AdditionalField->all({tablename => 'subscription'});
-    foreach my $af (@$afs) {
-        $af->delete_values({record_id => $subscriptionid});
-    }
+    Koha::AdditionalFieldValues->search({
+        'field.tablename' => 'subscription',
+        'me.record_id' => $subscriptionid,
+    }, { join => 'field' })->delete;
 
     logaction( "SERIAL", "DELETE", $subscriptionid, "" ) if C4::Context->preference("SubscriptionLog");
 }
@@ -1833,11 +1832,11 @@ sub GetLateOrMissingIssues {
         }
         $line->{"status".$line->{status}}   = 1;
 
-        my $additional_field_values = Koha::AdditionalField->fetch_all_values({
-            record_id => $line->{subscriptionid},
-            tablename => 'subscription'
-        });
-        %$line = ( %$line, additional_fields => $additional_field_values->{$line->{subscriptionid}} );
+        my $subscription = Koha::Subscriptions->find($line->{subscriptionid});
+        my %additional_field_values = map {
+            $_->field->name => $_->value
+        } $subscription->additional_field_values;
+        %$line = ( %$line, additional_fields => \%additional_field_values );
 
         push @issuelist, $line;
     }

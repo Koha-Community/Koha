@@ -11,7 +11,7 @@
                     <select name="additional_field_[% field.id %]" id="additional_field_[% field.id %]">
                         <option value="">All</option>
                         [% FOREACH av IN AuthorisedValues.GetAuthValueDropbox( field.authorised_value_category ) %]
-                            [% IF av.authorised_value == values.${field.name} %]
+                            [% IF av.authorised_value == values.${field.id} %]
                                 <option value="[% av.authorised_value %]" selected="selected">[% av.lib %]</option>
                             [% ELSE %]
                                 <option value="[% av.authorised_value %]">[% av.lib %]</option>
@@ -20,10 +20,10 @@
                     </select> (Authorised values for [% field.authorised_value_category %])
                 [% ELSE %]
                     [% IF field.marcfield %]
-                        <input type="text" value="[% values.${field.name} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" readonly="readonly" />
+                        <input type="text" value="[% values.${field.id} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" readonly="readonly" />
                         This value will be filled with the [% field.marcfield %] subfield of the selected biblio.
                     [% ELSE %]
-                        <input type="text" value="[% values.${field.name} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" />
+                        <input type="text" value="[% values.${field.id} %]" id="additional_field_[% field.id %]" name="additional_field_[% field.id %]" />
                     [% END %]
                 [% END %]
             </li>

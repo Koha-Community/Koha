@@ -54,7 +54,8 @@ use C4::Acquisition qw/GetBasket NewBasket ModBasketHeader/;
 use C4::Contract qw/GetContracts/;
 
 use Koha::Acquisition::Booksellers;
-use Koha::AdditionalField;
+use Koha::Acquisition::Baskets;
+use Koha::AdditionalFields;
 
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -75,7 +76,7 @@ my $basket;
 my $op = $input->param('op');
 my $is_an_edit = $input->param('is_an_edit');
 
-$template->param( available_additional_fields => scalar Koha::AdditionalField->all( { tablename => 'aqbasket' } ) );
+$template->param( available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'aqbasket' } ) ] );
 
 if ( $op eq 'add_form' ) {
     my @contractloop;
@@ -98,10 +99,9 @@ if ( $op eq 'add_form' ) {
         }
         $template->param( is_an_edit => 1);
         $template->param(
-            additional_field_values => Koha::AdditionalField->fetch_all_values( {
-                tablename => 'aqbasket',
-                record_id => $basketno,
-            } )->{$basketno},
+            additional_field_values => { map {
+                $_->field->name => $_->value
+            } Koha::Acquisition::Baskets->find($basketno)->additional_field_values },
         );
     } else {
     #new basket
@@ -170,11 +170,15 @@ if ( $op eq 'add_form' ) {
         );
     }
 
-    Koha::AdditionalField->update_fields_from_query( {
-        tablename => 'aqbasket',
-        record_id => $basketno,
-        query => $input,
-    } );
+    my @additional_fields;
+    for my $field (Koha::AdditionalFields->search({ tablename => 'aqbasket' })) {
+        my $value = $input->param('additional_field_' . $field->id);
+        push @additional_fields, {
+            id => $field->id,
+            value => $value,
+        };
+    }
+    Koha::Acquisition::Baskets->find($basketno)->set_additional_fields(\@additional_fields);
 
     print $input->redirect('basket.pl?basketno='.$basketno);
     exit 0;

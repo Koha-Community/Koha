@@ -22,7 +22,7 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::Acquisition::Basket;
 
-use base qw( Koha::Objects );
+use base qw( Koha::Objects Koha::Objects::Mixin::AdditionalFields );
 
 =head1 NAME
 

@@ -22,6 +22,7 @@ use C4::Auth;
 use C4::Koha;
 use C4::Output;
 use Koha::AdditionalField;
+use Koha::AdditionalFields;
 
 my $input = new CGI;
 
@@ -49,14 +50,14 @@ if ( $op eq 'add' ) {
     if ( $field_id and $name ) {
         my $updated = 0;
         eval {
-            my $af = Koha::AdditionalField->new({
-                id => $field_id,
+            my $af = Koha::AdditionalFields->find($field_id);
+            $af->set({
                 name => $name,
                 authorised_value_category => $authorised_value_category,
                 marcfield => $marcfield,
                 searchable => $searchable,
             });
-            $updated = $af->update;
+            $updated = $af->store ? 1 : 0;
         };
         push @messages, {
             code => 'update',
@@ -72,7 +73,7 @@ if ( $op eq 'add' ) {
                 marcfield => $marcfield,
                 searchable => $searchable,
             });
-            $inserted = $af->insert;
+            $inserted = $af->store ? 1 : 0;
         };
         push @messages, {
             code => 'insert',
@@ -90,9 +91,8 @@ if ( $op eq 'add' ) {
 if ( $op eq 'delete' ) {
     my $deleted = 0;
     eval {
-        my $af = Koha::AdditionalField->new( { id => $field_id } );
+        my $af = Koha::AdditionalFields->find($field_id);
         $deleted = $af->delete;
-        $deleted = 0 if $deleted eq '0E0';
     };
     push @messages, {
         code => 'delete',
@@ -104,10 +104,10 @@ if ( $op eq 'delete' ) {
 if ( $op eq 'add_form' ) {
     my $field;
     if ( $field_id ) {
-        $field = Koha::AdditionalField->new( { id => $field_id } )->fetch;
+        $field = Koha::AdditionalFields->find($field_id);
     }
 
-    $tablename = $field->{tablename} if $field;
+    $tablename = $field->tablename if $field;
 
     $template->param(
         field => $field,
@@ -115,7 +115,7 @@ if ( $op eq 'add_form' ) {
 }
 
 if ( $op eq 'list' ) {
-    my $fields = Koha::AdditionalField->all( { tablename => $tablename } );
+    my $fields = Koha::AdditionalFields->search( { tablename => $tablename } );
     $template->param( fields => $fields );
 }
 

@@ -28,6 +28,7 @@ use C4::Contract;
 use C4::Debug;
 use C4::Templates qw(gettemplate);
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
 use Koha::Biblios;
@@ -2445,15 +2446,12 @@ sub GetHistory {
         $query .= ' AND (aqorders.ordernumber IN ( ' . join (',', ('?') x @$ordernumbers ) . '))';
         push @query_params, @$ordernumbers;
     if ( @$additional_fields ) {
-        my $matching_record_ids_for_additional_fields = Koha::AdditionalField->get_matching_record_ids( {
-            fields => $additional_fields,
-            tablename => 'aqbasket',
-            exact_match => 0,
-        } );
-        return [] unless @$matching_record_ids_for_additional_fields;
+        my @baskets = Koha::Acquisition::Baskets->search_additional_fields($additional_fields);
+
+        return [] unless @baskets;
 
         # No parameterization because record IDs come directly from DB
-        $query .= ' AND aqbasket.basketno IN ( ' . join( ',', @$matching_record_ids_for_additional_fields ) . ' )';
+        $query .= ' AND aqbasket.basketno IN ( ' . join( ',', map { $_->basketno } @baskets ) . ' )';
     }
 
     if ( C4::Context->preference("IndependentBranches") ) {

@@ -26,6 +26,7 @@ use C4::Output;
 use C4::Context;
 use C4::Search qw/enabled_staff_search_views/;
 
+use Koha::AdditionalFields;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Acquisition::Bookseller;
@@ -128,12 +129,7 @@ my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($su
 
 my $default_bib_view = get_default_view();
 
-my $additional_fields = Koha::AdditionalField->all( { tablename => 'subscription' } );
-for my $field ( @$additional_fields ) {
-    if ( $field->{authorised_value_category} ) {
-        $field->{authorised_value_choices} = GetAuthorisedValues( $field->{authorised_value_category} );
-    }
-}
+my $additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription' } );
 $template->param( additional_fields_for_subscription => $additional_fields );
 
 # FIXME Do we want to hide canceled orders?
