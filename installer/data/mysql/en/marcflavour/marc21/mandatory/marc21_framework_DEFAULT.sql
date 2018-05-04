@@ -7,7 +7,7 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 25 (December 2017)
+--           Revised to Update No. 26 (April 2018)
 -- *************************************************************
 
 
@@ -1486,6 +1486,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('377', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('377', '1', 'Real World Object URI', 'Real World Object URI', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('377', '2', 'Source', 'Source', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('377', '3', 'Materials specified', 'Materials specified', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('377', '6', 'Linkage', 'Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('377', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('377', 'a', 'Language code', 'Language code', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -1493,12 +1494,14 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('380', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('380', '1', 'Real World Object URI', 'Real World Object URI', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('380', '2', 'Source of term', 'Source of term', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('380', '3', 'Materials specified', 'Materials specified', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('380', '6', 'Linkage', 'Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('380', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('380', 'a', 'Form of work', 'Form of work', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', '1', 'Real World Object URI', 'Real World Object URI', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('381', '2', 'Source of term', 'Source of term', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('381', '3', 'Materials specified', 'Materials specified', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('381', '6', 'Linkage', 'Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('381', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('381', 'a', 'Other distinguishing characteristic', 'Other distinguishing characteristic', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -1522,6 +1525,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
         ('382', 'v', 'Note', 'Note', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('383', '2', 'Source', 'Source', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('383', '6', 'Linkage', 'Linkage', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+        ('383', '3', 'Materials specified', 'Materials specified', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('383', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('383', 'a', 'Serial number', 'Serial number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
         ('383', 'b', 'Opus number', 'Opus number', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -2578,6 +2582,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('730', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '1', 'Real World Object URI', 'Real World Object URI', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '3', 'Materials specified', 'Materials specified', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
+		('730', '4', 'Relationship', 'Relationship', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '5', 'Institution to which field applies', 'Institution to which field applies', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '6', 'Linkage', 'Linkage', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),

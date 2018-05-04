@@ -472,7 +472,16 @@
                     _("w- Parchment") +
                     '</option> \
                                  [% END %] \
-                     [% IF ( f4y ) %] \
+                     [% IF ( f4x ) %] \
+                                  <option value="x" selected="selected">' +
+                    _("x- Not applicable") +
+                    '</option> \
+                                 [% ELSE %] \
+                                  <option value="x">' +
+                    _("x- Not applicable") +
+                    '</option> \
+                                 [% END %] \
+                      [% IF ( f4y ) %] \
                                   <option value="y" selected="selected">' +
                     _("y- Other photographic medium") +
                     '</option> \
@@ -582,11 +591,11 @@
                                  [% END %] \
                      [% IF ( f6c ) %] \
                                   <option value="c" selected="selected">' +
-                    _("c- Pre-production") +
+                    _("c- Photographic pre-production") +
                     '</option> \
                                  [% ELSE %] \
                                   <option value="c">' +
-                    _("c- Pre-production") +
+                    _("c- Photographic pre-production") +
                     '</option> \
                                  [% END %] \
                      [% IF ( f6d ) %] \
