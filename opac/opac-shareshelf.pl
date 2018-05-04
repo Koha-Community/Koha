@@ -126,42 +126,38 @@ sub show_accept {
     my $shelfnumber = $param->{shelfnumber};
     my $shelf = Koha::Virtualshelves->find( $shelfnumber );
 
-    # The key for accepting is checked later in Koha::Virtualshelf->share
+    # The key for accepting is checked later in Koha::Virtualshelfshare
     # You must not be the owner and the list must be private
-    if ( $shelf->category == 2 or $shelf->owner == $param->{loggedinuser} ) {
-        return;
+    if( !$shelf ) {
+        $param->{errcode} = 2;
+    } elsif( $shelf->category == 2 ) {
+        $param->{errcode} = 5;
+    } elsif( $shelf->owner == $param->{loggedinuser} ) {
+        $param->{errcode} = 8;
     }
+    return if $param->{errcode};
 
-    # We could have used ->find with the share id, but we don't want to change
-    # the url sent to the patron
-    my $shared_shelves = Koha::Virtualshelfshares->search(
-        {
-            shelfnumber => $param->{shelfnumber},
-        },
-        {
-            order_by => { -desc => 'sharedate' },
+    # Look for shelfnumber and invitekey in shares, expiration check later
+    my $key = keytostring( stringtokey( $param->{key}, 0 ), 1 );
+    my $shared_shelves = Koha::Virtualshelfshares->search({
+        shelfnumber => $param->{shelfnumber},
+        invitekey => $key,
+    });
+    my $shared_shelf = $shared_shelves ? $shared_shelves->next : undef; # we pick the first, but there should only be one
+
+    if ( $shared_shelf ) {
+        my $is_accepted = eval { $shared_shelf->accept( $key, $param->{loggedinuser} ) };
+        if( $is_accepted ) {
+            notify_owner($param);
+            #redirect to view of this shared list
+            print $param->{query}->redirect(
+                -uri    => SHELVES_URL . $param->{shelfnumber},
+                -cookie => $param->{cookie}
+            );
+            exit;
         }
-    );
-
-    if ( $shared_shelves ) {
-        my $key = keytostring( stringtokey( $param->{key}, 0 ), 1 );
-        while ( my $shared_shelf = $shared_shelves->next ) {
-            my $is_accepted = eval { $shared_shelf->accept( $key, $param->{loggedinuser} ) };
-            if ( $is_accepted ) {
-                notify_owner($param);
-
-                #redirect to view of this shared list
-                print $param->{query}->redirect(
-                    -uri    => SHELVES_URL . $param->{shelfnumber},
-                    -cookie => $param->{cookie}
-                );
-                exit;
-            }
-        }
-        $param->{errcode} = 7;    #not accepted (key not found or expired)
-    } else {
-        # This shelf is not shared
     }
+    $param->{errcode} = 7; # not accepted: key invalid or expired
 }
 
 sub notify_owner {
