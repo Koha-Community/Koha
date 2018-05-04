@@ -59,11 +59,11 @@
                         [% FOREACH flavourloo IN flavourloop %]
                             [% IF ( flavourloo.label == "Unimarc") %]
                                  <p>
-                                     <label><input type="radio" name="marcflavour" value="[% flavourloo.code | html %]" /> [% flavourloo.label | html %]</label>
+                                     <label><input type="radio" name="marcflavour" id="marcflavour" value="[% flavourloo.code | html %]" /> [% flavourloo.label | html %]</label>
                                  </p>
                             [% ELSE %]
                                  <p>
-                                     <label><input type="radio" name="marcflavour" value="[% flavourloo.code | html %]" checked="checked" /> [% flavourloo.label | html %]</label>
+                                     <label><input type="radio" name="marcflavour" id="marcflavour" value="[% flavourloo.code | html %]" checked="checked" /> [% flavourloo.label | html %]</label>
                                  </p>
                             [% END %]
                         [% END %]
@@ -238,7 +238,11 @@
                     [% ELSE %]
                         <h2>Web installer &rsaquo; Install basic configuration settings</h2>
                         <p>We are ready to do some basic configuration.</p>
-                        <p><a href="install.pl?step=3&amp;op=choosemarc" class="btn btn-primary">Continue to the next step</a></p>
+                        <form action="install.pl" method="post">
+                            <input type="hidden" name="step" value="3" />
+                            <input type="hidden" name="op" value="choosemarc" />
+                            <p><input value="Continue to the next step" class="btn btn-primary" type="submit" /></p>
+                        </form>
                     [% END %]
                 [% END # / IF default %]
 
