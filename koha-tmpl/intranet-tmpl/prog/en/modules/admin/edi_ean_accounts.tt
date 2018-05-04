@@ -36,11 +36,11 @@
 [% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-<div id="bd">
-<div id="yui-main">
-<div class="yui-b">
 [% IF display %]
     <div id="toolbar" class="btn-toolbar">
     <a class="btn btn-default btn-sm" id="newediean" href="/cgi-bin/koha/admin/edi_ean_accounts.pl?op=ean_form">
@@ -165,12 +165,15 @@
 [% END %]
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
-    [% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]

@@ -31,11 +31,11 @@
 [% INCLUDE 'prefs-admin-search.inc' %]
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Did you mean?</div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-    <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
         <h3>Did you mean?</h3>
         <noscript><div class="dialog alert"><strong>Please enable Javascript:</strong>
             Configuring 'Did you mean?' plugins requires Javascript. If
@@ -62,16 +62,19 @@
             <fieldset class="action"><button class="save-all submit" type="submit">Save configuration</button> <a href="/cgi-bin/koha/admin/didyoumean.pl" class="force_reload cancel">Cancel</a></fieldset>
         </form>
 
-        </div>
-        </div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $( ".pluginlist" ).sortable();
             $( ".plugin" ).addClass( "ui-widget ui-widget-content ui-helper-clearfix ui-corner-all" )
