@@ -77,10 +77,11 @@
 	[% END %]
 </div>
 
-<div id="doc3" class="yui-t2">
-	<div id="bd">
-		<div id="yui-main">
-			<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
 				<h1>Browse system logs</h1>
 				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
 					[% IF ( do_it ) %]
@@ -271,20 +272,25 @@
                         </div>
                     [% END %]
                 [% END %]
-			</div>
-		</div>
-		<div class="yui-b noprint">
-        [% IF ( circulation ) %]
-				[% INCLUDE 'circ-menu.inc' %]
-			[% ELSE %]
-				[% IF ( CATALOGUING ) %]
-					[% INCLUDE 'biblio-view-menu.inc' %]
-				[% ELSE %]
-					[% INCLUDE 'tools-menu.inc' %]
-				[% END %]
-			[% END %]
-		</div>
-	</div>
+
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% IF ( circulation ) %]
+                    [% INCLUDE 'circ-menu.inc' %]
+                [% ELSE %]
+                    [% IF ( CATALOGUING ) %]
+                        [% INCLUDE 'biblio-view-menu.inc' %]
+                    [% ELSE %]
+                        [% INCLUDE 'tools-menu.inc' %]
+                    [% END %]
+                [% END %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]

@@ -12,13 +12,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <strong>Task scheduler</strong></div>
 
-<div id="doc3" class="yui-t2">
-
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
-
-<div id="main">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 [% IF ( job_add_failed ) %]
 <div class="dialog message">Failed to add scheduled task</div>
@@ -84,20 +81,21 @@
 [% END %]
 </table>[% END %]
 
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-</div>
-</div>
-</div>
-<div class="yui-b noprint">
-[% INCLUDE 'tools-menu.inc' %]
-[% INCLUDE 'guided-reports-view.inc' %]
-</div>
-</div>
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+                [% INCLUDE 'guided-reports-view.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function(){
             $("#startdate").datepicker({ minDate: "+0D" });
         });

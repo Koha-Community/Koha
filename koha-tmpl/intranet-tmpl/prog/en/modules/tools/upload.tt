@@ -189,7 +189,7 @@
    </table>
 [% END %]
 
-<style type="text/css">
+<style>
     #fileuploadstatus,#fileuploadfailed { display : none; }
     #fileuploadstatus { margin:.4em; }
     #fileuploadprogress { width:150px;height:10px;border:1px solid #666;background:url('[% interface | html %]/[% theme | html %]/img/progress.png') -300px 0px no-repeat; }
@@ -200,21 +200,21 @@
 
 [% IF ( plugin ) %]
     <body id="tools_upload" class="tools">
-        <div class="yui-t7">
-            <div id="bd">
-                <div class="yui-g">
+        <div class="main container-fluid">
+            <div class="row">
+                <div class="col-sm-12">
+                    <main>
 [% ELSE %]
     <body id="tools_upload" class="tools">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
     [% PROCESS breadcrumbs %]
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-            <div id="yui-main">
-                <div class="yui-b">
+
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
 [% END %]
-
-
 
 <h1>Upload</h1>
 <div class="dialog alert" id="myalerts" style="display:none;"></div>
@@ -236,22 +236,28 @@
     [% END %]
 [% END %]
 
-</div>
-
 [% IF !plugin %]
-</div>
-    <div class="yui-b noprint">
-        [% INCLUDE 'tools-menu.inc' %]
-    </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+[% ELSE %]
+            </main>
+        </div> <!-- .col-sm-12 -->
+     </div> <!-- /.row -->
 [% END %]
 
-</div>
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/file-upload.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         function StartUpload() {
             if( $('#fileToUpload').prop('files').length == 0 ) return;
             $('#fileToUpload').prop('disabled',true);
