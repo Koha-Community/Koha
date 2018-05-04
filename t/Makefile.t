@@ -29,6 +29,8 @@ my @ignored = qw(
     .gitignore
     .mailmap
     .perlcriticrc
+    .proverc
+    .proverc.dist
     LICENSE
     README.md
     README.robots
