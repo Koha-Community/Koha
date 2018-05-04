@@ -86,8 +86,8 @@ if ( $op eq 'list' ) {
         '/cgi-bin/koha/opac-illrequests.pl?method=view&illrequest_id=' .
         $params->{illrequest_id} .
         '&message=1'
-    exit;
     );
+    exit;
 } elsif ( $op eq 'cancreq') {
     my $request = Koha::Illrequests->find({
         borrowernumber => $loggedinuser,
@@ -98,9 +98,8 @@ if ( $op eq 'list' ) {
         '/cgi-bin/koha/opac-illrequests.pl?method=view&illrequest_id=' .
         $params->{illrequest_id} .
         '&message=1'
-    exit;
     );
-
+    exit;
 } elsif ( $op eq 'create' ) {
     if (!$params->{backend}) {
         my $req = Koha::Illrequest->new;
@@ -138,7 +137,7 @@ if ( $op eq 'list' ) {
 $template->param(
     message         => $params->{message},
     illrequestsview => 1,
-    method              => $op
+    method          => $op
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
