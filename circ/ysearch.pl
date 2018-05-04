@@ -39,7 +39,7 @@ my $query = $input->param('term');
 binmode STDOUT, ":encoding(UTF-8)";
 print $input->header( -type => 'text/plain', -charset => 'UTF-8' );
 
-my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { circulate => '*' } );
+my ( $auth_status, $sessionID ) = check_cookie_auth( $input->cookie('CGISESSID'), { catalogue => '1' } );
 if ( $auth_status ne "ok" ) {
     exit 0;
 }
