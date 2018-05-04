@@ -25,6 +25,7 @@ use C4::Biblio;
 use C4::Koha;
 use C4::Charset;
 use MARC::File::USMARC;
+use MARC::Field;
 use C4::ImportBatch;
 use C4::AuthoritiesMarc; #GuessAuthTypeCode, FindDuplicateAuthority
 use C4::Languages;
@@ -355,15 +356,65 @@ sub _add_rowdata {
         author => 'biblio.author',
         isbn =>'biblioitems.isbn',
         lccn =>'biblioitems.lccn', #LC control number (not call number)
-        edition =>'biblioitems.editionstatement',
-        date => 'biblio.copyrightdate', #MARC21
-        date2 => 'biblioitems.publicationyear', #UNIMARC
+        edition =>'biblioitems.editionstatement'
     );
+    $fetch{date} = C4::Context->preference('marcflavour') eq "MARC21" ? 'biblio.copyrightdate' : 'biblioitems.publicationyear';
+
     foreach my $k (keys %fetch) {
         $row->{$k} = C4::Biblio::TransformMarcToKohaOneField( $fetch{$k}, $record );
     }
     $row->{date}//= $row->{date2};
     $row->{isbn}=_isbn_replace($row->{isbn});
+
+    $row = _add_custom_field_rowdata($row, $record);
+
+    return $row;
+}
+
+sub _add_custom_field_rowdata
+{
+    my ( $row, $record ) = @_;
+    my $pref_newtags = C4::Context->preference('AdditionalFieldsInZ3950ResultSearch');
+
+    $pref_newtags =~ s/^\s+|\s+$//g;
+    $pref_newtags =~ s/\h+/ /g;
+
+    my @addnumberfields;
+
+    foreach my $field (split /\,/, $pref_newtags) {
+        $field =~ s/^\s+|\s+$//g ;  # trim whitespace
+        my ($tag, $subtags) = split(/\$/, $field);
+
+        if ( $record->field($tag) ) {
+            my @content = ();
+
+            for my $marcfield ($record->field($tag)) {
+                if ( $subtags ) {
+                    my $str = '';
+                    for my $code (split //, $subtags) {
+                        if ( $marcfield->subfield($code) ) {
+                            $str .= $marcfield->subfield($code) . ' ';
+                        }
+                    }
+                    if ( not $str eq '') {
+                        push @content, $str;
+                    }
+                } elsif ( $tag <= 10 ) {
+                    push @content, $marcfield->data();
+                } else {
+                    push @content, $marcfield->as_string();
+                }
+            }
+
+            if ( @content ) {
+                $row->{$field} = \@content;
+                push( @addnumberfields, $field );
+            }
+        }
+    }
+
+    $row->{'addnumberfields'} = \@addnumberfields;
+
     return $row;
 }
 

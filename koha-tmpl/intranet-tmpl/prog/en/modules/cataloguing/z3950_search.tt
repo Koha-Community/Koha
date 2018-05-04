@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
+[% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Z39.50/SRU search results</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -102,6 +103,9 @@
         <th>Edition</th>
         <th>ISBN</th>
         <th>LCCN</th>
+        [% IF Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' %]
+        <th>Additional fields</th>
+        [% END %]
         <th>Actions</th>
     </tr></thead>
     <tbody>[% FOREACH breeding_loo IN breeding_loop %]
@@ -115,7 +119,18 @@
             <td>[% breeding_loo.edition | html %]</td>
             <td>[% breeding_loo.isbn | html %]</td>
             <td>[% breeding_loo.lccn | html %]</td>
-
+            [% IF Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' %]
+            <td>
+               <dl>
+                  [% FOREACH addnumberfield IN breeding_loo.addnumberfields %]
+                    [% FOREACH string IN breeding_loo.$addnumberfield %]
+                        <dt>[% addnumberfield | html %]:</dt>
+                        <dd>[% string | html %]</dd>
+                    [% END %]
+                  [% END %]
+               </dl>
+            </td>
+            [% END %]
             <td>
                 <div class="dropdown">
                     <a class="btn btn-default btn-xs dropdown-toggle" id="cataloguesearchactions[% breeding_loo.breedingid | html %]" role="button" data-toggle="dropdown" href="#">

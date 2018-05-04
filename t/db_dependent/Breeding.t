@@ -20,9 +20,11 @@
 use Modern::Perl;
 
 use FindBin;
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Warn;
+use t::lib::Mocks qw( mock_preference );
 
+use C4::Context;
 use C4::Breeding;
 use Koha::XSLT_Handler;
 
@@ -48,6 +50,11 @@ subtest '_create_connection' => sub {
 subtest '_do_xslt_proc' => sub {
     plan tests => 6;
     test_do_xslt();
+};
+#Group 4: testing _add_rowdata (part of Z3950Search)
+subtest '_add_rowdata' => sub {
+    plan tests => 5;
+    test_add_rowdata();
 };
 
 #-------------------------------------------------------------------------------
@@ -188,4 +195,45 @@ sub test_do_xslt {
     is( ref $res[0], 'MARC::Record', 'Still got back MARC record' );
     is ( $res[0]->subfield('245','a'), 'Just a title',
         'At least the title is the same :)' );
+}
+
+sub test_add_rowdata {
+    t::lib::Mocks::mock_preference('AdditionalFieldsInZ3950ResultSearch','');
+
+    my $row = {
+       biblionumber => 0,
+       server => "testServer",
+       breedingid => 0
+   };
+
+    my $biblio = MARC::Record->new();
+    $biblio->append_fields(
+        MARC::Field->new('245', ' ', ' ', a => 'Just a title'), #title
+    );
+
+    my $returned_row = C4::Breeding::_add_rowdata($row, $biblio);
+
+    is($returned_row->{title}, "Just a title", "_add_rowdata returns the title of a biblio");
+    is($returned_row->{addnumberfields}[0], undef, "_add_rowdata returns undef if it has no additionnal field");
+
+    t::lib::Mocks::mock_preference('AdditionalFieldsInZ3950ResultSearch',"245\$a, 035\$a");
+
+    $row = {
+       biblionumber => 0,
+       server => "testServer",
+       breedingid => 0
+   };
+   $biblio = MARC::Record->new();
+   $biblio->append_fields(
+        MARC::Field->new('245', ' ', ' ', a => 'Just a title'), #title
+        MARC::Field->new('035', ' ', ' ', a => 'First 035'),
+        MARC::Field->new('035', ' ', ' ', a => 'Second 035')
+   );
+   $returned_row = C4::Breeding::_add_rowdata($row, $biblio);
+
+   is($returned_row->{title}, "Just a title", "_add_rowdata returns the title of a biblio");
+   is($returned_row->{addnumberfields}[0], "245\$a", "_add_rowdata returns the field number chosen in the AdditionalFieldsInZ3950ResultSearch preference");
+
+   # Test repeatble tags,the trailing whitespace is a normal side-effect of _add_custom_row_data
+   is_deeply(\$returned_row->{"035\$a"}, \["First 035 ", "Second 035 "],"_add_rowdata supports repeatable tags");
 }

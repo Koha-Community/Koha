@@ -5,6 +5,9 @@
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% IF ( opsearch ) %]Order from external source[% ELSE %]Order from external source &rsaquo; Search results[% END %]</title>
 [% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
+[% INCLUDE 'datatables.inc' %]
+[% USE Koha %]
+
 <style type="text/css">
 .linktools { background-color:#FFF;border-top:1px solid #DDD; border-left: 1px solid #DDD; border-right: 1px solid #666; border-bottom:1px solid #666;display: none; white-space: nowrap;}
 .linktools a { font-size : 85%; text-decoration:none; padding:.3em;;background-color:#FFF; display:block;float:left;border-right:1px solid #DDD;}
@@ -103,6 +106,9 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         <th>Author</th>
         <th>ISBN</th>
         <th>LCCN</th>
+        [% IF Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' %]
+        <th>Additional fields</th>
+        [% END %]
         <th>Preview</th>
 		<th>&nbsp;</th>
     </tr></thead>
@@ -115,6 +121,18 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             <td>[% breeding_loo.author | html %]</td>
             <td>[% breeding_loo.isbn | html %]</td>
             <td>[% breeding_loo.lccn | html %]</td>
+            [% IF Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' %]
+            <td>
+               <dl>
+                  [% FOREACH addnumberfield IN breeding_loo.addnumberfields %]
+                    [% FOREACH string IN breeding_loo.$addnumberfield %]
+                        <dt>[% addnumberfield | html %]:</dt>
+                        <dd>[% string | html %]</dd>
+                    [% END %]
+                  [% END %]
+               </dl>
+            </td>
+            [% END %]
             <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | html %]" title="MARC" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" title="Card" class="previewData">Card</a></td>
             <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | html %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order</a></td>
 
