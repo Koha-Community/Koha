@@ -51,10 +51,20 @@ sub accept {
     if ( $self->invitekey ne $invitekey ) {
         Koha::Exceptions::Virtualshelves::InvalidInviteKey->throw;
     }
-    $self->invitekey(undef);
-    $self->sharedate(dt_from_string);
-    $self->borrowernumber($borrowernumber);
-    $self->store;
+
+    # If this borrower already has a share, there is no need to accept twice
+    # We solve this by 'pretending' to reaccept, but delete instead
+    my $search = Koha::Virtualshelfshares->search({ shelfnumber => $self->shelfnumber, borrowernumber => $borrowernumber, invitekey => undef });
+    if( $search->count ) {
+        $self->delete;
+        return $search->next;
+    } else {
+        $self->invitekey(undef);
+        $self->sharedate(dt_from_string);
+        $self->borrowernumber($borrowernumber);
+        $self->store;
+        return $self;
+    }
 }
 
 sub has_expired {
