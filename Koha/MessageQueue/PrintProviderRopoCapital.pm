@@ -31,7 +31,7 @@ sub sendAll {
     my ($ok, $error);
     return (undef, "PrintProviderRopoCapital->sendAll(): the given MessageQueues-array is empty!") unless $messageQueues && @$messageQueues;
 
-    my $providerConfig = C4::Context->config('printProviders')->{ropocapital};
+    my $providerConfig = C4::Context->config('printmailProviders')->{ropocapital};
     my $letterStagingDirectory = $providerConfig->{letterStagingDirectory}.'/';
     $error = `mkdir -p $letterStagingDirectory`;
     return (undef, "PrintProviderRopoCapital->sendAll(): Couldn't create the letterStagingDirectory '$letterStagingDirectory': $error") if $error;
