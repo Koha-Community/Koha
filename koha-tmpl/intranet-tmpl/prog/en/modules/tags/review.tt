@@ -6,7 +6,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css">
+<style>
 .setlabel {width: 6em; font-family: courier; background-color:#E8E8E8;}
 .rejected { color: #CC0033; }
 .approved { color: #339900; }
@@ -21,13 +21,13 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; Tags</div>
 
-<div id="doc3" class="yui-t2">
- <div id="bd">
-  <div id="yui-main">
-   <div class="yui-b">
-   
-<div class="yui-ge">
-<div class="yui-u first">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-12">
+            <main>
+
+<div class="row">
+<div class="col-sm-8 col-sm-push-2">
 <h1>Tags</h1>
 <form method="post" action="/cgi-bin/koha/tags/review.pl" class="checkboxed">
   <h4>Displaying 
@@ -143,7 +143,8 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
   </fieldset>[% END %]
   </form>
 </div>
-<div class="yui-u">
+<div class="col-sm-2 col-sm-push-2">
+    <aside>
  <fieldset class="brief">
   <h4>Terms summary</h4>
   <ul>
@@ -181,13 +182,10 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
    </div>
    </form>
   </fieldset>
+    </aside>
 </div>
-</div>
-
-
-  </div>
- </div>
- <div class="yui-b">
+<div class="col-sm-2 col-sm-pull-10">
+    <aside>
 <form method="post" action="/cgi-bin/koha/tags/review.pl">
 <fieldset class="brief">
   <h4>Filters</h4>
@@ -221,6 +219,10 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
  <fieldset class="action"><button type="submit" class="btn btn-default btn-sm"><i class="fa fa-filter" aria-hidden="true"></i> Apply filter(s)</button></fieldset>
 </fieldset>
 </form>
+</aside>
+</div>
+</div>
+</main>
 </div>
 </div>
 
@@ -229,7 +231,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% Asset.js("js/pages/tags-review.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         var MSG_AJAX_APPROVE_FAILED = _("AJAX failed to approve tag: %s");
         var MSG_AJAX_REJECTION_FAILED = _("AJAX failed to reject tag: %s");
         var MSG_AJAX_TAG_PERMITTED = _("%s is permitted!");

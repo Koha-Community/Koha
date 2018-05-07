@@ -5,7 +5,7 @@
 <title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css">
+<style>
 tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : transparent; }</style>
 </head>
 
@@ -15,10 +15,11 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; <a href="/cgi-bin/koha/tags/review.pl">Tags</a> &rsaquo; Results for tag <i>[% tag | html %]</i></div>
 
-<div id="doc3" class="yui-t2">
- <div id="bd">
-  <div id="yui-main">
-  <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
 [% IF ( titles ) %]
 <h3>Titles tagged with the term <i>[% tag | html %]</i></h3>
 <table id="itemst">
@@ -61,25 +62,26 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
 	<div class="dialog message">There are no titles tagged with the term <i>[% tag | html %]</i></div>
 [% END %]
 </form>
- </div>
- </div>
- <div class="yui-b">
-  <ul>
-    <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a>
-    </li>
-    <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a>
-    </li>
-    <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a>
-    </li>
-    <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a>
-    </li>
-  </ul>
- </div>
-</div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                <ul>
+                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=1">Approved tags</a></li>
+                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=-1">Rejected tags</a></li>
+                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=0">Pending tags</a></li>
+                    <li><a href="/cgi-bin/koha/tags/review.pl?approved=all">All tags</a></li>
+                </ul>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         $(document).ready(function() {
             $(".delete").click(function (event) {
                 $(this).parent().parent().parent().addClass("selected");
