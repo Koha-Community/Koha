@@ -123,7 +123,11 @@ sub _sendTheLetterViaFtp {
             return (undef, "FTP->put():ing the eLetter '$file' to RopoCapital Zender failed: ". $ftpcon->$error_fn);
         }
 
-        $ftpcon->close();
+        if ($providerConfig->{sftp}) {
+            undef $ftpcon;
+        } else {
+            $ftpcon->quit();
+        }
 
         return (1, undef); #Sending succeeded!
     }
