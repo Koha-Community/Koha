@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -112,5 +112,34 @@ subtest 'fund' => sub {
     is( ref( $order->fund ),
         'Koha::Acquisition::Fund',
         '->fund should return a Koha::Acquisition::Fund object' );
+    $schema->storage->txn_rollback;
+};
+
+subtest 'invoice' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    my $o = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => { cancellationreason => 'XXXXXXXX', invoiceid => undef }, # not received yet
+        }
+    );
+
+    my $order = Koha::Acquisition::Orders->find( $o->ordernumber );
+    is( $order->invoice, undef,
+        '->invoice should return undef if no invoice defined yet');
+
+    my $invoice = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Invoices',
+        },
+    );
+
+    $o->invoiceid( $invoice->invoiceid )->store;
+    $order = Koha::Acquisition::Orders->find( $o->ordernumber );
+    is( ref( $order->invoice ), 'Koha::Acquisition::Invoice',
+        '->invoice should return a Koha::Acquisition::Invoice object if an invoice is defined');
+
     $schema->storage->txn_rollback;
 };

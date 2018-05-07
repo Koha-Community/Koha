@@ -21,6 +21,7 @@ use Carp qw( croak );
 
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Funds;
+use Koha::Acquisition::Invoices;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -133,6 +134,21 @@ sub fund {
     my ( $self )  = @_;
     my $fund_rs = $self->_result->budget;
     return Koha::Acquisition::Fund->_new_from_dbic( $fund_rs );
+}
+
+=head3 invoice
+
+    my $invoice = $order->invoice
+
+Returns the invoice associated to the order.
+
+=cut
+
+sub invoice {
+    my ( $self )  = @_;
+    my $invoice_rs = $self->_result->invoiceid;
+    return unless $invoice_rs;
+    return Koha::Acquisition::Invoice->_new_from_dbic( $invoice_rs );
 }
 
 =head2 Internal methods
