@@ -55,7 +55,7 @@ BEGIN {
     @ISA       = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
-      &get_all_subpermissions &get_user_subpermissions
+      &get_all_subpermissions &get_user_subpermissions track_login_for_session
     );
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap      = C4::Context->config('useldapserver') || 0;
@@ -802,6 +802,8 @@ sub checkauth {
     my $casparam = $query->param('cas');
     my $q_userid = $query->param('userid') // '';
 
+    my $session;
+
     # Basic authentication is incompatible with the use of Shibboleth,
     # as Shibboleth may return REMOTE_USER as a Shibboleth attribute,
     # and it may not be the attribute we want to use to match the koha login.
@@ -827,7 +829,7 @@ sub checkauth {
     }
     elsif ( $sessionID = $query->cookie("CGISESSID") )
     {    # assignment, not comparison
-        my $session = get_session($sessionID);
+        $session = get_session($sessionID);
         C4::Context->_new_userenv($sessionID);
         my ( $ip, $lasttime, $sessiontype );
         my $s_userid = '';
@@ -1199,11 +1201,7 @@ sub checkauth {
             );
         }
 
-        if ( $userid ) {
-            # track_login also depends on pref TrackLastPatronActivity
-            my $patron = Koha::Patrons->find({ userid => $userid });
-            $patron->track_login if $patron;
-        }
+        track_login_for_session( $userid, $session );
 
         return ( $userid, $cookie, $sessionID, $flags );
     }
@@ -2076,6 +2074,30 @@ sub getborrowernumber {
         }
     }
     return 0;
+}
+
+=head2 track_login_for_session
+
+  track_login_for_session( $userid, $session );
+
+C<$userid> the userid of the member
+C<$session> the CGI::Session object used to store the session's state.
+
+Wraps the call to $patron->track_login, the method used to update borrowers.lastseen.
+
+=cut
+
+sub track_login_for_session {
+    my ( $userid, $session ) = @_;
+
+    if ( $userid && $session && !$session->param('tracked_for_session') ) {
+        $session->param( 'tracked_for_session', 1 );
+        $session->flush();
+
+        # track_login also depends on pref TrackLastPatronActivity
+        my $patron = Koha::Patrons->find( { userid => $userid } );
+        $patron->track_login if $patron;
+    }
 }
 
 END { }    # module clean-up code here (global destructor)
