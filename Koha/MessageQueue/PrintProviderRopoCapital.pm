@@ -91,9 +91,15 @@ sub _sendTheLetterViaFtp {
 
     #Get the ftp-connection.
     my ($ftpcon, $error);
+    my @extra_put_params;
     my $error_fn = 'error';
     if ($providerConfig->{sftp}) {
         ($ftpcon, $error) = _getSftpToRopoCapital( $providerConfig );
+        my %opts = (
+            copy_perm => 0,
+            copy_time => 0
+        );
+        @extra_put_params = (undef, %opts);
     } else {
         ($ftpcon, $error) = _getFtpToRopoCapital( $providerConfig );
         $error_fn = 'message';
@@ -113,7 +119,7 @@ sub _sendTheLetterViaFtp {
             }
         }
 
-        unless($ftpcon->put( $file )) {
+        unless($ftpcon->put( $file, @extra_put_params )) {
             return (undef, "FTP->put():ing the eLetter '$file' to RopoCapital Zender failed: ". $ftpcon->$error_fn);
         }
 
