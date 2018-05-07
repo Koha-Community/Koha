@@ -9,6 +9,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Details for subscription #[% subscriptionid | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="ser_subscription-detail" class="ser">
@@ -412,6 +413,7 @@
         var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
     </script>
     [% Asset.js("js/serials-toolbar.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
         // the english words used in display purposes
         var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern",
@@ -422,6 +424,16 @@
                 popup([% subscriptionid | html %]);
                 return false;
             })
+
+            $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
+                'bPaginate': false,
+                'bAutoWidth': false,
+                "aaSorting": [[ 4, "desc" ]],
+                "aoColumnDefs": [
+                    { "aTargets": "title-string", "sType": "title-string" }
+                ]
+            }));
+
         });
     </script>
 [% END %]
