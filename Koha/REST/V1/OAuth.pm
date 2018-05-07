@@ -24,6 +24,18 @@ use Koha::OAuth;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+=head1 NAME
+
+Koha::REST::V1::OAuth - Controller library for handling OAuth2-related token handling
+
+=head2 Operations
+
+=head3 token
+
+Controller method handling token requests
+
+=cut
+
 sub token {
 
     my $c = shift->openapi->valid_input or return;
