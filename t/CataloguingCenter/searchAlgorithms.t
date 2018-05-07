@@ -31,9 +31,10 @@ use t::lib::TestObjects::ObjectFactory;
 
 my $testContext = {};
 
-my $cataloguingCenterZ3950 = t::CataloguingCenter::z3950Params::getCataloguingCenterZ3950params();
-unless ($cataloguingCenterZ3950 = Koha::Z3950Servers->search($cataloguingCenterZ3950)->next) {
-    $cataloguingCenterZ3950 = Koha::Z3950Server->new($cataloguingCenterZ3950)->store;
+my $z3950params = t::CataloguingCenter::z3950Params::getCataloguingCenterZ3950params();
+my $cataloguingCenterZ3950;
+unless ($cataloguingCenterZ3950 = Koha::Z3950Servers->search($z3950params)->next) {
+    $cataloguingCenterZ3950 = Koha::Z3950Server->new($z3950params)->store;
 }
 $cataloguingCenterZ3950 = $cataloguingCenterZ3950->unblessed;
 
