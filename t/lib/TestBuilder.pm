@@ -471,6 +471,10 @@ sub _gen_default_values {
             borrowernotes  => '',
         },
         Item => {
+            notforloan         => 0,
+            itemlost           => 0,
+            withdrawn          => 0,
+            restricted         => 0,
             more_subfields_xml => undef,
         },
         Category => {

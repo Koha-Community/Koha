@@ -1216,10 +1216,6 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
             value  => {
                 homebranch    => $homebranch->{branchcode},
                 holdingbranch => $holdingbranch->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                restricted    => 0,
                 biblionumber  => $biblioitem->{biblionumber}
             }
         }
@@ -1381,10 +1377,6 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
             value  => {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                restricted    => 0,
                 biblionumber  => $biblioitem_1->{biblionumber}
             }
         }
@@ -1395,10 +1387,6 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
             value  => {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                restricted    => 0,
                 biblionumber  => $biblioitem_2->{biblionumber}
             }
         }
@@ -1462,10 +1450,6 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
             value  => {
                 homebranch    => $library->branchcode,
                 holdingbranch => $library->branchcode,
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                restricted    => 0,
                 biblionumber  => $biblioitem_1->{biblionumber}
             }
         }
@@ -1592,9 +1576,6 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
             value  => {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
                 biblionumber  => $biblionumber,
             }
         }
@@ -1604,9 +1585,6 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
             value  => {
                 homebranch    => $library->{branchcode},
                 holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
                 biblionumber  => $biblionumber,
             }
         }
