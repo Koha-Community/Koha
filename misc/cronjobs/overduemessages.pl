@@ -119,19 +119,19 @@ EXAMPLES:
   Make sure that each overdue notification number (1st, 2nd, 3rd) has a distinct letterCode!
   Eg. ODUE1, ODUE2, ODUECLAIM (for the third letter). This is used to distinguish the letternumbers.
 
-  If you are using PrintProviderEnfo, make sure that the following configuration is found in the \$KOHA_CONF
- <printProviders>
-  <enfo>
+  If you are using PrintProviderRopoCapital, make sure that the following configuration is found in the \$KOHA_CONF
+ <printmailProviders>
+  <ropocapital>
    <!-- <dontReallySendAnything>comment this to actually send the letters, now we are just fakin'</dontReallySendAnything> -->
-   <letterStagingDirectory>/tmp/enfo/</letterStagingDirectory>
+   <letterStagingDirectory>/tmp/ropocapital/</letterStagingDirectory>
    <clientId>JNS190</clientId>
    <remoteDirectory>testedtester</remoteDirectory>
-   <host>ENFO IP</host>
+   <host>ROPO IP</host>
    <user>USERNAME</user>
    <passwd>PASSWORD</passwd>
    <sftp>1</sftp>
-  </enfo>
- </printProviders>
+  </ropocapital>
+ </printmailProviders>
 
   Also it is important to preserve the message_queue-entries as long as it takes to perform the complete
   overdue notification + claiming cycle, so we don't start sending first overdue notification again.
@@ -193,7 +193,7 @@ elsif($pageChangeItems && $pageChangeSeparator) {
  #TODO: HACK TO ENABLE CALENDAR DAYS
 my $calendar = Koha::Overdues::Calendar->new();
 $calendar->upsertWeekdays('','1,2,3,4,5,6,7');
-C4::Context->set_preference('PrintProviderImplementation', 'PrintProviderEnfo');
+C4::Context->set_preference('PrintProviderImplementation', 'PrintProviderRopoCapital');
 
 my $controller = Koha::Overdues::Controller->new({verbose => $verbose,
                                                   sortBy => $sortByColumn,
