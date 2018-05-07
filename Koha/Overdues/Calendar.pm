@@ -48,8 +48,9 @@ sub _getOverdueCalendarMap {
     my %weekdays;
 
     my %branchesFollowingDefaultRules;
-    my $allBranches = Koha::Libraries->search;
-    foreach my $branchCode (keys %$allBranches) {
+    my @allBranches = Koha::Libraries->search->as_list;
+    foreach my $branch (@allBranches) {
+        my $branchCode = $branch->branchcode;
         unless ($weekdaysByBranch{ $branchCode }) {
             $branchesFollowingDefaultRules{$branchCode} = 1;
         }
