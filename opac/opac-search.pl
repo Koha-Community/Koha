@@ -108,7 +108,7 @@ if ($format =~ /(rss|atom|opensearchdescription)/) {
 elsif (@params && $build_grouped_results) {
     $template_name = 'opac-results-grouped.tt';
 }
-elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) ) {
+elsif ((@params>=1) || ($cgi->param("q")) || ($cgi->param('multibranchlimit')) || ($cgi->param('limit-yr')) || @searchCategories ) {
     $template_name = 'opac-results.tt';
 }
 else {
