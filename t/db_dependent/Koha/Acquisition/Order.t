@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -95,5 +95,22 @@ subtest 'store' => sub {
         $order->discard_changes;
         like( $order->entrydate, qr|^\d{4}-\d{2}-\d{2}$| );
     };
+    $schema->storage->txn_rollback;
+};
+
+subtest 'fund' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+    my $o = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+        }
+    );
+
+    my $order = Koha::Acquisition::Orders->find( $o->ordernumber );
+    is( ref( $order->fund ),
+        'Koha::Acquisition::Fund',
+        '->fund should return a Koha::Acquisition::Fund object' );
     $schema->storage->txn_rollback;
 };

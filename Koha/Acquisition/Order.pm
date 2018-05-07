@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp qw( croak );
 
 use Koha::Acquisition::Baskets;
+use Koha::Acquisition::Funds;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -118,6 +119,20 @@ sub basket {
     my ( $self )  = @_;
     my $basket_rs = $self->_result->basketno;
     return Koha::Acquisition::Basket->_new_from_dbic( $basket_rs );
+}
+
+=head3 fund
+
+    my $fund = $order->fund
+
+Returns the fund (aqbudgets) associated to the order.
+
+=cut
+
+sub fund {
+    my ( $self )  = @_;
+    my $fund_rs = $self->_result->budget;
+    return Koha::Acquisition::Fund->_new_from_dbic( $fund_rs );
 }
 
 =head2 Internal methods
