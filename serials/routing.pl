@@ -61,6 +61,11 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $subs = GetSubscription($subscriptionid);
+
+output_and_exit( $query, $cookie, $template, 'unknown_subscription')
+    unless $subs;
+
 if($op eq 'delete'){
     delroutingmember($routingid,$subscriptionid);
 }
@@ -76,7 +81,7 @@ if($op eq 'save'){
 }
 
 my @routinglist = getroutinglist($subscriptionid);
-my $subs = GetSubscription($subscriptionid);
+
 my ($count,@serials) = GetSerials($subscriptionid);
 my $serialdates = GetLatestSerials($subscriptionid,$count);
 
