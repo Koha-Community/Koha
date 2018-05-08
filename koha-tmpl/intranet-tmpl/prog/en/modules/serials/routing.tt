@@ -7,7 +7,14 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | html %]"><i>[% title | html %]</i></a> &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+    [% UNLESS blocking_error %]
+        &rsaquo; <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]"><i>[% title | html %]</i></a>
+        &rsaquo; [% IF ( op ) %]Create routing list[% ELSE %]Edit routing list[% END %]
+    [% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -15,6 +22,7 @@
 	<div id="yui-main">
 	<div class="yui-b">
 
+[% INCLUDE 'blocking_errors.inc' %]
 
 [% IF ( op ) %]
 <h1>Create routing list for <i>[% title | html %]</i></h1>

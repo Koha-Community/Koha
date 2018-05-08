@@ -269,6 +269,8 @@ sub GetSubscription {
     $sth->execute($subscriptionid);
     my $subscription = $sth->fetchrow_hashref;
 
+    return unless $subscription;
+
     $subscription->{cannotedit} = not can_edit_subscription( $subscription );
 
     # Add additional fields to the subscription into a new key "additional_fields"

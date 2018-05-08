@@ -62,6 +62,10 @@ my ($template, $loggedinuser, $cookie)
 
 
 my $subs = GetSubscription($subscriptionid);
+
+output_and_exit( $query, $cookie, $template, 'unknown_subscription')
+    unless $subs;
+
 $subs->{enddate} ||= GetExpirationDate($subscriptionid);
 
 my ($totalissues,@serialslist) = GetSerials($subscriptionid);

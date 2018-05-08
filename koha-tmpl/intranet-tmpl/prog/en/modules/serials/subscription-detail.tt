@@ -17,7 +17,11 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'serials-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Details for subscription #[% subscriptionid | html %]</div>
+<div id="breadcrumbs">
+    <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+    &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a>
+    [% UNLESS blocking_error %]&rsaquo; Details for subscription #[% subscriptionid | html %][% END %]
+</div>
 
 <div id="doc3" class="yui-t2">
    

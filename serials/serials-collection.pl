@@ -104,6 +104,7 @@ if($op eq 'gennext' && @subscriptionid){
         last if HasSubscriptionExpired($subscriptionid) > 0;
     }
     print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
+    exit;
 }
 
 my $subscriptioncount;
@@ -113,6 +114,7 @@ if (@subscriptionid){
    my $closed = 0;
    foreach my $subscriptionid (@subscriptionid){
     my $subs= GetSubscription($subscriptionid);
+    next unless $subs;
     $closed = 1 if $subs->{closed};
 
     $subs->{opacnote}     =~ s/\n/\<br\/\>/g;
@@ -134,6 +136,9 @@ if (@subscriptionid){
     my $tmpsubscription= GetFullSubscription($subscriptionid);
     @subscriptioninformation=(@$tmpsubscription,@subscriptioninformation);
   }
+
+  output_and_exit( $query, $cookie, $template, 'unknown_subscription') unless @subscriptioninformation;
+
   $template->param(closed => $closed);
   $subscriptions=PrepareSerialsData(\@subscriptioninformation);
   $subscriptioncount = CountSubscriptionFromBiblionumber($subscriptiondescs->[0]{'biblionumber'});

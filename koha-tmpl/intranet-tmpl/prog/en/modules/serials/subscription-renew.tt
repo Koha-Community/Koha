@@ -11,6 +11,8 @@
 <body id="ser_subscription-renew" class="ser">
     <div class="container-fluid">
 
+[% INCLUDE 'blocking_errors.inc' %]
+
 [% IF op == 'renew' OR op =='multi_renew' %]
     [% IF op == 'renew' %]
         <span>Subscription renewed.<span>

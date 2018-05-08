@@ -7,6 +7,8 @@
         <div class="dialog message">This bibliographic record does not exist.</div>
     [% CASE 'unknown_item' %]
         <div class="dialog message">This item does not exist.</div>
+    [% CASE 'unknown_subscription' %]
+        <div class="dialog message">This subscription does not exist.</div>
     [% CASE %][% blocking_error | html %]
     [% END %]
 

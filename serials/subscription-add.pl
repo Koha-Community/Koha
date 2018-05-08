@@ -69,6 +69,9 @@ if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
     my $subscriptionid = $query->param('subscriptionid');
     $subs = GetSubscription($subscriptionid);
 
+    output_and_exit( $query, $cookie, $template, 'unknown_subscription')
+        unless $subs;
+
     ## FIXME : Check rights to edit if mod. Could/Should display an error message.
     if ($subs->{'cannotedit'} && $op eq 'modify'){
       carp "Attempt to modify subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";

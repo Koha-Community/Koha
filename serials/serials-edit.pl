@@ -114,6 +114,7 @@ unless ( @serialids ) {
     $string =~ s/,$//;
 
     print $query->redirect($string);
+    exit;
 }
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(

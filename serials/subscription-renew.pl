@@ -75,6 +75,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 if ( $op eq "renew" ) {
     # Do not use this script with op=renew and @subscriptionids > 1!
     my $subscriptionid = $subscriptionids[0];
+    # Make sure the subscription exists
+    my $subscription = GetSubscription( $subscriptionid );
+    output_and_exit( $query, $cookie, $template, 'unknown_subscription') unless $subscription;
     my $startdate = output_pref( { str => scalar $query->param('startdate'), dateonly => 1, dateformat => 'iso' } );
     ReNewSubscription(
         $subscriptionid, $loggedinuser,
@@ -95,6 +98,7 @@ if ( $op eq "renew" ) {
 } else {
     my $subscriptionid = $subscriptionids[0];
     my $subscription = GetSubscription($subscriptionid);
+    output_and_exit( $query, $cookie, $template, 'unknown_subscription') unless $subscription;
     if ($subscription->{'cannotedit'}){
       carp "Attempt to renew subscription $subscriptionid by ".C4::Context->userenv->{'id'}." not allowed";
       print $query->redirect("/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=$subscriptionid");
