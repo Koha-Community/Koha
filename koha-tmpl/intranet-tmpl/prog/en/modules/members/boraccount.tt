@@ -44,6 +44,34 @@ $(document).ready(function() {
         table_account_fines.fnFilter(filteredValue, 4, true, false);
         $(this).toggleClass('filtered');
     });
+    $("tr").on("click", function(e) {
+        $("td").each(function() {
+            if ($(this).hasClass("transaction-selected")) {
+                $(this).removeClass("transaction-selected");
+            }
+        });
+        if ($(this).hasClass("transaction")) {
+            $(this).children("td").addClass("transaction-selected");
+            $(this).children("td").each(function() {
+                if ($(this).hasClass("transactionnumber")) {
+                    var transactionnumber = $(this).html();
+                    $("input[name*='parentTransaction']").each(function() {
+                        if ($(this).val() == transactionnumber) {
+                            $(this).parent().children("td").addClass("transaction-selected");
+                        }
+                    });
+                }
+            });
+        }
+        e.stopPropagation();
+    })
+    $(document).click(function(e) {
+        $("td").each(function() {
+            if ($(this).hasClass("transaction-selected")) {
+                $(this).removeClass("transaction-selected");
+            }
+        });
+    });
 });
 </script>
 </head>
@@ -91,7 +119,7 @@ $(document).ready(function() {
 	<!-- FIXME: Shouldn't hardcode dollar signs, since Euro or Pound might be needed -->
   [% FOREACH account IN accounts %]
 
-   <tr>
+   <tr[% IF account.transactionnumber %] class="transaction"[% END %]>
     [% FOREACH relline IN relatedaccounts.${account.accountlines_id} %]
       <input type="hidden" name="parentTransaction" value="[% relline %]" />
     [% END %]
@@ -158,37 +186,6 @@ $(document).ready(function() {
 
 </div>
 </div>
-<script type="text/javascript">
-   $("tr").on("click", function(e) {
-    $("td").each(function() {
-     if ($(this).hasClass("transaction-selected")) {
-      $(this).removeClass("transaction-selected");
-     }
-    });
-    if ($(this).hasClass("transaction")) {
-     $(this).children("td").addClass("transaction-selected");
-     $(this).children("td").each(function() {
-      if ($(this).hasClass("transactionnumber")) {
-         var transactionnumber = $(this).html();
-
-         $("input[name*='parentTransaction']").each(function() {
-          if ($(this).val() == transactionnumber) {
-           $(this).parent().children("td").addClass("transaction-selected");
-          }
-         });
-      }
-     });
-    }
-    e.stopPropagation();
-   })
-   $(document).click(function(e) {
-    $("td").each(function() {
-     if ($(this).hasClass("transaction-selected")) {
-      $(this).removeClass("transaction-selected");
-     }
-    });
-   });
-</script>
 <div class="yui-b">
 [% INCLUDE 'circ-menu.inc' %]
 </div>
