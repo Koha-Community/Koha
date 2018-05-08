@@ -20,7 +20,6 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use HTML::Entities;
-use C4::Acquisition qw( GetHistory );
 use C4::Auth;
 use C4::Koha;
 use C4::Serials;    #uses getsubscriptionfrom biblionumber
@@ -180,7 +179,14 @@ foreach my $subscription (@subscriptions) {
 
 # Get acquisition details
 if ( C4::Context->preference('AcquisitionDetails') ) {
-    my $orders = C4::Acquisition::GetHistory( biblionumber => $biblionumber, get_canceled_order => 1 );
+    my $orders = Koha::Acquisition::Orders->search(
+        { biblionumber => $biblionumber },
+        {
+            join => 'basketno',
+            order_by => 'basketno.booksellerid'
+        }
+    );    # GetHistory sorted by aqbooksellerid, but does it make sense?
+
     $template->param(
         orders => $orders,
     );

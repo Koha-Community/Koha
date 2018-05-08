@@ -710,44 +710,47 @@
           <th class="title-string">Receive date</th>
           <th>Status</th>
           <th>Quantity</th>
+          <th>Subscription</th>
+          <th>Subscription callnumber</th>
         </tr>
       </thead>
       <tbody>
       [% FOR order IN orders %]
+        [% SET basket = order.basket %]
+        [% SET vendor = basket.bookseller %]
           <tr>
             <td>
-            [% IF (order.id) %]
-                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | html %]" title="Vendor detail page">[% order.name | html %]</a>
-            [% END %]
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]" title="Vendor detail page">[% vendor.name | html %]</a>
             </td>
             <td>
-            [% IF (order.invoiceid) %]
+            [% IF order.invoiceid %]
                 [% IF CAN_user_acquisition %]
-                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | html %]"
+                    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]"
                        title="Invoice detail page">
-                       [% order.invoicenumber | html %]</a>
+                       [% order.invoice.invoicenumber | hrml %]</a>
                 [% ELSE %]
-                    [% order.invoicenumber | html %]
+                    [% order.invoice.invoicenumber | html %]
                 [% END %]
             [% END %]
             </td>
             <td>
-            [% IF (order.basketgroupid) %]
+            [% IF basket.basketgroupid %]
+                [% SET basket_group = basket.basket_group %]
                 [% IF CAN_user_acquisition_group_manage %]
-                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% order.id | html %]&basketgroupid=[% order.basketgroupid | html %]">[% order.groupname | html %] ([% order.basketgroupid | html %])</a>
+                    <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&booksellerid=[% vendor.id | uri %]&basketgroupid=[% basket_group.id | uri %]">[% basket_group.name | html%] ([% basket_group.id | html %])</a>
                 [% ELSE %]
-                    [% order.groupname | html %] ([% order.basketgroupid | html %])
+                    [% basket_group.name | html %] ([% basket_group.id | html %])
                 [% END %]
             [% END %]
             </td>
             <td>[% IF CAN_user_acquisition_order_manage %]
-                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno | html %]">[% order.basketname | html %] ([% order.basketno | html %])</a>
+                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">[% basket.basketname | html %] ([% basket.basketno | html %])</a>
             [% ELSE %]
-                [% order.basketname | html %] ([% order.basketno | html %])
+                [% basket.basketname | html %] ([% basket.basketno | html %])
             [% END %]</td>
             <td>[% order.ordernumber | html %]</td>
-            <td><span title="[% order.creationdate | html %]">[% order.creationdate | $KohaDates%]</span></td>
-            <td><span title="[% order.datereceived | html %]">[% order.datereceived | $KohaDates%]</span></td>
+            <td><span title="[% basket.creationdate | uri %]">[% basket.creationdate | $KohaDates%]</span></td>
+            <td><span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates%]</span></td>
             <td>
               [% SWITCH order.orderstatus %]
                 [% CASE 'new' %]New
@@ -758,6 +761,16 @@
               [% END %]
             </td>
             <td>[% order.quantity | html %]</td>
+            <td>
+                [% IF order.subscriptionid %]
+                    <a href="g/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% order.subscriptionid | uri %]">[% order.subscriptionid | html %]</a>
+                [% END %]
+            </td>
+            <td>
+                [% IF order.subscriptionid %]
+                    [% order.subscription.callnumber | html %]
+                [% END %]
+            </td>
           </tr>
       [% END %]
       </tbody>
