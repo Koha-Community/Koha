@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use Test::Mojo;
 use Test::Warn;
 
@@ -28,6 +28,7 @@ use t::lib::Mocks;
 
 use C4::Auth;
 use C4::Context;
+use Koha::Auth::PermissionManager;
 use Koha::AuthUtils;
 use Koha::Database;
 use Koha::DateUtils;
@@ -130,6 +131,73 @@ subtest 'Authorization header tests' => sub {
     $tx->req->headers->header('Authorization' => "Koha $borrowernumber:$signature");
     $t->request_ok($tx)
       ->status_is(200);
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get() test (get_api_session)' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
+    my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
+    my $password = "2anxious? if someone finds out";
+
+    t::lib::Mocks::mock_preference('TrackLastPatronActivity', 1);
+
+    my ($nobody, $sessionid) = create_user_and_session();
+    my $b = Koha::Patrons->find($nobody);
+    my $borrower = $builder->build({
+        source => 'Borrower',
+        value => {
+            email => 'testinen@example.com',
+            cardnumber => '1A01',
+            firstname => 'Juhani',
+            surname => 'Seplae',
+            branchcode   => $branchcode,
+            categorycode => $categorycode,
+            lost     => 0,
+            password => Koha::AuthUtils::hash_password($password),
+        }
+    });
+    warn "trying sessionid $sessionid";
+    my $borrowernumber = $borrower->{borrowernumber};
+    my $patron = Koha::Patrons->find($borrowernumber);
+    Koha::Auth::PermissionManager->grantPermissions($patron, {
+        'auth' => 'get_session'
+    });
+
+    my $key = $builder->build({
+        source => 'ApiKey',
+        value  => {
+            borrowernumber => $borrowernumber,
+            active => 1,
+        }
+    });
+    my $kohadate = DateTime::Format::HTTP->format_datetime();
+    my $sig = hmac_sha256_hex("GET $borrowernumber $kohadate", $key->{api_key});
+
+    my $tx = $t->ua->build_tx( GET => "/api/v1/auth/session", json => {
+        sessionid => $sessionid
+    });
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx->req->headers->header('X-Koha-Date' => $kohadate);
+    $tx->req->headers->header('Authorization' => "Koha $borrowernumber:$sig");
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is('/firstname' => $b->firstname, "Get human firstname")
+      ->json_has('/sessionid', "Get human sessionid");
+
+    Koha::Auth::PermissionManager->revokeAllPermissions($patron);
+    $tx = $t->ua->build_tx( GET => "/api/v1/auth/session", json => {
+        sessionid => $sessionid
+    });
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $tx->req->headers->header('X-Koha-Date' => $kohadate);
+    $tx->req->headers->header('Authorization' => "Koha $borrowernumber:$sig");
+    $t->request_ok($tx)
+      ->status_is(403);
 
     $schema->storage->txn_rollback;
 };

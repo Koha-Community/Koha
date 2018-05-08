@@ -157,6 +157,49 @@ sub logout {
     return $c->render( status => 200, openapi => {});
 }
 
+=head3 get_api_session
+
+Checks whether the given sessionid is valid at the time. If a valid session is
+found, a minimal subset of borrower's info is returned for the SSO-scheme.
+
+=cut
+
+sub get_api_session {
+    my $c = shift->openapi->valid_input or return;
+
+    my $sessionId = $c->req->json->{sessionid};
+    my $session = C4::Auth::get_session($sessionId);
+
+    # If the returned session equals the given session, accept it as a valid
+    # session and return it.
+    # Otherwise, destroy the created session.
+    if ($sessionId eq $session->id()) {
+
+        # See if the given session is timed out
+        if (Koha::Auth::Challenge::Cookie::isSessionExpired($session)) {
+            return $c->render( status => 401, openapi => {
+                error => "Koha's session expired."} );
+        }
+
+        my $patron = Koha::Patrons->find($session->param('number'));
+        unless ($patron) {
+            return $c->render( status => 404, openapi => {
+                error => "Patron not found"} );
+        }
+
+        return $c->render(
+            status => 200,
+            openapi => _swaggerize_session($sessionId, $patron)
+        );
+    }
+    else {
+        $session->delete();
+        $session->flush();
+        return $c->render( status => 404, openapi => {
+            error => "Bad session id"} );
+    }
+}
+
 sub _swaggerize_session {
     my ($sessionid, $patron) = @_;
 
@@ -176,7 +219,7 @@ sub _swaggerize_session {
         surname  => $patron->surname,
         email     => $patron->email,
         sessionid => $sessionid,
-	permissions => \@permissions,
+        permissions => \@permissions,
     };
 }
 
