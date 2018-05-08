@@ -341,7 +341,7 @@ if ($oauth_tokens) {
     require Koha::OAuthAccessTokens;
 
     my $count = int Koha::OAuthAccessTokens->search({ expires => { '<=', time } })->delete;
-    say "Removed $count expired OAuth2 tokens";
+    say "Removed $count expired OAuth2 tokens" if $verbose;
 }
 
 exit(0);
