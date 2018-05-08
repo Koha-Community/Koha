@@ -44,8 +44,8 @@ $(document).ready(function() {
         table_account_fines.fnFilter(filteredValue, 4, true, false);
         $(this).toggleClass('filtered');
     });
-    $("tr").on("click", function(e) {
-        $("td").each(function() {
+    table_account_fines.$("tr").on("click", function(e) {
+        table_account_fines.$("td").each(function() {
             if ($(this).hasClass("transaction-selected")) {
                 $(this).removeClass("transaction-selected");
             }
@@ -55,7 +55,7 @@ $(document).ready(function() {
             $(this).children("td").each(function() {
                 if ($(this).hasClass("transactionnumber")) {
                     var transactionnumber = $(this).html();
-                    $("input[name*='parentTransaction']").each(function() {
+                    table_account_fines.$("input[name*='parentTransaction']").each(function() {
                         if ($(this).val() == transactionnumber) {
                             $(this).parent().children("td").addClass("transaction-selected");
                         }
@@ -66,7 +66,7 @@ $(document).ready(function() {
         e.stopPropagation();
     })
     $(document).click(function(e) {
-        $("td").each(function() {
+        table_account_fines.$("td").each(function() {
             if ($(this).hasClass("transaction-selected")) {
                 $(this).removeClass("transaction-selected");
             }
