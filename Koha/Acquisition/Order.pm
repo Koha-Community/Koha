@@ -22,6 +22,7 @@ use Carp qw( croak );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Funds;
 use Koha::Acquisition::Invoices;
+use Koha::Subscriptions;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 
@@ -149,6 +150,21 @@ sub invoice {
     my $invoice_rs = $self->_result->invoiceid;
     return unless $invoice_rs;
     return Koha::Acquisition::Invoice->_new_from_dbic( $invoice_rs );
+}
+
+=head3 subscription
+
+    my $subscription = $order->subscription
+
+Returns the subscription associated to the order.
+
+=cut
+
+sub subscription {
+    my ( $self )  = @_;
+    my $subscription_rs = $self->_result->subscriptionid;
+    return unless $subscription_rs;
+    return Koha::Subscription->_new_from_dbic( $subscription_rs );
 }
 
 =head2 Internal methods

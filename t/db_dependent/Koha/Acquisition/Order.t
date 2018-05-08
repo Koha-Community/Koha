@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -140,6 +140,35 @@ subtest 'invoice' => sub {
     $order = Koha::Acquisition::Orders->find( $o->ordernumber );
     is( ref( $order->invoice ), 'Koha::Acquisition::Invoice',
         '->invoice should return a Koha::Acquisition::Invoice object if an invoice is defined');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'subscription' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    my $o = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => { subscriptionid => undef }, # not linked to a subscription
+        }
+    );
+
+    my $order = Koha::Acquisition::Orders->find( $o->ordernumber );
+    is( $order->subscription, undef,
+        '->subscription should return undef if not created from a subscription');
+
+    $o = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            # Will be linked to a subscription by TestBuilder
+        }
+    );
+
+    $order = Koha::Acquisition::Orders->find( $o->ordernumber );
+    is( ref( $order->subscription ), 'Koha::Subscription',
+        '->subscription should return a Koha::Subscription object if created from a subscription');
 
     $schema->storage->txn_rollback;
 };
