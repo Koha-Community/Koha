@@ -17,10 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More;
 use Test::MockModule;
 use Test::Mojo;
 
+use Module::Load::Conditional qw(can_load);
+
+use Koha::ApiKeys;
 use Koha::Database;
 use Koha::Patrons;
 
@@ -31,7 +34,15 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();
 
+if ( can_load( modules => { 'Net::OAuth2::AuthorizationServer' => undef } ) ) {
+    plan tests => 2;
+}
+else {
+    plan skip_all => 'Net::OAuth2::AuthorizationServer not available';
+}
+
 subtest '/oauth/token tests' => sub {
+
     plan tests => 27;
 
     $schema->storage->txn_begin;

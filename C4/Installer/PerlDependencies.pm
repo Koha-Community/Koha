@@ -890,7 +890,7 @@ our $PERL_DEPS = {
     },
     'Net::OAuth2::AuthorizationServer' => {
         usage    => 'REST API',
-        required => '1',
+        required => '0',
         min_ver  => '0.16',
     },
 };

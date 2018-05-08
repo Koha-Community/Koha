@@ -120,7 +120,8 @@ sub authenticate_api_request {
 
     if ($authorization_header and $authorization_header =~ /^Bearer /) {
         # attempt to use OAuth2 authentication
-        if ( ! Module::Load::Conditional::can_load('Net::OAuth2::AuthorizationServer') ) {
+        if ( ! Module::Load::Conditional::can_load(
+                    modules => {'Net::OAuth2::AuthorizationServer' => undef} )) {
             Koha::Exceptions::Authorization::Unauthorized->throw(
                 error => 'Authentication failure.'
             );

@@ -40,7 +40,8 @@ sub token {
 
     my $c = shift->openapi->valid_input or return;
 
-    if ( Module::Load::Conditional::can_load('Net::OAuth2::AuthorizationServer') ) {
+    if ( Module::Load::Conditional::can_load(
+                modules => {'Net::OAuth2::AuthorizationServer' => undef} )) {
         require Net::OAuth2::AuthorizationServer;
     }
     else {
