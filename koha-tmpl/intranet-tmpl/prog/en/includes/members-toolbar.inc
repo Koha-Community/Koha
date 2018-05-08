@@ -66,7 +66,7 @@
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to manage API keys" id="apikeys" href="#">Manage API keys</a></li>
                 [% END %]
 
-                [% IF ( CAN_user_borrowers ) %]
+                [% IF CAN_user_borrowers_edit_borrowers %]
                     [% IF ( NorwegianPatronDBEnable == 1 ) %]
                         <li><a id="deletepatronlocal" href="#">Delete local</a></li>
                         <li><a id="deletepatronremote" href="#">Delete remote</a></li>
