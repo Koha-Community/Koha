@@ -1,32 +1,23 @@
 [% USE Asset %]
+[% SET footerjs = 1 %]
 <!DOCTYPE html>
 [% IF ( bidi ) %]<html lang="[% lang %]" dir="[% bidi %]">[% ELSE %]<html lang="[% lang %]">[% END %]
 <head>
 <title>Koha &rsaquo; Tools &rsaquo; Spine labels</title>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 [% Asset.css("css/spinelabel.css") %]
-
-		<style type="text/css">
-		@media print {
-			.noprint { display: none; }
-		}
-	</style>
-[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS %]</style>[% END %]
-[% IF ( IntranetUserJS ) %]
-    [% Asset.js("lib/jquery/jquery-2.2.3.min.js") %]
-    [% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") %]
-    <script type="text/javascript">
-    //<![CDATA[
-    [% IntranetUserJS %]
-    //]]>
-    </script>
-[% END %]
+<style>
+    @media print {
+        .noprint { display: none; }
+    }
+</style>
+[% IF ( IntranetUserCSS ) %]<style>[% IntranetUserCSS %]</style>[% END %]
 </head>
+
 	[% IF ( BarcodeNotFound ) %]
 		<body id="labels_spinelabel-print" class="tools labels">
             <p>The barcode [% Barcode |html %] was not found.</p>
             <p><a href="spinelabel-home.pl">Return to spine label printer</a></p>
-		</body>
 	[% ELSE %]
 		[% IF ( autoprint ) %]
             <body id="labels_spinelabel-print" class="tools labels" onload="window.print()">
@@ -37,8 +28,16 @@
 				[% content %]
 			</span>
 			<span id="print_button" class="noprint">
-                <button onclick="window.print()">Print this label</button>
+                <button onclick="window.print()">Print this slabel</button>
 			</span>
-		</body>
 	[% END %]
-</html>
+
+[% IF ( IntranetUserJS ) %]
+    [% Asset.js( "lib/jquery/jquery-2.2.3.min.js" ) %]
+    [% Asset.js( "lib/jquery/jquery-migrate-1.3.0.min.js" ) %]
+    <script>
+        [% IntranetUserJS %]
+    </script>
+[% END %]
+
+[% INCLUDE 'popup-bottom.inc' %]

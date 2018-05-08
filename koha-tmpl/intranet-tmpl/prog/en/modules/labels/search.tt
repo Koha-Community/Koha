@@ -1,12 +1,11 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo;  Labels</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'calendar.inc' %]
-<style type="text/css">#custom-doc { width:47.23em;*width:46.04em;min-width:610px; margin:auto;margin-top: .4em; text-align:left; }</style>
 </head>
-<body id="labels_search" class="tools labels">
 
-<div id="custom-doc" class="yui-t7">
-   <div id="bd">
+<body id="labels_search" class="tools labels">
+    <div class="main container-fluid">
 
 <h1>Search for items
 [% IF ( batch_id ) %]
@@ -104,5 +103,5 @@ to add to Batch [% batch_id %]
 <fieldset class="action"><input type="submit" value="Search" class="submit" /> <a class="cancel close" href="#">Cancel</a></fieldset>
 </form>
 </div>
-</div>
-[% INCLUDE 'popup-bottom.inc' %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

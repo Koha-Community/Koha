@@ -1,56 +1,12 @@
 [% USE Asset %]
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Barcodes and labels &rsaquo; Search results</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    <style type="text/css">#custom-doc { width:46.23em;*width:45.04em;min-width:700px; margin:auto;margin-top: .4em; text-align:left; }</style>
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
-    <script type="text/javascript">
-        //<![CDATA[
-            $(document).ready(function(){
-                $("#toolbar").fixFloat();
-                $("#CheckAll").click(function(e){
-                    e.preventDefault();
-                    $("input[type='checkbox']").prop("checked",true);
-                });
-                $("#CheckNone").click(function(e){
-                    e.preventDefault();
-                    $("input[type='checkbox']").prop("checked",false);
-                });
-                $("#add_items").on("click",function(){
-                    add_item('checked',[% batch_id %],'[% type %]');
-                });
-                $(".select_item").on("click",function(e){
-                    e.preventDefault();
-                    var batch_id = $(this).data("batch-id");
-                    var itemnumber = $(this).data("item-number");
-                    var type = $(this).data("field-type");
-                    add_item(itemnumber, batch_id, type);
-                });
-            });
-            function add_item(item_number,batch_id,type_id){
-                var p = window.opener;
-                if (item_number == 'checked') {
-                    items= new Array;
-                    if(document.resultform.action.length > 0) {
-                        for (var i=0; i < document.resultform.action.length; i++) {
-                            if (document.resultform.action[i].checked) {
-                                p.add_item(document.resultform.action[i].value);
-                            }
-                        }
-                    } else {
-                        p.add_item(document.resultform.action.value);
-                    }
-                }
-                else {
-                    p.add_item(item_number);
-                }
-            }
-            //]]>
-    </script>
 </head>
+
 <body id="labels_result" class="tools labels">
-    <div id="custom-doc" class="yui-t7">
-        <div id="bd">
+    <div class="main container-fluid">
             <h1>Search results</h1>
         <div class="results">
                 [% IF ( displayprev || displaynext ) %]
@@ -106,7 +62,7 @@
                                             <th>Select</th>
                                         [% CASE %]
                                             <th>[% header_field.field_label %]</th>
-z                                    [% END -%]
+                                    [% END -%]
                                 [% END %]
                             </tr>
                         </thead>
@@ -151,4 +107,50 @@ z                                    [% END -%]
         <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Close</a></div>
             [% END %]
     </div>
-    [% INCLUDE 'popup-bottom.inc' %]
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
+    <script>
+        $(document).ready(function(){
+            $("#toolbar").fixFloat();
+            $("#CheckAll").click(function(e){
+                e.preventDefault();
+                $("input[type='checkbox']").prop("checked",true);
+            });
+            $("#CheckNone").click(function(e){
+                e.preventDefault();
+                $("input[type='checkbox']").prop("checked",false);
+            });
+            $("#add_items").on("click",function(){
+                add_item('checked',[% batch_id %],'[% type %]');
+            });
+            $(".select_item").on("click",function(e){
+                e.preventDefault();
+                var batch_id = $(this).data("batch-id");
+                var itemnumber = $(this).data("item-number");
+                var type = $(this).data("field-type");
+                add_item(itemnumber, batch_id, type);
+            });
+        });
+        function add_item(item_number,batch_id,type_id){
+            var p = window.opener;
+            if (item_number == 'checked') {
+                items= new Array;
+                if(document.resultform.action.length > 0) {
+                    for (var i=0; i < document.resultform.action.length; i++) {
+                        if (document.resultform.action[i].checked) {
+                            p.add_item(document.resultform.action[i].value);
+                        }
+                    }
+                } else {
+                    p.add_item(document.resultform.action.value);
+                }
+            }
+            else {
+                p.add_item(item_number);
+            }
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]

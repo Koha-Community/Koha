@@ -1,25 +1,13 @@
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Label printing/exporting</title>
     [% INCLUDE 'doc-head-close.inc' popup => 1 %]
-    <script type="text/javascript">
-        //<![CDATA[
-            function Done() {
-                window.location = "[% referer %]";
-            };
-            $(document).ready(function(){
-                $(".gb-close").on("click",function(){
-                    parent.parent.GB_hide();
-                });
-            });
-        //]]>
-    </script>
-    <style type="text/css">#custom-doc {width:47.23em; *width:46.04em; min-width:610px; margin:auto; margin-top:0.4em;}</style>
-    <style type="text/css">table {border-collapse: separate; border-spacing: 0; border: hidden none;} .header {cursor: auto; background-position: center center; background-repeat: repeat;}</style>
+    <style>table {border-collapse: separate; border-spacing: 0; border: hidden none;} .header {cursor: auto; background-position: center center; background-repeat: repeat;}</style>
 </head>
+
 <body id="labels_label-print" class="tools labels">
-    <div id="custom-doc" class="yui-t2">
-        <div id="bd">
-            [% IF ( batches ) %]
+    <div class="main container-fluid">
+        [% IF ( batches ) %]
             <form>
                 <h3>Click on the following links to download the exported batch(es).</h3>
                         [% FOREACH batche IN batches %]
@@ -107,4 +95,20 @@
             </form>
             [% END %]
         </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") %]
+    [% INCLUDE 'greybox.inc' %]
+    <script>
+        function Done() {
+            window.location = "[% referer %]";
+        };
+        $(document).ready(function(){
+            $(".gb-close").on("click",function(){
+                parent.parent.GB_hide();
+            });
+        });
+    </script>
+[% END %]
+
 [% INCLUDE 'popup-bottom.inc' %]

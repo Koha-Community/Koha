@@ -1,41 +1,9 @@
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Templates &rsaquo; [% IF ( template_id ) %]Edit ([% template_id %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-	<script type="text/javascript">
-        //<![CDATA[
-		$(document).ready(function(){
-		var selectedUnit = $("#units option:selected").attr("value");
-		var unitfields = $("#page_height,#page_width,#label_width,#label_height,#top_margin,#left_margin,#top_text_margin,#left_text_margin,#col_gap,#row_gap");
-		$(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
-		$("#units").change(function(){
-			$(".unit").html(getUnit($(this).val()));
-		});
-		function getUnit(unit){
-			switch(unit){
-				case "POINT":
-					var unit = " pt";
-					break;
-				case "AGATE":
-					var unit = " ag";
-					break;
-				case "INCH":
-					var unit = " in";
-					break;
-				case "MM":
-					var unit = " mm";
-					break;
-				case "CM":
-					var unit = " cm";
-					break;
-				default:
-					var unit = "";
-			}
-			return unit;
-		}
-		});
-        //]]>
-	</script>
 </head>
+
 <body id="labels_label-edit-template" class="tools labels">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -46,20 +14,17 @@
         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Templates</a> &rsaquo;
         [% IF ( template_id ) %]Edit ([% template_id %])[% ELSE %]New[% END %]
     </div>
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-            <div id="yui-main">
-                <div class="yui-b">
-                    <div class="yui-g">
-                    [% INCLUDE 'labels-toolbar.inc' %]
-                        <div class="yui-u first">
 
-                        </div>
-                    </div>
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+                    [% INCLUDE 'labels-toolbar.inc' %]
+
+                    <h3>Edit label template</h3>
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-template.pl" method="get">
-                    <div class="yui-g">
-                        <h3>Edit label template</h3>
-                        <div class="yui-u first">
+                    <div class="row">
+                        <div class="col-sm-6">
                             <fieldset class="rows">
                                 <ol>
                                     <li>
@@ -119,7 +84,7 @@
                                 </ol>
                             </fieldset>
                         </div>
-                        <div class="yui-u">
+                        <div class="col-sm-6">
                             <fieldset class="rows">
                                 <ol><li>
                                     <label for="top_margin">Top page margin:</label>
@@ -176,7 +141,6 @@
                             </fieldset>
                         </div>
                     </div>
-                    <div class="yui-g">
                         <fieldset class="action">
                             <input type="submit" class="submit" value="Save" /><a class="cancel" href="/cgi-bin/koha/labels/label-manage.pl?label_element=template">Cancel</a>
                             <input type="hidden" name="op" value="save" />
@@ -184,12 +148,52 @@
                             <input type="hidden" name="template_id" value="[% template_id %]" />
                             [% END %]
                         </fieldset>
-                    </div>
                 </form>
-            </div>
-        </div>
-        <div class="yui-b">
-          [% INCLUDE 'tools-menu.inc' %]
-        </div>
-    </div>
-    [% INCLUDE 'intranet-bottom.inc' %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") %]
+    <script>
+        $(document).ready(function(){
+            var selectedUnit = $("#units option:selected").attr("value");
+            var unitfields = $("#page_height,#page_width,#label_width,#label_height,#top_margin,#left_margin,#top_text_margin,#left_text_margin,#col_gap,#row_gap");
+            $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
+            $("#units").change(function(){
+                $(".unit").html(getUnit($(this).val()));
+            });
+        });
+        function getUnit(unit){
+            switch(unit){
+                case "POINT":
+                    var unit = " pt";
+                    break;
+                case "AGATE":
+                    var unit = " ag";
+                    break;
+                case "INCH":
+                    var unit = " in";
+                    break;
+                case "MM":
+                    var unit = " mm";
+                    break;
+                case "CM":
+                    var unit = " cm";
+                    break;
+                default:
+                    var unit = "";
+            }
+            return unit;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

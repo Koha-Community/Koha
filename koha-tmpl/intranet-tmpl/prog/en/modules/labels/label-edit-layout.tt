@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% BLOCK translate_label_types %]
 [%  SWITCH type %]
 [%   CASE 'BIB'    %]Biblio
@@ -10,36 +11,8 @@
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Layouts &rsaquo; [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]New[% END %]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-    <script type="text/JavaScript">
-        //<![CDATA[
-            $(document).ready(function() {
-                $("input[name='layout_choice']").change( function() { layout_method() } );
-                layout_method();
-                $("#font").on("change",function(){
-                     checkOblique();
-                });
-            });
-            function layout_method() {
-                if( $("input[name='layout_choice']:checked").val() == 'layout_string' ) {
-                    $('#layout_table').hide();
-                    $('#layout_string').show();
-                } else {
-                    $('#layout_table').show();
-                    $('#layout_string').hide();
-                }
-            }
-            function checkOblique() {
-                var font = document.getElementById("font");
-                var selectedfont = font.options[font.selectedIndex].value;
-                if ( selectedfont.match("I$") || selectedfont.match("O$") ) {
-                    document.getElementById("oblique_title").disabled = true;
-                } else {
-                    document.getElementById("oblique_title").disabled = false;
-                }
-            }
-        //]]>
-    </script>
 </head>
+
 [% BLOCK translate_justification_types %]
 [%  SWITCH type %]
 [%   CASE 'L' %]Left
@@ -57,16 +30,14 @@
         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=layout">Layouts</a> &rsaquo;
         [% IF ( layout_id ) %]Edit ([% layout_id %])[% ELSE %]New[% END %]
     </div>
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-            <div id="yui-main">
-                <div class="yui-b">
-                    <div class="yui-g">
-                    [% INCLUDE 'labels-toolbar.inc' %]
-                        <div class="yui-u first">
 
-                        </div>
-                    </div>
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+
+                    [% INCLUDE 'labels-toolbar.inc' %]
+
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-layout.pl" method="get">
                         <fieldset class="rows">
                             <legend>[% IF ( layout_id ) %]Edit[% ELSE %]Create[% END %] label layout</legend>
@@ -207,10 +178,45 @@
                             <input type="hidden" name="layout_id" value="[% layout_id %]" />
                         </fieldset>
                     </form>
-                </div>
-            </div>
-            <div class="yui-b">
-              [% INCLUDE 'tools-menu.inc' %]
-            </div>
-        </div>
-        [% INCLUDE 'intranet-bottom.inc' %]
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") %]
+    <script>
+        $(document).ready(function() {
+            $("input[name='layout_choice']").change( function() { layout_method() } );
+            layout_method();
+            $("#font").on("change",function(){
+                 checkOblique();
+            });
+        });
+        function layout_method() {
+            if( $("input[name='layout_choice']:checked").val() == 'layout_string' ) {
+                $('#layout_table').hide();
+                $('#layout_string').show();
+            } else {
+                $('#layout_table').show();
+                $('#layout_string').hide();
+            }
+        }
+        function checkOblique() {
+            var font = document.getElementById("font");
+            var selectedfont = font.options[font.selectedIndex].value;
+            if ( selectedfont.match("I$") || selectedfont.match("O$") ) {
+                document.getElementById("oblique_title").disabled = true;
+            } else {
+                document.getElementById("oblique_title").disabled = false;
+            }
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]

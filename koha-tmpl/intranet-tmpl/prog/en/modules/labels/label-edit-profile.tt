@@ -1,41 +1,9 @@
+[% SET footerjs = 1 %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Tools &rsaquo; Label creator &rsaquo; Profiles &rsaquo; [% IF ( profile_id ) %]Edit ([% profile_id %])[% ELSE %]New[% END%]</title>
     [% INCLUDE 'doc-head-close.inc' %]
-	<script type="text/javascript">
-        //<![CDATA[
-		$(document).ready(function(){
-		var selectedUnit = $("#units option:selected").attr("value");
-		var unitfields = $("#offset_horz,#offset_vert,#creep_horz,#creep_vert");
-		$(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
-		$("#units").change(function(){
-			$(".unit").html(getUnit($(this).val()));
-		});
-		function getUnit(unit){
-			switch(unit){
-				case "POINT":
-					var unit = " pt";
-					break;
-				case "AGATE":
-					var unit = " ag";
-					break;
-				case "INCH":
-					var unit = " in";
-					break;
-				case "MM":
-					var unit = " mm";
-					break;
-				case "CM":
-					var unit = " cm";
-					break;
-				default:
-					var unit = "";
-			}
-			return unit;
-		}
-		});
-        //]]>
-	</script>
 </head>
+
 <body id="labels_label-edit-profile" class="tools labels">
     [% INCLUDE 'header.inc' %]
     [% INCLUDE 'cat-search.inc' %]
@@ -46,16 +14,14 @@
         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=profile">Profiles</a> &rsaquo;
         [% IF ( profile_id ) %]Edit ([% profile_id %])[% ELSE %]New[% END%]
     </div>
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-	    <div id="yui-main">
-	        <div class="yui-b">
-                    <div class="yui-g">
+
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+                <main>
+
                     [% INCLUDE 'labels-toolbar.inc' %]
-                    </div>
-                        <div class="yui-u first">
                             <h3>Edit printer profile</h3>
-                                <div class="yui-g first">
                     <form name="input" action="/cgi-bin/koha/labels/label-edit-profile.pl" method="get">
                                     <fieldset class="rows"><legend>Profile settings</legend>
                                         <ol>
@@ -138,12 +104,51 @@
                                         <input type="hidden" name="profile_id" value="[% profile_id %]" />
                                     </fieldset>
                     </form>
-                                </div>
-                            </div>
-                        </div>
-                </div>
-                <div class="yui-b">
-                  [% INCLUDE 'tools-menu.inc' %]
-                </div>
-            </div>
-            [% INCLUDE 'intranet-bottom.inc' %]
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") %]
+    <script>
+        $(document).ready(function(){
+            var selectedUnit = $("#units option:selected").attr("value");
+            var unitfields = $("#offset_horz,#offset_vert,#creep_horz,#creep_vert");
+            $(unitfields).after("<span class=\"unit\">"+getUnit(selectedUnit)+"</span>");
+            $("#units").change(function(){
+                $(".unit").html(getUnit($(this).val()));
+            });
+        });
+        function getUnit(unit){
+            switch(unit){
+                case "POINT":
+                    var unit = " pt";
+                    break;
+                case "AGATE":
+                    var unit = " ag";
+                    break;
+                case "INCH":
+                    var unit = " in";
+                    break;
+                case "MM":
+                    var unit = " mm";
+                    break;
+                case "CM":
+                    var unit = " cm";
+                    break;
+                default:
+                    var unit = "";
+            }
+            return unit;
+        }
+    </script>
+[% END %]
+
+[% INCLUDE 'intranet-bottom.inc' %]
