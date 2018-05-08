@@ -20,6 +20,7 @@ package Koha::Acquisition::Basket;
 use Modern::Perl;
 
 use Koha::Database;
+use Koha::Acquisition::BasketGroups;
 
 use base qw( Koha::Object );
 
@@ -45,6 +46,18 @@ sub bookseller {
     return Koha::Acquisition::Bookseller->_new_from_dbic( $bookseller_rs );
 }
 
+=head3 basket_group
+
+Returns the basket group associated to this basket
+
+=cut
+
+sub basket_group {
+    my ($self) = @_;
+    my $basket_group_rs = $self->_result->basketgroupid;
+    return unless $basket_group_rs;
+    return Koha::Acquisition::BasketGroup->_new_from_dbic( $basket_group_rs );
+}
 
 =head3 effective_create_items
 

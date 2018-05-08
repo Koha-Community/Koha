@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 
-# Copyright 2017 Koha Development team
+# Copyright 2018 Koha Development team
 #
 # This file is part of Koha
 #
@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
@@ -75,6 +75,35 @@ subtest 'create_items + effective_create_items tests' => sub {
         $basket->unblessed, "Correct basket found and updated" );
     is( $retrieved_basket->effective_create_items,
         "ordering", "We use basket create items if it is set" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'basket_group' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    my $b = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            value => { basketgroupid => undef }, # not linked to a basketgroupid
+        }
+    );
+
+    my $basket = Koha::Acquisition::Baskets->find( $b->basketno );
+    is( $basket->basket_group, undef,
+        '->basket_group should return undef if not linked to a basket group');
+
+    $b = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Baskets',
+            # Will be linked to a basket group by TestBuilder
+        }
+    );
+
+    $basket = Koha::Acquisition::Baskets->find( $b->basketno );
+    is( ref( $basket->basket_group ), 'Koha::Acquisition::BasketGroup',
+        '->basket_group should return a Koha::Acquisition::BasketGroup object if linked to a basket group');
 
     $schema->storage->txn_rollback;
 };
