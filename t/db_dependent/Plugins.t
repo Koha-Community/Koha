@@ -5,7 +5,6 @@ use Modern::Perl;
 use Test::More tests => 35;
 use CGI;
 use File::Basename;
-use File::Spec;
 use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Archive::Extract;
@@ -13,6 +12,8 @@ use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
 
 use C4::Context;
+use Koha::UploadedFile;
+
 use t::lib::Mocks;
 
 BEGIN {
@@ -62,7 +63,7 @@ is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->
 # test absolute path change in get_template with Koha::Plugin::Test
 # using the mock set before
 # we also add tmpdir as an approved template dir
-t::lib::Mocks::mock_config( 'pluginsdir', [ File::Spec->tmpdir ] );
+t::lib::Mocks::mock_config( 'pluginsdir', [ Koha::UploadedFile->temporary_directory ] );
 my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1 );
 print $fh 'I am [% filename %]';
 close $fh;

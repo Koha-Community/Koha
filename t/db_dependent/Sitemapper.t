@@ -26,6 +26,8 @@ use Test::More tests => 16;
 use Koha::Schema;
 use Carp qw/croak carp/;
 
+use Koha::UploadedFile;
+
 BEGIN {
     use_ok('Koha::Sitemapper');
     use_ok('Koha::Sitemapper::Writer');
@@ -62,7 +64,7 @@ $db->mock(
     _new_schema => sub { return Schema(); }
 );
 
-my $dir = File::Spec->tmpdir();
+my $dir = Koha::UploadedFile->temporary_directory;
 
 my $data = [
     [qw/ 1         2013-11-15 2013-11-15/],

@@ -38,6 +38,7 @@ use File::Spec;
 
 use Koha::Calendar;
 use Koha::DateUtils;
+use Koha::UploadedFile;
 use C4::Log;
 
 my $help;
@@ -183,7 +184,7 @@ sub set_holiday {
 sub get_filename {
     my $directory = shift;
     if ( !$directory ) {
-        $directory = File::Spec->tmpdir();
+        $directory = Koha::UploadedFile->temporary_directory;
     }
     if ( !-d $directory ) {
         carp "Could not write to $directory ... does not exist!";

@@ -20,14 +20,16 @@ package C4::InstallAuth;
 use strict;
 #use warnings; FIXME - Bug 2505
 use Digest::MD5 qw(md5_base64);
+use CGI::Session;
 use File::Spec;
 
 require Exporter;
+
 use C4::Context;
 use C4::Output;
 use C4::Templates;
 use C4::Koha;
-use CGI::Session;
+use Koha::UploadedFile;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -237,7 +239,7 @@ sub checkauth {
     my $dbh = C4::Context->dbh();
     my $template_name;
     $template_name = "installer/auth.tt";
-    my $sessdir = File::Spec->catdir( File::Spec->tmpdir, 'cgisess_' . C4::Context->config('database') ); # same construction as in C4/Auth
+    my $sessdir = File::Spec->catdir( Koha::UploadedFile->temporary_directory, 'cgisess_' . C4::Context->config('database') ); # same construction as in C4/Auth
 
     # state variables
     my $loggedin = 0;

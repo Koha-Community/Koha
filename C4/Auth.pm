@@ -20,7 +20,6 @@ package C4::Auth;
 use strict;
 use warnings;
 use Digest::MD5 qw(md5_base64);
-use File::Spec;
 use JSON qw/encode_json/;
 use URI::Escape;
 use CGI::Session;
@@ -31,6 +30,7 @@ use C4::Templates;    # to get the template
 use C4::Languages;
 use C4::Search::History;
 use Koha;
+use Koha::UploadedFile;
 use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
 use Koha::DateUtils qw(dt_from_string);
@@ -1740,7 +1740,7 @@ sub _get_session_params {
     }
     else {
         # catch all defaults to tmp should work on all systems
-        my $dir = File::Spec->tmpdir;
+        my $dir = Koha::UploadedFile->temporary_directory;
         my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
         return { dsn => "driver:File;serializer:yaml;id:md5", dsn_args => { Directory => "$dir/cgisess_$instance" } };
     }
