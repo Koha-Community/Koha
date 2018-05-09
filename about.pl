@@ -26,6 +26,7 @@ use CGI qw ( -utf8 );
 use DateTime::TimeZone;
 use List::MoreUtils qw/ any /;
 use LWP::Simple;
+use Module::Load::Conditional qw(can_load);
 use XML::Simple;
 use Config;
 use Search::Elasticsearch;
@@ -388,6 +389,13 @@ if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
         $es_status->{running} = $es_running;
 
         $template->param( elasticsearch_status => $es_status );
+    }
+}
+
+if ( C4::Context->preference('RESTOAuth2ClientCredentials') ) {
+    # Do we have the required deps?
+    unless ( can_load( modules => { 'Net::OAuth2::AuthorizationServer' => undef }) ) {
+        $template->param( oauth2_missing_deps => 1 );
     }
 }
 
