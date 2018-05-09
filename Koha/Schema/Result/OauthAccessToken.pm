@@ -27,13 +27,13 @@ __PACKAGE__->table("oauth_access_tokens");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 255
+  size: 191
 
 =head2 client_id
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 255
+  size: 191
 
 =head2 expires
 
@@ -44,9 +44,9 @@ __PACKAGE__->table("oauth_access_tokens");
 
 __PACKAGE__->add_columns(
   "access_token",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 191 },
   "client_id",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 191 },
   "expires",
   { data_type => "integer", is_nullable => 0 },
 );
@@ -64,8 +64,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("access_token");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-04-11 17:44:30
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:u2e++Jrwln4Qhi3UPx2CQA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-05-09 12:50:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:M6tueO6jmJwgmwMrqO1L0Q
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
