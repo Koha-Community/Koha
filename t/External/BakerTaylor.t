@@ -20,8 +20,8 @@ t::lib::Mocks::mock_preference( 'BakerTaylorUsername', $username );
 t::lib::Mocks::mock_preference( 'BakerTaylorPassword', $password );
 t::lib::Mocks::mock_preference( 'BakerTaylorBookstoreURL', $link_url );
 
-my $image_url = "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$username&Password=$password&Options=Y&Return=T&Type=S&Value=";
-my $content_cafe = "http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$username&Password=$password&Options=Y&ItemKey=";
+my $image_url = "https://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$username&Password=$password&Options=Y&Return=T&Type=S&Value=";
+my $content_cafe = "https://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$username&Password=$password&Options=Y&ItemKey=";
 
 is( C4::External::BakerTaylor::image_url(), $image_url, "testing default image url");
 is( C4::External::BakerTaylor::image_url("aa"), $image_url."aa", "testing image url construction");

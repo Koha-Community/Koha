@@ -44,7 +44,7 @@ sub _initialize {
 	$user     = (@_ ? shift : C4::Context->preference('BakerTaylorUsername')    ) || ''; # LL17984
 	$pass     = (@_ ? shift : C4::Context->preference('BakerTaylorPassword')    ) || ''; # CC82349
 	$link_url = (@_ ? shift : C4::Context->preference('BakerTaylorBookstoreURL'));
-        $image_url = "http://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$user&Password=$pass&Options=Y&Return=T&Type=S&Value=";
+        $image_url = "https://contentcafe2.btol.com/ContentCafe/Jacket.aspx?UserID=$user&Password=$pass&Options=Y&Return=T&Type=S&Value=";
 	$agent = "Koha/$VERSION [en] (Linux)";
 			#"Mozilla/4.76 [en] (Win98; U)",	#  if for some reason you want to go stealth, you might prefer this
 }
@@ -70,7 +70,7 @@ sub content_cafe_url {
 	($user and $pass) or return;
 	my $isbn = (@_ ? shift : '');
 	$isbn =~ s/(p|-)//g;	# sanitize
-	return "http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
+    return "https://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=$user&Password=$pass&Options=Y&ItemKey=$isbn";
 }
 
 sub http_jacket_link {
@@ -90,7 +90,7 @@ sub availability {
 	my $isbn = shift or return;
 	($user and $pass) or return;
 	$isbn =~ s/(p|-)//g;	# sanitize
-	my $url = "http://contentcafe2.btol.com/ContentCafe/InventoryAvailability.asmx/CheckInventory?UserID=$user&Password=$pass&Value=$isbn";
+    my $url = "https://contentcafe2.btol.com/ContentCafe/InventoryAvailability.asmx/CheckInventory?UserID=$user&Password=$pass&Value=$isbn";
 	$debug and warn __PACKAGE__ . " request:\n$url\n";
 	my $content = get($url);
 	$debug and print STDERR $content, "\n";

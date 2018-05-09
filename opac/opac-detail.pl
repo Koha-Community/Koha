@@ -1081,7 +1081,7 @@ if (C4::Context->preference("BakerTaylorEnabled")) {
 	{
 		$template->param(
 		BakerTaylorContentURL   =>
-		sprintf("http://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=%s&Password=%s&ItemKey=%s&Options=Y",
+        sprintf("https://contentcafe2.btol.com/ContentCafeClient/ContentCafe.aspx?UserID=%s&Password=%s&ItemKey=%s&Options=Y",
 				$bt_user,$bt_pass,$isbn)
 		);
 	}
