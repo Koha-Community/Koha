@@ -82,16 +82,18 @@ start_zebra()
             log_daemon_msg "Starting Koha Zebra daemon for ${name}"
 
         if daemon $DAEMONOPTS -- $ZEBRA_DAEMON $ZEBRA_PARAMS; then
-            [ "$verbose" != "no" ] && \
-                log_end_msg 0
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 0) || return 0
         else
-            [ "$verbose" != "no" ] && \
-                log_end_msg 1
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 1) || return 1
         fi
     else
         if [ "$verbose" != "no" ]; then
             log_daemon_msg "Error: Zebra already running for ${name}"
             log_end_msg 1
+        else
+            return 1
         fi
     fi
 }
@@ -115,16 +117,18 @@ stop_zebra()
             log_daemon_msg "Stopping Koha Zebra daemon for ${name}"
 
         if daemon $DAEMONOPTS --stop -- $ZEBRA_DAEMON $ZEBRA_PARAMS; then
-            [ "$verbose" != "no" ] && \
-                log_end_msg 0
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 0) || return 0
         else
-            [ "$verbose" != "no" ] && \
-                log_end_msg 1
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 1) || return 1
         fi
     else
         if [ "$verbose" != "no" ]; then
             log_daemon_msg "Error: Zebra not running for ${name}"
             log_end_msg 1
+        else
+            return 1
         fi
     fi
 }
@@ -142,6 +146,8 @@ restart_zebra()
         if [ "$verbose" != "no" ]; then
             log_daemon_msg "Error: Zebra not running for ${name}"
             log_end_msg 1
+        else
+            return 1
         fi
     fi
 }
