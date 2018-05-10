@@ -203,6 +203,7 @@ sub AddReserve {
             itemtype       => $itemtype,
         }
     )->store();
+    $hold->set_waiting() if $found eq 'W';
 
     logaction( 'HOLDS', 'CREATE', $hold->id, Dumper($hold->unblessed) )
         if C4::Context->preference('HoldsLog');
