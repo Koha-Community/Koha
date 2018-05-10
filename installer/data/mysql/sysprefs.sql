@@ -163,7 +163,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ExcludeHolidaysFromMaxPickUpDelay', '0', NULL, 'If ON, reserves max pickup delay takes into accountthe closed days.', 'YesNo'),
 ('ExportCircHistory', 0, NULL, "Display the export circulation options",  'YesNo' ),
 ('ExportRemoveFields','',NULL,'List of fields for non export in circulation.pl (separated by a space)','Free'),
-('ExtendedPatronAttributes','0',NULL,'Use extended patron IDs and attributes','YesNo'),
+('ExtendedPatronAttributes','1',NULL,'Use extended patron IDs and attributes','YesNo'),
 ('FacetLabelTruncationLength','20',NULL,'Specify the facet max length in OPAC','Integer'),
 ('FacetMaxCount','20',NULL,'Specify the max facet count for each category','Integer'),
 ('FailedLoginAttempts','','','Number of login attempts before lockout the patron account','Integer'),
