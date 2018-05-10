@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 56;
+use Test::More tests => 57;
 use Test::MockModule;
 use Test::Warn;
 
@@ -53,6 +53,9 @@ my $dbh = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
 
 my $frameworkcode = q||;
+
+
+t::lib::Mocks::mock_preference('ReservesNeedReturns', 1);
 
 # Somewhat arbitrary field chosen for age restriction unit tests. Must be added to db before the framework is cached
 $dbh->do("update marc_subfield_structure set kohafield='biblioitems.agerestriction' where tagfield='521' and tagsubfield='a' and frameworkcode=?", undef, $frameworkcode);
@@ -666,6 +669,57 @@ subtest '_koha_notify_reserve() tests' => sub {
         })->next()->to_address();
     is($email_message_address, undef ,"We should not populate the hold message with the email address, sending will do so");
 
+};
+
+subtest 'ReservesNeedReturns' => sub {
+    plan tests => 4;
+
+    my $biblioitem = $builder->build_object( { class => 'Koha::Biblioitems' } );
+    my $library    = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype   = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
+    my $item_info  = {
+        biblionumber     => $biblioitem->biblionumber,
+        biblioitemnumber => $biblioitem->biblioitemnumber,
+        homebranch       => $library->branchcode,
+        holdingbranch    => $library->branchcode,
+        itype            => $itemtype->itemtype,
+    };
+    my $item = $builder->build_object( { class => 'Koha::Items', value => $item_info } );
+    my $patron   = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, }
+        }
+    );
+
+    my $priority = 1;
+    my ( $hold_id, $hold );
+
+    t::lib::Mocks::mock_preference('ReservesNeedReturns', 0); # '0' means 'Automatically mark a hold as found and waiting'
+    $hold_id = C4::Reserves::AddReserve(
+        $library->branchcode, $patron->borrowernumber,
+        $item->biblionumber,  '',
+        $priority,            undef,
+        undef,                '',
+        "title for fee",      $item->itemnumber,
+    );
+    $hold = Koha::Holds->find($hold_id);
+    is( $hold->priority, 0, 'If ReservesNeedReturns is 0, priority must have been set to 0' );
+    is( $hold->found, 'W', 'If ReservesNeedReturns is 0, found must have been set waiting' );
+
+    $hold->delete; # cleanup
+
+    t::lib::Mocks::mock_preference('ReservesNeedReturns', 1); # '0' means "Don't automatically mark a hold as found and waiting"
+    $hold_id = C4::Reserves::AddReserve(
+        $library->branchcode, $patron->borrowernumber,
+        $item->biblionumber,  '',
+        $priority,            undef,
+        undef,                '',
+        "title for fee",      $item->itemnumber,
+    );
+    $hold = Koha::Holds->find($hold_id);
+    is( $hold->priority, $priority, 'If ReservesNeedReturns is 1, priority must not have been set to changed' );
+    is( $hold->found, undef, 'If ReservesNeedReturns is 1, found must not have been set waiting' );
 };
 
 sub count_hold_print_messages {
