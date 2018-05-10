@@ -272,12 +272,6 @@ if ( $query->param('place_reserve') ) {
         my $rank = $biblioData->{rank};
         if ( $itemNum ne '' ) {
             $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum ) eq 'OK';
-            $rank = '0' unless C4::Context->preference('ReservesNeedReturns');
-            my $item = GetItem($itemNum);
-            if ( $item->{'holdingbranch'} eq $branch ) {
-                $found = 'W'
-                  unless C4::Context->preference('ReservesNeedReturns');
-            }
         }
         else {
             $canreserve = 1 if CanBookBeReserved( $borrowernumber, $biblioNum ) eq 'OK';
