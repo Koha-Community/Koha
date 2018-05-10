@@ -43,11 +43,11 @@
                     <tbody>
                         [% FOREACH f IN files %]
                             <tr>
-                                 <td><a href="?borrowernumber=[% borrowernumber %]&amp;op=download&amp;file_id=[% f.file_id %]">[% f.file_name %]</a></td>
+                                 <td><a href="?borrowernumber=[% patron.borrowernumber %]&amp;op=download&amp;file_id=[% f.file_id %]">[% f.file_name %]</a></td>
                                  <td>[% f.file_type %]</td>
                                  <td>[% f.file_description %]</td>
                                  <td>[% f.date_uploaded | $KohaDates %]</td>
-                                 [% IF CAN_user_borrowers_edit_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
+                                 [% IF CAN_user_borrowers_edit_borrowers %]<td><a class="btn btn-default btn-xs confirmdelete" href="?borrowernumber=[% patron.borrowernumber %]&amp;op=delete&amp;file_id=[% f.file_id %]"><i class="fa fa-trash"></i> Delete</a></td>[% END %]
                             </tr>
                         [% END %]
                     </tbody>
@@ -63,7 +63,7 @@
                         <legend>Upload New File</legend>
                         <ol>
                         <li><input type="hidden" name="op" value="upload" />
-                        <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
+                        <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
                         <input type="hidden" name="MAX_FILE_SIZE" value="2000000" />
 
                         <label for="description">Description:</label>
