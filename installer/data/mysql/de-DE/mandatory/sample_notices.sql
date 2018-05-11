@@ -1,6 +1,6 @@
 INSERT INTO `letter` (module, code, name, title, content, message_transport_type)
 VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>> <<borrowers.surname>>,\n\nNach unseren Unterlagen haben Sie Medien entliehen, die nun überfällig geworden sind. Unsere Bibliothek erhebt keine Mahngebühren, bitte geben Sie die entliehenen Medien schnellstmöglich zurück.\n\n<<branches.branchname>>\n<<branches.branchaddress1>>\n<<branches.branchaddress2>> <<branches.branchaddress3>>\nTelefon: <<branches.branchphone>>\nFax: <<branches.branchfax>>\nEmail: <<branches.branchemail>>\n\nSie können die überfälligen Medien soweit möglich auch direkt über Ihr Benutzerkonto online verlängern. Wenn ein Medium länger als 30 Tage überfällig ist, wird Ihr Benutzeraccount gesperrt und Sie können keine Medien mehr entleihen.\n\nDie folgenden Medien sind zur Zeit überfällig:\n\n<item>"<<biblio.title>>" von <<biblio.author>>, <<items.itemcallnumber>>, Barcode: <<items.barcode>> Gebühr: <<items.fine>></item>\n\nVielen Dank für die schnelle Erledigung.\n\n< Ihr Bibliotheksteam\n', 'email'),
-('claimacquisition','ACQCLAIM','Reklamation (Erwerbung)','Titel nicht eingetroffen','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Ordernumber <<aqorders.ordernumber>> (<<aqorders.title>>) (<<aqorders.quantity>> bestellt) (je $<<aqorders.listprice>> €) sind nicht eingetroffen.</order>', 'email'),
+('claimacquisition','ACQCLAIM','Reklamation (Erwerbung)','Titel nicht eingetroffen','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\n<order>Ordernumber <<aqorders.ordernumber>> (<<aqorders.title>>) (<<aqorders.quantity>> bestellt) (je $<<aqorders.listprice>>) sind nicht eingetroffen.</order>', 'email'),
 ('orderacquisition','ACQORDER','Bestellung (Erwerbung)','Bestellung','<<aqbooksellers.name>>\r\n<<aqbooksellers.address1>>\r\n<<aqbooksellers.address2>>\r\n<<aqbooksellers.address3>>\r\n<<aqbooksellers.address4>>\r\n<<aqbooksellers.phone>>\r\n\r\nBitte bestellen Sie für die Bibliothek:\r\n\r\n<order>Bestelnummer <<aqorders.ordernumber>> (<<biblio.title>>) (Anzahl: <<aqorders.quantity>>) (je <<aqorders.listprice>>).</order>\r\n\r\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
 ('serial','SERIAL_ALERT','Neues Heft zugegangen','Zeitschrift ist jetzt verfügbar','<<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nDas folgende Heft ist jetzt verfügbar:\r\n\r\n<<biblio.title>>, <<biblio.author>> (<<items.barcode>>)\r\n\r\nBitte holen Sie es sobald möglich ab.', 'email'),
 ('members','ACCTDETAILS','Kontoinformationen - Standard','Ihr neues Benutzerkonto','Liebe/r <<borrowers.title>> <<borrowers.firstname>> <<borrowers.surname>>.\r\n\r\nDie Daten Ihres neuen Benutzerkontos sind:\r\n\r\nBenutzer:  <<borrowers.userid>>\r\nPasswort: <<borrowers.password>>\r\n\r\nWenn Sie Probleme in Hinsicht auf Ihr Benutzerkonto haben, wenden Sie sich bitte an die Bibliothek.\r\n\r\nVielen Dank,\r\nIhr Bibliotheksteam', 'email'),
@@ -14,7 +14,7 @@ VALUES ('circulation','ODUE','Mahnung','Mahnung','Liebe/r <<borrowers.firstname>
 ('circulation','CHECKIN','Rückgabequittung (Zusammenfassung)','Rückgabequittung','Die folgenden Medien wurden zurückgegeben:\r\n----\r\n<<biblio.title>>\r\n----\r\nVielen Dank.', 'email'),
 ('circulation','CHECKOUT','Ausleihquittung (Zusammenfassung)','Ausleihquittung','Die folgenden Medien wurden entliehen:\r\n----\r\n<<biblio.title>>\r\n----\r\nVielen Dank für Ihren Besuch in <<branches.branchname>>.', 'email'),
 ('reserves', 'HOLDPLACED', 'Neue Vormerkung', 'Neue Vormerkung','Folgender Titel wurde vorgemerkt: <<biblio.title>> (<<biblio.biblionumber>>) durch den Benutzer <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>).', 'email'),
-('reserves', 'CANCEL_HOLD_ON_LOST', 'Hold has been cancelled', "Hold has been cancelled", "Dear [% borrower.firstname %] [% borrower.surname %],\n\nWe regret to inform you, that the following item can not be provided due to it being missing. Your hold was cancelled.\n\nTitle: [% biblio.title %]\nAuthor: [% biblio.author %]\nCopy: [% item.copynumber %]\nLocation: [% branch.branchname %]", 'email'),
+('reserves', 'CANCEL_HOLD_ON_LOST', 'Vormerkung wurde storniert', "Vormerkung wurde storniert", "Liebe(r) [% borrower.firstname %] [% borrower.surname %],\n\nWir bedauern Ihnen mitteilen zu müssen, dass die nachfolgende Vormerkung nicht erfüllt werden kann, da das vorgemerkte Medium vermisst wird. Ihre Vormerkung wurde storniert.\n\nTitel: [% biblio.title %]\nVerfasser: [% biblio.author %]\nExemplar: [% item.copynumber %]\nBibliothek: [% branch.branchname %]", 'email'),
 ('suggestions','ACCEPTED','Anschaffungsvorschlag wurde angenommen', 'Ihr Anschaffungsvorschlag wurde angenommen','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlagen: <<suggestions.title>> von <<suggestions.author>>.\n\nDie Bibliothek hat diesen Titel heute recherchiert und wird Ihn sobald wie möglich im Buchhandel bestellen. Sie erhalten Nachricht, sobald die Bestellung abgeschlossen ist und sobald der Titel in der Bibliotek verfügbar ist.\n\nWenn Sie Fragen haben, richten Sie Ihre Mail bitte an: <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','AVAILABLE','Vorgeschlagenes Medium verfügbar', 'Das vorgeschlagene Medium ist jetzt verfügbar','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlagen: <<suggestions.title>> von <<suggestions.author>>.\n\nWir freuen uns Ihnen mitteilen zu können, dass dieser Titel jetzt im Bestand der Bibliothek verfügbar ist.\n\nWenn Sie Fragen haben, richten Sie Ihre Mail bitte an: <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
 ('suggestions','ORDERED','Vorgeschlagenes Medium bestellt', 'Das vorgeschlagene Medium wurde im Buchhandel bestellt','Liebe(r) <<borrowers.firstname>> <<borrowers.surname>>,\n\nSie haben der Bibliothek folgendes Medium zur Anschaffung vorgeschlaten: <<suggestions.title>> von <<suggestions.author>>.\n\nWir freuen uns Ihnen mitteilen zu können, dass dieser Titel jetzt im Buchhandel bestellt wurde. Nach Eintreffen wird er in unseren Bestand eingearbeitet.\n\nSie erhalten Nachricht, sobald das Medium verfügbar ist.\n\nBei Nachfragen erreichen Sie uns unter der Emailadresse <<branches.branchemail>>.\n\nVielen Dank,\n\n<<branches.branchname>>', 'email'),
@@ -31,10 +31,9 @@ alle Medien zurückgegeben und ausstehende Gebühren beglichen hat.</p>', 1, 'em
 
 INSERT INTO `letter` (module, code, name, title, content, is_html)
 VALUES ('circulation','ISSUESLIP','Ausleihquittung (Quittungsdruck)','Ausleihquittung (Quittungsdruck)', '<h2>Ausleihquittung</h2>
-Bibliothek: <<branches.branchname>> <br/>
-Ausleihe an: <<borrowers.firstname>>  <<borrowers.surname>> <br />
-Ausweisnummer: <<borrowers.cardnumber>> <br />
-<br />
+Ausgeliehen an: <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
+(<<borrowers.cardnumber>>) <br />
+
 <<today>><br />
 <br />
 <h4>Ausleihen</h4>
@@ -80,30 +79,45 @@ Signatur: <<items.itemcallnumber>><br/>
 Fällig am: <<issues.date_due>><br />
 </p>
 </checkedout>', 1),
-('circulation','HOLD_SLIP','Vormerkquittung','Vormerkquittung', '<h2>Vormerkung</h2>
-<h4>Abholbereit seit: <<today>></h4>
-<br/>
-Bibliothek: <<branches.branchname>> <br/>
-Vorgemerkt für: <<borrowers.firstname>>  <<borrowers.surname>> <br />
-Ausweisnummer: <<borrowers.cardnumber>> <br />
-<br/>
+('circulation','HOLD_SLIP','Vormerkquittung','Vormerkquittung', '<h5>Datum: <<today>></h5>
+
+<h3> Transport nach/Vormerkung in <<branches.branchname>></h3>
+
+<h3><<borrowers.surname>>, <<borrowers.firstname>></h3>
+
+<ul>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li> <<borrowers.address>><br />
+    <<borrowers.address2>><br />
+    <<borrowers.city >>  <<borrowers.zipcode>>
+    </li>
+    <li><<borrowers.email>></li>
+</ul>
 <br />
-<h3><<biblio.author>> <<biblio.title>></h3>
-Barcode: <<items.barcode>><br/>
-Signatur: <<items.itemcallnumber>><br/>
-<p>
+<h3>EXEMPLAR VORGEMERKT</h3>
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+   <li><<reserves.waitingdate>></li>
+</ul>
+<p>Anmerkungen:
 <pre><<reserves.reservenotes>></pre>
 </p>
 ', 1),
-('circulation','TRANSFERSLIP','Transportquittung','Transportquittung', '<h2>TRANSPORT</h2>
-<h3>Transport nach: <<branches.branchname>></h3>
-<h3>Datum: <<today>></h3>
-<br/>
-<br/>
+('circulation','TRANSFERSLIP','Transportquittung','Transportquittung', '<h5>Datum: <<today>></h5>
+
+<h3>Transport nach <<branches.branchname>></h3>
+
 <h3>EXEMPLAR</h3>
-<h4><<biblio.author>><<biblio.title>></h4>
-Barcode: <<items.barcode>><br/>
-Signatur: <<items.itemcallnumber>><br/>', 1);
+<h4><<biblio.title>></h4>
+<h5><<biblio.author>></h5>
+<ul>
+   <li><<items.barcode>></li>
+   <li><<items.itemcallnumber>></li>
+</ul>', 1);
 
 INSERT INTO `letter` (`module`,`code`,`branchcode`,`name`,`is_html`,`title`,`content`)
 VALUES (
@@ -163,8 +177,7 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'AR_PENDING', '', 'Artikelbestellung - Offen', 0, 'Artikelbestellung ist eingegangen', 'Liebe/r <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nIhre Artikelbestellung aus <<biblio.title>> (<<items.barcode>>) ist bei uns eingegangen.\r\n\r\nBestellter Artikel:\r\nTitel: <<article_requests.title>>\r\nVerfasser: <<article_requests.author>>\r\nJahrgang/Band: <<article_requests.volume>>\r\nHeft: <<article_requests.issue>>\r\nJahr/Datum: <<article_requests.date>>\r\nSeiten: <<article_requests.pages>>\r\nKapitel: <<article_requests.chapters>>\r\nHinweise: <<article_requests.patron_notes>>\r\n\r\n\r\nVielen Dank!', 'email'),
 ('circulation', 'AR_SLIP', '', 'Artikelbestellung - Quittung', 0, 'Artikelbestellung', 'Artikelbestellung:\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nTitel: <<biblio.title>>\r\nBarcode: <<items.barcode>>\r\n\r\nBestellter Artikel:\r\nTitle: <<article_requests.title>>\r\nVerfasser: <<article_requests.author>>\r\nJahrgang/Band: <<article_requests.volume>>\r\nHeft: <<article_requests.issue>>\r\nJahr/Datum: <<article_requests.date>>\r\nSeiten: <<article_requests.pages>>\r\nKapitel: <<article_requests.chapters>>\r\nHinweise: <<article_requests.patron_notes>>\r\n', 'print'),
 ('circulation', 'AR_PROCESSING', '', 'Artikelbestellung - In Bearbeitung', 0, 'Artikelbestellung in Bearbeitung', 'Liebe/r <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nIhre Artikelbestellung aus <<biblio.title>> (<<items.barcode>>) wird zur Zeit bearbeitet.\r\n\r\nBestellter Artikel:\r\nTitel: <<article_requests.title>>\r\nVerfasser: <<article_requests.author>>\r\nBand/Jahrgang: <<article_requests.volume>>\r\nHeft: <<article_requests.issue>>\r\nJahr/Datum: <<article_requests.date>>\r\nSeiten: <<article_requests.pages>>\r\nKapitel: <<article_requests.chapters>>\r\nHinweise: <<article_requests.patron_notes>>\r\n\r\nVielen Dank!', 'email'),
-('circulation', 'CHECKOUT_NOTE', '', 'Checkout note on item set by patron', '0', 'Checkout note', '<<borrowers.firstname>> <<borrowers.surname>> has added a note to the item <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
-
+('circulation', 'CHECKOUT_NOTE', '', 'Ausleihnotiz zu einem Exemplar', '0', 'Ausleihnotiz', '<<borrowers.firstname>> <<borrowers.surname>> hat eine Notiz zu folgendem Exemplar angegeben: <<biblio.title>> - <<biblio.author>> (<<biblio.biblionumber>>).','email');
 INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`)
     VALUES
         ('circulation', 'ACCOUNT_PAYMENT', '', 'Account payment', 0, 'Account payment', '[%- USE Price -%]\r\nA payment of [% credit.amount * -1 | $Price %] has been applied to your account.\r\n\r\nThis payment affected the following fees:\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nAmount paid: [% o.amount * -1 | $Price %]\r\nAmount remaining: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default'),
