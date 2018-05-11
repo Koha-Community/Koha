@@ -74,8 +74,8 @@ Options:
   --timezone time/zone      Specify a timezone. e.g. America/Argentina
   --upload-path dir         Set a user defined upload_path. It defaults to
                             /var/lib/koha/<instance>/uploads
-  --upload-tmp-path dir     Set a user defined upload_tmp_path. It defaults to
-                            /var/lib/koha/<instance>/uploads_tmp
+  --tmp-path dir            Set a user defined tmp_path. It defaults to
+                            /var/lib/koha/<instance>/tmp
   --letsencrypt             Set up a https-only site with letsencrypt certificates
   --help,-h                 Show this help.
 
@@ -120,7 +120,7 @@ generate_config_file() {
         -e "s#__TEMPLATE_CACHE_DIR__#$TEMPLATE_CACHE_DIR#g" \
         -e "s#__TIMEZONE__#$TIMEZONE#g" \
         -e "s#__UPLOAD_PATH__#$UPLOAD_PATH#g" \
-        -e "s#__UPLOAD_TMP_PATH__#$UPLOAD_TMP_PATH#g" \
+        -e "s#__TMP_PATH__#$TMP_PATH#g" \
         -e "s/__LOG_DIR__/\/var\/log\/koha\/$name/g" \
         -e "s/__PLUGINS_DIR__/\/var\/lib\/koha\/$name\/plugins/g" \
         -e "s/__MEMCACHED_NAMESPACE__/$MEMCACHED_NAMESPACE/g" \
@@ -328,18 +328,18 @@ set_upload_path()
     if [ "$CLO_UPLOAD_PATH" != "" ]; then
         UPLOAD_PATH=$CLO_UPLOAD_PATH
     else
-        UPLOAD_PATH="$UPLOAD_PATH_BASE/$instance/$UPLOAD_DIR"
+        UPLOAD_PATH="$INSTANCE_PATH_BASE/$instance/$UPLOAD_DIR"
     fi
 }
 
-set_upload_tmp_path()
+set_tmp_path()
 {
     local instance="$1"
 
-    if [ "$CLO_UPLOAD_TMP_PATH" != "" ]; then
-        UPLOAD_TMP_PATH=$CLO_UPLOAD_TMP_PATH
+    if [ "$CLO_TMP_PATH" != "" ]; then
+        TMP_PATH=$CLO_TMP_PATH
     else
-        UPLOAD_TMP_PATH="$UPLOAD_PATH_BASE/$instance/$UPLOAD_TMP_DIR"
+        TMP_PATH="$INSTANCE_PATH_BASE/$instance/$TMP_DIR"
     fi
 }
 
@@ -425,15 +425,15 @@ MEMCACHED_PREFIX=""
 # hardcoded memcached defaults
 DEFAULT_MEMCACHED_SERVERS="127.0.0.1:11211"
 DEFAULT_MEMCACHED_PREFIX="koha_"
-# hardcoded upload_path
-UPLOAD_PATH_BASE="/var/lib/koha"
+# hardcoded instance base path
+INSTANCE_PATH_BASE="/var/lib/koha"
 UPLOAD_DIR="uploads"
 UPLOAD_PATH=""
 # timezone defaults to empty
 TIMEZONE=""
 # hardcoded upload_tmp_path
-UPLOAD_TMP_DIR="uploads_tmp"
-UPLOAD_TMP_PATH=""
+TMP_DIR="tmp"
+TMP_PATH=""
 # cache base dir
 CACHE_DIR_BASE="/var/cache/koha"
 # Generate a randomizaed API secret
@@ -464,7 +464,7 @@ fi
 
 [ $# -ge 1 ] && [ $# -le 16 ] || ( usage ; die "Error: wrong parameters" )
 
-TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,upload-tmp-path:,letsencrypt, \
+TEMP=`getopt -o chrpm:l:d:f:b:a: -l create-db,request-db,populate-db,use-db,enable-sru,sru-port:,help,marcflavor:,auth-idx:,biblio-idx:,zebralang:,defaultsql:,configfile:,passwdfile:,dbhost:,database:,adminuser:,memcached-servers:,memcached-prefix:,template-cache-dir:,timezone:,upload-path:,tmp-path:,letsencrypt, \
      -n "$0" -- "$@"`
 
 # Note the quotes around `$TEMP': they are essential!
@@ -480,7 +480,7 @@ CLO_AUTHORITIES_INDEXING_MODE=""
 CLO_MEMCACHED_SERVERS=""
 CLO_MEMCACHED_PREFIX=""
 CLO_UPLOAD_PATH=""
-CLO_UPLOAD_TMP_PATH=""
+CLO_TMP_PATH=""
 CLO_LETSENCRYPT=""
 CLO_TEMPLATE_CACHE_DIR=""
 CLO_TIMEZONE=""
@@ -529,8 +529,8 @@ while true ; do
             CLO_TIMEZONE="$2" ; shift 2 ;;
         --upload-path)
             CLO_UPLOAD_PATH="$2" ; shift 2 ;;
-        --upload-tmp-path)
-            CLO_UPLOAD_TMP_PATH="$2" ; shift 2 ;;
+        --tmp-path)
+            CLO_TMP_PATH="$2" ; shift 2 ;;
         --letsencrypt)
             CLO_LETSENCRYPT="yes" ; shift ;;
         -h|--help)
@@ -600,7 +600,7 @@ set_authorities_indexing_mode $AUTHORITIES_INDEXING_MODE $ZEBRA_MARC_FORMAT
 name="$1"
 
 set_upload_path $name
-set_upload_tmp_path $name
+set_tmp_path $name
 
 if [ "$op" = use ] && [ "$CLO_DATABASE" = "" ] &&
    ( [ ! -f "$PASSWDFILE" ] || [ ! `cat $PASSWDFILE | grep "^$name:"` ] )

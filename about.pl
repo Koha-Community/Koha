@@ -24,6 +24,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use DateTime::TimeZone;
+use File::Spec;
 use List::MoreUtils qw/ any /;
 use LWP::Simple;
 use Module::Load::Conditional qw(can_load);
@@ -261,10 +262,10 @@ if ( ! defined C4::Context->config('upload_path') ) {
     }
 }
 
-if ( ! defined C4::Context->config('upload_tmp_path') ) {
+if ( ! defined C4::Context->config('tmp_path') ) {
     push @xml_config_warnings, {
-        error                    => 'uploadtmppath_entry_missing',
-        effective_upload_tmp_dir => Koha::UploadedFile->temporary_directory
+        error             => 'tmp_path_entry_missing',
+        effective_tmp_dir => File::Spec->tmpdir
     }
 }
 
