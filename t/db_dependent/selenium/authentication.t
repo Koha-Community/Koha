@@ -72,6 +72,9 @@ SKIP: {
         plan tests => 6;
 
         my $mainpage = $s->opac_base_url . q|opac-main.pl|;
+
+        $driver->get($mainpage . q|?logout.x=1|); # Disconnect first! We are logged in if staff and opac interfaces are separated by ports
+
         $driver->get($mainpage);
         like( $driver->get_title, qr(Koha online catalog), 'Hitting the main page should not redirect to the login form');
 
