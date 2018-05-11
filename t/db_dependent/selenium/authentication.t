@@ -92,7 +92,6 @@ SKIP: {
         like( $driver->get_title, qr(Your library home), 'Patron without permissions should be able to login to the OPAC using the modal');
 
         $driver->find_element('//a[@id="logout"]')->click;
-        $driver->capture_screenshot('1.png');
         $driver->find_element('//div[@id="login"]'); # logged out
 
         # Using the form on the right
