@@ -7,7 +7,7 @@
 --                    guided by Paul POULAIN
 --                      by thd for LibLime
 --
---           Revised to Update No. 25 (December 2017)
+--           Revised to Update No. 26 (April 2018)
 -- *************************************************************
 
 
@@ -1486,6 +1486,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('377', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('377', '1', 'URI des Realweltobjects', 'URI des Realweltobjects', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('377', '2', 'Quelle', 'Quelle', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('377', '3', 'Spezifische Materialangaben', 'Spezifische Materialangaben', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('377', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('377', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('377', 'a', 'Language code', 'Language code', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -1493,12 +1494,14 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('380', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('380', '1', 'URI des Realweltobjects', 'URI des Realweltobjects', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('380', '2', 'Quelle der Ansetzung oder des Terms', 'Quelle der Ansetzung oder des Terms', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('380', '3', 'Spezifische Materialangaben', 'Spezifische Materialangaben', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('380', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('380', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('380', 'a', 'Form des Werks', 'Form des Werks', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', '1', 'URI des Realweltobjects', 'URI des Realweltobjects', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', '2', 'Quelle der Ansetzung oder des Terms', 'Quelle der Ansetzung oder des Terms', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('381', '3', 'Spezifische Materialangaben', 'Spezifische Materialangaben', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('381', 'a', 'Andere unterscheidende Eigenschaft', 'Andere unterscheidende Eigenschaft', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -1522,6 +1525,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('382', 'v', 'Fußnote', 'Fußnote', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', '2', 'Quelle', 'Quelle', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
+		('383', '3', 'Spezifische Materialangaben', 'Spezifische Materialangaben', 0, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', 'a', 'Seriennummer', 'Seriennummer', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
 		('383', 'b', 'Opusnummer', 'Opusnummer', 1, 0, '', 3, '', '', '', NULL, -6, '', '', '', NULL),
@@ -2578,6 +2582,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('730', '0', 'IDN des Normdatensatzes oder Standardnummer', 'IDN des Normdatensatzes oder Standardnummer', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '1', 'URI des Realweltobjects', 'URI des Realweltobjects', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '3', 'Spezifische Materialangaben', 'Spezifische Materialangaben', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
+		('730', '4', 'Code für Beziehungskennzeichnung', 'Code für Beziehungskennzeichnung', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '5', 'Das Unterfeld gibt die Institution an, auf die sich das Feld bezieht', 'Das Unterfeld gibt die Institution an, auf die sich das Feld bezieht', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '6', 'Verknüpfung', 'Verknüpfung', 0, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
 		('730', '8', 'Feldverknüpfung und Reihenfolge', 'Feldverknüpfung und Reihenfolge', 1, 0, '', 7, '', '', '', NULL, -6, '', '', '', NULL),
