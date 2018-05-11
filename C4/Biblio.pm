@@ -1036,6 +1036,8 @@ changes would be passed around in subsequent calls.
 
 =back
 
+=back
+
 =cut
 
 sub GetMarcSubfieldStructure {
