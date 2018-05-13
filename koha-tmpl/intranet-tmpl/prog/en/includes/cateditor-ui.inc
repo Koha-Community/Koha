@@ -1,7 +1,7 @@
-<script src="[% interface %]/lib/codemirror/codemirror-compressed.js"></script>
-<script src="[% interface %]/lib/filesaver.js"></script>
-<script src="[% interface %]/lib/koha/cateditor/marc-mode.js"></script>
-<script src="[% interface %]/lib/require.js"></script>
+[% Asset.js("lib/codemirror/codemirror-compressed.js") %]
+[% Asset.js("lib/filesaver.js") %]
+[% Asset.js("lib/koha/cateditor/marc-mode.js") %]
+[% Asset.js("lib/require.js") %]
 <script>
     var authInfo = {
         [%- FOREACH authtag = authtags -%]
