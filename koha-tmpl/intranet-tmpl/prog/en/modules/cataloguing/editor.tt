@@ -6,8 +6,8 @@
 [% Asset.css("css/datatables.css") %]
 [% Asset.css("lib/codemirror/codemirror.css") %]
 [% Asset.css("css/humanmsg.css") %]
-<script src="[% interface %]/lib/jquery/plugins/humanmsg.js" type="text/javascript"></script>
-<script src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js" type="text/javascript"></script>
+[% Asset.js("js/cataloging.js") %]
+[% Asset.js("lib/jquery/plugins/humanmsg.js") %]
 [% IF ( bidi ) %]
    [% Asset.css("css/right-to-left.css") %]
 [% END %]
