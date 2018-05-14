@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use Test::More tests => 14;
-use Cwd qw(abs_path);
+use File::Basename;
 use File::Temp qw/tempfile/;
 
 use t::lib::Mocks;
@@ -13,8 +13,7 @@ use Koha::Plugins;
 
 BEGIN {
     # Mock pluginsdir before loading Plugins module
-    my $path = abs_path(__FILE__);
-    $path =~ s/(\/[^\/]+){2}$//; # remove db_dependent and filename
+    my $path = dirname(__FILE__) . '/../lib';
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
     use_ok('C4::ImportBatch');
 }
