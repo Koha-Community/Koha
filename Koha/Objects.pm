@@ -383,7 +383,15 @@ sub AUTOLOAD {
     my $method = our $AUTOLOAD;
     $method =~ s/.*:://;
 
-    carp "The method $method is not covered by tests" and return unless grep {/^$method$/} @known_methods;
+
+    unless ( grep { /^$method$/ } @known_methods ) {
+        my $class = ref($self) ? ref($self) : $self;
+        Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
+            error      => sprintf("The method %s->%s is not covered by tests!", $class, $method),
+            show_trace => 1
+        );
+    }
+
     my $r = eval { $self->_resultset->$method(@params) };
     if ( $@ ) {
         carp "No method $method found for " . ref($self) . " " . $@;
