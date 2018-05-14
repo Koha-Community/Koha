@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 15;
+use Test::More tests => 14;
 use Test::Exception;
 use Test::Warn;
 
@@ -95,10 +95,6 @@ subtest 'delete' => sub {
     is( Koha::Patrons->search({ -or => { borrowernumber => [ $patron_1->{borrowernumber}, $patron_2->{borrowernumber}]}})->count, 0, '');
 };
 
-subtest 'not_covered_yet' => sub {
-    plan tests => 1;
-    warning_is { Koha::Patrons->search->not_covered_yet } { carped => 'The method not_covered_yet is not covered by tests' }, "If a method is not covered by tests, the AUTOLOAD method won't execute the method";
-};
 subtest 'new' => sub {
     plan tests => 2;
     my $a_cat_code = 'A_CAT_CODE';
@@ -188,16 +184,18 @@ subtest 'get_column' => sub {
 };
 
 subtest 'Exceptions' => sub {
-    plan tests => 2;
+    plan tests => 7;
 
     my $patron_borrowernumber = $builder->build({ source => 'Borrower' })->{ borrowernumber };
     my $patron = Koha::Patrons->find( $patron_borrowernumber );
 
+    # Koha::Object
     try {
         $patron->blah('blah');
     } catch {
         ok( $_->isa('Koha::Exceptions::Object::MethodNotCoveredByTests'),
             'Calling a non-covered method should raise a Koha::Exceptions::Object::MethodNotCoveredByTests exception' );
+        is( $_->message, 'The method Koha::Patron->blah is not covered by tests!', 'The message raised should contain the package and the method' );
     };
 
     try {
@@ -205,6 +203,23 @@ subtest 'Exceptions' => sub {
     } catch {
         ok( $_->isa('Koha::Exceptions::Object::PropertyNotFound'),
             'Setting a non-existent property should raise a Koha::Exceptions::Object::PropertyNotFound exception' );
+    };
+
+    # Koha::Objects
+    try {
+        Koha::Patrons->search->not_covered_yet;
+    } catch {
+        ok( $_->isa('Koha::Exceptions::Object::MethodNotCoveredByTests'),
+            'Calling a non-covered method should raise a Koha::Exceptions::Object::MethodNotCoveredByTests exception' );
+        is( $_->message, 'The method Koha::Patrons->not_covered_yet is not covered by tests!', 'The message raised should contain the package and the method' );
+    };
+
+    try {
+        Koha::Patrons->not_covered_yet;
+    } catch {
+        ok( $_->isa('Koha::Exceptions::Object::MethodNotCoveredByTests'),
+            'Calling a non-covered method should raise a Koha::Exceptions::Object::MethodNotCoveredByTests exception' );
+        is( $_->message, 'The method Koha::Patrons->not_covered_yet is not covered by tests!', 'The message raised should contain the package and the method' );
     };
 };
 
