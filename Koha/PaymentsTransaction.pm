@@ -312,6 +312,9 @@ sub CompletePayment {
             borrowernumber => $transaction->borrowernumber,
             accountno      => $nextacctno,
         });
+        Koha::Patron::Debarments::DelDebarmentsAfterPayment({
+            borrowernumber => $transaction->borrowernumber
+        });
 
         if ( C4::Context->preference("FinesLog") ) {
             C4::Log::logaction("FINES", 'CREATE',$transaction->borrowernumber,Dumper({
