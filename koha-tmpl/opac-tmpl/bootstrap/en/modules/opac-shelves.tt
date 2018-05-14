@@ -185,7 +185,7 @@
                                             <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                                         </form>
                                         [% IF category == PRIVATE && Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | html %]" class="">Share list</a>
+                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | html %]" class="sharelist">Share list</a>
                                         [% END %]
                                     [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
                                         <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="form-inline">
@@ -699,7 +699,7 @@
                                                         </form>
                                                     [% END %]
                                                     [% IF s.is_private AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                                        <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber |html %]" class="">Share</a>
+                                                        <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber |html %]" class="sharelist">Share</a>
                                                     [% END %]
                                                     [% IF s.is_shared_with( loggedinusernumber ) %]
                                                         <form action="opac-shelves.pl" method="post" class="form-inline">

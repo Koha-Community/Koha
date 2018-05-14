@@ -13,6 +13,7 @@
         [% IF ( loggedinusername ) %]
             <li><a href="/cgi-bin/koha/opac-user.pl">[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</a> <span class="divider">&rsaquo;</span></li>
         [% END %]
+        <li><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <span class="divider">&rsaquo;</span></li>
         <li>Share a list</li>
     </ul> <!-- / .breadcrumb -->
 
@@ -26,10 +27,11 @@
                 </div>
             [% END %]
 
+            <div class="span10">
+                <div id="shareshelf" class="maincontent">
+
 [%# This section contains the essential code for error messages and three operations: invite, confirm_invite and accept. %]
     <h2>Share a list with another patron</h2>
-    <div class="span10">
-        <div id="shareshelf" class="maincontent">
 
     [% IF errcode %]
         [% IF errcode==1 && op %]<div class="alert">The operation [% op | html %] is not supported.</div>[% END %]
