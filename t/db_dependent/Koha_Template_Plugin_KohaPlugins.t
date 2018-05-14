@@ -16,7 +16,7 @@ use C4::Context;
 use t::lib::Mocks;
 
 BEGIN {
-    push( @INC, dirname(__FILE__) );
+    push( @INC, dirname(__FILE__) . '/../lib' );
 
     use_ok('Koha::Plugins');
     use_ok('Koha::Plugins::Handler');
