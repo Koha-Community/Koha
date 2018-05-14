@@ -28,6 +28,7 @@ use Koha::Database;
 use File::Temp qw(tempfile tempdir);
 my $temp_dir = tempdir('Koha_patrons_import_test_XXXX', CLEANUP => 1, TMPDIR => 1);
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 my $builder = t::lib::TestBuilder->new;
 
@@ -81,12 +82,8 @@ warning_is { $result_0 = $patrons_import->import_patrons($params_0) }
 is($result_0, undef, 'Got the expected undef from import_patrons with no file handle');
 
 # Given ... a file handle to file with headers only.
-my $ExtendedPatronAttributes = 0;
-my $context = Test::MockModule->new('C4::Context'); # Necessary mocking for consistent test results.
-$context->mock('preference', sub { my ($mod, $meth) = @_;
-                                    if ( $meth eq 'ExtendedPatronAttributes' ) { return $ExtendedPatronAttributes; }
-                                    if ( $meth eq 'dateformat' ) { return 'us'; }
-                                });
+t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
+t::lib::Mocks::mock_preference('dateformat', 'us');
 
 
 my $csv_headers  = 'cardnumber,surname,firstname,title,othernames,initials,streetnumber,streettype,address,address2,city,state,zipcode,country,email,phone,mobile,fax,dateofbirth,branchcode,categorycode,dateenrolled,dateexpiry,userid,password';
@@ -160,7 +157,7 @@ is($result_3->{invalid}, 1, 'Got the expected 1 invalid result from import_patro
 is($result_3->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons with duplicate userid');
 
 # Given ... a new input and mocked C4::Context
-$ExtendedPatronAttributes = 1; # Updates mocked C4::Preferences result.
+t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
 
 my $new_input_line = '1001,Donna,Sullivan,Mrs,Henry,DS,59,Court,Burrows,Reading,Salt Lake City,Pennsylvania,19605,United States,hsullivan1@purevolume.com,3-(864)009-3006,7-(291)885-8423,1-(879)095-5038,09/19/1970,LPL,PT,03/04/2015,07/01/2015,hsullivan1,8j6P6Dmap';
 my $filename_4 = make_csv($temp_dir, $csv_headers, $new_input_line);
@@ -190,7 +187,7 @@ is($result_4->{imported}, 1, 'Got the expected 1 imported result from import_pat
 is($result_4->{invalid}, 0, 'Got the expected 0 invalid result from import_patrons with extended user');
 is($result_4->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons with extended user');
 
-$context->unmock('preference');
+t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
 
 # Given ... 3 new inputs. One with no branch code, one with unexpected branch code.
 my $input_no_branch   = '1002,Johnny,Reynolds,Mr,Patricia,JR,12,Hill,Kennedy,Saint Louis,Colorado Springs,Missouri,63131,United States,preynolds2@washington.edu,7-(925)314-9514,0-(315)973-8956,4-(510)556-2323,09/18/1967,,PT,05/07/2015,07/01/2015,preynolds2,K3HiDzl';
