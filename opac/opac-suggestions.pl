@@ -196,16 +196,18 @@ my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 
 # Is the person allowed to choose their branch
 if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
+    my $branchcode = $input->param('branchcode') || q{};
 
-# pass the pickup branch along....
-    my $userbranch = '';
-    if (C4::Context->userenv && C4::Context->userenv->{'branch'}) {
-        $userbranch = C4::Context->userenv->{'branch'};
+    if ( !$branchcode && $borrowernumber ) {
+        my $patron = Koha::Patrons->find($borrowernumber);
+        $branchcode = $patron->branchcode;
     }
-    my $branchcode = $input->param('branchcode');
-    unless ( $branchcode ) {
-        my $patron = Koha::Patrons->find( $borrowernumber );
-        $branchcode = $patron->branchcode || $userbranch || '' ;
+
+    if (   !$branchcode
+        && C4::Context->userenv
+        && C4::Context->userenv->{branch} )
+    {
+        $branchcode = C4::Context->userenv->{branch};
     }
 
     $template->param( branchcode => $branchcode );
