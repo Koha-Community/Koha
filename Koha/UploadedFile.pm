@@ -168,10 +168,7 @@ Returns root directory for temporary storage
 
 sub temporary_directory {
     my ( $class ) = @_;
-    my $temporary_directory = ( C4::Context->config('tmp_path') )
-            ? C4::Context->config('tmp_path') . '/uploads'
-            : File::Spec->tmpdir;
-    return $temporary_directory;
+    return C4::Context->config('tmp_path') || File::Spec->tmpdir;
 }
 
 =head3 _type
