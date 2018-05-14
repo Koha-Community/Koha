@@ -11,7 +11,7 @@ function hideColumns(){
     $("#showall").prop("checked", false).parent().removeClass("selected");
     for( i=0; i<valCookie.length; i++ ){
       if(valCookie[i] !== ''){
-        index = valCookie[i] - 2;
+        index = valCookie[i] - 3;
         $("#itemst td:nth-child("+valCookie[i]+"),#itemst th:nth-child("+valCookie[i]+")").toggle();
         $("#checkheader"+index).prop("checked", false).parent().removeClass("selected");
       }
@@ -24,7 +24,7 @@ function hideColumn(num) {
   valCookie = $.cookie("showColumns");
   // set the index of the table column to hide
   $("#"+num).parent().removeClass("selected");
-  var hide = Number(num.replace("checkheader","")) + 2;
+  var hide = Number(num.replace("checkheader","")) + 3;
   // hide header and cells matching the index
   $("#itemst td:nth-child("+hide+"),#itemst th:nth-child("+hide+")").toggle();
   // set or modify cookie with the hidden column's index
@@ -60,7 +60,7 @@ function showColumn(num){
   $("#"+num).parent().addClass("selected");
   valCookie = $.cookie("showColumns");
   // set the index of the table column to hide
-  show = Number(num.replace("checkheader","")) + 2;
+  show = Number(num.replace("checkheader","")) + 3;
   // hide header and cells matching the index
   $("#itemst td:nth-child("+show+"),#itemst th:nth-child("+show+")").toggle();
   // set or modify cookie with the hidden column's index
@@ -82,14 +82,14 @@ function showColumn(num){
 function showAllColumns(){
     $("#selections").checkCheckboxes();
     $("#selections span").addClass("selected");
-    $("#itemst td:nth-child(2),#itemst tr th:nth-child(2)").nextAll().show();
+    $("#itemst td:nth-child(3),#itemst tr th:nth-child(3)").nextAll().show();
     $.removeCookie("showColumns", { path: '/' });
     $("#hideall").prop("checked", false).parent().removeClass("selected");
 }
 function hideAllColumns(){
     $("#selections").unCheckCheckboxes();
     $("#selections span").removeClass("selected");
-    $("#itemst td:nth-child(2),#itemst th:nth-child(2)").nextAll().hide();
+    $("#itemst td:nth-child(3),#itemst th:nth-child(3)").nextAll().hide();
     $("#hideall").prop("checked", true).parent().addClass("selected");
     var cookieString = allColumns.join("/");
     $.cookie("showColumns", cookieString, { expires : date, path: '/' });
