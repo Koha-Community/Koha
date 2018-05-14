@@ -220,8 +220,15 @@ sub generate_edifact_orders {
     my $baskets       = GetBasketsByBasketgroup($basketgroupid);
     my $ean           = get_edifact_ean();
 
-    for my $basket ( @{$baskets} ) {
-        create_edi_order( { ean => $ean, basketno => $basket->{basketno}, } );
+    if($ean) {
+        for my $basket ( @{$baskets} ) {
+            create_edi_order( { ean => $ean, basketno => $basket->{basketno}, } );
+        }
+    } else {
+        my $booksellerid = $input->param('booksellerid') || 0;
+        print $input->redirect('/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=' .
+                               $booksellerid .
+                               '&message=No%20EDIFACT%20Setup');
     }
     return;
 }
@@ -240,6 +247,12 @@ my $op = $input->param('op') || 'display';
 # - display : display the list of all basketgroups for a vendor
 my $booksellerid = $input->param('booksellerid');
 $template->param(booksellerid => $booksellerid);
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+
+my $schema = Koha::Database->new()->schema();
+my $rs = $schema->resultset('VendorEdiAccount')->search(
+    { vendor_id => $booksellerid, } );
+$template->param( ediaccount => ($rs->count > 0));
 
 if ( $op eq "add" ) {
 #
@@ -391,8 +404,17 @@ if ( $op eq "add" ) {
     
 } elsif ( $op eq 'ediprint') {
     my $basketgroupid = $input->param('basketgroupid');
-    generate_edifact_orders( $basketgroupid );
-    exit;
+    if ($template->param( 'ediaccount' )) {
+        generate_edifact_orders( $basketgroupid );
+        exit;
+    } else {
+        $template->param('NoEDIMessage' => 1);
+        my $basketgroups = &GetBasketgroups($booksellerid);
+        my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+        my $baskets = &GetBasketsByBookseller($booksellerid);
+
+        displaybasketgroups($basketgroups, $bookseller, $baskets);
+    }
 }else{
 # no param : display the list of all basketgroups for a given vendor
     my $basketgroups = &GetBasketgroups($booksellerid);
