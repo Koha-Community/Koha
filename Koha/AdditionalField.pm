@@ -1,5 +1,11 @@
 package Koha::AdditionalField;
 
+=head1 NAME
+
+Koha::AdditionalField - Koha::Object derived class for additional fields
+
+=cut
+
 use Modern::Perl;
 
 use base qw(Koha::Object);
@@ -8,23 +14,13 @@ use C4::Context;
 
 sub _type { 'AdditionalField' }
 
-1;
-
-__END__
-
-=head1 NAME
-
-Koha::AdditionalField
-
 =head1 AUTHOR
 
-Jonathan Druart <jonathan.druart at biblibre.com>
+Koha Development Team <http://koha-community.org/>
 
-=head1 COPYRIGHT
+=head1 COPYRIGHT AND LICENSE
 
-Copyright 2013 BibLibre
-
-=head1 LICENSE
+Copyright 2013, 2018 BibLibre
 
 This file is part of Koha.
 
@@ -39,3 +35,11 @@ A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License along
 with Koha; if not, see <http://www.gnu.org/licenses>.
+
+=head1 SEE ALSO
+
+L<Koha::Object>
+
+=cut
+
+1;

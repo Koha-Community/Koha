@@ -59,10 +59,42 @@ sub set_additional_fields {
     }
 }
 
+=head3 additional_field_values
+
+Returns additional field values
+
+    my @values = $foo->additional_field_values;
+
+=cut
+
 sub additional_field_values {
     my ($self) = @_;
 
     return $self->_result->additional_field_values;
 }
+
+=head1 AUTHOR
+
+Koha Development Team <http://koha-community.org/>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright 2018 BibLibre
+
+This file is part of Koha.
+
+Koha is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 3 of the License, or (at your option) any later
+version.
+
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Koha; if not, see <http://www.gnu.org/licenses>.
+
+=cut
 
 1;
