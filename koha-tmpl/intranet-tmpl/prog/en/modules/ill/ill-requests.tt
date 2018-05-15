@@ -452,7 +452,7 @@
                                 </li>
                                 <li class="notesopac">
                                     <label for="notesopac" class="notesopac">Opac notes:</label>
-                                    <textarea name="notesopac" id="notesopac" rows="5">[% request.notesopac %]</textarea>
+                                    <textarea name="notesopac" id="notesopac" rows="5">[% request.notesopac | html %]</textarea>
                                 </li>
                             </ol>
                         </fieldset>
@@ -554,7 +554,7 @@
                                 </div>
                                 <div class="notesopac">
                                     <span class="label notes_opac">Notes:</span>
-                                    <pre>[% request.notesopac %]</pre>
+                                    <pre>[% request.notesopac | html %]</pre>
                                 </div>
                             </div>
                             <div class="rows">

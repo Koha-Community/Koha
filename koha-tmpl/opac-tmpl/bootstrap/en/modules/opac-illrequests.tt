@@ -179,9 +179,9 @@
                                     <li>
                                         <label for="notesopac">Notes:</label>
                                         [% IF !request.completed %]
-                                            <textarea name="notesopac" rows="5" cols="50">[% request.notesopac %]</textarea>
+                                            <textarea name="notesopac" rows="5" cols="50">[% request.notesopac | html %]</textarea>
                                         [% ELSE %]
-                                            [% request.notesopac %]
+                                            [% request.notesopac | html %]
                                         [% END %]
                                     </li>
                                 </ol>
