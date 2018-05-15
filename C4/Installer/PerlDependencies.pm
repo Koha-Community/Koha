@@ -893,6 +893,11 @@ our $PERL_DEPS = {
         required => '0',
         min_ver  => '0.16',
     },
+    'CGI::Emulate::PSGI' => {
+        usage    => 'Plack',
+        required => '1',
+        min_ver  => '0.20',
+    },
 };
 
 1;
