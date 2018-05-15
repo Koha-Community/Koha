@@ -290,7 +290,7 @@ sub get_template_and_user {
         my $all_perms = get_all_subpermissions();
 
         my @flagroots = qw(circulate catalogue parameters borrowers permissions reserveforothers borrow
-          editcatalogue updatecharges management tools editauthorities serials reports acquisition clubs);
+          editcatalogue updatecharges tools editauthorities serials reports acquisition clubs);
 
         # We are going to use the $flags returned by checkauth
         # to create the template's parameters that will indicate
@@ -305,7 +305,6 @@ sub get_template_and_user {
             $template->param( CAN_user_editcatalogue    => 1 );
             $template->param( CAN_user_updatecharges    => 1 );
             $template->param( CAN_user_acquisition      => 1 );
-            $template->param( CAN_user_management       => 1 );
             $template->param( CAN_user_tools            => 1 );
             $template->param( CAN_user_editauthorities  => 1 );
             $template->param( CAN_user_serials          => 1 );
@@ -341,9 +340,6 @@ sub get_template_and_user {
             foreach my $module ( keys %$flags ) {
                 if ( $flags->{$module} == 1 or ref( $flags->{$module} ) ) {
                     $template->param( "CAN_user_$module" => 1 );
-                    if ( $module eq "parameters" ) {
-                        $template->param( CAN_user_management => 1 );
-                    }
                 }
             }
         }

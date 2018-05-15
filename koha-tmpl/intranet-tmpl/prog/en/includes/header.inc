@@ -101,7 +101,7 @@
 
                     <li role="separator" class="loggedin-menu-label divider"></li>
                     [% IF ( IndependentBranches ) %]
-                        [% IF ( CAN_user_management || CAN_user_editcatalogue_edit_catalogue ) %]
+                        [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                     <li>
                         <a class="toplinks" href="/cgi-bin/koha/circ/selectbranchprinter.pl">Set library</a>
                     </li>

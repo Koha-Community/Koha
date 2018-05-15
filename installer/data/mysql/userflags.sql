@@ -9,7 +9,6 @@ INSERT INTO userflags (bit, flag, flagdesc, defaulton) VALUES
 (9,'editcatalogue','Edit catalog (Modify bibliographic/holdings data)',0),
 (10,'updatecharges','Manage patrons fines and fees',0),
 (11,'acquisition','Acquisition and/or suggestion management',0),
-(12,'management','Set library management parameters (deprecated)',0),
 (13,'tools','Use all tools (expand for granular tools permissions)',0),
 (14,'editauthorities','Edit authorities',0),
 (15,'serials','Manage serial subscriptions',0),

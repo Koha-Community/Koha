@@ -10,7 +10,6 @@
     [%- CASE 'editcatalogue' -%]<span>Edit catalog (Modify bibliographic/holdings data)</span>
     [%- CASE 'updatecharges' -%]<span>Manage patrons fines and fees</span>
     [%- CASE 'acquisition' -%]<span>Acquisition and/or suggestion management</span>
-    [%- CASE 'management' -%]<span>Set library management parameters (deprecated)</span>
     [%- CASE 'tools' -%]<span>Use all tools (expand for granular tools permissions)</span>
     [%- CASE 'editauthorities' -%]<span>Edit authorities</span>
     [%- CASE 'serials' -%]<span>Manage serial subscriptions</span>

@@ -409,7 +409,7 @@ sub MockedCheckauth {
         borrowers         => 0,
         catalogue         => 1, circulate         => 0,
         coursereserves    => 0, editauthorities   => 0,
-        editcatalogue     => 0, management        => 0,
+        editcatalogue     => 0,
         parameters        => 0, permissions       => 0,
         plugins           => 0, reports           => 0,
         reserveforothers  => 0, serials           => 0,
