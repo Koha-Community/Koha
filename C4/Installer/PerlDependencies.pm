@@ -872,6 +872,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '5.61',
     },
+    'Session::Token' => {
+        'usage'    => 'Creates random token for secure use',
+        'required' => '0',
+        'min_ver'  => '1.503',
+    },
     'Struct::Diff' => {
         'usage'    => 'Diff installed and available permissions',
         'required' => '0',
