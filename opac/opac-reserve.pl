@@ -267,8 +267,6 @@ if ( $query->param('place_reserve') ) {
 
         my $expiration_date = $query->param("expiration_date_$biblioNum");
 
-      # If a specific item was selected and the pickup branch is the same as the
-      # holdingbranch, force the value $rank and $found.
         my $rank = $biblioData->{rank};
         if ( $itemNum ne '' ) {
             $canreserve = 1 if CanItemBeReserved( $borrowernumber, $itemNum ) eq 'OK';
