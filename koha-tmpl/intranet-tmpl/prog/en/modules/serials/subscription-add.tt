@@ -450,9 +450,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                 </ol>
                             </fieldset>
 
-                            [% IF additional_fields_for_subscription %]
+                            [% IF additional_fields %]
                                 <div id="subscription_additional_fields">
-                                    [% INCLUDE 'additional-fields-entry.inc' available=additional_fields_for_subscription values=additional_fields %]
+                                    [% INCLUDE 'additional-fields-entry.inc' available=additional_fields values=additional_field_values %]
                                 </div>
                             [% END %]
 

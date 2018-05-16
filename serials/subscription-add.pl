@@ -70,10 +70,10 @@ our $firstissuedate;
 
 my $mana_url = C4::Context->config('mana_config');
 $template->param( 'mana_url' => $mana_url );
+my $subscriptionid = $query->param('subscriptionid');
 
 if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 
-    my $subscriptionid = $query->param('subscriptionid');
     $subs = GetSubscription($subscriptionid);
 
     output_and_exit( $query, $cookie, $template, 'unknown_subscription')
@@ -144,7 +144,19 @@ $template->param(
     locations_loop=>$locations_loop,
 );
 
-$template->param( additional_fields_for_subscription => [ Koha::AdditionalFields->search( { tablename => 'subscription' } ) ] );
+my @additional_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
+my %additional_field_values;
+if ($subscriptionid) {
+    my $subscription = Koha::Subscriptions->find($subscriptionid);
+    foreach my $value ($subscription->additional_field_values) {
+        $additional_field_values{$value->field_id} = $value->value;
+    }
+}
+
+$template->param(
+    additional_fields => \@additional_fields,
+    additional_field_values => \%additional_field_values,
+);
 
 my $typeloop = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 

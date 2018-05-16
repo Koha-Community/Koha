@@ -100,7 +100,7 @@ if ( $op eq 'add_form' ) {
         $template->param( is_an_edit => 1);
         $template->param(
             additional_field_values => { map {
-                $_->field->name => $_->value
+                $_->field->id => $_->value
             } Koha::Acquisition::Baskets->find($basketno)->additional_field_values },
         );
     } else {
