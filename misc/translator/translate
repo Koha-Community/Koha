@@ -29,6 +29,8 @@ use LangInstaller;
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Caches;
+
 
 my $verbose     = 0;
 my $pref        = 0;
@@ -68,6 +70,8 @@ if ( $cmd =~ /^(create|install|update|compress|uncompress)$/ ) {
     else {
         $installer->$cmd(\@files);
     }
+
+    Koha::Caches->get_instance()->flush_all if $cmd ne 'update';
 }
 else {
     usage();

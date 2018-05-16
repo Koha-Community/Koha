@@ -231,6 +231,15 @@ init_template_paths()
     PO_DIR="$TRANSLATE_DIR/po"
 }
 
+flush_cache()
+{
+    if [ "$dev" = "" ]; then
+        koha-foreach --enabled "$KOHA_HOME/misc/bin/clear_cache.pl"
+    else
+        koha-shell $dev -c "$KOHA_HOME/misc/bin/clear_cache.pl"
+    fi
+}
+
 # Control variables
 list_all=""
 op=""
@@ -298,11 +307,15 @@ case $op in
     "list")
         list $list_all ;;
     "install")
-        install_lang $language ;;
+        install_lang $language
+        flush_cache
+        ;;
     "update")
         update_lang $language ;;
     "remove")
-        remove_lang $language ;;
+        remove_lang $language
+        flush_cache
+        ;;
     "check")
         check_lang_po_files $language ;;
     *)
