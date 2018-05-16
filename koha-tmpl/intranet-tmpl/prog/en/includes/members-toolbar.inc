@@ -151,10 +151,11 @@ function searchToHold(){
         <a id="duplicate" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% borrowernumber %]&amp;categorycode=[% categorycode %]"><i class="fa fa-copy"></i> Duplicate</a>
     [% END %]
 
+    [% IF CAN_user_circulate_circulate_remaining_permissions %]
     <div class="btn-group">
         <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
             <ul class="dropdown-menu">
-                [% IF ( CAN_user_borrowers ) %]<li><a id="printsummary" href="#">Print summary</a></li>[% END %]
+                <li><a id="printsummary" href="#">Print summary</a></li>
                 <li><a id="printslip" href="#">Print slip</a></li>
                 <li><a id="printquickslip" href="#">Print quick slip</a></li>
                 [% IF Borrowers.HasOverdues( borrowernumber ) %]
@@ -162,6 +163,7 @@ function searchToHold(){
                 [% END %]
             </ul>
     </div>
+    [% END %]
 
     [% IF ( CAN_user_reserveforothers ) %]
         <a id="searchtohold" class="btn btn-default btn-sm" href="#"><i class="fa fa-search"></i> Search to hold</a>
