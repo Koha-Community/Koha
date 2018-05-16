@@ -813,7 +813,7 @@ then
     service apache2 restart
 
     # Start Zebra.
-    koha-zebra --start "$name"
+    koha-start-zebra "$name"
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         # Start Indexer daemon
