@@ -23,9 +23,9 @@
     <option value="bc">Barcode</option>
     <option value="location">Shelving location</option>
     [% IF ( Koha.Preference('IntranetNumbersPreferPhrase') ) %]
-    <option value="sn,phr">Standard number</option>
+    <option value="ident,phr">Standard number</option>
     [% ELSE %]
-    <option value="sn">Standard number</option>
+    <option value="ident">Standard number</option>
     [% END %]
     <option value="nb">&nbsp;&nbsp;&nbsp;&nbsp; ISBN</option>
     <option value="ns">&nbsp;&nbsp;&nbsp;&nbsp; ISSN</option>
