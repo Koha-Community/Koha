@@ -373,6 +373,8 @@ $template->param(
     PatronsPerPage => C4::Context->preference("PatronsPerPage") || 20,
     relatives_issues_count => $relatives_issues_count,
     relatives_borrowernumbers => \@relatives,
+    userUrl => C4::Context->preference("PersonalInterfaceURL"),
+    logUrl => C4::Context->preference("LogInterfaceURL")
 );
 
 C4::Log::logaction("MEMBERS", "VIEW", $borrowernumber, "Details page") if C4::Context->preference("BorrowersViewLog");
