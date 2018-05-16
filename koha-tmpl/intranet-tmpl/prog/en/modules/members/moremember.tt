@@ -540,6 +540,9 @@ function validate1(date) {
                 </a>
             </li>
         [% END %]
+        [% IF CAN_user_tools_manage_patron_lists%]
+            <li><a id="patrondata-tab-link" href="#patrondata">Patron's data</a></li>
+        [% END %]
     </ul>
 
 [% INCLUDE "checkouts-table.inc" %]
@@ -582,6 +585,18 @@ function validate1(date) {
 [% END %]
 
 [% INCLUDE borrower_debarments.inc %]
+
+<div id="patrondata">
+    [% IF CAN_user_tools_manage_patron_lists %]
+        <p>Print or send patron's complete Koha data.</p>
+        <div class="buttons">
+            <button id="printData" class="btn btn-default" style="font-size:12px;"><i class="fa fa-print" aria-hidden="true"></i> Print data for patron</button>
+            <button id="sendData" data-toggle="modal" data-target="#sendModal" class="btn btn-default" style="font-size:12px;"><i class="fa fa-envelope" aria-hidden="true"></i> Send data to patron</button>
+            [% INCLUDE 'patron-data-send.inc' %]
+        </div>
+        <div class="w-100 text-center mt-5 spinner-wrapper hidden"><i class="fa fa-spinner fa-spin" style="font-size:40px;"></i></div>
+    [% END %]
+</div>
 
 <div id="reserves">
 [% IF ( holds_count ) %]
