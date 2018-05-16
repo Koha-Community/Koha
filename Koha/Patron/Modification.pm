@@ -144,7 +144,7 @@ sub approve {
 
     $patron->set($data);
     my $logdata = getModifiedPatronFieldsForLogs($data);
-    logaction("MEMBERS", "MODIFY", $self->borrowernumber, "Approved patron's change request: $logdata") if C4::Context->preference("BorrowersLog");
+    logaction("MEMBERS", "MODIFY", $self->borrowernumber, "Approved patron's change request: $logdata") if C4::Context->preference("BorrowersLog") && $logdata;
 
     # Take care of extended attributes
     if ( $self->extended_attributes ) {
@@ -234,7 +234,7 @@ sub deny {
 
     my $logdata = C4::Members::getModifiedPatronFieldsForLogs($data);
 
-    logaction("MEMBERS", "MODIFY", $self->borrowernumber, "Denied patron's change request: $logdata") if C4::Context->preference("BorrowersLog");
+    logaction("MEMBERS", "MODIFY", $self->borrowernumber, "Denied patron's change request: $logdata") if C4::Context->preference("BorrowersLog") && $logdata;
 
     return $self->delete();
 }
