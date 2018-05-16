@@ -441,7 +441,7 @@ sub ModMember {
             # Try to do the live sync
             Koha::NorwegianPatronDB::NLSync({ 'borrowernumber' => $data{'borrowernumber'} });
         }
-        logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATED FIELD(S): $logdata") if C4::Context->preference("BorrowersLog");
+        logaction("MEMBERS", "MODIFY", $data{'borrowernumber'}, "UPDATED FIELD(S): $logdata") if C4::Context->preference("BorrowersLog") && $logdata;
     }
     return $execute_success;
 }
