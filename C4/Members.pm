@@ -1643,7 +1643,9 @@ sub getModifiedPatronFieldsForLogs {
     my $olddata = Koha::Patrons->find( $data->{borrowernumber} )->unblessed;
 
     foreach my $key ( keys %$data ) {
-        $logdata .= $key." => ".$data->{$key}.", " if ( $olddata->{$key} ne $data->{$key});
+        my $od = defined $olddata->{$key} ? $olddata->{$key} : 'undef';
+        my $nd = defined $data->{$key} ? $data->{$key} : 'undef';
+        $logdata .= $key.": $od => $nd, " if ( $olddata->{$key} ne $data->{$key});
     }
 
     $logdata =~ s/,\s+$//;
