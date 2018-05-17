@@ -70,11 +70,6 @@ __PACKAGE__->table("accountlines");
   data_type: 'longtext'
   is_nullable: 1
 
-=head2 dispute
-
-  data_type: 'longtext'
-  is_nullable: 1
-
 =head2 accounttype
 
   data_type: 'varchar'
@@ -139,8 +134,6 @@ __PACKAGE__->add_columns(
   "amount",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "description",
-  { data_type => "longtext", is_nullable => 1 },
-  "dispute",
   { data_type => "longtext", is_nullable => 1 },
   "accounttype",
   { data_type => "varchar", is_nullable => 1, size => 5 },
@@ -243,8 +236,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-04-19 12:18:02
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FUX/e/s202yrUtP3c13lfw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-05-16 17:00:24
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pygYYKxFDRLX97PyeUeLvg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
