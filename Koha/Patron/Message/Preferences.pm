@@ -19,10 +19,14 @@ package Koha::Patron::Message::Preferences;
 
 use Modern::Perl;
 
+use C4::Context;
+
 use Koha::Database;
 use Koha::Patron::Message::Attributes;
 use Koha::Patron::Message::Preference;
 use Koha::Patron::Message::Transports;
+
+use Data::Dumper;
 
 use base qw(Koha::Objects);
 
@@ -152,6 +156,26 @@ sub TO_JSON {
     }
 
     return $preferences;
+}
+
+sub _log_action_buffer {
+    return 0 unless C4::Context->preference("BorrowersLog");
+    my $self = shift;
+    my ($logEntries, $borrowernumber) = @_;
+    return 0 unless $logEntries;
+
+    if (scalar(@$logEntries)) {
+        my $d = Data::Dumper->new([$logEntries]);
+        $d->Indent(0);
+        $d->Purity(0);
+        $d->Terse(1);
+        C4::Log::logaction('MEMBERS', 'MOD MTT', $borrowernumber, $d->Dump($logEntries));
+    }
+    else {
+        C4::Log::logaction('MEMBERS', 'MOD MTT', $borrowernumber, 'All message_transport_types removed')
+    }
+
+    return 1;
 }
 
 =head3 type

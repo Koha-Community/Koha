@@ -20,7 +20,6 @@ package C4::Form::MessagingPreferences;
 use strict;
 use warnings;
 
-use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Debug;
@@ -145,12 +144,12 @@ sub handle_form_action {
             categorycode => $categorycode || $updater->{'categorycode'},
         });
         unless ($preference) {
-            Koha::Patron::Message::Preference->new($updater)->store;
+            $preference = Koha::Patron::Message::Preference->new($updater)->store;
         } else {
             $preference->set($updater)->store;
         }
 
-        _pushToActionLogBuffer($logEntries, $updater, $option);
+        $preference->_push_to_action_buffer($logEntries);
 
 	if ($query->param( $option->{'message_attribute_id'})){
 	    $prefs_set = 1;
@@ -165,7 +164,7 @@ sub handle_form_action {
     # show the success message
     $template->param( settings_updated => 1 );
 
-    _writeActionLogBuffer($logEntries, $borrowernumber);
+    Koha::Patron::Message::Preferences->_log_action_buffer($logEntries, $borrowernumber);
 }
 
 =head2 set_form_values
@@ -225,37 +224,6 @@ sub _transport_set {
     my ($name, @transport_methods) = @_;
 
     return List::MoreUtils::firstidx { $_ eq $name } @transport_methods;
-}
-
-sub _pushToActionLogBuffer {
-    return unless C4::Context->preference("BorrowersLog");
-    my ($logEntries, $updater, $option) = @_;
-
-    if ($updater->{message_transport_types} && scalar(@{$updater->{message_transport_types}})) {
-        my $entry = {};
-        $entry->{cc}   = $updater->{categorycode}    if $updater->{categorycode};
-        $entry->{dig}  = $updater->{wants_digest}    if $updater->{wants_digest};
-        $entry->{da}   = $updater->{days_in_advance} if $updater->{days_in_advance};
-        $entry->{mtt}  = $updater->{message_transport_types};
-        $entry->{_name} = $option->{message_name};
-        push(@$logEntries, $entry);
-    }
-}
-
-sub _writeActionLogBuffer {
-    return unless C4::Context->preference("BorrowersLog");
-    my ($logEntries, $borrowernumber) = @_;
-
-    if (scalar(@$logEntries)) {
-        my $d = Data::Dumper->new([$logEntries]);
-        $d->Indent(0);
-        $d->Purity(0);
-        $d->Terse(1);
-        C4::Log::logaction('MEMBERS', 'MOD MTT', $borrowernumber, $d->Dump($logEntries));
-    }
-    else {
-        C4::Log::logaction('MEMBERS', 'MOD MTT', $borrowernumber, 'All message_transports removed')
-    }
 }
 
 =head1 TODO

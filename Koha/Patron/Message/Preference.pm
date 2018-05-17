@@ -583,6 +583,41 @@ sub _validate_message_transport_types {
     }
 }
 
+sub _push_to_action_buffer {
+    return unless C4::Context->preference("BorrowersLog");
+    my $self = shift;
+    my ($logEntries) = @_;
+    return unless $logEntries;
+    Koha::Exceptions::MissingParameter->throw(
+        error => 'You must pass an array reference to '.
+                 'Koha::Patron::Message::Preference::_push_to_action_buffer'
+    ) if ref($logEntries) ne 'ARRAY';
+
+    my @mtts = keys %{$self->message_transport_types};
+    if (@mtts) {
+        my $entry = {};
+        $entry->{cc}   = $self->categorycode    if $self->categorycode;
+        $entry->{dig}  = $self->wants_digest    if $self->wants_digest;
+        $entry->{da}   = $self->days_in_advance if $self->days_in_advance;
+        $entry->{mtt}  = \@mtts;
+        $entry->{_name} = $self->message_name;
+        push(@$logEntries, $entry);
+    }
+
+    return $logEntries;
+}
+
+sub _log_action_buffer {
+    my $self = shift;
+    my ($logEntries, $borrowernumber) = @_;
+    $borrowernumber //= defined $self->borrowernumber
+        ? $self->borrowernumber : undef;
+
+    Koha::Patron::Message::Preferences->_log_action_buffer(
+        $logEntries, $borrowernumber
+    );
+}
+
 =head3 type
 
 =cut

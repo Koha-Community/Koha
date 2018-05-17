@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -361,6 +361,55 @@ subtest 'Add preferences from defaults' => sub {
     is(Koha::Patron::Message::Transport::Preferences->search({
         borrower_message_preference_id => $pref->borrower_message_preference_id
     })->count, 2, 'Found the two transport types that we set earlier');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Test action logging' => sub {
+    plan tests => 8;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference('BorrowersLog', 1);
+
+    my $patron = build_a_test_patron();
+    my ($default, $mtt1, $mtt2) = build_a_test_category_preference({
+        patron => $patron,
+    });
+    Koha::Patron::Message::Preference->new_from_default({
+        borrowernumber       => $patron->borrowernumber,
+        categorycode         => $patron->categorycode,
+        message_attribute_id => $default->message_attribute_id,
+    })->store;
+    my $pref = Koha::Patron::Message::Preferences->find({
+        borrowernumber       => $patron->borrowernumber,
+        message_attribute_id => $default->message_attribute_id,
+    });
+
+    my $actionLog = [];
+    $pref->_push_to_action_buffer($actionLog);
+    is(ref($actionLog), 'ARRAY', 'Action log is an array');
+    is(@{$actionLog}, 1, 'One element in action log');
+    is($actionLog->[0]->{_name}, $pref->message_name, 'Correct message name');
+    is(@{$actionLog->[0]->{mtt}}, keys %{$pref->message_transport_types},
+       'Correct mtts');
+
+    # Let's push it another time for the lulz
+    $pref->_push_to_action_buffer($actionLog);
+    is(@{$actionLog}, 2, 'Two elements in action log');
+
+    $pref->_log_action_buffer($actionLog, $patron->borrowernumber);
+    my $logs = C4::Log::GetLogs("","","",["MEMBERS"],["MOD MTT"],
+        $patron->borrowernumber,"");
+    is($logs->[0]->{action}, 'MOD MTT', 'Correct log action');
+    is($logs->[0]->{object}, $patron->borrowernumber, 'Correct borrowernumber');
+
+    # Test empty action log buffer
+    my $patron2 = build_a_test_patron();
+    $pref->_log_action_buffer([], $patron2->borrowernumber);
+    $logs = C4::Log::GetLogs("","","",["MEMBERS"],["MOD MTT"],
+        $patron2->borrowernumber,"");
+    is($logs->[0]->{info}, 'All message_transport_types removed', 'All message_transport_types removed');
 
     $schema->storage->txn_rollback;
 };
