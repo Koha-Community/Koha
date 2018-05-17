@@ -548,7 +548,7 @@
                             <div class="rows">
                                 <h4>Details from supplier ([% request.backend | html %])</h4>
                                 [% FOREACH meta IN request.metadata %]
-                                    <div class="requestmeta-[% meta.key | html %]">
+                                    <div class="requestmeta-[% meta.key.replace('\s','_') | html %]">
                                         <span class="label">[% meta.key | html %]:</span>
                                         [% meta.value | html %]
                                     </div>
