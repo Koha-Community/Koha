@@ -4176,7 +4176,8 @@ DROP TABLE IF EXISTS `illrequestattributes`;
 CREATE TABLE illrequestattributes (
     illrequest_id bigint(20) unsigned NOT NULL, -- ILL request number
     type varchar(200) NOT NULL,                 -- API ILL property name
-    value MEDIUMTEXT NOT NULL,                        -- API ILL property value
+    value MEDIUMTEXT NOT NULL,                  -- API ILL property value
+    readonly tinyint(1) NOT NULL DEFAULT 1,     -- Is this attribute read only
     PRIMARY KEY  (`illrequest_id`, `type` (191)),
     CONSTRAINT `illrequestattributes_ifk`
       FOREIGN KEY (illrequest_id)
