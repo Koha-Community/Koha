@@ -817,6 +817,11 @@ our $PERL_DEPS = {
         required => 1,
         min_ver => '1.00',
     },
+    'Selenium::Remote::Driver' => {
+        usage    => 'Testing suite',
+        required => 0,
+        min_ver  => '1.27'
+    },
     'Sereal::Encoder' => {
         'usage'    => 'Caching',
         'required' => '1',
