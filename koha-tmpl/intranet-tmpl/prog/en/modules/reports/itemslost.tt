@@ -87,7 +87,7 @@
                         </td>
                         <td>[% item.biblio.author %]</td>
                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) %]
-                        <td><span title="[% item.itemlost_on %]"</span>[% item.itemlost_on | $KohaDates %]</span></td>
+                        <td><span title="[% item.itemlost_on %]">[% item.itemlost_on | $KohaDates %]</span></td>
                         <td>
                             <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.barcode %]</a>
                         </td>
