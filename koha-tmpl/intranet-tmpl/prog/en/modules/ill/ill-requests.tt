@@ -402,7 +402,7 @@
                             <ol>
                                 <li class="borrowernumber">
                                     <label for="borrowernumber">Patron ID:</label>
-                                    <input name="borrowernumber" id="borrowernumber" type="text" value="[% request.borrowernumber | html %]">
+                                    [% request.borrowernumber | html %]
                                 </li>
                                 <li class="biblio_id">
                                     <label for="biblio_id" class="biblio_id">Bibliographic record ID:</label>
@@ -449,6 +449,7 @@
                             <input type="hidden" value="edit_action" name="method">
                             <input type="hidden" value="form" name="stage">
                             <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
+                            <input type="hidden" value="[% request.borrowernumber | html %]" name="borrowernumber">
                             <input type="submit" value="Submit">
                             <a class="cancel" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]">Cancel</a>
                         </fieldset>
