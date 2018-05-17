@@ -147,7 +147,7 @@ subtest 'list() tests' => sub {
 };
 
 subtest 'edit() tests' => sub {
-    plan tests => 28;
+    plan tests => 29;
 
     $schema->storage->txn_begin;
 
@@ -250,6 +250,16 @@ subtest 'edit() tests' => sub {
                 $mtt2->message_transport_type => Mojo::JSON->false)
       ->json_is('/'.$preference->message_name.'/transport_types/'.
                 $mtt1->message_transport_type => Mojo::JSON->true);
+
+    subtest 'Ensure things get logged' => sub {
+        plan tests => 3;
+
+        my $logs = C4::Log::GetLogs("","","",["MEMBERS"],["MOD MTT"],
+        $patron->borrowernumber,"");
+        is($logs->[0]->{action}, 'MOD MTT', 'Correct log action');
+        is($logs->[0]->{object}, $patron->borrowernumber, 'Correct borrowernumber');
+        is($logs->[0]->{interface}, 'rest', 'REST interface');
+    };
 
     Koha::Patron::Message::Transports->search({
         message_attribute_id => $preference->message_attribute_id,

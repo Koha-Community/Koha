@@ -73,6 +73,7 @@ sub edit {
 
     return try {
         die unless $found;
+        my $actionLog = [];
         foreach my $in (keys %{$body}) {
             my $preference =
                 Koha::Patron::Message::Preferences->find_with_message_name({
@@ -119,12 +120,14 @@ sub edit {
                 } else {
                     $edited_preference->{'categorycode'}=$found->categorycode;
                 }
-                Koha::Patron::Message::Preference->new($edited_preference)->store;
+                $preference = Koha::Patron::Message::Preference->new(
+                    $edited_preference)->store;
             }
             # Otherwise, modify the already-existing one
             else {
                 $preference->set($edited_preference)->store;
             }
+            $preference->_push_to_action_buffer($actionLog);
         }
 
         # Finally, return the preferences
@@ -132,6 +135,7 @@ sub edit {
             borrowernumber => $borrowernumber,
             categorycode   => $categorycode,
         });
+        $preferences->_log_action_buffer($actionLog, $borrowernumber);
 
         return $c->render( status => 200, openapi => $preferences);
     }
