@@ -4153,7 +4153,8 @@ CREATE TABLE illrequests (
     completed date DEFAULT NULL,                -- Date the request was completed
     medium varchar(30) DEFAULT NULL,            -- The Koha request type
     accessurl varchar(500) DEFAULT NULL,        -- Potential URL for accessing item
-    cost varchar(20) DEFAULT NULL,              -- Cost of request
+    cost varchar(20) DEFAULT NULL,              -- Quotes cost of request
+    price_paid varchar(20) DEFAULT NULL,              -- Final cost of request
     notesopac MEDIUMTEXT DEFAULT NULL,                -- Patron notes attached to request
     notesstaff MEDIUMTEXT DEFAULT NULL,               -- Staff notes attached to request
     orderid varchar(50) DEFAULT NULL,           -- Backend id attached to request
