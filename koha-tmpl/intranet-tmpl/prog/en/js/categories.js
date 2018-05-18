@@ -60,7 +60,8 @@ $(document).ready(function() {
                     return $("#enrolmentperioddate").val() === "";
                 },
                 digits: true,
-                enrollment_period: true
+                enrollment_period: true,
+                min: 1
             },
             enrolmentperioddate: {
                 required: function(element){
