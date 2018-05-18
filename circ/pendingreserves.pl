@@ -207,6 +207,10 @@ sub check_issuingrules {
     my $rotColUrl = "/cgi-bin/koha/rotating_collections/addItems.pl?colId=";
     foreach my $itemnumber (@itemnumbers) {
         my $item = Koha::Items->find( $itemnumber );
+        if (!defined($item)) {
+            warn "item $itemnumber is not defined";
+            next;
+        }
         my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
             {   categorycode => $borrower->{categorycode},
                 itemtype     => $item->itype,
