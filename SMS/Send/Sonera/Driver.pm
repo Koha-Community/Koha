@@ -22,20 +22,18 @@ package SMS::Send::Sonera::Driver;
 #use Modern::Perl; #Can't use this since SMS::Send uses hash keys starting with _
 use utf8;
 use SMS::Send::Driver ();
-use LWP::Curl;
+use LWP::Simple;
 use LWP::UserAgent;
-use URI::Escape;
 use C4::Context;
 use Encode;
 use Koha::Exception::ConnectionFailed;
 use Koha::Exception::SMSDeliveryFailure;
-
-use Try::Tiny;
+use URI::Escape;
 
 use vars qw{$VERSION @ISA};
 BEGIN {
-        $VERSION = '0.06';
-                @ISA     = 'SMS::Send::Driver';
+    $VERSION = '0.06';
+    @ISA     = 'SMS::Send::Driver';
 }
 
 
@@ -43,42 +41,42 @@ BEGIN {
 # Constructor
 
 sub new {
-        my $class = shift;
-        my $params = {@_};
+    my $class = shift;
+    my $params = {@_};
 
-        my $username = $params->{_login} ? $params->{_login} : C4::Context->config('smsProviders')->{'sonera'}->{'user'};
-        my $password = $params->{_password} ? $params->{_password} : C4::Context->config('smsProviders')->{'sonera'}->{'passwd'};
+    my $username = $params->{_login} ? $params->{_login} : C4::Context->config('smsProviders')->{'sonera'}->{'user'};
+    my $password = $params->{_password} ? $params->{_password} : C4::Context->config('smsProviders')->{'sonera'}->{'passwd'};
 
-        my $from = $params->{_from};
-        
-        if (! defined $username ) {
-            warn "->send_sms(_login) must be defined!";
-            return;
-        }
-        if (! defined $password ) {
-            warn "->send_sms(_password) must be defined!";
-            return;
-        }
+    my $from = $params->{_from};
+    
+    if (! defined $username ) {
+        warn "->send_sms(_login) must be defined!";
+        return;
+    }
+    if (! defined $password ) {
+        warn "->send_sms(_password) must be defined!";
+        return;
+    }
 
-        if (! defined $from ) {
-            warn "->send_sms(_from) must be defined!";
-            return;
-        }
+    if (! defined $from ) {
+        warn "->send_sms(_from) must be defined!";
+        return;
+    }
 
-        #Prevent injection attack
-        $self->{_login} =~ s/'//g;
-        $self->{_password} =~ s/'//g;
-        $self->{_from} =~ s/'//g;
+    #Prevent injection attack
+    $self->{_login} =~ s/'//g;
+    $self->{_password} =~ s/'//g;
+    $self->{_from} =~ s/'//g;
 
-        # Create the object
-        my $self = bless {}, $class;
+    # Create the object
+    my $self = bless {}, $class;
 
-        $self->{UserAgent} = LWP::UserAgent->new(timeout => 5);
-        $self->{_login} = $username;
-        $self->{_password} = $password;
-        $self->{_from} = $from;
+    $self->{UserAgent} = LWP::UserAgent->new(timeout => 5);
+    $self->{_login} = $username;
+    $self->{_password} = $password;
+    $self->{_from} = $from;
 
-        return $self;
+    return $self;
 }
 
 sub send_sms {
@@ -104,40 +102,37 @@ sub send_sms {
         return;
     }
 
+    #Clean recipientnumber
+    $recipientNumber =~ s/^\+//;
+    $recipientNumber =~ s/^0/358/;
+    $recipientNumber =~ s/\-//;
+    $recipientNumber =~ s/ //;
     #Prevent injection attack!
     $recipientNumber =~ s/'//g;
     $message =~ s/(")|(\$\()|(`)/\\"/g; #Sanitate " so it won't break the system( iconv'ed curl command )
 
     my $base_url = C4::Context->config('smsProviders')->{'sonera'}->{'url'};
     my $parameters = {
-        'username'   => $self->{_login},
-        'password'   => $self->{_password},
-        'to'         => $recipientNumber,
-        'message'    => Encode::encode( "utf8", $message),
+        'U'   => $self->{_login},
+        'P'   => $self->{_password},
+        'T'         => $recipientNumber,
+        'M'    =>  Encode::encode( "iso-8859-1", $message)
     };
 
     if ($clientid) {
-        $parameters->{'costcenter'} = $clientid;
+        $parameters->{'C'} = $clientid;
     }
 
     if (C4::Context->config('smsProviders')->{'sonera'}->{'sourceName'}) {
-        $parameters->{'from'} = C4::Context->config('smsProviders')->{'sonera'}->{'sourceName'};
+        $parameters->{'F'} = C4::Context->config('smsProviders')->{'sonera'}->{'sourceName'};
     }
 
-    my $lwpcurl = LWP::Curl->new();
-    my $return;
-    try {
-        $return = $lwpcurl->post($base_url, $parameters);
-    } catch {
-        if ($_ =~ /Couldn't resolve host name \(6\)/) {
-            Koha::Exception::ConnectionFailed->throw(error => "Connection failed");
-        }
-        die $_;
-    };
+    $parameters->{'M'} = uri_escape($parameters->{'M'});
+    $parameters->{'P'} = uri_escape($parameters->{'P'});
 
-    if ($lwpcurl->{retcode} == 6) {
-        Koha::Exception::ConnectionFailed->throw(error => "Connection failed");
-    }
+    my $get_request = '?U='.$parameters->{'U'}.'&P='.$parameters->{'P'}.'&F='.$parameters->{'F'}.'&T='.$parameters->{'T'}.'&M='.$parameters->{'M'};
+
+    my $return = get($base_url.$get_request);
 
     my $delivery_note = $return;
 
@@ -151,3 +146,4 @@ sub send_sms {
     Koha::Exception::SMSDeliveryFailure->throw(error => $delivery_note);
 }
 1;
+
