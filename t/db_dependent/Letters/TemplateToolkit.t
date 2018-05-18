@@ -555,8 +555,8 @@ You have [% count %] items due
 EOF
 
         reset_template( { template => $template, code => $code, module => 'circulation' } );
-        my $letter_for_item1 = C4::Reserves::ReserveSlip( $library->{branchcode}, $patron->{borrowernumber}, $biblio1->{biblionumber} );
-        my $letter_for_item2 = C4::Reserves::ReserveSlip( $library->{branchcode}, $patron->{borrowernumber}, $biblio2->{biblionumber} );
+        my $letter_for_item1 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio1->{biblionumber} } );
+        my $letter_for_item2 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio2->{biblionumber} } );
 
         my $tt_template = <<EOF;
 <h5>Date: [% today | \$KohaDates with_hours => 1 %]</h5>
@@ -589,8 +589,8 @@ EOF
 EOF
 
         reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
-        my $tt_letter_for_item1 = C4::Reserves::ReserveSlip( $library->{branchcode}, $patron->{borrowernumber}, $biblio1->{biblionumber} );
-        my $tt_letter_for_item2 = C4::Reserves::ReserveSlip( $library->{branchcode}, $patron->{borrowernumber}, $biblio2->{biblionumber} );
+        my $tt_letter_for_item1 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio1->{biblionumber} } );
+        my $tt_letter_for_item2 = C4::Reserves::ReserveSlip( { branchcode => $library->{branchcode}, borrowernumber => $patron->{borrowernumber}, biblionumber => $biblio2->{biblionumber} } );
 
         is( $tt_letter_for_item1->{content}, $letter_for_item1->{content}, );
         is( $tt_letter_for_item2->{content}, $letter_for_item2->{content}, );
