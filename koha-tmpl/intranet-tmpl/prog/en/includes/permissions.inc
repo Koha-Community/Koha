@@ -45,10 +45,11 @@
     [%- CASE 'fast_cataloging' -%]<span>Fast cataloging</span>
     [%- CASE 'remaining_permissions' -%]<span>Remaining permissions for managing fines and fees</span>
     [%- CASE 'writeoff' -%]<span>Write off fines and fees</span>
-    [%- CASE 'budget_add_del' -%]<span>Add and delete funds (but can't modify funds)</span>
-    [%- CASE 'budget_manage' -%]<span>Manage funds</span>
-    [%- CASE 'budget_manage_all' -%]<span>Manage all funds</span>
-    [%- CASE 'budget_modify' -%]<span>Modify funds (can't create lines, but can modify existing ones)</span>
+    [%- CASE 'suggestions_manage' -%]<span>Manage purchase suggestions</span>
+    [%- CASE 'budget_add_del' -%]<span>Add and delete budgets (but can't modify budgets)</span>
+    [%- CASE 'budget_manage' -%]<span>Manage budgets</span>
+    [%- CASE 'budget_manage_all' -%]<span>Manage all budgets</span>
+    [%- CASE 'budget_modify' -%]<span>Modify budget (can't create lines, but can modify existing ones)</span>
     [%- CASE 'contracts_manage' -%]<span>Manage contracts</span>
     [%- CASE 'group_manage' -%]<span>Manage basket groups</span>
     [%- CASE 'order_manage' -%]<span>Manage basket and order lines</span>

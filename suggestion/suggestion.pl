@@ -111,7 +111,7 @@ my ( $template, $borrowernumber, $cookie, $userflags ) = get_template_and_user(
             template_name   => "suggestion/suggestion.tt",
             query           => $input,
             type            => "intranet",
-            flagsrequired   => { catalogue => 1 },
+            flagsrequired   => { acquisition => 'suggestions_manage' },
         }
     );
 
