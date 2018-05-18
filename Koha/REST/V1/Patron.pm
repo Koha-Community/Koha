@@ -38,6 +38,7 @@ use Try::Tiny;
 sub list {
     my $c = shift->openapi->valid_input or return;
 
+    my $user = $c->stash('koha.user');
     my $params = $c->req->query_params->to_hash;
     my $patrons;
     if (keys %$params) {
@@ -53,10 +54,11 @@ sub list {
     # TODO Koha-Suomi: Remove this ugly hack below and replace huge return arrays
     #      with pagination feature (already implemented in Koha 17.11 onwards)
     # Safety switch to avoid spamming action log with thousands of lines:
-    my $log = $patrons->count < 100 if C4::Context->preference('BorrowersLog');
+    my $log = $patrons->count < 100 if C4::Context->preference('BorrowersViewLog');
 
-    if ($log) {
+    if (!$c->stash('is_owner_access') && $log) {
         foreach my $patron (@{$patrons->as_list}) {
+            next if $patron->borrowernumber == $user->borrowernumber;
             C4::Log::logaction('MEMBERS', 'VIEW', $patron->borrowernumber, '');
         }
     }
@@ -67,6 +69,7 @@ sub list {
 sub get {
     my $c = shift->openapi->valid_input or return;
 
+    my $user = $c->stash('koha.user');
     my $borrowernumber = $c->validation->param('borrowernumber');
     my $patron = Koha::Patrons->find($borrowernumber);
 
@@ -74,7 +77,10 @@ sub get {
         return $c->render(status => 404, openapi => { error => "Patron not found." });
     }
 
-    if (C4::Context->preference('BorrowersLog')) {
+    if (!$c->stash('is_owner_access')                    &&
+        $patron->borrowernumber != $user->borrowernumber &&
+        C4::Context->preference('BorrowersViewLog'))
+    {
         C4::Log::logaction('MEMBERS', 'VIEW', $patron->borrowernumber, '');
     }
 
@@ -325,7 +331,7 @@ sub changepassword {
 
         if (C4::Context->preference('BorrowersLog')) {
             C4::Log::logaction('MEMBERS', 'MODIFY', $patron->borrowernumber,
-                "Password change");
+                "Change password");
         }
 
         return $c->render(status => 200, openapi => {});
@@ -381,7 +387,7 @@ sub getstatus {
         my %problems = map { ref($_) => $_ } $patron->status_not_ok;
         $ret->{blocks} = Koha::Availability->_swaggerize_exception(\%problems);
 
-        if (C4::Context->preference('BorrowersLog')) {
+        if (C4::Context->preference('BorrowersViewLog')) {
             C4::Log::logaction('MEMBERS', 'VIEW', $patron->borrowernumber,
                                'Patron status request');
         }
