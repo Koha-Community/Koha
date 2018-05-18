@@ -13,7 +13,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'letters-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form or copy_form) %][% IF ( modify ) %]<a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Modify notice[% ELSE %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Add notice[% END %][% ELSE %][% IF ( add_validate or copy_validate) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Notice added[% ELSE %][% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; Slips</a> &rsaquo; Confirm deletion[% ELSE %]Notices &amp; Slips[% END %][% END %][% END %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo; [% IF ( add_form or copy_form) %][% IF ( modify ) %]<a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a> &rsaquo; Modify notice[% ELSE %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a> &rsaquo; Add notice[% END %][% ELSE %][% IF ( add_validate or copy_validate) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a> &rsaquo; Notice added[% ELSE %][% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/tools/letter.pl">Notices &amp; slips</a> &rsaquo; Confirm deletion[% ELSE %]Notices &amp; slips[% END %][% END %][% END %]</div>
 
 <div id="preview_template" class="modal in" tabindex="-1" role="dialog" aria-labelledby="preview_template_label" aria-hidden="true">
     <div class="modal-dialog modal-lg">
@@ -45,7 +45,7 @@
 [% END %]
 
 [% IF ( no_op_set ) %]
-    <h1>Notices and Slips</h1>
+    <h1>Notices &amp; slips</h1>
     <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
       <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
     [% UNLESS independant_branch %]
