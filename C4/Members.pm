@@ -1637,10 +1637,10 @@ Returns string of fields that will be changed
 =cut
 
 sub getModifiedPatronFieldsForLogs {
-    my ($data) = @_;
+    my ($data, $olddata) = @_;
 
     my $logdata;
-    my $olddata = Koha::Patrons->find( $data->{borrowernumber} )->unblessed;
+    $olddata //= Koha::Patrons->find( $data->{borrowernumber} )->unblessed;
 
     foreach my $key ( keys %$data ) {
         my $od = defined $olddata->{$key} ? $olddata->{$key} : 'undef';

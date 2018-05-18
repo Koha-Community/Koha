@@ -23,6 +23,8 @@ use Koha::AuthUtils qw(hash_password);
 use Koha::Availability;
 use C4::Auth qw( haspermission checkpw_internal );
 use C4::Context;
+use C4::Log;
+use C4::Members;
 use Koha::Exceptions;
 use Koha::Exceptions::Password;
 use Koha::Patrons;
@@ -31,8 +33,6 @@ use Koha::Patron::Modifications;
 use Koha::Libraries;
 
 use Scalar::Util qw(blessed looks_like_number);
-use Try::Tiny;
-
 use Try::Tiny;
 
 sub list {
@@ -50,6 +50,17 @@ sub list {
         $patrons = Koha::Patrons->search;
     }
 
+    # TODO Koha-Suomi: Remove this ugly hack below and replace huge return arrays
+    #      with pagination feature (already implemented in Koha 17.11 onwards)
+    # Safety switch to avoid spamming action log with thousands of lines:
+    my $log = $patrons->count < 100 if C4::Context->preference('BorrowersLog');
+
+    if ($log) {
+        foreach my $patron (@{$patrons->as_list}) {
+            C4::Log::logaction('MEMBERS', 'VIEW', $patron->borrowernumber, '');
+        }
+    }
+
     return $c->render(status => 200, openapi => $patrons);
 }
 
@@ -61,6 +72,10 @@ sub get {
 
     unless ($patron) {
         return $c->render(status => 404, openapi => { error => "Patron not found." });
+    }
+
+    if (C4::Context->preference('BorrowersLog')) {
+        C4::Log::logaction('MEMBERS', 'VIEW', $patron->borrowernumber, '');
     }
 
     return $c->render(status => 200, openapi => $patron);
@@ -75,6 +90,9 @@ sub add {
         if ($body->{password}) { $body->{password} = hash_password($body->{password}) }; # bcrypt password if given
 
         my $patron = Koha::Patron->new($body)->validate->store;
+        if (C4::Context->preference('BorrowersLog')) {
+            C4::Log::logaction('MEMBERS', 'CREATE', $patron->borrowernumber, '');
+        }
         return $c->render(status => 201, openapi => $patron);
     }
     catch {
@@ -116,8 +134,23 @@ sub edit {
                 my $verification
                         = _parameters_require_modification_request($body);
                 if (keys %{$verification->{not_required}}) {
+
+                    # Get modified fields for action logging
+                    my $logdata = C4::Members::getModifiedPatronFieldsForLogs(
+                        $verification->{not_required}, $patron->unblessed
+                    ) if C4::Context->preference('BorrowersLog');
+
+                    # Update changes
                     Koha::Patrons->find($borrowernumber)->set(
                         $verification->{not_required})->store;
+
+                    # Store action log of modification
+                    if ($logdata) {
+                        C4::Log::logaction('MEMBERS', 'MODIFY', $borrowernumber,
+                            "UPDATED FIELD(S): $logdata"
+                        );
+                    }
+
                     unless (keys %{$verification->{required}}) {
                         return $c->render( status => 200, openapi => $patron );
                     }
@@ -127,6 +160,17 @@ sub edit {
                     my $m = Koha::Patron::Modification->new(
                         $verification->{required}
                     )->store();
+
+                    my $logdata = C4::Members::getModifiedPatronFieldsForLogs(
+                        $verification->{required}, $patron->unblessed
+                    ) if C4::Context->preference('BorrowersLog');
+
+                    if ($logdata) {
+                        C4::Log::logaction('MEMBERS', 'MODIFY', $borrowernumber,
+                            "MOD REQUEST FIELD(S): $logdata"
+                        );
+                    }
+
                     return $c->render( status => 202, openapi => {});
                 }
             } else {
@@ -140,6 +184,19 @@ sub edit {
             die unless $patron->set($body)->validate;
             return $c->render( status => 204, openapi => {}) unless $patron->is_changed; # No Content = No changes made
             $patron->store;
+
+            # Get modified fields for action logging
+            my $logdata = C4::Members::getModifiedPatronFieldsForLogs(
+                $body, $patron->unblessed
+            ) if C4::Context->preference('BorrowersLog');
+
+            # Store action log of modification
+            if ($logdata) {
+                C4::Log::logaction('MEMBERS', 'MODIFY', $patron->borrowernumber,
+                    "UPDATED FIELD(S): $logdata"
+                );
+            }
+
             return $c->render( status => 200, openapi => $patron);
         }
     }
@@ -186,8 +243,14 @@ sub delete {
         return $c->render( status => 404, openapi => {error => "Patron not found"});
     }
 
+    my $borrowernumber = $patron->borrowernumber;
+
     # check if loans, reservations, debarrment, etc. before deletion!
     my $res = $patron->delete;
+
+    if (C4::Context->preference('BorrowersLog')) {
+        C4::Log::logaction('MEMBERS', 'DELETE', $borrowernumber, '');
+    }
 
     if ($res eq '1') {
         return $c->render( status => 200, openapi => {});
@@ -259,6 +322,12 @@ sub changepassword {
             Koha::Exceptions::Password::Invalid->throw;
         }
         $patron->change_password_to($pw->{'new_password'});
+
+        if (C4::Context->preference('BorrowersLog')) {
+            C4::Log::logaction('MEMBERS', 'MODIFY', $patron->borrowernumber,
+                "Password change");
+        }
+
         return $c->render(status => 200, openapi => {});
     }
     catch {
@@ -311,6 +380,11 @@ sub getstatus {
         my $ret = $patron->TO_JSON;
         my %problems = map { ref($_) => $_ } $patron->status_not_ok;
         $ret->{blocks} = Koha::Availability->_swaggerize_exception(\%problems);
+
+        if (C4::Context->preference('BorrowersLog')) {
+            C4::Log::logaction('MEMBERS', 'VIEW', $patron->borrowernumber,
+                               'Patron status request');
+        }
 
         return $c->render(status => 200, openapi => $ret);
     } catch {
