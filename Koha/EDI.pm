@@ -30,7 +30,7 @@ use Koha::Database;
 use C4::Acquisition qw( NewBasket CloseBasket ModOrder);
 use C4::Suggestions qw( ModSuggestion );
 use C4::Items qw(AddItem);
-use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcBiblio );
+use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcBiblio GetFrameworkCode GetMarcFromKohaField );
 use Koha::Edifact::Order;
 use Koha::Edifact;
 use Log::Log4perl;
@@ -388,6 +388,23 @@ sub receipt_items {
         }
         push @{ $branch_map{$b} }, $item;
     }
+
+    # Handling for 'AcqItemSetSubfieldsWhenReceived'
+    my @affects;
+    my $biblionumber;
+    my $itemfield;
+    if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
+        @affects = split q{\|},
+          C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
+        if (@affects) {
+            $biblionumber = $schema->resultset('Aqorder')->find($ordernumber)
+              ->biblionumber->biblionumber;
+            my $frameworkcode = GetFrameworkCode($biblionumber);
+            ($itemfield) = GetMarcFromKohaField( 'items.itemnumber',
+                $frameworkcode );
+        }
+    }
+
     my $gir_occurrence = 0;
     while ( $gir_occurrence < $quantity ) {
         my $branch = $inv_line->girfield( 'branch', $gir_occurrence );
@@ -408,6 +425,18 @@ sub receipt_items {
                     $logger->trace("Adding barcode $barcode");
                     $item->barcode($barcode);
                 }
+            }
+
+            # Handling for 'AcqItemSetSubfieldsWhenReceived'
+            if (@affects) {
+                my $item_marc = C4::Items::GetMarcItem( $biblionumber, $item->itemnumber );
+                for my $affect (@affects) {
+                    my ( $sf, $v ) = split q{=}, $affect, 2;
+                    foreach ( $item_marc->field($itemfield) ) {
+                        $_->update( $sf => $v );
+                    }
+                }
+                C4::Items::ModItemFromMarc( $item_marc, $biblionumber, $item->itemnumber );
             }
 
             $item->update;
