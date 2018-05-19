@@ -31,7 +31,7 @@ my ($template, $borrowernumber, $cookie) = get_template_and_user({
     query => $cgi,
     type => 'intranet',
     authnotrequired => 0,
-    flagsrequired   => { catalogue => 1 },
+    flagsrequired   => { parameters => 'manage_item_search_fields' },
 });
 
 my $op = $cgi->param('op') || '';

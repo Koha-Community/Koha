@@ -6,7 +6,7 @@ use Encode qw( encode );
 use C4::Service;
 use Koha::Localizations;
 
-our ( $query, $response ) = C4::Service->init( parameters => 'parameters_remaining_permissions' );
+our ( $query, $response ) = C4::Service->init( parameters => 'manage_itemtypes' );
 
 sub get_translations {
     my $rs = Koha::Localizations->search({ entity => $query->param('entity'), code => $query->param('code') });

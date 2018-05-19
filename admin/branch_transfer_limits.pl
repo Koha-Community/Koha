@@ -33,7 +33,7 @@ my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "admin/branch_transfer_limits.tt",
 			     query => $input,
 			     type => "intranet",
-                 flagsrequired => {parameters => 'parameters_remaining_permissions'},
+                 flagsrequired => {parameters => 'manage_transfers'},
 			     debug => 1,
 			     });
 

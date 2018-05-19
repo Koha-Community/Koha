@@ -32,6 +32,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user( {
     query => $input,
     type => "intranet",
     authnotrequired => 0,
+    flagsrequired   => { parameters => 'manage_search_targets' },
 });
 
 # Main code: convert mapping string to hash structure and show template

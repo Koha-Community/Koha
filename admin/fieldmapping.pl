@@ -41,7 +41,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
         query           => $query,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { parameters => 'parameters_remaining_permissions' },
+        flagsrequired   => { parameters => 'manage_keywords2marc_mappings' },
         debug           => 1,
     }
 );

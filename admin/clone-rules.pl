@@ -41,7 +41,7 @@ my ($template, $loggedinuser, $cookie)
                             query => $input,
                             type => "intranet",
                             authnotrequired => 0,
-                            flagsrequired => {parameters => 'parameters_remaining_permissions'},
+                            flagsrequired => {parameters => 'manage_circ_rules'},
                             debug => 1,
                             });
 

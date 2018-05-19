@@ -36,6 +36,29 @@
     [%- CASE 'manage_circ_rules' -%]<span>manage circulation rules</span>
     [%- CASE 'manage_circ_rules_from_any_libraries' -%]<span>Edit circulation rules from any libraries. If not set the logged in user could only edit circulation rules for its the own library (please note that manage_circ_rules is still required)</span>
     [%- CASE 'parameters_remaining_permissions' -%]<span>Remaining system parameters permissions</span>
+    [%- CASE 'manage_circ_rules' -%]<span>Manage circulation rules</span>
+    [%- CASE 'manage_sysprefs' -%]<span>Manage global system preferences</span>
+    [%- CASE 'manage_libraries' -%]<span>Manage libraries and library groups</span>
+    [%- CASE 'manage_itemtypes' -%]<span>Manage item types</span>
+    [%- CASE 'manage_auth_values' -%]<span>Manage authorized value categories and authorized values</span>
+    [%- CASE 'manage_patron_categories' -%]<span>Manage patron categories</span>
+    [%- CASE 'manage_patron_attributes' -%]<span>Manage extended patron attributes</span>
+    [%- CASE 'manage_transfers' -%]<span>Manage library transfer limits and transport cost matrix</span>
+    [%- CASE 'manage_item_circ_alerts' -%]<span>Manage item circulation alerts</span>
+    [%- CASE 'manage_cities' -%]<span>Manage cities and towns</span>
+    [%- CASE 'manage_marc_frameworks' -%]<span>Manage MARC bibliographic and authority frameworks and test them</span>
+    [%- CASE 'manage_keywords2koha_mappings' -%]<span>Manage keywords to Koha mappings</span>
+    [%- CASE 'manage_classfications' -%]<span>Manage classification sources and filing rules</span>
+    [%- CASE 'manage_matching_rules' -%]<span>Manage record matching rules</span>
+    [%- CASE 'manage_oai_sets' -%]<span>Manage OAI sets</span>
+    [%- CASE 'manage_item_search_fields' -%]<span>Manage item search fields</span>
+    [%- CASE 'manage_search_engine_config' -%]<span>Manage search enginge configuration</span>
+    [%- CASE 'manage_search_targets' -%]<span>Manage Z39.50 and SRU server confiugration</span>
+    [%- CASE 'manage_didyoumean' -%]<span>Manage Did you mean? configuration</span>
+    [%- CASE 'manage_column_config' -%]<span>Manage column configuation</span>
+    [%- CASE 'manage_audio_alerts' -%]<span>Manage audio alerts</span>
+    [%- CASE 'manage_sms_providers' -%]<span>Manage SMS cellular providers</span>
+    [%- CASE 'manage_usage_stats' -%]<span>Manage usage statistics settings</span>
     [%- CASE 'edit_borrowers' -%]<span>Add, modify and view patron information</span>
     [%- CASE 'view_borrower_infos_from_any_libraries' -%]<span>View patron infos from any libraries. If not set the logged in user could only access patron infos from its own library or group of libraries.</span>
     [%- CASE 'modify_holds_priority' -%]<span>Modify holds priority</span>

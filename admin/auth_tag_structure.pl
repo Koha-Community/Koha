@@ -50,7 +50,7 @@ my ($template, $loggedinuser, $cookie)
                  query => $input,
                  type => "intranet",
                  authnotrequired => 0,
-                 flagsrequired => {parameters => 'parameters_remaining_permissions'},
+                 flagsrequired => {parameters => 'manage_marc_frameworks'},
                  debug => 1,
                  });
 

@@ -31,7 +31,7 @@ my ($auth_status, $sessionID);
 if (exists $cookies{'CGISESSID'}) {
     ($auth_status, $sessionID) = check_cookie_auth(
         $cookies{'CGISESSID'}->value,
-        { parameters => 'parameters_remaining_permissions' },
+        { parameters => 'manage_marc_frameworks' },
     );
 }
 if ($auth_status eq 'ok') {

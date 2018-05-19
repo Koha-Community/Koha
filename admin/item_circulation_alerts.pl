@@ -44,7 +44,7 @@ sub show {
             query           => $input,
             type            => "intranet",
             authnotrequired => 0,
-            flagsrequired   => { parameters => 'parameters_remaining_permissions' },
+            flagsrequired   => { parameters => 'item_circ_alerts' },
             debug           => defined($input->param('debug')),
         }
     );

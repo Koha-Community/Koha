@@ -31,7 +31,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
         query           => $input,
         type            => 'intranet',
         authnotrequired => 0,
-        flagsrequired   => { superlibrarian => 1 },                          # Create a specific permission?
+        flagsrequired   => { parameters => 'manage_search_engine_config' },
     }
 );
 
