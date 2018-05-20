@@ -112,7 +112,11 @@
             <span class="results_summary">
                 <span class="label">Holds:</span>
                 <span class="number_box">
-                    <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a>
+                    [% IF CAN_user_reserveforothers_place_holds %]
+                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber %]">[% holdcount %]</a>
+                    [% ELSE %]
+                        [% holdcount %]
+                    [% END %]
                 </span>
             </span>
         [% END %]

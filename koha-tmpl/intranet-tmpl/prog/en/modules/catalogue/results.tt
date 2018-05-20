@@ -119,7 +119,7 @@
             [% END %]
 
 
-                [% IF ( CAN_user_reserveforothers && DisplayMultiPlaceHold ) %]
+                [% IF ( CAN_user_reserveforothers_place_holds && DisplayMultiPlaceHold ) %]
                 [% IF ( holdfor ) %]
                     <div id="placeholdc" class="btn-group">
                         <button class="btn btn-default btn-xs placehold"><i class="fa fa-sticky-note-o"></i> Place hold</button>
@@ -441,8 +441,12 @@
                             [% IF ( SEARCH_RESULT.norequests ) %]
                                 <span class="noholdstext">No holds allowed</span>
                             [% ELSE %]
-                                <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) %])</a>
-                                [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></span>[% END %]
+                                [% IF CAN_user_reserveforothers_place_holds %]
+                                    <a id="reserve_[% SEARCH_RESULT.biblionumber %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) %])</a>
+                                    [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber %]&amp;findborrower=[% holdfor_cardnumber %]">Place hold for [% holdfor_firstname %] [% holdfor_surname %] ([% holdfor_cardnumber %])</a></span>[% END %]
+                                [% ELSE %]
+                                    Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) %])
+                                [% END %]
                             [% END %]
 
                                 [% IF Koha.Preference('intranetbookbag') == 1 %]
