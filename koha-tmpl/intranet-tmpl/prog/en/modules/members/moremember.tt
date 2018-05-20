@@ -508,6 +508,7 @@ function validate1(date) {
             <li><a href="#relatives-issues" id="relatives-issues-tab">Relatives' checkouts</a></li>
         [% END %]
         <li><a href="#finesandcharges">Fines &amp; Charges</a></li>
+        [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
         <li>
             [% IF ( holds_count ) %]
                 <a href="#reserves" id="holds-tab">[% holds_count %] Hold(s)</a>
@@ -515,6 +516,7 @@ function validate1(date) {
                 <a href="#reserves" id="holds-tab">0 Holds</a>
             [% END %]
         </li>
+        [% END %]
         [% IF Koha.Preference('ArticleRequests') %]
             <li>
                 <a href="#article-requests" id="article-requests-tab"> [% patron.article_requests_current.count %] Article requests</a>
@@ -574,6 +576,7 @@ function validate1(date) {
 
 [% INCLUDE borrower_debarments.inc %]
 
+[% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
 <div id="reserves">
 [% IF ( holds_count ) %]
     <form action="/cgi-bin/koha/reserve/modrequest.pl" method="post">
@@ -626,7 +629,7 @@ function validate1(date) {
 
     [% ELSE %]<p>Patron has nothing on hold.</p>[% END %]
 	</div>
-
+[% END %]
 
 [% IF Koha.Preference('ArticleRequests') %]
     [% INCLUDE 'patron-article-requests.inc' %]
