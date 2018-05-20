@@ -56,6 +56,7 @@
     [%- CASE 'period_manage' -%]<span>Manage budgets</span>
     [%- CASE 'planning_manage' -%]<span>Manage budget plannings</span>
     [%- CASE 'vendors_manage' -%]<span>Manage vendors</span>
+    [%- CASE 'currencies_manage' -%]<span>Manage currencies and exchange rates</span>
     [%- CASE 'batch_upload_patron_images' -%]<span>Upload patron images in a batch or one at a time</span>
     [%- CASE 'delete_anonymize_patrons' -%]<span>Delete old borrowers and anonymize circulation history (deletes borrower reading history)</span>
     [%- CASE 'edit_calendar' -%]<span>Define days when the library is closed</span>

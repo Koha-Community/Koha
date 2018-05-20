@@ -17,6 +17,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 9, 'delete_all_items', 'Delete all items at once'),
    (10, 'writeoff', 'Write off fines and fees'),
    (10, 'remaining_permissions', 'Remaining permissions for managing fines and fees'),
+   (11, 'currencies_manage', 'Manage currencies and exchange rates'),
    (11, 'vendors_manage', 'Manage vendors'),
    (11, 'contracts_manage', 'Manage contracts'),
    (11, 'period_manage', 'Manage budgets'),
