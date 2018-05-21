@@ -93,7 +93,7 @@ a.add, a.delete {
     <div class="dialog message">
         Warning: Any changes to the configuration will only take effect after a full reindex. Until then searching may not work correctly.
 
-        <p>Weight: define weight between 1 and 99. Higher numbers indicate increased relevancy.
+        <p>Weight: define weight as a positive number. Higher numbers indicate increased relevancy.
         <strong>Note that fields weighting works only for simple search.</strong></p>
         <ol>
           <li>only search fields mapped with biblios can be weighted</li>
@@ -198,17 +198,13 @@ a.add, a.delete {
                           [% END %]
                         </select>
                       </td>
+                      <td>
                       [% IF search_field.mapped_biblios %]
-                        <td>
-                          [% IF search_field.weight %]
-                            <input type="number" name="search_field_weight" value="[% search_field.weight %]" min="1" max="99" />
-                          [% ELSE %]
-                            <input type="number" name="search_field_weight" min="1" max="99" />
-                          [% END %]
-                        </td>
+                        <input type="number" step="0.01" min="0" max="999" name="search_field_weight" value="[% search_field.weight %]" />
                       [% ELSE %]
-                        <td><input type="hidden" name="search_field_weight" value=""></td>
+                        <input type="hidden" name="search_field_weight" value="">
                       [% END %]
+                      </td>
                     </tr>
                   [% END %]
                 </tbody>
