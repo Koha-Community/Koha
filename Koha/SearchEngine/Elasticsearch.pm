@@ -165,7 +165,7 @@ sub get_elasticsearch_mappings {
     if (!defined $all_mappings{$self->index}) {
         $sort_fields{$self->index} = {};
         my $mappings = {
-            data => scalar _get_elasticsearch_mapping('general', '')
+            data => _get_elasticsearch_mapping('general', '')
         };
         my $marcflavour = lc C4::Context->preference('marcflavour');
         $self->_foreach_mapping(
@@ -242,7 +242,7 @@ sub _get_elasticsearch_mapping {
     if (defined $settings->{$purpose}{'default'}) {
         return $settings->{$purpose}{'default'};
     }
-    return;
+    return undef;
 }
 
 sub reset_elasticsearch_mappings {
