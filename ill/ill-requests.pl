@@ -128,6 +128,7 @@ if ( $backends_available ) {
             $request->borrowernumber($params->{borrowernumber});
             $request->biblio_id($params->{biblio_id});
             $request->branchcode($params->{branchcode});
+            $request->price_paid($params->{price_paid});
             $request->notesopac($params->{notesopac});
             $request->notesstaff($params->{notesstaff});
             $request->store;

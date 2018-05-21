@@ -431,6 +431,10 @@
                                     <label class="cost">Cost:</label>
                                     [% request.cost || 'N/A' | html %]
                                 </li>
+                                <li class="price_paid">
+                                    <label class="price_paid">Price paid:</label>
+                                    <input name="price_paid" id="price_paid" type="text" value="[% request.price_paid %]">
+                                </li>
                                 <li class="req_id">
                                     <label class="req_id">Request number:</label>
                                     [% request.id_prefix _ request.illrequest_id | html %]
@@ -531,6 +535,10 @@
                                 <div class="cost">
                                     <span class="label cost">Cost:</span>
                                     [% request.cost || "N/A" | html %]
+                                </div>
+                                <div class="price_paid">
+                                    <span class="label price_paid">Price paid:</span>
+                                    [% request.price_paid || "N/A" %]
                                 </div>
                                 <div class="req_id">
                                     <span class="label req_id">Request number:</span>
