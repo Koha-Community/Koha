@@ -62,7 +62,7 @@
     [% END %]
 [% ELSE %]
 <!-- Assuming invoices -->
-     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id | uri %]">
+     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id | uri %]&op=do_search">
       Invoices
      </a>
 [% END %]
