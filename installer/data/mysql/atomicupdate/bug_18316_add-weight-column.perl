@@ -1,7 +1,7 @@
 $DBversion = 'XXX';
 if( CheckVersion( $DBversion ) ) {
     if( !column_exists( 'search_field', 'weight' ) ) {
-        $dbh->do( "ALTER TABLE search_field ADD COLUMN weight int" );
+        $dbh->do( "ALTER TABLE `search_field` ADD COLUMN `weight` decimal(5,2) DEFAULT NULL" );
     }
 
     SetVersion( $DBversion );

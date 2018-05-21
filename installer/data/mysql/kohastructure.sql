@@ -1661,7 +1661,7 @@ CREATE TABLE `search_field` (
   `name` varchar(255) NOT NULL COMMENT 'the name of the field as it will be stored in the search engine',
   `label` varchar(255) NOT NULL COMMENT 'the human readable name of the field, for display',
   `type` ENUM('', 'string', 'date', 'number', 'boolean', 'sum', 'isbn', 'stdno') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine',
-  `weight` int default NULL,
+  `weight` decimal(5,2) DEFAULT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY (`name`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
