@@ -28,6 +28,9 @@ sub cpu_pos_report {
         $transaction = Koha::PaymentsTransactions->find($invoicenumber);
         my $params = $c->req->json;
 
+        C4::Context->setCommandlineEnvironment();
+        C4::Context->interface('rest');
+
         my $logger = Koha::Logger->get();
         $logger->info("Report received: ".Dumper($params));
 

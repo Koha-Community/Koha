@@ -97,6 +97,7 @@ else {
         description         => '',
         is_self_payment     => 1,
         user_branch         => C4::Context::mybranch(),
+        manager_id          => $borrowernumber,
     })->store();
 
     # Link accountlines to the transaction

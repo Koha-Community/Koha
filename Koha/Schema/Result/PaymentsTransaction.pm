@@ -47,6 +47,11 @@ __PACKAGE__->table("payments_transactions");
   is_nullable: 1
   size: 10
 
+=head2 manager_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =head2 status
 
   data_type: 'enum'
@@ -88,6 +93,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "user_branch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
+  "manager_id",
+  { data_type => "integer", is_nullable => 1 },
   "status",
   {
     data_type => "enum",

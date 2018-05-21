@@ -150,7 +150,7 @@ sub MakeFullPayment {
     # staff client
     my $boraccount = t::lib::Page::Members::Boraccount->new({borrowernumber => $borrowers->{'superuberadmin'}->borrowernumber, op => 'modify', destination => 'circ', categorycode => 'PT'});
 
-    $boraccount = $boraccount->doPasswordLogin($borrowers->{'superuberadmin'}->userid(), $password)
+    $boraccount = $boraccount->doPasswordLogin($borrowers->{'superuberadmin2'}->userid(), $password)
     ->findFine("First")     # find the two fines created...
     ->findFine("Second")    # ...by FinesFactory
     ->isFineAmountOutstanding("First", $firstAmount)
@@ -174,6 +174,7 @@ sub MakeFullPayment {
         $boraccount
         ->isFinePaid("Transaction that pays everything ;)") # note of transaction
         ->isFineAmount("Transaction that pays everything ;)", "-".sprintf("%.2f",$firstAmount+$secondAmount));
+        is($transaction->manager_id, $borrowers->{'superuberadmin2'}->borrowernumber, 'Correct manager id');
     }
     $boraccount
     ->isFineAmount("First", $firstAmount)
@@ -192,7 +193,7 @@ sub MakePartialPayment {
     # staff client
     my $boraccount = t::lib::Page::Members::Boraccount->new({borrowernumber => $borrowers->{'superuberadmin2'}->borrowernumber, op => 'modify', destination => 'circ', categorycode => 'PT'});
 
-    $boraccount = $boraccount->doPasswordLogin($borrowers->{'superuberadmin2'}->userid(), $password)
+    $boraccount = $boraccount->doPasswordLogin($borrowers->{'superuberadmin'}->userid(), $password)
     ->findFine("First2")     # find the two fines created...
     ->findFine("Second2")    # ...by FinesFactory
     ->isFineAmountOutstanding("First2", $firstAmount)
@@ -217,6 +218,7 @@ sub MakePartialPayment {
         $boraccount
         ->isFinePaid("Transaction that pays everything ;)2") # note of transaction
         ->isFineAmount("Transaction that pays everything ;)2", "-".(sprintf("%.2f",$partialPayment)));
+        is($transaction->manager_id, $borrowers->{'superuberadmin'}->borrowernumber, 'Correct manager id');
     }
     $boraccount
     ->isFineAmount("First2", $firstAmount)

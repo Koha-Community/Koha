@@ -30,6 +30,9 @@ sub cpu_online_report {
         $transaction = Koha::PaymentsTransactions->find($invoicenumber);
         my $params = $c->req->json;
 
+        C4::Context->setCommandlineEnvironment();
+        C4::Context->interface('rest');
+
         $c->app->log->info("Report received: ".Dumper($params));
 
         my $interface = Koha::Payment::Online->new({

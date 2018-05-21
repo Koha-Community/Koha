@@ -4351,7 +4351,8 @@ CREATE TABLE `payments_transactions` ( -- information related to payments via PO
   transaction_id int(11) NOT NULL auto_increment, -- transaction number
   borrowernumber int(11) NOT NULL, -- the borrowernumber that the payment is for
   accountlines_id int(11), -- the accountlines_id of the payment (the accounttype is Pay)
-  user_branch varchar(10), -- branch of the user, can be used for raports that list all payments by branch
+  user_branch varchar(10), -- branch of the user, can be used for reports that list all payments by branch
+  manager_id int(11) DEFAULT NULL, -- borrowernumber of the payment manager
   status ENUM('paid','pending','cancelled','unsent') DEFAULT 'pending', -- status of transaction
   timestamp timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- timestamp for payment initialization
   description TEXT NOT NULL, -- additional description that can hold notes. Prints into the accountlines Pay event once the payment is completed

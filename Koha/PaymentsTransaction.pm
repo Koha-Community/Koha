@@ -168,7 +168,7 @@ sub CompletePayment {
     my ($self, $status) = @_;
     my $dbh                 = C4::Context->dbh;
     my $manager_id          = 0;
-    $manager_id             = C4::Context->userenv->{'number'} if C4::Context->userenv;
+    $manager_id             = $self->manager_id;
     my $branch              = $self->is_self_payment == 1
                                 ? $self->user_branch
                                 : C4::Context->userenv
@@ -220,12 +220,13 @@ sub CompletePayment {
     # Payment was cancelled
     if ($new_status eq "cancelled") {
         $transaction->set({ status => "cancelled" })->store();
-        &logaction(
-        "PAYMENTS",
-        "PAY",
-            $transaction->transaction_id,
-            $transaction->status
-        );
+        if ( C4::Context->preference("FinesLog") ) {
+            C4::Log::logaction("FINES", 'PAYMENT_CANCELLED', $transaction->borrowernumber, Dumper({
+                action                => 'payment_cancelled',
+                borrowernumber        => $transaction->borrowernumber,
+                manager_id            => $manager_id,
+            }));
+        }
         return;
     }
 
@@ -328,12 +329,6 @@ sub CompletePayment {
                 manager_id        => $manager_id,
             }));
         }
-        &logaction(
-        "PAYMENTS",
-        "PAY",
-            $transaction->transaction_id,
-            $transaction->status
-        );
     }
 }
 

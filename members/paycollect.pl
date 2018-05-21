@@ -129,12 +129,16 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             my @selected = (defined $select) ? split /,/, $select : $accountlines_id;
             $payment->{selected}             = \@selected;
 
+            my $manager_id = C4::Context->userenv ?
+                C4::Context->userenv->{number} : undef;
+
             # Initialize the transaction
             $payment->{transaction} = Koha::PaymentsTransaction->new()->set({
                 borrowernumber      => $payment->{borrowernumber},
                 status              => "unsent",
                 description         => $payment->{payment_note} || '',
                 user_branch         => C4::Context::mybranch(),
+                manager_id          => $manager_id,
             })->store();
 
             # Link accountlines to the transaction
