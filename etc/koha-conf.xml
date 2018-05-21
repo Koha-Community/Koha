@@ -159,21 +159,10 @@ __PAZPAR2_TOGGLE_XML_POST__
  <plack_max_requests>50</plack_max_requests>
  <plack_workers>2</plack_workers>
 
- <!-- Elasticsearch Configuration -->
  <elasticsearch>
      <server>localhost:9200</server>
      <index_name>koha___DB_NAME__</index_name>
  </elasticsearch>
- <!-- Uncomment the following line if you want to override the Elasticsearch default index settings -->
- <!-- <elasticsearch_index_config>__KOHA_CONF_DIR__/searchengine/elasticsearch/index_config.yaml</elasticsearch_index_config> -->
- <!-- Uncomment the following line if you want to override the Elasticsearch default field settings -->
- <!-- <elasticsearch_field_config>__KOHA_CONF_DIR__/searchengine/elasticsearch/field_config.yaml</elasticsearch_field_config> -->
- <!-- Uncomment the following line if you want to override the Elasticsearch index default settings.
-      Note that any changes made to the mappings file only take effect if you reset the mappings in
-      by visiting /cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl?op=reset&i_know_what_i_am_doing=1&reset_fields=1.
-      Resetting mappings will override any changes made in the Search engine configuration UI.
- -->
- <!-- <elasticsearch_index_mappings>__KOHA_CONF_DIR__/searchengine/elasticsearch/mappings.yaml</elasticsearch_index_mappings> -->
 
  <interlibrary_loans>
      <!-- Path to where Illbackends are located on the system
