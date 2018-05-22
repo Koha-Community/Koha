@@ -238,6 +238,7 @@ sub authenticate_api_request {
     my $user;
     if ($c->req->headers->header('Authorization')) {
         ($user, undef) = _header_auth($c, $authorization);
+        $c->stash('koha.user', $user);
     } else {
         ($user, undef) = _cookie_auth($c, $authorization);
     }
