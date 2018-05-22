@@ -305,7 +305,7 @@ sub pay {
     };
 }
 
-sub changepassword {
+sub api_changepassword {
     my $c = shift->openapi->valid_input or return;
 
     my $patron;
