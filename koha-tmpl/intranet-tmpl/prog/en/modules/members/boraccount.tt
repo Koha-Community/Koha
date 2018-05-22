@@ -77,7 +77,7 @@
                     <a href="boraccount.pl?action=reverse&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-undo"></i> Reverse</a>
                 [% END %]
                 [% IF account.amount < 0 %]
-                    <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs"><i class="fa fa-ban"></i> Void</a>
+                    <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id %]&amp;borrowernumber=[% account.borrowernumber %]" class="btn btn-default btn-xs void"><i class="fa fa-ban"></i> Void</a>
                 [% END %]
           [% ELSE %]
             &nbsp;
@@ -140,6 +140,14 @@
                 }
                 table_account_fines.fnFilter(filteredValue, 4, true, false);
                 $(this).toggleClass('filtered');
+            });
+
+            $(".void").on("click",function(e){
+                if( confirm( _("Are you sure you want to void this credit?") ) ) {
+                    return true;
+                } else {
+                    e.preventDefault();
+                }
             });
         });
     </script>
