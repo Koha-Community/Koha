@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; API Keys</title>
@@ -99,13 +100,14 @@
     </div>
 
 [% MACRO jsinclude BLOCK %]
-        <script>
-            $(document).ready(function(){
-                $(".delete").on("click", function(e){
-                    return confirmDelete(_("Are you sure you want to delete this key?"));
-                });
+    [% Asset.js("js/members-menu.js") %]
+    <script>
+        $(document).ready(function(){
+            $(".delete").on("click", function(e){
+                return confirmDelete(_("Are you sure you want to delete this key?"));
             });
-        </script>
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
