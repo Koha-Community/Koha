@@ -116,6 +116,15 @@
                 '</a>';
         };
 
+        // Our 'render' function for biblio_id
+        var createBiblioLink = function(data, type, row) {
+            return '<a title="' + _("View biblio details") + '" ' +
+                'href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' +
+                row.biblio_id + '">' +
+                row.biblio_id +
+                '</a>';
+        };
+
         // Our 'render' function for the library name
         var createLibrary = function(data, type, row) {
             return row.library.branchname;
@@ -187,6 +196,7 @@
             },
             biblio_id: {
                 name: _("Bibliograpic Record ID")
+                func: createBiblioLink
             },
             library: {
                 name: _("Library"),
@@ -514,7 +524,11 @@
 
                                 <div class="biblio_id">
                                     <span class="label biblio_id">Bibliographic record ID:</span>
-                                    [% IF request.biblio_id %][% request.biblio_id | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    [% IF request.biblio_id %]
+                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | html %]">[% request.biblio_id | html %]</a>
+                                    [% ELSE %]
+                                        <span>N/A</span>
+                                    [% END %]
                                 </div>
                                 <div class="branchcode">
                                     <span class="label branchcode">Library:</span>
