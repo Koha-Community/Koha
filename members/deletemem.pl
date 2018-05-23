@@ -31,6 +31,7 @@ use C4::Members;
 use Module::Load;
 use Koha::Patrons;
 use Koha::Token;
+use Koha::Patron::Categories;
 
 if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
     load Koha::NorwegianPatronDB, qw( NLMarkForDeletion NLSync );
@@ -98,6 +99,12 @@ if (C4::Context->preference("IndependentBranches")) {
             exit 0; # Exit without error
         }
     }
+}
+
+if ( $patron->is_child ) {
+    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
+    $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
+    $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
 }
 
 my $op = $input->param('op') || 'delete_confirm';
