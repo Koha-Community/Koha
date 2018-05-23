@@ -64,6 +64,17 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/members-menu.js") %]
+    <script>
+        /* Set some variables needed in members-menu.js */
+        var borrowernumber = "[% patron.borrowernumber %]";
+        var advsearch = "[% advsearch %]";
+        var dateformat = "[% dateformat %]";
+        var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
+        var CATCODE_MULTI = "[% CATCODE_MULTI %]";
+        var catcode = "[% catcode %]";
+        var destination = "[% destination %]";
+        var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers %]";
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
