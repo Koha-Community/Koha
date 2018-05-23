@@ -177,7 +177,8 @@ $(document).ready(function(){
                   <td>&nbsp;</td>
                 [% END %]
                 <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | uri %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
-                <td class="holds_count"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]">[% IF item_loo.holds %][% item_loo.item_holds | html %]/[% item_loo.holds | html %][% ELSE %][% item_loo.holds | html %][% END %]</a></td>
+                <td class="holds_count"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% item_loo.biblionumber | uri %]" title="[% IF item_loo.holds %]Holds on this item: [% item_loo.item_holds | html %] / Total holds on this record: [% item_loo.holds | html %] [% ELSE %]Holds on this record: [% item_loo.holds | html %][% END %]">
+                [% IF item_loo.holds %][% item_loo.item_holds | html %]/[% item_loo.holds | html %][% ELSE %][% item_loo.holds | html %][% END %]</a></td>
                 [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field | html %]</td>
         [% END %] </tr>
             [% END %]
