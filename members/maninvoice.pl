@@ -51,12 +51,12 @@ unless ( $patron ) {
 
 my $add=$input->param('add');
 if ($add){
-    die "Wrong CSRF token"
-        unless Koha::Token->new->check_csrf( {
-            session_id => $input->cookie('CGISESSID'),
-            token => scalar $input->param('csrf_token'),
-        });
     if ( checkauth( $input, 0, $flagsrequired, 'intranet' ) ) {
+        die "Wrong CSRF token"
+            unless Koha::Token->new->check_csrf( {
+                session_id => scalar $input->cookie('CGISESSID'),
+                token => scalar $input->param('csrf_token'),
+            });
         #  print $input->header;
         my $barcode=$input->param('barcode');
         my $itemnum;
