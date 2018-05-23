@@ -36,29 +36,41 @@
 </div>
 
     [% IF items.count %]
-        <div class="lostitems-table_table_controls">
+        [% IF csv_profiles.count %]
+            <div class="lostitems-table_table_controls">
                 | <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> |
                 <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
                 <span class="itemselection_actions">
-                  | Actions:
-                  [% IF csv_profiles.count %]
-                      <a class="itemselection_action_export"><i class="fa fa-download"></i> Export selected items</a>
-                      Using the following CSV profile:
-                      <select name="csv_profile_id" id="csv_profile_id">
-                          [% FOREACH csv_profile IN csv_profiles %]
-                              <option value="[% csv_profile.export_format_id %]">[% csv_profile.profile %]</<option>
-                          [% END %]
-                      </select>
-                  [% ELSE %]
-                      <span class="itemselection_action_export" title="You should create a CSV profile for export_lost_items"><i class="fa fa-download"></i> Export selected items</a>
-                  [% END %]
+                    | Actions:
+                    <a class="itemselection_action_export"><i class="fa fa-download"></i> Export selected items</a>
+                    Using the following CSV profile:
+                    <select name="csv_profile_id" id="csv_profile_id">
+                        [% FOREACH csv_profile IN csv_profiles %]
+                            <option value="[% csv_profile.export_format_id %]">
+                                [% csv_profile.profile %]
+                            </option>
+                        [% END %]
+                    </select>
                 </span>
-        </div>
+            </div>
+        [% ELSE %]
+            <div class="dialog message">
+                [% IF ( CAN_user_tools_manage_csv_profiles ) %]
+                    To enable the export of selected items, <a href="/cgi-bin/koha/tools/csv-profiles.pl">create a CSV profile</a> of the type "SQL" with usage option "Export lost items in report."
+                [% ELSE %]
+                    To enable the export of selected items, your administrator must create a CSV profile of the type "SQL" with usage option "Export lost items in report."
+                [% END %]
+            </div>
+            <div class="lostitems-table_table_controls">
+            </div>
+        [% END %]
 
         <table id="lostitems-table">
             <thead>
                 <tr>
-                    <th class="NoSort"></th>
+                    [% IF csv_profiles.count %]
+                        <th class="NoSort"></th>
+                    [% END %]
                     <th>Title</th>
                     <th>Author</th>
                     <th>Lost status</th>
@@ -79,9 +91,11 @@
             <tbody>
                 [% FOREACH item IN items %]
                     <tr>
-                        <td style="text-align:center;vertical-align:middle">
-                            <input type="checkbox" value="[% item.itemnumber %]" name="itemnumber" />
-                        </td>
+                        [% IF csv_profiles.count %]
+                            <td style="text-align:center;vertical-align:middle">
+                                <input type="checkbox" value="[% item.itemnumber %]" name="itemnumber" />
+                            </td>
+                        [% END %]
                         <td>
                             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber %]" title="[% item.itemnotes %]">[% item.biblio.title |html %]</a>
                         </td>
