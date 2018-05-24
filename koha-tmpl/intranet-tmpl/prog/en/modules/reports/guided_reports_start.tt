@@ -177,9 +177,17 @@ canned reports and writing custom SQL reports.</p>
                     <th class="title-string">Last run</th>
                     <th class="report_public">Public</th>
                     <th class="report_json_url">JSON URL</th>
-                    [% IF (usecache) %] <th>Cache expiry (seconds)</th> [% END %]
+                    [% IF (usecache) %]
+                        <th>Cache expiry (seconds)</th>
+                    [% ELSE %]
+                        <th class="hidden">&nbsp;</th>
+                    [% END %]
                     <th>Saved results</th>
-                    [% IF has_obsolete_reports %]<th>Update</th>[% END %]
+                    [% IF has_obsolete_reports %]
+                        <th>Update</th>
+                    [% ELSE %]
+                        <th class="hidden">&nbsp;</th>
+                    [% END %]
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -221,21 +229,19 @@ canned reports and writing custom SQL reports.</p>
                             <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% END %]
                         </td>
-                        [% IF (usecache) %] <td>[% savedreport.cache_expiry %]</td> [% END %]
+                        <td>[% savedreport.cache_expiry %]</td>
                         <td>
                             [% FOR result IN savedreport.results %]
                                 <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id %]">[% result.date_run %]</a>
                                 <br/>
                             [% END %]
                         </td>
-                        [% IF has_obsolete_reports %]
                         <td>
                             [% IF savedreport.seems_obsolete %]
                                 This report seems obsolete, it uses biblioitems.marcxml field.
                                 <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id %]" data-report_id="[% savedreport.id %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
                             [% END %]
                         </td>
-                        [% END %]
                         <td>
                             <div class="dropup">
                                 <div class="btn-group">
@@ -998,7 +1004,8 @@ $(document).ready(function() {
                         { 'bSortable': false, 'bSearchable':false, 'aTargets': [0, -1] },
                         { 'bSearchable': false, 'aTargets': [3] },
                         { "aTargets": [ 1, 2 ], "sType": "natural"  },
-                        { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                        { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                        { "visible": false, "aTargets" : [ "hidden" ] }
                     ],
                     'oLanguage': {
                         'sZeroRecords': _("No matching reports found")
