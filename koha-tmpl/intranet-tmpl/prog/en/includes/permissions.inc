@@ -1,150 +1,666 @@
 [%- BLOCK main_permissions -%]
     [% SWITCH name %]
-    [%- CASE 'superlibrarian' -%]<span>Access to all librarian functions</span>
-    [%- CASE 'circulate' -%]<span>Check out and check in items</span>
-    [%- CASE 'catalogue' -%]<span><b>Required for staff login.</b> Staff access, allows viewing of catalogue in staff client.</span>
-    [%- CASE 'parameters' -%]<span>Manage Koha system settings (Administration panel)</span>
-    [%- CASE 'borrowers' -%]<span>Add, modify and view patron information</span>
-    [%- CASE 'permissions' -%]<span>Set user permissions</span>
-    [%- CASE 'reserveforothers' -%]<span>Place and modify holds for patrons</span>
-    [%- CASE 'editcatalogue' -%]<span>Edit catalog (Modify bibliographic/holdings data)</span>
-    [%- CASE 'updatecharges' -%]<span>Manage patrons fines and fees</span>
-    [%- CASE 'acquisition' -%]<span>Acquisition and/or suggestion management</span>
-    [%- CASE 'tools' -%]<span>Use all tools (expand for granular tools permissions)</span>
-    [%- CASE 'editauthorities' -%]<span>Edit authorities</span>
-    [%- CASE 'serials' -%]<span>Manage serial subscriptions</span>
-    [%- CASE 'reports' -%]<span>Allow access to the reports module</span>
-    [%- CASE 'staffaccess' -%]<span>Allow staff members to modify permissions for other staff members</span>
-    [%- CASE 'coursereserves' -%]<span>Course reserves</span>
-    [%- CASE 'plugins' -%]<span>Koha plugins</span>
-    [%- CASE 'lists' -%]<span>Lists</span>
-    [%- CASE 'clubs' -%]<span>Patron clubs</span>
-    [%- CASE 'ill' -%]<span>Create and modify Interlibrary loan requests</span>
-    [%- CASE 'self_check' -%]<span>Self check modules</span>
-    [%- CASE 'stockrotation' -%]<span>Manage stockrotation operations</span>
+    [%- CASE 'superlibrarian' -%]
+        <span class="main_permission superlibrarian_permission">Access to all librarian functions</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'circulate' -%]
+        <span class="main_permission circulate_permission">Check out and check in items</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'catalogue' -%]
+        <span class="main_permission catalogue_permission">Staff access, allows viewing of catalogue in staff client.</span>
+        <span class="permissioncode">([% name | html %])</span> <span class="required">Required for staff login.</span>
+    [%- CASE 'parameters' -%]
+        <span class="main_permission parameters_permission">Manage Koha system settings (Administration panel)</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'borrowers' -%]
+        <span class="main_permission borrowers_permission">Add, modify and view patron information</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'permissions' -%]
+        <span class="main_permission permissions_permission">Set user permissions</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'reserveforothers' -%]
+        <span class="main_permission reserveforothers_permission">Place and modify holds for patrons</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'editcatalogue' -%]
+        <span class="main_permission editcatalogue_permission">Edit catalog (Modify bibliographic/holdings data)</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'updatecharges' -%]
+        <span class="main_permission updatecharges_permission">Manage patrons fines and fees</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'acquisition' -%]
+        <span class="main_permission acquisition_permission">Acquisition and/or suggestion management</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'tools' -%]
+        <span class="main_permission tools_permission">Use all tools (expand for granular tools permissions)</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'editauthorities' -%]
+        <span class="main_permission editauthorities_permission">Edit authorities</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'serials' -%]
+        <span class="main_permission serials_permission">Manage serial subscriptions</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'reports' -%]
+        <span class="main_permission reports_permission">Allow access to the reports module</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'staffaccess' -%]
+        <span class="main_permission staffaccess_permission">Allow staff members to modify permissions for other staff members</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'coursereserves' -%]
+        <span class="main_permission coursereserves_permission">Course reserves</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'plugins' -%]
+        <span class="main_permission plugins_permission">Koha plugins</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'lists' -%]
+        <span class="main_permission lists_permission">Lists</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'clubs' -%]
+        <span class="main_permission clubs_permission">Patron clubs</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'ill' -%]
+        <span class="main_permission ill_permission">Create and modify Interlibrary loan requests</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'self_check' -%]
+        <span class="main_permission self_check_permission">Self check modules</span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'stockrotation' -%]
+        <span class="main_permission self_check_permission">Manage stockrotation operations</span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- END -%]
 [%- END -%]
 
 [%- BLOCK sub_permissions -%]
   [% SWITCH name %]
-    [%- CASE 'circulate_remaining_permissions' -%]<span>Remaining circulation permissions</span>
-    [%- CASE 'force_checkout' -%]<span>Force checkout if a limitation exists</span>
-    [%- CASE 'manage_restrictions' -%]<span>Manage restrictions for accounts</span>
-    [%- CASE 'overdues_report' -%]<span>Execute overdue items report</span>
-    [%- CASE 'override_renewals' -%]<span>Override blocked renewals</span>
-    [%- CASE 'manage_checkout_notes' %]<span>Mark checkout notes as seen/not seen</span>
-    [%- CASE 'manage_circ_rules' -%]<span>manage circulation rules</span>
-    [%- CASE 'manage_circ_rules_from_any_libraries' -%]<span>Manage circulation rules for any library. If not set the logged in user can only edit circulation rules for their own library (please note that manage_circ_rules is still required)</span>
-    [%- CASE 'parameters_remaining_permissions' -%]<span>Remaining system parameters permissions</span>
-    [%- CASE 'manage_circ_rules' -%]<span>Manage circulation rules</span>
-    [%- CASE 'manage_sysprefs' -%]<span>Manage global system preferences</span>
-    [%- CASE 'manage_libraries' -%]<span>Manage libraries and library groups</span>
-    [%- CASE 'manage_itemtypes' -%]<span>Manage item types</span>
-    [%- CASE 'manage_auth_values' -%]<span>Manage authorized value categories and authorized values</span>
-    [%- CASE 'manage_patron_categories' -%]<span>Manage patron categories</span>
-    [%- CASE 'manage_patron_attributes' -%]<span>Manage extended patron attributes</span>
-    [%- CASE 'manage_transfers' -%]<span>Manage library transfer limits and transport cost matrix</span>
-    [%- CASE 'manage_item_circ_alerts' -%]<span>Manage item circulation alerts</span>
-    [%- CASE 'manage_cities' -%]<span>Manage cities and towns</span>
-    [%- CASE 'manage_marc_frameworks' -%]<span>Manage MARC bibliographic and authority frameworks and test them</span>
-    [%- CASE 'manage_keywords2koha_mappings' -%]<span>Manage keywords to Koha mappings</span>
-    [%- CASE 'manage_classifications' -%]<span>Manage classification sources and filing rules</span>
-    [%- CASE 'manage_matching_rules' -%]<span>Manage record matching rules</span>
-    [%- CASE 'manage_oai_sets' -%]<span>Manage OAI sets</span>
-    [%- CASE 'manage_item_search_fields' -%]<span>Manage item search fields</span>
-    [%- CASE 'manage_search_engine_config' -%]<span>Manage search engine configuration</span>
-    [%- CASE 'manage_search_targets' -%]<span>Manage Z39.50 and SRU server configuration</span>
-    [%- CASE 'manage_didyoumean' -%]<span>Manage Did you mean? configuration</span>
-    [%- CASE 'manage_column_config' -%]<span>Manage column configuration</span>
-    [%- CASE 'manage_audio_alerts' -%]<span>Manage audio alerts</span>
-    [%- CASE 'manage_additional_fields' -%]<span>Manage additional fields for baskets or subscriptions (requires edit_subscription or order_manage permissions)</span>
-    [%- CASE 'manage_sms_providers' -%]<span>Manage SMS cellular providers</span>
-    [%- CASE 'manage_usage_stats' -%]<span>Manage usage statistics settings</span>
-    [%- CASE 'manage_mana' -%]<span>Manage Mana KB content sharing</span>
-    [%- CASE 'edit_borrowers' -%]<span>Add, modify and view patron information</span>
-    [%- CASE 'view_borrower_infos_from_any_libraries' -%]<span>View patron infos from any libraries. If not set the logged in user could only access patron infos from its own library or group of libraries.</span>
-    [%- CASE 'modify_holds_priority' -%]<span>Modify holds priority</span>
-    [%- CASE 'place_holds' -%]<span>Place holds for patrons</span>
-    [%- CASE 'delete_all_items' -%]<span>Delete all items at once</span>
-    [%- CASE 'edit_catalogue' -%]<span>Edit catalog (Modify bibliographic/holdings data)</span>
-    [%- CASE 'edit_items' -%]<span>Edit items</span>
-    [%- CASE 'edit_items_restricted' -%]<span>Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)</span>
-    [%- CASE 'fast_cataloging' -%]<span>Fast cataloging</span>
-    [%- CASE 'remaining_permissions' -%]<span>Remaining permissions for managing fines and fees</span>
-    [%- CASE 'writeoff' -%]<span>Write off fines and fees</span>
-    [%- CASE 'suggestions_manage' -%]<span>Manage purchase suggestions</span>
-    [%- CASE 'budget_add_del' -%]<span>Add and delete funds (but can't modify funds)</span>
-    [%- CASE 'budget_manage' -%]<span>Manage funds</span>
-    [%- CASE 'budget_manage_all' -%]<span>Manage all funds</span>
-    [%- CASE 'budget_modify' -%]<span>Modify funds (can't create lines, but can modify existing ones)</span>
-    [%- CASE 'contracts_manage' -%]<span>Manage contracts</span>
-    [%- CASE 'group_manage' -%]<span>Manage basket groups</span>
-    [%- CASE 'order_manage' -%]<span>Manage basket and order lines</span>
-    [%- CASE 'order_manage_all' -%]<span>Manage all baskets and order lines, regardless of restrictions on them</span>
-    [%- CASE 'order_receive' -%]<span>Receive orders and manage shipments</span>
-    [%- CASE 'period_manage' -%]<span>Manage budgets</span>
-    [%- CASE 'planning_manage' -%]<span>Manage budget plannings</span>
-    [%- CASE 'vendors_manage' -%]<span>Manage vendors</span>
-    [%- CASE 'currencies_manage' -%]<span>Manage currencies and exchange rates</span>
-    [%- CASE 'batch_upload_patron_images' -%]<span>Upload patron images in a batch or one at a time</span>
-    [%- CASE 'delete_anonymize_patrons' -%]<span>Delete old borrowers and anonymize circulation history (deletes borrower reading history)</span>
-    [%- CASE 'edit_calendar' -%]<span>Define days when the library is closed</span>
-    [%- CASE 'edit_news' -%]<span>Write news for the OPAC and staff interfaces</span>
-    [%- CASE 'edit_notice_status_triggers' -%]<span>Set notice/status triggers for overdue items</span>
-    [%- CASE 'edit_notices' -%]<span>Define notices</span>
-    [%- CASE 'edit_patrons' -%]<span>Perform batch modification of patrons</span>
-    [%- CASE 'edit_quotes' -%]<span>Edit quotes for quote-of-the-day feature</span>
-    [%- CASE 'export_catalog' -%]<span>Export bibliographic and holdings data</span>
-    [%- CASE 'import_patrons' -%]<span>Import patron data</span>
-    [%- CASE 'inventory' -%]<span>Perform inventory of your catalog</span>
-    [%- CASE 'items_batchdel' -%]<span>Perform batch deletion of items</span>
-    [%- CASE 'items_batchmod' -%]<span>Perform batch modification of items</span>
-    [%- CASE 'items_batchmod_restricted' -%]<span>Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference (please note that items_batchmod is still required)</span>
-    [%- CASE 'label_creator' -%]<span>Create printable labels and barcodes from catalog and patron data</span>
-    [%- CASE 'manage_csv_profiles' -%]<span>Manage CSV export profiles</span>
-    [%- CASE 'manage_patron_lists' -%]<span>Add, edit and delete patron lists and their contents</span>
-    [%- CASE 'manage_staged_marc' -%]<span>Managed staged MARC records, including completing and reversing imports</span>
-    [%- CASE 'marc_modification_templates' -%]<span>Manage marc modification templates</span>
-    [%- CASE 'moderate_comments' -%]<span>Moderate patron comments</span>
-    [%- CASE 'moderate_tags' -%]<span>Moderate patron tags</span>
-    [%- CASE 'records_batchdel' -%]<span>Perform batch deletion of records (bibliographic or authority)</span>
-    [%- CASE 'records_batchmod' -%]<span>Perform batch modification of records (biblios or authorities)</span>
-    [%- CASE 'rotating_collections' -%]<span>Manage rotating collections</span>
-    [%- CASE 'schedule_tasks' -%]<span>Schedule tasks to run</span>
-    [%- CASE 'stage_marc_import' -%]<span>Stage MARC records into the reservoir</span>
-    [%- CASE 'upload_local_cover_images' -%]<span>Upload local cover images</span>
-    [%- CASE 'view_system_logs' -%]<span>Browse the system logs</span>
-    [%- CASE 'check_expiration' -%]<span>Check the expiration of a serial</span>
-    [%- CASE 'claim_serials' -%]<span>Claim missing serials</span>
-    [%- CASE 'create_subscription' -%]<span>Create a new subscription</span>
-    [%- CASE 'delete_subscription' -%]<span>Delete an existing subscription</span>
-    [%- CASE 'edit_subscription' -%]<span>Edit an existing subscription</span>
-    [%- CASE 'receive_serials' -%]<span>Serials receiving</span>
-    [%- CASE 'renew_subscription' -%]<span>Renew a subscription</span>
-    [%- CASE 'routing' -%]<span>Routing</span>
-    [%- CASE 'superserials' -%]<span>Manage subscriptions from any branch (only applies when IndependentBranches is used)</span>
-    [%- CASE 'delete_reports' -%]<span>Delete SQL reports</span>
-    [%- CASE 'create_reports' -%]<span>Create SQL reports</span>
-    [%- CASE 'execute_reports' -%]<span>Execute SQL reports</span>
-    [%- CASE 'add_reserves' -%]<span>Add course reserves</span>
-    [%- CASE 'delete_reserves' -%]<span>Remove course reserves</span>
-    [%- CASE 'manage_courses' -%]<span>Add, edit and delete courses</span>
-    [%- CASE 'configure' -%]<span>Configure plugins</span>
-    [%- CASE 'manage' -%]<span>Manage plugins ( install / uninstall )</span>
-    [%- CASE 'report' -%]<span>Use report plugins</span>
-    [%- CASE 'tool' -%]<span>Use tool plugins</span>
-    [%- CASE 'delete_public_lists' -%]<span>Delete public lists</span>
-    [%- CASE 'upload_general_files' -%]<span>Upload any file</span>
-    [%- CASE 'upload_manage' -%]<span>Manage uploaded files (<i>Useless without upload_general_files</i>)</span>
-    [%- CASE 'access_files' -%]<span>Access to the files stored on the server</span>
-    [%- CASE 'edit_clubs' -%]<span>Create and edit clubs</span>
-    [%- CASE 'edit_templates' -%]<span>Create and edit club templates</span>
-    [%- CASE 'enroll' -%]<span>Enroll patrons in clubs</span>
-    [%- CASE 'edi_manage' -%]<span>Manage EDIFACT transmissions</span>
+    [%- CASE 'circulate_remaining_permissions' -%]
+        <span class="sub_permission circulate_remaining_permissions_subpermission">
+            Remaining circulation permissions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'force_checkout' -%]
+        <span class="sub_permission force_checkout_subpermission">
+            Force checkout if a limitation exists
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_restrictions' -%]
+        <span class="sub_permission manage_restrictions_subpermission">
+            Manage restrictions for accounts
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'overdues_report' -%]
+        <span class="sub_permission overdues_report_subpermission">
+            Execute overdue items report
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'override_renewals' -%]
+        <span class="sub_permission override_renewals_subpermission">
+            Override blocked renewals
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_checkout_notes' %]
+        <span class="sub_permission manage_checkout_notes_subpermission">
+            Mark checkout notes as seen/not seen
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_circ_rules' -%]
+        <span class="sub_permission manage_circ_rules_subpermission">
+            manage circulation rules
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_circ_rules_from_any_libraries' -%]
+        <span class="sub_permission manage_circ_rules_from_any_libraries_subpermission">
+            Manage circulation rules for any library. If not set the logged in user can only edit circulation rules for their own library (please note that manage_circ_rules is still required)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'parameters_remaining_permissions' -%]
+        <span class="sub_permission parameters_remaining_permissions_subpermission">
+            Remaining system parameters permissions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_circ_rules' -%]
+        <span class="sub_permission manage_circ_rules_subpermission">
+            Manage circulation rules
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_sysprefs' -%]
+        <span class="sub_permission manage_sysprefs_subpermission">
+            Manage global system preferences
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_libraries' -%]
+        <span class="sub_permission manage_libraries_subpermission">
+            Manage libraries and library groups
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_itemtypes' -%]
+        <span class="sub_permission manage_itemtypes_subpermission">
+            Manage item types
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_auth_values' -%]
+        <span class="sub_permission manage_auth_values_subpermission">
+            Manage authorized value categories and authorized values
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_patron_categories' -%]
+        <span class="sub_permission manage_patron_categories_subpermission">
+            Manage patron categories
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_patron_attributes' -%]
+        <span class="sub_permission manage_patron_attributes_subpermission">
+            Manage extended patron attributes
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_transfers' -%]
+        <span class="sub_permission manage_transfers_subpermission">
+            Manage library transfer limits and transport cost matrix
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_item_circ_alerts' -%]
+        <span class="sub_permission manage_item_circ_alerts_subpermission">
+            Manage item circulation alerts
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_cities' -%]
+        <span class="sub_permission manage_cities_subpermission">
+            Manage cities and towns
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_marc_frameworks' -%]
+        <span class="sub_permission manage_marc_frameworks_subpermission">
+            Manage MARC bibliographic and authority frameworks and test them
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_keywords2koha_mappings' -%]
+        <span class="sub_permission manage_keywords2koha_mappings_subpermission">
+            Manage keywords to Koha mappings
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_classifications' -%]
+        <span class="sub_permission manage_classifications_subpermission">
+            Manage classification sources and filing rules
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_matching_rules' -%]
+        <span class="sub_permission manage_matching_rules_subpermission">
+            Manage record matching rules
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_oai_sets' -%]
+        <span class="sub_permission manage_oai_sets_subpermission">
+            Manage OAI sets
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_item_search_fields' -%]
+        <span class="sub_permission manage_item_search_fields_subpermission">
+            Manage item search fields
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_search_engine_config' -%]
+        <span class="sub_permission manage_search_engine_config_subpermission">
+            Manage search engine configuration
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_search_targets' -%]
+        <span class="sub_permission manage_search_targets_subpermission">
+            Manage Z39.50 and SRU server configuration
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_didyoumean' -%]
+        <span class="sub_permission manage_didyoumean_subpermission">
+            Manage Did you mean? configuration
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_column_config' -%]
+        <span class="sub_permission manage_column_config_subpermission">
+            Manage column configuration
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_audio_alerts' -%]
+        <span class="sub_permission manage_audio_alerts_subpermission">
+            Manage audio alerts
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_additional_fields' -%]
+        <span class="sub_permission manage_aditional_fields_subpermission">
+            Manage additional fields for baskets or subscriptions (requires edit_subscription or order_manage permissions)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_sms_providers' -%]
+        <span class="sub_permission manage_sms_providers_subpermission">
+            Manage SMS cellular providers
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_usage_stats' -%]
+        <span class="sub_permission manage_usage_stats_subpermission">
+            Manage usage statistics settings
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_mana' -%]
+        <span class="sub_permission manage_mana_subpermission">
+            Manage Mana KB content sharing
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_borrowers' -%]
+        <span class="sub_permission edit_borrowers_subpermission">
+            Add, modify and view patron information
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'view_borrower_infos_from_any_libraries' -%]
+        <span class="sub_permission view_borrower_infos_from_any_libraries_subpermission">
+            View patron infos from any libraries. If not set the logged in user could only access patron infos from its own library or group of libraries.
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'modify_holds_priority' -%]
+        <span class="sub_permission modify_holds_priority_subpermission">
+            Modify holds priority
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'place_holds' -%]
+        <span class="sub_permission place_holds_subpermission">
+            Place holds for patrons
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_all_items' -%]
+        <span class="sub_permission delete_all_items_subpermission">
+            Delete all items at once
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_catalogue' -%]
+        <span class="sub_permission edit_catalogue_subpermission">
+            Edit catalog (Modify bibliographic/holdings data)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_items' -%]
+        <span class="sub_permission edit_items_subpermission">
+            Edit items
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_items_restricted' -%]
+        <span class="sub_permission edit_items_restricted_subpermission">
+            Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'fast_cataloging' -%]
+        <span class="sub_permission fast_cataloging_subpermission">
+            Fast cataloging
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'remaining_permissions' -%]
+        <span class="sub_permission remaining_permissions_subpermission">
+            Remaining permissions for managing fines and fees
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'writeoff' -%]
+        <span class="sub_permission writeoff_subpermission">
+            Write off fines and fees
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'suggestions_manage' -%]
+        <span class="sub_permission suggestions_manage_subpermission">
+            Manage purchase suggestions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'budget_add_del' -%]
+        <span class="sub_permission budget_add_del_subpermission">
+            Add and delete funds (but can't modify funds)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'budget_manage' -%]
+        <span class="sub_permission budget_manage_subpermission">
+            Manage funds
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'budget_manage_all' -%]
+        <span class="sub_permission budget_manage_all_subpermission">
+            Manage all funds
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'budget_modify' -%]
+        <span class="sub_permission budget_modify_subpermission">
+            Modify funds (can't create lines, but can modify existing ones)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'contracts_manage' -%]
+        <span class="sub_permission contracts_manage_subpermission">
+            Manage contracts
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'group_manage' -%]
+        <span class="sub_permission group_manage_subpermission">
+            Manage basket groups
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'order_manage' -%]
+        <span class="sub_permission order_manage_subpermission">
+            Manage basket and order lines
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'order_manage_all' -%]
+        <span class="sub_permission order_manage_all_subpermission">
+            Manage all baskets and order lines, regardless of restrictions on them
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'order_receive' -%]
+        <span class="sub_permission order_receive_subpermission">
+            Receive orders and manage shipments
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'period_manage' -%]
+        <span class="sub_permission period_manage_subpermission">
+            Manage budgets
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'planning_manage' -%]
+        <span class="sub_permission planning_manage_subpermission">
+            Manage budget plannings
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'vendors_manage' -%]
+        <span class="sub_permission vendors_manage_subpermission">
+            Manage vendors
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'currencies_manage' -%]
+        <span class="sub_permission currencies_manage_subpermission">
+            Manage currencies and exchange rates
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'batch_upload_patron_images' -%]
+        <span class="sub_permission batch_upload_patron_images_subpermission">
+            Upload patron images in a batch or one at a time
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_anonymize_patrons' -%]
+        <span class="sub_permission delete_anonymize_patrons_subpermission">
+            Delete old borrowers and anonymize circulation history (deletes borrower reading history)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_calendar' -%]
+        <span class="sub_permission edit_calendar_subpermission">
+            Define days when the library is closed
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_news' -%]
+        <span class="sub_permission edit_news_subpermission">
+            Write news for the OPAC and staff interfaces
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_notice_status_triggers' -%]
+        <span class="sub_permission edit_notice_status_triggers_subpermission">
+            Set notice/status triggers for overdue items
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_notices' -%]
+        <span class="sub_permission edit_notices_subpermission">
+            Define notices
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_patrons' -%]
+        <span class="sub_permission edit_patrons_subpermission">
+            Perform batch modification of patrons
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_quotes' -%]
+        <span class="sub_permission edit_quotes_subpermission">
+            Edit quotes for quote-of-the-day feature
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'export_catalog' -%]
+        <span class="sub_permission export_catalog_subpermission">
+            Export bibliographic and holdings data
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'import_patrons' -%]
+        <span class="sub_permission import_patrons_subpermission">
+            Import patron data
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'inventory' -%]
+        <span class="sub_permission inventory_subpermission">
+            Perform inventory of your catalog
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'items_batchdel' -%]
+        <span class="sub_permission items_batchdel_subpermission">
+            Perform batch deletion of items
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'items_batchmod' -%]
+        <span class="sub_permission items_batchmod_subpermission">
+            Perform batch modification of items
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'items_batchmod_restricted' -%]
+        <span class="sub_permission items_batchmod_restricted_subpermission">
+            Limit batch item modification to subfields defined in the SubfieldsToAllowForRestrictedBatchmod preference (please note that items_batchmod is still required)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'label_creator' -%]
+        <span class="sub_permission label_creator_subpermission">
+            Create printable labels and barcodes from catalog and patron data
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_csv_profiles' -%]
+        <span class="sub_permission manage_csv_profiles_subpermission">
+            Manage CSV export profiles
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_patron_lists' -%]
+        <span class="sub_permission manage_patron_lists_subpermission">
+            Add, edit and delete patron lists and their contents
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_staged_marc' -%]
+        <span class="sub_permission manage_staged_marc_subpermission">
+            Managed staged MARC records, including completing and reversing imports
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'marc_modification_templates' -%]
+        <span class="sub_permission marc_modification_templates_subpermission">
+            Manage marc modification templates
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'moderate_comments' -%]
+        <span class="sub_permission moderate_comments_subpermission">
+            Moderate patron comments
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'moderate_tags' -%]
+        <span class="sub_permission moderate_tags_subpermission">
+            Moderate patron tags
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'records_batchdel' -%]
+        <span class="sub_permission records_batchdel_subpermission">
+            Perform batch deletion of records (bibliographic or authority)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'records_batchmod' -%]
+        <span class="sub_permission records_batchmod_subpermission">
+            Perform batch modification of records (biblios or authorities)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'rotating_collections' -%]
+        <span class="sub_permission rotating_collections_subpermission">
+            Manage rotating collections
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'schedule_tasks' -%]
+        <span class="sub_permission schedule_tasks_subpermission">
+            Schedule tasks to run
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'stage_marc_import' -%]
+        <span class="sub_permission stage_marc_import_subpermission">
+            Stage MARC records into the reservoir
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'upload_local_cover_images' -%]
+        <span class="sub_permission upload_local_cover_images_subpermission">
+            Upload local cover images
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'view_system_logs' -%]
+        <span class="sub_permission view_system_logs_subpermission">
+            Browse the system logs
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'check_expiration' -%]
+        <span class="sub_permission check_expiration_subpermission">
+            Check the expiration of a serial
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'claim_serials' -%]
+        <span class="sub_permission claim_serials_subpermission">
+            Claim missing serials
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'create_subscription' -%]
+        <span class="sub_permission create_subscription_subpermission">
+            Create a new subscription
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_subscription' -%]
+        <span class="sub_permission delete_subscription_subpermission">
+            Delete an existing subscription
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_subscription' -%]
+        <span class="sub_permission edit_subscription_subpermission">
+            Edit an existing subscription
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'receive_serials' -%]
+        <span class="sub_permission receive_serials_subpermission">
+            Serials receiving
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'renew_subscription' -%]
+        <span class="sub_permission renew_subscription_subpermission">
+            Renew a subscription
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'routing' -%]
+        <span class="sub_permission routing_subpermission">
+            Routing
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'superserials' -%]
+        <span class="sub_permission superserials_subpermission">
+            Manage subscriptions from any branch (only applies when IndependentBranches is used)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_reports' -%]
+        <span class="sub_permission delete_reports_subpermission">
+            Delete SQL reports
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'create_reports' -%]
+        <span class="sub_permission create_reports_subpermission">
+            Create SQL reports
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'execute_reports' -%]
+        <span class="sub_permission execute_reports_subpermission">
+            Execute SQL reports
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'add_reserves' -%]
+        <span class="sub_permission add_reserves_subpermission">
+            Add course reserves
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_reserves' -%]
+        <span class="sub_permission delete_reserves_subpermission">
+            Remove course reserves
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_courses' -%]
+        <span class="sub_permission manage_courses_subpermission">
+            Add, edit and delete courses
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'configure' -%]
+        <span class="sub_permission configure_subpermission">
+            Configure plugins
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage' -%]
+        <span class="sub_permission manage_subpermission">
+            Manage plugins ( install / uninstall )
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'report' -%]
+        <span class="sub_permission report_subpermission">
+            Use report plugins
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'tool' -%]
+        <span class="sub_permission tool_subpermission">
+            Use tool plugins
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'delete_public_lists' -%]
+        <span class="sub_permission delete_public_lists_subpermission">
+            Delete public lists
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'upload_general_files' -%]
+        <span class="sub_permission upload_general_files_subpermission">
+            Upload any file
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'upload_manage' -%]
+        <span class="sub_permission upload_manage_subpermission">
+            Manage uploaded files (<i>Useless without upload_general_files</i>)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'access_files' -%]
+        <span class="sub_permission access_files_subpermission">
+            Access to the files stored on the server
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_clubs' -%]
+        <span class="sub_permission edit_clubs_subpermission">
+            Create and edit clubs
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_templates' -%]
+        <span class="sub_permission edit_templates_subpermission">
+            Create and edit club templates
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'enroll' -%]
+        <span class="sub_permission enroll_subpermission">
+            Enroll patrons in clubs
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edi_manage' -%]
+        <span class="sub_permission edi_manage_subpermission">
+            Manage EDIFACT transmissions
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%# self_check %]
-    [%- CASE 'self_checkin_module' -%]<span>Log into the self check-in module. Note: this permission prevents the patron from using any other OPAC functionality</span>
-    [%- CASE 'self_checkout_module' -%]<span>Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID</span>
-    [%- CASE 'manage_rota_items' -%]<span>Add and remove items from rotas</span>
-    [%- CASE 'manage_rotas' -%]<span>Create, edit and delete rotas</span>
+    [%- CASE 'self_checkin_module' -%]
+        <span class="sub_permission self_checkin_module_subpermission">
+            Log into the self check-in module. Note: this permission prevents the patron from using any other OPAC functionality
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'self_checkout_module' -%]
+        <span class="sub_permission self_checkout_module_subpermission">
+            Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_rota_items' -%]
+        <span class="sub_permission manage_rota_items_subpermission">
+            Add and remove items from rotas
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_rotas' -%]
+        <span class="sub_permission manage_rotas_subpermission">
+            Create, edit and delete rotas
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
   [%- END -%]
 [%- END -%]

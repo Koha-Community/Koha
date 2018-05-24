@@ -537,19 +537,6 @@ label,
         font-weight: bold;
     }
 
-    // Permissions Labels
-    &.permissioncode {
-        font-style: italic;
-
-        &::before {
-            content: "(";
-        }
-
-        &::after {
-            content: ")";
-        }
-    }
-
     &.required {
         color: #C00;
     }
@@ -3751,10 +3738,6 @@ span {
         font-weight: bold;
     }
 
-    &.permissiondesc {
-        font-weight: normal;
-    }
-
     &.required {
         color: #C00;
         font-style: italic;
@@ -4384,6 +4367,95 @@ span {
         label {
             margin-left: 0;
         }
+    }
+}
+
+/* Permissions */
+
+#permissionstree {
+    display: inline-block;
+
+    label {
+        cursor: pointer;
+
+        &:hover {
+            color: #004d99;
+        }
+    }
+}
+
+.main_permission {
+    font-size: 110%;
+    font-weight: bold;
+}
+
+.permissioncode {
+    color: #666;
+    font-style: italic;
+}
+
+.permission-highlight {
+    background-color: #FFC;
+}
+
+.togglechildren_on,
+.togglechildren_off {
+    float: right;
+}
+
+.togglechildren_off,
+.children {
+    display: none;
+}
+
+.open {
+    .togglechildren_off {
+        display: inline;
+    }
+
+    .togglechildren_on {
+        display: none;
+    }
+}
+
+.parent {
+    border: 1px solid #DDD;
+    border-bottom-width: 0;
+    padding: 5px;
+
+    &:last-child {
+        border-bottom-width: 1px;
+    }
+
+    &:nth-child(odd) {
+        background-color: #F8F8F8;
+    }
+}
+
+
+.superlibrarian-hint {
+    color: #000;
+    padding: .2em 0;
+    text-indent: 2em;
+}
+
+.child-flags {
+    background-color: #FFF;
+    border: 1px solid #DDD;
+    border-bottom-width: 0;
+    margin: 0 5px 0 20px;
+    padding: 5px;
+
+    &:first-child {
+        margin-top: 10px;
+    }
+
+    &:last-child {
+        border-bottom-width: 1px;
+    }
+
+    &:nth-child(odd) {
+        background-color: #EEE;
     }
 }
 
