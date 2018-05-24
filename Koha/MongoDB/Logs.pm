@@ -45,6 +45,22 @@ sub getActionLogs{
     return \@logs;
 }
 
+#get all data from action_cache_logs;
+sub getActionCacheLogs{
+    my $self = shift;
+    my $dbh = C4::Context->dbh;
+    my $query = "
+    SELECT action_id,action, object, timestamp, user, info from action_logs_cache";
+    my $stmnt = $dbh->prepare($query);
+    $stmnt->execute();
+
+    my @logs;
+    while ( my $row = $stmnt->fetchrow_hashref ) {
+        push @logs, $row;
+    }
+    return \@logs;
+}
+
 sub setUserLogs{
 	my $self = shift;
 	my ($actionlog, $sourceuserId, $objectuserId, $cardnumber, $borrowernumber) = @_;

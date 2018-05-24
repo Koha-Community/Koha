@@ -82,6 +82,11 @@ sub logaction {
     $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos,$interface);
     $sth->finish;
 
+    # Insert log mark to action_logs_cache. Data of this table will be copied to MongoDB 
+    $sth=$dbh->prepare("Insert into action_logs_cache (timestamp,user,module,action,object,info,interface) values (now(),?,?,?,?,?,?)");
+    $sth->execute($usernumber,$modulename,$actionname,$objectnumber,$infos,$interface);
+    $sth->finish;
+
     my $logger = Koha::Logger->get(
         {
             interface => 'intranet',
