@@ -71,7 +71,7 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
             my $letter = C4::Letters::GetPreparedLetter(
                 module => 'reserves',
                 letter_code => 'CANCEL_HOLD_ON_LOST',
-                branchcode => $patron->homebranch,
+                branchcode => $patron->branchcode,
                 lang => $patron->lang,
                 tables => {
                     branches    => $library->branchcode,
