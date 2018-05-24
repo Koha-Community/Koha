@@ -1292,7 +1292,7 @@ The release team for Koha 18.05.00 is
 
 - Release Manager: [Jonathan Druart](mailto:jonathan.druart@bugs.koha-community.org)
 - Release Manager assistant: [Nick Clemens](mailto:nick@bywatersolutions.com)
-
+- QA Manager: [Katrin Fischer](mailto:Katrin.Fischer@bsz-bw.de)
 - QA Team:
   - [Tomás Cohen Arazi](mailto:tomascohen@gmail.com)
   - [Alex Arnaud](mailto:alex.arnaud@biblibre.com)
