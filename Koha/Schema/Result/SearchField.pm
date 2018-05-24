@@ -48,7 +48,7 @@ the human readable name of the field, for display
 =head2 type
 
   data_type: 'enum'
-  extra: {list => ["","string","date","number","boolean","sum","isbn","stdno"]}
+  extra: {list => ["","string","date","number","boolean","sum"]}
   is_nullable: 0
 
 what type of data this holds, relevant when storing it in the search engine
@@ -65,9 +65,7 @@ __PACKAGE__->add_columns(
   "type",
   {
     data_type => "enum",
-    extra => {
-      list => ["", "string", "date", "number", "boolean", "sum", "isbn", "stdno"],
-    },
+    extra => { list => ["", "string", "date", "number", "boolean", "sum"] },
     is_nullable => 0,
   },
 );
@@ -116,8 +114,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-05-09 12:50:58
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NDRiXH19vBOhrMoyJqVTGQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-23 13:30:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1IenQWmCO16tJ/nIFTFYug
 
 __PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
 
