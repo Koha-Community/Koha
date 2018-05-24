@@ -1,0 +1,175 @@
+{
+  "/logs": {
+    "get": {
+      "x-mojo-to": "Log#get",
+      "operationId": "getLog",
+      "tags": ["logs"],
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [{
+        "name": "datefrom",
+        "in": "query",
+        "description": "Start date",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "dateto",
+        "in": "query",
+        "description": "End date",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "user",
+        "in": "query",
+        "description": "User id",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "modules",
+        "in": "query",
+        "description": "Log modules",
+        "required": false,
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }, {
+        "name": "action",
+        "in": "query",
+        "description": "Log action",
+        "required": false,
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }, {
+        "name": "object",
+        "in": "query",
+        "description": "Object id",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "info",
+        "in": "query",
+        "description": "Log info",
+        "required": false,
+        "type": "string"
+      }, {
+        "name": "interface",
+        "in": "query",
+        "description": "Interface",
+        "required": false,
+        "type": "string"
+      }],
+      "x-koha-authorization": {
+        "allow-owner": true,
+          "permissions": {
+            "auth": "get_session"
+          }
+      },
+      "responses": {
+        "200": {
+          "description": "Getting logs succeeded",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/log"
+            }
+          }
+        },
+        "404": {
+          "description": "Missing log data",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Log#add",
+      "operationId": "addLog",
+      "tags": ["logs"],
+      "parameters": [{
+        "name": "module",
+        "in": "query",
+        "description": "Log module",
+        "required": false,
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }, {
+        "name": "action",
+        "in": "query",
+        "description": "Log action",
+        "required": false,
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }, {
+        "name": "object",
+        "in": "query",
+        "description": "Object id",
+        "required": false,
+        "type": "integer"
+      }, {
+        "name": "info",
+        "in": "query",
+        "description": "Log info",
+        "required": false,
+        "type": "string"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Log added"
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "auth": "get_session"
+        }
+      }
+    }
+  }
+}
