@@ -15933,12 +15933,8 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '17.12.00.037';
 if( CheckVersion( $DBversion ) ) {
 
-    $dbh->do( q{
-        ALTER TABLE search_field CHANGE COLUMN type type ENUM('', 'string', 'date', 'number', 'boolean', 'sum', 'isbn', 'stdno') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine'
-    } );
-
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 20073 - Add new types for Elasticsearch fields)\n";
+    print "Upgrade to $DBversion done (This change has been reverted, nothing done!)\n";
 }
 
 $DBversion = '17.12.00.038';
