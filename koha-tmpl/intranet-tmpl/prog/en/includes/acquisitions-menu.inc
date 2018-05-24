@@ -10,12 +10,14 @@
                 <li><a href="/cgi-bin/koha/acqui/edifactmsgs.pl">EDIFACT messages</a></li>
             [% END %]
         </ul>
-        [% IF ( CAN_user_acquisition_budget_manage || CAN_user_parameters || CAN_user_acquisition_edi_manage ) %]
+        [% IF ( CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_parameters || CAN_user_acquisition_edi_manage ) %]
             <h5>Administration</h5>
             <ul>
                 <li><a href="/cgi-bin/koha/admin/admin-home.pl">Administration home</a></li>
-                [% IF ( CAN_user_acquisition_budget_manage ) %]
+                [% IF ( CAN_user_acquisition_period_manage ) %]
                     <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a></li>
+                [% END %]
+                [% IF ( CAN_user_acquisition_budget_manage ) %]
                     <li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a></li>
                 [% END %]
                 [% IF ( CAN_user_acquisition_currencies_manage ) %]

@@ -42,15 +42,25 @@
     [% END %]
 </ul>
 
+[% IF ( CAN_user_acquisition_period_manage || CAN_user_acquisition_budget_manage || CAN_user_parameters || CAN_user_acquisition_edi_manage ) %]
 <h5>Acquisition parameters</h5>
 
 <ul>
-    <li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
-    <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a></li>
-    <li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a></li>
-    <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
-    <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
+    [% IF ( CAN_user_acquisition_currencies_manage ) %]
+        <li><a href="/cgi-bin/koha/admin/currency.pl">Currencies and exchange rates</a></li>
+    [% END %]
+    [% IF ( CAN_user_acquisition_period_manage ) %]
+        <li><a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a></li>
+    [% END %]
+    [% IF ( CAN_user_acquisition_budget_manage ) %]
+        <li><a href="/cgi-bin/koha/admin/aqbudgets.pl">Funds</a></li>
+    [% END %]
+    [% IF ( CAN_user_acquisition_edi_manage ) %]
+        <li><a href="/cgi-bin/koha/admin/edi_accounts.pl">EDI accounts</a></li>
+        <li><a href="/cgi-bin/koha/admin/edi_ean_accounts.pl">Library EANs</a></li>
+    [% END %]
 </ul>
+[% END %]
 
 [% IF CAN_user_plugins %]
 <h5>Plugins</h5>
