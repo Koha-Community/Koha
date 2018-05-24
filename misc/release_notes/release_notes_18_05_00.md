@@ -1,5 +1,5 @@
 # RELEASE NOTES FOR KOHA 18.05.00
-17 May 2018
+24 May 2018
 
 Koha is the first free and open source software library automation
 package (ILS). Development is sponsored by libraries of varying types
@@ -19,9 +19,44 @@ Installation instructions can be found at:
 
 Koha 18.05.00 is a major release, that comes with many new features.
 
-It includes 12 new features, 257 enhancements, 354 bugfixes.
+It includes 12 new features, 257 enhancements, 360 bugfixes.
 
+## Important notes
 
+### Plack and Memcached
+
+On the Koha's about page you can see the status of Plack and Memcached.
+
+The use of Plack and Memcached has been around and stable for more than two years, and must be considered mandatory.
+
+They bring a lot of speed and improve the user experience.
+
+### No more login with the database user
+
+It is no longer possible to use the database user to login into Koha.
+You should first create a superlibrarian patron and use it for logging in.
+
+### Debian Stretch users: tmp path changes
+
+If you are using Debian Stretch (9) you should take a look at [bug 20428](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20428).
+
+A new entry upload_path must be created in your koha-conf.xml file in order to define a temporary uploaded files directory.
+
+### Dealing with SQL modes
+
+Since latest stables have been released it is not longer needed to modify the configuration of the Database Management System.
+
+See the [dedicated wiki page](https://wiki.koha-community.org/wiki/DBMS_configuration) for more information.
+
+### Change of the database tables charset
+
+[Bug 18336](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18336) adds the support for Unicode supplementary characters.
+
+We have now a better support of Unicode characters and especially vietnamese and chinese get improved, we also support emojis.
+
+However upgrading the database will require space (a temporary table is created for each of the tables), and time.
+
+It is recommended that the upgrade routine is launched using the command line because it is expected to take more time than usual and could cause timeouts. Packages users will have this run during the upgrade process.
 
 ## New features
 
@@ -432,7 +467,6 @@ Will ask for only 2 parameters when run, Branchcode and Item type.
 
 - [[18825]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18825) Elasticsearch - Update default authority mappings
 - [[19582]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19582) Elasticsearch: Auth-finder.pl must use search_auth_compat
-- [[20073]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20073) Move Elasticsearch settings to configuration files
 - [[20386]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20386) Improve warning and error messages for Search Engine Configuration
 
 ### Serials
@@ -598,6 +632,8 @@ have already been fixed in maintainance releases)
 - [[20323]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20323) Batch patron modification tool broken
 - [[20325]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20325) C4::Accounts::purge_zero_balance_fees does not check account_offsets
 - [[20428]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20428) MARC import fails on Debian Stretch
+- [[20701]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20701) maninvoice.pl is vulnerable for CSRF attacks
+- [[20730]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20730) Missing authentication check in serials/routing.pl
 
 ### Cataloging
 
@@ -699,6 +735,7 @@ The system preference 'MarkLostItemsAsReturned' now allows libraries to choose i
 - [[19908]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19908) Password should not be mandatory
 - [[19921]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19921) Error when updating child to adult patron on system with only one adult patron category
 - [[20214]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20214) Patron search is broken
+- [[20792]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20792) Can't go to patron record with TranslateNotices active
 
 ### REST api
 
@@ -901,6 +938,7 @@ have already been fixed in maintainance releases)
 - [[19973]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19973) SQL syntax error in uk-UA/mandatory/sample_notices.sql
 - [[20075]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20075) Change authority hidden attribute in sql installer files
 - [[20103]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20103) Readonly::XS version not detected
+- [[20104]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20104) Update minimum version of Perl to 5.20 because of caller()
 - [[20746]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20746) Improve behaviour of onboarding tool for Italian by standardizing file structure of it-IT installer
 
 ### Label/patron card printing
@@ -930,7 +968,7 @@ have already been fixed in maintainance releases)
 - [[18990]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18990) Overdue Notices are not sending through SMS correctly
 - [[19578]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19578) TT syntax for notices - There is no way to pre-process DB fields
 - [[20298]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20298) Notices template uses same html id for each language
-- [[20685]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20685) Modify letter template does not render incorrectly
+- [[20685]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20685) Modify letter template does not render correctly
 
 ### OPAC
 
@@ -966,6 +1004,8 @@ have already been fixed in maintainance releases)
 - [[18993]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18993) Bump libtest-simple-perl to 1.302073
 - [[19610]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19610) Make koha-common.logrotate use copytruncate
 - [[20072]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20072) Fix build-git-snapshot for Debian source format quilt
+- [[20800]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20800) Keep Koha on Stretch from using broken libhttp-oai-perl
+- [[20801]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20801) Make dependency on memcached mandatory
 
 ### Patrons
 
@@ -979,6 +1019,7 @@ have already been fixed in maintainance releases)
 - [[20455]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20455) Can't sort patron search on date expired
 - [[20666]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20666) Wrong Permissions prevent non-plack pages to load
 - [[20719]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20719) Home library not displayed on all patron account tabs
+- [[20803]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20803) Cannot search to hold or use print options from API keys interface
 
 ### REST api
 
@@ -1101,7 +1142,7 @@ have already been fixed in maintainance releases)
 - [[20503]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20503) Borrower_PrevCheckout.t  is failing randomly
 - [[20531]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20531) IssueSlip is failing randomly
 - [[20557]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20557) Koha/Acquisition/Order.t is failing randomly
-- [[20584]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20584) Koha/Patron/Categories.t is on slow servers
+- [[20584]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20584) Koha/Patron/Categories.t is failing on slow servers
 - [[20721]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20721) Circulation.t keeps failing randomly
 - [[20764]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20764) t/Koha_Template_Plugin_KohaPlugins.t is DB dependent
 
@@ -1176,15 +1217,25 @@ documentation is
 
 - [Koha Documentation](http://koha-community.org/documentation/)
 
-As of the date of these release notes, only the English version of the
-Koha manual is available:
+As of the date of these release notes, the Koha manual is available in the following languages:
 
-- [Koha Manual](http://koha-community.org/manual/18.05/en/html/)
+- [English](http://koha-community.org/manual/18.05/en/html/)
+- [Arabic](http://koha-community.org/manual/18.05/ar/html/)
+- [Chinese - Taiwan](http://koha-community.org/manual/18.05/zh_TW/html/)
+- [Czech](http://koha-community.org/manual/18.05/cs/html/)
+- [French](http://koha-community.org/manual/18.05/fr/html/)
+- [French (Canada)](http://koha-community.org/manual/18.05/fr_CA/html/)
+- [German](http://koha-community.org/manual/18.05/de/html/)
+- [Hindi](http://koha-community.org/manual/18.05/hi/html/)
+- [Italian](http://koha-community.org/manual/18.05/it/html/)
+- [Portuguese - Brazil](http://koha-community.org/manual/18.05/pt_BR/html/)
+- [Spanish](http://koha-community.org/manual/18.05/es/html/)
+- [Turkish](http://koha-community.org/manual/18.05/tr/html/)
 
 
 The Git repository for the Koha manual can be found at
 
-- [Koha Git Repository](http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary)
+- [Koha Git Repository](https://gitlab.com/koha-community/koha-manual)
 
 ## Translations
 
@@ -1192,7 +1243,7 @@ Complete or near-complete translations of the OPAC and staff
 interface are available in this release for the following languages:
 
 - Arabic (96.8%)
-- Armenian (99.2%)
+- Armenian (99.7%)
 - Basque (73.6%)
 - Chinese (China) (78%)
 - Chinese (Taiwan) (100%)
@@ -1201,23 +1252,23 @@ interface are available in this release for the following languages:
 - English (New Zealand) (97%)
 - English (USA)
 - Finnish (93.1%)
-- French (99.6%)
+- French (100%)
 - French (Canada) (89.7%)
 - German (100%)
-- German (Switzerland) (96.7%)
-- Greek (78.7%)
+- German (Switzerland) (100%)
+- Greek (78.9%)
 - Hindi (100%)
-- Italian (97%)
+- Italian (97.1%)
 - Norwegian Bokmål (53%)
 - Occitan (post 1500) (71.3%)
 - Persian (53.6%)
 - Polish (95%)
-- Portuguese (99.9%)
-- Portuguese (Brazil) (78.7%)
+- Portuguese (100%)
+- Portuguese (Brazil) (78.8%)
 - Slovak (93.8%)
-- Spanish (99.5%)
-- Swedish (95.1%)
-- Turkish (99.2%)
+- Spanish (100%)
+- Swedish (95.2%)
+- Turkish (99.7%)
 - Vietnamese (66%)
 
 Partial translations are available for various other languages.
@@ -1289,7 +1340,7 @@ We thank the following individuals who contributed patches to Koha 18.05.00.
 - Alex Buckley (4)
 - Pongtawat C (1)
 - Colin Campbell (2)
-- Nick Clemens (74)
+- Nick Clemens (76)
 - Tomás Cohen Arazi (130)
 - David Cook (2)
 - Charlotte Cordwell (8)
@@ -1301,7 +1352,7 @@ We thank the following individuals who contributed patches to Koha 18.05.00.
 - Indranil Das Gupta (L2C2 Technologies) (1)
 - Frédéric Demians (1)
 - Marcel de Rooy (108)
-- Jonathan Druart (568)
+- Jonathan Druart (578)
 - Magnus Enger (3)
 - Charles Farmer (4)
 - Katrin Fischer (24)
@@ -1321,7 +1372,7 @@ We thank the following individuals who contributed patches to Koha 18.05.00.
 - Olli-Antti Kivilahti (4)
 - Ulrich Kleiber (1)
 - Jon Knight (3)
-- Owen Leonard (127)
+- Owen Leonard (129)
 - Ere Maijala (3)
 - Sherryn Mak (1)
 - Jose Martin (1)
@@ -1344,7 +1395,7 @@ We thank the following individuals who contributed patches to Koha 18.05.00.
 - Grace Smyth (6)
 - Fridolin Somers (7)
 - Lari Taskula (7)
-- Mirko Tietgen (13)
+- Mirko Tietgen (15)
 - Mark Tompsett (50)
 - Jenny Way (6)
 - Jesse Weaver (2)
@@ -1353,12 +1404,12 @@ We thank the following individuals who contributed patches to Koha 18.05.00.
 We thank the following libraries, companies, and other institutions who contributed
 patches to Koha 18.05.00
 
-- abunchofthings.net (13)
-- ACPL (127)
+- abunchofthings.net (15)
+- ACPL (128)
 - BibLibre (74)
 - BSZ BW (30)
-- bugs.koha-community.org (568)
-- ByWater-Solutions (179)
+- bugs.koha-community.org (578)
+- ByWater-Solutions (180)
 - Catalyst (17)
 - Foundations (1)
 - Göteborgs universitet (3)
@@ -1413,16 +1464,16 @@ for Koha.
 - Barton Chittenden (1)
 - Axelle Clarisse (1)
 - Nick Clemens (113)
-- Tomas Cohen Arazi (171)
+- Tomas Cohen Arazi (175)
 - Koha-us conference (1)
 - Charlotte Cordwell (5)
 - Chris Cormack (2)
 - Roch D'Amour (26)
-- Marcel de Rooy (250)
-- Jonathan Druart (1491)
+- Marcel de Rooy (252)
+- Jonathan Druart (1507)
 - Charles Farmer (16)
 - Bouzid Fergani (1)
-- Katrin Fischer (373)
+- Katrin Fischer (374)
 - Brendan Gallagher (14)
 - Lucie Gay (2)
 - Bernardo Gonzalez Kriegel (1)
@@ -1463,7 +1514,7 @@ for Koha.
 - Fridolin Somers (2)
 - Lari Taskula (17)
 - Mirko Tietgen (9)
-- Mark Tompsett (119)
+- Mark Tompsett (122)
 - Ed Veal (2)
 - Marc Véron (7)
 - Marjorie Vila (5)
@@ -1473,16 +1524,38 @@ for Koha.
 And people who contributed to the Koha manual during the release cycle of Koha 18.05.00.
 
   * Chris Cormack (37)
-  * Caroline Cyr La Rose (27)
+  * Caroline Cyr La Rose (45)
   * Jonathan Druart (9)
   * Magnus Enger (2)
-  * Katrin Fischer (7)
-  * Lee Jamison (7)
+  * Katrin Fischer (34)
+  * Bernardo Gonzalez Kriegel (2)
+  * Lee Jamison (49)
   * Hugh Rundle (2)
 
 We regret any omissions.  If a contributor has been inadvertently missed,
 please send a patch against these release notes to 
 koha-patches@lists.koha-community.org.
+
+## Special thanks
+
+I would like to add special thanks to the documentation team.
+
+They provided documentation for all the new features and enhancements we have in this release.
+
+I also think the whole Koha team can be thanked for their patience with my requests!
+
+And, of course, Karen, for her daily help and support.
+
+## Notes from the Release Manager
+
+During this release we mainly focussed on:
+ * improving the online manual - it is now available in several languages and formats!
+ * integrating new features: we have 12 of them into this release!
+ * keeping our testing suite and our code robust
+ * elastic search
+ * REST API
+
+Enjoy this new version of Koha and wish the best of luck to Nick!
 
 ## Revision control notes
 
@@ -1504,4 +1577,4 @@ tracker at:
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-Autogenerated release notes updated last on 17 May 2018 15:46:36.
+Autogenerated release notes updated last on 22 May 2018 15:34:41.
