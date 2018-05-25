@@ -305,7 +305,7 @@
           <xsl:call-template name="chopPunctuation">
             <xsl:with-param name="chopString">
               <xsl:call-template name="subfieldSelect">
-                <xsl:with-param name="codes">abcdfijkmnpvxyz</xsl:with-param>
+                <xsl:with-param name="codes">abcdfijkmnptvxyz</xsl:with-param>
                 <xsl:with-param name="subdivCodes">ijknpxyz</xsl:with-param>
                 <xsl:with-param name="subdivDelimiter">-- </xsl:with-param>
               </xsl:call-template>
