@@ -48,7 +48,7 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 my $tx;
 
 subtest 'under() tests' => sub {
-    plan tests => 15;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -60,6 +60,38 @@ subtest 'under() tests' => sub {
     $t->request_ok($tx)
       ->status_is(401)
       ->json_is('/error', 'Authentication failure.');
+
+    # 401 (authenticating as database user)
+    my $db_session = C4::Auth::get_session('');
+    $db_session->param( 'number', 0);
+    $db_session->param( 'id',     C4::Context->config('user'));
+    $db_session->param('ip', '127.0.0.1');
+    $db_session->param('lasttime', time());
+    $db_session->flush;
+    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
+     $tx->req->cookies(
+        { name => 'CGISESSID', value => $db_session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)
+      ->status_is(401)
+      ->json_is('/error', 'Please do not use the API as the database '
+                .'administrative user. This could cause problems!');
+
+    # 401 (anonymous session)
+    my $anon_session = C4::Auth::get_session('');
+    $anon_session->param( 'sessiontype', 'anon');
+    $anon_session->param('ip', '127.0.0.1');
+    $anon_session->param('lasttime', time());
+    $anon_session->flush;
+    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
+     $tx->req->cookies(
+        { name => 'CGISESSID', value => $anon_session->id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)
+      ->status_is(401)
+      ->json_is('/error', 'Unknown authenticated user. Perhaps you have '
+                .'an anonymous session?');
+
 
     # 403 (no permission)
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );

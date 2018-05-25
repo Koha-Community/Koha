@@ -253,10 +253,10 @@ sub authenticate_api_request {
     my $permissions = $authorization->{'permissions'};
     # Check if the user is authorized
     my ($owner_access, $guarantor_access, $guarantee_access);
-    if ( haspermission($user->userid, $permissions)
+    if ( $user && ( haspermission($user->userid, $permissions)
         or $owner_access = allow_owner($c, $authorization, $user)
         or $guarantor_access = allow_guarantor($c, $authorization, $user)
-        or $guarantee_access = allow_guarantee($c, $authorization, $user) ) {
+        or $guarantee_access = allow_guarantee($c, $authorization, $user) ) ) {
 
         Koha::Exceptions::Authorization::Unauthorized->throw(
             error => "Patron's card has been marked as 'lost'. Access forbidden."
@@ -271,6 +271,13 @@ sub authenticate_api_request {
 
         # Everything is ok
         return 1;
+    }
+
+    unless ($user) {
+        Koha::Exceptions::Authentication::Required->throw(
+            error => 'Unknown authenticated user. Perhaps you have an anonymous'
+                    .' session?'
+        );
     }
 
     Koha::Exceptions::Authorization::Unauthorized->throw(
@@ -310,6 +317,12 @@ sub _cookie_auth {
     if ($status eq "ok") {
         $session = get_session($sessionID);
         $user = Koha::Patrons->find($session->param('number'));
+        if ($session->param('number') eq '0') {
+            Koha::Exceptions::Authentication::Required->throw(
+                error => 'Please do not use the API as the database '
+                        .'administrative user. This could cause problems!'
+            );
+        }
         $c->stash('koha.user' => $user);
     }
     elsif ($status eq "maintenance") {
