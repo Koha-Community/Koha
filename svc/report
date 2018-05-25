@@ -34,8 +34,9 @@ my $report_id = $query->param('id');
 my $report_name = $query->param('name');
 my $report_annotation = $query->param('annotated');
 
-my $report_rec = Koha::Reports->find( $report_name ? { 'name' => $report_name } : { 'id' => $report_id } );
-if (!$report_rec) { die "There is no such report.\n"; }
+my $report_recs = Koha::Reports->search( $report_name ? { 'report_name' => $report_name } : { 'id' => $report_id } );
+if (!$report_recs || $report_recs->count == 0 ) { die "There is no such report.\n"; }
+my $report_rec = $report_recs->next();
 
 my @sql_params  = $query->param('sql_params');
 
@@ -53,7 +54,7 @@ my $cache = Koha::Caches->get_instance();
 my $cache_active = $cache->is_cache_active;
 my ($cache_key, $json_text);
 if ($cache_active) {
-    $cache_key = "intranet:report:".($report_name ? "name:$report_name" : "id:$report_id")
+    $cache_key = "intranet:report:".($report_name ? "report_name:$report_name" : "id:$report_id")
     . join( '-', @sql_params );
     $json_text = $cache->get_from_cache($cache_key);
 }
