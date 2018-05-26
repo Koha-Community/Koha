@@ -33,6 +33,7 @@ use C4::Search::History;
 use Koha;
 use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Library::Groups;
 use Koha::Libraries;
 use Koha::Patrons;
@@ -1201,7 +1202,7 @@ sub checkauth {
             );
         }
 
-        track_login_for_session( $userid, $session );
+        track_login_for_session( $userid );
 
         return ( $userid, $cookie, $sessionID, $flags );
     }
@@ -2078,26 +2079,30 @@ sub getborrowernumber {
 
 =head2 track_login_for_session
 
-  track_login_for_session( $userid, $session );
+  track_login_for_session( $userid );
 
 C<$userid> the userid of the member
-C<$session> the CGI::Session object used to store the session's state.
 
 Wraps the call to $patron->track_login, the method used to update borrowers.lastseen.
 
 =cut
 
 sub track_login_for_session {
-    my ( $userid, $session ) = @_;
+    my $userid = shift;
+    return unless $userid;
 
-    if ( $userid && $session && !$session->param('tracked_for_session') ) {
-        $session->param( 'tracked_for_session', 1 );
-        $session->flush();
+    my $patron = Koha::Patrons->find( { userid => $userid } );
+    return unless $patron;
 
-        # track_login also depends on pref TrackLastPatronActivity
-        my $patron = Koha::Patrons->find( { userid => $userid } );
-        $patron->track_login if $patron;
-    }
+    my $cache     = Koha::Caches->get_instance();
+    my $cache_key = "seen-for-session-" . $patron->id;
+    my $cached    = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
+
+    my $today = dt_from_string()->ymd;
+    return if $cached && $cached eq $today;
+
+    $patron->track_login;
+    $cache->set_in_cache( $cache_key, $today );
 }
 
 END { }    # module clean-up code here (global destructor)
