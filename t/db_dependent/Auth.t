@@ -77,38 +77,33 @@ subtest 'track_login_for_session() tests' => sub {
     $patron->lastseen( undef );
     $patron->store();
 
-    # Mock a CGI object with real userid param
-    my $cgi = Test::MockObject->new();
-    $cgi->mock( 'param', sub { return $patron; } );
-    $cgi->mock( 'cookie', sub { return; } );
-
-    my $session = new CGI::Session( undef, undef, { Directory => File::Spec->tmpdir } );
+    my $cache     = Koha::Caches->get_instance();
+    my $cache_key = "seen-for-session-" . $patron->id;
+    $cache->clear_from_cache($cache_key);
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
 
-    C4::Auth::track_login_for_session( $userid );
-    $patron->_result()->discard_changes();
-    is( $patron->lastseen, undef, 'Patron last seen should be unchanged if no session is passed' );
+    is( $patron->lastseen, undef, 'Patron should have not last seen when newly created' );
 
-    C4::Auth::track_login_for_session( $userid, $session );
+    C4::Auth::track_login_for_session( $userid );
     $patron->_result()->discard_changes();
     isnt( $patron->lastseen, undef, 'Patron should have last seen set when TrackLastPatronActivity = 1' );
 
     sleep(1); # We need to wait a tiny bit to make sure the timestamp will be different
     my $last_seen = $patron->lastseen;
-    C4::Auth::track_login_for_session( $userid, $session );
+    C4::Auth::track_login_for_session( $userid );
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged if passed the same session' );
 
-    $session = new CGI::Session( undef, undef, { Directory => File::Spec->tmpdir } );
-    C4::Auth::track_login_for_session( $userid, $session );
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_for_session( $userid );
     $patron->_result()->discard_changes();
     isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed if given a new session' );
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
     sleep(1);
     $last_seen = $patron->lastseen;
-    C4::Auth::track_login_for_session( $userid, $session );
+    C4::Auth::track_login_for_session( $userid );
     $patron->_result()->discard_changes();
     is( $patron->lastseen, $last_seen, 'Patron should have last seen unchanged when TrackLastPatronActivity = 0' );
 
