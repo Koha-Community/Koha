@@ -709,7 +709,7 @@
             $(".modal").on('hidden.bs.modal', function (e) { $("#barcode").focus(); });
 
             [% IF print_slip %]
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber %]&amp;biblionumber=[% biblionumber %]');
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% borrowernumber %]&amp;biblionumber=[% biblionumber %]');
             [% END %]
 
             var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'returns', 'checkedintable', 'json' ) %]

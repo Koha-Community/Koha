@@ -78,7 +78,7 @@ if ($session->param('branch') eq 'NO_LIBRARY_SET'){
 if ( $query->param('print_slip') ) {
     $template->param(
         print_slip     => 1,
-        borrowernumber => scalar $query->param('borrowernumber'),
+        borrowernumber => scalar $query->param('borrowernumber'), # FIXME We should send a Koha::Patron and raise an error if not exist.
         biblionumber   => scalar $query->param('biblionumber'),
     );
 }
