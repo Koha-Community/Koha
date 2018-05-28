@@ -255,6 +255,8 @@
                     [% budget_owner.firstname %] [% budget_owner.surname %]
                 </a> |
             </span>
+        [% ELSE %]
+            <span  id="budget_owner_name"></span>
         [% END %]
         <a id="edit_owner" class="new_window" href="#"><i class="fa fa-search"></i> Select owner</a>
         <a id="remove_owner" href="#"><i class="fa fa-trash"></i> Remove owner</a>
@@ -471,7 +473,7 @@
 
             function select_user(borrowernumber, borrower) {
                 ownerRemove();
-                var borrowername = borrower.firstname + ' ' + borrower.surname
+                var borrowername = borrower.firstname + ' ' + borrower.surname;
                 if (borrowernumber) {
                     var ownerlink = '<a href="/cgi-bin/koha/members/moremember.pl'
                         + '?borrowernumber=' + borrowernumber + '">'
