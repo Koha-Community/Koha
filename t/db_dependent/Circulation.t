@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 116;
+use Test::More tests => 117;
 
 use DateTime;
 use POSIX qw( floor );
@@ -2192,6 +2192,40 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
 
 };
 
+subtest 'CanBookBeIssued | item-level_itypes=biblio' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 0); # biblio
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } )->store;
+
+    my $itemtype = $builder->build(
+        {
+            source => 'Itemtype',
+            value  => { notforloan => undef, }
+        }
+    );
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem', value => { itemtype => $itemtype->{itemtype} } } );
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value  => {
+                homebranch    => $library->{branchcode},
+                holdingbranch => $library->{branchcode},
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                biblionumber  => $biblioitem->{biblionumber},
+                biblioitemnumber => $biblioitem->{biblionumber},
+            }
+        }
+    )->store;
+
+    my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, undef, undef, undef, undef );
+    is_deeply( $needsconfirmation, {}, 'Item can be issued to this patron' );
+    is_deeply( $issuingimpossible, {}, 'Item can be issued to this patron' );
+};
 
 $schema->storage->txn_rollback;
 $cache->clear_from_cache('single_holidays');
