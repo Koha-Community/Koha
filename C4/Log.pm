@@ -90,7 +90,7 @@ sub logaction {
                 $objectnumber = $usernumber;
             } else {
                 $infos =~ tr/\/\'//d; 
-                my @info = $infos =~ /borrowernumber => (.*?)\n/;
+                my @info = $infos =~ /borrowernumber => (.*?)(,|}|\n)/;
                 $objectnumber = $info[0];
                 $objectnumber =~ s/\D+//g;
             }
