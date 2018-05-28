@@ -24,6 +24,13 @@
                 <li>
             [% END %]
                 <a href="/cgi-bin/koha/opac-memberentry.pl">your personal details</a></li>
+
+            [% IF Koha.Preference('GDPR_Policy') # remove when extending %]
+                [% IF consentview %]<li class="active">[% ELSE %]<li>[% END %]
+                    <a href="/cgi-bin/koha/opac-patron-consent.pl">your consents</a>
+                </li>
+            [% END %]
+
             [% IF Koha.Preference( 'TagsEnabled' ) == 1 %]
                 [% IF ( tagsview ) %]
                     <li class="active">
