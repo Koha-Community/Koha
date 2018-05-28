@@ -929,13 +929,16 @@ sub CanBookBeIssued {
                 }
             }
         }
-        elsif ($biblioitem->notforloan == 1){
-            if (!C4::Context->preference("AllowNotForLoanOverride")) {
-                $issuingimpossible{NOT_FOR_LOAN} = 1;
-                $issuingimpossible{itemtype_notforloan} = $effective_itemtype;
-            } else {
-                $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
-                $needsconfirmation{itemtype_notforloan} = $effective_itemtype;
+        else {
+            my $itemtype = Koha::ItemTypes->find($biblioitem->itemtype);
+            if ( $itemtype and $itemtype->notforloan == 1){
+                if (!C4::Context->preference("AllowNotForLoanOverride")) {
+                    $issuingimpossible{NOT_FOR_LOAN} = 1;
+                    $issuingimpossible{itemtype_notforloan} = $effective_itemtype;
+                } else {
+                    $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
+                    $needsconfirmation{itemtype_notforloan} = $effective_itemtype;
+                }
             }
         }
     }
