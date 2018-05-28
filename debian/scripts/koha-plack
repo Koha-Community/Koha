@@ -181,14 +181,48 @@ enable_plack()
     local instancename=$1
     local instancefile=$(get_apache_config_for "$instancename")
 
-    if ! is_plack_enabled $instancename; then
-        # Uncomment the plack related lines for OPAC and intranet
+    alreadyopac=0
+    alreadyintra=0
+    failopac=0
+    failintra=0
+    if ! is_plack_enabled_opac $instancefile; then
+        # Uncomment the plack related lines for OPAC
         sed -i 's:^\s*#\(\s*Include /etc/koha/apache-shared-opac-plack.conf\)$:\1:' "$instancefile"
+        if ! is_plack_enabled_opac $instancefile; then
+            [ "${quiet}" != "yes" ] && warn "Plack not enabled for ${instancename} OPAC"
+            failopac=1
+        else
+            [ "${quiet}" != "yes" ] && warn "Plack enabled for ${instancename} OPAC"
+        fi
+    else
+        [ "${quiet}" != "yes" ] && warn "Plack already enabled for ${instancename} OPAC"
+        alreadyopac=1
+    fi
+    if ! is_plack_enabled_intranet $instancefile; then
+        # Uncomment the plack related lines for intranet
         sed -i 's:^\s*#\(\s*Include /etc/koha/apache-shared-intranet-plack.conf\)$:\1:' "$instancefile"
-        [ "${quiet}" != "yes" ] && warn "Plack enabled for ${instancename}"
+        if ! is_plack_enabled_intranet $instancefile; then
+            [ "${quiet}" != "yes" ] && warn "Plack not enabled for ${instancename} Intranet"
+            failintra=1
+        else
+            [ "${quiet}" != "yes" ] && warn "Plack enabled for ${instancename} Intranet"
+        fi
+    else
+        [ "${quiet}" != "yes" ] && warn "Plack already enabled for ${instancename} Intranet"
+        alreadyintra=1
+    fi
+
+    # Fail if it was already plack enabled.
+    if [ $alreadyopac -eq 1 ] && [ $alreadyintra -eq 1 ] ; then
+        return 1
+    elif [ "$alreadyopac" != "$alreadyintra" ]; then
+        [ "${quiet}" != "yes" ] && warn "$instancename had a plack configuration error. Please confirm it is corrected."
+    fi
+
+    # Succeed if both or any plack were turned on.
+    if [ $failopac -eq 0 ] ||  [ $failintra -eq 0 ] ; then
         return 0
     else
-        [ "${quiet}" != "yes" ] && warn "Plack already enabled for ${instancename}"
         return 1
     fi
 }
@@ -198,14 +232,48 @@ disable_plack()
     local instancename=$1
     local instancefile=$(get_apache_config_for "$instancename")
 
-    if is_plack_enabled $instancename; then
-        # Comment out the plack related lines for OPAC and intranet
+    alreadyopac=0
+    alreadyintra=0
+    failopac=0
+    failintra=0
+    if is_plack_enabled_opac $instancefile ; then
+        # Comment the plack related lines for OPAC
         sed -i 's:^\(\s*Include /etc/koha/apache-shared-opac-plack.conf\)$:#\1:' "$instancefile"
+        if is_plack_enabled_opac $instancefile ; then
+            [ "${quiet}" != "yes" ] && warn "Plack not disabled for ${instancename} OPAC"
+            failopac=1
+        else
+            [ "${quiet}" != "yes" ] && warn "Plack disabled for ${instancename} OPAC"
+        fi
+    else
+        [ "${quiet}" != "yes" ] && warn "Plack already disabled for ${instancename} OPAC"
+        alreadyopac=1
+    fi
+    if is_plack_enabled_intranet $instancefile; then
+        # Comment the plack related lines for intranet
         sed -i 's:^\(\s*Include /etc/koha/apache-shared-intranet-plack.conf\)$:#\1:' "$instancefile"
-        [ "${quiet}" != "yes" ] && warn "Plack disabled for ${instancename}"
+        if is_plack_enabled_intranet $instancefile; then
+            [ "${quiet}" != "yes" ] && warn "Plack not disabled for ${instancename} Intranet"
+            failintra=1
+        else
+            [ "${quiet}" != "yes" ] && warn "Plack disabled for ${instancename} Intranet"
+        fi
+    else
+        [ "${quiet}" != "yes" ] && warn "Plack already disabled for ${instancename} Intranet"
+        alreadyintra=1
+    fi
+
+    # Fail if it was already plack disabled.
+    if [ $alreadyopac -eq 1 ] &&  [ $alreadyintra -eq 1 ] ; then
+        return 1
+    elif [ "$alreadyopac" != "$alreadyintra" ]; then
+        [ "${quiet}" != "yes" ] && warn "$instancename had a plack configuration error. Please confirm it is corrected."
+    fi
+
+    # Succeed if both or any plack were turned off.
+    if  [ $failopac -eq 0 ] || [ $failintra -eq 0 ] ; then
         return 0
     else
-        [ "${quiet}" != "yes" ] && warn "Plack already disabled for ${instancename}"
         return 1
     fi
 }
