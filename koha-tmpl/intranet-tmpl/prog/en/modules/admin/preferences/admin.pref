@@ -430,11 +430,3 @@ Administration:
               choices:
                 Zebra: Zebra
                 Elasticsearch: Elasticsearch
-        -
-            - "Use"
-            - pref: ElasticsearchMARCSerializationFormat
-              default: MARCXML
-              choices:
-                MARCXML: MARCXML
-                base64ISO2709: base64ISO2709
-            - "as serialization format for MARC records stored in Elasticsearch index. base64ISO2709 is faster and will use less space but have a maximum record length which could cause issues with very large records."

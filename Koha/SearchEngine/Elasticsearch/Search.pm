@@ -369,11 +369,14 @@ sub decode_record_from_result {
     # Result is passed in as array, will get flattened
     # and first element will be $result
     my ( $self, $result ) = @_;
-    if (C4::Context->preference('ElasticsearchMARCSerializationFormat') eq 'MARCXML') {
+    if ($result->{marc_format} eq 'base64ISO2709') {
+        return MARC::Record->new_from_usmarc(decode_base64($result->{marc_data}));
+    }
+    elsif ($result->{marc_format} eq 'MARCXML') {
         return MARC::Record->new_from_xml($result->{marc_data}, 'UTF-8', uc C4::Context->preference('marcflavour'));
     }
     else {
-        return MARC::Record->new_from_usmarc(decode_base64($result->{marc_data}));
+        die("Missing marc_format field in Elasticsearch result");
     }
 }
 

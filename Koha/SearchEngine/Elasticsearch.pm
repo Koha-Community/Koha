@@ -382,11 +382,26 @@ sub marc_records_to_documents {
         }
         # TODO: Perhaps should check if $records_document non empty, but really should never be the case
         $record->encoding('UTF-8');
-        if ($serialization_format eq 'base64ISO2709') {
+        my @warnings;
+        {
+            # Temporarily intercept all warn signals (MARC::Record carps when record length > 99999)
+            local $SIG{__WARN__} = sub {
+                push @warnings, $_[0];
+            };
             $record_document->{'marc_data'} = encode_base64(encode('UTF-8', $record->as_usmarc()));
         }
-        else {
+        if (@warnings) {
+            # Suppress warnings if record length exceeded
+            unless (substr($record->leader(), 0, 5) eq '99999') {
+                foreach my $warning (@warnings) {
+                    carp($warning);
+                }
+            }
             $record_document->{'marc_data'} = $record->as_xml_record($marcflavour);
+            $record_document->{'marc_format'} = 'MARCXML';
+        }
+        else {
+            $record_document->{'marc_format'} = 'base64ISO2709';
         }
         my $id = $record->subfield('999', 'c');
         push @record_documents, [$id, $record_document];
