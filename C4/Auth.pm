@@ -37,6 +37,7 @@ use Koha::DateUtils qw(dt_from_string);
 use Koha::Library::Groups;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Patron::Consents;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
@@ -178,6 +179,22 @@ sub get_template_and_user {
             $in->{'flagsrequired'},
             $in->{'type'}
         );
+    }
+
+    # If we enforce GDPR and the user did not consent, redirect
+    if( $in->{type} eq 'opac' && $user &&
+        $in->{'template_name'} !~ /opac-patron-consent/ &&
+        C4::Context->preference('GDPR_Policy') eq 'Enforced' )
+    {
+        my $consent = Koha::Patron::Consents->search({
+            borrowernumber => getborrowernumber($user),
+            type => 'GDPR_PROCESSING',
+            given_on => { '!=', undef },
+        })->next;
+        if( !$consent ) {
+            print $in->{query}->redirect(-uri => '/cgi-bin/koha/opac-patron-consent.pl', -cookie => $cookie);
+            safe_exit;
+        }
     }
 
     if ( $in->{type} eq 'opac' && $user ) {
