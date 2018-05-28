@@ -419,7 +419,7 @@ RECORD: while (  ) {
             if ($biblionumber) {
                 eval{$biblioitemnumber=GetBiblioData($biblionumber)->{biblioitemnumber};};
                 if ($update) {
-                    eval { ( $biblionumber, $biblioitemnumber ) = ModBiblio( $record, $biblionumber, GetFrameworkCode($biblionumber) ) };
+                    eval { ModBiblio( $record, $biblionumber, GetFrameworkCode($biblionumber) ) };
                     if ($@) {
                         warn "ERROR: Edit biblio $biblionumber failed: $@\n";
                         printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "ERROR" } ) if ($logfile);
