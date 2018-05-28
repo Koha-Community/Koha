@@ -198,12 +198,7 @@ my $patron_reason_loop = GetAuthorisedValues("OPAC_SUG");
 if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
     my $branchcode = $input->param('branchcode') || q{};
 
-    if ( !$branchcode && $borrowernumber ) {
-        my $patron = Koha::Patrons->find($borrowernumber);
-        $branchcode = $patron->branchcode;
-    }
-
-    if (   !$branchcode
+    if ( !$branchcode
         && C4::Context->userenv
         && C4::Context->userenv->{branch} )
     {
