@@ -199,6 +199,40 @@ is_indexer_running()
     fi
 }
 
+is_plack_enabled_opac()
+{
+    local instancefile=$1
+
+    if [ "$instancefile" = "" ]; then
+        return 1
+    fi
+
+    # remember 0 means success/true in bash.
+    if grep -q '^[[:space:]]*Include /etc/koha/apache-shared-opac-plack.conf' \
+            "$instancefile" ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+is_plack_enabled_intranet()
+{
+    local instancefile=$1
+
+    if [ "$instancefile" = "" ]; then
+        return 1
+    fi
+
+    # remember 0 means success/true in bash.
+    if grep -q '^[[:space:]]*Include /etc/koha/apache-shared-intranet-plack.conf' \
+            "$instancefile" ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 is_plack_enabled()
 {
     local site=$1
@@ -208,10 +242,22 @@ is_plack_enabled()
         return 1
     fi
 
-    if grep -q '^[[:space:]]*Include /etc/koha/apache-shared-opac-plack.conf' \
-            "$instancefile" && \
-       grep -q '^[[:space:]]*Include /etc/koha/apache-shared-intranet-plack.conf' \
-            "$instancefile" ; then
+    if is_plack_enabled_opac $instancefile ; then
+        enabledopac=1
+    else
+        enabledopac=0
+    fi
+    if is_plack_enabled_intranet $instancefile ; then
+        enabledintra=1
+    else
+        enabledintra=0
+    fi
+
+    # remember 0 means success/true in bash.
+    if [ "$enabledopac" != "$enabledintra" ] ; then
+        echo "$site has a plack configuration error. Enable or disable plack to correct this."
+        return 0
+    elif [ "$enabledopac" = "1" ] ; then
         return 0
     else
         return 1
