@@ -371,7 +371,11 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
  */
 jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     "title-string-pre": function ( a ) {
-        return a.match(/title="(.*?)"/)[1].toLowerCase();
+        var m = a.match(/title="(.*?)"/);
+        if ( null !== m && m.length ) {
+            return m[1].toLowerCase();
+        }
+        return "";
     },
 
     "title-string-asc": function ( a, b ) {
