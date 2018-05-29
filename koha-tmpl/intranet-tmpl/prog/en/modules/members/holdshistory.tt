@@ -4,6 +4,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE ColumnsSettings %]
+[% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Holds history for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
@@ -32,6 +33,8 @@
     <div class="dialog message">This patron has no holds history.</div>
 [% ELSE %]
 
+[% SET show_itemtype_column = Koha.Preference('AllowHoldItemTypeSelection') %]
+
 <div id="holdshistory" style="overflow:hidden">
   <table id="table_holdshistory">
       <thead>
@@ -43,7 +46,9 @@
         <th class="title-string">Expiration date</th>
         <th class="title-string">Waiting date</th>
         <th class="title-string">Cancellation date</th>
-        <th>Item type</th>
+        [% IF show_itemtype_column %]
+          <th>Requested item type</th>
+        [% END %]
         <th>Status</th>
       </thead>
       <tbody>
@@ -74,7 +79,15 @@
                   <span title="0000-00-00"></span>
               [% END %]
           </td>
-          <td>[% hold.itemtype %]</td>
+          [% IF show_itemtype_column %]
+            <td>
+              [% IF hold.itemtype %]
+                  [% ItemTypes.GetDescription( hold.itemtype ) %]
+              [% ELSE %]
+                  Any item type
+              [% END %]
+            </td>
+          [% END %]
           <td>
           [% IF hold.found == 'F' %]
               Fulfilled
@@ -110,6 +123,10 @@
     <script type="text/javascript" id="js">
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
+            [% UNLESS show_itemtype_column %]
+              //Remove item type column settings
+              columns_settings.splice(8,1);
+            [% END %]
             var table = KohaTable("table_holdshistory", {
                 "sPaginationType": "four_button",
                 "aaSorting": [[4, 'desc']],
