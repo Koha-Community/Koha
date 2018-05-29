@@ -23,8 +23,11 @@ use C4::Output;
 use C4::Auth;
 
 use Koha::SearchEngine::Elasticsearch;
+use Koha::SearchEngine::Elasticsearch::Indexer;
 use Koha::SearchMarcMaps;
 use Koha::SearchFields;
+
+use Try::Tiny;
 
 my $input = new CGI;
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
@@ -44,6 +47,25 @@ my $database = Koha::Database->new();
 my $schema   = $database->schema;
 
 my $marc_type = lc C4::Context->preference('marcflavour');
+
+my @index_names = ('biblios', 'authorities');
+
+my $update_mappings = sub {
+    for my $index_name (@index_names) {
+        my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => $index_name });
+        try {
+            $indexer->update_mappings();
+        } catch {
+            my $conf = $indexer->get_elasticsearch_params();
+            push @messages, {
+                type => 'error',
+                code => 'error_on_update_es_mappings',
+                message => $_[0],
+                index => $conf->{index_name},
+            };
+        };
+    }
+};
 
 if ( $op eq 'edit' ) {
 
@@ -110,6 +132,7 @@ if ( $op eq 'edit' ) {
     } else {
         push @messages, { type => 'message', code => 'success_on_update' };
         $schema->storage->txn_commit;
+        $update_mappings->();
     }
 }
 elsif( $op eq 'reset_confirmed' ) {
@@ -125,7 +148,28 @@ elsif( $op eq 'reset_confirm' ) {
 
 my @indexes;
 
-for my $index_name (qw| biblios authorities |) {
+for my $index_name (@index_names) {
+    my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => $index_name });
+    if (!$indexer->index_status_ok) {
+        my $conf = $indexer->get_elasticsearch_params();
+        if ($indexer->index_status_reindex_required) {
+            push @messages, {
+                type => 'error',
+                code => 'reindex_required',
+                index => $conf->{index_name},
+            };
+        }
+        elsif($indexer->index_status_recreate_required) {
+            push @messages, {
+                type => 'error',
+                code => 'recreate_required',
+                index => $conf->{index_name},
+            };
+        }
+    }
+}
+
+for my $index_name (@index_names) {
     my $search_fields = Koha::SearchFields->search(
         { 'search_marc_map.index_name' => $index_name, 'search_marc_map.marc_type' => $marc_type, },
         {   join => { search_marc_to_fields => 'search_marc_map' },

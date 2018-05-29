@@ -19,12 +19,17 @@ package Koha::SearchEngine::Elasticsearch::Indexer;
 
 use Carp;
 use Modern::Perl;
+use Try::Tiny;
+use List::Util qw(any);
 use base qw(Koha::SearchEngine::Elasticsearch);
 use Data::Dumper;
 
 # For now just marc, but we can do anything here really
 use Catmandu::Importer::MARC;
 use Catmandu::Store::ElasticSearch;
+
+use Koha::Exceptions;
+use C4::Context;
 
 Koha::SearchEngine::Elasticsearch::Indexer->mk_accessors(qw( store ));
 
@@ -57,6 +62,12 @@ If that's a problem, clone them first.
 
 =cut
 
+use constant {
+    INDEX_STATUS_OK => 0,
+    INDEX_STATUS_REINDEX_REQUIRED => 1, # Not currently used, but could be useful later, for example if can detect when new field or mapping added
+    INDEX_STATUS_RECREATE_REQUIRED => 2,
+};
+
 sub update_index {
     my ($self, $biblionums, $records) = @_;
 
@@ -66,7 +77,6 @@ sub update_index {
         $self->_sanitise_records($biblionums, $records);
     }
 
-    $self->ensure_mappings_updated();
     $self->bulk_index($records);
     return 1;
 }
@@ -98,10 +108,45 @@ sub bulk_index {
     return 1;
 }
 
-sub ensure_mappings_updated {
-    my ($self) = @_;
-    unless ($self->{_mappings_updated}) {
-        $self->update_mappings();
+sub index_status_ok {
+    my ($self, $set) = @_;
+    return defined $set ?
+        $self->index_status(INDEX_STATUS_OK) :
+        $self->index_status == INDEX_STATUS_OK;
+}
+
+sub index_status_reindex_required {
+    my ($self, $set) = @_;
+    return defined $set ?
+        $self->index_status(INDEX_STATUS_REINDEX_REQUIRED) :
+        $self->index_status == INDEX_STATUS_REINDEX_REQUIRED;
+}
+
+sub index_status_recreate_required {
+    my ($self, $set) = @_;
+    return defined $set ?
+        $self->index_status(INDEX_STATUS_RECREATE_REQUIRED) :
+        $self->index_status == INDEX_STATUS_RECREATE_REQUIRED;
+}
+
+sub index_status {
+    my ($self, $status) = @_;
+    my $key = 'ElasticsearchIndexStatus_' . $self->index;
+
+    if (defined $status) {
+        unless (any { $status == $_ } (
+                INDEX_STATUS_OK,
+                INDEX_STATUS_REINDEX_REQUIRED,
+                INDEX_STATUS_RECREATE_REQUIRED,
+            )
+        ) {
+            Koha::Exceptions::Exception->throw("Invalid index status: $status");
+        }
+        C4::Context->set_preference($key, $status);
+        return $status;
+    }
+    else {
+        return C4::Context->preference($key);
     }
 }
 
@@ -112,16 +157,23 @@ sub update_mappings {
     my $mappings = $self->get_elasticsearch_mappings();
 
     foreach my $type (keys %{$mappings}) {
-        my $response = $elasticsearch->indices->put_mapping(
-            index => $conf->{index_name},
-            type => $type,
-            body => {
-                $type => $mappings->{$type}
-            }
-        );
-        # TODO: process response, produce errors etc
+        try {
+            my $response = $elasticsearch->indices->put_mapping(
+                index => $conf->{index_name},
+                type => $type,
+                body => {
+                    $type => $mappings->{$type}
+                }
+            );
+        } catch {
+            $self->index_status_recreate_required(1);
+            my $reason = $_[0]->{vars}->{body}->{error}->{reason};
+            Koha::Exceptions::Exception->throw(
+                error => "Unable to update mappings for index \"$conf->{index_name}\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
+            );
+        };
     }
-    $self->{_mappings_updated} = 1;
+    $self->index_status_ok(1);
 }
 
 =head2 $indexer->update_index_background($biblionums, $records)
@@ -181,8 +233,7 @@ sub delete_index_background {
 
 =head2 $indexer->drop_index();
 
-Drops the index from the elasticsearch server. Calling C<update_index>
-after this will recreate it again.
+Drops the index from the elasticsearch server.
 
 =cut
 
@@ -191,8 +242,7 @@ sub drop_index {
     if ($self->index_exists) {
         my $conf = $self->get_elasticsearch_params();
         my $elasticsearch = $self->get_elasticsearch();
-        my $response = $elasticsearch->indices->delete(index => $conf->{index_name});
-        # TODO: Handle response? Convert errors to exceptions/die
+        $elasticsearch->indices->delete(index => $conf->{index_name});
     }
 }
 
@@ -201,13 +251,13 @@ sub create_index {
     my $conf = $self->get_elasticsearch_params();
     my $settings = $self->get_elasticsearch_settings();
     my $elasticsearch = $self->get_elasticsearch();
-    my $response = $elasticsearch->indices->create(
+    $elasticsearch->indices->create(
         index => $conf->{index_name},
         body => {
             settings => $settings
         }
     );
-    # TODO: Handle response? Convert errors to exceptions/die
+    $self->update_mappings();
 }
 
 sub index_exists {
