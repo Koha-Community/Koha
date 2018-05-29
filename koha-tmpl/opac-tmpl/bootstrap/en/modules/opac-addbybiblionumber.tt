@@ -23,7 +23,7 @@
                                         </li>
                                     [% END %]
                                 </ul>
-                                [% IF private_shelves.count or public_shelves.count or private_shelves_shared_with_me %]
+                                [% IF private_shelves.count or public_shelves.count or private_shelves_shared_with_me.count %]
                                     <form name="f1" action="/cgi-bin/koha/opac-addbybiblionumber.pl" method="post">
                                         <fieldset>
                                             <legend>Select a list</legend>
