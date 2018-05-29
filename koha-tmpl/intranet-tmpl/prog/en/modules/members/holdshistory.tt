@@ -110,7 +110,7 @@
     <script type="text/javascript" id="js">
         $(document).ready(function() {
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
-            var table = KohaTable("#table_holdshistory", {
+            var table = KohaTable("table_holdshistory", {
                 "sPaginationType": "four_button",
                 "aaSorting": [[4, 'desc']],
                 "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
