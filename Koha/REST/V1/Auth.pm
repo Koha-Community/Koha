@@ -503,6 +503,8 @@ sub check_object_ownership {
         checkout_id     => \&_object_ownership_by_checkout_id,
         reserve_id      => \&_object_ownership_by_reserve_id,
         message_id      => \&_object_ownership_by_message_id,
+        suggestionid    => \&_object_ownership_by_suggestionid,
+        suggestedby     => \&_object_ownership_by_suggestedby,
     };
     foreach my $check (keys %$additional_checks) {
         $parameters->{$check} = $additional_checks->{$check};
@@ -609,6 +611,32 @@ sub _object_ownership_by_reserve_id {
 
     my $reserve = Koha::Holds->find($reserve_id);
     return $reserve && $user->borrowernumber == $reserve->borrowernumber;
+}
+
+=head3 _object_ownership_by_suggestedby
+
+Compares C<$suggetedby> to currently logged in C<$user>'s borrowernumber.
+
+=cut
+
+sub _object_ownership_by_suggestedby {
+    my ($c, $user, $suggestedby) = @_;
+
+    return $user->borrowernumber == $suggestedby;
+}
+
+=head3 _object_ownership_by_suggestionid
+
+Finds a Koha::Suggestion-object by C<$suggestionid> and checks if it
+belongs to C<$user>.
+
+=cut
+
+sub _object_ownership_by_suggestionid {
+    my ($c, $user, $suggestionid) = @_;
+
+    my $suggestion = Koha::Suggestions->find($suggestionid);
+    return $suggestion && $user->borrowernumber == $suggestion->suggestedby;
 }
 
 1;

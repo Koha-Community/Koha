@@ -1,0 +1,632 @@
+{
+  "/suggestions": {
+    "get": {
+      "x-mojo-to": "Suggestion#list",
+      "operationId": "listSuggestions",
+      "tags": ["suggestions"],
+      "parameters": [{
+        "name": "suggestionid",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on suggestionid",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "suggestedby",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on suggestedby",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "suggesteddate",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on suggesteddate",
+        "required": false,
+        "type": "string",
+        "format": "date"
+      },
+      {
+        "name": "managedby",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on managedby",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "manageddate",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on manageddate",
+        "required": false,
+        "type": "string",
+        "format": "date"
+      },
+      {
+        "name": "acceptedby",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on acceptedby",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "accepteddate",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on accepteddate",
+        "required": false,
+        "type": "string",
+        "format": "date"
+      },
+      {
+        "name": "rejectedby",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on rejectedby",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "rejecteddate",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on rejecteddate",
+        "required": false,
+        "type": "string",
+        "format": "date"
+      },
+      {
+        "name": "STATUS",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on STATUS (valid values: ASKED, CHECKED, ACCEPTED or REJECTED)",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "note",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on note",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "author",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on author",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "title",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on title",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "copyrightdate",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on copyrightdate",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "publishercode",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on publishercode",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "date",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on date",
+        "required": false,
+        "type": "string",
+        "format": "date-time"
+      },
+      {
+        "name": "volumedesc",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on volumedesc",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "publicationyear",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on publicationyear",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "place",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on place",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "isbn",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on isbn",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "biblionumber",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on biblionumber",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "reason",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on reason",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "patronreason",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on patronreason",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "budgetid",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on budgetid",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "branchcode",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on branchcode",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "collectiontitle",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on collectiontitle",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "itemtype",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on itemtype",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "quantity",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on quantity",
+        "required": false,
+        "type": "integer"
+      },
+      {
+        "name": "currency",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on currency",
+        "required": false,
+        "type": "string"
+      },
+      {
+        "name": "price",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on price",
+        "required": false,
+        "type": "number"
+      },
+      {
+        "name": "total",
+        "in": "query",
+        "description": "Case insensetive 'starts_with' search on total",
+        "required": false,
+        "type": "number"
+      }],
+      "produces": [
+          "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of suggestions",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/suggestion"
+            }
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "catalogue": "1"
+        },
+        "allow-owner": true
+      }
+    },
+    "post": {
+      "x-mojo-to": "Suggestion#add",
+      "operationId": "addSuggestion",
+      "tags": ["suggestions"],
+      "parameters": [{
+        "name": "body",
+        "in": "body",
+        "description": "A JSON object containing information about new suggestion",
+        "required": true,
+        "schema": {
+          "type": "object",
+          "properties": {
+            "note": {
+              "description": "note entered on the suggestion",
+              "type": ["string", "null"]
+            },
+            "author": {
+              "description": "author of the suggested item",
+              "type": ["string", "null"]
+            },
+            "title": {
+              "description": "title of the suggested item",
+              "type": ["string", "null"]
+            },
+            "copyrightdate": {
+              "description": "copyright date of the suggested item",
+              "type": ["integer", "null"]
+            },
+            "publishercode": {
+              "description": "publisher of the suggested item",
+              "type": ["string", "null"]
+            },
+            "place": {
+              "description": "publication place of the suggested item",
+              "type": ["string", "null"]
+            },
+            "isbn": {
+              "description": "isbn of the suggested item",
+              "type": ["string", "null"]
+            },
+            "branchcode": {
+              "description": "foreign key linking the suggested branch to the branches table",
+              "type": ["string", "null"]
+            },
+            "collectiontitle": {
+              "description": "collection name for the suggested item",
+              "type": ["string", "null"]
+            },
+            "itemtype": {
+              "description": "suggested item type",
+              "type": ["string", "null"]
+            }
+          },
+          "required": ["title", "itemtype"],
+          "additionalProperties": false
+        }
+      }],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "A successfully created suggestion",
+          "schema": {
+            "items": {
+              "$ref": "../definitions.json#/suggestion"
+            }
+          }
+        },
+        "400": {
+          "description": "Bad parameter",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Resource not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in creating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/suggestions/{suggestionid}": {
+    "get": {
+      "x-mojo-to": "Suggestion#get",
+      "operationId": "getSuggestion",
+      "tags": ["suggestions"],
+      "parameters": [{
+        "$ref": "../parameters.json#/suggestionidPathParam"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A suggestion",
+          "schema": {
+            "$ref": "../definitions.json#/suggestion"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Suggestion not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "permissions": {
+          "catalogue": "1"
+        }
+      }
+    },
+    "put": {
+      "x-mojo-to": "Suggestion#edit",
+      "operationId": "editSuggestion",
+      "tags": ["suggestions"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/suggestionidPathParam"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing information on suggestion",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "note": {
+                "description": "note entered on the suggestion",
+                "type": ["string", "null"]
+              },
+              "author": {
+                "description": "author of the suggested item",
+                "type": ["string", "null"]
+              },
+              "title": {
+                "description": "title of the suggested item",
+                "type": ["string", "null"]
+              },
+              "copyrightdate": {
+                "description": "copyright date of the suggested item",
+                "type": ["integer", "null"]
+              },
+              "publishercode": {
+                "description": "publisher of the suggested item",
+                "type": ["string", "null"]
+              },
+              "place": {
+                "description": "publication place of the suggested item",
+                "type": ["string", "null"]
+              },
+              "isbn": {
+                "description": "isbn of the suggested item",
+                "type": ["string", "null"]
+              },
+              "branchcode": {
+                "description": "foreign key linking the suggested branch to the branches table",
+                "type": ["string", "null"]
+              },
+              "collectiontitle": {
+                "description": "collection name for the suggested item",
+                "type": ["string", "null"]
+              },
+              "itemtype": {
+                "description": "suggested item type",
+                "type": ["string", "null"]
+              }
+            },
+            "required": ["title", "itemtype"],
+            "additionalProperties": false
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "A successfully updated suggestion",
+          "schema": {
+            "items": {
+              "$ref": "../definitions.json#/suggestion"
+            }
+          }
+        },
+        "204": {
+          "description": "No Content",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "400": {
+          "description": "Bad parameter",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Resource not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Conflict in updating resource",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "permissions": {
+          "catalogue": "1"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Suggestion#delete",
+      "operationId": "deleteSuggestion",
+      "tags": ["suggestions"],
+      "parameters": [{
+        "$ref": "../parameters.json#/suggestionidPathParam"
+      }],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Suggestion deleted successfully",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "400": {
+          "description": "Suggestion deletion failed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Suggestion not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "permissions": {
+          "catalogue": "1"
+        }
+      }
+    }
+  }
+}

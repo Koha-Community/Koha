@@ -1,0 +1,129 @@
+{
+  "type": "object",
+  "properties": {
+    "suggestionid": {
+      "description": "unique identifier assigned automatically by Koha",
+      "type": "integer"
+    },
+    "suggestedby": {
+      "description": "borrowernumber for the perpson making the suggestion, foreign key linking to the borrowers table",
+      "type": "integer"
+    },
+    "suggesteddate": {
+      "description": "date the suggestion was submitted",
+      "type": "string"
+    },
+    "managedby": {
+      "description": "borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table",
+      "type": ["integer", "null"]
+    },
+    "manageddate": {
+      "description": "date the suggestion was updated",
+      "type": ["string", "null"]
+    },
+    "acceptedby": {
+      "description": "borrowernumber for the librarian who accepted the suggestion, foreign key linking to the borrowers table",
+      "type": ["integer", "null"]
+    },
+    "accepteddate": {
+      "description": "date the suggestion was marked as accepted",
+      "type": ["string", "null"]
+    },
+    "rejectedby": {
+      "description": "borrowernumber for the librarian who rejected the suggestion, foreign key linking to the borrowers table",
+      "type": ["integer", "null"]
+    },
+    "rejecteddate": {
+      "description": "date the suggestion was marked as rejected",
+      "type": ["string", "null"]
+    },
+    "STATUS": {
+      "description": "suggestion status (ASKED, CHECKED, ACCEPTED, or REJECTED)",
+      "type": "string"
+    },
+    "note": {
+      "description": "note entered on the suggestion",
+      "type": ["string", "null"]
+    },
+    "author": {
+      "description": "author of the suggested item",
+      "type": ["string", "null"]
+    },
+    "title": {
+      "description": "title of the suggested item",
+      "type": ["string", "null"]
+    },
+    "copyrightdate": {
+      "description": "copyright date of the suggested item",
+      "type": ["integer", "null"]
+    },
+    "publishercode": {
+      "description": "publisher of the suggested item",
+      "type": ["string", "null"]
+    },
+    "date": {
+      "description": "date",
+      "type": "string"
+    },
+    "volumedesc": {
+      "description": "volumedesc",
+      "type": ["string", "null"]
+    },
+    "publicationyear": {
+      "description": "publicationyear",
+      "type": ["integer", "null"]
+    },
+    "place": {
+      "description": "publication place of the suggested item",
+      "type": ["string", "null"]
+    },
+    "isbn": {
+      "description": "isbn of the suggested item",
+      "type": ["string", "null"]
+    },
+    "biblionumber": {
+      "description": "foreign key linking the suggestion to the biblio table after the suggestion has been ordered",
+      "type": ["integer", "null"]
+    },
+    "reason": {
+      "description": "reason for accepting or rejecting the suggestion",
+      "type": ["string", "null"]
+    },
+    "patronreason": {
+      "description": "reason for making the suggestion",
+      "type": ["string", "null"]
+    },
+    "budgetid": {
+      "description": "foreign key linking the suggested budget to the aqbudgets table",
+      "type": ["integer", "null"]
+    },
+    "branchcode": {
+      "description": "foreign key linking the suggested branch to the branches table",
+      "type": ["string", "null"]
+    },
+    "collectiontitle": {
+      "description": "collection name for the suggested item",
+      "type": ["string", "null"]
+    },
+    "itemtype": {
+      "description": "suggested item type",
+      "type": ["string", "null"]
+    },
+    "quantity": {
+      "description": "suggested quantity to be purchased",
+      "type": ["integer", "null"]
+    },
+    "currency": {
+      "description": "suggested currency for the suggested price",
+      "type": ["string", "null"]
+    },
+    "price": {
+      "description": "suggested price",
+      "type": ["number", "null"]
+    },
+    "total": {
+      "description": "suggested total cost (price*quantity updated for currency)",
+      "type": ["number", "null"]
+    }
+  }
+}
