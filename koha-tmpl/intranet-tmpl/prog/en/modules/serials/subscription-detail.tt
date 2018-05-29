@@ -348,7 +348,7 @@
                         <th>Order number</th>
                         <th class="title-string">Creation date</th>
                         <th class="title-string">Receive date</th>
-                        <th>Status</th>
+                        <th class="title-string">Status</th>
                         <th>Fund</th>
                         <th>Ordered</th>
                         <th>Spent</th>
@@ -377,11 +377,11 @@
                         <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
                         <td>
                           [% SWITCH order.orderstatus %]
-                            [% CASE 'new' %]New
-                            [% CASE 'ordered' %]Ordered
-                            [% CASE 'partial' %]Partial
-                            [% CASE 'complete' %]Complete
-                            [% CASE 'cancelled' %]Cancelled
+                            [% CASE 'new' %]<span title="status_1">New</span>
+                            [% CASE 'ordered' %]<span title="status_2">Ordered</span>
+                            [% CASE 'partial' %]<span title="status_3">Partial</span>
+                            [% CASE 'complete' %]<span title="status_4">Complete</span>
+                            [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
                           [% END %]
                         </td>
                         <td>[% order.fund.budget_name | html %]</td>
@@ -434,7 +434,7 @@
             var table = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'bPaginate': false,
                 'bAutoWidth': false,
-                "aaSorting": [[ 4, "desc" ]],
+                "aaSorting": [[ 5, "asc" ], [ 2, "desc" ]], // Order by status then ordernumber
                 "aoColumnDefs": [
                     { "aTargets": "title-string", "sType": "title-string" }
                 ]
@@ -442,7 +442,7 @@
 
             $("#hide_received_orders").click(function(e){
                 e.preventDefault();
-                table.fnFilter( '.', 4, true ); // Not empty "Receive date" columns
+                table.fnFilter( '^$', 4, true ); // Not empty "Receive date" columns
             });
             $("#show_all_orders").click(function(e){
                 e.preventDefault();
