@@ -82,6 +82,12 @@ a.add, a.delete {
           (search field [% m.values.field_name %] with mapping [% m.values.marc_field %].)
         [% CASE 'invalid_field_weight' %]
           Invalid field weight "[% m.weight | html %]", must be a positive decimal number.
+        [% CASE 'error_on_update_es_mappings' %]
+          An error occurred when updating Elasticsearch index mappings: [% m.message | html %].
+        [% CASE 'reindex_required' %]
+          Index "[% m.index | html %]" needs to be reindexed
+        [% CASE 'recreate_required' %]
+          Index "[% m.index | html %]" needs to be recreated
         [% CASE 'success_on_update' %]
           Mappings updated successfully.
         [% CASE 'success_on_reset' %]

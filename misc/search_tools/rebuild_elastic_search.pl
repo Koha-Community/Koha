@@ -168,6 +168,11 @@ sub do_reindex {
     elsif (!$indexer->index_exists()) {
         # Create index if does not exist
         $indexer->create_index();
+    } elsif ($indexer->index_status_ok) {
+        # Update mapping unless index is some kind of problematic state
+        $indexer->update_mappings();
+    } elsif ($indexer->index_status_recreate_required) {
+        warn qq/Index "$index_name" has status "recreate required", suggesting it should be recreated/;
     }
 
     my $count        = 0;
