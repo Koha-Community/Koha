@@ -15,26 +15,27 @@
 [% ELSE %]
 
                 [% IF ( multiple ) %]
-		    <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html%]</em>: [% ELSE %]a list:[% END %]</h1>
+            <h1>Add [% total %] items to [% IF ( singleshelf ) %]<em>[% shelfname | html%]</em>: [% ELSE %]a list:[% END %]</h1>
                 [% ELSE %]
                         <h1>Add to [% IF ( singleshelf ) %]<em>[% shelfname | html %]</em>[% ELSE %]a list:[% END %]</h1>
                 [% END %]
-		<ul>
-		    [% FOREACH biblio IN biblios %]
-			<li> <span class="title">[% biblio.title |html %]</span>
-			    [% IF ( biblio.author ) %]<span class="author"> [% biblio.author %] </span>[% END %]
-			</li>
-		    [% END %]
+        <ul>
+            [% FOREACH biblio IN biblios %]
+            <li> <span class="title">[% biblio.title |html %]</span>
+                [% IF ( biblio.author ) %]<span class="author"> [% biblio.author %] </span>[% END %]
+            </li>
+            [% END %]
                 </ul>
 
-		<form name="f1" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" method="post">
+        <form name="f1" action="/cgi-bin/koha/virtualshelves/addbybiblionumber.pl" method="post">
                         [% FOREACH biblio IN biblios %] <input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
-			<input type="hidden" name="confirmed" value="1" />
-			[% IF ( shelfnumber ) %]<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />[% END %]
+            <input type="hidden" name="confirmed" value="1" />
+            [% IF ( shelfnumber ) %]<input type="hidden" name="shelfnumber" value="[% shelfnumber %]" />[% END %]
 
 [% UNLESS ( shelfnumber ) %]
 
 [% UNLESS ( newshelf ) %]
+    [% IF ( private_shelves.count ) %]
      <fieldset class="rows">
     <legend>Select an existing list</legend>
     <ol>
@@ -65,38 +66,39 @@
             </select>
         </li>
     </ol>
-	[% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
-	[% UNLESS ( biblionumbers ) %]
-	  <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
-	[% ELSE %]
-	  <input type="hidden" name="biblionumbers" value="[% biblionumbers %]" />
-	[% END %]
-	</fieldset>
+    [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
+    [% UNLESS ( biblionumbers ) %]
+      <input type="hidden" name="biblionumber" value="[% biblionumber %]" />
+    [% ELSE %]
+      <input type="hidden" name="biblionumbers" value="[% biblionumbers %]" />
+    [% END %]
+    </fieldset>
 
-	<p>... or...</p>
+    <p>... or...</p>
+[% END %]
 [% END %]
 
     <fieldset class="rows"><legend>Add to a new list:</legend>
-	<ol><li>
-	    <label for="newvirtualshelf">
-		List name:
-	    </label>
-	    [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
-	    [% UNLESS ( biblionumbers ) %]
-			  <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
-	    [% ELSE %]
-			  <input type="hidden" name="biblionumbers" id="biblionumbers" value="[% biblionumbers %]" />
-	    [% END %]
-	    <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
-	    <input type="hidden" name="confirmed" value="1" />
-	</li>
-	<li>
-	    <label for="category">Category:</label>
-	    <select name="category" id="category">
-		<option value="1">Private</option>
-		<option value="2">Public</option>
-	    </select>
-	</li></ol>
+    <ol><li>
+        <label for="newvirtualshelf">
+        List name:
+        </label>
+        [% FOREACH biblio IN biblios %]<input type="hidden" name="biblionumber" value="[% biblio.biblionumber %]" />[% END %]
+        [% UNLESS ( biblionumbers ) %]
+              <input type="hidden" name="biblionumber" id="biblionumber" value="[% biblionumber %]" />
+        [% ELSE %]
+              <input type="hidden" name="biblionumbers" id="biblionumbers" value="[% biblionumbers %]" />
+        [% END %]
+        <input type="text" name="newvirtualshelf" id="newvirtualshelf" size="40" />
+        <input type="hidden" name="confirmed" value="1" />
+    </li>
+    <li>
+        <label for="category">Category:</label>
+        <select name="category" id="category">
+        <option value="1">Private</option>
+        <option value="2">Public</option>
+        </select>
+    </li></ol>
     </fieldset>
 
 
@@ -104,11 +106,11 @@
 
 
 <!-- SAVE -->
-		    <fieldset class="action">
+            <fieldset class="action">
             <input type="hidden" name="sortfield" value="title" />
-			<input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a>
-		    </fieldset>
-		</form>
+            <input type="submit" value="Save" class="submit" /> <a class="close cancel" href="#">Cancel</a>
+            </fieldset>
+        </form>
 <!-- /SAVE -->
 
 [% SET popup_window = 1 %]
