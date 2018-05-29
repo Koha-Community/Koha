@@ -2217,7 +2217,7 @@ subtest 'CanBookBeIssued | item-level_itypes=biblio' => sub {
                 itemlost      => 0,
                 withdrawn     => 0,
                 biblionumber  => $biblioitem->{biblionumber},
-                biblioitemnumber => $biblioitem->{biblionumber},
+                biblioitemnumber => $biblioitem->{biblioitemnumber},
             }
         }
     )->store;
