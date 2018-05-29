@@ -1076,6 +1076,18 @@ sub only_my_library {
       && C4::Context->userenv->{branch};
 }
 
+=head3 temporary_directory
+
+Returns root directory for temporary storage
+
+=cut
+
+sub temporary_directory {
+    my ( $class ) = @_;
+    return C4::Context->config('tmp_path') || File::Spec->tmpdir;
+}
+
+
 1;
 
 __END__

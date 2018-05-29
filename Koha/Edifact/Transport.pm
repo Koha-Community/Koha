@@ -40,7 +40,7 @@ sub new {
     my $self     = {
         account     => $acct,
         schema      => $schema,
-        working_dir => Koha::UploadedFile->temporary_directory,    #temporary work directory
+        working_dir => C4::Context::temporary_directory,    #temporary work directory
         transfer_date => DateTime->now( time_zone => 'local' ),
     };
 

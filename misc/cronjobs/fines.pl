@@ -184,7 +184,7 @@ sub set_holiday {
 sub get_filename {
     my $directory = shift;
     if ( !$directory ) {
-        $directory = Koha::UploadedFile->temporary_directory;
+        $directory = C4::Context::temporary_directory;
     }
     if ( !-d $directory ) {
         carp "Could not write to $directory ... does not exist!";

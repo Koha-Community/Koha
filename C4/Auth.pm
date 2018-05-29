@@ -1740,7 +1740,7 @@ sub _get_session_params {
     }
     else {
         # catch all defaults to tmp should work on all systems
-        my $dir = Koha::UploadedFile->temporary_directory;
+        my $dir = C4::Context::temporary_directory;
         my $instance = C4::Context->config( 'database' ); #actually for packages not exactly the instance name, but generally safer to leave it as it is
         return { dsn => "driver:File;serializer:yaml;id:md5", dsn_args => { Directory => "$dir/cgisess_$instance" } };
     }

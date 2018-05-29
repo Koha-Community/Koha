@@ -74,7 +74,7 @@ subtest 'permanent_directory and temporary_directory' => sub {
     # Check mocked directories
     is( Koha::UploadedFile->permanent_directory, $tempdir,
         'Check permanent directory' );
-    is( Koha::UploadedFile->temporary_directory, $tempdir,
+    is( C4::Context::temporary_directory, $tempdir,
         'Check temporary directory' );
 };
 

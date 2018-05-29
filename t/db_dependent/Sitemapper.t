@@ -64,7 +64,7 @@ $db->mock(
     _new_schema => sub { return Schema(); }
 );
 
-my $dir = Koha::UploadedFile->temporary_directory;
+my $dir = C4::Context::temporary_directory;
 
 my $data = [
     [qw/ 1         2013-11-15 2013-11-15/],

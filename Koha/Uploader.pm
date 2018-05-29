@@ -189,7 +189,7 @@ sub _init {
     my ( $self, $params ) = @_;
 
     $self->{rootdir} = Koha::UploadedFile->permanent_directory;
-    $self->{tmpdir} = Koha::UploadedFile->temporary_directory;
+    $self->{tmpdir} = C4::Context::temporary_directory;
 
     $params->{tmp} = $params->{temp} if !exists $params->{tmp};
     $self->{temporary} = $params->{tmp}? 1: 0; #default false

@@ -160,17 +160,6 @@ sub permanent_directory {
     return C4::Context->config('upload_path');
 }
 
-=head3 tmp_directory
-
-Returns root directory for temporary storage
-
-=cut
-
-sub temporary_directory {
-    my ( $class ) = @_;
-    return C4::Context->config('tmp_path') || File::Spec->tmpdir;
-}
-
 =head3 _type
 
 Returns name of corresponding DBIC resultset

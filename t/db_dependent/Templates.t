@@ -126,9 +126,9 @@ subtest "Absolute path change in _get_template_file" => sub {
     # We create a simple template in /tmp.
     # We simulate an anonymous OPAC session; the OPACBaseURL template variable
     # should be filled by get_template_and_user.
-    t::lib::Mocks::mock_config( 'pluginsdir', [ Koha::UploadedFile->temporary_directory ] );
+    t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context::temporary_directory ] );
     t::lib::Mocks::mock_preference( 'OPACBaseURL', 'without any doubt' );
-    my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => Koha::UploadedFile->temporary_directory );
+    my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1, DIR => C4::Context::temporary_directory );
     print $fh q|I am a [% quality %] template [% OPACBaseURL %]|;
     close $fh;
     my ( $template, $login, $cookie ) = C4::Auth::get_template_and_user({

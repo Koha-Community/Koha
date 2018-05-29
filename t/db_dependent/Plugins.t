@@ -63,7 +63,7 @@ is( $plugin->get_plugin_http_path(), '/plugin/Koha/Plugin/Test', 'Test $plugin->
 # test absolute path change in get_template with Koha::Plugin::Test
 # using the mock set before
 # we also add tmpdir as an approved template dir
-t::lib::Mocks::mock_config( 'pluginsdir', [ Koha::UploadedFile->temporary_directory ] );
+t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context::temporary_directory ] );
 my ( $fh, $fn ) = tempfile( SUFFIX => '.tt', UNLINK => 1 );
 print $fh 'I am [% filename %]';
 close $fh;
