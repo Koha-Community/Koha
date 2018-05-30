@@ -399,7 +399,7 @@ my %is_nolimit = map { $_ => 1 } @nolimits;
 if($params->{'multibranchlimit'}) {
     my $search_group = Koha::Library::Groups->find( $params->{multibranchlimit} );
     my @libraries = $search_group->all_libraries;
-    my $multibranch = '('.join( " or ", map { 'branch: ' . $_->id } @libraries ) .')';
+    my $multibranch = '('.join( " or ", map { 'branch: ' . $_->branchcode } @libraries ) .')';
     push @limits, $multibranch if ($multibranch ne  '()');
 }
 
