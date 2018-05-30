@@ -375,11 +375,16 @@ $biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'notReservable',
     "CanItemBeReserved should return 'notReservable'");
 
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_2, holdingbranch => $branch_1, itype => 'CAN' } , $biblio->biblionumber);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status},
     'cannotReserveFromOtherBranches',
-    "CanItemBeReserved should return 'cannotReserveFromOtherBranches'");
+    "CanItemBeReserved should use PatronLibrary rule when ReservesControlBranch set to 'PatronLibrary'");
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status},
+    'OK',
+    "CanItemBeReserved should use item home library rule when ReservesControlBranch set to 'ItemsHomeLibrary'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $biblio->biblionumber);

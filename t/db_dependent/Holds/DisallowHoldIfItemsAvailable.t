@@ -7,7 +7,6 @@ use C4::Circulation;
 use C4::Items;
 use Koha::IssuingRule;
 use Koha::Items;
-
 use Test::More tests => 6;
 
 use t::lib::TestBuilder;
@@ -29,11 +28,13 @@ my $library1 = $builder->build({
 my $library2 = $builder->build({
     source => 'Branch',
 });
-
+my $itemtype = $builder->build({
+    source => 'Itemtype',
+    value  => { notforloan => 0 }
+})->{itemtype};
 
 t::lib::Mocks::mock_userenv({ branchcode => $library1->{branchcode} });
 
-my $bib_title = "Test Title";
 
 my $borrower1 = $builder->build({
     source => 'Borrower',
@@ -51,51 +52,42 @@ my $borrower2 = $builder->build({
     }
 });
 
-# Test hold_fulfillment_policy
-my ( $itemtype ) = @{ $dbh->selectrow_arrayref("SELECT itemtype FROM itemtypes LIMIT 1") };
+my $borrower3 = $builder->build({
+    source => 'Borrower',
+    value => {
+        branchcode => $library2->{branchcode},
+        dateexpiry => '3000-01-01',
+    }
+});
+
 my $borrowernumber1 = $borrower1->{borrowernumber};
 my $borrowernumber2 = $borrower2->{borrowernumber};
 my $library_A = $library1->{branchcode};
 my $library_B = $library2->{branchcode};
 
-$dbh->do("INSERT INTO biblio (frameworkcode, author, title, datecreated) VALUES ('', 'Koha test', '$bib_title', '2011-02-01')");
+my $biblio = $builder->build_sample_biblio({itemtype=>$itemtype});
+my $biblionumber = $biblio->biblionumber;
+my $item1  = $builder->build_sample_item({
+    biblionumber=>$biblionumber,
+    itype=>$itemtype,
+    homebranch => $library_A,
+    holdingbranch => $library_A
+})->unblessed;
+my $item2  = $builder->build_sample_item({
+    biblionumber=>$biblionumber,
+    itype=>$itemtype,
+    homebranch => $library_A,
+    holdingbranch => $library_A
+})->unblessed;
 
-my $biblionumber = $dbh->selectrow_array("SELECT biblionumber FROM biblio WHERE title = '$bib_title'")
-  or BAIL_OUT("Cannot find newly created biblio record");
+# Test hold_fulfillment_policy
 
-$dbh->do("INSERT INTO biblioitems (biblionumber, itemtype) VALUES ($biblionumber, '$itemtype')");
 
-my $biblioitemnumber =
-  $dbh->selectrow_array("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber = $biblionumber")
-  or BAIL_OUT("Cannot find newly created biblioitems record");
 
-$dbh->do("
-    INSERT INTO items (barcode, biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
-    VALUES ('AllowHoldIf1', $biblionumber, $biblioitemnumber, '$library_A', '$library_A', 0, 0, 0, 0, NULL, '$itemtype')
-");
-
-my $itemnumber1 =
-  $dbh->selectrow_array("SELECT itemnumber FROM items WHERE biblionumber = $biblionumber")
-  or BAIL_OUT("Cannot find newly created item");
-
-my $item1 = Koha::Items->find( $itemnumber1 )->unblessed;
-
-$dbh->do("
-    INSERT INTO items (barcode, biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
-    VALUES ('AllowHoldIf2', $biblionumber, $biblioitemnumber, '$library_A', '$library_A', 0, 0, 0, 0, NULL, '$itemtype')
-");
-
-my $itemnumber2 =
-  $dbh->selectrow_array("SELECT itemnumber FROM items WHERE biblionumber = $biblionumber ORDER BY itemnumber DESC")
-  or BAIL_OUT("Cannot find newly created item");
-
-my $item2 = Koha::Items->find( $itemnumber2 )->unblessed;
-
-$dbh->do("DELETE FROM issuingrules");
 my $rule = Koha::IssuingRule->new(
     {
         categorycode => '*',
-        itemtype     => '*',
+        itemtype     => $itemtype,
         branchcode   => '*',
         issuelength  => 7,
         lengthunit   => 8,
@@ -128,9 +120,10 @@ AddReturn( $item1->{barcode} );
         my $hold_allowed_from_any_libraries = 2;
         my $sth_delete_rules = $dbh->prepare(q|DELETE FROM default_circ_rules|);
         my $sth_insert_rule = $dbh->prepare(q|INSERT INTO default_circ_rules(singleton, holdallowed, hold_fulfillment_policy, returnbranch) VALUES ('singleton', ?, 'any', 'homebranch');|);
+        my $sth_insert_branch_rule = $dbh->prepare(q|INSERT INTO default_branch_circ_rules(branchcode, holdallowed, hold_fulfillment_policy, returnbranch) VALUES (?, ?, 'any', 'homebranch');|);
 
         subtest 'Item is available at a different library' => sub {
-            plan tests => 4;
+            plan tests => 7;
 
             $item1 = Koha::Items->find( $item1->{itemnumber} );
             $item1->set({homebranch => $library_B, holdingbranch => $library_B })->store;
@@ -140,8 +133,6 @@ AddReturn( $item1->{barcode} );
             #Item 1 homebranch library B is available
             #Item 2 homebranch library A is checked out
             #Borrower1 is from library A
-            #CircControl has no effect - same rule for all branches as set at line 96
-            #FIXME: ReservesControlBranch is not checked in these subs we are testing
 
             {
                 $sth_delete_rules->execute;
@@ -150,10 +141,20 @@ AddReturn( $item1->{barcode} );
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
                 $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
                 is( $is, 1, "Hold allowed from home library + ReservesControlBranch=ItemHomeLibrary, One item is available at different library, not holdable = none available => the hold is allowed at item level" );
+                $is = IsAvailableForItemLevelRequest( $item1, $borrower2);
+                is( $is, 1, "Hold allowed from home library + ReservesControlBranch=ItemHomeLibrary, One item is available at home library, holdable = one available => the hold is not allowed at item level" );
+                $sth_insert_branch_rule->execute( $library_B, $hold_allowed_from_any_libraries );
+                #Adding a rule for the item's home library affects the availability for a borrower from another library because ReservesControlBranch is set to ItemHomeLibrary
+                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                is( $is, 0, "Hold allowed from home library + ReservesControlBranch=ItemHomeLibrary, One item is available at different library, holdable = one available => the hold is not allowed at item level" );
 
                 t::lib::Mocks::mock_preference('ReservesControlBranch', 'PatronLibrary');
                 $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
                 is( $is, 1, "Hold allowed from home library + ReservesControlBranch=PatronLibrary, One item is available at different library, not holdable = none available => the hold is allowed at item level" );
+                #Adding a rule for the patron's home library affects the availability for an item from another library because ReservesControlBranch is set to PatronLibrary
+                $sth_insert_branch_rule->execute( $library_A, $hold_allowed_from_any_libraries );
+                $is = IsAvailableForItemLevelRequest( $item1, $borrower1);
+                is( $is, 0, "Hold allowed from home library + ReservesControlBranch=PatronLibrary, One item is available at different library, holdable = one available => the hold is not allowed at item level" );
             }
 
             {
@@ -213,35 +214,24 @@ AddReturn( $item1->{barcode} );
     };
 }
 
-my $biblio = $builder->build({
-    source => 'Biblio',
-});
-
-my $item3 = $builder->build({
-    source => 'Item',
-    value => {
-        biblionumber => $biblio->{biblionumber},
-        itemlost     => 0,
-        notforloan   => 0,
-        withdrawn    => 0,
-        damaged      => 0,
-        onloan       => undef,
-    }
-});
+my $itemtype2 = $builder->build({
+    source => 'Itemtype',
+    value  => { notforloan => 0 }
+})->{itemtype};
+my $item3 = $builder->build_sample_item({ itype => $itemtype2 });
 
 my $hold = $builder->build({
     source => 'Reserve',
     value =>{
-        itemnumber => $item3->{itemnumber},
+        itemnumber => $item3->itemnumber,
         found => 'T'
     }
 });
 
-$dbh->do("DELETE FROM issuingrules");
 $rule = Koha::IssuingRule->new(
     {
         categorycode => '*',
-        itemtype     => '*',
+        itemtype     => $itemtype2,
         branchcode   => '*',
         issuelength  => 7,
         lengthunit   => 8,
@@ -251,7 +241,7 @@ $rule = Koha::IssuingRule->new(
 );
 $rule->store();
 
-$is = IsAvailableForItemLevelRequest( $item3, $borrower1);
+$is = IsAvailableForItemLevelRequest( $item3->unblessed, $borrower1);
 is( $is, 1, "Item can be held, items in transit are not available" );
 
 # Cleanup
