@@ -362,4 +362,16 @@ $template->param(
     failed_holds             => scalar $query->param('failed_holds'),
 );
 
+# if not an empty string this indicates to return
+# back to the opac-results page
+my $search_query = $query->param('has-search-query');
+
+if ($search_query ne '') {
+
+    print $query->redirect(
+        -uri    => "/cgi-bin/koha/opac-search.pl?$search_query",
+        -cookie => $cookie,
+    );
+}
+
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

@@ -301,6 +301,7 @@
             <h3 id="modalLoginLabel">Log in to your account</h3>
         </div>
         <form action="/cgi-bin/koha/opac-user.pl" method="post" name="auth" id="modalAuth">
+            <input type="hidden" name="has-search-query" id="has-search-query" value="" />
             <div class="modal-body">
                 [% IF ( shibbolethAuthentication ) %]
                     [% IF ( invalidShibLogin ) %]
