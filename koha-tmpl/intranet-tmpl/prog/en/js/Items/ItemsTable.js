@@ -195,6 +195,9 @@ Items.ItemsTable = {
                     $("#loading-holdings").remove();
                   },
                   "success": function (jqXHR, textStatus, errorThrown) {
+                    if (typeof self.items !== 'undefined') {
+                        return 1; // return if some items are already loaded
+                    }
                     var serialItems = jqXHR.serialItems;
                     if (self.events._initedWithTooFewResults && Array.isArray(serialItems) && serialItems.length > 0 ||
                         (Array.isArray(serialItems) && serialItems.length > 10))
