@@ -1,7 +1,7 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% BLOCK controls %]
-    <p style="padding: 7px 0; border-top : 1px solid #E8E8E8;">
+    <p class="cart-controls">
         <a id="CheckAll" href="#"><i class="fa fa-check"></i> Select all</a> <a id="CheckNone" href="#"><i class="fa fa-remove"></i> Clear all</a>
         | <b>Selected items :</b>
         <a href="#" id="remove_from_cart">Remove</a>
@@ -24,26 +24,18 @@
     </p>
 [% END %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] Catalog &rsaquo; Your cart</title>
-    [% IF ( print_basket ) %]
-
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<link rel="shortcut icon" href="[% IF ( IntranetFavicon ) %][% IntranetFavicon %][% ELSE %][% interface %]/[% theme %]/img/favicon.ico[% END %]" type="image/x-icon" />
-<style type="text/css">
-    @import url([% interface %]/[% theme %]/css/print.css);
-</style>
-    [% ELSE %][% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
-	[% END %]
+<title>Koha &rsaquo; Catalog &rsaquo; Your cart</title>
+[% INCLUDE 'doc-head-close.inc' %]
 </head>
-[% IF ( print_basket ) %]<body id="cart_basket" class="cart" onload="print();history.back();">[% ELSE %]<body id="cart_basket" class="cart">[% END %]
+
+<body id="cart_basket" class="cart">
 
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-12">
 
 <div class="container">
-[% UNLESS ( print_basket ) %]
+
 <h1>Your cart</h1>
 
 <div id="toolbar" class="btn-toolbar">
@@ -69,25 +61,17 @@
     <a class="btn btn-default btn-sm" href="basket.pl" id="empty_cart"><i class="fa fa-trash"></i> Empty and close</a>
     <a class="btn btn-default btn-sm close" href="basket.pl"><i class="fa fa-times-circle"></i> Hide window</a>
 </div>
-        [% END %]
+
 
 [% IF ( verbose ) %]
-    [% UNLESS ( print_basket ) %]
         [% PROCESS controls %]
-    [% END %]
             <form action="basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
     <h3>
-        [% IF ( print_basket ) %]
-            [% BIBLIO_RESULT.title |html %]
-                [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
-                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
-        [% ELSE %]
-                <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" />
-                [% BIBLIO_RESULT.title |html %]
-                [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
-                [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
-        [% END %]
+        <input type="checkbox" class="select_record noprint" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" />
+        [% BIBLIO_RESULT.title |html %]
+        [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
+        [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author %][% END %]
     </h3>
 	    <!-- COinS / Openurl -->
     <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition %]&amp;rft.series=[% BIBLIO_RESULT.series %]&amp;rft.genre="></span>
@@ -235,14 +219,13 @@
             </form>
 
 [% ELSE %]
-[% UNLESS ( print_basket ) %]
+
     <form action="/cgi-bin/koha/basket/basket.pl" method="get" name="bookbag_form" id="bookbag_form">
     [% PROCESS controls %]
-[% END %]
 
     <table id="itemst">
 	<thead><tr>
-        [% UNLESS ( print_basket ) %]<th class="NoSort">&nbsp;</th>[% END %]
+        <th class="NoSort noprint">&nbsp;</th>
         <th class="anti-the">Title</th>
         <th>Item type</th>
         <th><a id="items-popover" href="#" data-trigger="hover" data-toggle="popover" data-placement="top" title="Item sorting" data-content="Items are sorted by the highest or lowest callnumber in a group of items respectively.">Items</a></th>
@@ -250,10 +233,10 @@
 
         [% FOREACH BIBLIO_RESULT IN BIBLIO_RESULTS %]
                 <tr>
-            [% UNLESS ( print_basket ) %]<td>
+                    <td class="noprint">
                         <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber %]" name="bib[% BIBLIO_RESULT.biblionumber %]" id="bib[% BIBLIO_RESULT.biblionumber %]" />
 
-                </td> [% END %]
+                </td>
             <td><a href="[% BIBLIO_RESULT.dest %]?biblionumber=[% BIBLIO_RESULT.biblionumber %]" class="open_title">
                         [% BIBLIO_RESULT.title |html %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
                     </a>
@@ -294,10 +277,8 @@
     </div>
 </div>
             [% INCLUDE js_includes.inc %]
-            [% UNLESS ( print_basket ) %]
-                [% INCLUDE 'datatables.inc' %]
-                [% Asset.js("js/cart.js") %]
-                [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
-            [% END %]
+            [% INCLUDE 'datatables.inc' %]
+            [% Asset.js("js/cart.js") %]
+            [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
     </body>
 </html>
