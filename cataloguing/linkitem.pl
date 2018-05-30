@@ -74,6 +74,9 @@ if ( $barcode && $biblionumber ) {
                 errornomodbiblio => 1
             );
         }
+        $template->param(
+            hostitemnumber => $item->itemnumber,
+        );
     }
     else {
         $template->param(
@@ -84,7 +87,6 @@ if ( $barcode && $biblionumber ) {
 
     $template->param(
         barcode        => $barcode,
-        hostitemnumber => $item->itemnumber,
     );
 
 }
