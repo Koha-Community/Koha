@@ -51,6 +51,37 @@ Items.ItemsTable = {
             alert("ItemsTable.ItemsTable(node, biblionumber, callback):> Callback is not a 'function' or 'undefined'!");
         }
         Items.ItemsTable.addInstance(this);
+        var htmlTableContent = Items.ItemsTableView.template();
+        var aoColumns = [];
+
+        $(this.node).html(htmlTableContent);
+        var thead_row = this.datatable.find('thead tr');
+        var clone = thead_row.clone().addClass('filters_row');
+        clone.find("th.NoSort").html('');
+        thead_row.before(clone);
+        filters_row = this.datatable.find('thead tr.filters_row');
+
+        this.datatable.DataTable($.extend(true, {}, dataTablesDefaults, {
+            'sDom': 't',
+            'bPaginate': false,
+            'bAutoWidth': false,
+            "aoColumnDefs": [
+                    { "aTargets": [ "NoSort" ], "bSortable": false, "bSearchable": false }
+                ]
+        }));
+        filters_row.find('th').each(function() {
+                if (this.className.match(/NoSort/)){
+                    aoColumns.push(null);
+                } else {
+                    aoColumns.push('text');
+                }
+        });
+        this.datatable.dataTable().columnFilter({
+            'sPlaceHolder': 'head:after',
+            'aoColumns': aoColumns
+        });
+        filters_row.addClass('columnFilter');
+
         if (this.datasource == "ajax") {
             Items.ItemsTable._initAjax(this);
         }
@@ -170,36 +201,6 @@ Items.ItemsTable = {
                     {
                         Items.Cache.clear();
                         Items.Cache.addLocalItems(jqXHR.serialItems);
-                        var htmlTableContent = Items.ItemsTableView.template();
-                        var aoColumns = [];
-
-                        $(self.node).html(htmlTableContent);
-                        var thead_row = self.datatable.find('thead tr');
-                        var clone = thead_row.clone().addClass('filters_row');
-                        clone.find("th.NoSort").html('');
-                        thead_row.before(clone);
-                        filters_row = self.datatable.find('thead tr.filters_row');
-
-                        self.datatable.DataTable($.extend(true, {}, dataTablesDefaults, {
-                            'sDom': 't',
-                            'bPaginate': false,
-                            'bAutoWidth': false,
-                            "aoColumnDefs": [
-                                    { "aTargets": [ "NoSort" ], "bSortable": false, "bSearchable": false }
-                                ]
-                        }));
-                        filters_row.find('th').each(function() {
-                                if (this.className.match(/NoSort/)){
-                                    aoColumns.push(null);
-                                } else {
-                                    aoColumns.push('text');
-                                }
-                        });
-                        self.datatable.dataTable().columnFilter({
-                            'sPlaceHolder': 'head:after',
-                            'aoColumns': aoColumns
-                        });
-                        filters_row.addClass('columnFilter');
 
                         Items.ItemsTable.setItems(self, serialItems);
 
