@@ -102,8 +102,9 @@ Returns the fully qualified path name for an uploaded file.
 sub full_path {
     my ( $self ) = @_;
     my $path = File::Spec->catfile(
-        $self->permanent?
-            $self->permanent_directory: $self->temporary_directory,
+        $self->permanent
+            ? $self->permanent_directory
+            : C4::Context->temporary_directory,
         $self->dir,
         $self->hashvalue. '_'. $self->filename,
     );

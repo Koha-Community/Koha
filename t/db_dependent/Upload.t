@@ -48,11 +48,11 @@ our $uploads = [
     ],
 ];
 
-# Redirect upload dir structure and mock File::Spec and CGI
+# Redirect upload dir structure and mock C4::Context and CGI
 my $tempdir = tempdir( CLEANUP => 1 );
 t::lib::Mocks::mock_config('upload_path', $tempdir);
-my $specmod = Test::MockModule->new( 'File::Spec' );
-$specmod->mock( 'tmpdir' => sub { return $tempdir; } );
+my $specmod = Test::MockModule->new( 'C4::Context' );
+$specmod->mock( 'temporary_directory' => sub { return $tempdir; } );
 my $cgimod = Test::MockModule->new( 'CGI' );
 $cgimod->mock( 'new' => \&newCGI );
 
