@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Koha %]
 [% USE Branches %]
 [% USE Categories %]
 [% USE CirculationRules %]
@@ -687,7 +688,7 @@
             <li><strong>No holds allowed:</strong> No patron may put this book on hold.</li>
         </ul>
         <p><strong>Note: </strong>If the system preference 'AllowHoldPolicyOverride' is enabled, these policies can be overridden by your circulation staff.</br />
-            <strong>Important: </strong>The policies are based on the patron's home library, not the library where the hold is being placed.
+            <strong>Important: </strong>The policies are applied based on the ReservesControlBranch system preference which is set to <a href="/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=ReservesControlBranch">[% Koha.Preference('ReservesControlBranch') %]</a>.
         </p>
 
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">

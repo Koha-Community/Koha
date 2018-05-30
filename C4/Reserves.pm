@@ -442,10 +442,10 @@ sub CanItemBeReserved {
         return { status => 'tooManyReserves', limit => $rule->rule_value} if $total_holds_count >= $rule->rule_value;
     }
 
-    my $circ_control_branch =
-      C4::Circulation::_GetCircControlBranch( $item->unblessed(), $borrower );
+    my $reserves_control_branch =
+      GetReservesControlBranch( $item->unblessed(), $borrower );
     my $branchitemrule =
-      C4::Circulation::GetBranchItemRule( $circ_control_branch, $item->itype ); # FIXME Should not be item->effective_itemtype?
+      C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->itype ); # FIXME Should not be item->effective_itemtype?
 
     if ( $branchitemrule->{holdallowed} == 0 ) {
         return { status => 'notReservable' };
@@ -1174,9 +1174,7 @@ sub IsAvailableForItemLevelRequest {
     my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
     my $item_object = Koha::Items->find( $item->{itemnumber } );
     my $itemtype = $item_object->effective_itemtype;
-    my $notforloan_per_itemtype
-      = $dbh->selectrow_array("SELECT notforloan FROM itemtypes WHERE itemtype = ?",
-                              undef, $itemtype);
+    my $notforloan_per_itemtype = Koha::ItemTypes->find($itemtype)->notforloan;
 
     return 0 if
         $notforloan_per_itemtype ||
@@ -1203,9 +1201,8 @@ sub IsAvailableForItemLevelRequest {
         my $any_available = 0;
 
         foreach my $i (@items) {
-
-            my $circ_control_branch = C4::Circulation::_GetCircControlBranch( $i->unblessed(), $borrower );
-            my $branchitemrule = C4::Circulation::GetBranchItemRule( $circ_control_branch, $i->itype );
+            my $reserves_control_branch = GetReservesControlBranch( $i->unblessed(), $borrower );
+            my $branchitemrule = C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
 
             $any_available = 1
               unless $i->itemlost
