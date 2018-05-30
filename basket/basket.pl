@@ -39,11 +39,9 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user (
 );
 
 my $bib_list     = $query->param('bib_list');
-my $print_basket = $query->param('print');
 my $verbose      = $query->param('verbose');
 
 if ($verbose)      { $template->param( verbose      => 1 ); }
-if ($print_basket) { $template->param( print_basket => 1 ); }
 
 my @bibs = split( /\//, $bib_list );
 my @results;

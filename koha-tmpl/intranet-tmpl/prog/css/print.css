@@ -302,7 +302,8 @@ form#sortbyform,
 fieldset.action,
 .list-actions,
 .print,
-.ui-tabs-nav {
+.ui-tabs-nav,
+.cart-controls {
     display: none;
 }
 
@@ -328,4 +329,31 @@ fieldset {
 p#upload_image
 {
     display: none;
+}
+
+th {
+    text-align: left;
+}
+
+#cart_basket .container,
+#cart_basket table,
+#cart_basket tr,
+#cart_basket th,
+#cart_basket td,
+#cart_basket .sorting_asc,
+#cart_basket .sorting,
+#cart_basket .sorting_desc,
+#cart_basket .sorting_disabled,
+#cart_basket tbody tr:nth-child(2n+1) td {
+    background: transparent none;
+    border: 0;
+}
+
+#cart_basket tr {
+    border-collapse: collapse;
+    border-bottom: 1px solid #DDD;
+}
+
+.container {
+    width:100%;
 }

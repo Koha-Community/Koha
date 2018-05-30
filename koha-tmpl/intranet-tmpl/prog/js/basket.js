@@ -381,8 +381,7 @@ function downloadBasket() {
 }
 
 function printBasket() {
-    var loc = document.location + "&print=1";
-    document.location = loc;
+    window.print();
 }
 
 function showMore() {
