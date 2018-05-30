@@ -148,7 +148,7 @@ sub all_libraries {
     my @children = $self->children;
     foreach my $c (@children) {
         if ( $c->branchcode ) {
-            push( @libraries, $c );
+            push( @libraries, $c->library );
         }
         else {
             push( @libraries, $c->all_libraries );
@@ -159,7 +159,6 @@ sub all_libraries {
     @libraries =
       grep { !$seen{ $_->id }++ } @libraries;
 
-#    return wantarray ? @li : $children;
     return @libraries;
 }
 
