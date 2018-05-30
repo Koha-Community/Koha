@@ -80,6 +80,7 @@ if ( $query->param('print_slip') ) {
         print_slip     => 1,
         borrowernumber => scalar $query->param('borrowernumber'), # FIXME We should send a Koha::Patron and raise an error if not exist.
         biblionumber   => scalar $query->param('biblionumber'),
+        itemnumber     => scalar $query->param('itemnumber'),
     );
 }
 
