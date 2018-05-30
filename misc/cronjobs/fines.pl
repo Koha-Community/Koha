@@ -38,7 +38,6 @@ use File::Spec;
 
 use Koha::Calendar;
 use Koha::DateUtils;
-use Koha::UploadedFile;
 use C4::Log;
 
 my $help;

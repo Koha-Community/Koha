@@ -47,7 +47,6 @@ use Koha::Caches;
 use Koha::Config::SysPrefs;
 use Koha::Illrequest::Config;
 use Koha::SearchEngine::Elasticsearch;
-use Koha::UploadedFiles;
 
 use C4::Members::Statistics;
 

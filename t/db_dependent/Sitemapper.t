@@ -26,7 +26,6 @@ use Test::More tests => 16;
 use Koha::Schema;
 use Carp qw/croak carp/;
 
-use Koha::UploadedFile;
 
 BEGIN {
     use_ok('Koha::Sitemapper');

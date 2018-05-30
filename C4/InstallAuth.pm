@@ -29,7 +29,6 @@ use C4::Context;
 use C4::Output;
 use C4::Templates;
 use C4::Koha;
-use Koha::UploadedFile;
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 

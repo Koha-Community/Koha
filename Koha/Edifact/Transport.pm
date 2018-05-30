@@ -28,7 +28,6 @@ use Net::SFTP::Foreign;
 use File::Slurp;
 use File::Copy;
 use File::Basename qw( fileparse );
-use Koha::UploadedFile;
 use Koha::Database;
 use Encode qw( from_to );
 

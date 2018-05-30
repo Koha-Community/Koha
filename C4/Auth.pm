@@ -30,7 +30,6 @@ use C4::Templates;    # to get the template
 use C4::Languages;
 use C4::Search::History;
 use Koha;
-use Koha::UploadedFile;
 use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
 use Koha::DateUtils qw(dt_from_string);
