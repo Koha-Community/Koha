@@ -81,6 +81,7 @@ if ( $query->param('print_slip') ) {
         print_slip     => 1,
         borrowernumber => scalar $query->param('borrowernumber'),
         biblionumber   => scalar $query->param('biblionumber'),
+        itemnumber     => scalar $query->param('itemnumber'),
     );
 }
 
