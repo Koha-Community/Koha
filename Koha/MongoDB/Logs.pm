@@ -48,9 +48,13 @@ sub getActionLogs{
 #get all data from action_cache_logs;
 sub getActionCacheLogs{
     my $self = shift;
+    my ($limit) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
     SELECT action_id,action, object, timestamp, user, info from action_logs_cache";
+    if ($limit) {
+        $query .= " limit ".$limit;
+    }
     my $stmnt = $dbh->prepare($query);
     $stmnt->execute();
 
@@ -65,11 +69,7 @@ sub setUserLogs{
 	my $self = shift;
 	my ($actionlog, $sourceuserId, $objectuserId, $cardnumber, $borrowernumber) = @_;
 
-	my $client = $self->getConfig->mongoClient();
-    my $settings = $self->getConfig->getSettings();
-
-    my $logs = $client->ns($settings->{database}.'.user_logs');
-    my $result = $logs->insert_one({
+    my $result = {
         sourceuser       => $sourceuserId,
         objectuser       => $objectuserId,
         objectcardnumber => $cardnumber,
@@ -78,9 +78,9 @@ sub setUserLogs{
         info             => $actionlog->{info},
         timestamp        => $actionlog->{timestamp}
 
-        });   
+        };   
 
-    return $actionlog;
+    return $result;
 }
 
 sub checkLog {
