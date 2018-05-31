@@ -15,7 +15,15 @@
 <h4 id="h4_result">&quot;[% result %]&quot;</h4>
 
 <form name="f_pop" id="f_pop" onsubmit="report()" action="">
-<fieldset class="action" id="fixedlengthbuilderaction"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
+    <div id="toolbar">
+        <div class="btn-group">
+            <button type="submit" class="btn btn-default btn-sm"><i class="fa fa-save"></i> Save</button>
+        </div>
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm close_window"><i class="fa fa-remove"></i> Cancel</button>
+        </div>
+    </div>
+
 <input type="hidden" name="plugin_name" value="marc21_field_008.pl" />
 <input type="hidden" id="[% index %]" name="index" value="[% index %]" />
 <input type="hidden" name="result" id="result" value="[% result %]" />
@@ -33,8 +41,16 @@
 </form>
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") %]
     [% Asset.js("js/xmlControlfield.js") %]
-    <script type="text/javascript">
+    <script>
+        $(document).ready(function(){
+            $('#toolbar').fixFloat();
+            $(".close_window").on("click", function(e){
+                e.preventDefault();
+                window.close();
+            });
+        });
         var objXmlControlField;
         var tr_result;
         var h4_result;
