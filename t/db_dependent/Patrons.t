@@ -168,10 +168,10 @@ subtest "Update patron categories" => sub {
     $builder->build({source=>'Accountline',value => {amountoutstanding=>5.01,borrowernumber=>$adult2->{borrowernumber}}});
 
     is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode})->count,3,'Three patrons in child category');
-    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,au=>1})->count,1,'One under age patron in child category');
-    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,au=>1})->next->borrowernumber,$child1->{borrowernumber},'Under age patron in child category is expected one');
-    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,ao=>1})->count,1,'One over age patron in child category');
-    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,ao=>1})->next->borrowernumber,$child3->{borrowernumber},'Over age patron in child category is expected one');
+    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,ageunder=>1})->count,1,'One under age patron in child category');
+    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,ageunder=>1})->next->borrowernumber,$child1->{borrowernumber},'Under age patron in child category is expected one');
+    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,ageover=>1})->count,1,'One over age patron in child category');
+    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,ageover=>1})->next->borrowernumber,$child3->{borrowernumber},'Over age patron in child category is expected one');
     is( Koha::Patrons->search_patrons_to_update({from=>$a_categorycode,search_params=>{branchcode=>$branchcode2}})->count,1,'One patron in branch 2');
     is( Koha::Patrons->search_patrons_to_update({from=>$a_categorycode,search_params=>{branchcode=>$branchcode2}})->next->borrowernumber,$adult2->{borrowernumber},'Adult patron in branch 2 is expected one');
     is( Koha::Patrons->search_patrons_to_update({from=>$a_categorycode,fine_min=>5})->count,1,'One patron with fines over $5');
@@ -187,7 +187,7 @@ subtest "Update patron categories" => sub {
     is( Koha::Patrons->search_patrons_to_update({from=>$a_categorycode,search_params=>{'sort1'=>'quack'}})->next->borrowernumber,$adult1->{borrowernumber},'One adult patron with a quack is expected one');
 
     is( Koha::Patrons->find($adult1->{borrowernumber})->guarantees->count,3,'Guarantor has 3 guarantees');
-    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,au=>1})->update_category({to=>$a_categorycode}),1,'One child patron updated to adult category');
+    is( Koha::Patrons->search_patrons_to_update({from=>$c_categorycode,ageunder=>1})->update_category({to=>$a_categorycode}),1,'One child patron updated to adult category');
     is( Koha::Patrons->find($adult1->{borrowernumber})->guarantees->count,2,'Guarantee was removed when made adult');
 
     is( Koha::Patrons->find($inst->{borrowernumber})->guarantees->count,1,'Guarantor has 1 guarantees');

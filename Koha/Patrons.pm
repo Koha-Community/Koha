@@ -388,15 +388,22 @@ sub search_patrons_to_update {
 
     my $cat_from = Koha::Patron::Categories->find($params->{from});
     $search_params->{categorycode}=$params->{from};
-    if ($params->{ao} || $params->{au}){
-        my ($y,$m,$d) = Today();
-        if( $cat_from->dateofbirthrequired && $params->{au} ) {
-            my ($dy,$dm,$dd) =Add_Delta_YMD($y,$m,$d,-$cat_from->dateofbirthrequired,0,0);
-            $search_params->{dateofbirth}{'>'} = $dy."-".sprintf("%02d",$dm)."-".sprintf("%02d",$dd);
+    if ($params->{ageover} || $params->{ageunder}){
+        if( $cat_from->dateofbirthrequired && $params->{ageunder} ) {
+            my $date_after = output_pref({
+                dt         => dt_from_string()->subtract( years => $cat_from->dateofbirthrequired),
+                dateonly   => 1,
+                dateformat => 'sql'
+            });
+            $search_params->{dateofbirth}{'>'} = $date_after;
         }
-        if( $cat_from->upperagelimit && $params->{ao} ) {
-            my ($dy,$dm,$dd) =Add_Delta_YMD($y,$m,$d,-$cat_from->upperagelimit,0,0);
-            $search_params->{dateofbirth}{'<'} = $dy."-".sprintf("%02d",$dm)."-".sprintf("%02d",$dd);
+        if( $cat_from->upperagelimit && $params->{ageover} ) {
+            my $date_before = output_pref({
+                dt         => dt_from_string()->subtract( years => $cat_from->upperagelimit),
+                dateonly   => 1,
+                dateformat => 'sql'
+            });
+            $search_params->{dateofbirth}{'<'} = $date_before;
         }
     }
     if ($params->{fine_min} || $params->{fine_max}) {

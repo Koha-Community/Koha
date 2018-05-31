@@ -47,20 +47,20 @@ update_patrons_category.pl -f=categorycode -t=categorycode
 update_patrons_category.pl --help | --man
 
 Options:
-   --help       brief help message
-   --man        full documentation
-   -ao          update if over  maximum age for current category
-   -au          update if under minimuum age  current category
-   -fo=X        update if fines over  X amount
-   -fu=X        update if fines under X amount
-   -rb=date     update if registration date is before given date
-   -ra=date     update if registration date is after a given date
-   --field name=value  where <name> is a column in the borrowers table, patrons will be updated if the field is equal to given <value>
-   -v           verbose mode
-   -confirm     commit changes to db, no action will be taken unless this switch is included
-   -b           <branchname>       only deal with patrons from this library/branch
-   -f           <categorycode>     change patron category from this category
-   -t           <categorycode>     change patron category to this category
+   --help                   brief help message
+   --man                    full documentation
+   -ao --ageover            update if over  maximum age for current category
+   -au --ageunder           update if under minimuum age  current category
+   -fo=X --fineover=X       update if fines over  X amount
+   -fu=X --fineunder=X      update if fines under X amount
+   -rb=date --regbefore     update if registration date is before given date
+   -ra=date --regafter      update if registration date is after a given date
+   -d --dbfield name=value    where <name> is a column in the borrowers table, patrons will be updated if the field is equal to given <value>
+   -v -verbose              verbose mode
+   -c --confirm             commit changes to db, no action will be taken unless this switch is included
+   -b --branch <branchname> only deal with patrons from this library/branch
+   -f --from <categorycode> change patron category from this category
+   -t --to   <categorycode> change patron category to this category
 
 =head1 OPTIONS
 
@@ -74,52 +74,52 @@ Print a brief help message and exits.
 
 Prints the manual page and exits.
 
-=item B<-v>
+=item B<--verbosse | -v>
 
 Verbose. Without this flag set, only fatal errors are reported.
 
-=item B<--confirm>
+=item B<--confirm | -c>
 
 Commit changes. Unless this flag set is, the script will report changes but not actually execute them on the database.
 
-=item B<-b>
+=item B<--branch | -b>
 
 changes patrons for one specific branch. Use the value in the
 branches.branchcode table.
 
-=item B<-f>
+=item B<--from | -f>
 
 *required* defines the category to update. Expects the code from categories.categorycode.
 
-=item B<-t>
+=item B<--to | -t>
 
 *required* defines the category patrons will be converted to. Expects the code from categories.categorycode.
 
-=item B<-ao>
+=item B<--ageover | -ao>
 
 Update patron only if they are above the maximum age range specified for the 'from' category.
 
-=item B<-au>
+=item B<--ageunde | -au>
 
 Update patron only if they are below the minimum age range specified for the 'from' category.
 
-=item B<-fo=X>
+=item B<--fineover=X | -fo=X>
 
 Supply a number and only account with fines over this number will be updated.
 
-=item B<-fu=X>
+=item B<==fineunder=X | -fu=X>
 
 Supply a number and only account with fines under this number will be updated.
 
-=item B<-rb=date>
+=item B<--regbefore=date | -rb=date>
 
 Enter a date in ISO format YYYY-MM-DD and only patrons registered before this date wil be updated.
 
-=item B<-ra=date>
+=item B<--regafter=date | -ra=date>
 
 Enter a date in ISO format YYYY-MM-DD and only patrons registered after this date wil be updated.
 
-=item B<--field column=value>
+=item B<--field column=value | -d column=value>
 
 Use this flag to specify a column in the borrowers table and update only patrons whose value in that column matches the value supplied (repeatable)
 
@@ -148,10 +148,10 @@ C<update_patron_categories.pl> -f=<categorycode> -t=<categorycode> -v  - Process
 # These variables are set by command line options.
 # They are initially set to default values.
 
-my $help     = 0;
-my $man      = 0;
-my $verbose  = 0;
-my $doit = 0;
+my $help    = 0;
+my $man     = 0;
+my $verbose = 0;
+my $doit    = 0;
 my $au;
 my $ao;
 my $min_dob;
@@ -167,46 +167,59 @@ my $branch_lim;
 my %fields;
 
 GetOptions(
-    'help|?'  => \$help,
-    'man'     => \$man,
-    'v'       => \$verbose,
-    'confirm' => \$doit,
-    'f=s'     => \$fromcat,
-    't=s'     => \$tocat,
-    'ao'       => \$ao,
-    'au'       => \$au,
-    'fo=s'    => \$fine_min,
-    'fu=s'    => \$fine_max,
-    'rb=s'    => \$reg_bef,
-    'ra=s'    => \$reg_aft,
-    'b=s'     => \$branch_lim,
-    'field=s' => \%fields
+    'help|?'          => \$help,
+    'man'             => \$man,
+    'v|verbose'       => \$verbose,
+    'c|confirm'       => \$doit,
+    'f|from=s'        => \$fromcat,
+    't|to=s'          => \$tocat,
+    'ao|ageover'      => \$ageover,
+    'au|ageunder'     => \$ageunder,
+    'fo|finesover=s'  => \$fine_min,
+    'fu|finesunder=s' => \$fine_max,
+    'rb|regbefore=s'  => \$reg_bef,
+    'ra|regafter=s'   => \$reg_aft,
+    'b|branch=s'      => \$branch_lim,
+    'd|field=s'       => \%fields
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
+warn "v $verbose c $doit f $fromcat t $tocat";
+warn Data::Dumper::Dumper(%fields);
+exit;
+
 if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
-    print "Must supply category from and to (-f & -t) please specify -help for usage tips.\n";
+    print
+"Must supply category from and to (-f & -t) please specify -help for usage tips.\n";
     exit;
 }
 
-($verbose && !$doit) and print "No actions will be taken (test mode)\n";
+( $verbose && !$doit ) and print "No actions will be taken (test mode)\n";
 
-$verbose and print "Will update patrons from $fromcat to $tocat with conditions below (if any)\n";
+$verbose
+  and print
+"Will update patrons from $fromcat to $tocat with conditions below (if any)\n";
 
 my %params;
 
-if ( $reg_bef || $reg_aft ){
+if ( $reg_bef || $reg_aft ) {
     my $date_bef;
     my $date_aft;
-    if (defined $reg_bef) {eval { $date_bef = dt_from_string( $reg_bef, 'iso' ); };}
-    die "$reg_bef is not a valid date before, aborting! Use a date in format YYYY-MM-DD.$@"
-    if $@;
-    if (defined $reg_aft) {eval { $date_aft = dt_from_string( $reg_aft, 'iso' ); };}
-    die "$reg_bef is not a valid date after, aborting! Use a date in format YYYY-MM-DD.$@"
-    if $@;
-    $params{dateenrolled}{'<='}=$reg_bef if defined $date_bef;
-    $params{dateenrolled}{'>='}=$reg_aft if defined $date_aft;
+    if ( defined $reg_bef ) {
+        eval { $date_bef = dt_from_string( $reg_bef, 'iso' ); };
+    }
+    die
+"$reg_bef is not a valid date before, aborting! Use a date in format YYYY-MM-DD.$@"
+      if $@;
+    if ( defined $reg_aft ) {
+        eval { $date_aft = dt_from_string( $reg_aft, 'iso' ); };
+    }
+    die
+"$reg_bef is not a valid date after, aborting! Use a date in format YYYY-MM-DD.$@"
+      if $@;
+    $params{dateenrolled}{'<='} = $reg_bef if defined $date_bef;
+    $params{dateenrolled}{'>='} = $reg_aft if defined $date_aft;
 }
 
 my $cat_from = Koha::Patron::Categories->find($fromcat);
@@ -218,42 +231,49 @@ $params{"me.branchcode"} = $branch_lim if $branch_lim;
 
 if ($verbose) {
     print "Conditions:\n";
-    print "    Registered before $reg_bef\n" if $reg_bef;
-    print "    Registered after  $reg_aft\n" if $reg_aft;
+    print "    Registered before $reg_bef\n"      if $reg_bef;
+    print "    Registered after  $reg_aft\n"      if $reg_aft;
     print "    Total fines more than $fine_min\n" if $fine_min;
     print "    Total fines less than $fine_max\n" if $fine_max;
-    print "    Age below minimum for ".$cat_from->description."\n" if $au;
-    print "    Age above maximum for ".$cat_from->description."\n" if $ao;
-    if (defined $branch_lim) {
+    print "    Age below minimum for " . $cat_from->description . "\n" if $ageunder;
+    print "    Age above maximum for " . $cat_from->description . "\n" if $ageover;
+    if ( defined $branch_lim ) {
         print "    Branchcode of patron is $branch_lim\n";
     }
 }
 
-while (my ($key,$value) = each %fields ) {
+while ( my ( $key, $value ) = each %fields ) {
     $verbose and print "    Borrower column $key is equal to $value\n";
-    $params{"me.".$key} = $value;
+    $params{ "me." . $key } = $value;
 }
 
-my $target_patrons = Koha::Patrons->search_patrons_to_update({
-        from => $fromcat,
+my $target_patrons = Koha::Patrons->search_patrons_to_update(
+    {
+        from          => $fromcat,
         search_params => \%params,
-        au => $au,
-        ao => $ao,
-        fine_min => $fine_min,
-        fine_max => $fine_max,
-    });
-my $patrons_found = $target_patrons->count;
+        ageunder      => $ageunder,
+        ageover       => $ageover,
+        fine_min      => $fine_min,
+        fine_max      => $fine_max,
+    }
+);
+my $patrons_found    = $target_patrons->count;
 my $actually_updated = 0;
-my $testdisplay  = $doit ? "" : "WOULD HAVE ";
-if ( $verbose ) {
-    while ( my $target_patron = $target_patrons->next() ){
-    my $target = Koha::Patrons->find( $target_patron->borrowernumber );
-    $verbose and print $testdisplay."Updated ".$target->firstname." ".$target->surname." from $fromcat to $tocat\n";
+my $testdisplay      = $doit ? "" : "WOULD HAVE ";
+if ($verbose) {
+    while ( my $target_patron = $target_patrons->next() ) {
+        my $target = Koha::Patrons->find( $target_patron->borrowernumber );
+        $verbose
+          and print $testdisplay
+          . "Updated "
+          . $target->firstname . " "
+          . $target->surname
+          . " from $fromcat to $tocat\n";
     }
     $target_patrons->reset;
 }
-if ( $doit ) {
-    $actually_updated = $target_patrons->update_category({to=>$tocat});
+if ($doit) {
+    $actually_updated = $target_patrons->update_category( { to => $tocat } );
 }
 
 $verbose and print "$patrons_found found, $actually_updated updated\n";
