@@ -51,6 +51,7 @@ use Koha::Authorities;
 
 use Koha::Authority::Types;
 use Koha::Token;
+use Koha::Z3950Servers;
 
 our ($tagslib);
 
@@ -214,6 +215,13 @@ chop $biblio_fields if $biblio_fields;
 
 build_tabs ($template, $record, $dbh,"",$query);
 
+my $servers = Koha::Z3950Servers->search(
+    {
+        recordtype => 'authority',
+        servertype => ['zed', 'sru'],
+    },
+);
+
 my $type = $authority_types->find($authtypecode);
 $template->param(
     authid          => $authid,
@@ -223,6 +231,7 @@ $template->param(
     authtypecode    => $authtypecode,
     authority_types => $authority_types,
     csrf_token      => Koha::Token->new->generate_csrf({ session_id => scalar $query->cookie('CGISESSID') }),
+    servers => $servers,
 );
 
 $template->{VARS}->{marcflavour} = C4::Context->preference("marcflavour");

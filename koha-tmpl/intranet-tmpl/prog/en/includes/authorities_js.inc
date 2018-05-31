@@ -1,4 +1,4 @@
-<script type="text/javascript">
+<script>
 
 function mergeAuth(authid, summary) {
     var alreadySelected = $.cookie('auth_to_merge');
@@ -65,15 +65,14 @@ $(document).ready(function () {
         return false;
     });
 
-    $("#z3950submit").click(function(){
-        [% IF ( authid ) %]
-            if (confirm(_("Please note that this Z39.50 search could replace the current record."))){
-                window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=[% authid %]","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-            }
-        [% ELSE %]
-            window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
-        [% END %]
-        return false;
+    $("#z3950_new").click(function(e){
+        e.preventDefault();
+        window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
+    });
+
+    $("#z3950_replace").click(function(e){
+        e.preventDefault();
+        window.open("/cgi-bin/koha/cataloguing/z3950_auth_search.pl?authid=[% authid %]","z3950search",'width=800,height=500,location=yes,toolbar=no,scrollbars=yes,resize=yes');
     });
 
     var searchType = '[% marclist %]';
