@@ -30,6 +30,7 @@ use C4::Members::Attributes qw( GetBorrowerAttributes );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::Patrons;
+use Koha::Patron::Consent;
 use Koha::Patron::Modification;
 use Koha::Patron::Modifications;
 use C4::Scrubber;
@@ -209,7 +210,9 @@ if ( $action eq 'create' ) {
 
             $borrower{categorycode}     ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
             $borrower{password}         ||= Koha::AuthUtils::generate_password;
+            my $consent_dt = delete $borrower{gdpr_proc_consent};
             my $patron = Koha::Patron->new( \%borrower )->store;
+            Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
             if ( $patron ) {
                 C4::Members::Attributes::SetBorrowerAttributes( $patron->borrowernumber, $attributes );
                 if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
@@ -366,6 +369,7 @@ sub GetMandatoryFields {
       C4::Context->preference("PatronSelfRegistrationBorrowerMandatoryField");
 
     my @fields = split( /\|/, $BorrowerMandatoryField );
+    push @fields, 'gdpr_proc_consent' if C4::Context->preference('GDPR_Policy');
 
     foreach (@fields) {
         $mandatory_fields{$_} = 1;
@@ -471,6 +475,9 @@ sub ParseCgiForBorrower {
         # Trigger validation
         $borrower{'dateofbirth'} = undef;
     }
+
+    # Replace checkbox 'agreed' by datetime in gdpr_proc_consent
+    $borrower{gdpr_proc_consent} = dt_from_string if  $borrower{gdpr_proc_consent} && $borrower{gdpr_proc_consent} eq 'agreed';
 
     return %borrower;
 }

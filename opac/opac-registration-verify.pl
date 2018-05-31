@@ -25,6 +25,7 @@ use C4::Members;
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::Patrons;
+use Koha::Patron::Consent;
 use Koha::Patron::Modifications;
 
 my $cgi = new CGI;
@@ -62,11 +63,13 @@ if (
 
     my $patron_attrs = $m->unblessed;
     $patron_attrs->{password} ||= Koha::AuthUtils::generate_password;
-
+    my $consent_dt = delete $patron_attrs->{gdpr_proc_consent};
     $patron_attrs->{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
     delete $patron_attrs->{timestamp};
     delete $patron_attrs->{verification_token};
     my $patron = Koha::Patron->new( $patron_attrs )->store;
+
+    Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
 
     if ($patron) {
         $m->delete();
