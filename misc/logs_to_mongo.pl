@@ -8,7 +8,7 @@ use Koha::MongoDB::Logs;
 use Koha::MongoDB::Users;
 use Data::Dumper;
 my $loopcount=0;
-my $limit=0;
+my $limit=100;
 my $copied=0;
 my $help=0;
 

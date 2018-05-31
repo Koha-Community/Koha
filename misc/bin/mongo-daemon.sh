@@ -16,13 +16,13 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 ### BEGIN INIT INFO
-# Provides:          koha-index-daemon-$DBNAME
+# Provides:          mongo-daemon
 # Required-Start:    $local_fs $syslog
 # Required-Stop:     $local_fs $syslog
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # X-Interactive:     false
-# Short-Description: Start/stop koha-index-daemon for $DBNAME
+# Short-Description: Start/stop mongo-daemon
 ### END INIT INFO
 
 . /lib/lsb/init-functions
