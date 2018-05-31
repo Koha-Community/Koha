@@ -134,11 +134,11 @@ sub get_onshelfholds_policy {
 =cut
 
 sub article_requestable_rules {
-    my ( $class_or_self, $params ) = @_;
+    my ( $class, $params ) = @_;
     my $category = $params->{categorycode};
 
     return if !C4::Context->preference('ArticleRequests');
-    return $class_or_self->search({
+    return $class->search({
         $category ? ( categorycode => [ $category, '*' ] ) : (),
         article_requests => { '!=' => 'no' },
     });
@@ -161,7 +161,7 @@ sub article_requestable_rules {
 =cut
 
 sub guess_article_requestable_itemtypes {
-    my ( $class_or_self, $params ) = @_;
+    my ( $class, $params ) = @_;
     my $category = $params->{categorycode};
     return {} if !C4::Context->preference('ArticleRequests');
 
@@ -172,7 +172,7 @@ sub guess_article_requestable_itemtypes {
         if $last_article_requestable_guesses && exists $last_article_requestable_guesses->{$key};
 
     my $res = {};
-    my $rules = $class_or_self->article_requestable_rules({
+    my $rules = $class->article_requestable_rules({
         $category ? ( categorycode => $category ) : (),
     });
     return $res if !$rules;
