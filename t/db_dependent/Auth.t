@@ -67,7 +67,7 @@ subtest 'checkauth() tests' => sub {
 
 };
 
-subtest 'track_login_for_session() tests' => sub {
+subtest 'track_login_daily tests' => sub {
 
     plan tests => 5;
 
@@ -78,34 +78,34 @@ subtest 'track_login_for_session() tests' => sub {
     $patron->store();
 
     my $cache     = Koha::Caches->get_instance();
-    my $cache_key = "seen-for-session-" . $patron->id;
+    my $cache_key = "track_login_" . $patron->userid;
     $cache->clear_from_cache($cache_key);
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '1' );
 
     is( $patron->lastseen, undef, 'Patron should have not last seen when newly created' );
 
-    C4::Auth::track_login_for_session( $userid );
+    C4::Auth::track_login_daily( $userid );
     $patron->_result()->discard_changes();
     isnt( $patron->lastseen, undef, 'Patron should have last seen set when TrackLastPatronActivity = 1' );
 
     sleep(1); # We need to wait a tiny bit to make sure the timestamp will be different
     my $last_seen = $patron->lastseen;
-    C4::Auth::track_login_for_session( $userid );
+    C4::Auth::track_login_daily( $userid );
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron last seen should be unchanged if passed the same session' );
+    is( $patron->lastseen, $last_seen, 'Patron last seen should still be unchanged' );
 
     $cache->clear_from_cache($cache_key);
-    C4::Auth::track_login_for_session( $userid );
+    C4::Auth::track_login_daily( $userid );
     $patron->_result()->discard_changes();
-    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed if given a new session' );
+    isnt( $patron->lastseen, $last_seen, 'Patron last seen should be changed if we cleared the cache' );
 
     t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', '0' );
-    sleep(1);
-    $last_seen = $patron->lastseen;
-    C4::Auth::track_login_for_session( $userid );
+    $patron->lastseen( undef )->store;
+    $cache->clear_from_cache($cache_key);
+    C4::Auth::track_login_daily( $userid );
     $patron->_result()->discard_changes();
-    is( $patron->lastseen, $last_seen, 'Patron should have last seen unchanged when TrackLastPatronActivity = 0' );
+    is( $patron->lastseen, undef, 'Patron should still have last seen unchanged when TrackLastPatronActivity = 0' );
 
 };
 

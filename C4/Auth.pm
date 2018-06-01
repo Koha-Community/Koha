@@ -56,7 +56,7 @@ BEGIN {
     @ISA       = qw(Exporter);
     @EXPORT    = qw(&checkauth &get_template_and_user &haspermission &get_user_subpermissions);
     @EXPORT_OK = qw(&check_api_auth &get_session &check_cookie_auth &checkpw &checkpw_internal &checkpw_hash
-      &get_all_subpermissions &get_user_subpermissions track_login_for_session
+      &get_all_subpermissions &get_user_subpermissions track_login_daily
     );
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap      = C4::Context->config('useldapserver') || 0;
@@ -1202,7 +1202,7 @@ sub checkauth {
             );
         }
 
-        track_login_for_session( $userid );
+        track_login_daily( $userid );
 
         return ( $userid, $cookie, $sessionID, $flags );
     }
@@ -2077,30 +2077,26 @@ sub getborrowernumber {
     return 0;
 }
 
-=head2 track_login_for_session
+=head2 track_login_daily
 
-  track_login_for_session( $userid );
+    track_login_daily( $userid );
 
-C<$userid> the userid of the member
-
-Wraps the call to $patron->track_login, the method used to update borrowers.lastseen.
+Wraps the call to $patron->track_login, the method used to update borrowers.lastseen. We only call track_login once a day.
 
 =cut
 
-sub track_login_for_session {
+sub track_login_daily {
     my $userid = shift;
-    return unless $userid;
-
-    my $patron = Koha::Patrons->find( { userid => $userid } );
-    return unless $patron;
+    return if !$userid || !C4::Context->preference('TrackLastPatronActivity');
 
     my $cache     = Koha::Caches->get_instance();
-    my $cache_key = "seen-for-session-" . $patron->id;
-    my $cached    = $cache->get_from_cache( $cache_key, { unsafe => 1 } );
-
+    my $cache_key = "track_login_" . $userid;
+    my $cached    = $cache->get_from_cache($cache_key);
     my $today = dt_from_string()->ymd;
     return if $cached && $cached eq $today;
 
+    my $patron = Koha::Patrons->find({ userid => $userid });
+    return unless $patron;
     $patron->track_login;
     $cache->set_in_cache( $cache_key, $today );
 }
