@@ -6,10 +6,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Article requests</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css"> p { margin-top: 0; }</style>
+<style type="text/css"> p { margin-top: 0; } [id^="article-menu-"] { display: none; } [id^="article-menu-"]:before { content: "|"; }</style>
 </head>
 
 [% BLOCK actions %]
+    <div id="[% menuid %]" class="dropdown">
         <a class="btn btn-default btn-xs dropdown-toggle ar-actions" role="button" data-toggle="dropdown" href="#">
             Actions <b class="caret"></b>
         </a>
@@ -39,6 +40,7 @@
                 [% END %]
             </li>
         </ul>
+    </div>
 [% END %]
 
 <body id="circ_article-requests" class="circ">
@@ -91,6 +93,11 @@
                     </ul>
 
                     <div id="article-requests-pending">
+                        <div class="article-requests-pending_table_controls">
+                            <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                            [% PROCESS actions menuid='article-menu-pending' id_arg=0 pull_right='' aria_menu='table_controls' %]
+                        </div>
+
                         <table id="article-requests-pending-table">
                             <thead>
                                 <tr>
@@ -185,7 +192,7 @@
                                         <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
                                         <td class="ar-actions">
                                         <div class="dropdown">
-                                            [% PROCESS actions id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
+                                            [% PROCESS actions menuid = "row" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
                                         </div>
                                         </td>
                                     </tr>
@@ -195,6 +202,10 @@
                     </div>
 
                     <div id="article-requests-processing">
+                        <div class="article-requests-processing_table_controls">
+                            <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                            [% PROCESS actions menuid='article-menu-processing' id_arg=0 pull_right='' aria_menu='table_controls' %]
+                        </div>
                         <table id="article-requests-processing-table">
                             <thead>
                                 <tr>
@@ -289,7 +300,7 @@
                                         <td class="ar-date"><span title="[% ar.created_on %]">[% ar.created_on | $KohaDates %]</span></td>
                                         <td class="ar-actions">
                                         <div class="dropdown">
-                                            [% PROCESS actions id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
+                                            [% PROCESS actions menuid="table_" _ ar.id id_arg=ar.id pull_right='pull-right' aria_menu='ar-actions' %]
                                         </div>
                                         </td>
                                     </tr>
@@ -298,19 +309,25 @@
                         </table>
                     </div>
                     <br/>
-                    <div class="table_controls row" id="table_controls">
-                        <a href="#" class="SelectAll"><i class="fa fa-check"></i> Select all</a> <a href="#" class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
-                        [% PROCESS actions id_arg=0 pull_right='' aria_menu='table_controls' %]
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 
 [% MACRO jsinclude BLOCK %]
-    <script type="text/javascript">
+    <script>
+        var active_table = "#article-requests-pending";
         $(document).ready(function() {
-            $('#article-request-tabs').tabs();
+            $('#article-request-tabs').tabs({
+                activate: function( activate_event, activate_ui ) {
+                    active_table = activate_ui.newPanel.selector;
+                },
+                create: function( create_event, create_ui ){
+                    active_table = create_ui.panel.selector;
+                },
+            });
+
+            activateBatchActions( active_table );
 
             [% IF article_requests_pending.count %]
                 $(".ar-pending-none").hide();
@@ -320,34 +337,47 @@
                 $(".ar-processing-none").hide();
             [% END %]
 
+            $( "input:checkbox", active_table ).on("change", function(){
+                activateBatchActions( active_table );
+            });
+
             $(".SelectAll").on("click", function(e) {
                 e.preventDefault();
-                if( $('table#article-requests-pending-table').is(":visible") )
-                    var table='article-requests-pending-table';
-                else table='article-requests-processing-table';
-                $("table#"+table+" input[type='checkbox']").prop('checked', true);
+                $( active_table + " input[type='checkbox']").prop('checked', true);
+                activateBatchActions( active_table );
             });
             $(".ClearAll").on("click", function(e) {
                 e.preventDefault();
-                if( $('table#article-requests-pending-table').is(":visible") )
-                    var table='article-requests-pending-table';
-                else table='article-requests-processing-table';
-                $("table#"+table+" input[type='checkbox']").prop('checked', false);
+                $( active_table + " input[type='checkbox']").prop('checked', false);
+                activateBatchActions( active_table );
             });
             $("a.ar-actions").on('click', function(e) {
                 // Hide menu option ?
-                if( $('table#article-requests-processing-table').is(":visible") )
+                if( $('#article-requests-processing-table').is(":visible") )
                     $('a.ar-process-request').hide();
                 else $('a.ar-process-request').show();
             });
         });
 
+        function activateBatchActions( active_table ){
+            // Check to see whether batch menu should be shown based on state of checkboxes
+            if ( $( "input:checkbox", active_table ).length > 0 ) {
+                // There are rows with checkboxes
+                $( "[class$='_table_controls']", active_table ).show();
+                if ( $( "input:checkbox:checked", active_table ).length > 0 ) {
+                    $( "[id^='article-menu-']", active_table ).css("display","inline-block");
+                } else {
+                    $( "[id^='article-menu-']", active_table ).hide();
+                }
+            } else {
+                // All rows have been removed
+                $("[class$='_table_controls']", active_table ).hide();
+            }
+        }
+
         function HandleMulti( fnHandler, id, a ) {
             if( id !== 0 ) { fnHandler( id, a ); return; }
-            if( $('table#article-requests-pending-table').is(":visible") )
-                var table='article-requests-pending-table';
-            else table='article-requests-processing-table';
-            $("table#"+table+" input[type='checkbox']:checked").each(function() {
+            $( active_table + " input[type='checkbox']:checked").each(function() {
                 fnHandler( $(this).attr('reqid'), $(this).closest('tr').find('td.ar-actions div a') );
             });
         }
@@ -363,7 +393,7 @@
                 return;
             }
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>').find('div.dropdown').hide();
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -374,7 +404,8 @@
                 },
                 success: function( data ) {
                     a.closest('tr').remove();
-                    UpdateTabCounts()
+                    UpdateTabCounts();
+                    activateBatchActions( active_table );
                 },
                 dataType: 'json'
             });
@@ -385,7 +416,7 @@
             table_row.find('.ar-process-request').remove();
             table_row.find('input[type="checkbox"]').prop('checked', false);
 
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>').find('div.dropdown').hide();
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -397,14 +428,15 @@
                     a.closest('tr').remove();
                     $("#article-requests-processing-table").append( table_row );
                     $("#article-requests-processing-table .ar-processing-none").hide();
-                    UpdateTabCounts()
+                    UpdateTabCounts();
+                    activateBatchActions( active_table );
                 },
                 dataType: 'json'
             });
         }
 
         function Complete( id, a ) {
-            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/loading-small.gif"/>').find('div.dropdown').hide();
+            a.closest('td').prepend('<img src="[% interface %]/[% theme %]/img/spinner-small.gif"/>').find('div.dropdown').hide();
             $.ajax({
                 type: "POST",
                 url: '/cgi-bin/koha/svc/article_request',
@@ -414,7 +446,8 @@
                 },
                 success: function( data ) {
                     a.closest('tr').remove();
-                    UpdateTabCounts()
+                    UpdateTabCounts();
+                    activateBatchActions( active_table );
                 },
                 dataType: 'json'
             });
