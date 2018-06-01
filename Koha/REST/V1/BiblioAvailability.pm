@@ -42,7 +42,7 @@ sub search {
                 })->in_opac->swaggerize;
             }
         }
-        $c->app->log->debug(Data::Dumper::Dumper(\@availabilities));
+        $c->app->log->trace(Data::Dumper::Dumper(\@availabilities));
         return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
@@ -84,7 +84,7 @@ sub hold {
             }
         }
 
-        $c->app->log->debug(Data::Dumper::Dumper(\@availabilities));
+        $c->app->log->trace(Data::Dumper::Dumper(\@availabilities));
         return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
