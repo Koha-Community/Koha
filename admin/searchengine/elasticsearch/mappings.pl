@@ -72,7 +72,17 @@ if ( $op eq 'edit' ) {
             my $search_field = Koha::SearchFields->find( { name => $field_name }, { key => 'name' } );
             $search_field->label($field_label);
             $search_field->type($field_type);
-            $search_field->weight($field_weight) if looks_like_number($field_weight) && $field_weight > 0;
+
+            if (!length($field_weight)) {
+                $search_field->weight(undef);
+            }
+            elsif ($field_weight <= 0 || !looks_like_number($field_weight)) {
+                push @messages, { type => 'error', code => 'invalid_field_weight', 'weight' => $field_weight };
+            }
+            else {
+                $search_field->weight($field_weight);
+            }
+
             $search_field->store;
         }
 

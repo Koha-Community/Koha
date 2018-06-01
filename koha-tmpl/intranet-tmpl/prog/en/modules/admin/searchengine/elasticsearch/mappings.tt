@@ -80,6 +80,8 @@ a.add, a.delete {
         [% CASE 'error_on_delete' %]
           An error occurred when deleting the existing mappings. Nothing has been changed!
           (search field [% m.values.field_name %] with mapping [% m.values.marc_field %].)
+        [% CASE 'invalid_field_weight' %]
+          Invalid field weight "[% m.weight | html %]", must be a positive decimal number.
         [% CASE 'success_on_update' %]
           Mappings updated successfully.
         [% CASE 'success_on_reset' %]
@@ -201,7 +203,7 @@ a.add, a.delete {
                       </td>
                       <td>
                       [% IF search_field.mapped_biblios %]
-                        <input type="number" step="0.01" min="0" max="999" name="search_field_weight" value="[% search_field.weight %]" />
+                        <input type="number" step="0.01" min="0.01" max="999.99" name="search_field_weight" value="[% search_field.weight %]" />
                       [% ELSE %]
                         <input type="hidden" name="search_field_weight" value="">
                       [% END %]
