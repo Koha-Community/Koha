@@ -1,0 +1,65 @@
+{
+  "/patrons/{patron_id}/account": {
+    "get": {
+      "x-mojo-to": "Patrons::Account#get",
+      "operationId": "getPatronAccount",
+      "tags": [
+        "patron"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/patron_id_pp"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Patron's account balance",
+          "schema": {
+            "$ref": "../definitions.json#/patron_balance"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "borrowers": "edit_borrowers",
+          "updatecharges": "remaining_permissions"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,81 @@
+{
+  "type": "object",
+  "properties": {
+    "account_line_id": {
+      "type": "integer",
+      "description": "Internal account line identifier"
+    },
+    "checkout_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Internal identifier for the checkout the account line is related to"
+    },
+    "patron_id": {
+      "type": "integer",
+      "description": "Internal identifier for the patron the account line belongs to"
+    },
+    "item_id": {
+      "type": [
+        "integer",
+        "null"
+      ],
+      "description": "Internal identifier for the item the account line is related to"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the account line was created"
+    },
+    "amount": {
+      "type": "number",
+      "description": "Account line amount"
+    },
+    "description": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Account line description"
+    },
+    "account_type": {
+      "type": "string",
+      "description": "Account line type"
+    },
+    "payment_type": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Payment type"
+    },
+    "amount_outstanding": {
+      "type": "number",
+      "description": "Outstanding amount"
+    },
+    "last_increment": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "The amount the line was increased last time"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp for the latest line update"
+    },
+    "internal_note": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Internal note"
+    },
+    "staff_id": {
+      "type": "integer",
+      "description": "Internal patron identifier for the staff member that introduced the account line"
+    }
+  }
+}
