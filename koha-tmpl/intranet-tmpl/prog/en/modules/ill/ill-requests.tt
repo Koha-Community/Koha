@@ -22,18 +22,6 @@
         // Filters that are active
         var activeFilters = {};
 
-        // Date format for datepickers
-        var dateMap = {
-            dmydot: 'dd.mm.yy',
-            iso: 'yy-mm-dd',
-            metric: 'dd/mm/yy',
-            us: 'mm/dd/yy'
-        };
-        var dateFormat = dateMap['[% Koha.Preference('dateformat') %]'];
-        $('#illfilter_dateplaced, #illfilter_datemodified').datepicker(
-            'option', 'dateFormat', dateFormat
-        );
-
         // Fields we don't want to display
         var ignore = [
             'accessurl',
