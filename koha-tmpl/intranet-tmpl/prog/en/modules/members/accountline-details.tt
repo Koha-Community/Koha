@@ -51,7 +51,8 @@
 
                                 &nbsp;
                                 [% IF ( accountline.itemnumber ) %]
-                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% accountline.biblionumber %]&amp;itemnumber=[% accountline.itemnumber %]">[% accountline.title |html %]</a>
+                                    [% SET biblio = accountline.item.biblio %]
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber %]&amp;itemnumber=[% accountline.itemnumber %]">[% biblio.title |html %]</a>
                                 [% END %]
                             </td>
 
