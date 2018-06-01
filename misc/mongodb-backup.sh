@@ -18,4 +18,4 @@ fi
 
 echo "Starting backing up"
 
-mongodump --db $DATABASE --out $OUT/$BACKUPNAME --host $HOST --port 27017 -u $USER -p $PASS --authenticationDatabase $DATABASE
+mongodump --db $DATABASE --gzip --archive=$OUT/$BACKUPNAME.archive --host $HOST --port 27017 -u $USER -p $PASS --authenticationDatabase $DATABASE
