@@ -58,11 +58,11 @@ sub list {
 
     # Create new "formatted" columns for each date column
     # that needs formatting
-    foreach(@requests) {
+    foreach $req(@requests) {
         foreach my $field(@format_dates) {
-            if (defined $_->{$field}) {
-                $_->{$field . "_formatted"} = format_sqldatetime(
-                    $_->{$field},
+            if (defined $req->{$field}) {
+                $req->{$field . "_formatted"} = format_sqldatetime(
+                    $req->{$field},
                     undef,
                     undef,
                     1
