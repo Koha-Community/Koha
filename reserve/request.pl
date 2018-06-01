@@ -105,7 +105,7 @@ if ($findborrower) {
     if ( $borrower ) {
         $borrowernumber_hold = $borrower->{borrowernumber};
     } else {
-        my $dt_params = { iDisplayLength => -1 };
+        my $dt_params = { iDisplayLength => 100 };
         my $results = C4::Utils::DataTables::Members::search(
             {
                 searchmember => $findborrower,

@@ -81,7 +81,7 @@ if ( $op && $op eq 'search' ) {
         my $local_results = C4::Utils::DataTables::Members::search(
             {
                 searchmember => $identifier,
-                dt_params => { iDisplayLength => -1 },
+                dt_params => { iDisplayLength => 100 },
             }
         )->{patrons};
         $template->param( 'local_result' => $local_results );

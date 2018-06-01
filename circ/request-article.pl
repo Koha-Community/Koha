@@ -86,7 +86,7 @@ if ( !$patron && $patron_cardnumber ) {
     my $results = C4::Utils::DataTables::Members::search(
         {
             searchmember => $patron_cardnumber,
-            dt_params    => { iDisplayLength => -1 },
+            dt_params    => { iDisplayLength => 100 },
         }
     );
 

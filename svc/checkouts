@@ -50,7 +50,7 @@ my @sort_columns = qw/date_due title itype issuedate branchcode itemcallnumber/;
 
 my @borrowernumber   = $input->multi_param('borrowernumber');
 my $offset           = $input->param('iDisplayStart');
-my $results_per_page = $input->param('iDisplayLength') || -1;
+my $results_per_page = $input->param('iDisplayLength') || 100;
 
 my $sorting_column = $input->param('iSortCol_0') || q{};
 $sorting_column = ( $sorting_column && $sort_columns[$sorting_column] ) ? $sort_columns[$sorting_column] : 'issuedate';
