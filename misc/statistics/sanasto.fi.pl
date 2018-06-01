@@ -337,16 +337,16 @@ sub writeToCsv {
 sub GetMarcBiblio {
     my $biblionumber = shift;
     my $dbh          = C4::Context->dbh;
-    my $sth          = $dbh->prepare("SELECT marcxml FROM biblioitems WHERE biblionumber=? ");
+    my $sth          = $dbh->prepare("SELECT metadata FROM biblio_metadata WHERE biblionumber=? ");
     $sth->execute($biblionumber);
     my $row     = $sth->fetchrow_hashref;
     unless ($row) {
-        $sth          = $dbh->prepare("SELECT marcxml FROM deletedbiblioitems WHERE biblionumber=? ");
+        $sth          = $dbh->prepare("SELECT metadata FROM deletedbiblio_metadata WHERE biblionumber=? ");
         $sth->execute($biblionumber);
         $row     = $sth->fetchrow_hashref;
     }
     return undef unless $row;
-    my $marcxml = C4::Charset::StripNonXmlChars( $row->{'marcxml'} );
+    my $marcxml = C4::Charset::StripNonXmlChars( $row->{'metadata'} );
     MARC::File::XML->default_record_format( C4::Context->preference('marcflavour') );
     my $record = MARC::Record->new();
 
