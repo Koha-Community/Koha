@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use List::MoreUtils 'any';
 
-use Test::More tests => 17;
+use Test::More tests => 19;
 
 use t::lib::TestBuilder;
 
@@ -120,7 +120,9 @@ my $groupX2_library6 = Koha::Library::Group->new({ parent_id => $groupX2->id,  b
 my @branchcodes = sort( $library1->{branchcode}, $library2->{branchcode} );
 my @group_branchcodes = sort( map { $_->branchcode } $groupX->libraries->as_list );
 is_deeply( \@branchcodes, \@group_branchcodes, "Group libraries are returned correctly" );
+is( ref($groupX->libraries), 'Koha::Libraries', '->libraries should return a Koha::Libraries iterator' );
 
 @branchcodes = sort( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode}, $library4->{branchcode}, $library5->{branchcode}, $library6->{branchcode} );
 @group_branchcodes = sort( map { $_->branchcode } $groupX->all_libraries );
 is_deeply( \@branchcodes, \@group_branchcodes, "Group all_libraries are returned correctly" );
+is( ref(($groupX->all_libraries)[0]), 'Koha::Library', '->all_libraries should return a list of Koha::Library - in the future it should be fixed to return a Koha::Libraries iterator instead'); # FIXME
