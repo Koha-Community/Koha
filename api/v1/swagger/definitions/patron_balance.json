@@ -1,0 +1,19 @@
+{
+  "type": "object",
+  "properties": {
+    "balance": {
+      "type": "number",
+      "description": "Signed decimal number"
+    },
+    "outstanding_lines": {
+      "type": "array",
+      "items": {
+        "$ref": "account_line.json"
+      }
+    }
+  },
+  "additionalProperties": false,
+  "required": [
+    "balance"
+  ]
+}
