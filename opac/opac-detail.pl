@@ -760,7 +760,7 @@ if( C4::Context->preference('ArticleRequests') ) {
     my $patron = $borrowernumber ? Koha::Patrons->find($borrowernumber) : undef;
     my $artreqpossible = $patron
         ? $biblio->can_article_request( $patron )
-        : $biblio->may_article_request;
+        : Koha::ItemTypes->find($biblio->itemtype)->may_article_request;
     $template->param( artreqpossible => $artreqpossible );
 }
 

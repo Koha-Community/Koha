@@ -22,6 +22,7 @@ use Carp;
 use C4::Koha;
 use C4::Languages;
 use Koha::Database;
+use Koha::IssuingRules;
 use Koha::Localizations;
 
 use base qw(Koha::Object);
@@ -104,6 +105,26 @@ sub can_be_deleted {
     my $nb_items = Koha::Items->search( { itype => $self->itemtype } )->count;
     my $nb_biblioitems = Koha::Biblioitems->search( { itemtype => $self->itemtype } )->count;
     return $nb_items + $nb_biblioitems == 0 ? 1 : 0;
+}
+
+=head3 may_article_request
+
+    Returns true if it is likely possible to make an article request for
+    this item type.
+    Optional parameter: categorycode (for patron).
+
+=cut
+
+sub may_article_request {
+    my ( $self, $params ) = @_;
+    return q{} if !C4::Context->preference('ArticleRequests');
+    my $itemtype = $self->itemtype;
+    my $category = $params->{categorycode};
+
+    my $guess = Koha::IssuingRules->guess_article_requestable_itemtypes({
+        $category ? ( categorycode => $category ) : (),
+    });
+    return ( $guess->{ $itemtype // q{} } || $guess->{ '*' } ) ? 1 : q{};
 }
 
 =head3 type

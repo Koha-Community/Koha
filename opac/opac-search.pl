@@ -642,10 +642,10 @@ for (my $i=0;$i<@servers;$i++) {
         }
         $hits = 0 unless @newresults;
 
-        my $categorycode; # needed for may_article_request
-        if( $borrowernumber && C4::Context->preference('ArticleRequests') ) {
-            my $patron = Koha::Patrons->find( $borrowernumber );
-            $categorycode = $patron ? $patron->categorycode : undef;
+        my $art_req_itypes;
+        if( C4::Context->preference('ArticleRequests') ) {
+            my $patron = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : undef;
+            $art_req_itypes = Koha::IssuingRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
         }
 
         foreach my $res (@newresults) {
@@ -705,10 +705,7 @@ for (my $i=0;$i<@servers;$i++) {
             }
 
             # BZ17530: 'Intelligent' guess if result can be article requested
-            $res->{artreqpossible} = Koha::Biblio->may_article_request({
-                categorycode => $categorycode,
-                itemtype     => $res->{itemtype},
-            });
+            $res->{artreqpossible} = ( $art_req_itypes->{ $res->{itemtype} // q{} } || $art_req_itypes->{ '*' } ) ? 1 : q{};
         }
 
         if ($results_hashref->{$server}->{"hits"}){

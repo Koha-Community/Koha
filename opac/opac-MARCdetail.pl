@@ -60,6 +60,7 @@ use List::MoreUtils qw( any uniq );
 use Koha::Biblios;
 use Koha::IssuingRules;
 use Koha::Items;
+use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
 
@@ -352,7 +353,7 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
 if( C4::Context->preference('ArticleRequests') ) {
     my $artreqpossible = $patron
         ? $biblio->can_article_request( $patron )
-        : $biblio->may_article_request;
+        : Koha::ItemTypes->find($biblio->itemtype)->may_article_request;
     $template->param( artreqpossible => $artreqpossible );
 }
 

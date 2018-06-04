@@ -169,32 +169,6 @@ sub can_be_transferred {
     return 0;
 }
 
-=head3 may_article_request
-
-    Returns true if it is likely possible to make an article request for
-    a given item type (or the default item type from biblioitems).
-
-    # As class method:
-    my $boolean = Koha::Biblio->may_article_request({ itemtype => 'BK' });
-    # As instance method:
-    my $boolean = Koha::Biblios->find($biblionumber)->may_article_request;
-
-=cut
-
-sub may_article_request {
-    my ( $class_or_self, $params ) = @_;
-    return q{} if !C4::Context->preference('ArticleRequests');
-    my $itemtype = ref($class_or_self)
-        ? $class_or_self->itemtype
-        : $params->{itemtype};
-    my $category = $params->{categorycode};
-
-    my $guess = Koha::IssuingRules->guess_article_requestable_itemtypes({
-        $category ? ( categorycode => $category ) : (),
-    });
-    return ( $guess->{ $itemtype // q{} } || $guess->{ '*' } ) ? 1 : q{};
-}
-
 =head3 article_request_type
 
 my $type = $biblio->article_request_type( $borrower );

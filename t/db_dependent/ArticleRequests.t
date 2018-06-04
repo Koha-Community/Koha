@@ -221,7 +221,7 @@ subtest 'search_limited' => sub {
 };
 
 subtest 'may_article_request' => sub {
-    plan tests => 6;
+    plan tests => 3;
 
     # mocking
     t::lib::Mocks::mock_preference('ArticleRequests', 1);
@@ -231,18 +231,10 @@ subtest 'may_article_request' => sub {
         'PT' => { 'BK' => 1 },
     });
 
-    # tests for class method call
-    is( Koha::Biblio->may_article_request({ itemtype => 'CR' }), 1, 'SER/* should be true' );
-    is( Koha::Biblio->may_article_request({ itemtype => 'CR', categorycode => 'S' }), 1, 'SER/S should be true' );
-    is( Koha::Biblio->may_article_request({ itemtype => 'CR', categorycode => 'PT' }), '', 'SER/PT should be false' );
-
-    # tests for instance method call
-    my $builder = t::lib::TestBuilder->new;
-    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
-    my $biblioitem = $builder->build_object({ class => 'Koha::Biblioitems', value => { biblionumber => $biblio->biblionumber, itemtype => 'BK' }});
-    is( $biblio->may_article_request, '', 'BK/* false' );
-    is( $biblio->may_article_request({ categorycode => 'S' }), 1, 'BK/S true' );
-    is( $biblio->may_article_request({ categorycode => 'PT' }), 1, 'BK/PT true' );
+    my $itemtype = Koha::ItemTypes->find('CR') // Koha::ItemType->new({ itemtype => 'CR' })->store;
+    is( $itemtype->may_article_request, 1, 'SER/* should be true' );
+    is( $itemtype->may_article_request({ categorycode => 'S' }), 1, 'SER/S should be true' );
+    is( $itemtype->may_article_request({ categorycode => 'PT' }), '', 'SER/PT should be false' );
 
     # Cleanup
     $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
