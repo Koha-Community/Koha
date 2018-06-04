@@ -224,9 +224,12 @@
 
                                             [% IF LibrarySearchGroups %]<optgroup label="Libraries">[% END %]
 
-                                            [% FOREACH BranchesLoo IN BranchesLoop %]
-                                                [% IF ( BranchesLoo.selected ) %]<option selected="selected" value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>
-                                                [% ELSE %]<option value="branch:[% BranchesLoo.value %]">[% BranchesLoo.branchname %]</option>[% END %]
+                                            [% FOREACH library IN Branches.all( selected => opac_name ) %]
+                                                [% IF library.selected %]
+                                                    <option selected="selected" value="branch:[% library.branchcode %]">[% library.branchname %]</option>
+                                                [% ELSE %]
+                                                    <option value="branch:[% library.branchcode %]">[% library.branchname %]</option>
+                                                [% END %]
                                             [% END %]
 
                                             [% IF LibrarySearchGroups %]
