@@ -48,6 +48,7 @@ sub getUser{
                 surname => 'Not found',
                 address => 'Nowhere',
                 city    => 'Nowhere',
+                cardnumber => '__NOT_FOUND__',
                 branchcode => $lib->branchcode,
                 categorycode => $cat->categorycode,
             };
