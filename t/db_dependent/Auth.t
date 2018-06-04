@@ -37,7 +37,7 @@ $schema->storage->txn_begin;
 
 subtest 'checkauth() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     my $patron = $builder->build({ source => 'Borrower', value => { flags => undef } })->{userid};
 
@@ -63,6 +63,12 @@ subtest 'checkauth() tests' => sub {
         });
     ( $userid, $cookie, $sessionID, $flags ) = C4::Auth::checkauth( $cgi, $authnotrequired );
     is ( $userid, undef, 'If DB user is used, it should not be logged in' );
+
+    my $is_allowed = C4::Auth::haspermission( $db_user_id, { can_do => 'everything' } );
+
+    # FIXME This belongs to t/db_dependent/Auth/haspermission.t but we do not want to c/p the pervious mock statements
+    ok( !$is_allowed, 'DB user should not have any permissions');
+
     C4::Context->_new_userenv; # For next tests
 
 };

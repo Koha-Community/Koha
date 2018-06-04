@@ -2030,11 +2030,6 @@ sub haspermission {
     $sth->execute($userid);
     my $row = $sth->fetchrow();
     my $flags = getuserflags( $row, $userid );
-    if ( $userid eq C4::Context->config('user') ) {
-
-        # Super User Account from /etc/koha.conf
-        $flags->{'superlibrarian'} = 1;
-    }
 
     return $flags if $flags->{superlibrarian};
 
