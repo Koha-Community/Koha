@@ -99,6 +99,8 @@ sub copy_log {
         $retval=-1;
         warn "caught error: $_";
     };
+    
+    $client->reconnect;
     return($retval);
 }
 
