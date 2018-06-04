@@ -3450,6 +3450,7 @@ CREATE TABLE IF NOT EXISTS `borrower_modifications` (
   `smsalertnumber` varchar(50) DEFAULT NULL,
   `privacy` int(11) DEFAULT NULL,
   `extended_attributes` MEDIUMTEXT DEFAULT NULL,
+  `gdpr_proc_consent` datetime, -- data processing consent
   PRIMARY KEY (`verification_token` (191),`borrowernumber`),
   KEY `verification_token` (`verification_token` (191)),
   KEY `borrowernumber` (`borrowernumber`)
@@ -3503,6 +3504,21 @@ CREATE TABLE IF NOT EXISTS plugin_data (
   plugin_key varchar(255) NOT NULL,
   plugin_value MEDIUMTEXT,
   PRIMARY KEY ( `plugin_class` (191), `plugin_key` (191) )
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table patron_consent
+--
+
+DROP TABLE IF EXISTS patron_consent;
+CREATE TABLE patron_consent (
+  id int AUTO_INCREMENT,
+  borrowernumber int NOT NULL,
+  type enum('GDPR_PROCESSING' ), -- allows for future extension
+  given_on datetime,
+  refused_on datetime,
+  PRIMARY KEY (id),
+  FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

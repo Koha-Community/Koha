@@ -213,3 +213,16 @@ Patrons:
                yes: Allow only superlibrarians
                no: Allow all permitted users
          - "to access/change superlibrarian privileges. Note: A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
+    Privacy:
+     -
+         - Use the following URL
+         - pref: PrivacyPolicyURL
+         - to refer to your local privacy policy in messages about privacy and data protection. (If you enforce GDPR policy, make sure that this page is not blocked.)
+     -
+         - Set GDPR policy to
+         - pref: GDPR_Policy
+           choices:
+               '': 'Disabled'
+               Enforced: 'Enforced'
+               Permissive: 'Permissive'
+         - "GDPR is the EU General Data Protection Regulation. When you enforce, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
