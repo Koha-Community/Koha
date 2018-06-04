@@ -16,7 +16,7 @@ function confirm_reopen() {
 function confirm_deletion() {
     var is_confirmed = confirm( CONFIRM_DELETE_SUBSCRIPTION );
     if (is_confirmed) {
-        window.location="subscription-detail.pl?subscriptionid=[% subscriptionid %]&op=del";
+        window.location="subscription-detail.pl?subscriptionid=" + subscriptionid + "&op=del";
     }
 }
 function popup(subscriptionid) {
