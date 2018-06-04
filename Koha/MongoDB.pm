@@ -64,26 +64,41 @@ sub push_action_logs {
 
     try {
         # all rows from table
-        my $actionlogs = $logs->getActionCacheLogs($limit);
+        my $actionlogs = $logs->getActionCacheLogs({
+            limit => $limit,
+            order_by => 'user, object'
+        });
         my @actions;
         my @actionIds;
 
-
+        my $prev_koha_user;
+        my $prev_koha_object;
         foreach my $actionlog (@{$actionlogs}) {
             my $user = $users->checkUser($actionlog->{user});
             my $object = $users->checkUser($actionlog->{object});
             my $borrowernumber = $actionlog->{object};
             my $action_id = $actionlog->{action_id};
 
-            # if borrower's log and not already in mongo
             if($actionlog->{object}) {
-                my $objectuser = $users->getUser($actionlog->{object});
+                my $objectuser = $prev_koha_object;
+                if (!defined $prev_koha_object ||
+                    $prev_koha_object->{borrowernumber} != $actionlog->{object})
+                {
+                    $objectuser = $users->getUser($actionlog->{object});
+                    $prev_koha_object = $objectuser; # store it for next iteration
+                }
                 my $objectuserId = $users->setUser($objectuser);
                 my $sourceuser;
                 my $sourceuserId;
 
                 if($actionlog->{user}) {
-                    $sourceuser = $users->getUser($actionlog->{user});
+                    $sourceuser = $prev_koha_user;
+                    if (!defined $prev_koha_user ||
+                        $prev_koha_user->{borrowernumber} != $actionlog->{user})
+                    {
+                        $sourceuser = $users->getUser($actionlog->{user});
+                        $prev_koha_user = $sourceuser; # store it for next iteration
+                    }
                     $sourceuserId = $users->setUser($sourceuser);
                 }
 

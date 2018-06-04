@@ -60,7 +60,7 @@ subtest 'test push_action_logs()' => sub {
 
     $schema->storage->txn_begin;
 
-    my $amnt_borrowers = 3;
+    my $amnt_borrowers = 10;
     my $amnt_action_logs = 20;
     my $mongo = Koha::MongoDB->new();
 
@@ -94,10 +94,12 @@ subtest 'test push_action_logs()' => sub {
     };
 
     subtest 'test user_logs collection' => sub {
-        plan tests => $amnt_action_logs*2+2;
-
+        plan tests => 5;
         my $real_patron_found = 0;
         my $at_least_one_patron_not_found = 0;
+        my $ok_sourceusers = 1;
+        my $ok_objectusers = 1;
+        my $ok_cardnumbers = 1;
         my $mongo_logs = $coll_user_logs->find();
         while (my $doc = $mongo_logs->next) {
             if ($doc->{objectborrowernumber} == 0)
@@ -107,13 +109,19 @@ subtest 'test push_action_logs()' => sub {
             if ($doc->{objectborrowernumber} > 0) {
                 $real_patron_found = 1;
             }
-            ok(
-                $coll_users->count({ '_id' => $doc->{sourceuser} }) == 1 &&
-                $coll_users->count({ '_id' => $doc->{objectuser} }) == 1,
-               'Found source & object user'
-            );
-            ok(defined $doc->{objectcardnumber}, 'Card number defined');
+            unless ($coll_users->count({ '_id' => $doc->{sourceuser} }) == 1) {
+                $ok_sourceusers = Data::Dumper::Dumper($doc->{sourceuser});
+            }
+            unless ($coll_users->count({ '_id' => $doc->{objectuser} }) == 1) {
+                $ok_objectusers = Data::Dumper::Dumper($doc->{sourceuser});
+            }
+            unless (defined $doc->{objectcardnumber}) {
+                $ok_cardnumbers = 0;
+            }
         }
+        is($ok_sourceusers, 1, 'Found all sourceusers');
+        is($ok_objectusers, 1, 'Found all objectusers');
+        is($ok_cardnumbers, 1, 'All objectusers have cardnumbers defined');
         is($real_patron_found, 1, 'At least one real patron found');
         is($at_least_one_patron_not_found, 1, 'At least one patron not found');
     };

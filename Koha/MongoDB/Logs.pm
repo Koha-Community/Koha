@@ -48,12 +48,15 @@ sub getActionLogs{
 #get all data from action_cache_logs;
 sub getActionCacheLogs{
     my $self = shift;
-    my ($limit) = @_;
+    my ($params) = @_;
     my $dbh = C4::Context->dbh;
     my $query = "
     SELECT action_id,action, object, timestamp, user, info from action_logs_cache";
-    if ($limit) {
-        $query .= " limit ".$limit;
+    if ($params->{order_by}) {
+        $query .= " order by ".$params->{order_by};
+    }
+    if ($params->{limit}) {
+        $query .= " limit ".$params->{limit};
     }
     my $stmnt = $dbh->prepare($query);
     $stmnt->execute();
