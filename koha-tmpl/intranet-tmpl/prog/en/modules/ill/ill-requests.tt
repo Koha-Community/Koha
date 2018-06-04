@@ -154,43 +154,13 @@
                 }
             },
             dateModified: {
-                listener: function() {
-                    var me = 'dateModified';
-                    $('#illfilter_datemodified').change(function() {
-                        var val = $('#illfilter_datemodified').val();
-                        if (val && val.length > 0) {
-                            activeFilters[me] = function() {
-                                table.column(10).search(val);
-                            }
-                        } else {
-                            if (activeFilters.hasOwnProperty(me)) {
-                                delete activeFilters[me];
-                            }
-                        }
-                    });
-                },
                 clear: function() {
-                    $('#illfilter_datemodified').val('');
+                    $('#illfilter_datemodified_start, #illfilter_datemodified_end').val('');
                 }
             },
             datePlaced: {
-                listener: function() {
-                    var me = 'datePlaced';
-                    $('#illfilter_dateplaced').change(function() {
-                        var val = $('#illfilter_dateplaced').val();
-                        if (val && val.length > 0) {
-                            activeFilters[me] = function() {
-                                table.column(8).search(val);
-                            }
-                        } else {
-                            if (activeFilters.hasOwnProperty(me)) {
-                                delete activeFilters[me];
-                            }
-                        }
-                    });
-                },
                 clear: function() {
-                    $('#illfilter_dateplaced').val('');
+                    $('#illfilter_dateplaced_start, #illfilter_dateplaced_end').val('');
                 }
             }
         };
@@ -484,6 +454,33 @@
                     }
                 }));
 
+                // Custom date range filtering
+                $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    var placedStart = $('#illfilter_dateplaced_start').datepicker('getDate');
+                    var placedEnd = $('#illfilter_dateplaced_end').datepicker('getDate');
+                    var modifiedStart = $('#illfilter_datemodified_start').datepicker('getDate');
+                    var modifiedEnd = $('#illfilter_datemodified_end').datepicker('getDate');
+                    var rowPlaced = data[8] ? new Date(data[8]) : null;
+                    var rowModified = data[10] ? new Date(data[10]) : null;
+                    var placedPassed = true;
+                    var modifiedPassed = true;
+                    if (placedStart && rowPlaced && rowPlaced < placedStart) {
+                        placedPassed = false
+                    };
+                    if (placedEnd && rowPlaced && rowPlaced > placedEnd) {
+                        placedPassed = false;
+                    }
+                    if (modifiedStart && rowModified && rowModified < modifiedStart) {
+                        modifiedPassed = false
+                    };
+                    if (modifiedEnd && rowModified && rowModified > modifiedEnd) {
+                        modifiedPassed = false;
+                    }
+
+                    return placedPassed && modifiedPassed;
+
+                });
+
             }
         );
 
@@ -553,12 +550,20 @@
                             </select>
                         </li>
                         <li>
-                            <label for="illfilter_dateplaced">Date placed:</label>
-                            <input type="text" name="illfilter_dateplaced" id="illfilter_dateplaced" class="datepicker">
+                            <label for="illfilter_dateplaced_start">Date placed between:</label>
+                            <input type="text" name="illfilter_dateplaced_start" id="illfilter_dateplaced_start" class="datepicker">
                         </li>
                         <li>
-                            <label for="illfilter_datemodified">Updated on:</label>
-                            <input type="text" name="illfilter_datemodified" id="illfilter_datemodified" class="datepicker">
+                            <label for="illfilter_dateplaced_end">and:</label>
+                            <input type="text" name="illfilter_dateplaced_end" id="illfilter_dateplaced_end" class="datepicker">
+                        </li>
+                        <li>
+                            <label for="illfilter_datemodified_start">Updated between:</label>
+                            <input type="text" name="illfilter_datemodified_start" id="illfilter_datemodified_start" class="datepicker">
+                        </li>
+                        <li>
+                            <label for="illfilter_datemodified_end">and:</label>
+                            <input type="text" name="illfilter_datemodified_end" id="illfilter_datemodified_end" class="datepicker">
                         </li>
                         <li>
                             <label for="illfilter_branchname">Library:</label>
