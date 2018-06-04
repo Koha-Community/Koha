@@ -16057,6 +16057,21 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Koha 18.06 - It's Adventure time!)\n";
 }
 
+$DBversion = '18.06.00.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{UPDATE permissions SET description = 'Manage budgets' WHERE code = 'period_manage';});
+    $dbh->do(q{UPDATE permissions SET description = 'Manage funds' WHERE code = 'budget_manage';});
+    $dbh->do(q{UPDATE permissions SET description = 'Modify funds (can''t create lines, but can modify existing ones)' WHERE code = 'budget_modify';});
+    $dbh->do(q{UPDATE permissions SET description = 'Manage baskets and order lines' WHERE code = 'order_manage';});
+    $dbh->do(q{UPDATE permissions SET description = 'Manage all baskets and order lines, regardless of restrictions on them' WHERE code = 'order_manage_all';});
+    $dbh->do(q{UPDATE permissions SET description = 'Manage basket groups' WHERE code = 'group_manage';});
+    $dbh->do(q{UPDATE permissions SET description = 'Receive orders and manage shipments' WHERE code = 'order_receive';});
+    $dbh->do(q{UPDATE permissions SET description = 'Add and delete funds (but can''t modify funds)' WHERE code = 'budget_add_del';});
+    $dbh->do(q{UPDATE permissions SET description = 'Manage all funds' WHERE code = 'budget_manage_all';});
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 3849- Improve descriptions of granular acquisition permissions)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
