@@ -6,6 +6,7 @@ use CGI;
 use C4::ClassSource;
 use C4::Context;
 use C4::Biblio;
+use C4::Koha;
 use C4::Service;
 use Koha::Database;
 use Koha::Libraries;
@@ -51,21 +52,9 @@ foreach my $class_source (sort keys %$class_sources) {
     push @{ $authorised_values->{cn_source} }, { value => $class_source, lib => $class_sources->{$class_source}->{'description'} };
 }
 
-my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-my $results;
-if( $branch_limit ) {
-    $results = $schema->resultset( "AuthorisedValue" )->search(
-    { "authorised_values_branches.branchcode" => { "=", [ $branch_limit, undef ] } },
-    { join => "authorised_values_branches", order_by => "lib" } );
-} else {
-    $results = $schema->resultset( "AuthorisedValue" )->search(
-    undef,
-    { order_by => "lib" } );
-}
-
-foreach my $result ( $results->all ) {
-    $authorised_values->{$result->category} ||= [];
-    push @{ $authorised_values->{$result->category} }, { value => $result->authorised_value, lib => $result->lib };
+my $avs = C4::Koha::GetAuthorisedValues();
+for my $av ( @$avs ) {
+    push @{ $authorised_values->{$av->{category}} }, { value => $av->{authorised_value}, lib => $av->{lib} };
 }
 
 $response->param( framework => \@tags, authorised_values => $authorised_values );
