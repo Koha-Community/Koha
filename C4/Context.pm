@@ -90,21 +90,21 @@ BEGIN {
     }  	# else there is no browser to send fatals to!
 }
 
-use Encode;
-use ZOOM;
-use Koha::Caches;
-use POSIX ();
-use DateTime::TimeZone;
-use Module::Load::Conditional qw(can_load);
 use Carp;
 use DateTime::TimeZone;
+use Encode;
+use File::Spec;
+use Module::Load::Conditional qw(can_load);
+use POSIX ();
+use ZOOM;
 
 use C4::Boolean;
 use C4::Debug;
-use Koha;
-use Koha::Config;
+use Koha::Caches;
 use Koha::Config::SysPref;
 use Koha::Config::SysPrefs;
+use Koha::Config;
+use Koha;
 
 =head1 NAME
 
