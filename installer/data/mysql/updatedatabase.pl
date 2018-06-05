@@ -46,7 +46,6 @@ use MARC::Record;
 use MARC::File::XML ( BinaryEncoding => 'utf8' );
 
 use File::Path qw[remove_tree]; # perl core module
-use File::Spec;
 use File::Slurp;
 
 # FIXME - The user might be installing a new database, so can't rely
@@ -11772,7 +11771,7 @@ $dbh->do(q{
     WHERE COALESCE(permanent,0)=0 AND dir='koha_upload'
 });
 
-my $tmp= File::Spec->tmpdir.'/koha_upload';
+my $tmp = C4::Context->temporary_directory . '/koha_upload';
 remove_tree( $tmp ) if -d $tmp;
 
     print "Upgrade to $DBversion done (Bug 14893 - Separate temporary storage per instance in Upload.pm)\n";
