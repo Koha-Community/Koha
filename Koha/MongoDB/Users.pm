@@ -18,8 +18,15 @@ has 'config' => (
 
 sub BUILD {
     my $self = shift;
+    my $args = shift;
     $self->setConfig(new Koha::MongoDB::Config);
-    $self->{dbh} = $self->getConfig->mongoClient();
+    my $dbh;
+    if ($args->{dbh}) {
+        $dbh = $args->{dbh};
+    } else {
+        $dbh = $self->getConfig->mongoClient();
+    }
+    $self->{dbh} = $dbh;
 }
 
 

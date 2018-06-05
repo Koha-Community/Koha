@@ -56,7 +56,7 @@ subtest 'Koha::MongoDB initialization' => sub {
 };
 
 subtest 'test push_action_logs()' => sub {
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -71,6 +71,17 @@ subtest 'test push_action_logs()' => sub {
 
     is(@{$logs->getActionCacheLogs}, $amnt_action_logs,
        'Koha: Action logs cache populated');
+
+    subtest 'test $limit' => sub {
+        plan tests => 2;
+
+        my $mongo = Koha::MongoDB->new;
+
+        is($mongo->push_action_logs(1000, 3), 1, 'Executed push_action_logs');
+        is($coll_user_logs->count(), 0,
+       'MongoDB: Did not receive any rows yet due to higher limit');
+    };
+
 
     is($mongo->push_action_logs(), 1, 'Koha to MongoDB: Great success');
 

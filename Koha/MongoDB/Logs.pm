@@ -20,9 +20,17 @@ has 'config' => (
 
 sub BUILD {
     my $self = shift;
+    my $args = shift;
     my $schema = Koha::Database->new()->schema();
     $self->setSchema($schema);
     $self->setConfig(new Koha::MongoDB::Config);
+    my $dbh;
+    if ($args->{dbh}) {
+        $dbh = $args->{dbh};
+    } else {
+        $dbh = $self->getConfig->mongoClient();
+    }
+    $self->{dbh} = $dbh;
 }
 
 sub getActionLogs{
@@ -90,7 +98,7 @@ sub checkLog {
 	my $self = shift;
 	my ($actionlog, $sourceuserId, $objectuserId) = @_;
 
-	my $client = $self->getConfig->mongoClient();
+	my $client = $self->{dbh};
     my $settings = $self->getConfig->getSettings();
 
     my $logs = $client->ns($settings->{database}.'.user_logs');

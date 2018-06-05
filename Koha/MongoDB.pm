@@ -29,11 +29,12 @@ sub new {
     my ($class, $params) = @_;
 
     my $config = new Koha::MongoDB::Config;
+    my $dbh    = $config->mongoClient();
     my $self = {
-        'logs' => new Koha::MongoDB::Logs,
-        'users' => new Koha::MongoDB::Users,
+        'logs' => Koha::MongoDB::Logs->new({ dbh => $dbh }),
+        'users' => Koha::MongoDB::Users->new({ dbh => $dbh }),
         'config' => $config,
-        'client' => $config->mongoClient(),
+        'client' => $dbh,
         'settings' => $config->getSettings(),
     };
 
@@ -52,7 +53,7 @@ copies data from table action_logs to mongodb
 
 sub push_action_logs {
     my $self = shift;
-    my ($limit) = @_;
+    my ($limit, $limit_unreached_sleep) = @_;
 
     my $retval=0;
     my $logs = $self->{logs};
@@ -62,12 +63,20 @@ sub push_action_logs {
     my $settings = $self->{settings};
     my $mongologs = $client->ns($settings->{database}.'.user_logs');
 
+    $limit //= 0;
+    $limit_unreached_sleep //= 60;
+
     try {
         # all rows from table
         my $actionlogs = $logs->getActionCacheLogs({
             limit => $limit,
             order_by => 'user, object'
         });
+        if (@{$actionlogs} == 0 || defined $limit && @{$actionlogs} < $limit) {
+            sleep($limit_unreached_sleep);
+            $retval = 1;
+            return;
+        }
         my @actions;
         my @actionIds;
 
