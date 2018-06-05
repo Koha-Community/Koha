@@ -19,6 +19,7 @@ has 'config' => (
 sub BUILD {
     my $self = shift;
     $self->setConfig(new Koha::MongoDB::Config);
+    $self->{dbh} = $self->getConfig->mongoClient();
 }
 
 
@@ -62,7 +63,7 @@ sub setUser{
 	my $self = shift;
 	my ($user) = @_;
 
-	my $client = $self->getConfig->mongoClient();
+	my $client = $self->{dbh};
     my $settings = $self->getConfig->getSettings();
 
     my $users = $client->ns($settings->{database}.'.users');
@@ -91,7 +92,7 @@ sub setUser{
 sub checkUser {
 	my $self = shift;
     my ($borrowernumber) = @_;
-    my $client = $self->getConfig->mongoClient();
+    my $client = $self->{dbh};
     my $settings = $self->getConfig->getSettings();
 
     my $users = $client->ns($settings->{database}.'.users');

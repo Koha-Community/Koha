@@ -74,8 +74,6 @@ sub push_action_logs {
         my $prev_koha_user;
         my $prev_koha_object;
         foreach my $actionlog (@{$actionlogs}) {
-            my $user = $users->checkUser($actionlog->{user});
-            my $object = $users->checkUser($actionlog->{object});
             my $borrowernumber = $actionlog->{object};
             my $action_id = $actionlog->{action_id};
 
@@ -110,7 +108,6 @@ sub push_action_logs {
             push @actionIds, $action_id;
         }
         my $return = $mongologs->insert_many(\@actions);
-
         if ($return->acknowledged) {
             $self->_remove_logs_cache(@actionIds);
         }
