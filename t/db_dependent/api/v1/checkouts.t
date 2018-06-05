@@ -214,7 +214,7 @@ $t->request_ok($tx)
   ->json_is({ renewable => Mojo::JSON->true, error => undef });
 
 subtest 'test restricted renewability due to patron restrictions' => sub {
-    plan tests => 12;
+    plan tests => 15;
 
     my $kp = Koha::Patrons->find($patron->{borrowernumber});
 
@@ -244,6 +244,15 @@ subtest 'test restricted renewability due to patron restrictions' => sub {
       ->status_is(200)
       ->json_is({ renewable => Mojo::JSON->false, error => 'gonenoaddress' });
     $kp->set({ gonenoaddress => undef })->store;
+
+    $kp->set({ dateexpiry => '2000-01-01' })->store;
+    $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id
+                           . "/renewability");
+    $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is({ renewable => Mojo::JSON->false, error => 'cardexpired' });
+    $kp->set({ dateexpiry => undef })->store;
 
     my $accountline = Koha::Account::Line->new({
         borrowernumber => $kp->borrowernumber,

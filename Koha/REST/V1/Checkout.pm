@@ -84,7 +84,7 @@ sub renew {
         );
         if (!$error && (my $err = $patron_checks->debt_renew_opac ||
             $patron_checks->debarred || $patron_checks->gonenoaddress ||
-            $patron_checks->lost)) {
+            $patron_checks->lost || $patron_checks->expired)) {
             $err = ref($err);
             $can_renew = 0;
             $err =~ s/Koha::Exceptions::Patron:://;
@@ -139,7 +139,7 @@ sub renewability {
         );
         if (!$error && (my $err = $patron_checks->debt_renew_opac ||
             $patron_checks->debarred || $patron_checks->gonenoaddress ||
-            $patron_checks->lost)) {
+            $patron_checks->lost || $patron_checks->expired)) {
             $err = ref($err);
             $can_renew = 0;
             $err =~ s/Koha::Exceptions::Patron:://;
@@ -284,7 +284,7 @@ sub expanded {
         );
         if (!$error && (my $err = $patron_checks->debt_renew_opac ||
             $patron_checks->debarred || $patron_checks->gonenoaddress ||
-            $patron_checks->lost)) {
+            $patron_checks->lost || $patron_checks->expired)) {
             $err = ref($err);
             $can_renew = 0;
             $err =~ s/Koha::Exceptions::Patron:://;
