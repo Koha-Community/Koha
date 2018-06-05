@@ -237,7 +237,7 @@
         <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %]</li>
         <li>
             <label for="unitprice">Actual cost:</label>
-            <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price %]" />
+            <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price on_editing => 1 %]" />
         </li>
         <li><label for="order_internalnote">Internal note: </label><textarea name="order_internalnote" width="40" rows="8" >[% order_internalnote %]</textarea></li>
         [% IF order_vendornote %]
