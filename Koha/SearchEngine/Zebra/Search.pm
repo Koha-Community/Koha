@@ -110,4 +110,6 @@ sub search_auth_compat {
     C4::AuthoritiesMarc::SearchAuthorities(@params);
 }
 
+sub max_result_window { undef }
+
 1;

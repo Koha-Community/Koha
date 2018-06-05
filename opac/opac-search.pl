@@ -830,7 +830,8 @@ for (my $i=0;$i<@servers;$i++) {
 	    }
             ## Build the page numbers on the bottom of the page
             my @page_numbers;
-            my $hits_to_paginate = C4::Context->preference('SearchEngine') eq 'Elasticsearch' ? 10000 : $hits;
+            my $max_result_window = $searcher->max_result_window;
+            my $hits_to_paginate = ($max_result_window && $max_result_window < $hits) ? $max_result_window : $hits;
             $template->param( hits_to_paginate => $hits_to_paginate );
             # total number of pages there will be
             my $pages = ceil($hits_to_paginate / $results_per_page);
