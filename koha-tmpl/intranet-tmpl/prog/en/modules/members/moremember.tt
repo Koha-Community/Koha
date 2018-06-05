@@ -301,7 +301,9 @@
     <li><span class="label">Borrowernumber: </span> [% patron.borrowernumber %]</li>
     <li><span class="label">Category: </span>[% patron.category.description %] ([% patron.categorycode %])</li>
     <li><span class="label">Registration date: </span>[% patron.dateenrolled | $KohaDates %]</li>
-
+    [% IF ( patron.date_renewed ) %]
+        <li><span class="label">Renewal date: </span>[% patron.date_renewed | $KohaDates %]</li>
+    [% END %]
     <li><span class="label">Expiration date: </span>
     [% IF ( was_renewed ) %]
             <strong class="reregistrinfo">[% patron.dateexpiry | $KohaDates %]</strong>
