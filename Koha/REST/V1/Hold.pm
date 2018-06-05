@@ -127,7 +127,7 @@ sub edit {
                            openapi => {error => "Reserve not found"} );
     }
 
-    if (my $problem = _opac_patron_restrictions($c->stash('koha.user'))) {
+    if (my $problem = _opac_patron_restrictions($c, $c->stash('koha.user'))) {
         return $c->render( status => 403, openapi => {
             error => "Reserve cannot be modified. Reason: $problem"} );
     }
@@ -217,7 +217,6 @@ sub _opac_patron_restrictions {
     return 0 unless $patron;
     return 0 if (!$c->stash('is_owner_access')
                  && !$c->stash('is_guarantor_access'));
-
     my @problems = $patron->status_not_ok;
     foreach my $problem (@problems) {
         $problem = ref($problem);

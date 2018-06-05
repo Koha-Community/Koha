@@ -206,7 +206,7 @@ subtest "Test endpoints without permission" => sub {
       ->status_is(403);
 };
 subtest "Test endpoints without permission, but accessing own object" => sub {
-    plan tests => 36;
+    plan tests => 37;
 
     my $reserve_id3 = C4::Reserves::AddReserve($branchcode, $nopermission->{'borrowernumber'},
     $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber, 'W');
@@ -227,7 +227,7 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
     my $borrno_tmp = $post_data->{'borrowernumber'};
     $post_data->{'borrowernumber'} = int $nopermission->{'borrowernumber'};
 
-    subtest 'test patron restrictions' => sub {
+    subtest 'test patron restrictions, POST' => sub {
         $nopermission_patron->set({ gonenoaddress => 1 })->store;
         $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
         $tx->req->cookies({name => 'CGISESSID',
@@ -264,6 +264,53 @@ subtest "Test endpoints without permission, but accessing own object" => sub {
           ->json_is('/error' =>
                     "Patron's card has been marked as 'lost'. Access forbidden.");
         $nopermission_patron->set({ lost => 0 })->store;
+    };
+
+    subtest 'test patron restrictions, PUT' => sub {
+        my $reserve_id4 = C4::Reserves::AddReserve($branchcode, $nopermission->{'borrowernumber'},
+        $biblionumber, undef, 2, undef, undef, undef, '', $itemnumber, 'W');
+        $nopermission_patron->set({ gonenoaddress => 1 })->store;
+        $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id4" =>
+                               json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' => 'Reserve cannot be modified. Reason: gonenoaddress');
+        $nopermission_patron->set({ gonenoaddress => 0 })->store;
+
+        $nopermission_patron->set({ debarred => "9999-12-31" })->store;
+        $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id4" =>
+                               json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' => 'Reserve cannot be modified. Reason: debarred');
+        $nopermission_patron->set({ debarred => undef })->store;
+
+        $nopermission_patron->set({ dateexpiry => "2000-01-01" })->store;
+        $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id4" =>
+                               json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' => 'Reserve cannot be modified. Reason: cardexpired');
+        $nopermission_patron->set({ dateexpiry => "0000-00-00" })->store;
+
+        $nopermission_patron->set({ lost => 1 })->store;
+        $tx = $t->ua->build_tx(PUT => "/api/v1/holds/$reserve_id4" =>
+                               json => $post_data);
+        $tx->req->cookies({name => 'CGISESSID',
+                           value => $session_nopermission->id});
+        $t->request_ok($tx) # create hold to myself
+          ->status_is(403)
+          ->json_is('/error' =>
+                    "Patron's card has been marked as 'lost'. Access forbidden.");
+        $nopermission_patron->set({ lost => 0 })->store;
+
+        C4::Reserves::CancelReserve({ reserve_id => $reserve_id4 });
     };
 
     $tx = $t->ua->build_tx(POST => "/api/v1/holds" => json => $post_data);
