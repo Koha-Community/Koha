@@ -317,6 +317,7 @@
 [% MACRO jsinclude BLOCK %]
     <script>
         var active_table = "#article-requests-pending";
+        var last_cancel_reason;
         $(document).ready(function() {
             $('#article-request-tabs').tabs({
                 activate: function( activate_event, activate_ui ) {
@@ -376,6 +377,7 @@
         }
 
         function HandleMulti( fnHandler, id, a ) {
+            last_cancel_reason = undefined;
             if( id !== 0 ) { fnHandler( id, a ); return; }
             $( active_table + " input[type='checkbox']:checked").each(function() {
                 fnHandler( $(this).attr('reqid'), $(this).closest('tr').find('td.ar-actions div a') );
@@ -388,8 +390,10 @@
         }
 
         function Cancel( id, a ) {
-            notes = prompt(_("Reason for cancellation:"));
-            if ( notes == null ) {
+            // last_cancel_reason: undefined means 'prompt for new reason'
+            // a null value indicates that prompt was cancelled
+            if( last_cancel_reason === undefined ) last_cancel_reason = prompt(_("Please specify the reason for cancelling selected item(s):"));
+            if ( last_cancel_reason === null ) {
                 return;
             }
 
@@ -400,7 +404,7 @@
                 data: {
                     action: 'cancel',
                     id: id,
-                    notes: notes
+                    notes: last_cancel_reason
                 },
                 success: function( data ) {
                     a.closest('tr').remove();
