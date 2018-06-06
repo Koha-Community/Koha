@@ -161,7 +161,7 @@ subtest 'discard_changes' => sub {
 
 subtest 'TO_JSON tests' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -169,6 +169,7 @@ subtest 'TO_JSON tests' => sub {
     my $borrowernumber = $builder->build(
         { source => 'Borrower',
           value => { lost => 1,
+                     sms_provider_id => undef,
                      gonenoaddress => 0,
                      updated_on => $dt,
                      lastseen   => $dt, } })->{borrowernumber};
@@ -184,6 +185,8 @@ subtest 'TO_JSON tests' => sub {
 
     ok( $gonenoaddress->isa('JSON::PP::Boolean'), 'Boolean attribute type is correct' );
     is( $gonenoaddress, 0, 'Boolean attribute value is correct (false)' );
+
+    is( $patron->TO_JSON->{sms_provider_id}, undef, 'Undef values should not be casted to 0' );
 
     ok( !isvstring($patron->borrowernumber), 'Integer values are not coded as strings' );
 

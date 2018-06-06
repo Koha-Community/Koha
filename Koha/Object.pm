@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use Carp;
 use Mojo::JSON;
+use Scalar::Util qw( looks_like_number );
 use Try::Tiny;
 
 use Koha::Database;
@@ -241,7 +242,9 @@ sub TO_JSON {
                 ? Mojo::JSON->true
                 : Mojo::JSON->false;
         }
-        elsif ( _numeric_column_type( $columns_info->{$col}->{data_type} ) ) {
+        elsif ( _numeric_column_type( $columns_info->{$col}->{data_type} )
+            and looks_like_number( $unblessed->{$col} )
+        ) {
 
             # TODO: Remove once the solution for
             # https://rt.cpan.org/Ticket/Display.html?id=119904
