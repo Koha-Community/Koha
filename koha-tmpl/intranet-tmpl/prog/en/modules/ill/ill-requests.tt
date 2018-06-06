@@ -415,7 +415,7 @@
                         { // Hide the two date columns we use just for sorting
                             'aTargets': [ 'placed', 'updated' ],
                             'bVisible': false,
-                            'bSearchable': false
+                            'bSearchable': true
                         },
                         { // When sorting 'placed', we want to use the
                           // unformatted column
@@ -456,12 +456,13 @@
 
                 // Custom date range filtering
                 $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
+                    console.log(data);
                     var placedStart = $('#illfilter_dateplaced_start').datepicker('getDate');
                     var placedEnd = $('#illfilter_dateplaced_end').datepicker('getDate');
                     var modifiedStart = $('#illfilter_datemodified_start').datepicker('getDate');
                     var modifiedEnd = $('#illfilter_datemodified_end').datepicker('getDate');
-                    var rowPlaced = data[8] ? new Date(data[8]) : null;
-                    var rowModified = data[10] ? new Date(data[10]) : null;
+                    var rowPlaced = data[7] ? new Date(data[7]) : null;
+                    var rowModified = data[9] ? new Date(data[9]) : null;
                     var placedPassed = true;
                     var modifiedPassed = true;
                     if (placedStart && rowPlaced && rowPlaced < placedStart) {
