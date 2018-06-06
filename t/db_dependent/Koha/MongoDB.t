@@ -19,31 +19,35 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More;
 use Test::MockModule;
-use t::lib::MongoDBTest qw(
-    skip_unless_mongod
-    build_client
-    get_test_db
-    server_version
-    server_type
-);
 
 use t::lib::TestBuilder;
-
 use Koha::Database;
+
+my (
+    $conn, $testdb, $server_version, $server_type, $coll_users, $coll_user_logs,
+    $mocked_config
+);
+eval {
+    $conn = t::lib::MongoDBTest::build_client();
+    $testdb = t::lib::MongoDBTest::get_test_db($conn);
+    $server_version = t::lib::MongoDBTest::server_version($conn);
+    $server_type = t::lib::MongoDBTest::server_type($conn);
+    $coll_users = $testdb->get_collection('users');
+    $coll_user_logs = $testdb->get_collection('user_logs');
+    $mocked_config = mock_db($conn, $testdb);
+};
+if($@) {
+    plan skip_all => 'This test requires mongodb-server package';
+    done_testing();
+}
+else {
+    plan tests => 3;
+}
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
-
-my $conn = build_client();
-my $testdb = get_test_db($conn);
-my $server_version = server_version($conn);
-my $server_type = server_type($conn);
-my $coll_users = $testdb->get_collection('users');
-my $coll_user_logs = $testdb->get_collection('user_logs');
-
-my $mocked_config = mock_db($conn, $testdb);
 
 use_ok('Koha::MongoDB');
 
