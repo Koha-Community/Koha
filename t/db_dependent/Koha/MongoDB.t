@@ -63,6 +63,9 @@ subtest 'test push_action_logs()' => sub {
     my $amnt_borrowers = 10;
     my $amnt_action_logs = 20;
     my $mongo = Koha::MongoDB->new();
+    my $client = $mongo->{client};
+    my $settings = $mongo->{settings};
+    my $mongologs = $client->ns($settings->{database}.'.user_logs');
 
     generate_test_data($amnt_borrowers, $amnt_action_logs);
 
@@ -77,13 +80,13 @@ subtest 'test push_action_logs()' => sub {
 
         my $mongo = Koha::MongoDB->new;
 
-        is($mongo->push_action_logs(1000, 3), 1, 'Executed push_action_logs');
+        is($mongo->push_action_logs($mongologs, 1000, 3), 1, 'Executed push_action_logs');
         is($coll_user_logs->count(), 0,
        'MongoDB: Did not receive any rows yet due to higher limit');
     };
 
 
-    is($mongo->push_action_logs(), 1, 'Koha to MongoDB: Great success');
+    is($mongo->push_action_logs($mongologs), 1, 'Koha to MongoDB: Great success');
 
     my $mongo_user_count = $coll_users->count();
     ok($mongo_user_count >= 1, 'MongoDB: More than one user');

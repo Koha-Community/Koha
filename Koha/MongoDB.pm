@@ -47,21 +47,17 @@ sub new {
 
     $mongo->push_action_logs();
 
-copies data from table action_logs to mongodb
+copies data from table action_logs_cache to mongodb
 
 =cut
 
 sub push_action_logs {
     my $self = shift;
-    my ($limit, $limit_unreached_sleep) = @_;
+    my ($mongologs, $limit, $limit_unreached_sleep) = @_;
 
     my $retval=0;
     my $logs = $self->{logs};
     my $users = $self->{users};
-    my $config = $self->{config};
-    my $client = $self->{client};
-    my $settings = $self->{settings};
-    my $mongologs = $client->ns($settings->{database}.'.user_logs');
 
     $limit //= 0;
     $limit_unreached_sleep //= 60;
@@ -128,7 +124,6 @@ sub push_action_logs {
         warn "caught error: $_";
     };
 
-    $client->reconnect;
     return($retval);
 }
 

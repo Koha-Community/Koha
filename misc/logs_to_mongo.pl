@@ -33,6 +33,9 @@ if ($help) {
 }
 
 my $mongo = Koha::MongoDB->new;
+my $client = $mongo->{client};
+my $settings = $mongo->{settings};
+my $mongologs = $client->ns($settings->{database}.'.user_logs');
 
 ###################################################
 # main loop copies logs and waits one minute before new round
@@ -40,7 +43,6 @@ my $mongo = Koha::MongoDB->new;
 # if $loopcount does not increase, script will run
 while($loopcount < 5) {
     
-    my $copied=$mongo->push_action_logs($limit);
-    #sleep(60);
-    #$loopcount++;
+    my $copied=$mongo->push_action_logs($mongologs, $limit);
+    $client->reconnect;
 }
