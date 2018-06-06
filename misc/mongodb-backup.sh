@@ -7,7 +7,7 @@ USER=$(sed -n 's/[ \t]<username>\(.*\)<\/username>/\1/p' $CONFIG)
 PASS=$(sed -n 's/[ \t]<password>\(.*\)<\/password>/\1/p' $CONFIG)
 DATABASE=$(sed -n 's/[ \t]<database>\(.*\)<\/database>/\1/p' $CONFIG)
 TIME=`date +%d_%b_%y`
-OUT=/home/koha/koha-dev/var/spool/backup/mongodb
+OUT="$1"
 BACKUPNAME=mongo_$TIME
 
 if ! [ "$(sudo dpkg-query -l | grep mongodb-org-tools | wc -l)" -eq 1 ]; then
@@ -16,6 +16,17 @@ if ! [ "$(sudo dpkg-query -l | grep mongodb-org-tools | wc -l)" -eq 1 ]; then
   exit 1
 fi
 
-echo "Starting backing up"
+if [ -z "$OUT" ]; then
+	echo "Output directory not defined"
+	exit 1;
+else
+	echo "Removing oldest Mongo backups"
 
-mongodump --db $DATABASE --gzip --archive=$OUT/$BACKUPNAME.archive --host $HOST --port 27017 -u $USER -p $PASS --authenticationDatabase $DATABASE
+	find $OUT/*.archive -mtime +1 -exec rm {} \;
+
+	sleep 5
+
+	echo "Starting backing up"
+
+	mongodump --db $DATABASE --gzip --archive=$OUT/$BACKUPNAME.archive --host $HOST --port 27017 -u $USER -p $PASS --authenticationDatabase $DATABASE
+fi
