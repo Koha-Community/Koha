@@ -917,7 +917,7 @@ sub CanBookBeIssued {
         if (C4::Context->preference('item-level_itypes')){
             # this should probably be a subroutine
             my $sth = $dbh->prepare("SELECT notforloan FROM itemtypes WHERE itemtype = ?");
-            $sth->execute($item->{'itemtype'});
+            $sth->execute($effective_itemtype);
             my $notforloan=$sth->fetchrow_hashref();
             if ($notforloan->{'notforloan'}) {
                 if (!C4::Context->preference("AllowNotForLoanOverride")) {
