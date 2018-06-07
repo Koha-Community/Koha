@@ -93,17 +93,10 @@ if ($do_it) {
             print $line->{rowtitle}.$sep;
             foreach my $cell (@$x) {
                 print $cell->{value}.$sep;
+                print $cell->{count};
             }
-            print $line->{totalrow};
             print "\n";
         }
-# footer
-        print "TOTAL";
-        $cols = @$results[0]->{loopfooter};
-        foreach my $col ( @$cols ) {
-            print $sep.$col->{totalcol};
-        }
-        print $sep.@$results[0]->{total};
         exit;
     }
 # Displaying choices
@@ -163,7 +156,6 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub calculate {
     my ($line, $column, $filters) = @_;
     my @mainloop;
-    my @loopfooter;
     my @loopcol;
     my @loopline;
     my @looprow;
@@ -415,7 +407,6 @@ sub calculate {
     $globalline{looprow} = \@looprow;
     $globalline{loopcol} = \@loopcol;
 # 	# the foot (totals by borrower type)
-    $globalline{loopfooter} = \@loopfooter;
     $globalline{total}= $grantotal;
     $globalline{line} = $line;
     $globalline{column} = $column;
