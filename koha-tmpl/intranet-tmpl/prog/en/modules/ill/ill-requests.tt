@@ -118,11 +118,12 @@
 
         // Our 'render' function for biblio_id
         var createBiblioLink = function(data, type, row) {
-            return '<a title="' + _("View biblio details") + '" ' +
+            return (row.biblio_id) ?
+                '<a title="' + _("View biblio details") + '" ' +
                 'href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' +
                 row.biblio_id + '">' +
                 row.biblio_id +
-                '</a>';
+                '</a>' : '';
         };
 
         // Our 'render' function for the library name
