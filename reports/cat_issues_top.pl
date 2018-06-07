@@ -94,8 +94,8 @@ if ($do_it) {
             print $line->{rowtitle}.$sep;
             foreach my $cell (@$x) {
                 print $cell->{value}.$sep;
+		print $cell->{count};
             }
-            print $line->{totalrow};
             print "\n";
         }
 # footer
