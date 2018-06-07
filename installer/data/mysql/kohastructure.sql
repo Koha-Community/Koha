@@ -3518,6 +3518,7 @@ CREATE TABLE patron_lists (
   patron_list_id int(11) NOT NULL AUTO_INCREMENT, -- unique identifier
   name varchar(255) CHARACTER SET utf8mb4 NOT NULL,  -- the list's name
   owner int(11) NOT NULL,                         -- borrowernumber of the list creator
+  shared tinyint(1) default 0,
   PRIMARY KEY (patron_list_id),
   KEY owner (owner)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
