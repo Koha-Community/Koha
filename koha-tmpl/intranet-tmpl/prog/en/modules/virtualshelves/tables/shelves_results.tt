@@ -11,13 +11,13 @@
                 "dt_type":
                     "[% data.type | html %]",
                 "dt_shelfname":
-                    "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% data.shelfnumber | html %]'>[% data.shelfname | html %]</a>",
+                    "<a href='/cgi-bin/koha/virtualshelves/shelves.pl?op=view&shelfnumber=[% data.shelfnumber | html %]'>[% To.json(data.shelfname) | html%]</a>",
                 "dt_count":
                     "[% data.count | html %] item(s)",
                 "dt_is_shared":
                     "[% IF data.type == 2 %]Public[% ELSIF data.is_shared %]Shared[% ELSE %]Private[% END %]",
                 "dt_owner":
-                    "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner | html %]'>[% data.firstname | html %] [% data.surname | html %]</a>",
+                    "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner | html %]'>[% To.json(data.firstname) | html %] [% To.json(data.surname) | html %]</a>",
                 "dt_sortby":
                     [% IF data.sortby == "author" %]"Author"[% ELSIF data.sortby == "copyrightdate" %]"Year"[% ELSIF data.sortby == "itemcallnumber" %]"Call number"[% ELSIF data.sortby == "dateadded" %]"Date added"[% ELSE %]"Title"[% END %],
                 "dt_created_on":
