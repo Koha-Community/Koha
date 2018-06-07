@@ -163,7 +163,7 @@
                     <td>[% order.authorisedbyname %]</td>
                     <td>
                         [% IF ( order.basketgroupid ) %]
-                            [% order.groupname %] (<a href="basketgroup.pl?booksellerid=[% order.id %]">[% order.basketgroupid %]</a>)
+                            [% order.groupname %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id %]&basketgroupid=[% order.basketgroupid %]">[% order.basketgroupid %]</a>)
                         [% ELSE %]
                             &nbsp;
                         [% END %]
