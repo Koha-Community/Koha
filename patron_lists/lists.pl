@@ -39,6 +39,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my @lists = GetPatronLists();
 
-$template->param( lists => \@lists );
+$template->param(
+    lists          => \@lists,
+    logged_in_user => $loggedinuser,
+);
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );

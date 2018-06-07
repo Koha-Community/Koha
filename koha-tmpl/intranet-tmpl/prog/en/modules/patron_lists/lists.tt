@@ -32,15 +32,26 @@
                 <tr>
                     <th>Name</th>
                     <th>Patrons in list</th>
+                    <th>Shared</th>
                     <th class="NoSort">&nbsp;</th>
                 </tr>
             </thead>
 
             <tbody>
                 [% FOREACH l IN lists %]
+                    [% SET shared_by_other = l.owner.id != logged_in_user %]
                     <tr>
                         <td><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id %]">[% l.name |html%]</a></td>
                         <td>[% l.patron_list_patrons_rs.count || 0 %]</td>
+                        <td>
+                            [% IF l.shared %]
+                                [% IF shared_by_other %]
+                                    by <a href=/cgi-bin/koha/members/moremember.pl?borrowernumber=[% l.owner.id %]">[% INCLUDE 'patron-title.inc' patron=l.owner %]</a>
+                                [% ELSE %]
+                                    by you
+                                [% END %]
+                            [% END %]
+                        </td>
                         <td>
                             <div class="dropdown">
                                 <a class="btn btn-default btn-xs dropdown-toggle" id="listactions[% l.patron_list_id %]" role="button" data-toggle="dropdown" href="#">
@@ -48,8 +59,10 @@
                                 </a>
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="listactions[% l.patron_list_id %]">
                                     <li><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id %]"><i class="fa fa-user"></i> Add patrons</a></li>
-                                    <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id %]"><i class="fa fa-pencil"></i> Edit list</a></li>
-                                    <li><a class="delete_patron" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id %]" data-list-name="[% l.name %]"><i class="fa fa-trash"></i> Delete list</a></li>
+                                    [% UNLESS shared_by_other %]
+                                        <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id %]"><i class="fa fa-pencil"></i> Edit list</a></li>
+                                        <li><a class="delete_patron" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id %]" data-list-name="[% l.name %]"><i class="fa fa-trash"></i> Delete list</a></li>
+                                    [% END %]
                                     [% IF ( l.patron_list_patrons_rs.count ) %]
                                         <li class="divider"></li>
                                         <li>

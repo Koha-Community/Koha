@@ -63,7 +63,15 @@ sub GetPatronLists {
         return;
     }
 
-    delete( $params->{owner} ) if ( C4::Context->IsSuperLibrarian() );
+    delete $params->{owner} if C4::Context->IsSuperLibrarian();
+
+    if ( my $owner = $params->{owner} ) {
+        delete $params->{owner};
+        $params->{'-or'} = [
+            owner => $owner,
+            shared => 1,
+        ];
+    }
 
     my $schema = Koha::Database->new()->schema();
 

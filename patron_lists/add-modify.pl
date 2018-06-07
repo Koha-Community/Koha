@@ -39,6 +39,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 
 my $id   = $cgi->param('patron_list_id');
 my $name = $cgi->param('name');
+my $shared = $cgi->param('shared') ? 1 : 0;
 
 if ($id) {
     my ($list) = GetPatronLists( { patron_list_id => $id } );
@@ -47,11 +48,11 @@ if ($id) {
 
 if ($name) {
     if ($id) {
-        ModPatronList( { patron_list_id => $id, name => $name } );
+        ModPatronList( { patron_list_id => $id, name => $name, shared => $shared } );
         print $cgi->redirect('lists.pl');
     }
     else {
-        my $list = AddPatronList( { name => $name } );
+        my $list = AddPatronList( { name => $name, shared => $shared } );
         print $cgi->redirect(
             "list.pl?patron_list_id=" . $list->patron_list_id() );
     }

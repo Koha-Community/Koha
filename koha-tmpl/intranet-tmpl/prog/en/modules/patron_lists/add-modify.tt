@@ -52,6 +52,15 @@
                     </li>
 
                     <li>
+                        <label for="list-shared">Shared:</label>
+                        [% IF list.shared %]
+                            <input id="list-shared" name="shared" type="checkbox" checked="checked" />
+                        [% ELSE %]
+                            <input id="list-shared" name="shared" type="checkbox" />
+                        [% END %]
+                    </li>
+
+                    <li>
                         <span class="label">Owner: </span>[% loggedinusername %]
                     </li>
                 </ol>
