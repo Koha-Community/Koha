@@ -69,7 +69,7 @@ while ( my ( $biblionumber, $biblioitemnumber, $frameworkcode ) = $sth->fetchrow
     $count++;
     warn $count unless $count % 1000;
     my $record = GetMarcBiblio({
-        biblionummber => $biblionumber,
+        biblionumber => $biblionumber,
         embed_items   => 1 });
     unless ($record) { push @errors, "bad record biblionumber $biblionumber"; next; }
 
