@@ -176,12 +176,7 @@
        <li>
         <label for="creator">Ordered by: </label>
         <span>
-          [% IF creator and (creator.firstname or creator.surname) %]
-            [% creator.firstname %]
-            [% creator.surname %]
-          [% ELSE %]
-            No name
-          [% END %]
+            [% INCLUDE 'patron-title.inc' patron = creator %]
         </span>
        </li>
        <li><label for="quantity_to_receive">Quantity to receive: </label><span class="label">

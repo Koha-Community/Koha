@@ -13,7 +13,7 @@
                     </li>
                     <li>
                         <span class="label">Ordered by: </span>
-                        [% creator.firstname %] [% creator.surname %]
+                        [% INCLUDE 'patron-title.inc' patron = creator %]
                     </li>
                     <li>
                         <span class="label">Claims count: </span>
