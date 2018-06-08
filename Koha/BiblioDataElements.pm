@@ -226,11 +226,11 @@ sub _getBiblioitemsNeedingUpdate {
 
     my $dbh = C4::Context->dbh();
     my $sth = $dbh->prepare("
-            (SELECT biblioitemnumber, itemtype, marcxml, 0 as deleted FROM biblioitems
-             WHERE timestamp >= ? $limit
+            (SELECT bi.biblioitemnumber, bi.itemtype, bmt.metadata, 0 AS deleted FROM biblioitems bi LEFT JOIN biblio_metadata bmt ON bi.biblionumber=bmt.biblionumber
+             WHERE bi.timestamp >= ? $limit
             ) UNION (
-             SELECT biblioitemnumber, itemtype, marcxml, 1 as deleted FROM deletedbiblioitems
-             WHERE timestamp >= ? $limit
+             SELECT bi.biblioitemnumber, bi.itemtype, bmt.metadata, 1 AS deleted FROM biblioitems bi LEFT JOIN biblio_metadata bmt ON bi.biblionumber=bmt.biblionumber
+             WHERE bi.timestamp >= ? $limit
             )
     ");
     $sth->execute( $lastModTime, $lastModTime );
