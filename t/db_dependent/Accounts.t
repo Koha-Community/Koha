@@ -395,7 +395,7 @@ subtest "More Koha::Account::pay tests" => sub {
         is( $stat->type, 'payment', "Correct statistic type" );
         is( $stat->branch, $branch, "Correct branch logged to statistics" );
         is( $stat->borrowernumber, $borrowernumber, "Correct borrowernumber logged to statistics" );
-        is( $stat->value, "$amount" . "\.0000", "Correct amount logged to statistics" );
+        is( $stat->value+0, $amount, "Correct amount logged to statistics" );
     }
 };
 
@@ -449,7 +449,7 @@ subtest "Even more Koha::Account::pay tests" => sub {
         is( $stat->type, 'payment', "Correct statistic type" );
         is( $stat->branch, $branch, "Correct branch logged to statistics" );
         is( $stat->borrowernumber, $borrowernumber, "Correct borrowernumber logged to statistics" );
-        is( $stat->value, "$partialamount" . "\.0000", "Correct amount logged to statistics" );
+        is( $stat->value+0, $partialamount, "Correct amount logged to statistics" );
     }
 };
 
