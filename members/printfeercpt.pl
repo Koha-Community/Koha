@@ -57,12 +57,6 @@ if ( $action eq 'print' ) {
 #  ReversePayment( $borrowernumber, $input->param('accountno') );
 }
 
-if ( $data->{'category_type'} eq 'C') {
-    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
-    $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
-    $template->param( 'catcode' => $patron_categories->next->categorycde )  if $patron_categories->count == 1;
-}
-
 #get account details
 my ($total,$accts,$numaccts)=GetMemberAccountRecords($borrowernumber);
 my $totalcredit;
