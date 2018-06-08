@@ -30,6 +30,8 @@ use File::Temp qw/tempdir/;
 use IPC::Open3;
 use File::Spec;
 use Symbol qw(gensym);
+use FindBin qw($Bin);
+use Cwd qw(abs_path);
 use utf8;
 
 my $po_dir = tempdir(CLEANUP => 1);
@@ -46,7 +48,9 @@ opendir ( $dh, $staff_dir ) or die "can't opendir $staff_dir: $!";
 my @staff_themes = grep { not /^\.|lib|js/ } readdir($dh);
 close $dh;
 
-chdir "misc/translator"; # for now, tmpl_process3.pl works only if run from its directory
+my $misc_translator_dir = abs_path("$Bin/../../misc/translator");
+
+chdir $misc_translator_dir; # for now, tmpl_process3.pl works only if run from its directory
 
 # Check translatable of OPAC themes
 for my $theme ( @opac_themes ) {
@@ -63,7 +67,7 @@ sub test_string_extraction {
     my $template_dir = shift;
     my $po_dir       = shift;
 
-    my $command = "./tmpl_process3.pl create -i $template_dir -s $po_dir/$module.po -r --pedantic-warnings";
+    my $command = "PERL5LIB=\$PERL5LIB:$misc_translator_dir ./tmpl_process3.pl create -i $template_dir -s $po_dir/$module.po -r --pedantic-warnings";
    
     open (NULL, ">", File::Spec->devnull);
     print NULL "foo"; # avoid warning;
