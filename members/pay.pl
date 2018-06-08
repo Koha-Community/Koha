@@ -98,7 +98,7 @@ if ($writeoff_all) {
     if ( $amount > $accountline->amountoutstanding ) {
         print $input->redirect( "/cgi-bin/koha/members/paycollect.pl?"
               . "borrowernumber=$borrowernumber"
-              . "&amount=$amount"
+              . "&amount=" . $accountline->amount
               . "&amountoutstanding=" . $accountline->amountoutstanding
               . "&accounttype=" . $accountline->accounttype
               . "&accountlines_id=" . $accountlines_id
