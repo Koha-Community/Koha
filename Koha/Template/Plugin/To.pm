@@ -19,9 +19,11 @@ package Koha::Template::Plugin::To;
 
 use Modern::Perl;
 
-use base qw( Template::Plugin );
+use Template::Plugin::Filter;
+use base qw( Template::Plugin::Filter );
 
 use JSON qw( to_json );
+our $DYNAMIC = 1;
 
 sub json {
     my ( $self, $value ) = @_;
@@ -32,6 +34,11 @@ sub json {
     $json =~ s/\\r/\\\\r/g; # Convert newlines to escaped newline characters
     $json =~ s/\\n/\\\\n/g;
     return $json;
+}
+
+sub filter {
+    my ( $self, $value ) = @_;
+    return $self->json($value);
 }
 
 1;
