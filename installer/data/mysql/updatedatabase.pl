@@ -16072,6 +16072,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 3849- Improve descriptions of granular acquisition permissions)\n";
 }
 
+$DBversion = '18.06.00.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{DELETE FROM userflags WHERE bit = 12 AND flag = 'management';});
+    $dbh->do(q{UPDATE borrowers SET flags = flags - ( flags & (1<<12) ) WHERE flags & (1 << 12);});
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 2426 - Remove deprecated management permission)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
