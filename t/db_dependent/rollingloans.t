@@ -6,6 +6,7 @@ use C4::Circulation;
 use C4::Members;
 use C4::Items;
 use Koha::DateUtils;
+use Koha::Libraries;
 use Koha::Patrons;
 use t::lib::TestBuilder;
 use t::lib::Mocks qw(mock_preference);
@@ -14,6 +15,10 @@ use Test::More tests => 8;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+
+my $builder = t::lib::TestBuilder->new;
+$builder->build({ source => 'Branch', value => { branchcode => 'CPL' } })
+    unless Koha::Libraries->find('CPL');
 
 C4::Context->_new_userenv(1234567);
 C4::Context->set_userenv(91, 'CLIstaff', '23529001223661', 'CPL',
@@ -25,7 +30,6 @@ my $test_item_fic = '502326000402';
 my $test_item_24 = '502326000404';
 my $test_item_48 = '502326000403';
 
-my $builder = t::lib::TestBuilder->new;
 my $borrower1 = $builder->build_object({ class => 'Koha::Patrons', value => { cardnumber => $test_patron } });
 my $item1 = $builder->build_object({
     class => 'Koha::Items',
