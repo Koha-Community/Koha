@@ -67,8 +67,8 @@ my $sample_supplier1 = {
     gstreg        => 1,
     listincgst    => 1,
     invoiceincgst => 1,
-    tax_rate       => '1.0000',
-    discount      => '1.0000',
+    tax_rate      => '1.0000',
+    discount      => 1.0000,
     notes         => 'notes1',
     deliverytime  => undef
 };
@@ -87,8 +87,8 @@ my $sample_supplier2 = {
     gstreg        => 1,
     listincgst    => 1,
     invoiceincgst => 1,
-    tax_rate       => '2.0000',
-    discount      => '2.0000',
+    tax_rate      => '2.0000',
+    discount      => 2.0000,
     notes         => 'notes2',
     deliverytime  => 2
 };
@@ -118,7 +118,7 @@ for my $bookseller ( @bookseller2 ) {
 }
 
 $sample_supplier2->{id} = $id_supplier2;
-is_deeply( $bookseller2[0], $sample_supplier2,
+is_deeply( cast_precision($bookseller2[0]), $sample_supplier2,
     "Koha::Acquisition::Booksellers->search returns the right informations about supplier $sample_supplier2->{name}" );
 
 $supplier1 = Koha::Acquisition::Bookseller->new($sample_supplier1)->store;
@@ -126,6 +126,7 @@ $id_supplier1 = $supplier1->id;
 my @booksellers = Koha::Acquisition::Booksellers->search();
 for my $bookseller ( @booksellers ) {
     $bookseller = field_filter( $bookseller->unblessed );
+    $bookseller = cast_precision($bookseller);
 }
 
 $sample_supplier1->{id} = $id_supplier1;
@@ -150,7 +151,7 @@ is( $bookseller1fromid, undef,
     "find returns undef if no id given" );
 $bookseller1fromid = Koha::Acquisition::Booksellers->find( $id_supplier1 );
 $bookseller1fromid = field_filter($bookseller1fromid->unblessed);
-is_deeply( $bookseller1fromid, $sample_supplier1,
+is_deeply( cast_precision($bookseller1fromid), $sample_supplier1,
     "Get Supplier1 (find a bookseller by id)" );
 
 $bookseller1fromid = Koha::Acquisition::Booksellers->find( $id_supplier1 );
@@ -229,8 +230,8 @@ $sample_supplier2 = {
     gstreg        => 1,
     listincgst    => 1,
     invoiceincgst => 1,
-    tax_rate       => '2.0000 ',
-    discount      => '2.0000',
+    tax_rate      => '2.0000',
+    discount      => 2.0000,
     notes         => 'notes2 modified',
     deliverytime  => 2,
 };
@@ -259,8 +260,8 @@ my $sample_supplier3 = {
     gstreg        => 1,
     listincgst    => 1,
     invoiceincgst => 1,
-    tax_rate       => '3.0000',
-    discount      => '3.0000',
+    tax_rate      => '3.0000',
+    discount      => 3.0000,
     notes         => 'notes3',
     deliverytime  => 3
 };
@@ -279,8 +280,8 @@ my $sample_supplier4 = {
     gstreg        => 1,
     listincgst    => 1,
     invoiceincgst => 1,
-    tax_rate       => '3.0000',
-    discount      => '3.0000',
+    tax_rate      => '3.0000',
+    discount      => 3.0000,
     notes         => 'notes3',
 };
 my $supplier3 = Koha::Acquisition::Bookseller->new($sample_supplier3)->store;
@@ -358,7 +359,7 @@ my $order1 = Koha::Acquisition::Order->new(
         entrydate        => '2013-01-01',
         currency         => $curcode,
         notes            => "This is a note1",
-        tax_rate          => 0.0500,
+        tax_rate         => 0.0500,
         orderstatus      => 1,
         subscriptionid   => $id_subscription1,
         quantityreceived => 2,
@@ -378,7 +379,7 @@ my $order2 = Koha::Acquisition::Order->new(
         entrydate      => '2013-01-01',
         currency       => $curcode,
         notes          => "This is a note2",
-        tax_rate        => 0.0500,
+        tax_rate       => 0.0500,
         orderstatus    => 1,
         subscriptionid => $id_subscription2,
         rrp            => 10,
@@ -396,7 +397,7 @@ my $order3 = Koha::Acquisition::Order->new(
         entrydate      => '2013-02-02',
         currency       => $curcode,
         notes          => "This is a note3",
-        tax_rate        => 0.0500,
+        tax_rate       => 0.0500,
         orderstatus    => 2,
         subscriptionid => $id_subscription3,
         rrp            => 11,
@@ -414,7 +415,7 @@ my $order4 = Koha::Acquisition::Order->new(
         entrydate        => '2013-02-02',
         currency         => $curcode,
         notes            => "This is a note3",
-        tax_rate          => 0.0500,
+        tax_rate         => 0.0500,
         orderstatus      => 2,
         subscriptionid   => $id_subscription3,
         rrp              => 11,
@@ -777,6 +778,17 @@ sub field_filter {
         if ( grep { /^$field$/ } keys %$struct ) {
             delete $struct->{$field};
         }
+    }
+    return $struct;
+}
+
+# ensure numbers are actually tested as numbers to prevent
+# precision changes causing test failures (D8->D9 Upgrades)
+sub cast_precision {
+    my ($struct) = @_;
+    my @cast = ('discount');
+    for my $cast (@cast) {
+        $struct->{$cast} = $struct->{$cast}+0;
     }
     return $struct;
 }
