@@ -3072,7 +3072,10 @@ sub AddRenewal {
         DelUniqueDebarment({ borrowernumber => $borrowernumber, type => 'OVERDUES' });
     }
 
-    unless ( C4::Context->interface eq 'opac' ) { #if from opac we are obeying OpacRenewalBranch as calculated in opac-renew.pl
+    my $interface = C4::Context->interface;
+    my $is_rest_opac = $interface eq 'rest' && defined C4::Context->userenv
+            ? C4::Context->userenv->{number} == $borrowernumber ? 1:0 : undef;
+    if ( $interface ne 'opac' && !$is_rest_opac ) { #if from opac/rest we are obeying OpacRenewalBranch as calculated in opac-renew.pl
         $branch = C4::Context->userenv ? C4::Context->userenv->{branch} : $branch;
     }
 
