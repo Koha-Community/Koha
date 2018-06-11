@@ -957,7 +957,6 @@
                     <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
                         <xsl:value-of select="translate($f773, '()', '')"/>
                     </a>
-                    <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
                 </xsl:when>
                 <xsl:when test="marc:subfield[@code='0']">
                     <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:subfield[@code='0']"/></xsl:attribute>
@@ -968,9 +967,12 @@
                     <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
                         <xsl:value-of select="$f773"/>
                     </a>
-                    <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
+            <xsl:if test="marc:subfield[@code='g']">
+                <xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/>
+            </xsl:if>
+
         </span>
 
         <xsl:if test="marc:subfield[@code='n']">
