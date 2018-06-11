@@ -100,6 +100,8 @@ foreach my $num (@getreserves) {
     my $holdingbranch = $gettitle->{'holdingbranch'};
     my $homebranch = $gettitle->{'homebranch'};
 
+    next if (!($all_branches || $holdingbranch eq $default));
+
     my %getreserv = (
         itemnumber => $itemnumber,
         borrowernum => $borrowernum,
