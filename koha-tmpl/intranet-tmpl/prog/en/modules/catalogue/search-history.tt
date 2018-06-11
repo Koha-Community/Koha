@@ -31,7 +31,7 @@
         <div id="biblio_tab">
           [% IF ( current_biblio_searches ) %]
             <h2>Current session</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
               <div class="selections-toolbar">
                 <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>
@@ -68,7 +68,7 @@
 
           [% IF ( previous_biblio_searches ) %]
             <h2>Previous sessions</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
               <div class="selections-toolbar">
                 <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>
@@ -111,7 +111,7 @@
         <div id="authority_tab">
           [% IF ( current_authority_searches ) %]
             <h2>Current session</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
               <div class="selections-toolbar">
                 <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>
@@ -148,7 +148,7 @@
 
           [% IF ( previous_authority_searches ) %]
             <h2>Previous sessions</h2>
-            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="get">
+            <form action="/cgi-bin/koha/catalogue/search-history.pl" method="post">
               <div class="selections-toolbar">
                 <a class="CheckAll" href="#"><i class="fa fa-check"></i> Select all visible rows</a>
                 <span class="sep">|</span>

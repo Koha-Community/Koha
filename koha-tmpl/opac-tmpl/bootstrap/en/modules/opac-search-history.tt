@@ -44,7 +44,7 @@
                             <div id="current_biblio">
                                 [% IF ( current_biblio_searches ) %]
                                     <h2>Current session</h2>
-                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
                                         <div class="selections-toolbar toolbar">
                                             <a class="CheckAll" href="#">Select all</a>
                                             <a class="CheckNone" href="#">Clear all</a>
@@ -83,7 +83,7 @@
                             <div id="previous_biblio">
                                 [% IF ( previous_biblio_searches ) %]
                                     <h2>Previous sessions</h2>
-                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
                                         <div class="selections-toolbar toolbar">
                                             <a class="CheckAll" href="#">Select all</a>
                                             <a class="CheckNone" href="#">Clear all</a>
@@ -129,7 +129,7 @@
                             <div id="authority_tab">
                                 [% IF ( current_authority_searches ) %]
                                     <h2>Current session</h2>
-                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
                                         <div class="selections-toolbar toolbar">
                                             <a class="CheckAll" href="#">Select all</a>
                                             <a class="CheckNone" href="#">Clear all</a>
@@ -166,7 +166,7 @@
 
                                 [% IF ( previous_authority_searches ) %]
                                     <h2>Previous sessions</h2>
-                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="get">
+                                    <form action="/cgi-bin/koha/opac-search-history.pl" method="post">
                                         <div class="selections-toolbar toolbar">
                                             <a class="CheckAll" href="#">Select all</a>
                                             <a class="CheckNone" href="#">Clear all</a>
