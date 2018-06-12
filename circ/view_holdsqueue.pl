@@ -68,7 +68,7 @@ my @itemtypesloop;
 while ( my $itemtype = $itemtypes->next ) {
     push @itemtypesloop, {
         value       => $itemtype->itemtype,
-        description => $itemtypes->description, # FIXME Don't we want the translated_description here?
+        description => $itemtype->description, # FIXME Don't we want the translated_description here?
     };
 }
 
