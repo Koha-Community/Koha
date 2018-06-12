@@ -23,7 +23,7 @@
 
             <h1>Checkout notes</h1>
 
-            <div class="dialog alert" id="error"></div>
+            <div class="dialog alert" id="error" style="display:none;"></div>
 
             [% IF ( selected_count ) %]
                 <div class="dialog message">
@@ -38,11 +38,19 @@
             [% END %]
 
             [% IF ( notes.count ) %]
-                <fieldset class="action">
-                    <a class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                <fieldset class="action" style="cursor:pointer;">
+                    <a class="SelectAll"><i class="fa fa-check"></i> Select all</a>
+                    | <a class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                    | <a class="HideSeen"><i class="fa fa-minus-square"></i> Hide seen</a>
+                    | <a class="ShowAll"><i class="fa fa-bars"></i> Show all</a>
                 </fieldset>
 
                 <form id="mark_selected" method="post" action="/cgi-bin/koha/circ/checkout-notes.pl">
+
+                    <fieldset class="action">
+                        <button type="submit" class="btn btn-default btn-sm" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button>
+                        <button type="submit" class="btn btn-default btn-sm" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                    </fieldset>
 
                     <table id="notestable">
                         <thead>
@@ -64,7 +72,7 @@
                                     <td>[% note.note | html %]</td>
                                     <td>[% note.notedate | $KohaDates %]</td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => note.patron hide_patron_infos_if_needed=1 %]</td>
-                                    <td>
+                                    <td class="seen[% note.noteseen %]">
                                         [% IF ( note.noteseen == 0 ) %]
                                             <span id="status_[% note.issue_id %]">Not seen</span>
                                         [% ELSIF ( note.noteseen == 1 ) %]
@@ -82,11 +90,6 @@
                             [% END %]
                         </tbody>
                     </table>
-
-                    <fieldset class="action">
-                        <button type="submit" class="btn btn-default btn-sm" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button>
-                        <button type="submit" class="btn btn-default btn-sm" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
-                    </fieldset>
 
                 </form>
 
@@ -131,6 +134,14 @@
                 $(".btn-sm").prop("disabled", true);
             });
 
+            $(".HideSeen").on("click", function(){
+                $(".seen1").parent().hide();
+            });
+
+            $(".ShowAll").on("click", function(){
+                $("tr").show();
+            });
+
             $("#error").hide();
 
             $("input[type='checkbox']").click(function(event){
@@ -141,7 +152,7 @@
                 }
             });
 
-            $(".btn-xs").click(function(event){
+            $("button.seen, button.notseen").click(function(event){
                 event.preventDefault(); // prevent form submission
                 var $action = $(this).attr("name");
                 var $issue_id = $(this).data('issue_id');
@@ -161,10 +172,12 @@
                     if (data.status == 'success'){
                         if ( $action == 'notseen' ){
                             $("#status_" + $issue_id).text(_("Not seen"));
+                            $(event.target).parent().siblings(".seen1").removeClass("seen1").addClass("seen0");
                             $(event.target).siblings(".seen").prop("disabled", false);
                             $(event.target).prop("disabled", true);
                         } else {
                             $("#status_" + $issue_id).text(_("Seen"));
+                            $(event.target).parent().siblings(".seen0").removeClass("seen0").addClass("seen1");
                             $(event.target).siblings(".notseen").prop("disabled", false);
                             $(event.target).prop("disabled", true);
                         }

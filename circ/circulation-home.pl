@@ -40,7 +40,4 @@ $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' )
 
 $template->{'VARS'}->{'AllowOfflineCirculation'} = C4::Context->preference('AllowOfflineCirculation');
 
-my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
-$template->param( pending_checkout_notes => $pending_checkout_notes );
-
 output_html_with_http_headers $query, $cookie, $template->output;
