@@ -103,7 +103,7 @@
                                         [% END %]
                                     [% END %]
                                     [% IF ( loggedinusername ) %]
-                                        <li><p class="members navbar-text">Welcome, <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</span></a></p></li>
+                                        <li><p class="members navbar-text">Welcome, <a class="login-link" href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername" data-borrowernumber="[% USER_INFO.borrowernumber %]" data-branchcode="[% USER_INFO.branchcode %]" >[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</span></a></p></li>
                                         <li class="divider-vertical"></li>
                                     [% END %]
                                 [% END %]
