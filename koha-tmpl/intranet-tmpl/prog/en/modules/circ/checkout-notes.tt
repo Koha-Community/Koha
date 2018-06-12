@@ -28,72 +28,71 @@
             [% IF ( selected_count ) %]
                 <div class="dialog message">
                     [% IF ( action == 'seen' ) %]
-                        [% selected_count %] note(s) marked as seen.
+                        <span>[% selected_count %] note(s) marked as seen.</span>
                     [% ELSIF ( action == 'notseen' ) %]
-                        [% selected_count %] note(s) marked as not seen.
+                        <span>[% selected_count %] note(s) marked as not seen.</span>
                     [% ELSE %]
-                        Failed to change the status of [% selected_count %] item(s).
+                        <span>Failed to change the status of [% selected_count %] item(s).</span>
                     [% END %]
                 </div>
-                <a href="/cgi-bin/koha/circ/checkout-notes.pl" class="btn btn-default btn-sm"><i class="fa fa-left"></i> Return to checkout notes</a>
-            [% ELSE %]
+            [% END %]
 
-                [% IF ( notes ) %]
+            [% IF ( notes.count ) %]
+                <fieldset class="action">
+                    <a class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                </fieldset>
+
+                <form id="mark_selected" method="post" action="/cgi-bin/koha/circ/checkout-notes.pl">
+
+                    <table id="notestable">
+                        <thead>
+                            <tr>
+                                <th>&nbsp;</th>
+                                <th>Title</th>
+                                <th>Note</th>
+                                <th>Date</th>
+                                <th>Set by</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH note IN notes %]
+                                <tr>
+                                    <td><input type="checkbox" name="issue_ids" value="[% note.issue_id %]"></td>
+                                    <td>[% note.item.biblio.title %] - [% note.item.biblio.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber %]">[% note.item.barcode %]</a>)</td>
+                                    <td>[% note.note | html %]</td>
+                                    <td>[% note.notedate | $KohaDates %]</td>
+                                    <td>[% INCLUDE 'patron-title.inc' patron => note.patron hide_patron_infos_if_needed=1 %]</td>
+                                    <td>
+                                        [% IF ( note.noteseen == 0 ) %]
+                                            <span id="status_[% note.issue_id %]">Not seen</span>
+                                        [% ELSIF ( note.noteseen == 1 ) %]
+                                            <span id="status_[% note.issue_id %]">Seen</span>
+                                        [% END %]
+                                    </td>
+                                    <td class="actions">
+                                        [% IF ( note.noteseen == 1 ) %]
+                                            <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                        [% ELSIF ( note.noteseen == 0 ) %]
+                                            <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
+                                        [% END %]
+                                    </td>
+                                </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+
                     <fieldset class="action">
-                        <a class="SelectAll"><i class="fa fa-check"></i> Select all</a> | <a class="ClearAll"><i class="fa fa-remove"></i> Clear all</a>
+                        <button type="submit" class="btn btn-default btn-sm" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button>
+                        <button type="submit" class="btn btn-default btn-sm" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
                     </fieldset>
 
-                    <form id="mark_selected" method="post" action="/cgi-bin/koha/circ/checkout-notes.pl">
+                </form>
 
-                        <table id="notestable">
-                            <thead>
-                                <tr>
-                                    <th>&nbsp;</th>
-                                    <th>Title</th>
-                                    <th>Note</th>
-                                    <th>Date</th>
-                                    <th>Set by</th>
-                                    <th>Status</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                [% FOREACH note IN notes %]
-                                    <tr>
-                                        <td><input type="checkbox" name="issue_ids" value="[% note.issue_id %]"></td>
-                                        <td>[% note.item.biblio.title %] - [% note.item.biblio.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber %]">[% note.item.barcode %]</a>)</td>
-                                        <td>[% note.note %]</td>
-                                        <td>[% note.notedate | $KohaDates %]</td>
-                                        <td>[% IF note.patron.title %][% note.patron.title %] [% END %][% note.patron.firstname %] [% note.patron.surname %] (<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% note.patron.borrowernumber %]">[% note.patron.cardnumber %]</a>)</td>
-                                        <td>
-                                            [% IF ( note.noteseen == 0 ) %]
-                                                <span id="status_[% note.issue_id %]">Not seen</span>
-                                            [% ELSIF ( note.noteseen == 1 ) %]
-                                                <span id="status_[% note.issue_id %]">Seen</span>
-                                            [% END %]
-                                        </td>
-                                        <td class="actions">
-                                            [% IF ( note.noteseen == 1 ) %]
-                                                <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs"><i class="fa fa-eye-slash"></i> Mark not seen</button>
-                                            [% ELSIF ( note.noteseen == 0 ) %]
-                                                <button name="seen" data-issue_id="[% note.issue_id %]" class="seen btn btn-default btn-xs"><i class="fa fa-eye"></i> Mark seen</button> <button name="notseen" data-issue_id="[% note.issue_id %]" class="notseen btn btn-default btn-xs" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
-                                            [% END %]
-                                        </td>
-                                    </tr>
-                                [% END %]
-                            </tbody>
-                        </table>
-
-                        <fieldset class="action">
-                            <button type="submit" class="btn btn-default btn-sm" name="mark_selected-seen" value="seen" disabled="disabled"><i class="fa fa-eye"></i> Mark seen</button>
-                            <button type="submit" class="btn btn-default btn-sm" name="mark_selected-notseen" value="notseen" disabled="disabled"><i class="fa fa-eye-slash"></i> Mark not seen</button>
-                        </fieldset>
-
-                    </form>
-
-                [% END %] <!-- notes -->
-
-            [% END %] <!-- selected_count -->
+            [% ELSE %]
+                <span>There are currently no checkout notes.</span>
+            [% END %] <!-- notes -->
 
         </div> <!-- yui-main -->
 

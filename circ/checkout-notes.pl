@@ -38,11 +38,9 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
-my @notes = Koha::Checkouts->search({ 'me.note' => { '!=', undef } }, { prefetch => [ 'borrower', { item => 'biblionumber' } ] });
 
 $template->param(
     pending_checkout_notes => $pending_checkout_notes,
-    notes                  => \@notes,
 );
 
 my $action;
@@ -65,9 +63,11 @@ if ( $action eq 'seen' ) {
     }
 }
 
+my $notes = Koha::Checkouts->search({ 'me.note' => { '!=', undef } }, { prefetch => [ 'borrower', { item => 'biblionumber' } ] });
 $template->param(
     selected_count => scalar(@issue_ids),
     action         => $action,
+    notes          => $notes,
 );
 
 output_html_with_http_headers $query, $cookie, $template->output;
