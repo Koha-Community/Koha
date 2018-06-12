@@ -1555,7 +1555,7 @@ sub GetMarcItemFields {
     ITEMLOOP: foreach my $item (@$items) {
 
         # Check itemnumbers
-        next if ( @$itemnumbers && !any { $_ == $item->itemnumber } @$itemnumbers );
+        next if ( @$itemnumbers && !any { $_ == $item->{itemnumber} } @$itemnumbers );
 
         # Check hiding rules
         if ( defined $hidingrules ) {
