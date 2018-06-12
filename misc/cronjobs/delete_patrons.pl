@@ -104,7 +104,7 @@ delete_patrons - This script deletes patrons
 delete_patrons.pl [-h|--help] [-v|--verbose] [-c|--confirm] [--not_borrowed_since=DATE] [--expired_before=DATE] [--last-seen=DATE] [--category_code=CAT] [--library=LIBRARY]
 
 Dates should be in ISO format, e.g., 2013-07-19, and can be generated
-with `date -d '-3 month' "+%Y-%m-%d"`.
+with `date -d '-3 month' --iso-8601`.
 
 The options to select the patron records to delete are cumulative.  For
 example, supplying both --expired_before and --library specifies that
