@@ -13519,53 +13519,55 @@ if ( CheckVersion($DBversion) ) {
         WHERE ordernumber = ?
     |);
 
-    require Koha::Number::Price;
+    require Number::Format;
+    my $format = Number::Format->new;
+    my $precision = 2;
     for my $order ( @$orders ) {
         $sth_get_bookseller->execute( $order->{ordernumber} );
         my ( $bookseller ) = $sth_get_bookseller->fetchrow_hashref;
-        $order->{rrp}   = Koha::Number::Price->new( $order->{rrp} )->round;
-        $order->{ecost} = Koha::Number::Price->new( $order->{ecost} )->round;
+        $order->{rrp}   = $format->round( $order->{rrp}, $precision );
+        $order->{ecost} = $format->round( $order->{ecost}, $precision );
         $order->{tax_rate} ||= 0 ; # tax_rate can be NULL in DB
         # Ordering
         if ( $bookseller->{listincgst} ) {
             $order->{rrp_tax_included} = $order->{rrp};
-            $order->{rrp_tax_excluded} = Koha::Number::Price->new(
-                $order->{rrp_tax_included} / ( 1 + $order->{tax_rate} ) )->round;
+            $order->{rrp_tax_excluded} = $format->round(
+                $order->{rrp_tax_included} / ( 1 + $order->{tax_rate} ), $precision );
             $order->{ecost_tax_included} = $order->{ecost};
-            $order->{ecost_tax_excluded} = Koha::Number::Price->new(
-                $order->{ecost} / ( 1 + $order->{tax_rate} ) )->round;
+            $order->{ecost_tax_excluded} = $format->round(
+                $order->{ecost} / ( 1 + $order->{tax_rate} ), $precision );
         }
         else {
             $order->{rrp_tax_excluded} = $order->{rrp};
-            $order->{rrp_tax_included} = Koha::Number::Price->new(
-                $order->{rrp} * ( 1 + $order->{tax_rate} ) )->round;
+            $order->{rrp_tax_included} = $format->round(
+                $order->{rrp} * ( 1 + $order->{tax_rate} ), $precision );
             $order->{ecost_tax_excluded} = $order->{ecost};
-            $order->{ecost_tax_included} = Koha::Number::Price->new(
-                $order->{ecost} * ( 1 + $order->{tax_rate} ) )->round;
+            $order->{ecost_tax_included} = $format->round(
+                $order->{ecost} * ( 1 + $order->{tax_rate} ), $precision );
         }
 
         #receiving
         if ( $bookseller->{listincgst} ) {
-            $order->{unitprice_tax_included} = Koha::Number::Price->new( $order->{unitprice} )->round;
-            $order->{unitprice_tax_excluded} = Koha::Number::Price->new(
-              $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate} ) )->round;
+            $order->{unitprice_tax_included} = $format->round( $order->{unitprice}, $precision );
+            $order->{unitprice_tax_excluded} = $format->round(
+              $order->{unitprice_tax_included} / ( 1 + $order->{tax_rate} ), $precision );
         }
         else {
-            $order->{unitprice_tax_excluded} = Koha::Number::Price->new( $order->{unitprice} )->round;
-            $order->{unitprice_tax_included} = Koha::Number::Price->new(
-              $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate} ) )->round;
+            $order->{unitprice_tax_excluded} = $format->round( $order->{unitprice}, $precision );
+            $order->{unitprice_tax_included} = $format->round(
+              $order->{unitprice_tax_excluded} * ( 1 + $order->{tax_rate} ), $precision );
         }
 
         # If the order is received, the tax is calculated from the unit price
         if ( $order->{orderstatus} eq 'complete' ) {
-            $order->{tax_value} = Koha::Number::Price->new(
+            $order->{tax_value} = $format->round(
               ( $order->{unitprice_tax_included} - $order->{unitprice_tax_excluded} )
-              * $order->{quantity} )->round;
+              * $order->{quantity}, $precision );
         } else {
             # otherwise the ecost is used
-            $order->{tax_value} = Koha::Number::Price->new(
+            $order->{tax_value} = $format->round(
                 ( $order->{ecost_tax_included} - $order->{ecost_tax_excluded} ) *
-                  $order->{quantity} )->round;
+                  $order->{quantity}, $precision );
         }
 
         $sth_update_order->execute(
@@ -13608,7 +13610,6 @@ if ( CheckVersion($DBversion) ) {
         WHERE ordernumber = ?
     |);
 
-    require Koha::Number::Price;
     for my $order (@$orders) {
         my $tax_value_on_ordering =
           $order->{quantity} *
