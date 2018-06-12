@@ -44,7 +44,7 @@
         [% FOREACH checkout IN checkouts %]
             <tr>
                 [% IF Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
-                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issue.borrowernumber %]">[% IF HidePatronName %][% issue.cardnumber %][% ELSE %][% issue.surname %][% IF ( issue.firstname ) %], [% issue.firstname %][% END %][% END %]</a></td>
+                <td>[% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]</td>
                 [% END %]
                 <td>
                     [% IF checkout.item.barcode %] [%# FIXME This test is not mandatory I think %]
