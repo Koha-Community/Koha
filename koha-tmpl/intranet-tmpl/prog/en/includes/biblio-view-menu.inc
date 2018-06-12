@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% USE Biblio %]
-[% SET biblio_object_id = object || biblionumber %]
+[% SET biblio_object_id = object || biblionumber || biblio.biblionumber %]
 
 <div id="menu">
 <ul>
