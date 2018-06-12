@@ -2652,6 +2652,9 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
       <z:index name="itype:0">
         <xslo:value-of select="marc:subfield[@code='y']"/>
       </z:index>
+      <z:index name="ccode:0">
+        <xslo:value-of select="marc:subfield[@code='8']"/>
+      </z:index>
     </xslo:if>
   </xslo:template>
   <xslo:template mode="index_all" match="text()">
