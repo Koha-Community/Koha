@@ -52,7 +52,6 @@ use Koha::BiblioFrameworks;
 use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
-use Koha::Checkouts;
 
 my $query = new CGI;
 
@@ -580,8 +579,6 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
     push @riloop, \%ri;
 }
 
-my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
-
 $template->param(
     riloop         => \@riloop,
     printer        => $printer,
@@ -592,7 +589,6 @@ $template->param(
     forgivemanualholdsexpire => $forgivemanualholdsexpire,
     overduecharges => $overduecharges,
     AudioAlerts        => C4::Context->preference("AudioAlerts"),
-    pending_checkout_notes => $pending_checkout_notes,
 );
 
 $itemnumber = GetItemnumberFromBarcode( $barcode );

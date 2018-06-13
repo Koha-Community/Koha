@@ -37,12 +37,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
-
-$template->param(
-    pending_checkout_notes => $pending_checkout_notes,
-);
-
 my $action;
 foreach (qw( seen notseen )) {
     $action = $_ if ( $query->param("mark_selected-$_") );

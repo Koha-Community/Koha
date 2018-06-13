@@ -35,7 +35,6 @@ use Koha::AuthorisedValues;
 use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
-use Koha::Checkouts;
 
 ###############################################
 #  Getting state
@@ -222,8 +221,6 @@ foreach my $code ( keys %$messages ) {
 # use Data::Dumper;
 # warn "FINAL ============= ".Dumper(@trsfitemloop);
 
-my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
-
 $template->param(
     found                   => $found,
     reserved                => $reserved,
@@ -239,7 +236,6 @@ $template->param(
     trsfitemloop            => \@trsfitemloop,
     errmsgloop              => \@errmsgloop,
     CircAutocompl           => C4::Context->preference("CircAutocompl"),
-    pending_checkout_notes  => $pending_checkout_notes,
 );
 
 # Checking if there is a Fast Cataloging Framework

@@ -39,7 +39,6 @@ use Koha::BiblioFrameworks;
 use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
-use Koha::Checkouts;
 
 my $input = new CGI;
 
@@ -151,8 +150,6 @@ while ( my $hold = $holds->next ) {
 
 $template->param(cancel_result => \@cancel_result) if @cancel_result;
 
-my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
-
 $template->param(
     reserveloop => \@reservloop,
     reservecount => $reservcount,
@@ -161,7 +158,6 @@ $template->param(
     show_date   => output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }),
     ReservesMaxPickUpDelay => $max_pickup_delay,
     tab => $tab,
-    pending_checkout_notes => $pending_checkout_notes,
 );
 
 # Checking if there is a Fast Cataloging Framework

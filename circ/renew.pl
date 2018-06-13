@@ -28,7 +28,6 @@ use C4::Koha;
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::BiblioFrameworks;
-use Koha::Checkouts;
 
 my $cgi = new CGI;
 
@@ -121,8 +120,5 @@ if ($barcode) {
 
 # Checking if there is a Fast Cataloging Framework
 $template->param( fast_cataloging => 1 ) if Koha::BiblioFrameworks->find( 'FA' );
-
-my $pending_checkout_notes = Koha::Checkouts->search({ noteseen => 0 })->count;
-$template->param( pending_checkout_notes => $pending_checkout_notes );
 
 output_html_with_http_headers( $cgi, $cookie, $template->output );

@@ -32,6 +32,7 @@ use C4::Search::History;
 use Koha;
 use Koha::Caches;
 use Koha::AuthUtils qw(get_script_name hash_password);
+use Koha::Checkouts;
 use Koha::DateUtils qw(dt_from_string);
 use Koha::Library::Groups;
 use Koha::Libraries;
@@ -498,7 +499,8 @@ sub get_template_and_user {
             EnableBorrowerFiles                                                        => C4::Context->preference('EnableBorrowerFiles'),
             UseKohaPlugins                                                             => C4::Context->preference('UseKohaPlugins'),
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
-            useDischarge                                                               => C4::Context->preference('useDischarge')
+            useDischarge                                                               => C4::Context->preference('useDischarge'),
+            pending_checkout_notes                                                     => scalar Koha::Checkouts->search({ noteseen => 0 }),
         );
     }
     else {
