@@ -8,6 +8,9 @@
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") %]
 </head>
+
+<body id="circ_checkout-notes" class="circ">
+
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'circ-search.inc' %]
 <div id="breadcrumbs">
@@ -58,7 +61,7 @@
                                 <th>&nbsp;</th>
                                 <th>Title</th>
                                 <th>Note</th>
-                                <th>Date</th>
+                                <th class="title-string">Date</th>
                                 <th>Set by</th>
                                 <th>Status</th>
                                 <th>Actions</th>
@@ -70,7 +73,7 @@
                                     <td><input type="checkbox" name="issue_ids" value="[% note.issue_id %]"></td>
                                     <td>[% note.item.biblio.title %] - [% note.item.biblio.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber %]">[% note.item.barcode %]</a>)</td>
                                     <td>[% note.note | html %]</td>
-                                    <td>[% note.notedate | $KohaDates %]</td>
+                                    <td><span title="[% note.notedate %]">[% note.notedate | $KohaDates %]</span></td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => note.patron hide_patron_infos_if_needed=1 %]</td>
                                     <td class="seen[% note.noteseen %]">
                                         [% IF ( note.noteseen == 0 ) %]
@@ -114,12 +117,12 @@
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
-    //<![CDATA[
+    <script>
         $(document).ready(function(){
             $("#notestable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aoColumnDefs": [
                     { "aTargets": [ 0, -1 ], "bSearchable": false, "bSortable": false },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
                 ],
                 "sPaginationType": "four_button"
             }));
@@ -185,10 +188,13 @@
                         $("#error").text(_("Unable to change status of note."));
                         $("#error").show();
                     }
+                })
+                .error(function(data){
+                    $("#error").text(_("Unable to change status of note."));
+                    $("#error").show();
                 });
             });
         });
-    //]]>
     </script>
 [% END %]
 
