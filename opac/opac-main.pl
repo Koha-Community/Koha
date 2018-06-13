@@ -29,6 +29,7 @@ use C4::Members;
 use C4::Overdues;
 use Koha::Checkouts;
 use Koha::Holds;
+use Koha::News;
 
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -61,8 +62,21 @@ if (defined $input->param('branch') and length $input->param('branch')) {
 elsif (C4::Context->userenv and defined $input->param('branch') and length $input->param('branch') == 0 ){
    $homebranch = "";
 }
-my $all_koha_news   = &GetNewsToDisplay($news_lang,$homebranch);
-my $koha_news_count = scalar @$all_koha_news;
+
+my $news_id = $input->param('news_id');
+my (@all_koha_news, $koha_news_count);
+
+if (defined $news_id){
+    @all_koha_news = Koha::News->search({ idnew => $news_id });
+    $koha_news_count = 1;
+    if (scalar @all_koha_news > 0){
+        $template->param( news_item => @all_koha_news );
+    } else {
+        $template->param( single_news_error => 1 );
+    }
+} else {
+    @all_koha_news   = &GetNewsToDisplay($news_lang,$homebranch);
+}
 
 my $quote = GetDailyQuote();   # other options are to pass in an exact quote id or select a random quote each pass... see perldoc C4::Koha
 
@@ -90,8 +104,7 @@ if ( $patron ) {
 }
 
 $template->param(
-    koha_news           => $all_koha_news,
-    koha_news_count     => $koha_news_count,
+    koha_news           => @all_koha_news,
     branchcode          => $homebranch,
     display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
     daily_quote         => $quote,

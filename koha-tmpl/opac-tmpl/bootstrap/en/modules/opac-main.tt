@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE Branches %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -12,7 +13,12 @@
 
 <div class="main">
     <ul class="breadcrumb">
-        <li><a href="#">Home</a></li>
+        <li><a href="/cgi-bin/koha/opac-main.pl">Home</a>
+        [% IF news_item %]
+            <span class="divider">&rsaquo;</span></li>
+            <li>[% news_item.title %]</li>
+        [% END %]
+        </li>
     </ul>
 
     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
@@ -57,18 +63,32 @@
                 </form>
             [% END %]
 
-        [% IF ( koha_news_count ) %]
+        [% IF ( koha_news ) %]
+
+
+            [% IF single_news_error %]
+
+                <div class="alert alert-error">
+                    This news item does not exist.
+                </div>
+
+            [% ELSE %]
 
             <div id="news" class="newscontainer">
                 [% SET newsdisp = ( Koha.Preference('NewsAuthorDisplay') ) %]
                 [% FOREACH koha_new IN koha_news %]
                     <div class="newsitem">
-                        <a name="newsitem[% koha_new.idnew | html %]"></a><h4 class="newsheader">[% koha_new.title | html %]</h4>
+                        <a name="newsitem[% koha_new.idnew | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.idnew %]"><h4 class="newsheader">[% koha_new.title | html %]</h4></a>
                         <div class="newsbody">[% koha_new.content | $raw %]</div>
-                        <div class="newsfooter">(published on [% koha_new.newdate | html %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %])</div>
+                        <div class="newsfooter">(published on [% koha_new.timestamp | $KohaDates with_hours = 1 | html %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %])</div>
                     </div>
                 [% END %]
             </div>
+
+            [% END %]
+
+            [% UNLESS news_item %] <!-- If single news item -->
+
             <div id="rssnews-container">
                 <!-- Logged in users have a branch code or it could be explicitly set -->
                 <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-news-rss.pl?branchcode=[% branchcode | uri %]"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png"></a>
@@ -108,6 +128,8 @@
 
         [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock | $raw %]</div>[% END %]
         </div> <!-- / .span 7/9 -->
+
+        [% END %] <!-- If single news item -->
 
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
             <div class="span3">
