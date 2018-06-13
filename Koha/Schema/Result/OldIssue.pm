@@ -229,6 +229,25 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RKLeDDEz22G5BU/ZAl7QLA
 
+__PACKAGE__->belongs_to(
+    "borrower",
+    "Koha::Schema::Result::Borrower",
+    { borrowernumber => "borrowernumber" },
+    { join_type => "LEFT", on_delete => "CASCADE", on_update => "CASCADE" },
+);
+
+__PACKAGE__->belongs_to(
+  "item",
+  "Koha::Schema::Result::Item",
+  { itemnumber => "itemnumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 sub koha_objects_class {
     'Koha::Old::Checkouts';
 }

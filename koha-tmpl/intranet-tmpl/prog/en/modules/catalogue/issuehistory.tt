@@ -26,8 +26,8 @@
 [% IF biblio.author %]<h3>by [% biblio.author %]</h3>[% END %]
 
 <div class="searchresults">
-    [% IF checkouts.count %]
-        <h4>Checked out [% checkouts.count %] times</h4>
+    [% IF checkouts %]
+        <h4>Checked out [% checkouts %] times</h4>
         <table id="table_issues">
             <thead><tr>
             [% IF Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
