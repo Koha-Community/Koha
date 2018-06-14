@@ -48,7 +48,7 @@
 
         [% IF ( execute ) %]
             [% BLOCK params %]
-                [%- FOREACH param IN sql_params %]&amp;sql_params=[% param %][% END %]
+                [%- FOREACH param IN sql_params %]&amp;sql_params=[% param | uri %][% END %]
             [%- END %]
 
 
