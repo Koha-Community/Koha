@@ -128,7 +128,6 @@ my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_l
 
 $data->{'itemtypename'} = $itemtypes->{ $data->{'itemtype'} }->{'translated_description'}
   if $data->{itemtype} && exists $itemtypes->{ $data->{itemtype} };
-$data->{'rentalcharge'} = $data->{'rentalcharge'};
 foreach ( keys %{$data} ) {
     $template->param( "$_" => defined $data->{$_} ? $data->{$_} : '' );
 }

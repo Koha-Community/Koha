@@ -137,7 +137,7 @@ Item types administration
                             [% END %]
                         [% END %]
                     </select>
-                    (Options are defined as the authorized values for the ITEMTYPECAT category)
+                    <span class="hint">Options are defined as the authorized values for the ITEMTYPECAT category.</span>
                 </li>
                 [% IF Koha.Preference('noItemTypeImages') %]
                     <li>
@@ -217,7 +217,7 @@ Item types administration
                     [% ELSE %]
                         <input type="checkbox" id="hideinopac" name="hideinopac" value="1" />
                     [% END %]
-                    (if checked, items of this type will be hidden as filters in OPAC's advanced search)
+                    <span class="hint">If checked, items of this type will be hidden as filters in OPAC's advanced search.</span>
                 </li>
                 <li>
                     <label for="notforloan">Not for loan: </label>
@@ -226,11 +226,17 @@ Item types administration
                         [% ELSE %]
                             <input type="checkbox" id="notforloan" name="notforloan" value="1" />
                         [% END %]
-                      (if checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item)
+                        <span class="hint">If checked, no item of this type can be issued. If not checked, every item of this type can be issued unless notforloan is set for a specific item.</span>
                 </li>
                 <li>
                     <label for="rentalcharge">Rental charge: </label>
-                    <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | html %]" />
+                    <input type="text" id="rentalcharge" name="rentalcharge" size="10" value="[% itemtype.rentalcharge | $Price %]" />
+                    <span class="hint">This fee is charged once per checkout/renewal per item</span>
+                </li>
+                <li>
+                    <label for="rental_charge_daily">Daily rental charge: </label>
+                    <input type="text" id="rental_charge_daily" name="rental_charge_daily" size="10" value="[% itemtype.rental_charge_daily | $Price %]" />
+                    <span class="hint">This fee is charged a checkout/renewal time for each day between the checkout/renewal date and due date.</span>
                 </li>
                 <li>
                     <label for="defaultreplacecost">Default replacement cost: </label>
@@ -329,7 +335,8 @@ Item types administration
             <th>Search category</th>
             <th>Not for loan</th>
             <th>Hide in OPAC</th>
-            <th>Charge</th>
+            <th>Rental charge</th>
+            <th>Daily rental charge</th>
             <th>Default replacement cost</th>
             <th>Processing fee (when lost)</th>
             <th>Checkin message</th>
@@ -369,6 +376,11 @@ Item types administration
             <td>
             [% UNLESS ( itemtype.notforloan ) %]
               [% itemtype.rentalcharge | $Price %]
+            [% END %]
+            </td>
+            <td>
+            [% UNLESS ( itemtype.notforloan ) %]
+              [% itemtype.rental_charge_daily | $Price %]
             [% END %]
             </td>
             <td>[% itemtype.defaultreplacecost | $Price %]</td>

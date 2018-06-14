@@ -70,8 +70,15 @@ my $library2 = $builder->build({
     source => 'Branch',
 });
 my $itemtype = $builder->build(
-    {   source => 'Itemtype',
-        value  => { notforloan => undef, rentalcharge => 0, defaultreplacecost => undef, processfee => undef }
+    {
+        source => 'Itemtype',
+        value  => {
+            notforloan          => undef,
+            rentalcharge        => 0,
+            rental_charge_daily => 0,
+            defaultreplacecost  => undef,
+            processfee          => undef
+        }
     }
 )->{itemtype};
 my $patron_category = $builder->build(
@@ -2993,4 +3000,96 @@ sub test_debarment_on_checkout {
         $expected_expiration_date, 'Test at line ' . $line_number );
     Koha::Patron::Debarments::DelUniqueDebarment(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
-}
+};
+
+subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
+    plan tests => 8;
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } )->store;
+
+    my $module = new Test::MockModule('C4::Context');
+    $module->mock('userenv', sub { { branch => $library->id } });
+
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    )->store;
+
+    my $itemtype = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value  => {
+                notforloan          => undef,
+                rentalcharge        => 0,
+                rental_charge_daily => 1.000000
+            }
+        }
+    )->store;
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                homebranch       => $library->id,
+                holdingbranch    => $library->id,
+                notforloan       => 0,
+                itemlost         => 0,
+                withdrawn        => 0,
+                itype            => $itemtype->id,
+                biblionumber     => $biblioitem->{biblionumber},
+                biblioitemnumber => $biblioitem->{biblioitemnumber},
+            }
+        }
+    )->store;
+
+    is( $itemtype->rental_charge_daily, '1.000000', 'Daily rental charge stored and retreived correctly' );
+    is( $item->effective_itemtype, $itemtype->id, "Itemtype set correctly for item");
+
+    my $dt_from = dt_from_string();
+    my $dt_to = dt_from_string()->add( days => 7 );
+    my $dt_to_renew = dt_from_string()->add( days => 13 );
+
+    t::lib::Mocks::mock_preference('finesCalendar', 'ignoreCalendar');
+    my $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    my $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
+    is( $accountline->amount, '7.000000', "Daily rental charge calulated correctly with finesCalendar = ignoreCalendar" );
+    $accountline->delete();
+    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
+    is( $accountline->amount, '6.000000', "Daily rental charge calulated correctly with finesCalendar = ignoreCalendar, for renewal" );
+    $accountline->delete();
+    $issue->delete();
+
+    t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
+    $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
+    is( $accountline->amount, '7.000000', "Daily rental charge calulated correctly with finesCalendar = noFinesWhenClosed" );
+    $accountline->delete();
+    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
+    is( $accountline->amount, '6.000000', "Daily rental charge calulated correctly with finesCalendar = noFinesWhenClosed, for renewal" );
+    $accountline->delete();
+    $issue->delete();
+
+    my $calendar = C4::Calendar->new( branchcode => $library->id );
+    $calendar->insert_week_day_holiday(
+        weekday     => 3,
+        title       => 'Test holiday',
+        description => 'Test holiday'
+    );
+    $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from );
+    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
+    is( $accountline->amount, '6.000000', "Daily rental charge calulated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays" );
+    $accountline->delete();
+    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    $accountline = Koha::Account::Lines->find({ itemnumber => $item->id });
+    is( $accountline->amount, '5.000000', "Daily rental charge calulated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays, for renewal" );
+    $accountline->delete();
+    $issue->delete();
+
+};

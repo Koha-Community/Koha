@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Price %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
@@ -34,6 +35,7 @@
         <li><span class="label">Item type:</span> [% itemtypename | html %]&nbsp;</li>
         [% END %]
         [% IF ( rentalcharge ) %]<li><span class="label">Rental charge:</span>[% rentalcharge | $Price %]&nbsp;</li>[% END %]
+        [% IF ( rental_charge_daily ) %]<li><span class="label">Daily rental charge:</span>[% rental_charge_daily | $Price %]&nbsp;</li>[% END %]
         <li><span class="label">ISBN:</span> [% isbn | html %]&nbsp;</li>
         <li><span class="label">Publisher:</span>[% place | html %] [% publishercode | html %] [% publicationyear | html %]&nbsp;</li>
         [% IF ( volumeddesc ) %]<li><span class="label">Volume:</span> [% volumeddesc | html %]</li>[% END %]

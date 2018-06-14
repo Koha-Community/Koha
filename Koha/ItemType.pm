@@ -90,6 +90,39 @@ sub translated_descriptions {
     } @translated_descriptions ];
 }
 
+=head3 calc_rental_charge_daily
+
+    my $fee = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
+
+    This method calculates the daily rental fee for a given itemtype for a given
+    period of time passed in as a pair of DateTime objects.
+
+=cut
+
+sub calc_rental_charge_daily {
+    my ( $self, $params ) = @_;
+
+    my $rental_charge_daily = $self->rental_charge_daily;
+    return 0 unless $rental_charge_daily;
+
+    my $from_dt = $params->{from};
+    my $to_dt   = $params->{to};
+
+    my $duration;
+    if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
+        my $branchcode = C4::Context->userenv->{branch};
+        my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+        $duration = $calendar->days_between( $from_dt, $to_dt );
+    }
+    else {
+        $duration = $to_dt->delta_days($from_dt);
+    }
+    my $days = $duration->in_units('days');
+
+    my $charge = $rental_charge_daily * $days;
+
+    return $charge;
+}
 
 
 =head3 can_be_deleted

@@ -72,6 +72,7 @@ if ( $op eq 'add_form' ) {
     my $itemtype     = Koha::ItemTypes->find($itemtype_code);
     my $description  = $input->param('description');
     my $rentalcharge = $input->param('rentalcharge');
+    my $rental_charge_daily = $input->param('rental_charge_daily');
     my $defaultreplacecost = $input->param('defaultreplacecost');
     my $processfee = $input->param('processfee');
     my $image = $input->param('image') || q||;
@@ -92,6 +93,7 @@ if ( $op eq 'add_form' ) {
     if ( $itemtype and $is_a_modif ) {    # it's a modification
         $itemtype->description($description);
         $itemtype->rentalcharge($rentalcharge);
+        $itemtype->rental_charge_daily($rental_charge_daily);
         $itemtype->defaultreplacecost($defaultreplacecost);
         $itemtype->processfee($processfee);
         $itemtype->notforloan($notforloan);
@@ -112,19 +114,21 @@ if ( $op eq 'add_form' ) {
         }
     } elsif ( not $itemtype and not $is_a_modif ) {
         my $itemtype = Koha::ItemType->new(
-            {   itemtype           => $itemtype_code,
-                description        => $description,
-                rentalcharge       => $rentalcharge,
-                defaultreplacecost => $defaultreplacecost,
-                processfee         => $processfee,
-                notforloan         => $notforloan,
-                imageurl           => $imageurl,
-                summary            => $summary,
-                checkinmsg         => $checkinmsg,
-                checkinmsgtype     => $checkinmsgtype,
-                sip_media_type     => $sip_media_type,
-                hideinopac         => $hideinopac,
-                searchcategory     => $searchcategory,
+            {
+                itemtype            => $itemtype_code,
+                description         => $description,
+                rentalcharge        => $rentalcharge,
+                rental_charge_daily => $rental_charge_daily,
+                defaultreplacecost  => $defaultreplacecost,
+                processfee          => $processfee,
+                notforloan          => $notforloan,
+                imageurl            => $imageurl,
+                summary             => $summary,
+                checkinmsg          => $checkinmsg,
+                checkinmsgtype      => $checkinmsgtype,
+                sip_media_type      => $sip_media_type,
+                hideinopac          => $hideinopac,
+                searchcategory      => $searchcategory,
             }
         );
         eval { $itemtype->store; };

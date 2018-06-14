@@ -989,6 +989,8 @@ sub CanBookBeIssued {
 
     if ( $rentalConfirmation ){
         my ($rentalCharge) = GetIssuingCharges( $item->itemnumber, $patron->borrowernumber );
+        my $itemtype = Koha::ItemTypes->find( $item->itype ); # GetItem sets effective itemtype
+        $rentalCharge += $itemtype->calc_rental_charge_daily( { from => dt_from_string(), to => $duedate } );
         if ( $rentalCharge > 0 ){
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
         }
@@ -1435,6 +1437,16 @@ sub AddIssue {
             if ( $charge > 0 ) {
                 my $description = "Rental";
                 AddIssuingCharge( $issue, $charge, $description );
+            }
+
+            my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
+            if ( $itemtype ) {
+                my $daily_charge = $itemtype->calc_rental_charge_daily( { from => $issuedate, to => $datedue } );
+                if ( $daily_charge > 0 ) {
+                    AddIssuingCharge( $issue, $daily_charge, 'Daily rental' ) if $daily_charge > 0;
+                    $charge += $daily_charge;
+                    $item->{charge} = $charge;
+                }
             }
 
             # Record the fact that this book was issued.
@@ -2859,11 +2871,22 @@ sub AddRenewal {
     $renews = $item->renewals + 1;
     ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item->biblionumber, $itemnumber, { log_action => 0 } );
 
-    # Charge a new rental fee, if applicable?
+    # Charge a new rental fee, if applicable
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
     if ( $charge > 0 ) {
         my $description = "Renewal of Rental Item " . $biblio->title . " " .$item->barcode;
         AddIssuingCharge($issue, $charge, $description);
+    }
+
+    # Charge a new daily rental fee, if applicable
+    my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
+    if ( $itemtype ) {
+        my $daily_charge = $itemtype->calc_rental_charge_daily( { from => dt_from_string($lastreneweddate), to => $datedue } );
+        if ( $daily_charge > 0 ) {
+            my $type_desc = "Renewal of Daily Rental Item " . $biblio->title . " $item->{'barcode'}";
+            AddIssuingCharge( $issue, $daily_charge, $type_desc )
+        }
+        $charge += $daily_charge;
     }
 
     # Send a renewal slip according to checkout alert preferencei
@@ -3183,7 +3206,7 @@ sub _get_discount_from_rule {
 
 =head2 AddIssuingCharge
 
-  &AddIssuingCharge( $checkout, $charge )
+  &AddIssuingCharge( $checkout, $charge, [$description] )
 
 =cut
 
