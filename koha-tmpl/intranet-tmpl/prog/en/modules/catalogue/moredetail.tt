@@ -75,11 +75,7 @@
             <li><span class="label">Current location:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
             [% IF ( ITEM_DAT.issue ) %]Checked out to
-                [% IF ( hidepatronname ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ITEM_DAT.borrowernumber %]">[% ITEM_DAT.cardnumber %]</a>,
-                    [% ELSE %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ITEM_DAT.borrowernumber %]">[% ITEM_DAT.borrowerfirstname %] [% ITEM_DAT.borrowersurname %]</a>,
-                [% END %]
+                [% INCLUDE 'patron-title.inc' patron => ITEM_DAT.patron hide_patron_infos_if_needed=1 %]
                 [% IF ( ITEM_DAT.lastreneweddate ) %]
                     Last renewed [% ITEM_DAT.lastreneweddate | $KohaDates %],
                 [% END %]
