@@ -1574,8 +1574,8 @@ sub GetMarcItemFields {
         # Set correct item type
         if ( !$item_level_itype || !$item->{itype} ) {
             warn 'item-level_itypes set but no itemtype set for item (' . $item->{itemnumber} . ')' if ( !$item->{itype} );
-            my $biblioitem = Koha::Biblioitem::find( $item->{biblioitemnumber} );
-            $item->itype = $biblioitem->itemtype();
+            my $biblioitem = Koha::Biblioitems->find( $item->{biblioitemnumber} );
+            $item->{itype} = $biblioitem->itemtype;
         }
 
         my $mungeditem = {
@@ -1734,10 +1734,11 @@ sub _do_column_fixes_for_mod {
         (not defined $item->{'withdrawn'} or $item->{'withdrawn'} eq '')) {
         $item->{'withdrawn'} = 0;
     }
-    if (exists $item->{location}
-        and $item->{location} ne 'CART'
-        and $item->{location} ne 'PROC'
-        and not $item->{permanent_location}
+    if (exists $item->{'location'}
+        and defined $item->{'location'}
+        and $item->{'location'} ne 'CART'
+        and $item->{'location'} ne 'PROC'
+        and (not defined $item->{'permanent_location'} or not $item->{'permanent_location'})
     ) {
         $item->{'permanent_location'} = $item->{'location'};
     }
@@ -2406,7 +2407,7 @@ sub _SearchItems_build_where_fragment {
         push @columns, Koha::Database->new()->schema()->resultset('Biblioitem')->result_source->columns;
         my @operators = qw(= != > < >= <= like);
         my $field = $filter->{field};
-        if ( (0 < grep /^$field$/, @columns) or (substr($field, 0, 5) eq 'marc:') ) {
+        if ( defined $field and ((0 < grep /^$field$/, @columns) or (substr($field, 0, 5) eq 'marc:')) ) {
             my $op = $filter->{operator};
             my $query = $filter->{query};
 
