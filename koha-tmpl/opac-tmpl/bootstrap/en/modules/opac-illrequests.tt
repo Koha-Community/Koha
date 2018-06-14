@@ -135,7 +135,7 @@
                                         [% IF request.metadata.Title %][% request.metadata.Title | html %][% ELSE %]<span>N/A</span>[% END %]
                                     </td>
                                     <td>[% request.backend | html %]</td>
-                                    <td>[% request.medium | html %]</td>
+                                    <td>[% request.getType | html %]</td>
                                     <td>[% request.capabilities.$status.name | html %]</td>
                                     <td><span title="[% request.placed | html %]">[% request.placed | $KohaDates %]</span></td>
                                     <td><span title="[% request.updated | html %]">[% request.updated | $KohaDates %]</span></td>
@@ -178,7 +178,7 @@
                                     </li>
                                     <li>
                                         <label for="medium">Request type:</label>
-                                        [% request.medium | html %]
+                                        [% request.getType | html %]
                                     </li>
                                     <li>
                                         <label for="placed">Request placed:</label>

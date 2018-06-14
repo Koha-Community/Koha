@@ -737,6 +737,20 @@ sub getPrefix {
         || "";                  # "the empty prefix"
 }
 
+=head3 getType
+
+    my $type = $abstract->getType();
+
+Return a string representing the material type of this request
+
+=cut
+
+sub getType {
+    my ($self) = @_;
+    my $attr = $self->illrequestattributes->find({ type => 'type'});
+    return $attr ? $attr->value : '<span>N/A</span>';
+};
+
 #### Illrequests Imports
 
 =head3 check_limits
