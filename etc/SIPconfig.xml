@@ -61,6 +61,9 @@
           <screen_msg_regex find="Greetings from Koha." replace="Welcome to your library!" />
           <screen_msg_regex find="Invalid patron barcode." replace="Barcode not found, are you sure this is your library card?" />
           <patron_attribute field="XY" code="CODE" />
+          <syspref-overrides>
+              <AllFinesNeedOverride>0</AllFinesNeedOverride>
+          </syspref-overrides>
       </login>
   </accounts>
 
@@ -101,4 +104,13 @@ in our case "ILS".
             retries="5" />
     </institution>
 </institutions>
+
+<!-- This section allows system preferences to be overridden on a global basis.
+     If the same system preference is overridden at the login level, the login
+     version will take precedence.
+-->
+<syspref-overrides>
+      <AllFinesNeedOverride>0</AllFinesNeedOverride>
+</syspref-overrides>
+
 </acsconfig>

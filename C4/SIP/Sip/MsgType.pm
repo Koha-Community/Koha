@@ -331,6 +331,19 @@ sub handle {
     my $config = $server->{config};
     my $self;
 
+    # Set system preference overrides, first global, then account level
+    # Clear overrides from previous message handling first
+    foreach my $key ( %ENV ) {
+        delete $ENV{$key} if index($key, 'OVERRIDE_SYSPREF_') > 0;
+    }
+    foreach my $key ( keys %{ $config->{'syspref-overrides'} } ) {
+        $ENV{"OVERRIDE_SYSPREF_$key"} = $config->{'syspref-overrides'}->{$key};
+    }
+    foreach my $key ( keys %{ $server->{account}->{'syspref-overrides'} } ) {
+        $ENV{"OVERRIDE_SYSPREF_$key"} =
+          $server->{account}->{'syspref-overrides'}->{$key};
+    }
+
     #
     # What's the field delimiter for variable length fields?
     # This can't be based on the account, since we need to know
