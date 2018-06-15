@@ -10,6 +10,7 @@ use C4::Templates qw ( gettemplate );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
+use Koha::Patron::Debarments;
 
 sub count {
     my ($params) = @_;
