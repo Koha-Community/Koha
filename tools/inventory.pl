@@ -118,7 +118,7 @@ for my $authvfield (@$statuses) {
     }
 }
 
-my @class_sources = Koha::ClassSources->search();
+my @class_sources = Koha::ClassSources->search({ used => 1 });
 my $pref_class = C4::Context->preference("DefaultClassificationSource");
 
 
