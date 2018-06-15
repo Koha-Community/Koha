@@ -6,6 +6,7 @@
 
 # <notifications>
 #   <mailto>someone@somewere.com,someone@else.com</mailto>
+#   <mailfrom>someone@somewere.com</mailfrom> <!-- this is optional, [user]@[host] will be used if left unset -->
 # </notifications>
 
 die() { printf "$@\n" ; exit 1 ; }
@@ -23,13 +24,15 @@ test -e $KOHA_CONF || die "No KOHA_CONF."
 config_file="$(dirname $KOHA_CONF)/procurement-config.xml"
 test -e $config_file || die "No procurement config $config_file."
 
-mailto=$($xmllint --xpath '*/notifications/mailto/text()' $config_file)
-export failed_path=$($xmllint --xpath '*/settings/import_failed_path/text()' $config_file)
-export log_path=$($xmllint --xpath 'yazgfs/config/logdir/text()' $KOHA_CONF)
+mailto=$($xmllint --xpath '*/notifications/mailto/text()' $config_file 2> /dev/null)
+mailfrom=$($xmllint --xpath '*/notifications/mailfrom/text()' $config_file 2> /dev/null)
+export failed_path=$($xmllint --xpath '*/settings/import_failed_path/text()' $config_file 2> /dev/null)
+export log_path=$($xmllint --xpath 'yazgfs/config/logdir/text()' $KOHA_CONF 2> /dev/null)
 
-test -n $mailto || die "No one to send notifications to in $config_file."
-test -n $failed_path || die "No path to failed EDItX messages in $config_file."
-test -n $log_path || die "No path to logs in $KOHA_CONF."
+test -n "$mailto" || die "No one to send notifications to in $config_file."
+test -n "$mailfrom" && mailfrom="-r $mailfrom"
+test -n "$failed_path" || die "No path to failed EDItX messages in $config_file."
+test -n "$log_path" || die "No path to logs in $KOHA_CONF."
 
 # Get failed EDItX notices and send emails
 
@@ -56,7 +59,7 @@ if test -n "$failed_files"; then
 
     printf "Virheelliset sanomat on siirretty hakemistoon $failed_path.\n"
 
-  ) | $mailer -s "EDItX sanomien käsittelyssä oli ongelmia" $mailto
+  ) | $mailer $mailfrom -s "EDItX sanomien käsittelyssä oli ongelmia" $mailto
 
 fi
 
