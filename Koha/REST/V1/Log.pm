@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 use C4::Log;
+use Koha::MongoDB::Logs;
 
 sub get {
     my $c = shift->openapi->valid_input or return;
@@ -32,6 +33,20 @@ sub get {
     }
 
     return $c->render( status => 200, openapi => $logs);
+}
+
+sub getMongo {
+    my $c = shift->openapi->valid_input or return;
+
+    my $params = $c->req->params->to_hash;
+
+    my $retval=Koha::MongoDB::Logs->getUserLogs($params->{object});
+    unless ($retval) {
+        return $c->render( status => 404, openapi =>
+            {error => "Missing log data"});
+    }
+
+    return $c->render( status => 200, openapi => $retval);
 }
 
 sub add {

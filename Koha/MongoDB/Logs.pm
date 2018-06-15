@@ -1,6 +1,7 @@
 package Koha::MongoDB::Logs;
 
 use Moose;
+use Try::Tiny;
 use MongoDB;
 use Koha::MongoDB::Config;
 
@@ -109,6 +110,43 @@ sub checkLog {
         timestamp => $actionlog->{timestamp}});
 
     return $findlog;
+}
+
+sub getUserLogs {
+   my $self = shift;
+   my ($borrowernumber)= @_;
+
+   my $config = new Koha::MongoDB::Config;
+   my $logs = new Koha::MongoDB::Logs;
+   my $client = $config->mongoClient();
+   my $settings=$config->getSettings();
+   my $user_logs=$client->ns($settings->{database}.'.user_logs');
+   my @logArray;
+
+   try
+   {
+
+     my $resultset=$user_logs->find({"objectborrowernumber" => $borrowernumber});
+     while(my $row = $resultset->next)
+     {
+        my $jsonObject;
+        $jsonObject->{cardnumber} = $row->{objectcardnumber};
+        $jsonObject->{action} = $row->{action};
+        $jsonObject->{info} = $row->{info};
+        $jsonObject->{timestamp} = $row->{timestamp};
+        push (@logArray, $jsonObject);
+
+     }
+   }
+   catch
+   {
+      if (!$client) {
+        my @cal = caller(0);
+        Koha::Exception::ConnectionFailed->throw(error => $cal[3].'():>'."No MongoDB connection");
+      }
+   };
+
+   return(\@logArray);
 }
 
 1;

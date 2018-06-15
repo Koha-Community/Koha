@@ -65,7 +65,8 @@
       "x-koha-authorization": {
         "allow-owner": true,
           "permissions": {
-            "auth": "get_session"
+            "tools": "view_system_logs",
+            "tools": "manage_patron_lists"
           }
       },
       "responses": {
@@ -167,7 +168,61 @@
       },
       "x-koha-authorization": {
         "permissions": {
-          "auth": "get_session"
+          "tools": "view_system_logs",
+          "tools": "manage_patron_lists"
+        }
+      }
+    }
+  },
+  "/mongologs": {
+    "get": {
+      "x-mojo-to": "Log#getMongo",
+      "operationId": "getMongoLog",
+      "tags": ["logs"],
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [{
+        "name": "object",
+        "in": "query",
+        "description": "borrowernumber",
+        "required": true,
+        "type": "string"
+      }],
+      "x-koha-authorization": {
+        "allow-owner": true,
+          "permissions": {
+            "tools": "view_system_logs",
+            "tools": "manage_patron_lists"
+          }
+      },
+      "responses": {
+        "200": {
+          "description": "Getting logs succeeded",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/mongolog"
+            }
+          }
+        },
+        "404": {
+          "description": "Missing log data",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
         }
       }
     }
