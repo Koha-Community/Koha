@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 162;
+use Test::More tests => 172;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -197,6 +197,32 @@ $tx = $t->ua->build_tx(PATCH => '/api/v1/patrons/'.$guarantor->{borrowernumber}.
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403);
+
+# Get patron's all data
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/alldata?borrowernumber=".$patron->{borrowernumber});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200);
+
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/alldata?borrowernumber=".$patron->{borrowernumber}."&section=personal");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200);
+
+$tx = $t->ua->build_tx(GET => "/api/v1/patrons/alldata?section=personal");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(400);
+
+my $non_existent_id = $patron->{borrowernumber} + 1;
+$tx = $t->ua->build_tx( GET => "/api/v1/patrons/alldata?borrowernumber=".$non_existent_id."&section=personal" );
+$tx->req->cookies( { name => 'CGISESSID', value => $session->id} );
+$t->request_ok($tx)->status_is(403);
+
+my $non_existent_id = $patron->{borrowernumber} + 1;
+$tx = $t->ua->build_tx( GET => "/api/v1/patrons/alldata?borrowernumber=".$patron->{borrowernumber}."&section=new" );
+$tx->req->cookies( { name => 'CGISESSID', value => $session->id} );
+$t->request_ok($tx)->status_is(400);
 
 my $loggedinuser = $builder->build({
     source => 'Borrower',

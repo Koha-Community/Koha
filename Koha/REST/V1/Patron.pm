@@ -30,6 +30,7 @@ use Koha::Exceptions::Password;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Patron::Modifications;
+use Koha::Patron::AllData;
 use Koha::Libraries;
 
 use Scalar::Util qw(blessed looks_like_number);
@@ -402,6 +403,39 @@ sub getstatus {
                 { error => "Something went wrong, check the logs." });
         }
     };
+}
+
+sub getalldata {
+    my $c = shift->openapi->valid_input or return;
+    my $retval;
+    my $error;
+    return try {
+        my $patron = Koha::Patrons->find($c->validation->param('borrowernumber'))->unblessed;
+        my $section = $c->validation->param('section');
+        unless ($patron) {
+            return $c->render(status  => 404,
+                              openapi => {error => "Patron not found"});
+        }
+
+        unless ($section) {
+            ($retval, $error) = Koha::Patron::AllData->getall({borrowernumber => $patron->{borrowernumber}});
+        } else {
+            my $method = "get".$section;
+            ($retval, $error) = Koha::Patron::AllData->$method({borrowernumber => $patron->{borrowernumber}});
+        }
+        if ($error) {
+            return $c->render(status  => 500,
+                              openapi => { error => $error });
+        } elsif (!$retval) {
+            return $c->render(status  => 404,
+                              openapi => {error => "Data not found"});
+        }
+        return $c->render( status => 200, openapi => $retval);
+    } catch {
+        return $c->render(status  => 500,
+                              openapi => { error => "Something went wrong. $_" });
+    }
+
 }
 
 # Takes a HASHref of parameters

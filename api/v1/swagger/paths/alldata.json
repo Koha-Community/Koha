@@ -1,0 +1,61 @@
+{
+  "/alldata": {
+    "get": {
+      "x-mojo-to": "Alldata#get",
+      "operationId": "getAlldata",
+      "tags": ["patrons"],
+      "parameters": [{
+        "name": "borrowernumber",
+        "in": "query",
+        "description": "Exact borrowernumber",
+        "required": false,
+        "type": "string"
+      }],
+      "produces": [
+          "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Patron info",
+          "schema": {
+            "type": "object"
+
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "view_borrowers"
+        },
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "allow-guarantee": true
+      }
+
+    }
+  }
+}
