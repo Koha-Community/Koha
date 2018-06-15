@@ -12,6 +12,7 @@ use C4::Reserves qw( GetReservesFromBorrowernumber CancelReserve );
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Patrons;
+use Koha::Patron::Debarments;
 
 my $rs = Koha::Database->new->schema->resultset('Discharge');
 
