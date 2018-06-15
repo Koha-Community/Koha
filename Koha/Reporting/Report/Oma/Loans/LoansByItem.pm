@@ -24,6 +24,8 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::Time::Hour');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Time::Day');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Time::Month');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::PublishedYear');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::AcquiredYear');
 
     $self->addFilter('branch_category', 'Koha::Reporting::Report::Filter::BranchGroup');
     $self->addFilter('branch', 'Koha::Reporting::Report::Filter::Branch');

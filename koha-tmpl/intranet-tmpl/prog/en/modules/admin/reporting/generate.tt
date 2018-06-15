@@ -33,6 +33,7 @@
         'Acquired Year (from)': _("Acquired Year (from)"),
         'Acquired Year (to)': _("Acquired Year (to)"),
         'Active / Overdue': _("Active / Overdue"),
+        'Valid / Outdated': _("Valid / Outdated"),
         'Adult / Child': _("Adult / Child"),
         'Age Group': _("Age Group"),
         'Borrower Activity': _("Borrower Activity"),
@@ -54,6 +55,7 @@
         'Loaned amount (to)': _("Loaned amount (to)"),
         'Loan type': _("Loan type"),
         'Location': _("Location"),
+        'Shelving location': _("Shelving location"),
         'Message type': _("Message type"),
         'Month': _("Month"),
         'Optimal collection min': _("Optimal collection min"),
@@ -63,9 +65,11 @@
         'Postcode (to)': _("Postcode (to)"),
         'Published Year (from)': _("Published Year (from)"),
         'Published Year (to)': _("Published Year (to)"),
+        'Published year': _("Published year"),
+        'Acquired year': _("Acquired year"),
         'Reserve status': _("Reserve status"),
         'Transport type': _("Transport type"),
-
+        'Item status options': _("Item status options"),
         'Select All': _("Select All"),
         'Remove All': _("Remove All"),
         'Not set': _("Not set"),
@@ -86,6 +90,8 @@
 
         'Active': _('Active'),
         'Overdue': _('Overdue'),
+        'Valid': _('Valid'),
+        'Outdated': _('Outdated'),
 
         'email': _('email'),
         'print': _('print'),
@@ -111,7 +117,7 @@
                   <h1>Reporting </h1>
                   <a href="/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=okm" class="btn btn-default btn-settings">Settings</a>
                </div>
-               <form id="reporting-main-form" type="post" action="request.pl">
+               <form id="reporting-main-form" method="post" action="request.pl">
                <div class="reporting-chooser-container">
                    <fieldset class="reporting-chooser report-selector">
                        <legend>Reports to run</legend>

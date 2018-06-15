@@ -550,7 +550,7 @@ sub execute{
     my $self = shift;
     my $dbh = C4::Context->dbh;
     my ($query, $parameters ,$tableName) = @_;
-
+#    print Dumper $query;
     my $stmnt = $dbh->prepare($query);
     my $result;
     if($stmnt){
@@ -560,7 +560,7 @@ sub execute{
         else{
             $result = $stmnt->execute();
         }
-        my $rowCount = $self->getInsertedRowCount();
+        my $rowCount = $self->getInsertedRowCount($result);
         my $tableRowCount = $self->getTableRowCount($tableName);
         print Dumper "Rows inserted: " . $rowCount;
         print Dumper "All rows: ". $tableRowCount;
@@ -598,6 +598,7 @@ sub getInsertedRowCount{
     my $self = shift;
     my $dbh = C4::Context->dbh;
     my $result = 0;
+    my $execResult = $_[0];
     my $stmnt = $dbh->prepare('SELECT ROW_COUNT() as count');
     $stmnt->execute();
 
@@ -605,6 +606,11 @@ sub getInsertedRowCount{
     if(defined $row->{count}){
         $result = $row->{count};
     }
+
+    if($result == 0 && $execResult > 0){
+	$result = $execResult;
+    }
+
     return $result;
 }
 

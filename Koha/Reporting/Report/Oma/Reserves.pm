@@ -14,6 +14,7 @@ sub BUILD {
     $self->setGroup('oma');
 
     $self->addGrouping('Koha::Reporting::Report::Grouping::CnClass');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::CnClassFictive');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LanguageAll');
     $self->addGrouping('Koha::Reporting::Report::Grouping::AgeGroup');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');
@@ -24,7 +25,8 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::ReserveStatus');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationAge');
-
+    $self->addGrouping('Koha::Reporting::Report::Grouping::PublishedYear');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::AcquiredYear');
 
     $self->addFilter('branch_category', 'Koha::Reporting::Report::Filter::BranchGroup');
     $self->addFilter('branch', 'Koha::Reporting::Report::Filter::Branch');

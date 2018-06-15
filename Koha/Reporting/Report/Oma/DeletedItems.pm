@@ -27,7 +27,8 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::Collection');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationAge');
-
+    $self->addGrouping('Koha::Reporting::Report::Grouping::PublishedYear');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::AcquiredYear');
 
     $self->addFilter('branch_category', 'Koha::Reporting::Report::Filter::BranchGroup');
     $self->addFilter('branch', 'Koha::Reporting::Report::Filter::Branch');

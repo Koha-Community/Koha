@@ -29,7 +29,6 @@ sub changeWaitTimeOut{
 changeWaitTimeOut();
 
 my $config = Koha::Reporting::Import::Abstract->loadConfiguration();
-
 unless ($config->{blockStatisticsGeneration}) {
 
 	print "Starting imports\n";

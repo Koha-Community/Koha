@@ -46,7 +46,7 @@ sub loadDatas{
 
     my $query = "select items.itemnumber, items.location, items.homebranch as branch, items.dateaccessioned as acquired_year, items.itype as itemtype, items.ccode as collection_code, ";
     $query .=  "COALESCE(items.dateaccessioned, '0000-00-00') as datetime, items.biblioitemnumber, items.cn_sort, '0' as is_deleted, items.barcode, ";
-    $query .= 'biblio_metadata.metadata, biblioitems.publicationyear as published_year ';
+    $query .= 'biblio_metadata.metadata as marcxml, biblioitems.publicationyear as published_year ';
     $query .= 'from items ';
     $query .= 'left join biblioitems on items.biblioitemnumber=biblioitems.biblioitemnumber ';
     $query .= 'left join biblio_metadata on items.biblionumber=biblio_metadata.biblionumber ';

@@ -40,6 +40,7 @@ sub loadOptions{
     my $branchGroupOrder = [];
     my $select = 'select branchcategories.categorycode, branchcategories.categoryname, branchrelations.branchcode from branchcategories ';
     $select .= 'left join branchrelations on branchcategories.categorycode = branchrelations.categorycode ';
+    $select .= 'where branchcategories.categorycode like "%STATS" ';
     $select .= 'order by branchcategories.categoryname';
 
     my $stmnt = $dbh->prepare($select);

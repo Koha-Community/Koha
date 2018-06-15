@@ -32,6 +32,7 @@ sub loadDatas{
     my $statistics;
     my @parameters;
     my $patroncategories = Koha::Reporting::Import::Abstract->getConditionValues('patronCategories');
+
     my $query = 'select reporting_statistics_tmp.datetime, reporting_statistics_tmp.branch, reporting_statistics_tmp.type as loan_type, ';
     $query .= 'reporting_statistics_tmp.usercode, ';
     $query .= 'reporting_statistics_tmp.borrowernumber, reporting_statistics_tmp.ccode as collection_code, reporting_statistics_tmp.itemnumber, ';
@@ -48,14 +49,14 @@ sub loadDatas{
     $query .= 'left join biblioitems on items.biblioitemnumber=biblioitems.biblioitemnumber ';
     $query .= 'left join deletedbiblioitems on items.biblioitemnumber=deletedbiblioitems.biblioitemnumber ';
 
-    $query .= 'left join biblio_metadata as bibliometa on items.biblionumber=bibliometa.biblionumber ';
-    $query .= 'left join deletedbiblio_metadata as deletedbibliometa on items.biblionumber=deletedbibliometa.biblionumber ';
+    $query .= 'left join biblio_metadata as bibliometa on biblioitems.biblionumber=bibliometa.biblionumber ';
+    $query .= 'left join deletedbiblio_metadata as deletedbibliometa on deletedbiblioitems.biblionumber=deletedbibliometa.biblionumber ';
 
     $query .= 'left join biblioitems as dbiblioitems on deleteditems.biblioitemnumber=dbiblioitems.biblioitemnumber ';
     $query .= 'left join deletedbiblioitems as ddeletedbiblioitems on deleteditems.biblioitemnumber=ddeletedbiblioitems.biblioitemnumber ';
 
-    $query .= 'left join biblio_metadata as dbibliometa on deleteditems.biblionumber=dbibliometa.biblionumber ';
-    $query .= 'left join deletedbiblio_metadata as ddeletedbibliometa on deleteditems.biblionumber=ddeletedbibliometa.biblionumber ';
+    $query .= 'left join biblio_metadata as dbibliometa on dbiblioitems.biblionumber=dbibliometa.biblionumber ';
+    $query .= 'left join deletedbiblio_metadata as ddeletedbibliometa on ddeletedbiblioitems.biblionumber=ddeletedbibliometa.biblionumber ';
 
     $query .= 'left join borrowers on reporting_statistics_tmp.borrowernumber = borrowers.borrowernumber ';
     $query .= "where reporting_statistics_tmp.usercode in ".$patroncategories." and other != 'KONVERSIO' and type in ('issue', 'renew') ";
@@ -69,7 +70,6 @@ sub loadDatas{
         $query .= 'limit ?';
         push @parameters, $self->getLimit();
     }
-
     my $stmnt = $dbh->prepare($query);
     if(@parameters){
         $stmnt->execute(@parameters) or die($DBI::errstr);

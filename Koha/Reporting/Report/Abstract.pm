@@ -155,6 +155,13 @@ has 'default_limit' => (
     writer => 'setDefaultLimit'
 );
 
+has 'use_data_column' => (
+    is => 'rw',
+    default => 1,
+    reader => 'getUseDataColumn',
+    writer => 'setUseDataColumn'
+);
+
 sub BUILD {
     my $self = shift;
     my $factTableFactory = new Koha::Reporting::Table::Fact::Factory;

@@ -11,8 +11,8 @@ extends 'Koha::Reporting::Report::Grouping::Abstract';
 sub BUILD {
     my $self = shift;
     $self->setName('overdue');
-    $self->setDescription('Active / Overdue');
-    $self->setAlias('Active / Overdue');
+    $self->setDescription('Valid / Outdated');
+    $self->setAlias('Valid / Outdated');
     $self->setDimension('fact');
     $self->setField('is_overdue');
 }

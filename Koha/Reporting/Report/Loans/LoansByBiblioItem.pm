@@ -22,6 +22,7 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::ItemTypeOkm');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LoanType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::CnClass');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::CnClassFictive');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Collection');
     $self->addGrouping('Koha::Reporting::Report::Grouping::AgeGroup');
 
@@ -29,6 +30,7 @@ sub BUILD {
     $self->addFilter('branch', 'Koha::Reporting::Report::Filter::Branch');
     $self->addFilter('location', 'Koha::Reporting::Report::Filter::Location');
     $self->addFilter('cn_class', 'Koha::Reporting::Report::Filter::CnClass::Primary');
+    $self->addFilter('cn_class_fict', 'Koha::Reporting::Report::Filter::CnClass::Fictive');
 #    $self->addFilter('itemtype', 'Koha::Reporting::Report::Filter::Itemtype');
     $self->addFilter('itemtype_okm', 'Koha::Reporting::Report::Filter::ItemtypeOkm');
     $self->addFilter('language', 'Koha::Reporting::Report::Filter::Language');

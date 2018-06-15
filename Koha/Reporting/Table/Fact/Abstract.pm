@@ -40,6 +40,13 @@ has 'use_count' => (
     writer => 'setUseCount'
 );
 
+has 'use_data_column' => (
+    is => 'rw',
+    default => 1,
+    reader => 'getUseDataColumn',
+    writer => 'setUseDataColumn'
+);
+
 has 'use_rollup' => (
     is => 'rw',
     default => 0,
@@ -225,12 +232,12 @@ sub buildSelect{
         elsif($self->getUseSum()){
             $select .= $self->getSumSelectFragment() . ' ';
         }
-        else{
+        elsif($self->getUseDataColumn()){
             $select .= $self->getDataColumn() . ' ';
         }
 
         if($self->getLimit()){
-            $limit = 'LIMIT ' . $self->getLimit();
+            $limit = ' LIMIT ' . $self->getLimit();
         }
     }
 
@@ -242,7 +249,7 @@ sub buildSelect{
     }
 
     $select = $select . $from . $where .$groupBy. $having .$orderBy . $limit;
-    #die Dumper $select;
+   # die Dumper $select;
     return ($select, \@bind);
 }
 

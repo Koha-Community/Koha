@@ -34,7 +34,7 @@ sub loadDatas{
     $query .= "COALESCE(items.ccode, items_biblio.ccode, deleteditems.ccode, deleted_items_biblio.ccode) as collection_code, ";
     $query .= "COALESCE(items.cn_sort, items_biblio.cn_sort, deleteditems.cn_sort, deleted_items_biblio.cn_sort) as cn_sort, ";
     $query .= "COALESCE(items.barcode, items_biblio.barcode, deleteditems.barcode, deleted_items_biblio.barcode) as barcode, ";
-    $query .= 'biblio_metadata.metadata, biblioitems.publicationyear as published_year, biblioitems.biblioitemnumber, ';
+    $query .= 'biblio_metadata.metadata as marcxml, biblioitems.publicationyear as published_year, biblioitems.biblioitemnumber, ';
     $query .= 'borrowers.categorycode, borrowers.zipcode as postcode, borrowers.dateofbirth, ';
     $query .= 'borrowers.cardnumber ';
 

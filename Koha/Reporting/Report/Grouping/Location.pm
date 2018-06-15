@@ -11,8 +11,8 @@ extends 'Koha::Reporting::Report::Grouping::Abstract';
 sub BUILD {
     my $self = shift;
     $self->setName('location');
-    $self->setDescription('Location');
-    $self->setAlias('Location');
+    $self->setDescription('Shelving location');
+    $self->setAlias('Shelving location');
     $self->setDimension('location');
     $self->setField('location');
 }

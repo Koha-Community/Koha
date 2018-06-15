@@ -14,6 +14,7 @@ sub BUILD {
 
     $self->addGrouping('Koha::Reporting::Report::Grouping::Postcode');
     $self->addGrouping('Koha::Reporting::Report::Grouping::CnClass');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::CnClassFictive');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LanguageAll');
     $self->addGrouping('Koha::Reporting::Report::Grouping::AgeGroup');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');

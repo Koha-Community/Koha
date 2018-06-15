@@ -100,7 +100,7 @@ sub render {
     my $fact = $_[1];
     $self->setFactTable($fact);
     my ($headerRows, $rows) = $self->generateRows($dataRows, $fact->getDataColumn());
-    print Dumper $headerRows;
+    #print Dumper $headerRows;
 }
 
 sub generateRows {
@@ -154,7 +154,8 @@ sub generateRows {
         foreach my $group (keys $groupValues){
              my $groupArray = $groupValues->{$group};
              $groupArray = $self->uniq($groupArray);
-             $groupValues->{$group} = $groupArray;
+	     my @tmp = $self->nsort(@$groupArray); 
+             $groupValues->{$group} = \@tmp;
         }
 
         $self->setGroupsValues($groupValues);
@@ -474,5 +475,47 @@ sub uniq {
     }
     return $result;
 };
+
+sub nsort {
+    my $self = shift;
+    my($cmp, $lc);
+    return @_ if @_ < 2;
+
+    my($x, $i);
+    map
+        $_->[0],
+
+    sort {
+        $x = 0;
+        $i = 1;
+
+        while($i < @$a and $i < @$b) {
+            last if ($x = ($a->[$i] cmp $b->[$i])); # lexicographic
+            ++$i;
+
+            last if ($x = ($a->[$i] <=> $b->[$i])); # numeric
+            ++$i;
+        }
+
+        $x || (@$a <=> @$b) || ($a->[0] cmp $b->[0]);
+    }
+
+    map {
+        my @bit = ($x = defined($_) ? $_ : '');
+
+        if($x =~ m/^[+-]?(?=\d|\.\d)\d*(?:\.\d*)?(?:[Ee](?:[+-]?\d+))?\z/s) {
+            push @bit, '', $x;
+        } else {
+            while(length $x) {
+                push @bit, ($x =~ s/^(\D+)//s) ? lc($1) : '';
+                push @bit, ($x =~ s/^(\d+)//s) ?    $1  :  0;
+            }
+        }
+        \@bit;
+    }
+    @_;
+}
+
+
 
 1;

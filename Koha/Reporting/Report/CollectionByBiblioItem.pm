@@ -24,6 +24,7 @@ sub BUILD {
     $self->setGroup('oma');
 
     $self->addGrouping('Koha::Reporting::Report::Grouping::CnClass');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::CnClassFictive');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LanguageAll');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');
     $self->addGrouping('Koha::Reporting::Report::Grouping::ItemType');

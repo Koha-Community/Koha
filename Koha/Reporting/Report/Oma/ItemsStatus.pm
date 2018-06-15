@@ -25,6 +25,7 @@ sub BUILD {
 
     $self->addGrouping('Koha::Reporting::Report::Grouping::Barcode');
     $self->addGrouping('Koha::Reporting::Report::Grouping::CnClass');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::Signum');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LanguageAll');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');
     $self->addGrouping('Koha::Reporting::Report::Grouping::ItemType');
@@ -32,12 +33,14 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::Collection');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationAge');
-
+    $self->addGrouping('Koha::Reporting::Report::Grouping::PublishedYear');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::AcquiredYear');
 
     $self->addFilter('branch_category', 'Koha::Reporting::Report::Filter::BranchGroup');
     $self->addFilter('branch', 'Koha::Reporting::Report::Filter::Branch');
     $self->addFilter('location', 'Koha::Reporting::Report::Filter::Location');
     $self->addFilter('cn_class', 'Koha::Reporting::Report::Filter::CnClass::Primary');
+    $self->addFilter('signum', 'Koha::Reporting::Report::Filter::Signum');
     $self->addFilter('cn_class_fict', 'Koha::Reporting::Report::Filter::CnClass::Fictive');
     $self->addFilter('itemtype', 'Koha::Reporting::Report::Filter::Itemtype');
     $self->addFilter('language', 'Koha::Reporting::Report::Filter::LanguageAll');

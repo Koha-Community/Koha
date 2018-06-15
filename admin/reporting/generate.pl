@@ -10,12 +10,13 @@ use YAML::XS;
 use JSON;
 use Koha::Reporting::View;
 use Koha::Reporting::Import::Abstract;
+use Encode qw(encode_utf8);
 
 my $query = new CGI;
 
 my $view = new Koha::Reporting::View;
 my $reportData = $view->createReportsViewJson();
-my $reportsJson = encode_json($reportData);
+my $reportsJson = encode_utf8(encode_json($reportData));
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {

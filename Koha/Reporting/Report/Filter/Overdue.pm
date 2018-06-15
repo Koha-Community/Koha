@@ -10,7 +10,7 @@ extends 'Koha::Reporting::Report::Filter::Abstract';
 sub BUILD {
     my $self = shift;
     $self->setName('overdue');
-    $self->setDescription('Active / Overdue');
+    $self->setDescription('Valid / Outdated');
     $self->setType('multiselect');
     $self->setDimension('fact');
     $self->setField('is_overdue');
@@ -22,8 +22,8 @@ sub loadOptions{
     my $self = shift;
     my $dbh = C4::Context->dbh;
     my $options = [
-        {'name' => 'Active', 'description' => 'Active'},
-        {'name' => 'Overdue', 'description' => 'Overdue'}
+        {'name' => 'Valid', 'description' => 'Valid'},
+        {'name' => 'Outdated', 'description' => 'Outdated'}
     ];
 
     return $options;

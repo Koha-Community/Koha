@@ -11,13 +11,14 @@ use C4::Members;
 use JSON;
 use Data::Dumper;
 use Koha::Reporting::Report::Factory;
+use Encode qw(encode_utf8);
 
 my $query = new CGI;
 my $requestJson = $query->param('request_json');
 my $message;
 
 if($requestJson){
-    my $reportRequest = decode_json($requestJson);
+    my $reportRequest = decode_json(encode_utf8($requestJson));
     if($reportRequest && defined $reportRequest->{name}){
         my $rows;
         my $headerRows;
@@ -29,7 +30,9 @@ if($requestJson){
            $report->initFromRequest($reportRequest);
            @dataRows = $report->load();
            if(@dataRows){
-               $report->getRenderer()->addColumn($report->getFactTable()->getDataColumn());
+               if($report->getUseDataColumn()){
+                   $report->getRenderer()->addColumn($report->getFactTable()->getDataColumn());
+               }
                ($headerRows, $rows) = $report->getRenderer()->generateRows(\@dataRows, $report);
 
                if(@$rows){
