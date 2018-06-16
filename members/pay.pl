@@ -139,8 +139,7 @@ output_html_with_http_headers $input, $cookie, $template->output;
 sub add_accounts_to_template {
 
     my $patron = Koha::Patrons->find( $borrowernumber );
-    my $total = $patron->account->balance;
-    my $account_lines = Koha::Account::Lines->search({ borrowernumber => $borrowernumber, amountoutstanding => { '!=' => 0 } }, { order_by => ['accounttype'] });
+    my ( $total, $account_lines ) = Koha::Account->new( { patron_id => $borrowernumber } )->outstanding_debits;
     my @accounts;
     while ( my $account_line = $account_lines->next ) {
         $account_line = $account_line->unblessed;
