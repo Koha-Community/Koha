@@ -27,7 +27,7 @@
 
 <div class="searchresults">
     [% IF checkouts %]
-        <h4>Checked out [% checkouts %] times</h4>
+        <h4>Checked out [% checkouts.size %] times</h4>
         <table id="table_issues">
             <thead><tr>
             [% IF Koha.Preference('intranetreadinghistory') AND CAN_user_circulate_circulate_remaining_permissions %]
