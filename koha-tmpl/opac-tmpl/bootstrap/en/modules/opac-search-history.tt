@@ -71,7 +71,7 @@
                                                     <tr>
                                                         <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                                                         <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
-                                                        <td><a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                        <td><a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                                         <td>[% s.total | html %]</td>
                                                     </tr>
                                                 [% END %]
@@ -111,7 +111,7 @@
                                                 <tr>
                                                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                                                     <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
-                                                    <td><a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
+                                                    <td><a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;[% s.query_cgi | $raw %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a> <a href="/cgi-bin/koha/opac-search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                                                     <td>[% s.total | html %]</td>
                                                 </tr>
                                             [% END %]
