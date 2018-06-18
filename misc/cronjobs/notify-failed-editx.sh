@@ -26,11 +26,15 @@ test -e $config_file || die "No procurement config $config_file."
 
 mailto=$($xmllint --xpath '*/notifications/mailto/text()' $config_file 2> /dev/null)
 mailfrom=$($xmllint --xpath '*/notifications/mailfrom/text()' $config_file 2> /dev/null)
+
+export tmp_path=$($xmllint --xpath '*/settings/import_tmp_path/text()' $config_file 2> /dev/null)
 export failed_path=$($xmllint --xpath '*/settings/import_failed_path/text()' $config_file 2> /dev/null)
 export log_path=$($xmllint --xpath 'yazgfs/config/logdir/text()' $KOHA_CONF 2> /dev/null)
 
-test -n "$mailto" || die "No one to send notifications to in $config_file."
 test -n "$mailfrom" && mailfrom="-r $mailfrom"
+test -n "$mailto" || die "No one to send notifications to in $config_file."
+
+test -n "$tmp_path" || die "No path to incoming EDItX messages in $config_file."
 test -n "$failed_path" || die "No path to failed EDItX messages in $config_file."
 test -n "$log_path" || die "No path to logs in $KOHA_CONF."
 
@@ -62,6 +66,25 @@ if test -n "$failed_files"; then
   ) | $mailer $mailfrom -s "EDItX sanomien käsittelyssä oli ongelmia" $mailto
 
 fi
+
+# Get postponed EDItX notices and send emails
+
+export pending_files="$(ls -1 $tmp_path/* 2> /dev/null)"
+
+if test -n "$pending_files"; then
+
+  ( printf "Seuraavat EDItX sanomat odottavat edelleen käsittelyä:\n\n"
+
+    printf "$pending_files\n\n"
+
+    printf "Sanomien siirrossa aineistontoimittajalta Koha-palvelimelle on tapahtunut virhe\n"
+    printf "ja sanomat ovat puutteellisia.\n\n"
+
+    printf "Puutteelliset sanomat on jätetty hakemistoon $tmp_path.\n" 
+      
+  ) | $mailer $mailfrom -s "EDItX sanomia on jäänyt odottamaan käsittelyä" $mailto
+
+fi 
 
 # All done, exit gracefully
 exit 0
