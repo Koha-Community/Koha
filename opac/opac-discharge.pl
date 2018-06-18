@@ -37,7 +37,7 @@ unless ( C4::Context->preference('useDischarge') ) {
     exit;
 }
 
-my $op = $input->param("op") || '';
+my $op = $input->param("op") // '';
 
 # Getting the template and auth
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
@@ -52,11 +52,21 @@ if ($can_be_discharged == 0) {
     $template->param( has_checkouts => 1 );
 }
 
+my $pending = Koha::Patron::Discharge::count({
+    borrowernumber => $loggedinuser,
+    pending        => 1,
+});
+my $available = Koha::Patron::Discharge::is_discharged({borrowernumber => $loggedinuser});
+
 if ( $op eq 'request' ) {
+    if ($pending || $available) {
+        # Request already done
+        print $input->redirect("/cgi-bin/koha/opac-discharge.pl");
+        exit;
+    }
     my $success = Koha::Patron::Discharge::request({
         borrowernumber => $loggedinuser,
     });
-
     if ($success) {
         $template->param( success => 1 );
     }
@@ -65,6 +75,11 @@ if ( $op eq 'request' ) {
     }
 }
 elsif ( $op eq 'get' ) {
+    unless ($available) {
+        # No valid discharge to get
+        print $input->redirect("/cgi-bin/koha/opac-discharge.pl");
+        exit;
+    }
     eval {
 
         # Getting member data
@@ -92,18 +107,8 @@ elsif ( $op eq 'get' ) {
     }
 }
 else {
-    my $pending = Koha::Patron::Discharge::count({
-        borrowernumber => $loggedinuser,
-        pending        => 1,
-    });
-    # FIXME looks like $available is not needed
-    # If a user is discharged they have a validated discharge available
-    my $available = Koha::Patron::Discharge::count({
-        borrowernumber => $loggedinuser,
-        validated      => 1,
-    });
     $template->param(
-        available => $available && Koha::Patron::Discharge::is_discharged({borrowernumber => $loggedinuser}),
+        available => $available,
         pending   => $pending,
     );
 }
