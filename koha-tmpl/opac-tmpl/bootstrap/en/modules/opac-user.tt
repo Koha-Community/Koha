@@ -589,7 +589,9 @@ Using this account is not recommended because some parts of Koha will not functi
                                             <th class="anti-the">Title</th>
                                             <th class="psort title-string">Placed on</th>
                                             <th class="title-string">Expires on</th>
-                                            <th>Pick up location</th>
+                                            [% UNLESS( singleBranchMode) %]
+                                                <th>Pick up location</th>
+                                            [% END %]
                                             [% IF ( showpriority ) %]
                                                 <th>Priority</th>
                                             [% END %]
@@ -648,10 +650,12 @@ Using this account is not recommended because some parts of Koha will not functi
                                                     <span title="0000-00-00">-</span>
                                                 [% END %]
                                             </td>
-                                            <td class="branch">
-                                                <span class="tdlabel">Pick up location:</span>
-                                                [% RESERVE.branch.branchname %]
-                                            </td>
+                                            [% UNLESS( singleBranchMode) %]
+                                                <td class="branch">
+                                                    <span class="tdlabel">Pick up location:</span>
+                                                    [% RESERVE.branch.branchname %]
+                                                </td>
+                                            [% END %]
                                             [% IF ( showpriority ) %]
                                                  <td class="priority">
                                                     <span class="tdlabel">Priority:</span>
