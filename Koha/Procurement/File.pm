@@ -8,6 +8,7 @@ use Digest::SHA qw(sha256_base64);
 use File::Slurp;
 use File::Copy;
 use File::Basename;
+use XML::LibXML;
 
 use C4::Context;
 use Koha::Procurement::Logger;
@@ -188,6 +189,10 @@ sub fillLoadFolder {
             if($self->filterFile($tmpFile)){
                 next;
             }
+            if(!eval{XML::LibXML->new()->parse_file($fullPath)}) {
+                $self->getLogger()->log("File: $fullPath is not valid XML, processing postponed.");
+                next;
+            }
             if(!$self->fileAlreadyImported($tmpFile)){
                 if(move($fullPath, $fullLoadPath)){
                     $self->getLogger()->log("File: $fullPath moved to $fullLoadPath for import.");
@@ -249,6 +254,7 @@ sub filterFile{
     if(exists($filteredFileNamesHash{$fileName})){
         $result = 1;
     }
+    
     return $result;
 }
 
