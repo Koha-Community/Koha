@@ -118,6 +118,9 @@ else {
     $template_name = 'opac-advsearch.tt';
     $template_type = 'advsearch';
 }
+
+$format = 'rss' if $format =~ /rss/;
+
 # load the template
 ($template, $borrowernumber, $cookie) = get_template_and_user({
     template_name => $template_name,
@@ -142,7 +145,7 @@ if($cgi->cookie("bib_list")){
     @cart_list = split(/\//, $cart_list);
 }
 
-if ($format eq 'rss2' or $format eq 'opensearchdescription' or $format eq 'atom') {
+if ($format eq 'rss' or $format eq 'opensearchdescription' or $format eq 'atom') {
     $template->param($format => 1);
     $template->param(timestamp => strftime("%Y-%m-%dT%H:%M:%S-00:00", gmtime)) if ($format eq 'atom'); 
     # FIXME - the timestamp is a hack - the biblio update timestamp should be used for each
@@ -769,7 +772,7 @@ for (my $i=0;$i<@servers;$i++) {
         }
 
         ## If there's just one result, redirect to the detail page
-        if ($total == 1 && $format ne 'rss2'
+        if ($total == 1 && $format ne 'rss'
         && $format ne 'opensearchdescription' && $format ne 'atom') {
             my $biblionumber=$newresults[0]->{biblionumber};
             if (C4::Context->preference('BiblioDefaultView') eq 'isbd') {

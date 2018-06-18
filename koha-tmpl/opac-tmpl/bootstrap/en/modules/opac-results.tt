@@ -24,7 +24,7 @@
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-<link rel="alternate" type="application/rss+xml" title="[% LibraryName | html %] Search RSS feed" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
+<link rel="alternate" type="application/rss+xml" title="[% LibraryName | html %] Search RSS feed" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss" />
 </head>
 [% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='results' bodyclass='scrollto' %]
@@ -61,7 +61,7 @@
                         <p>
                             [% IF ( searchdesc ) %]
                                 No results found for that in [% LibraryName | html %] catalog.
-                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss2" class="rsssearchlink noprint">
+                                <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="rsssearchlink noprint">
                                     <i class="fa fa-rss rsssearchicon" title="Subscribe to this search"></i>
                                 </a>
                             [% ELSE %]
@@ -107,7 +107,7 @@
                                 [% END %]
                             ).
                         [% END %]
-                        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss2" class="rsssearchlink noprint">
+                        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;format=rss" class="rsssearchlink noprint">
                             <i class="fa fa-rss rsssearchicon" title="Subscribe to this search"></i>
                         </a>
                     [% END # / IF total %]
