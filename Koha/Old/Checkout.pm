@@ -21,6 +21,14 @@ use Koha::Database;
 
 use base qw(Koha::Object);
 
+=head1 NAME
+
+Koha::Old:Checkout - Koha checkout object for returned items
+
+=head1 API
+
+=head2 Class Methods
+
 =head3 item
 
 my $item = $checkout->item;
@@ -48,10 +56,6 @@ sub patron {
     my $patron_rs = $self->_result->borrower;
     return Koha::Patron->_new_from_dbic( $patron_rs );
 }
-
-
-
-
 
 sub _type {
     return 'OldIssue';
