@@ -59,6 +59,45 @@ modules:
           columnname: claims_count
         -
           columnname: claimed_date
+    basket:
+      orders:
+        -
+          columnname: basket_number
+        -
+          columnname: order_information
+        -
+          columnname: recommended_retail_price_tax_excluded
+        -
+          columnname: ecost_tax_excluded
+        -
+          columnname: recommended_retail_price_tax_included
+          is_hidden: 1
+        -
+          columnname: ecost_tax_included
+          is_hidden: 1
+        -
+          columnname: quantity
+        -
+          columnname: total_tax_excluded
+        -
+          columnname: total_tax_included
+          is_hidden: 1
+        -
+          columnname: goods_and_services_tax_percentage
+        -
+          columnname: goods_and_services_tax
+        -
+          columnname: fund
+        -
+          columnname: supplier_report
+        -
+          columnname: modify
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
+        -
+          columnname: cancel
+          cannot_be_toggled: 1
+          cannot_be_modified: 1
 
   admin:
     currency:

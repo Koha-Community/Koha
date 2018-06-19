@@ -18,6 +18,7 @@
 [% USE Branches %]
 [% USE Price %]
 [% USE AuthorisedValues %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; [% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for [% booksellername | html %]</title>
@@ -387,32 +388,28 @@
 
         <div id="acqui_basket_content" class="yui-g">
         [% IF ( books_loop ) %]
-        <h2>Orders</h2>
-        <label for="show_all_details">
-            <input type="checkbox" style="vertical-align: middle;" id="show_all_details" />
-            Show all details
-        </label>
+            <h2>Orders</h2>
             <table id="orders">
                 <thead>
                     <tr>
                         <th>No.</th>
-                        <th class="anti-the">Order</th>
-                        <th class="tax_excluded">RRP tax exc.</th>
-                        <th class="tax_excluded">ecost tax exc.</th>
-                        <th class="tax_included">RRP tax inc.</th>
-                        <th class="tax_included">ecost tax inc.</th>
-                        <th class="replacementprice">Replacement price</th>
+                        <th>Order</th>
+                        <th>RRP tax exc.</th>
+                        <th>ecost tax exc.</th>
+                        <th>RRP tax inc.</th>
+                        <th>ecost tax inc.</th>
+                        <th>Replacement price</th>
                         <th>Qty.</th>
-                        <th class="tax_excluded">Total tax exc. ([% currency | html %])</th>
-                        <th class="tax_included">Total tax inc. ([% currency | html %])</th>
+                        <th>Total tax exc. ([% currency | html %])</th>
+                        <th>Total tax inc. ([% currency | html %])</th>
                         <th>GST %</th>
                         <th>GST</th>
                         <th>Fund</th>
                         <th>Supplier report</th>
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
-                                <th>Modify</th>
-                                <th>Cancel order</th>
+                                <th class="NoSort">Modify</th>
+                                <th class="NoSort">Cancel order</th>
                             [% END %]
                         [% END %]
                     </tr>
@@ -422,14 +419,14 @@
                     <tr>
                         <th></th>
                         <th>Total (GST [% foot_loo.tax_rate * 100 | html %])</th>
-                        <th class="tax_excluded">&nbsp;</th>
-                        <th class="tax_excluded">&nbsp;</th>
-                        <th class="tax_included">&nbsp;</th>
-                        <th class="tax_included">&nbsp;</th>
-                        <th class="replacementprice">&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
+                        <th>&nbsp;</th>
                         <th>[% foot_loo.quantity | html %]</th>
-                        <th class="tax_excluded">[% foot_loo.total_tax_excluded | $Price %]</th>
-                        <th class="tax_included">[% foot_loo.total_tax_included | $Price %]</th>
+                        <th>[% foot_loo.total_tax_excluded | $Price %]</th>
+                        <th>[% foot_loo.total_tax_included | $Price %]</th>
                         <th>&nbsp;</th>
                         <th>[% foot_loo.tax_value | $Price %]</th>
                         <th>&nbsp;</th>
@@ -445,14 +442,14 @@
                 <tr>
                     <th></th>
                     <th>Total ([% currency | html %])</th>
-                    <th class="tax_excluded">&nbsp;</th>
-                    <th class="tax_excluded">&nbsp;</th>
-                    <th class="tax_included">&nbsp;</th>
-                    <th class="tax_included">&nbsp;</th>
-                    <th class="replacementprice">&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
+                    <th>&nbsp;</th>
                     <th>[% total_quantity | html %]</th>
-                    <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
-                    <th class="tax_included">[% total_tax_included | $Price %]</th>
+                    <th>[% total_tax_excluded | $Price %]</th>
+                    <th>[% total_tax_included | $Price %]</th>
                     <th>&nbsp;</th>
                     <th>[% total_tax_value | $Price %]</th>
                     <th>&nbsp;</th>
@@ -521,14 +518,14 @@
                         </td>
                         [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
                         [%# FIXME: use of a regexp is not ideal; bugs 9410 and 10929 suggest better way of handling this %]
-                        <td class="number tax_excluded [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price %]</td>
-                        <td class="number tax_excluded [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price %]</td>
-                        <td class="number tax_included [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price %]</td>
-                        <td class="number tax_included [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price %]</td>
-                        <td class="number replacementprice [% IF books_loo.replacementprice.search(zero_regex) %]error[% END %]">[% books_loo.replacementprice | $Price %]</td>
+                        <td class="number [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price | html %]</td>
+                        <td class="number [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price | html %]</td>
+                        <td class="number [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price | html %]</td>
+                        <td class="number [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price | html %]</td>
+                        <td class="number [% IF books_loo.replacementprice.search(zero_regex) %]error[% END %]">[% books_loo.replacementprice | $Price %]</td>
                         <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity | html %]</td>
-                        <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price %]</td>
-                        <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price %]</td>
+                        <td class="number [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price | html %]</td>
+                        <td class="number [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price | html %]</td>
                         <td class="number">[% books_loo.tax_rate * 100 | html %]</td>
                         <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name | html %]</td>
@@ -637,14 +634,14 @@
                         </p>
                       [% END %]
                     </td>
-                    <td class="number tax_excluded">[% order.rrp_tax_excluded | $Price %]</td>
-                    <td class="number tax_excluded">[% order.ecost_tax_excluded | $Price %]</td>
-                    <td class="number tax_included">[% order.rrp_tax_included | $Price %]</td>
-                    <td class="number tax_included">[% order.ecost_tax_included | $Price %]</td>
-                    <td class="number replacementprice">[% order.replacementprice | $Price %]</td>
+                    <td class="number">[% order.rrp_tax_excluded | $Price | html %]</td>
+                    <td class="number">[% order.ecost_tax_excluded | $Price | html %]</td>
+                    <td class="number">[% order.rrp_tax_included | $Price | html %]</td>
+                    <td class="number">[% order.ecost_tax_included | $Price | html %]</td>
+                    <td class="number">[% order.replacementprice | $Price %]</td>
                     <td class="number">[% order.quantity | html %]</td>
-                    <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
-                    <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
+                    <td class="number">[% order.total_tax_excluded | $Price | html %]</td>
+                    <td class="number">[% order.total_tax_included | $Price | html %]</td>
                     <td class="number">[% order.tax_rate * 100 | html %]</td>
                     <td class="number">[% order.tax_value | $Price %]</td>
                     <td>[% order.budget_name | html %]
@@ -763,6 +760,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     <script>
         function updateColumnsVisibility(visible) {
@@ -779,12 +777,6 @@
 
         $(document).ready(function() {
             if ( $('#toolbar').length ) {$('#toolbar').fixFloat();}
-            $("#show_all_details").click(function(){
-                updateColumnsVisibility($(this).is(":checked"));
-            });
-
-            $("#show_all_details").prop('checked', false);
-            updateColumnsVisibility(false);
             [% UNLESS ( closedate ) %]
                 $('#addtoBasket').on('show', function () {
                    $(this).find(".modal-body").html($(".acqui_basket_add")[0].outerHTML);
@@ -895,18 +887,22 @@
         [% END %]
     [% END %]
     <script>
+<<<<<<< HEAD
+=======
+        var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'basket', 'orders', 'json' ) %];
+>>>>>>> Bug 20966: Add column configuration to table of orders in a basket
         $(document).ready(function() {
-            var orderst = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "sPaginationType": "four_button",
+            KohaTable("orders", {
                 [% IF ( active ) %]
                     "aoColumnDefs": [
-                        [% UNLESS ( closedate ) %]
-                            { "aTargets": [ -1, -2 ], "bSortable": false, "bSearchable": false },
-                        [% END %]
+                        { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
                         { "sType": "anti-the", "aTargets": [ "anti-the" ] }
                     ],
                 [% END %]
-            } ) );
+                "sPaginationType": "four_button",
+                "autoWidth": false
+            }, columns_settings);
+
             var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sPaginationType": "four_button"
             } ) );
