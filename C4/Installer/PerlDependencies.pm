@@ -1022,6 +1022,11 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '0.01'
     },
+    'REST::Client' => {
+        'usage'    => 'Rest client',
+        'required' => '0',
+        'min_ver'  => '273'
+    },
     'Bytes::Random::Secure' => {
         usage => 'Core',
         required => 1,

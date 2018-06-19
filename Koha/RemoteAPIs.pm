@@ -97,8 +97,8 @@ sub remote {
 
 sub isSupportedAPI {
     my ($api) = @_;
-    return 1 if $api =~ m!Koha-Suomi|Koha-Suomi!;
-    Koha::Exception::UnknownProtocol->throw(error => "Parameter \$api '".$api."' is not supported. Supported API protocols are 'Koha-Suomi'");
+    return 1 if $api =~ m!Koha-Suomi|Koha-Suomi|Webkake!;
+    Koha::Exception::UnknownProtocol->throw(error => "Parameter \$api '".$api."' is not supported. Supported API protocols are 'Koha-Suomi, Webkake'");
 }
 
 =head2 isSupportedAuthentication
