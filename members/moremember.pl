@@ -120,6 +120,13 @@ my $error = $input->param('error');
 $template->param( error => $error ) if ( $error );
 
 my $patron        = Koha::Patrons->find($borrowernumber);
+
+if ( not defined $patron ) {
+    $template->param (unknowuser => 1);
+	output_html_with_http_headers $input, $cookie, $template->output;
+    exit;
+}
+
 my $issues        = $patron->checkouts;
 my $balance       = $patron->account->balance;
 $template->param(

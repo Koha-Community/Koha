@@ -76,6 +76,13 @@ my $issues = GetPendingIssues($member);     # FIXME: wasteful call when really, 
 my $countissues = scalar(@$issues);
 
 my $bor = C4::Members::GetMember( borrowernumber => $member );
+
+if (not defined $bor) {
+    # moremember.pl handles nonexistent borrower
+    print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member");
+    exit 0; # Exit without error
+}
+
 my $flags = C4::Members::patronflags( $bor );
 my $userenv = C4::Context->userenv;
 
