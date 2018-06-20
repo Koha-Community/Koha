@@ -139,6 +139,10 @@ CAN_user_serials_create_subscription ) %]
     <div class="btn-group"><a id="placehold" class="btn btn-default btn-sm" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
 [% END %]
 
+[% FOREACH p IN plugins %]
+	[% p.get_toolbar_button %]
+[% END %]
+
 </div>
 
     <!--Modal for Dublin Core-->
