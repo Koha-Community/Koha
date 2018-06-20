@@ -898,6 +898,11 @@ our $PERL_DEPS = {
         required => '1',
         min_ver  => '0.20',
     },
+    'CGI::Compile' => {
+       usage    => 'Plack',
+       required => '1',
+       min_ver  => '0.17'
+    },
 };
 
 1;
