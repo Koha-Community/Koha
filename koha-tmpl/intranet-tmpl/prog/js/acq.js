@@ -374,8 +374,3 @@ function hideAllColumns(){
     $("#plan td:nth-child(2),#plan th:nth-child(2)").nextUntil("th:nth-child("+(allCols-1)+"),td:nth-child("+(allCols-1)+")").hide(); // hide all but the last two columns
     $("#hideall").prop("checked", true).parent().addClass("selected");
 }
-
-$(document).ready(function() {
-    var path = location.pathname.substring(1);
-    $('#navmenulist a[href$="/' + path + '"]').css('font-weight','bold');
-});
