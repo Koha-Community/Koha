@@ -1,17 +1,4 @@
 [% USE Branches %]
-<script type="text/javascript">//<![CDATA[
-    $(document).ready(function() {
-        var path = location.pathname.substring(1);
-        var url = window.location.toString();
-        var params = '';
-        if ( url.match(/\?(.+)$/) ) {
-            params = "?" + RegExp.$1;
-        }
-        $('#navmenulist a[href$="/' + path + params + '"]').css('font-weight','bold');
-    });
-//]]>
-</script>
-
 <div id="navmenu">
     <div id="navmenulist">
 

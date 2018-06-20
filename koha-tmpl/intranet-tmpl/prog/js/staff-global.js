@@ -62,6 +62,18 @@ $.fn.selectTabByID = function (tabID) {
         e.preventDefault();
         $( $(this).data("element") ).toggle();
     });
+
+    var navmenulist = $("#navmenulist");
+    if( navmenulist.length > 0 ){
+        var path = location.pathname.substring(1);
+        var url = window.location.toString();
+        var params = '';
+        if ( url.match(/\?(.+)$/) ) {
+            params = "?" + RegExp.$1;
+        }
+        $("a[href$=\"/" + path + params + "\"]", navmenulist).addClass("current");
+    }
+
 });
 
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html
