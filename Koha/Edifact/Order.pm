@@ -580,7 +580,7 @@ sub additional_product_id {
         $product_id   = $1;
         $product_code = 'EN';
     }
-    elsif ( $isbn_field =~ m/(\d{9})[Xx\d]/ ) {
+    elsif ( $isbn_field =~ m/(\d{9}[Xx\d])/ ) {
         $product_id   = $1;
         $product_code = 'IB';
     }
