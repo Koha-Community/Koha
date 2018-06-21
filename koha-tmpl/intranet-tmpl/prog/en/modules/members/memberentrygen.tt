@@ -187,12 +187,20 @@
 		[% END %]
         [% UNLESS nosurname %]
 		<li>
-		[% IF ( mandatorysurname ) %]
-		<label for="surname" class="required">
-		[% ELSE %]
-		<label for="surname">
-		[% END %]
-		Surname: </label>
+
+        [% IF ( I ) %]
+            <label for="surname" class="required">
+                Name:
+            </label>
+        [% ELSE %]
+            [% IF ( mandatorysurname ) %]
+                <label for="surname" class="required">
+            [% ELSE %]
+                <label for="surname">
+            [% END %]
+            Surname: </label>
+        [% END %]
+
 		[% IF ( uppercasesurnames ) %]
             <input style="text-transform:uppercase;" type="text" id="surname" name="surname" size="20"  value="[% surname %]" />
 		[% ELSE %]
