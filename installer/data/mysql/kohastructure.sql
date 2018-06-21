@@ -438,8 +438,25 @@ CREATE TABLE `class_sort_rules` (
   `class_sort_rule` varchar(10) NOT NULL default '',
   `description` LONGTEXT,
   `sort_routine` varchar(30) NOT NULL default '',
+  `split_routine` varchar(30) NOT NULL default '',
+  `split_regex` varchar(255) NOT NULL default '',
   PRIMARY KEY (`class_sort_rule`),
   UNIQUE KEY `class_sort_rule_idx` (`class_sort_rule`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table `class_split_rules`
+--
+
+DROP TABLE IF EXISTS `class_split_rules`;
+
+CREATE TABLE class_split_rules (
+  class_split_rule varchar(10) NOT NULL default '',
+  description LONGTEXT,
+  split_routine varchar(30) NOT NULL default '',
+  split_regex varchar(255) NOT NULL default '',
+  PRIMARY KEY (class_split_rule),
+  UNIQUE KEY class_split_rule_idx (class_split_rule)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
@@ -452,10 +469,12 @@ CREATE TABLE `class_sources` (
   `description` LONGTEXT,
   `used` tinyint(4) NOT NULL default 0,
   `class_sort_rule` varchar(10) NOT NULL default '',
+  `class_split_rule` varchar(10) NOT NULL default '',
   PRIMARY KEY (`cn_source`),
   UNIQUE KEY `cn_source_idx` (`cn_source`),
   KEY `used_idx` (`used`),
-  CONSTRAINT `class_source_ibfk_1` FOREIGN KEY (`class_sort_rule`) REFERENCES `class_sort_rules` (`class_sort_rule`)
+  CONSTRAINT `class_source_ibfk_1` FOREIGN KEY (`class_sort_rule`) REFERENCES `class_sort_rules` (`class_sort_rule`),
+  CONSTRAINT `class_source_ibfk_2` FOREIGN KEY (`class_split_rule`) REFERENCES `class_split_rules` (`class_split_rule`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
