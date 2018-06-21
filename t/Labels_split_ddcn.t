@@ -42,7 +42,7 @@ BEGIN {
         $test_num += 4;
     }
     plan tests => $test_num;
-    use_ok('C4::Labels::Label');
+    use_ok('C4::ClassSplitRoutine::Dewey');
     use vars qw($ddcns);
 }
 
@@ -50,7 +50,8 @@ foreach my $ddcn (sort keys %$ddcns) {
     my (@parts, @expected);
     ok($ddcn, "ddcn: $ddcn");
     ok(@expected = @{$ddcns->{$ddcn}}, "split expected to produce " . scalar(@expected) . " pieces");
-    ok(@parts = C4::Labels::Label::_split_ddcn($ddcn), "C4::Labels::Label::_split_ddcn($ddcn)");
+    ok(@parts = C4::ClassSplitRoutine::Dewey::split_callnumber($ddcn), "Dewey::split_callnumber($ddcn)");
+
     ok(scalar(@expected) == scalar(@parts), sprintf("%d of %d pieces produced", scalar(@parts), scalar(@expected)));
     my $i = 0;
     foreach my $unit (@expected) {

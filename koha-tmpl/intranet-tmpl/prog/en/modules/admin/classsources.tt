@@ -16,6 +16,14 @@
 
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
+<style type="text/css">
+    #button_add,
+    .split_regex,
+    .split_callnumber
+    {
+        padding-left: 10em;
+    }
+</style>
 </head>
 
 <body id="admin_classsources" class="admin">
@@ -233,12 +241,33 @@
            </select>
            <span class="required">Required</span>
        </li>
-       <li id="regex_block">
-           <label for="split_regex" class="required">Regular expression: </label>
-           <input type="text" name="split_regex" id="split_regex" value="[% split_rule.split_regex | html %]" />
-           <span class="required">Required</span>
-       </li>
-
+        <li id="regex_block">
+            <label for="split_regex" class="required">Regular expression: </label>
+            <div>
+                [% IF split_rule %]
+                    [% FOR re IN split_rule.regexs %]
+                        <div class="split_regex">
+                            <input type="text" name="split_regex" id="split_regex" value="[% re | html %]" />
+                            <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash"></i>Delete</a>
+                        </div>
+                    [% END %]
+                [% ELSE %]
+                    <div class="split_regex">
+                        <input type="text" name="split_regex" id="split_regex" value="" />
+                    </div>
+                [% END %]
+            </div>
+            <div id="button_add">
+                <a href="#" class="add_regex" title="Add a new regular expression"><i class="fa fa-fw fa-plus"></i> New</a>
+                <span class="required">Required</span>
+            </div>
+            <label for="callnumbers">Test the regular expressions:</label>
+            <div id="test_split">
+                <textarea name="callnumbers"></textarea>
+                <button name="test_split_cns">Test</button>
+                <div id="result_split_callnumbers"></div>
+            </div>
+        </li>
     </ol>
   </fieldset>
     <fieldset class="action">
@@ -349,6 +378,26 @@
                 $("#split_regex").removeAttr('required');
             }
         };
+        function update_delete_links_visibility() {
+            if( $("div.split_regex").length > 1 ) {
+                $("div.split_regex").find('a.del_regex').show();
+            } else {
+                $("div.split_regex").find('a.del_regex').hide();
+            }
+        }
+
+        function add_regex() {
+            var div_node = $("div.split_regex:last");
+            var div_clone = $(div_node).clone(true);
+            $(div_clone).find("input").val("");
+            $(div_node).after(div_clone);
+            update_delete_links_visibility();
+        }
+        function del_regex(a_node) {
+            $(a_node).parent('div').remove();
+            update_delete_links_visibility();
+        }
+
         $(document).ready(function(){
             update_regex_block();
             $("#split_routine").on("change", function(){
@@ -363,6 +412,35 @@
             });
             $(".delete_split_rule").on("click", function(e){
                 return confirm(_("Are you sure you want to delete this splitting rule?"));
+            });
+
+            $(".add_regex").on("click", function(e){
+                e.preventDefault();
+                add_regex();
+            });
+            $(".del_regex").on("click", function(e){
+                e.preventDefault();
+                del_regex(this);
+            });
+
+            $("button[name='test_split_cns']").on("click", function(e){
+                e.preventDefault();
+                var regexs = [];
+                $("input[name='split_regex']").each(function(){
+                    regexs.push($(this).val());
+                });
+                var callnumbers = $("textarea[name='callnumbers']").val();
+                $.getJSON('/cgi-bin/koha/svc/split_callnumbers', {regexs: JSON.stringify(regexs), callnumbers: callnumbers}, function(answer){
+                    var callnumbers = answer['split_callnumbers'];
+                    $("#result_split_callnumbers").html('');
+                    var list_node = $('<ol></ol>');
+                    $(callnumbers).each(function(){
+                        var split_cn = this['split'].join('<br/>');
+                        var li_node = $('<li><label>'+this['inline']+'</label><div class="split_callnumber">'+split_cn+'</div></li>');
+                        $(list_node).append(li_node);
+                    });
+                    $("#result_split_callnumbers").append(list_node);
+                }).fail(function(){alert("Something went wrong.")});
             });
         });
 

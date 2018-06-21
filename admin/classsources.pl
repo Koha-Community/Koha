@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Koha;
 use C4::ClassSource;
 use C4::ClassSortRoutine;
+use C4::ClassSplitRoutine;
 use Koha::ClassSources;
 use Koha::ClassSortRules;
 use Koha::ClassSplitRules;
@@ -40,7 +41,7 @@ my $class_sort_rule  = $input->param('class_sort_rule');
 my $class_split_rule = $input->param('class_split_rule');
 my $sort_routine     = $input->param('sort_routine');
 my $split_routine    = $input->param('split_routine');
-my $split_regex      = $input->param('split_regex');
+my @split_regex      = $input->multi_param('split_regex');
 my $description      = $input->param('description');
 my $used             = $input->param('used');
 
@@ -194,16 +195,20 @@ elsif ( $op eq "add_split_rule" ) {
 }
 elsif ( $op eq "add_split_rule_validate" ) {
     my $split_rule = Koha::ClassSplitRules->find($class_split_rule);
+
+    @split_regex =  grep {!/^$/} @split_regex; # Remove empty
     if ($split_rule) {
         $split_rule->set(
             {
                 description   => $description,
                 split_routine => $split_routine,
-                split_regex =>
-                  ( $split_routine eq 'RegEx' ? $split_regex : '' ),
             }
         );
-        eval { $split_rule->store; };
+        eval {
+            $split_rule->regexs(\@split_regex)
+                if $split_routine eq 'RegEx';
+            $split_rule->store;
+        };
         if ($@) {
             push @messages,
               { type => 'error', code => 'error_on_update_split_rule' };
@@ -220,8 +225,7 @@ elsif ( $op eq "add_split_rule_validate" ) {
                 class_split_rule => $class_split_rule,
                 description      => $description,
                 split_routine    => $split_routine,
-                split_regex =>
-                  ( $split_routine eq 'RegEx' ? $split_regex : '' ),
+                regexs           => \@split_regex,
             }
         );
         eval { $split_rule->store; };
@@ -273,11 +277,6 @@ sub get_class_sort_routines {
 }
 
 sub get_class_split_routines {
-    my @split_routines = qw(
-      Dewey
-      Generic
-      LCC
-      RegEx
-    );
+    my @split_routines = GetSplitRoutineNames();
     return \@split_routines;
 }

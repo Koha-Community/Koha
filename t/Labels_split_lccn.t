@@ -20,6 +20,7 @@
 use strict;
 use warnings;
 
+use C4::ClassSplitRoutine::LCC;
 use Test::More;
 
 BEGIN {
@@ -52,7 +53,7 @@ foreach my $lccn (sort keys %$lccns) {
     my (@parts, @expected);
     ok($lccn, "lccn: $lccn");
     ok(@expected = @{$lccns->{$lccn}}, "split expected to produce " . scalar(@expected) . " pieces");
-    ok(@parts = C4::Labels::Label::_split_lccn($lccn), "C4::Labels::Label::_split_lccn($lccn)");
+    ok(@parts = C4::ClassSplitRoutine::LCC::split_callnumber($lccn), "split LCC ($lccn)");
     ok(scalar(@expected) == scalar(@parts), sprintf("%d of %d pieces produced", scalar(@parts), scalar(@expected)));
     my $i = 0;
     foreach my $unit (@expected) {

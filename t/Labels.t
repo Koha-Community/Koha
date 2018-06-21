@@ -20,6 +20,7 @@
 use strict;
 use warnings;
 
+use C4::ClassSplitRoutine::LCC;
 use Test::More tests => 11;
 
 BEGIN {
@@ -62,4 +63,4 @@ Q
 
 ok(C4::Labels::Label::_get_text_fields(), 'test getting textx fields');
 
-is(C4::Labels::Label::_split_lccn(),"0", 'test when _split_lccn is null');
+is(C4::ClassSplitRoutine::LCC::split_callnumber(),"0", 'test when split LCC is null');

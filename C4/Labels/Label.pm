@@ -7,15 +7,18 @@ use Text::Wrap;
 use Algorithm::CheckDigits;
 use Text::CSV_XS;
 use Data::Dumper;
-use Library::CallNumber::LC;
 use Text::Bidi qw( log2vis );
 
 use C4::Context;
 use C4::Debug;
 use C4::Biblio;
-
-
-my $possible_decimal = qr/\d{3,}(?:\.\d+)?/; # at least three digits for a DDCN
+use Koha::ClassSources;
+use Koha::ClassSortRules;
+use Koha::ClassSplitRules;
+use C4::ClassSplitRoutine::Dewey;
+use C4::ClassSplitRoutine::LCC;
+use C4::ClassSplitRoutine::Generic;
+use C4::ClassSplitRoutine::RegEx;
 
 sub _check_params {
     my $given_params = {};
@@ -119,67 +122,6 @@ sub _get_text_fields {
     my $error = $csv->error_input();
     warn sprintf('Text field sort failed with this error: %s', $error) if $error;
     return \@sorted_fields;
-}
-
-
-sub _split_lccn {
-    my ($lccn) = @_;
-    $_ = $lccn;
-    # lccn examples: 'HE8700.7 .P6T44 1983', 'BS2545.E8 H39 1996';
-    my @parts = Library::CallNumber::LC->new($lccn)->components();
-    unless (scalar @parts && defined $parts[0])  {
-        $debug and warn sprintf('regexp failed to match string: %s', $_);
-        @parts = $_;     # if no match, just use the whole string.
-    }
-    my $LastPiece = pop @parts;
-    push @parts, split /\s+/, $LastPiece if $LastPiece;   # split the last piece into an arbitrary number of pieces at spaces
-    $debug and warn "split_lccn array: ", join(" | ", @parts), "\n";
-    return @parts;
-}
-
-sub _split_ddcn {
-    my ($ddcn) = @_;
-    $_ = $ddcn;
-    s/\///g;   # in theory we should be able to simply remove all segmentation markers and arrive at the correct call number...
-    my (@parts) = m/
-        ^([-a-zA-Z]*\s?(?:$possible_decimal)?) # R220.3  CD-ROM 787.87 # will require extra splitting
-        \s+
-        (.+)                               # H2793Z H32 c.2 EAS # everything else (except bracketing spaces)
-        \s*
-        /x;
-    unless (scalar @parts)  {
-        warn sprintf('regexp failed to match string: %s', $_);
-        push @parts, $_;     # if no match, just push the whole string.
-    }
-
-    if ($parts[0] =~ /^([-a-zA-Z]+)\s?($possible_decimal)$/) {
-          shift @parts;         # pull off the mathching first element, like example 1
-        unshift @parts, $1, $2; # replace it with the two pieces
-    }
-
-    push @parts, split /\s+/, pop @parts;   # split the last piece into an arbitrary number of pieces at spaces
-    $debug and print STDERR "split_ddcn array: ", join(" | ", @parts), "\n";
-    return @parts;
-}
-
-## NOTE: Custom call number types go here. It may be necessary to create additional splitting algorithms if some custom call numbers
-##      cannot be made to work here. Presently this splits standard non-ddcn, non-lccn fiction and biography call numbers.
-
-sub _split_ccn {
-    my ($fcn) = @_;
-    my @parts = ();
-    # Split call numbers based on spaces
-    push @parts, split /\s+/, $fcn;   # split the call number into an arbitrary number of pieces at spaces
-    if ($parts[-1] !~ /^.*\d-\d.*$/ && $parts[-1] =~ /^(.*\d+)(\D.*)$/) {
-        pop @parts;            # pull off the matching last element
-        push @parts, $1, $2;    # replace it with the two pieces
-    }
-    unless (scalar @parts) {
-        warn sprintf('regexp failed to match string: %s', $_);
-        push (@parts, $_);
-    }
-    $debug and print STDERR "split_ccn array: ", join(" | ", @parts), "\n";
-    return @parts;
 }
 
 sub _get_barcode_data {
@@ -400,6 +342,14 @@ sub draw_label_text {
     # FIXME - returns all items, so you can't get data from an embedded holdings field.
     # TODO - add a GetMarcBiblio1item(bibnum,itemnum) or a GetMarcItem(itemnum).
     my $cn_source = ($item->{'cn_source'} ? $item->{'cn_source'} : C4::Context->preference('DefaultClassificationSource'));
+    my $class_source = Koha::ClassSources->find( $cn_source );
+    my ( $split_routine, $regexs );
+    if ($class_source) {
+        my $class_split_rule = Koha::ClassSplitRules->find( $class_source->class_split_rule );
+        $split_routine = $class_split_rule->split_routine;
+        $regexs        = $class_split_rule->regexs;
+    }
+    else { $split_routine = $cn_source }
     LABEL_FIELDS:       # process data for requested fields on current label
     for my $field (@$label_fields) {
         if ($field->{'code'} eq 'itemtype') {
@@ -429,14 +379,18 @@ sub draw_label_text {
         # Fields which hold call number data  FIXME: ( 060? 090? 092? 099? )
         my @callnumber_list = qw(itemcallnumber 050a 050b 082a 952o 995k);
         if ((grep {$field->{'code'} =~ m/$_/} @callnumber_list) and ($self->{'printing_type'} eq 'BIB') and ($self->{'callnum_split'})) { # If the field contains the call number, we do some sp
-            if ($cn_source eq 'lcc' || $cn_source eq 'nlm') { # NLM and LCC should be split the same way
-                @label_lines = _split_lccn($field_data);
-                @label_lines = _split_ccn($field_data) if !@label_lines;    # If it was not a true lccn, try it as a custom call number
-                push (@label_lines, $field_data) if !@label_lines;         # If it was not that, send it on unsplit
-            } elsif ($cn_source eq 'ddc') {
-                @label_lines = _split_ddcn($field_data);
-                @label_lines = _split_ccn($field_data) if !@label_lines;
-                push (@label_lines, $field_data) if !@label_lines;
+            if ($split_routine eq 'LCC' || $split_routine eq 'nlm') { # NLM and LCC should be split the same way
+                @label_lines = C4::ClassSplitRoutine::LCC::split_callnumber($field_data);
+                @label_lines = C4::ClassSplitRoutine::Generic::split_callnumber($field_data) unless @label_lines; # If it was not a true lccn, try it as a custom call number
+                push (@label_lines, $field_data) unless @label_lines;         # If it was not that, send it on unsplit
+            } elsif ($split_routine eq 'Dewey') {
+                @label_lines = C4::ClassSplitRoutine::Dewey::split_callnumber($field_data);
+                @label_lines = C4::ClassSplitRoutine::Generic::split_callnumber($field_data) unless @label_lines;
+                push (@label_lines, $field_data) unless @label_lines;
+            } elsif ($split_routine eq 'RegEx' ) {
+                @label_lines = C4::ClassSplitRoutine::RegEx::split_callnumber($field_data, $regexs);
+                @label_lines = C4::ClassSplitRoutine::Generic::split_callnumber($field_data) unless @label_lines;
+                push (@label_lines, $field_data) unless @label_lines;
             } else {
                 warn sprintf('Call number splitting failed for: %s. Please add this call number to bug #2500 at bugs.koha-community.org', $field_data);
                 push @label_lines, $field_data;
