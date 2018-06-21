@@ -577,13 +577,17 @@
                                     <thead>
                                         <tr>
                                             <th class="anti-the">Title</th>
-                                            <th class="psort title-string">Placed on</th>
+                                            [% IF ( showpriority ) %]
+                                                <th class="title-string">Placed on</th>
+                                            [% ELSE %]
+                                                <th class="psort title-string">Placed on</th>
+                                            [% END %]
                                             <th class="title-string">Expires on</th>
                                             [% UNLESS( singleBranchMode) %]
                                                 <th>Pick up location</th>
                                             [% END %]
                                             [% IF ( showpriority ) %]
-                                                <th>Priority</th>
+                                                <th class="psort">Priority</th>
                                             [% END %]
                                             <th>Status</th>
                                             [% IF SuspendHoldsOpac %]
@@ -647,7 +651,7 @@
                                                 </td>
                                             [% END %]
                                             [% IF ( showpriority ) %]
-                                                 <td class="priority">
+                                                 <td data-order="[% RESERVE.priority %]" class="priority">
                                                     <span class="tdlabel">Priority:</span>
                                                     [% RESERVE.priority %]
                                                 </td>
