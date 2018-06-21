@@ -25,7 +25,7 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do(q|
             INSERT INTO class_split_rules(class_split_rule, description, split_routine)
             VALUES
-            ('dewey', 'Default sorting rules for DDC', 'dewey'),
+            ('dewey', 'Default sorting rules for DDC', 'Dewey'),
             ('lcc', 'Default sorting rules for LCC', 'LCC'),
             ('generic', 'Generic call number sorting rules', 'Generic')
         |);
