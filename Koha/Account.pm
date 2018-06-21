@@ -476,10 +476,11 @@ sub non_issues_charges {
 =cut
 
 our $offset_type = {
-    'credit'   => 'Payment',
-    'forgiven' => 'Writeoff',
-    'payment'  => 'Payment',
-    'writeoff' => 'Writeoff'
+    'credit'           => 'Payment',
+    'forgiven'         => 'Writeoff',
+    'lost_item_return' => 'Lost Item Return',
+    'payment'          => 'Payment',
+    'writeoff'         => 'Writeoff'
 };
 
 =head3 $account_type
@@ -487,10 +488,11 @@ our $offset_type = {
 =cut
 
 our $account_type = {
-    'credit'   => 'C',
-    'forgiven' => 'FOR',
-    'payment'  => 'Pay',
-    'writeoff' => 'W'
+    'credit'           => 'C',
+    'forgiven'         => 'FOR',
+    'lost_item_return' => 'CR',
+    'payment'          => 'Pay',
+    'writeoff'         => 'W'
 };
 
 =head1 AUTHOR
