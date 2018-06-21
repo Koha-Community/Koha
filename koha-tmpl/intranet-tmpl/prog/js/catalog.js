@@ -35,7 +35,7 @@ function confirm_deletion() {
         if( order_manage_permission ){
             is_confirmed = confirm( CONFIRM_IN_DELETED_ORDERS.format(countdeletedorders) );
         } else {
-            is_confirmed = alert( MSG_IN_DELTED_ORDERS.format(countdeletedorders) );
+            is_confirmed = alert( MSG_IN_DELETED_ORDERS.format(countdeletedorders) );
         }
     } else if ( holdcount > 0 ) {
         is_confirmed = confirm( CONFIRM_DELETION_HOLDS.format(holdcount) );
