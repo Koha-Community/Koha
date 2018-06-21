@@ -44,6 +44,7 @@ use C4::Members;
 
 use MARC::File::XML;
 use URI::Escape;
+use MIME::Base64 qw(decode_base64url encode_base64url);
 
 our $dbh = C4::Context->dbh;
 
@@ -467,7 +468,7 @@ my $cookieitemrecord;
 if ($prefillitem) {
     my $lastitemcookie = $input->cookie('LastCreatedItem');
     if ($lastitemcookie) {
-        $lastitemcookie = uri_unescape($lastitemcookie);
+        $lastitemcookie = decode_base64url($lastitemcookie);
         eval {
             if ( thaw($lastitemcookie) ) {
                 $cookieitemrecord = thaw($lastitemcookie);
@@ -476,7 +477,7 @@ if ($prefillitem) {
         };
         if ($@) {
             $lastitemcookie = 'undef' unless $lastitemcookie;
-            warn "Storable::thaw failed to thaw LastCreatedItem-cookie. Cookie value '$lastitemcookie'. Caught error follows: '$@'";
+            warn "Storable::thaw failed to thaw LastCreatedItem-cookie. Cookie value '".encode_base64url($lastitemcookie)."'. Caught error follows: '$@'";
         }
     }
 }
@@ -532,8 +533,8 @@ if ($op eq "additem") {
             if ($prefillitem && defined $record) {
                 my $itemcookie = $input->cookie(
                     -name => 'LastCreatedItem',
-                    # We uri_escape the whole freezed structure so we're sure we won't have any encoding problems
-                    -value   => uri_escape_utf8( freeze( $record ) ),
+                    # We encode_base64url the whole freezed structure so we're sure we won't have any encoding problems
+                    -value   => encode_base64url( freeze( $record ) ),
                     -HttpOnly => 1,
                     -expires => ''
                 );
