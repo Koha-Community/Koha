@@ -224,10 +224,10 @@
         // We show table ordered by descending dates by default
         // (so that the more recent query is shown first)
         $(".historyt").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [[ 1, "desc" ]],
-            "aoColumnDefs": [
-                { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-                { "aTargets": [ 1 ], "sType": "title-string" },
+            "order": [[ 1, "desc" ]],
+            "columnDefs": [
+                { "targets": [ 0 ], "sortable": false, "searchable": false },
+                { "targets": [ 1 ], "type": "title-string" },
             ]
         }));
 

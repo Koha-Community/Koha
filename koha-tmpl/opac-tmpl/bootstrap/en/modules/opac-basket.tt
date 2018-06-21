@@ -6,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your cart</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% BLOCK cssinclude %]<style type="text/css">.item-status { display: inline; } @media print { body { height: 99%; } }</style>[% END %]
+[% BLOCK cssinclude %]<style type="text/css">.item-status, .dt-buttons { display: inline; } @media print { body { height: 99%; } }</style>[% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='basket' %]
     <div class="main">
@@ -25,9 +25,11 @@
                                     <a class="send" href="opac-basket.pl">Send</a>
                                 [% END %]
                                 <a class="download" href="opac-basket.pl">Download</a>
-                                <a class="print-large" href="#">Print</a>
                                 <a class="empty" href="opac-basket.pl">Empty and close</a>
                                 <a class="hide close" href="opac-basket.pl">Hide window</a>
+                                [% IF ( verbose ) %]
+                                    <a class="print-large" href="#">Print</a>
+                                [% END %]
                             </div>
 
                             <div id="selections-toolbar" class="toolbar">
@@ -425,19 +427,26 @@
                     return false;
                 });
 
-                $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aaSorting": [[ 1, "asc" ]],
-                    "aoColumnDefs": [
-                      { "aTargets": [ 0,-1 ], "bSortable": false, "bSearchable": false }
+                var itemst = $("#itemst").dataTable($.extend(true, {}, dataTablesDefaults, {
+                    "order": [[ 1, "asc" ]],
+                    "columnDefs": [
+                      { "targets": [ 0,-1 ], "sortable": false, "searchable": false }
                     ],
-                    "aoColumns": [
+                    "columns": [
                         null,
-                        { "sType": "anti-the" },
+                        { "type": "anti-the" },
                         null,
                         null,
                         null
-                    ]
+                    ],
+
                 }));
+
+                var buttons = new $.fn.dataTable.Buttons(itemst, {
+                     buttons: [
+                        'print'
+                    ]
+                }).container().appendTo($('#toolbar'));
 
                 $(".cb").change(function(){
                     selRecord( $(this).val(), $(this).prop("checked") );

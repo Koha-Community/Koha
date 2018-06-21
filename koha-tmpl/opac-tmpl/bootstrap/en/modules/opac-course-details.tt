@@ -108,10 +108,10 @@
     <script>
     $(document).ready(function() {
         $("#course-items-table").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sDom": '<"top"flp>rt<"clear">',
-            "aoColumnDefs": [
-                { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] }
+            "dom": '<"top"flp>rt<"clear">',
+            "columnDefs": [
+                { "type": "anti-the", "targets" : [ "anti-the" ] },
+                { "type": "title-string", "targets" : [ "title-string" ] }
             ]
         }));
     });

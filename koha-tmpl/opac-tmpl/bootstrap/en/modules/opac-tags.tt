@@ -200,14 +200,14 @@
         });
 
         $("#mytagst").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [[ 2, "asc" ]],
-            "aoColumnDefs": [
-              { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }
+            "sorting": [[ 2, "asc" ]],
+            "columnDefs": [
+              { "targets": [ 0 ], "sortable": false, "searchable": false }
             ],
-            "aoColumns": [
+            "columns": [
                 null,
-                { "sType": "anti-the" },
-                { "sType": "title-string" },
+                { "type": "anti-the" },
+                { "type": "title-string" },
                 null
             ]
         }));

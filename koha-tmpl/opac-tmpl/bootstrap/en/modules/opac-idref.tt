@@ -53,9 +53,9 @@
 <script>
   $(document).ready(function (){
       $("table").dataTable($.extend(true, {}, dataTablesDefaults, {
-          'bFilter': false,
-          'aoColumnDefs': [
-              { 'aTargets': [-1, -2], 'bSortable': false }
+          'filter': false,
+          'columnDefs': [
+              { 'targets': [-1, -2], 'sortable': false }
           ],
       }));
 

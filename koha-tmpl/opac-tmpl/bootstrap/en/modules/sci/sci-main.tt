@@ -195,7 +195,6 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-    [% INCLUDE 'datatables.inc' %]
     <script>
 
         function mungeHistory() {
@@ -221,7 +220,7 @@
                 var barcode = $('#barcode_input').val();
                 //var result  = validate_barcode( barcode );
                 $('#sci_barcodes_table tbody').append(
-                        '<tr stype="font-size: initial;"><td>' +
+                        '<tr style="font-size: initial;"><td>' +
                             barcode +
                             '<input type="hidden" name="barcode" value="' + barcode + '" />' +
                         '</td></tr>' );

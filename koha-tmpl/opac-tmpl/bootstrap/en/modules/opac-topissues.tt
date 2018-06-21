@@ -101,14 +101,14 @@
 //<![CDATA[
     $(function() {
         $("#topissuest").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [ [2, "desc"], [0, "asc"] ],
-            "aoColumnDefs": [
-              [% IF ( opacuserlogin ) %]{ "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }[% END %]
+            "sorting": [ [2, "desc"], [0, "asc"] ],
+            "columnDefs": [
+              [% IF ( opacuserlogin ) %]{ "targets": [ -1 ], "sortable": false, "searchable": false }[% END %]
             ],
-            "aoColumns": [
-                { "sType": "anti-the" },
+            "columns": [
+                { "type": "anti-the" },
                 null,
-                { "sType": "title-numeric" },
+                { "type": "title-numeric" },
                 [% IF ( opacuserlogin ) %]null,[% END %]
             ]
         }));

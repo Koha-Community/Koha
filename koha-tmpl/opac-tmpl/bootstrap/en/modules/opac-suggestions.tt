@@ -294,13 +294,13 @@
 
     $(function() {
         $("#suggestt").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aaSorting": [[ 1, "asc" ]],
-            "aoColumnDefs": [
-              [% IF ( loggedinusername ) %]{ "aTargets": [ 0 ], "bSortable": false, "bSearchable": false }[% END %]
+            "order": [[ 1, "asc" ]],
+            "columnDefs": [
+              [% IF ( loggedinusername ) %]{ "targets": [ 0 ], "sortable": false, "searchable": false }[% END %]
             ],
-            "aoColumns": [
+            "columns": [
                 [% IF ( loggedinusername ) %]null,[% END %]
-                { "sType": "anti-the" },
+                { "type": "anti-the" },
                 null,
                 null,
                 [% IF Koha.Preference( 'OPACViewOthersSuggestions' ) == 1 %]null,[% END %]

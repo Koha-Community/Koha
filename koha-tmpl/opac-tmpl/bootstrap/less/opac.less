@@ -1336,7 +1336,8 @@ input.hold.disabled,
 input.editshelf,
 .newshelf,
 .newshelf.disabled,
-.deleteshelf {
+.deleteshelf,
+.buttons-print {
     background-image: url("../images/sprite.png");
     background-repeat: no-repeat;
 }
@@ -1439,8 +1440,9 @@ a.print-small {
     padding-left : 30px;
 }
 
-a.print-large {
-    background-position : -5px -186px; /* Toolbar print */
+a.print-large,
+.buttons-print {
+    background-position : 0 -187px; /* Toolbar print */
     text-decoration : none;
     padding-left : 35px;
 }
@@ -1572,6 +1574,13 @@ input.editshelf {
     label {
         display : inline;
     }
+}
+
+.buttons-print {
+    background-position-y: -184px;
+    border: 0;
+    color: #0076B2;
+    font-size: 100%;
 }
 
 .branch-info-tooltip {

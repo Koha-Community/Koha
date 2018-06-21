@@ -160,12 +160,12 @@
                 $(this).addClass("currentsubtab");
             });
             $(".subscriptionstclass").dataTable($.extend(true, {}, dataTablesDefaults, {
-                "aaSorting": [[ 0, "desc" ]],
-                "aoColumns": [
-                    { "sType": "title-string" },
+                "order": [[ 0, "desc" ]],
+                "columns": [
+                    { "type": "title-string" },
                     null,
                     null,
-                    { "sType": "title-string" },
+                    { "type": "title-string" },
                     null,
                     null,
                     null

@@ -6,26 +6,26 @@
 //      // other settings
 //  } ) );
 var dataTablesDefaults = {
-    "oLanguage": {
-        "oPaginate": {
-            "sFirst"    : window.MSG_DT_FIRST || "First",
-            "sLast"     : window.MSG_DT_LAST || "Last",
-            "sNext"     : window.MSG_DT_NEXT || "Next",
-            "sPrevious" : window.MSG_DT_PREVIOUS || "Previous"
+    "language": {
+        "paginate": {
+            "first"    : window.MSG_DT_FIRST || "First",
+            "last"     : window.MSG_DT_LAST || "Last",
+            "next"     : window.MSG_DT_NEXT || "Next",
+            "previous" : window.MSG_DT_PREVIOUS || "Previous"
         },
-        "sEmptyTable"       : window.MSG_DT_EMPTY_TABLE || "No data available in table",
-        "sInfo"             : window.MSG_DT_INFO || "Showing _START_ to _END_ of _TOTAL_ entries",
-        "sInfoEmpty"        : window.MSG_DT_INFO_EMPTY || "No entries to show",
-        "sInfoFiltered"     : window.MSG_DT_INFO_FILTERED || "(filtered from _MAX_ total entries)",
-        "sLengthMenu"       : window.MSG_DT_LENGTH_MENU || "Show _MENU_ entries",
-        "sLoadingRecords"   : window.MSG_DT_LOADING_RECORDS || "Loading...",
-        "sProcessing"       : window.MSG_DT_PROCESSING || "Processing...",
-        "sSearch"           : window.MSG_DT_SEARCH || "Search:",
-        "sZeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found"
+        "emptyTable"       : window.MSG_DT_EMPTY_TABLE || "No data available in table",
+        "info"             : window.MSG_DT_INFO || "Showing _START_ to _END_ of _TOTAL_ entries",
+        "infoEmpty"        : window.MSG_DT_INFO_EMPTY || "No entries to show",
+        "infoFiltered"     : window.MSG_DT_INFO_FILTERED || "(filtered from _MAX_ total entries)",
+        "lengthMenu"       : window.MSG_DT_LENGTH_MENU || "Show _MENU_ entries",
+        "loadingRecords"   : window.MSG_DT_LOADING_RECORDS || "Loading...",
+        "processing"       : window.MSG_DT_PROCESSING || "Processing...",
+        "search"           : window.MSG_DT_SEARCH || "Search:",
+        "zeroRecords"      : window.MSG_DT_ZERO_RECORDS || "No matching records found"
     },
-    // "aaSorting": [$(" - select row position of th -")],
-    "sDom": 't',
-    "bPaginate": false,
+    // "sorting": [$(" - select row position of th -")],
+    "dom": 't',
+    "paginate": false,
     // "fnHeaderCallback": function() {
     //     return $('th.sorting.nosort,th.sorting_desc.nosort,th.sorting_asc.nosort').removeClass("sorting sorting_desc sorting_asc").unbind("click");
     // }
@@ -36,12 +36,12 @@ var dataTablesDefaults = {
  * Ex: <td><span title="[% ISO_date %]">[% formatted_date %]</span></td>
  *
  * In DataTables config:
- *     "aoColumns": [
- *        { "sType": "title-string" },
+ *     "columns": [
+ *        { "type": "title-string" },
  *      ]
  * http://datatables.net/plug-ins/sorting#hidden_title_string
  */
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+jQuery.extend( jQuery.fn.dataTableExt.sort, {
     "title-string-pre": function ( a ) {
         return a.match(/title="(.*?)"/)[1].toLowerCase();
     },
@@ -60,14 +60,13 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
  * Ex: <td><span title="[% total %]">Total: [% total %]</span></td>
  *
  * In DataTables config:
- *     "aoColumns": [
- *        { "sType": "title-numeric" }
+ *     "columns": [
+ *        { "type": "title-numeric" }
  *     ]
  * http://legacy.datatables.net/plug-ins/sorting#hidden_title
  */
-jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+jQuery.extend( jQuery.fn.dataTableExt.sort, {
     "title-numeric-pre": function ( a ) {
-        console.log(a);
         var x = a.match(/title="*(-?[0-9\.]+)/)[1];
         return parseFloat( x );
     },
@@ -86,8 +85,8 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
     /* Plugin to allow text sorting to ignore articles
      *
      * In DataTables config:
-     *     "aoColumns": [
-     *        { "sType": "anti-the" },
+     *     "columns": [
+     *        { "type": "anti-the" },
      *      ]
      * Based on the plugin found here:
      * http://datatables.net/plug-ins/sorting#anti_the
@@ -106,7 +105,7 @@ jQuery.extend( jQuery.fn.dataTableExt.oSort, {
         var re = new RegExp(rpattern, "i");
     }
 
-    jQuery.extend( jQuery.fn.dataTableExt.oSort, {
+    jQuery.extend( jQuery.fn.dataTableExt.sort, {
         "anti-the-pre": function ( a ) {
             var x = String(a).replace( /<[\s\S]*?>/g, "" );
             var y = x.trim();

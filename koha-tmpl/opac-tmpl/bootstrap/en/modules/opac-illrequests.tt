@@ -222,10 +222,10 @@
 <script>
     //<![CDATA[
         $("#illrequestlist").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "aoColumnDefs": [
-                { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false }
+            "columnDefs": [
+                { "targets": [ -1 ], "sortable": false, "searchable": false }
             ],
-            "aaSorting": [[ 3, "desc" ]],
+            "order": [[ 3, "desc" ]],
             "deferRender": true
         }));
         $("#backend-dropdown-options").removeClass("nojs");

@@ -190,8 +190,8 @@
 $( document ).ready(function() {
 
     $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "aoColumnDefs": [
-             { "sType": "title-string", "aTargets" : [ "title-string" ] }
+        "columnDefs": [
+             { "type": "title-string", "targets" : [ "title-string" ] }
          ]
     } ));
 

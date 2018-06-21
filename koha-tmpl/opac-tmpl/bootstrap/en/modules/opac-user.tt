@@ -911,11 +911,11 @@
             dTables.each(function(){
                 var thIndex = $(this).find("th.psort").index();
                 $(this).dataTable($.extend(true, {}, dataTablesDefaults, {
-                    "aaSorting" : [[ thIndex, 'asc' ]],
-                    "aoColumnDefs": [
-                        { "aTargets": [ "nosort" ],"bSortable": false,"bSearchable": false },
-                        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
-                        { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                    "sorting" : [[ thIndex, 'asc' ]],
+                    "columnDefs": [
+                        { "targets": [ "nosort" ],"sortable": false,"searchable": false },
+                        { "type": "anti-the", "targets" : [ "anti-the" ] },
+                        { "type": "title-string", "targets" : [ "title-string" ] }
                     ]
                 }));
             });
