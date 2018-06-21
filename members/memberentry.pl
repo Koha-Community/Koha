@@ -283,7 +283,7 @@ if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_Borrow
         $patron->surname($newdata{surname});
         $newdata{'userid'} = $patron->generate_userid;
     }
-    elsif ( ( defined $data{'firstname'} ) && ( defined $data{'surname'} ) ) {
+    elsif ( ( defined $data{'firstname'} || $category_type eq 'I' ) && ( defined $data{'surname'} ) ) {
         # Partial page edit (access through "Details"/"Library details" tab), firstname and surname input zones are not used
         # Still, if the userid field is erased, we can create a new userid with available firstname and surname
         # FIXME clean thiscode newdata vs data is very confusing
