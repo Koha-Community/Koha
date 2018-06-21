@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use C4::Log;
+
 use Koha::Notice::Messages;
 
 use Try::Tiny;
@@ -137,6 +139,13 @@ sub resend {
         my $message_id = $c->validation->param('message_id');
         $notice = Koha::Notice::Messages->find($message_id);
         $notice->status('pending')->store;
+        C4::Log::logaction(
+            "NOTICES",
+            "RESEND",
+            $notice->borrowernumber,
+            '{"message_id": '.$message_id.'}',
+            'rest'
+        );
         return $c->render( status => 204, openapi => {});
     }
     catch {
