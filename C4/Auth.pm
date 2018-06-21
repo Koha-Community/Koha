@@ -1771,7 +1771,7 @@ sub checkpw {
 
     if ( $patron and $patron->account_locked ) {
         # Nothing to check, account is locked
-    } elsif ($ldap) {
+    } elsif ($ldap && defined($password)) {
         $debug and print STDERR "## checkpw - checking LDAP\n";
         my ( $retval, $retcard, $retuserid ) = checkpw_ldap(@_);    # EXTERNAL AUTH
         if ( $retval == 1 ) {
