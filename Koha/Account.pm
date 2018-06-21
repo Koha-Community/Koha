@@ -263,6 +263,116 @@ sub pay {
     return $payment->id;
 }
 
+=head3 add_credit
+
+This method allows adding credits to a patron's account
+
+my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
+    {
+        amount       => $amount,
+        description  => $description,
+        note         => $note,
+        user_id      => $user_id,
+        library_id   => $library_id,
+        sip          => $sip,
+        payment_type => $payment_type,
+        type         => $credit_type,
+        item_id      => $item_id
+    }
+);
+
+$credit_type can be any of 'credit', 'payment', 'forgiven' or 'writeoff'
+
+=cut
+
+sub add_credit {
+
+    my ( $self, $params ) = @_;
+
+    # amount is passed as a positive value, but we store credit as negative values
+    my $amount       = $params->{amount} * -1;
+    my $description  = $params->{description} // q{};
+    my $note         = $params->{note} // q{};
+    my $user_id      = $params->{user_id};
+    my $library_id   = $params->{library_id};
+    my $sip          = $params->{sip};
+    my $payment_type = $params->{payment_type};
+    my $type         = $params->{type} || 'payment';
+    my $item_id      = $params->{item_id};
+
+    my $schema = Koha::Database->new->schema;
+
+    my $account_type = $Koha::Account::account_type->{$type};
+    $account_type .= $sip
+        if defined $sip &&
+           $type eq 'payment';
+
+    my $line;
+
+    $schema->txn_do(
+        sub {
+            # We should remove accountno, it is no longer needed
+            my $last = Koha::Account::Lines->search( { borrowernumber => $self->{patron_id} },
+                { order_by => 'accountno' } )->next();
+            my $accountno = $last ? $last->accountno + 1 : 1;
+
+            # Insert the account line
+            $line = Koha::Account::Line->new(
+                {   borrowernumber    => $self->{patron_id},
+                    date              => \'NOW()',
+                    amount            => $amount,
+                    description       => $description,
+                    accounttype       => $account_type,
+                    amountoutstanding => $amount,
+                    payment_type      => $payment_type,
+                    note              => $note,
+                    manager_id        => $user_id,
+                    itemnumber        => $item_id
+                }
+            )->store();
+
+            # Record the account offset
+            my $account_offset = Koha::Account::Offset->new(
+                {   credit_id => $line->id,
+                    type      => $Koha::Account::offset_type->{$type},
+                    amount    => $amount
+                }
+            )->store();
+
+            UpdateStats(
+                {   branch         => $library_id,
+                    type           => $type,
+                    amount         => $amount,
+                    borrowernumber => $self->{patron_id},
+                    accountno      => $accountno,
+                }
+            );
+
+            if ( C4::Context->preference("FinesLog") ) {
+                logaction(
+                    "FINES", 'CREATE',
+                    $self->{patron_id},
+                    Dumper(
+                        {   action            => "create_$type",
+                            borrowernumber    => $self->{patron_id},
+                            accountno         => $accountno,
+                            amount            => $amount,
+                            description       => $description,
+                            amountoutstanding => $amount,
+                            accounttype       => $account_type,
+                            note              => $note,
+                            itemnumber        => $item_id,
+                            manager_id        => $user_id,
+                        }
+                    )
+                );
+            }
+        }
+    );
+
+    return $line;
+}
+
 =head3 balance
 
 my $balance = $self->balance
@@ -358,6 +468,30 @@ sub non_issues_charges {
 }
 
 1;
+
+=head2 Name mappings
+
+=head3 $offset_type
+
+=cut
+
+our $offset_type = {
+    'credit'   => 'Payment',
+    'forgiven' => 'Writeoff',
+    'payment'  => 'Payment',
+    'writeoff' => 'Writeoff'
+};
+
+=head3 $account_type
+
+=cut
+
+our $account_type = {
+    'credit'   => 'C',
+    'forgiven' => 'FOR',
+    'payment'  => 'Pay',
+    'writeoff' => 'W'
+};
 
 =head1 AUTHOR
 
