@@ -48,16 +48,10 @@ sources and sorting rules.
 @ISA    = qw(Exporter);
 @EXPORT = qw(
     &GetClassSources
-    &AddClassSource
     &GetClassSource
-    &ModClassSource
-    &DelClassSource
     &GetClassSortRules
-    &AddClassSortRule
     &GetClassSortRule
-    &ModClassSortRule
-    &DelClassSortRule
-  
+
     &GetSourcesForSortRule
     &GetClassSort
     
@@ -103,6 +97,8 @@ sub GetClassSources {
 
 =head2 AddClassSource
 
+  DEPRECATED
+
   AddClassSource($cn_source, $description, $used, $class_sort_rule);
 
   Adds a class_sources row.
@@ -144,6 +140,8 @@ sub GetClassSource {
 
 =head2 ModClassSource 
 
+  DEPRECATED
+
   ModClassSource($cn_source, $description, $used, $class_sort_rule);
 
   Updates a class_sources row.
@@ -164,6 +162,8 @@ sub ModClassSource {
 }
 
 =head2 DelClassSource 
+
+  DEPRECATED
 
   DelClassSource($cn_source);
 
@@ -219,6 +219,8 @@ sub GetClassSortRules {
 
 =head2 AddClassSortRule
 
+  DEPRECATED
+
   AddClassSortRule($class_sort_rule, $description, $sort_routine);
 
   Adds a class_sort_rules row.
@@ -260,6 +262,8 @@ sub GetClassSortRule {
 
 =head2 ModClassSortRule 
 
+  DEPRECATED
+
   ModClassSortRule($class_sort_rule, $description, $sort_routine);
 
   Updates a class_sort_rules row.
@@ -279,6 +283,8 @@ sub ModClassSortRule {
 }
 
 =head2 DelClassSortRule 
+
+  DEPRECATED
 
   DelClassSortRule($class_sort_rule);
 
