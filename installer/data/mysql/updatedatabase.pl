@@ -16080,6 +16080,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 2426 - Remove deprecated management permission)\n";
 }
 
+$DBversion = '18.06.00.003';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE search_field CHANGE COLUMN type type ENUM('', 'string', 'date', 'number', 'boolean', 'sum', 'isbn', 'stdno') NOT NULL COMMENT 'what type of data this holds, relevant when storing it in the search engine'" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20073 - Add new types for Elasticsearch fields)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
