@@ -351,7 +351,7 @@ sub add_credit {
                     borrowernumber => $self->{patron_id},
                     accountno      => $accountno,
                 }
-            );
+            ) if grep { $type eq $_ } ('payment', 'writeoff') ;
 
             if ( C4::Context->preference("FinesLog") ) {
                 logaction(

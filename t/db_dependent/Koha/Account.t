@@ -144,5 +144,17 @@ subtest 'add_credit() tests' => sub {
     is( $offset_2->credit_id, $line_2->id, 'No debit_id is set for credits' );
     is( $offset_2->debit_id, undef, 'No debit_id is set for credits' );
 
+    my $line_3 = $account->add_credit(
+        {   amount      => 20,
+            description => 'Manual credit applied',
+            library_id  => $patron->branchcode,
+            user_id     => $patron->id,
+            type        => 'forgiven'
+        }
+    );
+
+    is( $schema->resultset('ActionLog')->count(), 2, 'Log was added' );
+    is( $schema->resultset('Statistic')->count(), 2, 'No action added to statistics, because of credit type' );
+
     $schema->storage->txn_rollback;
 };
