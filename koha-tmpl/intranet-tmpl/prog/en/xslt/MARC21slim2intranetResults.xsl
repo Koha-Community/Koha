@@ -887,7 +887,7 @@
             <xsl:call-template name="chopPunctuation">
               <xsl:with-param name="chopString">
                 <xsl:call-template name="subfieldSelect">
-                    <xsl:with-param name="codes">abceg</xsl:with-param>
+                    <xsl:with-param name="codes">abcefg</xsl:with-param>
                 </xsl:call-template>
                </xsl:with-param>
            </xsl:call-template>
