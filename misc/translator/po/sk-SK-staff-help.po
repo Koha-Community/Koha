@@ -9,18 +9,18 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-05-10 01:09-0300\n"
-"PO-Revision-Date: 2018-01-25 10:39+0200\n"
-"Last-Translator: Paul <vilhan@biblia.sk>\n"
+"POT-Creation-Date: 2018-06-15 07:55-0300\n"
+"PO-Revision-Date: 2018-06-06 09:26+0000\n"
+"Last-Translator: siracide <paul.vilhan@gmail.com>\n"
 "Language-Team: SVK\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
-"X-Generator: Virtaal 0.7.1\n"
+"X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1432071975.000000\n"
+"X-POOTLE-MTIME: 1528277170.721956\n"
 "X-Pootle-Path: /sk/18.05/sk-SK-staff-help.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -6731,13 +6731,13 @@ msgstr ""
 "čitateľ danej kategórie môže vykonať, bez ohľadu na typ exemplára."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:39
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "For this option to appear you need to make sure that you have a New serial "
 "issue notice set up in the Notices Tool"
 msgstr ""
-"Aby sa objavila táto možnosť, musíte sa uistiť, že máte oznámenie o "
-"distribučnom zozname nastavené v nástroji oznámení"
+"Aby sa objavila táto možnosť, musíte sa uistiť, že máte nastavené oznámenie "
+"o novom čísle periodika v nástroji oznámení"
 
 #: intranet-tmpl/prog/en/modules/help/admin/smart-rules.tt:84
 #, c-format
@@ -7572,6 +7572,12 @@ msgid ""
 "these mappings, this form shows the mappings in Default and applies changes "
 "to all other frameworks."
 msgstr ""
+"V minulosti bolo priradenie Kohy k MARCu rovnaké vo všetkých rámcoch. "
+"Všimnite si však, že bolo (predtým) možné pridať alebo odobrať priradenie v "
+"jednotlivom rámci cez Administráciu/Knižničný rámec MARC. Keďže teraz "
+"považujeme Predvolený rámec za prioritný pre tieto priradenia, tento "
+"formulár zobrazuje priradenia v predvolenom režime a aplikuje zmeny na "
+"všetky ostatné rámce."
 
 #: intranet-tmpl/prog/en/modules/help/members/boraccount.tt:13
 #, c-format
@@ -10517,6 +10523,10 @@ msgid ""
 "Remove button on the corresponding line. Both changes (add, delete) are "
 "applied immediately."
 msgstr ""
+"Aby sa pridalo priradenie k určitému poľu Kohy, kliknite na tlačidlo Pridať "
+"v príslušnom riadku tabuľky. Následne budete zadávať číslo poľa a kód "
+"podpoľa. Pre odobratie určitého priradenia, kliknite na tlačidlo Odobrať v "
+"príslušnom riadku. Obe zmeny (pridať, odstrániť) sa uskutočnia okamžite."
 
 #: intranet-tmpl/prog/en/modules/help/serials/subscription-add.tt:14
 #, c-format
@@ -11267,7 +11277,7 @@ msgid "Koha team"
 msgstr "Tím Kohy"
 
 #: intranet-tmpl/prog/en/modules/help/admin/koha2marclinks.tt:3
-#, fuzzy, c-format
+#, c-format
 msgid "Koha to MARC mapping"
 msgstr "Priradenie Koha k MARC"
 
@@ -14320,7 +14330,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:241
 #, c-format
 msgid "SERIAL_ALERT (New serial issue) "
-msgstr ""
+msgstr "SERIAL_ALERT (Nové číslo periodika) "
 
 #: intranet-tmpl/prog/en/modules/help/tools/letter.tt:252
 #, c-format
@@ -15637,7 +15647,7 @@ msgstr "Intranet:"
 #, c-format
 msgid "Staff access, allows viewing the catalogue in staff client "
 msgstr ""
-"Knihovníckky prístup, umožňuje prezeranie katalógu cez knihovnícke rozhranie "
+"Knihovnícky prístup, umožňuje prezeranie katalógu cez knihovnícke rozhranie "
 
 #: intranet-tmpl/prog/en/modules/help/members/member-flags.tt:479
 #, c-format
@@ -17153,7 +17163,7 @@ msgstr "Zoznam bude aktualizovaný a nový citát by už teraz mal byť viditeľ
 #: intranet-tmpl/prog/en/modules/help/admin/koha2marclinks.tt:9
 #, c-format
 msgid "The mappings are found in three tables: biblio, biblioitems and items."
-msgstr ""
+msgstr "Priradenie sa nachádza v troch tabuľkách: biblio, biblioitems a items."
 
 #: intranet-tmpl/prog/en/modules/help/patroncards/edit-template.tt:18
 #, c-format
@@ -17534,6 +17544,12 @@ msgid ""
 "biblionumber, biblioitemnumber or itemnumber. You are not recommended to "
 "change them."
 msgstr ""
+"Nástroj teraz podporuje aj viaceré priradenia pre jedno pole Kohy. "
+"Napríklad, môžete spojiť dátum vydania k 260$c aj 264$c (ekvivalent RDA). "
+"Keďžte záznam zvyčajne obsahuje iba jeden z nich, táto jedna hodnota sa "
+"objaví v dátume vydania. (Uložia sa viaceré hodnoty oddelené zvislými "
+"čiarami.) Pamätajte, že nemôžete pridať/odobrať priradenia pre biblionumber, "
+"biblioitemnumber alebo itemnumber. Neodporúča sa, aby ste ich menili."
 
 #: intranet-tmpl/prog/en/modules/help/admin/branches.tt:15
 #, c-format
@@ -17883,6 +17899,9 @@ msgid ""
 "maintained on the corresponding form in the Administration module. For more "
 "information on this field, consult the online help page of that form."
 msgstr ""
+"Toto pole bolo vypnuté na tomto formulári. Priradenie Kohy k MARCu sa "
+"udržiava na príslušnom formulári v module Administrácie. Pre viac informácií "
+"o tomto poli sa poraďte na stránke pomoci pri tomto formulári na webe. "
 
 #: intranet-tmpl/prog/en/modules/help/tools/import_borrowers.tt:28
 #, c-format
@@ -21088,7 +21107,7 @@ msgstr ""
 "tomuto:"
 
 #: intranet-tmpl/prog/en/modules/help/admin/koha2marclinks.tt:5
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "While Koha stores the entire MARC record, it also stores common fields for "
 "easy access in various tables in the database. Koha to MARC mapping is used "
@@ -21098,11 +21117,13 @@ msgid ""
 "doing! We would recommend to test such changes first in a non-production "
 "environment."
 msgstr ""
-"Kým Koha ukladá úplný záznam MARC, ukladá aj bežné polia pre ľahký prístup v "
-"rozličných tabuľkách databázy. Priradenie Koha k MARC sa používa na to, aby "
-"ste zistili, kde sa tieto hodnoty nachádzajú v zázname MARC. V mnohých "
-"prípadoch nebudete musieť meniť predvolené hodnoty nastavené pri inštalácii, "
-"ale je dôležité vedieť, že tu tento nástroj je a možno ho kedykoľvek použiť."
+"Kým Koha ukladá úplný záznam MARC, ukladá aj bežné polia pre ľahký prístup "
+"do rozličných tabuliek databázy. Priradenie Koha k MARC sa používa na to, "
+"aby ste Kohe dali vedieť, kde sa tieto hodnoty nachádzajú v zázname MARC. V "
+"mnohých prípadoch nebudete musieť meniť predvolené hodnoty nastavené pri "
+"inštalácii. Ak sa rozhodnete zmeniť na tomto mieste priradenie, uistite sa, "
+"že viete, čo robíte! Odporúčame vám najprv takéto zmeny otestovať v "
+"neprodukčnom prostredí."
 
 #: intranet-tmpl/prog/en/modules/help/circ/circulation-home.tt:9
 #, c-format
@@ -23571,6 +23592,6 @@ msgid ""
 "[ \"My third title\" ] } ] } } "
 msgstr ""
 "{ fields =&gt; { 008 =&gt; [ \"140211b xxu||||| |||| 00| 0 eng d\" ], 100 "
-"=&gt; [ { a =&gt; [ \"Môj autor\" ] } ] 245 =&gt; [ { a =&gt; [ \"Môj prvý "
-"titul\", \"Môj druhý titul\" ], b =&gt; [ \"Moja upomienka\" ] }, { a =&gt; "
-"[ \"Môj tretí titul\" ] } ] } } "
+"=&gt; [ { a =&gt; [ \"My author\" ] } ] 245 =&gt; [ { a =&gt; [ \"My first "
+"title\", \"My second title\" ], b =&gt; [ \"My remainder\" ] }, { a =&gt; "
+"[ \"My third title\" ] } ] } } "
