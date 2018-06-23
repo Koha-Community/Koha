@@ -474,6 +474,32 @@ sub non_issues_charges {
 
 1;
 
+=head2 Name mappings
+
+=head3 $offset_type
+
+=cut
+
+our $offset_type = {
+    'credit'           => 'Manual Credit',
+    'forgiven'         => 'Writeoff',
+    'lost_item_return' => 'Lost Item Return',
+    'payment'          => 'Payment',
+    'writeoff'         => 'Writeoff'
+};
+
+=head3 $account_type
+
+=cut
+
+our $account_type = {
+    'credit'           => 'C',
+    'forgiven'         => 'FOR',
+    'lost_item_return' => 'CR',
+    'payment'          => 'Pay',
+    'writeoff'         => 'W'
+};
+
 =head1 AUTHOR
 
 Kyle M Hall <kyle.m.hall@gmail.com>
