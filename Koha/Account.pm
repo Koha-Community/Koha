@@ -481,7 +481,7 @@ sub non_issues_charges {
 =cut
 
 our $offset_type = {
-    'credit'           => 'Payment',
+    'credit'           => 'Manual Credit',
     'forgiven'         => 'Writeoff',
     'lost_item_return' => 'Lost Item Return',
     'payment'          => 'Payment',
