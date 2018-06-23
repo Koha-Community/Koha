@@ -288,6 +288,38 @@ sub balance {
       : 0;
 }
 
+=head3 outstanding_debits
+
+my ( $total, $lines ) = Koha::Account->new({ patron_id => $patron_id })->outstanding_debits;
+
+=cut
+
+sub outstanding_debits {
+    my ($self) = @_;
+
+    my $outstanding_debits = Koha::Account::Lines->search(
+        {   borrowernumber    => $self->{patron_id},
+            amountoutstanding => { '>' => 0 }
+        },
+        {   select => [ { sum => 'amountoutstanding' } ],
+            as     => ['outstanding_debits_total'],
+        }
+    );
+    my $total
+        = ( $outstanding_debits->count )
+        ? $outstanding_debits->next->get_column('outstanding_debits_total') + 0
+        : 0;
+
+    my $lines = Koha::Account::Lines->search(
+        {
+            borrowernumber    => $self->{patron_id},
+            amountoutstanding => { '>' => 0 }
+        }
+    );
+
+    return ( $total, $lines );
+}
+
 =head3 non_issues_charges
 
 my $non_issues_charges = $self->non_issues_charges
