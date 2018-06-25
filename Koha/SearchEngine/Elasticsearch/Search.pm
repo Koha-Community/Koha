@@ -399,6 +399,15 @@ sub json2marc {
     return $marc;
 }
 
+=head2 max_result_window
+
+Returns the maximum number of results that can be fetched
+
+This directly requests Elasticsearch for the setting index.max_result_window (or
+the default value for this setting in case it is not set)
+
+=cut
+
 sub max_result_window {
     my ($self) = @_;
 
