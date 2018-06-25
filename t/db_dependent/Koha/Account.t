@@ -100,7 +100,7 @@ subtest 'outstanding_credits() tests' => sub {
 
     my ( $total, $lines ) = $account->outstanding_credits();
 
-    is( $total, -10, 'Outstandig debits total is correctly calculated' );
+    is( $total, -10, 'Outstandig credits total is correctly calculated' );
 
     my $i = 0;
     foreach my $line ( @{ $lines->as_list } ) {
