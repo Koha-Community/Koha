@@ -292,16 +292,28 @@
 
 <ul>
     [% IF (SeparateHoldings) %]
-        <li><a href="#holdings">[% LoginBranchname %] holdings</a></li>
-        <li><a href="#otherholdings">Other holdings</a></li>
+        <li>
+            <a href="#holdings">[% LoginBranchname %] holdings ([% itemloop.size() || 0 %])</a>
+        </li>
+        <li>
+            <a href="#otherholdings">Other holdings ([% otheritemloop.size() || 0 %])</a>
+        </li>
     [% ELSE %]
-        <li><a href="#holdings">Holdings</a></li>
+        <li>
+            <a href="#holdings">Holdings ([% itemloop.size() || 0 %])</a>
+        </li>
     [% END %]
 [% IF ( MARCNOTES || notes ) %]<li><a href="#description">Descriptions</a></li>[% END %]
 [% IF ( subscriptionsnumber ) %]<li><a href="#subscriptions">Subscriptions</a></li>[% END %]
 [% IF Koha.Preference('AcquisitionDetails') %]<li><a href="#acq_details">Acquisition details</a></li>[% END %]
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]<li><a href="#editions">Editions</a></li>[% END %][% END %]
-[% IF ( LocalCoverImages ) %][% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]<li><a href="#images">Images</a></li>[% END %][% END %]
+[% IF ( LocalCoverImages ) %]
+    [% IF ( localimages || CAN_user_tools_upload_local_cover_images ) %]
+        <li>
+            <a href="#images">Images ([% localimages.size() || 0 %])</a>
+        </li>
+    [% END %]
+[% END %]
 [% IF ( HTML5MediaEnabled ) %][% IF ( HTML5MediaSets ) %]<li><a href="#html5media">Play media</a></li>[% END %][% END %]
 [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && Koha.Preference('NovelistSelectStaffView') == 'tab' ) %]
     <li class="NovelistSelect" style="display:none;"><a href="#NovelistSelect">NoveList Select</a></li>
