@@ -79,12 +79,11 @@ sub opac_auth {
 
     $login ||= $self->login;
     $password ||= $self->password;
-    my $mainpage = $self->base_url . 'opac-main.pl';
+    my $mainpage = $self->opac_base_url . 'opac-main.pl';
 
     $self->driver->get($mainpage);
     $self->fill_form( { userid => $login, password => $password } );
-    my $login_button = $self->driver->find_element('//input[@id="submit"]');
-    $login_button->submit();
+    $self->submit_form;
 }
 
 sub fill_form {
