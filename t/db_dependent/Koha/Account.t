@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Account;
 use Koha::Account::Lines;
@@ -79,6 +79,35 @@ subtest 'outstanding_debits() tests' => sub {
     $lines = $patron_4->account->outstanding_debits();
     is( $lines->total_outstanding, 0, "Total if no outstanding debits is 0" );
     is( $lines->count, 0, "With no outstanding debits, we get back a Lines object with 0 lines" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'outstanding_credits() tests' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $account = Koha::Account->new({ patron_id => $patron->id });
+
+    my @generated_lines;
+    push @generated_lines, $account->add_credit({ amount => 1 });
+    push @generated_lines, $account->add_credit({ amount => 2 });
+    push @generated_lines, $account->add_credit({ amount => 3 });
+    push @generated_lines, $account->add_credit({ amount => 4 });
+
+    my ( $total, $lines ) = $account->outstanding_credits();
+
+    is( $total, -10, 'Outstandig debits total is correctly calculated' );
+
+    my $i = 0;
+    foreach my $line ( @{ $lines->as_list } ) {
+        my $fetched_line = Koha::Account::Lines->find( $generated_lines[$i]->id );
+        is_deeply( $line->unblessed, $fetched_line->unblessed, "Fetched line matches the generated one ($i)" );
+        $i++;
+    }
 
     $schema->storage->txn_rollback;
 };
