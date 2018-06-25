@@ -93,7 +93,7 @@ if ($do_it) {
             print $line->{rowtitle}.$sep;
             foreach my $cell (@$x) {
                 print $cell->{value}.$sep;
-                print $cell->{count};
+                print $cell->{count} // '';
             }
             print "\n";
         }
@@ -102,10 +102,6 @@ if ($do_it) {
 # Displaying choices
 } else {
     my $dbh = C4::Context->dbh;
-    my @values;
-    my %labels;
-    my %select;
-    my $req;
     
     my $CGIextChoice = ( 'CSV' ); # FIXME translation
     my $CGIsepChoice=GetDelimiterChoices;
@@ -157,7 +153,6 @@ sub calculate {
     my ($line, $column, $filters) = @_;
     my @mainloop;
     my @loopcol;
-    my @loopline;
     my @looprow;
     my %globalline;
     my $grantotal =0;
@@ -357,7 +352,6 @@ sub calculate {
     
     my $dbcalc = $dbh->prepare($strcalc);
     $dbcalc->execute;
-    my $previous_col;
     my %indice;
     while (my  @data = $dbcalc->fetchrow) {
         my ($row, $rank, $id, $callnum, $ccode, $loc, $col )=@data;
