@@ -678,7 +678,6 @@ for (my $i=0;$i<@servers;$i++) {
                                 last_page_offset => $last_page_offset,
                                 previous_page_offset => $previous_page_offset) unless $pages < 2;
             $template->param(   next_page_offset => $next_page_offset) unless $pages eq $current_page_number;
-            warn "topage $hits_to_paginate";
         }
 
 
