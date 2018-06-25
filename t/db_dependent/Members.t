@@ -176,6 +176,8 @@ is( $borrower->{dateenrolled}, '2015-09-06', 'Koha::Patron->store should correct
 subtest 'Koha::Patron->store should not update userid if not true' => sub {
     plan tests => 3;
 
+    # TODO Move this to t/db_dependent/Koha/Patrons.t subtest ->store
+
     $data{ cardnumber } = "234567890";
     $data{userid} = 'a_user_id';
     $borrowernumber = Koha::Patron->new( \%data )->store->borrowernumber;
@@ -382,6 +384,7 @@ $schema->storage->txn_rollback;
 
 subtest 'Koha::Patron->store (invalid categorycode) tests' => sub {
     plan tests => 1;
+    # TODO Move this to t/db_dependent/Koha/Patrons.t subtest ->store
 
     $schema->storage->txn_begin;
 

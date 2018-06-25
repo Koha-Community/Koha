@@ -255,7 +255,7 @@ subtest 'store() tests' => sub {
     my $api_key = Koha::ApiKey->new({ patron_id => $patron_id });
 
     my $print_error = $schema->storage->dbh->{PrintError};
-    $schema->storage->dbh->{PrintError} = 0; # FIXME This does not longer work - because of the transaction in Koha::Patron->store?
+    $schema->storage->dbh->{PrintError} = 0;
     throws_ok
         { $api_key->store }
         'Koha::Exceptions::Object::FKConstraint',

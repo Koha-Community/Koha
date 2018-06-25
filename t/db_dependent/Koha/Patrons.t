@@ -19,8 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 31;
+use Test::More tests => 32;
 use Test::Warn;
+use Test::Exception;
 use Time::Fake;
 use DateTime;
 use JSON;
@@ -1424,6 +1425,27 @@ subtest 'Test Koha::Patrons::merge' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest '->store' => sub {
+    plan tests => 1;
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $print_error = $schema->storage->dbh->{PrintError};
+    $schema->storage->dbh->{PrintError} = 0; ; # FIXME This does not longer work - because of the transaction in Koha::Patron->store?
+
+    my $patron_1 = $builder->build_object({class=> 'Koha::Patrons'});
+    my $patron_2 = $builder->build_object({class=> 'Koha::Patrons'});
+
+    throws_ok
+        { $patron_2->userid($patron_1->userid)->store; }
+        'Koha::Exceptions::Object::DuplicateID',
+        'AddMember raises an exception on invalid categorycode';
+
+    $schema->storage->dbh->{PrintError} = $print_error;
+    $schema->storage->txn_rollback;
+};
+
 
 # TODO Move to t::lib::Mocks and reuse it!
 sub set_logged_in_user {
