@@ -110,6 +110,14 @@ sub search_auth_compat {
     C4::AuthoritiesMarc::SearchAuthorities(@params);
 }
 
+=head2 max_result_window
+
+Returns the maximum number of results that can be fetched
+
+Zebra does not have such a limit, so it always returns undef
+
+=cut
+
 sub max_result_window { undef }
 
 1;
