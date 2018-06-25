@@ -5,10 +5,31 @@
       "type": "number",
       "description": "Signed decimal number"
     },
-    "outstanding_lines": {
-      "type": "array",
-      "items": {
-        "$ref": "account_line.json"
+    "outstanding_credits": {
+      "properties": {
+        "total": {
+            "type": "number"
+        },
+        "lines": {
+            "type": "array",
+            "items": {
+                "$ref": "account_line.json"
+            }
+        }
+      }
+    },
+    "outstanding_debits": {
+      "type": "object",
+      "properties": {
+        "total": {
+            "type": "number"
+        },
+        "lines": {
+            "type": "array",
+            "items": {
+                "$ref": "account_line.json"
+            }
+        }
       }
     }
   },

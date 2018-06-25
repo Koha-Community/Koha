@@ -45,18 +45,26 @@ sub get {
         return $c->render( status => 404, openapi => { error => "Patron not found." } );
     }
 
+    my $account = $patron->account;
     my $balance;
 
-    $balance->{balance} = $patron->account->balance;
+    $balance->{balance} = $account->balance;
 
-    my @outstanding_lines = Koha::Account::Lines->search(
-        {   borrowernumber    => $patron->borrowernumber,
-            amountoutstanding => { '!=' => 0 }
-        }
-    );
-    foreach my $line ( @outstanding_lines ) {
-        push @{ $balance->{outstanding_lines} },  _to_api($line->TO_JSON)
-    }
+    # get outstanding debits
+    my ( $debits_total,  $debits )  = $account->outstanding_debits;
+    my ( $credits_total, $credits ) = $account->outstanding_credits;
+
+    my @debit_lines = map { _to_api( $_->TO_JSON ) } @{ $debits->as_list };
+    $balance->{outstanding_debits} = {
+        total => $debits_total,
+        lines => \@debit_lines
+    };
+
+    my @credit_lines = map { _to_api( $_->TO_JSON ) } @{ $credits->as_list };
+    $balance->{outstanding_credits} = {
+        total => $credits_total,
+        lines => \@credit_lines
+    };
 
     return $c->render( status => 200, openapi => $balance );
 }
@@ -135,7 +143,7 @@ our $to_api_mapping = {
     dispute           => undef,
     issue_id          => 'checkout_id',
     itemnumber        => 'item_id',
-    manager_id        => 'staff_id',
+    manager_id        => 'user_id',
     note              => 'internal_note',
 };
 
@@ -151,7 +159,7 @@ our $to_model_mapping = {
     internal_note      => 'note',
     item_id            => 'itemnumber',
     patron_id          => 'borrowernumber',
-    staff_id           => 'manager_id'
+    user_id            => 'manager_id'
 };
 
 1;

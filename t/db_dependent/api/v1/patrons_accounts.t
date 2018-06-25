@@ -41,19 +41,23 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get_balance() tests' => sub {
 
-    plan tests => 9;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
     my ( $patron_id, $session_id ) = create_user_and_session({ authorized => 0 });
-    my $patron = Koha::Patrons->find($patron_id);
+    my $patron  = Koha::Patrons->find($patron_id);
+    my $account = $patron->account;
 
     my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$patron_id/account");
     $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
     $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
-    $t->request_ok($tx)
-      ->status_is(200)
-      ->json_is( { balance => 0.00 } );
+    $t->request_ok($tx)->status_is(200)->json_is(
+        {   balance             => 0.00,
+            outstanding_debits  => { total => 0, lines => [] },
+            outstanding_credits => { total => 0, lines => [] }
+        }
+    );
 
     my $account_line_1 = Koha::Account::Line->new(
         {
@@ -85,16 +89,22 @@ subtest 'get_balance() tests' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
     $t->request_ok($tx)->status_is(200)->json_is(
-        {   balance           => 100.01,
-            outstanding_lines => [
-                Koha::REST::V1::Patrons::Account::_to_api( $account_line_1->TO_JSON ),
-                Koha::REST::V1::Patrons::Account::_to_api( $account_line_2->TO_JSON )
-
-            ]
+        {   balance            => 100.01,
+            outstanding_debits => {
+                total => 100.01,
+                lines => [
+                    Koha::REST::V1::Patrons::Account::_to_api( $account_line_1->TO_JSON ),
+                    Koha::REST::V1::Patrons::Account::_to_api( $account_line_2->TO_JSON )
+                ]
+            },
+            outstanding_credits => {
+                total => 0,
+                lines => []
+            }
         }
     );
 
-    Koha::Account->new({ patron_id => $patron_id })->pay(
+    $account->pay(
         {   amount       => 100.01,
             note         => 'He paid!',
             description  => 'Finally!',
@@ -107,7 +117,32 @@ subtest 'get_balance() tests' => sub {
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(200)->json_is( { balance => 0 } );
+    $t->request_ok($tx)->status_is(200)->json_is(
+        {   balance             => 0,
+            outstanding_debits  => { total => 0, lines => [] },
+            outstanding_credits => { total => 0, lines => [] }
+        }
+    );
+
+    # add a credit
+    my $credit_line = $account->add_credit({ amount => 10, user_id => $patron->id });
+    # re-read from the DB
+    $credit_line->discard_changes;
+    $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)->status_is(200)->json_is(
+        {   balance            => -10,
+            outstanding_debits => {
+                total => 0,
+                lines => []
+            },
+            outstanding_credits => {
+                total => -10,
+                lines => [ Koha::REST::V1::Patrons::Account::_to_api( $credit_line->TO_JSON ) ]
+            }
+        }
+    );
 
     $schema->storage->txn_rollback;
 };
