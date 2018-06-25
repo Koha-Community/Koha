@@ -29,6 +29,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::ApiKeys;
 
 use Scalar::Util qw( isvstring );
 use Try::Tiny;
@@ -239,21 +240,24 @@ subtest "Test update method" => sub {
 
 subtest 'store() tests' => sub {
 
-    plan tests => 10;
+    plan tests => 7;
+
+    # Using Koha::ApiKey to test Koha::Object>-store
+    # Simple object with foreign keys and unique key
 
     $schema->storage->txn_begin;
 
-    # Create a category to make sure its ID doesn't exist on the DB
-    my $category = $builder->build_object({ class => 'Koha::Patron::Categories' });
-    my $category_id = $category->id;
-    $category->delete;
+    # Create a patron to make sure its ID doesn't exist on the DB
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron_id = $patron->id;
+    $patron->delete;
 
-    my $patron = Koha::Patron->new({ categorycode => $category_id });
+    my $api_key = Koha::ApiKey->new({ patron_id => $patron_id });
 
     my $print_error = $schema->storage->dbh->{PrintError};
     $schema->storage->dbh->{PrintError} = 0; # FIXME This does not longer work - because of the transaction in Koha::Patron->store?
     throws_ok
-        { $patron->store }
+        { $api_key->store }
         'Koha::Exceptions::Object::FKConstraint',
         'Exception is thrown correctly';
     is(
@@ -263,22 +267,20 @@ subtest 'store() tests' => sub {
     );
     is(
         $@->broken_fk,
-        'categorycode',
+        'patron_id',
         'Exception field is correct'
     );
 
-    my $library = $builder->build_object({ class => 'Koha::Libraries' });
-    $category   = $builder->build_object({ class => 'Koha::Patron::Categories' });
-    $patron     = $builder->build_object({ class => 'Koha::Patrons' });
+    $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    $api_key = $builder->build_object({ class => 'Koha::ApiKeys' });
 
-    my $new_patron = Koha::Patron->new({
-        branchcode   => $library->id,
-        cardnumber   => $patron->cardnumber,
-        categorycode => $category->id
+    my $new_api_key = Koha::ApiKey->new({
+        patron_id => $patron_id,
+        secret => $api_key->secret,
     });
 
     throws_ok
-        { $new_patron->store }
+        { $new_api_key->store }
         'Koha::Exceptions::Object::DuplicateID',
         'Exception is thrown correctly';
 
@@ -290,39 +292,16 @@ subtest 'store() tests' => sub {
 
     is(
        $@->duplicate_id,
-       'cardnumber',
-       'Exception field is correct'
-    );
-
-    $new_patron = Koha::Patron->new({
-        branchcode   => $library->id,
-        userid       => $patron->userid,
-        categorycode => $category->id
-    });
-
-    throws_ok
-        { $new_patron->store }
-        'Koha::Exceptions::Object::DuplicateID',
-        'Exception is thrown correctly';
-
-    is(
-        $@->message,
-        'Duplicate ID',
-        'Exception message is correct'
-    );
-
-    is(
-       $@->duplicate_id,
-       'userid',
+       'secret',
        'Exception field is correct'
     );
 
     $schema->storage->dbh->{PrintError} = $print_error;
 
     # Successful test
-    $patron->set({ firstname => 'Manuel' });
-    my $ret = $patron->store;
-    is( ref($ret), 'Koha::Patron', 'store() returns the object on success' );
+    $api_key->set({ secret => 'Manuel' });
+    my $ret = $api_key->store;
+    is( ref($ret), 'Koha::ApiKey', 'store() returns the object on success' );
 
     $schema->storage->txn_rollback;
 };
