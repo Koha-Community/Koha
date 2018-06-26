@@ -19,9 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+use Test::Exception;
 
+use Koha::Account;
 use Koha::Account::Lines;
+use Koha::Account::Offsets;
 use Koha::Items;
 
 use t::lib::TestBuilder;
@@ -29,7 +32,7 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
-subtest 'item' => sub {
+subtest 'item() tests' => sub {
 
     plan tests => 2;
 
@@ -63,7 +66,7 @@ subtest 'item' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'total_outstanding' => sub {
+subtest 'total_outstanding() tests' => sub {
 
     plan tests => 5;
 
@@ -125,6 +128,102 @@ subtest 'total_outstanding' => sub {
 
     $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
     is( $lines->total_outstanding, -100, 'total_outstanding sums correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_credit() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $account = $patron->account;
+
+    my $credit = $account->add_credit({ amount => 100, user_id => $patron->id });
+
+    ok( $credit->is_credit, 'is_credit detects credits' );
+
+    my $debit = Koha::Account::Line->new(
+    {
+        borrowernumber => $patron->id,
+        accounttype    => "F",
+        amount         => 10,
+    })->store;
+
+    ok( !$debit->is_credit, 'is_credit() detects debits' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'apply() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account = $patron->account;
+
+    my $credit = $account->add_credit( { amount => 100, user_id => $patron->id } );
+
+    my $debit_1 = Koha::Account::Line->new(
+        {   borrowernumber    => $patron->id,
+            accounttype       => "F",
+            amount            => 10,
+            amountoutstanding => 10
+        }
+    )->store;
+
+    my $debit_2 = Koha::Account::Line->new(
+        {   borrowernumber    => $patron->id,
+            accounttype       => "F",
+            amount            => 100,
+            amountoutstanding => 100
+        }
+    )->store;
+
+    $credit->discard_changes;
+    $debit_1->discard_changes;
+
+    my $remaining_credit = $credit->apply( { debit => $debit_1, offset_type => 'Manual Credit' } );
+    is( $remaining_credit, 90, 'Remaining credit is correctly calculated' );
+    $credit->discard_changes;
+    is( $credit->amountoutstanding * -1, $remaining_credit, 'Remaining credit correctly stored' );
+
+    # re-read debit info
+    $debit_1->discard_changes;
+    is( $debit_1->amountoutstanding * 1, 0, 'Debit has been cancelled' );
+
+    my $offsets = Koha::Account::Offsets->search( { credit_id => $credit->id, debit_id => $debit_1->id } );
+    is( $offsets->count, 1, 'Only one offset is generated' );
+    my $THE_offest = $offsets->next;
+    is( $THE_offest->amount * 1, 10, 'Amount was calculated correctly (less than the available credit)' );
+    is( $THE_offest->type, 'Manual Credit', 'Passed type stored correctly' );
+
+    $remaining_credit = $credit->apply( { debit => $debit_2, offset_type => 'Manual Credit' } );
+    is( $remaining_credit, 0, 'No remaining credit left' );
+    $credit->discard_changes;
+    is( $credit->amountoutstanding * 1, 0, 'No outstanding credit' );
+    $debit_2->discard_changes;
+    is( $debit_2->amountoutstanding * 1, 10, 'Outstanding amount decremented correctly' );
+
+    throws_ok
+        { $debit_1->apply({ debit => $credit }); }
+        'Koha::Exceptions::Account::IsNotCredit',
+        '->apply() can only be used with credits';
+
+    throws_ok
+        { $credit->apply({ debit => $credit }); }
+        'Koha::Exceptions::Account::IsNotDebit',
+        '->apply() can only be applied to credits';
+
+    throws_ok
+        { $credit->apply({ debit => $debit_1 }); }
+        'Koha::Exceptions::Account::NoAvailableCredit',
+        '->apply() can only be used with outstanding credits';
+
 
     $schema->storage->txn_rollback;
 };
