@@ -111,6 +111,7 @@
                     <table id="illrequestlist" class="table table-bordered table-striped">
                         <thead>
                             <tr>
+                                <th>Request ID</th>
                                 <th>Author</th>
                                 <th>Title</th>
                                 <th>Requested from</th>
@@ -125,6 +126,7 @@
                             [% FOREACH request IN requests %]
                                 [% status = request.status | html %]
                                 <tr>
+                                    <td>[% request.id | html %]</td>
                                     <td>
                                         [% IF request.metadata.Author %][% request.metadata.Author | html %][% ELSE %]<span>N/A</span>[% END %]
                                     </td>
@@ -151,6 +153,10 @@
                             <fieldset class="rows">
                                 <legend id="library_legend">Details from library</legend>
                                 <ol>
+                                    <li>
+                                        <label for="request_id">Request ID:</label>
+                                        [% request.id | html %]
+                                    </li>
                                     <li>
                                         <label for="backend">Requested from:</label>
                                         [% request.backend | html %]
