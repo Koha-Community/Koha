@@ -48,7 +48,7 @@
 
                                 [% IF ( GoogleJackets ) %]
                                     [% IF ( item.browser_normalized_isbn ) %]
-                                        <div style="block" title="[% item.biblionumber |url %]" class="[% item.browser_normalized_isbn %]" id="gbs-thumbnail-preview[% loop.count %]"></div>
+                                        <div title="[% item.biblionumber |url %]" class="[% item.browser_normalized_isbn %]" id="gbs-thumbnail-preview[% loop.count %]"></div>
                                     [% ELSE %]
                                         <span class="no-image">No cover image available</span>
                                     [% END %]
