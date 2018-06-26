@@ -22,9 +22,10 @@ use Data::Dumper;
 
 use C4::Log qw(logaction);
 
-use Koha::Database;
-use Koha::Items;
 use Koha::Account::Offsets;
+use Koha::Database;
+use Koha::Exceptions::Account;
+use Koha::Items;
 
 use base qw(Koha::Object);
 
@@ -34,7 +35,7 @@ Koha::Account::Lines - Koha accountline Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -124,6 +125,86 @@ sub void {
     );
 
 }
+
+=head3 apply
+
+    my $outstanding_amount = $credit->apply({ debit =>  $debit, [ offset_type => $offset_type ] });
+
+=cut
+
+sub apply {
+    my ( $self, $params ) = @_;
+
+    my $debit       = $params->{debit};
+    my $offset_type = $params->{offset_type} // 'credit_applied';
+
+    unless ( $self->is_credit ) {
+        Koha::Exceptions::Account::IsNotCredit->throw(
+            error => 'Account line ' . $self->id . ' is not a credit'
+        );
+    }
+
+    unless ( !$debit->is_credit ) {
+        Koha::Exceptions::Account::IsNotDebit->throw(
+            error => 'Account line ' . $debit->id . 'is not a debit'
+        );
+    }
+
+    my $available_credit = $self->amountoutstanding * -1;
+
+    unless ( $available_credit > 0 ) {
+        Koha::Exceptions::Account::NoAvailableCredit->throw(
+            error => 'Outstanding credit is ' . $available_credit . ' and cannot be applied'
+        );
+    }
+
+    my $schema = Koha::Database->new->schema;
+
+    $schema->txn_do( sub {
+
+        my $amount_to_cancel;
+        my $owed = $debit->amountoutstanding;
+
+        if ( $available_credit >= $owed ) {
+            $amount_to_cancel = $owed;
+        }
+        else {    # $available_credit < $debit->amountoutstanding
+            $amount_to_cancel = $available_credit;
+        }
+
+        # record the account offset
+        Koha::Account::Offset->new(
+            {   credit_id => $self->id,
+                debit_id  => $debit->id,
+                amount    => $amount_to_cancel,
+                type      => $offset_type,
+            }
+        )->store();
+
+        $available_credit -= $amount_to_cancel;
+
+        $self->amountoutstanding( $available_credit * -1 )->store;
+        $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
+    });
+
+    return $available_credit;
+}
+
+=head3 is_credit
+
+    my $bool = $line->is_credit;
+
+=cut
+
+sub is_credit {
+    my ($self) = @_;
+
+    return ( $self->amount < 0 );
+}
+
+=head2 Internal methods
+
+=cut
 
 =head3 _type
 
