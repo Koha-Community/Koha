@@ -31,7 +31,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'outstanding_debits() tests' => sub {
 
-    plan tests => 5;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -54,6 +54,11 @@ subtest 'outstanding_debits() tests' => sub {
         is_deeply( $line->unblessed, $fetched_line->unblessed, "Fetched line matches the generated one ($i)" );
         $i++;
     }
+
+    ( $total, $lines ) =  Koha::Account->new({ patron_id => 'InvalidBorrowernumber' })->outstanding_debits();
+    is( $total, 0, "Total if no outstanding debits is 0" );
+    is( $lines->count, 0, "With no outstanding debits, we get back a Lines object with 0 lines" );
+
 
     $schema->storage->txn_rollback;
 };
