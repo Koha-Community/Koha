@@ -614,7 +614,7 @@ foreach my $category_type (qw(C A S P I X)) {
           { 'categorycode' => $patron_category->categorycode,
             'categoryname' => $patron_category->description,
             'categorycodeselected' =>
-              ( ( defined( $borrower_data->{'categorycode'} ) && $patron_category->categorycode eq $borrower_data->{'categorycode'} ) || ( defined($categorycode) && $patron_category->categorycode eq $categorycode ) ),
+              ( defined($categorycode) && $patron_category->categorycode eq $categorycode ),
           };
     }
     my %typehash;
