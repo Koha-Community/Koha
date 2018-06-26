@@ -88,7 +88,7 @@
                     [% END %]
                     [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
                       [% coce_id = normalized_ean || normalized_isbn %]
-                      <div style="block" title="[% biblio.biblionumber %]" class="[% coce_id %]" id="coce-thumbnail-preview"></div>
+                      <div title="[% biblio.biblionumber %]" class="[% coce_id %]" id="coce-thumbnail-preview"></div>
                     [% END %]
                     [% IF OpenLibraryCovers %]
                         <div title="[% biblio.biblionumber %]" class="[% normalized_isbn %]" id="openlibrary-thumbnail-preview"></div>

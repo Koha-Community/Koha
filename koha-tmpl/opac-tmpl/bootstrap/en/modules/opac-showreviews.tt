@@ -135,7 +135,7 @@
 
                                         [% IF ( GoogleJackets ) %]
                                             [% IF ( review.normalized_isbn ) %]
-                                                <div style="block" title="[% review.biblionumber |url %]" class="[% review.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>
+                                                <div title="[% review.biblionumber |url %]" class="[% review.normalized_isbn %]" id="gbs-thumbnail[% loop.count %]"></div>
                                             [% ELSE %]
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]
