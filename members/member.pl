@@ -53,7 +53,7 @@ if ( $quicksearch and $searchmember ) {
         $branchcode = $userenv->{'branch'};
     }
     my $patron = Koha::Patrons->find( { cardnumber => $searchmember } );
-    if( ( $branchcode and $patron->branchcode eq $branchcode ) or ( not $branchcode and $patron ) ){
+    if( ( $branchcode and $patron and $patron->branchcode eq $branchcode ) or ( not $branchcode and $patron ) ){
         print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=" . $patron->borrowernumber);
         exit;
     }
