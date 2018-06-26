@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp;
 use Data::Dumper;
 use List::MoreUtils qw( uniq );
+use List::Util qw( sum );
 
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
@@ -297,25 +298,15 @@ my ( $total, $lines ) = Koha::Account->new({ patron_id => $patron_id })->outstan
 sub outstanding_debits {
     my ($self) = @_;
 
-    my $outstanding_debits = Koha::Account::Lines->search(
-        {   borrowernumber    => $self->{patron_id},
-            amountoutstanding => { '>' => 0 }
-        },
-        {   select => [ { sum => 'amountoutstanding' } ],
-            as     => ['outstanding_debits_total'],
-        }
-    );
-    my $total
-        = ( $outstanding_debits->count )
-        ? $outstanding_debits->next->get_column('outstanding_debits_total') + 0
-        : 0;
-
     my $lines = Koha::Account::Lines->search(
         {
             borrowernumber    => $self->{patron_id},
             amountoutstanding => { '>' => 0 }
         }
     );
+
+    # sum returns undef it list is empty
+    my $total = sum( $lines->get_column('amountoutstanding') ) + 0;
 
     return ( $total, $lines );
 }
