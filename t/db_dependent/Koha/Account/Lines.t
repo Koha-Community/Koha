@@ -132,9 +132,9 @@ subtest 'total_outstanding() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'is_credit() tests' => sub {
+subtest 'is_credit() and is_debit() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -144,6 +144,7 @@ subtest 'is_credit() tests' => sub {
     my $credit = $account->add_credit({ amount => 100, user_id => $patron->id });
 
     ok( $credit->is_credit, 'is_credit detects credits' );
+    ok( !$credit->is_debit, 'is_debit detects credits' );
 
     my $debit = Koha::Account::Line->new(
     {
@@ -152,7 +153,8 @@ subtest 'is_credit() tests' => sub {
         amount         => 10,
     })->store;
 
-    ok( !$debit->is_credit, 'is_credit() detects debits' );
+    ok( !$debit->is_credit, 'is_credit detects debits' );
+    ok( $debit->is_debit, 'is_debit detects debits');
 
     $schema->storage->txn_rollback;
 };

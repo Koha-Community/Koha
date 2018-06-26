@@ -144,7 +144,7 @@ sub apply {
         );
     }
 
-    unless ( !$debit->is_credit ) {
+    unless ( $debit->is_debit ) {
         Koha::Exceptions::Account::IsNotDebit->throw(
             error => 'Account line ' . $debit->id . 'is not a debit'
         );
@@ -200,6 +200,18 @@ sub is_credit {
     my ($self) = @_;
 
     return ( $self->amount < 0 );
+}
+
+=head3 is_debit
+
+    my $bool = $line->is_debit;
+
+=cut
+
+sub is_debit {
+    my ($self) = @_;
+
+    return !$self->is_credit;
 }
 
 =head2 Internal methods
