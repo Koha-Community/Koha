@@ -65,11 +65,10 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 # Determine if we should be offering any enhancement plugin buttons
 if ( C4::Context->preference('UseKohaPlugins') &&
 	 C4::Context->config('enable_plugins') ) {
-	my @plugins = Koha::Plugins->new()->GetPlugins({
-		method => 'intranet_catalog_biblio_enhancements'
-	});
 	# Only pass plugins that can offer a toolbar button
-	@plugins = grep { $_->get_toolbar_button } @plugins;
+	my @plugins = Koha::Plugins->new()->GetPlugins({
+		method => 'get_intranet_catalog_toolbar_button'
+	});
 	$template->param(
 		plugins => \@plugins
 	);
