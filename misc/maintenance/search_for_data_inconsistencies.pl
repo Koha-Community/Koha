@@ -25,7 +25,7 @@ use Koha::Items;
     while ( my $item = $items->next ) {
         if ( not $item->homebranch and not $item->holdingbranch ) {
             new_item(sprintf "Item with itemnumber=%s does not have homebranch and holdingbranch defined", $item->itemnumber);
-        } elsif ( $item->homebranch ) {
+        } elsif ( not $item->homebranch ) {
             new_item(sprintf "Item with itemnumber=%s does not have homebranch defined", $item->itemnumber);
         } else {
             new_item(sprintf "Item with itemnumber=%s does not have holdingbranch defined", $item->itemnumber);
@@ -61,7 +61,5 @@ search_for_data_inconsistencies.pl
 Catch data inconsistencies in Koha database
 
 * Items with not defined homebranch and/or holdingbranch
-
-=back
 
 =cut
