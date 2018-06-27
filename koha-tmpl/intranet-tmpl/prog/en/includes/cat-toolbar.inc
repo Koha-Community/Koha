@@ -139,7 +139,7 @@ CAN_user_serials_create_subscription ) %]
 [% END %]
 
 [% FOREACH p IN plugins %]
-	[% p.get_toolbar_button %]
+	[% p.get_intranet_catalog_toolbar_button %]
 [% END %]
 
 </div>
