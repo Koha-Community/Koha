@@ -1331,8 +1331,7 @@ sub GetMarcBiblio {
         return;
     }
 
-    # Use state to speed up repeated calls in batch processes
-    state $sth = C4::Context->dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=? ");
+    my $sth = C4::Context->dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=? ");
     $sth->execute($biblionumber);
     my $row     = $sth->fetchrow_hashref;
     $sth->finish;
@@ -1376,8 +1375,7 @@ sub GetXmlBiblio {
     my ($biblionumber) = @_;
     return unless $biblionumber;
 
-    # Use state to speed up repeated calls in batch processes
-    state $sth = C4::Context->dbh->prepare(
+    my $sth = C4::Context->dbh->prepare(
         q|
         SELECT metadata
         FROM biblio_metadata
@@ -2597,8 +2595,7 @@ sub UpsertBiblio {
 
 sub GetFrameworkCode {
     my ($biblionumber) = @_;
-    # Use state to speed up repeated calls in batch processes
-    state $sth         = C4::Context->dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
+    my $sth         = C4::Context->dbh->prepare("SELECT frameworkcode FROM biblio WHERE biblionumber=?");
     $sth->execute($biblionumber);
     my ($frameworkcode) = $sth->fetchrow;
     $sth->finish;

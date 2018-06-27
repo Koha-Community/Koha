@@ -1545,7 +1545,7 @@ sub GetMarcItemFields {
 
     my $item_level_itype = C4::Context->preference('item-level_itypes');
     # This is so much faster than using Koha::Items->search that it makes sense even if it's ugly.
-    state $sth = C4::Context->dbh->prepare( 'SELECT * FROM items WHERE biblionumber = ?' );
+    my $sth = C4::Context->dbh->prepare( 'SELECT * FROM items WHERE biblionumber = ?' );
     $sth->execute( $biblionumber );
     my $items = $sth->fetchall_arrayref({});
     $sth->finish();
