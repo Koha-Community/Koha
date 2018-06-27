@@ -43,9 +43,9 @@ sub to_marc {
     return "Koha::Plugin::Test::to_marc";
 }
 
-sub get_intranet_catalog_toolbar_button {
+sub intranet_catalog_biblio_enhancements_toolbar_button {
     my ( $self, $args ) = @_;
-    return "Koha::Plugin::Test::get_intranet_catalog_toolbar_button";
+    return "Koha::Plugin::Test::intranet_catalog_biblio_enhancements_toolbar_button";
 }
 
 sub intranet_catalog_biblio_enhancements {
