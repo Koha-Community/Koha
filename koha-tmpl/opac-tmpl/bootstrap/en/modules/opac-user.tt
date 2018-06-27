@@ -762,10 +762,10 @@
                                             [% END # / IF SuspendHoldsOpac %]
                                             <td class="modify">
                                                 [% IF ( RESERVE.is_cancelable_from_opac ) %]
-                                                    <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
+                                                    <form id="delete_hold_[% RESERVE.reserve_id | html %]" action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                                     <input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber | html %]" />
                                                     <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id | html %]" />
-                                                    <button type="submit" name="submit" class="btn btn-xs btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="fa fa-remove"></i> Cancel</button></form>
+                                                    <button data-title="[% RESERVE.biblio.title | html %] [% FOREACH s IN RESERVE.biblio.subtitles %] [% s | html %] [% END %] [% RESERVE.item.enumchron | html %]" data-reserve_id="[% RESERVE.reserve_id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-hold"><i class="fa fa-remove"></i> Cancel</button></form>
                                                 [% END %]
                                             </td>
                                         </tr>
@@ -775,8 +775,8 @@
 
                             [% IF SuspendHoldsOpac %]
                                 <div>
-                                    <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_SUSPEND_HOLDS);"><i class="fa fa-pause"></i> Suspend all holds</button>
+                                    <form class="form-inline" id="suspend_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                                        <button type="submit" id="suspend_all_submit" class="btn"><i class="fa fa-pause"></i> Suspend all holds</button>
                                         <input type="hidden" name="suspend" value="1" />
 
                                         [% IF AutoResumeSuspendedHolds %]
@@ -788,8 +788,8 @@
                                 </div>
                                 <br/>
                                 <div>
-                                    <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_RESUME_HOLDS);"><i class="fa fa-play"></i> Resume all suspended holds</button>
+                                    <form id="resume_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                                        <button type="submit" id="resume_all_submit" class="btn"><i class="fa fa-play"></i> Resume all suspended holds</button>
                                         <input type="hidden" name="suspend" value="0" />
                                     </form>
                                 </div>
@@ -885,7 +885,10 @@
 
                                                 <td class="article-request-cancel">
                                                     <span class="tdlabel">Cancel:</span>
-                                                    <a class="btn btn-xs btn-danger" href="opac-article-request-cancel.pl?id=[% ar.id | html %]" onclick="return confirmDelete(MSG_CONFIRM_DELETE_ARTREQ);"><i class="fa fa-remove"></i> Cancel</a>
+                                                    <form action="/cgi-bin/koha/opac-article-request-cancel.pl" id="delete_article_request_[% ar.id | html %]">
+                                                        <input type="hidden" name="id" value="[% ar.id | html %]" />
+                                                        <button data-title="[% ar.biblio.title | html %] [% ar.item.enumchron | html %]" data-article-request_id="[% ar.id | html %]" type="submit" class="btn btn-sm btn-danger btn-delete-article-request"><i class="fa fa-remove"></i> Cancel</button>
+                                                    </form>
                                                 </td>
                                             </tr>
                                         [% END %]
@@ -917,17 +920,10 @@
 [% END %]
 
 [% INCLUDE 'opac-bottom.inc' %]
-
-
 [% BLOCK jsinclude %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
-        //<![CDATA[
-        var MSG_CONFIRM_DELETE_ARTREQ   = _("Are you sure you want to cancel this article request?");
-        var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
-        var MSG_CONFIRM_SUSPEND_HOLDS = _("Are you sure you want to suspend all holds?");
-        var MSG_CONFIRM_RESUME_HOLDS  = _("Are you sure you want to resume all suspended holds?");
 
         $(document).ready(function(){
             $('#opac-user-views').tabs();
@@ -935,6 +931,56 @@
             $(".js-hide").hide();
             $(".modal-nojs").addClass("modal").addClass("hide").removeClass("modal-nojs");
             $(".suspend-until").prop("readonly",1);
+
+            $(".btn-delete-hold").on("click", function(e){
+                e.preventDefault();
+                var hold_title = $(this).data("title");
+                var reserve_id = $(this).data("reserve_id");
+                var body = "<p><strong>" + hold_title + "</strong></p>";
+                confirmModal( hold_title, _("Are you sure you want to cancel this hold?"), _("Yes, cancel hold"), _("No, do not cancel hold"), function( result ){
+                        if( result ){
+                            $("#delete_hold_" + reserve_id ).submit();
+                        }
+                    }
+                );
+            });
+
+            $(".btn-delete-article-request").on("click", function(e){
+                e.preventDefault();
+                var hold_title = $(this).data("title");
+                var article_request_id = $(this).data("article-request_id");
+                var body = "<p><strong>" + hold_title + "</strong></p>";
+                confirmModal( hold_title, _("Are you sure you want to cancel this article request?"), _("Yes, cancel article request"), _("No, do not cancel article request"), function( result ){
+                        if( result ){
+                            $("#delete_article_request_" + article_request_id ).submit();
+                        }
+                    }
+                );
+            });
+
+            $("#suspend_all_submit").on("click", function(e){
+                e.preventDefault();
+                var title = _("Are you sure you want to suspend all holds?");
+                var body = _("All holds will be suspended.");
+                confirmModal( body, title, _("Yes, suspend all holds"), "", function( result ){
+                        if( result ){
+                            $("#suspend_all_holds").submit();
+                        }
+                    }
+                );
+            });
+
+            $("#resume_all_submit").on("click", function(e){
+                e.preventDefault();
+                var title = _("Are you sure you want to resume all suspended holds?");
+                var body = _("All holds will resume.");
+                confirmModal( body, title, _("Yes, resume all holds"), _("No, do not resume holds"), function( result ){
+                        if( result ){
+                            $("#resume_all_holds").submit();
+                        }
+                    }
+                );
+            });
 
             var dTables = $("#checkoutst,#holdst,#overduest,#opac-user-relative-issues-table");
             dTables.each(function(){
