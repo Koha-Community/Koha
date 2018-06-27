@@ -22,7 +22,7 @@ use Modern::Perl;
 use Carp;
 use Data::Dumper;
 use List::MoreUtils qw( uniq );
-use List::Util qw( sum );
+use List::Util qw( sum0 );
 
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
@@ -305,8 +305,7 @@ sub outstanding_debits {
         }
     );
 
-    # sum returns undef it list is empty
-    my $total = sum( $lines->get_column('amountoutstanding') ) + 0;
+    my $total = sum0( $lines->get_column('amountoutstanding') );
 
     return ( $total, $lines );
 }
