@@ -9,7 +9,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 39;
+use Test::More tests => 41;
 
 use C4::Context;
 
@@ -42,6 +42,8 @@ isa_ok( $plugin, "Koha::Plugins::Base", 'Test plugin parent class' );
 ok( $plugin->can('report'), 'Test plugin can report' );
 ok( $plugin->can('tool'), 'Test plugin can tool' );
 ok( $plugin->can('to_marc'), 'Test plugin can to_marc' );
+ok( $plugin->can('intranet_catalog_biblio_enhancements'), 'Test plugin can intranet_catalog_biblio_enhancements');
+ok( $plugin->can('get_intranet_catalog_toolbar_button'), 'Test plugin can get_intranet_catalog_toolbar_button' );
 ok( $plugin->can('opac_online_payment'), 'Test plugin can opac_online_payment' );
 ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_payment_begin' );
 ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );

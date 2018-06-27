@@ -45,6 +45,16 @@ sub to_marc {
     return "Koha::Plugin::Test::to_marc";
 }
 
+sub get_intranet_catalog_toolbar_button {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::get_intranet_catalog_toolbar_button";
+}
+
+sub intranet_catalog_biblio_enhancements {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::intranet_catalog_biblio_enhancements";
+}
+
 sub opac_online_payment {
     my ( $self, $args ) = @_;
     return "Koha::Plugin::Test::opac_online_payment";
