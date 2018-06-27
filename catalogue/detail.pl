@@ -68,7 +68,7 @@ if ( C4::Context->preference('UseKohaPlugins') &&
 	 C4::Context->config('enable_plugins') ) {
 	# Only pass plugins that can offer a toolbar button
 	my @plugins = Koha::Plugins->new()->GetPlugins({
-		method => 'get_intranet_catalog_toolbar_button'
+		method => 'intranet_catalog_biblio_enhancements_toolbar_button'
 	});
 	$template->param(
 		plugins => \@plugins
