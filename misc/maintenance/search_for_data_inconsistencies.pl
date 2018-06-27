@@ -18,6 +18,7 @@
 use Modern::Perl;
 
 use Koha::Items;
+use Koha::Authorities;
 
 {
     my $items = Koha::Items->search({ -or => { homebranch => undef, holdingbranch => undef }});
@@ -32,6 +33,17 @@ use Koha::Items;
         }
     }
     if ( $items->count ) { new_hint("Edit these items and set valid homebranch and/or holdingbranch")}
+}
+
+{
+    # No join possible, FK is missing at DB level
+    my @auth_types = Koha::Authority::Types->search->get_column('authtypecode');
+    my $authorities = Koha::Authorities->search({authtypecode => { 'not in' => \@auth_types } });
+    if ( $authorities->count ) {new_section("Invalid auth_header.authtypecode")}
+    while ( my $authority = $authorities->next ) {
+        new_item(sprintf "Authority with authid=%s does not have a code defined (%s)", $authority->authid, $authority->authtypecode);
+    }
+    if ( $authorities->count ) {new_hint("Go to 'Home › Administration › Authority types' to define them")}
 }
 
 sub new_section {
