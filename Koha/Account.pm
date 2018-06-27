@@ -281,7 +281,12 @@ my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
     }
 );
 
-$credit_type can be any of 'credit', 'payment', 'forgiven' or 'writeoff'
+$credit_type can be any of:
+  - 'credit'
+  - 'payment'
+  - 'forgiven'
+  - 'lost_item_return'
+  - 'writeoff'
 
 =cut
 
