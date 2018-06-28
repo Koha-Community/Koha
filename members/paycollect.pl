@@ -180,7 +180,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
     $total_paid = '0.00';    #TODO not right with pay_individual
 }
 
-borrower_add_additional_fields($borrower, $template);
+borrower_add_additional_fields($borrower, $template, $category);
 
 $template->param(%$borrower);
 
@@ -201,19 +201,20 @@ $template->param(
 output_html_with_http_headers $input, $cookie, $template->output;
 
 sub borrower_add_additional_fields {
-    my ( $b_ref, $template ) = @_;
+    my ( $b_ref, $template, $category ) = @_;
 
 # some borrower info is not returned in the standard call despite being assumed
 # in a number of templates. It should not be the business of this script but in lieu of
 # a revised api here it is ...
-    if ( $b_ref->{category_type} eq 'C' ) {
+    if ( $category->category_type eq 'C' ) {
         my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
         $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
         $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
     }
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
-        $b_ref->{extendedattributes} = GetBorrowerAttributes($b_ref->{borrowernumber});
+        my $extendedattributes = GetBorrowerAttributes($b_ref->{borrowernumber});
+        $template->param( extendedattributes => $extendedattributes );
     }
 
     return;

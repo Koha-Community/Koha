@@ -151,7 +151,7 @@ sub add_accounts_to_template {
         }
         push @accounts, $account_line;
     }
-    borrower_add_additional_fields($patron->unblessed);
+    borrower_add_additional_fields($patron);
 
     $template->param(
         patron   => $patron,
@@ -229,20 +229,21 @@ sub writeoff_all {
 }
 
 sub borrower_add_additional_fields {
-    my $b_ref = shift;
+    my $patron = shift;
 
 # some borrower info is not returned in the standard call despite being assumed
 # in a number of templates. It should not be the business of this script but in lieu of
 # a revised api here it is ...
-    if ( $b_ref->{category_type} eq 'C' ) {
+    if ( $patron->category->category_type eq 'C' ) {
         my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
         $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
         $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
     }
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
-        $b_ref->{extendedattributes} = GetBorrowerAttributes($borrowernumber);
+        my $extendedattributes = GetBorrowerAttributes($patron->borrowernumber);
         $template->param(
+            extendedattributes       => $extendedattributes,
             ExtendedPatronAttributes => 1,
         );
     }
