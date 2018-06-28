@@ -31,7 +31,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-Koha::Account::Lines - Koha accountline Object class
+Koha::Account::Line - Koha accountline Object class
 
 =head1 API
 

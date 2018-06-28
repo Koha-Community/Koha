@@ -27,7 +27,6 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::Cities - Koha City Object set class
 Koha::Account::Lines - Koha Account Line Object set class
 
 =head1 API
