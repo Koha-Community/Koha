@@ -11,4 +11,5 @@ INSERT INTO account_offset_types ( type ) VALUES
 ('Rental Fee'),
 ('Fine Update'),
 ('Fine'),
-('Void Payment');
+('Void Payment'),
+('credit_applied');

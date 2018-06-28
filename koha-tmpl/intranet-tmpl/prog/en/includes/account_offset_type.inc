@@ -1,4 +1,5 @@
 [% SWITCH account_offset.type %]
+    [% CASE 'credit_applied' %]Credit applied
     [% CASE 'Payment' %]Payment
     [% CASE 'Manual Credit' %]Manual credit
     [% CASE 'Manual Debit' %]Manual invoice
