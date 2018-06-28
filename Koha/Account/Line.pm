@@ -128,25 +128,20 @@ sub void {
 
 =head3 apply
 
-    my $outstanding_amount = $credit->apply({ debit =>  $debit, [ offset_type => $offset_type ] });
+    my $debits = $account->outstanding_debits;
+    my $outstanding_amount = $credit->apply({ debits =>  $debits, [ offset_type => $offset_type ] });
 
 =cut
 
 sub apply {
     my ( $self, $params ) = @_;
 
-    my $debit       = $params->{debit};
+    my $debits      = $params->{debits};
     my $offset_type = $params->{offset_type} // 'credit_applied';
 
     unless ( $self->is_credit ) {
         Koha::Exceptions::Account::IsNotCredit->throw(
             error => 'Account line ' . $self->id . ' is not a credit'
-        );
-    }
-
-    unless ( $debit->is_debit ) {
-        Koha::Exceptions::Account::IsNotDebit->throw(
-            error => 'Account line ' . $debit->id . 'is not a debit'
         );
     }
 
@@ -161,30 +156,37 @@ sub apply {
     my $schema = Koha::Database->new->schema;
 
     $schema->txn_do( sub {
+        while ( my $debit = $debits->next ) {
 
-        my $amount_to_cancel;
-        my $owed = $debit->amountoutstanding;
-
-        if ( $available_credit >= $owed ) {
-            $amount_to_cancel = $owed;
-        }
-        else {    # $available_credit < $debit->amountoutstanding
-            $amount_to_cancel = $available_credit;
-        }
-
-        # record the account offset
-        Koha::Account::Offset->new(
-            {   credit_id => $self->id,
-                debit_id  => $debit->id,
-                amount    => $amount_to_cancel,
-                type      => $offset_type,
+            unless ( $debit->is_debit ) {
+                Koha::Exceptions::Account::IsNotDebit->throw(
+                    error => 'Account line ' . $debit->id . 'is not a debit'
+                );
             }
-        )->store();
+            my $amount_to_cancel;
+            my $owed = $debit->amountoutstanding;
 
-        $available_credit -= $amount_to_cancel;
+            if ( $available_credit >= $owed ) {
+                $amount_to_cancel = $owed;
+            }
+            else {    # $available_credit < $debit->amountoutstanding
+                $amount_to_cancel = $available_credit;
+            }
 
-        $self->amountoutstanding( $available_credit * -1 )->store;
-        $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
+            # record the account offset
+            Koha::Account::Offset->new(
+                {   credit_id => $self->id,
+                    debit_id  => $debit->id,
+                    amount    => $amount_to_cancel,
+                    type      => $offset_type,
+                }
+            )->store();
+
+            $available_credit -= $amount_to_cancel;
+
+            $self->amountoutstanding( $available_credit * -1 )->store;
+            $debit->amountoutstanding( $owed - $amount_to_cancel )->store;
+        }
     });
 
     return $available_credit;
