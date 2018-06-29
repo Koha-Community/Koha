@@ -75,8 +75,8 @@ is( int($accountline->amount), int($itemtype->{processfee}), "The accountline am
 is( $accountline->itemnumber, $itemnumber1, "The accountline itemnumber should the linked with barcode '0101'" );
 is( $accountline->note, C4::Context->preference("ProcessingFeeNote"), "The accountline description should be 'test'" );
 
-my $lost_ao = Koha::Account::Offsets->single( { type => 'Lost Item' } );
-ok( $lost_ao, 'Account offset of type "Lost Item" created' );
+my $lost_ao = Koha::Account::Offsets->search( { type => 'Lost Item' } );
+is( $lost_ao->count, 1, 'Account offset of type "Lost Item" created' );
 
-my $processing_fee_ao = Koha::Account::Offsets->single( { type => 'Processing Fee' } );
-ok( $processing_fee_ao, 'Account offset of type "Processing Fee" created' );
+my $processing_fee_ao = Koha::Account::Offsets->search( { type => 'Processing Fee' } );
+is( $processing_fee_ao->count, 1, 'Account offset of type "Processing Fee" created' );
