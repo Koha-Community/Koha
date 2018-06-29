@@ -167,6 +167,7 @@ t::lib::Selenium - Selenium helper module
 
 The goal of this module is to group the different actions we need
 when we use automation test using Selenium
+
 =head1 METHODS
 
 =head2 new
@@ -218,9 +219,6 @@ when we use automation test using Selenium
     $c->click_when_visible
 
     Should always be called to avoid the "An element could not be located on the page" error
-
-=head2
-
 
 =head1 AUTHORS
 
