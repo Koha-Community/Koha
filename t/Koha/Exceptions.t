@@ -22,7 +22,7 @@ use Test::Exception;
 
 subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
 
-    plan tests => 3;
+    plan tests => 5;
 
     use_ok('Koha::Exceptions::Object');
 
@@ -34,5 +34,10 @@ subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
     # stringify the exception
     is( "$@", 'Invalid parameter passed, nasty=fk does not exist', 'Exception stringified correctly' );
 
+    throws_ok
+        { Koha::Exceptions::Object::FKConstraint->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Object::FKConstraint',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
 
