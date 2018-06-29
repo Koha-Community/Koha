@@ -32,7 +32,7 @@ use C4::Reserves;
 use C4::Serials;
 use C4::XISBN qw(get_xisbns);
 use C4::External::Amazon;
-use C4::Search;		# enabled_staff_search_views
+use C4::Search;        # enabled_staff_search_views
 use C4::Tags qw(get_tags);
 use C4::XSLT;
 use C4::Images;
@@ -64,14 +64,14 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 
 # Determine if we should be offering any enhancement plugin buttons
 if ( C4::Context->preference('UseKohaPlugins') &&
-	 C4::Context->config('enable_plugins') ) {
-	# Only pass plugins that can offer a toolbar button
-	my @plugins = Koha::Plugins->new()->GetPlugins({
-		method => 'intranet_catalog_biblio_enhancements_toolbar_button'
-	});
-	$template->param(
-		plugins => \@plugins
-	);
+     C4::Context->config('enable_plugins') ) {
+    # Only pass plugins that can offer a toolbar button
+    my @plugins = Koha::Plugins->new()->GetPlugins({
+        method => 'intranet_catalog_biblio_enhancements_toolbar_button'
+    });
+    $template->param(
+        plugins => \@plugins
+    );
 }
 
 my $biblionumber = $query->param('biblionumber');
@@ -159,8 +159,8 @@ my $hostrecords;
 # adding items linked via host biblios
 my @hostitems = GetHostItemsInfo($record);
 if (@hostitems){
-	$hostrecords =1;
-	push (@items,@hostitems);
+    $hostrecords =1;
+    push (@items,@hostitems);
 }
 
 my $dat = &GetBiblioData($biblionumber);
@@ -172,7 +172,7 @@ my @subs;
 
 foreach my $subscription (@subscriptions) {
     my %cell;
-	my $serials_to_display;
+    my $serials_to_display;
     $cell{subscriptionid}    = $subscription->{subscriptionid};
     $cell{subscriptionnotes} = $subscription->{internalnotes};
     $cell{missinglist}       = $subscription->{missinglist};
@@ -182,9 +182,9 @@ foreach my $subscription (@subscriptions) {
     $cell{callnumber}        = $subscription->{callnumber};
     $cell{closed}            = $subscription->{closed};
     #get the three latest serials.
-	$serials_to_display = $subscription->{staffdisplaycount};
-	$serials_to_display = C4::Context->preference('StaffSerialIssueDisplayCount') unless $serials_to_display;
-	$cell{staffdisplaycount} = $serials_to_display;
+    $serials_to_display = $subscription->{staffdisplaycount};
+    $serials_to_display = C4::Context->preference('StaffSerialIssueDisplayCount') unless $serials_to_display;
+    $cell{staffdisplaycount} = $serials_to_display;
     $cell{latestserials} =
       GetLatestSerials( $subscription->{subscriptionid}, $serials_to_display );
     push @subs, \%cell;
@@ -294,7 +294,7 @@ foreach my $item (@items) {
         $item->{CheckedOutFor} = $checkout->patron;
     }
 
-	# Check the transit status
+    # Check the transit status
     my ( $transfertwhen, $transfertfrom, $transfertto ) = GetTransfers($item->{itemnumber});
     if ( defined( $transfertwhen ) && ( $transfertwhen ne '' ) ) {
         $item->{transfertwhen} = $transfertwhen;
@@ -314,7 +314,7 @@ foreach my $item (@items) {
 
     if ($item->{biblionumber} ne $biblionumber){
         $item->{hostbiblionumber} = $item->{biblionumber};
-	$item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
+        $item->{hosttitle} = GetBiblioData($item->{biblionumber})->{title};
     }
 	
 
@@ -369,26 +369,26 @@ if (scalar(@itemloop) == 0 || scalar(@otheritemloop) == 0) {
 
 $template->param( norequests => $norequests );
 $template->param(
-	MARCNOTES   => $marcnotesarray,
-	MARCSUBJCTS => $marcsubjctsarray,
-	MARCAUTHORS => $marcauthorsarray,
-	MARCSERIES  => $marcseriesarray,
-	MARCURLS => $marcurlsarray,
+    MARCNOTES   => $marcnotesarray,
+    MARCSUBJCTS => $marcsubjctsarray,
+    MARCAUTHORS => $marcauthorsarray,
+    MARCSERIES  => $marcseriesarray,
+    MARCURLS => $marcurlsarray,
     MARCISBNS => $marcisbnsarray,
-	MARCHOSTS => $marchostsarray,
-	subtitle    => $subtitle,
-	itemdata_ccode      => $itemfields{ccode},
-	itemdata_enumchron  => $itemfields{enumchron},
-	itemdata_uri        => $itemfields{uri},
-	itemdata_copynumber => $itemfields{copynumber},
-	itemdata_stocknumber => $itemfields{stocknumber},
-	volinfo				=> $itemfields{enumchron},
+    MARCHOSTS => $marchostsarray,
+    subtitle    => $subtitle,
+    itemdata_ccode      => $itemfields{ccode},
+    itemdata_enumchron  => $itemfields{enumchron},
+    itemdata_uri        => $itemfields{uri},
+    itemdata_copynumber => $itemfields{copynumber},
+    itemdata_stocknumber => $itemfields{stocknumber},
+    volinfo                => $itemfields{enumchron},
         itemdata_itemnotes  => $itemfields{itemnotes},
         itemdata_nonpublicnotes => $itemfields{itemnotes_nonpublic},
-	z3950_search_params	=> C4::Search::z3950_search_args($dat),
+    z3950_search_params    => C4::Search::z3950_search_args($dat),
         hostrecords         => $hostrecords,
-	analytics_flag	=> $analytics_flag,
-	C4::Search::enabled_staff_search_views,
+    analytics_flag    => $analytics_flag,
+    C4::Search::enabled_staff_search_views,
         materials       => $materials_flag,
 );
 
