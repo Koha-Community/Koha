@@ -65,7 +65,7 @@ sub do_checkin {
                    . substr( $return_date, 16, 2 );
 
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
-    my ($return, $messages, $iteminformation, $borrower) = AddReturn($barcode, $branch, undef, undef, $return_date);
+    my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, undef, $return_date);
     $self->alert(!$return);
     # ignoring messages: NotIssued, WasLost, WasTransfered
 
@@ -94,7 +94,7 @@ sub do_checkin {
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{WasTransfered}) { # set into transit so tell unit
-        $self->{item}->destination_loc($iteminformation->{homebranch});
+        $self->{item}->destination_loc($issue->item->homebranch);
         $self->alert_type('04');            # send to other branch
     }
     if ($messages->{ResFound}) {
