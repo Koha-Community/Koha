@@ -22,9 +22,7 @@
 [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") %]
 <!-- koha core js -->
 [% Asset.js("js/staff-global.js") %]
-[% IF Koha.Preference('BrowseResultSelection') %]
-    [% Asset.js("js/commons.js") %]
-[% END %]
+[% Asset.js("js/commons.js") %]
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
