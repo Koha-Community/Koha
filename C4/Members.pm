@@ -44,7 +44,6 @@ use Koha::Holds;
 use Koha::List::Patron;
 use Koha::Patrons;
 use Koha::Patron::Categories;
-use Koha::Schema;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
 
@@ -899,7 +898,7 @@ database column.
 =cut
 
 sub get_cardnumber_length {
-    my $borrower = Koha::Schema->resultset('Borrower');
+    my $borrower = Koha::Database->new->schema->resultset('Borrower');
     my $field_size = $borrower->result_source->column_info('cardnumber')->{size};
     my ( $min, $max ) = ( 0, $field_size ); # borrowers.cardnumber is a nullable varchar(20)
     $min = 1 if C4::Context->preference('BorrowerMandatoryField') =~ /cardnumber/;
