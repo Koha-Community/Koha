@@ -53,7 +53,7 @@
                 showOn: "both",
                 changeMonth: true,
                 changeYear: true,
-                buttonImage: '[% interface | html %]/lib/famfamfam/silk/calendar.png',
+                buttonImage: '[% interface | html %]/lib/famfamfam/calendar.png',
                 buttonImageOnly: true,
                 showButtonPanel: true,
                 showOtherMonths: true,

@@ -171,7 +171,7 @@
                 chip cartridge
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='c']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/cd.png" alt="computer optical disc cartridge" title="computer optical disc cartridge" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/cd.png" alt="computer optical disc cartridge" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='j']">
                 magnetic disc
@@ -180,11 +180,11 @@
                 magneto-optical disc
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='o']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/cd.png" alt="optical disc" title="optical disc" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/cd.png" alt="optical disc" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='r']">
 		available online
-                <img src="/opac-tmpl/lib/famfamfam/silk/drive_web.png" alt="remote" title="remote" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/drive_web.png" alt="remote" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='c'][substring(text(),2,1)='a']">
                 tape cartridge
@@ -197,16 +197,16 @@
             </xsl:if>
 
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='a']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/world.png" alt="celestial globe" title="celestial globe" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/world.png" alt="celestial globe" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='e']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/world.png" alt="earth moon globe" title="earth moon globe" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/world.png" alt="earth moon globe" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='b']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/world.png" alt="planetary or lunar globe" title="planetary or lunar globe" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/world.png" alt="planetary or lunar globe" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='d'][substring(text(),2,1)='c']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/world.png" alt="terrestrial globe" title="terrestrial globe" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/world.png" alt="terrestrial globe" class="format"/>
             </xsl:if>
 
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='o'][substring(text(),2,1)='o']">
@@ -269,19 +269,19 @@
                 film reel
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='n']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/chart_curve.png" alt="chart" title="chart" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/chart_curve.png" alt="chart" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='c']">
                 collage
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='d']">
-                 <img src="/opac-tmpl/lib/famfamfam/silk/pencil.png" alt="drawing" title="drawing" class="format"/>
+                 <img src="/opac-tmpl/lib/famfamfam/pencil.png" alt="drawing" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='o']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/note.png" alt="flash card" title="flash card" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/note.png" alt="flash card" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='e']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/paintbrush.png" alt="painting" title="painting" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/paintbrush.png" alt="painting" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='f']">
                 photomechanical print
@@ -293,7 +293,7 @@
                 photoprint
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='i']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/picture.png" alt="picture" title="picture" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/picture.png" alt="picture" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='k'][substring(text(),2,1)='j']">
                 print
@@ -302,7 +302,7 @@
                 technical drawing
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='q'][substring(text(),2,1)='q']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/script.png" alt="notated music" title="notated music" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/script.png" alt="notated music" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='g'][substring(text(),2,1)='d']">
                 filmslip
@@ -317,7 +317,7 @@
                 other filmstrip type
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='g'][substring(text(),2,1)='s']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/pictures.png" alt="slide" title="slide" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/pictures.png" alt="slide" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='g'][substring(text(),2,1)='t']">
                 transparency
@@ -338,7 +338,7 @@
                 sound cassette
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='s'][substring(text(),2,1)='d']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/cd.png" alt="sound disc" title="sound disc" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/cd.png" alt="sound disc" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='s'][substring(text(),2,1)='t']">
                 sound-tape reel
@@ -365,7 +365,7 @@
                 braille
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='t'][substring(text(),2,1)='b']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/magnifier.png" alt="large print" title="large print" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/magnifier.png" alt="large print" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='t'][substring(text(),2,1)='a']">
                 regular print
@@ -380,7 +380,7 @@
                 videocassette
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='v'][substring(text(),2,1)='d']">
-                <img src="/opac-tmpl/lib/famfamfam/silk/dvd.png" alt="videodisc" title="videodisc" class="format"/>
+                <img src="/opac-tmpl/lib/famfamfam/dvd.png" alt="videodisc" class="format"/>
             </xsl:if>
             <xsl:if test="marc:controlfield[@tag=007][substring(text(),1,1)='v'][substring(text(),2,1)='r']">
                 videoreel
@@ -613,23 +613,25 @@
     <span class="results_material_type">
         <span class="label">Material type: </span>
             <xsl:choose>
-                <xsl:when test="$leader19='a'"><img src="/opac-tmpl/lib/famfamfam/silk/book_link.png" alt="book" title="book" class="materialtype"/> Set</xsl:when>
+                <xsl:when test="$leader19='a'"><img src="/opac-tmpl/lib/famfamfam/ST.png" alt="Set" class="materialtype mt_icon_ST"/> Set</xsl:when>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
-                        <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'"><img src="/opac-tmpl/lib/famfamfam/silk/book.png" alt="book" title="book" class="materialtype"/> Book</xsl:when>
-                        <xsl:when test="$leader7='i' or $leader7='s'"><img src="/opac-tmpl/lib/famfamfam/silk/newspaper.png" alt="serial" title="serial" class="materialtype"/> Continuing resource</xsl:when>
-                        <xsl:when test="$leader7='a' or $leader7='b'"><img src="/opac-tmpl/lib/famfamfam/silk/book_open.png" alt="article" title="article" class="materialtype"/> Article</xsl:when>
+                        <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'"><img src="/opac-tmpl/lib/famfamfam/BK.png" alt="Text" class="materialtype mt_icon_BK"/> Text</xsl:when>
+                        <xsl:when test="$leader7='i' or $leader7='s'"><img src="/opac-tmpl/lib/famfamfam/SE.png" alt="Continuing resource" class="materialtype mt_icon_SE"/> Continuing resource</xsl:when>
+                        <xsl:when test="$leader7='a' or $leader7='b'"><img src="/opac-tmpl/lib/famfamfam/AR.png" alt="Article" class="materialtype mt_icon_AR"/> Article</xsl:when>
                     </xsl:choose>
                 </xsl:when>
-                <xsl:when test="$leader6='t'"><img src="/opac-tmpl/lib/famfamfam/silk/book.png" alt="book" title="book" class="materialtype"/> Book</xsl:when>
-                <xsl:when test="$leader6='o'"><img src="/opac-tmpl/lib/famfamfam/silk/report_disk.png" alt="kit" title="kit" class="materialtype"/> Kit</xsl:when>
-                <xsl:when test="$leader6='p'"><img src="/opac-tmpl/lib/famfamfam/silk/report_disk.png" alt="mixed materials" title="mixed materials" class="materialtype"/>Mixed materials</xsl:when>
-                <xsl:when test="$leader6='m'"><img src="/opac-tmpl/lib/famfamfam/silk/computer_link.png" alt="computer file" title="computer file" class="materialtype"/> Computer file</xsl:when>
-                <xsl:when test="$leader6='e' or $leader6='f'"><img src="/opac-tmpl/lib/famfamfam/silk/map.png" alt="map" title="map" class="materialtype"/> Map</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'"><img src="/opac-tmpl/lib/famfamfam/silk/film.png" alt="visual material" title="visual material" class="materialtype"/> Visual material</xsl:when>
-                <xsl:when test="$leader6='c' or $leader6='d'"><img src="/opac-tmpl/lib/famfamfam/silk/music.png" alt="score" title="score" class="materialtype"/> Score</xsl:when>
-                <xsl:when test="$leader6='i'"><img src="/opac-tmpl/lib/famfamfam/silk/sound.png" alt="sound" title="sound" class="materialtype"/> Sound</xsl:when>
-                <xsl:when test="$leader6='j'"><img src="/opac-tmpl/lib/famfamfam/silk/sound.png" alt="music" title="music" class="materialtype"/> Music</xsl:when>
+                <xsl:when test="$leader6='t'"><img src="/opac-tmpl/lib/famfamfam/BK.png" alt="Text" class="materialtype mt_icon_BK"/> Text</xsl:when>
+                <xsl:when test="$leader6='o'"><img src="/opac-tmpl/lib/famfamfam/MM.png" alt="Kit" class="materialtype mt_icon_MM"/> Kit</xsl:when>
+                <xsl:when test="$leader6='p'"><img src="/opac-tmpl/lib/famfamfam/MM.png" alt="Mixed materials" class="materialtype mt_icon_MM"/>Mixed materials</xsl:when>
+                <xsl:when test="$leader6='m'"><img src="/opac-tmpl/lib/famfamfam/CF.png" alt="Computer file" class="materialtype mt_icon_CF"/> Computer file</xsl:when>
+                <xsl:when test="$leader6='e' or $leader6='f'"><img src="/opac-tmpl/lib/famfamfam/MP.png" alt="Map" class="materialtype mt_icon_MP"/> Map</xsl:when>
+                <xsl:when test="$leader6='g'"><img src="/opac-tmpl/lib/famfamfam/VM.png" alt="Film" class="materialtype mt_icon_VM"/> Film</xsl:when>
+                <xsl:when test="$leader6='k'"><img src="/opac-tmpl/lib/famfamfam/GR.png" alt="Picture" class="materialtype mt_icon_GR"/> Picture</xsl:when>
+                <xsl:when test="$leader6='r'"><img src="/opac-tmpl/lib/famfamfam/OB.png" alt="Object" class="materialtype mt_icon_OB"/> Object</xsl:when>
+                <xsl:when test="$leader6='c' or $leader6='d'"><img src="/opac-tmpl/lib/famfamfam/PR.png" alt="Score" class="materialtype mt_icon_PR"/> Score</xsl:when>
+                <xsl:when test="$leader6='i'"><img src="/opac-tmpl/lib/famfamfam/MU.png" alt="Sound" class="materialtype mt_icon_MU"/> Sound</xsl:when>
+                <xsl:when test="$leader6='j'"><img src="/opac-tmpl/lib/famfamfam/PR.png" alt="Music" class="materialtype mt_icon_PR"/> Music</xsl:when>
             </xsl:choose>
     </span>
     </xsl:if>
@@ -648,7 +650,7 @@
         </xsl:if>
             <xsl:choose>
                 <xsl:when test="$controlField008-21='d'">
-                     <img src="/opac-tmpl/lib/famfamfam/silk/database.png" alt="database" title="database" class="format"/>
+                    <img src="/opac-tmpl/lib/famfamfam/database.png" alt="database" class="format"/>
                 </xsl:when>
                 <xsl:when test="$controlField008-21='l'">
                     loose-leaf
@@ -663,7 +665,7 @@
                     periodical
                 </xsl:when>
                 <xsl:when test="$controlField008-21='w'">
-                     <img src="/opac-tmpl/lib/famfamfam/silk/world_link.png" alt="web site" title="web site" class="format"/>
+                     <img src="/opac-tmpl/lib/famfamfam/world_link.png" alt="web site" class="format"/>
                 </xsl:when>
             </xsl:choose>
         </span>
@@ -678,7 +680,7 @@
                 </xsl:when>
                 <xsl:when test="contains($controlField008-24,'b')">
 			bibliography
-                     <img src="/opac-tmpl/lib/famfamfam/silk/text_list_bullets.png" alt="bibliography" title="bibliography" class="natureofcontents"/>
+                     <img src="/opac-tmpl/lib/famfamfam/text_list_bullets.png" alt="bibliography" class="natureofcontents"/>
                 </xsl:when>
                 <xsl:when test="contains($controlField008-24,'c')">
                     catalog
@@ -726,7 +728,7 @@
                     statistics
                 </xsl:when>
                 <xsl:when test="contains($controlField008-24,'t')">
-                     <img src="/opac-tmpl/lib/famfamfam/silk/report.png" alt="technical report" title="technical report" class="natureofcontents"/>
+                     <img src="/opac-tmpl/lib/famfamfam/report.png" alt="technical report" class="natureofcontents"/>
                 </xsl:when>
                 <xsl:when test="contains($controlField008-24,'v')">
                     legal case and case notes
@@ -756,13 +758,13 @@
                     numeric data
                 </xsl:when>
                 <xsl:when test="$controlField008-26='e'">
-                     <img src="/opac-tmpl/lib/famfamfam/silk/database.png" alt="database" title="database" class="format"/>
+                     <img src="/opac-tmpl/lib/famfamfam/database.png" alt="database" class="format"/>
                 </xsl:when>
                 <xsl:when test="$controlField008-26='f'">
-                     <img src="/opac-tmpl/lib/famfamfam/silk/font.png" alt="font" title="font" class="format"/>
+                     <img src="/opac-tmpl/lib/famfamfam/font.png" alt="font" class="format"/>
                 </xsl:when>
                 <xsl:when test="$controlField008-26='g'">
-                     <img src="/opac-tmpl/lib/famfamfam/silk/controller.png" alt="game" title="game" class="format"/>
+                     <img src="/opac-tmpl/lib/famfamfam/controller.png" alt="game" class="format"/>
                 </xsl:when>
             </xsl:choose>
         </span>
@@ -779,7 +781,7 @@
                 festschrift
             </xsl:if>
             <xsl:if test="$controlField008-34='a' or $controlField008-34='b' or $controlField008-34='c' or $controlField008-34='d'">
-                 <img src="/opac-tmpl/lib/famfamfam/silk/user.png" alt="biography" title="biography" class="natureofcontents"/>
+                 <img src="/opac-tmpl/lib/famfamfam/user.png" alt="biography" class="natureofcontents"/>
             </xsl:if>
 
             <xsl:if test="$controlField008-33 and $controlField008-33!='|' and $controlField008-33!='u' and $controlField008-33!=' '">
