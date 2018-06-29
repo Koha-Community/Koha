@@ -64,11 +64,13 @@ elsif (C4::Context->userenv and defined $input->param('branch') and length $inpu
 }
 
 my $news_id = $input->param('news_id');
-my (@all_koha_news, $koha_news_count);
+my @all_koha_news;
 
 if (defined $news_id){
-    @all_koha_news = Koha::News->search({ idnew => $news_id });
-    $koha_news_count = 1;
+    @all_koha_news = Koha::News->search({
+        idnew => $news_id,
+        lang  => $news_lang,
+    });
     if (scalar @all_koha_news > 0){
         $template->param( news_item => @all_koha_news );
     } else {
