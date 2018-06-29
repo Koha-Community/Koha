@@ -221,7 +221,7 @@ sub generate_subfield_form {
                 $subfield_data{marc_value} = {
                     type        => 'hidden',
                     id          => $subfield_data{id},
-                    maxlength   => $subfield_data{max_length},
+                    maxlength   => $subfield_data{maxlength},
                     value       => $value,
                 };
             }
@@ -240,7 +240,7 @@ sub generate_subfield_form {
                 $subfield_data{marc_value} = {
                     type         => 'text_auth',
                     id           => $subfield_data{id},
-                    maxlength    => $subfield_data{max_length},
+                    maxlength    => $subfield_data{maxlength},
                     value        => $value,
                     authtypecode => $subfieldlib->{authtypecode},
                 };
@@ -260,7 +260,7 @@ sub generate_subfield_form {
                 $subfield_data{marc_value} = {
                     type        => 'text_plugin',
                     id          => $subfield_data{id},
-                    maxlength   => $subfield_data{max_length},
+                    maxlength   => $subfield_data{maxlength},
                     value       => $value,
                     class       => $class,
                     nopopup     => $plugin->noclick,
@@ -271,7 +271,7 @@ sub generate_subfield_form {
                 $subfield_data{marc_value} = {
                     type        => 'text',
                     id          => $subfield_data{id},
-                    maxlength   => $subfield_data{max_length},
+                    maxlength   => $subfield_data{maxlength},
                     value       => $value,
                 }; # supply default input form
             }
@@ -280,7 +280,7 @@ sub generate_subfield_form {
             $subfield_data{marc_value} = {
                 type        => 'hidden',
                 id          => $subfield_data{id},
-                maxlength   => $subfield_data{max_length},
+                maxlength   => $subfield_data{maxlength},
                 value       => $value,
             };
         }
@@ -288,7 +288,7 @@ sub generate_subfield_form {
             $subfield_data{marc_value} = {
                 type        => 'text',
                 id          => $subfield_data{id},
-                maxlength   => $subfield_data{max_length},
+                maxlength   => $subfield_data{maxlength},
                 value       => $value,
             };
         }
@@ -314,7 +314,7 @@ sub generate_subfield_form {
             $subfield_data{marc_value} = {
                 type        => 'text',
                 id          => $subfield_data{id},
-                maxlength   => $subfield_data{max_length},
+                maxlength   => $subfield_data{maxlength},
                 value       => $value,
             };
         }
