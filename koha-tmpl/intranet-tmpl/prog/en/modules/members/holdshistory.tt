@@ -125,7 +125,7 @@
             var columns_settings = [% ColumnsSettings.GetColumns('members', 'holdshistory', 'holdshistory-table', 'json') %];
             [% UNLESS show_itemtype_column %]
               //Remove item type column settings
-              columns_settings.splice(8,1);
+              columns_settings = columns_settings.filter(function(c){return c['columnname'] != 'itemtype';});
             [% END %]
             var table = KohaTable("table_holdshistory", {
                 "sPaginationType": "four_button",
