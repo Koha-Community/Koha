@@ -7,6 +7,7 @@ use Carp;
 
 use C4::Templates qw ( gettemplate );
 use C4::Members qw( GetPendingIssues );
+use C4::Letters qw ( GetPreparedLetter );
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
