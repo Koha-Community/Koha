@@ -15,8 +15,10 @@ sub full_message {
 
     my $msg = $self->message;
 
-    if ( $self->isa('Koha::Exceptions::Object::FKConstraint') ) {
-        $msg = sprintf("Invalid parameter passed, %s=%s does not exist", $self->broken_fk, $self->value );
+    unless ( $msg) {
+        if ( $self->isa('Koha::Exceptions::Object::FKConstraint') ) {
+            $msg = sprintf("Invalid parameter passed, %s=%s does not exist", $self->broken_fk, $self->value );
+        }
     }
 
     return $msg;
