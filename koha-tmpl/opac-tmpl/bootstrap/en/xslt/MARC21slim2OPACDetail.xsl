@@ -63,8 +63,11 @@
                 <xsl:when test="$leader6='o' or $leader6='p'">MX</xsl:when>
                 <xsl:when test="$leader6='m'">CF</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">MP</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'">VM</xsl:when>
-                <xsl:when test="$leader6='i' or $leader6='j'">MU</xsl:when>
+                <xsl:when test="$leader6='g'">VM</xsl:when>
+                <xsl:when test="$leader6='k'">PK</xsl:when>
+                <xsl:when test="$leader6='r'">OB</xsl:when>
+                <xsl:when test="$leader6='i'">SO</xsl:when>
+                <xsl:when test="$leader6='j'">MU</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'">PR</xsl:when>
             </xsl:choose>
         </xsl:variable>
@@ -73,7 +76,7 @@
                 <xsl:when test="$leader19='a'">Set</xsl:when>
                 <xsl:when test="$leader6='a'">
                     <xsl:choose>
-                        <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'">Book</xsl:when>
+                        <xsl:when test="$leader7='c' or $leader7='d' or $leader7='m'">Text</xsl:when>
                         <xsl:when test="$leader7='i' or $leader7='s'">
                             <xsl:choose>
                                 <xsl:when test="substring($controlField008,22,1)!='m'">Continuing resource</xsl:when>
@@ -83,12 +86,14 @@
                         <xsl:when test="$leader7='a' or $leader7='b'">Article</xsl:when>
                     </xsl:choose>
                 </xsl:when>
-                <xsl:when test="$leader6='t'">Book</xsl:when>
+                <xsl:when test="$leader6='t'">Text</xsl:when>
 				<xsl:when test="$leader6='o'">Kit</xsl:when>
                 <xsl:when test="$leader6='p'">Mixed materials</xsl:when>
                 <xsl:when test="$leader6='m'">Computer file</xsl:when>
                 <xsl:when test="$leader6='e' or $leader6='f'">Map</xsl:when>
-                <xsl:when test="$leader6='g' or $leader6='k' or $leader6='r'">Visual material</xsl:when>
+                <xsl:when test="$leader6='g'">Film</xsl:when>
+                <xsl:when test="$leader6='k'">Picture</xsl:when>
+                <xsl:when test="$leader6='r'">Object</xsl:when>
                 <xsl:when test="$leader6='j'">Music</xsl:when>
                 <xsl:when test="$leader6='i'">Sound</xsl:when>
                 <xsl:when test="$leader6='c' or $leader6='d'">Score</xsl:when>
@@ -185,7 +190,11 @@
    <xsl:if test="$DisplayOPACiconsXSLT!='0'">
         <xsl:if test="$materialTypeCode!=''">
         <span class="results_summary type"><span class="label">Material type: </span>
-        <xsl:element name="img"><xsl:attribute name="src">/opac-tmpl/lib/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute><xsl:attribute name="alt">materialTypeLabel</xsl:attribute><xsl:attribute name="class">materialtype</xsl:attribute></xsl:element>
+        <xsl:element name="img">
+            <xsl:attribute name="src">/opac-tmpl/lib/famfamfam/<xsl:value-of select="$materialTypeCode"/>.png</xsl:attribute>
+            <xsl:attribute name="alt"><xsl:value-of select="$materialTypeLabel"/></xsl:attribute>
+            <xsl:attribute name="class">materialtype mt_icon_<xsl:value-of select="$materialTypeCode"/></xsl:attribute>
+        </xsl:element>
         <xsl:value-of select="$materialTypeLabel"/>
         </span>
         </xsl:if>
