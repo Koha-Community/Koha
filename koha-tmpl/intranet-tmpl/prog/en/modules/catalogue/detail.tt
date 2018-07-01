@@ -150,9 +150,9 @@
               <img src="[% imageurl | html %]" alt="" />
           [% END %]
           [% IF ( description ) %]
-            [% description | html %]
+              <span class="itypetext">[% description | html %]</span>
           [% ELSE %]
-            [% itemtype | html %]
+              <span class="itypetext">[% itemtype | html %]</span>
           [% END %]
           </span>
         [% END %]
@@ -406,7 +406,7 @@
                             [% IF !noItemTypeImages && itemtype.image_location %]
                                 <img src="[% itemtype.image_location | html %]" alt="[% itemtype.translated_description | html %]" title="[% itemtype.translated_description | html %]" />
                             [% END %]
-                            <span class="itypedesc">[% itemtype.translated_description | html %]</span>
+                            <span class="itypedesc itypetext">[% itemtype.translated_description | html %]</span>
                         </td>
                     [% END %]
                     <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.holdingbranch ) | html %] [% END %]</td>
@@ -987,7 +987,7 @@ Note that permanent location is a code, and location may be an authval.
 <div role="tabpanel" class="tab-pane" id="editions"><h4>Editions</h4>
 <table>
 [% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
-[% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description | html %][% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
+[% IF ( !item_level_itypes || Koha.Preference('BiblioItemtypeInfo') ) %]<td>[% IF ( noItemTypeImages ) %]<span class="itypetext">[% XISBN.description | html %]</span>[% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> <span>by</span> [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
   [% IF ( XISBN.publishercode ) %]
 [% XISBN.publishercode | html %] [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %] [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]

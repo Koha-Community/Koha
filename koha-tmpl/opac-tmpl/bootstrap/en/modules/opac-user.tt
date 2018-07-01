@@ -381,7 +381,7 @@
                                                             <span class="tdlabel">Item type:</span>
                                                             [% IF ( ISSUE.imageurl && !Koha.Preference('OpacNoItemTypeImages') ) %]
                                                                 <img src="[% ISSUE.imageurl | html %]" title="[% ISSUE.description | html %]" alt="[% ISSUE.description | html %]" />
-                                                            [% END %] [% ISSUE.description | html %]
+                                                                [% END %] <span class="itypetext">[% ISSUE.description | html %]</span>
                                                         </td>
                                                     [% END %]
                                                     [% IF ( show_barcode ) %]

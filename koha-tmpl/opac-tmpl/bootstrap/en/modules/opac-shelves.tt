@@ -399,7 +399,7 @@
                                                             [% UNLESS ( Koha.Preference('OpacNoItemTypeImages') ) %]
                                                                 <img src="[% itemsloo.imageurl | html %]" alt="[% itemsloo.description | html %]" title="[% itemsloo.description | html %]" />
                                                             [% END %]
-                                                            [% itemsloo.description | html %]
+                                                            <span class="itypetext">[% itemsloo.description | html %]</span>
                                                         </td>
                                                     [% END %]
                                                     <td>

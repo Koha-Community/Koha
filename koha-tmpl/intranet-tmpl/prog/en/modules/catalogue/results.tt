@@ -530,7 +530,7 @@
                                                         [% IF !noItemTypeImages && SEARCH_RESULT.imageurl %]
                                                             <img src="[% SEARCH_RESULT.imageurl | html %]" alt="[%  SEARCH_RESULT.description | html %]" />
                                                         [% END %]
-                                                        [% SEARCH_RESULT.description | html %]
+                                                        <span class="itypetext">[% SEARCH_RESULT.description | html %]</span>
                                                     </div>
                                                 [% END %]
 
@@ -659,7 +659,7 @@
                                                                             [% END %]
 
                                                                             [% IF item_level_itypes && items_loo.description %]
-                                                                                <span class="item-itype-desc">[% items_loo.description | html %]</span>
+                                                                                <span class="item-itype-desc itypetext">[% items_loo.description | html %]</span>
                                                                             [% END %]
                                                                         </li>
                                                                     [% END # /FOREACH other_items_loo %]

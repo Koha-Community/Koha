@@ -761,7 +761,7 @@
                                                         [% UNLESS ( noItemTypeImages ) %]
                                                             [% IF ( itemloo.itemtype.image_location) %]<img src="[% itemloo.itemtype.image_location | html %]" alt="" /> <br /> [% END %]
                                                         [% END %]
-                                                        [% itemloo.itemtype.translated_description | html %]
+                                                        <span class="itypetext">[% itemloo.itemtype.translated_description | html %]</span>
                                                     </td>
                                                 [% END %]
                                                 <td>

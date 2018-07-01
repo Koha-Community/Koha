@@ -171,9 +171,9 @@
                                 <img src="[% imageurl | html %]" alt="" />
                             [% END %]
                             [% IF ( description ) %]
-                                [% description | html %]
+                                <span class="itypetext">[% description | html %]</span>
                             [% ELSE %]
-                                [% itemtype | html %]
+                               <span class="itypetext">[% itemtype | html %]</span>
                             [% END %]
                         </span>
                     [% END %]
@@ -1242,7 +1242,7 @@
                                 <img src="[% ITEM_RESULT.imageurl | html %]" title="[% ITEM_RESULT.description | html %]" alt="[% ITEM_RESULT.description | html %]" />
                             [% END %]
                         [% END %]
-                        [% ITEM_RESULT.description | html %]
+                       <span class="itypetext">[% ITEM_RESULT.description | html %]</span>
                     </td>
                 [% END %]
                 [% IF ( OpacLocationBranchToDisplay == 'holding' || OpacLocationBranchToDisplay == 'both' ) %]
