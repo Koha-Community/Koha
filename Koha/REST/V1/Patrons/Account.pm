@@ -50,19 +50,19 @@ sub get {
 
     $balance->{balance} = $account->balance;
 
-    # get outstanding debits
-    my ( $debits_total,  $debits )  = $account->outstanding_debits;
-    my ( $credits_total, $credits ) = $account->outstanding_credits;
+    # get outstanding debits and credits
+    my $debits  = $account->outstanding_debits;
+    my $credits = $account->outstanding_credits;
 
     my @debit_lines = map { _to_api( $_->TO_JSON ) } @{ $debits->as_list };
     $balance->{outstanding_debits} = {
-        total => $debits_total,
+        total => $debits->total_outstanding,
         lines => \@debit_lines
     };
 
     my @credit_lines = map { _to_api( $_->TO_JSON ) } @{ $credits->as_list };
     $balance->{outstanding_credits} = {
-        total => $credits_total,
+        total => $credits->total_outstanding,
         lines => \@credit_lines
     };
 
