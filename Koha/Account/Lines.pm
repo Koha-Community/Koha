@@ -18,9 +18,9 @@ package Koha::Account::Lines;
 use Modern::Perl;
 
 use Carp;
+use List::Util qw( sum0 );
 
 use Koha::Database;
-
 use Koha::Account::Line;
 
 use base qw(Koha::Objects);
@@ -34,9 +34,27 @@ Koha::Account::Lines - Koha Account Line Object set class
 
 =head2 Class Methods
 
+=head3 total_outstanding
+
+    my $lines = Koha::Account::Lines->search({ ...  });
+    my $total = $lines->total_outstanding;
+
+Returns the sum of the outstanding amounts of the resultset. If the resultset is
+empty it returns 0.
+
 =cut
 
-=head3 type
+sub total_outstanding {
+    my ( $self ) = @_;
+
+    my $total = sum0( $self->get_column('amountoutstanding') );
+
+    return $total;
+}
+
+=head2 Internal methods
+
+=head3 _type
 
 =cut
 

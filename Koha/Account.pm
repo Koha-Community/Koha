@@ -22,7 +22,6 @@ use Modern::Perl;
 use Carp;
 use Data::Dumper;
 use List::MoreUtils qw( uniq );
-use List::Util qw( sum0 );
 
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
@@ -291,7 +290,7 @@ sub balance {
 
 =head3 outstanding_debits
 
-my ( $total, $lines ) = Koha::Account->new({ patron_id => $patron_id })->outstanding_debits;
+my $lines = Koha::Account->new({ patron_id => $patron_id })->outstanding_debits;
 
 =cut
 
@@ -305,9 +304,7 @@ sub outstanding_debits {
         }
     );
 
-    my $total = sum0( $lines->get_column('amountoutstanding') );
-
-    return ( $total, $lines );
+    return $lines;
 }
 
 =head3 non_issues_charges
