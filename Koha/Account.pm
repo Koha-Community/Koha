@@ -424,7 +424,7 @@ sub outstanding_debits {
 
 =head3 outstanding_credits
 
-my ( $total, $lines ) = Koha::Account->new({ patron_id => $patron_id })->outstanding_credits;
+my $lines = Koha::Account->new({ patron_id => $patron_id })->outstanding_credits;
 
 =cut
 
@@ -438,10 +438,7 @@ sub outstanding_credits {
         }
     );
 
-    # sum returns undef if list is empty
-    my $total = sum0( $lines->get_column('amountoutstanding') );
-
-    return ( $total, $lines );
+    return $lines;
 }
 
 =head3 non_issues_charges

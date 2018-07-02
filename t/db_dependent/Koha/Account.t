@@ -90,7 +90,7 @@ subtest 'outstanding_credits() tests' => sub {
     $schema->storage->txn_begin;
 
     my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
-    my $account = Koha::Account->new({ patron_id => $patron->id });
+    my $account = $patron->account;
 
     my @generated_lines;
     push @generated_lines, $account->add_credit({ amount => 1 });
@@ -98,9 +98,9 @@ subtest 'outstanding_credits() tests' => sub {
     push @generated_lines, $account->add_credit({ amount => 3 });
     push @generated_lines, $account->add_credit({ amount => 4 });
 
-    my ( $total, $lines ) = $account->outstanding_credits();
+    my $lines = $account->outstanding_credits();
 
-    is( $total, -10, 'Outstandig credits total is correctly calculated' );
+    is( $lines->total_outstanding, -10, 'Outstandig credits total is correctly calculated' );
 
     my $i = 0;
     foreach my $line ( @{ $lines->as_list } ) {
@@ -109,8 +109,9 @@ subtest 'outstanding_credits() tests' => sub {
         $i++;
     }
 
-    ( $total, $lines ) =  Koha::Account->new({ patron_id => 'InvalidBorrowernumber' })->outstanding_credits();
-    is( $total, 0, "Total if no outstanding credits is 0" );
+    my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
+    $lines       = $patron_2->account->outstanding_credits();
+    is( $lines->total_outstanding, 0, "Total if no outstanding credits is 0" );
     is( $lines->count, 0, "With no outstanding credits, we get back a Lines object with 0 lines" );
 
     $schema->storage->txn_rollback;
