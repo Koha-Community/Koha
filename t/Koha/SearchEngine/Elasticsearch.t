@@ -117,7 +117,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 45;
+    plan tests => 32;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -130,6 +130,15 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             sort => undef,
             marc_type => 'marc21',
             marc_field => '001',
+        },
+        {
+            name => 'isbn',
+            type => 'isbn',
+            facet => 0,
+            suggestible => 0,
+            sort => 0,
+            marc_type => 'marc21',
+            marc_field => '020a',
         },
         {
             name => 'author',
@@ -246,6 +255,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     $marc_record_1->leader('     cam  22      a 4500');
     $marc_record_1->append_fields(
         MARC::Field->new('001', '123'),
+        MARC::Field->new('020', '', '', a => '1-56619-909-3'),
         MARC::Field->new('100', '', '', a => 'Author 1'),
         MARC::Field->new('110', '', '', a => 'Corp Author'),
         MARC::Field->new('210', '', '', a => 'Title 1'),
@@ -271,7 +281,6 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     my $docs = $see->marc_records_to_documents($records);
 
     # First record:
-
     is(scalar @{$docs}, 2, 'Two records converted to documents');
 
     is($docs->[0][0], '1234567', 'First document biblionumber should be set as first element in document touple');
@@ -359,6 +368,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         ['am'],
         'First document type_of_record_and_bib_level field should be set correctly'
     );
+
+    is(scalar @{$docs->[0][1]->{isbn}}, 4, 'First document isbn field should contain four values');
+    is_deeply($docs->[0][1]->{isbn}, ['978-1-56619-909-4', '9781566199094', '1-56619-909-3', '1566199093'], 'First document isbn field should be set correctly');
 
     # Second record:
 

@@ -38,6 +38,7 @@ use List::Util qw( sum0 reduce );
 use MARC::File::XML;
 use MIME::Base64;
 use Encode qw(encode);
+use Business::ISBN;
 
 __PACKAGE__->mk_ro_accessors(qw( index ));
 __PACKAGE__->mk_accessors(qw( sort_fields ));
@@ -459,6 +460,33 @@ sub marc_records_to_documents {
                 $record_document->{$field} = sum0(grep { !ref($_) && m/\d+(\.\d+)?/} @{$record_document->{$field}});
             }
         }
+        # Index all applicable ISBN forms (ISBN-10 and ISBN-13 with and without dashes)
+        foreach my $field (@{$rules->{isbn}}) {
+            if (defined $record_document->{$field}) {
+                my @isbns = ();
+                foreach my $input_isbn (@{$record_document->{$field}}) {
+                    my $isbn = Business::ISBN->new($input_isbn);
+                    if (defined $isbn && $isbn->is_valid) {
+                        my $isbn13 = $isbn->as_isbn13->as_string;
+                        push @isbns, $isbn13;
+                        $isbn13 =~ s/\-//g;
+                        push @isbns, $isbn13;
+
+                        my $isbn10 = $isbn->as_isbn10;
+                        if ($isbn10) {
+                            $isbn10 = $isbn10->as_string;
+                            push @isbns, $isbn10;
+                            $isbn10 =~ s/\-//g;
+                            push @isbns, $isbn10;
+                        }
+                    } else {
+                        push @isbns, $input_isbn;
+                    }
+                }
+                $record_document->{$field} = \@isbns;
+            }
+        }
+
         # TODO: Perhaps should check if $records_document non empty, but really should never be the case
         $record->encoding('UTF-8');
         my @warnings;
@@ -625,6 +653,7 @@ sub _get_marc_mapping_rules {
         'control_fields' => {},
         'data_fields' => {},
         'sum' => [],
+        'isbn' => [],
         'defaults' => {}
     };
 
@@ -634,6 +663,9 @@ sub _get_marc_mapping_rules {
 
         if ($type eq 'sum') {
             push @{$rules->{sum}}, $name;
+        }
+        elsif ($type eq 'isbn') {
+            push @{$rules->{isbn}}, $name;
         }
         elsif ($type eq 'boolean') {
             # boolean gets special handling, if value doesn't exist for a field,
