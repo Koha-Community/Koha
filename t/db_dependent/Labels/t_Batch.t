@@ -21,11 +21,15 @@
 use Modern::Perl;
 
 use Test::More tests => 24;
-use C4::Context;
 use MARC::Record;
 use MARC::Field;
+
+use t::lib::TestBuilder;
+
+use C4::Context;
 use C4::Biblio;
 use C4::Items;
+use Koha::Libraries;
 
 BEGIN {
     use_ok('C4::Labels::Batch');
@@ -35,6 +39,10 @@ BEGIN {
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 $dbh->{RaiseError} = 1;
+
+my $builder = t::lib::TestBuilder->new;
+$builder->build({ source => 'Branch', value => { branchcode => 'CPL' } })
+    unless Koha::Libraries->find('CPL');
 
 my $sth = $dbh->prepare('SELECT branchcode FROM branches b LIMIT 0,1');
 $sth->execute();
