@@ -322,6 +322,7 @@
             $('#article-request-tabs').tabs({
                 activate: function( activate_event, activate_ui ) {
                     active_table = activate_ui.newPanel.selector;
+                    activateBatchActions( active_table );
                 },
                 create: function( create_event, create_ui ){
                     active_table = create_ui.panel.selector;
