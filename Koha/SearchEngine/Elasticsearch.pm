@@ -310,9 +310,9 @@ sub sort_fields {
     return $self->_sort_fields_accessor();
 }
 
-=head2 _process_mappings($mappings, $data, $record_document)
+=head2 _process_mappings($mappings, $data, $record_document, $altscript)
 
-    $self->_process_mappings($mappings, $marc_field_data, $record_document)
+    $self->_process_mappings($mappings, $marc_field_data, $record_document, 0)
 
 Process all C<$mappings> targets operating on a specific MARC field C<$data>.
 Since we group all mappings by MARC field targets C<$mappings> will contain
@@ -338,14 +338,26 @@ The source data from a MARC record field.
 Hashref representing the Elasticsearch document on which mappings should be
 applied.
 
+=item C<$altscript>
+
+A boolean value indicating whether an alternate script presentation is being
+processed.
+
 =back
 
 =cut
 
 sub _process_mappings {
-    my ($_self, $mappings, $data, $record_document) = @_;
+    my ($_self, $mappings, $data, $record_document, $altscript) = @_;
     foreach my $mapping (@{$mappings}) {
         my ($target, $options) = @{$mapping};
+
+        # Don't process sort fields for alternate scripts
+        my $sort = $target =~ /__sort$/;
+        if ($sort && $altscript) {
+            next;
+        }
+
         # Copy (scalar) data since can have multiple targets
         # with differing options for (possibly) mutating data
         # so need a different copy for each
@@ -363,7 +375,12 @@ sub _process_mappings {
                 $options->{property} => $_data
             }
         }
-        push @{$record_document->{$target}}, $_data;
+        # For sort fields, index only a single field with concatenated values
+        if ($sort && @{$record_document->{$target}}) {
+            @{$record_document->{$target}}[0] .= " $_data";
+        } else {
+            push @{$record_document->{$target}}, $_data;
+        }
     }
 }
 
@@ -399,17 +416,28 @@ sub marc_records_to_documents {
         my $record_document = {};
         my $mappings = $rules->{leader};
         if ($mappings) {
-            $self->_process_mappings($mappings, $record->leader(), $record_document);
+            $self->_process_mappings($mappings, $record->leader(), $record_document, 0);
         }
         foreach my $field ($record->fields()) {
-            if($field->is_control_field()) {
+            if ($field->is_control_field()) {
                 my $mappings = $control_fields_rules->{$field->tag()};
                 if ($mappings) {
-                    $self->_process_mappings($mappings, $field->data(), $record_document);
+                    $self->_process_mappings($mappings, $field->data(), $record_document, 0);
                 }
             }
             else {
-                my $data_field_rules = $data_fields_rules->{$field->tag()};
+                my $tag = $field->tag();
+                # Handle alternate scripts in MARC 21
+                my $altscript = 0;
+                if ($marcflavour eq 'marc21' && $tag eq '880') {
+                    my $sub6 = $field->subfield('6');
+                    if ($sub6 =~ /^(...)-\d+/) {
+                        $tag = $1;
+                        $altscript = 1;
+                    }
+                }
+
+                my $data_field_rules = $data_fields_rules->{$tag};
 
                 if ($data_field_rules) {
                     my $subfields_mappings = $data_field_rules->{subfields};
@@ -421,7 +449,7 @@ sub marc_records_to_documents {
                             $mappings = [@{$mappings}, @{$wildcard_mappings}];
                         }
                         if (@{$mappings}) {
-                            $self->_process_mappings($mappings, $data, $record_document);
+                            $self->_process_mappings($mappings, $data, $record_document, $altscript);
                         }
                     }
 
@@ -437,7 +465,7 @@ sub marc_records_to_documents {
                                 )
                             );
                             if ($data) {
-                                $self->_process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document);
+                                $self->_process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document, $altscript);
                             }
                         }
                     }
