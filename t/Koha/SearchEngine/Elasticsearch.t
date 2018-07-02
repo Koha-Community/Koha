@@ -115,7 +115,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 29;
+    plan tests => 30;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -307,7 +307,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         'First document sum_item_price field should be set correctly'
     );
 
-    ok(defined $docs->[0][1]->{marc_xml}, 'First document marc_xml field should be set');
+    ok(defined $docs->[0][1]->{marc_data}, 'First document marc_data field should be set');
+
+    ok(defined $docs->[0][1]->{marc_format}, 'First document marc_format field should be set');
 
     is(scalar @{$docs->[0][1]->{type_of_record}}, 1, 'First document type_of_record field should have one value');
     is_deeply(
