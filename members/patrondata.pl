@@ -57,7 +57,7 @@ if ($email) {
     # create link
     my $opacbase = C4::Context->preference('OPACBaseURL') || '';
     my $tokenLink = $opacbase
-      . "/cgi-bin/koha/mydata.pl?borrowernumber=".$bornumber."&token=".$token->attribute;
+      . "/cgi-bin/koha/mydata.pl?token=".$token->attribute;
 
     my $patron = Koha::Patrons->find( $bornumber );
 
