@@ -202,7 +202,7 @@ function PDFTemplate(json, time, section) {
 	for (var i in json) if (json.hasOwnProperty(i)) {
 		data = dataParser(json[i]);
 		for (var it = 0; it < data.length; it++) {
-			if (data[it].value) {
+			if (data[it] && data[it].value) {
 				doc.text(data[it].key, 10, line);
 				var splitValue = "";
 				if (data[it].value) {
