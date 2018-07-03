@@ -92,7 +92,7 @@ subtest 'json2marc' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 23;
+    plan tests => 24;
 
     t::lib::Mocks::mock_preference('DisplayLibraryFacets','both');
     my $query = $builder->build_query();
@@ -232,12 +232,14 @@ subtest 'build_query tests' => sub {
         "query of specific field is added AND suppress:0"
     );
 
-    ( undef, $query ) = $builder->build_query_compat( undef, ['title:"donald duck"'], undef, undef, undef, undef, undef, { suppress => 0 } );
+    my ($simple_query, $query_cgi);
+    ( undef, $query, $simple_query, $query_cgi ) = $builder->build_query_compat( undef, ['title:"donald duck"'], undef, undef, undef, undef, undef, { suppress => 0 } );
     is(
         $query->{query}{query_string}{query},
         '(title:"donald duck")',
         "query of specific field is not added AND suppress:0"
     );
+    is($query_cgi, 'q=title%3A%22donald%20duck%22', 'query cgi');
 };
 
 subtest "_convert_sort_fields" => sub {
