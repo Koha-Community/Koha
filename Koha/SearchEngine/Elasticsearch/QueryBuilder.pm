@@ -238,7 +238,7 @@ sub build_query_compat {
     #die Dumper($query);
     # We roughly emulate the CGI parameters of the zebra query builder
     my $query_cgi;
-    $query_cgi = 'idx=kw&q=' . uri_escape_utf8( $operands->[0] ) if @$operands;
+    $query_cgi = 'q=' . uri_escape_utf8( $operands->[0] ) if @$operands;
     my $simple_query;
     $simple_query = $operands->[0] if @$operands == 1;
     my $query_desc   = $simple_query;
