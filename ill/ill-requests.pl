@@ -55,9 +55,14 @@ my ( $template, $patronnumber, $cookie ) = get_template_and_user( {
 } );
 
 # Are we able to actually work?
-my $backends = Koha::Illrequest::Config->new->available_backends;
+my $cfg = Koha::Illrequest::Config->new;
+my $backends = $cfg->available_backends;
+my $has_branch = $cfg->has_branch;
 my $backends_available = ( scalar @{$backends} > 0 );
-$template->param( backends_available => $backends_available );
+$template->param(
+    backends_available => $backends_available,
+    has_branch         => $has_branch
+);
 
 if ( $backends_available ) {
     if ( $op eq 'illview' ) {

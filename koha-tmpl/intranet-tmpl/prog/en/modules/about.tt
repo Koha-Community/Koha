@@ -289,6 +289,11 @@
                     The ILL module is enabled, but no 'partner_code' defined in koha-conf.xml. Falling back to the hardcoded 'ILLLIBS'.
                     </td></tr>
                   [%END %]
+                  [% IF ill_branch_not_defined %]
+                    <tr><th scope="row"><b>Warning</b> </th><td>
+                    The ILL module is enabled, but no 'branch' block is defined in koha-conf.xml. You must define this block before use.
+                    </td></tr>
+                  [%END %]
                   [% IF ill_partner_code_doesnt_exist %]
                     <tr><th scope="row"><b>Warning</b> </th><td>
                     The ILL module is enabled, but the configured 'partner_code' ([% ill_partner_code_doesnt_exist | html %]) is not defined on the system.

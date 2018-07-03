@@ -282,6 +282,13 @@ if ( C4::Context->preference('ILLModule') ) {
         $warnILLConfiguration = 1;
     }
 
+
+    if ( !$ill_config_from_file->{branch} ) {
+        # branch not defined
+        $template->param( ill_branch_not_defined => 1 );
+        $warnILLConfiguration = 1;
+    }
+
     $template->param( warnILLConfiguration => $warnILLConfiguration );
 }
 

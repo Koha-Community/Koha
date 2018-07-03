@@ -117,6 +117,17 @@ sub available_backends {
     return \@backends;
 }
 
+=head has_branch
+
+Return whether a 'branch' block is defined
+
+=cut
+
+sub has_branch {
+    my ( $self ) = @_;
+    return $self->{configuration}->{raw_config}->{branch};
+}
+
 =head3 partner_code
 
     $partner_code = $config->partner_code($new_code);
@@ -150,18 +161,15 @@ sub limits {
 
 =head3 getPrefixes
 
-    my $prefixes = $config->getPrefixes('brw_cat' | 'branch');
+    my $prefixes = $config->getPrefixes();
 
-Return the prefix for ILLs defined by our config.
+Return the branch prefix for ILLs defined by our config.
 
 =cut
 
 sub getPrefixes {
-    my ( $self, $type ) = @_;
-    die "Unexpected type." unless ( $type eq 'brw_cat' || $type eq 'branch' );
-    my $values = $self->{configuration}->{prefixes}->{$type};
-    $values->{default} = $self->{configuration}->{prefixes}->{default};
-    return $values;
+    my ( $self ) = @_;
+    return $self->{configuration}->{prefixes}->{branch};
 }
 
 =head3 getLimitRules

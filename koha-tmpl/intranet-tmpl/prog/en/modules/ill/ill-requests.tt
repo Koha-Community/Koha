@@ -328,7 +328,7 @@
     <div id="bd">
         <div id="yui-main">
             <div id="interlibraryloans" class="yui-b">
-        [% IF !backends_available %]
+        [% IF !backends_available || !has_branch %]
             <div class="dialog message">ILL module configuration problem. Take a look at the <a href="/cgi-bin/koha/about.pl#sysinfo">about page</a></div>
         [% ELSE %]
                 [% INCLUDE 'ill-toolbar.inc' %]

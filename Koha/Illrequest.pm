@@ -717,8 +717,7 @@ sub getLimits {
 =head3 getPrefix
 
     my $prefix = $abstract->getPrefix( {
-        brw_cat => $brw_cat,
-        branch  => $branch_code,
+        branch  => $branch_code
     } );
 
 Return the ILL prefix as defined by our $params: either per borrower category,
@@ -728,13 +727,8 @@ per branch or the default.
 
 sub getPrefix {
     my ( $self, $params ) = @_;
-    my $brn_prefixes = $self->_config->getPrefixes('branch');
-    my $brw_prefixes = $self->_config->getPrefixes('brw_cat');
-
-    return $brw_prefixes->{$params->{brw_cat}}
-        || $brn_prefixes->{$params->{branch}}
-        || $brw_prefixes->{default}
-        || "";                  # "the empty prefix"
+    my $brn_prefixes = $self->_config->getPrefixes();
+    return $brn_prefixes->{$params->{branch}} || ""; # "the empty prefix"
 }
 
 =head3 get_type
@@ -982,12 +976,7 @@ file.
 
 sub id_prefix {
     my ( $self ) = @_;
-    my $brw = $self->patron;
-    my $brw_cat = "dummy";
-    $brw_cat = $brw->categorycode
-        unless ( 'HASH' eq ref($brw) && $brw->{deleted} );
     my $prefix = $self->getPrefix( {
-        brw_cat => $brw_cat,
         branch  => $self->branchcode,
     } );
     $prefix .= "-" if ( $prefix );
@@ -1018,6 +1007,10 @@ sub _censor {
 
 Overloaded I<TO_JSON> method that takes care of inserting calculated values
 into the unblessed representation of the object.
+
+TODO: This method does nothing and is not called anywhere. However, bug 74325
+touches it, so keeping this for now until both this and bug 74325 are merged,
+at which point we can sort it out and remove it completely
 
 =cut
 
