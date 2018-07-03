@@ -240,13 +240,17 @@ function dataParser(json) {
 				if (childJson[it] != "" && childJson[it] != null && childJson[it] != 0 && TrimValues(it)) {
 					if (it == "itemnumber") {
 						var item = getDataInfo('/api/v1/items/'+childJson[it]);
-						it = "barcode", 
-						childJson[it] = item.barcode;
+						if (item) {
+							it = "barcode", 
+							childJson[it] = item.barcode;
+						}
 					}
 					if (it == "biblionumber") {
 						var biblio = getDataInfo('/api/v1/biblios/'+childJson[it]);
-						it = "title", 
-						childJson[it] = biblio.title;
+						if (biblio) {
+							it = "title", 
+							childJson[it] = biblio.title;
+						}
 					}
 					self.arr.push(parseKeyValue(it, childJson[it]));
 				}
