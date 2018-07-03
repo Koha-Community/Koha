@@ -340,8 +340,8 @@ if ( $op eq 'list' ) {
             $template->param( uncertainprices => 1 );
         }
 
-        $line->{tax_rate} = $line->{tax_rate_on_ordering};
-        $line->{tax_value} = $line->{tax_value_on_ordering};
+        $line->{tax_rate} = $line->{tax_rate_on_ordering} // 0;
+        $line->{tax_value} = $line->{tax_value_on_ordering} // 0;
 
         push @books_loop, $line;
 
