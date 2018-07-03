@@ -62,13 +62,6 @@
         "required": false,
         "type": "string"
       }],
-      "x-koha-authorization": {
-        "allow-owner": true,
-          "permissions": {
-            "tools": "view_system_logs",
-            "tools": "manage_patron_lists"
-          }
-      },
       "responses": {
         "200": {
           "description": "Getting logs succeeded",
@@ -97,6 +90,8 @@
             "$ref": "../definitions.json#/error"
           }
         }
+      },
+      "x-koha-authorization": {
       }
     },
     "post": {
@@ -167,10 +162,6 @@
         }
       },
       "x-koha-authorization": {
-        "permissions": {
-          "tools": "view_system_logs",
-          "tools": "manage_patron_lists"
-        }
       }
     }
   },
