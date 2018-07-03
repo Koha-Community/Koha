@@ -32,7 +32,6 @@ use Koha;
 my $input = new CGI;
 
 my $token   = $input->param("token");
-my $bornumber     = $input->param("borrowernumber");
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -48,16 +47,16 @@ my $tokenizer = new Koha::Auth::Token;
 my $resultSet = Koha::Database->new()->schema()->resultset(Koha::Patron::Attribute->_type());
 
 my $tokenParams = {};
-$tokenParams->{borrowernumber} = $bornumber;
+$tokenParams->{borrowernumber} = $borrowernumber;
 $tokenParams->{code} = 'LTOKEN';
 
 my $dbtoken = $tokenizer->getToken($resultSet, $tokenParams);
-
+my $bornumber = $dbtoken->borrowernumber->borrowernumber if $dbtoken;
 if ( defined $dbtoken && $token eq $dbtoken->attribute && $bornumber eq $borrowernumber) {
 
     my $logUrl = C4::Context->preference('LogInterfaceURL');
     my $personalUrl = C4::Context->preference('PersonalInterfaceURL');
-    $template->param(borrowernumber => $bornumber, logurl => $logUrl, personalurl => $personalUrl);
+    $template->param(borrowernumber => $borrowernumber, logurl => $logUrl, personalurl => $personalUrl);
     $tokenizer->delete($resultSet, $tokenParams);
 	output_html_with_http_headers $input, $cookie, $template->output;
 } else {

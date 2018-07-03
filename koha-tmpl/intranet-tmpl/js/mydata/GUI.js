@@ -44,7 +44,7 @@ function MyDataView(){
 		var dataValues;
 		if (name == "logs") {dataValues = {object: borrowernumber};}
 		if (name == "user") {dataValues = {borrowernumber: borrowernumber, section: section};}
-		$(".spinner-wrapper").removeClass("hidden");
+		$("#mydata").find(".spinner-wrapper").removeClass("hidden");
 		$(".nodata, .dataurl").addClass("hidden");
 		var data = fetchJson(url, dataValues);
 		if (data) {
@@ -68,7 +68,8 @@ function MyDataView(){
 			$("#loadJSON").attr('href', 'data:' + filedata).attr('download',filename+now+'.json');
 		}
 		$(".nodata, .dataurl").removeClass("hidden");
-		$(".spinner-wrapper").addClass("hidden");
+		$("#mydata").find(".spinner-wrapper").addClass("hidden");
+		$('.'+section).removeClass("hidden");
 	}
 
 	if (userurl.length > 0) {
@@ -98,8 +99,10 @@ function MyDataView(){
 		var section = $(event.currentTarget).attr("section-value");
 		$('li').removeClass("active");
 		$(event.target).closest('li').addClass("active");
+		$('#userList').removeClass();
 		$('#logList').addClass("hidden");
-		$('#userList').removeClass("hidden");
+		$("#userList").addClass("hidden");
+		$("#userList").addClass(section);
 		$("#loadJSON").removeAttr("href").removeAttr("download");
 		self.dataurl(false);
 		if (logurl.length > 0) {
@@ -119,11 +122,13 @@ function MyDataView(){
 		if (self.user().length > 0) {
 			PDFTemplate(json, now, templatesection);
 		}
+		$("#mydata").find(".spinner-wrapper").removeClass("hidden");
 		var postValues = {module: "MEMBERS", action: "Print", object: borrowernumber, info: "Printed "+templatesection+" data"};
 		addLogRecord("/api/v1/logs/", postValues);
 
 	}
 	self.loadJSON = function(data, event) {
+		$("#mydata").find(".spinner-wrapper").removeClass("hidden");
 		var postValues = {module: "MEMBERS", action: "Download", object: borrowernumber, info: "Downloaded "+templatesection+" data"};
 		addLogRecord("/api/v1/logs/", postValues);
 	}
@@ -155,6 +160,9 @@ function addLogRecord(url, dataValues) {
         cache: true,
         async: false,
         success: function (data, textStatus, jqXHR) {
+			$("#mydata").find(".spinner-wrapper").addClass("hidden");
+			$("#patrondata").find(".spinner-wrapper").addClass("hidden");
+			$("#patrondata").find(".buttons").removeClass("hidden");
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(JSON.stringify(errorThrown));
@@ -162,17 +170,34 @@ function addLogRecord(url, dataValues) {
     });
 }
 
+function getDataInfo(url) {
+	var response;
+    $.ajax({
+        url: url,
+        type: "GET",
+        cache: true,
+        async: false,
+        success: function (data, textStatus, jqXHR) {
+			response = data;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            response = null;
+        }
+	});
+	return response;
+}
+
 function PDFTemplate(json, time, section) {
 	var translator = new Translator(myDataTranslations);
 	var doc = new jsPDF();
 	var data;
 	section = section.substr(0,1).toUpperCase()+section.substr(1);
-    doc.setFontSize(16);
+    doc.setFontSize(10);
     doc.setLineWidth(100);
 	doc.text(translator.translate(section), 10, 10);
 	doc.text(translator.translate("Field"), 10, 20);
-	doc.text(translator.translate("Value"), 60, 20);
-	doc.setFontSize(10);
+	doc.text(translator.translate("Value"), 50, 20);
+	doc.setFontSize(9);
 	var line = 30;
 	for (var i in json) if (json.hasOwnProperty(i)) {
 		data = dataParser(json[i]);
@@ -181,16 +206,14 @@ function PDFTemplate(json, time, section) {
 				doc.text(data[it].key, 10, line);
 				var splitValue = "";
 				if (data[it].value) {
-					splitValue = doc.splitTextToSize(isDate(data[it].value) ? moment(data[it].value).format('lll') : data[it].value, 130);
+					splitValue = doc.splitTextToSize(isDate(data[it].value) ? moment(data[it].value).format('lll') : data[it].value, 145);
 				}
-				doc.text(splitValue, 60, line);
+				doc.text(splitValue, 50, line);
 				var lineValue;
-				if (splitValue.length >= 2 && splitValue.length < 10) {
-					lineValue = 10*splitValue.length-10;
-				}else if (splitValue.length >= 10) {
-					lineValue = 10*splitValue.length-50;
+				if (splitValue.length >= 2) {
+					lineValue = 9*splitValue.length/2;
 				} else {
-					lineValue = 10;
+					lineValue = 9;
 				}
 			}
 			line += lineValue;
@@ -199,11 +222,9 @@ function PDFTemplate(json, time, section) {
 				line = lineValue;
 			}
 		}
-		line += 10;
+		line += 9;
 	}
 	doc.save(section+"data_"+time+".pdf");
-	$("#patrondata").find(".spinner-wrapper").addClass("hidden");
-	$("#patrondata").find(".buttons").removeClass("hidden");
 
 }
 
@@ -217,6 +238,16 @@ function dataParser(json) {
 			var childJson = json[i];
 			for (var it in childJson) if (childJson.hasOwnProperty(it)) {
 				if (childJson[it] != "" && childJson[it] != null && childJson[it] != 0 && TrimValues(it)) {
+					if (it == "itemnumber") {
+						var item = getDataInfo('/api/v1/items/'+childJson[it]);
+						it = "barcode", 
+						childJson[it] = item.barcode;
+					}
+					if (it == "biblionumber") {
+						var biblio = getDataInfo('/api/v1/biblios/'+childJson[it]);
+						it = "title", 
+						childJson[it] = biblio.title;
+					}
 					self.arr.push(parseKeyValue(it, childJson[it]));
 				}
 			}
@@ -247,25 +278,23 @@ function TrimJson(json) {
 		if ($.isArray(json)) {
 			var childJson = json[i];
 			for (var it in childJson) if (childJson.hasOwnProperty(it)) {
-				TrimValues(it, childJson);
+				TrimValues(it, childJson, ["biblionumber", "itemnumber"]);
 			}
 
 		} else {
-			TrimValues(i, json);
+			TrimValues(i, json, ["biblionumber", "itemnumber"]);
 		}
 	}
 
 }
 
-function TrimValues(key, array) {
+function TrimValues(key, array, addisonalValues) {
 	var arr = ["borrowernumber",
 				"issue_id",
 				"reserve_id",
-				"itemnumber",
 				"accountlines_id",
 				"manager_id",
 				"message_id",
-				"biblionumber",
 				"borrower_debarment_id",
 				"suggestionid",
 				"suggestedby",
@@ -277,7 +306,7 @@ function TrimValues(key, array) {
 				"action_id",
 				"object"];
 	var returnkey = true;
-
+	arr = arr.concat(addisonalValues);
 	if ($.inArray( key, arr ) !== -1) {
 		if (array) {
 			delete array[key]
