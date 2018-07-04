@@ -23,6 +23,7 @@ use C4::Auth;
 use Graphics::Magick;
 use XML::Simple;
 use POSIX qw(ceil);
+use Storable qw(dclone);
 use autouse 'Data::Dumper' => qw(Dumper);
 
 use C4::Debug;
@@ -125,11 +126,14 @@ if ($layout_xml->{'page_side'} eq 'B') { # rearrange items on backside of page t
     @{$items} = @swap_array;
 }
 
+# WARNING: Referential nightmare ahead...
+
 CARD_ITEMS:
 foreach my $item (@{$items}) {
     if ($item) {
         my $print_layout_xml = (( ($cardscount % 2  == 1) && ( $layout_back_id ) ) ?
-            $layout_back_xml : $layout_xml );
+            dclone($layout_back_xml) : dclone($layout_xml) );   # We must have a true copy of the layout xml hash, otherwise
+                                                                # we modify the original template and very bad things happen.
 
         $cardscount ++;
         my $borrower_number = $item->{'borrower_number'};
@@ -159,12 +163,11 @@ foreach my $item (@{$items}) {
         my $error = undef;
         my $images = $print_layout_xml->{'images'};
         PROCESS_IMAGES:
-        foreach (keys %{$images}) {
-            if (grep{m/source/} keys(%{$images->{$_}->{'data_source'}->[0]})) {
-                if ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'none') {
-                    next PROCESS_IMAGES;
+        foreach my $card_image (sort(keys %{$images})) {
+            if (grep{m/(source)/} keys(%{$images->{$card_image}->{'data_source'}->[0]})) {
+                if ($images->{$card_image}->{'data_source'}->[0]->{'image_source'} eq 'none') {
                 }
-                elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'patronimages') {
+                elsif ($images->{$card_image}->{'data_source'}->[0]->{'image_source'} eq 'patronimages') {
                     my $patron_image = Koha::Patron::Images->find($borrower_number);
                     if ($patron_image) {
                         $image_data->{'imagefile'} = $patron_image->imagefile;
@@ -172,27 +175,26 @@ foreach my $item (@{$items}) {
                     else {
                         warn sprintf('No image exists for borrower number %s.', $borrower_number);
                     }
-                    next PROCESS_IMAGES unless $patron_image;
                 }
-                elsif ($images->{$_}->{'data_source'}->[0]->{'image_source'} eq 'creator_images') {
+                elsif ($images->{$card_image}->{'data_source'}->[0]->{'image_source'} eq 'creator_images') {
+                    ## FIXME: The DB stuff here needs to be religated to a Koha::Creator::Images object -chris_n
                     my $dbh = C4::Context->dbh();
                     $dbh->{LongReadLen} = 1000000;      # allows us to read approx 1MB
-                    $image_data = $dbh->selectrow_hashref("SELECT imagefile FROM creator_images WHERE image_name = \'$images->{$_}->{'data_source'}->[0]->{'image_name'}\'");
+                    $image_data = $dbh->selectrow_hashref("SELECT imagefile FROM creator_images WHERE image_name = \'$images->{$card_image}->{'data_source'}->[0]->{'image_name'}\'");
                     warn sprintf('Database returned the following error: %s.', $error) if $error;
-                    warn sprintf('Image does not exists in db table %s.', $images->{$_}->{'data_source'}->[0]->{'image_name'}) if !$image_data;
-                    next PROCESS_IMAGES if !$image_data;
+                    unless($image_data){
+                        warn sprintf('Image does not exists in db table %s.', $images->{$card_image}->{'data_source'}->[0]->{'image_name'});
+                    }
                 }
                 else {
-                    warn sprintf('No retrieval method for image source %s.', $images->{$_}->{'data_source'}->[0]->{'image_source'});
-                    next PROCESS_IMAGES;
+                    warn sprintf('No retrieval method for image source %s.', $images->{$card_image}->{'data_source'}->[0]->{'image_source'});
                 }
             }
             else {
-                warn sprintf("Unrecognized image data source: %s", $images->{$_}->{'data_source'});
-                next PROCESS_IMAGES;
+                warn sprintf("Unrecognized image data source: %s", $images->{$card_image}->{'data_source'});
             }
 
-        my $binary_data = $image_data->{'imagefile'};
+        my $binary_data = $image_data->{'imagefile'} || next PROCESS_IMAGES;
 
 #       invoke the display image object...
         my $image = Graphics::Magick->new;
@@ -211,7 +213,7 @@ foreach my $item (@{$items}) {
         my $alt_width = ceil($image->Get('width')); # the rounding up is important: Adobe reader does not handle long decimal numbers well
         my $alt_height = ceil($image->Get('height'));
         my $ratio = $alt_width / $alt_height;
-        my $display_height = ceil($images->{$_}->{'Dx'});
+        my $display_height = ceil($images->{$card_image}->{'Dx'});
         my $display_width = ceil($ratio * $display_height);
 
 
@@ -219,20 +221,25 @@ foreach my $item (@{$items}) {
         $image->Set(magick => 'jpg', quality => 100);
 
 #       Write param for downsizing in pdf
-            $images->{$_}->{'scale'} = $pdf_scale_factor;
+            $images->{$card_image}->{'scale'} = $pdf_scale_factor;
 
 #       Write params for alt image...
-            $images->{$_}->{'alt'}->{'Sx'} = $oversize_factor * $alt_width;
-            $images->{$_}->{'alt'}->{'Sy'} = $oversize_factor * $alt_height;
-            $images->{$_}->{'alt'}->{'data'} = $alt_image->ImageToBlob();
+            $images->{$card_image}->{'alt'}->{'Sx'} = $oversize_factor * $alt_width;
+            $images->{$card_image}->{'alt'}->{'Sy'} = $oversize_factor * $alt_height;
+            $images->{$card_image}->{'alt'}->{'data'} = $alt_image->ImageToBlob();
 
 #       Write params for display image...
-            $images->{$_}->{'Sx'} = $oversize_factor * $display_width;
-            $images->{$_}->{'Sy'} = $oversize_factor * $display_height;
-            $images->{$_}->{'data'} = $image->ImageToBlob();
+            $images->{$card_image}->{'Sx'} = $oversize_factor * $display_width;
+            $images->{$card_image}->{'Sy'} = $oversize_factor * $display_height;
+            $images->{$card_image}->{'data'} = $image->ImageToBlob();
 
             my $err = $patron_card->draw_image($pdf);
-            warn sprintf ("Error encountered while attempting to draw image %s, %s", $_, $err) if $err;
+            warn sprintf ("Error encountered while attempting to draw image %s, %s", $card_image, $err) if $err;
+            # Destroy all Graphics::Magick objects and related references
+            # or bad things will happen.
+            undef $image;
+            undef $alt_image;
+            undef $binary_data;
         }
         $patron_card->draw_text($pdf);
     }
