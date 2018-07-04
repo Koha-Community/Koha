@@ -37,6 +37,7 @@
     var CANCEL = _("Cancel");
     var RESUME = _("Resume");
     var SUSPEND = _("Suspend");
+    var SUSPEND_UNTIL = _("Suspend until:");
     var SUSPEND_HOLD_ON = _("Suspend hold on");
     var CLEAR_DATE_TO_SUSPEND_INDEFINITELY = _("Clear date to suspend indefinitely");
     var SUSPEND_HOLD_ERROR_DATE = _("Unable to suspend hold, invalid date");
