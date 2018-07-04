@@ -241,7 +241,7 @@ $(document).ready(function() {
                 <div class='modal-body'>\
                     <input type='hidden' id='suspend-modal-reserve_id' name='reserve_id' />\
 \
-                    <label for='suspend-modal-until'>Suspend until:</label>\
+                    <label for='suspend-modal-until'>" + SUSPEND_UNTIL + "</label>\
                     <input name='suspend_until' id='suspend-modal-until' class='suspend-until' size='10' />\
 \
                     <p/><a class='btn btn-link' id='suspend-modal-clear-date' >" + CLEAR_DATE_TO_SUSPEND_INDEFINITELY + "</a></p>\
