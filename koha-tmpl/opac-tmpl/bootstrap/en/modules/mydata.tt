@@ -65,14 +65,14 @@
             <div class="col-md-4 pl-1 d-none d-md-block d-lg-block d-xl-block"><h3>Value</h3></div>
             <div class="w-100 mb-3"></div>
         </div>
-        <div class="w-100 text-center mt-5 spinner-wrapper hidden"><i class="fa fa-spinner fa-spin" style="font-size:80px;"></i></div>
+        <div class="w-100 text-center mt-5 spinner-wrapper"><i class="fa fa-spinner fa-spin" style="font-size:80px;"></i></div>
         <div id="userList">
                 <div data-bind="if: dataurl">
                     <div class="nodata" data-bind="if: user().length == 0">No data</div>
                     <div class="row ml-0 mt-3" data-bind="foreach: user">
                         <div class="row w-100 mt-4 mb-4 pl-1 pr-1 ml-0 border-bottom border-2 border-dark bg-dark" data-bind="css: { 'even': ($index() % 2 == 0 && $data.value), 'data-row': $data.value, 'bg-white': $data.value }">
                             <div class="col-md-4 pl-0"><span data-bind="text: $data.key"></span></div>
-                            <div class="col-md-4 pl-0"><span data-bind="text: isDate($data.value) ? moment($data.value).format('lll') : $data.value"></span></div>
+                            <div class="col-md-4 pl-0"><span data-bind="text: $data.value"></span></div>
                         </div>
                     </div>
                 </div>
@@ -84,7 +84,7 @@
                 <div class="row ml-0 mt-3" data-bind="foreach: logs">
                     <div class="row w-100 mt-4 mb-4 pl-1 pr-1 ml-0 border-bottom border-2 border-dark bg-dark" data-bind="css: { 'even': ($index() % 2 == 0 && $data.value), 'data-row': $data.value, 'bg-white': $data.value }">
                         <div class="col-md-4 pl-0"><span data-bind="text: $data.key"></span></div>
-                        <div class="col-md-4 pl-0"><span data-bind="text: isDate($data.value) ? moment($data.value).format('lll') : $data.value"></span></div>
+                        <div class="col-md-4 pl-0"><span data-bind="text: $data.value"></span></div>
                     </div>
                 </div>
             </div>

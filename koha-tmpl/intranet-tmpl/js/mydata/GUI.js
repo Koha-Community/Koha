@@ -4,24 +4,32 @@ $(document).ready(function(){
 		$("#patrondata").find(".spinner-wrapper").removeClass("hidden");
         var userValues = {borrowernumber: borrowernumber};
 		var logValues = {object: borrowernumber};
-		if (userUrl) {
-			var json = fetchJson(userUrl, userValues);
-			if (logUrl) {
-				var log = fetchJson(logUrl, logValues);
-				json['logs'] = log;
+		var logs;
+		if (logUrl) {
+			var logcallback = function(log) {
+				logs = log;
 			}
-			var userLang = navigator.language || navigator.userLanguage;
-			moment.locale(userLang);
-
-			var now = moment().format('Y-M-D');
-			PDFTemplate(json, now, "Patron");
-			var postValues = {module: "MEMBERS", action: "Print", object: borrowernumber, info: "Printed patron's data"};
-			addLogRecord("/api/v1/logs/", postValues);
-		} else {
-			alert("Missing preferences PersonalInterfaceUrl");
-			$("#patrondata").find(".buttons").removeClass("hidden");
-			$("#patrondata").find(".spinner-wrapper").addClass("hidden");
+			fetchJson(logUrl, logValues, logcallback);
 		}
+		var callback = function(json, textStatus, jqXHR) {
+            if (userUrl) {
+				if (logs) {
+					json['logs'] = logs;
+				}
+				var userLang = navigator.language || navigator.userLanguage;
+				moment.locale(userLang);
+	
+				var now = moment().format('Y-M-D');
+				PDFTemplate(json, now, "Patron");
+				var postValues = {module: "MEMBERS", action: "Print", object: borrowernumber, info: "Printed patron's data"};
+				addLogRecord("/api/v1/logs/", postValues);
+			} else {
+				alert("Missing preferences PersonalInterfaceUrl");
+				$("#patrondata").find(".buttons").removeClass("hidden");
+				$("#patrondata").find(".spinner-wrapper").addClass("hidden");
+			}
+        };
+		fetchJson(userUrl, userValues, callback);
     });
 });
 
@@ -44,32 +52,34 @@ function MyDataView(){
 		var dataValues;
 		if (name == "logs") {dataValues = {object: borrowernumber};}
 		if (name == "user") {dataValues = {borrowernumber: borrowernumber, section: section};}
-		$("#mydata").find(".spinner-wrapper").removeClass("hidden");
-		$(".nodata, .dataurl").addClass("hidden");
-		var data = fetchJson(url, dataValues);
-		if (data) {
-			if (name == "logs") {self.logs(dataParser(data)); filename = 'logdata_'; json = data; templatesection = 'logs'}
-			if (name == "user") {
-				for (var i in data) if (data.hasOwnProperty(i)) {
-					self.user(dataParser(data[i]));
-					if (section != 'personal') {
-						json = data[i];
+		var callback = function(data, textStatus, jqXHR) {
+			if (data) {
+				if (name == "logs") {self.logs(dataParser(data)); filename = 'logdata_'; json = data; templatesection = 'logs'}
+				if (name == "user") {
+					for (var i in data) if (data.hasOwnProperty(i)) {
+						self.user(dataParser(data[i]));
+						if (section != 'personal') {
+							json = data[i];
+						}
 					}
+					filename = section+'data_';
+					if (section == 'personal') {
+						json = data
+					}
+					templatesection = section;
+	
 				}
-				filename = section+'data_';
-				if (section == 'personal') {
-					json = data
-				}
-				templatesection = section;
-
+				TrimJson(json);
+				var filedata = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
+				$("#loadJSON").attr('href', 'data:' + filedata).attr('download',filename+now+'.json');
+				$("#mydata").find(".spinner-wrapper").addClass("hidden");
+				$('.'+section).removeClass("hidden");
+				if (name == "logs") {$('#logList').removeClass("hidden")};
+			} else {
+				$(".nodata, .dataurl").removeClass("hidden");
 			}
-			TrimJson(json);
-			var filedata = "text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(json));
-			$("#loadJSON").attr('href', 'data:' + filedata).attr('download',filename+now+'.json');
 		}
-		$(".nodata, .dataurl").removeClass("hidden");
-		$("#mydata").find(".spinner-wrapper").addClass("hidden");
-		$('.'+section).removeClass("hidden");
+		fetchJson(url, dataValues, callback);
 	}
 
 	if (userurl.length > 0) {
@@ -78,10 +88,8 @@ function MyDataView(){
 	}
 
 	self.logData = function(data, event) {
-		$('li').removeClass("active");
-		$(event.target).closest('li').addClass("active");
+		activateLoading(event);
 		$('#userList').addClass("hidden");
-		$('#logList').removeClass("hidden");
 		$("#loadJSON").removeAttr("href").removeAttr("download");
 		self.dataurl(false);
 		if (userurl.length > 0) {
@@ -97,8 +105,7 @@ function MyDataView(){
 
      self.userData = function(data, event) {
 		var section = $(event.currentTarget).attr("section-value");
-		$('li').removeClass("active");
-		$(event.target).closest('li').addClass("active");
+		activateLoading(event);
 		$('#userList').removeClass();
 		$('#logList').addClass("hidden");
 		$("#userList").addClass("hidden");
@@ -134,16 +141,16 @@ function MyDataView(){
 	}
 }
 
-function fetchJson(url, dataValues) {
+function fetchJson(url, dataValues, callback) {
     var response;
     $.ajax({
         url: url,
         type: "GET",
         data: dataValues,
         cache: true,
-        async: false,
+        async: true,
         success: function (data, textStatus, jqXHR) {
-            response = data;
+            if (callback) callback(data, textStatus, jqXHR);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert(JSON.stringify(errorThrown));
@@ -152,13 +159,21 @@ function fetchJson(url, dataValues) {
     return response;
 }
 
+function activateLoading(event) {
+
+	$('li').removeClass("active");
+	$(event.target).closest('li').addClass("active");
+	$("#mydata").find(".spinner-wrapper").removeClass("hidden");
+	$(".nodata, .dataurl").addClass("hidden");
+}
+
 function addLogRecord(url, dataValues) {
     $.ajax({
         url: url,
         type: "POST",
-        data: dataValues,
-        cache: true,
-        async: false,
+		data: dataValues,
+		cache: true,
+        async: true,
         success: function (data, textStatus, jqXHR) {
 			$("#mydata").find(".spinner-wrapper").addClass("hidden");
 			$("#patrondata").find(".spinner-wrapper").addClass("hidden");
@@ -206,7 +221,7 @@ function PDFTemplate(json, time, section) {
 				doc.text(data[it].key, 10, line);
 				var splitValue = "";
 				if (data[it].value) {
-					splitValue = doc.splitTextToSize(isDate(data[it].value) ? moment(data[it].value).format('lll') : data[it].value, 145);
+					splitValue = doc.splitTextToSize(data[it].value, 145);
 				}
 				doc.text(splitValue, 50, line);
 				var lineValue;
@@ -242,14 +257,14 @@ function dataParser(json) {
 						var item = getDataInfo('/api/v1/items/'+childJson[it]);
 						if (item) {
 							it = "barcode", 
-							childJson[it] = item.barcode;
+							childJson[it] = item.barcode ? item.barcode : "No barcode";
 						}
 					}
 					if (it == "biblionumber") {
 						var biblio = getDataInfo('/api/v1/biblios/'+childJson[it]);
 						if (biblio) {
 							it = "title", 
-							childJson[it] = biblio.title;
+							childJson[it] = biblio.title ? biblio.title : "No title";
 						}
 					}
 					self.arr.push(parseKeyValue(it, childJson[it]));
