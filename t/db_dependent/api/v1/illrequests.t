@@ -38,7 +38,7 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 18;
 
     my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
     # Mock ->capabilities
@@ -67,6 +67,7 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::Illrequests',
             value => {
+                backend        => 'FreeForm',
                 branchcode     => $library->branchcode,
                 borrowernumber => $patron->borrowernumber
             }
@@ -77,20 +78,18 @@ subtest 'list() tests' => sub {
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [ $illrequest->TO_JSON ] );
+    $t->request_ok($tx)->status_is(200)->json_is( [ $illrequest->unblessed ] );
 
     # One illrequest created, returned with augmented data
     $tx = $t->ua->build_tx( GET =>
           '/api/v1/illrequests?embed=patron,library,capabilities,metadata' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is(
-        [
-            $illrequest->TO_JSON(
-                { patron => 1, library => 1, capabilities => 1, metadata => 1 }
-            )
-        ]
-    );
+    $t->request_ok($tx)->status_is(200)
+        ->json_has( '/0/patron', $patron->unblessed )
+        ->json_has( '/0/capabilities', 'capable' )
+        ->json_has( '/0/library', $library->unblessed  )
+        ->json_has( '/0/metadata', 'metawhat?'  );
 
     # Create another ILL request
     my $illrequest2 = $builder->build_object(
@@ -108,7 +107,7 @@ subtest 'list() tests' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
-      ->json_is( [ $illrequest->TO_JSON, $illrequest2->TO_JSON ] );
+      ->json_is( [ $illrequest->unblessed, $illrequest2->unblessed ] );
 
     # Warn on unsupported query parameter
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests?request_blah=blah' );
