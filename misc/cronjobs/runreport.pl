@@ -274,6 +274,7 @@ foreach my $report_id (@ARGV) {
         $message = $cgi->table(join "", @rows);
     } elsif ($format eq 'csv') {
         my $csv = Text::CSV_XS->new({
+            binary      => 1,
             quote_char  => $quote,
             sep_char    => $separator,
             });
