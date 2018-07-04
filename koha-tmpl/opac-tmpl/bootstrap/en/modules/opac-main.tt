@@ -65,7 +65,6 @@
 
         [% IF ( koha_news ) %]
 
-
             [% IF single_news_error %]
 
                 <div class="alert alert-error">
@@ -80,14 +79,14 @@
                     <div class="newsitem">
                         <a name="newsitem[% koha_new.idnew | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.idnew %]"><h4 class="newsheader">[% koha_new.title | html %]</h4></a>
                         <div class="newsbody">[% koha_new.content | $raw %]</div>
-                        <div class="newsfooter">(published on [% koha_new.timestamp | $KohaDates with_hours = 1 | html %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %])</div>
+                        <div class="newsfooter">(published on [% koha_new.timestamp | $KohaDates with_hours = 1 | html %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %][% IF ( koha_new.expirationdate ) %], expiry on [% koha_new.expirationdate %][% END %])</div>
                     </div>
                 [% END %]
             </div>
 
             [% END %]
 
-            [% UNLESS news_item %] <!-- If single news item -->
+            [% UNLESS news_item %] <!-- unless single news item -->
 
             <div id="rssnews-container">
                 <!-- Logged in users have a branch code or it could be explicitly set -->
@@ -106,30 +105,30 @@
                     [% END %]
                 [% END %]
             </div>
-            [% ELSE %]
-                [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
-                    <div id="news" class="newscontainer">
-                        <div class="newsitem">
-                            <div class="newsbody">No news to display.</div>
-                            <div class="newsfooter"></div>
-                        </div>
+
+            [% IF ( display_daily_quote && daily_quote ) %]
+                <div id="daily-quote">
+                    <h3>Quote of the day</h3>
+                    <div>
+                        <span id="daily-quote-text">[% daily_quote.text | html %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source | html %]</span>
                     </div>
-                [% END %]
+                </div>
             [% END %]
 
-        [% IF ( display_daily_quote && daily_quote ) %]
-            <div id="daily-quote">
-                <h3>Quote of the day</h3>
-                <div>
-                    <span id="daily-quote-text">[% daily_quote.text | html %]</span><span id="daily-quote-sep"> ~ </span><span id="daily-quote-source">[% daily_quote.source | html %]</span>
+            [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock | $raw %]</div>[% END %]
+
+            [% END %] <!-- single news item -->
+        [% ELSE %] <!-- koha news -->
+            [% IF Koha.Preference( 'OpacNewsLibrarySelect' ) %]
+                <div id="news" class="newscontainer">
+                    <div class="newsitem">
+                        <div class="newsbody">No news to display.</div>
+                        <div class="newsfooter"></div>
+                    </div>
                 </div>
-            </div>
+            [% END %]
         [% END %]
-
-        [% IF ( OpacMainUserBlock ) %]<div id="opacmainuserblock">[% OpacMainUserBlock | $raw %]</div>[% END %]
         </div> <!-- / .span 7/9 -->
-
-        [% END %] <!-- If single news item -->
 
         [% IF ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) || OpacNavRight ) %]
             <div class="span3">
