@@ -27,27 +27,31 @@ sub _get_record_for_export {
     }
     return unless $record;
 
-    if ($dont_export_fields) {
-        for my $f ( split / /, $dont_export_fields ) {
-            if ( $f =~ m/^(\d{3})(.)?$/ ) {
-                my ( $field, $subfield ) = ( $1, $2 );
+    _strip_unwanted_fields($record, $dont_export_fields) if $dont_export_fields;
+    C4::Biblio::RemoveAllNsb($record) if $clean;
+    return $record;
+}
 
-                # skip if this record doesn't have this field
-                if ( defined $record->field($field) ) {
-                    if ( defined $subfield ) {
-                        my @tags = $record->field($field);
-                        foreach my $t (@tags) {
-                            $t->delete_subfields($subfield);
-                        }
-                    } else {
-                        $record->delete_fields( $record->field($field) );
+sub _strip_unwanted_fields {
+    my ($record, $dont_export_fields) = @_;
+
+    for my $f ( split / /, $dont_export_fields ) {
+        if ( $f =~ m/^(\d{3})(.)?$/ ) {
+            my ( $field, $subfield ) = ( $1, $2 );
+
+            # skip if this record doesn't have this field
+            if ( defined $record->field($field) ) {
+                if ( defined $subfield ) {
+                    my @tags = $record->field($field);
+                    foreach my $t (@tags) {
+                        $t->delete_subfields($subfield);
                     }
+                } else {
+                    $record->delete_fields( $record->field($field) );
                 }
             }
         }
     }
-    C4::Biblio::RemoveAllNsb($record) if $clean;
-    return $record;
 }
 
 sub _get_authority_for_export {
@@ -85,6 +89,26 @@ sub _get_biblio_for_export {
     return $record;
 }
 
+sub _get_holdings_for_export {
+    my ($params)           = @_;
+    my $dont_export_fields = $params->{dont_export_fields};
+    my $clean              = $params->{clean};
+    my $biblionumber       = $params->{biblionumber};
+
+    my $records = C4::Holdings::GetMarcHoldingsByBiblionumber($biblionumber);
+    foreach my $record (@$records) {
+        _strip_unwanted_fields($record, $dont_export_fields) if $dont_export_fields;
+        C4::Biblio::RemoveAllNsb($record) if $clean;
+        C4::Biblio::UpsertMarcControlField($record, '004', $biblionumber);
+        my $leader = $record->leader();
+        if ($leader !~ /^.{6}[uvxy]/) {
+            $leader =~ s/^(.{6})./$1u/;
+            $record->leader($leader);
+        }
+    }
+    return $records;
+}
+
 sub export {
     my ($params) = @_;
 
@@ -96,6 +120,7 @@ sub export {
     my $dont_export_fields = $params->{dont_export_fields};
     my $csv_profile_id     = $params->{csv_profile_id};
     my $output_filepath    = $params->{output_filepath};
+    my $export_holdings    = $params->{export_holdings} // 0;
 
     if( !$record_type ) {
         Koha::Logger->get->warn( "No record_type given." );
@@ -124,6 +149,20 @@ sub export {
                 next;
             }
             print $record->as_usmarc();
+            if ($export_holdings && $record_type eq 'bibs') {
+                my $holdings = _get_holdings_for_export( { %$params, biblionumber => $record_id } );
+                foreach my $holding (@$holdings) {
+                    my $errorcount_on_decode = eval { scalar( MARC::File::USMARC->decode( $holding->as_usmarc )->warnings() ) };
+                    if ( $errorcount_on_decode or $@ ) {
+                        my $msg = "Holdings record for biblio $record_id could not be exported. " .
+                            ( $@ // '' );
+                        chomp $msg;
+                        Koha::Logger->get->info( $msg );
+                        next;
+                    }
+                    print $holding->as_usmarc();
+                }
+            }
         }
     } elsif ( $format eq 'xml' ) {
         my $marcflavour = C4::Context->preference("marcflavour");
@@ -139,6 +178,13 @@ sub export {
             }
             print MARC::File::XML::record($record);
             print "\n";
+            if ($export_holdings && $record_type eq 'bibs') {
+                my $holdings = _get_holdings_for_export( { %$params, biblionumber => $record_id } );
+                foreach my $holding (@$holdings) {
+                    print MARC::File::XML::record($holding);
+                    print "\n";
+                }
+            }
         }
         print MARC::File::XML::footer();
         print "\n";

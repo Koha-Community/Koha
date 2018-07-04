@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 use Test::Warn;
 use t::lib::TestBuilder;
 
@@ -35,6 +35,7 @@ use Koha::Biblio;
 use Koha::Biblioitem;
 use Koha::Exporter::Record;
 use Koha::Biblio::Metadata;
+use Koha::Holdings;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -58,9 +59,16 @@ $biblio_2->append_fields(
 );
 my ($biblionumber_2, $biblioitemnumber_2) = AddBiblio($biblio_2, '');
 
-my $bad_biblio = Koha::Biblio->new()->store();
+my $bad_biblio = Koha::Biblio->new()->datecreated('2018-01-01')->store();
 Koha::Biblio::Metadata->new( { biblionumber => $bad_biblio->id, format => 'marcxml', metadata => 'something wrong', marcflavour => C4::Context->preference('marcflavour') } )->store();
 my $bad_biblionumber = $bad_biblio->id;
+
+my $holding_1 = MARC::Record->new();
+$holding_1->leader('00202cx  a22000973  4500');
+$holding_1->append_fields(
+    MARC::Field->new('852', '8', ' ', b => 'Location', k => '1973', h => 'Tb', t => 'Copy 1')
+);
+C4::Holdings::AddHolding($holding_1, '', $biblionumber_1);
 
 my $builder = t::lib::TestBuilder->new;
 my $item_1_1 = $builder->build({
@@ -197,6 +205,59 @@ subtest 'export iso2709' => sub {
     my $title = $second_record->subfield(245, 'a');
     $title = Encode::encode('UTF-8', $title);
     is( $title, $biblio_2_title, 'Export ISO2709: The title is correctly encoded' );
+};
+
+subtest 'export xml with holdings' => sub {
+    plan tests => 2;
+    my $generated_xml_file = '/tmp/test_export.xml';
+    Koha::Exporter::Record::export(
+        {   record_type     => 'bibs',
+            record_ids      => [ $biblionumber_1, $biblionumber_2 ],
+            format          => 'xml',
+            output_filepath => $generated_xml_file,
+            export_holdings => 1,
+        }
+    );
+
+    my $generated_xml_content = read_file( $generated_xml_file );
+    $MARC::File::XML::_load_args{BinaryEncoding} = 'utf-8';
+    open my $fh, '<', $generated_xml_file;
+    my $records = MARC::Batch->new( 'XML', $fh );
+    my @records;
+    # The following statement produces
+    # Use of uninitialized value in concatenation (.) or string at /usr/share/perl5/MARC/File/XML.pm line 398, <$fh> chunk 5.
+    # Why?
+    while ( my $record = $records->next ) {
+        push @records, $record;
+    }
+    is( scalar( @records ), 3, 'Export XML with holdings: 3 records should have been exported' );
+    my $holding_record = $records[1];
+    my $location = $holding_record->subfield('852', 'b');
+    is( $location, 'Location', 'Export XML with holdings: The holding record is correctly exported' );
+};
+
+subtest 'export iso2709 with holdings' => sub {
+    plan tests => 2;
+    my $generated_mrc_file = '/tmp/test_export.mrc';
+    # Get all item infos
+    Koha::Exporter::Record::export(
+        {   record_type     => 'bibs',
+            record_ids      => [ $biblionumber_1, $biblionumber_2 ],
+            format          => 'iso2709',
+            output_filepath => $generated_mrc_file,
+            export_holdings => 1,
+        }
+    );
+
+    my $records = MARC::File::USMARC->in( $generated_mrc_file );
+    my @records;
+    while ( my $record = $records->next ) {
+        push @records, $record;
+    }
+    is( scalar( @records ), 3, 'Export ISO2709 with holdings: 3 records should have been exported' );
+    my $holding_record = $records[1];
+    my $location = $holding_record->subfield('852', 'b');
+    is( $location, 'Location', 'Export ISO2709 with holdings: The holding record is correctly exported' );
 };
 
 subtest 'export without record_type' => sub {

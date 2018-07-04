@@ -35,6 +35,7 @@ use Koha::Libraries;
 my $query = new CGI;
 
 my $dont_export_items = $query->param("dont_export_item") || 0;
+my $export_holdings   = $query->param("export_holdings") || 0;
 my $record_type       = $query->param("record_type");
 my $op                = $query->param("op") || '';
 my $output_format     = $query->param("format") || $query->param("output_format") || 'iso2709';
@@ -209,6 +210,7 @@ if ( $op eq "export" ) {
                 dont_export_fields => $export_remove_fields,
                 csv_profile_id     => $csv_profile_id,
                 export_items       => (not $dont_export_items),
+                export_holdings    => $export_holdings,
             }
         );
     }
@@ -302,6 +304,7 @@ else {
         export_remove_fields     => C4::Context->preference("ExportRemoveFields"),
         csv_profiles             => [ Koha::CsvProfiles->search({ type => 'marc', used_for => 'export_records' }) ],
         messages                 => \@messages,
+        show_summary_holdings    => C4::Context->preference('SummaryHoldings') ? 1 : 0,
     );
 
     output_html_with_http_headers $query, $cookie, $template->output;

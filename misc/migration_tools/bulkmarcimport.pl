@@ -27,6 +27,8 @@ use C4::Koha;
 use C4::Debug;
 use C4::Charset;
 use C4::Items;
+use C4::Holdings;
+
 use YAML;
 use Unicode::Normalize;
 use Time::HiRes qw(gettimeofday);
@@ -41,7 +43,7 @@ use open qw( :std :encoding(UTF-8) );
 binmode( STDOUT, ":encoding(UTF-8)" );
 my ( $input_marc_file, $number, $offset) = ('',0,0);
 my ($version, $delete, $test_parameter, $skip_marc8_conversion, $char_encoding, $verbose, $commit, $fk_off,$format,$biblios,$authorities,$keepids,$match, $isbn_check, $logfile);
-my ( $insert, $filters, $update, $all, $yamlfile, $authtypes, $append );
+my ( $insert, $filters, $update, $all, $yamlfile, $authtypes, $append, $import_holdings );
 my $cleanisbn = 1;
 my ($sourcetag,$sourcesubfield,$idmapfl, $dedup_barcode);
 my $framework = '';
@@ -87,12 +89,16 @@ GetOptions(
     'custom:s'    => \$localcust,
     'oplibmatcher=s' => \$oplibMatcher,
     'oplibmatchlog=s' => \$oplibmatchlog,
+    'holdings' => \$import_holdings,
 );
 $biblios ||= !$authorities;
 $insert  ||= !$update;
 my $writemode = ($append) ? "a" : "w";
+my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
 
 pod2usage( -msg => "\nYou must specify either --biblios or --authorities, not both.\n", -exitval ) if $biblios && $authorities;
+
+pod2usage( -msg => "\nHoldings only supported for MARC 21 biblios.\n", -exitval ) if $import_holdings && (!$biblios || $marcFlavour ne 'MARC21');
 
 if ($all) {
     $insert = 1;
@@ -163,6 +169,7 @@ if ($fk_off) {
 if ($delete) {
 	if ($biblios){
     	print "deleting biblios\n";
+        $dbh->do("truncate holdings");
     	$dbh->do("truncate biblio");
     	$dbh->do("truncate biblioitems");
     	$dbh->do("truncate items");
@@ -179,8 +186,6 @@ if ($delete) {
 if ($test_parameter) {
     print "TESTING MODE ONLY\n    DOING NOTHING\n===============\n";
 }
-
-my $marcFlavour = C4::Context->preference('marcflavour') || 'MARC21';
 
 print "Characteristic MARC flavour: $marcFlavour\n" if $verbose;
 my $starttime = gettimeofday;
@@ -249,6 +254,7 @@ my $searcher = Koha::SearchEngine::Search->new(
     }
 );
 
+my $biblionumber;
 RECORD: while (  ) {
     my $record;
     # get records
@@ -321,10 +327,19 @@ RECORD: while (  ) {
     }
 
 
+
+    # check for holdings records
+    my $holdings_record = 0;
+    if ($biblios && $marcFlavour eq 'MARC21') {
+        my $leader = $record->leader();
+        $holdings_record = $leader =~ /^.{6}[uvxy]/;
+    }
+
+    my $id;
     # search for duplicates (based on Local-number)
     my $originalid;
     $originalid = GetRecordId( $record, $tagid, $subfieldid );
-    if ($match) {
+    if ($match && !$holdings_record) {
         require C4::Search;
         my $query = build_query( $match, $record );
         my $server = ( $authorities ? 'authorityserver' : 'biblioserver' );
@@ -440,8 +455,29 @@ RECORD: while (  ) {
             $yamlhash->{$originalid}->{'subfields'} = \@subfields;
             }
         }
+        elsif ($holdings_record) {
+            if ($import_holdings) {
+                if (!defined $biblionumber) {
+                    warn "ERROR: Encountered holdings record without preceding biblio record\n";
+                } else {
+                    if ($insert) {
+                        my $holdings_id = 0;
+                        eval { ( $holdings_id ) = AddHolding( $record, '', $biblionumber ) };
+                        if ($@) {
+                            warn "ERROR: Adding holdings record $holdings_id for biblio $biblionumber failed: $@\n";
+                            printlog( { $holdings_id, op => "insert", status => "ERROR" } ) if ($logfile);
+                            next RECORD;
+                        } else {
+                            printlog( { $holdings_id, op => "insert", status => "ok" } ) if ($logfile);
+                        }
+                    } else {
+                        printlog( { 0, op => "update", status => "warning : not in database" } ) if ($logfile);
+                    }
+                }
+            }
+        }
         else {
-            my ( $biblionumber, $biblioitemnumber, $itemnumbers_ref, $errors_ref );
+            my ( $biblioitemnumber, $itemnumbers_ref, $errors_ref );
             $biblionumber = $id;
             # check for duplicate, based on ISBN (skip it if we already have found a duplicate with match parameter
             if (!$biblionumber && $isbn_check && $isbn) {
@@ -710,6 +746,11 @@ Type of import: authority records
 
 The I<FILE> to import
 
+=item B<-holdings>
+
+Import MARC 21 holdings records when interleaved with bibliographic records
+(insert only, update not supported). Used only with -biblios.
+
 =item  B<-v>
 
 Verbose mode. 1 means "some infos", 2 means "MARC dumping"
@@ -755,7 +796,7 @@ I<UNIMARC> are supported. MARC21 by default.
 =item B<-d>
 
 Delete EVERYTHING related to biblio in koha-DB before import. Tables: biblio,
-biblioitems, items
+biblioitems, items, holdings
 
 =item B<-m>=I<FORMAT>
 

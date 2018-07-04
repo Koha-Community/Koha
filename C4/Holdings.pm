@@ -368,6 +368,53 @@ sub GetXmlHolding {
     return $marcxml;
 }
 
+=head2 GetMarcHoldingsByBiblionumber
+
+  my $records = GetMarcHoldingsByBiblionumber(biblionumber);
+
+Returns MARC::Record array representing holding records
+
+=over 4
+
+=item C<$biblionumber>
+
+biblionumber
+
+=back
+
+=cut
+
+sub GetMarcHoldingsByBiblionumber {
+    my $biblionumber = shift;
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+    my $sth = C4::Context->dbh->prepare(
+        q|
+        SELECT metadata
+        FROM holdings_metadata
+        WHERE holding_id IN (SELECT holding_id FROM holdings WHERE biblionumber=?)
+            AND format='marcxml'
+            AND marcflavour=?
+        |
+    );
+
+    $sth->execute( $biblionumber, $marcflavour );
+
+    my @records;
+    while (my ($marcxml) = $sth->fetchrow()) {
+        $marcxml = StripNonXmlChars( $marcxml );
+        my $record = eval {
+            MARC::Record::new_from_xml( $marcxml, "utf8", $marcflavour );
+        };
+        if ($@) {
+            warn " problem with holding for biblio $biblionumber : $@ \n$marcxml";
+        }
+        push @records, $record if $record;
+    }
+    $sth->finish();
+    return \@records;
+}
+
 =head2 GetHoldingFrameworkCode
 
   $frameworkcode = GetFrameworkCode( $holding_id )
