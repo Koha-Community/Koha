@@ -255,6 +255,7 @@ sub expanded {
 
     foreach my $checkout (@{$checkouts_json}) {
         my $item         = Koha::Items->find($checkout->{itemnumber});
+        my $biblio       = Koha::Biblios->find($item->biblionumber);
         my $branchcode   = C4::Circulation::_GetCircControlBranch( $item->unblessed,
                                                                    $borrower);
         my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
@@ -269,8 +270,12 @@ sub expanded {
                 reserve_level => $item->reserve_level,
             }
         );
-        $checkout->{'max_renewals'} = $issuing_rule
-                        ? 0+$issuing_rule->renewalsallowed : 0;
+        $checkout->{'enumchron'}       = $item->enumchron;
+        $checkout->{'biblionumber'}    = $item->biblionumber;
+        $checkout->{'title'}           = $biblio->title;
+        $checkout->{'title_remainder'} = $biblio->title_remainder;
+        $checkout->{'max_renewals'}    = $issuing_rule
+            ? 0+$issuing_rule->renewalsallowed : 0;
         my ($can_renew, $error);
         if ($opac_renewability) {
             ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
