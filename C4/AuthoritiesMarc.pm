@@ -994,14 +994,14 @@ sub BuildSummary {
             if ($type eq 'subfi') {
                 push @seefrom, {
                     heading => $field->as_string($marc21subfields),
-                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
+                    hemain  => scalar $field->subfield( substr($marc21subfields, 0, 1) ),
                     type    => ($field->subfield('i') || ''),
                     field   => $field->tag(),
                 };
             } else {
                 push @seefrom, {
                     heading => $field->as_string($marc21subfields),
-                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
+                    hemain  => scalar $field->subfield( substr($marc21subfields, 0, 1) ),
                     type    => $type,
                     field   => $field->tag(),
                 };
@@ -1017,8 +1017,8 @@ sub BuildSummary {
             if ($type eq 'subfi') {
                 push @seealso, {
                     heading => $field->as_string($marc21subfields),
-                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
-                    type    => $field->subfield('i'),
+                    hemain  => scalar $field->subfield( substr($marc21subfields, 0, 1) ),
+                    type    => scalar $field->subfield('i'),
                     field   => $field->tag(),
                     search  => $field->as_string($marc21subfields) || '',
                     authid  => $field->subfield('9') || ''
@@ -1026,7 +1026,7 @@ sub BuildSummary {
             } else {
                 push @seealso, {
                     heading => $field->as_string($marc21subfields),
-                    hemain  => $field->subfield( substr($marc21subfields, 0, 1) ),
+                    hemain  => scalar $field->subfield( substr($marc21subfields, 0, 1) ),
                     type    => $type,
                     field   => $field->tag(),
                     search  => $field->as_string($marc21subfields) || '',
