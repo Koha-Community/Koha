@@ -1627,7 +1627,7 @@ sub GetMarcISBN {
     my @marcisbns;
     foreach my $field ( $record->field($scope) ) {
         my $isbn = $field->subfield( 'a' );
-        if ( $isbn ne "" ) {
+        if ( $isbn && $isbn ne "" ) {
             push @marcisbns, $isbn;
         }
     }
@@ -2324,16 +2324,9 @@ sub TransformHtmlToXml {
         if ( ( @$tags[$i] ne $prevtag ) ) {
             $close_last_tag = 0;
             $j++ unless ( @$tags[$i] eq "" );
-            my $indicator1 = eval { substr( @$indicator[$j], 0, 1 ) };
-            my $indicator2 = eval { substr( @$indicator[$j], 1, 1 ) };
-            my $ind1       = _default_ind_to_space($indicator1);
-            my $ind2;
-            if ( @$indicator[$j] ) {
-                $ind2 = _default_ind_to_space($indicator2);
-            } else {
-                warn "Indicator in @$tags[$i] is empty";
-                $ind2 = " ";
-            }
+            my $str = ( $indicator->[$j] // q{} ) . '  '; # extra space prevents substr outside of string warn
+            my $ind1 = _default_ind_to_space( substr( $str, 0, 1 ) );
+            my $ind2 = _default_ind_to_space( substr( $str, 1, 1 ) );
             if ( !$first ) {
                 $xml .= "</datafield>\n";
                 if (   ( @$tags[$i] && @$tags[$i] > 10 )
@@ -2366,19 +2359,12 @@ sub TransformHtmlToXml {
                 }
             }
         } else {    # @$tags[$i] eq $prevtag
-            my $indicator1 = eval { substr( @$indicator[$j], 0, 1 ) };
-            my $indicator2 = eval { substr( @$indicator[$j], 1, 1 ) };
-            my $ind1       = _default_ind_to_space($indicator1);
-            my $ind2;
-            if ( @$indicator[$j] ) {
-                $ind2 = _default_ind_to_space($indicator2);
-            } else {
-                warn "Indicator in @$tags[$i] is empty";
-                $ind2 = " ";
-            }
             if ( @$values[$i] eq "" ) {
             } else {
                 if ($first) {
+                    my $str = ( $indicator->[$j] // q{} ) . '  '; # extra space prevents substr outside of string warn
+                    my $ind1 = _default_ind_to_space( substr( $str, 0, 1 ) );
+                    my $ind2 = _default_ind_to_space( substr( $str, 1, 1 ) );
                     $xml .= "<datafield tag=\"@$tags[$i]\" ind1=\"$ind1\" ind2=\"$ind2\">\n";
                     $first = 0;
                     $close_last_tag = 1;
