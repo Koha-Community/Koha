@@ -1,0 +1,51 @@
+{
+  "type": "object",
+  "properties": {
+    "holding_id": {
+      "type": "integer",
+      "description": "internally assigned holding identifier"
+    },
+    "biblionumber": {
+      "type": "integer",
+      "description": "internally assigned biblio identifier"
+    },
+    "biblioitemnumber": {
+      "type": "integer",
+      "description": "internally assigned biblio item identifier"
+    },
+    "frameworkcode": {
+      "type": "string",
+      "description": "framework used in cataloging this record"
+    },
+    "holdingbranch": {
+      "type": ["string", "null"],
+      "description": "library that is currently in possession of this holding"
+    },
+    "location": {
+      "type": ["string", "null"],
+      "description": "authorized value for the shelving location for this holding"
+    },
+    "callnumber": {
+      "type": ["string", "null"],
+      "description": "call number for this holding"
+    },
+    "suppress": {
+      "type": ["integer", "null"],
+      "description": "Boolean indicating whether the record is suppressed in OPAC"
+    },
+    "timestamp": {
+      "type": ["string", "null"],
+      "description": "date and time this recird was last altered",
+      "format": "date-time"
+    },
+    "datecreated": {
+      "type": ["string", "null"],
+      "description": "the date this record was added to Koha",
+      "format": "date"
+    },
+    "metadata": {
+      "type": ["string", "null"],
+      "description": "Metadata"
+    }
+  }
+}

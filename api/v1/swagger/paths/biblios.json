@@ -186,7 +186,7 @@
     "get": {
       "x-mojo-to": "Biblio#getexpanded",
       "operationId": "getexpandedByBiblio",
-      "tags": ["biblios", "items", "item status"],
+      "tags": ["biblios", "holdings", "items", "item status"],
       "parameters": [
         { "$ref": "../parameters.json#/biblionumberPathParam" }
       ],
@@ -196,6 +196,42 @@
       "responses": {
         "200": {
           "description": "A biblio record with items and item statuses"
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/biblios/{biblionumber}/holdings": {
+    "get": {
+      "x-mojo-to": "Biblio#getholdings",
+      "operationId": "getholdingsByBiblio",
+      "tags": ["biblios", "holdings"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A biblio record with holdings"
         },
         "404": {
           "description": "Biblio not found",

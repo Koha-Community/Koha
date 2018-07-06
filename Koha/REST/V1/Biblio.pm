@@ -83,8 +83,19 @@ sub getexpanded {
             $item->{status} = "onhold";
         }
     }
+    my @holdings = $biblio->holdings;
 
-    return $c->render(status => 200, openapi => { biblio => $biblio, items => \@expanded });
+    return $c->render(status => 200, openapi => { biblio => $biblio, holdings => \@holdings, items => \@expanded });
+}
+
+sub getholdings {
+    my $c = shift->openapi->valid_input or return;
+ 
+    my $biblio = Koha::Biblios->find($c->validation->param('biblionumber'));
+    unless ($biblio) {
+        return $c->render(status => 404, openapi => {error => "Biblio not found"});
+    }
+    return $c->render(status => 200, openapi => { biblio => $biblio, holdings => $biblio->holdings_full });
 }
 
 sub add {

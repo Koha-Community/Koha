@@ -55,9 +55,15 @@ __PACKAGE__->table("items");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 datereceived
+
+  data_type: 'timestamp'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =head2 booksellerid
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 homebranch
@@ -113,6 +119,12 @@ __PACKAGE__->table("items");
   data_type: 'tinyint'
   default_value: 0
   is_nullable: 0
+
+=head2 damaged_on
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
 
 =head2 itemlost
 
@@ -172,12 +184,12 @@ __PACKAGE__->table("items");
 
 =head2 itemnotes
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 itemnotes_nonpublic
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 holdingbranch
@@ -189,14 +201,14 @@ __PACKAGE__->table("items");
 
 =head2 paidfor
 
-  data_type: 'mediumtext'
+  data_type: 'longtext'
   is_nullable: 1
 
 =head2 timestamp
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 location
@@ -237,7 +249,7 @@ __PACKAGE__->table("items");
 
 =head2 materials
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 uri
@@ -259,7 +271,7 @@ __PACKAGE__->table("items");
 
 =head2 enumchron
 
-  data_type: 'text'
+  data_type: 'mediumtext'
   is_nullable: 1
 
 =head2 copynumber
@@ -292,12 +304,6 @@ __PACKAGE__->table("items");
   is_nullable: 1
   size: 10
 
-=head2 datereceived
-
-  data_type: 'timestamp'
-  datetime_undef_if_invalid: 1
-  is_nullable: 1
-
 =head2 circulation_level
 
   data_type: 'varchar'
@@ -309,6 +315,12 @@ __PACKAGE__->table("items");
   data_type: 'varchar'
   is_nullable: 1
   size: 10
+
+=head2 holding_id
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
 
 =cut
 
@@ -333,8 +345,14 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 30 },
   "dateaccessioned",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
+  "datereceived",
+  {
+    data_type => "timestamp",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "booksellerid",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "homebranch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "price",
@@ -353,6 +371,12 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "damaged",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
+  "damaged_on",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
   "itemlost",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "itemlost_on",
@@ -382,18 +406,18 @@ __PACKAGE__->add_columns(
   "restricted",
   { data_type => "tinyint", is_nullable => 1 },
   "itemnotes",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "itemnotes_nonpublic",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "holdingbranch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "paidfor",
-  { data_type => "mediumtext", is_nullable => 1 },
+  { data_type => "longtext", is_nullable => 1 },
   "timestamp",
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "location",
@@ -409,7 +433,7 @@ __PACKAGE__->add_columns(
   "ccode",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "materials",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "uri",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "itype",
@@ -417,7 +441,7 @@ __PACKAGE__->add_columns(
   "more_subfields_xml",
   { data_type => "longtext", is_nullable => 1 },
   "enumchron",
-  { data_type => "text", is_nullable => 1 },
+  { data_type => "mediumtext", is_nullable => 1 },
   "copynumber",
   { data_type => "varchar", is_nullable => 1, size => 32 },
   "stocknumber",
@@ -428,16 +452,12 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "sub_location",
   { data_type => "varchar", is_nullable => 1, size => 10 },
-  "datereceived",
-  {
-    data_type => "timestamp",
-    datetime_undef_if_invalid => 1,
-    is_nullable => 1,
-  },
   "circulation_level",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "reserve_level",
   { data_type => "varchar", is_nullable => 1, size => 10 },
+  "holding_id",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -603,6 +623,26 @@ __PACKAGE__->might_have(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 holding
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Holding>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "holding",
+  "Koha::Schema::Result::Holding",
+  { holding_id => "holding_id" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "CASCADE",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 holdingbranch
 
 Type: belongs_to
@@ -734,8 +774,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-24 13:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vf1sBZrpUo0Cvi896fjNuA
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-07-06 14:29:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xARjmmuE/GI6fsizxDXnzw
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 

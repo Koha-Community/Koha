@@ -124,6 +124,11 @@ if ( $op eq 'add_form' ) {
     while ( ( my $field ) = $sth2->fetchrow_array ) {
         push @kohafields, "items." . $field;
     }
+    $sth2 = $dbh->prepare("SHOW COLUMNS from holdings");
+    $sth2->execute;
+    while ( ( my $field ) = $sth2->fetchrow_array ) {
+        push @kohafields, "holdings." . $field;
+    }
 
     # build authorised value list
     $sth2->finish;
