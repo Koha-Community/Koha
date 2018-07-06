@@ -16129,9 +16129,9 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '18.06.00.005';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( "ALTER TABLE aqorders ADD COLUMN created_by int(11) NULL DEFAULT NULL AFTER quantityreceived;" );
-    $dbh->do( "ALTER TABLE aqorders ADD CONSTRAINT aqorders_created_by FOREIGN KEY (created_by) REFERENCES borrowers (borrowernumber) ON DELETE SET NULL ON UPDATE CASCADE;" );
-    $dbh->do( "UPDATE aqorders, aqbasket SET aqorders.created_by = aqbasket.authorisedby  WHERE aqorders.basketno = aqbasket.basketno;" );
+    $dbh->do( "ALTER IGNORE TABLE aqorders ADD COLUMN created_by int(11) NULL DEFAULT NULL AFTER quantityreceived;" );
+    $dbh->do( "ALTER IGNORE TABLE aqorders ADD CONSTRAINT aqorders_created_by FOREIGN KEY (created_by) REFERENCES borrowers (borrowernumber) ON DELETE SET NULL ON UPDATE CASCADE;" );
+    $dbh->do( "UPDATE aqorders, aqbasket SET aqorders.created_by = aqbasket.authorisedby  WHERE aqorders.basketno = aqbasket.basketno AND aqorders.created_by IS NULL;" );
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 12395 - Save order line's creator)\n";
 }
