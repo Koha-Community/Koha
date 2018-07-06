@@ -60,7 +60,6 @@ subtest 'Old version is unchanged' => sub {
     $schema->storage->txn_rollback;
 };
 
-<<<<<<< HEAD
 subtest 'Skip items with waiting holds' => sub {
 
     plan tests => 6;
@@ -127,18 +126,24 @@ subtest 'Skip items with waiting holds' => sub {
         'Item on hold skipped, no one matches' );
 
     $schema->storage->txn_rollback;
-=======
-$dbh->rollback;
-$dbh->{AutoCommit} = 1;
+};
+
+subtest 'Verify results with OldWay' => sub {
+    $schema->storage->txn_begin;
+    plan tests => 1;
+
+    my ($oldResults, $oldCount) = OldWay();
+    my ($newResults, $newCount) = GetItemsForInventory();
+    is_deeply($newResults,$oldResults,"Inventory results unchanged.");
+    $schema->storage->txn_rollback;
+};
 
 subtest 'Use cn_sort rather than callnumber to determine correct location' => sub {
-
-    plan tests => 1;
-    my $builder = t::lib::TestBuilder->new;
-    my $schema  = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    $builder->schema->resultset( 'Issue' )->delete_all;
-    $builder->schema->resultset( 'Item' )->delete_all;
+    plan tests => 1;
+
+    my $builder = t::lib::TestBuilder->new;
+    Koha::Items->delete;
 
     my $class_rule = $builder->build({
         source => 'ClassSortRule',
@@ -166,12 +171,11 @@ subtest 'Use cn_sort rather than callnumber to determine correct location' => su
     is($item_count,1,"We should return GT95 as between GT90 and GT100");
     $schema->storage->txn_rollback;
 
->>>>>>> Bug 19915: Add unit test to GetItemsForInventory.t
 };
 
-sub OldWay {
-    my ($tdbh)       = @_;
-    my $ldbh         = $tdbh;
+sub OldWay { # FIXME Do we really still need so much code to check results ??
+    my $ldbh = C4::Context->dbh;
+
     my $minlocation  = '';
     my $maxlocation  = '';
     my $location     = '';
