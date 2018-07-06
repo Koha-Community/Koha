@@ -101,6 +101,12 @@ __PACKAGE__->table("aqorders");
   default_value: 0
   is_nullable: 0
 
+=head2 created_by
+
+  data_type: 'integer'
+  is_foreign_key: 1
+  is_nullable: 1
+
 =head2 datecancellationprinted
 
   data_type: 'date'
@@ -341,6 +347,8 @@ __PACKAGE__->add_columns(
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "quantityreceived",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
+  "created_by",
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "datecancellationprinted",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "cancellationreason",
@@ -554,6 +562,26 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 created_by
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "created_by",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "created_by" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 currency
 
 Type: belongs_to
@@ -625,8 +653,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:K0GnMGYtZUQ1WCesHKIxHw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-06 14:12:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/CljC8eGYHoYM3506qYavg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
