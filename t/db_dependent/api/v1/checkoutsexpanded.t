@@ -42,7 +42,7 @@ my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get() tests' => sub {
-    plan tests => 34;
+    plan tests => 42;
 
     $schema->storage->txn_begin;
 
@@ -60,7 +60,7 @@ subtest 'get() tests' => sub {
     my $librarian    = Koha::Patrons->find($librariannnumber);
 
     # 2. Biblios and items
-    my $biblionumber = create_biblio('RESTful Web APIs');
+    my $biblionumber = create_biblio('RESTful Web APIs', 'The Best');
     my $itemnumber1  = create_item($biblionumber, 'TEST1001');
     my $itemnumber2  = create_item($biblionumber, 'TEST1002');
     my $itemnumber3  = create_item($biblionumber, 'TEST1003');
@@ -119,7 +119,12 @@ subtest 'get() tests' => sub {
         ->json_is('/1/renewable'  => Mojo::JSON->false)
         ->json_is('/1/renewability_error' => 'too_many')
         ->json_is('/1/max_renewals' => 1)
+        ->json_is('/0/biblionumber' => $biblionumber)
+        ->json_is('/0/title' => 'RESTful Web APIs')
+        ->json_is('/0/title_remainder' => 'The Best')
+        ->json_is('/0/enumchron' => 'ecTEST1001')
         ->json_hasnt('/2');
+        
 
     t::lib::Mocks::mock_preference('OpacRenewalAllowed', 0);
     $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/expanded?borrowernumber="
@@ -142,6 +147,10 @@ subtest 'get() tests' => sub {
         ->json_is('/1/renewable'  => Mojo::JSON->false)
         ->json_is('/1/renewability_error' => 'too_many')
         ->json_is('/1/max_renewals' => 1)
+        ->json_is('/0/biblionumber' => $biblionumber)
+        ->json_is('/0/title' => 'RESTful Web APIs')
+        ->json_is('/0/title_remainder' => 'The Best')
+        ->json_is('/0/enumchron' => 'ecTEST1001')
         ->json_hasnt('/2');
     $schema->storage->txn_rollback;
 };
@@ -169,11 +178,11 @@ sub create_user_and_session {
 }
 
 sub create_biblio {
-    my ($title) = @_;
+    my ($title, $subtitle) = @_;
 
     my $record = new MARC::Record;
     $record->append_fields(
-        new MARC::Field('200', ' ', ' ', a => $title),
+        new MARC::Field('245', ' ', ' ', a => $title, b => $subtitle),
     );
 
     my ($biblionumber) = C4::Biblio::AddBiblio($record, '');
@@ -194,6 +203,7 @@ sub create_item {
         homebranch    => $branchcode,
         holdingbranch => $branchcode,
         itype         => $itemtype->{itemtype},
+        enumchron     => 'ec' . $barcode
     };
 
     my $itemnumber = C4::Items::AddItem($item, $biblionumber);

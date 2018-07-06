@@ -15,6 +15,21 @@
     "max_renewals": {
       "type": "integer",
       "description": "maximum number of renewals allowed"
+    },
+    "biblionumber": {
+      "$ref": "../x-primitives.json#/biblionumber"
+    },
+    "title": {
+      "type": ["string", "null"],
+      "description": "title (without the subtitle) from the MARC record (245$a in MARC21)"
+    },
+    "title_remainder": {
+      "type": ["string", "null"],
+      "description": "245$b in MARC21"
+    },
+    "enumchron": {
+      "type": ["string", "null"],
+      "description": "serial enumeration/chronology for the item"
     }
   }
 }
