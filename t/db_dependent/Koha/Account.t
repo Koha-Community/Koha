@@ -90,8 +90,8 @@ subtest 'add_credit() tests' => sub {
     $schema->storage->txn_begin;
 
     # delete logs and statistics
-    $schema->resultset('ActionLog')->search()->delete();
-    $schema->resultset('Statistic')->search()->delete();
+    my $action_logs = $schema->resultset('ActionLog')->search()->count;
+    my $statistics = $schema->resultset('Statistic')->search()->count;
 
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $account = Koha::Account->new( { patron_id => $patron->borrowernumber } );
@@ -106,13 +106,14 @@ subtest 'add_credit() tests' => sub {
             description => 'Payment of 25',
             library_id  => $patron->branchcode,
             note        => 'not really important',
+            type        => 'payment',
             user_id     => $patron->id
         }
     );
 
     is( $account->balance, -25, 'Patron has a balance of -25' );
-    is( $schema->resultset('ActionLog')->count(), 0, 'No log was added' );
-    is( $schema->resultset('Statistic')->count(), 1, 'Action added to statistics' );
+    is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No log was added' );
+    is( $schema->resultset('Statistic')->count(), $statistics + 1, 'Action added to statistics' );
     is( $line_1->accounttype, $Koha::Account::account_type->{'payment'}, 'Account type is correctly set' );
 
     # Enable logs
@@ -130,8 +131,8 @@ subtest 'add_credit() tests' => sub {
     );
 
     is( $account->balance, -62, 'Patron has a balance of -25' );
-    is( $schema->resultset('ActionLog')->count(), 1, 'Log was added' );
-    is( $schema->resultset('Statistic')->count(), 2, 'Action added to statistics' );
+    is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
+    is( $schema->resultset('Statistic')->count(), $statistics + 2, 'Action added to statistics' );
     is( $line_2->accounttype, $Koha::Account::account_type->{'payment'} . $sip_code, 'Account type is correctly set' );
 
     # offsets have the credit_id set to accountlines_id, and debit_id is undef
