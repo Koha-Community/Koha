@@ -85,7 +85,7 @@ subtest 'outstanding_debits() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -153,8 +153,8 @@ subtest 'add_credit() tests' => sub {
         }
     );
 
-    is( $schema->resultset('ActionLog')->count(), 2, 'Log was added' );
-    is( $schema->resultset('Statistic')->count(), 2, 'No action added to statistics, because of credit type' );
+    is( $schema->resultset('ActionLog')->count(), $action_logs + 2, 'Log was added' );
+    is( $schema->resultset('Statistic')->count(), $statistics + 2, 'No action added to statistics, because of credit type' );
 
     $schema->storage->txn_rollback;
 };
