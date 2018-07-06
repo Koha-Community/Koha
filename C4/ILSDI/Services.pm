@@ -357,7 +357,7 @@ sub AuthenticatePatron {
     my ($status, $cardnumber, $userid) = C4::Auth::checkpw( C4::Context->dbh, $username, $password );
     if ( $status ) {
         # Get the borrower
-        my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
+        my $patron = Koha::Patrons->find( { userid => $userid } );
         return { id => $patron->borrowernumber };
     }
     else {

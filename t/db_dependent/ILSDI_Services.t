@@ -42,9 +42,17 @@ subtest 'AuthenticatePatron test' => sub {
 
     my $plain_password = 'tomasito';
 
+    $builder->build({
+        source => 'Borrower',
+        value => {
+            cardnumber => undef,
+        }
+    });
+
     my $borrower = $builder->build({
         source => 'Borrower',
         value  => {
+            cardnumber => undef,
             password => Koha::AuthUtils::hash_password( $plain_password )
         }
     });
