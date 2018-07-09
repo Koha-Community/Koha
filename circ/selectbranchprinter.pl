@@ -62,6 +62,7 @@ if ( $branch and my $library = Koha::Libraries->find($branch) ) {
         $template->param(LoginBranchcode => $branch);       # update template for new branch
         $session->param('branchname', $branchname);         # update sesssion in DB
         $session->param('branch', $branch);                 # update sesssion in DB
+        $session->flush();
         push @updated, {
             updated_branch => 1,
                 old_branch => $userenv_branch,
