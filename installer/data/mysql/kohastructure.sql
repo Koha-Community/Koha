@@ -2961,6 +2961,29 @@ CREATE TABLE `action_logs` ( -- logs of actions taken in Koha (requires that the
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table `action_logs_cache`
+--
+
+CREATE TABLE action_logs_cache ( -- logs of actions taken in Koha (requires that the logs be turned on)
+  `action_id` int(11) NOT NULL auto_increment, -- unique identifier for each action
+  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- the date and time the action took place
+  `user` int(11) NOT NULL default 0, -- the staff member who performed the action (borrowers.borrowernumber)
+  `module` text, -- the module this action was taken against
+  `action` text, -- the action (includes things like DELETED, ADDED, MODIFY, etc)
+  `object` int(11) default NULL, -- the object that the action was taken against (could be a borrowernumber, itemnumber, etc)
+  `info` text, -- information about the action (usually includes SQL statement)
+  `interface` VARCHAR(30) DEFAULT NULL, -- the context this action was taken in
+  PRIMARY KEY (action_id),
+  KEY timestamp_idx (timestamp),
+  KEY user_idx (user),
+  KEY module_idx (module(255)),
+  KEY action_idx (action(255)),
+  KEY object_idx (object),
+  KEY info_idx (info(255)),
+  KEY interface (interface)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for table `alert`
 --
 
