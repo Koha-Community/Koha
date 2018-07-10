@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Test::Mojo;
 use Test::Warn;
@@ -45,8 +45,8 @@ subtest 'get_balance() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my ( $patron_id, $session_id ) = create_user_and_session({ authorized => 0 });
-    my $patron  = Koha::Patrons->find($patron_id);
+    my ( $patron, $session_id ) = create_user_and_session({ authorized => 0 });
+    my $patron_id  = $patron->id;
     my $account = $patron->account;
 
     my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$patron_id/account");
@@ -147,32 +147,112 @@ subtest 'get_balance() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
+subtest 'add_credit() tests' => sub {
+
+    plan tests => 17;
+
+    $schema->storage->txn_begin;
+
+    my ( $patron, $session_id ) = create_user_and_session( { authorized => 1 } );
+    my $patron_id = $patron->id;
+    my $account   = $patron->account;
+
+    is( $account->outstanding_debits->count,  0, 'No outstanding debits for patron' );
+    is( $account->outstanding_credits->count, 0, 'No outstanding credits for patron' );
+
+    my $credit = { amount => 100 };
+
+    my $tx = $t->ua->build_tx(
+        POST => "/api/v1/patrons/$patron_id/account/credits" => json => $credit );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)->status_is(200)->json_has('/account_line_id');
+
+    my $outstanding_credits = $account->outstanding_credits;
+    is( $outstanding_credits->count,             1 );
+    is( $outstanding_credits->total_outstanding, -100 );
+
+    my $debit_1 = Koha::Account::Line->new(
+        {   borrowernumber    => $patron->borrowernumber,
+            date              => \'NOW()',
+            amount            => 10,
+            description       => "A description",
+            accounttype       => "N",                       # New card
+            amountoutstanding => 10,
+            manager_id        => $patron->borrowernumber,
+        }
+    )->store();
+    my $debit_2 = Koha::Account::Line->new(
+        {   borrowernumber    => $patron->borrowernumber,
+            date              => \'NOW()',
+            amount            => 15,
+            description       => "A description",
+            accounttype       => "N",                       # New card
+            amountoutstanding => 15,
+            manager_id        => $patron->borrowernumber,
+        }
+    )->store();
+
+    is( $account->outstanding_debits->total_outstanding, 25 );
+    $tx = $t->ua->build_tx(
+        POST => "/api/v1/patrons/$patron_id/account/credits" => json => $credit );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)->status_is(200)->json_has('/account_line_id');
+
+    is( $account->outstanding_debits->total_outstanding,
+        0, "Debits have been cancelled automatically" );
+
+    my $debit_3 = Koha::Account::Line->new(
+        {   borrowernumber    => $patron->borrowernumber,
+            date              => \'NOW()',
+            amount            => 100,
+            description       => "A description",
+            accounttype       => "N",                       # New card
+            amountoutstanding => 100,
+            manager_id        => $patron->borrowernumber,
+        }
+    )->store();
+
+    $credit = {
+        amount            => 35,
+        account_lines_ids => [ $debit_1->id, $debit_2->id, $debit_3->id ]
+    };
+
+    $tx = $t->ua->build_tx(
+        POST => "/api/v1/patrons/$patron_id/account/credits" => json => $credit );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)->status_is(200)->json_has('/account_line_id');
+
+    my $outstanding_debits = $account->outstanding_debits;
+    is( $outstanding_debits->total_outstanding, 65 );
+    is( $outstanding_debits->count,             1 );
+
+    $schema->storage->txn_rollback;
+};
+
 sub create_user_and_session {
 
     my $args  = shift;
-    my $flags = ( $args->{authorized} ) ? 16 : 0;
+    my $flags = ( $args->{authorized} ) ? 2**10 : 0;
 
-    my $user = $builder->build(
+    my $patron = $builder->build_object(
         {
-            source => 'Borrower',
+            class => 'Koha::Patrons',
             value  => {
-                flags => $flags,
-                gonenoaddress => 0,
-                lost => 0,
-                email => 'nobody@example.com',
-                emailpro => 'nobody@example.com',
-                B_email => 'nobody@example.com'
+                flags         => $flags
             }
         }
     );
 
     # Create a session for the authorized user
     my $session = C4::Auth::get_session('');
-    $session->param( 'number',   $user->{borrowernumber} );
-    $session->param( 'id',       $user->{userid} );
+    $session->param( 'number',   $patron->id );
+    $session->param( 'id',       $patron->userid );
     $session->param( 'ip',       '127.0.0.1' );
     $session->param( 'lasttime', time() );
     $session->flush;
 
-    return ( $user->{borrowernumber}, $session->id );
+    return ( $patron, $session->id );
 }
