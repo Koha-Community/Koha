@@ -1,0 +1,39 @@
+{
+  "type": "object",
+  "properties": {
+    "credit_type": {
+      "type": "string",
+      "description": "Type of credit ('credit', 'forgiven', 'lost_item_return', 'payment', 'writeoff' )"
+    },
+    "amount": {
+      "type": "number",
+      "minimum": 0,
+      "description": "Credit amount"
+    },
+    "account_lines_ids": {
+        "type": "array",
+        "items": {
+            "type": "integer"
+        },
+        "description": "List of account line ids the credit goes against (optional)"
+    },
+    "payment_type": {
+        "type": "string",
+        "description":  "Payment type (only applies when credit_type=payment)"
+    },
+    "date": {
+      "type": "string",
+      "format": "date",
+      "description": "Date the credit was recorded (optional)"
+    },
+    "description": {
+      "type": "string",
+      "description": "Description"
+    },
+    "note": {
+      "type": "string",
+      "description": "Internal note"
+    }
+  },
+  "required": [ "amount" ]
+}

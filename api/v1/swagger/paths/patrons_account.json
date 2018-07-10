@@ -61,5 +61,74 @@
         }
       }
     }
+  },
+  "/patrons/{patron_id}/account/credits": {
+    "post": {
+      "x-mojo-to": "Patrons::Account#add_credit",
+      "operationId": "addPatronCredit",
+      "tags": [
+        "patron"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/patron_id_pp"
+        },
+        {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing credit information",
+          "required": true,
+          "schema": {
+            "$ref": "../definitions.json#/patron_account_credit"
+          }
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Credit added",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "updatecharges": "remaining_permissions"
+        }
+      }
+    }
   }
 }
