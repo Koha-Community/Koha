@@ -69,36 +69,60 @@
           <li><label for="authority_type">Authorities: </label><input type="radio" name="recordtype" value="authority" id="authority_type" /></li>
         </ol>
       </fieldset>
-      <fieldset class="rows">
-        <legend>Use a file</legend>
-        <ol>
-          <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
-        </ol>
-      </fieldset>
-      <fieldset class="rows" id="shelves">
-        <legend>Or select a list of records</legend>
-        <ol>
-          <li>
-            <label for="shelf_number">Use records from the following list: </label>
-            <select name="shelf_number" id="shelf_number">
-              <option value="">Select a list</option>
-                [% FOREACH list IN lists %]
-                  <option value="[% list.shelfnumber %]">[% list.shelfname %]</option>
-                [% END %]
-              </option>
-            </select>
-          </li>
-        </ol>
-      </fieldset>
-      <fieldset class="rows">
-        <legend>Or enter a list of record numbers</legend>
-        <ol>
-          <li>
-            <label for="recordnumber_list">List of biblionumbers or authority ids (one per line): </label>
-            <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
-          </li>
-        </ol>
-      </fieldset>
+
+      <br><br>
+
+      <div id="batch_mod_form" class="toptabs">
+        <ul>
+          <li><a href="#uploadfile">Upload a file</a></li>
+          [% IF lists.count %]<li id="show_list_option"><a href="#shelves">Select a list of records</a></li>[% END %]
+          <li><a href="#enterlist">Enter a list of record numbers</a></li>
+        </ul>
+
+        <div id="uploadfile">
+          <fieldset class="rows">
+            <legend>Use a file</legend>
+            <ol>
+              <li><label for="uploadfile">File: </label> <input type="file" id="uploadfile" name="uploadfile" /></li>
+            </ol>
+          </fieldset>
+          &nbsp;
+        </div>
+
+        <div id="shelves">
+          <fieldset class="rows">
+            <legend>Or select a list of records</legend>
+            <ol>
+              <li>
+                <label for="shelf_number">Use records from the following list: </label>
+                <select name="shelf_number" id="shelf_number">
+                  <option value="">Select a list</option>
+                    [% FOREACH list IN lists %]
+                      <option value="[% list.shelfnumber %]">[% list.shelfname %]</option>
+                    [% END %]
+                  </option>
+                </select>
+              </li>
+            </ol>
+          </fieldset>
+          &nbsp;
+        </div>
+
+        <div id="enterlist">
+          <fieldset class="rows">
+            <legend>Or enter a list of record numbers</legend>
+            <ol>
+              <li>
+                <label for="recordnumber_list">List of biblionumbers or authority ids (one per line): </label>
+                <textarea rows="10" cols="30" id="recordnumber_list" name="recordnumber_list"></textarea>
+              </li>
+            </ol>
+          </fieldset>
+          &nbsp;
+        </div>
+
+      </div>
+
       <fieldset class="rows">
         <legend>Use MARC Modification Template:</legend>
         <ol>
@@ -262,11 +286,14 @@
     [% Asset.js("js/background-job-progressbar.js") | $raw %]
     <script>
         $(document).ready(function() {
+
+          $("#batch_mod_form").tabs();
+
           $("input[type='radio']").click(function(){
             if ($(this).attr('id') == 'authority_type') {
-              $("#shelves").hide();
+              $("#show_list_option").hide();
             } else if ($(this).attr('id') == 'biblio_type') {
-              $("#shelves").show();
+              $("#show_list_option").show();
             }
           });
           $("#selectall").click(function(e){

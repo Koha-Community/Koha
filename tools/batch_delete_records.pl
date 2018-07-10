@@ -45,8 +45,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user({
         flagsrequired => { tools => 'records_batchdel' },
 });
 
-my @lists = Koha::Virtualshelves->search({});
-$template->param( lists => \@lists );
+$template->param( lists => scalar Koha::Virtualshelves->search([{ category => 1, owner => $loggedinuser }, { category => 2 }]) );
 
 my @records;
 my @messages;

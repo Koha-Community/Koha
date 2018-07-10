@@ -69,8 +69,7 @@ if ( $completedJobID ) {
     exit;
 }
 
-my @lists = Koha::Virtualshelves->search({});
-$template->param( lists => \@lists );
+$template->param( lists => scalar Koha::Virtualshelves->search([{ category => 1, owner => $loggedinuser }, { category => 2 }]) );
 
 my @templates = GetModificationTemplates( $mmtid );
 unless ( @templates ) {
