@@ -104,7 +104,9 @@ if ($fileID) {
     else {
         my $filename = $upload->full_path;
         my $dirname = File::Temp::tempdir( CLEANUP => 1 );
-        unless ( system( "unzip", $filename, '-d', $dirname ) == 0 ) {
+        qx/unzip $filename -d $dirname/;
+        my $exit_code = $?;
+        unless ( $exit_code == 0 ) {
             $error = 'UZIPFAIL';
         }
         else {
