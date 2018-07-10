@@ -115,7 +115,9 @@ if ( ( $op eq 'Upload' ) && $uploadfile ) {
     }
     close $tfh;
     if ( $filetype eq 'zip' ) {
-        unless ( system( "unzip", $tempfile, '-d', $dirname ) == 0 ) {
+        qx/unzip $tempfile -d $dirname/;
+        my $exit_code = $?;
+        unless ( $exit_code == 0 ) {
             $errors{'UZIPFAIL'} = $uploadfilename;
             $template->param( ERRORS => [ \%errors ] );
             # This error is fatal to the import, so bail out here
