@@ -59,7 +59,7 @@ if ($uri) {
         my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
         my $marc_urls = C4::Biblio::GetMarcUrls($record, C4::Context->preference('marcflavour'));
         if ( ( grep { $_ eq $uri } map { $_->{MARCURL} } @$marc_urls )
-            || Koha::Items->search( { uri => $uri } )->count )
+            || Koha::Items->search( { itemnumber => $itemnumber, uri => $uri } )->count )
         {
             $tracker->trackclick(
                 {
