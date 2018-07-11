@@ -99,6 +99,9 @@ for my $itm (@all_items) {
 
 my $record=GetMarcBiblio({ biblionumber => $biblionumber });
 
+output_and_exit( $query, $cookie, $template, 'unknown_biblio')
+    unless $record;
+
 my $hostrecords;
 # adding items linked via host biblios
 my @hostitems = GetHostItemsInfo($record);
