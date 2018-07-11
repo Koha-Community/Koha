@@ -63,7 +63,7 @@ function Click$function_name(event) {
         //Only add the parameter to the URL if there is a value to add
         leader_parameter = \"&leader=\"+leader_value;
     }
-    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=\"+ event.data.id +\"&result=\"+defaultvalue+leader_parameter,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
+    newin=window.open(\"../cataloguing/plugin_launcher.pl?plugin_name=marc21_field_008.pl&index=\"+ event.data.id +\"&result=\"+encodeURIComponent(defaultvalue)+leader_parameter,\"tag_editor\",'width=1000,height=600,toolbar=false,scrollbars=yes');
 
 }
 //]]>
