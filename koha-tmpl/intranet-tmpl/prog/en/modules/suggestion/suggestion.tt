@@ -308,7 +308,7 @@
                         [% END %]
 
                         [% FOREACH s IN SuggestionStatuses %]
-                            [% IF s.authorised_value == selected_status %]
+                            [% IF s.authorised_value == suggestion.STATUS %]
                                 <option value="[% s.authorised_value %]" selected="selected">[% s.lib %]</option>
                             [% ELSE %]
                                 <option value="[% s.authorised_value %]">[% s.lib %]</option>

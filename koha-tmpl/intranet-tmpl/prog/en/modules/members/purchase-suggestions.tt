@@ -75,13 +75,22 @@
                                     [% END %]
                                 </td>
                                 <td>
-                                    [% IF ( s.ASKED ) %]Requested[% END %]
-                                    [% IF ( s.CHECKED ) %]Checked by the library[% END %]
-                                    [% IF ( s.ACCEPTED ) %]Accepted by the library[% END %]
-                                    [% IF ( s.ORDERED ) %]Ordered by the library[% END %]
-                                    [% IF ( s.REJECTED ) %]Suggestion declined [% END %]
-                                    [% IF ( s.AVAILABLE ) %]Available in the library[% END %]
-                                    [% IF ( s.reason ) %]([% s.reason %])[% END %]
+                                    [% SWITCH s.STATUS %]
+                                    [% CASE "ASKED" %]<span>Requested</span>
+                                    [% CASE "CHECKED" %]<span>Checked by the library</span>
+                                    [% CASE "ACCEPTED" %]<span>Accepted by the library</span>
+                                    [% CASE "ORDERED" %]<span>Ordered by the library</span>
+                                    [% CASE "REJECTED" %]<span>Suggestion declined<span>
+                                    [% CASE "AVAILABLE" %]<span>Available in the library</span>
+                                    [% CASE %]
+                                        [% SET status_description = AuthorisedValues.GetByCode('SUGGEST_STATUS', s.STATUS) %]
+                                        [% IF status_description %]
+                                            [% status_description %]
+                                        [% ELSE %]
+                                            <span>Unknown</span>
+                                        [% END %]
+                                    [% END %]
+                                    [% IF s.reason %]([% s.reason %])[% END %]
                                 </td>
                             </tr>
                         [% END %]
