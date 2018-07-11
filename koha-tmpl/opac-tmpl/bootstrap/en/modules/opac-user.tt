@@ -490,6 +490,9 @@
                                             <tr>
                                                 [% IF ( JacketImages || AdlibrisEnabled ) %]
                                                     <td class="jacketcell">
+                                                    [% IF ( AdlibrisEnabled && OVERDUE.normalized_isbn ) %]
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% OVERDUE.biblionumber | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% OVERDUE.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                                                    [% END %]
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( OVERDUE.normalized_isbn ) %]
                                                             <a href="http://www.amazon.com/gp/reader/[% OVERDUE.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% OVERDUE.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail" /></a>
