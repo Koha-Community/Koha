@@ -1440,7 +1440,7 @@ subtest '->store' => sub {
     throws_ok
         { $patron_2->userid($patron_1->userid)->store; }
         'Koha::Exceptions::Object::DuplicateID',
-        'AddMember raises an exception on invalid categorycode';
+        'Koha::Patron->store raises an exception on duplicate ID';
 
     $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
