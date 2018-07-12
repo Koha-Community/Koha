@@ -358,6 +358,7 @@ sub create_item {
 
     my $item = {
         barcode => $barcode,
+        itype => 'Books'
     };
 
     my $itemnumber = C4::Items::AddItem($item, $biblionumber);

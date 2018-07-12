@@ -215,9 +215,21 @@ sub listhistory {
           $other_params
         );
 
+        my $checkouts_json = $checkouts->TO_JSON;
+
+        foreach my $checkout (@{$checkouts_json}) {
+            my $item         = Koha::Items->find($checkout->{itemnumber});
+            my $biblio       = Koha::Biblios->find($item->biblionumber);
+
+            $checkout->{'enumchron'}       = $item->enumchron;
+            $checkout->{'biblionumber'}    = $item->biblionumber;
+            $checkout->{'title'}           = $biblio->title;
+            $checkout->{'title_remainder'} = $biblio->title_remainder;
+        }
+
         return $c->render( status => 200, openapi => {
             total => $checkouts_count,
-            records => $checkouts
+            records => $checkouts_json
         });
     }
     catch {
