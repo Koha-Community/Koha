@@ -1089,7 +1089,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             if(editor.modified )
                 { return 1; }
             else
-                { return undef; }
+                { return undefined; }
         };
 
         // Start editor
