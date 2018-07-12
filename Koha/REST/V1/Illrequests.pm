@@ -43,7 +43,7 @@ sub list {
 
     my $args = $c->req->params->to_hash // {};
     my $output = [];
-    my @format_dates = ( 'placed', 'updated' );
+    my @format_dates = ( 'placed', 'updated', 'completed' );
 
     # Create a hash where all keys are embedded values
     # Enables easy checking
@@ -127,9 +127,10 @@ sub list {
         foreach my $p(@{$patron_arr}) {
             if ($p->{borrowernumber} == $req->borrowernumber) {
                 $to_push->{patron} = {
-                    firstname  => $p->{firstname},
-                    surname    => $p->{surname},
-                    cardnumber => $p->{cardnumber}
+                    patron_id => $p->{borrowernumber},
+                    firstname      => $p->{firstname},
+                    surname        => $p->{surname},
+                    cardnumber     => $p->{cardnumber}
                 };
                 last;
             }

@@ -5,6 +5,7 @@
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
+[% USE ColumnsSettings %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests</title>
@@ -62,8 +63,8 @@
                             </select>
                         </li>
                         <li>
-                            <label for="illfilter_barcode">Cardnumber:</label>
-                            <input type="text" name="illfilter_barcode" id="illfilter_barcode" />
+                            <label for="illfilter_patron">Patron:</label>
+                            <input type="text" name="illfilter_patron" id="illfilter_patron" />
                         </li>
                     </ol>
                     <fieldset class="action">
@@ -507,20 +508,34 @@
                         <table id="ill-requests">
                             <thead>
                                 <tr id="illview-header">
-                                    <th>Author</th>
-                                    <th>Title</th>
-                                    <th>Patron</th>
-                                    <th>Bibliographic record ID</th>
-                                    <th>Library</th>
-                                    <th>Status</th>
-                                    <th class="placed">&nbsp;</th>
-                                    <th class="placed_formatted">Date placed</th>
-                                    <th class="updated">&nbsp;</th>
-                                    <th class="updated_formatted">Updated on</th>
-                                    <th>Request number</th>
-                                    <th>Comments</th>
-                                    <th class="patron_cardnumber">Cardnumber</th>
-                                    <th class="actions"></th>
+                                    <th scope="col">Request ID</th>
+                                    <th scope="col">Author</th>
+                                    <th scope="col">Title</th>
+                                    <th scope="col">Article title</th>
+                                    <th scope="col">Issue</th>
+                                    <th scope="col">Volume</th>
+                                    <th scope="col">Year</th>
+                                    <th scope="col">Pages</th>
+                                    <th scope="col">Type</th>
+                                    <th scope="col">Order ID</th>
+                                    <th scope="col">Patron</th>
+                                    <th scope="col">Bibliographic record</th>
+                                    <th scope="col">Branch</th>
+                                    <th scope="col">Status</th>
+                                    <th scope="col" class="placed">&nbsp;</th>
+                                    <th scope="col" class="placed_formatted">Placed on</th>
+                                    <th scope="col" class="updated">&nbsp;</th>
+                                    <th scope="col" class="updated_formatted">Updated on</th>
+                                    <th scope="col">Replied</th>
+                                    <th scope="col" class="completed">&nbsp;</th>
+                                    <th scope="col" class="completed_formatted">Completed on</th>
+                                    <th scope="col">Access URL</th>
+                                    <th scope="col">Cost</th>
+                                    <th scope="col">Comments</th>
+                                    <th scope="col">OPAC notes</th>
+                                    <th scope="col">Staff notes</th>
+                                    <th scope="col">Backend</th>
+                                    <th scope="col" class="actions"></th>
                                 </tr>
                             </thead>
                             <tbody id="illview-body">
@@ -544,6 +559,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
@@ -551,52 +567,23 @@
 
             // Illview Datatable setup
 
+            var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
+
             var table;
 
             // Filters that are active
             var activeFilters = {};
 
-            // Fields we don't want to display
-            var ignore = [
-                'accessurl',
-                'backend',
-                'branchcode',
-                'completed',
-                'capabilities',
-                'cost',
-                'medium',
-                'notesopac',
-                'notesstaff',
-                'replied'
-            ];
-
             // Fields we need to expand (flatten)
             var expand = [
                 'metadata',
-                'patron'
+                'patron',
+                'library'
             ];
 
             // Expanded fields
             // This is auto populated
             var expanded = {};
-
-            // The core fields that should be displayed first
-            var core = [
-                'metadata_author',
-                'metadata_title',
-                'borrowername',
-                'biblio_id',
-                'library',
-                'status',
-                'placed',
-                'placed_formatted',
-                'updated',
-                'updated_formatted',
-                'illrequest_id',
-                'comments',
-                'patron_cardnumber',
-                'action'
-            ];
 
             // Filterable columns
             var filterable = {
@@ -627,7 +614,7 @@
                             var sel = $('#illfilter_status option:selected').val();
                             if (sel && sel.length > 0) {
                                 activeFilters[me] = function() {
-                                    table.column(5).search(sel);
+                                    table.api().column(13).search(sel);
                                 }
                             } else {
                                 if (activeFilters.hasOwnProperty(me)) {
@@ -644,7 +631,7 @@
                     prep: function(tableData, oData) {
                         var uniques = {};
                         tableData.forEach(function(row) {
-                            uniques[row.library.branchname] = 1
+                            uniques[row.library_branchname] = 1
                         });
                         Object.keys(uniques).sort().forEach(function(unique) {
                             $('#illfilter_branchname').append(
@@ -659,7 +646,7 @@
                             var sel = $('#illfilter_branchname option:selected').val();
                             if (sel && sel.length > 0) {
                                 activeFilters[me] = function() {
-                                    table.column(4).search(sel);
+                                    table.api().column(12).search(sel);
                                 }
                             } else {
                                 if (activeFilters.hasOwnProperty(me)) {
@@ -672,14 +659,14 @@
                         $('#illfilter_branchname').val('');
                     }
                 },
-                barcode: {
+                patron: {
                     listener: function() {
-                        var me = 'barcode';
-                        $('#illfilter_barcode').change(function() {
-                            var val = $('#illfilter_barcode').val();
+                        var me = 'patron';
+                        $('#illfilter_patron').change(function() {
+                            var val = $('#illfilter_patron').val();
                             if (val && val.length > 0) {
                                 activeFilters[me] = function() {
-                                    table.column(12).search(val);
+                                    table.api().column(10).search(val);
                                 }
                             } else {
                                 if (activeFilters.hasOwnProperty(me)) {
@@ -689,7 +676,7 @@
                         });
                     },
                     clear: function() {
-                        $('#illfilter_barcode').val('');
+                        $('#illfilter_patron').val('');
                     }
                 },
                 dateModified: {
@@ -704,17 +691,6 @@
                 }
             };
 
-            // Remove any fields we're ignoring
-            var removeIgnore = function(dataObj) {
-                dataObj.forEach(function(thisRow) {
-                    ignore.forEach(function(thisIgnore) {
-                        if (thisRow.hasOwnProperty(thisIgnore)) {
-                            delete thisRow[thisIgnore];
-                        }
-                    });
-                });
-            };
-
             // Expand any fields we're expanding
             var expandExpand = function(row) {
                 expand.forEach(function(thisExpand) {
@@ -725,7 +701,7 @@
                         var expandObj = row[thisExpand];
                         Object.keys(expandObj).forEach(
                             function(thisExpandCol) {
-                                var expColName = thisExpand + '_' + thisExpandCol;
+                                var expColName = thisExpand + '_' + thisExpandCol.replace(/\s/g,'_');
                                 // Keep a list of fields that have been expanded
                                 // so we can create toggle links for them
                                 if (expanded[thisExpand].indexOf(expColName) == -1) {
@@ -741,12 +717,6 @@
                     }
                 });
             };
-
-            // Build a de-duped list of all column names
-            var allCols = {};
-            core.map(function(thisCore) {
-                allCols[thisCore] = 1;
-            });
 
             // Strip the expand prefix if it exists, we do this for display
             var stripPrefix = function(value) {
@@ -765,18 +735,44 @@
                 if ( row.patron_firstname ) {
                     patronLink = patronLink + row.patron_firstname + ' ';
                 }
-                patronLink = patronLink + row.patron_surname + '</a>';
+                patronLink = patronLink + row.patron_surname +
+                    ' (' + row.patron_cardnumber + ')' + '</a>';
                 return patronLink;
             };
 
-            // Our 'render' function for the library name
-            var createLibrary = function(data, type, row) {
-                return row.library.branchname;
+            // Our 'render' function for biblio_id
+            var createBiblioLink = function(data, type, row) {
+                return (row.biblio_id) ?
+                    '<a title="' + _("View biblio details") + '" ' +
+                    'href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=' +
+                    row.biblio_id + '">' +
+                    row.biblio_id +
+                    '</a>' : '';
+            };
+
+            // Our 'render' function for title
+            var createTitle = function(data, type, row) {
+                return (
+                    row.hasOwnProperty('metadata_container_title') &&
+                    row.metadata_container_title
+                ) ? row.metadata_container_title : row.metadata_title;
             };
 
             // Render function for request ID
             var createRequestId = function(data, type, row) {
                 return row.id_prefix + row.illrequest_id;
+            };
+
+            // Render function for type
+            var createType = function(data, type, row) {
+                if (!row.hasOwnProperty('metadata_Type') || !row.metadata_Type) {
+                    if (row.hasOwnProperty('medium') && row.medium) {
+                        row.metadata_Type = row.medium;
+                    } else {
+                        row.metadata_Type = null;
+                    }
+                }
+                return row.metadata_Type;
             };
 
             // Render function for request status
@@ -833,33 +829,32 @@
             // Columns that require special treatment
             var specialCols = {
                 action: {
-                    name: '',
-                    func: createActionLink
-                },
-                borrowername: {
-                    name: _("Patron"),
-                    func: createPatronLink
+                    func: createActionLink,
+                    skipSanitize: true
                 },
                 illrequest_id: {
-                    name: _("Request number"),
                     func: createRequestId
                 },
                 status: {
-                    name: _("Status"),
                     func: createStatus
                 },
                 biblio_id: {
-                    name: _("Biblio ID")
+                    name: _("Bibliograpic record ID"),
+                    func: createBiblioLink,
+                    skipSanitize: true
                 },
-                library: {
-                    name: _("Library"),
-                    func: createLibrary
+                metadata_title: {
+                    func: createTitle
+                },
+                metadata_Type: {
+                    func: createType
                 },
                 updated: {
                     name: _("Updated on"),
                 },
-                patron_cardnumber: {
-                    name: _("Cardnumber")
+                patron: {
+                    skipSanitize: true,
+                    func: createPatronLink
                 }
             };
 
@@ -898,23 +893,36 @@
                 });
             });
 
-        // Display the modal containing request supplier metadata
-        $('#ill-request-display-metadata').on('click', function(e) {
-            e.preventDefault();
-            $('#dataPreview').modal({show:true});
-        });
+            // Display the modal containing request supplier metadata
+            $('#ill-request-display-metadata').on('click', function(e) {
+                e.preventDefault();
+                $('#dataPreview').modal({show:true});
+            });
+
+            // Allow us to chain Datatable render helpers together, so we
+            // can use our custom functions and render.text(), which
+            // provides us with data sanitization
+            $.fn.dataTable.render.multi = function(renderArray) {
+                return function(d, type, row, meta) {
+                    for(var r = 0; r < renderArray.length; r++) {
+                        var toCall = renderArray[r].hasOwnProperty('display') ?
+                            renderArray[r].display :
+                            renderArray[r];
+                        d = toCall(d, type, row, meta);
+                    }
+                    return d;
+                }
+            }
 
             // Get our data from the API and process it prior to passing
             // it to datatables
             var ajax = $.ajax(
-                '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias'
+                '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias,comments'
                 ).done(function() {
                     var data = JSON.parse(ajax.responseText);
                     // Make a copy, we'll be removing columns next and need
                     // to be able to refer to data that has been removed
                     var dataCopy = $.extend(true, [], data);
-                    // Remove all columns we're not interested in
-                    removeIgnore(dataCopy);
                     // Expand columns that need it and create an array
                     // of all column names
                     $.each(dataCopy, function(k, row) {
@@ -924,56 +932,72 @@
                     // Assemble an array of column definitions for passing
                     // to datatables
                     var colData = [];
-                    Object.keys(allCols).forEach(function(thisCol) {
+                    columns_settings.forEach(function(thisCol) {
+                        var colName = thisCol.columnname;
                         // Create the base column object
-                        var colObj = {
-                            name: thisCol,
-                            className: thisCol,
-                            defaultContent: ''
-                        };
+                        var colObj = $.extend({}, thisCol);
+                        colObj.name = colName;
+                        colObj.className = colName;
+                        colObj.defaultContent = '';
+
                         // We may need to process the data going in this
                         // column, so do it if necessary
                         if (
-                            specialCols.hasOwnProperty(thisCol) &&
-                            specialCols[thisCol].hasOwnProperty('func')
+                            specialCols.hasOwnProperty(colName) &&
+                            specialCols[colName].hasOwnProperty('func')
                         ) {
-                            colObj.render = specialCols[thisCol].func;
+                            var renderArray = [
+                                specialCols[colName].func
+                            ];
+                            if (!specialCols[colName].skipSanitize) {
+                                renderArray.push(
+                                    $.fn.dataTable.render.text()
+                                );
+                            }
+
+                            colObj.render = $.fn.dataTable.render.multi(
+                                renderArray
+                            );
                         } else {
-                            colObj.data = thisCol;
+                            colObj.data = colName;
+                            colObj.render = $.fn.dataTable.render.text()
                         }
+                        // Make sure properties that aren't present in the API
+                        // response are populated with null to avoid Datatables
+                        // choking on their absence
+                        dataCopy.forEach(function(thisData) {
+                            if (!thisData.hasOwnProperty(colName)) {
+                                thisData[colName] = null;
+                            }
+                        });
                         colData.push(colObj);
                     });
 
                     // Initialise the datatable
-                    table = $('#ill-requests').DataTable($.extend(true, {}, dataTablesDefaults, {
+                    table = KohaTable("ill-requests", {
                         'aoColumnDefs': [
                             { // Last column shouldn't be sortable or searchable
                                 'aTargets': [ 'actions' ],
                                 'bSortable': false,
                                 'bSearchable': false
                             },
-                            { // Hide the two date columns we use just for sorting
-                                'aTargets': [ 'placed', 'updated' ],
-                                'bVisible': false,
-                                'bSearchable': true
-                            },
                             { // When sorting 'placed', we want to use the
                               // unformatted column
                               'aTargets': [ 'placed_formatted'],
-                              'iDataSort': 7
+                              'iDataSort': 14
                             },
                             { // When sorting 'updated', we want to use the
                               // unformatted column
                               'aTargets': [ 'updated_formatted'],
-                              'iDataSort': 9
+                              'iDataSort': 16
                             },
-                            {
-                              'aTargets': [ 'patron_cardnumber' ],
-                              'bVisible': false,
-                              'bSearchable': true
+                            { // When sorting 'completed', we want to use the
+                              // unformatted column
+                              'aTargets': [ 'completed_formatted'],
+                              'iDataSort': 19
                             }
                         ],
-                        'aaSorting': [[ 9, 'desc' ]], // Default sort, updated descending
+                        'aaSorting': [[ 16, 'desc' ]], // Default sort, updated descending
                         'processing': true, // Display a message when manipulating
                         'sPaginationType': "full_numbers", // Pagination display
                         'deferRender': true, // Improve performance on big datasets
@@ -996,7 +1020,7 @@
                             }
 
                         }
-                    }));
+                    }, columns_settings);
 
                     // Custom date range filtering
                     $.fn.dataTable.ext.search.push(function(settings, data, dataIndex) {
@@ -1004,8 +1028,8 @@
                         var placedEnd = $('#illfilter_dateplaced_end').datepicker('getDate');
                         var modifiedStart = $('#illfilter_datemodified_start').datepicker('getDate');
                         var modifiedEnd = $('#illfilter_datemodified_end').datepicker('getDate');
-                        var rowPlaced = data[6] ? new Date(data[6]) : null;
-                        var rowModified = data[8] ? new Date(data[8]) : null;
+                        var rowPlaced = data[14] ? new Date(data[14]) : null;
+                        var rowModified = data[16] ? new Date(data[16]) : null;
                         var placedPassed = true;
                         var modifiedPassed = true;
                         if (placedStart && rowPlaced && rowPlaced < placedStart) {
@@ -1029,7 +1053,7 @@
             );
 
             var clearSearch = function() {
-                table.search('').columns().search('');
+                table.api().search('').columns().search('');
                 activeFilters = {};
                 for (var filter in filterable) {
                     if (
@@ -1039,20 +1063,20 @@
                         filterable[filter].clear();
                     }
                 }
-                table.draw();
+                table.api().draw();
             };
 
             // Apply any search filters, or clear any previous
             // ones
             $('#illfilter_form').submit(function(event) {
                 event.preventDefault();
-                table.search('').columns().search('');
+                table.api().search('').columns().search('');
                 for (var active in activeFilters) {
                     if (activeFilters.hasOwnProperty(active)) {
                         activeFilters[active]();
                     }
                 }
-                table.draw();
+                table.api().draw();
             });
 
             // Clear all filters

@@ -25,6 +25,7 @@ use File::Basename qw( basename );
 use Encode qw( encode );
 use Mail::Sendmail;
 use Try::Tiny;
+use DateTime;
 
 use Koha::Database;
 use Koha::Email;
@@ -659,6 +660,7 @@ Mark a request as completed (status = COMP).
 sub mark_completed {
     my ( $self ) = @_;
     $self->status('COMP')->store;
+    $self->completed(DateTime->now)->store;
     return {
         error   => 0,
         status  => '',

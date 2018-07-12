@@ -40,7 +40,7 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 18;
+    plan tests => 20;
 
     # Mock ILLBackend (as object)
     my $backend = Test::MockObject->new;
@@ -114,9 +114,11 @@ subtest 'list() tests' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
         ->json_has( '/0/patron', 'patron embedded' )
+        ->json_is( '/0/patron/patron_id', $patron->borrowernumber, 'The right patron is embeded')
         ->json_has( '/0/capabilities', 'capabilities embedded' )
         ->json_has( '/0/library', 'library embedded'  )
-        ->json_has( '/0/metadata', 'metadata embedded'  );
+        ->json_has( '/0/metadata', 'metadata embedded'  )
+        ->json_hasnt( '/1', 'Only one request was created' );
 
     # Create another ILL request
     my $illrequest2 = $builder->build_object(
@@ -156,7 +158,7 @@ subtest 'list() tests' => sub {
 
 sub add_formatted {
     my $req = shift;
-    my @format_dates = ( 'placed', 'updated' );
+    my @format_dates = ( 'placed', 'updated', 'completed' );
     # We need to embellish the request with properties that the API
     # controller calculates on the fly
     # Create new "formatted" columns for each date column
