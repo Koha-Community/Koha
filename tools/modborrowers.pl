@@ -92,11 +92,12 @@ if ( $op eq 'show' ) {
         my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
         if ( $patron ) {
             if ( $logged_in_user->can_see_patron_infos( $patron ) ) {
-                $patron = $patron->unblessed;
-                $patron->{patron_attributes} = C4::Members::Attributes::GetBorrowerAttributes( $patron->{borrowernumber} );
-                $max_nb_attr = scalar( @{ $patron->{patron_attributes} } )
-                    if scalar( @{ $patron->{patron_attributes} } ) > $max_nb_attr;
-                push @borrowers, $patron;
+                my $borrower = $patron->unblessed;
+                my $attributes = $patron->get_extended_attributes;
+                $borrower->{patron_attributes} = $attributes->as_list;
+                $borrower->{patron_attributes_count} = $attributes->count;
+                $max_nb_attr = $borrower->{patron_attributes_count} if $borrower->{patron_attributes_count} > $max_nb_attr;
+                push @borrowers, $borrower;
             } else {
                 push @notfoundcardnumbers, $cardnumber;
             }
@@ -107,7 +108,7 @@ if ( $op eq 'show' ) {
 
     # Just for a correct display
     for my $borrower ( @borrowers ) {
-        my $length = scalar( @{ $borrower->{patron_attributes} } );
+        my $length = $borrower->{patron_attributes_count};
         push @{ $borrower->{patron_attributes} }, {} for ( $length .. $max_nb_attr - 1);
     }
 
@@ -373,7 +374,7 @@ if ( $op eq 'do' ) {
             }
         }
 
-        my $borrower_categorycode = Koha::Patrons->find( $borrowernumber )->categorycode;
+        my $patron = Koha::Patrons->find( $borrowernumber );
         my $i=0;
         for ( @attributes ) {
             next unless $_;
@@ -382,7 +383,7 @@ if ( $op eq 'do' ) {
             $attribute->{attribute} = $attr_values[$i];
             my $attr_type = C4::Members::AttributeTypes->fetch( $_ );
             # If this borrower is not in the category of this attribute, we don't want to modify this attribute
-            ++$i and next if $attr_type->{category_code} and $attr_type->{category_code} ne $borrower_categorycode;
+            ++$i and next if $attr_type->{category_code} and $attr_type->{category_code} ne $patron->category_code;
             my $valuename = "attr" . $i . "_value";
             if ( grep { $_ eq $valuename } @disabled ) {
                 # The attribute is disabled, we remove it for this borrower !
@@ -407,11 +408,13 @@ if ( $op eq 'do' ) {
     for my $borrowernumber ( @borrowernumbers ) {
         my $patron = Koha::Patrons->find( $borrowernumber );
         if ( $patron ) {
-            $patron = $patron->unblessed;
-            $patron->{patron_attributes} = C4::Members::Attributes::GetBorrowerAttributes( $patron->{borrowernumber} );
-            $max_nb_attr = scalar( @{ $patron->{patron_attributes} } )
-                if scalar( @{ $patron->{patron_attributes} } ) > $max_nb_attr;
-            push @borrowers, $patron;
+            my $category_description = $patron->category->description;
+            my $borrower = $patron->unblessed;
+            $borrower->{category_description} = $category_description;
+            my $attributes = $patron->get_extended_attributes;
+            $borrower->{patron_attributes} = $attributes->as_list;
+            $max_nb_attr = $attributes->count if $attributes->count > $max_nb_attr;
+            push @borrowers, $borrower;
         }
     }
     my @patron_attributes_option;

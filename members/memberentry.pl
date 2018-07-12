@@ -870,13 +870,14 @@ sub patron_attributes_form {
         $template->param(no_patron_attribute_types => 1);
         return;
     }
-    my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-    my @classes = uniq( map {$_->{class}} @$attributes );
+    my $patron = Koha::Patrons->find($borrowernumber); # Already fetched but outside of this sub
+    my @attributes = $patron->get_extended_attributes->as_list; # FIXME Must be improved!
+    my @classes = uniq( map {$_->type->class} @attributes );
     @classes = sort @classes;
 
     # map patron's attributes into a more convenient structure
     my %attr_hash = ();
-    foreach my $attr (@$attributes) {
+    foreach my $attr (@attributes) {
         push @{ $attr_hash{$attr->{code}} }, $attr;
     }
 

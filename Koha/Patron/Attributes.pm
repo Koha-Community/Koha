@@ -60,6 +60,7 @@ sub search {
             },
         } : {};
     $attributes //= {};
+    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['code', 'attribute'] }
     return $self->SUPER::search( { %$params, %$or }, { %$attributes, %$join } );
 }
 

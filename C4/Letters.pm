@@ -28,7 +28,6 @@ use Template;
 use Module::Load::Conditional qw(can_load);
 
 use C4::Members;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use C4::Log;
 use C4::SMS;
 use C4::Debug;
@@ -852,11 +851,13 @@ sub _parseletter {
     }
 
     if ($table eq 'borrowers' && $letter->{content}) {
-        if ( my $attributes = GetBorrowerAttributes($values->{borrowernumber}) ) {
+        my $patron = Koha::Patrons->find( $values->{borrowernumber} );
+        if ( $patron ) {
+            my $attributes = $patron->get_extended_attributes;
             my %attr;
-            foreach (@$attributes) {
-                my $code = $_->{code};
-                my $val  = $_->{value_description} || $_->{value};
+            while ( my $attribute = $attributes->next ) {
+                my $code = $attribute->code;
+                my $val  = $attribute->description; # FIXME - we always display intranet description here!
                 $val =~ s/\p{P}(?=$)//g if $val;
                 next unless $val gt '';
                 $attr{$code} ||= [];

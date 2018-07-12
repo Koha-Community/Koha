@@ -35,7 +35,6 @@ use C4::Output;
 use C4::Members::AttributeTypes;
 use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::Patron::Messages;
 use Koha::DateUtils;
@@ -131,15 +130,15 @@ $template->param(
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-    my @classes = uniq( map {$_->{class}} @$attributes );
+    my @attributes = $patron->get_extended_attributes->as_list; # FIXME Must be improved!
+    my @classes = uniq( map {$_->type->class} @attributes );
     @classes = sort @classes;
 
     my @attributes_loop;
     for my $class (@classes) {
         my @items;
-        for my $attr (@$attributes) {
-            push @items, $attr if $attr->{class} eq $class
+        for my $attr (@attributes) {
+            push @items, $attr if $attr->type->class eq $class
         }
         my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
         my $lib = $av->count ? $av->next->lib : $class;

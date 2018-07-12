@@ -26,7 +26,6 @@ use String::Random qw( random_string );
 use C4::Auth;
 use C4::Output;
 use C4::Members;
-use C4::Members::Attributes qw( GetBorrowerAttributes );
 use C4::Form::MessagingPreferences;
 use Koha::AuthUtils;
 use Koha::Patrons;

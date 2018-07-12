@@ -64,8 +64,53 @@ sub type {
 
     my $self = shift;
 
-    return Koha::Patron::Attribute::Types->find( $self->code );
+    return scalar Koha::Patron::Attribute::Types->find( $self->code );
 }
+
+=head3
+
+my $authorised_value = $attribute->authorised_value;
+
+Return the Koha::AuthorisedValue object of this attribute when one is attached.
+
+Return undef if this attribute is not attached to an authorised value
+
+=cut
+
+sub authorised_value {
+    my ($self) = @_;
+
+    return unless $self->type->authorised_value_category;
+
+    my $av = Koha::AuthorisedValues->search(
+        {
+            category         => $self->type->authorised_value_category,
+            authorised_value => $self->attribute,
+        }
+    );
+    return unless $av->count; # Data inconsistency
+    return $av->next;
+}
+
+=head3
+
+my $description = $patron_attribute->description;
+
+Return the value of this attribute or the description of the authorised value (when attached).
+
+This method must be called when the authorised value's description must be
+displayed instead of the code.
+
+=cut
+
+sub description {
+    my ( $self) = @_;
+    if ( $self->type->authorised_value_category ) {
+        return $self->authorised_value->lib;
+    }
+    return $self->attribute;
+}
+
 
 =head2 Internal methods
 

@@ -206,11 +206,7 @@ subtest 'checkpw_ldap tests' => sub {
 
         C4::Auth_with_ldap::checkpw_ldap( $dbh, 'hola', password => 'hey' );
         ok(
-            @{
-                C4::Members::Attributes::GetBorrowerAttributes(
-                    $borrower->{borrowernumber}
-                )
-            },
+            Koha::Patrons->find($borrower->{borrowernumber})->get_extended_attributes->count,
             'Extended attributes are not deleted'
         );
 

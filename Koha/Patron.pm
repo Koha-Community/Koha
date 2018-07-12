@@ -1438,20 +1438,19 @@ sub generate_userid {
      return $self;
 }
 
-=head3 attributes
+=head3 get_extended_attributes
 
-my $attributes = $patron->attributes
+my $attributes = $patron->get_extended_attributes
 
 Return object of Koha::Patron::Attributes type with all attributes set for this patron
 
 =cut
 
-sub attributes {
+sub get_extended_attributes {
     my ( $self ) = @_;
-    return Koha::Patron::Attributes->search({
-        borrowernumber => $self->borrowernumber,
-        branchcode     => $self->branchcode,
-    });
+    my $rs = $self->_result->borrower_attributes;
+    # We call search to use the filters in Koha::Patron::Attributes->search
+    return Koha::Patron::Attributes->_new_from_dbic($rs)->search;
 }
 
 =head3 lock

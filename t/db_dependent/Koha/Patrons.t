@@ -2020,7 +2020,7 @@ subtest 'anonymize' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'get_extended_attributes' => sub {
-    plan tests => 7;
+    plan tests => 9;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -2091,6 +2091,15 @@ subtest 'get_extended_attributes' => sub {
     # TODO - What about multiple?
     my $non_existent = $patron_2->get_extended_attribute_value( 'not_exist' );
     is( $non_existent, undef, 'Koha::Patron->get_extended_attribute_value must return undef if the attribute does not exist' );
+
+    # Test branch limitations
+    set_logged_in_user($patron_2);
+    C4::Members::Attributes::SetBorrowerAttributes($patron_1->borrowernumber, $attributes_for_1);
+    $extended_attributes_for_1 = $patron_1->get_extended_attributes;
+    is( $extended_attributes_for_1->count, 2, 'There should be 2 attributes for patron 1, the limited one should not be returned');
+
+    my $limited_value = $patron_1->get_extended_attribute_value( $attribute_type_limited->code );
+    is( $limited_value, undef, );
 
     $schema->storage->txn_rollback;
 };

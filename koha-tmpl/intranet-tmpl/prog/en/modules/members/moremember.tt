@@ -381,12 +381,8 @@
                                                     <ol>
                                                         [% FOREACH item IN attribute.items %]
                                                             <li>
-                                                                <span class="label">[% item.description | html %]: </span>
-                                                                [% IF ( item.value_description ) %]
-                                                                    [% item.value_description | html %]
-                                                                [% ELSE %]
-                                                                    [% item.value| html | html_line_break %]
-                                                                [% END %]
+                                                                <span class="label">[% item.type.description | html %]: </span>
+                                                                [% item.description | html_line_break %]
                                                             </li>
                                                         [% END %]
                                                     </ol>

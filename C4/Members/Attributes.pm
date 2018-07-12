@@ -29,7 +29,7 @@ our ($csv, $AttributeTypes);
 
 BEGIN {
     @ISA = qw(Exporter);
-    @EXPORT_OK = qw(GetBorrowerAttributes CheckUniqueness SetBorrowerAttributes
+    @EXPORT_OK = qw(CheckUniqueness SetBorrowerAttributes
                     DeleteBorrowerAttribute UpdateBorrowerAttribute
                     extended_attributes_code_value_arrayref extended_attributes_merge
                     SearchIdMatchingAttribute);
@@ -43,57 +43,8 @@ C4::Members::Attributes - manage extend patron attributes
 =head1 SYNOPSIS
 
   use C4::Members::Attributes;
-  my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
 
 =head1 FUNCTIONS
-
-=head2 GetBorrowerAttributes
-
-  my $attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber[, $opac_only]);
-
-Retrieve an arrayref of extended attributes associated with the
-patron specified by C<$borrowernumber>.  Each entry in the arrayref
-is a hashref containing the following keys:
-
-code (attribute type code)
-description (attribute type description)
-value (attribute value)
-value_description (attribute value description (if associated with an authorised value))
-
-If the C<$opac_only> parameter is present and has a true value, only the attributes
-marked for OPAC display are returned.
-
-=cut
-
-sub GetBorrowerAttributes {
-    my $borrowernumber = shift;
-    my $opac_only = @_ ? shift : 0;
-
-    my $dbh = C4::Context->dbh();
-    my $query = "SELECT code, description, attribute, lib, display_checkout, category_code, class
-                 FROM borrower_attributes
-                 JOIN borrower_attribute_types USING (code)
-                 LEFT JOIN authorised_values ON (category = authorised_value_category AND attribute = authorised_value)
-                 WHERE borrowernumber = ?";
-    $query .= "\nAND opac_display = 1" if $opac_only;
-    $query .= "\nORDER BY code, attribute";
-    my $sth = $dbh->prepare_cached($query);
-    $sth->execute($borrowernumber);
-    my @results = ();
-    while (my $row = $sth->fetchrow_hashref()) {
-        push @results, {
-            code              => $row->{'code'},
-            description       => $row->{'description'},
-            value             => $row->{'attribute'},
-            value_description => $row->{'lib'},
-            display_checkout  => $row->{'display_checkout'},
-            category_code     => $row->{'category_code'},
-            class             => $row->{'class'},
-        }
-    }
-    $sth->finish;
-    return \@results;
-}
 
 =head2 SearchIdMatchingAttribute
 

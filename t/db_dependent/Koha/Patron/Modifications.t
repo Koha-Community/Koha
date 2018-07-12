@@ -30,7 +30,6 @@ use Try::Tiny;
 
 use C4::Context;
 use C4::Members;
-use C4::Members::Attributes qw( GetBorrowerAttributes );
 use Koha::Patrons;
 use Koha::Patron::Attribute;
 
@@ -175,14 +174,16 @@ subtest 'approve tests' => sub {
     );
     is( $patron->firstname, 'Kyle',
         'Patron modification set the right firstname' );
-    my @patron_attributes = GetBorrowerAttributes( $patron->borrowernumber );
-    is( $patron_attributes[0][0]->{code},
+    my $patron_attributes = $patron->get_extended_attributes;
+    my $attribute_1 = $patron_attributes->next;
+    is( $attribute_1->code,
         'CODE_1', 'Patron modification correctly saved attribute code' );
-    is( $patron_attributes[0][0]->{value},
+    is( $attribute_1->attribute,
         'VALUE_1', 'Patron modification correctly saved attribute value' );
-    is( $patron_attributes[0][1]->{code},
+    my $attribute_2 = $patron_attributes->next;
+    is( $attribute_2->code,
         'CODE_2', 'Patron modification correctly saved attribute code' );
-    is( $patron_attributes[0][1]->{value},
+    is( $attribute_2->attribute,
         0, 'Patron modification correctly saved attribute with value 0, not confused with delete' );
 
     # Create a new Koha::Patron::Modification, skip extended_attributes to
@@ -219,7 +220,7 @@ subtest 'approve tests' => sub {
     )->store();
     ok( $patron_modification->approve,
         'Patron modification correctly approved' );
-    @patron_attributes
+    my @patron_attributes
         = map { $_->unblessed }
         Koha::Patron::Attributes->search(
         { borrowernumber => $patron->borrowernumber } );
@@ -232,12 +233,12 @@ subtest 'approve tests' => sub {
     is( $patron_attributes[1]->{code},
         'CODE_2', 'Attribute updated correctly (code)' );
     is( $patron_attributes[1]->{attribute},
-        'Tomasito', 'Attribute updated correctly (attribute)' );
+        'None', 'Attribute updated correctly (attribute)' );
 
     is( $patron_attributes[2]->{code},
         'CODE_2', 'Attribute updated correctly (code)' );
     is( $patron_attributes[2]->{attribute},
-        'None', 'Attribute updated correctly (attribute)' );
+        'Tomasito', 'Attribute updated correctly (attribute)' );
 
     my $empty_code_json = '[{"code":"CODE_2","value":""}]';
     $verification_token = md5_hex( time() . {} . rand() . {} . $$ );
@@ -251,7 +252,7 @@ subtest 'approve tests' => sub {
     )->store();
     ok( $patron_modification->approve,
         'Patron modification correctly approved' );
-    @patron_attributes
+    $patron_attributes
         = map { $_->unblessed }
         Koha::Patron::Attributes->search(
         { borrowernumber => $patron->borrowernumber } );

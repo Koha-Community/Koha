@@ -299,7 +299,7 @@ sub import_patrons {
             }
             if ($extended) {
                 if ($ext_preserve) {
-                    my $old_attributes = GetBorrowerAttributes($borrowernumber);
+                    my $old_attributes = $patron->get_extended_attributes->as_list;
                     $patron_attributes = extended_attributes_merge( $old_attributes, $patron_attributes );
                 }
                 push @errors, { unknown_error => 1 }

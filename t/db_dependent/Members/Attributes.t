@@ -26,7 +26,7 @@ use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 46;
+use Test::More tests => 41;
 
 use_ok('C4::Members::Attributes');
 
@@ -70,12 +70,9 @@ my $attribute_type_limited = C4::Members::AttributeTypes->new('my code3', 'my de
 $attribute_type_limited->branches([ $new_library->{branchcode} ]);
 $attribute_type_limited->store;
 
-my $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes();
-ok(1);
-#is( @$borrower_attributes, 0, 'GetBorrowerAttributes without the borrower number returns an empty array' );
 $patron = Koha::Patrons->find($borrowernumber);
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 0, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
+my $borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 0, 'get_extended_attributes returns the correct number of borrower attributes' );
 
 my $attributes = [
     {
@@ -92,28 +89,18 @@ my $attributes = [
     }
 ];
 
-my $set_borrower_attributes = C4::Members::Attributes::SetBorrowerAttributes();
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes();
-is( @$borrower_attributes, 0, 'SetBorrowerAttributes without arguments does not add borrower attributes' );
-
-$set_borrower_attributes = C4::Members::Attributes::SetBorrowerAttributes($borrowernumber);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes();
-is( @$borrower_attributes, 0, 'SetBorrowerAttributes without the attributes does not add borrower attributes' );
-
-$set_borrower_attributes = C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $attributes);
+my $set_borrower_attributes = C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $attributes);
 is( $set_borrower_attributes, 1, 'SetBorrowerAttributes returns the success code' );
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes();
-is( @$borrower_attributes, 0, 'GetBorrowerAttributes without the borrower number returns an empty array' );
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 3, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
-is( $borrower_attributes->[0]->{code}, $attributes->[0]->{code}, 'SetBorrowerAttributes stores the correct code correctly' );
-is( $borrower_attributes->[0]->{description}, $attribute_type1->description(), 'SetBorrowerAttributes stores the field description correctly' );
-is( $borrower_attributes->[0]->{value}, $attributes->[0]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
-is( $borrower_attributes->[1]->{code}, $attributes->[1]->{code}, 'SetBorrowerAttributes stores the field code correctly' );
-is( $borrower_attributes->[1]->{description}, $attribute_type2->description(), 'SetBorrowerAttributes stores the field description correctly' );
-is( $borrower_attributes->[1]->{value}, $attributes->[1]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 3, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 3, 'get_extended_attributes returns the correct number of borrower attributes' );
+my $attr_0 = $borrower_attributes->next;
+is( $attr_0->code, $attributes->[0]->{code}, 'SetBorrowerAttributes stores the correct code correctly' );
+is( $attr_0->type->description, $attribute_type1->description(), 'SetBorrowerAttributes stores the field description correctly' );
+is( $attr_0->attribute, $attributes->[0]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
+my $attr_1 = $borrower_attributes->next;
+is( $attr_1->code, $attributes->[1]->{code}, 'SetBorrowerAttributes stores the field code correctly' );
+is( $attr_1->type->description, $attribute_type2->description(), 'SetBorrowerAttributes stores the field description correctly' );
+is( $attr_1->attribute, $attributes->[1]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
 
 $attributes = [
     {
@@ -126,8 +113,8 @@ $attributes = [
     }
 ];
 C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $attributes);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 3, 'SetBorrowerAttributes should not have removed the attributes limited to another branch' );
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 3, 'SetBorrowerAttributes should not have removed the attributes limited to another branch' );
 
 # TODO This is not implemented yet
 #$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, undef, 'branch_limited');
@@ -151,11 +138,12 @@ my $attribute = {
     code => $attribute_type1->code(),
 };
 C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, $attribute);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 3, 'UpdateBorrowerAttribute does not change the number of borrower attributes' );
-is( $borrower_attributes->[0]->{code}, $attribute->{code}, 'UpdateBorrowerAttribute updates the field code correctly' );
-is( $borrower_attributes->[0]->{description}, $attribute_type1->description(), 'UpdateBorrowerAttribute updates the field description correctly' );
-is( $borrower_attributes->[0]->{value}, $attribute->{attribute}, 'UpdateBorrowerAttribute updates the field value correctly' );
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 3, 'UpdateBorrowerAttribute does not change the number of borrower attributes' );
+$attr_0 = $borrower_attributes->next;
+is( $attr_0->code, $attribute->{code}, 'UpdateBorrowerAttribute updates the field code correctly' );
+is( $attr_0->type->description, $attribute_type1->description(), 'UpdateBorrowerAttribute updates the field description correctly' );
+is( $attr_0->attribute, $attribute->{attribute}, 'UpdateBorrowerAttribute updates the field value correctly' );
 
 
 my $check_uniqueness = C4::Members::Attributes::CheckUniqueness();
@@ -187,30 +175,31 @@ for my $attr( split(' ', $attributes->[1]->{value}) ) {
 
 
 C4::Members::Attributes::DeleteBorrowerAttribute();
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 3, 'DeleteBorrowerAttribute without arguments deletes nothing' );
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 3, 'DeleteBorrowerAttribute without arguments deletes nothing' );
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 3, 'DeleteBorrowerAttribute without the attribute deletes nothing' );
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 3, 'DeleteBorrowerAttribute without the attribute deletes nothing' );
 C4::Members::Attributes::DeleteBorrowerAttribute(undef, $attribute);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 3, 'DeleteBorrowerAttribute with a undef borrower number deletes nothing' );
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 3, 'DeleteBorrowerAttribute with a undef borrower number deletes nothing' );
 
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attribute);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 2, 'DeleteBorrowerAttribute deletes a borrower attribute' );
-is( $borrower_attributes->[0]->{code}, $attributes->[1]->{code}, 'DeleteBorrowerAttribute deletes the correct entry');
-is( $borrower_attributes->[0]->{description}, $attribute_type2->description(), 'DeleteBorrowerAttribute deletes the correct entry');
-is( $borrower_attributes->[0]->{value}, $attributes->[1]->{value}, 'DeleteBorrowerAttribute deletes the correct entry');
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 2, 'DeleteBorrowerAttribute deletes a borrower attribute' );
+$attr_0 = $borrower_attributes->next;
+is( $attr_0->code, $attributes->[1]->{code}, 'DeleteBorrowerAttribute deletes the correct entry');
+is( $attr_0->type->description, $attribute_type2->description(), 'DeleteBorrowerAttribute deletes the correct entry');
+is( $attr_0->attribute, $attributes->[1]->{value}, 'DeleteBorrowerAttribute deletes the correct entry');
 
 C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attributes->[1]);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 1, 'DeleteBorrowerAttribute deletes a borrower attribute' );
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 1, 'DeleteBorrowerAttribute deletes a borrower attribute' );
 
 # Regression tests for bug 16504
 t::lib::Mocks::mock_userenv({ branchcode => $new_library->{branchcode} });
-my $another_patron = $builder->build(
-    {   source => 'Borrower',
+my $another_patron = $builder->build_object(
+    {   class  => 'Koha::Patrons',
         value  => {
             firstname    => 'my another firstname',
             surname      => 'my another surname',
@@ -232,8 +221,8 @@ $attributes = [
         code => $attribute_type_limited->code(),
     }
 ];
-C4::Members::Attributes::SetBorrowerAttributes($another_patron->{borrowernumber}, $attributes);
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($another_patron->{borrowernumber});
-is( @$borrower_attributes, 3, 'SetBorrowerAttributes should have added the 3 attributes for another patron');
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 1, 'SetBorrowerAttributes should not have removed the attributes of other patrons' );
+C4::Members::Attributes::SetBorrowerAttributes($another_patron->borrowernumber, $attributes);
+$borrower_attributes = $another_patron->get_extended_attributes;
+is( $borrower_attributes->count, 3, 'SetBorrowerAttributes should have added the 3 attributes for another patron');
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 1, 'SetBorrowerAttributes should not have removed the attributes of other patrons' );

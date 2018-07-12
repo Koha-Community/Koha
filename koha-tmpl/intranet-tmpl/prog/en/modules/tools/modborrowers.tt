@@ -191,7 +191,8 @@
                                                     <td>[% borrower.debarredcomment | html %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
                                                         [% IF ( pa.code ) %]
-                                                            <td>[% pa.code | html %]=[% pa.value | html %]</td>
+                                                        [%# Replace pa.attribute with pa.description if we prefer to display the description %]
+                                                            <td>[% pa.code | html %]=[% pa.attribute | html %]</td>
                                                         [% ELSE %]
                                                             <td></td>
                                                         [% END %]
