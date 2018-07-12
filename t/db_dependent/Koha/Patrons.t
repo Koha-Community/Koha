@@ -2018,3 +2018,79 @@ subtest 'anonymize' => sub {
     is( $patron2->firstname, undef, 'First name patron2 cleared' );
 };
 $schema->storage->txn_rollback;
+
+subtest 'get_extended_attributes' => sub {
+    plan tests => 7;
+    my $schema = Koha::Database->new->schema;
+    $schema->storage->txn_begin;
+
+    my $patron_1 = $builder->build_object({class=> 'Koha::Patrons'});
+    my $patron_2 = $builder->build_object({class=> 'Koha::Patrons'});
+
+    set_logged_in_user($patron_1);
+
+    my $attribute_type1 = C4::Members::AttributeTypes->new('my code1', 'my description1');
+    $attribute_type1->unique_id(1);
+    $attribute_type1->store();
+
+    my $attribute_type2 = C4::Members::AttributeTypes->new('my code2', 'my description2');
+    $attribute_type2->opac_display(1);
+    $attribute_type2->staff_searchable(1);
+    $attribute_type2->store();
+
+    my $new_library = $builder->build( { source => 'Branch' } );
+    my $attribute_type_limited = C4::Members::AttributeTypes->new('my code3', 'my description3');
+    $attribute_type_limited->branches([ $new_library->{branchcode} ]);
+    $attribute_type_limited->store;
+
+    my $attributes_for_1 = [
+        {
+            value => 'my attribute1',
+            code => $attribute_type1->code(),
+        },
+        {
+            value => 'my attribute2',
+            code => $attribute_type2->code(),
+        },
+        {
+            value => 'my attribute limited',
+            code => $attribute_type_limited->code(),
+        }
+    ];
+
+    my $attributes_for_2 = [
+        {
+            value => 'my attribute12',
+            code => $attribute_type1->code(),
+        },
+        {
+            value => 'my attribute limited 2',
+            code => $attribute_type_limited->code(),
+        }
+    ];
+
+    my $extended_attributes = $patron_1->get_extended_attributes;
+    is( ref($extended_attributes), 'Koha::Patron::Attributes', 'Koha::Patron->get_extended_attributes must return a Koha::Patron::Attribute set' );
+    is( $extended_attributes->count, 0, 'There should not be attribute yet');
+
+    C4::Members::Attributes::SetBorrowerAttributes($patron_1->borrowernumber, $attributes_for_1);
+    C4::Members::Attributes::SetBorrowerAttributes($patron_2->borrowernumber, $attributes_for_2);
+
+    my $extended_attributes_for_1 = $patron_1->get_extended_attributes;
+    is( $extended_attributes_for_1->count, 3, 'There should be 3 attributes now for patron 1');
+
+    my $extended_attributes_for_2 = $patron_2->get_extended_attributes;
+    is( $extended_attributes_for_2->count, 2, 'There should be 2 attributes now for patron 2');
+
+    my $attribute_12 = $extended_attributes_for_2->search({ code => $attribute_type1->code });
+    is( $attribute_12->next->attribute, 'my attribute12', 'search by code should return the correct attribute' );
+
+    $attribute_12 = $patron_2->get_extended_attribute_value( $attribute_type1->code );
+    is( $attribute_12, 'my attribute12', 'Koha::Patron->get_extended_attribute_value should return the correct attribute value' );
+
+    # TODO - What about multiple?
+    my $non_existent = $patron_2->get_extended_attribute_value( 'not_exist' );
+    is( $non_existent, undef, 'Koha::Patron->get_extended_attribute_value must return undef if the attribute does not exist' );
+
+    $schema->storage->txn_rollback;
+};

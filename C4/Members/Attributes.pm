@@ -29,7 +29,7 @@ our ($csv, $AttributeTypes);
 
 BEGIN {
     @ISA = qw(Exporter);
-    @EXPORT_OK = qw(GetBorrowerAttributes GetBorrowerAttributeValue CheckUniqueness SetBorrowerAttributes
+    @EXPORT_OK = qw(GetBorrowerAttributes CheckUniqueness SetBorrowerAttributes
                     DeleteBorrowerAttribute UpdateBorrowerAttribute
                     extended_attributes_code_value_arrayref extended_attributes_merge
                     SearchIdMatchingAttribute);
@@ -93,28 +93,6 @@ sub GetBorrowerAttributes {
     }
     $sth->finish;
     return \@results;
-}
-
-=head2 GetBorrowerAttributeValue
-
-  my $value = C4::Members::Attributes::GetBorrowerAttributeValue($borrowernumber, $attribute_code);
-
-Retrieve the value of an extended attribute C<$attribute_code> associated with the
-patron specified by C<$borrowernumber>.
-
-=cut
-
-sub GetBorrowerAttributeValue {
-    my $borrowernumber = shift;
-    my $code = shift;
-
-    my $dbh = C4::Context->dbh();
-    my $query = "SELECT attribute
-                 FROM borrower_attributes
-                 WHERE borrowernumber = ?
-                 AND code = ?";
-    my $value = $dbh->selectrow_array($query, undef, $borrowernumber, $code);
-    return $value;
 }
 
 =head2 SearchIdMatchingAttribute

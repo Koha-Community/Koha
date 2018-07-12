@@ -26,7 +26,7 @@ use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 48;
+use Test::More tests => 46;
 
 use_ok('C4::Members::Attributes');
 
@@ -71,9 +71,11 @@ $attribute_type_limited->branches([ $new_library->{branchcode} ]);
 $attribute_type_limited->store;
 
 my $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes();
-is( @$borrower_attributes, 0, 'GetBorrowerAttributes without the borrower number returns an empty array' );
-$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber);
-is( @$borrower_attributes, 0, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
+ok(1);
+#is( @$borrower_attributes, 0, 'GetBorrowerAttributes without the borrower number returns an empty array' );
+$patron = Koha::Patrons->find($borrowernumber);
+$borrower_attributes = $patron->get_extended_attributes;
+is( $borrower_attributes->count, 0, 'GetBorrowerAttributes returns the correct number of borrower attributes' );
 
 my $attributes = [
     {
@@ -131,19 +133,17 @@ is( @$borrower_attributes, 3, 'SetBorrowerAttributes should not have removed the
 #$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, undef, 'branch_limited');
 #is( @$borrower_attributes, 2, 'GetBorrowerAttributes returns the correct number of borrower attributes filtered on library' );
 
-my $attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue();
-is( $attribute_value, undef, 'GetBorrowerAttributeValue without arguments returns undef' );
-$attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue($borrowernumber);
-is( $attribute_value, undef, 'GetBorrowerAttributeValue without the attribute code returns undef' );
-$attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue(undef, $attributes->[0]->{code});
-is( $attribute_value, undef, 'GetBorrowerAttributeValue with a undef borrower number returns undef' );
-$attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue($borrowernumber, 'my invalid code');
-is( $attribute_value, undef, 'GetBorrowerAttributeValue with an invalid code retuns undef' );
+$patron = Koha::Patrons->find($borrowernumber);
+my $extended_attributes = $patron->get_extended_attributes;
+my $attribute_value = $extended_attributes->search({ code => 'my invalid code' });
+is( $attribute_value->count, 0, 'non existent attribute should return empty result set');
+$attribute_value = $patron->get_extended_attribute_value('my invalid code');
+is( $attribute_value, undef, 'non existent attribute should undef');
 
-$attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue($borrowernumber, $attributes->[0]->{code});
-is( $attribute_value, $attributes->[0]->{value}, 'GetBorrowerAttributeValue returns the correct attribute value' );
-$attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue($borrowernumber, $attributes->[1]->{code});
-is( $attribute_value, $attributes->[1]->{value}, 'GetBorrowerAttributeValue returns the correct attribute value' );
+$attribute_value = $patron->get_extended_attribute_value($attributes->[0]->{code});
+is( $attribute_value, $attributes->[0]->{value}, 'get_extended_attribute_value returns the correct attribute value' );
+$attribute_value = $patron->get_extended_attribute_value($attributes->[1]->{code});
+is( $attribute_value, $attributes->[1]->{value}, 'get_extended_attribute_value returns the correct attribute value' );
 
 
 my $attribute = {
@@ -166,7 +166,6 @@ $check_uniqueness = C4::Members::Attributes::CheckUniqueness(undef, $attribute->
 is( $check_uniqueness, 0, 'CheckUniqueness without the argument code returns false' );
 $check_uniqueness = C4::Members::Attributes::CheckUniqueness('my invalid code');
 is( $check_uniqueness, 0, 'CheckUniqueness with an invalid argument code returns false' );
-$attribute_value = C4::Members::Attributes::GetBorrowerAttributeValue($borrowernumber, $attributes->[1]->{code});
 $check_uniqueness = C4::Members::Attributes::CheckUniqueness('my invalid code', $attribute->{attribute});
 is( $check_uniqueness, 0, 'CheckUniqueness with an invalid argument code returns fale' );
 $check_uniqueness = C4::Members::Attributes::CheckUniqueness($attribute->{code}, 'new value');

@@ -28,7 +28,6 @@ use C4::External::BakerTaylor qw( image_url link_url );
 use C4::Reserves;
 use C4::Members;
 use C4::Members::AttributeTypes;
-use C4::Members::Attributes qw/GetBorrowerAttributeValue/;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;
@@ -287,10 +286,10 @@ $template->param( canrenew     => $canrenew );
 $template->param( OVERDUES       => \@overdues );
 $template->param( overdues_count => $overdues_count );
 
-my $show_barcode = Koha::Patron::Attribute::Types->search(
+my $show_barcode = Koha::Patron::Attribute::Types->search( # FIXME we should not need this search
     { code => ATTRIBUTE_SHOW_BARCODE } )->count;
 if ($show_barcode) {
-    my $patron_show_barcode = GetBorrowerAttributeValue($borrowernumber, ATTRIBUTE_SHOW_BARCODE);
+    my $patron_show_barcode = $patron->get_extended_attribute_value(ATTRIBUTE_SHOW_BARCODE);
     undef $show_barcode if defined($patron_show_barcode) && !$patron_show_barcode;
 }
 $template->param( show_barcode => 1 ) if $show_barcode;

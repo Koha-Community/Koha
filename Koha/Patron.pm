@@ -1557,6 +1557,30 @@ sub add_guarantor {
     )->store();
 }
 
+=head3 get_extended_attribute_value
+
+my $attribute_value = $patron->get_extended_attribute_value( $code );
+
+Return the attribute's value for the code passed in parameter.
+
+It not exist it returns undef
+
+Note that this will not work for repeatable attribute types.
+
+Maybe you certainly not want to use this method, it is actually only used for SHOW_BARCODE
+(which should be a real patron's attribute (not extended)
+
+=cut
+
+sub get_extended_attribute_value {
+    my ( $self, $code ) = @_;
+    my $rs = $self->_result->borrower_attributes;
+    return unless $rs;
+    my $attribute = $rs->search( { code => $code } );
+    return unless $attribute->count;
+    return $attribute->next->attribute;
+}
+
 =head3 to_api
 
     my $json = $patron->to_api;
