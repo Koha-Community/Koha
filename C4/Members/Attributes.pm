@@ -128,7 +128,12 @@ sub SetBorrowerAttributes {
 
     my $dbh = C4::Context->dbh;
 
-    DeleteBorrowerAttributes( $borrowernumber, $no_branch_limit );
+    my $attributes = Koha::Patrons->find($borrowernumber)->get_extended_attributes;
+
+    unless ( $no_branch_limit ) {
+        $attributes = $attributes->filter_by_branch_limitations;
+    }
+    $attributes->delete;
 
     my $sth = $dbh->prepare("INSERT INTO borrower_attributes (borrowernumber, code, attribute)
                              VALUES (?, ?, ?)");
@@ -140,39 +145,6 @@ sub SetBorrowerAttributes {
         }
     }
     return 1; # borrower attributes successfully set
-}
-
-=head2 DeleteBorrowerAttributes
-
-  DeleteBorrowerAttributes($borrowernumber);
-
-Delete borrower attributes for the patron identified by C<$borrowernumber>.
-
-=cut
-
-sub DeleteBorrowerAttributes {
-    my $borrowernumber = shift;
-    my $no_branch_limit = @_ ? shift : 0;
-    my $branch_limit = $no_branch_limit
-        ? 0
-        : C4::Context->userenv ? C4::Context->userenv->{"branch"} : 0;
-
-    my $dbh = C4::Context->dbh;
-    my $query = q{
-        DELETE borrower_attributes FROM borrower_attributes
-        };
-
-    $query .= $branch_limit
-        ? q{
-            LEFT JOIN borrower_attribute_types_branches ON bat_code = code
-            WHERE ( b_branchcode = ? OR b_branchcode IS NULL )
-                AND borrowernumber = ?
-        }
-        : q{
-            WHERE borrowernumber = ?
-        };
-
-    $dbh->do( $query, undef, $branch_limit ? $branch_limit : (), $borrowernumber );
 }
 
 =head2 DeleteBorrowerAttribute

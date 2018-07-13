@@ -41,7 +41,7 @@ my $attributes = Koha::Patron::Attributes->search( $params );
 sub search {
     my ( $self, $params, $attributes ) = @_;
 
-    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['code', 'attribute'] }
+    unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['me.code', 'attribute'] }
 
     return $self->SUPER::search( $params, $attributes );
 }
