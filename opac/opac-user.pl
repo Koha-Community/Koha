@@ -289,8 +289,8 @@ $template->param( overdues_count => $overdues_count );
 my $show_barcode = Koha::Patron::Attribute::Types->search( # FIXME we should not need this search
     { code => ATTRIBUTE_SHOW_BARCODE } )->count;
 if ($show_barcode) {
-    my $patron_show_barcode = $patron->get_extended_attribute_value(ATTRIBUTE_SHOW_BARCODE);
-    undef $show_barcode if defined($patron_show_barcode) && !$patron_show_barcode;
+    my $patron_show_barcode = $patron->get_extended_attribute(ATTRIBUTE_SHOW_BARCODE);
+    undef $show_barcode if $patron_show_barcode and not $patron_show_barcode->attribute;
 }
 $template->param( show_barcode => 1 ) if $show_barcode;
 

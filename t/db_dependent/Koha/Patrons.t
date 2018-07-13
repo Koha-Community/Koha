@@ -2085,12 +2085,12 @@ subtest 'get_extended_attributes' => sub {
     my $attribute_12 = $extended_attributes_for_2->search({ code => $attribute_type1->code });
     is( $attribute_12->next->attribute, 'my attribute12', 'search by code should return the correct attribute' );
 
-    $attribute_12 = $patron_2->get_extended_attribute_value( $attribute_type1->code );
-    is( $attribute_12, 'my attribute12', 'Koha::Patron->get_extended_attribute_value should return the correct attribute value' );
+    $attribute_12 = $patron_2->get_extended_attribute( $attribute_type1->code );
+    is( $attribute_12->attribute, 'my attribute12', 'Koha::Patron->get_extended_attribute should return the correct attribute value' );
 
-    # TODO - What about multiple?
-    my $non_existent = $patron_2->get_extended_attribute_value( 'not_exist' );
-    is( $non_existent, undef, 'Koha::Patron->get_extended_attribute_value must return undef if the attribute does not exist' );
+    # TODO - What about multiple? POD explains the problem
+    my $non_existent = $patron_2->get_extended_attribute( 'not_exist' );
+    is( $non_existent, undef, 'Koha::Patron->get_extended_attribute must return undef if the attribute does not exist' );
 
     # Test branch limitations
     set_logged_in_user($patron_2);
@@ -2103,11 +2103,11 @@ subtest 'get_extended_attributes' => sub {
     is( $extended_attributes_for_1->count, 2, 'There should be 2 attributes for patron 1, the limited one should be returned');
 
     # Not filtered
-    my $limited_value = $patron_1->get_extended_attribute_value( $attribute_type_limited->code );
-    is( $limited_value, 'my attribute limited', );
+    my $limited_value = $patron_1->get_extended_attribute( $attribute_type_limited->code );
+    is( $limited_value->attribute, 'my attribute limited', );
 
     ## Do we need a filtered?
-    #$limited_value = $patron_1->get_extended_attribute_value( $attribute_type_limited->code );
+    #$limited_value = $patron_1->get_extended_attribute( $attribute_type_limited->code );
     #is( $limited_value, undef, );
 
     $schema->storage->txn_rollback;

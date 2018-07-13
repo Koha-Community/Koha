@@ -388,7 +388,7 @@ if ( $op eq 'do' ) {
             if ( grep { $_ eq $valuename } @disabled ) {
                 # The attribute is disabled, we remove it for this borrower !
                 eval {
-                    C4::Members::Attributes::DeleteBorrowerAttribute( $borrowernumber, $attribute );
+                    $patron->get_extended_attribute($attribute->{code})->delete;
                 };
                 push @errors, { error => $@ } if $@;
             } else {

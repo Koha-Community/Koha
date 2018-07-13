@@ -26,7 +26,7 @@ use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 41;
+use Test::More tests => 38;
 
 use_ok('C4::Members::Attributes');
 
@@ -124,13 +124,13 @@ $patron = Koha::Patrons->find($borrowernumber);
 my $extended_attributes = $patron->get_extended_attributes;
 my $attribute_value = $extended_attributes->search({ code => 'my invalid code' });
 is( $attribute_value->count, 0, 'non existent attribute should return empty result set');
-$attribute_value = $patron->get_extended_attribute_value('my invalid code');
+$attribute_value = $patron->get_extended_attribute('my invalid code');
 is( $attribute_value, undef, 'non existent attribute should undef');
 
-$attribute_value = $patron->get_extended_attribute_value($attributes->[0]->{code});
-is( $attribute_value, $attributes->[0]->{value}, 'get_extended_attribute_value returns the correct attribute value' );
-$attribute_value = $patron->get_extended_attribute_value($attributes->[1]->{code});
-is( $attribute_value, $attributes->[1]->{value}, 'get_extended_attribute_value returns the correct attribute value' );
+$attribute_value = $patron->get_extended_attribute($attributes->[0]->{code});
+is( $attribute_value->attribute, $attributes->[0]->{value}, 'get_extended_attribute returns the correct attribute value' );
+$attribute_value = $patron->get_extended_attribute($attributes->[1]->{code});
+is( $attribute_value->attribute, $attributes->[1]->{value}, 'get_extended_attribute returns the correct attribute value' );
 
 
 my $attribute = {
@@ -174,27 +174,17 @@ for my $attr( split(' ', $attributes->[1]->{value}) ) {
 }
 
 
-C4::Members::Attributes::DeleteBorrowerAttribute();
+$patron->get_extended_attribute($attribute->{code})->delete;
 $borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 3, 'DeleteBorrowerAttribute without arguments deletes nothing' );
-C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber);
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 3, 'DeleteBorrowerAttribute without the attribute deletes nothing' );
-C4::Members::Attributes::DeleteBorrowerAttribute(undef, $attribute);
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 3, 'DeleteBorrowerAttribute with a undef borrower number deletes nothing' );
-
-C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attribute);
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 2, 'DeleteBorrowerAttribute deletes a borrower attribute' );
+is( $borrower_attributes->count, 2, 'delete attribute by code' );
 $attr_0 = $borrower_attributes->next;
-is( $attr_0->code, $attributes->[1]->{code}, 'DeleteBorrowerAttribute deletes the correct entry');
-is( $attr_0->type->description, $attribute_type2->description(), 'DeleteBorrowerAttribute deletes the correct entry');
-is( $attr_0->attribute, $attributes->[1]->{value}, 'DeleteBorrowerAttribute deletes the correct entry');
+is( $attr_0->code, $attributes->[1]->{code}, 'delete attribute by code');
+is( $attr_0->type->description, $attribute_type2->description(), 'delete attribute by code');
+is( $attr_0->attribute, $attributes->[1]->{value}, 'delete attribute by code');
 
-C4::Members::Attributes::DeleteBorrowerAttribute($borrowernumber, $attributes->[1]);
+$patron->get_extended_attribute($attributes->[1]->{code})->delete;
 $borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 1, 'DeleteBorrowerAttribute deletes a borrower attribute' );
+is( $borrower_attributes->count, 1, 'delete attribute by code' );
 
 # Regression tests for bug 16504
 t::lib::Mocks::mock_userenv({ branchcode => $new_library->{branchcode} });

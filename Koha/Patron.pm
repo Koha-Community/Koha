@@ -1556,11 +1556,11 @@ sub add_guarantor {
     )->store();
 }
 
-=head3 get_extended_attribute_value
+=head3 get_extended_attribute
 
-my $attribute_value = $patron->get_extended_attribute_value( $code );
+my $attribute_value = $patron->get_extended_attribute( $code );
 
-Return the attribute's value for the code passed in parameter.
+Return the attribute for the code passed in parameter.
 
 It not exist it returns undef
 
@@ -1571,13 +1571,13 @@ Maybe you certainly not want to use this method, it is actually only used for SH
 
 =cut
 
-sub get_extended_attribute_value {
-    my ( $self, $code ) = @_;
+sub get_extended_attribute {
+    my ( $self, $code, $value ) = @_;
     my $rs = $self->_result->borrower_attributes;
     return unless $rs;
-    my $attribute = $rs->search( { code => $code } );
+    my $attribute = $rs->search({ code => $code, ( $value ? ( attribute => $value ) : () ) });
     return unless $attribute->count;
-    return $attribute->next->attribute;
+    return $attribute->next;
 }
 
 =head3 to_api

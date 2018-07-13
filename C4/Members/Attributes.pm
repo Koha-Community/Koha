@@ -30,7 +30,7 @@ our ($csv, $AttributeTypes);
 BEGIN {
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(CheckUniqueness SetBorrowerAttributes
-                    DeleteBorrowerAttribute UpdateBorrowerAttribute
+                    UpdateBorrowerAttribute
                     extended_attributes_code_value_arrayref extended_attributes_merge
                     SearchIdMatchingAttribute);
     %EXPORT_TAGS = ( all => \@EXPORT_OK );
@@ -147,26 +147,6 @@ sub SetBorrowerAttributes {
     return 1; # borrower attributes successfully set
 }
 
-=head2 DeleteBorrowerAttribute
-
-  DeleteBorrowerAttribute($borrowernumber, $attribute);
-
-Delete a borrower attribute for the patron identified by C<$borrowernumber> and the attribute code of C<$attribute>
-
-=cut
-
-sub DeleteBorrowerAttribute {
-    my ( $borrowernumber, $attribute ) = @_;
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(qq{
-        DELETE FROM borrower_attributes
-            WHERE borrowernumber = ?
-            AND code = ?
-    } );
-    $sth->execute( $borrowernumber, $attribute->{code} );
-}
-
 =head2 UpdateBorrowerAttribute
 
   UpdateBorrowerAttribute($borrowernumber, $attribute );
@@ -178,7 +158,7 @@ Update a borrower attribute C<$attribute> for the patron identified by C<$borrow
 sub UpdateBorrowerAttribute {
     my ( $borrowernumber, $attribute ) = @_;
 
-    DeleteBorrowerAttribute $borrowernumber, $attribute;
+    Koha::Patrons->find($borrowernumber)->get_extended_attributes->search({ 'me.code' => $attribute->{code} })->filter_by_branch_limitations->delete;
 
     my $dbh = C4::Context->dbh;
     my $query = "INSERT INTO borrower_attributes SET attribute = ?, code = ?, borrowernumber = ?";

@@ -210,7 +210,7 @@ subtest 'checkpw_ldap tests' => sub {
             'Extended attributes are not deleted'
         );
 
-        is( $patron->get_extended_attribute_value( $attr_type2->{code} ), 'BAR', 'Mapped attribute is BAR' );
+        is( $patron->get_extended_attribute( $attr_type2->{code} )->attribute, 'BAR', 'Mapped attribute is BAR' );
         $auth->unmock('update_local');
         $auth->unmock('ldap_entry_2_hash');
 
