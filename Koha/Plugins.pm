@@ -19,12 +19,15 @@ package Koha::Plugins;
 
 use Modern::Perl;
 
-use Module::Load::Conditional qw(can_load);
-use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
+use Class::Inspector;
 use List::MoreUtils qw( any );
+use Module::Load::Conditional qw(can_load);
+use Module::Load qw(load);
+use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
 
 use C4::Context;
 use C4::Output;
+use Koha::Plugins::Methods;
 
 BEGIN {
     my $pluginsdir = C4::Context->config("pluginsdir");
@@ -70,6 +73,43 @@ sub GetPlugins {
     my $method = $params->{method};
     my $req_metadata = $params->{metadata} // {};
 
+    my $dbh = C4::Context->dbh;
+    my $plugin_classes = $dbh->selectcol_arrayref('SELECT DISTINCT(plugin_class) FROM plugin_methods');
+    my @plugins;
+
+    foreach my $plugin_class (@$plugin_classes) {
+        next if $method && !Koha::Plugins::Methods->search({ plugin_class => $plugin_class, plugin_method => $method })->count;
+        load $plugin_class;
+        my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
+
+        my $plugin_enabled = $plugin->retrieve_data('__ENABLED__');
+        $plugin->{enabled} = $plugin_enabled;
+
+        # Want all plugins. Not only enabled ones.
+        if ( defined($params->{all}) && $params->{all} ) {
+            $plugin_enabled = 1;
+        }
+
+        next unless $plugin_enabled;
+
+        push @plugins, $plugin;
+    }
+    return @plugins;
+}
+
+=head2
+
+Koha::Plugins::InstallPlugins()
+
+This method iterates through all plugins physically present on a system.
+For each plugin module found, it will test that the plugin can be loaded,
+and if it can, will store its available methods in the plugin_methods table.
+
+=cut
+
+sub InstallPlugins {
+    my ( $self, $params ) = @_;
+
     my @plugin_classes = $self->plugins();
     my @plugins;
 
@@ -79,22 +119,17 @@ sub GetPlugins {
 
             my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
 
-            my $plugin_enabled = $plugin->retrieve_data('__ENABLED__');
-            $plugin->{enabled} = $plugin_enabled;
+            Koha::Plugins::Methods->search({ plugin_class => $plugin_class })->delete();
 
-            # Want all plugins. Not only enabled ones.
-            if ( defined($params->{all}) && $params->{all} ) {
-                $plugin_enabled = 1;
+            foreach my $method ( @{ Class::Inspector->methods($plugin_class) } ) {
+                Koha::Plugins::Method->new(
+                    {
+                        plugin_class  => $plugin_class,
+                        plugin_method => $method,
+                    }
+                )->store();
             }
 
-            next unless $plugin_enabled;
-
-            # Limit results by method or metadata
-            next if $method && !$plugin->can($method);
-            my $plugin_metadata = $plugin->get_metadata;
-            next if $plugin_metadata
-                and %$req_metadata
-                and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
             push @plugins, $plugin;
         } else {
             my $error = $Module::Load::Conditional::ERROR;

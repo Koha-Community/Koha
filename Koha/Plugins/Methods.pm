@@ -21,7 +21,7 @@ use Carp;
 
 use Koha::Database;
 
-use Koha::City;
+use Koha::Plugins::Method;
 
 use base qw(Koha::Objects);
 

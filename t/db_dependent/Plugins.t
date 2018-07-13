@@ -13,6 +13,7 @@ use Test::More tests => 47;
 
 use C4::Context;
 use Koha::Database;
+use Koha::Plugins::Methods;
 
 use t::lib::Mocks;
 
@@ -26,6 +27,10 @@ BEGIN {
 }
 
 my $schema = Koha::Database->new->schema;
+
+Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins();
+
+ok( Koha::Plugins::Methods->search( { plugin_class => 'Koha::Plugin::Test' } )->count, 'Test plugin methods added to database' );
 
 my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
 $mock_plugin->mock( 'test_template', sub {
@@ -93,12 +98,6 @@ is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functio
 
 @names = map { $_->get_metadata()->{'name'} } @plugins;
 is( scalar grep( /^Test Plugin$/, @names), 1, "GetPlugins also found Test Plugin via a metadata tag" );
-# Test two metadata conditions; one does not exist for Test.pm
-# Since it is a required key, we should not find the same results
-my @plugins2 = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
-    metadata => { my_example_tag  => 'find_me', not_there => '1' },
-});
-isnt( scalar @plugins2, scalar @plugins, 'GetPlugins with two metadata conditions' );
 
 $result = $plugin->disable;
 is( ref($result), 'Koha::Plugin::Test' );
@@ -141,6 +140,7 @@ for my $pass ( 1 .. 2 ) {
 
     ok( -f $plugins_dir . "/Koha/Plugin/Com/ByWaterSolutions/KitchenSink.pm", "KitchenSink plugin installed successfully" );
     $INC{$pm_path} = $full_pm_path; # FIXME I do not really know why, but if this is moved before the $plugin constructor, it will fail with Can't locate object method "new" via package "Koha::Plugin::Com::ByWaterSolutions::KitchenSink"
+    Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins();
     Koha::Plugins::Handler->delete({ class => "Koha::Plugin::Com::ByWaterSolutions::KitchenSink", enable_plugins => 1 });
     my $sth = C4::Context->dbh->table_info( undef, undef, $table, 'TABLE' );
     my $info = $sth->fetchall_arrayref;

@@ -21,9 +21,10 @@ use Modern::Perl;
 
 use File::Path qw(remove_tree);
 
-use Module::Load::Conditional qw(can_load);
+use Module::Load qw(load);
 
 use C4::Context;
+use Koha::Plugins::Methods;
 
 BEGIN {
     my $pluginsdir = C4::Context->config("pluginsdir");
@@ -61,15 +62,15 @@ sub run {
     my $cgi           = $args->{'cgi'};
     my $params        = $args->{'params'};
 
-    if ( can_load( modules => { $plugin_class => undef } ) ) {
+    my $has_method = Koha::Plugins::Methods->search({ plugin_class => $plugin_class, plugin_method => $plugin_method })->count();
+    if ( $has_method ) {
+        load $plugin_class;
         my $plugin = $plugin_class->new( { cgi => $cgi, enable_plugins => $args->{'enable_plugins'} } );
-        if ( $plugin->can($plugin_method) ) {
-            return $plugin->$plugin_method( $params );
-        } else {
-            warn "Plugin does not have method $plugin_method";
-        }
+        my @return = $plugin->$plugin_method( $params );
+        return $plugin->$plugin_method( $params );
     } else {
-        warn "Plugin $plugin_class cannot be loaded";
+        warn "Plugin does not have method $plugin_method";
+        return undef;
     }
 }
 
@@ -101,6 +102,7 @@ sub delete {
     });
 
     C4::Context->dbh->do( "DELETE FROM plugin_data WHERE plugin_class = ?", undef, ($plugin_class) );
+    Koha::Plugins::Methods->search({ plugin_class => $plugin_class })->delete();
 
     unlink "$plugin_path.pm" or warn "Could not unlink $plugin_path.pm: $!";
     remove_tree($plugin_path);

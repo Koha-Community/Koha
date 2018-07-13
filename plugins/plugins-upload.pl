@@ -19,9 +19,10 @@
 use Modern::Perl;
 
 use Archive::Extract;
-use File::Temp;
-use File::Copy;
 use CGI qw ( -utf8 );
+use Class::Inspector;
+use File::Copy;
+use File::Temp;
 
 use C4::Context;
 use C4::Auth;
@@ -86,6 +87,8 @@ if ($plugins_enabled) {
                 $template->param( ERRORS => [ \%errors ] );
                 output_html_with_http_headers $input, $cookie, $template->output;
                 exit;
+            } else {
+                Koha::Plugins->new()->InstallPlugins();
             }
         }
     } elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
