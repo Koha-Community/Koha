@@ -93,7 +93,7 @@ if ( $op eq 'show' ) {
         if ( $patron ) {
             if ( $logged_in_user->can_see_patron_infos( $patron ) ) {
                 my $borrower = $patron->unblessed;
-                my $attributes = $patron->get_extended_attributes;
+                my $attributes = $patron->extended_attributes;
                 $borrower->{patron_attributes} = $attributes->as_list;
                 $borrower->{patron_attributes_count} = $attributes->count;
                 $max_nb_attr = $borrower->{patron_attributes_count} if $borrower->{patron_attributes_count} > $max_nb_attr;
@@ -393,7 +393,11 @@ if ( $op eq 'do' ) {
                 push @errors, { error => $@ } if $@;
             } else {
                 eval {
-                    C4::Members::Attributes::UpdateBorrowerAttribute( $borrowernumber, $attribute );
+                    # Note:
+                    # We should not need to filter by branch, but stay on the safe side
+                    # Repeatable are not supported so we can do that - TODO
+                    $patron->extended_attributes->search({'me.code' => $attribute->{code}})->filter_by_branch_limitations->delete;
+                    $patron->add_extended_attribute($attribute);
                 };
                 push @errors, { error => $@ } if $@;
             }
@@ -411,7 +415,7 @@ if ( $op eq 'do' ) {
             my $category_description = $patron->category->description;
             my $borrower = $patron->unblessed;
             $borrower->{category_description} = $category_description;
-            my $attributes = $patron->get_extended_attributes;
+            my $attributes = $patron->extended_attributes;
             $borrower->{patron_attributes} = $attributes->as_list;
             $max_nb_attr = $attributes->count if $attributes->count > $max_nb_attr;
             push @borrowers, $borrower;

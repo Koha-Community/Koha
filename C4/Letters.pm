@@ -853,7 +853,7 @@ sub _parseletter {
     if ($table eq 'borrowers' && $letter->{content}) {
         my $patron = Koha::Patrons->find( $values->{borrowernumber} );
         if ( $patron ) {
-            my $attributes = $patron->get_extended_attributes;
+            my $attributes = $patron->extended_attributes;
             my %attr;
             while ( my $attribute = $attributes->next ) {
                 my $code = $attribute->code;

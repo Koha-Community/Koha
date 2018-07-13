@@ -239,7 +239,11 @@ sub checkpw_ldap {
                 next;
             }
             if (C4::Members::Attributes::CheckUniqueness($code, $borrower{$code}, $borrowernumber)) {
-                C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, {code => $code, attribute => $borrower{$code}});
+                my $patron = Koha::Patrons->find($borrowernumber);
+                if ( $patron ) { # Should not be needed, but we are in C4::Auth LDAP...
+                    my $attribute = Koha::Patron::Attribute->new({code => $code, attribute => $borrower{$code}});
+                    $patron->extended_attributes([$attribute]);
+                }
             } else {
                 warn "ERROR_extended_unique_id_failed $code $borrower{$code}";
             }

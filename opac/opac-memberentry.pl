@@ -213,7 +213,8 @@ if ( $action eq 'create' ) {
             my $patron = Koha::Patron->new( \%borrower )->store;
             Koha::Patron::Consent->new({ borrowernumber => $patron->borrowernumber, type => 'GDPR_PROCESSING', given_on => $consent_dt })->store if $consent_dt;
             if ( $patron ) {
-                C4::Members::Attributes::SetBorrowerAttributes( $patron->borrowernumber, $attributes );
+                $patron->extended_attributes->filter_by_branch_limitations->delete;
+                $patron->extended_attributes($attributes);
                 if ( C4::Context->preference('EnhancedMessagingPreferences') ) {
                     C4::Form::MessagingPreferences::handle_form_action(
                         $cgi,

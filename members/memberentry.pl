@@ -480,7 +480,8 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         }
 
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
-            C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
+            $patron->extended_attributes->filter_by_branch_limitations->delete;
+            $patron->extended_attributes($extended_patron_attributes);
         }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
@@ -550,7 +551,8 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
 
         add_guarantors( $patron, $input );
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
-            C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
+            $patron->extended_attributes->filter_by_branch_limitations->delete;
+            $patron->extended_attributes($extended_patron_attributes);
         }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
@@ -871,7 +873,7 @@ sub patron_attributes_form {
         return;
     }
     my $patron = Koha::Patrons->find($borrowernumber); # Already fetched but outside of this sub
-    my @attributes = $patron->get_extended_attributes->as_list; # FIXME Must be improved!
+    my @attributes = $patron->extended_attributes->as_list; # FIXME Must be improved!
     my @classes = uniq( map {$_->type->class} @attributes );
     @classes = sort @classes;
 

@@ -174,7 +174,7 @@ subtest 'approve tests' => sub {
     );
     is( $patron->firstname, 'Kyle',
         'Patron modification set the right firstname' );
-    my $patron_attributes = $patron->get_extended_attributes;
+    my $patron_attributes = $patron->extended_attributes;
     my $attribute_1 = $patron_attributes->next;
     is( $attribute_1->code,
         'CODE_1', 'Patron modification correctly saved attribute code' );

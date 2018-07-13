@@ -1438,16 +1438,41 @@ sub generate_userid {
      return $self;
 }
 
-=head3 get_extended_attributes
-
-my $attributes = $patron->get_extended_attributes
-
-Return object of Koha::Patron::Attributes type with all attributes set for this patron
+=head3 add_extended_attribute
 
 =cut
 
-sub get_extended_attributes {
-    my ( $self ) = @_;
+sub add_extended_attribute {
+    my ($self, $attribute) = @_;
+    $attribute->{borrowernumber} = $self->borrowernumber;
+    return Koha::Patron::Attribute->new($attribute)->store;
+}
+
+=head3 extended_attributes
+
+Return object of Koha::Patron::Attributes type with all attributes set for this patron
+
+Or setter FIXME
+
+=cut
+
+sub extended_attributes {
+    my ( $self, $attributes ) = @_;
+    if ($attributes) {    # setter
+        my $schema = $self->_result->result_source->schema;
+        $schema->txn_do(
+            sub {
+                # Remove the existing one
+                $self->extended_attributes->filter_by_branch_limitations->delete;
+
+                # Insert the new ones
+                for my $attribute (@$attributes) {
+                    $self->_result->create_related('borrower_attributes', $attribute);
+                }
+            }
+        );
+    }
+
     my $rs = $self->_result->borrower_attributes;
     # We call search to use the filters in Koha::Patron::Attributes->search
     return Koha::Patron::Attributes->_new_from_dbic($rs)->search;

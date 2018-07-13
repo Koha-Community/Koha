@@ -29,8 +29,7 @@ our ($csv, $AttributeTypes);
 
 BEGIN {
     @ISA = qw(Exporter);
-    @EXPORT_OK = qw(CheckUniqueness SetBorrowerAttributes
-                    UpdateBorrowerAttribute
+    @EXPORT_OK = qw(CheckUniqueness
                     extended_attributes_code_value_arrayref extended_attributes_merge
                     SearchIdMatchingAttribute);
     %EXPORT_TAGS = ( all => \@EXPORT_OK );
@@ -112,71 +111,14 @@ sub CheckUniqueness {
     return ($count == 0);
 }
 
-=head2 SetBorrowerAttributes 
-
-  SetBorrowerAttributes($borrowernumber, [ { code => 'CODE', value => 'value' }, ... ] );
-
-Set patron attributes for the patron identified by C<$borrowernumber>,
-replacing any that existed previously.
-
-=cut
-
-sub SetBorrowerAttributes {
-    my $borrowernumber = shift;
-    my $attr_list = shift;
-    my $no_branch_limit = shift // 0;
-
-    my $dbh = C4::Context->dbh;
-
-    my $attributes = Koha::Patrons->find($borrowernumber)->get_extended_attributes;
-
-    unless ( $no_branch_limit ) {
-        $attributes = $attributes->filter_by_branch_limitations;
-    }
-    $attributes->delete;
-
-    my $sth = $dbh->prepare("INSERT INTO borrower_attributes (borrowernumber, code, attribute)
-                             VALUES (?, ?, ?)");
-    foreach my $attr (@$attr_list) {
-        $sth->execute($borrowernumber, $attr->{code}, $attr->{value});
-        if ($sth->err) {
-            warn sprintf('Database returned the following error: %s', $sth->errstr);
-            return; # bail immediately on errors
-        }
-    }
-    return 1; # borrower attributes successfully set
-}
-
-=head2 UpdateBorrowerAttribute
-
-  UpdateBorrowerAttribute($borrowernumber, $attribute );
-
-Update a borrower attribute C<$attribute> for the patron identified by C<$borrowernumber>,
-
-=cut
-
-sub UpdateBorrowerAttribute {
-    my ( $borrowernumber, $attribute ) = @_;
-
-    Koha::Patrons->find($borrowernumber)->get_extended_attributes->search({ 'me.code' => $attribute->{code} })->filter_by_branch_limitations->delete;
-
-    my $dbh = C4::Context->dbh;
-    my $query = "INSERT INTO borrower_attributes SET attribute = ?, code = ?, borrowernumber = ?";
-    my @params = ( $attribute->{attribute}, $attribute->{code}, $borrowernumber );
-    my $sth = $dbh->prepare( $query );
-
-    $sth->execute( @params );
-}
-
-
 =head2 extended_attributes_code_value_arrayref 
 
    my $patron_attributes = "homeroom:1150605,grade:01,extradata:foobar";
    my $aref = extended_attributes_code_value_arrayref($patron_attributes);
 
-Takes a comma-delimited CSV-style string argument and returns the kind of data structure that SetBorrowerAttributes wants, 
+Takes a comma-delimited CSV-style string argument and returns the kind of data structure that Koha::Patron->extended_attributes wants,
 namely a reference to array of hashrefs like:
- [ { code => 'CODE', value => 'value' }, { code => 'CODE2', value => 'othervalue' } ... ]
+ [ { code => 'CODE', attribute => 'value' }, { code => 'CODE2', attribute => 'othervalue' } ... ]
 
 Caches Text::CSV parser object for efficiency.
 
@@ -190,7 +132,7 @@ sub extended_attributes_code_value_arrayref {
     # TODO: error handling (check $ok)
     return [
         sort {&_sort_by_code($a,$b)}
-        map { map { my @arr = split /:/, $_, 2; { code => $arr[0], value => $arr[1] } } $_ }
+        map { map { my @arr = split /:/, $_, 2; { code => $arr[0], attribute => $arr[1] } } $_ }
         @list
     ];
     # nested map because of split

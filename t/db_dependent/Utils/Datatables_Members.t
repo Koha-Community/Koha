@@ -26,6 +26,7 @@ use C4::Members::Attributes;
 use C4::Members::AttributeTypes;
 
 use Koha::Library;
+use Koha::Patrons;
 use Koha::Patron::Categories;
 
 use t::lib::Mocks;
@@ -279,15 +280,29 @@ my $attribute_type = C4::Members::AttributeTypes->new( 'ATM_1', 'my attribute ty
 $attribute_type->{staff_searchable} = 1;
 $attribute_type->store;
 
-
-C4::Members::Attributes::SetBorrowerAttributes(
-    $john_doe->{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for a common user' } ]
+Koha::Patrons->find( $john_doe->{borrowernumber} )->extended_attributes(
+    [
+        {
+            code      => $attribute_type->{code},
+            attribute => 'the default value for a common user'
+        }
+    ]
 );
-C4::Members::Attributes::SetBorrowerAttributes(
-    $jane_doe->{borrowernumber}, [ { code => $attribute_type->{code}, value => 'the default value for another common user' } ]
+Koha::Patrons->find( $jane_doe->{borrowernumber} )->extended_attributes(
+    [
+        {
+            code      => $attribute_type->{code},
+            attribute => 'the default value for another common user'
+        }
+    ]
 );
-C4::Members::Attributes::SetBorrowerAttributes(
-    $john_smith->{borrowernumber}, [ { code => $attribute_type->{code}, value => 'Attribute which not appears even if contains "Dupont"' } ]
+Koha::Patrons->find( $john_smith->{borrowernumber} )->extended_attributes(
+    [
+        {
+            code      => $attribute_type->{code},
+            attribute => 'Attribute which not appears even if contains "Dupont"'
+        }
+    ]
 );
 
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);

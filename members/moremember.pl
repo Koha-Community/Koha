@@ -130,7 +130,7 @@ $template->param(
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
-    my @attributes = $patron->get_extended_attributes->as_list; # FIXME Must be improved!
+    my @attributes = $patron->extended_attributes->as_list; # FIXME Must be improved!
     my @classes = uniq( map {$_->type->class} @attributes );
     @classes = sort @classes;
 

@@ -26,7 +26,7 @@ use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 38;
+use Test::More tests => 39;
 
 use_ok('C4::Members::Attributes');
 
@@ -71,79 +71,83 @@ $attribute_type_limited->branches([ $new_library->{branchcode} ]);
 $attribute_type_limited->store;
 
 $patron = Koha::Patrons->find($borrowernumber);
-my $borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 0, 'get_extended_attributes returns the correct number of borrower attributes' );
+my $borrower_attributes = $patron->extended_attributes;
+is( $borrower_attributes->count, 0, 'extended_attributes returns the correct number of borrower attributes' );
 
 my $attributes = [
     {
-        value => 'my attribute1',
+        attribute => 'my attribute1',
         code => $attribute_type1->code(),
     },
     {
-        value => 'my attribute2',
+        attribute => 'my attribute2',
         code => $attribute_type2->code(),
     },
     {
-        value => 'my attribute limited',
+        attribute => 'my attribute limited',
         code => $attribute_type_limited->code(),
     }
 ];
 
-my $set_borrower_attributes = C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $attributes);
-is( $set_borrower_attributes, 1, 'SetBorrowerAttributes returns the success code' );
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 3, 'get_extended_attributes returns the correct number of borrower attributes' );
+$patron->extended_attributes->filter_by_branch_limitations->delete;
+my $set_borrower_attributes = $patron->extended_attributes($attributes);
+is( ref($set_borrower_attributes), 'Koha::Patron::Attributes', '');
+is( $set_borrower_attributes->count, 3, '');
+$borrower_attributes = $patron->extended_attributes;
+is( $borrower_attributes->count, 3, 'extended_attributes returns the correct number of borrower attributes' );
 my $attr_0 = $borrower_attributes->next;
-is( $attr_0->code, $attributes->[0]->{code}, 'SetBorrowerAttributes stores the correct code correctly' );
-is( $attr_0->type->description, $attribute_type1->description(), 'SetBorrowerAttributes stores the field description correctly' );
-is( $attr_0->attribute, $attributes->[0]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
+is( $attr_0->code, $attributes->[0]->{code}, 'setter for extended_attributes sestores the correct code correctly' );
+is( $attr_0->type->description, $attribute_type1->description(), 'setter for extended_attributes stores the field description correctly' );
+is( $attr_0->attribute, $attributes->[0]->{attribute}, 'setter for extended_attributes stores the field value correctly' );
 my $attr_1 = $borrower_attributes->next;
-is( $attr_1->code, $attributes->[1]->{code}, 'SetBorrowerAttributes stores the field code correctly' );
-is( $attr_1->type->description, $attribute_type2->description(), 'SetBorrowerAttributes stores the field description correctly' );
-is( $attr_1->attribute, $attributes->[1]->{value}, 'SetBorrowerAttributes stores the field value correctly' );
+is( $attr_1->code, $attributes->[1]->{code}, 'setter for extended_attributes stores the field code correctly' );
+is( $attr_1->type->description, $attribute_type2->description(), 'setter for extended_attributes stores the field description correctly' );
+is( $attr_1->attribute, $attributes->[1]->{attribute}, 'setter for extended_attributes stores the field value correctly' );
 
 $attributes = [
     {
-        value => 'my attribute1',
+        attribute => 'my attribute1',
         code => $attribute_type1->code(),
     },
     {
-        value => 'my attribute2',
+        attribute => 'my attribute2',
         code => $attribute_type2->code(),
     }
 ];
-C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $attributes);
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 3, 'SetBorrowerAttributes should not have removed the attributes limited to another branch' );
+$patron->extended_attributes->filter_by_branch_limitations->delete;
+$patron->extended_attributes($attributes);
+$borrower_attributes = $patron->extended_attributes;
+is( $borrower_attributes->count, 3, 'setter for extended_attributes should not have removed the attributes limited to another branch' );
 
 # TODO This is not implemented yet
 #$borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowernumber, undef, 'branch_limited');
 #is( @$borrower_attributes, 2, 'GetBorrowerAttributes returns the correct number of borrower attributes filtered on library' );
 
 $patron = Koha::Patrons->find($borrowernumber);
-my $extended_attributes = $patron->get_extended_attributes;
+my $extended_attributes = $patron->extended_attributes;
 my $attribute_value = $extended_attributes->search({ code => 'my invalid code' });
 is( $attribute_value->count, 0, 'non existent attribute should return empty result set');
 $attribute_value = $patron->get_extended_attribute('my invalid code');
 is( $attribute_value, undef, 'non existent attribute should undef');
 
 $attribute_value = $patron->get_extended_attribute($attributes->[0]->{code});
-is( $attribute_value->attribute, $attributes->[0]->{value}, 'get_extended_attribute returns the correct attribute value' );
+is( $attribute_value->attribute, $attributes->[0]->{attribute}, 'get_extended_attribute returns the correct attribute value' );
 $attribute_value = $patron->get_extended_attribute($attributes->[1]->{code});
-is( $attribute_value->attribute, $attributes->[1]->{value}, 'get_extended_attribute returns the correct attribute value' );
+is( $attribute_value->attribute, $attributes->[1]->{attribute}, 'get_extended_attribute returns the correct attribute value' );
 
 
 my $attribute = {
     attribute => 'my attribute3',
     code => $attribute_type1->code(),
 };
-C4::Members::Attributes::UpdateBorrowerAttribute($borrowernumber, $attribute);
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 3, 'UpdateBorrowerAttribute does not change the number of borrower attributes' );
+$patron->extended_attributes->search({'me.code' => $attribute->{code}})->filter_by_branch_limitations->delete;
+$patron->add_extended_attribute($attribute);
+$borrower_attributes = $patron->extended_attributes;
+is( $borrower_attributes->count, 3, 'delete then add a new attribute does not change the number of borrower attributes' );
 $attr_0 = $borrower_attributes->next;
-is( $attr_0->code, $attribute->{code}, 'UpdateBorrowerAttribute updates the field code correctly' );
-is( $attr_0->type->description, $attribute_type1->description(), 'UpdateBorrowerAttribute updates the field description correctly' );
-is( $attr_0->attribute, $attribute->{attribute}, 'UpdateBorrowerAttribute updates the field value correctly' );
+is( $attr_0->code, $attribute->{code}, 'delete then add a new attribute updates the field code correctly' );
+is( $attr_0->type->description, $attribute_type1->description(), 'delete then add a new attribute updates the field description correctly' );
+is( $attr_0->attribute, $attribute->{attribute}, 'delete then add a new attribute updates the field value correctly' );
 
 
 my $check_uniqueness = C4::Members::Attributes::CheckUniqueness();
@@ -160,7 +164,7 @@ $check_uniqueness = C4::Members::Attributes::CheckUniqueness($attribute->{code},
 is( $check_uniqueness, 1, 'CheckUniqueness with a new value returns true' );
 $check_uniqueness = C4::Members::Attributes::CheckUniqueness('my invalid code', 'new value');
 is( $check_uniqueness, 0, 'CheckUniqueness with an invalid argument code and a new value returns false' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness($attributes->[1]->{code}, $attributes->[1]->{value});
+$check_uniqueness = C4::Members::Attributes::CheckUniqueness($attributes->[1]->{code}, $attributes->[1]->{attribute});
 is( $check_uniqueness, 1, 'CheckUniqueness with an attribute unique_id=0 returns true' );
 $check_uniqueness = C4::Members::Attributes::CheckUniqueness($attribute->{code}, $attribute->{attribute});
 is( $check_uniqueness, '', 'CheckUniqueness returns false' );
@@ -168,22 +172,22 @@ is( $check_uniqueness, '', 'CheckUniqueness returns false' );
 
 my $borrower_numbers = C4::Members::Attributes::SearchIdMatchingAttribute('attribute1');
 is( @$borrower_numbers, 0, 'SearchIdMatchingAttribute searchs only in attributes with staff_searchable=1' );
-for my $attr( split(' ', $attributes->[1]->{value}) ) {
+for my $attr( split(' ', $attributes->[1]->{attribute}) ) {
     $borrower_numbers = C4::Members::Attributes::SearchIdMatchingAttribute($attr);
     is( $borrower_numbers->[0], $borrowernumber, 'SearchIdMatchingAttribute returns the borrower numbers matching' );
 }
 
 
 $patron->get_extended_attribute($attribute->{code})->delete;
-$borrower_attributes = $patron->get_extended_attributes;
+$borrower_attributes = $patron->extended_attributes;
 is( $borrower_attributes->count, 2, 'delete attribute by code' );
 $attr_0 = $borrower_attributes->next;
 is( $attr_0->code, $attributes->[1]->{code}, 'delete attribute by code');
 is( $attr_0->type->description, $attribute_type2->description(), 'delete attribute by code');
-is( $attr_0->attribute, $attributes->[1]->{value}, 'delete attribute by code');
+is( $attr_0->attribute, $attributes->[1]->{attribute}, 'delete attribute by code');
 
 $patron->get_extended_attribute($attributes->[1]->{code})->delete;
-$borrower_attributes = $patron->get_extended_attributes;
+$borrower_attributes = $patron->extended_attributes;
 is( $borrower_attributes->count, 1, 'delete attribute by code' );
 
 # Regression tests for bug 16504
@@ -199,20 +203,22 @@ my $another_patron = $builder->build_object(
 );
 $attributes = [
     {
-        value => 'my attribute1',
+        attribute => 'my attribute1',
         code => $attribute_type1->code(),
     },
     {
-        value => 'my attribute2',
+        attribute => 'my attribute2',
         code => $attribute_type2->code(),
     },
     {
-        value => 'my attribute limited',
+        attribute => 'my attribute limited',
         code => $attribute_type_limited->code(),
     }
 ];
-C4::Members::Attributes::SetBorrowerAttributes($another_patron->borrowernumber, $attributes);
-$borrower_attributes = $another_patron->get_extended_attributes;
-is( $borrower_attributes->count, 3, 'SetBorrowerAttributes should have added the 3 attributes for another patron');
-$borrower_attributes = $patron->get_extended_attributes;
-is( $borrower_attributes->count, 1, 'SetBorrowerAttributes should not have removed the attributes of other patrons' );
+
+$another_patron->extended_attributes->filter_by_branch_limitations->delete;
+$another_patron->extended_attributes($attributes);
+$borrower_attributes = $another_patron->extended_attributes;
+is( $borrower_attributes->count, 3, 'setter for extended_attributes should have added the 3 attributes for another patron');
+$borrower_attributes = $patron->extended_attributes;
+is( $borrower_attributes->count, 1, 'setter for extended_attributes should not have removed the attributes of other patrons' );

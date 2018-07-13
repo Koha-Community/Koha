@@ -2019,7 +2019,7 @@ subtest 'anonymize' => sub {
 };
 $schema->storage->txn_rollback;
 
-subtest 'get_extended_attributes' => sub {
+subtest 'extended_attributes' => sub {
     plan tests => 10;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
@@ -2069,17 +2069,19 @@ subtest 'get_extended_attributes' => sub {
         }
     ];
 
-    my $extended_attributes = $patron_1->get_extended_attributes;
-    is( ref($extended_attributes), 'Koha::Patron::Attributes', 'Koha::Patron->get_extended_attributes must return a Koha::Patron::Attribute set' );
+    my $extended_attributes = $patron_1->extended_attributes;
+    is( ref($extended_attributes), 'Koha::Patron::Attributes', 'Koha::Patron->extended_attributes must return a Koha::Patron::Attribute set' );
     is( $extended_attributes->count, 0, 'There should not be attribute yet');
 
-    C4::Members::Attributes::SetBorrowerAttributes($patron_1->borrowernumber, $attributes_for_1);
-    C4::Members::Attributes::SetBorrowerAttributes($patron_2->borrowernumber, $attributes_for_2);
+    $patron_1->extended_attributes->filter_by_branch_limitations->delete;
+    $patron_2->extended_attributes->filter_by_branch_limitations->delete;
+    $patron_1->extended_attributes($attributes_for_1);
+    $patron_2->extended_attributes($attributes_for_2);
 
-    my $extended_attributes_for_1 = $patron_1->get_extended_attributes;
+    my $extended_attributes_for_1 = $patron_1->extended_attributes;
     is( $extended_attributes_for_1->count, 3, 'There should be 3 attributes now for patron 1');
 
-    my $extended_attributes_for_2 = $patron_2->get_extended_attributes;
+    my $extended_attributes_for_2 = $patron_2->extended_attributes;
     is( $extended_attributes_for_2->count, 2, 'There should be 2 attributes now for patron 2');
 
     my $attribute_12 = $extended_attributes_for_2->search({ code => $attribute_type1->code });
@@ -2095,11 +2097,11 @@ subtest 'get_extended_attributes' => sub {
     # Test branch limitations
     set_logged_in_user($patron_2);
     # Return all
-    $extended_attributes_for_1 = $patron_1->get_extended_attributes;
+    $extended_attributes_for_1 = $patron_1->extended_attributes;
     is( $extended_attributes_for_1->count, 3, 'There should be 2 attributes for patron 1, the limited one should be returned');
 
     # Return filtered
-    $extended_attributes_for_1 = $patron_1->get_extended_attributes->filter_by_branch_limitations;
+    $extended_attributes_for_1 = $patron_1->extended_attributes->filter_by_branch_limitations;
     is( $extended_attributes_for_1->count, 2, 'There should be 2 attributes for patron 1, the limited one should be returned');
 
     # Not filtered

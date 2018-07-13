@@ -565,10 +565,10 @@ subtest 'test_set_patron_attributes' => sub {
     # Then ...
     ok($result_3, 'Got some data back from set patron attributes');
     is($result_3->[0]->{code}, 'grade', 'Got the expected first code from set patron attributes');
-    is($result_3->[0]->{value}, '01', 'Got the expected first value from set patron attributes');
+    is($result_3->[0]->{attribute}, '01', 'Got the expected first value from set patron attributes');
 
     is($result_3->[1]->{code}, 'homeroom', 'Got the expected second code from set patron attributes');
-    is($result_3->[1]->{value}, 1150605, 'Got the expected second value from set patron attributes');
+    is($result_3->[1]->{attribute}, 1150605, 'Got the expected second value from set patron attributes');
 
     is(scalar @feedback_3, 1, 'Got the expected 1 array size from set patron attributes with extended user');
     is($feedback_3[0]->{feedback}, 1, 'Got the expected second feedback from set patron attributes with extended user');

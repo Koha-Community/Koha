@@ -299,11 +299,18 @@ sub import_patrons {
             }
             if ($extended) {
                 if ($ext_preserve) {
-                    my $old_attributes = $patron->get_extended_attributes->as_list;
+                    my $old_attributes = $patron->extended_attributes->as_list;
                     $patron_attributes = extended_attributes_merge( $old_attributes, $patron_attributes );
                 }
-                push @errors, { unknown_error => 1 }
-                  unless SetBorrowerAttributes( $borrower{'borrowernumber'}, $patron_attributes, 'no_branch_limit' );
+                eval {
+                    # We do not want to filter by branch, maybe we should?
+                    Koha::Patrons->find($borrowernumber)->extended_attributes->delete;
+                    $patron->extended_attributes($patron_attributes);
+                };
+                if ($@) {
+                    # FIXME This is not an unknown error, we can do better here
+                    push @errors, { unknown_error => 1 };
+                }
             }
             $overwritten++;
             push(
@@ -332,7 +339,9 @@ sub import_patrons {
                 }
 
                 if ($extended) {
-                    SetBorrowerAttributes( $patron->borrowernumber, $patron_attributes );
+                    # FIXME Hum, we did not filter earlier and now we do?
+                    $patron->extended_attributes->filter_by_branch_limitations->delete;
+                    $patron->extended_attributes($patron_attributes);
                 }
 
                 if ($set_messaging_prefs) {
@@ -460,7 +469,7 @@ sub set_column_keys {
 
  my $patron_attributes = set_patron_attributes($extended, $borrower{patron_attributes}, $feedback);
 
-Returns a reference to array of hashrefs data structure as expected by SetBorrowerAttributes.
+Returns a reference to array of hashrefs data structure as expected by Koha::Patron->extended_attributes
 
 =cut
 

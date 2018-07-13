@@ -71,7 +71,7 @@
     [% END %]
 
     [% IF Koha.Preference('ExtendedPatronAttributes') %]
-        [% FOREACH extendedattribute IN patron.get_extended_attributes %]
+        [% FOREACH extendedattribute IN patron.extended_attributes %]
             [% IF ( extendedattribute.type.display_checkout ) %] [%# FIXME We should filter in the line above %]
                 [% IF ( extendedattribute.attribute ) %] [%# FIXME Why that? why not if == 0? %]
                     <li class="patronattribute">
