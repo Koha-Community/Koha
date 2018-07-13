@@ -804,7 +804,7 @@ Unsuspends all suspended reserves with a suspend_until date from before today.
 sub AutoUnsuspendReserves {
     my $today = dt_from_string();
 
-    my @holds = Koha::Holds->search( { suspend_until => { '<' => $today->ymd() } } );
+    my @holds = Koha::Holds->search( { suspend_until => { '<=' => $today->ymd() } } );
 
     map { $_->suspend(0)->suspend_until(undef)->store() } @holds;
 }
