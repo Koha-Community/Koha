@@ -305,24 +305,26 @@
         });
 
         $(document).ready(function() {
-            $( "#patron" ).autocomplete({
-                source: "/cgi-bin/koha/circ/ysearch.pl",
-                minLength: 3,
-                select: function( event, ui ) {
-                    $( "#patron" ).val( ui.item.cardnumber );
-                    $( "#holds_patronsearch" ).submit();
-                    return false;
-                }
-            })
-            .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
-                return $( "<li></li>" )
-                .data( "ui-autocomplete-item", item )
-                .append( "<a>" + item.surname + ", " + item.firstname +
-                         " (" + item.cardnumber + ") <small>" + item.address +
-                         " " + item.city + " " + item.zipcode + " " +
-                         item.country + "</small></a>" )
-                .appendTo( ul );
-            };
+            [% UNLESS (patron ) %]
+                $( "#patron" ).autocomplete({
+                    source: "/cgi-bin/koha/circ/ysearch.pl",
+                    minLength: 3,
+                    select: function( event, ui ) {
+                        $( "#patron" ).val( ui.item.cardnumber );
+                        $( "#holds_patronsearch" ).submit();
+                        return false;
+                    }
+                })
+                .data( "ui-autocomplete" )._renderItem = function( ul, item ) {
+                    return $( "<li></li>" )
+                    .data( "ui-autocomplete-item", item )
+                    .append( "<a>" + item.surname + ", " + item.firstname +
+                             " (" + item.cardnumber + ") <small>" + item.address +
+                             " " + item.city + " " + item.zipcode + " " +
+                             item.country + "</small></a>" )
+                    .appendTo( ul );
+                };
+            [% END %]
 
             $( ".ar-update-branchcode" ).on('focus', function(){
                 previous_branchcode = this.value;
