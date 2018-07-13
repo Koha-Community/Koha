@@ -33,7 +33,6 @@ use HTML::Entities;
 use CGI qw ( -utf8 );
 use DateTime;
 use C4::Auth;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::DateUtils;
 
 use Koha::Biblios;
@@ -505,7 +504,9 @@ sub GetPatronInfo {
 
     my $show_attributes = $cgi->param('show_attributes');
     if ( $show_attributes && $show_attributes eq "1" ) {
-        my $attrs = GetBorrowerAttributes( $borrowernumber, 1 );
+        # FIXME Regression expected here, we do not retrieve the same field as previously
+        # Waiting for answer on bug 14257 comment 15
+        my $attrs = $patron->get_extended_attributes->search({ opac_display => 1 })->unblessed;
         $borrower->{'attributes'} = $attrs;
     }
 
