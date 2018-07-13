@@ -2020,7 +2020,7 @@ subtest 'anonymize' => sub {
 $schema->storage->txn_rollback;
 
 subtest 'get_extended_attributes' => sub {
-    plan tests => 9;
+    plan tests => 10;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -2094,12 +2094,21 @@ subtest 'get_extended_attributes' => sub {
 
     # Test branch limitations
     set_logged_in_user($patron_2);
-    C4::Members::Attributes::SetBorrowerAttributes($patron_1->borrowernumber, $attributes_for_1);
+    # Return all
     $extended_attributes_for_1 = $patron_1->get_extended_attributes;
-    is( $extended_attributes_for_1->count, 2, 'There should be 2 attributes for patron 1, the limited one should not be returned');
+    is( $extended_attributes_for_1->count, 3, 'There should be 2 attributes for patron 1, the limited one should be returned');
 
+    # Return filtered
+    $extended_attributes_for_1 = $patron_1->get_extended_attributes->filter_by_branch_limitations;
+    is( $extended_attributes_for_1->count, 2, 'There should be 2 attributes for patron 1, the limited one should be returned');
+
+    # Not filtered
     my $limited_value = $patron_1->get_extended_attribute_value( $attribute_type_limited->code );
-    is( $limited_value, undef, );
+    is( $limited_value, 'my attribute limited', );
+
+    ## Do we need a filtered?
+    #$limited_value = $patron_1->get_extended_attribute_value( $attribute_type_limited->code );
+    #is( $limited_value, undef, );
 
     $schema->storage->txn_rollback;
 };

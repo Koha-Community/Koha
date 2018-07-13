@@ -18,6 +18,7 @@ package Koha::Patron::Attributes;
 use Modern::Perl;
 
 use Koha::Patron::Attribute;
+use Koha::Patron::Attribute::Types;
 
 use base qw(Koha::Objects);
 
@@ -33,35 +34,57 @@ Koha::Patron::Attributes - Koha Patron Attributes Object set class
 
 =head3 search
 
-my $attributes-> Koha::Patron::Attributes->search( $params );
+my $attributes = Koha::Patron::Attributes->search( $params );
 
 =cut
 
 sub search {
     my ( $self, $params, $attributes ) = @_;
 
-    my $branchcode = $params->{branchcode};
-    delete( $params->{branchcode} );
-
-    my $or =
-        $branchcode
-        ? {
-            '-or' => [
-                'borrower_attribute_types_branches.b_branchcode' => undef,
-                'borrower_attribute_types_branches.b_branchcode' => $branchcode,
-            ]
-        } : {};
-
-    my $join =
-        $branchcode
-        ? {
-            join => {
-                'code' => 'borrower_attribute_types_branches'
-            },
-        } : {};
-    $attributes //= {};
     unless ( exists $attributes->{order_by} ) { $attributes->{order_by} = ['code', 'attribute'] }
-    return $self->SUPER::search( { %$params, %$or }, { %$attributes, %$join } );
+
+    return $self->SUPER::search( $params, $attributes );
+}
+
+=head3 filter_by_branch_limitations
+
+my $attributes = Koha::Patron::Attributes->filter_by_branch_limitations([$branchcode]);
+
+Search patron attributes filtered by a library
+
+If $branchcode exists it will be used to filter the result set.
+
+Otherwise it will be the library of the logged in user.
+
+=cut
+
+sub filter_by_branch_limitations {
+    my ( $self, $branchcode ) = @_;
+
+    # Maybe we should not limit if logged in user is superlibrarian?
+    my $branch_limit =
+        $branchcode          ? $branchcode
+        # Do we raise an exception if no userenv defined?
+      : C4::Context->userenv ? C4::Context->userenv->{"branch"}
+      :                        undef;
+
+    my $or = $branch_limit
+      ? {
+        '-or' => [
+            'borrower_attribute_types_branches.b_branchcode' => undef,
+            'borrower_attribute_types_branches.b_branchcode' => $branch_limit,
+        ]
+      }
+      : {};
+
+    my $join = $branch_limit
+      ? {
+        join => {
+            code => 'borrower_attribute_types_branches'
+        },
+      }
+      : {};
+    return $self->search( $or, $join );
 }
 
 =head3 _type
