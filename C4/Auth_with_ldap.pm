@@ -238,14 +238,15 @@ sub checkpw_ldap {
             unless (exists($borrower{$code}) && $borrower{$code} !~ m/^\s*$/ ) {
                 next;
             }
-            if (C4::Members::Attributes::CheckUniqueness($code, $borrower{$code}, $borrowernumber)) {
-                my $patron = Koha::Patrons->find($borrowernumber);
-                if ( $patron ) { # Should not be needed, but we are in C4::Auth LDAP...
+            my $patron = Koha::Patrons->find($borrowernumber);
+            if ( $patron ) { # Should not be needed, but we are in C4::Auth LDAP...
+                eval {
                     my $attribute = Koha::Patron::Attribute->new({code => $code, attribute => $borrower{$code}});
                     $patron->extended_attributes([$attribute]);
+                };
+                if ($@) { # FIXME Test if Koha::Exceptions::Patron::Attribute::NonRepeatable
+                    warn "ERROR_extended_unique_id_failed $code $borrower{$code}";
                 }
-            } else {
-                warn "ERROR_extended_unique_id_failed $code $borrower{$code}";
             }
         }
     }

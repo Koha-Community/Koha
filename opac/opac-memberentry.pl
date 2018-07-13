@@ -98,11 +98,13 @@ my $attributes = ParsePatronAttributes($borrowernumber,$cgi);
 my $conflicting_attribute = 0;
 
 foreach my $attr (@$attributes) {
-    unless ( C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber) ) {
+    my $attribute = Koha::Patron::Attribute->new($attr);
+    eval {$attribute->check_unique_id};
+    if ( $@ ) {
         my $attr_info = C4::Members::AttributeTypes->fetch($attr->{code});
         $template->param(
             extended_unique_id_failed_code => $attr->{code},
-            extended_unique_id_failed_value => $attr->{value},
+            extended_unique_id_failed_value => $attr->{attribute},
             extended_unique_id_failed_description => $attr_info->description()
         );
         $conflicting_attribute = 1;
@@ -665,7 +667,7 @@ sub ParsePatronAttributes {
             }
             else {
                 # we've got a value
-                push @attributes, { code => $code, value => $value };
+                push @attributes, { code => $code, attribute => $value };
 
                 # 'code' is no longer a delete candidate
                 delete $delete_candidates->{$code}
@@ -678,7 +680,7 @@ sub ParsePatronAttributes {
         if ( Koha::Patron::Attributes->search({
                 borrowernumber => $borrowernumber, code => $code })->count > 0 )
         {
-            push @attributes, { code => $code, value => '' }
+            push @attributes, { code => $code, attribute => '' }
                 unless any { $_->{code} eq $code } @attributes;
         }
     }

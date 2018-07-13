@@ -29,7 +29,7 @@ our ($csv, $AttributeTypes);
 
 BEGIN {
     @ISA = qw(Exporter);
-    @EXPORT_OK = qw(CheckUniqueness
+    @EXPORT_OK = qw(
                     extended_attributes_code_value_arrayref extended_attributes_merge
                     SearchIdMatchingAttribute);
     %EXPORT_TAGS = ( all => \@EXPORT_OK );
@@ -65,50 +65,6 @@ AND (} . join (" OR ", map "attribute like ?", @$filter) .qq{)};
     my $sth = $dbh->prepare_cached($query);
     $sth->execute(map "%$_%", @$filter);
     return [map $_->[0], @{ $sth->fetchall_arrayref }];
-}
-
-=head2 CheckUniqueness
-
-  my $ok = CheckUniqueness($code, $value[, $borrowernumber]);
-
-Given an attribute type and value, verify if would violate
-a unique_id restriction if added to the patron.  The
-optional C<$borrowernumber> is the patron that the attribute
-value would be added to, if known.
-
-Returns false if the C<$code> is not valid or the
-value would violate the uniqueness constraint.
-
-=cut
-
-sub CheckUniqueness {
-    my $code = shift;
-    my $value = shift;
-    my $borrowernumber = @_ ? shift : undef;
-
-    my $attr_type = C4::Members::AttributeTypes->fetch($code);
-
-    return 0 unless defined $attr_type;
-    return 1 unless $attr_type->unique_id();
-
-    my $dbh = C4::Context->dbh;
-    my $sth;
-    if (defined($borrowernumber)) {
-        $sth = $dbh->prepare("SELECT COUNT(*) 
-                              FROM borrower_attributes 
-                              WHERE code = ? 
-                              AND attribute = ?
-                              AND borrowernumber <> ?");
-        $sth->execute($code, $value, $borrowernumber);
-    } else {
-        $sth = $dbh->prepare("SELECT COUNT(*) 
-                              FROM borrower_attributes 
-                              WHERE code = ? 
-                              AND attribute = ?");
-        $sth->execute($code, $value);
-    }
-    my ($count) = $sth->fetchrow_array;
-    return ($count == 0);
 }
 
 =head2 extended_attributes_code_value_arrayref 

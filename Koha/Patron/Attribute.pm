@@ -47,7 +47,7 @@ sub store {
     my $self = shift;
 
     $self->_check_repeatable;
-    $self->_check_unique_id;
+    $self->check_unique_id;
 
     return $self->SUPER::store();
 }
@@ -139,21 +139,26 @@ sub _check_repeatable {
     return $self;
 }
 
-=head3 _check_unique_id
+=head3 check_unique_id
 
-_check_unique_id checks if the attribute type is marked as unique id and throws and exception
+check_unique_id checks if the attribute type is marked as unique id and throws and exception
 if the attribute type is a unique id and there's already an attribute with the same
 code and value on the database.
 
 =cut
 
-sub _check_unique_id {
+sub check_unique_id {
 
     my $self = shift;
 
     if ( $self->type->unique_id ) {
+        my $params = { code => $self->code, attribute => $self->attribute };
+
+        $params->{borrowernumber} = { '!=' => $self->borrowernumber } if $self->borrowernumber;
+        $params->{id}             = { '!=' => $self->id }             if $self->in_storage;
+
         my $unique_count = Koha::Patron::Attributes
-            ->search( { code => $self->code, attribute => $self->attribute } )
+            ->search( $params )
             ->count;
         Koha::Exceptions::Patron::Attribute::UniqueIDConstraint->throw()
             if $unique_count > 0;

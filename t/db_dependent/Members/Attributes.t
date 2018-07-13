@@ -26,7 +26,8 @@ use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 39;
+use Test::Exception;
+use Test::More tests => 33;
 
 use_ok('C4::Members::Attributes');
 
@@ -150,24 +151,29 @@ is( $attr_0->type->description, $attribute_type1->description(), 'delete then ad
 is( $attr_0->attribute, $attribute->{attribute}, 'delete then add a new attribute updates the field value correctly' );
 
 
-my $check_uniqueness = C4::Members::Attributes::CheckUniqueness();
-is( $check_uniqueness, 0, 'CheckUniqueness without arguments returns false' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness($attribute->{code});
-is( $check_uniqueness, 1, 'CheckUniqueness with a valid argument code returns true' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness(undef, $attribute->{attribute});
-is( $check_uniqueness, 0, 'CheckUniqueness without the argument code returns false' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness('my invalid code');
-is( $check_uniqueness, 0, 'CheckUniqueness with an invalid argument code returns false' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness('my invalid code', $attribute->{attribute});
-is( $check_uniqueness, 0, 'CheckUniqueness with an invalid argument code returns fale' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness($attribute->{code}, 'new value');
-is( $check_uniqueness, 1, 'CheckUniqueness with a new value returns true' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness('my invalid code', 'new value');
-is( $check_uniqueness, 0, 'CheckUniqueness with an invalid argument code and a new value returns false' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness($attributes->[1]->{code}, $attributes->[1]->{attribute});
-is( $check_uniqueness, 1, 'CheckUniqueness with an attribute unique_id=0 returns true' );
-$check_uniqueness = C4::Members::Attributes::CheckUniqueness($attribute->{code}, $attribute->{attribute});
-is( $check_uniqueness, '', 'CheckUniqueness returns false' );
+lives_ok { # Editing, new value, same patron
+    Koha::Patron::Attribute->new(
+        {
+            code           => $attribute->{code},
+            attribute      => 'new value',
+            borrowernumber => $patron->borrowernumber
+        }
+    )->check_unique_id;
+} 'no exception raised';
+lives_ok { # Editing, same value, same patron
+    Koha::Patron::Attribute->new(
+        {
+            code           => $attributes->[1]->{code},
+            attribute      => $attributes->[1]->{attribute},
+            borrowernumber => $patron->borrowernumber
+        }
+    )->check_unique_id;
+} 'no exception raised';
+throws_ok { # Creating a new one, but already exists!
+    Koha::Patron::Attribute->new(
+        { code => $attribute->{code}, attribute => $attribute->{attribute} } )
+      ->check_unique_id;
+} 'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint';
 
 
 my $borrower_numbers = C4::Members::Attributes::SearchIdMatchingAttribute('attribute1');

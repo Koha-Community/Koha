@@ -312,7 +312,7 @@ if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_Borrow
 }
   
 $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled dateexpiry);
-my $extended_patron_attributes = ();
+my $extended_patron_attributes;
 if ($op eq 'save' || $op eq 'insert'){
 
     output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
@@ -398,19 +398,22 @@ if ($op eq 'save' || $op eq 'insert'){
       push (@errors, "ERROR_bad_email_alternative") if (!Email::Valid->address($emailalt));
   }
 
-  if (C4::Context->preference('ExtendedPatronAttributes')) {
-    $extended_patron_attributes = parse_extended_patron_attributes($input);
-    foreach my $attr (@$extended_patron_attributes) {
-        unless (C4::Members::Attributes::CheckUniqueness($attr->{code}, $attr->{value}, $borrowernumber)) {
-            my $attr_info = C4::Members::AttributeTypes->fetch($attr->{code});
-            push @errors, "ERROR_extended_unique_id_failed";
-            $template->param(
-                ERROR_extended_unique_id_failed_code => $attr->{code},
-                ERROR_extended_unique_id_failed_value => $attr->{value},
-                ERROR_extended_unique_id_failed_description => $attr_info->description()
-            );
-        }
-    }
+  if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
+      $extended_patron_attributes = parse_extended_patron_attributes($input);
+      for my $attr ( @$extended_patron_attributes ) {
+          $attr->{borrowernumber} = $borrowernumber if $borrowernumber;
+          my $attribute = Koha::Patron::Attribute->new($attr);
+          eval {$attribute->check_unique_id};
+          if ( $@ ) {
+              push @errors, "ERROR_extended_unique_id_failed";
+              my $attr_info = C4::Members::AttributeTypes->fetch($attr->{code});
+              $template->param(
+                  ERROR_extended_unique_id_failed_code => $attr->{code},
+                  ERROR_extended_unique_id_failed_value => $attr->{attribute},
+                  ERROR_extended_unique_id_failed_description => $attr_info->description()
+              );
+          }
+      }
   }
 }
 
@@ -479,10 +482,6 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             }
         }
 
-        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
-            $patron->extended_attributes->filter_by_branch_limitations->delete;
-            $patron->extended_attributes($extended_patron_attributes);
-        }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template, 1, $newdata{'categorycode'});
         }
@@ -550,14 +549,15 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
         }
 
         add_guarantors( $patron, $input );
-        if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
-            $patron->extended_attributes->filter_by_branch_limitations->delete;
-            $patron->extended_attributes($extended_patron_attributes);
-        }
         if (C4::Context->preference('EnhancedMessagingPreferences') and $input->param('setting_messaging_prefs')) {
             C4::Form::MessagingPreferences::handle_form_action($input, { borrowernumber => $borrowernumber }, $template);
         }
 	}
+
+    if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
+        $patron->extended_attributes->filter_by_branch_limitations->delete;
+        $patron->extended_attributes($extended_patron_attributes);
+    }
 
     if ( $destination eq 'circ' and not C4::Auth::haspermission( C4::Context->userenv->{id}, { circulate => 'circulate_remaining_permissions' } ) ) {
         # If we want to redirect to circulation.pl and need to check if the logged in user has the necessary permission
@@ -845,7 +845,7 @@ if ( C4::Context->preference('TranslateNotices') ) {
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
-sub  parse_extended_patron_attributes {
+sub parse_extended_patron_attributes {
     my ($input) = @_;
     my @patron_attr = grep { /^patron_attr_\d+$/ } $input->multi_param();
 
@@ -857,7 +857,7 @@ sub  parse_extended_patron_attributes {
         my $code     = $input->param("${key}_code");
         next if exists $dups{$code}->{$value};
         $dups{$code}->{$value} = 1;
-        push @attr, { code => $code, value => $value };
+        push @attr, { code => $code, attribute => $value };
     }
     return \@attr;
 }
@@ -872,15 +872,16 @@ sub patron_attributes_form {
         $template->param(no_patron_attribute_types => 1);
         return;
     }
-    my $patron = Koha::Patrons->find($borrowernumber); # Already fetched but outside of this sub
-    my @attributes = $patron->extended_attributes->as_list; # FIXME Must be improved!
-    my @classes = uniq( map {$_->type->class} @attributes );
-    @classes = sort @classes;
+    my @attributes;
+    if ( $borrowernumber ) {
+        my $patron = Koha::Patrons->find($borrowernumber); # Already fetched but outside of this sub
+        @attributes = $patron->extended_attributes->as_list; # FIXME Must be improved!
+    }
 
     # map patron's attributes into a more convenient structure
     my %attr_hash = ();
     foreach my $attr (@attributes) {
-        push @{ $attr_hash{$attr->{code}} }, $attr;
+        push @{ $attr_hash{$attr->code} }, $attr;
     }
 
     my @attribute_loop = ();
@@ -899,11 +900,11 @@ sub patron_attributes_form {
         if (exists $attr_hash{$attr_type->code()}) {
             foreach my $attr (@{ $attr_hash{$attr_type->code()} }) {
                 my $newentry = { %$entry };
-                $newentry->{value} = $attr->{value};
+                $newentry->{value} = $attr->attribute;
                 $newentry->{use_dropdown} = 0;
                 if ($attr_type->authorised_value_category()) {
                     $newentry->{use_dropdown} = 1;
-                    $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category(), $attr->{value});
+                    $newentry->{auth_val_loop} = GetAuthorisedValues($attr_type->authorised_value_category(), $attr->attribute);
                 }
                 $i++;
                 undef $newentry->{value} if ($attr_type->unique_id() && $op eq 'duplicate');
