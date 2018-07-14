@@ -86,7 +86,8 @@ KOHA.OverDriveCirculation = new function() {
     $( document ).ready(function() {
         var p = window.opener;
         if (p) {
-            cb = p.refresh_overdrive_account_details;
+            try { cb = p.refresh_overdrive_account_details;}
+            catch(err){ return; } //Catch error if opener is not accessible
             if (cb) {
                 cb();
             } else {
