@@ -32,7 +32,7 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(
                     extended_attributes_code_value_arrayref extended_attributes_merge
-                    SearchIdMatchingAttribute);
+                    );
     %EXPORT_TAGS = ( all => \@EXPORT_OK );
 }
 
@@ -45,19 +45,6 @@ C4::Members::Attributes - manage extend patron attributes
   use C4::Members::Attributes;
 
 =head1 FUNCTIONS
-
-=head2 SearchIdMatchingAttribute
-
-  my $matching_borrowernumbers = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
-
-=cut
-use Koha::Patrons;
-sub SearchIdMatchingAttribute{
-    my $filter = shift;
-
-    my @borrowernumbers = Koha::Patrons->filter_by_attribute_value($filter)->get_column('borrowernumber');
-    return \@borrowernumbers;
-}
 
 =head2 extended_attributes_code_value_arrayref 
 

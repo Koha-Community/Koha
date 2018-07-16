@@ -33,7 +33,6 @@ use C4::Reserves;
 use C4::Accounts;
 use C4::Biblio;
 use C4::Letters;
-use C4::Members::Attributes qw(SearchIdMatchingAttribute);
 use C4::NewsChannels; #get slip news
 use DateTime;
 use Koha::Database;

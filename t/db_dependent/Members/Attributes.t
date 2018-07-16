@@ -182,14 +182,6 @@ throws_ok { # Creating a new one, but already exists!
 } 'Koha::Exceptions::Patron::Attribute::UniqueIDConstraint';
 
 
-my $borrower_numbers = C4::Members::Attributes::SearchIdMatchingAttribute('attribute1');
-is( @$borrower_numbers, 0, 'SearchIdMatchingAttribute searchs only in attributes with staff_searchable=1' );
-for my $attr( split(' ', $attributes->[1]->{attribute}) ) {
-    $borrower_numbers = C4::Members::Attributes::SearchIdMatchingAttribute($attr);
-    is( $borrower_numbers->[0], $borrowernumber, 'SearchIdMatchingAttribute returns the borrower numbers matching' );
-}
-
-
 $patron->get_extended_attribute($attribute->{code})->delete;
 $borrower_attributes = $patron->extended_attributes;
 is( $borrower_attributes->count, 2, 'delete attribute by code' );

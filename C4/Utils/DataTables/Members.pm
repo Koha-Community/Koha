@@ -4,7 +4,6 @@ use Modern::Perl;
 use C4::Context;
 use C4::Utils::DataTables;
 use Koha::DateUtils;
-use C4::Members::Attributes qw(SearchIdMatchingAttribute );
 
 sub search {
     my ( $params ) = @_;
@@ -131,9 +130,9 @@ sub search {
 
 
         if ( $searchfieldstype eq 'standard' and C4::Context->preference('ExtendedPatronAttributes') and $searchmember ) {
-            my $matching_borrowernumbers = C4::Members::Attributes::SearchIdMatchingAttribute($searchmember);
+            my @matching_borrowernumbers = Koha::Patrons->filter_by_attribute_value($searchmember)->get_column('borrowernumber');
 
-            for my $borrowernumber ( @$matching_borrowernumbers ) {
+            for my $borrowernumber ( @matching_borrowernumbers ) {
                 push @where_strs_or, "borrowers.borrowernumber = ?";
                 push @where_args, $borrowernumber;
             }
