@@ -51,21 +51,12 @@ C4::Members::Attributes - manage extend patron attributes
   my $matching_borrowernumbers = C4::Members::Attributes::SearchIdMatchingAttribute($filter);
 
 =cut
-
+use Koha::Patrons;
 sub SearchIdMatchingAttribute{
     my $filter = shift;
-    $filter = [$filter] unless ref $filter;
 
-    my $dbh   = C4::Context->dbh();
-    my $query = qq{
-SELECT DISTINCT borrowernumber
-FROM borrower_attributes
-JOIN borrower_attribute_types USING (code)
-WHERE staff_searchable = 1
-AND (} . join (" OR ", map "attribute like ?", @$filter) .qq{)};
-    my $sth = $dbh->prepare_cached($query);
-    $sth->execute(map "%$_%", @$filter);
-    return [map $_->[0], @{ $sth->fetchall_arrayref }];
+    my @borrowernumbers = Koha::Patrons->filter_by_attribute_value($filter)->get_column('borrowernumber');
+    return \@borrowernumbers;
 }
 
 =head2 extended_attributes_code_value_arrayref 
