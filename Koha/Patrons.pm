@@ -427,6 +427,21 @@ sub update_category_to {
     return $counter;
 }
 
+=head3 filter_by_attribute_type
+
+my $patrons = Koha::Patrons->filter_by_attribute_type($attribute_type_code);
+
+Return a Koha::Patrons set with patrons having the attribute defined.
+
+=cut
+
+sub filter_by_attribute_type {
+    my ( $self, $attribute_type ) = @_;
+    my $rs = Koha::Patron::Attributes->search( { code => $attribute_type } )
+      ->_resultset()->search_related('borrowernumber');
+    return Koha::Patrons->_new_from_dbic($rs);
+}
+
 =head3 _type
 
 =cut
