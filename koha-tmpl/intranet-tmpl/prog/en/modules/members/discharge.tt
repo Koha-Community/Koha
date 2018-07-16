@@ -35,7 +35,7 @@
     <p>Cannot edit discharge: the patron has checked out items.</p>
 [% ELSE %]
     [% IF patron.holds.count %]
-        <p>Borrower has reserves: they will be canceled if the discharge is generated.</p>
+        <p>Patron has holds. They will be cancelled if the discharge is generated.</p>
     [% END %]
     <form method="post">
         <input type="submit" value="Generate discharge" name="discharge" />
