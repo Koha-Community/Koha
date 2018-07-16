@@ -506,8 +506,8 @@ subtest 'test_set_column_keys' => sub {
     my $attr_type_3 = $patrons_import->set_attribute_types($params_3);
 
     # Then ...
-    isa_ok($attr_type_3, 'C4::Members::AttributeTypes');
-    is($attr_type_3->{code}, $code_3, 'Got the expected code attribute type from set attribute types');
+    isa_ok($attr_type_3, 'Koha::Patron::Attribute::Type');
+    is($attr_type_3->code, $code_3, 'Got the expected code attribute type from set attribute types');
 };
 
 subtest 'test_set_column_keys' => sub {

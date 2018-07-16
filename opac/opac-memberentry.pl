@@ -101,11 +101,11 @@ foreach my $attr (@$attributes) {
     my $attribute = Koha::Patron::Attribute->new($attr);
     eval {$attribute->check_unique_id};
     if ( $@ ) {
-        my $attr_info = C4::Members::AttributeTypes->fetch($attr->{code});
+        my $attr_type = Koha::Patron::Attribute::Types->find($attr->{code});
         $template->param(
             extended_unique_id_failed_code => $attr->{code},
             extended_unique_id_failed_value => $attr->{attribute},
-            extended_unique_id_failed_description => $attr_info->description()
+            extended_unique_id_failed_description => $attr_type->description,
         );
         $conflicting_attribute = 1;
     }

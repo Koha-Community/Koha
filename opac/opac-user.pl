@@ -27,7 +27,6 @@ use C4::Circulation;
 use C4::External::BakerTaylor qw( image_url link_url );
 use C4::Reserves;
 use C4::Members;
-use C4::Members::AttributeTypes;
 use C4::Output;
 use C4::Biblio;
 use C4::Items;

@@ -31,7 +31,6 @@ use C4::Context;
 use C4::Output;
 use C4::Members;
 use C4::Members::Attributes;
-use C4::Members::AttributeTypes;
 use C4::Koha;
 use C4::Log;
 use C4::Letters;
@@ -407,11 +406,11 @@ if ($op eq 'save' || $op eq 'insert'){
           eval {$attribute->check_unique_id};
           if ( $@ ) {
               push @errors, "ERROR_extended_unique_id_failed";
-              my $attr_info = C4::Members::AttributeTypes->fetch($attr->{code});
+              my $attr_type = Koha::Patron::Attribute::Types->find($attr->code);
               $template->param(
                   ERROR_extended_unique_id_failed_code => $attr->{code},
                   ERROR_extended_unique_id_failed_value => $attr->{attribute},
-                  ERROR_extended_unique_id_failed_description => $attr_info->description()
+                  ERROR_extended_unique_id_failed_description => $attr_type->description()
               );
           }
       }

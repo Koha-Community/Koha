@@ -38,6 +38,7 @@ use Koha::Holds;
 use Koha::Old::Holds;
 use Koha::Patrons;
 use Koha::Old::Patrons;
+use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 use Koha::Patron::Relationship;
 use Koha::Database;
@@ -2029,42 +2030,49 @@ subtest 'extended_attributes' => sub {
 
     set_logged_in_user($patron_1);
 
-    my $attribute_type1 = C4::Members::AttributeTypes->new('my code1', 'my description1');
-    $attribute_type1->unique_id(1);
-    $attribute_type1->store();
-
-    my $attribute_type2 = C4::Members::AttributeTypes->new('my code2', 'my description2');
-    $attribute_type2->opac_display(1);
-    $attribute_type2->staff_searchable(1);
-    $attribute_type2->store();
+    my $attribute_type1 = Koha::Patron::Attribute::Type->new(
+        {
+            code        => 'my code1',
+            description => 'my description1',
+            unique_id   => 1
+        }
+    )->store;
+    my $attribute_type2 = Koha::Patron::Attribute::Type->new(
+        {
+            code             => 'my code2',
+            description      => 'my description2',
+            opac_display     => 1,
+            staff_searchable => 1
+        }
+    )->store;
 
     my $new_library = $builder->build( { source => 'Branch' } );
-    my $attribute_type_limited = C4::Members::AttributeTypes->new('my code3', 'my description3');
-    $attribute_type_limited->branches([ $new_library->{branchcode} ]);
-    $attribute_type_limited->store;
+    my $attribute_type_limited = Koha::Patron::Attribute::Type->new(
+        { code => 'my code3', description => 'my description3' } )->store;
+    $attribute_type_limited->library_limits( [ $new_library->{branchcode} ] );
 
     my $attributes_for_1 = [
         {
-            value => 'my attribute1',
+            attribute => 'my attribute1',
             code => $attribute_type1->code(),
         },
         {
-            value => 'my attribute2',
+            attribute => 'my attribute2',
             code => $attribute_type2->code(),
         },
         {
-            value => 'my attribute limited',
+            attribute => 'my attribute limited',
             code => $attribute_type_limited->code(),
         }
     ];
 
     my $attributes_for_2 = [
         {
-            value => 'my attribute12',
+            attribute => 'my attribute12',
             code => $attribute_type1->code(),
         },
         {
-            value => 'my attribute limited 2',
+            attribute => 'my attribute limited 2',
             code => $attribute_type_limited->code(),
         }
     ];

@@ -21,7 +21,6 @@ use Modern::Perl;
 
 use C4::Context;
 use C4::Members;
-use C4::Members::AttributeTypes;
 use Koha::Database;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -57,19 +56,26 @@ my $patron = $builder->build(
 t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 my $borrowernumber = $patron->{borrowernumber};
 
-my $attribute_type1 = C4::Members::AttributeTypes->new('my code1', 'my description1');
-$attribute_type1->unique_id(1);
-$attribute_type1->store();
-
-my $attribute_type2 = C4::Members::AttributeTypes->new('my code2', 'my description2');
-$attribute_type2->opac_display(1);
-$attribute_type2->staff_searchable(1);
-$attribute_type2->store();
+my $attribute_type1 = Koha::Patron::Attribute::Type->new(
+    {
+        code        => 'my code1',
+        description => 'my description1',
+        unique_id   => 1
+    }
+)->store;
+my $attribute_type2 = Koha::Patron::Attribute::Type->new(
+    {
+        code             => 'my code2',
+        description      => 'my description2',
+        opac_display     => 1,
+        staff_searchable => 1
+    }
+)->store;
 
 my $new_library = $builder->build( { source => 'Branch' } );
-my $attribute_type_limited = C4::Members::AttributeTypes->new('my code3', 'my description3');
-$attribute_type_limited->branches([ $new_library->{branchcode} ]);
-$attribute_type_limited->store;
+my $attribute_type_limited = Koha::Patron::Attribute::Type->new(
+    { code => 'my code3', description => 'my description3' } )->store;
+$attribute_type_limited->library_limits( [ $new_library->{branchcode} ] );
 
 $patron = Koha::Patrons->find($borrowernumber);
 my $borrower_attributes = $patron->extended_attributes;

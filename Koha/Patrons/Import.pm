@@ -25,7 +25,6 @@ use Encode qw( decode_utf8 );
 
 use C4::Members;
 use C4::Members::Attributes qw(:all);
-use C4::Members::AttributeTypes;
 
 use Koha::Libraries;
 use Koha::Patrons;
@@ -440,12 +439,12 @@ Returns an attribute type based on matchpoint parameter.
 sub set_attribute_types {
     my ($self, $params) = @_;
 
-    my $attribute_types;
+    my $attribute_type;
     if( $params->{extended} ) {
-        $attribute_types = C4::Members::AttributeTypes->fetch($params->{matchpoint});
+        $attribute_type = Koha::Patron::Attribute::Types->find($params->{matchpoint});
     }
 
-    return $attribute_types;
+    return $attribute_type;
 }
 
 =head2 set_column_keys

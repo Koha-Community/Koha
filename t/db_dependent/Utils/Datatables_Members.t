@@ -23,7 +23,6 @@ use C4::Context;
 use C4::Members;
 
 use C4::Members::Attributes;
-use C4::Members::AttributeTypes;
 
 use Koha::Library;
 use Koha::Patrons;
@@ -276,14 +275,18 @@ $search_results = C4::Utils::DataTables::Members::search({
 is( $search_results->{ iTotalDisplayRecords }, 0,
     "No members are found by userid, surname search");
 
-my $attribute_type = C4::Members::AttributeTypes->new( 'ATM_1', 'my attribute type' );
-$attribute_type->{staff_searchable} = 1;
-$attribute_type->store;
+my $attribute_type = Koha::Patron::Attribute::Type->new(
+    {
+        code             => 'ATM_1',
+        description      => 'my attribute type',
+        staff_searchable => 1
+    }
+)->store;
 
 Koha::Patrons->find( $john_doe->{borrowernumber} )->extended_attributes(
     [
         {
-            code      => $attribute_type->{code},
+            code      => $attribute_type->code,
             attribute => 'the default value for a common user'
         }
     ]
@@ -291,7 +294,7 @@ Koha::Patrons->find( $john_doe->{borrowernumber} )->extended_attributes(
 Koha::Patrons->find( $jane_doe->{borrowernumber} )->extended_attributes(
     [
         {
-            code      => $attribute_type->{code},
+            code      => $attribute_type->code,
             attribute => 'the default value for another common user'
         }
     ]
@@ -299,7 +302,7 @@ Koha::Patrons->find( $jane_doe->{borrowernumber} )->extended_attributes(
 Koha::Patrons->find( $john_smith->{borrowernumber} )->extended_attributes(
     [
         {
-            code      => $attribute_type->{code},
+            code      => $attribute_type->code,
             attribute => 'Attribute which not appears even if contains "Dupont"'
         }
     ]
