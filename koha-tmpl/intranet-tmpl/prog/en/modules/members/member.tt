@@ -342,11 +342,11 @@
             });
             $("#select_all").on("click",function(e){
                 e.preventDefault();
-                $(".selection").prop("checked", true);
+                $(".selection").prop("checked", true).change();
             });
             $("#clear_all").on("click",function(e){
                 e.preventDefault();
-                $(".selection").prop("checked", false);
+                $(".selection").prop("checked", false).change();
             });
             $("#clear_search").on("click",function(e){
                 e.preventDefault();
