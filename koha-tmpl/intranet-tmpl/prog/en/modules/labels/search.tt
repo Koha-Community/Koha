@@ -1,7 +1,6 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]<title>Koha &rsaquo;  Labels</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'calendar.inc' %]
 </head>
 
 <body id="labels_search" class="tools labels">
@@ -104,4 +103,7 @@ to add to Batch [% batch_id %]
 </form>
 </div>
 
+[% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+[% END %]
 [% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
