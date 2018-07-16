@@ -28,8 +28,6 @@ C4::Members::AttributeTypes - mananage extended patron attribute types
 
 =head1 SYNOPSIS
 
-  my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes();
-
   my $attr_type = C4::Members::AttributeTypes->new($code, $description);
   $attr_type->code($code);
   $attr_type->description($description);
@@ -46,48 +44,6 @@ C4::Members::AttributeTypes - mananage extended patron attribute types
   $attr_type = C4::Members::AttributeTypes->delete($code);
 
 =head1 FUNCTIONS
-
-=head2 GetAttributeTypes
-
-  my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes($all_fields);
-
-Returns an array of hashrefs of each attribute type defined
-in the database.  The array is sorted by code.  Each hashref contains
-at least the following fields:
-
- - code
- - description
-
-If $all_fields is true, then each hashref also contains the other fields from borrower_attribute_types.
-
-=cut
-
-sub GetAttributeTypes {
-    my $all    = @_   ? shift : 0;
-    my $no_branch_limit = @_ ? shift : 0;
-    my $branch_limit = $no_branch_limit
-        ? 0
-        : C4::Context->userenv ? C4::Context->userenv->{"branch"} : 0;
-    my $select = $all ? '*'   : 'DISTINCT(code), description, class';
-
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT $select FROM borrower_attribute_types";
-    $query .= qq{
-        LEFT JOIN borrower_attribute_types_branches ON bat_code = code
-        WHERE b_branchcode = ? OR b_branchcode IS NULL
-    } if $branch_limit;
-    $query .= " ORDER BY code";
-    my $sth    = $dbh->prepare($query);
-    $sth->execute( $branch_limit ? $branch_limit : () );
-    my $results = $sth->fetchall_arrayref({});
-    $sth->finish;
-    return @$results;
-}
-
-sub GetAttributeTypes_hashref {
-    my %hash = map {$_->{code} => $_} GetAttributeTypes(@_);
-    return \%hash;
-}
 
 =head1 METHODS 
 

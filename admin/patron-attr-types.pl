@@ -29,6 +29,7 @@ use C4::Context;
 use C4::Output;
 use C4::Koha;
 use C4::Members::AttributeTypes;
+use Koha::Patron::Attribute::Types;
 
 use Koha::AuthorisedValues;
 use Koha::Libraries;
@@ -86,48 +87,18 @@ exit 0;
 sub add_attribute_type_form {
     my $template = shift;
 
-    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
-    my @branches_loop;
-    foreach my $branch (@$branches) {
-        push @branches_loop, {
-            branchcode => $branch->{branchcode},
-            branchname => $branch->{branchname},
-        };
-    }
-
     my $patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
     $template->param(
         attribute_type_form => 1,
         confirm_op => 'add_attribute_type_confirmed',
         categories => $patron_categories,
-        branches_loop => \@branches_loop,
     );
-    $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS'));
 }
 
 sub error_add_attribute_type_form {
     my $template = shift;
 
     $template->param(description => scalar $input->param('description'));
-
-    if ($input->param('repeatable')) {
-        $template->param(repeatable_checked => 1);
-    }
-    if ($input->param('unique_id')) {
-        $template->param(unique_id_checked => 1);
-    }
-    if ($input->param('opac_display')) {
-        $template->param(opac_display_checked => 1);
-    }
-    if ($input->param('opac_editable')) {
-        $template->param(opac_editable_checked => 1);
-    }
-    if ($input->param('staff_searchable')) {
-        $template->param(staff_searchable_checked => 1);
-    }
-    if ($input->param('display_checkout')) {
-        $template->param(display_checkout_checked => 'checked="checked"');
-    }
 
     $template->param( category_code => scalar $input->param('category_code') );
     $template->param( class => scalar $input->param('class') );
@@ -154,6 +125,8 @@ sub add_update_attribute_type {
         my $existing = C4::Members::AttributeTypes->fetch($code);
         if (defined($existing)) {
             $template->param(duplicate_code_error => $code);
+            # FIXME Regression here
+            # Form will not be refilled with entered values on error
             error_add_attribute_type_form($template);
             return 0;
         }
@@ -231,53 +204,8 @@ sub edit_attribute_type_form {
     my $template = shift;
     my $code = shift;
 
-    my $attr_type = C4::Members::AttributeTypes->fetch($code);
-
-    $template->param(code => $code);
-    $template->param(description => $attr_type->description());
-    $template->param(class => $attr_type->class());
-
-    if ($attr_type->repeatable()) {
-        $template->param(repeatable_checked => 1);
-    }
-    $template->param(repeatable_disabled => 1);
-    if ($attr_type->unique_id()) {
-        $template->param(unique_id_checked => 1);
-    }
-    $template->param(unique_id_disabled => 1);
-    if ($attr_type->opac_display()) {
-        $template->param(opac_display_checked => 1);
-    }
-    if ($attr_type->opac_editable()) {
-        $template->param(opac_editable_checked => 1);
-    }
-    if ($attr_type->staff_searchable()) {
-        $template->param(staff_searchable_checked => 1);
-    }
-    if ($attr_type->display_checkout()) {
-        $template->param(display_checkout_checked => 'checked="checked"');
-    }
-    $template->param( authorised_value_category => $attr_type->authorised_value_category() );
-    $template->param(classes_val_loop => GetAuthorisedValues( 'PA_CLASS' ));
-
-    my $branches = Koha::Libraries->search( {}, { order_by => ['branchname'] } )->unblessed;
-    my @branches_loop;
-    my $selected_branches = $attr_type->branches;
-    foreach my $branch (@$branches) {
-        my $selected = ( grep {$_->{branchcode} eq $branch->{branchcode}} @$selected_branches ) ? 1 : 0;
-        push @branches_loop, {
-            branchcode => $branch->{branchcode},
-            branchname => $branch->{branchname},
-            selected => $selected,
-        };
-    }
-    $template->param( branches_loop => \@branches_loop );
-
-    $template->param(
-        category_code        => $attr_type->category_code,
-        category_class       => $attr_type->class,
-        category_description => $attr_type->category_description,
-    );
+    my $attr_type = Koha::Patron::Attribute::Types->find($code);
+    $template->param(attribute_type => $attr_type);
 
     my $patron_categories = Koha::Patron::Categories->search({}, {order_by => ['description']});
     $template->param(
@@ -292,18 +220,17 @@ sub edit_attribute_type_form {
 sub patron_attribute_type_list {
     my $template = shift;
 
-    my @attr_types = C4::Members::AttributeTypes::GetAttributeTypes( 1, 1 );
+    my @attr_types = Koha::Patron::Attribute::Types->search->as_list;
 
-    my @classes = uniq( map { $_->{class} } @attr_types );
+    my @classes = uniq( map { $_->class } @attr_types );
     @classes = sort @classes;
 
     my @attributes_loop;
+    # FIXME This is not efficient and should be improved
     for my $class (@classes) {
-        my ( @items, $branches );
+        my @items;
         for my $attr (@attr_types) {
-            next if $attr->{class} ne $class;
-            my $attr_type = C4::Members::AttributeTypes->fetch($attr->{code});
-            $attr->{branches} = $attr_type->branches;
+            next if $attr->class ne $class;
             push @items, $attr;
         }
         my $av = Koha::AuthorisedValues->search({ category => 'PA_CLASS', authorised_value => $class });
@@ -312,7 +239,6 @@ sub patron_attribute_type_list {
             class => $class,
             items => \@items,
             lib   => $lib,
-            branches => $branches,
         };
     }
     $template->param(available_attribute_types => \@attributes_loop);

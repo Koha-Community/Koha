@@ -22,6 +22,8 @@ use Test::More;
 
 use Module::Load::Conditional qw/check_install/;
 
+use Koha::Patron::Attribute::Types;
+
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
         plan tests => 8;
@@ -57,7 +59,7 @@ fixtures_ok [
 my $db = Test::MockModule->new('Koha::Database');
 $db->mock( _new_schema => sub { return Schema(); } );
 
-my @members_attributetypes = C4::Members::AttributeTypes::GetAttributeTypes(undef, 1);
+my @members_attributetypes = @{Koha::Patron::Attribute::Types->search->unblessed};
 
 is( $members_attributetypes[0]->{'code'}, 'one', 'First code value is one' );
 

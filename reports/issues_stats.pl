@@ -34,7 +34,7 @@ use C4::Members;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::ItemTypes;
-use C4::Members::AttributeTypes;
+use Koha::Patron::Attribute::Types;
 
 =head1 NAME
 
@@ -166,9 +166,10 @@ foreach (sort {$ccodes->{$a} cmp $ccodes->{$b}} keys %$ccodes) {
 my $CGIextChoice = ( 'CSV' ); # FIXME translation
 my $CGIsepChoice=GetDelimiterChoices;
 
-my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes(1);
+my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
 my %attribute_types_by_class;
-foreach my $attribute_type (@attribute_types) {
+while ( my ( $attribute_type ) = $attribute_types->next ) {
+    $attribute_type = $attribute_type->unblessed;
     if ($attribute_type->{authorised_value_category}) {
         my $authorised_values = C4::Koha::GetAuthorisedValues(
             $attribute_type->{authorised_value_category});

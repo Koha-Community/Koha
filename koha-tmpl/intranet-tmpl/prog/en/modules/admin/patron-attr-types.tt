@@ -1,6 +1,8 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
+[% USE Branches %]
+[% USE scalar %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Patron attribute types
@@ -60,10 +62,10 @@
   <fieldset class="rows">
     <ol>
       <li>
-          [% IF ( edit_attribute_type ) %]
-		  <span class="label">Patron attribute type code: </span>
-            <input type="hidden" name="code" value="[% code | html %]" />
-            [% code | html %]
+          [% IF attribute_type %]
+            <span class="label">Patron attribute type code: </span>
+            <input type="hidden" name="code" value="[% attribute_type.code |html %]" />
+            [% attribute_type.code |html %]
           [% ELSE %]
               <label for="code" class="required">Patron attribute type code: </label>
               <input type="text" id="code" name="code" required="required" class="required" size="10" maxlength="10" />
@@ -71,45 +73,37 @@
           [% END %]
        </li>
        <li><label for="description" class="required">Description: </label>
-           <input type="text" id="description" name="description" required="required" class="required" size="50" maxlength="250" value="[% description | html %]" />
+           <input type="text" id="description" name="description" required="required" class="required" size="50" maxlength="250" value="[% attribute_type.description |html %]" />
            <span class="required">Required</span>
        </li>
        <li><label for="repeatable">Repeatable: </label>
-            [% IF ( repeatable_checked ) %]
-              [% IF ( repeatable_disabled ) %]
-                <input type="checkbox" id="repeatable" name="repeatable" checked="checked" disabled="disabled" />
-              [% ELSE %]
-                <input type="checkbox" id="repeatable" name="repeatable" checked="checked" />
-              [% END %]
+            [% IF attribute_type %]
+                [% IF attribute_type.repeatable %]
+                    <input type="checkbox" id="repeatable" name="repeatable" checked="checked" disabled="disabled" />
+                [% ELSE %]
+                    <input type="checkbox" id="repeatable" name="repeatable" disabled="disabled" />
+                [% END %]
             [% ELSE %]
-              [% IF ( repeatable_disabled ) %]
-                <input type="checkbox" id="repeatable" name="repeatable" disabled="disabled" />
-              [% ELSE %]
                 <input type="checkbox" id="repeatable" name="repeatable" />
-              [% END %]
             [% END %]
-            <span>Check to let a patron record have multiple values of this attribute.  
+            <span>Check to let a patron record have multiple values of this attribute.
                   This setting cannot be changed after an attribute is defined.</span>
        </li>
        <li><label for="unique_id">Unique identifier: </label>
-            [% IF ( unique_id_checked ) %]
-              [% IF ( unique_id_disabled ) %]
-                <input type="checkbox" id="unique_id" name="unique_id" checked="checked" disabled="disabled" />
-              [% ELSE %]
-                <input type="checkbox" id="unique_id" name="unique_id" checked="checked" />
-              [% END %]
+            [% IF attribute_type %]
+                [% IF attribute_type.unique_id %]
+                    <input type="checkbox" id="unique_id" name="unique_id" checked="checked" disabled="disabled" />
+                [% ELSE %]
+                    <input type="checkbox" id="unique_id" name="unique_id" disabled="disabled" />
+                [% END %]
             [% ELSE %]
-              [% IF ( unique_id_disabled ) %]
-                <input type="checkbox" id="unique_id" name="unique_id" disabled="disabled" />
-              [% ELSE %]
                 <input type="checkbox" id="unique_id" name="unique_id" />
-              [% END %]
             [% END %]
             <span>If checked, attribute will be a unique identifier &mdash; if a value is given to a patron record, the same value
                   cannot be given to a different record.  This setting cannot be changed after an attribute is defined.</span>
        </li>
        <li><label for="opac_display">Display in OPAC: </label>
-          [% IF ( opac_display_checked ) %]
+          [% IF attribute_type AND attribute_type.opac_display %]
             <input type="checkbox" id="opac_display" name="opac_display" checked="checked" />
           [% ELSE %]
             <input type="checkbox" id="opac_display" name="opac_display" />
@@ -117,7 +111,7 @@
             <span>Check to display this attribute on a patron's details page in the OPAC.</span>
        </li>
        <li><label for="opac_editable">Editable in OPAC: </label>
-          [% IF ( opac_editable_checked ) %]
+          [% IF attribute_type AND attribute_type.opac_editable %]
             <input type="checkbox" id="opac_editable" name="opac_editable" checked="checked" />
           [% ELSE %]
             <input type="checkbox" id="opac_editable" name="opac_editable" />
@@ -125,7 +119,7 @@
             <span>Check to allow patrons to edit this attribute from their details page in the OPAC. (Requires above, does not work with <a href="/cgi-bin/koha/admin/preferences.pl?op=search&amp;searchfield=PatronSelfRegistrationVerifyByEmail" target="_blank">PatronSelfRegistrationVerifyByEmail</a>.)</span>
        </li>
        <li><label for="staff_searchable">Searchable: </label>
-          [% IF ( staff_searchable_checked ) %]
+          [% IF attribute_type AND attribute_type.staff_searchable %]
             <input type="checkbox" id="staff_searchable" name="staff_searchable" checked="checked" />
           [% ELSE %]
             <input type="checkbox" id="staff_searchable" name="staff_searchable" />
@@ -133,7 +127,7 @@
             <span>Check to make this attribute staff_searchable in the staff patron search.</span>
        </li>
        <li><label for="display_checkout">Display in check-out: </label>
-            [% IF display_checkout_checked %]
+            [% IF attribute_type AND attribute_type.display_checkout %]
                 <input type="checkbox" id="display_checkout" name="display_checkout" checked="checked" />
 	    [% ELSE %]
 	        <input type="checkbox" id="display_checkout" name="display_checkout" />
@@ -144,7 +138,7 @@
         <li><label for="authorised_value_category">Authorized value category: </label>
             <select name="authorised_value_category" id="authorised_value_category">
                 <option value=""></option>
-                [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => authorised_value_category ) %]
+                [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => attribute_type.authorised_value_category ) %]
             </select>
             <span>Authorized value category; if one is selected, the patron record input page will only allow values 
                   to be chosen from the authorized value list.  However, an authorized value list is not 
@@ -153,13 +147,7 @@
         <li><label for="branches">Branches limitation: </label>
             <select id="branches" name="branches" multiple size="10">
                 <option value="">All branches</option>
-                [% FOREACH branch IN branches_loop %]
-                  [% IF ( branch.selected ) %]
-                    <option selected="selected" value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                  [% ELSE %]
-                    <option value="[% branch.branchcode | html %]">[% branch.branchname | html %]</option>
-                  [% END %]
-                [% END %]
+                [% PROCESS options_for_libraries libraries => Branches.all( selecteds => attribute_type.library_limits ) %]
             </select>
             <span>Select All if this attribute type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
             </span>
@@ -169,27 +157,14 @@
             <select name="category_code" id="category">
                 <option value=""></option>
                 [% FOREACH cat IN categories %]
-                    [% IF ( cat.categorycode == category_code ) %]<option value="[% cat.categorycode | html %]" selected="selected">[% cat.description | html %]</option>[% ELSE %]<option value="[% cat.categorycode | html %]">[% cat.description | html %]</option>[% END %]
+                    [% IF ( cat.categorycode == attribute_type.category_code ) %]<option value="[% cat.categorycode | html %]" selected="selected">[% cat.description |html %]</option>[% ELSE %]<option value="[% cat.categorycode | html %]">[% cat.description |html %]</option>[% END %]
                 [% END %]
             </select>
             <span>Choose one to limit this attribute to one patron type. Please leave blank if you want these attributes to be available for all types of patrons.</span>
         </li>
         <li>
             <label for="class">Class: </label>
-            <select name="class" id="class">
-                <option value=""></option>
-                [% FOREACH class IN classes_val_loop %]
-                    [% IF class.authorised_value == category_class %]
-                        <option value="[% class.authorised_value | html %]" selected="selected">
-                            [% class.lib | html %]
-                        </option>
-                    [% ELSE %]
-                        <option value="[% class.authorised_value | html %]" >
-                            [% class.lib | html %]
-                        </option>
-                    [% END %]
-                [% END %]
-            </select>
+            [% PROCESS 'av-build-dropbox.inc' name="class", category="PA_CLASS" default=attribute_type.class %]
             <span>Group attributes types with a block title (based on authorized values category 'PA_CLASS')</span>
         </li>
     </ol>
@@ -259,16 +234,17 @@
             <td>[% item.code | html %]</td>
             <td>[% item.description | html %]</td>
             <td>
-                [% IF ( item.branches && item.branches.size > 0 ) %]
+                [% SET libraries = item.library_limits %]
+                [% IF ( libraries && libraries.count > 0 ) %]
                     [% branches_str = "" %]
-                    [% FOREACH branch IN item.branches %]
+                    [% FOREACH branch IN libraries %]
                         [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
                     [% END %]
                     <span title="[% branches_str | html %]">
-                        [% IF item.branches.size > 1 %]
-                            [% item.branches.size | html %] branches limitations
+                        [% IF libraries.count > 1 %]
+                            [% libraries.count | html %] branches limitations
                         [% ELSE %]
-                            [% item.branches.size | html %] branch limitation
+                            [% libraries.count | html %] branch limitation
                         [% END %]
                     </span>
                 [% ELSE %]
@@ -276,8 +252,8 @@
                 [% END %]
             </td>
             <td class="actions">
-              <a class="btn btn-default btn-xs" href="[% item.script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
-              <a class="btn btn-default btn-xs" href="[% item.script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
+              <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+              <a class="btn btn-default btn-xs" href="[% script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
         [% END %]

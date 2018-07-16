@@ -43,6 +43,7 @@ use Koha::Cities;
 use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::Patrons;
+use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 use Koha::Patron::HouseboundRole;
 use Koha::Patron::HouseboundRoles;
@@ -867,8 +868,8 @@ sub patron_attributes_form {
     my $borrowernumber = shift;
     my $op = shift;
 
-    my @types = C4::Members::AttributeTypes::GetAttributeTypes();
-    if (scalar(@types) == 0) {
+    my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
+    if ( $attribute_types->count == 0 ) {
         $template->param(no_patron_attribute_types => 1);
         return;
     }
@@ -887,8 +888,7 @@ sub patron_attributes_form {
     my @attribute_loop = ();
     my $i = 0;
     my %items_by_class;
-    foreach my $type_code (map { $_->{code} } @types) {
-        my $attr_type = C4::Members::AttributeTypes->fetch($type_code);
+    while ( my ( $attr_type ) = $attribute_types->next ) {
         my $entry = {
             class             => $attr_type->class(),
             code              => $attr_type->code(),

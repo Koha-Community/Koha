@@ -35,6 +35,7 @@ use C4::Output;
 use C4::Members::AttributeTypes;
 use C4::Form::MessagingPreferences;
 use List::MoreUtils qw/uniq/;
+use Koha::Patron::Attribute::Types;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::Patron::Messages;
 use Koha::DateUtils;
@@ -154,8 +155,8 @@ if (C4::Context->preference('ExtendedPatronAttributes')) {
         attributes_loop => \@attributes_loop
     );
 
-    my @types = C4::Members::AttributeTypes::GetAttributeTypes();
-    if (scalar(@types) == 0) {
+    my $nb_of_attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations->count;
+    if ( $nb_of_attribute_types == 0 ) {
         $template->param(no_patron_attribute_types => 1);
     }
 }

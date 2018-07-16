@@ -233,8 +233,9 @@ sub checkpw_ldap {
         return 0;   # B2, D2
     }
     if (C4::Context->preference('ExtendedPatronAttributes') && $borrowernumber && ($config{update} ||$config{replicate})) {
-        foreach my $attribute_type ( C4::Members::AttributeTypes::GetAttributeTypes() ) {
-            my $code = $attribute_type->{code};
+        my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
+        while ( my $attribute_type = $attribute_types->next ) {
+            my $code = $attribute_type->code;
             unless (exists($borrower{$code}) && $borrower{$code} !~ m/^\s*$/ ) {
                 next;
             }
@@ -375,8 +376,9 @@ sub update_local {
     # skip extended patron attributes in 'borrowers' attribute update
     my @keys = keys %$borrower;
     if (C4::Context->preference('ExtendedPatronAttributes')) {
-        foreach my $attribute_type ( C4::Members::AttributeTypes::GetAttributeTypes() ) {
-           my $code = $attribute_type->{code};
+        my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
+        while ( my $attribute_type = $attribute_types->next ) {
+           my $code = $attribute_type->code;
            @keys = grep { $_ ne $code } @keys;
            $debug and printf STDERR "ignoring extended patron attribute '%s' in update_local()\n", $code;
         }

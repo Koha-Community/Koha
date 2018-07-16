@@ -329,6 +329,8 @@ subtest 'search_with_library_limits() tests' => sub {
         4, '4 attribute types are available with no library passed'
     );
 
+    # TODO test if filter_by_branch_limitations restriced on logged-in-user's branch
+
     $schema->storage->txn_rollback;
 };
 

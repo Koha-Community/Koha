@@ -22,7 +22,8 @@ use warnings;
 
 use Text::CSV;      # Don't be tempted to use Text::CSV::Unicode -- even in binary mode it fails.
 use C4::Context;
-use C4::Members::AttributeTypes;
+
+use Koha::Patron::Attribute::Types;
 
 use vars qw(@ISA @EXPORT_OK @EXPORT %EXPORT_TAGS);
 our ($csv, $AttributeTypes);
@@ -110,7 +111,7 @@ The third option specifies whether repeatable codes are clobbered or collected. 
 
 Returns one reference to (merged) array of hashref.
 
-Caches results of C4::Members::AttributeTypes::GetAttributeTypes_hashref(1) for efficiency.
+Caches results of attribute types for efficiency. # FIXME That is very bad and can cause side-effects undef plack
 
 =cut
 
@@ -118,7 +119,7 @@ sub extended_attributes_merge {
     my $old = shift or return;
     my $new = shift or return $old;
     my $keep = @_ ? shift : 0;
-    $AttributeTypes or $AttributeTypes = C4::Members::AttributeTypes::GetAttributeTypes_hashref(1);
+    $AttributeTypes or $AttributeTypes = Koha::Patron::Attribute::Types->search->unblessed;
     my @merged = @$old;
     foreach my $att (@$new) {
         unless ($att->{code}) {

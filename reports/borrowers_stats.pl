@@ -28,11 +28,11 @@ use C4::Acquisition;
 use C4::Output;
 use C4::Reports;
 use C4::Circulation;
-use C4::Members::AttributeTypes;
 
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Libraries;
+use Koha::Patron::Attribute::Types;
 use Koha::Patron::Categories;
 
 use Date::Calc qw(
@@ -157,16 +157,15 @@ sub calculate {
 
     # check parameters
     my @valid_names = qw(categorycode zipcode branchcode sex sort1 sort2);
-    my @attribute_types = C4::Members::AttributeTypes::GetAttributeTypes;
     if ($line =~ /^patron_attr\.(.*)/) {
         my $attribute_type = $1;
-        return unless (grep {$attribute_type eq $_->{code}} @attribute_types);
+        return unless Koha::Patron::Attribute::Types->find($attribute_type);
     } else {
         return unless (grep { $_ eq $line } @valid_names);
     }
     if ($column =~ /^patron_attr\.(.*)/) {
         my $attribute_type = $1;
-        return unless (grep {$attribute_type eq $_->{code}} @attribute_types);
+        return unless Koha::Patron::Attribute::Types->find($attribute_type);
     } else {
         return unless (grep { $_ eq $column } @valid_names);
     }
@@ -496,11 +495,11 @@ sub parse_extended_patron_attributes {
 sub patron_attributes_form {
     my $template = shift;
 
-    my @types = C4::Members::AttributeTypes::GetAttributeTypes();
+    my $attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
 
     my %items_by_class;
-    foreach my $type (@types) {
-        my $attr_type = C4::Members::AttributeTypes->fetch($type->{code});
+    while ( my $attr_type = $attribute_types->next ) {
+        # TODO The following can be simplified easily
         my $entry = {
             class             => $attr_type->class(),
             code              => $attr_type->code(),

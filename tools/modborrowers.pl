@@ -31,7 +31,6 @@ use C4::Auth;
 use C4::Koha;
 use C4::Members;
 use C4::Members::Attributes;
-use C4::Members::AttributeTypes qw/GetAttributeTypes_hashref/;
 use C4::Output;
 use List::MoreUtils qw /any uniq/;
 use Koha::DateUtils qw( dt_from_string );
@@ -115,31 +114,30 @@ if ( $op eq 'show' ) {
     # Construct the patron attributes list
     my @patron_attributes_values;
     my @patron_attributes_codes;
-    my $patron_attribute_types = C4::Members::AttributeTypes::GetAttributeTypes_hashref('all');
+    my $patron_attribute_types = Koha::Patron::Attribute::Types->filter_by_branch_limitations;
     my @patron_categories = Koha::Patron::Categories->search_limited({}, {order_by => ['description']});
-    for ( values %$patron_attribute_types ) {
-        my $attr_type = C4::Members::AttributeTypes->fetch( $_->{code} );
+    while ( my $attr_type = $patron_attribute_types->next ) {
         # TODO Repeatable attributes are not correctly managed and can cause data lost.
         # This should be implemented.
-        next if $attr_type->{repeatable};
-        next if $attr_type->{unique_id}; # Don't display patron attributes that must be unqiue
+        next if $attr_type->repeatable;
+        next if $attr_type->unique_id; # Don't display patron attributes that must be unqiue
         my $options = $attr_type->authorised_value_category
             ? GetAuthorisedValues( $attr_type->authorised_value_category )
             : undef;
         push @patron_attributes_values,
             {
-                attribute_code => $_->{code},
+                attribute_code => $attr_type->code,
                 options        => $options,
             };
 
-        my $category_code = $_->{category_code};
+        my $category_code = $attr_type->category_code;
         my ( $category_lib ) = map {
-            ( defined $category_code and $_->categorycode eq $category_code ) ? $_->description : ()
+            ( defined $category_code and $attr_type->categorycode eq $category_code ) ? $attr_type->description : ()
         } @patron_categories;
         push @patron_attributes_codes,
             {
-                attribute_code => $_->{code},
-                attribute_lib  => $_->{description},
+                attribute_code => $attr_type->code,
+                attribute_lib  => $attr_type->description,
                 category_lib   => $category_lib,
                 type           => $attr_type->authorised_value_category ? 'select' : 'text',
             };
