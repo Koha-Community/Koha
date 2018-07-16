@@ -152,10 +152,8 @@ my $help    = 0;
 my $man     = 0;
 my $verbose = 0;
 my $doit    = 0;
-my $au;
-my $ao;
-my $min_dob;
-my $max_dob;
+my $ageunder;
+my $ageover;
 my $remove_guarantors = 0;
 my $fine_min;
 my $fine_max;
@@ -186,7 +184,6 @@ pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
 warn "v $verbose c $doit f $fromcat t $tocat";
-warn Data::Dumper::Dumper(%fields);
 exit;
 
 if ( not $fromcat && $tocat ) {    #make sure we've specified the info we need.
