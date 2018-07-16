@@ -824,25 +824,6 @@ CREATE TABLE `import_items` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table 'invoice_adjustments'
---
-
-DROP TABLE IF EXISTS invoice_adjustments;
-CREATE TABLE IF NOT EXISTS invoice_adjustments (
-    adjustment_id int(11) NOT NULL AUTO_INCREMENT, -- primary key for adjustments
-    invoiceid int(11) NOT NULL, -- foreign key to link an adjustment to an invoice
-    adjustment decimal(28,6), -- amount of adjustment
-    reason varchar(80) default NULL, -- reason for adjustment defined by authorised values in ADJ_REASON category
-    note mediumtext default NULL, -- text to explain adjustment
-    budget_id int(11) default NULL, -- optional link to budget to apply adjustment to
-    encumber_open smallint(1) NOT NULL default 1, -- whether or not to encumber the finds when invoice is still open, 1 = yes, 0 = no
-    timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- timestamp  of last adjustment to adjustment
-    PRIMARY KEY (adjustment_id),
-    CONSTRAINT invoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
-    CONSTRAINT invoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `issuingrules`
 --
 
@@ -3157,6 +3138,25 @@ CREATE TABLE aqinvoices (
   CONSTRAINT aqinvoices_fk_aqbooksellerid FOREIGN KEY (booksellerid) REFERENCES aqbooksellers (id) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT edifact_msg_fk FOREIGN KEY ( message_id ) REFERENCES edifact_messages ( id ) ON DELETE SET NULL,
   CONSTRAINT aqinvoices_fk_shipmentcost_budgetid FOREIGN KEY (shipmentcost_budgetid) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Table structure for table 'aqinvoice_adjustments'
+--
+
+DROP TABLE IF EXISTS aqinvoice_adjustments;
+CREATE TABLE IF NOT EXISTS aqinvoice_adjustments (
+    adjustment_id int(11) NOT NULL AUTO_INCREMENT, -- primary key for adjustments
+    invoiceid int(11) NOT NULL, -- foreign key to link an adjustment to an invoice
+    adjustment decimal(28,6), -- amount of adjustment
+    reason varchar(80) default NULL, -- reason for adjustment defined by authorised values in ADJ_REASON category
+    note mediumtext default NULL, -- text to explain adjustment
+    budget_id int(11) default NULL, -- optional link to budget to apply adjustment to
+    encumber_open smallint(1) NOT NULL default 1, -- whether or not to encumber the finds when invoice is still open, 1 = yes, 0 = no
+    timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- timestamp  of last adjustment to adjustment
+    PRIMARY KEY (adjustment_id),
+    CONSTRAINT aqinvoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT aqinvoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --

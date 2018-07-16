@@ -38,7 +38,7 @@ use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Currencies;
 use Koha::DateUtils;
 use Koha::Misc::Files;
-use Koha::InvoiceAdjustments;
+use Koha::Acquisition::Invoice::Adjustments;
 
 my $input = new CGI;
 my ( $template, $loggedinuser, $cookie, $flags ) = get_template_and_user(
@@ -111,7 +111,7 @@ elsif ( $op && $op eq 'delete' ) {
 }
 elsif ( $op && $op eq 'del_adj' ) {
     my $adjustment_id  = $input->param('adjustment_id');
-    my $del_adj = Koha::InvoiceAdjustments->find( $adjustment_id );
+    my $del_adj = Koha::Acquisition::Invoice::Adjustments->find( $adjustment_id );
     $del_adj->delete() if ($del_adj);
 }
 elsif ( $op && $op eq 'mod_adj' ) {
@@ -126,7 +126,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
     for( my $i=0; $i < scalar @adjustment; $i++ ){
         if( $adjustment_id[$i] eq 'new' ){
             next unless ( $adjustment[$i] || $reason[$i] );
-            my $new_adj = Koha::InvoiceAdjustment->new({
+            my $new_adj = Koha::Acquisition::Invoice::Adjustment->new({
                 invoiceid => $invoiceid,
                 adjustment => $adjustment[$i],
                 reason => $reason[$i],
@@ -137,7 +137,7 @@ elsif ( $op && $op eq 'mod_adj' ) {
             $new_adj->store();
         }
         else {
-            my $old_adj = Koha::InvoiceAdjustments->find( $adjustment_id[$i] );
+            my $old_adj = Koha::Acquisition::Invoice::Adjustments->find( $adjustment_id[$i] );
             unless ( $old_adj->adjustment == $adjustment[$i] && $old_adj->reason eq $reason[$i] && $old_adj->budget_id == $budget_id[$i] && $old_adj->encumber_open == $e_open{$adjustment_id[$i]} && $old_adj->note eq $note[$i] ){
                 $old_adj->timestamp(undef);
                 $old_adj->adjustment( $adjustment[$i] );
@@ -201,7 +201,7 @@ foreach my $budget (@$budgets) {
     push @budgets_loop, \%line;
 }
 
-my $adjustments = Koha::InvoiceAdjustments->search({ invoiceid => $details->{'invoiceid'} });
+my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({ invoiceid => $details->{'invoiceid'} });
 if ( $adjustments ) { $template->param( adjustments => $adjustments ); }
 
 $template->param(

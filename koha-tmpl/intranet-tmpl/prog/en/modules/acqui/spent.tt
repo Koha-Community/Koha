@@ -77,7 +77,7 @@
     [% END %]
 
     <tfoot>
-        [% IF shipmentcosts.size || ( adjustments.count > 0 ) %]
+        [% IF shipmentcosts.size || ( adjustments && adjustments.count > 0 ) %]
             <tr valign="top">
                 <td colspan="9"> Sub total </td>
                 <td class="data"> [% subtotal %] </td>
@@ -92,7 +92,7 @@
                 </tr>
             [% END %]
         [% END %]
-        [% IF ( adjustments.count > 0 ) %]
+        [% IF ( adjustments && adjustments.count > 0 ) %]
             [% FOREACH adjustment IN adjustments %]
                 <tr>
                     <td></td>

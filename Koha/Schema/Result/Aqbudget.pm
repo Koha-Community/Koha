@@ -212,6 +212,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 aqinvoice_adjustments
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::AqinvoiceAdjustment>
+
+=cut
+
+__PACKAGE__->has_many(
+  "aqinvoice_adjustments",
+  "Koha::Schema::Result::AqinvoiceAdjustment",
+  { "foreign.budget_id" => "self.budget_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 aqinvoices
 
 Type: has_many
@@ -283,8 +298,8 @@ Composing rels: L</aqbudgetborrowers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9MY8aD6YBjuLy8c7tDnZeg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-16 13:50:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zB7ox8a4KdDGq5fsbQfLGQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -92,7 +92,7 @@
           <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
               <fieldset class="rows">
                   <input type="hidden" name="invoiceid" value="[% invoiceid %]" />
-                  [% IF (adjustments.count > 0) %]
+                  [% IF (adjustments && adjustments.count > 0) %]
                       <table id="invoice_adj_table">
                           <tr>
                              <th>Id</th>

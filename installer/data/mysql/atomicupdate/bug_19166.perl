@@ -1,7 +1,7 @@
 $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "
-        CREATE TABLE IF NOT EXISTS invoice_adjustments (
+        CREATE TABLE IF NOT EXISTS aqinvoice_adjustments (
             adjustment_id int(11) NOT NULL AUTO_INCREMENT,
             invoiceid int(11) NOT NULL,
             adjustment decimal(28,6),
@@ -11,8 +11,8 @@ if( CheckVersion( $DBversion ) ) {
             encumber_open smallint(1) NOT NULL default 1,
             timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
             PRIMARY KEY (adjustment_id),
-            CONSTRAINT invoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
-            CONSTRAINT invoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
+            CONSTRAINT aqinvoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT aqinvoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
         " );
     $dbh->do("INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('ADJ_REASON')");

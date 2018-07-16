@@ -32,7 +32,7 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
-use Koha::InvoiceAdjustments;
+use Koha::Acquisition::Invoice::Adjustments;
 
 my $dbh     = C4::Context->dbh;
 my $input   = new CGI;
@@ -97,7 +97,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
     }
 }
 
-my $adjustments = Koha::InvoiceAdjustments->search({budget_id => $fund_id, closedate => undef, encumber_open => 1 }, { join => 'invoiceid' } );
+my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $fund_id, closedate => undef, encumber_open => 1 }, { join => 'invoiceid' } );
 while ( my $adj = $adjustments->next ){
     $total += $adj->adjustment;
 }

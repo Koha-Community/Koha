@@ -821,7 +821,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
     is( $ordered, 0, "New budget, no orders/invoices, should be nothing ordered");
 
     my $inv_adj_1 = $builder->build({
-        source => 'InvoiceAdjustment',
+        source => 'AqinvoiceAdjustment',
         value  => {
             invoiceid     => $invoice->{invoiceid},
             adjustment    => 3,
@@ -836,7 +836,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
     is( $ordered, 0, "After adding invoice adjustment on open invoice not encumbered, should be nothing ordered");
 
     my $inv_adj_2 = $builder->build({
-        source => 'InvoiceAdjustment',
+        source => 'AqinvoiceAdjustment',
         value  => {
             invoiceid     => $invoice->{invoiceid},
             adjustment    => 3,
@@ -857,7 +857,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
         }
     });
     my $inv_adj_3 = $builder->build({
-        source => 'InvoiceAdjustment',
+        source => 'AqinvoiceAdjustment',
         value  => {
             invoiceid     => $invoice_2->{invoiceid},
             adjustment    => 3,
@@ -866,7 +866,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
         }
     });
     my $inv_adj_4 = $builder->build({
-        source => 'InvoiceAdjustment',
+        source => 'AqinvoiceAdjustment',
         value  => {
             invoiceid     => $invoice_2->{invoiceid},
             adjustment    => 3,
@@ -887,7 +887,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
         }
     });
     my $inv_adj_5 = $builder->build({
-        source => 'InvoiceAdjustment',
+        source => 'AqinvoiceAdjustment',
         value  => {
             invoiceid     => $invoice->{invoiceid},
             adjustment    => 3,
@@ -896,7 +896,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
         }
     });
     my $inv_adj_6 = $builder->build({
-        source => 'InvoiceAdjustment',
+        source => 'AqinvoiceAdjustment',
         value  => {
             invoiceid     => $invoice_2->{invoiceid},
             adjustment    => 3,
