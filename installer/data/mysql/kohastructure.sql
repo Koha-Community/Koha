@@ -1726,7 +1726,8 @@ CREATE TABLE `opac_news` ( -- data from the news tool
   `title` varchar(250) NOT NULL default '', -- title of the news article
   `content` MEDIUMTEXT NOT NULL, -- the body of your news article
   `lang` varchar(50) NOT NULL default '', -- location for the article (koha is the staff interface, slip is the circulation receipt and language codes are for the opac)
-  `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP, -- pulibcation date and time
+  `publicationdate` date DEFAULT NULL, -- publication date
+  `updated_on` timestamp NOT NULL default CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- last modification
   `expirationdate` date default NULL, -- date the article is set to expire or no longer be visible
   `number` int(11) default NULL, -- the order in which this article appears in that specific location
   `borrowernumber` int(11) default NULL, -- The user who created the news article
