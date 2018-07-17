@@ -519,7 +519,7 @@ sub DelEmptyFields {
 sub FilterUnchangedAttributes {
     my ( $borrowernumber, $entered_attributes ) = @_;
 
-    my @patron_attributes = grep {$_->opac_editable} Koha::Patron::Attributes->search({ borrowernumber => $borrowernumber })->as_list;
+    my @patron_attributes = grep {$_->type->opac_editable ? $_ : ()} Koha::Patron::Attributes->search({ borrowernumber => $borrowernumber })->as_list;
 
     my $patron_attribute_types;
     foreach my $attr (@patron_attributes) {
@@ -582,7 +582,7 @@ sub GeneratePatronAttributesForm {
         return [];
     }
 
-    my @displayable_attributes = grep { $_->opac_display }
+    my @displayable_attributes = grep { $_->type->opac_display ? $_ : () }
         Koha::Patron::Attributes->search({ borrowernumber => $borrowernumber })->as_list;
 
     my %attr_values = ();
@@ -595,14 +595,14 @@ sub GeneratePatronAttributesForm {
         }
     }
     elsif ( defined $borrowernumber ) {
-        my @editable_attributes = grep { $_->opac_editable } @displayable_attributes;
+        my @editable_attributes = grep { $_->type->opac_editable ? $_ : () } @displayable_attributes;
         foreach my $attr (@editable_attributes) {
             push @{ $attr_values{ $attr->code } }, $attr->attribute;
         }
     }
 
     # Add the non-editable attributes (that don't come from the form)
-    foreach my $attr ( grep { !$_->opac_editable } @displayable_attributes ) {
+    foreach my $attr ( grep { !$_->type->opac_editable } @displayable_attributes ) {
         push @{ $attr_values{ $attr->code } }, $attr->attribute;
     }
 

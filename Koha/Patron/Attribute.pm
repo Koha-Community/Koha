@@ -52,34 +52,6 @@ sub store {
     return $self->SUPER::store();
 }
 
-=head3 opac_display
-
-    my $attribute = Koha::Patron::Attribute->new({ code => 'a_code', ... });
-    if ( $attribute->opac_display ) { ... }
-
-=cut
-
-sub opac_display {
-
-    my $self = shift;
-
-    return Koha::Patron::Attribute::Types->find( $self->code )->opac_display;
-}
-
-=head3 opac_editable
-
-    my $attribute = Koha::Patron::Attribute->new({ code => 'a_code', ... });
-    if ( $attribute->is_opac_editable ) { ... }
-
-=cut
-
-sub opac_editable {
-
-    my $self = shift;
-
-    return Koha::Patron::Attribute::Types->find( $self->code )->opac_editable;
-}
-
 =head3 type
 
     my $attribute_type = $attribute->type;
