@@ -31,7 +31,7 @@ our ($csv, $AttributeTypes);
 BEGIN {
     @ISA = qw(Exporter);
     @EXPORT_OK = qw(
-                    extended_attributes_code_value_arrayref extended_attributes_merge
+                    extended_attributes_code_value_arrayref
                     );
     %EXPORT_TAGS = ( all => \@EXPORT_OK );
 }
@@ -61,6 +61,7 @@ Caches Text::CSV parser object for efficiency.
 
 sub extended_attributes_code_value_arrayref {
     my $string = shift or return;
+    use Data::Printer colored => 1; warn p $string;
     $csv or $csv = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
     my $ok   = $csv->parse($string);  # parse field again to get subfields!
     my @list = $csv->fields();
@@ -71,49 +72,6 @@ sub extended_attributes_code_value_arrayref {
         @list
     ];
     # nested map because of split
-}
-
-=head2 extended_attributes_merge
-
-  my $old_attributes = extended_attributes_code_value_arrayref("homeroom:224,grade:04,deanslist:2007,deanslist:2008,somedata:xxx");
-  my $new_attributes = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2009,extradata:foobar");
-  my $merged = extended_attributes_merge($patron_attributes, $new_attributes, 1);
-
-  # assuming deanslist is a repeatable code, value same as:
-  # $merged = extended_attributes_code_value_arrayref("homeroom:115,grade:05,deanslist:2007,deanslist:2008,deanslist:2009,extradata:foobar,somedata:xxx");
-
-Takes three arguments.  The first two are references to array of hashrefs, each like:
- [ { code => 'CODE', value => 'value' }, { code => 'CODE2', value => 'othervalue' } ... ]
-
-The third option specifies whether repeatable codes are clobbered or collected.  True for non-clobber.
-
-Returns one reference to (merged) array of hashref.
-
-Caches results of attribute types for efficiency. # FIXME That is very bad and can cause side-effects undef plack
-
-=cut
-
-sub extended_attributes_merge {
-    my $old = shift or return;
-    my $new = shift or return $old;
-    my $keep = @_ ? shift : 0;
-    $AttributeTypes or $AttributeTypes = Koha::Patron::Attribute::Types->search->unblessed;
-    my @merged = @$old;
-    foreach my $att (@$new) {
-        unless ($att->{code}) {
-            warn "Cannot merge element: no 'code' defined";
-            next;
-        }
-        unless ($AttributeTypes->{$att->{code}}) {
-            warn "Cannot merge element: unrecognized code = '$att->{code}'";
-            next;
-        }
-        unless ($AttributeTypes->{$att->{code}}->{repeatable} and $keep) {
-            @merged = grep {$att->{code} ne $_->{code}} @merged;    # filter out any existing attributes of the same code
-        }
-        push @merged, $att;
-    }
-    return [( sort {&_sort_by_code($a,$b)} @merged )];
 }
 
 sub _sort_by_code {

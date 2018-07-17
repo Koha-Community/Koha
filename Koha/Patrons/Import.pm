@@ -299,7 +299,8 @@ sub import_patrons {
             if ($extended) {
                 if ($ext_preserve) {
                     my $old_attributes = $patron->extended_attributes->as_list;
-                    $patron_attributes = extended_attributes_merge( $old_attributes, $patron_attributes );
+
+                    $patron_attributes = $patron->extended_attributes->merge_with( $patron_attributes );
                 }
                 eval {
                     # We do not want to filter by branch, maybe we should?

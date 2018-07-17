@@ -87,6 +87,34 @@ sub filter_by_branch_limitations {
     return $self->search( $or, $join );
 }
 
+sub merge_with {
+    my ( $self, $new_attributes ) = @_;
+
+    my @merged = $self->as_list;
+    while ( my ( $attr ) = $new_attributes->next ) {
+        unless ( $attr->code ) {
+            warn "Cannot merge element: no 'code' defined";
+            next;
+        }
+
+        # FIXME Do we need that here or let ->store do the job?
+        unless ( $attr->type ) {
+            warn "Cannot merge element: unrecognized code = '$attr->code'";
+            next;
+        }
+        unless ( $attr->type->repeatable ) {
+            # filter out any existing attributes of the same code
+            @merged = grep {$attr->code ne $_->code} @merged;
+        }
+
+        push @merged, $attr;
+    }
+
+    # WARNING - we would like to return a set, but $new_attributes is not in storage yet
+    # Maybe there is something obvious I (JD) am missing
+    return [ sort { $a->{code} cmp $b->{code} || $a->{attribute} cmp $b->{attribute} } @merged ];
+}
+
 =head3 _type
 
 =cut
