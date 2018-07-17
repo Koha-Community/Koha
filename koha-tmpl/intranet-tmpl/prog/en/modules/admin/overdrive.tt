@@ -1,0 +1,65 @@
+[% USE Asset %]
+[% USE Branches %]
+[% USE HtmlTags %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Library OverDrive Info &rsaquo;</title>
+[% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/datatables.css") %]
+</head>
+
+<body id="admin_overdrive" class="admin">
+[% INCLUDE 'header.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/overdrive.pl">Library OverDrive Info</a> &rsaquo;
+</div>
+
+<div id="doc3" class="yui-t2">
+
+<div id="bd">
+    <div id="yui-main">
+    <div class="yui-b">
+
+<form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
+    <input type="hidden" name="op" value="update" />
+    <fieldset class="rows">
+        <legend>
+            OverDrive
+        </legend>
+        <table id="od_info">
+            <thead>
+                <th>Branch</th>
+                <th>Authname</th>
+            </thead>
+            <tbody>
+                [% FOREACH b IN branches %]
+                <tr>
+                <td>
+                    [% Branches.GetName( b.branchcode ) %]
+                    <input type="hidden" name="branchcode" value="[% b.branchcode %]" />
+                </td>
+                <td>
+                    <input type="text" name="authname" value="[% b.authname %]" />
+                </td>
+                </tr>
+                [% END %]
+            </tbody>
+        </table>
+        <input type="submit" value="Submit">
+</form>
+
+</div>
+</div>
+<div class="yui-b">
+[% INCLUDE 'admin-menu.inc' %]
+</div>
+</div>
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script type="text/javascript">
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]
