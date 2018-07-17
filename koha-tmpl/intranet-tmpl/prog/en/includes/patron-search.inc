@@ -156,14 +156,3 @@
 </div><!-- /header_search -->
 </div><!-- /gradient -->
 <!-- End Patrons Resident Search Box -->
-
-<script type="text/javascript">
-    var advsearch = "[% advsearch %]";
-    var destination = "[% destination %]";
-    var catcode = "[% catcode %]";
-    var dateformat = "[% Koha.Preference('dateformat') %]";
-    var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers %]";
-    var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
-    var CATCODE_MULTI = "[% CATCODE_MULTI %]";
-    var borrowernumber = "[% patron.borrowernumber %]";
-</script>

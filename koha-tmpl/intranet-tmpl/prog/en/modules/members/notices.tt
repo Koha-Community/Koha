@@ -93,16 +93,6 @@
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
 
-        /* Set some variables needed in members-menu.js */
-        var borrowernumber = "[% patron.borrowernumber %]";
-        var advsearch = "[% advsearch %]";
-        var dateformat = "[% dateformat %]";
-        var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
-        var CATCODE_MULTI = "[% CATCODE_MULTI %]";
-        var catcode = "[% catcode %]";
-        var destination = "[% destination %]";
-        var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers %]";
-
         $(document).ready(function() {
             $("#noticestable").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aaSorting": [[ 3, "desc" ]],
@@ -126,6 +116,7 @@
             });
         });
     </script>
+    [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") %]
 [% END %]
 

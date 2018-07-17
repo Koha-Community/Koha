@@ -142,6 +142,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") %]
+    [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
         $(document).ready(function() {

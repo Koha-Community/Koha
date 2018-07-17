@@ -74,12 +74,6 @@ if ( $borrowernumber eq C4::Context->preference('AnonymousPatron') ){
     }
 }
 
-if ( $patron->is_child) {
-    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
-    $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
-    $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
-}
-
 $template->param(
     holdshistoryview => 1,
     patron           => $patron,

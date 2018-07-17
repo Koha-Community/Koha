@@ -53,18 +53,16 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $borrowernumber = $input->param('borrowernumber');
 my $catcode        = $input->param('catcode');
 my $cattype        = $input->param('cattype');
-my $catcode_multi = $input->param('catcode_multi');
 my $op             = $input->param('op');
 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 
+my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
 if ( $op eq 'multi' ) {
     # FIXME - what are the possible upgrade paths?  C -> A , C -> S ...
     #   currently just allowing C -> A
-    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
     $template->param(
         MULTI             => 1,
-        CATCODE_MULTI     => 1,
         borrowernumber    => $borrowernumber,
         patron_categories => $patron_categories,
     );
@@ -75,11 +73,24 @@ elsif ( $op eq 'update' ) {
     my $patron         = Koha::Patrons->find( $borrowernumber );
     output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
+    my $adult_category;
+    if ( $patron_categories->count == 1 ) {
+        $adult_category = $patron_categories->next;
+    } else {
+        $adult_category = $patron_categories->search({'me.categorycode' => $catcode })->next;
+    }
+
+    # Just in case someone is trying something bad
+    # But we should not hit that with a normal use of the interface
+    die "You are doing something wrong updating this child" unless $adult_category;
+
     $patron->guarantorid(undef);
-    $patron->categorycode($catcode);
+    $patron->categorycode($adult_category->categorycode);
     $patron->store;
 
-    if (  $catcode_multi ) {
+    # FIXME We should not need that
+    # We could redirect with a friendly message
+    if ( $patron_categories->count > 1 ) {
         $template->param(
                 SUCCESS        => 1,
                 borrowernumber => $borrowernumber,

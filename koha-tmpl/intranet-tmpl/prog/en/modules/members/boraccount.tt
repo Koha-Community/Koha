@@ -116,9 +116,9 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
+    [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") %]
     <script type="text/javascript">
-        var dateformat = "[% Koha.Preference('dateformat') %]";
         $(document).ready(function() {
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");

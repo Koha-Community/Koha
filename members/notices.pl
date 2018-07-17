@@ -51,12 +51,6 @@ my ($template, $loggedinuser, $cookie)= get_template_and_user({template_name => 
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-if ( $patron->is_child ) {
-    my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});
-    $template->param( 'CATCODE_MULTI' => 1) if $patron_categories->count > 1;
-    $template->param( 'catcode' => $patron_categories->next->categorycode )  if $patron_categories->count == 1;
-}
-
 # Allow resending of messages in Notices tab
 my $op = $input->param('op') || q{};
 if ( $op eq 'resend_notice' ) {

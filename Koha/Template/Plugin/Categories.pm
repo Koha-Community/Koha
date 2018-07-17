@@ -23,7 +23,8 @@ use base qw( Template::Plugin );
 use Koha::Patron::Categories;
 
 sub all {
-    return Koha::Patron::Categories->search_limited;
+    my ( $self, $params ) = @_;
+    return Koha::Patron::Categories->search_limited($params);
 }
 
 sub GetName {

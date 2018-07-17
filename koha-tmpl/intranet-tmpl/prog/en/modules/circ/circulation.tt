@@ -1003,15 +1003,6 @@ No patron matched <span class="ex">[% message | html %]</span>
         var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
         var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
 
-        /* Set some variables needed in members-menu.js */
-        var advsearch = "[% advsearch %]";
-        var dateformat = "[% dateformat %]";
-        var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
-        var CATCODE_MULTI = "[% CATCODE_MULTI %]";
-        var catcode = "[% catcode %]";
-        var destination = "[% destination %]";
-        var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers %]";
-
         columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) %]
 
         [% IF borrowernumber and patron %]
@@ -1104,6 +1095,7 @@ No patron matched <span class="ex">[% message | html %]</span>
             [% END %]
         });
     </script>
+    [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") %]
 [% END %]
 

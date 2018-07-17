@@ -38,9 +38,7 @@
                 </table>
                 <input type="hidden" name="op" value="update" />
                 <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
-                <input type="hidden" name="catcode" value="[% catcode %]" />
                 <input type="hidden" name="cattype" value="[% cattype %]" />
-                <input type="hidden" name="catcode_multi" value="[% CATCODE_MULTI %]" />
                 <fieldset class="action">
                     <input class="submit" type="submit" value="Submit" />
                     <a href="#" class="cancel close">Cancel</a>
@@ -55,16 +53,6 @@
     [% INCLUDE 'datatables.inc' %]
     <script type="text/javascript">
 
-        /* Set some variables needed in members-menu.js */
-        var advsearch = "[% advsearch %]";
-        var dateformat = "[% dateformat %]";
-        var CAN_user_borrowers = "[% CAN_user_borrowers %]";
-        var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers %]";
-        var NorwegianPatronDBEnable = "[% NorwegianPatronDBEnable %]";
-        var CATCODE_MULTI = "[% CATCODE_MULTI %]";
-        var catcode = "[% catcode %]";
-        var destination = "[% destination %]";
-
         $(document).ready(function() {
             $("#catst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sDom": 't',
@@ -76,24 +64,13 @@
             }));
         });
     </script>
-    [% IF ( CONFIRM ) %]
-        <script type="text/javascript">
-            function confirm_updatechild() {
-                var is_confirmed = window.confirm('Are you sure you want to update this child to an Adult category?  This cannot be undone.');
-                if (is_confirmed) {
-                        window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=[% borrowernumber %]&catcode=[% catcode %]&catcode_multi=[% CATCODE_MULTI %]';
-                }
-            }
-
-            confirm_updatechild([% borrowernumber %]);
-        </script>
-    [% END %]
     [% IF ( SUCCESS ) %]
         <script type="text/javascript">
             self.opener.location.href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber %]';
             window.close();
         </script>
     [% END %]
+    [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") %]
 [% END %]
 

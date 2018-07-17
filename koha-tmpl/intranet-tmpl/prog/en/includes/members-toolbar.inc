@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE Borrowers %]
 [% USE Branches %]
+[% USE Categories %]
 [% USE AuthorisedValues %]
 [% SET NorwegianPatronDBEnable = Koha.Preference( 'NorwegianPatronDBEnable' ) %]
 <div id="toolbar" class="btn-toolbar">
@@ -81,10 +82,12 @@
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
                 [% END %]
-                [% IF ( patron.is_child ) %]
-                    <li><a id="updatechild" href="#">Update child to adult patron</a></li>
-                [% ELSE %]
-                    <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li>
+                [% IF Categories.scalar.all(category_type => 'A').count > 0 %]
+                    [% IF patron.is_child %]
+                        <li><a id="updatechild" href="#">Update child to adult patron</a></li>
+                    [% ELSE %]
+                        <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="Patron is an adult" id="updatechild" href="#">Update child to adult patron</a></li>
+                    [% END %]
                 [% END %]
                 [% IF Koha.Preference('intranetreadinghistory') %]
                     [%IF ( privacy == 2 ) %]

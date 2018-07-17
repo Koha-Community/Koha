@@ -1,4 +1,4 @@
-/* global borrowernumber advsearch dateformat _ CAN_user_borrowers_edit_borrowers NorwegianPatronDBEnable CATCODE_MULTI catcode destination */
+/* global borrowernumber advsearch dateformat _ CAN_user_borrowers_edit_borrowers NorwegianPatronDBEnable number_of_adult_categories destination */
 
 $(document).ready(function(){
     $("#filteraction_off, #filteraction_on").on('click', function(e) {
@@ -123,12 +123,12 @@ function confirm_both_deletion() {
 function confirm_updatechild() {
     var is_confirmed = window.confirm(_("Are you sure you want to update this child to an Adult category?  This cannot be undone."));
     if (is_confirmed) {
-        window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=' + borrowernumber + '&catcode=' + catcode + '&catcode_multi=' + CATCODE_MULTI;
+        window.location='/cgi-bin/koha/members/update-child.pl?op=update&borrowernumber=' + borrowernumber;
     }
 }
 
 function update_child() {
-    if( CATCODE_MULTI ){
+    if( number_of_adult_categories > 1 ){
         window.open('/cgi-bin/koha/members/update-child.pl?op=multi&borrowernumber=' + borrowernumber,'UpdateChild','width=400,height=300,toolbar=no,scrollbars=yes,resizable=yes');
     } else {
         confirm_updatechild();
