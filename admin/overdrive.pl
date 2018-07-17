@@ -30,7 +30,6 @@ my $input         = CGI->new;
 my @branchcodes   = $input->multi_param('branchcode');
 my @authnames     = $input->multi_param('authname');
 my $op            = $input->param('op');
-my @messages;
 
 our ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => 'admin/overdrive.tt',

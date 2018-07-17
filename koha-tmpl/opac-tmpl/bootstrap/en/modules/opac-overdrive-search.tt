@@ -64,6 +64,7 @@
 [% Asset.js("js/overdrive.js") | $raw %]
 [% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %]
 <script>
+var OD_password_required = [% IF Koha.Preference('OverDrivePasswordRequired') %]1[% ELSE %]0[% END %];
 var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) | html %]";
 var results_per_page = [% OPACnumSearchResults | html %];
 
@@ -188,7 +189,7 @@ $( document ).ready( function() {
     [% IF ( overdrive_error ) %]
     KOHA.OverDriveCirculation.display_error("#breadcrumbs", "[% overdrive_error.dquote | html %]");
     [% END %]
-    [% IF ( loggedinusername and OverDriveCirculation ) %]
+    [% IF ( loggedinusername and Koha.Preference('OverDriveCirculation') ) %]
     KOHA.OverDriveCirculation.with_account_details("#breadcrumbs", function() {
         search( 0 );
     });

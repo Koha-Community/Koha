@@ -1058,6 +1058,7 @@
     [% IF Koha.Preference('OverDriveCirculation') %]
     [% Asset.js("js/overdrive.js") | $raw %]
     <script>
+    var OD_password_required = [% IF Koha.Preference('OverDrivePasswordRequired') %]1[% ELSE %]0[% END %];
     $(document).ready(function() {
         [% IF ( overdrive_error ) %]
             KOHA.OverDriveCirculation.display_error("#opac-user-overdrive", "[% overdrive_error.dquote | html %]");

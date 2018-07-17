@@ -24,6 +24,8 @@ use JSON qw(encode_json);
 use C4::Auth qw(checkauth);
 use C4::Output;
 use Koha::Logger;
+use Koha::Patrons;
+use Koha::Library::OverDriveInfos;
 use Koha::ExternalContent::OverDrive;
 
 my $logger = Koha::Logger->get({ interface => 'opac' });
@@ -43,7 +45,13 @@ local $@;
 eval {
         {
             $action eq 'login' && do {
-                $data{login_url} = $od->auth_url($page_url);
+                my $password = $cgi->param("password") // q{} ;
+                my $patron = Koha::Patrons->find({ userid => $user });
+                my $branch_info = Koha::Library::OverDriveInfos->find( $patron->branchcode ) if $patron;
+                my $branch_authname = $branch_info->authname if $branch_info;
+                my $authname = $branch_authname || C4::Context->preference('OverDriveAuthname');
+                $od->auth_by_userid($user, $password,C4::Context->preference('OverDriveWebsiteID'),$authname);
+                $data{login_success} = 1;
                 last;
             };
 
