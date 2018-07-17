@@ -42,7 +42,7 @@ my $expirationdate;
 if ( $cgi->param('expirationdate') ) {
     $expirationdate = output_pref({ dt => dt_from_string( scalar $cgi->param('expirationdate') ), dateformat => 'iso', dateonly => 1 });
 }
-my $timestamp      = output_pref({ dt => dt_from_string( scalar $cgi->param('timestamp') ), dateformat => 'iso', dateonly => 1 });
+my $publicationdate= output_pref({ dt => dt_from_string( scalar $cgi->param('publicationdate') ), dateformat => 'iso', dateonly => 1 });
 my $number         = $cgi->param('number');
 my $lang           = $cgi->param('lang');
 my $branchcode     = $cgi->param('branch');
@@ -109,7 +109,7 @@ elsif ( $op eq 'add' ) {
                 content        => $content,
                 lang           => $lang,
                 expirationdate => $expirationdate,
-                timestamp      => $timestamp,
+                publicationdate=> $publicationdate,
                 number         => $number,
                 branchcode     => $branchcode,
                 borrowernumber => $borrowernumber,
@@ -129,7 +129,7 @@ elsif ( $op eq 'edit' ) {
             content        => $content,
             lang           => $lang,
             expirationdate => $expirationdate,
-            timestamp      => $timestamp,
+            publicationdate=> $publicationdate,
             number         => $number,
             branchcode     => $branchcode,
         }
