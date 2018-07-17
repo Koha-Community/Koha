@@ -272,6 +272,18 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
+-- Table structure for table `branches_overdrive`
+--
+
+DROP TABLE IF EXISTS `branches_overdrive`;
+CREATE TABLE IF NOT EXISTS branches_overdrive (
+  `branchcode` VARCHAR( 10 ) NOT NULL ,
+  `authname` VARCHAR( 255 ) NOT NULL ,
+  PRIMARY KEY (`branchcode`) ,
+  CONSTRAINT `branches_overdrive_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE = InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
 -- Table structure for table `browser`
 --
 DROP TABLE IF EXISTS `browser`;

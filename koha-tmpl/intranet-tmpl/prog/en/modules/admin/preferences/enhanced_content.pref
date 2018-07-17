@@ -351,6 +351,14 @@ Enhanced Content:
             - pref: OverDriveClientSecret
             - .
         -
+            - "Authenticate using OverDrive website id #"
+            - pref: OverDriveWebsiteID
+            - .
+        -
+            - "Authenticate using OverDrive Authname"
+            - pref: OverDriveAuthName
+            - "(will be used as fallback if individual branch authname not set <a href=\"/cgi-bin/koha/admin/overdrive.pl\">here</a>)."
+        -
             - "Show items from the OverDrive catalog of library #"
             - pref: OverDriveLibraryID
             - .
@@ -359,10 +367,15 @@ Enhanced Content:
               choices:
                   yes: Enable
                   no: "Don't enable"
-            - users to access their OverDrive circulation history, and circulate items.
-            - If you enable access, you must register auth return url of
-            - http(s)://my.opac.hostname/cgi-bin/koha/external/overdrive/auth.pl
-            - with OverDrive.
+            - users to access their OverDrive circulation history, and circulate items.<br />
+            - A password is
+            - pref: OverDrivePasswordRequired
+              choices:
+                  yes: Required
+                  no: Not required
+            - for user access to OverDrive. <br />
+            - If you enable access you must have a SIP connection registered with
+            - OverDrive for patron authentication against Koha
     RecordedBooks:
         -
             - Include RecordedBooks availability information with the client secret
