@@ -51,7 +51,7 @@ subtest 'test_methods' => sub {
                    'set_attribute_types',
                    'prepare_columns',
                    'set_column_keys',
-                   'set_patron_attributes',
+                   'generate_patron_attributes',
                    'check_branch_code',
                    'format_dates',
                   );
@@ -217,6 +217,7 @@ my $params_4 = { file => $handle_4, matchpoint => $attribute->{code}, };
 
 # When ...
 my $result_4 = $patrons_import->import_patrons($params_4);
+use Data::Printer colored => 1; warn p $result_4;
 
 # Then ...
 is($result_4->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons with extended user');
@@ -528,19 +529,19 @@ subtest 'test_set_column_keys' => sub {
     is(scalar @columnkeys_1, @columns - 1 + $extended, 'Got the expected array size from set column keys with extended');
 };
 
-subtest 'test_set_patron_attributes' => sub {
+subtest 'test_generate_patron_attributes' => sub {
     plan tests => 13;
 
     # Given ... nothing at all
     # When ... Then ...
-    my $result_0 = $patrons_import->set_patron_attributes(undef, undef, undef);
+    my $result_0 = $patrons_import->generate_patron_attributes(undef, undef, undef);
     is($result_0, undef, 'Got the expected undef from set patron attributes with nothing');
 
     # Given ... not extended.
     my $extended_1 = 0;
 
     # When ... Then ...
-    my $result_1 = $patrons_import->set_patron_attributes($extended_1, undef, undef);
+    my $result_1 = $patrons_import->generate_patron_attributes($extended_1, undef, undef);
     is($result_1, undef, 'Got the expected undef from set patron attributes with not extended');
 
     # Given ... NO patrons attributes
@@ -549,7 +550,7 @@ subtest 'test_set_patron_attributes' => sub {
     my @feedback_2;
 
     # When ...
-    my $result_2 = $patrons_import->set_patron_attributes($extended_2, $patron_attributes_2, \@feedback_2);
+    my $result_2 = $patrons_import->generate_patron_attributes($extended_2, $patron_attributes_2, \@feedback_2);
 
     # Then ...
     is($result_2, undef, 'Got the expected undef from set patron attributes with no patrons attributes');
@@ -560,7 +561,7 @@ subtest 'test_set_patron_attributes' => sub {
     my @feedback_3;
 
     # When ...
-    my $result_3 = $patrons_import->set_patron_attributes($extended_2, $patron_attributes_3, \@feedback_3);
+    my $result_3 = $patrons_import->generate_patron_attributes($extended_2, $patron_attributes_3, \@feedback_3);
 
     # Then ...
     ok($result_3, 'Got some data back from set patron attributes');

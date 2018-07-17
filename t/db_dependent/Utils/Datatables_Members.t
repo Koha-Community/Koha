@@ -22,8 +22,6 @@ use Test::More tests => 51;
 use C4::Context;
 use C4::Members;
 
-use C4::Members::Attributes;
-
 use Koha::Library;
 use Koha::Patrons;
 use Koha::Patron::Categories;

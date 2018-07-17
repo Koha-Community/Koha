@@ -87,24 +87,32 @@ sub filter_by_branch_limitations {
     return $self->search( $or, $join );
 }
 
+=head3
+
+$new_attributes is an arrayref of hashrefs
+
+=cut
+
 sub merge_with {
     my ( $self, $new_attributes ) = @_;
 
     my @merged = $self->as_list;
-    while ( my ( $attr ) = $new_attributes->next ) {
-        unless ( $attr->code ) {
+    my $attribute_types = { map { $_->code => $_->unblessed } Koha::Patron::Attribute::Types->search };
+    for my $attr ( @$new_attributes ) {
+        unless ( $attr->{code} ) {
             warn "Cannot merge element: no 'code' defined";
             next;
         }
 
+        my $attribute_type = $attribute_types->{$attr->{code}};
         # FIXME Do we need that here or let ->store do the job?
-        unless ( $attr->type ) {
-            warn "Cannot merge element: unrecognized code = '$attr->code'";
+        unless ( $attribute_type ) {
+            warn "Cannot merge element: unrecognized code = '$attr->{code}'";
             next;
         }
-        unless ( $attr->type->repeatable ) {
+        unless ( $attribute_type->{repeatable} ) {
             # filter out any existing attributes of the same code
-            @merged = grep {$attr->code ne $_->code} @merged;
+            @merged = grep {$attr->{code} ne $_->code} @merged;
         }
 
         push @merged, $attr;

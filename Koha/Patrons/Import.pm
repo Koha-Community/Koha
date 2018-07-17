@@ -24,7 +24,6 @@ use Text::CSV;
 use Encode qw( decode_utf8 );
 
 use C4::Members;
-use C4::Members::Attributes qw(:all);
 
 use Koha::Libraries;
 use Koha::Patrons;
@@ -156,8 +155,8 @@ sub import_patrons {
             next LINE;
         }
 
-        # Set patron attributes if extended.
-        my $patron_attributes = $self->set_patron_attributes($extended, $borrower{patron_attributes}, \@feedback);
+        # Generate patron attributes if extended.
+        my $patron_attributes = $self->generate_patron_attributes($extended, $borrower{patron_attributes}, \@feedback);
         if( $extended ) { delete $borrower{patron_attributes}; } # Not really a field in borrowers.
 
         # Default date enrolled and date expiry if not already set.
@@ -298,8 +297,6 @@ sub import_patrons {
             }
             if ($extended) {
                 if ($ext_preserve) {
-                    my $old_attributes = $patron->extended_attributes->as_list;
-
                     $patron_attributes = $patron->extended_attributes->merge_with( $patron_attributes );
                 }
                 eval {
@@ -465,29 +462,38 @@ sub set_column_keys {
     return @columnkeys;
 }
 
-=head2 set_patron_attributes
+=head2 generate_patron_attributes
 
- my $patron_attributes = set_patron_attributes($extended, $borrower{patron_attributes}, $feedback);
+ my $patron_attributes = generate_patron_attributes($extended, $borrower{patron_attributes}, $feedback);
 
-Returns a reference to array of hashrefs data structure as expected by Koha::Patron->extended_attributes
+Returns a Koha::Patron::Attributes as expected by Koha::Patron->extended_attributes
 
 =cut
 
-sub set_patron_attributes {
-    my ($self, $extended, $patron_attributes, $feedback) = @_;
+sub generate_patron_attributes {
+    my ($self, $extended, $string, $feedback) = @_;
 
     unless( $extended ) { return; }
-    unless( defined($patron_attributes) ) { return; }
+    unless( defined $string ) { return; }
 
     # Fixup double quotes in case we are passed smart quotes
-    $patron_attributes =~ s/\xe2\x80\x9c/"/g;
-    $patron_attributes =~ s/\xe2\x80\x9d/"/g;
+    $string =~ s/\xe2\x80\x9c/"/g;
+    $string =~ s/\xe2\x80\x9d/"/g;
 
-    push (@$feedback, { feedback => 1, name => 'attribute string', value => $patron_attributes });
+    push (@$feedback, { feedback => 1, name => 'attribute string', value => $string });
+    return [] unless $string; # Unit tests want the feedback, is it really needed?
 
-    my $result = extended_attributes_code_value_arrayref($patron_attributes);
-
-    return $result;
+    my $csv = Text::CSV->new({binary => 1});  # binary needed for non-ASCII Unicode
+    my $ok   = $csv->parse($string);  # parse field again to get subfields!
+    my @list = $csv->fields();
+    my @patron_attributes =
+      sort { $a->{code} cmp $b->{code} || $a->{value} cmp $b->{value} }
+      map {
+        my @arr = split /:/, $_, 2;
+        { code => $arr[0], attribute => $arr[1] }
+      } @list;
+    return \@patron_attributes;
+    # TODO: error handling (check $ok)
 }
 
 =head2 check_branch_code
