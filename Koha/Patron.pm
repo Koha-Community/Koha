@@ -99,6 +99,12 @@ sub new {
     return $class->SUPER::new($params);
 }
 
+=head3 fixup_cardnumber
+
+Autogenerate next cardnumber from highest value found in database
+
+=cut
+
 sub fixup_cardnumber {
     my ( $self ) = @_;
     my $max = Koha::Patrons->search({
@@ -110,8 +116,13 @@ sub fixup_cardnumber {
     $self->cardnumber(($max || 0) +1);
 }
 
-# trim whitespace from data which has some non-whitespace in it.
-# Could be moved to Koha::Object if need to be reused
+=head3 trim_whitespace
+
+trim whitespace from data which has some non-whitespace in it.
+Could be moved to Koha::Object if need to be reused
+
+=cut
+
 sub trim_whitespaces {
     my( $self ) = @_;
 
@@ -128,6 +139,15 @@ sub trim_whitespaces {
     return $self;
 }
 
+=head3 plain_text_password
+
+$patron->plain_text_password( $password );
+
+stores a copy of the unencrypted password in the object
+for use in code before encrypting for db
+
+=cut
+
 sub plain_text_password {
     my ( $self, $password ) = @_;
     if ( $password ) {
@@ -139,6 +159,14 @@ sub plain_text_password {
 
     return;
 }
+
+=head3 store
+
+Patron specific store method to cleanup record
+and do other necessary things before saving
+to db
+
+=cut
 
 sub store {
     my ($self) = @_;
