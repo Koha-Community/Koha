@@ -232,7 +232,7 @@ elsif ($op eq "set-branch-defaults") {
     $holdallowed =~ s/\s//g;
     $holdallowed = undef if $holdallowed !~ /^\d+/;
     $max_holds =~ s/\s//g;
-    $max_holds = undef if $max_holds !~ /^\d+/;
+    $max_holds = '' if $max_holds !~ /^\d+/;
 
     if ($branch eq "*") {
         my $sth_search = $dbh->prepare("SELECT count(*) AS total

@@ -20,12 +20,12 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do(q{
         INSERT INTO circulation_rules ( branchcode, categorycode, itemtype, rule_name, rule_value )
-        SELECT branchcode, categorycode, NULL, 'max_holds', max_holds FROM branch_borrower_circ_rules
+        SELECT branchcode, categorycode, NULL, 'max_holds', COALESCE( max_holds, '' ) FROM branch_borrower_circ_rules
     });
 
     $dbh->do(q{
         INSERT INTO circulation_rules ( branchcode, categorycode, itemtype, rule_name, rule_value )
-        SELECT NULL, categorycode, NULL, 'max_holds', max_holds FROM branch_borrower_circ_rules
+        SELECT NULL, categorycode, NULL, 'max_holds', COALESCE( max_holds, '' ) FROM default_borrower_circ_rules
     });
 
     $dbh->do(q{

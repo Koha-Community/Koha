@@ -520,7 +520,7 @@
                         </td>
                         <td>
                             [% SET rule_value = CirculationRules.Get( branch_cat_rule_loo.branchcode, branch_cat_rule_loo.categorycode, branch_cat_rule_loo.itemtype, 'max_holds' ) %]
-                            [% IF rule_value  %]
+                            [% IF rule_value.defined && rule_value != '' %]
                                 [% rule_value %]
                             [% ELSE %]
                                 Unlimited

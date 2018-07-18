@@ -429,7 +429,7 @@ sub CanItemBeReserved {
             rule_name    => 'max_holds',
         }
     );
-    if ( $rule ) {
+    if ( $rule && defined( $rule->rule_value ) && $rule->rule_value ne '' ) {
         my $total_holds_count = Koha::Holds->search(
             {
                 borrowernumber => $borrower->{borrowernumber}
