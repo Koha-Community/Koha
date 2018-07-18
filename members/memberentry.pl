@@ -223,7 +223,8 @@ if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' )
         qr/^\d+-DAYS/,
         qr/^patron_attr_/,
         qr/^csrf_token$/,
-        qr/^add_debarment$/, qr/^debarred_expiration$/ # We already dealt with debarments previously
+        qr/^add_debarment$/, qr/^debarred_expiration$/, # We already dealt with debarments previously
+        qr/^housebound_chooser$/, qr/^housebound_deliverer$/,
     );
     for my $regexp (@keys_to_delete) {
         for (keys %newdata) {
