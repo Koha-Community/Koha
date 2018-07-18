@@ -120,7 +120,7 @@ my $hash2 = hash_password('password');
 
 { # tests no_set_userenv parameter
     my $patron = $builder->build( { source => 'Borrower' } );
-    Koha::Patrons->find( $patron->{borrowernumber} )->update_password( $patron->{userid}, $hash1 );
+    Koha::Patrons->find( $patron->{borrowernumber} )->update_password( $patron->{userid}, 'password' );
     my $library = $builder->build(
         {
             source => 'Branch',

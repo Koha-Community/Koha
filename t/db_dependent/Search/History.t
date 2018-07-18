@@ -9,7 +9,6 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Auth;
-use Koha::AuthUtils qw/hash_password/;
 use Koha::Database;
 
 use Test::More tests => 27;
@@ -369,9 +368,8 @@ my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
 # Borrower Creation
-my $hash = hash_password('password');
 our $patron = $builder->build( { source => 'Borrower' } );
-Koha::Patrons->find( $patron->{borrowernumber} )->update_password( $patron->{userid}, $hash );
+Koha::Patrons->find( $patron->{borrowernumber} )->update_password( $patron->{userid}, 'password' );
 
 my $session = C4::Auth::get_session("");
 $session->flush;

@@ -28,6 +28,7 @@ use Text::Unaccent qw( unac_string );
 
 use C4::Context;
 use C4::Log;
+use Koha::AuthUtils;
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
@@ -267,20 +268,9 @@ sub store {
                   if C4::Context->preference("BorrowersLog");
             }
             else {    #ModMember
-                # test to know if you must update or not the borrower password
-                if ( defined $self->password ) {
-                    if ( $self->password eq '****' or $self->password eq '' ) {
-                        $self->password(undef);
-                    } else {
-                        if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-                            # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
-                            Koha::NorwegianPatronDB::NLUpdateHashedPIN( $self->borrowernumber, $self->password );
-                        }
-                        $self->password(Koha::AuthUtils::hash_password($self->password));
-                    }
-                }
+                # We could add a test here to make sure the password is not update (?)
 
-                 # Come from ModMember, but should not be possible (?)
+                # Come from ModMember, but should not be possible (?)
                 $self->dateenrolled(undef) unless $self->dateenrolled;
                 $self->dateexpiry(undef)   unless $self->dateexpiry;
 
@@ -687,14 +677,24 @@ sub update_password {
     my ( $self, $userid, $password ) = @_;
     eval { $self->userid($userid)->store; };
     return if $@; # Make sure the userid is not already in used by another patron
+
+    return 0 if $password eq '****' or $password eq ''; # Do we need that?
+
+    if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+        # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
+        Koha::NorwegianPatronDB::NLUpdateHashedPIN( $self->borrowernumber, $password );
+    }
+
+    my $digest = Koha::AuthUtils::hash_password($password);
     $self->update(
         {
-            password       => $password,
+            password       => $digest,
             login_attempts => 0,
         }
     );
+
     logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
-    return 1;
+    return $digest;
 }
 
 =head3 renew_account

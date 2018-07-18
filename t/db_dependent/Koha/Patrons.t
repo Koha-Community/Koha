@@ -173,9 +173,9 @@ subtest 'update_password' => sub {
     is( Koha::Patrons->find( $new_patron_1->borrowernumber )->userid,   $original_userid,   'Koha::Patron->update_password should not have updated the userid' );
     is( Koha::Patrons->find( $new_patron_1->borrowernumber )->password, $original_password, 'Koha::Patron->update_password should not have updated the userid' );
 
-    $retrieved_patron_1->update_password( 'another_nonexistent_userid_1', 'another_password' );
+    my $digest = $retrieved_patron_1->update_password( 'another_nonexistent_userid_1', 'another_password' );
     is( Koha::Patrons->find( $new_patron_1->borrowernumber )->userid,   'another_nonexistent_userid_1', 'Koha::Patron->update_password should have updated the userid' );
-    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->password, 'another_password',             'Koha::Patron->update_password should have updated the password' );
+    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->password, $digest,             'Koha::Patron->update_password should have updated the password' );
 
     my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $new_patron_1->borrowernumber } )->count;
     is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->update_password should have logged' );
@@ -1444,7 +1444,7 @@ subtest '->store' => sub {
 
     # Test password
     my $password = 'password';
-    $patron_1->password($password)->store;
+    $patron_1->update_password($patron_1->userid, $password);
     like( $patron_1->password, qr|^\$2|, 'Password should be hashed using bcrypt (start with $2)' );
     my $digest = $patron_1->password;
     $patron_1->surname('xxx')->store;

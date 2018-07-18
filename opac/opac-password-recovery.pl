@@ -10,7 +10,6 @@ use C4::Context;
 use Koha::Patron::Password::Recovery
   qw(SendPasswordRecoveryEmail ValidateBorrowernumber GetValidLinkInfo CompletePasswordRecovery DeleteExpiredPasswordRecovery);
 use Koha::Patrons;
-use Koha::AuthUtils qw(hash_password);
 use Koha::Patrons;
 my $query = new CGI;
 use HTML::Entities;
@@ -156,7 +155,7 @@ elsif ( $query->param('passwordReset') ) {
             $error = 'password_too_weak' if $err eq 'too_weak';
             $error = 'password_has_whitespaces' if $err eq 'has_whitespaces';
         } else {
-            Koha::Patrons->find($borrower_number)->update_password( $username, hash_password($password) );
+            Koha::Patrons->find($borrower_number)->update_password( $username, $password );
             CompletePasswordRecovery($uniqueKey);
             $template->param(
                 password_reset_done => 1,

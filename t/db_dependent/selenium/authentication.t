@@ -47,9 +47,8 @@ SKIP: {
         like( $driver->get_title, qr(Log in to Koha), 'Hitting the main page should redirect to the login form');
 
         my $password = Koha::AuthUtils::generate_password();
-        my $digest = Koha::AuthUtils::hash_password( $password );
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
-        $patron->update_password( $patron->userid, $digest );
+        $patron->update_password( $patron->userid, $password );
 
         # Patron does not have permission to access staff interface
         $s->auth( $patron->userid, $password );
@@ -79,9 +78,8 @@ SKIP: {
         like( $driver->get_title, qr(Koha online catalog), 'Hitting the main page should not redirect to the login form');
 
         my $password = Koha::AuthUtils::generate_password();
-        my $digest = Koha::AuthUtils::hash_password( $password );
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
-        $patron->update_password( $patron->userid, $digest );
+        $patron->update_password( $patron->userid, $password );
 
         # Using the modal
         $driver->find_element('//a[@class="login-link loginModal-trigger"]')->click;

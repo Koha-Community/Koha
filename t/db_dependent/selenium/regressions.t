@@ -41,8 +41,7 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { flags => 1 } } );
     my $password = Koha::AuthUtils::generate_password();
-    my $digest   = Koha::AuthUtils::hash_password($password);
-    $patron->update_password( $patron->userid, $digest );
+    $patron->update_password( $patron->userid, $password );
     $s->opac_auth( $patron->userid, $password );
     my $elt = $driver->find_element('//span[@class="loggedinusername"]');
     is( $elt->get_attribute('data-branchcode'), $patron->library->branchcode,

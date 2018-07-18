@@ -78,10 +78,10 @@ if ( $newpassword and not @errors) {
             token  => scalar $input->param('csrf_token'),
         });
 
-    my $digest = Koha::AuthUtils::hash_password( scalar $input->param('newpassword') );
     my $uid    = $input->param('newuserid') || $bor->{userid};
+    my $password = $input->param('newpassword');
     my $dbh    = C4::Context->dbh;
-    if ( Koha::Patrons->find( $member )->update_password($uid, $digest) ) {
+    if ( Koha::Patrons->find( $member )->update_password($uid, $password) ) {
         $template->param( newpassword => $newpassword );
         if ( $destination eq 'circ' ) {
             print $input->redirect("/cgi-bin/koha/circ/circulation.pl?findborrower=$cardnumber");
