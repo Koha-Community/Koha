@@ -16136,6 +16136,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 12395 - Save order line's creator)\n";
 }
 
+$DBversion = '18.06.00.006';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER IGNORE TABLE patron_lists ADD COLUMN shared tinyint(1) default 0 AFTER owner;" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19524 - Share patron lists between staff)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
