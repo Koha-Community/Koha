@@ -34,7 +34,7 @@ BEGIN {
 
 my $now_value       = DateTime->now();
 my $mocked_datetime = Test::MockModule->new('DateTime');
-$mocked_datetime->mock( 'now', sub { return $now_value; } );
+$mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 
 sub slurp {
     my $file = shift;

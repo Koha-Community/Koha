@@ -45,7 +45,7 @@ $dbh->do('DELETE FROM items');
 
 my $now_value       = DateTime->now();
 my $mocked_datetime = Test::MockModule->new('DateTime');
-$mocked_datetime->mock( 'now', sub { return $now_value; } );
+$mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 
 my $library  = $builder->build( { source => 'Branch' } );
 my $category = $builder->build( { source => 'Category' } );
