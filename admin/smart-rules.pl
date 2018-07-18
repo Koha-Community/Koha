@@ -329,14 +329,13 @@ elsif ($op eq "add-branch-cat") {
                                             WHERE categorycode = ?");
             my $sth_insert = $dbh->prepare(q|
                 INSERT INTO default_borrower_circ_rules
-                    (categorycode, maxissueqty, maxonsiteissueqty, max_holds)
-                    VALUES (?, ?, ?, ?)
+                    (categorycode, maxissueqty, maxonsiteissueqty)
+                    VALUES ( ?, ?, ?)
             |);
             my $sth_update = $dbh->prepare(q|
                 UPDATE default_borrower_circ_rules
                 SET maxissueqty = ?,
                     maxonsiteissueqty = ?,
-                    max_holds = ?
                 WHERE categorycode = ?
             |);
             $sth_search->execute($categorycode);
