@@ -16143,6 +16143,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19524 - Share patron lists between staff)\n";
 }
 
+$DBversion = '18.06.00.007';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (11, 'currencies_manage', 'Manage currencies and exchange rates');" );
+    $dbh->do(q{
+        INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code)
+            SELECT borrowernumber, 11, 'currencies_manage' FROM borrowers WHERE flags & (1 << 3) OR borrowernumber IN
+            (SELECT borrowernumber FROM user_permissions WHERE code = 'parameters_remaining_permissions');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 7651 - Add separate permission for managing currencies and exchange rates)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
