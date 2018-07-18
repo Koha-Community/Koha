@@ -1,0 +1,98 @@
+#!/usr/bin/perl
+
+use Modern::Perl;
+use JSON qw( from_json );
+
+use C4::Service;
+use C4::ClassSplitRoutine::RegEx;
+our ( $query, $response ) = C4::Service->init( parameters => 'parameters_remaining_permissions' );
+
+sub get_split_callnumbers {
+    my $regexs = from_json( $query->param('regexs') );
+    my $c = $query->param('callnumbers');
+    my @callnumbers = split "\n", $c;
+    use Data::Printer colored => 1; warn p $c;
+    my @callnumbers_split;
+    for my $callnumber ( @callnumbers ) {
+        my @lines = C4::ClassSplitRoutine::RegEx::split_callnumber($callnumber, $regexs);
+        push @callnumbers_split, { inline => $callnumber, split => \@lines };
+    }
+    $response->param( split_callnumbers => \@callnumbers_split );
+    C4::Service->return_success( $response );
+}
+
+sub update_translation {
+    my $id = $query->param('id');
+    my $translation = $query->param('translation');
+    my $lang = $query->param('lang');
+
+    my $localization = Koha::Localizations->find( $id );
+    if ( defined $lang and $localization->lang ne $lang ) {
+        $localization->lang( $lang )
+    }
+    if ( defined $translation and $localization->translation ne $translation ) {
+        $localization->translation( $translation )
+    }
+    my %params;
+    my $is_changed;
+    if ( $localization->is_changed ) {
+        $is_changed = 1;
+        unless ( Koha::Localizations->search( { entity => $localization->entity, code => $localization->code, lang => $lang, localization_id => { '!=' => $localization->localization_id }, } )->count ) {
+            $localization->store;
+        } else {
+            $params{error} = 1;
+            $params{error_code} = 'already_exists';
+        }
+    }
+    $response->param(
+        %params,
+        id          => $localization->localization_id,
+        entity      => $localization->entity,
+        code        => $localization->code,
+        lang        => $localization->lang,
+        translation => $localization->translation,
+        is_changed  => $is_changed,
+    );
+    C4::Service->return_success( $response );
+}
+
+sub add_translation {
+    my $entity = $query->param('entity');
+    my $code = $query->param('code');
+    my $lang = $query->param('lang');
+    my $translation = $query->param('translation');
+
+    unless ( Koha::Localizations->search({entity => $entity, code => $code, lang => $lang, })->count ) {
+        my $localization = Koha::Localization->new(
+            {
+                entity => $entity,
+                code => $code,
+                lang => $lang,
+                translation => $translation,
+            }
+        );
+        $localization->store;
+        $response->param(
+            id          => $localization->localization_id,
+            entity      => $localization->entity,
+            code        => $localization->code,
+            lang        => $localization->lang,
+            translation => $localization->translation,
+        );
+
+    } else {
+        $response->param( error => 1, error_code => 'already_exists', );
+    }
+    C4::Service->return_success( $response );
+}
+
+sub delete_translation {
+    my $id = $query->param('id');
+    Koha::Localizations->find($id)->delete;
+    $response->param( id => $id );
+    C4::Service->return_success( $response );
+}
+
+C4::Service->dispatch(
+    [ 'GET /', [ 'callnumbers', 'regexs' ], \&get_split_callnumbers ],
+);
