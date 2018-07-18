@@ -1427,7 +1427,7 @@ subtest 'Test Koha::Patrons::merge' => sub {
 };
 
 subtest '->store' => sub {
-    plan tests => 1;
+    plan tests => 3;
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
 
@@ -1441,6 +1441,14 @@ subtest '->store' => sub {
         { $patron_2->userid($patron_1->userid)->store; }
         'Koha::Exceptions::Object::DuplicateID',
         'Koha::Patron->store raises an exception on duplicate ID';
+
+    # Test password
+    my $password = 'password';
+    $patron_1->password($password)->store;
+    like( $patron_1->password, qr|^\$2|, 'Password should be hashed using bcrypt (start with $2)' );
+    my $digest = $patron_1->password;
+    $patron_1->surname('xxx')->store;
+    is( $patron_1->password, $digest, 'Password should not have changed on ->store');
 
     $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
