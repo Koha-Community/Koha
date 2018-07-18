@@ -198,7 +198,7 @@ if ($borrowernumber_hold && !$action) {
                 messages            => $messages,
                 warnings            => $warnings,
                 restricted          => $is_debarred,
-                amount_outstanding  => GetMemberAccountRecords($patron->borrowernumber),
+                amount_outstanding  => $patron->account->balance,
     );
 }
 

@@ -543,7 +543,7 @@ foreach my $flag ( sort keys %$flags ) {
 my $amountold = $flags ? $flags->{'CHARGES'}->{'message'} || 0 : 0;
 $amountold =~ s/^.*\$//;    # remove upto the $, if any
 
-my ( $total, $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+my $total = $patron ? $patron->account->balance : 0;
 
 if ( $patron && $patron->category->category_type eq 'C') {
     my $patron_categories = Koha::Patron::Categories->search_limited({ category_type => 'A' }, {order_by => ['categorycode']});

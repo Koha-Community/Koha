@@ -29,6 +29,7 @@ use C4::Members;
 use C4::Overdues;
 use Koha::Checkouts;
 use Koha::Holds;
+use Koha::Patrons;
 
 my $input = new CGI;
 my $dbh   = C4::Context->dbh;
@@ -72,7 +73,8 @@ if ( defined $borrowernumber ){
     my ( $overdues_count, $overdues ) = checkoverdues($borrowernumber);
     my $holds_pending = Koha::Holds->search({ borrowernumber => $borrowernumber, found => undef })->count;
     my $holds_waiting = Koha::Holds->search({ borrowernumber => $borrowernumber })->waiting->count;
-    my ( $total , $accts, $numaccts) = GetMemberAccountRecords( $borrowernumber );
+    my $patron = Koha::Patrons->find( $borrowernumber );
+    my $total = $patron ? $patron->account->balance : 0;
 
     if  ( $checkouts > 0 || $overdues_count > 0 || $holds_pending > 0 || $holds_waiting > 0 || $total > 0 ) {
         $template->param( dashboard_info => 1 );

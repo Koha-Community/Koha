@@ -181,7 +181,11 @@ sub patronflags {
     my %flags;
     my ( $patroninformation) = @_;
     my $dbh=C4::Context->dbh;
-    my ($balance, $owing) = GetMemberAccountBalance( $patroninformation->{'borrowernumber'});
+
+    my $patron = Koha::Patrons->find( $patroninformation->{borrowernumber} );
+    my $account = $patron->account;
+    my $owing = $account->non_issues_charges;
+
     if ( $owing > 0 ) {
         my %flaginfo;
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5;
@@ -192,7 +196,7 @@ sub patronflags {
         }
         $flags{'CHARGES'} = \%flaginfo;
     }
-    elsif ( $balance < 0 ) {
+    elsif ( ( my $balance = $account->balance ) < 0 ) {
         my %flaginfo;
         $flaginfo{'message'} = sprintf 'Patron has credit of %.02f', -$balance;
         $flaginfo{'amount'}  = sprintf "%.02f", $balance;

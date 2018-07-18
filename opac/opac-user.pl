@@ -116,7 +116,9 @@ if ( $userdebarred || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
     $canrenew = 0;
 }
 
-my ( $amountoutstanding ) = GetMemberAccountRecords($borrowernumber);
+my $patron = Koha::Patrons->find( $borrowernumber );
+my $amountoutstanding = $patron ? $patron->account->balance : 0;
+
 if ( $amountoutstanding > 5 ) {
     $borr->{'amountoverfive'} = 1;
 }
