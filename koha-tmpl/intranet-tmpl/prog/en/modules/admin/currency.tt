@@ -18,7 +18,7 @@
 [% INCLUDE 'currencies-admin-search.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/currency.pl">Currencies &amp; Exchange rates</a> &rsaquo; [% IF op == 'add_form' %][% IF currency %]Modify currency '[% currency.currency | html %]'[% ELSE %]New currency[% END %][% END %]
-[% IF op == 'delete_confirm' %]Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' | html %]
+[% IF op == 'delete_confirm' %]Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]
 [% ELSIF op == 'list' %]Currencies
 [% END %]
 </div>
@@ -126,7 +126,7 @@
 [% IF op =='delete_confirm' %]
     [% IF nb_of_orders or nb_of_vendors %]
     <div class="dialog alert">
-        <h3>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' | html %]</h3>
+        <h3>Cannot delete currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h3>
         <p>
             [% IF nb_of_orders %]
                 This currency is used by [% nb_of_orders | html %] orders.
@@ -141,7 +141,7 @@
     </div>
     [% ELSE %]
     <div class="dialog alert">
-        <h3>Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' | html %]</h3>
+        <h3>Confirm deletion of currency [% currency.currency | $HtmlTags tag='span' attributes=>'class="ex"' %]</h3>
         <table>
             <tr><th>Currency</th>
                 <td>[% currency.currency | html %]</td>

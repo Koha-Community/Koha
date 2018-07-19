@@ -12,11 +12,11 @@
                 <h2>Web installer &rsaquo; Database settings</h2>
                 <h3>Database settings:</h3>
                 <ul>
-                    <li><em>Database type: </em> [%- dbms | $HtmlTags tag=>'code' | html -%]</li>
-                    <li><em>Database name: </em> [%- dbname | $HtmlTags tag=>'code' | html -%]</li>
-                    <li><em>Database host: </em> [%- hostname | $HtmlTags tag=>'code' | html -%]</li>
-                    <li><em>Database port: </em> [%- port| $HtmlTags tag=>'code' | html -%] (probably okay if blank)</li>
-                    <li><em>Database user: </em> [%- user | $HtmlTags tag=>'code' | html -%]</li>
+                    <li><em>Database type: </em> [%- dbms | $HtmlTags tag=>'code' -%]</li>
+                    <li><em>Database name: </em> [%- dbname | $HtmlTags tag=>'code' -%]</li>
+                    <li><em>Database host: </em> [%- hostname | $HtmlTags tag=>'code' -%]</li>
+                    <li><em>Database port: </em> [%- port| $HtmlTags tag=>'code' -%] (probably okay if blank)</li>
+                    <li><em>Database user: </em> [%- user | $HtmlTags tag=>'code' -%]</li>
                 </ul>
 
                 [% IF ( dbconnection ) %]
@@ -25,14 +25,14 @@
                             <div class="alert alert-success" role="alert"><p>Connection established.</p></div>
                             [% IF ( checkdatabasecreated ) %]
                                 <ul>
-                                    <li>Database [% dbname | $HtmlTags tag=>'code' | html %] exists.</li>
+                                    <li>Database [% dbname | $HtmlTags tag=>'code' %] exists.</li>
                                 [% IF ( checkgrantaccess ) %]
-                                    <li>User [% user | $HtmlTags tag=>'code' | html %]  has all required privileges on database [% dbname | $HtmlTags tag=>'code' | html %].</li>
+                                    <li>User [% user | $HtmlTags tag=>'code' %]  has all required privileges on database [% dbname | $HtmlTags tag=>'code' %].</li>
                                     </ul>
                                 [% ELSE %]
                                     </ul>
-                                    <p class="error">User [% user | $HtmlTags tag=>'code' | html %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code' | html %].</p>
-                                    <p class="tip">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' | html %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' | html %].</p>
+                                    <p class="error">User [% user | $HtmlTags tag=>'code' %] doesn't have enough privilege on database [% dbname | $HtmlTags tag=>'code' %].</p>
+                                    <p class="tip">Ask for or make a change in the user's privileges. User [% user | $HtmlTags tag=>'code' %] must have USAGE, INSERT, UPDATE, DELETE, DROP and CREATE privileges on database [% dbname | $HtmlTags tag=>'code' %].</p>
                                     <p>Need help? See manual for [% IF ( mysql ) %]
                                             <a href="http://dev.mysql.com/doc/refman/4.1/en/grant.html">MySQL</a>
                                         [% ELSE %]
@@ -41,7 +41,7 @@
                                     </p>
                                 [% END %]
                             [% ELSE %]
-                                <div class="alert alert-danger" role="alert"><p>No database named [% dbname | $HtmlTags tag=>'code' | html %] detected.</p></div>
+                                <div class="alert alert-danger" role="alert"><p>No database named [% dbname | $HtmlTags tag=>'code' %] detected.</p></div>
                                 <p>Please create the database before continuing.</p>
                             [% END %]
                         [% ELSE %]
@@ -50,7 +50,7 @@
                                 <ul>
                                     <li>Check that your database is running.</li>
                                     <li>Check your database settings in [% 'koha-conf.xml' | $HtmlTags Tag=>'code' %].</li>
-                                    <li>Check the hostname setting in [% INCLUDE txt_kohaconf_xml %]. Some database servers require [% '127.0.0.1' | $HtmlTags tag=>'code' | html %] rather than [% 'localhost' | $HtmlTags tag=>'code' | html %].</li>
+                                    <li>Check the hostname setting in [% INCLUDE txt_kohaconf_xml %]. Some database servers require [% '127.0.0.1' | $HtmlTags tag=>'code' %] rather than [% 'localhost' | $HtmlTags tag=>'code' %].</li>
                                 </ul>
                             </div>
                             <p>Please correct these errors. <a href="/cgi-bin/koha/installer/install.pl">Then start the installer again.</a>

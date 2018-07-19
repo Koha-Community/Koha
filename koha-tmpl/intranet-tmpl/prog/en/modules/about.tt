@@ -202,27 +202,27 @@
             <h3>Problems found</h3>
             [% IF ai_patrons %]
                 <h4>Patrons</h4>
-                <p>The following ids exist in both tables [% "borrowers" | $HtmlTags tag="strong" | html %] and [% "deletedborrowers" | $HtmlTags tag="strong" | html %]:</p>
+                <p>The following ids exist in both tables [% "borrowers" | $HtmlTags tag="strong" %] and [% "deletedborrowers" | $HtmlTags tag="strong" %]:</p>
                 <p>[% FOR p IN ai_patrons %][% p.borrowernumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_biblios %]
                 <h4>Biblios</h4>
-                <p>The following ids exist in both tables [% "biblio" | $HtmlTags tag="strong" | html %] and [% "deletedbiblio" | $HtmlTags tag="strong" | html %]:</p>
+                <p>The following ids exist in both tables [% "biblio" | $HtmlTags tag="strong" %] and [% "deletedbiblio" | $HtmlTags tag="strong" %]:</p>
                 <p>[% FOR b IN ai_biblios %][% b.biblionumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_items %]
                 <h4>Items</h4>
-                <p>The following ids exist in both tables [% "items" | $HtmlTags tag="strong" | html %] and [% "deleteditems" | $HtmlTags tag="strong" | html %]:</p>
+                <p>The following ids exist in both tables [% "items" | $HtmlTags tag="strong" %] and [% "deleteditems" | $HtmlTags tag="strong" %]:</p>
                 <p>[% FOR i IN ai_items %][% i.itemnumber | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_checkouts %]
                 <h4>Checkouts</h4>
-                <p>The following ids exist in both tables [% "issues" | $HtmlTags tag="strong" | html %] and [% "old_issues" | $HtmlTags tag="strong" | html %]:</p>
+                <p>The following ids exist in both tables [% "issues" | $HtmlTags tag="strong" %] and [% "old_issues" | $HtmlTags tag="strong" %]:</p>
                 <p>[% FOR c IN ai_checkouts %][% c.issue_id | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             [% IF ai_holds %]
                 <h4>Holds</h4>
-                <p>The following ids exist in both tables [% "holds" | $HtmlTags tag="strong" | html %] and [% "old_reserves" | $HtmlTags tag="strong" | html %]:</p>
+                <p>The following ids exist in both tables [% "holds" | $HtmlTags tag="strong" %] and [% "old_reserves" | $HtmlTags tag="strong" %]:</p>
                 <p>[% FOR h IN ai_holds %][% h.reserve_id | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             <br/>
