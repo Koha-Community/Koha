@@ -16162,6 +16162,28 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 13560 - need an add option in marc modification templates)\n";
 }
 
+$DBversion = '18.06.00.009';  # will be replaced by the RM
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "
+        CREATE TABLE IF NOT EXISTS aqinvoice_adjustments (
+            adjustment_id int(11) NOT NULL AUTO_INCREMENT,
+            invoiceid int(11) NOT NULL,
+            adjustment decimal(28,6),
+            reason varchar(80) default NULL,
+            note mediumtext default NULL,
+            budget_id int(11) default NULL,
+            encumber_open smallint(1) NOT NULL default 1,
+            timestamp timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+            PRIMARY KEY (adjustment_id),
+            CONSTRAINT aqinvoice_adjustments_fk_invoiceid FOREIGN KEY (invoiceid) REFERENCES aqinvoices (invoiceid) ON DELETE CASCADE ON UPDATE CASCADE,
+            CONSTRAINT aqinvoice_adjustments_fk_budget_id FOREIGN KEY (budget_id) REFERENCES aqbudgets (budget_id) ON DELETE SET NULL ON UPDATE CASCADE
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+        " );
+    $dbh->do("INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('ADJ_REASON')");
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19166 - Add the ability to add adjustments to an invoice)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
