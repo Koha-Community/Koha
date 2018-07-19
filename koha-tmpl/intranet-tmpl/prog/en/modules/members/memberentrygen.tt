@@ -147,7 +147,7 @@
 <input type="hidden" name="op" value="insert" />
 [% ELSE %]
 <input type="hidden" name="op" value="save" />
-[% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 %]
+[% IF step == 4 || step == 5 || step == 6 || step == 2 || step == 1 || step == 7 %]
 [%# Only put the cardnumber if we arent showing it in the form later %]
 [% IF cardnumber %]
 <input type="hidden" name="cardnumber" value="[% cardnumber %]" />
@@ -976,7 +976,7 @@
 
 [% END %]
 
-[% IF ( step_4 ) %]
+[% IF ( step_7 ) %]
 [% IF Koha.Preference('HouseboundModule') %]
   <fieldset class="rows" id="memberentry_housebound_roles">
     <legend id="housebound_roles">Housebound roles</legend>
@@ -1026,6 +1026,9 @@
     </ol>
   </fieldset>
 [% END # hide fieldset %]
+[% END # IF step_7 %]
+
+[% IF ( step_4 ) %]
 [% IF ( ExtendedPatronAttributes ) %][% UNLESS ( no_patron_attribute_types ) %]
   <fieldset class="rows" id="memberentry_patron_attributes">
     <legend id="patron_attributes_lgd">Additional attributes and identifiers</legend>
