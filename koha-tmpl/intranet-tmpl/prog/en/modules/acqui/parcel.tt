@@ -327,7 +327,7 @@
                 <td>
                     [% IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) %]
                       [% IF loop_receive.cannot_cancel %]
-                        [% span_title = BLOCK | html %]
+                        [% span_title = BLOCK %]
                             Cannot cancel receipt of this order line because it
                             was created from a partial receipt of order line no.
                             [% order.parent_ordernumber | html %], which is
@@ -337,7 +337,7 @@
                       [% ELSE %]
                         [%# FIXME Here we block the cancellation if holds exist. Actually it could be possible if items will be exist after the deletion %]
                         [%# Some additional checks should be added in the pl file %]
-                        [% span_title = BLOCK | html %]
+                        [% span_title = BLOCK %]
                           Cannot cancel receipt of this order line because at least one reservation exists on the records.
                         [% END %]
                       [% END %]

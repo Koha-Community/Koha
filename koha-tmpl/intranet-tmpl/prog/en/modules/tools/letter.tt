@@ -68,7 +68,7 @@
         <p>You searched for <b>[% searchfield | html %]</b></p>
 		[% END %]
 		[% IF ( letter && !independant_branch) %]
-            [% select_for_copy = BLOCK | html %]
+            [% select_for_copy = BLOCK %]
             <select name="branchcode">
                 [% FOREACH l IN Branches.all() %]
                 <option value="[% l.branchcode | html %]">Copy to [% l.branchname | html %]</option>

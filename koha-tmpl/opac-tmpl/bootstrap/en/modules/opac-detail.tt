@@ -469,7 +469,7 @@
                             <div class="results_summary ratings">
 
                                 [% SET rating_avg = ratings.get_avg_rating() %]
-                                [% rating_avg_int = BLOCK | html %][% rating_avg | format("%.0f") %][% END %]
+                                [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
                                 [% FOREACH i  IN [ 1 2 3 4 5  ] %]
                                     [% IF rating_avg_int == i && borrowernumber %]
                                         <input class="auto-submit-star" type="radio" name="rating"  value="[% i | html %]"  checked="checked" />

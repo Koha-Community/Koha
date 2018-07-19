@@ -20,11 +20,11 @@
 
 [% url_params = [] | html %]
 [% FOREACH param IN CGI.params.pairs %]
-    [% escaped_value = BLOCK | html %][% param.value | uri %][% END %]
+    [% escaped_value = BLOCK %][% param.value | uri %][% END %]
     [% url_params.push(param.key _ '=' _ escaped_value) | html %]
 [% END %]
 [% SET referrer = '/cgi-bin/koha/serials/serials-search.pl?' %]
-[% referrer = BLOCK | html %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
+[% referrer = BLOCK %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
 [% SET edit_action_link = '/cgi-bin/koha/serials/subscription-batchedit.pl?referrer=' _ referrer %]
 
 [% BLOCK subscriptions_table %]

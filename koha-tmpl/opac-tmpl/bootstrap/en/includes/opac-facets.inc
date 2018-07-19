@@ -35,7 +35,7 @@
                         <ul>
                             [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi _ limit_cgi %]
                             [% IF ( sort_by ) %]
-                              [% url = BLOCK | html %][% url | html %][% "&amp;sort_by=" _ sort_by |url %][% END %]
+                              [% url = BLOCK %][% url | html %][% "&amp;sort_by=" _ sort_by |url %][% END %]
                             [% END %]
                             [% FOREACH facet IN facets_loo.facets %]
                             [% IF facets_loo.type_label_CollectionCodes %][% SET facet.facet_label_value = AuthorisedValues.GetByCode('CCODE',facet.facet_label_value,1) || facet.facet_label_value %][% END %]
