@@ -943,7 +943,7 @@ sub checkauth {
             $session->param( 'search_history', $anon_search_history );
         }
 
-        my $sessionID = $session->id;
+        $sessionID = $session->id;
         C4::Context->_new_userenv($sessionID);
         $cookie = $query->cookie(
             -name     => 'CGISESSID',
