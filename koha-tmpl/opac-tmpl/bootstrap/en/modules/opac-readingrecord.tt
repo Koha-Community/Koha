@@ -119,11 +119,7 @@
                                                 [% END %]
 
                                                 [% IF SyndeticsEnabled && SyndeticsCoverImages %]
-                                                    [% IF  using_https  %]
-                                                        <img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
-                                                   [% ELSE %]
-                                                        <img src="http://www.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
-                                                   [% END %]
+                                                    <img src="https://secure.syndetics.com/index.aspx?isbn=[% issue.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% issue.normalized_upc %]&amp;oclc=[% issue.normalized_oclc %]" alt="" class="item-thumbnail" />
                                                 [% END %]
                                                 </td>
                                                 <td>

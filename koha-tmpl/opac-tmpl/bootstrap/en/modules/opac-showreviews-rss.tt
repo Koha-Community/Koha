@@ -13,10 +13,8 @@
        <description><![CDATA[
 [% IF ( OPACAmazonCoverImages ) %][% IF ( review.normalized_isbn ) %]<img src="https://images-na.ssl-images-amazon.com/images/P/[% review.normalized_isbn %].01.TZZZZZZZ.jpg" alt="" />[% END %][% END %]
 
-[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( review.content_identifier_exists ) %][% IF ( using_https ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% review.normalized_upc %]&amp;oclc=[% review.normalized_oclc %]" alt="" />
-[% ELSE %]
-<img src="http://www.syndetics.com/index.aspx?isbn=[% review.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% review.normalized_upc %]&amp;oclc=[% review.normalized_oclc %]" alt="" />
-[% END %][% END %][% END %][% END %]
+[% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( review.content_identifier_exists ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% review.normalized_upc %]&amp;oclc=[% review.normalized_oclc %]" alt="" />
+[% END %][% END %][% END %]
 
 [% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
 [% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL |html %][% bt_id %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |html %][% bt_id %]" /></a>[% END %]
