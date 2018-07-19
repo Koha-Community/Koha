@@ -32,5 +32,5 @@
 [%~ IF data.zipcode %][% SET address = address _ data.zipcode _ ' ' %][% END %]
 [%~ IF data.country %][% SET address = address _ data.country _ ' ' %][% END %]
 [%~ SET address = address _ Branches.GetName( data.branchcode ) %]
-[%~ To.json( address ).raw ~%]
+[%~ To.json( address ) | $raw ~%]
 [% END %]

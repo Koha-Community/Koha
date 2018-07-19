@@ -303,7 +303,7 @@ function confirm_deletion() {
                         [% ELSE  %]
                             <a href="#" id="buttonDot_[%- mv.id | html -%]" class="[%- mv.class | html -%]" title="Tag editor">...</a>
                         [% END %]
-                        [%- mv.javascript.raw -%]
+                        [%- mv.javascript | $raw -%]
                     [% END %]
                 [% ELSIF ( mv.type == 'text' ) %]
                     [% IF mv.readonly %]

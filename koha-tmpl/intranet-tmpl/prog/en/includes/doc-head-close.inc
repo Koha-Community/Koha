@@ -18,7 +18,7 @@
 [% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% Asset.css("css/print.css", { media = "print" }) | $raw %]
 [% INCLUDE intranetstylesheet.inc %]
-[% IF ( bidi ) %][% Asset.css("css/right-to-left.css").raw %][% END %]
+[% IF ( bidi ) %][% Asset.css("css/right-to-left.css") | $raw %][% END %]
 
 [% IF ( login ) %]
     [% Asset.css("css/login.css") | $raw %]

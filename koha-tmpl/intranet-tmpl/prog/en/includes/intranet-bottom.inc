@@ -69,7 +69,7 @@
     <span id="audio-alert"></span>
     [% IF ( footerjs ) %]
         [% INCLUDE js_includes.inc %]
-        [% jsinclude.raw # Parse the page template's JavaScript block if necessary %]
+        [% jsinclude | $raw # Parse the page template's JavaScript block if necessary %]
     [% END %]
     </body>
 </html>

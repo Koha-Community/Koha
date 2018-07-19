@@ -971,7 +971,7 @@ $(document).ready(function() {
         $(document).ready(function(){
 
             $('[data-toggle="tooltip"]').tooltip();
-            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ).raw %];
+            var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
 
             $('#limit').change(function() {
                 $('#limitselect').submit();

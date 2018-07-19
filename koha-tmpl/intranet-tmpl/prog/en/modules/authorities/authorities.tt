@@ -65,7 +65,7 @@ function AreMandatoriesNotOk(){
     		[% FOREACH subfield_loo IN innerloo.subfield_loop %]
     			[% IF ( subfield_loo.mandatory ) %]mandatories.push("[% subfield_loo.id | html %]");
                     tab.push("[% BIG_LOO.number | html %]");
-                    label.push("[% subfield_loo.marc_lib.raw |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]");
+                    label.push("[% subfield_loo.marc_lib | $raw |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') %]");
     			[% END %]
 			[% END %]
 		[% END %]

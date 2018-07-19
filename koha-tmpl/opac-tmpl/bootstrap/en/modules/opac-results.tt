@@ -592,7 +592,7 @@
 [% IF ( OverDriveEnabled ) %][% Asset.js("js/overdrive.js") | $raw %][% END %]
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.js("js/authtoresults.js") | $raw %]
-[% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js").raw %]
+[% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %]
 [% END %]<script>
 //<![CDATA[
 [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'RequestOnOpac' ) == 1 ) %]

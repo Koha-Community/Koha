@@ -693,9 +693,9 @@ No patron matched <span class="ex">[% message | html %]</span>
                    [% IF ( debarredcomment ) %]
                        with the explanation: <br/><i>
                        [% IF debarredcomment.search('OVERDUES_PROCESS') %]
-                           Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ').raw | html_line_break %]
+                           Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | raw | html_line_break %]
                        [% ELSE %]
-                           [% debarredcomment.raw | html_line_break %]
+                           [% debarredcomment | raw | html_line_break %]
                        [% END %]
                        </i>
                    [% END %]
@@ -1004,7 +1004,7 @@ No patron matched <span class="ex">[% message | html %]</span>
         var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
         var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
 
-        columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ).raw %]
+        columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'circulation', 'issues-table', 'json' ) | $raw %]
 
         [% IF borrowernumber and patron %]
             if($.cookie("holdfor") != [% patron.borrowernumber | html %]){

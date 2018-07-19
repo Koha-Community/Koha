@@ -123,7 +123,7 @@
         $(document).ready(function() {
             var txtActivefilter = _("Filter paid transactions");
             var txtInactivefilter = _("Show all transactions");
-            var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json').raw %];
+            var columns_settings = [% ColumnsSettings.GetColumns('members', 'fines', 'account-fines', 'json') | $raw %];
             var table_account_fines = KohaTable("table_account_fines", {
                 "sPaginationType": "four_button",
                 'aaSorting': [[0, 'desc']],

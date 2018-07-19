@@ -31,7 +31,7 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title | html %][% FOREACH subtitl IN subtitle %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %] [% subtitl.subfield | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% IF ( bidi ) %]
-  [% BLOCK cssinclude %][% Asset.css("css/right-to-left.css").raw %][% END %]
+  [% BLOCK cssinclude %][% Asset.css("css/right-to-left.css") | $raw %][% END %]
 [% END %]
 [% IF ( OpacStarRatings != 'disable' ) %]
     [% BLOCK cssinclude %][% Asset.css("css/jquery.rating.css") | $raw %][% END %]
@@ -1363,7 +1363,7 @@
 [% END %]
 [% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %][% END %]
 
-[% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js").raw %][% END %]
+[% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
 
 <script>
 //<![CDATA[
@@ -1420,7 +1420,7 @@
             }
         });
 
-        var columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ).raw %];
+        var columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw ];
 
         KohaTable("#holdingst", {
             dom: '<"clearfix">t',
@@ -1440,7 +1440,7 @@
             "bKohaColumnsUseNames": true
         }, columns_settings);
 
-        var serial_column_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ).raw %];
+        var serial_column_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
 
         KohaTable("#subscriptionst", {
             dom: '<"clearfix">t',

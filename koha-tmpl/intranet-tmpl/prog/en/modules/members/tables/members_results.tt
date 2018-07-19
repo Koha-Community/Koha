@@ -45,5 +45,5 @@
 [%~ IF data.streettype %][% address = address _ AuthorisedValues.GetByCode( 'ROADTYPE', data.streettype ) _ ' ' | html %][% END %]
 [%~ IF data.address %][% address = address _ data.address _ ' ' | html %][% END %]
 [%~ IF data.address2 %][% address = address _ data.address2 _ ' ' | html %][% END %]
-[%~ To.json( address ).raw ~%]
+[%~ To.json( address ) | $raw ~%]
 [% END %]
