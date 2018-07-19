@@ -309,11 +309,7 @@
                                                             [% END %]
 
                                                             [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
-                                                                [% IF ( using_https ) %]
-                                                                    <span title="[% itemsloo.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" /></span>
-                                                                [% ELSE %]
-                                                                    <span title="[% itemsloo.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="http://www.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" /></span>
-                                                                [% END %]
+                                                                <span title="[% itemsloo.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% itemsloo.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% itemsloo.normalized_upc %]&amp;oclc=[% itemsloo.normalized_oclc %]" alt="" /></span>
                                                             [% END %]
 
                                                             [% IF ( GoogleJackets ) %]

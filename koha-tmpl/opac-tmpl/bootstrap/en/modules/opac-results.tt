@@ -238,11 +238,7 @@
 
                                                         [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                                             [% IF ( SEARCH_RESULT.normalized_isbn || SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_oclc ) %]
-                                                                    [% IF ( using_https ) %]
-                                                                        <span title="[% SEARCH_RESULT.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="item-thumbnail" /></span>
-                                                                    [% ELSE %]
-                                                                        <span title="[% SEARCH_RESULT.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="http://www.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="item-thumbnail" /></span>
-                                                                    [% END %]
+                                                                    <span title="[% SEARCH_RESULT.biblionumber %]" id="syndetics-thumbnail[% loop.count %]"><img src="https://secure.syndetics.com/index.aspx?isbn=[% SEARCH_RESULT.normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %]&amp;type=xw10&amp;upc=[% SEARCH_RESULT.normalized_upc %]&amp;oclc=[% SEARCH_RESULT.normalized_oclc %]" alt="" class="item-thumbnail" /></span>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
