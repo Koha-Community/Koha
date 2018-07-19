@@ -35,11 +35,7 @@
                                 [% IF ( SyndeticsEnabled ) %]
                                     [% IF ( SyndeticsCoverImages ) %]
                                         [% IF ( content_identifier_exists ) %]
-                                            [% IF ( using_https ) %]
-                                                <img src="https://secure.syndetics.com/index.aspx?isbn=[% item.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( item.browser_normalized_upc ) %]&amp;upc=[% item.browser_normalized_upc %][% END %][% IF ( item.browser_normalized_oclc ) %]&amp;oclc=[% item.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
-                                            [% ELSE %]
-                                                <img src="http://www.syndetics.com/index.aspx?isbn=[% item.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( item.browser_normalized_upc ) %]&amp;upc=[% item.browser_normalized_upc %][% END %][% IF ( item.browser_normalized_oclc ) %]&amp;oclc=[% item.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
-                                            [% END %]
+                                            <img src="https://secure.syndetics.com/index.aspx?isbn=[% item.browser_normalized_isbn %]/SC.GIF&amp;client=[% SyndeticsClientCode %][% IF ( item.browser_normalized_upc ) %]&amp;upc=[% item.browser_normalized_upc %][% END %][% IF ( item.browser_normalized_oclc ) %]&amp;oclc=[% item.browser_normalized_oclc %][% END %]&amp;type=xw10" alt="" />
                                         [% ELSE %]
                                             <span class="no-image">No cover image available</span>
                                         [% END %]
