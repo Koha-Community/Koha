@@ -296,11 +296,11 @@ RECORD: while (  ) {
     &$localcust($record) if $localcust;
     my $isbn;
     # remove trailing - in isbn (only for biblios, of course)
-    if ($biblios && $cleanisbn) {
+    if( $biblios ) {
         my $tag = $marcFlavour eq 'UNIMARC' ? '010' : '020';
         my $field = $record->field($tag);
-        my $isbn = $field && $field->subfield('a');
-        if ( $isbn ) {
+        $isbn = $field && $field->subfield('a');
+        if ( $isbn && $cleanisbn ) {
             $isbn =~ s/-//g;
             $field->update('a' => $isbn);
         }
