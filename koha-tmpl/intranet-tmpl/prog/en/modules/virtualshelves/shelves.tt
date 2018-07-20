@@ -297,6 +297,7 @@
             [% IF shelf.sortfield == "author" %]<option value="author" selected="selected">Author</option>[% ELSE %]<option value="author">Author</option>[% END %]
             [% IF shelf.sortfield == "copyrightdate" %]<option value="copyrightdate" selected="selected">Copyrightdate</option>[% ELSE %]<option value="copyrightdate">Copyrightdate</option>[% END %]
             [% IF shelf.sortfield == "itemcallnumber" %]<option value="itemcallnumber" selected="selected">Call number</option>[% ELSE %]<option value="itemcallnumber">Call number</option>[% END %]
+            [% IF shelf.sortfield == "dateadded" %]<option value="dateadded" selected="selected">Date added</option>[% ELSE %]<option value="dateadded">Date added</option>[% END %]
             </select></li>
             <li><label for="category">Category: </label>
                 <select id="category" name="category" onchange="AdjustRemark()">
@@ -369,6 +370,7 @@
                                 <option value="author">Author</option>
                                 <option value="copyrightdate">Copyrightdate</option>
                                 <option value="itemcallnumber">Call number</option>
+                                <option value="dateadded">Date added</option>
                             </select>
                         </th>
                         <th></th>

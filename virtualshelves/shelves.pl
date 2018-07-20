@@ -101,7 +101,7 @@ if ( $op eq 'add_form' ) {
     if ( $shelf ) {
         $op = $referer;
         my $sortfield = $query->param('sortfield');
-        $sortfield = 'title' unless grep {/^$sortfield$/}qw( title author copyrightdate itemcallnumber );
+        $sortfield = 'title' unless grep {/^$sortfield$/}qw( title author copyrightdate itemcallnumber dateadded );
         if ( $shelf->can_be_managed( $loggedinuser ) ) {
             $shelf->shelfname( scalar $query->param('shelfname') );
             $shelf->sortfield( $sortfield );

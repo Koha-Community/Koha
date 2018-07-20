@@ -230,6 +230,12 @@
                                         [% ELSE %]
                                             <option value="copyrightdate">Copyright date</option>
                                         [% END %]
+
+                                        [% IF sortfield == "dateadded" %]
+                                            <option value="dateadded" selected="selected">Date added</option>
+                                        [% ELSE %]
+                                            <option value="dateadded">Date added</option>
+                                        [% END %]
                                     </select>
 
                                     <select name="direction" class="resort" onchange="$('#sorting-form').submit()">
@@ -579,6 +585,11 @@
                                                 <option value="itemcallnumber" selected="selected">Call number</option>
                                             [% ELSE %]
                                                 <option value="itemcallnumber">Call number</option>
+                                            [% END %]
+                                            [% IF shelf.sortfield == "dateadded" %]
+                                                <option value="dateadded" selected="selected">Date added</option>
+                                            [% ELSE %]
+                                                <option value="dateadded">Date added</option>
                                             [% END %]
                                         </select>
                                     </li>

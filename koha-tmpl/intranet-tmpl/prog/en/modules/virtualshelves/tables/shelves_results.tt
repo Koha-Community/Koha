@@ -19,7 +19,7 @@
                 "dt_owner":
                     "<a href='/cgi-bin/koha/members/moremember.pl?borrowernumber=[% data.owner | html %]'>[% data.firstname | html %] [% data.surname | html %]</a>",
                 "dt_sortby":
-                    [% IF data.sortby == "author" %]"Author"[% ELSIF data.sortby == "copyrightdate" %]"Year"[% ELSIF data.sortby == "itemcallnumber" %]"Call number"[% ELSE %]"Title"[% END %],
+                    [% IF data.sortby == "author" %]"Author"[% ELSIF data.sortby == "copyrightdate" %]"Year"[% ELSIF data.sortby == "itemcallnumber" %]"Call number"[% ELSIF data.sortby == "dateadded" %]"Date added"[% ELSE %]"Title"[% END %],
                 "dt_created_on":
                     "[% data.created_on | $KohaDates %]",
                 "dt_modification_time":
