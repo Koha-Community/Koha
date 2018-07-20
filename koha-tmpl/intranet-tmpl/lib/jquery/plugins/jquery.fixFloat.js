@@ -8,11 +8,17 @@
         var tbh = $(this);
         var defaults = {
             enabled: true,
-            originalOffset: tbh.position().top
+            originalOffset: tbh.offset().top,
+            originalPosition: tbh.position().top,
         };
         var originalOffset = typeof options.originalOffset === 'undefined'
             ? defaults.originalOffset
             : options.originalOffset;
+
+        var originalPosition = typeof options.originalPosition === 'undefined'
+            ? defaults.originalPosition
+            : options.originalPosition;
+
         options = $.extend(defaults, options);
 
         if (tbh.css('position') !== 'absolute') {
@@ -34,14 +40,16 @@
             }
             tbh.css({
                 'position': 'absolute',
-                    'top': originalOffset
+                    'top': originalPosition,
             });
         }
 
         if (options.enabled) {
             $(window).scroll(function () {
                 var offsetTop = tbh.offset().top;
+
                 var s = parseInt($(window).scrollTop(), 10);
+
                 var fixMe = (s > offsetTop);
                 var repositionMe = (s < originalOffset);
                 if (fixMe) {
@@ -55,7 +63,7 @@
                 if (repositionMe) {
                     tbh.css({
                         'position': 'absolute',
-                            'top': originalOffset,
+                            'top': originalPosition,
                         'z-index': '1'
                     });
                     tbh.removeClass("floating");
