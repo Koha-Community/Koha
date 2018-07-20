@@ -100,6 +100,9 @@ if ($version || ($input_marc_file eq '')) {
     pod2usage( -verbose => 2 );
     exit;
 }
+if( $update && ( !$match || $isbn_check ) ) {
+    warn "Using -update without -match or -isbn seems to be useless.\n";
+}
 
 if(defined $localcust) { #local customize module
     if(!-e $localcust) {
@@ -473,7 +476,9 @@ RECORD: while (  ) {
                         printlog( { id => $id || $originalid || $biblionumber, op => "insert", status => "ok" } ) if ($logfile);
                     }
                 } else {
+                    warn "WARNING: Updating record ".($id||$originalid)." failed";
                     printlog( { id => $id || $originalid || $biblionumber, op => "update", status => "warning : not in database" } ) if ($logfile);
+                    next RECORD;
                 }
             }
             eval { ( $itemnumbers_ref, $errors_ref ) = AddItemBatchFromMarc( $record, $biblionumber, $biblioitemnumber, '' ); };
