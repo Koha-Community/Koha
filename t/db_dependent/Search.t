@@ -855,6 +855,8 @@ if ( $indexing_mode eq 'dom' ) {
     my $expected_facets_info_marc21 = {
                    'au' => { 'expanded'    => undef,
                              'label_value' => "Authors" },
+                'ccode' => { 'expanded'    => undef,
+                             'label_value' => "CollectionCodes" },
         'holdingbranch' => { 'expanded'    => undef,
                              'label_value' => "HoldingLibrary" },
                 'itype' => { 'expanded'    => undef,
@@ -953,6 +955,8 @@ sub run_unimarc_search_tests {
     my $expected_facets_info_unimarc = {
                    'au' => { 'expanded'    => undef,
                              'label_value' => "Authors" },
+                'ccode' => { 'expanded'    => undef,
+                             'label_value' => "CollectionCodes" },
         'holdingbranch' => { 'expanded'    => undef,
                              'label_value' => "HoldingLibrary" },
              'location' => { 'expanded'    => undef,
