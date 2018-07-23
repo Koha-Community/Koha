@@ -16155,14 +16155,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 7651 - Add separate permission for managing currencies and exchange rates)\n";
 }
 
-$DBversion = '18.06.00.008';  # will be replaced by the RM
+$DBversion = '18.06.00.008';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "ALTER IGNORE TABLE marc_modification_template_actions CHANGE action action ENUM('delete_field','add_field','update_field','move_field','copy_field','copy_and_replace_field')" );
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 13560 - need an add option in marc modification templates)\n";
 }
 
-$DBversion = '18.06.00.009';  # will be replaced by the RM
+$DBversion = '18.06.00.009';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( "
         CREATE TABLE IF NOT EXISTS aqinvoice_adjustments (
@@ -16182,6 +16182,22 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do("INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('ADJ_REASON')");
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 19166 - Add the ability to add adjustments to an invoice)\n";
+}
+
+$DBversion = '18.06.00.010';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`, `content`, `message_transport_type`, `lang`)
+        VALUES
+            ('circulation', 'ACCOUNT_PAYMENT', '', 'Account payment', 0, 'Account payment', '[%- USE Price -%]\r\nA payment of [% credit.amount * -1 | $Price %] has been applied to your account.\r\n\r\nThis payment affected the following fees:\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nAmount paid: [% o.amount * -1 | $Price %]\r\nAmount remaining: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default'),
+                ('circulation', 'ACCOUNT_WRITEOFF', '', 'Account writeoff', 0, 'Account writeoff', '[%- USE Price -%]\r\nAn account writeoff of [% credit.amount * -1 | $Price %] has been applied to your account.\r\n\r\nThis writeoff affected the following fees:\r\n[%- FOREACH o IN offsets %]\r\nDescription: [% o.debit.description %]\r\nAmount paid: [% o.amount * -1 | $Price %]\r\nAmount remaining: [% o.debit.amountoutstanding | $Price %]\r\n[% END %]', 'email', 'default');
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`)
+        VALUES ('UseEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19191 - Add ability to email receipts for account payments and write-offs)\n";
 }
 
 # SEE bug 13068
