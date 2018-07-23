@@ -111,6 +111,8 @@ a {
     &.document {
         background-position: left middle;
         background-repeat: no-repeat;
+        display: inline-block;
+        min-height: 20px;
         padding-left: 20px;
     }
 
@@ -153,6 +155,76 @@ a {
 
 }
 
+aside {
+    h5 {
+        font-size : 100%;
+        margin : .5em 0;
+    }
+
+    fieldset {
+        &.brief {
+            margin: 0;
+            padding : .4em .7em;
+
+            fieldset {
+                margin: 0;
+                padding: .5em 0;
+
+                legend {
+                    font-size: 85%;
+                }
+            }
+
+            li {
+                &.checkbox {
+                    label {
+                        display: inline;
+                    }
+                }
+
+                &.dateinsert {
+                    label {
+                        display: inline;
+                    }
+                    span {
+                        &.label {
+                            display: inline
+                        }
+                    }
+                }
+
+                &.radio {
+                    input {
+                        padding: .3em 0;
+                    }
+                    label {
+                        display: inline;
+                    }
+
+                    padding: .7em 0;
+
+                    span {
+                        &.label {
+                            display: inline;
+                        }
+                    }
+                }
+            }
+
+            ol {
+                font-size : 85%;
+                margin : 0;
+                padding : 0;
+            }
+
+            select,
+            input[type="text"] {
+                width: 100%;
+            }
+        }
+    }
+}
+
 button {
     @include default-button;
 
@@ -169,6 +241,19 @@ button {
         border: 0;
         cursor: pointer;
         padding: 0;
+    }
+}
+
+main {
+    .yui-b {
+        fieldset {
+            &.brief {
+                input[type="text"],
+                select {
+                    width: auto;
+                }
+            }
+        }
     }
 }
 
@@ -333,6 +418,10 @@ h6 {
     margin: .3em 0;
 }
 
+hr {
+    clear: both;
+}
+
 p {
     margin: .5em 0 .5em 0;
 }
@@ -483,6 +572,10 @@ label,
 
         a {
             text-decoration: none;
+
+            &.current {
+                font-weight: bold;
+            }
         }
     }
 }
@@ -609,6 +702,11 @@ ol {
     background-image: linear-gradient(to bottom, rgb(230, 240, 242) 1%, rgb(255, 255, 255) 99%);
     display: inline-block;
     width: 100%;
+}
+
+.cart-controls {
+    border-top: 1px solid #E8E8E8;
+    padding: 7px 0;
 }
 
 .clearfix {
@@ -852,6 +950,7 @@ fieldset {
                 display: block;
                 font-weight: bold;
                 padding: .3em 0;
+                text-align: left;
             }
         }
     }
@@ -936,7 +1035,7 @@ fieldset {
             font-weight: bold;
             margin-right: 1em;
             text-align: right;
-            width: 6em;
+            width: 9em;
 
             .error {
                 float: none;
@@ -1070,6 +1169,16 @@ fieldset {
     }
 }
 
+#multi_receiving {
+    fieldset {
+        &.rows {
+            label {
+                width: 50%;
+            }
+        }
+    }
+}
+
 .yui-u {
     div {
         .hint {
@@ -1119,6 +1228,34 @@ legend {
     padding: .2em .5em;
     width: auto;
 }
+
+details {
+    > summary {
+        cursor: pointer;
+
+        &::before {
+            content: "\f0da";
+            display: inline-block;
+            font-family: FontAwesome;
+            width: 1em;
+        }
+
+        &.checkouts-by-itemtype {
+            li {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+details[open] {
+    > summary {
+        &::before {
+            content: "\f0d7";
+        }
+    }
+}
+
 
 #floating-save {
     background-color: rgba(185, 216, 217, .6);
@@ -1647,8 +1784,9 @@ dd {
                 padding: 0;
             }
 
-            select {
-                width: 12em;
+            select,
+            input[type=text] {
+                width: 100%;
             }
         }
 
@@ -1656,16 +1794,6 @@ dd {
             div {
                 &.hint {
                     margin-left: 10.5em;
-                }
-            }
-
-            label {
-                width: 9em;
-            }
-
-            span {
-                &.label {
-                    width: 9em;
                 }
             }
 
@@ -1678,6 +1806,19 @@ dd {
                     &.label {
                         width: auto;
                     }
+                }
+            }
+        }
+    }
+}
+
+#yui-main {
+    .yui-b {
+        fieldset {
+            &.brief {
+                select,
+                input[type=text] {
+                    width: auto;
                 }
             }
         }
@@ -1737,11 +1878,6 @@ dd {
 
 #z3950_search_targets_acq {
     height:     308px;
-    overflow-y: auto;
-}
-
-#z3950_search_targets_auth {
-    height:     348px;
     overflow-y: auto;
 }
 
@@ -2016,7 +2152,7 @@ i {
 
 
 #logo {
-    background: transparent url("../img/koha-logo-medium.gif") no-repeat scroll 0%;
+    background: transparent url("../img/koha-logo-medium.png") no-repeat scroll 0%;
     margin: .75em .3em .75em .7em;
 
     a {
@@ -2070,6 +2206,10 @@ li {
 
 .address {
     font-size: 110%;
+
+    li {
+        list-style-type: none;
+    }
 }
 
 .title {
@@ -2393,7 +2533,8 @@ li {
     font-size: 105%;
     line-height: 200%;
 
-    a {
+    a,
+    span {
         background-color: #E4ECF5;
         border: 1px solid #A4BEDD;
         border-radius: 4px;
@@ -3332,7 +3473,12 @@ label {
 }
 
 .modal-body {
+    background-color: #FFF;
     overflow-y: auto;
+}
+
+.modal-content {
+    background-color : #EDF4F6;
 }
 
 .btn-group {
@@ -3524,6 +3670,21 @@ span {
         color: #C00;
         font-style: italic;
         margin-left: .5em;
+    }
+}
+
+
+.result-biblio-itemtype {
+    float: right;
+    padding: .5em;
+    margin: .5em;
+    font-size: 85%;
+    text-align: center;
+
+    img {
+        display: block;
+        margin: auto;
+        margin-bottom: 2px;
     }
 }
 
@@ -3777,6 +3938,10 @@ span {
 }
 
 #interlibraryloans {
+    #dataPreviewLabel {
+        margin: .3em 0;
+    }
+
     h1 {
         margin: 1em 0;
     }
@@ -3787,6 +3952,7 @@ span {
 
     h3 {
         margin-top: 20px;
+
     }
 
     .bg-info {
@@ -3853,6 +4019,10 @@ span {
         margin-bottom: 20px;
     }
 
+    .notesopac {
+        display: inline-block;
+    }
+
     .rows {
         div {
             height: 1em;
@@ -3860,11 +4030,11 @@ span {
         }
     }
 
-    #requestattributes {
-        .label {
-            width: auto;
-        }
-    }
+}
+
+#requestattributes {
+    font-family: monospace;
+    line-height: 1.3em;
 }
 
 #ill-requests {
@@ -3898,6 +4068,49 @@ span {
         padding: 0;
     }
 }
+
+/* ==== MODULE LINKS - Start ==== */
+
+ul {
+    &.buttons-list {
+        /* List containing the module links */
+        padding: 0;
+        margin-bottom: 30px;
+
+        li {
+            /* Standard attributes for the list elements */
+            list-style-type:none;
+
+            a {
+                &.circ-button {
+                    /* Class used for each module link */
+                    background-color: #F4F8F9;
+                    background-position: 5px 3px;
+                    background-repeat: no-repeat;
+                    border: solid 2px #b9d8d9;
+                    border-radius: 6px;
+                    box-sizing: content-box;
+                    color: #000000;
+                    display: block;
+                    font-size: 110%;
+                    font-weight: bold;
+                    max-width: 260px;
+                    margin: .5em 0;
+                    padding: 8px;
+                    text-decoration: none;
+
+                    &:hover {
+                        /* Class used for each module link hover state */
+                        border-color: #538200;
+                        color: #538200;
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* ==== MODULE LINKS - End ==== */
 
 @media (min-width: 200px) {
     .navbar-nav > li {
