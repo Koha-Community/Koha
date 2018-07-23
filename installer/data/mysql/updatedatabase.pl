@@ -16200,6 +16200,20 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19191 - Add ability to email receipts for account payments and write-offs)\n";
 }
 
+$DBversion = '18.06.00.011';
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists( 'issues', 'noteseen' ) ) {
+        $dbh->do(q|ALTER TABLE issues ADD COLUMN noteseen int(1) default NULL AFTER notedate|);
+    }
+
+    unless( column_exists( 'old_issues', 'noteseen' ) ) {
+        $dbh->do(q|ALTER TABLE old_issues ADD COLUMN noteseen int(1) default NULL AFTER notedate|);
+    }
+    $dbh->do(q|INSERT IGNORE INTO permissions (module_bit, code, description) VALUES ( 1, 'manage_checkout_notes', 'Mark checkout notes as seen/not seen');|);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17698: Add column issues.noteseen and old_issues.noteseen)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 

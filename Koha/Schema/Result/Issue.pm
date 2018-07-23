@@ -112,6 +112,11 @@ __PACKAGE__->table("issues");
   datetime_undef_if_invalid: 1
   is_nullable: 1
 
+=head2 noteseen
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -170,6 +175,8 @@ __PACKAGE__->add_columns(
     datetime_undef_if_invalid => 1,
     is_nullable => 1,
   },
+  "noteseen",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -241,8 +248,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:skFfce3y1eEx3rSdFaLmPg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-23 13:51:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+mlcId4odhAFp3HHgV/+tg
 
 __PACKAGE__->belongs_to(
     "borrower",
