@@ -100,7 +100,7 @@ if ($version || ($input_marc_file eq '')) {
     pod2usage( -verbose => 2 );
     exit;
 }
-if( $update && ( !$match || $isbn_check ) ) {
+if( $update && !( $match || $isbn_check ) ) {
     warn "Using -update without -match or -isbn seems to be useless.\n";
 }
 
