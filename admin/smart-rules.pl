@@ -63,10 +63,11 @@ unless ( $branch ) {
     }
 }
 
-my $uid = Koha::Patrons->find( $loggedinuser )->userid;
-my $restricted_to_own_library = $uid && haspermission( $uid, { parameters => 'manage_circ_rules_restricted' }, { no_inherit => 1 } );
-$template->param( restricted_to_own_library => $restricted_to_own_library );
-$branch = C4::Context::mybranch() if $restricted_to_own_library;
+my $logged_in_patron = Koha::Patrons->find( $loggedinuser );
+
+my $can_edit_from_any_library = $logged_in_patron->has_permission( {parameters => 'manage_circ_rules_from_any_libraries' } );
+$template->param( restricted_to_own_library => not $can_edit_from_any_library );
+$branch = C4::Context::mybranch() unless $can_edit_from_any_library;
 
 $branch = '*' if $branch eq 'NO_LIBRARY_SET';
 
