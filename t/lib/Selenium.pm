@@ -234,6 +234,12 @@ when we use automation test using Selenium
 
     Should always be called to avoid the "An element could not be located on the page" error
 
+=head2 capture
+    $c->capture
+
+Capture a screenshot and upload it using the excellent lut.im service provided by framasoft
+The url of the image will be printed on STDERR (it should be better to return it instead)
+
 =head1 AUTHORS
 
 Jonathan Druart <jonathan.druart@bugs.koha-community.org>
