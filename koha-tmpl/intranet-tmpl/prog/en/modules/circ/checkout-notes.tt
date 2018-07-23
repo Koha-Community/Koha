@@ -64,7 +64,7 @@
                                         <td>[% note.item.biblio.title %] - [% note.item.biblio.author %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber %]">[% note.item.barcode %]</a>)</td>
                                         <td>[% note.note %]</td>
                                         <td>[% note.notedate | $KohaDates %]</td>
-                                        <td>[% IF note.patron.title %][% note.patron.title %][% END %][% note.patron.firstname %] [% note.patron.surname %] (<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% note.patron.borrowernumber %]">[% note.patron.cardnumber %]</a>)</td>
+                                        <td>[% IF note.patron.title %][% note.patron.title %] [% END %][% note.patron.firstname %] [% note.patron.surname %] (<a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% note.patron.borrowernumber %]">[% note.patron.cardnumber %]</a>)</td>
                                         <td>
                                             [% IF ( note.noteseen == 0 ) %]
                                                 <span id="status_[% note.issue_id %]">Not seen</span>
