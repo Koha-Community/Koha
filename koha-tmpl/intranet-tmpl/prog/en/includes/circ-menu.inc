@@ -17,43 +17,45 @@
             </li>
         [% END %]
     [% END %]
-    [% IF Koha.Preference( 'AddressFormat' ) %]
-        [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
-    [% ELSE %]
-        [% INCLUDE 'member-display-address-style-us.inc' %]
-    [% END %]
-
-    [% IF ( patron.phone || patron.mobile || patron.phonepro ) %]<li class="patronphone">
-    [% IF ( patron.phone ) %]
-        <a href="tel:[% patron.phone | url %]">[% patron.phone | html %]</a>
-    [% ELSE %]
-        [% IF ( patron.mobile ) %]
-            <a href="tel:[% patron.mobile | url %]">[% patron.mobile | html %]</a>
+    [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
+        [% IF Koha.Preference( 'AddressFormat' ) %]
+            [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
         [% ELSE %]
-            [% IF ( patron.phonepro ) %]
-                <a href="tel:[% patron.phonepro | url %]">[% patron.phonepro | html %]</a>
+            [% INCLUDE 'member-display-address-style-us.inc' %]
+        [% END %]
+
+        [% IF ( patron.phone || patron.mobile || patron.phonepro ) %]<li class="patronphone">
+        [% IF ( patron.phone ) %]
+            <a href="tel:[% patron.phone | url %]">[% patron.phone | html %]</a>
+        [% ELSE %]
+            [% IF ( patron.mobile ) %]
+                <a href="tel:[% patron.mobile | url %]">[% patron.mobile | html %]</a>
+            [% ELSE %]
+                [% IF ( patron.phonepro ) %]
+                    <a href="tel:[% patron.phonepro | url %]">[% patron.phonepro | html %]</a>
+                [% END %]
+            [% END %]
+        [% END %]</li>[% END %]
+        [% IF ( patron.email ) %]
+            <li class="email"> <a href="mailto:[% patron.email | url %]" title="[% patron.email | html %]">[% patron.email | html %]</a></li>
+        [% ELSE %]
+            [% IF ( patron.emailpro ) %]
+                <li class="email"> <a href="mailto:[% patron.emailpro | url %]" title="[% patron.emailpro | html %]">[% patron.emailpro | html %]</a></li>
             [% END %]
         [% END %]
-    [% END %]</li>[% END %]
-    [% IF ( patron.email ) %]
-        <li class="email"> <a href="mailto:[% patron.email | url %]" title="[% patron.email | html %]">[% patron.email | html %]</a></li>
-    [% ELSE %]
-        [% IF ( patron.emailpro ) %]
-            <li class="email"> <a href="mailto:[% patron.emailpro | url %]" title="[% patron.emailpro | html %]">[% patron.emailpro | html %]</a></li>
-        [% END %]
-    [% END %]
 
-    [% UNLESS ( patron.address or patron.address2 ) %]
-        <li><span class="empty" id="noaddressstored">No address stored.</span></li>
-    [% END %]
-    [% UNLESS ( patron.city ) %]
-        <li><span class="empty" id="nocitystored">No city stored.</span></li>
-    [% END %]
-    [% UNLESS ( patron.phone or patron.mobile or patron.phonepro) %]
-        <li> <span class="empty">No phone stored.</span></li>
-    [% END %]
-    [% UNLESS ( patron.email or patron.emailpro) %]
-        <li> <span class="empty">No email stored.</span></li>
+        [% UNLESS ( patron.address or patron.address2 ) %]
+            <li><span class="empty" id="noaddressstored">No address stored.</span></li>
+        [% END %]
+        [% UNLESS ( patron.city ) %]
+            <li><span class="empty" id="nocitystored">No city stored.</span></li>
+        [% END %]
+        [% UNLESS ( patron.phone or patron.mobile or patron.phonepro) %]
+            <li> <span class="empty">No phone stored.</span></li>
+        [% END %]
+        [% UNLESS ( patron.email or patron.emailpro) %]
+            <li> <span class="empty">No email stored.</span></li>
+        [% END %]
     [% END %]
 
     [% IF ( ExtendedPatronAttributes ) %][% FOREACH extendedattribute IN extendedattributes %]

@@ -1,0 +1,1 @@
+INSERT INTO  systempreferences (variable, value, options, explanation) VALUES ('HidePersonalPatronDetailOnCirculation', 0, 'YesNo', 'Hide patrons phone number, email address, street address and city in the circulation page');
