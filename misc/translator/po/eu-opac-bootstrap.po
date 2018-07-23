@@ -2,7 +2,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2018-06-15 07:30-0300\n"
+"POT-Creation-Date: 2018-07-17 23:47-0300\n"
 "PO-Revision-Date: 2017-12-15 09:50-0300\n"
 "Language-Team: Koha Translation Team \n"
 "Language: eu\n"
@@ -11,16 +11,6 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "X-Pootle-Path: /eu/18.05/eu-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
-
-#. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
-#. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
-#. %3$s:  ELSE 
-#. %4$s:  debarred_comment | html_line_break 
-#. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:45
-#, c-format
-msgid "\" %s Restriction added by overdues process %s %s %s %s "
-msgstr "\" %s Atzerapen prozesuengatik gehitutako murriztapena %s %s %s %s "
 
 #. %1$s:  END 
 #. %2$s:  END 
@@ -76,7 +66,7 @@ msgstr ""
 #. %2$s:  ELSE 
 #. %3$s:  IF ( RESERVE.is_in_transit ) 
 #. %4$s:  SET transfer = RESERVE.item.get_transfer 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:668
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:687
 #, c-format
 msgid "%s %s %s %s Item in transit from "
 msgstr "%s %s %s%s -tik itema zirkulazioan "
@@ -116,7 +106,7 @@ msgstr ""
 #. %1$s:  IF ( RESERVE.is_waiting ) 
 #. %2$s:  IF ( RESERVE.is_at_destination ) 
 #. %3$s:  IF ( RESERVE.found ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:652
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:671
 #, c-format
 msgid "%s %s %s Item waiting at "
 msgstr "%s %s %s Itema zain "
@@ -176,15 +166,15 @@ msgstr "%s %s (ez onartua) %s "
 #. For the first occurrence,
 #. %1$s:  END 
 #. %2$s:  IF debarred_date && debarred_date != '9999-12-31' 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:51
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:55
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:111
 #, c-format
 msgid "%s %s End date: "
 msgstr "%s %s Azken data: "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:665
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:684
 #, c-format
 msgid "%s %s Item in transit to "
 msgstr "%s %s Itema bidean "
@@ -445,7 +435,7 @@ msgstr "%s (erlazionatutako bilaketak: %s%s%s). %s "
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
 #. %3$s:  IF ( canrenew ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:552
 #, c-format
 msgid "%s Account frozen %s %s "
 msgstr "%s Blokeatutako kontua %s %s "
@@ -498,13 +488,13 @@ msgstr ""
 
 # 'Berritze gehiagorik ez' baino 'Ezin da gehiago berritu'
 #. %1$s:  ELSIF ( ISSUE.auto_renew || ISSUE.auto_too_soon ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:307
 #, c-format
 msgid "%s Automatic renewal "
 msgstr "%s Berritze automatikoa"
 
 #. %1$s:  ELSIF ISSUE.auto_account_expired 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:289
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:304
 #, fuzzy, c-format
 msgid "%s Automatic renewal failed, your account is expired. "
 msgstr "Ez da berrizterik onartzen"
@@ -614,13 +604,13 @@ msgstr ""
 "kontsultatu."
 
 #. %1$s:  ELSE 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:682
 #, c-format
 msgid "%s Item waiting to be pulled from "
 msgstr "%s-(e)tik erretiratua izateko zain dagoen itema "
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:161
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:176
 #, c-format
 msgid "%s Item(s) checked out"
 msgstr "%s Mailegatutako elementua(k)"
@@ -634,7 +624,7 @@ msgstr "No hay imágenes para este registro."
 
 #. %1$s:  ELSIF ( ISSUE.auto_too_late ) 
 #. %2$s:  ELSIF ISSUE.auto_too_much_oweing 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
 #, fuzzy, c-format
 msgid ""
 "%s No longer renewable %s Automatic renewal failed, you have unpaid fines. "
@@ -643,7 +633,7 @@ msgstr "Ez da berrizterik onartzen"
 # 'Berritze gehiagorik ez' baino 'Ezin da gehiago berritu'
 #. %1$s:  ELSIF ( ISSUE.too_soon ) 
 #. %2$s:  ISSUE.soonestrenewdate 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:310
 #, c-format
 msgid "%s No renewal before %s "
 msgstr "%s Ez berritu %s baino lehen"
@@ -663,20 +653,20 @@ msgid "%s No results, try to change filters. %s "
 msgstr "%s Ez da emaitzarik aurkitu, saiatu iragazkiak aldatzen %s "
 
 #. %1$s:  ELSIF ( OVERDUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
 #, c-format
 msgid "%s Not allowed"
 msgstr "%s Ez da berritzerik onartzen"
 
 #. %1$s:  ELSIF ( ISSUE.on_reserve ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:293
 #, fuzzy, c-format
 msgid "%s Not renewable "
 msgstr "%s Ezin da berriztatu%s"
 
 #. %1$s:  ELSIF ( ISSUE.too_many ) 
 #. %2$s:  ELSIF ( ISSUE.norenew_overdue ) 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:280
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #, c-format
 msgid "%s Not renewable %s Not allowed "
 msgstr "%s Ez da berriztagarria %s Ez da uzten"
@@ -685,7 +675,7 @@ msgstr "%s Ez da berriztagarria %s Ez da uzten"
 #. %1$s:  ELSIF ( OVERDUE.onreserve ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:561
 #, c-format
 msgid "%s On hold %s No renewals left %s "
 msgstr "%sErreserban %sBerritze gehiagorik ez %s "
@@ -722,7 +712,7 @@ msgstr ""
 #. %3$s:  ELSIF ar.status == 'COMPLETED' 
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:839
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:858
 #, fuzzy, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr "%s %sBerria %sEskatua %sPartziala %sOsoa %sBertan behera %s "
@@ -753,6 +743,18 @@ msgstr ""
 #, c-format
 msgid "%s Quotations"
 msgstr "%s Aipamenak"
+
+#. For the first occurrence,
+#. %1$s:  IF debarred_comment.search('OVERDUES_PROCESS') 
+#. %2$s:  debarred_comment.remove('OVERDUES_PROCESS ') | html_line_break 
+#. %3$s:  ELSE 
+#. %4$s:  debarred_comment | html_line_break 
+#. %5$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:48
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:104
+#, fuzzy, c-format
+msgid "%s Restriction added by overdues process %s %s %s %s "
+msgstr "\" %s Atzerapen prozesuengatik gehitutako murriztapena %s %s %s %s "
 
 #. %1$s:  LibraryName |html 
 #: opac-tmpl/bootstrap/en/modules/opac-opensearch.tt:5
@@ -882,7 +884,7 @@ msgstr "%s Bideo laburpenak"
 #. %12$s:  itemLoo.reservedate 
 #. %13$s:  END 
 #. %14$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:389
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:396
 #, c-format
 msgid ""
 "%s Waiting %s On hold %s for patron %s at %s expected at %s %s since %s %s "
@@ -894,7 +896,7 @@ msgstr ""
 #. %1$s:  IF ( OVERDUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:571
 #, c-format
 msgid "%s Yes %s No %s "
 msgstr "%s Bai %s Ez %s "
@@ -903,7 +905,7 @@ msgstr "%s Bai %s Ez %s "
 #. %2$s:  ELSIF ( ISSUE.rentalfines ) 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:319
 #, c-format
 msgid "%s Yes (Item overdue or lost) %s Yes (Rental fees) %s No %s "
 msgstr ""
@@ -927,7 +929,7 @@ msgstr "%sEz duzu inoiz mailegurik eskatu liburutegi honetan. %s "
 #. %3$s:  ELSE 
 #. %4$s:  RESERVE_CHARGE 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:130
 #, c-format
 msgid ""
 "%s You will be charged a hold fee of %s when you collect this item %s You "
@@ -975,18 +977,27 @@ msgid "%s desc"
 msgstr "%s desc"
 
 #. %1$s:  LoginBranchname 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:562
 #, c-format
 msgid "%s holdings"
 msgstr "%s erreserbak"
 
 #. For the first occurrence,
 #. %1$s:  acquisition_details.total_quantity 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:668
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:695
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:669
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:696
 #, fuzzy, c-format
 msgid "%s items are on order."
 msgstr "%s zure saskira gehitutako elementua(k)"
+
+#. For the first occurrence,
+#. %1$s:  hits_to_paginate 
+#. %2$s:  total 
+#: opac-tmpl/bootstrap/en/includes/search/page-numbers.inc:3
+#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:3
+#, c-format
+msgid "%s of %s results loaded, refine your search to view other records"
+msgstr ""
 
 #. %1$s:  IF ( RESERVE.waitingdate ) 
 #. %2$s:  RESERVE.waitingdate | $KohaDates 
@@ -994,7 +1005,7 @@ msgstr "%s zure saskira gehitutako elementua(k)"
 #. %4$s:  RESERVE.expirationdate | $KohaDates 
 #. %5$s:  END 
 #. %6$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:656
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:675
 #, fuzzy, c-format
 msgid "%s since %s %s until %s %s %s "
 msgstr "%s %s %s %s %s %s %s "
@@ -1752,7 +1763,7 @@ msgstr "%s(MM/DD/YYYY)%s(DD/MM/YYYY)%s(YYYY-MM-DD)%s "
 #. %1$s:  IF ( bibitemloo.author ) 
 #. %2$s:  bibitemloo.author 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:165
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:172
 #, c-format
 msgid "%s, by %s%s "
 msgstr "%s, egilea %s%s"
@@ -1971,7 +1982,7 @@ msgstr "%sEste registro no tiene ítems.%s "
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:30
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:123
 #, c-format
 msgid "%sUpdate your contact information%sGo to your contact information%s"
 msgstr "%sEguneratu kontaktuko informazioa%sJoan kontaktuko informaziora%s"
@@ -1991,13 +2002,13 @@ msgstr "%sBai%sEz%s "
 msgid "%sa list:%s"
 msgstr "%szerrenda bat:%s"
 
-#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:6
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1105
+#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:7
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1106
 #, c-format
 msgid "&laquo; Previous"
 msgstr "&laquo; Aurrekoa"
 
-#: opac-tmpl/bootstrap/en/includes/search/page-numbers.inc:4
+#: opac-tmpl/bootstrap/en/includes/search/page-numbers.inc:5
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:161
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:164
 #, c-format
@@ -2620,21 +2631,21 @@ msgstr "(%s erregistroak)"
 #. For the first occurrence,
 #. %1$s:  ISSUE.renewsleft 
 #. %2$s:  ISSUE.renewsallowed 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:278
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:289
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:292
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:298
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:544
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:310
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:559
 #, c-format
 msgid "(%s of %s renewals remaining)"
 msgstr "(%s de %s falta diren berritzeak)"
 
 #. For the first occurrence,
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:450
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:575
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:773
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:590
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:221
 #, c-format
 msgid "(%s total)"
@@ -2712,7 +2723,7 @@ msgid "(Optional, default 1)"
 msgstr "(Aukerakoa, lehenetsia 1)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:31
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:124
 #, c-format
 msgid ""
 "(Please note: there may be a delay in restoring your account if you submit "
@@ -2807,27 +2818,27 @@ msgstr "(guztira _MAX_  sarreratik filtratua )"
 msgid "(modified on %s)"
 msgstr "(aldatua:  %s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:280
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #, c-format
 msgid "(on hold)"
 msgstr "(Erreserbatua)"
 
 #. %1$s:  ar.item.barcode 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:800
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:819
 #, fuzzy, c-format
 msgid "(only %s)"
 msgstr "(%s da)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:284
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:546
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:299
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:561
 #, c-format
 msgid "(overdue)"
 msgstr "Atzerapenak "
 
 #. For the first occurrence,
 #. %1$s:  priority 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:678
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1350
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:679
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1351
 #, fuzzy, c-format
 msgid "(priority %s)"
 msgstr "Prioritatea"
@@ -2897,7 +2908,7 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:131
 #, c-format
 msgid ".%sYou have fines.%s %s "
 msgstr ".%sIsunak dauzkazu.%s %s "
@@ -2918,13 +2929,13 @@ msgid "000 "
 msgstr "000 "
 
 #. SPAN
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:632
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:638
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:649
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:655
 msgid "0000-00-00"
 msgstr "0000-00-00"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:666
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:693
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:667
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:694
 #, fuzzy, c-format
 msgid "1 item is on order."
 msgstr "Ez da elementurik aurkitu."
@@ -3022,12 +3033,12 @@ msgid ""
 msgstr ""
 "Ordainketa bat id transakzioarekin '%s' kontu baterantz sortua izan da."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:314
 #, c-format
 msgid "A specific item"
 msgstr "Kopia jakin bat "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:587
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:588
 #, c-format
 msgid "About the author"
 msgstr "Egileari buruz"
@@ -3045,7 +3056,7 @@ msgid "Access denied"
 msgstr "Sartzea ukatuta"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:28
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, c-format
 msgid ""
 "According to our records, we don't have up-to-date contact information. "
@@ -3143,6 +3154,12 @@ msgstr "Gehitu zure saskira"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
 msgid "Add to..."
 msgstr "Gehitu:"
+
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
+#, fuzzy
+msgid "Add to: "
+msgstr "Gehitu %s"
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:139
 #, c-format
@@ -3259,9 +3276,9 @@ msgstr "Ordezko helbideari buruzko informazioa:"
 msgid "Alternate contact"
 msgstr "Ordezko kontaktua"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:362
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:376
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:390
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:377
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:391
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:405
 #, c-format
 msgid "Amount"
 msgstr "Monto"
@@ -3342,7 +3359,7 @@ msgstr "Edozein formatu"
 msgid "Any item "
 msgstr "Bakarrik elementu hau"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:275
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:282
 #, c-format
 msgid "Any item type"
 msgstr "Edozein elementu mota"
@@ -3379,13 +3396,13 @@ msgid "April"
 msgstr "Apirila"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 #, fuzzy
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Ziur zaude erreserba hau bertan behera utzi nahi duzula?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Ziur zaude erreserba hau bertan behera utzi nahi duzula?"
 
@@ -3436,27 +3453,27 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Ziur al zaude zerrenda hau ezabatu nahi duzula?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr "Ziur al zaurde erreserba hau kantzelatu nahi duzula?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Ziur al zaude erreserba guztiak kantzelatu nahi dituzula?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:871
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:872
 #, c-format
 msgid "Arrived"
 msgstr "Iritsi da"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:773
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:792
 #, fuzzy, c-format
 msgid "Article requests "
 msgstr "Oraindik %s eskaera gelditzen dira"
 
 #. %1$s:  borrower.article_requests_current.count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:162
 #, c-format
 msgid "Article requests (%s)"
 msgstr ""
@@ -3485,14 +3502,14 @@ msgid ""
 msgstr ""
 
 #. OPTION
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:235
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:242
 msgid "At least one item is available at this library"
 msgstr ""
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( subscription.branchcode ) 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:818
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:821
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:819
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:822
 #, c-format
 msgid "At library: %s"
 msgstr "Liburutegian: %s"
@@ -3541,8 +3558,8 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:166
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:779
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:798
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:210
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:212
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:573
@@ -3563,7 +3580,7 @@ msgstr "Egilea (A-Z)"
 msgid "Author (Z-A)"
 msgstr "Egilea (Z-A)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:795
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:796
 #, c-format
 msgid "Author notes provided by Syndetics"
 msgstr "Syndetics-ek emandako egilearen informazioa"
@@ -3680,31 +3697,31 @@ msgstr "TG"
 msgid "Back to lists"
 msgstr "Zerrendetara itzuli"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1111
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
 #, c-format
 msgid "Back to results"
 msgstr "Emaitzetara itzuli"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1111
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1112
 msgid "Back to the results search list"
 msgstr "Bilaketaren emaitzen zerrendara itzuli"
 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:107
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:149
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:93
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:325
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:172
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:408
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:457
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1210
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:187
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:423
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:472
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1211
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:125
 #, c-format
 msgid "Barcode"
 msgstr "Barra-kodea"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:260
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:522
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:275
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:537
 #, c-format
 msgid "Barcode:"
 msgstr "Barra kodea:"
@@ -3750,7 +3767,7 @@ msgstr "Blokeatua"
 msgid "Blocked record"
 msgstr "Blokeatutako erregistroak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:631
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:632
 #, c-format
 msgid "Book reviews by critics ( XXX )"
 msgstr "Kritikoek egindako liburuen iruzkinak"
@@ -3786,14 +3803,14 @@ msgstr "Arakatu hierarkiaren arabera"
 msgid "Browse our catalog"
 msgstr "Gure katalogoa arakatu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1097
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1099
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1098
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1100
 #, c-format
 msgid "Browse results"
 msgstr "Emaitzetatik nabigatu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1295
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1297
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1296
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1298
 #, c-format
 msgid "Browse shelf"
 msgstr "Arakatu apala"
@@ -3833,16 +3850,16 @@ msgid "Call Number"
 msgstr "Kokapen-kodea"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:79
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:174
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:409
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:458
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:424
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:473
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:227
 #, c-format
 msgid "Call no."
 msgstr "Katalogo zk."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:265
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:527
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:280
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
 #, c-format
 msgid "Call no.:"
 msgstr "Signatura topografikoa"
@@ -3854,8 +3871,8 @@ msgstr "Signatura topografikoa"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:58
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:59
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:330
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1199
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1200
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:222
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:224
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:583
@@ -3883,7 +3900,7 @@ msgid "Call number:"
 msgstr "Katalogo zenbakia:"
 
 #. %1$s:  subscription.callnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:828
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:829
 #, c-format
 msgid "Call number: %s"
 msgstr "Signatura topografikoa:  %s"
@@ -3902,9 +3919,9 @@ msgstr "Signatura topografikoa:  %s"
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:718
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:737
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:857
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:756
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:876
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:174
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:299
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:268
@@ -3923,7 +3940,7 @@ msgstr "Bertan behera utzi"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:140
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:837
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:838
 #, c-format
 msgid "Cancel email notification"
 msgstr "Bertan behera utzi e-mail bidezko ohartarazpena"
@@ -3939,12 +3956,12 @@ msgid "Cancel enrollment "
 msgstr "Konbinazioa bertan behera utzi"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 #, fuzzy
 msgid "Cancel rating"
 msgstr "Bertan behera utzi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:856
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:875
 #, fuzzy, c-format
 msgid "Cancel:"
 msgstr "Bertan behera utzi"
@@ -3967,7 +3984,7 @@ msgid "Cancels an active hold request for the patron."
 msgstr " Bazkidearen erreserba aktiboaren eskaera bertan behera uzten du."
 
 #. IMG
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:352
 msgid "Cannot be put on hold"
 msgstr "Ezin da erreserbatu"
 
@@ -3997,6 +4014,7 @@ msgstr "Txartel-zenbakia:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:25
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
 #, c-format
 msgid "Cart"
 msgstr "Saskia"
@@ -4033,7 +4051,7 @@ msgstr "Aldatu zure pasahitza"
 msgid "Change your password "
 msgstr "Aldatu zure pasahitza"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:784
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:803
 #, fuzzy, c-format
 msgid "Chapters"
 msgstr "karaketereak"
@@ -4078,7 +4096,7 @@ msgid "Checked out"
 msgstr "Maileguan hartuta"
 
 #. %1$s:  issues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:144
 #, c-format
 msgid "Checked out (%s)"
 msgstr "Mailegatua (%s)"
@@ -4141,7 +4159,7 @@ msgstr "Aipua"
 msgid "City:"
 msgstr "Hiria:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:880
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:881
 #, c-format
 msgid "Claimed"
 msgstr "Erreklamatuta"
@@ -4169,6 +4187,7 @@ msgstr "Garbitu"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:35
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:756
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:279
@@ -4182,14 +4201,14 @@ msgstr "Garbitu dena"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:293
 #, c-format
 msgid "Clear date"
 msgstr "Garbitu data"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:713
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:754
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:732
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:773
 #, c-format
 msgid "Clear date to suspend indefinitely"
 msgstr "Ezabatu data aldi baterako suspenditzeko"
@@ -4211,12 +4230,12 @@ msgstr "Klik egin hemen saioa irekitzeko."
 msgid "Click here to view"
 msgstr "Klik egin hemen saioa irekitzeko."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:661
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:662
 #, c-format
 msgid "Click here to view them all."
 msgstr " Sakatu hemen denak ikusteko."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1046
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1047
 #, c-format
 msgid "Click on an image to view it in the image viewer"
 msgstr "Egin klik irudi batetan bisualizadorean ikusteko"
@@ -4237,7 +4256,7 @@ msgid "Click to expand this role"
 msgstr "Klik egin leiho berri bat zabaltzeko"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Click to forward the list to"
 msgstr "Klik egin zerrenda aurreratzeko"
 
@@ -4254,17 +4273,17 @@ msgid "Click to open in new window"
 msgstr " Sakatu leiho berri batean zabaltzeko"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Click to rewind the list to"
 msgstr "Klik egin zerrendan atzeraka egiteko"
 
 #. DIV
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:204
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:219
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:498
 msgid "Click to view in Google Books"
 msgstr " Sakatu Google Books-en ikusteko"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1123
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1124
 #, c-format
 msgid "Close"
 msgstr "Itxi"
@@ -4291,7 +4310,7 @@ msgstr "Itxi lehioa"
 
 #. %1$s:  borrower_club_enrollments.count || 0 
 #. %2$s:  borrower_enrollable_clubs.count || 0 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:155
 #, fuzzy, c-format
 msgid "Clubs (%s/%s) "
 msgstr "%s %s/%s "
@@ -4314,7 +4333,7 @@ msgstr "Interesatua zauden itemak bildu"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:119
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1196
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1197
 #, c-format
 msgid "Collection"
 msgstr "Material mota"
@@ -4354,16 +4373,16 @@ msgstr "Zutabearen ikusgarritasuna"
 
 #. For the first occurrence,
 #. %1$s:  review.patron.firstname 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:949
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:951
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:955
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:950
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:952
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:956
 #, c-format
 msgid "Comment by %s"
 msgstr "%s-k iruzkindua "
 
 #. %1$s:  review.patron.firstname 
 #. %2$s:  review.patron.surname|truncate(2,'.') 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:953
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:954
 #, c-format
 msgid "Comment by %s %s"
 msgstr "%s %s -k iruzkindua"
@@ -4371,7 +4390,7 @@ msgstr "%s %s -k iruzkindua"
 #. %1$s:  review.patron.title 
 #. %2$s:  review.patron.firstname 
 #. %3$s:  review.patron.surname 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:947
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:948
 #, c-format
 msgid "Comment by %s %s %s"
 msgstr "Iruzkinaren egilea:  %s %s %s"
@@ -4388,20 +4407,20 @@ msgid "Comments on "
 msgstr "Iruzkinak item honi buruz: "
 
 #. %1$s:  ' ( ' _ (reviews.size || 0) _ ' )' 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:604
 #, fuzzy, c-format
 msgid "Comments%s"
 msgstr "Iruzkinak"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:426
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:433
 msgid "Confirm hold"
 msgstr "Berretsi erreserba"
 
 #. %1$s:  USER_INFO.firstname 
 #. %2$s:  USER_INFO.surname 
 #. %3$s:  USER_INFO.cardnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:126
 #, c-format
 msgid "Confirm holds for:%s %s (%s)"
 msgstr "Erreserbak baieztatu: %s %s (%s)"
@@ -4455,8 +4474,8 @@ msgid "Contents of "
 msgstr "Edukiak:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:321
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1205
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:328
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1206
 #, c-format
 msgid "Copy number"
 msgstr "Copia número "
@@ -4517,7 +4536,7 @@ msgstr "Ikastaro zenbakia:"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:273
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:21
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1217
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1218
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:19
 #, c-format
 msgid "Course reserves"
@@ -4573,18 +4592,18 @@ msgstr ""
 "Bazkide batentzat, Kohan erregistro bibliografiko bateko item jakin baterako "
 "item mailako eskaera bat sortzen du."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:388
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:403
 #, c-format
 msgid "Credits"
 msgstr "Kredituak"
 
 #. %1$s:  amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:150
 #, c-format
 msgid "Credits (%s)"
 msgstr "Kredituak (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1192
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1193
 #, c-format
 msgid "Current location"
 msgstr "Uneko kokalekua"
@@ -4628,7 +4647,7 @@ msgstr "DVD bideoa / Videodisc"
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:75
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:782
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:801
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:62
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:102
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:147
@@ -4648,14 +4667,14 @@ msgid "Date added:"
 msgstr "Sarrera-data:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:61
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1209
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1210
 #, c-format
 msgid "Date due"
 msgstr "Itzultze data"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:238
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:245
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:532
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:253
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:260
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:547
 #, c-format
 msgid "Date due:"
 msgstr "Itzultze data:"
@@ -4740,7 +4759,7 @@ msgstr ""
 "Erregistroak itzultzen direneko metadatoen eskema zehazten du, balio "
 "posibleak: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:879
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:880
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:698
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:279
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:54
@@ -4922,7 +4941,7 @@ msgstr "Eginda"
 msgid "Download"
 msgstr "Deskargatu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:358
 #, c-format
 msgid "Download as iCal/.ics file"
 msgstr "Jaitsi fitxategia iCal/.ics moduan"
@@ -4948,44 +4967,44 @@ msgstr "Descargar lista"
 msgid "Dublin Core"
 msgstr "Dublin Core"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:167
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:407
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:459
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:182
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:422
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:474
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:228
 #, c-format
 msgid "Due"
 msgstr "Itzulketa"
 
 #. %1$s:  itemLoo.dateDue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:375
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:382
 #, c-format
 msgid "Due %s"
 msgstr "Itzulketak %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:96
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:103
 #, c-format
 msgid "ERROR: Internal error: incomplete hold request. "
 msgstr "ERROREA: Barne-errorea: erreserba-eskaera osatugabea."
 
 #. %1$s:  bad_biblionumber 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:72
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:79
 #, c-format
 msgid "ERROR: No record found for record id %s. "
 msgstr ""
 "ERROREA: Ez dago biblionumber ri dagokion erregistro bibliografikorik %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:97
 #, c-format
 msgid "ERROR: No record id specified. "
 msgstr "ERROREA: ez da biblionumber-ik jaso"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:935
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:936
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:689
 #, c-format
 msgid "Edit"
 msgstr "Editatu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:321
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:336
 #, fuzzy, c-format
 msgid "Edit / Create note"
 msgstr "Editar informe SQL "
@@ -5025,13 +5044,13 @@ msgstr "Editar lista de enrutamiento para "
 msgid "Edition statement:"
 msgstr "Edizio-aitorpena:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:613
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:614
 #, c-format
 msgid "Editions"
 msgstr "Edizioak"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:203
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:41
 #, c-format
 msgid "Email"
@@ -5066,7 +5085,7 @@ msgstr "Entziklopediak "
 msgid "Enhanced content: "
 msgstr "Eduki hobetua:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:723
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:724
 #, c-format
 msgid "Enhanced descriptions from Syndetics:"
 msgstr "Syndetics-eko deskribapen hobetuak:"
@@ -5241,23 +5260,23 @@ msgstr "Signatura adibidea"
 msgid "Example response"
 msgstr "Erantzun adibidea"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:575
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:576
 #, c-format
 msgid "Excerpt"
 msgstr "Laburpena"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:766
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:767
 #, c-format
 msgid "Excerpt provided by Syndetics"
 msgstr "Syndetics-ek emandako laburpena"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:870
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:871
 #, c-format
 msgid "Expected"
 msgstr "Espero da"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
 msgid "Expecting a specific item selection."
 msgstr "Jakineko kopia baten hautaketaren zain"
 
@@ -5266,13 +5285,13 @@ msgstr "Jakineko kopia baten hautaketaren zain"
 msgid "Expiration date:"
 msgstr "Iraungitze-data:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:628
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:645
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:650
 #, c-format
 msgid "Expiration:"
 msgstr "Iraungipena:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:581
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:596
 #, c-format
 msgid "Expires on"
 msgstr "Iraungitze data:"
@@ -5297,7 +5316,7 @@ msgstr "Dublin Core-era esportatzen..."
 msgid "Extends the due date for a patron's existing loan."
 msgstr "Bazkide baten mailegu baterako itzultze-data luzatzen du."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 #, c-format
 msgid "Facebook"
 msgstr "Facebook"
@@ -5320,7 +5339,7 @@ msgstr "Otsaila"
 
 #. %1$s:  ItemTypes.GetDescription( ISSUE.renewalitemtype) 
 #. %2$s:  ISSUE.renewalfee | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:291
 #, fuzzy, c-format
 msgid "Fee for item type '%s': %s"
 msgstr "Ezabatu item mota '%s'?"
@@ -5355,8 +5374,8 @@ msgstr "Filmografiak"
 msgid "Fine amount"
 msgstr "Isunen zenbatekoa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:179
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:464
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:194
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:231
 #, c-format
 msgid "Fines"
@@ -5364,21 +5383,21 @@ msgstr "Isunak"
 
 #. For the first occurrence,
 #. %1$s:  amountoutstanding | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:133
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:148
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:149
 #, c-format
 msgid "Fines (%s)"
 msgstr "Isunak (%s)"
 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:68
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:360
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:374
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:375
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:389
 #, c-format
 msgid "Fines and charges"
 msgstr "Isunak eta karguak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:304
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:556
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:571
 #, c-format
 msgid "Fines:"
 msgstr "Isunak:"
@@ -5397,7 +5416,7 @@ msgstr "Bukatu jasotze prozesua"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:3
-#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:5
+#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:6
 #, c-format
 msgid "First"
 msgstr "Lehenengoa"
@@ -5629,12 +5648,12 @@ msgstr "Joan"
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Go to detail"
 msgstr "Ikus xehetasunak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:55
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:118
 #, c-format
 msgid "Go to your account page"
 msgstr "Jo zure kontuaren orrira"
@@ -5713,12 +5732,12 @@ msgid "Hi,"
 msgstr "Kaixo,"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
 msgid "Hide options"
 msgstr "Ezkutatu aukerak"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Hide pagination list (%s-%s / %s)"
 msgstr ""
 
@@ -5734,22 +5753,22 @@ msgstr "Ezkutatu leihoa"
 msgid "Highlight"
 msgstr "Nabarmendu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:620
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:637
 #, c-format
 msgid "Hold date:"
 msgstr "Erreserba-data"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:262
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:269
 #, c-format
 msgid "Hold not needed after:"
 msgstr "Geroago beharrezkoa ez den erreserba"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:286
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:293
 #, c-format
 msgid "Hold notes:"
 msgstr "Erreserba oharra:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:255
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:262
 #, c-format
 msgid "Hold starts on date:"
 msgstr "Erreserba data honetan hasiko da:"
@@ -5774,24 +5793,24 @@ msgid "Holding libraries"
 msgstr "Alearen liburutegiak"
 
 #: opac-tmpl/bootstrap/en/modules/opac-MARCdetail.tt:138
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:561
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:562
 #, c-format
 msgid "Holdings"
 msgstr "Aleak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:688
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:689
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:406
 #, c-format
 msgid "Holdings:"
 msgstr "Aleak:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:575
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:590
 #, c-format
 msgid "Holds "
 msgstr "Erreserbak "
 
 #. %1$s:  RESERVES.count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:146
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:161
 #, c-format
 msgid "Holds (%s)"
 msgstr "Erreserbak  (%s)"
@@ -5857,8 +5876,8 @@ msgstr "Hasiera"
 msgid "Home libraries"
 msgstr "Jatorri-liburutegia"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:327
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1194
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1195
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:126
 #, c-format
 msgid "Home library"
@@ -5979,7 +5998,7 @@ msgstr "IdRef"
 msgid "Identity"
 msgstr "Identifikazioa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
 #, c-format
 msgid "If this is an error, please contact the library."
 msgstr ""
@@ -6114,7 +6133,7 @@ msgid "If you want to, you can try to "
 msgstr "Nahi baduzu, saia zaitezke"
 
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:623
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:624
 #, c-format
 msgid "Images"
 msgstr "Irudiak"
@@ -6145,7 +6164,7 @@ msgstr "Lineako katalogoan: %s/cgi-bin/koha/opac-detail.pl?biblionumber=%s "
 #. %2$s:  Branches.GetName( item.transfertto ) 
 #. %3$s:  item.transfertwhen | $KohaDates 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:45
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:377
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:384
 #, c-format
 msgid "In transit from %s to %s since %s"
 msgstr "En cuarso desde %s a %s hasta %s"
@@ -6168,7 +6187,7 @@ msgstr "Hemen indexatua:"
 msgid "Indexes"
 msgstr "Aurkibideak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:341
 #, c-format
 msgid "Information"
 msgstr "Informazioa"
@@ -6207,12 +6226,12 @@ msgstr ""
 msgid "Invalid shelf number."
 msgstr "Kokapen-kodea ezeztatu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:781
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:800
 #, c-format
 msgid "Issue"
 msgstr "Mailegua"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:856
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:857
 #, c-format
 msgid "Issue #"
 msgstr "Alea #"
@@ -6244,7 +6263,7 @@ msgstr "Izenburu hau ezin da eskatu."
 msgid "Item URI"
 msgstr "Item URI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:643
 #, c-format
 msgid "Item call number"
 msgstr "Signatura topográfica del ítem"
@@ -6259,12 +6278,12 @@ msgstr "Ezin da mailegatua izan"
 msgid "Item damaged"
 msgstr "Item kaltetua"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1214
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1215
 #, c-format
 msgid "Item hold queue priority"
 msgstr "Alearen erreserba-errenkadaren lehentasuna"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1212
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1213
 #, c-format
 msgid "Item holds"
 msgstr "Item erreserbatua"
@@ -6277,23 +6296,23 @@ msgstr "Item galdua"
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:55
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:78
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:323
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:169
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:456
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1190
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:471
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1191
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:124
 #, c-format
 msgid "Item type"
 msgstr "Item mota"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:145
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:252
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:267
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:57
 #, c-format
 msgid "Item type:"
 msgstr "Elementu mota:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:194
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:201
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:332
 #, c-format
 msgid "Item type: "
@@ -6442,12 +6461,12 @@ msgstr "Inprimaketa handia"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:3
-#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:17
+#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:18
 #, c-format
 msgid "Last"
 msgstr "Azkena "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:328
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:335
 #, c-format
 msgid "Last location"
 msgstr "Azken kokalekua"
@@ -6462,7 +6481,7 @@ msgstr "Azken eguneraketa"
 msgid "Last updated:"
 msgstr "Azken eguneraketa:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:872
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:873
 #, c-format
 msgid "Late"
 msgstr "Berandu"
@@ -6514,7 +6533,7 @@ msgstr "Liburutegiak"
 
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:137
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:640
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
 #, c-format
 msgid "Library"
 msgstr "Liburutegia"
@@ -6567,22 +6586,28 @@ msgstr "Mugatu: "
 msgid "Link"
 msgstr "Lotura"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1325
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1327
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1326
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1328
 #, c-format
 msgid "Link to resource "
 msgstr "Errekurtsora lotura"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
 #, c-format
 msgid "LinkedIn"
 msgstr "LinkedIn"
 
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:182
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:197
 #, c-format
 msgid "Links"
 msgstr "Loturak"
+
+#. SCRIPT
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
+#, fuzzy
+msgid "List"
+msgstr "Zerrendak"
 
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:114
 #, c-format
@@ -6630,6 +6655,7 @@ msgid "Lists"
 msgstr "Zerrendak"
 
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:465
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
 #, fuzzy, c-format
 msgid "Lists:"
 msgstr "Zerrendak"
@@ -6648,11 +6674,11 @@ msgstr "Kargatzen"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:3
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:65
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Loading..."
 msgstr "Kargatzen..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:352
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:367
 #, fuzzy, c-format
 msgid "Loading... "
 msgstr "Kargatzen..."
@@ -6731,7 +6757,7 @@ msgstr "Zure etiketak ikusteko."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:102
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:301
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:981
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:982
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:300
 #, c-format
 msgid "Log in to your account"
@@ -6920,33 +6946,33 @@ msgstr "Mezua bidali da"
 msgid "Messages for you"
 msgstr "Zuretzako mezuak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:873
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:874
 #, c-format
 msgid "Missing"
 msgstr "Falta da"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:876
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:877
 #, fuzzy, c-format
 msgid "Missing (damaged)"
 msgstr "Caracteres omitidos"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:877
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:878
 #, fuzzy, c-format
 msgid "Missing (lost)"
 msgstr "Saioa galdu da"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:874
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:875
 #, c-format
 msgid "Missing (never received)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:875
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:876
 #, fuzzy, c-format
 msgid "Missing (sold out)"
 msgstr "Falta diren aleak"
 
 #. %1$s:  subscription.missinglist 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:846
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:847
 #, c-format
 msgid "Missing issues: %s "
 msgstr "Galdutako aleak:  %s "
@@ -6956,7 +6982,7 @@ msgstr "Galdutako aleak:  %s "
 msgid "Mo"
 msgstr "Al"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:590
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:607
 #, c-format
 msgid "Modify"
 msgstr "Aldatu"
@@ -6971,13 +6997,13 @@ msgstr "Astel"
 msgid "Monday"
 msgstr "Igandea"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1058
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1059
 #, c-format
 msgid "More book reviews at iDreamBooks.com"
 msgstr "Liburu-iruzkin gehiago iDreamBooks.com-en"
 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:22
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:890
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:891
 #, c-format
 msgid "More details"
 msgstr "Xehetasun gehiago"
@@ -7035,7 +7061,7 @@ msgstr "Termino Espezifikoa"
 msgid "Never"
 msgstr "Inoiz (ere)  ez"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:633
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:650
 #, fuzzy, c-format
 msgid "Never expires "
 msgstr "Ez da inoiz iraungitzen %s "
@@ -7122,24 +7148,24 @@ msgstr "%s liburutegiko %s%s%s berriak"
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:65
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1116
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1117
 #, c-format
 msgid "Next"
 msgstr "Hurrengoa"
 
-#: opac-tmpl/bootstrap/en/includes/search/page-numbers.inc:14
+#: opac-tmpl/bootstrap/en/includes/search/page-numbers.inc:15
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:175
 #, c-format
 msgid "Next &gt;&gt;"
 msgstr "Hurrengoa &gt;&gt;"
 
-#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:16
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1114
+#: opac-tmpl/bootstrap/en/includes/page-numbers.inc:17
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
 #, c-format
 msgid "Next &raquo;"
 msgstr "Hurrengoa &raquo;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:299
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:306
 #, c-format
 msgid "Next available item"
 msgstr "Urrengo item eskuragarria"
@@ -7182,14 +7208,14 @@ msgstr "Ez dira aldaketak egin."
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:117
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:206
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:215
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:477
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:485
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:494
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:213
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:221
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:230
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:500
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:509
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:82
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1005
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1006
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:307
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:323
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:332
@@ -7252,12 +7278,12 @@ msgstr "Azken erakutsita"
 msgid "No operation parameter has been passed."
 msgstr "Ez da operazio-parametrurik onartu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:712
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:713
 #, fuzzy, c-format
 msgid "No other items."
 msgstr "Elementu kopurua:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:698
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:699
 #, c-format
 msgid "No physical items for this record"
 msgstr "Erregistro honetarako itemik ez dago"
@@ -7384,17 +7410,17 @@ msgid "Not for loan %s"
 msgstr "Ezin da mailegatu (%s)"
 
 #. %1$s:  itemLoo.notforloanvalue 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:385
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:392
 #, c-format
 msgid "Not for loan (%s)"
 msgstr "Ez da mailegatzen (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:878
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:879
 #, fuzzy, c-format
 msgid "Not issued"
 msgstr "ítem"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:411
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:418
 #, c-format
 msgid "Not on hold"
 msgstr "Ez dago erreserbatua"
@@ -7404,8 +7430,8 @@ msgstr "Ez dago erreserbatua"
 msgid "Not what you expected? Check for "
 msgstr "Ez duzu aurkitu nahi zenuena? Saiatu honen arabera bilatzen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:185
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:860
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:861
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:178
 #, c-format
 msgid "Note"
@@ -7423,7 +7449,7 @@ msgstr "Oharra: "
 
 #. %1$s:  END 
 #. %2$s:  END # / UNLESS bibitemloo.holdable 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:240
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:247
 #, c-format
 msgid ""
 "Note: Library policy does not allow hold/pickup of an item available "
@@ -7494,8 +7520,8 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:84
 #: opac-tmpl/bootstrap/en/modules/opac-auth-detail.tt:113
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:143
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:785
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1208
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:804
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1209
 #: opac-tmpl/bootstrap/en/modules/opac-course-reserves.tt:37
 #, c-format
 msgid "Notes"
@@ -7528,7 +7554,7 @@ msgid "Nothing"
 msgstr "Ezer"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7545,9 +7571,9 @@ msgstr "Abisua:"
 msgid "Nov"
 msgstr "Aza."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:608
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1065
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1138
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:609
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1066
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1139
 #, c-format
 msgid "Novelist Select"
 msgstr "Novelist Select"
@@ -7567,7 +7593,7 @@ msgstr "Azaroa"
 msgid "Number"
 msgstr "Zenbakia"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:210
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:217
 #, c-format
 msgid "Number of holds: "
 msgstr "Erreserba-kopuruak:"
@@ -7682,7 +7708,7 @@ msgstr "Izenburuaren arabera antolatu"
 msgid "Order by: "
 msgstr "Antolatuta: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:988
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:989
 #, c-format
 msgid "Other editions of this work"
 msgstr "Lan honen beste edizioak"
@@ -7693,7 +7719,7 @@ msgid "Other forms:"
 msgstr "Beste formak:"
 
 #. %1$s:  ' ( ' _ (otheritemloop.size || 0) _ ' )' 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:565
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:566
 #, fuzzy, c-format
 msgid "Other holdings %s"
 msgstr "Otras reservas"
@@ -7720,7 +7746,7 @@ msgstr "OutputIntermediateFormat "
 msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:149
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:164
 #, fuzzy, c-format
 msgid "OverDrive Account"
 msgstr "OverDrive bilduman"
@@ -7734,18 +7760,18 @@ msgid "OverDrive search for '%s'"
 msgstr "'%s' –rako OverDrive bilaketa"
 
 #. %1$s:  priority 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:680
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:681
 #, fuzzy, c-format
 msgid "Overall queue priority: %s"
 msgstr "Alearen erreserba-errenkadaren lehentasuna"
 
 #. %1$s:  overdues_count 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:131
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:146
 #, c-format
 msgid "Overdue (%s)"
 msgstr "Atzerapenak (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:450
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:465
 #, c-format
 msgid "Overdues "
 msgstr "Atzerapenak "
@@ -7756,7 +7782,7 @@ msgstr "Atzerapenak "
 msgid "Owner only"
 msgstr "Jabea:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:783
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:802
 #, fuzzy, c-format
 msgid "Pages"
 msgstr "Irudiak"
@@ -7857,7 +7883,7 @@ msgid "Patent document"
 msgstr "Patente-dokumentua"
 
 #. %1$s:  review.datereviewed | $KohaDates 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:960
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:961
 #, c-format
 msgid "Patron comment on %s"
 msgstr "Bazkideak %s honi buruzko iruzkina"
@@ -7900,18 +7926,18 @@ msgstr "Telefonoa:"
 msgid "Physical details:"
 msgstr "Xehetasun fisikoak:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:582
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:598
 #, c-format
 msgid "Pick up location"
 msgstr "Jasotze kokalekua"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:219
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:642
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:226
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:660
 #, c-format
 msgid "Pick up location:"
 msgstr "Erretiro kokalekua"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:787
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:806
 #, c-format
 msgid "Pickup library"
 msgstr "Elementua hartzeko liburutegia"
@@ -7922,17 +7948,17 @@ msgid "Pickup library:"
 msgstr "Elementua hartzeko liburutegia"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
 msgid "Place a hold on"
 msgstr "Erreserba egin"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:161
 #, c-format
 msgid "Place a hold on "
 msgstr "Erreserba egin"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
 msgid "Place a hold on: "
 msgstr "Erreserba egin:"
 
@@ -7961,8 +7987,8 @@ msgstr "Erreserba egin"
 msgid "Place request"
 msgstr "Lekuak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:580
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:777
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:796
 #, c-format
 msgid "Placed on"
 msgstr "Kokapena:"
@@ -7977,7 +8003,7 @@ msgstr "Lekuak"
 msgid "Placing a hold"
 msgstr "Erreserba egin"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:627
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:628
 #, c-format
 msgid "Play media"
 msgstr "Multimedia "
@@ -8086,7 +8112,7 @@ msgstr "%s Mesedez, zuzendu hau eta berbidali. "
 msgid "Please do not use this mail to request or renew books."
 msgstr "Ez baduzu posta elektroniko hau jasotzen, berri bat eska dezakezu: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:288
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:295
 #, fuzzy, c-format
 msgid "Please enter additional information about the requested item:"
 msgstr ""
@@ -8166,14 +8192,14 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:73
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:97
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:100
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:122
 #, c-format
 msgid "Please note:"
 msgstr "Mesedez, ohar zaitez:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:67
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:131
 #, c-format
 msgid "Please note: "
 msgstr "Mesedez, kontuan hartu: "
@@ -8249,7 +8275,7 @@ msgstr "Ospetsua (behetik hasi)"
 msgid "Popularity (most to least)"
 msgstr "Ospetsua (goitik hasi)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:976
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:977
 #, fuzzy, c-format
 msgid "Post your comments on this item. "
 msgstr "Item honi buruzko zure iruzkinak gehitu edo editatu "
@@ -8288,7 +8314,7 @@ msgstr "Aurreikusi"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:16
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:3
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:65
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1107
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1108
 #, c-format
 msgid "Previous"
 msgstr "Aurrekoak"
@@ -8327,12 +8353,12 @@ msgstr "Inprimatu"
 msgid "Print list"
 msgstr "Inprimatu zerrenda"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:584
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:601
 #, c-format
 msgid "Priority"
 msgstr "Prioritatea"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:647
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:666
 #, c-format
 msgid "Priority:"
 msgstr "Lehentasuna:"
@@ -8397,7 +8423,7 @@ msgstr "Zerrenda publikoak"
 msgid "Public lists:"
 msgstr "Zerrenda publikoak:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:857
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:858
 #, fuzzy, c-format
 msgid "Publication date"
 msgstr "Argitaratze-aldia:"
@@ -8511,7 +8537,7 @@ msgstr "baloratu"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Rating based on reviews of "
 msgstr "Azterketa honetan oinarritutako balorazioa"
 
@@ -8530,7 +8556,7 @@ msgstr "Iradokizunaren arrazoia "
 msgid "RecallItem "
 msgstr "RecallItem "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:858
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:859
 #, fuzzy, c-format
 msgid "Received date"
 msgstr "Iruzkinaren data:"
@@ -8556,7 +8582,7 @@ msgstr "Record URL"
 msgid "Record not found"
 msgstr "Erregistro ez-aurkitua"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:776
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:795
 #, fuzzy, c-format
 msgid "Record title"
 msgstr "Detalles de registro"
@@ -8608,12 +8634,12 @@ msgstr "Inprimaketa erregularra"
 msgid "Related Term"
 msgstr "Erlazionatutako Terminoa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:410
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:425
 #, c-format
 msgid "Relative"
 msgstr "Kargu dagoen pertsona"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:145
 #, c-format
 msgid "Relatives' checkouts"
 msgstr "Senideen maileguak"
@@ -8679,18 +8705,18 @@ msgstr "Aukeratutako itemak ezabatu"
 msgid "Remove share"
 msgstr "Partekatua kendu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:176
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:273
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:461
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:542
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:288
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:476
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:557
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:229
 #, c-format
 msgid "Renew"
 msgstr "Berritu"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:340
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:355
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Renew all"
 msgstr "Berritu guztia"
 
@@ -8703,8 +8729,8 @@ msgid "Renew item"
 msgstr "Berritu item-ak"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:329
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Renew selected"
 msgstr "Aukeratutatoak berriztu"
 
@@ -8715,7 +8741,7 @@ msgstr "Aukeratutatoak berriztu"
 msgid "RenewLoan"
 msgstr "RenewLoan"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:270
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:285
 #, c-format
 msgid "Renewed!"
 msgstr "Berritu!"
@@ -8748,7 +8774,7 @@ msgstr "Eskatuta"
 msgid "Request placed:"
 msgstr "Eskatuta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:280
 #, c-format
 msgid "Request specific item type:"
 msgstr "Item mota espezifiko bat eskatu:"
@@ -8868,17 +8894,17 @@ msgstr "Emaitzak %s-(e)tik %s -(e)ra %s guztira"
 msgid "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 msgstr "Results of search %sfor '%s'%s%s&nbsp;with limit(s):&nbsp;'%s'%s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:692
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:711
 #, c-format
 msgid "Resume"
 msgstr "Emaitzak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:761
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
 #, c-format
 msgid "Resume all suspended holds"
 msgstr "Berriz ezarri bertan behera lagatako erreserba guztiak."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:703
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:722
 #, c-format
 msgid "Resume your hold on "
 msgstr "Zure erreserben laburpena"
@@ -8957,17 +8983,17 @@ msgstr ""
 "maileguak eta bazkidearen mezuak itzultzeko aukera ematen du."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Review date: "
 msgstr "Iruzkinaren data:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Review result: "
 msgstr "Iruzkinaren emaitzak:"
 
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:339
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:578
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:579
 #, c-format
 msgid "Reviews"
 msgstr "Iruzkinak"
@@ -8977,7 +9003,7 @@ msgstr "Iruzkinak"
 msgid "Reviews from LibraryThing.com:"
 msgstr "LibraryuThing.com-en iruzkinak:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:775
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:776
 #, c-format
 msgid "Reviews provided by Syndetics"
 msgstr "Syndetics-ek emandako iruzkinak"
@@ -9032,6 +9058,7 @@ msgstr "Larunbata"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:617
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:67
@@ -9223,8 +9250,8 @@ msgstr "Atala:"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:279
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:290
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:115
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:213
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:492
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:228
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:507
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:100
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:102
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:105
@@ -9238,12 +9265,12 @@ msgid "See also:"
 msgstr "Ikusi baita:"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "See biblio"
 msgstr "Ikus biblio"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1114
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1115
 msgid ""
 "See: [% IF ( nextTitle ) %][% nextTitle |html %][% ELSE %]next biblio[% END "
 "%]"
@@ -9252,7 +9279,7 @@ msgstr ""
 "%]"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1105
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1106
 msgid ""
 "See: [% IF ( previousTitle ) %][% previousTitle |html %][% ELSE %]previous "
 "biblio[% END %]"
@@ -9265,7 +9292,7 @@ msgstr ""
 msgid "Select a list"
 msgstr "Hautatu zerrenda bat"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:319
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:326
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:120
 #, c-format
 msgid "Select a specific item:"
@@ -9274,6 +9301,7 @@ msgstr "Aukeratu kopia jakin bat"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:34
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:756
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:279
@@ -9375,8 +9403,8 @@ msgstr "Iraila"
 msgid "Serial"
 msgstr "Aldizkako argitalpena"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:618
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:641
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:619
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:642
 #, c-format
 msgid "Serial collection"
 msgstr "Aldizkako argitalpen bilduma"
@@ -9428,7 +9456,7 @@ msgstr "Saioa galdu da"
 msgid "Settings updated"
 msgstr "Ezarpenak eguneratu dira"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1152
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:702
 #, c-format
 msgid "Share"
@@ -9445,7 +9473,7 @@ msgid "Share a list with another patron"
 msgstr "Partekatu zerrenda bat beste bazkide batekin"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1156
 msgid "Share by email"
 msgstr "Posta elektroniko bidez partekatu"
 
@@ -9455,16 +9483,16 @@ msgid "Share list"
 msgstr "Zerrenda partekatu"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1153
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
 msgid "Share on Facebook"
 msgstr "Facebook-en partekatu"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1154
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1155
 msgid "Share on LinkedIn"
 msgstr "Linkedin-en partekatu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1198
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1199
 #, c-format
 msgid "Shelving location"
 msgstr "Apaleko kokalekua"
@@ -9510,14 +9538,14 @@ msgstr "Erakutsi zerrendak"
 msgid "Show more"
 msgstr "Erakutsi gehiago"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:248
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:437
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:255
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:444
 #, c-format
 msgid "Show more options"
 msgstr "Aukera gehiago"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "Show pagination list (%s-%s / %s)"
 msgstr ""
 
@@ -9558,7 +9586,7 @@ msgstr "Azken 50 itemak erakusten."
 msgid "Showing only available items"
 msgstr "Eskuragarri dauden itemak soilik erakusten"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:592
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:593
 #, c-format
 msgid "Similar items"
 msgstr "Antzeko elementuak"
@@ -9590,7 +9618,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Something went wrong. The note has not been saved"
 msgstr ""
 
@@ -9599,7 +9627,7 @@ msgstr ""
 msgid "Sorry"
 msgstr "Sentitzen dugu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:141
 #, c-format
 msgid "Sorry,"
 msgstr "Sentitzen dugu,"
@@ -9623,7 +9651,7 @@ msgstr "Sentitzen dugu, baina ez duzu sartu posta elektroniko helbide zuzena."
 msgid "Sorry, no suggestions."
 msgstr "Sentitzen dugu, ez dago proposamenik."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:117
 #, fuzzy, c-format
 msgid "Sorry, none of these titles can be placed on hold. "
 msgstr ", item hauek ezin dira erreserbatu "
@@ -9691,7 +9719,7 @@ msgstr ""
 "Sentitzen dugu, auto-mailegu estazio honek identifikazioa galdu du. Mesedez, "
 "arazoa konpontzeko jarri harremanetan administratzailearekin"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:178
 #, c-format
 msgid "Sorry, you are too young to reserve this material."
 msgstr "Sentitzen dugu, gazteegia zara material hau erreserbatzeko."
@@ -9702,7 +9730,7 @@ msgid "Sorry, you cannot place holds."
 msgstr "No se puede reservar"
 
 #. %1$s:  too_many_reserves 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:66
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:73
 #, c-format
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "Sentitzen dugu, ezin duzu %s erreserba baino gehiago egin. "
@@ -9789,17 +9817,17 @@ msgstr "Estatistikak"
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:117
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:586
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:786
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:859
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1206
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:603
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:805
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:860
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1207
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:181
 #, c-format
 msgid "Status"
 msgstr "Statusa"
 
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:164
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:652
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:671
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:232
 #, c-format
 msgid "Status:"
@@ -9822,7 +9850,7 @@ msgstr "Hirugarren urratsa: klik egin 'Bukatu' botoian"
 msgid "Step two: Scan the barcode for each item, one at a time"
 msgstr "Bigarren urratsa: eskaneatu elementu bakoitzaren barra-kodeak banaka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:881
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:882
 #, c-format
 msgid "Stopped"
 msgstr "Parado"
@@ -9896,7 +9924,7 @@ msgstr "Lehio hau bidali eta itxi"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:160
 msgid "Submit changes"
 msgstr "Bidali aldaketak"
@@ -9909,8 +9937,8 @@ msgstr "Moldaketak bertan behera utzi"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:320
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:335
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 #, fuzzy, c-format
 msgid "Submit note"
 msgstr "Ohar publikoa"
@@ -9932,7 +9960,7 @@ msgstr "Harpidetu harpidetza alertara"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-serial-issues.tt:144
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:839
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:840
 #, c-format
 msgid "Subscribe to email notification on new issues"
 msgstr "Harpidetu ale berrien emailezko ohartarazpenari"
@@ -9970,7 +9998,7 @@ msgstr "Harpidetza"
 #. %3$s:  subscription.histenddate | $KohaDates 
 #. %4$s:  ELSE 
 #. %5$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:834
 #, c-format
 msgid "Subscription from: %s to:%s %s %s now (current)%s"
 msgstr "%s-(e)tik :%s %s %s -(e)rainoko harpidetza%s unekoa"
@@ -9992,7 +10020,7 @@ msgid "Subscription: "
 msgstr "Harpidetza: "
 
 #. %1$s:  subscriptionsnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:599
 #, fuzzy, c-format
 msgid "Subscriptions ( %s )"
 msgstr "Harpidetza(k)"
@@ -10056,26 +10084,26 @@ msgstr "Abizenak:"
 msgid "Surveys"
 msgstr "Berrikuspenak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:588
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:696
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:714
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:717
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:725
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:715
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:733
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:736
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:744
 #, c-format
 msgid "Suspend"
 msgstr "Geldiarazia"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:748
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:767
 #, c-format
 msgid "Suspend all holds"
 msgstr "Eten erreserba guztiak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:710
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
 #, c-format
 msgid "Suspend until:"
 msgstr "Geldiarazia data honarte:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:705
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:724
 #, c-format
 msgid "Suspend your hold on "
 msgstr "Zure erreserba guztiak bertan behera utzi"
@@ -10090,12 +10118,12 @@ msgstr "Aldatu hizkuntzak"
 msgid "System Maintenance"
 msgstr "Sistema-mantentzea"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:571
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:572
 #, c-format
 msgid "TOC"
 msgstr "TOC"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:753
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:754
 #, c-format
 msgid "Table of contents provided by Syndetics"
 msgstr "Syndetics-ek emandako eduki-taula"
@@ -10108,7 +10136,7 @@ msgstr "Syndetics-ek emandako eduki-taula"
 msgid "Tag"
 msgstr "Etiketa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:593
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:594
 #, c-format
 msgid "Tag browser"
 msgstr "Etiketa arakatzailea"
@@ -10203,7 +10231,7 @@ msgid "Thank you!"
 msgstr "Eskerrik asko!"
 
 #. %1$s:  subscription.opacdisplaycount 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:852
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:853
 #, c-format
 msgid "The %s latest issues for this subscription:"
 msgstr "Harpidetza honetarako azken %s zenbakiak"
@@ -10506,17 +10534,17 @@ msgid "The userid "
 msgstr "Erabiltzailearen izena "
 
 #. %1$s:  subscriptionsnumber 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:815
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:816
 #, c-format
 msgid "There are %s subscription(s) associated with this title."
 msgstr "Badago %s harpidetza izenburu honi lotuta."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:971
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:972
 #, c-format
 msgid "There are no comments for this item."
 msgstr "Ez dago iruzkinik"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:184
 #, fuzzy, c-format
 msgid "There are no items that can be placed on hold."
 msgstr ", item hauek ezin dira erreserbatu "
@@ -10614,7 +10642,7 @@ msgstr "ya existe en la base de datos"
 msgid "This is a on-site checkout, it cannot be renewed."
 msgstr "Izenburu hau ezin da eskatu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:814
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:815
 #, c-format
 msgid "This is a serial"
 msgstr "Hau aldizkako argitalpena da"
@@ -10667,8 +10695,8 @@ msgstr ""
 msgid "This message can have the following reason(s):"
 msgstr "Mezu honen arrazoia(k) ondorengoa d(ir)a:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:582
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1166
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:583
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
 #, c-format
 msgid ""
 "This page contains enriched content visible when JavaScript is enabled or by "
@@ -10678,22 +10706,22 @@ msgstr ""
 "hemen "
 
 #. %1$s:  items_count 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:661
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:662
 #, c-format
 msgid "This record has many physical items (%s). "
 msgstr "Erregistro honek item fisiko asko dauzka (%s)."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:825
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:826
 #, c-format
 msgid "This subscription is closed."
 msgstr "Esta subscripción está cerrada."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:187
 #, c-format
 msgid "This title cannot be requested because it's already in your possession."
 msgstr "Izenburu hau ezin da eskatu, dagoeneko zure eskutan baitago."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:182
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:189
 #, c-format
 msgid "This title cannot be requested."
 msgstr "Izenburu hau ezin da eskatu."
@@ -10715,7 +10743,7 @@ msgid "Thursday"
 msgstr "Osteguna"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:336
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:335
 msgid "Timeout while waiting for print confirmation"
 msgstr "Denbora-muga inprimatzeko baieztapena itxaron bitartean"
 
@@ -10730,11 +10758,11 @@ msgstr "Denbora-muga inprimatzeko baieztapena itxaron bitartean"
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:77
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:126
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:243
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:165
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:406
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:455
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:579
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:778
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:421
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:470
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:594
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:797
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:216
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:218
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:568
@@ -10756,7 +10784,7 @@ msgstr "Izenburua (A-Z)"
 msgid "Title (Z-A)"
 msgstr "Izenburua (Z-A)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:568
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:569
 #, c-format
 msgid "Title notes"
 msgstr "izenburuaren oharrak"
@@ -10833,7 +10861,7 @@ msgid "Total due"
 msgstr "Zorra, guztira"
 
 #. %1$s:  holds_count 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:674
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:675
 #, fuzzy, c-format
 msgid "Total holds: %s"
 msgstr "Deuda total: %s"
@@ -10858,7 +10886,7 @@ msgstr "Ar."
 msgid "Tuesday"
 msgstr "Asteartea"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1157
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1158
 #, c-format
 msgid "Tweet"
 msgstr "Tweet"
@@ -10890,7 +10918,7 @@ msgstr "Mota:"
 msgid "UF"
 msgstr "HE"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1203
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1204
 #, c-format
 msgid "URL"
 msgstr "URL"
@@ -10942,7 +10970,7 @@ msgstr "Ezin dira zure ezarpenak eguneratu!"
 msgid "Unable to verify payment."
 msgstr "Ezin da ordainketa egiaztatu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:381
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:388
 #, c-format
 msgid "Unavailable (lost or missing)"
 msgstr "Ez eskuragarria (galdua edo desagertua)"
@@ -11017,7 +11045,7 @@ msgstr "Erabiltzen du: "
 msgid "Username:"
 msgstr "Erabiltzailea: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:55
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:62
 #, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
@@ -11027,7 +11055,7 @@ msgstr ""
 "izan ohi dira. Zure kontuan agertzen bada, jar zaitez liburutegiarekin "
 "harremanetan."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:118
 #, c-format
 msgid ""
 "Usually the reason for freezing an account is old overdues or damage fees. "
@@ -11093,8 +11121,8 @@ msgid "View details for this title"
 msgstr "Izenburu honen xehetasunak ikusi"
 
 #. A
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:196
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:475
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:211
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:490
 msgid "View on Amazon.com"
 msgstr "Ikusi Amazon.com-en"
 
@@ -11103,13 +11131,13 @@ msgstr "Ikusi Amazon.com-en"
 msgid "View your search history"
 msgstr "Ikusi zure bilaketa-historiala"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:332
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1201
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:339
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1202
 #, c-format
 msgid "Vol info"
 msgstr "Vol info"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:780
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:799
 #, c-format
 msgid "Volume"
 msgstr "Bolumena"
@@ -11213,7 +11241,7 @@ msgid "Wk"
 msgstr "Wk"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:336
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:335
 msgid "Would you like to print a receipt?"
 msgstr "Nahi al duzu erreziboa inprimatu?"
 
@@ -11372,7 +11400,7 @@ msgid "You cannot place any more suggestions"
 msgstr "Usted no puede recibir más ítems "
 
 #. %1$s:  IF ( renewal_blocked_fines ) > 0  
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:131
 #, c-format
 msgid "You cannot renew your books online. Reason: %sYour fines exceed "
 msgstr ""
@@ -11389,8 +11417,8 @@ msgstr "Ezin duzu zerrenda publiko bat partekatu."
 msgid "You currently have nothing checked out."
 msgstr "Une honetan ez duzu ezer mailegatuta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:365
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:379
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:380
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:394
 #, c-format
 msgid "You currently owe fines and charges amounting to:"
 msgstr ""
@@ -11458,17 +11486,17 @@ msgstr ""
 "Lotura zahar bat jarraitu duzu, adibidez, bilatzaile batetik edo markadore "
 "batetik."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:393
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:408
 #, c-format
 msgid "You have a credit of:"
 msgstr "Zure kreditua da:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:181
 #, c-format
 msgid "You have already requested this title."
 msgstr "Izenburu hau eskatua duzu jadanik."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:865
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:884
 #, fuzzy, c-format
 msgid "You have no article requests currently."
 msgstr "Izenburu hau eskatua duzu jadanik."
@@ -11487,7 +11515,7 @@ msgstr ""
 "Ez dituzu beharrezkoak diren eremu guztiak bete. Mesedez, osotu falta diren "
 "eremuak eta birbidali"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:361
 #, c-format
 msgid "You have nothing checked out"
 msgstr "Ez duzu ezer mailegatua"
@@ -11518,7 +11546,7 @@ msgstr ""
 msgid "You have renewed this item the maximum number of times allowed."
 msgstr "%s %s ( %s ) berritua izan da gehienez honegatik %s %s ( "
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:837
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:838
 #, fuzzy, c-format
 msgid "You have subscribed to email notification on new issues. "
 msgstr "%s %s %s Ale berrien e-mail bidezko notifikaziora harpidetu zara"
@@ -11531,7 +11559,7 @@ msgstr ""
 "erabili: "
 
 #. %1$s:  too_much_oweing | $Price 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:67
 #, c-format
 msgid "You have unpaid fines. Amount: %s. "
 msgstr "Ordaintzeko pendiente dauden isunak dauzkazu. Guztira: %s. "
@@ -11572,7 +11600,7 @@ msgstr "Saioa hasi behar duzu zerrendak sortzeko edo atxikitzeko"
 msgid "You must have an email address to enroll"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:842
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:843
 #, fuzzy, c-format
 msgid ""
 "You must log in if you want to subscribe to email notification on new issues"
@@ -11583,12 +11611,12 @@ msgstr "%s %s Ale berrien e-mail bidezko notifikaziora harpidetu zara %s %s "
 msgid "You must reset your password"
 msgstr "Ezin duzu zure pasahitza berrasieratu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:91
 #, c-format
 msgid "You must select a library for pickup. "
 msgstr "Liburutegi bat aukeratu behar duzu "
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:78
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:85
 #, c-format
 msgid "You must select at least one item. "
 msgstr "Gutxienez item bat aukeratu behar duzu "
@@ -11628,7 +11656,7 @@ msgid "You will receive an email shortly. "
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid ""
 "Your CGI session cookie is not current. Please refresh the page and try "
 "again."
@@ -11722,12 +11750,12 @@ msgstr "Zure katalogoko bilaketa-historiala hutsik dago."
 msgid "Your checkout history"
 msgstr "Mailegu-historiala"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:926
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:927
 #, c-format
 msgid "Your comment"
 msgstr "Zure iruzkina"
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:928
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:929
 #, c-format
 msgid "Your comment (preview, pending approval)"
 msgstr "Zure iruzkina (aurrebisualizazioa, onarpenaren zain)"
@@ -11776,14 +11804,14 @@ msgstr ""
 " , ezin duzu erreserbarik egin zure txartela galduta edo lapurtuta egoeran "
 "markatuta dagoelako."
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:128
 #, c-format
 msgid "Your library card has been marked as lost or stolen. "
 msgstr ""
 " , ezin duzu erreserbarik egin zure txartela galduta edo lapurtuta egoeran "
 "markatuta dagoelako."
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:109
 #, c-format
 msgid ""
 "Your library card has expired. Please contact your librarian if you wish to "
@@ -11825,18 +11853,18 @@ msgid "Your messaging settings"
 msgstr "Zure mezuen ezarpenak"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 msgid "Your note about %s could not be saved."
 msgstr ""
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 #, fuzzy
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "Liburutegiak ez du baimendu katalogorako sarbidea"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:888
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:907
 #, fuzzy
 msgid "Your note about %s was removed."
 msgstr "Ez da erregistrorik ezabatu."
@@ -11875,7 +11903,7 @@ msgstr "Zure $%s-ko ordainketa arrakastaz prozesatu da!"
 msgid "Your personal details"
 msgstr "Zure datu pertsonalak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:210
 #, c-format
 msgid "Your priority: "
 msgstr "Zure lehentasunak:"
@@ -11969,8 +11997,10 @@ msgstr "Zure erabiltzaile-izena ez da aurkitzen. Mesedez, saiatu berriro."
 msgid "ZIP/Postal code:"
 msgstr "%s ZIP/Posta-kodea:"
 
+#. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
+#: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
 msgid "[ New list ]"
 msgstr "[ Zerrenda berria ]"
 
@@ -11994,7 +12024,7 @@ msgid "[% limit or"
 msgstr "[% Mugatu edo"
 
 #. %1$s:  HTML5MediaParent 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1037
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1038
 #, fuzzy, c-format
 msgid "[%s tag not supported by your browser.]"
 msgstr ""
@@ -12038,7 +12068,7 @@ msgstr "zorra askatzeko eskatu"
 #. %1$s:  rating_avg 
 #. %2$s:  ratings.count 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:523
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 #, c-format
 msgid "average rating: %s (%s votes)"
 msgstr "batazbesteko balorazioa: %s (%s boto)"
@@ -12068,7 +12098,7 @@ msgstr "borrowernumber"
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:65
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "by"
 msgstr "zeren bidez"
 
@@ -12076,8 +12106,8 @@ msgstr "zeren bidez"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:598
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:124
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1014
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1015
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 #, c-format
 msgid "by "
 msgstr "egilea(k): "
@@ -12179,8 +12209,8 @@ msgstr "Izena:"
 msgid "for more information on what it does and how to configure it."
 msgstr "funtzio eta konfigurazioari buruzko informazio gehiago lortzeko."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:582
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1167
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:583
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1168
 #, c-format
 msgid "here"
 msgstr "hemen"
@@ -12196,7 +12226,7 @@ msgid "hold(s) waiting"
 msgstr "Zain dauden erreserbak"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "iDreamBooks.com rating"
 msgstr "iDreamBooks.com -ren balorazioa"
 
@@ -12440,7 +12470,7 @@ msgid "purchase suggestion"
 msgstr " erosketa-iradokizuna"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "iDreamBooks.com-eko iruzkinetan oinarritutako balorazioa"
 
@@ -12541,7 +12571,7 @@ msgstr "show_loans"
 #. %10$s:  END 
 #. %11$s:  END 
 #. %12$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:692
 #, c-format
 msgid ""
 "since %s %s Suspended %s until %s %s %s %s Pending for next available item "
@@ -12673,7 +12703,7 @@ msgstr "Zure ordainketarekin arazo bat egon da"
 msgid "to create new lists."
 msgstr "zerrenda berriak sortzeko."
 
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:981
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:982
 #, c-format
 msgid "to post a comment."
 msgstr "iruzkin bat jartzeko."
@@ -12683,7 +12713,7 @@ msgstr "iruzkin bat jartzeko."
 msgid "unAPI"
 msgstr "unAPI"
 
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:752
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:771
 #, c-format
 msgid "until "
 msgstr "arte"
@@ -12779,7 +12809,7 @@ msgid "will be sent shortly to %s."
 msgstr "Laister bidaliko da %s-ri"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 msgid "with biblionumber"
 msgstr "biblionumber-ekin"
 
@@ -12789,7 +12819,7 @@ msgid "would be entered as "
 msgstr "sartuko litzateke modu honetan"
 
 #. %1$s:  new_reserves_allowed 
-#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:141
 #, c-format
 msgid ""
 "you can only place %s more holds. Please uncheck the checkboxes for the "
@@ -12842,7 +12872,7 @@ msgstr "zure erosketa-iradokizunak"
 #. For the first occurrence,
 #. %1$s:  my_rating.rating_value 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:518
-#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1396
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1397
 #, c-format
 msgid "your rating: %s, "
 msgstr "zure balorazioak: %s "
@@ -12875,7 +12905,7 @@ msgstr "zure etiketak"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:300
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:3
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:180
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:701
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:720
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:144
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:271
 #, c-format
