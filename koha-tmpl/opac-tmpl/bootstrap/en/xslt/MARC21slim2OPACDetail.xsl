@@ -139,12 +139,20 @@
                                     </xsl:choose>
                                     </a>
                                 </span>
-                                <xsl:if test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
+				<xsl:choose>
+                                  <xsl:when test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
                                     -
                                     <span class="componentPartRecordAuthor">
                                         <xsl:value-of select="marc:datafield[@tag=100]/marc:subfield[@code='a']" />
                                     </span>
-                                </xsl:if>
+                                  </xsl:when>
+                                  <xsl:when test="marc:datafield[@tag=110]/marc:subfield[@code='a']">
+                                    -
+                                    <span class="componentPartRecordAuthor">
+                                        <xsl:value-of select="marc:datafield[@tag=110]/marc:subfield[@code='a']" />
+                                    </span>
+                                  </xsl:when>
+				</xsl:choose>
                             </span>
                         </li>
                     </xsl:for-each>
