@@ -16214,6 +16214,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17698: Add column issues.noteseen and old_issues.noteseen)\n";
 }
 
+$DBversion = '18.06.00.012';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|INSERT IGNORE INTO permissions (module_bit, code, description) VALUES (11, 'suggestions_manage', 'Manage purchase suggestions');|);
+    $dbh->do(q|INSERT IGNORE INTO user_permissions (borrowernumber, module_bit, code) SELECT borrowernumber, 11, 'suggestions_manage' FROM borrowers WHERE flags & (1 << 2);|);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 11911 - Add separate permission for managing suggestions)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
