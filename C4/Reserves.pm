@@ -413,19 +413,10 @@ sub CanItemBeReserved {
     }
 
     # Now we need to check hold limits by patron category
-    my $rule = Koha::CirculationRules->find(
+    my $rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $borrower->{categorycode},
             branchcode   => $branchcode,
-            itemtype     => undef,
-            rule_name    => 'max_holds',
-        }
-    );
-    $rule ||= Koha::CirculationRules->find(
-        {
-            categorycode => $borrower->{categorycode},
-            branchcode   => undef,,
-            itemtype     => undef,
             rule_name    => 'max_holds',
         }
     );

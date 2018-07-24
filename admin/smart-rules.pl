@@ -271,7 +271,7 @@ elsif ($op eq "set-branch-defaults") {
     Koha::CirculationRules->set_rule(
         {
             branchcode   => $branch,
-            categorycode => '*',
+            categorycode => undef,
             itemtype     => undef,
             rule_name    => 'max_holds',
             rule_value   => $max_holds,
@@ -348,7 +348,7 @@ elsif ($op eq "add-branch-cat") {
 
             Koha::CirculationRules->set_rule(
                 {
-                    branchcode   => '*',
+                    branchcode   => undef,
                     categorycode => $categorycode,
                     itemtype     => undef,
                     rule_name    => 'max_holds',

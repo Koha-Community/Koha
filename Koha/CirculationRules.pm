@@ -53,9 +53,9 @@ sub get_effective_rule {
     my $search_params;
     $search_params->{rule_name} = $rule_name;
 
-    $search_params->{categorycode} = defined $categorycode ? { 'in' => [ $categorycode, '*' ] } : undef;
-    $search_params->{itemtype}     = defined $itemtype     ? { 'in' => [ $itemtype,     '*' ] } : undef;
-    $search_params->{branchcode}   = defined $branchcode   ? { 'in' => [ $branchcode,   '*' ] } : undef;
+    $search_params->{categorycode} = defined $categorycode ? [ $categorycode, undef ] : undef;
+    $search_params->{itemtype}     = defined $itemtype     ? [ $itemtype, undef ] : undef;
+    $search_params->{branchcode}   = defined $branchcode   ? [ $branchcode,   undef ] : undef;
 
     my $rule = $self->search(
         $search_params,
@@ -94,6 +94,9 @@ sub set_rule {
     my $rule_name    = $params->{rule_name};
     my $rule_value   = $params->{rule_value};
 
+    for my $v ( $branchcode, $categorycode, $itemtype ) {
+        $v = undef if $v and $v eq '*';
+    }
     my $rule = $self->search(
         {
             rule_name    => $rule_name,
