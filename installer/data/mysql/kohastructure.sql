@@ -350,7 +350,6 @@ CREATE TABLE `branch_borrower_circ_rules` ( -- includes default circulation rule
   `categorycode` VARCHAR(10) NOT NULL, -- the patron category this rule applies to (categories.categorycode)
   `maxissueqty` int(4) default NULL, -- the maximum number of checkouts this patron category can have at this branch
   `maxonsiteissueqty` int(4) default NULL, -- the maximum number of on-site checkouts this patron category can have at this branch
-  max_holds INT(4) NULL DEFAULT NULL, -- the maximum number of holds a patron may have at a time
   PRIMARY KEY (`categorycode`, `branchcode`),
   CONSTRAINT `branch_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
     ON DELETE CASCADE ON UPDATE CASCADE,
@@ -367,7 +366,6 @@ CREATE TABLE `default_borrower_circ_rules` ( -- default checkout rules found und
   `categorycode` VARCHAR(10) NOT NULL, -- patron category this rul
   `maxissueqty` int(4) default NULL,
   `maxonsiteissueqty` int(4) default NULL,
-  max_holds INT(4) NULL DEFAULT NULL, -- the maximum number of holds a patron may have at a time
   PRIMARY KEY (`categorycode`),
   CONSTRAINT `borrower_borrower_circ_rules_ibfk_1` FOREIGN KEY (`categorycode`) REFERENCES `categories` (`categorycode`)
     ON DELETE CASCADE ON UPDATE CASCADE
@@ -4224,8 +4222,9 @@ CREATE TABLE `circulation_rules` (
   KEY `branchcode` (`branchcode`),
   KEY `categorycode` (`categorycode`),
   KEY `itemtype` (`itemtype`),
-  UNIQUE (`branchcode`,`categorycode`,`itemtype`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  KEY `rule_name` (`rule_name`),
+  UNIQUE (`branchcode`,`categorycode`,`itemtype`,`rule_name`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

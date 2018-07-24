@@ -1,22 +1,24 @@
 $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
-    $dbh->do(q{
-        CREATE TABLE `circulation_rules` (
-          `id` int(11) NOT NULL auto_increment,
-          `branchcode` varchar(10) NULL default NULL,
-          `categorycode` varchar(10) NULL default NULL,
-          `itemtype` varchar(10) NULL default NULL,
-          `rule_name` varchar(32) NOT NULL,
-          `rule_value` varchar(32) NOT NULL,
-          PRIMARY KEY (`id`),
-          KEY `branchcode` (`branchcode`),
-          KEY `categorycode` (`categorycode`),
-          KEY `itemtype` (`itemtype`),
-          KEY `rule_name` (`rule_name`),
-          UNIQUE (`branchcode`,`categorycode`,`itemtype`,`rule_name`)
-        ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-    });
+    unless (TableExists('circulation_rules')){
+        $dbh->do(q{
+            CREATE TABLE `circulation_rules` (
+              `id` int(11) NOT NULL auto_increment,
+              `branchcode` varchar(10) NULL default NULL,
+              `categorycode` varchar(10) NULL default NULL,
+              `itemtype` varchar(10) NULL default NULL,
+              `rule_name` varchar(32) NOT NULL,
+              `rule_value` varchar(32) NOT NULL,
+              PRIMARY KEY (`id`),
+              KEY `branchcode` (`branchcode`),
+              KEY `categorycode` (`categorycode`),
+              KEY `itemtype` (`itemtype`),
+              KEY `rule_name` (`rule_name`),
+              UNIQUE (`branchcode`,`categorycode`,`itemtype`,`rule_name`)
+            ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+        });
+    }
 
     $dbh->do(q{
         INSERT INTO circulation_rules ( branchcode, categorycode, itemtype, rule_name, rule_value )
