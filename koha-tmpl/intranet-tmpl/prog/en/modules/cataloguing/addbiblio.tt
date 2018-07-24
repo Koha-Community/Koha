@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE HtmlTags %]
 [% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title |html %] (Record number [% biblionumber %])[% ELSE %]Add MARC record[% END %]</title>
@@ -443,7 +444,7 @@ function Changefwk() {
         window.close();
     </script>
 [% ELSE %]
-    <form method="post" name="f" id="f" action="/cgi-bin/koha/cataloguing/addbiblio.pl" onsubmit="return Check();">
+    <form method="post" name="f" id="f" action="[% url %]" onsubmit="return Check();">
     <input type="hidden" value="[% IF ( biblionumber ) %]view[% ELSE %]items[% END %]" id="redirect" name="redirect" />
     <input type="hidden" value="" id="current_tab" name="current_tab" />
     <input type="hidden" value="0" id="confirm_not_duplicate" name="confirm_not_duplicate" />
@@ -540,6 +541,30 @@ function Changefwk() {
         [% END %]
     [% END %]
 </div>
+
+[% IF (marc_format_errors) %]
+[% BLOCK show_marc_err %]
+<li><b>[% MARC_ERR.field %]</b>:
+[% SWITCH MARC_ERR.error %]
+[% CASE 'FIELD_LENGTH' %]<span>Length is [% MARC_ERR.length | $HtmlTags tag=>'b' %], should be [% MARC_ERR.wanted | $HtmlTags tag=>'b' %]</span>
+[% CASE 'FIELD_VALUE'  %]<span>Value is "[% MARC_ERR.value | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.required | html | $HtmlTags tag=>'b' %]</span>
+[% CASE 'FIELD_VALUE_POS'  %]<span>Value at position [% MARC_ERR.pos | $HtmlTags tag=>'b' %] is "[% MARC_ERR.value | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.required | html | $HtmlTags tag=>'b' %]</span>
+[% CASE 'NOT_REPEATABLE_SUBFIELD' %]<span>Subfield not repeatable, used [% MARC_ERR.count %] times</span>
+[% CASE 'NOT_REPEATABLE_FIELD' %]<span>Field not repeatable, used [% MARC_ERR.count %] times</span>
+[% CASE 'INDICATOR' %]<span>Indicator [% MARC_ERR.indicator %] is "[% MARC_ERR.current | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.valid | html | $HtmlTags tag=>'b' %]</span>
+[% CASE 'NOT_IN_FORMAT' %]<span>Not used in format</span>
+[% END %]
+</li>
+[% END %]
+
+<div id="marc_format_errors" class="error">
+<ul>
+  [% FOREACH MARC_ERR IN marc_format_errors %]
+    [% PROCESS show_marc_err MARC_ERR %]
+  [% END %]
+</ul>
+</div>
+[% END %]
 
 [% IF ( popup ) %]
         <input type="hidden" name="mode" value="popup" />

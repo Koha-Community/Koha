@@ -48,6 +48,8 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use URI::Escape;
 
+use C4::MarcFormatChecker;
+
 if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
     MARC::File::XML->default_record_format('UNIMARC');
 }
@@ -854,6 +856,27 @@ if ( $op eq "addbiblio" ) {
     # getting html input
     my @params = $input->multi_param();
     $record = TransformHtmlToMarc( $input, 1 );
+
+    if ($record ne '-1' && C4::Context->preference("marcflavour") eq "MARC21" ) {
+	my $format_errors = C4::MarcFormatChecker::CheckMARC21FormatErrors($record);
+	if (scalar(@{$format_errors}) > 0) {
+	    $template->param(
+		title => $record->title,
+		marc_format_errors => $format_errors,
+		popup => $mode,
+		frameworkcode => $frameworkcode,
+		itemtype => $frameworkcode,
+		borrowernumber => $loggedinuser,
+		biblionumber => $biblionumber,
+		tab => scalar $input->param('tab')
+		);
+	    $template->{'VARS'}->{'searchid'} = $searchid;
+	    build_tabs ($template, $record, $dbh,$encoding,$input);
+	    output_html_with_http_headers $input, $cookie, $template->output;
+	    exit;
+	}
+    }
+
     # check for a duplicate
     my ( $duplicatebiblionumber, $duplicatetitle );
     if ( !$is_a_modif ) {
