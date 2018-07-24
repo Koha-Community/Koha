@@ -22,6 +22,7 @@ use C4::Context;
 use C4::InstallAuth;
 use CGI qw ( -utf8 );
 use C4::Output;
+use C4::Members qw(checkcardnumber);
 use Koha::Patrons;
 use Koha::Libraries;
 use Koha::Database;
