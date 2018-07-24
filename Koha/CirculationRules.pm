@@ -50,6 +50,10 @@ sub get_effective_rule {
 
     croak q{No rule name passed in!} unless $rule_name;
 
+    for my $v ( $branchcode, $categorycode, $itemtype ) {
+        $v = undef if $v and $v eq '*';
+    }
+
     my $search_params;
     $search_params->{rule_name} = $rule_name;
 

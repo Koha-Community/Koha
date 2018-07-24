@@ -30,14 +30,14 @@ sub Get {
     $categorycode = undef if $categorycode eq q{};
     $itemtype     = undef if $itemtype eq q{};
 
-    my $rule = Koha::CirculationRules->search(
+    my $rule = Koha::CirculationRules->get_effective_rule(
         {
             branchcode   => $branchcode,
             categorycode => $categorycode,
             itemtype     => $itemtype,
             rule_name    => $rule_name,
         }
-    )->next();
+    );
 
     return $rule->rule_value if $rule;
 }
