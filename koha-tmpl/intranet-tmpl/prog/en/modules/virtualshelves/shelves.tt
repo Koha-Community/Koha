@@ -9,7 +9,7 @@
 <title>Koha &rsaquo; [% IF op == 'view' %]Lists &rsaquo; Contents of [% shelf.shelfname | html %][% ELSE %]Lists[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list [% shelf.shelfname | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-<style type="text/css">textarea { width: 100%; }</style>
+<style>textarea { width: 100%; }</style>
 
 [% BLOCK list_permissions %]
     <li>
@@ -59,13 +59,18 @@
 
 [% IF op == 'view' %]&rsaquo; Contents of <i>[% shelf.shelfname | html %]</i>[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list <i>[% shelf.shelfname | html %]</i>[% END %]</div>
 
-<div id="doc3" class="yui-t2">
-<div id="bd">
-<div id="yui-main">
-<div class="yui-b">
+[% IF ( can_add_biblios ) %]
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
+[% ELSE %]
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
+[% END %]
+            <main>
 
-   <div class="yui-g">[% INCLUDE 'virtualshelves-toolbar.inc' %]
-   </div>
+                [% INCLUDE 'virtualshelves-toolbar.inc' %]
 
 [% FOR m IN messages %]
     <div class="dialog [% m.type | html %]">
@@ -127,7 +132,6 @@
 [% END %]
 
 [% IF op == 'view' %]
-   <div class="yui-g">
     [% IF itemsloop %]
 
     <h3>Contents of <i>[% shelf.shelfname | html %]</i></h3>
@@ -144,8 +148,8 @@
     [% SET new_direction = 'asc' %]
 [% END %]
 
-<div id="searchheader" class="noprint">
-    [% IF itemsloop %]
+[% IF itemsloop %]
+    <div id="searchheader" class="noprint">
         <div id="selection_ops"><span class="checkall"></span> |
         <span class="clearall"></span>
 
@@ -159,8 +163,8 @@
         [% END %]
         [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]<div class="btn-group"><button type="submit" class="btn btn-default btn-xs merge-items"><i class="fa fa-compress"></i> Merge selected</button></div>[% END %]
         </div>
-    [% END %]
-</div>
+    </div>
+[% END %]
 
     <table id="searchresults">
             <tr>
@@ -256,12 +260,10 @@
 </form>
 
 	[% END %]
-   </div>
 [% END %]
 
 [% IF op == 'add_form' OR op == 'edit_form' %]
-<div class="yui-ge">
-    <div class="yui-u first">
+
     <form method="post" action="/cgi-bin/koha/virtualshelves/shelves.pl" class="validated">
         <fieldset class="rows">
 
@@ -331,8 +333,7 @@
         [% END %]
     </fieldset>
     </form>
-    </div>
-</div>
+
 [% END %]
 
 [% IF op == 'list' %]
@@ -390,45 +391,45 @@
     <input type="hidden" name="multi_hold" value="1"/>
 </form>
 
-</div>
-</div>
-
-[% IF ( can_add_biblios ) %]
-<div class="yui-b">
-  <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
-    <fieldset class="brief noprint">
-      <h4>Add items</h4>
-      <ol>
-        <li>
-          <label for="barcodes">Barcodes:</label>
-          <textarea name="barcodes" id="barcodes" class="focus" autocomplete="off" rows="5"></textarea>
-          <input type="hidden" name="op" value="add_biblio" />
-          <input type="hidden" name="referer" value="view" />
-          <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-        </li>
-        <li>
-          <label for="biblionumbers">Biblio numbers:</label>
-          <textarea name="biblionumbers" id="biblionumbers" class="focus" autocomplete="off" rows="5"></textarea>
-          <input type="hidden" name="op" value="add_biblio" />
-          <input type="hidden" name="referer" value="view" />
-          <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-        </li>
-      </ol>
-      <fieldset class="action">
-        <input type="submit" value="Add" />
-      </fieldset>
-    </fieldset>
-  </form>
-</div>
-[% END %]
-
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+        [% IF ( can_add_biblios ) %]
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                        <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
+                            <fieldset class="brief noprint">
+                                <h4>Add items</h4>
+                                <ol>
+                                    <li>
+                                        <label for="barcodes">Barcodes:</label>
+                                        <textarea name="barcodes" id="barcodes" class="focus" autocomplete="off" rows="5"></textarea>
+                                        <input type="hidden" name="op" value="add_biblio" />
+                                        <input type="hidden" name="referer" value="view" />
+                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                    </li>
+                                    <li>
+                                        <label for="biblionumbers">Biblio numbers:</label>
+                                        <textarea name="biblionumbers" id="biblionumbers" class="focus" autocomplete="off" rows="5"></textarea>
+                                        <input type="hidden" name="op" value="add_biblio" />
+                                        <input type="hidden" name="referer" value="view" />
+                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                                    </li>
+                                </ol>
+                                <fieldset class="action">
+                                    <input type="submit" value="Add" />
+                                </fieldset>
+                            </fieldset>
+                        </form>
+                </aside>
+            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        [% END %]
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% IF print %]
-        <script type="text/javascript">
+        <script>
             $( document ).ready(function() {
                 window.print();
                 setTimeout('window.close()', 1);
@@ -440,7 +441,7 @@
         [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
         [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     [% END %]
-    <script type="text/javascript">
+    <script>
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_REMOVE_FROM_LIST = _("Are you sure you want to remove these items from the list?");
         var MSG_CONFIRM_DELETE_LIST = _("Are you sure you want to remove this list?");
