@@ -268,22 +268,26 @@ sub store {
                   if C4::Context->preference("BorrowersLog");
             }
             else {    #ModMember
-                # We could add a test here to make sure the password is not update (?)
 
                 # Come from ModMember, but should not be possible (?)
                 $self->dateenrolled(undef) unless $self->dateenrolled;
                 $self->dateexpiry(undef)   unless $self->dateexpiry;
 
+
+                my $self_from_storage = $self->get_from_storage;
                 # FIXME We should not deal with that here, callers have to do this job
                 # Moved from ModMember to prevent regressions
                 unless ( $self->userid ) {
-                    my $stored_userid = $self->get_from_storage->userid;
+                    my $stored_userid = $self_from_storage->userid;
                     $self->userid($stored_userid);
                 }
 
+                # Password must be updated using $self->update_password
+                $self->password($self_from_storage->password);
+
                 if ( C4::Context->preference('FeeOnChangePatronCategory')
                     and $self->category->categorycode ne
-                    $self->get_from_storage->category->categorycode )
+                    $self_from_storage->category->categorycode )
                 {
                     $self->add_enrolment_fee_if_needed;
                 }
@@ -311,7 +315,7 @@ sub store {
                 }
 
                 my $borrowers_log = C4::Context->preference("BorrowersLog");
-                my $previous_cardnumber = $self->get_from_storage->cardnumber;
+                my $previous_cardnumber = $self_from_storage->cardnumber;
                 if ($borrowers_log
                     && ( !defined $previous_cardnumber
                         || $previous_cardnumber ne $self->cardnumber )
@@ -678,7 +682,7 @@ sub update_password {
     eval { $self->userid($userid)->store; };
     return if $@; # Make sure the userid is not already in used by another patron
 
-    return 0 if $password eq '****' or $password eq ''; # Do we need that?
+    return 0 if $password eq '****' or $password eq '';
 
     if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
         # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
