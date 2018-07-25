@@ -537,7 +537,9 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                                                                 # updating any columns in the borrowers table,
                                                                 # which can happen if we're only editing the
                                                                 # patron attributes or messaging preferences sections
-        $patron->update_password($newdata{password}); # If != **** or '' # test here?
+
+        $patron->update_password($newdata{userid}, $newdata{password});
+
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
         }
