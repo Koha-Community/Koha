@@ -38,7 +38,7 @@ my $report_recs = Koha::Reports->search( $report_name ? { 'report_name' => $repo
 if (!$report_recs || $report_recs->count == 0 ) { die "There is no such report.\n"; }
 my $report_rec = $report_recs->next();
 
-my @sql_params  = $query->param('sql_params');
+my @sql_params  = $query->multi_param('sql_params');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -54,7 +54,7 @@ my $cache = Koha::Caches->get_instance();
 my $cache_active = $cache->is_cache_active;
 my ($cache_key, $json_text);
 if ($cache_active) {
-    $cache_key = "intranet:report:".($report_name ? "report_name:$report_name" : "id:$report_id")
+    $cache_key = "intranet:report:".($report_name ? "report_name:$report_name:" : "id:$report_id:")
     . join( '-', @sql_params );
     $json_text = $cache->get_from_cache($cache_key);
 }

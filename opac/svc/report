@@ -41,7 +41,7 @@ my $report_rec = $report_recs->next();
 
 die "Sorry this report is not public\n" unless $report_rec->public;
 
-my @sql_params  = $query->param('sql_params');
+my @sql_params  = $query->multi_param('sql_params');
 
 my $cache = Koha::Caches->get_instance();
 my $cache_active = $cache->is_cache_active;
@@ -49,7 +49,7 @@ my ($cache_key, $json_text);
 if ($cache_active) {
     $cache_key =
         "opac:report:"
-      . ( $report_name ? "name:$report_name" : "id:$report_id" )
+      . ( $report_name ? "name:$report_name:" : "id:$report_id:" )
       . join( '-', @sql_params );
     $json_text = $cache->get_from_cache($cache_key);
 }
