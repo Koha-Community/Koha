@@ -40,7 +40,7 @@ pod2usage("branchcode is mandatory")   unless $branchcode;
 pod2usage("categorycode is mandatory") unless $categorycode;
 pod2usage("cardnumber is mandatory")   unless $cardnumber;
 
-Koha::Patron->new({
+my $patron = Koha::Patron->new({
     surname      => $surname,
     userid       => $userid,
     cardnumber   => $cardnumber,
@@ -49,6 +49,9 @@ Koha::Patron->new({
     password     => $password,
     flags        => 1,
 })->store;
+
+my $digest = Koha::AuthUtils::hash_password($password);
+$patron->update({password => $digest,});
 
 =head1 NAME
 
