@@ -58,7 +58,7 @@
                         <i class="fa fa-user"></i>
                     </span>
                     <span id="logged-in-info-full">
-                        <span class="loggedinusername">[% loggedinusername %]</span>
+                        <span class="loggedinusername">[% logged_in_user.userid | html %]</span>
                         <span class="separator">|</span>
                         [% IF ( AutoLocation ) %]
                             <brand>
@@ -81,7 +81,7 @@
 
                     <li class="loggedin-menu-label">
                         Logged in as:<br />
-                        <span class="loggedinusername">[% loggedinusername %]</span>
+                        <span class="loggedinusername">[% logged_in_user.userid | html %]</span>
                     </li>
                     <li class="loggedin-menu-label">
                         [% IF ( AutoLocation ) %]
