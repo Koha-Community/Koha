@@ -282,12 +282,12 @@
             <li>
                 <span class="label">Owner: </span>
                 [% IF op == 'add_form' %]
-                    <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber | html %]" />[% loggedinusername | html %]</li>
+                    <input type="hidden" name="owner" id="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
                 [% ELSE %]
                     [% IF owner %]
                         <input type="hidden" id="owner" name="owner" value="[% owner.borrowernumber | html %]" />[% owner.firstname _ ' ' _ owner.surname | html %]
                     [% ELSE %]
-                        <input type="hidden" id="owner" name="owner" value="[% loggedinusernumber | html %]" />[% loggedinusername | html %]
+                        <input type="hidden" id="owner" name="owner" value="[% loggedinusernumber | html %]" />[% logged_in_user.userid | html %]
                     [% END %]
                 [% END %]
             </li>

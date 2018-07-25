@@ -309,7 +309,7 @@
         }
 
         function synchronize() {
-            kohadb.saveSetting("userid", "[% loggedinusername | html %]");
+            kohadb.saveSetting("userid", "[% logged_in_user.userid | html %]");
             kohadb.saveSetting("branchcode", "[% LoginBranchcode | html %]");
             showSyncInfo();
             [% UNLESS (AllowOfflineCirculation) %]

@@ -261,7 +261,7 @@ sub get_template_and_user {
         }
 
         # user info
-        $template->param( loggedinusername   => $user ); # FIXME Should be replaced with something like patron-title.inc
+        $template->param( loggedinusername   => $user ); # OBSOLETE - Do not reuse this in template, use logged_in_user.userid instead
         $template->param( loggedinusernumber => $borrowernumber ); # FIXME Should be replaced with logged_in_user.borrowernumber
         $template->param( logged_in_user     => $patron );
         $template->param( sessionID          => $sessionID );

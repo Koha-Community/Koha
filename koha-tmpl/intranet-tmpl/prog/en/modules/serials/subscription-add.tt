@@ -31,7 +31,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                 [% ELSE %]
                         <input type="hidden" name="op" value="addsubscription" />
                 [% END %]
-                <input type="hidden" name="user" value="[% loggedinusername | html %]" />
+                <input type="hidden" name="user" value="[% logged_in_user.userid | html %]" />
                 <input type="hidden" name="irreg_check" value="0" />
 
                 <div id="page_1">

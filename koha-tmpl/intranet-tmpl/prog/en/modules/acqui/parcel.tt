@@ -88,7 +88,7 @@
 
 [% UNLESS no_orders_to_display %]
 <div id="acqui_receive_summary">
-<p><strong>Invoice number:</strong> [% invoice | html %] <strong>Received by:</strong> [% loggedinusername | html %] <strong>On:</strong> [% datereceived | $KohaDates %]</p>
+<p><strong>Invoice number:</strong> [% invoice | html %] <strong>Received by:</strong> [% logged_in_user.userid | html %]<strong>On:</strong> [% datereceived | $KohaDates %]</p>
 </div>
 [% UNLESS (invoiceclosedate) %]
   <div id="acqui_receive_search">
