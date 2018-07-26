@@ -56,8 +56,9 @@ KOHA.LocalCover = {
             $(message).html(NO_LOCAL_JACKET);
             $(mydiv).append(message);
             var img = $("<img />");
-            img.attr('src','/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"));
-            img.load(function () {
+            img.attr('src','/cgi-bin/koha/catalogue/image.pl?thumbnail=1&biblionumber=' + $(mydiv).attr("class"))
+                .addClass("thumbnail")
+                .load(function () {
                     if (!this.complete || typeof this.naturalWidth == "undefined" || this.naturalWidth <= 1) {
                         //IE HACK
                         try {
