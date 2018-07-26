@@ -24,6 +24,7 @@ use C4::Context;
 use C4::Biblio;
 use AnyEvent;
 use AnyEvent::HTTP;
+use Encode;
 
 my ( $verbose, $help, $html ) = ( 0, 0, 0 );
 my ( $host,    $host_intranet ) = ( '', '' );
@@ -96,6 +97,7 @@ sub check_all_url {
                         my $url = $field->subfield('u');
                         next unless $url;
                         $url = "$host/$url" unless $url =~ /^http/i;
+                        $url = encode_utf8($url);
                         $count++;
                         http_request(
                             HEAD    => $url,
