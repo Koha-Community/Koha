@@ -62,7 +62,6 @@ C4::Output - Functions for managing output, is slowly being deprecated
 =head1 FUNCTIONS
 
 =over 2
-=cut
 
 =item pagination_bar
 
@@ -341,6 +340,15 @@ sub output_and_exit_if_error {
     output_and_exit( $query, $cookie, $template, $error ) if $error;
     return;
 }
+
+=item output_and_exit
+
+    output_and_exit( $query, $cookie, $template, $error );
+
+    $error is a blocking error like biblionumber not found or so.
+    We should output the error and exit.
+
+=cut
 
 sub output_and_exit {
     my ( $query, $cookie, $template, $error ) = @_;
