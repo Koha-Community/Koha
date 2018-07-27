@@ -16129,16 +16129,22 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '18.06.00.005';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( "ALTER IGNORE TABLE aqorders ADD COLUMN created_by int(11) NULL DEFAULT NULL AFTER quantityreceived;" );
-    $dbh->do( "ALTER IGNORE TABLE aqorders ADD CONSTRAINT aqorders_created_by FOREIGN KEY (created_by) REFERENCES borrowers (borrowernumber) ON DELETE SET NULL ON UPDATE CASCADE;" );
-    $dbh->do( "UPDATE aqorders, aqbasket SET aqorders.created_by = aqbasket.authorisedby  WHERE aqorders.basketno = aqbasket.basketno AND aqorders.created_by IS NULL;" );
+    unless ( column_exists('aqorders', 'created') ) {
+        $dbh->do( "ALTER TABLE aqorders ADD COLUMN created_by int(11) NULL DEFAULT NULL AFTER quantityreceived;" );
+        unless ( foreign_key_exists('aqorders', 'aqorders_created_by') ) {
+            $dbh->do( "ALTER TABLE aqorders ADD CONSTRAINT aqorders_created_by FOREIGN KEY (created_by) REFERENCES borrowers (borrowernumber) ON DELETE SET NULL ON UPDATE CASCADE;" );
+        }
+        $dbh->do( "UPDATE aqorders, aqbasket SET aqorders.created_by = aqbasket.authorisedby  WHERE aqorders.basketno = aqbasket.basketno AND aqorders.created_by IS NULL;" );
+    }
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 12395 - Save order line's creator)\n";
 }
 
 $DBversion = '18.06.00.006';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( "ALTER IGNORE TABLE patron_lists ADD COLUMN shared tinyint(1) default 0 AFTER owner;" );
+    unless ( column_exists('patron_lists', 'shared') ) {
+        $dbh->do( "ALTER TABLE patron_lists ADD COLUMN shared tinyint(1) default 0 AFTER owner;" );
+    }
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 19524 - Share patron lists between staff)\n";
 }
@@ -16157,7 +16163,7 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '18.06.00.008';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( "ALTER IGNORE TABLE marc_modification_template_actions CHANGE action action ENUM('delete_field','add_field','update_field','move_field','copy_field','copy_and_replace_field')" );
+    $dbh->do( "ALTER TABLE marc_modification_template_actions CHANGE action action ENUM('delete_field','add_field','update_field','move_field','copy_field','copy_and_replace_field')" );
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 13560 - need an add option in marc modification templates)\n";
 }
