@@ -353,7 +353,12 @@ foreach my $budget ( @{$budgets} ) {
 }
 
 $template->param( budgetsloop => \@budgets_loop);
-$template->param( "statusselected_$$suggestion_ref{'STATUS'}" =>1) if ($$suggestion_ref{'STATUS'});
+if( $suggestion_ref->{STATUS} ) {
+    $template->param(
+        "statusselected_".$suggestion_ref->{STATUS} => 1,
+        selected_status => $suggestion_ref->{STATUS}, # We need template var selected_status in the second part of the template where template var suggestion.STATUS is out of scope
+    );
+}
 
 my @currencies = Koha::Acquisition::Currencies->search;
 $template->param(
