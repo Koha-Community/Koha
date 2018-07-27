@@ -22,9 +22,10 @@ use Carp qw( croak );
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Funds;
 use Koha::Acquisition::Invoices;
-use Koha::Subscriptions;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Items;
+use Koha::Subscriptions;
 
 use base qw(Koha::Object);
 
@@ -166,6 +167,65 @@ sub subscription {
     return unless $subscription_rs;
     return Koha::Subscription->_new_from_dbic( $subscription_rs );
 }
+
+sub items {
+    my ( $self )  = @_;
+    # aqorders_items is not a join table
+    # There is no FK on items (may have been deleted)
+    my $items_rs = $self->_result->aqorders_items;
+    my @itemnumbers = $items_rs->get_column( 'itemnumber' )->all;
+    return Koha::Items->search({ itemnumber => \@itemnumbers });
+}
+
+sub duplicate_to {
+    my ( $self, $basket, $default_values ) = @_;
+    my $new_order;
+    $default_values //= {};
+    Koha::Database->schema->txn_do(
+        sub {
+            my $order_info = $self->unblessed;
+            undef $order_info->{ordernumber};
+            for my $field (
+                qw(
+                ordernumber
+                received_on
+                datereceived
+                datecancellationprinted
+                cancellationreason
+                purchaseordernumber
+                claims_count
+                claimed_date
+                parent_ordernumber
+                )
+              )
+            {
+                undef $order_info->{$field};
+            }
+            $order_info->{placed_on}        = dt_from_string;
+            $order_info->{entrydate}        = dt_from_string;
+            $order_info->{orderstatus}      = 'new';
+            $order_info->{quantityreceived} = 0;
+            while ( my ( $field, $value ) = each %$default_values ) {
+                $order_info->{$field} = $value;
+            }
+
+            # FIXME $order_info->{created_by} = logged_in_user?
+            $order_info->{basketno} = $basket->basketno;
+
+            $new_order = Koha::Acquisition::Order->new($order_info)->store;
+            my $items = $self->items;
+            while ( my ($item) = $items->next ) {
+                my $item_info = $item->unblessed;
+                undef $item_info->{itemnumber};
+                undef $item_info->{barcode};
+                my $new_item = Koha::Item->new($item_info)->store;
+                $new_order->add_item( $new_item->itemnumber );
+            }
+        }
+    );
+    return $new_order;
+}
+
 
 =head2 Internal methods
 

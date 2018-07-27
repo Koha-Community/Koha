@@ -9,6 +9,8 @@
         <div class="dialog message">This item does not exist.</div>
     [% CASE 'unknown_subscription' %]
         <div class="dialog message">This subscription does not exist.</div>
+    [% CASE 'unknown_basket' %]
+        <div class="dialog message">This basket does not exist.</div>
     [% CASE %][% blocking_error | html %]
     [% END %]
 
