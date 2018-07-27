@@ -217,7 +217,7 @@ subtest 'apply() tests' => sub {
     is( $offsets->count, 1, 'Only one offset is generated' );
     $THE_offset = $offsets->next;
     is( $THE_offset->amount * 1, 90, 'Amount was calculated correctly (less than the available credit)' );
-    is( $THE_offset->type, 'credit_applied', 'Defaults to credit_applied offset type' );
+    is( $THE_offset->type, 'Credit Applied', 'Defaults to \'Credit Applied\' offset type' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $debit_1->id });
     throws_ok

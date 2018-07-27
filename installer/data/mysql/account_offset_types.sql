@@ -12,4 +12,4 @@ INSERT INTO account_offset_types ( type ) VALUES
 ('Fine Update'),
 ('Fine'),
 ('Void Payment'),
-('credit_applied');
+('Credit Applied');

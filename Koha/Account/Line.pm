@@ -129,7 +129,20 @@ sub void {
 =head3 apply
 
     my $debits = $account->outstanding_debits;
-    my $outstanding_amount = $credit->apply({ debits =>  $debits, [ offset_type => $offset_type ] });
+    my $outstanding_amount = $credit->apply( { debits => $debits, [ offset_type => $offset_type ] } );
+
+Applies the credit to a given debits set.
+
+=head4 arguments hashref
+
+=over 4
+
+=item debits - Koha::Account::Lines object set of debits
+
+=item offset_type (optional) - a string indicating the offset type (valid values are those from
+the 'account_offset_types' table)
+
+=back
 
 =cut
 
@@ -137,7 +150,7 @@ sub apply {
     my ( $self, $params ) = @_;
 
     my $debits      = $params->{debits};
-    my $offset_type = $params->{offset_type} // 'credit_applied';
+    my $offset_type = $params->{offset_type} // 'Credit Applied';
 
     unless ( $self->is_credit ) {
         Koha::Exceptions::Account::IsNotCredit->throw(
