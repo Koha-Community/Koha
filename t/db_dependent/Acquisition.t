@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 70;
+use Test::More tests => 72;
 use t::lib::Mocks;
 use Koha::Database;
 
@@ -438,6 +438,11 @@ my $orders = GetHistory( ordernumber => $ordernumbers[1] );
 is( scalar( @$orders ), 1, 'GetHistory with a given ordernumber returns 1 order' );
 $orders = GetHistory( ordernumber => $ordernumbers[1], search_children_too => 1 );
 is( scalar( @$orders ), 2, 'GetHistory with a given ordernumber and search_children_too set returns 2 orders' );
+$orders = GetHistory( ordernumbers => [$ordernumbers[1]] );
+is( scalar( @$orders ), 1, 'GetHistory with a given ordernumbers returns 1 order' );
+$orders = GetHistory( ordernumbers => \@ordernumbers );
+is( scalar( @$orders ), scalar( @ordernumbers ) - 1, 'GetHistory with a list of ordernumbers returns N-1 orders (was has been deleted [3])' );
+
 
 # Test GetHistory() with and without SearchWithISBNVariations
 # The ISBN passed as a param is the ISBN-10 version of the 13-digit ISBN in the sample record declared in $marcxml

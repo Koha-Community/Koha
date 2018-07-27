@@ -2299,6 +2299,7 @@ sub GetHistory {
     my $ordernumber = $params{ordernumber};
     my $search_children_too = $params{search_children_too} || 0;
     my $created_by = $params{created_by} || [];
+    my $ordernumbers = $params{ordernumbers} || [];
 
     my @order_loop;
     my $total_qty         = 0;
@@ -2459,6 +2460,10 @@ sub GetHistory {
         push @query_params, @$created_by;
     }
 
+    if ( @$ordernumbers ) {
+        $query .= ' AND (aqorders.ordernumber IN ( ' . join (',', ('?') x @$ordernumbers ) . '))';
+        push @query_params, @$ordernumbers;
+    }
 
     if ( C4::Context->preference("IndependentBranches") ) {
         unless ( C4::Context->IsSuperLibrarian() ) {
