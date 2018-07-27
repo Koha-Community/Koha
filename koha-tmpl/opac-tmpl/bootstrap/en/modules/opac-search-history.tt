@@ -13,6 +13,7 @@
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
         [% IF ( loggedinusername ) %]
+            <li><a href="/cgi-bin/koha/opac-user.pl">[% USER_INFO.firstname %] [% USER_INFO.surname %]</a> <span class="divider">&rsaquo;</span></li>
             <li><a href="#">Your search history</a></li>
         [% ELSE %]
             <li><a href="#">Search history</a></li>
