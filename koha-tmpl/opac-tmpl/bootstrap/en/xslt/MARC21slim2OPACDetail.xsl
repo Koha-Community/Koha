@@ -112,7 +112,7 @@
 
         <!-- Wrapper div for our schema.org object -->
         <xsl:element name="div">
-            <xsl:attribute name="class">record</xsl:attribute>
+            <xsl:attribute name="class"><xsl:value-of select="'record'" /></xsl:attribute>
             <xsl:attribute name="vocab">http://schema.org/</xsl:attribute>
             <xsl:attribute name="typeof"><xsl:value-of select='$schemaOrgType' /> Product</xsl:attribute>
             <xsl:attribute name="resource">#record</xsl:attribute>
