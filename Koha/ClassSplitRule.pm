@@ -64,7 +64,7 @@ sub regexs {
     my ( $self, $regexs ) = @_;
     return $regexs
       ? $self->split_regex( to_json($regexs) )
-      : from_json( $self->split_regex );
+      : from_json( $self->split_regex || '[]' );
 }
 
 =head3 type

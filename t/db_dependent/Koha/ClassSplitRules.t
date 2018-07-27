@@ -28,7 +28,7 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 
 subtest 'store + regexs' => sub {
-    plan tests => 1;
+    plan tests => 2;
     $schema->storage->txn_begin;
 
     my @regexs = ('s/\s/\n/g', 's/(\s?=)/\n=/g', 's/^(J|K)\n/$1 /');
@@ -37,9 +37,13 @@ subtest 'store + regexs' => sub {
             class_split_rule => 'split_rule',
             description     => 'a_split_test_1',
             split_routine   => 'regex',
-            regexs          => \@regexs,
         }
     )->store;
+
+    $rule = Koha::ClassSplitRules->find("split_rule");
+    is_deeply($rule->regexs, [], '->regexs return an empty array when no regex is defined');
+
+    $rule->regexs(\@regexs)->store;
 
     $rule = Koha::ClassSplitRules->find("split_rule");
     is_deeply($rule->regexs, \@regexs, '->new and ->regexs correctly serialized/deserialized the regexs');
