@@ -59,27 +59,7 @@ use C4::Koha;
 use Koha::DateUtils;
 
 my $input = new CGI;
-my $title                   = $input->param( 'title');
-my $author                  = $input->param('author');
-my $isbn                    = $input->param('isbn');
-my $name                    = $input->param( 'name' );
-my $ean                     = $input->param('ean');
-my $basket                  = $input->param( 'basket' );
-my $basketgroupname             = $input->param('basketgroupname');
-my $booksellerinvoicenumber = $input->param( 'booksellerinvoicenumber' );
 my $do_search               = $input->param('do_search') || 0;
-my $budget                  = $input->param( 'budget' );
-my $orderstatus             = $input->param( 'orderstatus' );
-my $ordernumber             = $input->param( 'ordernumber' );
-my $search_children_too     = $input->param( 'search_children_too' );
-my @created_by              = $input->multi_param('created_by');
-
-my $from_placed_on = eval { dt_from_string( scalar $input->param('from') ) } || dt_from_string;
-my $to_placed_on   = eval { dt_from_string( scalar $input->param('to')   ) } || dt_from_string;
-unless ( $input->param('from') ) {
-    # Fill the form with year-1
-    $from_placed_on->subtract( years => 1 );
-}
 
 my $dbh = C4::Context->dbh;
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -93,26 +73,35 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $filters = {
+    basket                  => scalar $input->param('basket'),
+    title                   => scalar $input->param('title'),
+    author                  => scalar $input->param('author'),
+    isbn                    => scalar $input->param('isbn'),
+    name                    => scalar $input->param('name'),
+    ean                     => scalar $input->param('ean'),
+    basketgroupname         => scalar $input->param('basketgroupname'),
+    budget                  => scalar $input->param('budget'),
+    booksellerinvoicenumber => scalar $input->param('booksellerinvoicenumber'),
+    budget                  => scalar $input->param('budget'),
+    orderstatus             => scalar $input->param('orderstatus'),
+    ordernumber             => scalar $input->param('ordernumber'),
+    search_children_too     => scalar $input->param('search_children_too'),
+    created_by              => scalar $input->multi_param('created_by'),
+};
+my $from_placed_on = eval { dt_from_string( scalar $input->param('from') ) } || dt_from_string;
+my $to_placed_on   = eval { dt_from_string( scalar $input->param('to')   ) } || dt_from_string;
+unless ( $input->param('from') ) {
+    # Fill the form with year-1
+    $from_placed_on->subtract( years => 1 );
+}
+$filters->{from_placed_on} = output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
+$filters->{to_placed_on} = output_pref( { dt => $to_placed_on, dateformat => 'iso', dateonly => 1 } ),
+
 my $order_loop;
 # If we're supplied any value then we do a search. Otherwise we don't.
 if ($do_search) {
-    $order_loop = GetHistory(
-        title => $title,
-        author => $author,
-        isbn   => $isbn,
-        ean   => $ean,
-        name => $name,
-        from_placed_on => output_pref( { dt => $from_placed_on, dateformat => 'iso', dateonly => 1 } ),
-        to_placed_on   => output_pref( { dt => $to_placed_on,   dateformat => 'iso', dateonly => 1 } ),
-        basket => $basket,
-        booksellerinvoicenumber => $booksellerinvoicenumber,
-        basketgroupname => $basketgroupname,
-        budget => $budget,
-        orderstatus => $orderstatus,
-        ordernumber => $ordernumber,
-        search_children_too => $search_children_too,
-        created_by => \@created_by,
-    );
+    $order_loop = GetHistory(%$filters);
 }
 
 my $budgetperiods = C4::Budgets::GetBudgetPeriods;
@@ -126,26 +115,10 @@ for my $bp ( @{$budgetperiods} ) {
 }
 
 $template->param(
-    order_loop              => $order_loop,
-    numresults              => $order_loop ? scalar(@$order_loop) : undef,
-    title                   => $title,
-    author                  => $author,
-    isbn                    => $isbn,
-    ean                     => $ean,
-    name                    => $name,
-    basket                  => $basket,
-    booksellerinvoicenumber => $booksellerinvoicenumber,
-    basketgroupname         => $basketgroupname,
-    ordernumber             => $ordernumber,
-    search_children_too     => $search_children_too,
-    from_placed_on          => $from_placed_on,
-    to_placed_on            => $to_placed_on,
-    orderstatus             => $orderstatus,
-    budget_id               => $budget,
-    bp_loop                 => $bp_loop,
-    search_done             => $do_search,
-    debug                   => $debug || $input->param('debug') || 0,
-    uc(C4::Context->preference("marcflavour")) => 1
+    order_loop  => $order_loop,
+    filters     => $filters,
+    bp_loop     => $bp_loop,
+    search_done => $do_search,
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
