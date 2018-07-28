@@ -5,6 +5,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Biblio %]
+[% USE ColumnsSettings %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
     [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') | html %]
@@ -1107,15 +1108,16 @@
             }
 
             [% IF Koha.Preference('AcquisitionDetails') %]
-                $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
-                    'sDom': 't',
+                var columns_settings = [% ColumnsSettings.GetColumns('catalogue', 'detail', 'acquisitiondetails-table', 'json') %];
+                var acquisitiondetails_table = KohaTable("orders", {
+                    "sDom": 'C<"top pager"ilpfB><"#filter_c">tr<"bottom pager"ip>',
                     'bPaginate': false,
                     'bAutoWidth': false,
                     "aaSorting": [[ 4, "desc" ]],
                     "aoColumnDefs": [
                         { "aTargets": "title-string", "sType": "title-string" }
                     ]
-                }));
+                }, columns_settings);
             [% END %]
         });
     </script>
