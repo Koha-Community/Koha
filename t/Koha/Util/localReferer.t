@@ -1,0 +1,60 @@
+use Modern::Perl;
+
+use Test::More tests => 1;
+use Test::MockObject;
+
+use t::lib::Mocks;
+use Koha::Util;
+
+subtest 'Tests for localReferer' => sub {
+    plan tests => 10;
+
+    my ( $referer, $base );
+    my $cgi = Test::MockObject->new;
+    $cgi->mock( 'referer', sub { $referer } );
+    $cgi->mock( 'url', sub { $base } ); # base for [opac-]changelanguage
+
+    # Start with filled OPACBaseIRL
+    t::lib::Mocks::mock_preference('OPACBaseURL', 'https://koha.nl' );
+    $referer = 'https://somewhere.com/myscript';
+    is( Koha::Util::localReferer($cgi), '/', 'External referer' );
+
+    my $search = '/cgi-bin/koha/opac-search.pl?q=perl';
+    $referer = "https://koha.nl$search";
+    is( Koha::Util::localReferer($cgi), $search, 'opac-search' );
+
+    $referer = 'https://koha.nl/custom/stuff';
+    is( Koha::Util::localReferer($cgi), '/', 'custom url' );
+
+    # trailing backslash
+    t::lib::Mocks::mock_preference('OPACBaseURL', 'http://koha.nl/' );
+    $referer = "http://koha.nl$search";
+    is( Koha::Util::localReferer($cgi), $search, 'opac-search, trailing backslash' );
+
+    # no OPACBaseURL
+    t::lib::Mocks::mock_preference('OPACBaseURL', '');
+    $referer = 'https://somewhere.com/myscript';
+    $base = 'http://koha.nl';
+    is( Koha::Util::localReferer($cgi), '/', 'no opacbaseurl, external' );
+
+    $referer = "https://koha.nl$search";
+    $base = 'https://koha.nl';
+    is( Koha::Util::localReferer($cgi), $search, 'no opacbaseurl, opac-search' );
+    $base = 'http://koha.nl';
+    is( Koha::Util::localReferer($cgi), $search, 'no opacbaseurl, opac-search, protocol diff' );
+
+    # base contains https, referer http (this should be very unusual)
+    # test parameters remove_language. staff
+    t::lib::Mocks::mock_preference('staffClientBaseURL', '' );
+    $search = '/cgi-bin/koha/catalogue/search.pl?q=perl'; # staff
+    $referer = "http://koha.nl:8080$search&language=zz-ZZ&debug=1";
+    $base = 'https://koha.nl:8080';
+    is( Koha::Util::localReferer($cgi, { remove_language => 1, staff => 1 }), $search.'&debug=1', 'no baseurl, staff search, protocol diff (base https)' );
+
+    # custom script, test fallback parameter
+    $referer = 'https://koha.nl/custom/stuff';
+    $base = 'https://koha.nl';
+    is( Koha::Util::localReferer($cgi, { fallback => 'ZZZ' }), 'ZZZ', 'no opacbaseurl, custom url, test fallback' );
+    $base = 'http://koha.nl';
+    is( Koha::Util::localReferer($cgi), '/', 'no opacbaseurl, custom url, protocol diff' );
+};
