@@ -31,17 +31,13 @@ tinyMCE.init({
             -%]
 
             tinyMCE.dom.Event.bind(editor.getBody(), 'input keyup dragend', function(e){
-                if (ed.isDirty()){
-                    wysiwyg_change(ed);
-                }
+                wysiwyg_change(ed);
             });
         });
 
         // Register change when TinyMCE command returns isDirty()
         ed.onExecCommand.add(function(ed, cmd, ui, val) {
-            if (ed.isDirty()){
-                wysiwyg_change(ed);
-            }
+            wysiwyg_change(ed);
         });
 
     },
