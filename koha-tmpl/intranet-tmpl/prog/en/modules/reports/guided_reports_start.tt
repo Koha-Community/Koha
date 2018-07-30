@@ -31,26 +31,8 @@
 [%- END -%]</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
-    #sql { width: 90%; height: 9em;}
-    #update_sql .modal-dialog { width: 80%; }
-    ins { background-color: #e6ffe6; }
-    del { background-color: #ffe6e6; }
-    #col1, #col2 { width:45%; float:left; }
-    #col1 ins, #col2 del { display: none; }
-    .show_sql { font-family: monospace; }
-    .send_to_item_mod {
-        background-color: #EBF3FF;
-        border: 1px solid #88b0e8;
-        border-radius: 5px;
-        display: inline-block;
-        font-size: 75%;
-        margin: 3px 5px;
-        padding: 3px 5px;
-        white-space: nowrap;
-    }
-</style>
 [% IF ( saved1 ) %]
+    [% Asset.css("css/reports.css") %]
     [% Asset.css("css/datatables.css") %]
 [% END %]
 </head>
@@ -144,6 +126,23 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( saved1 ) %]
 [% IF ( savedreports ) %]<h1>Saved reports</h1>
+
+[% IF ( filters.date || filters.author || filters.keyword ) %]
+    <p>Filtered by:
+        <span class="filter">
+            [% IF ( filters.date ) %]
+                <span class="filter_date"><strong>Date:</strong> [% filters.date %]</span>
+            [% END %]
+            [% IF ( filters.author ) %]
+                <span class="filter_author"><strong>Author:</strong> [% filters.author %]</span>
+            [% END %]
+            [% IF ( filters.keyword ) %]
+                <span class="filter_keyword"><strong>Keyword:</strong> [% filters.keyword %]</span>
+            [% END %]
+            <a class="clear_filter" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Use%20saved&clear_filters=1"><i class="fa fa-remove"></i> Clear</a>
+        </span>
+    </p>
+[% END %]
 
 <div id="tabs" class="toptabs">
     <ul>
