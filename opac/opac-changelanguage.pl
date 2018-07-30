@@ -16,26 +16,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use C4::Templates;
 use CGI qw ( -utf8 );
+use C4::Templates;
+use Koha::Util;
 
-my $query    = new CGI;
+my $query = new CGI;
 my $language = $query->param('language');
-
-# Detect where the user came from and save that url
-my $requestedUrl = $query->url( -base => 1 );
-
-# Use referer url if it matches $requestedUrl else use $requestedUrl as the url .
-my $url =
-  $query->referer() =~ $requestedUrl ? $query->referer() : $requestedUrl;
-
-# warn "Language : $query // $language // $url";
-
-# If language was set by an external URL the parameter
-# 'language=' should be removed from url string, otherwise
-# the language picker will not work
-$url =~ s|(.)language=[\w-]*&?|$1|;
-$url =~ s|(&\|\?)$||;    # Remove extraneous ? or &
+my $url = Koha::Util::localReferer($query, { remove_language => 1 });
 
 C4::Templates::setlanguagecookie( $query, $language, $url );

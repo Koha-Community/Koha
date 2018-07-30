@@ -16,15 +16,12 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use C4::Templates;
 use CGI qw ( -utf8 );
+use C4::Templates;
+use Koha::Util;
 
-my $query    = new CGI;
+my $query = new CGI;
 my $language = $query->param('language');
-my $url      = $query->referer();
-
-$url =~ s|(.)language=[\w-]*&?|$1|;
-$url =~ s|(&\|\?)$||; # Remove extraneous ? or &
+my $url = Koha::Util::localReferer($query, {remove_language => 1, staff => 1});
 
 C4::Templates::setlanguagecookie( $query, $language, $url );
