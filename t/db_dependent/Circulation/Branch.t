@@ -17,9 +17,9 @@
 
 use Modern::Perl;
 
-use C4::Biblio;
 use C4::Circulation;
 use C4::Items;
+use C4::Biblio;
 use C4::Context;
 
 use Koha::Patrons;

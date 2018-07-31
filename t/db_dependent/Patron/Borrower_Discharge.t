@@ -19,10 +19,10 @@ use Test::More tests => 19;
 use Test::Warn;
 use MARC::Record;
 
-use C4::Biblio qw( AddBiblio );
 use C4::Circulation qw( AddIssue AddReturn );
-use C4::Context;
 use C4::Items qw( AddItem );
+use C4::Biblio qw( AddBiblio );
+use C4::Context;
 
 use Koha::Patrons;
 use Koha::Patron::Discharge;

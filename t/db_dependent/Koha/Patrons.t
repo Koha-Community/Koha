@@ -26,10 +26,8 @@ use Time::Fake;
 use DateTime;
 use JSON;
 
+use C4::Circulation;
 use C4::Biblio;
-use C4::Circulation;
-
-use C4::Circulation;
 
 use Koha::Holds;
 use Koha::Patrons;

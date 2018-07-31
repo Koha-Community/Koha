@@ -16,20 +16,18 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-
-use t::lib::Mocks;
-use C4::Context;
-
 use Test::More tests => 3;
 use MARC::Record;
-use C4::Biblio;
-use C4::Items;
-use C4::Reserves;
 
 use Koha::Libraries;
 use Koha::Patrons;
+use C4::Context;
+use C4::Items;
+use C4::Biblio;
+use C4::Reserves;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;

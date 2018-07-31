@@ -17,13 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 52;
+use Test::More tests => 51;
 use C4::Context;
+use C4::RotatingCollections;
 use C4::Biblio;
 use Koha::Library;
 
 BEGIN {
-    use_ok('C4::RotatingCollections');
 }
 
 can_ok(

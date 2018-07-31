@@ -23,8 +23,9 @@ use Test::Warn;
 use DateTime;
 
 use C4::Context;
-use C4::Biblio; # AddBiblio
 use C4::Circulation; # AddIssue
+use C4::Biblio; # AddBiblio
+
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Libraries;

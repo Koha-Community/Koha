@@ -6,9 +6,9 @@ use List::Util qw( shuffle );
 use MARC::Field;
 use MARC::Record;
 
-use C4::Biblio;
 use C4::Context;
 use C4::Items;
+use C4::Biblio;
 use Koha::Database;
 
 use t::lib::TestBuilder;

@@ -7,21 +7,22 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 55;
+use Test::More tests => 54;
 use MARC::Record;
-use C4::Biblio;
+use Koha::Patrons;
 use C4::Items;
+use C4::Biblio;
+use C4::Reserves;
 use C4::Calendar;
+
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Biblios;
 use Koha::Holds;
-use Koha::Patrons;
 
 BEGIN {
     use FindBin;
     use lib $FindBin::Bin;
-    use_ok('C4::Reserves');
 }
 
 my $schema  = Koha::Database->new->schema;

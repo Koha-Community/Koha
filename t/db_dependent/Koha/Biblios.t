@@ -22,8 +22,8 @@ use Modern::Perl;
 use Test::More tests => 5;
 use Test::Exception;
 
-use C4::Biblio;
 use C4::Items;
+use C4::Biblio;
 use C4::Reserves;
 
 use Koha::DateUtils qw( dt_from_string output_pref );

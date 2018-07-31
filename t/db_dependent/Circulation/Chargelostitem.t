@@ -7,9 +7,9 @@ use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use C4::Circulation;
 use C4::Biblio;
 use C4::Items;
-use C4::Circulation;
 use Koha::Patrons;
 use MARC::Record;
 

@@ -17,19 +17,16 @@
 
 use Modern::Perl;
 
-use Test::More tests => 22;
+use Test::More tests => 21;
 use Test::MockModule;
 use t::lib::TestBuilder;
 
-use C4::Biblio;
+use C4::Circulation;
 use C4::Items;
+use C4::Biblio;
 use Koha::Library;
 use Koha::Patrons;
 use MARC::Record;
-
-BEGIN {
-    use_ok('C4::Circulation');
-}
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
