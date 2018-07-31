@@ -46,12 +46,10 @@ my $patron = Koha::Patron->new({
     cardnumber   => $cardnumber,
     branchcode   => $branchcode,
     categorycode => $categorycode,
-    password     => $password,
     flags        => 1,
 })->store;
 
-my $digest = Koha::AuthUtils::hash_password($password);
-$patron->update({password => $digest,});
+$patron->update_password( $userid, $password );
 
 =head1 NAME
 
