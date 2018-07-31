@@ -146,7 +146,7 @@ sub approve {
                     Koha::Exceptions::Patron::Modification->throw( $_->{msg} );
                 }
                 else {
-                    Koha::Exceptions::Patron::Modification->throw($@);
+                    Koha::Exceptions::Patron::Modification->throw($_);
                 }
             };
         }
