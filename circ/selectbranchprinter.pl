@@ -80,6 +80,7 @@ if ( $branch and my $library = Koha::Libraries->find($branch) ) {
 if ($printer) {
     if (! $userenv_printer or $userenv_printer ne $printer ) {
         $session->param('branchprinter', $printer);         # update sesssion in DB
+        $session->flush();
         $template->param('new_printer', $printer);          # update template
         push @updated, {
             updated_printer => 1,
