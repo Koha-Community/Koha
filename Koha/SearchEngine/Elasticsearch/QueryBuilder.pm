@@ -315,8 +315,8 @@ sub build_authorities_query {
             # regular wordlist stuff
 #            push @query_parts, { match => {$wh => { query => $val, operator => 'and' }} };
             my @values = split(' ',$val);
-            foreach $val (@values) {
-                push @query_parts, { wildcard => { "$wh.phrase" => "*" . lc $val . "*" } };
+            foreach my $v (@values) {
+                push @query_parts, { wildcard => { "$wh.phrase" => "*" . lc $v . "*" } };
             }
         }
     }
