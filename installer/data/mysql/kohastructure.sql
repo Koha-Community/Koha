@@ -3147,7 +3147,7 @@ CREATE TABLE aqinvoices (
 --
 
 DROP TABLE IF EXISTS aqinvoice_adjustments;
-CREATE TABLE IF NOT EXISTS aqinvoice_adjustments (
+CREATE TABLE aqinvoice_adjustments (
     adjustment_id int(11) NOT NULL AUTO_INCREMENT, -- primary key for adjustments
     invoiceid int(11) NOT NULL, -- foreign key to link an adjustment to an invoice
     adjustment decimal(28,6), -- amount of adjustment
