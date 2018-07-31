@@ -16129,7 +16129,7 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '18.06.00.005';
 if( CheckVersion( $DBversion ) ) {
-    unless ( column_exists('aqorders', 'created') ) {
+    unless ( column_exists('aqorders', 'created_by') ) {
         $dbh->do( "ALTER TABLE aqorders ADD COLUMN created_by int(11) NULL DEFAULT NULL AFTER quantityreceived;" );
         unless ( foreign_key_exists('aqorders', 'aqorders_created_by') ) {
             $dbh->do( "ALTER TABLE aqorders ADD CONSTRAINT aqorders_created_by FOREIGN KEY (created_by) REFERENCES borrowers (borrowernumber) ON DELETE SET NULL ON UPDATE CASCADE;" );
