@@ -26,6 +26,7 @@ use JSON qw( to_json );
 use Module::Load::Conditional qw( can_load );
 use Text::Unaccent qw( unac_string );
 
+use C4::Accounts;
 use C4::Context;
 use C4::Log;
 use Koha::AuthUtils;
