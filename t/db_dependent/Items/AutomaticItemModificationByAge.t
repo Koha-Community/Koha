@@ -7,9 +7,9 @@ use MARC::Field;
 use DateTime;
 use DateTime::Duration;
 
+use C4::Items;
 use C4::Biblio;
 use C4::Context;
-use C4::Items;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 

@@ -24,10 +24,9 @@ use Test::Warn;
 use Time::Fake;
 use DateTime;
 
-use C4::Biblio;
-use C4::Circulation;
 use C4::Members;
 use C4::Circulation;
+use C4::Biblio;
 
 use Koha::Holds;
 use Koha::Patron;

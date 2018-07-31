@@ -25,13 +25,13 @@ use t::lib::Mocks;
 use DateTime;
 
 use C4::Context;
+use Koha::Patrons;
 use C4::Reserves;
 
 use Koha::Database;
 use Koha::Biblios;
 use Koha::Biblioitems;
 use Koha::Items;
-use Koha::Patrons;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new();

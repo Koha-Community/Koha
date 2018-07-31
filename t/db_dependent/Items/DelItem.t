@@ -1,15 +1,12 @@
 use Modern::Perl;
 
 use MARC::Record;
+use C4::Items;
 use C4::Biblio;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 7;
-
-BEGIN {
-    use_ok('C4::Items');
-}
+use Test::More tests => 6;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;

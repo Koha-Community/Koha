@@ -19,7 +19,9 @@
 use Modern::Perl;
 
 use MARC::Record;
+use C4::Items;
 use C4::Biblio;
+use Koha::Items;
 use Koha::Database;
 use Koha::Library;
 
@@ -29,11 +31,6 @@ use t::lib::TestBuilder;
 use Test::More tests => 12;
 
 use Test::Warn;
-
-BEGIN {
-    use_ok('C4::Items');
-    use_ok('Koha::Items');
-}
 
 my $schema = Koha::Database->new->schema;
 my $location = 'My Location';
