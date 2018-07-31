@@ -179,7 +179,7 @@ sub generate_subfield_form {
                 }
             }
             elsif ( $subfieldlib->{authorised_value} eq "itemtypes" ) {
-                  push @authorised_values, "" unless ( $subfieldlib->{mandatory} );
+                  push @authorised_values, "";
                   my $itemtypes = Koha::ItemTypes->search_with_localization;
                   while ( my $itemtype = $itemtypes->next ) {
                       push @authorised_values, $itemtype->itemtype;
@@ -195,7 +195,7 @@ sub generate_subfield_form {
                   #---- class_sources
             }
             elsif ( $subfieldlib->{authorised_value} eq "cn_source" ) {
-                  push @authorised_values, "" unless ( $subfieldlib->{mandatory} );
+                  push @authorised_values, "";
                     
                   my $class_sources = GetClassSources();
                   my $default_source = C4::Context->preference("DefaultClassificationSource");
@@ -212,7 +212,7 @@ sub generate_subfield_form {
                   #---- "true" authorised value
             }
             else {
-                  push @authorised_values, qq{} unless ( $subfieldlib->{mandatory} );
+                  push @authorised_values, qq{};
                   my $av = GetAuthorisedValues( $subfieldlib->{authorised_value} );
                   for my $r ( @$av ) {
                       push @authorised_values, $r->{authorised_value};
