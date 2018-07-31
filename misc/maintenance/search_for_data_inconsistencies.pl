@@ -72,6 +72,7 @@ search_for_data_inconsistencies.pl
 
 Catch data inconsistencies in Koha database
 
-* Items with not defined homebranch and/or holdingbranch
+* Items with undefined homebranch and/or holdingbranch
+* Authorities with undefined authtypecodes/authority types
 
 =cut
