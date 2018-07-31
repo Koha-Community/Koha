@@ -7,6 +7,8 @@ use C4::Context;
 
 use Test::More tests => 6;
 use MARC::Record;
+
+use Koha::Patrons;
 use C4::Biblio;
 use C4::Items;
 use C4::Members;

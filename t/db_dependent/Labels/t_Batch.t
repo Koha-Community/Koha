@@ -27,8 +27,8 @@ use MARC::Field;
 use t::lib::TestBuilder;
 
 use C4::Context;
-use C4::Biblio;
 use C4::Items;
+use C4::Biblio;
 use Koha::Libraries;
 
 BEGIN {

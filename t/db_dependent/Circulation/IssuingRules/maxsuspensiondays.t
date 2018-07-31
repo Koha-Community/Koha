@@ -5,10 +5,10 @@ use MARC::Record;
 use MARC::Field;
 use C4::Context;
 
-use C4::Biblio qw( AddBiblio );
 use C4::Circulation qw( AddIssue AddReturn );
 use C4::Items qw( AddItem );
 use C4::Members qw( AddMember );
+use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Patron::Debarments qw( GetDebarments DelDebarment );
