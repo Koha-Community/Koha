@@ -5,8 +5,8 @@
 [% USE ItemTypes %]
 [% USE Price %]
 
-[% SET borrower_club_enrollments =  borrower.get_club_enrollments(1) %]
-[% SET borrower_enrollable_clubs = borrower.get_enrollable_clubs(1,1) %]
+[% SET borrower_club_enrollments =  logged_in_user.get_club_enrollments(1) %]
+[% SET borrower_enrollable_clubs = logged_in_user.get_enrollable_clubs(1,1) %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your library home</title>
@@ -159,7 +159,7 @@
                             [% END %]
 
                             [% IF ( RESERVES.count ) %]<li><a href="#opac-user-holds">Holds ([% RESERVES.count %])</a></li>[% END %]
-                            [% IF Koha.Preference('ArticleRequests') && borrower.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% borrower.article_requests_current.count %])</a></li>[% END %]
+                            [% IF Koha.Preference('ArticleRequests') && logged_in_user.article_requests_current %]<li><a href="#opac-user-article-requests">Article requests ([% logged_in_user.article_requests_current.count %])</a></li>[% END %]
                             [% IF ( OverDriveCirculation ) %]
                             <li><a href="#opac-user-overdrive">OverDrive Account</a></li>
                             [% END %]
@@ -187,7 +187,7 @@
                                                     <th>Barcode</th>
                                                 [% END %]
                                                     <th>Call no.</th>
-                                                [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                                [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                                     <th class="nosort">Renew</th>
                                                 [% END %]
                                                 [% IF ( OPACFinesTab ) %]
@@ -276,7 +276,7 @@
                                                     <span class="tdlabel">Call no.:</span>
                                                     [% ISSUE.itemcallnumber %]
                                                 </td>
-                                                [% IF ( OpacRenewalAllowed && !( borrower.is_expired && borrower.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                                [% IF ( OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                                     <td class="renew">
                                                     [% IF ISSUE.renewed %]<span class="blabel label-success">Renewed!</span><br />[% END %]
                                                     [% IF ( ISSUE.status ) %]
@@ -336,12 +336,12 @@
                                         [% END # /FOREACH ISSUES %]
                                     </tbody>
                                 </table>
-                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( borrower.is_expired && borrower.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                     <input type="submit" class="btn" value="Renew selected" />
                                 [% END %]
                                 </form>
 
-                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( borrower.is_expired && borrower.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                                 <form id="renewall" action="/cgi-bin/koha/opac-renew.pl" method="post">
                                     <input type="hidden" name="from" value="opac_user" />
                                     <input type="hidden" name="borrowernumber" value="[% borrowernumber %]" />
@@ -783,9 +783,9 @@
 
                         [% IF Koha.Preference('ArticleRequests') %]
                             <div id="opac-user-article-requests">
-                                [% IF borrower.article_requests_current.count %]
+                                [% IF logged_in_user.article_requests_current.count %]
                                     <table id="article-requests-table" class="table table-bordered table-striped">
-                                        <caption>Article requests <span class="count">([% borrower.article_requests_current.count %] total)</span></caption>
+                                        <caption>Article requests <span class="count">([% logged_in_user.article_requests_current.count %] total)</span></caption>
                                         <thead>
                                             <tr>
                                                 <th class="anti-the article-request-record-title">Record title</th>
@@ -805,7 +805,7 @@
                                         </thead>
 
                                         <tbody>
-                                        [% FOREACH ar IN borrower.article_requests_current %]
+                                        [% FOREACH ar IN logged_in_user.article_requests_current %]
                                                 <td class="article-request-record-title">
                                                     <a class="article-request-title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ar.biblionumber %]">
                                                         [% ar.biblio.title %]
@@ -949,7 +949,7 @@
                     e.preventDefault();
                     $("#renewall").submit();
                 });
-                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( borrower.is_expired && borrower.category.effective_BlockExpiredPatronOpacActions ) ) %]
+                [% IF ( canrenew && !userdebarred && OpacRenewalAllowed && !( logged_in_user.is_expired && logged_in_user.category.effective_BlockExpiredPatronOpacActions ) ) %]
                     $("#checkoutst caption").append("<div id=\"renewcontrols\"><a id=\"renewselected_link\" href=\"#\">"+_("Renew selected")+"</a> <a id=\"renewall_link\" href=\"#\">"+_("Renew all")+"</a></div>");
                 [% END %]
             [% END %]
