@@ -70,6 +70,11 @@
                     tbh.removeClass("floating");
                 }
             });
+
+            $(window).resize(function() {
+                var p = $(tbh).parents('div').first();
+                $(tbh).width(p.width()-10);
+            });
         }
     };
 })(jQuery, window);
