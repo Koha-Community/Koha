@@ -9,7 +9,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% borrower.firstname %] [% borrower.surname %]</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
         <li><a href="#">Your payment</a></li>
     </ul>
 

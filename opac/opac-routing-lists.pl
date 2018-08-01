@@ -42,11 +42,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $patron = Koha::Patrons->find( $borrowernumber );
-my $category = $patron->category;
-my $borrower= $patron->unblessed;
-$borrower->{description} = $category->description;
-$borrower->{category_type} = $category->category_type;
-$template->param( BORROWER_INFO => $borrower );
 
 $template->param(
     routinglistsview => 1,

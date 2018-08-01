@@ -19,7 +19,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li>[% IF BORROWER_INFO %]<a href="/cgi-bin/koha/opac-user.pl">[% BORROWER_INFO.firstname %] [% BORROWER_INFO.surname %]</a>[% END %] <span class="divider">&rsaquo;</span></li>
+        <li>[% IF logged_in_user %]<a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a>[% END %] <span class="divider">&rsaquo;</span></li>
         <li><a href="#">Your fines and charges</a></li>
     </ul>
 

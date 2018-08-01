@@ -25,7 +25,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber %]</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
         <li><a href="#">Your summary</a></li>
     </ul>
 
@@ -41,10 +41,10 @@
 
                     [% INCLUDE 'opac-note.inc' %]
 
-                    <h2>Hello, [% INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber %]
+                    <h2>Hello, [% INCLUDE 'patron-title.inc' patron = logged_in_user %]
                     </h2>
 
-                    <p><a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here if you're not [% BORROWER_INFO.title %] [% INCLUDE 'patron-title.inc' category_type = BORROWER_INFO.category_type firstname = BORROWER_INFO.firstname surname = BORROWER_INFO.surname othernames = BORROWER_INFO.othernames cardnumber = BORROWER_INFO.cardnumber %]</a></p>
+                    <p><a href="/cgi-bin/koha/opac-main.pl?logout.x=1">Click here if you're not [% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a></p>
 
                     [% IF ( patronupdate ) %]<div class="alert alert-info"><h3>Thank you!</h3><p>Your corrections have been submitted to the library, and a staff member will update your record as soon as possible.</p></div>[% END %]
 
@@ -55,16 +55,16 @@
                         </div>
                     [% END %]
 
-                    [% IF ( BORROWER_INFO.warndeparture ) %]
+                    [% IF ( borrower.warndeparture ) %]
                         <div class="alert" id="warndeparture">
-                            <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% BORROWER_INFO.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>
-                                [% IF ( BORROWER_INFO.returnbeforeexpiry ) %]<span id="warndeparture_returnbeforeexpiry"> Also note that you must return all checked out items before your card expires.</span>[% END %]
+                            <strong>Please note:</strong><span> Your card will expire on <span id="warndeparture_date">[% borrower.warndeparture | $KohaDates %]</span>. Please contact the library for more information.</span>
+                                [% IF ( borrower.returnbeforeexpiry ) %]<span id="warndeparture_returnbeforeexpiry"> Also note that you must return all checked out items before your card expires.</span>[% END %]
                         </div>
                     [% END %]
 
-                    [% IF ( BORROWER_INFO.warnexpired ) %]
+                    [% IF ( borrower.warnexpired ) %]
                         <div class="alert" id="warnexpired">
-                            <strong>Please note: </strong><span>Your account has expired as of [% BORROWER_INFO.warnexpired | $KohaDates %]. Please contact the library if you wish to renew your account.</span>
+                            <strong>Please note: </strong><span>Your account has expired as of [% borrower.warnexpired | $KohaDates %]. Please contact the library if you wish to renew your account.</span>
                         </div>
                     [% END %]
 
@@ -98,33 +98,33 @@
                                         </li>
                                     [% ELSE %]
                                         <li id="userdebarred"><strong>Please note:</strong> Your account has been frozen.
-                                        [% IF ( BORROWER_INFO.debarredcomment ) %]
+                                        [% IF ( borrower.debarredcomment ) %]
                                             Comment:
                                             <span id="userdebarred_comment">
                                                 <strong>
-                                                    [% IF BORROWER_INFO.debarredcomment.search('OVERDUES_PROCESS') %]
-                                                        Restriction added by overdues process [% BORROWER_INFO.debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
+                                                    [% IF borrower.debarredcomment.search('OVERDUES_PROCESS') %]
+                                                        Restriction added by overdues process [% borrower.debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
                                                     [% ELSE %]
-                                                        [% BORROWER_INFO.debarredcomment | html_line_break %]
+                                                        [% borrower.debarredcomment | html_line_break %]
                                                     [% END %]
                                                 </strong>
                                             </span>
                                         [% END %]
-                                        [% IF ( BORROWER_INFO.userdebarreddate && debarred_date != '9999-12-31' ) %]
+                                        [% IF ( borrower.userdebarreddate && debarred_date != '9999-12-31' ) %]
                                             End date:
-                                            <span id="userdebarred_date">[% BORROWER_INFO.userdebarreddate | $KohaDates %]</span>
+                                            <span id="userdebarred_date">[% borrower.userdebarreddate | $KohaDates %]</span>
                                         [% END %]
 
                                         <em>Usually the reason for freezing an account is old overdues or damage fees. If your account shows to be clear, please contact the library.</em> <a href="/cgi-bin/koha/opac-account.pl">Go to your account page</a></li>
                                     [% END %]
                                 [% END %]
-                                [% IF ( BORROWER_INFO.gonenoaddress ) %]
+                                [% IF ( borrower.gonenoaddress ) %]
                                     <li id="gonenoaddress"><strong>Please note:</strong> According to our records, we don't have up-to-date contact information. Please contact the library.
                                 <a href="/cgi-bin/koha/opac-memberentry.pl">[% IF ( Koha.Preference('OPACPatronDetails') ) %]Update your contact information[% ELSE %]Go to your contact information[% END %]</a>
                                 [% IF ( Koha.Preference('OPACPatronDetails') ) %]<em>(Please note: there may be a delay in restoring your account if you submit online.)</em>[% END %]
                                     </li>
                                 [% END %]
-                                [% IF ( BORROWER_INFO.lost ) %]
+                                [% IF ( borrower.lost ) %]
                                     <li id="lost"><strong>Please note: </strong> Your library card has been marked as lost or stolen. <em>If this is an error, please contact the library.</em></li>
                                 [% END %]
                                 [% IF ( renewal_blocked_fines.defined ) && ( OpacRenewalAllowed ) %]
@@ -145,9 +145,9 @@
                             [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                                [% IF ( BORROWER_INFO.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
-                                [% IF ( BORROWER_INFO.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
-                                [% IF ( BORROWER_INFO.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( borrower.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( borrower.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( borrower.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price %])</a></li>[% END %]
                             [% END %]
 
                             [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
@@ -367,7 +367,7 @@
 
                         [% IF ( OPACFinesTab ) %]
                             <!-- FINES BOX -->
-                            [% IF BORROWER_INFO.amountoverfive %]
+                            [% IF borrower.amountoverfive %]
                                 <div id="opac-user-fines"> <h3>Fines and charges</h3>
                                     <table class="table table-bordered table-striped">
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
@@ -381,7 +381,7 @@
                                 </div>
                             [% END %]
 
-                            [% IF BORROWER_INFO.amountoverzero %]
+                            [% IF borrower.amountoverzero %]
                                <div id="opac-user-fines"> <h3>Fines and charges</h3>
                                     <table class="table table-bordered table-striped">
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
@@ -395,7 +395,7 @@
                                 </div>
                             [% END %]
 
-                            [% IF BORROWER_INFO.amountlessthanzero %]
+                            [% IF borrower.amountlessthanzero %]
                                 <div id="opac-user-fines">  <h3>Credits</h3>
                                     <table class="table table-bordered table-striped">
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>

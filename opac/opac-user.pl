@@ -163,7 +163,7 @@ if ( $borr->{'dateexpiry'} && C4::Context->preference('NotifyBorrowerDeparture')
 # pass on any renew errors to the template for displaying
 my $renew_error = $query->param('renew_error');
 
-$template->param(   BORROWER_INFO     => $borr,
+$template->param(
                     amountoutstanding => $amountoutstanding,
                     borrowernumber    => $borrowernumber,
                     patron_flagged    => $borr->{flagged},
@@ -350,7 +350,6 @@ if (   C4::Context->preference('AllowPatronToSetCheckoutsVisibilityForGuarantor'
 }
 
 $template->param(
-    borrower                 => scalar Koha::Patrons->find($borrowernumber),
     patron_messages          => $patron_messages,
     opacnote                 => $borr->{opacnote},
     patronupdate             => $patronupdate,

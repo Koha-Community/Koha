@@ -71,7 +71,7 @@ if ( defined $query->param('modify') && $query->param('modify') eq 'yes' ) {
 
 C4::Form::MessagingPreferences::set_form_values({ borrowernumber     => $patron->borrowernumber }, $template);
 
-$template->param( BORROWER_INFO         => $patron->unblessed,
+$template->param(
                   messagingview         => 1,
                   SMSnumber             => $patron->smsalertnumber, # FIXME This is already sent 2 lines above
                   SMSSendDriver                =>  C4::Context->preference("SMSSendDriver"),
