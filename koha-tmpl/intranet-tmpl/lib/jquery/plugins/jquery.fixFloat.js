@@ -32,13 +32,6 @@
             tbhBis.attr('id', tbh.attr('id')+'Bis'); // Avoid 2 elts with the same id
             tbh.after(tbhBis);
             tbh.width(tbh.width());
-            var tbl = tbh.find("th,td");
-            if (tbl.length > 0) {
-                tbl.each(function () {
-                    var $elt = $(this);
-                    $elt.width($elt.outerWidth(true));
-                });
-            }
             tbh.css({
                 'position': 'absolute',
                     'top': originalPosition,
