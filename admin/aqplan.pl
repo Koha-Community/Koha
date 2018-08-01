@@ -84,8 +84,8 @@ $template->param(
 
 # ------- get periods stuff ------------------
 
-my $borrower_id         = $template->{VARS}->{'USER_INFO'}->{'borrowernumber'};
-my $borrower_branchcode = $template->{VARS}->{'USER_INFO'}->{'branchcode'};
+
+my $borrower_branchcode = my $branch_code = C4::Context->userenv->{'branch'};
 
 my $authcat      = $input->param('authcat');
 my $show_active  = $input->param('show_active') // 0;
@@ -108,7 +108,11 @@ $authcat = 'Asort1' if  not defined $authcat; # defaults to Asort if no authcat 
 my $budget_id = $input->param('budget_id');
 my $op        = $input->param("op") // q{};
 
-my $budgets_ref = GetBudgetHierarchy( $budget_period_id, $show_mine?$template->{VARS}->{'USER_INFO'}->{'branchcode'}:'', $show_mine?$template->{VARS}->{'USER_INFO'}->{'borrowernumber'}:'' );
+my $budgets_ref = GetBudgetHierarchy(
+    $budget_period_id,
+    $show_mine ? $borrower_branchcode : '',
+    $show_mine ? $borrowernumber      : ''
+);
 
 # build categories list
 my $sth = $dbh->prepare("select distinct category from authorised_values where category like 'A%' ");
@@ -315,7 +319,7 @@ foreach my $budget (@budgets) {
     if ( $period->{budget_period_locked} == 1 ) {
         $budget_lock = 1;
     } elsif ( $budget->{budget_permission} == 1 ) {
-        $budget_lock = 1 if $borrower_id != $budget->{'budget_owner_id'};
+        $budget_lock = 1 if $borrowernumber != $budget->{'budget_owner_id'};
     } elsif ( $budget->{budget_permission} == 2 ) {
         $budget_lock = 1 if $borrower_branchcode ne $budget->{budget_branchcode};
     }

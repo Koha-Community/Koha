@@ -145,7 +145,7 @@
                     [% ELSE %]
                         [% IF Koha.Preference('OPACUserSummary') && dashboard_info %]
                             <div id="user_summary">
-                                <h3>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</span></a></h3>
+                                <h3>Welcome, <a href="/cgi-bin/koha/opac-user.pl"><span class="loggedinusername">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</span></a></h3>
                                 <ul id="user_summary_shortcuts">
                                     [% IF checkouts && checkouts > 0 %]
                                         <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-checkouts"><span class="user_checkouts_count count_label">[% checkouts %]</span> checkout(s)</a></li>

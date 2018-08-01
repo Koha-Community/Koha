@@ -11,7 +11,7 @@
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
         [% IF ( loggedinusername ) %]
-            <li><a href="/cgi-bin/koha/opac-user.pl">[% USER_INFO.title %] [% USER_INFO.firstname %] [% USER_INFO.surname %]</a> <span class="divider">&rsaquo;</span></li>
+            <li><a href="/cgi-bin/koha/opac-user.pl">[% INCLUDE 'patron-title.inc' patron = logged_in_user %]</a> <span class="divider">&rsaquo;</span></li>
         [% END %]
         <li><a href="/cgi-bin/koha/opac-shelves.pl">Lists</a> <span class="divider">&rsaquo;</span></li>
         <li>Share a list</li>

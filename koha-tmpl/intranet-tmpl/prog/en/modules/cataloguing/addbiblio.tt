@@ -111,7 +111,7 @@
 
             if ( !confirm( breedingid ? _("This record cannot be transferred to the advanced editor. Continue?") : _("Any changes will not be saved. Continue?") ) ) return false;
 
-            $.cookie( 'catalogue_editor_[% USER_INFO.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
+            $.cookie( 'catalogue_editor_[% logged_in_user.borrowernumber %]', 'advanced', { expires: 365, path: '/' } );
 
             var biblionumber = [% biblionumber || "null" %];
 

@@ -89,9 +89,6 @@ if ( $budget_period_id ) {
 
 # ------- get periods stuff ------------------
 
-# USED FOR PERMISSION COMPARISON LATER
-my $borrower_id         = $template->{VARS}->{'USER_INFO'}->{'borrowernumber'};
-
 $template->param(
     show_mine   => $show_mine,
     op  => $op,
@@ -235,7 +232,7 @@ if ( $op eq 'list' ) {
     );
 
     my @budgets = @{
-        GetBudgetHierarchy( $$period{budget_period_id}, undef, ( $show_mine ? $borrower_id : 0 ))
+        GetBudgetHierarchy( $$period{budget_period_id}, undef, ( $show_mine ? $borrowernumber : 0 ))
     };
 
     my $period_total = 0;

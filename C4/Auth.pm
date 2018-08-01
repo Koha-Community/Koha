@@ -145,7 +145,7 @@ See C<&checkauth> for an explanation of these parameters.
 
 The C<template_name> is then used to find the correct template for
 the page. The authenticated users details are loaded onto the
-template in the HTML::Template LOOP variable C<USER_INFO>. Also the
+template in the logged_in_user variable (which is a Koha::Patron object). Also the
 C<sessionID> is passed to the template. This can be used in templates
 if cookies are disabled. It needs to be put as and input to every
 authenticated page.
@@ -284,8 +284,6 @@ sub get_template_and_user {
                 some_public_shelves  => $some_public_shelves,
             );
         }
-
-        $template->param( "USER_INFO" => $patron->unblessed ) if $borrowernumber != 0;
 
         my $all_perms = get_all_subpermissions();
 
