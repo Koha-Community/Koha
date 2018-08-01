@@ -28,7 +28,7 @@
                     "visibility": "hidden"
             });
             tbhBis.width(tbh.outerWidth(true));
-            tbhBis.height(tbh.outerHeight(true));
+            tbhBis.height(tbh.innerHeight(true));
             tbhBis.attr('id', tbh.attr('id')+'Bis'); // Avoid 2 elts with the same id
             tbh.after(tbhBis);
             tbh.width(tbh.width());
