@@ -1,24 +1,3 @@
-[% BLOCK pagination %]
-    <nav>
-        [% IF ( displayprev || displaynext ) %]
-            <ul class="pagination">
-                [% IF ( displayprev ) %]
-                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromprev %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]"><i class="fa fa-arrow-left"></i> Previous</a></li>
-                [% END %]
-                [% FOREACH number IN numbers %]
-                    [% IF ( startfrom == number.startfrom ) %]
-                        <li class="active"><span>[% number.number %]</span></a></li>
-                    [% ELSE %]
-                        <li><a class="nav" href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">[% number.number %]</a></li>
-                    [% END %]
-                [% END %]
-                [% IF ( displaynext ) %]
-                    <li><a class="nav" href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">Next <i class="fa fa-arrow-right"></i></a></li>
-                [% END %]
-            </ul>
-        [% END %]
-    </nav>
-[% END %]
 [% USE Asset %]
     [% INCLUDE 'doc-head-open.inc' %]
     <title>Koha &rsaquo; Barcodes and labels &rsaquo; Search results</title>
@@ -74,7 +53,19 @@
         <div id="bd">
             <h1>Search results</h1>
         <div class="results">
-            [% PROCESS pagination %]
+                [% IF ( displayprev || displaynext ) %]
+            <p>
+                    [% IF ( displayprev ) %]
+                    <a href="label-item-search.pl?startfrom=[% startfromprev %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&lt;&lt;</a>
+                    [% END %]
+                    [% FOREACH number IN numbers %]
+                    <a href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">[% number.number %]</a>
+                    [% END %]
+                    [% IF ( displaynext ) %]
+                    <a href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&gt;&gt;</a>
+                    [% END %]
+        </p>
+                [% END %]
                 [% IF ( results ) %]
                 <strong>Results [% from %] through [% to %] [% IF ( total ) %] of [% total %][% END %]</strong>
                 [% ELSE %]
@@ -141,7 +132,23 @@ z                                    [% END -%]
                 </div>
             </form>
         </div>
-        [% PROCESS pagination %]
+        [% IF ( displayprev || displaynext ) %]
+            <p>
+                [% IF ( displayprev ) %]
+                <a href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&lt;&lt;</a>
+                [% END %]
+                [% FOREACH number IN numbers %]
+                [% IF ( number.highlight ) %]
+                <span class="current">[% number.number %]</span>
+                [% ELSE %]
+                <a href="label-item-search.pl?startfrom=[% number.startfrom %]&amp;ccl_query=[% number.ccl_query %]&amp;resultsperpage=[% number.resultsperpage %]&amp;op=do_search&amp;batch_id=[% number.batch_id %]">[% number.number %]</a>
+                [% END %]
+        [% END %]
+                [% IF ( displaynext ) %]
+                <a href="label-item-search.pl?startfrom=[% startfromnext %]&amp;ccl_query=[% ccl_query %]&amp;resultsperpage=[% resultsperpage %]&amp;op=do_search&amp;batch_id=[% batch_id %]">&gt;&gt;</a>
+                [% END %]
+        </p>
         <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Close</a></div>
+            [% END %]
     </div>
     [% INCLUDE 'popup-bottom.inc' %]
