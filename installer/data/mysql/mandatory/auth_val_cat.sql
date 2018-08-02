@@ -14,7 +14,9 @@ INSERT IGNORE INTO authorised_value_categories( category_name )
     ('REPORT_SUBGROUP'),
     ('DEPARTMENT'),
     ('TERM'),
-    ('ITEMTYPECAT');
+    ('ITEMTYPECAT'),
+    ('ROADTYPE');
+
 INSERT IGNORE INTO authorised_value_categories( category_name )
     VALUES
     ('branches'),
