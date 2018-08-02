@@ -173,12 +173,10 @@ if ( $step == 3 ) {
                 branchcode   => scalar $input->param('libraries'),
                 categorycode => scalar $input->param('categorycode_entry'),
                 userid       => scalar $input->param('userid'),
-                password     => scalar $input->param('password'),
-                password2    => scalar $input->param('password2'),
                 privacy      => "default",
                 address      => "",
                 city         => "",
-                flags => 1,    # Will be superlibrarian
+                flags        => 1,    # Will be superlibrarian
             };
 
             my $patron_category =
@@ -187,7 +185,8 @@ if ( $step == 3 ) {
               $patron_category->get_expiry_date( $patron_data->{dateenrolled} );
 
             eval {
-                Koha::Patron->new($patron_data)->store;
+                my $patron = Koha::Patron->new($patron_data)->store;
+                $patron->update_password($patron->userid, $firstpassword);
             };
 
             #Error handling checking if the patron was created successfully
@@ -195,6 +194,7 @@ if ( $step == 3 ) {
                 push @messages, { code => 'success_on_insert_patron' };
             }
             else {
+                warn $@;
                 push @messages, { code => 'error_on_insert_patron' };
             }
         }
