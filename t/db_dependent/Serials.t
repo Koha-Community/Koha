@@ -18,7 +18,7 @@ use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
-use Test::More tests => 48;
+use Test::More tests => 46;
 
 BEGIN {
     use_ok('C4::Serials');
@@ -139,8 +139,6 @@ my ($serials_count, @serials) = GetSerials($subscriptionid);
 ok($serials_count > 0, 'Subscription has at least one serial');
 my $serial = $serials[0];
 
-ok(C4::Serials::GetSerialStatusFromSerialId($serial->{serialid}), 'test getting Serial Status From Serial Id');
-
 isa_ok(C4::Serials::GetSerialInformation($serial->{serialid}), 'HASH', 'test getting Serial Information');
 
 subtest 'Values should not be erased on editing' => sub {
@@ -202,8 +200,6 @@ is(C4::Serials::GetSerials(), undef, 'test getting serials when you enter nothin
 is(C4::Serials::GetSerials2(), undef, 'test getting serials when you enter nothing');
 
 is(C4::Serials::GetLatestSerials(), undef, 'test getting lastest serials');
-
-is(C4::Serials::GetDistributedTo(), undef, 'test getting distributed when nothing is entered');
 
 is(C4::Serials::GetNextSeq(), undef, 'test getting next seq when you enter nothing');
 

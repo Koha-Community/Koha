@@ -79,7 +79,6 @@ BEGIN {
       &GetPreviousSerialid
 
       &GetSuppliersWithLateIssues
-      &GetDistributedTo   &SetDistributedTo
       &getroutinglist     &delroutingmember   &addroutingmember
       &reorder_members
       &check_routing &updateClaim
@@ -160,26 +159,6 @@ sub GetSubscriptionHistoryFromSubscriptionId {
     $sth->finish;
 
     return $results;
-}
-
-=head2 GetSerialStatusFromSerialId
-
-$sth = GetSerialStatusFromSerialId();
-this function returns a statement handle
-After this function, don't forget to execute it by using $sth->execute($serialid)
-return :
-$sth = $dbh->prepare($query).
-
-=cut
-
-sub GetSerialStatusFromSerialId {
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        SELECT status
-        FROM   serial
-        WHERE  serialid = ?
-    |;
-    return $dbh->prepare($query);
 }
 
 =head2 GetSerialInformation
@@ -841,28 +820,6 @@ sub GetPreviousSerialid {
     $return = $line->{'serialid'} if ($line);
 
     return $return;
-}
-
-
-
-=head2 GetDistributedTo
-
-$distributedto=GetDistributedTo($subscriptionid)
-This function returns the field distributedto for the subscription matching subscriptionid
-
-=cut
-
-sub GetDistributedTo {
-    my $dbh = C4::Context->dbh;
-    my $distributedto;
-    my ($subscriptionid) = @_;
-
-    return unless ($subscriptionid);
-
-    my $query          = "SELECT distributedto FROM subscription WHERE subscriptionid=?";
-    my $sth            = $dbh->prepare($query);
-    $sth->execute($subscriptionid);
-    return ($distributedto) = $sth->fetchrow;
 }
 
 =head2 GetNextSeq
@@ -1718,26 +1675,6 @@ sub HasSubscriptionExpired {
     return 0;    # Notice that you'll never get here.
 }
 
-=head2 SetDistributedto
-
-SetDistributedto($distributedto,$subscriptionid);
-This function update the value of distributedto for a subscription given on input arg.
-
-=cut
-
-sub SetDistributedto {
-    my ( $distributedto, $subscriptionid ) = @_;
-    my $dbh   = C4::Context->dbh;
-    my $query = qq|
-        UPDATE subscription
-        SET    distributedto=?
-        WHERE  subscriptionid=?
-    |;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $distributedto, $subscriptionid );
-    return;
-}
-
 =head2 DelSubscription
 
 DelSubscription($subscriptionid)
@@ -2187,16 +2124,6 @@ sub abouttoexpire {
     return 0;
 }
 
-sub in_array {    # used in next sub down
-    my ( $val, @elements ) = @_;
-    foreach my $elem (@elements) {
-        if ( $val == $elem ) {
-            return 1;
-        }
-    }
-    return 0;
-}
-
 =head2 GetFictiveIssueNumber
 
 $issueno = GetFictiveIssueNumber($subscription, $publishedate);
@@ -2518,26 +2445,6 @@ sub _numeration {
     }
 
     return $string;
-}
-
-=head2 is_barcode_in_use
-
-Returns number of occurrences of the barcode in the items table
-Can be used as a boolean test of whether the barcode has
-been deployed as yet
-
-=cut
-
-sub is_barcode_in_use {
-    my $barcode = shift;
-    my $dbh       = C4::Context->dbh;
-    my $occurrences = $dbh->selectall_arrayref(
-        'SELECT itemnumber from items where barcode = ?',
-        {}, $barcode
-
-    );
-
-    return @{$occurrences};
 }
 
 =head2 CloseSubscription
