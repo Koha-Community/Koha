@@ -1422,7 +1422,7 @@
         var columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) %];
 
         KohaTable("#holdingst", {
-            dom: 'B<"clearfix">t',
+            dom: '<"clearfix">t',
             "columnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] }
@@ -1431,7 +1431,7 @@
         }, columns_settings);
 
         KohaTable("#otherholdingst", {
-            dom: 'B<"clearfix">t',
+            dom: '<"clearfix">t',
             "columnDefs": [
                 { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 { "sType": "title-string", "aTargets" : [ "title-string" ] }
@@ -1442,7 +1442,7 @@
         var serial_column_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) %];
 
         KohaTable("#subscriptionst", {
-            dom: 'B<"clearfix">t',
+            dom: '<"clearfix">t',
             "columnDefs": [
                 { "sType": "title-string", "aTargets" : [ "title-string" ] }
                 ],
