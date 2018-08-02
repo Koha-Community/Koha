@@ -184,9 +184,7 @@ sub build_authorized_values_list {
         }
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "itemtypes" ) {
-        push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
-            && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
+        push @authorised_values, "";
 
         my $itemtype;
         my $itemtypes = Koha::ItemTypes->search_with_localization;
@@ -197,8 +195,7 @@ sub build_authorized_values_list {
         $value = $itemtype unless ($value);
     }
     elsif ( $tagslib->{$tag}->{$subfield}->{authorised_value} eq "cn_source" ) {
-        push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
+        push @authorised_values, "";
 
         my $class_sources = GetClassSources();
 
@@ -220,9 +217,7 @@ sub build_authorized_values_list {
             $branch_limit ? $branch_limit : (),
         );
 
-        push @authorised_values, ""
-          unless ( $tagslib->{$tag}->{$subfield}->{mandatory}
-            && ( $value || $tagslib->{$tag}->{$subfield}->{defaultvalue} ) );
+        push @authorised_values, "";
 
         while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
             push @authorised_values, $value;
