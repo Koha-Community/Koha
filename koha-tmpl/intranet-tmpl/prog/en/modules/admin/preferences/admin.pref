@@ -176,12 +176,14 @@ Administration:
               choices:
                   yes: "Yes"
                   no: "No"
-            - "You have to run misc/cronjobs/share_usage_with_koha_community.pl in a cronjob. Note that the other \"UsageStats\" preferences have no effect if this preference is set to \"No\". Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+            - ". Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+            - "<br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - "Use the following library name to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryName
             - If this field is empty data will be sent anonymously.
-            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
         -
             - "The country where your library is located to be shown on the Hea Community website: "
             - pref: UsageStatsCountry
@@ -384,11 +386,11 @@ Administration:
                 Zimbabwe       : "Zimbabwe"
 
             - This will be shown on the <a href="http://hea.koha-community.org">Hea Koha community website</a>.
-            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
         -
             - "The library URL to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryUrl
-            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
         -
             - "The library type to be shown on the Hea Community website: "
             - pref: UsageStatsLibraryType
@@ -405,18 +407,18 @@ Administration:
                   government  : "government"
                   religiousOrg: "religious organization"
                   subscription: "subscription"
-            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
         -
             - pref: UsageStatsLibrariesInfo
               choices:
                   yes: "Share"
                   no: "Do not Share"
             - "libraries information (name, url, country)"
-            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
         -
             - "Geolocation of the main library: "
             - pref: UsageStatsGeolocation
-            - Note that this value has no effect if the UsageStats system preference is set to "Don't share"
+            - "<br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
     Search Engine:
         -
             - "Use following search engine: "
