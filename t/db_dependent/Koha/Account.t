@@ -24,6 +24,7 @@ use Test::More tests => 3;
 use Koha::Account;
 use Koha::Account::Lines;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
