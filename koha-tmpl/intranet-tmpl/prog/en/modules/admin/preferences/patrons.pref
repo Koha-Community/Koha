@@ -23,13 +23,13 @@ Patrons:
                yes: Do
                no: "Don't"
          - default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942).
-         - "NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
      -
          - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
          - pref: BorrowerMandatoryField
            class: multi
          - (separate columns with |)
-         - "NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+         - "<strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
      -
          - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> will not appear on the patron entry screen:"
          - pref: BorrowerUnwantedField
@@ -59,7 +59,9 @@ Patrons:
            choices:
                yes: Allow
                no: "Don't allow"
-         - "Staff to manage which notices patrons will receive and when they will receive them. Note: this only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
+         - "Staff to manage which notices patrons will receive and when they will receive them."
+         - "<br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
+         - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask you system administrator to schedule them."
      -
          - pref: ExtendedPatronAttributes
            choices:
@@ -100,6 +102,7 @@ Patrons:
          - pref: MembershipExpiryDaysNotice
            class: integer
          - days.
+         - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/membership_expiry.pl</code> cronjob. Ask you system administrator to schedule it."
      -
          - pref: patronimages
            choices:
@@ -188,7 +191,8 @@ Patrons:
            choices:
                yes: Show
                no: "Don't show"
-         - "patron messaging setting on the OPAC (note: EnhancedMessagingPreferences must be enabled)."
+         - "patron messaging setting on the OPAC."
+         - "<br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
      -
          - pref: TrackLastPatronActivity
            choices:
@@ -206,7 +210,8 @@ Patrons:
            choices:
                yes: Allow only superlibrarians
                no: Allow all permitted users
-         - "to access/change superlibrarian privileges. Note: A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
+         - "to access/change superlibrarian privileges."
+         - "<br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
 
     "Norwegian patron database":
      -
@@ -217,6 +222,8 @@ Patrons:
          - the ability to communicate with the Norwegian national patron database via the
          - pref: NorwegianPatronDBEndpoint
          - endpoint.
+
+    Privacy:
      -
          - Communicate with the Norwegian national patron database using the username
          - pref: NorwegianPatronDBUsername

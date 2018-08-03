@@ -396,13 +396,15 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - patrons to browse subject authorities on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to create the browser list)
+            - patrons to browse subject authorities on OPAC
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - pref: OpacCloud
               choices:
                   yes: Show
                   no: "Don't show"
-            - a subject cloud on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to build)
+            - a subject cloud on OPAC
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - pref: OpacAuthorities
               choices:
@@ -718,13 +720,15 @@ OPAC:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "library patrons to register or modify their account via the OPAC. Note: This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+            - "library patrons to register or modify their account via the OPAC."
+            - "<br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
         -
             - pref: PatronSelfRegistrationVerifyByEmail
               choices:
                   yes: Require
                   no: "Don't require"
             - "that a self-registering patron verify his or herself via email."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_unverified_opac_registrations.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - "Use the patron category code"
             - pref: PatronSelfRegistrationDefaultCategory
@@ -735,6 +739,7 @@ OPAC:
             - pref: PatronSelfRegistrationExpireTemporaryAccountsDelay
               class: integer
             - "days."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_expired_opac_registrations.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - "The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
             - pref: PatronSelfRegistrationBorrowerMandatoryField

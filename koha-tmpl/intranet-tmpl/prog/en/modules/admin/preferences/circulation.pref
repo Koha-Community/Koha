@@ -144,7 +144,7 @@ Circulation:
               choices:
                   yes: Enable
                   no: "Do not enable"
-            - "offline circulation on regular circulation computers. (NOTE: This system preference does not affect the Firefox plugin or the desktop application)"
+            - "offline circulation on regular circulation computers. (<strong>NOTE:</strong> This system preference does not affect the Firefox plugin or the desktop application)"
         -
             - pref: ShowAllCheckins
               choices:
@@ -213,12 +213,14 @@ Circulation:
                   yes: Move
                   no: "Don't move"
             - items that have the location PROC to the location CART when they are checked in.
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - pref: ReturnToShelvingCart
               choices:
                   yes: Move
                   no: "Don't move"
             - all items to the location CART when they are checked in.
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - pref: AutomaticItemReturn
               choices:
@@ -398,12 +400,14 @@ Circulation:
             - <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature.
             - "<br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
             - <br>(Used when the longoverdue.pl script is called without the --lost parameter)
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - "Charge a lost item to the borrower's account when the LOST value of the item changes to :"
             - pref: DefaultLongOverdueChargeValue
               class: integer
             - <br>Leave this field empty if you don't want to charge the user for lost items.
             - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - "When issuing an item that has been marked as lost, "
             - pref: IssueLostItem
@@ -427,7 +431,7 @@ Circulation:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "patrons to check out multiple items from the same record.  (NOTE: This will only affect records without a subscription attached.)"
+            - "patrons to check out multiple items from the same record.  (<strong>NOTE:</strong> This will only affect records without a subscription attached.)"
         -
             - pref: OnSiteCheckouts
               choices:
@@ -495,7 +499,7 @@ Circulation:
                   yes: Do
                   no: "Don't"
             - calculate and update overdue charges when an item is returned.
-            - <br /><b>NOTE If you are doing hourly loans then you should have this on.</b>
+            - "<br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
         -
             - pref: UpdateNotForLoanStatusOnCheckin
               type: textarea
@@ -568,7 +572,7 @@ Circulation:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay"
+            - "holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of
             - pref: ExpireReservesMaxPickUpDelayCharge
@@ -587,6 +591,7 @@ Circulation:
               choices:
                   yes: in random order.
                   no: in that order.
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask you system administrator to schedule it."
             -
         -
             - pref: canreservefromotherbranches
@@ -634,7 +639,8 @@ Circulation:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - suspended holds to be automatically resumed by a set date.
+            - "suspended holds to be automatically resumed by a set date."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - pref: SuspendHoldsIntranet
               choices:
@@ -756,7 +762,8 @@ Circulation:
                   test: Calculate (but only for mailing to the admin)
                   production: Calculate and charge
             - fines (when <code>misc/cronjobs/fines.pl</code> is being run).
-            - <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference.
+            - "<br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask you system administrator to schedule it."
         -
             - If a lost item is returned, apply the refunding rules defined in the
             - pref: RefundLostOnReturnControl
