@@ -42,6 +42,7 @@ use Modern::Perl;
 
 use base qw(Koha::SearchEngine::Elasticsearch);
 use C4::Context;
+use C4::AuthoritiesMarc;
 use Koha::ItemTypes;
 use Koha::AuthorisedValues;
 use Koha::SearchEngine::QueryBuilder;

@@ -23,7 +23,7 @@ $(document).ready(function(){
                     and_or: "and",
                     operator: "contains",
                     orderby: "HeadingAsc",
-                    querytype: "marclist"
+                    querytype: "all"
                 },
                 success: function(data) {
                     response( $.map( data, function( item ) {
