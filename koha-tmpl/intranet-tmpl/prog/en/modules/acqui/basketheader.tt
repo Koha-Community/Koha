@@ -48,26 +48,26 @@
                     </li>
                 [% END %]
                 <li>
-                    <label for="basketname" class="required">Basket name: </label> &nbsp;
-                        <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname %]" required="required" class="required" />
-                        <span class="required">Required</span>
+                    <label for="basketname" class="required">Basket name: </label>
+                    <input type="text" name="basketname" id="basketname" size="40" maxlength="80" value="[% basketname %]" required="required" class="required" />
+                    <span class="required">Required</span>
                 </li>
-                 <li>
-                    <label for="billingplace">Billing place:</label>
+                <li>
+                    <label for="billingplace">Billing place: </label>
                     <select name="billingplace" id="billingplace">
                         <option value="">--</option>
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => billingplace ) %]
                     </select>
                 </li>
                 <li>
-                    <label for="deliveryplace">Delivery place:</label>
+                    <label for="deliveryplace">Delivery place: </label>
                     <select name="deliveryplace" id="deliveryplace">
                         <option value="">--</option>
                         [% PROCESS options_for_libraries libraries => Branches.all( selected => deliveryplace ) %]
                     </select>
                 </li>
                 <li>
-                    <label for="basketbooksellerid">Vendor: </label> &nbsp;
+                    <label for="basketbooksellerid">Vendor: </label>
                     <select name="basketbooksellerid" id="basketbooksellerid">
                     [% FOREACH b IN booksellers %]
                         [% IF booksellerid == b.id %]
@@ -79,11 +79,11 @@
             </select>
                 </li>
                 <li>
-                    <label for="basketnote">Internal note: </label> &nbsp;
+                    <label for="basketnote">Internal note: </label>
                     <textarea name="basketnote" id="basketnote" rows="5" cols="40">[% basketnote |html %]</textarea>
                 </li>
                 <li>
-                    <label for="basketbooksellernote">Vendor note: </label> &nbsp;
+                    <label for="basketbooksellernote">Vendor note: </label>
                     <textarea name="basketbooksellernote" id="basketbooksellernote" rows="5" cols="40">[% basketbooksellernote |html %]</textarea>
                 </li>
                 [% IF ( contractloop ) %]
