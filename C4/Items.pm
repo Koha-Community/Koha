@@ -75,7 +75,6 @@ BEGIN {
 	GetHostItemsInfo
         GetItemnumbersForBiblio
 	get_hostitemnumbers_of
-        GetItemnumberFromBarcode
         GetBarcodeFromItemnumber
         GetHiddenItemnumbers
         ItemSafeToDelete
@@ -1366,23 +1365,6 @@ sub get_hostitemnumbers_of {
     return @returnhostitemnumbers;
 }
 
-
-=head2 GetItemnumberFromBarcode
-
-  $result = GetItemnumberFromBarcode($barcode);
-
-=cut
-
-sub GetItemnumberFromBarcode {
-    my ($barcode) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $rq =
-      $dbh->prepare("SELECT itemnumber FROM items WHERE items.barcode=?");
-    $rq->execute($barcode);
-    my ($result) = $rq->fetchrow;
-    return ($result);
-}
 
 =head2 GetBarcodeFromItemnumber
 
