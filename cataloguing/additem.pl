@@ -74,15 +74,20 @@ sub get_item_from_barcode {
 
 sub set_item_default_location {
     my $itemnumber = shift;
-    my $item = GetItem( $itemnumber );
+    my $item       = Koha::Items->find($itemnumber);
     if ( C4::Context->preference('NewItemsDefaultLocation') ) {
-        $item->{'permanent_location'} = $item->{'location'};
-        $item->{'location'} = C4::Context->preference('NewItemsDefaultLocation');
-        ModItem( $item, undef, $itemnumber);
+        ModItem(
+            {
+                permanent_location => $item->location,
+                location => C4::Context->preference('NewItemsDefaultLocation')
+            },
+            undef,
+            $itemnumber
+        );
     }
     else {
-      $item->{'permanent_location'} = $item->{'location'} if !defined($item->{'permanent_location'});
-      ModItem( $item, undef, $itemnumber);
+        ModItem( { permanent_location => $item->location }, undef, $itemnumber )
+          unless defined $item->permanent_location;
     }
 }
 
@@ -693,12 +698,12 @@ if ($op eq "additem") {
     if ($exist_itemnumber && $exist_itemnumber != $itemnumber) {
         push @errors,"barcode_not_unique";
     } else {
-        my $item = GetItem( $itemnumber );
+        my $item = Koha::Items->find($itemnumber );
         my $newitem = ModItemFromMarc($itemtosave, $biblionumber, $itemnumber);
         $itemnumber = q{};
-        my $olditemlost = $item->{itemlost};
+        my $olditemlost = $item->itemlost;
         my $newitemlost = $newitem->{itemlost};
-        LostItem( $item->{itemnumber}, 'additem' )
+        LostItem( $item->itemnumber, 'additem' )
             if $newitemlost && $newitemlost ge '1' && !$olditemlost;
     }
     $nextop="additem";

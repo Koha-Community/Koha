@@ -29,6 +29,7 @@ use C4::Auth;
 use C4::Context;
 use C4::Items;
 use C4::Members;
+use Koha::Items;
 use Koha::Patrons;
 use Date::Calc qw( Today Date_to_Days );
 my $query = new CGI;
@@ -65,14 +66,14 @@ else {
             my $renewalbranch = C4::Context->preference('OpacRenewalBranch');
             my $branchcode;
             if ( $renewalbranch eq 'itemhomebranch' ) {
-                my $item = GetItem($itemnumber);
-                $branchcode = $item->{'homebranch'};
+                my $item = Koha::Items->find($itemnumber);
+                $branchcode = $item->homebranch;
             }
             elsif ( $renewalbranch eq 'patronhomebranch' ) {
                 $branchcode = Koha::Patrons->find( $borrowernumber )->branchcode;
             }
             elsif ( $renewalbranch eq 'checkoutbranch' ) {
-                my $issue = GetOpenIssue($itemnumber);
+                my $issue = GetOpenIssue($itemnumber); # FIXME Should not be $item->checkout?
                 $branchcode = $issue->{'branchcode'};
             }
             elsif ( $renewalbranch eq 'NULL' ) {

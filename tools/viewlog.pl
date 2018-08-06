@@ -31,6 +31,8 @@ use C4::Items;
 use C4::Serials;
 use C4::Debug;
 use C4::Search;    # enabled_staff_search_views
+
+use Koha::Items;
 use Koha::Patrons;
 
 use vars qw($debug $cgi_debug);
@@ -120,11 +122,11 @@ if ($do_it) {
             # get item information so we can create a working link
             my $itemnumber = $result->{'object'};
             $itemnumber = $result->{'info'} if ( $result->{module} eq "CIRCULATION" );
-            my $item = GetItem($itemnumber);
+            my $item = Koha::Items->find($itemnumber);
             if ($item) {
-                $result->{'biblionumber'}     = $item->{'biblionumber'};
-                $result->{'biblioitemnumber'} = $item->{'biblionumber'};
-                $result->{'barcode'}          = $item->{'barcode'};
+                $result->{'biblionumber'}     = $item->biblionumber;
+                $result->{'biblioitemnumber'} = $item->biblionumber;
+                $result->{'barcode'}          = $item->barcode;
             }
         }
 

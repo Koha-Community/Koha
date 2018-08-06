@@ -29,6 +29,7 @@ use C4::Circulation;
 use C4::Members;
 use C4::Biblio;
 use Koha::DateUtils;
+use Koha::Items;
 use Koha::Patrons;
 
 use List::Util qw(shuffle);
@@ -674,9 +675,9 @@ sub CreatePicklistFromItemMap {
         my $reservenotes = $mapped_item->{reservenotes};
         my $item_level = $mapped_item->{item_level};
 
-        my $item = GetItem($itemnumber);
-        my $barcode = $item->{barcode};
-        my $itemcallnumber = $item->{itemcallnumber};
+        my $item = Koha::Items->find($itemnumber);
+        my $barcode = $item->barcode;
+        my $itemcallnumber = $item->itemcallnumber;
 
         my $patron = Koha::Patrons->find( $borrowernumber );
         my $cardnumber = $patron->cardnumber;

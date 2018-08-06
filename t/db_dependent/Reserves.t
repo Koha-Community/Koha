@@ -35,6 +35,7 @@ use C4::Reserves;
 use Koha::Caches;
 use Koha::DateUtils;
 use Koha::Holds;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Notice::Templates;
 use Koha::Patrons;
@@ -521,7 +522,7 @@ is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblio_with_no_item->{bibl
 ####### EO Bug 13113 <<<
        ####
 
-$item = GetItem($itemnumber);
+$item = Koha::Items->find($itemnumber)->unblessed;
 
 ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower), "Reserving a book on item level" );
 

@@ -37,7 +37,7 @@ How to add a new message to the queue:
   use C4::Message;
   use C4::Items;
   my $borrower = { borrowernumber => 1 };
-  my $item     = C4::Items::GetItem(1);
+  my $item     = Koha::Items->find($itemnumber)->unblessed;
   my $letter =  C4::Letters::GetPreparedLetter (
       module => 'circulation',
       letter_code => 'CHECKOUT',

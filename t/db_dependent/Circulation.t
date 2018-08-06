@@ -38,6 +38,7 @@ use C4::Overdues qw(UpdateFine CalcFine);
 use Koha::DateUtils;
 use Koha::Database;
 use Koha::IssuingRules;
+use Koha::Items;
 use Koha::Checkouts;
 use Koha::Patrons;
 use Koha::Subscriptions;
@@ -454,7 +455,7 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     my $passeddatedue1 = AddIssue($renewing_borrower, $item_7->barcode, $five_weeks_ago);
     is (defined $passeddatedue1, 1, "Item with passed date due checked out, due date: " . $passeddatedue1->date_due);
 
-    my ( $fine ) = CalcFine( GetItem(undef, $item_7->barcode), $renewing_borrower->{categorycode}, $branch, $five_weeks_ago, $now );
+    my ( $fine ) = CalcFine( $item_7->unblessed, $renewing_borrower->{categorycode}, $branch, $five_weeks_ago, $now );
     C4::Overdues::UpdateFine(
         {
             issue_id       => $passeddatedue1->id(),

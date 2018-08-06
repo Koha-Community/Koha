@@ -29,6 +29,7 @@ use C4::XSLT;
 
 use Koha::Biblios;
 use Koha::Biblioitems;
+use Koha::Items;
 use Koha::ItemTypes;
 use Koha::CsvProfiles;
 use Koha::Patrons;
@@ -151,9 +152,9 @@ if ( $op eq 'add_form' ) {
                 foreach my $barcode (@barcodes){
                     $barcode =~ s/\r$//; # strip any naughty return chars
                     next if $barcode eq '';
-                    my $item = GetItem( 0, $barcode);
-                    if (defined $item && $item->{itemnumber}) {
-                        my $added = eval { $shelf->add_biblio( $item->{biblionumber}, $loggedinuser ); };
+                    my $item = Koha::Items->find({barcode => $barcode});
+                    if ( $item ) {
+                        my $added = eval { $shelf->add_biblio( $item->biblionumber, $loggedinuser ); };
                         if ($@) {
                             push @messages, { item_barcode => $barcode, type => 'alert', code => ref($@), msg => $@ };
                         } elsif ( $added ) {

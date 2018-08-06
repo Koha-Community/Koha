@@ -40,6 +40,7 @@ use Koha::DateUtils;
 use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::ClassSources;
+use Koha::Items;
 use List::MoreUtils qw( none );
 
 my $minlocation=$input->param('minlocation') || '';
@@ -195,8 +196,9 @@ if ( $uploadbarcodes && length($uploadbarcodes) > 0 ) {
         if ( $qwithdrawn->execute($barcode) && $qwithdrawn->rows ) {
             push @errorloop, { 'barcode' => $barcode, 'ERR_WTHDRAWN' => 1 };
         } else {
-            my $item = GetItem( '', $barcode );
-            if ( defined $item && $item->{'itemnumber'} ) {
+            my $item = Koha::Items->find({barcode => $barcode});
+            if ( $item ) {
+                $item = $item->unblessed;
                 # Modify date last seen for scanned items, remove lost status
                 ModItem( { itemlost => 0, datelastseen => $date }, undef, $item->{'itemnumber'} );
                 $moddatecount++;

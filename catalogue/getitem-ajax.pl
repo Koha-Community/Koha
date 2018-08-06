@@ -29,6 +29,7 @@ use C4::Output;
 use Koha::Libraries;
 
 use Koha::AuthorisedValues;
+use Koha::Items;
 use Koha::ItemTypes;
 
 my $cgi = new CGI;
@@ -43,39 +44,42 @@ unless ($status eq "ok") {
 my $item = {};
 my $itemnumber = $cgi->param('itemnumber');
 
+my $item_unblessed = {};
 if($itemnumber) {
     my $acq_fw = GetMarcStructure(1, 'ACQ');
     my $fw = ($acq_fw) ? 'ACQ' : '';
-    $item = GetItem($itemnumber);
+    $item = Koha::Items->find($itemnumber);
+    $item_unblessed = $item->unblessed; # FIXME Not needed, call home_branch and holding_branch in the templates instead
 
-    if($item->{homebranch}) {
-        $item->{homebranchname} = Koha::Libraries->find($item->{homebranch})->branchname;
+    if($item->homebranch) { # This test should not be needed, homebranch and holdingbranch are mandatory
+        $item_unblessed->{homebranchname} = $item->home_branch->branchname;
     }
 
-    if($item->{holdingbranch}) {
-        $item->{holdingbranchname} = Koha::Libraries->find($item->{holdingbranch})->branchname;
+    if($item->holdingbranch) {
+        $item_unblessed->{holdingbranchname} = $item->holding_branch->branchname;
     }
 
     my $descriptions;
-    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
-    $item->{notforloan} = $descriptions->{lib} // '';
+    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->notforloan });
+    $item_unblessed->{notforloan} = $descriptions->{lib} // '';
 
-    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.restricted', authorised_value => $item->{restricted} });
-    $item->{restricted} = $descriptions->{lib} // '';
+    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.restricted', authorised_value => $item->restricted });
+    $item_unblessed->{restricted} = $descriptions->{lib} // '';
 
-    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->{location} });
-    $item->{location} = $descriptions->{lib} // '';
+    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->location });
+    $item_unblessed->{location} = $descriptions->{lib} // '';
 
-    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.collection', authorised_value => $item->{collection} });
-    $item->{collection} = $descriptions->{lib} // '';
+    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.collection', authorised_value => $item->collection });
+    $item_unblessed->{collection} = $descriptions->{lib} // '';
 
-    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
-    $item->{materials} = $descriptions->{lib} // '';
+    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->materials });
+    $item_unblessed->{materials} = $descriptions->{lib} // '';
 
-    my $itemtype = Koha::ItemTypes->find( $item->{itype} );
-    $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
+    my $itemtype = Koha::ItemTypes->find( $item->effective_itemtype );
+    # We should not do that here, but call ->itemtype->description when needed instea
+    $item_unblessed->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
 }
 
-my $json_text = to_json( $item, { utf8 => 1 } );
+my $json_text = to_json( $item_unblessed, { utf8 => 1 } );
 
 output_with_http_headers $cgi, undef, $json_text, 'json';

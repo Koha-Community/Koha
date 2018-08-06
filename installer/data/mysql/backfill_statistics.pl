@@ -78,13 +78,14 @@ my $query = "UPDATE statistics SET itemtype = ? WHERE itemnumber = ?";
 my $update = $dbh->prepare($query);
 # $debug and print "Update Query: $query\n";
 foreach (@itemnumbers) {
-	my $item = GetItem($_);
-	unless ($item) {
+    my $item = Koha::Items->find($_);
+    unless ($item) {
 		print STDERR "\tNo item found for itemnumber $_\n"; 
 		next;
 	}
-	$update->execute($item->{itype},$_) or warn "Error in UPDATE execution";
-	printf "\titemnumber %5d : %7s  (%s rows)\n", $_, $item->{itype}, $update->rows;
+    my $itemtype = $item->effective_itemtype;
+    $update->execute($itemtype,$_) or warn "Error in UPDATE execution";
+    printf "\titemnumber %5d : %7s  (%s rows)\n", $_, $itemtype, $update->rows;
 }
 
 my $old_issues = $dbh->prepare("SELECT * FROM old_issues WHERE timestamp = ? AND itemnumber = ?");

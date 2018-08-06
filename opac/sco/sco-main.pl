@@ -45,6 +45,7 @@ use C4::Biblio;
 use C4::Items;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Acquisition::Currencies;
+use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Images;
 use Koha::Patron::Messages;
@@ -102,10 +103,11 @@ my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) =
     $query->param("confirmed")  || '',
     $query->param("newissues")  || '',
 );
+
 my @newissueslist = split /,/, $newissues;
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 my $issuer   = Koha::Patrons->find( $issuerid )->unblessed;
-my $item     = GetItem(undef,$barcode);
+my $item     = Koha::Items->find({ barcode => $barcode });
 if (C4::Context->preference('SelfCheckoutByLogin') && !$patronid) {
     my $dbh = C4::Context->dbh;
     my $resval;
@@ -160,7 +162,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
         $template->param(
             impossible                => $issue_error,
             "circ_error_$issue_error" => 1,
-            title                     => $item->{title},
+            title                     => $item->biblio->title, # FIXME Need to be backport! GetItem did not return the biblio's title
             hide_main                 => 1,
         );
         if ($issue_error eq 'DEBT') {
@@ -177,7 +179,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
     } elsif ( $needconfirm->{RENEW_ISSUE} || $op eq 'renew' ) {
         if ($confirmed) {
             #warn "renewing";
-            AddRenewal( $borrower->{borrowernumber}, $item->{itemnumber} );
+            AddRenewal( $borrower->{borrowernumber}, $item->itemnumber );
             push @newissueslist, $barcode;
             $template->param( renewed => 1 );
         } else {
@@ -243,7 +245,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
             $confirm_required = 1;
             #warn "issue confirmation";
             $template->param(
-                confirm    => "Issuing title: " . $item->{title},
+                confirm    => "Issuing title: " . $item->biblio->title,
                 barcode    => $barcode,
                 hide_main  => 1,
                 inputfocus => 'confirm',

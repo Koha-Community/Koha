@@ -20,7 +20,7 @@ use Modern::Perl;
 use List::MoreUtils qw(any);
 
 use C4::Context;
-use C4::Items qw(GetItem ModItem);
+use C4::Items qw(ModItem);
 use C4::Circulation qw(GetOpenIssue);
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
@@ -606,14 +606,14 @@ sub _SwapAllFields {
     warn "C4::CourseReserves::_SwapFields( $ci_id )" if $DEBUG;
 
     my $course_item = GetCourseItem( ci_id => $ci_id );
-    my $item = GetItem( $course_item->{'itemnumber'} );
+    my $item = Koha::Items->find($course_item->{'itemnumber'});
 
     my %course_item_fields;
     my %item_fields;
     foreach (@FIELDS) {
         if ( defined( $course_item->{$_} ) ) {
             $course_item_fields{$_} = $course_item->{$_};
-            $item_fields{$_}        = $item->{$_} || q{};
+            $item_fields{$_}        = $item->$_ || q{};
         }
     }
 

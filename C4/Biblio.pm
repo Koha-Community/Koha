@@ -2196,10 +2196,9 @@ sub PrepHostMarcField {
     my ($hostbiblionumber,$hostitemnumber, $marcflavour) = @_;
     $marcflavour ||="MARC21";
     
-    require C4::Items;
     my $hostrecord = GetMarcBiblio({ biblionumber => $hostbiblionumber });
-	my $item = C4::Items::GetItem($hostitemnumber);
-	
+    my $item = Koha::Items->find($hostitemnumber);
+
 	my $hostmarcfield;
     if ( $marcflavour eq "MARC21" || $marcflavour eq "NORMARC" ) {
 	
@@ -2222,7 +2221,7 @@ sub PrepHostMarcField {
 
     	#other fields
         my $ed = $hostrecord->subfield('250','a');
-        my $barcode = $item->{'barcode'};
+        my $barcode = $item->barcode;
         my $title = $hostrecord->subfield('245','a');
 
         # record control number, 001 with 003 and prefix
@@ -2825,8 +2824,12 @@ sub EmbedItemsInMarcBiblio {
     require C4::Items;
     while ( my ($itemnumber) = $sth->fetchrow_array ) {
         next if @$itemnumbers and not grep { $_ == $itemnumber } @$itemnumbers;
-        my $i = $opachiddenitems ? C4::Items::GetItem($itemnumber) : undef;
-        push @items, { itemnumber => $itemnumber, item => $i };
+        my $item;
+        if ( $opachiddenitems ) {
+            $item = Koha::Items->find($itemnumber);
+            $item = $item ? $item->unblessed : undef;
+        }
+        push @items, { itemnumber => $itemnumber, item => $item };
     }
     my @items2pass = map { $_->{item} } @items;
     my @hiddenitems =

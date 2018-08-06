@@ -22,6 +22,7 @@ use C4::Items;
 use C4::Reserves;
 use Koha::Database;
 use Koha::Holds;
+use Koha::Items;
 
 use t::lib::TestBuilder;
 use Data::Dumper qw|Dumper|;
@@ -79,12 +80,12 @@ $to_biblionumber_after_moved = C4::Items::MoveItemFromBiblio( $item2->{itemnumbe
 
 is( $to_biblionumber_after_moved, undef, 'MoveItemFromBiblio should return undef if the move has failed. If called twice, the item is not attached to the first biblio anymore' );
 
-my $get_item1 = C4::Items::GetItem( $item1->{itemnumber} );
-is( $get_item1->{biblionumber}, $from_biblio->{biblionumber}, 'The item1 should not have been moved' );
-my $get_item2 = C4::Items::GetItem( $item2->{itemnumber} );
-is( $get_item2->{biblionumber}, $to_biblio->{biblionumber}, 'The item2 should have been moved' );
-my $get_item3 = C4::Items::GetItem( $item3->{itemnumber} );
-is( $get_item3->{biblionumber}, $to_biblio->{biblionumber}, 'The item3 should not have been moved' );
+my $get_item1 = Koha::Items->find( $item1->{itemnumber} );
+is( $get_item1->biblionumber, $from_biblio->{biblionumber}, 'The item1 should not have been moved' );
+my $get_item2 = Koha::Items->find( $item2->{itemnumber} );
+is( $get_item2->biblionumber, $to_biblio->{biblionumber}, 'The item2 should have been moved' );
+my $get_item3 = Koha::Items->find( $item3->{itemnumber} );
+is( $get_item3->biblionumber, $to_biblio->{biblionumber}, 'The item3 should not have been moved' );
 
 my $get_bib_level_hold    = Koha::Holds->find( $bib_level_hold_not_to_move->{reserve_id} );
 my $get_item_level_hold_1 = Koha::Holds->find( $item_level_hold_not_to_move->{reserve_id} );

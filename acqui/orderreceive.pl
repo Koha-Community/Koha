@@ -130,10 +130,10 @@ if ($AcqCreateItem eq 'receiving') {
     );
 } elsif ($AcqCreateItem eq 'ordering') {
     my $fw = ($acq_fw) ? 'ACQ' : '';
-    my @itemnumbers = $order_object->items->get_column('itemnumber');
+    my $items = $order_object->items;
     my @items;
-    foreach (@itemnumbers) {
-        my $item = GetItem($_); # FIXME We do not need this call, we already have the Koha::Items
+    while ( my $i = $items->next ) {
+        my $item = $i->unblessed;
         my $descriptions;
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
         $item->{notforloan} = $descriptions->{lib} // '';
@@ -150,8 +150,9 @@ if ($AcqCreateItem eq 'receiving') {
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
         $item->{materials} = $descriptions->{lib} // '';
 
-        my $itemtype = Koha::ItemTypes->find( $item->{itype} );
+        my $itemtype = Koha::ItemTypes->find($i->effective_itemtype);
         if (defined $itemtype) {
+            # We should not do that here, but call ->itemtype->description when needed instead
             $item->{itemtype} = $itemtype->description; # FIXME Should not it be translated_description?
         }
         push @items, $item;

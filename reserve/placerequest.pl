@@ -31,6 +31,8 @@ use C4::Reserves;
 use C4::Circulation;
 use C4::Members;
 use C4::Auth qw/checkauth/;
+
+use Koha::Items;
 use Koha::Patrons;
 
 my $input = CGI->new();
@@ -87,9 +89,9 @@ if ( $type eq 'str8' && $borrower ) {
         }
 
         if ( defined $checkitem && $checkitem ne '' ) {
-            my $item = GetItem($checkitem);
-            if ( $item->{'biblionumber'} ne $biblionumber ) {
-                $biblionumber = $item->{'biblionumber'};
+            my $item = Koha::Items->find($checkitem);
+            if ( $item->biblionumber ne $biblionumber ) {
+                $biblionumber = $item->biblionumber;
             }
         }
 

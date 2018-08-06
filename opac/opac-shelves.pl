@@ -176,10 +176,10 @@ if ( $op eq 'add_form' ) {
     $shelf = Koha::Virtualshelves->find($shelfnumber);
     if ($shelf) {
         if( my $barcode = $query->param('barcode') ) {
-            my $item = GetItem( 0, $barcode);
-            if (defined $item && $item->{itemnumber}) {
+            my $item = Koha::Items->find({ barcode => $barcode });
+            if ( $item ) {
                 if ( $shelf->can_biblios_be_added( $loggedinuser ) ) {
-                    my $added = eval { $shelf->add_biblio( $item->{biblionumber}, $loggedinuser ); };
+                    my $added = eval { $shelf->add_biblio( $item->biblionumber, $loggedinuser ); };
                     if ($@) {
                         push @messages, { type => 'error', code => ref($@), msg => $@ };
                     } elsif ( $added ) {

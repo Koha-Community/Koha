@@ -176,7 +176,9 @@ if ($op eq "action") {
 	foreach my $itemnumber(@itemnumbers){
 
 		$job->progress($i) if $runinbackground;
-		my $itemdata = GetItem($itemnumber);
+        my $itemdata = Koha::Items->find($itemnumber);
+        next unless $itemdata; # Should have been tested earlier, but just in case...
+        $itemdata = $itemdata->unblessed;
         if ( $del ){
             my $return = DelItemCheck( $itemdata->{'biblionumber'}, $itemdata->{'itemnumber'});
 			if ($return == 1) {
@@ -530,7 +532,9 @@ sub BuildItemsData{
 		my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
 		my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", "");
 		foreach my $itemnumber (@itemnumbers){
-			my $itemdata=GetItem($itemnumber);
+            my $itemdata = Koha::Items->find($itemnumber);
+            next unless $itemdata; # Should have been tested earlier, but just in case...
+            $itemdata = $itemdata->unblessed;
 			my $itemmarc=Item2Marc($itemdata);
 			my %this_row;
 			foreach my $field (grep {$_->tag() eq $itemtagfield} $itemmarc->fields()) {

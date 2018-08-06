@@ -320,14 +320,14 @@ sub CanItemBeReserved {
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
-    my $item       = C4::Items::GetItem($itemnumber);
-    my $biblio     = Koha::Biblios->find( $item->{biblionumber} );
+    my $item       = Koha::Items->find($itemnumber);
+    my $biblio     = $item->biblio;
     my $patron = Koha::Patrons->find( $borrowernumber );
     my $borrower = $patron->unblessed;
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
     return { status =>'damaged' }
-      if ( $item->{damaged}
+      if ( $item->damaged
         && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
     # Check for the age restriction
@@ -355,7 +355,7 @@ sub CanItemBeReserved {
 
     if ( $controlbranch eq "ItemHomeLibrary" ) {
         $branchfield = "items.homebranch";
-        $branchcode  = $item->{homebranch};
+        $branchcode  = $item->homebranch;
     }
     elsif ( $controlbranch eq "PatronLibrary" ) {
         $branchfield = "borrowers.branchcode";
@@ -363,7 +363,7 @@ sub CanItemBeReserved {
     }
 
     # we retrieve rights
-    if ( my $rights = GetHoldRule( $borrower->{'categorycode'}, $item->{'itype'}, $branchcode ) ) {
+    if ( my $rights = GetHoldRule( $borrower->{'categorycode'}, $item->effective_itemtype, $branchcode ) ) {
         $ruleitemtype     = $rights->{itemtype};
         $allowedreserves  = $rights->{reservesallowed};
         $holds_per_record = $rights->{holds_per_record};
@@ -373,7 +373,6 @@ sub CanItemBeReserved {
         $ruleitemtype = '*';
     }
 
-    $item = Koha::Items->find( $itemnumber );
     my $holds = Koha::Holds->search(
         {
             borrowernumber => $borrowernumber,
@@ -449,7 +448,7 @@ sub CanItemBeReserved {
     my $circ_control_branch =
       C4::Circulation::_GetCircControlBranch( $item->unblessed(), $borrower );
     my $branchitemrule =
-      C4::Circulation::GetBranchItemRule( $circ_control_branch, $item->itype );
+      C4::Circulation::GetBranchItemRule( $circ_control_branch, $item->itype ); # FIXME Should not be item->effective_itemtype?
 
     if ( $branchitemrule->{holdallowed} == 0 ) {
         return { status => 'notReservable' };
@@ -466,8 +465,7 @@ sub CanItemBeReserved {
     if ( C4::Context->preference('IndependentBranches')
         and !C4::Context->preference('canreservefromotherbranches') )
     {
-        my $itembranch = $item->homebranch;
-        if ( $itembranch ne $borrower->{branchcode} ) {
+        if ( $item->homebranch ne $borrower->{branchcode} ) {
             return { status => 'cannotReserveFromOtherBranches' };
         }
     }
@@ -528,8 +526,8 @@ sub GetOtherReserves {
     my $nextreservinfo;
     my ( undef, $checkreserves, undef ) = CheckReserves($itemnumber);
     if ($checkreserves) {
-        my $iteminfo = GetItem($itemnumber);
-        if ( $iteminfo->{'holdingbranch'} ne $checkreserves->{'branchcode'} ) {
+        my $item = Koha::Items->find($itemnumber);
+        if ( $item->holdingbranch ne $checkreserves->{'branchcode'} ) {
             $messages->{'transfert'} = $checkreserves->{'branchcode'};
             #minus priorities of others reservs
             ModReserveMinusPriority(
@@ -540,7 +538,7 @@ sub GetOtherReserves {
             #launch the subroutine dotransfer
             C4::Items::ModItemTransfer(
                 $itemnumber,
-                $iteminfo->{'holdingbranch'},
+                $item->holdingbranch,
                 $checkreserves->{'branchcode'}
               ),
               ;
@@ -776,15 +774,15 @@ sub CheckReserves {
                 }
             } else {
                 my $patron;
-                my $iteminfo;
+                my $item;
                 my $local_hold_match;
 
                 if ($LocalHoldsPriority) {
                     $patron = Koha::Patrons->find( $res->{borrowernumber} );
-                    $iteminfo = C4::Items::GetItem($itemnumber);
+                    $item = Koha::Items->find($itemnumber);
 
                     my $local_holds_priority_item_branchcode =
-                      $iteminfo->{$LocalHoldsPriorityItemControl};
+                      $item->$LocalHoldsPriorityItemControl;
                     my $local_holds_priority_patron_branchcode =
                       ( $LocalHoldsPriorityPatronControl eq 'PickupLibrary' )
                       ? $res->{branchcode}
@@ -798,14 +796,15 @@ sub CheckReserves {
 
                 # See if this item is more important than what we've got so far
                 if ( ( $res->{'priority'} && $res->{'priority'} < $priority ) || $local_hold_match ) {
-                    $iteminfo ||= C4::Items::GetItem($itemnumber);
-                    next if $res->{itemtype} && $res->{itemtype} ne _get_itype( $iteminfo );
+                    $item ||= Koha::Items->find($itemnumber);
+                    next if $res->{itemtype} && $res->{itemtype} ne $item->effective_itemtype;
                     $patron ||= Koha::Patrons->find( $res->{borrowernumber} );
-                    my $branch = GetReservesControlBranch( $iteminfo, $patron->unblessed );
-                    my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$iteminfo->{'itype'});
+                    my $branch = GetReservesControlBranch( $item->unblessed, $patron->unblessed );
+                    my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$item->effective_itemtype);
                     next if ($branchitemrule->{'holdallowed'} == 0);
                     next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $patron->branchcode));
-                    next if ( ($branchitemrule->{hold_fulfillment_policy} ne 'any') && ($res->{branchcode} ne $iteminfo->{ $branchitemrule->{hold_fulfillment_policy} }) );
+                    my $hold_fulfillment_policy = $branchitemrule->{hold_fulfillment_policy};
+                    next if ( ($branchitemrule->{hold_fulfillment_policy} ne 'any') && ($res->{branchcode} ne $item->$hold_fulfillment_policy) );
                     $priority = $res->{'priority'};
                     $highest  = $res;
                     last if $local_hold_match;

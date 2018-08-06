@@ -6,6 +6,7 @@ use C4::Context;
 use C4::Circulation;
 use C4::Items;
 use Koha::IssuingRule;
+use Koha::Items;
 
 use Test::More tests => 6;
 
@@ -77,7 +78,7 @@ my $itemnumber1 =
   $dbh->selectrow_array("SELECT itemnumber FROM items WHERE biblionumber = $biblionumber")
   or BAIL_OUT("Cannot find newly created item");
 
-my $item1 = GetItem( $itemnumber1 );
+my $item1 = Koha::Items->find( $itemnumber1 )->unblessed;
 
 $dbh->do("
     INSERT INTO items (barcode, biblionumber, biblioitemnumber, homebranch, holdingbranch, notforloan, damaged, itemlost, withdrawn, onloan, itype)
@@ -88,7 +89,7 @@ my $itemnumber2 =
   $dbh->selectrow_array("SELECT itemnumber FROM items WHERE biblionumber = $biblionumber ORDER BY itemnumber DESC")
   or BAIL_OUT("Cannot find newly created item");
 
-my $item2 = GetItem( $itemnumber2 );
+my $item2 = Koha::Items->find( $itemnumber2 )->unblessed;
 
 $dbh->do("DELETE FROM issuingrules");
 my $rule = Koha::IssuingRule->new(
@@ -132,8 +133,9 @@ AddReturn( $item1->{barcode} );
         subtest 'Item is available at a different library' => sub {
             plan tests => 4;
 
-            Koha::Items->find( $item1->{itemnumber} )->set({homebranch => $library_B, holdingbranch => $library_B })->store;
-            $item1 = GetItem( $itemnumber1 );
+            $item1 = Koha::Items->find( $item1->{itemnumber} );
+            $item1->set({homebranch => $library_B, holdingbranch => $library_B })->store;
+            $item1 = $item1->unblessed;
             #Scenario is:
             #One shelf holds is 'If all unavailable'/2
             #Item 1 homebranch library B is available
@@ -172,8 +174,9 @@ AddReturn( $item1->{barcode} );
         subtest 'Item is available at the same library' => sub {
             plan tests => 4;
 
-            Koha::Items->find( $item1->{itemnumber} )->set({homebranch => $library_A, holdingbranch => $library_A })->store;
-            $item1 = GetItem( $itemnumber1 );
+            $item1 = Koha::Items->find( $item1->{itemnumber} );
+            $item1->set({homebranch => $library_A, holdingbranch => $library_A })->store;
+            $item1 = $item1->unblessed;
             #Scenario is:
             #One shelf holds is 'If all unavailable'/2
             #Item 1 homebranch library A is available

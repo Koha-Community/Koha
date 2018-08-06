@@ -44,7 +44,7 @@ my $confirm=$cgi->param('confirm');
 my $dbh = C4::Context->dbh;
 
 # get the rest of this item's information
-my $item_data_hashref = GetItem($itemnumber, undef);
+my $item_data_hashref = Koha::Items->find($itemnumber)->unblessed;
 
 # make sure item statuses are set to 0 if empty or NULL
 for ($damaged,$itemlost,$withdrawn) {

@@ -32,6 +32,7 @@ use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Holds;
+use Koha::Items;
 use Koha::Library;
 use Koha::Patrons;
 
@@ -349,17 +350,17 @@ my $itemnumber;
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', q{} );
 AddReturn( 'barcode_3', $branchcode_1 );
-my $item = GetItem( $itemnumber );
-ok( $item->{notforloan} eq 1, 'UpdateNotForLoanStatusOnCheckin does not modify value when not enabled' );
+my $item = Koha::Items->find( $itemnumber );
+ok( $item->notforloan eq 1, 'UpdateNotForLoanStatusOnCheckin does not modify value when not enabled' );
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', '1: 9' );
 AddReturn( 'barcode_3', $branchcode_1 );
-$item = GetItem( $itemnumber );
-ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforloan value from 1 to 9 with setting "1: 9"} );
+$item = Koha::Items->find( $itemnumber );
+ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin updates notforloan value from 1 to 9 with setting "1: 9"} );
 
 AddReturn( 'barcode_3', $branchcode_1 );
-$item = GetItem( $itemnumber );
-ok( $item->{notforloan} eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
+$item = Koha::Items->find( $itemnumber );
+ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
 
 # Bug 14640 - Cancel the hold on checking out if asked
 my $reserve_id = AddReserve($branchcode_1, $borrower_id1, $biblionumber,

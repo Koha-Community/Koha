@@ -31,6 +31,7 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
+use Koha::Items;
 use MARC::Record;
 
 my $schema = Koha::Database->new()->schema();
@@ -162,10 +163,10 @@ is(
     "Create items on ordering: items are not deleted after cancelling a receipt"
 );
 
-my $item1 = C4::Items::GetItem( $itemnumber1 );
-is( $item1->{notforloan}, 9, "The notforloan value has been updated with '9'" );
+my $item1 = Koha::Items->find( $itemnumber1 );
+is( $item1->notforloan, 9, "The notforloan value has been updated with '9'" );
 
-my $item2 = C4::Items::GetItem( $itemnumber2 );
-is( $item2->{notforloan}, 0, "The notforloan value has been updated with '9'" );
+my $item2 = Koha::Items->find( $itemnumber2 );
+is( $item2->notforloan, 0, "The notforloan value has been updated with '9'" );
 
 $schema->storage->txn_rollback();

@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use C4::Circulation;
 use Koha::Database;
+use Koha::Items;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -159,9 +160,9 @@ is(
 
 DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} );
 
-my $test_item = GetItem( $item->{itemnumber} );
+my $test_item = Koha::Items->find( $item->{itemnumber} );
 
-is( $test_item->{itemnumber}, undef,
+is( $test_item, undef,
     "DelItemCheck should delete item if ItemSafeToDelete returns true"
 );
 

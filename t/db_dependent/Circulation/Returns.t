@@ -87,17 +87,16 @@ subtest "InProcessingToShelvingCart tests" => sub {
 
     t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 1 );
     AddReturn( $barcode, $branch );
-    $item = GetItem( $itemnumber );
-    is( $item->{location}, 'CART',
+    $item = Koha::Items->find( $itemnumber );
+    is( $item->location, 'CART',
         "InProcessingToShelvingCart functions as intended" );
 
-    $item->{location} = $location;
-    ModItem( $item, undef, $itemnumber );
+    ModItem( {location => $location}, undef, $itemnumber );
 
     t::lib::Mocks::mock_preference( "InProcessingToShelvingCart", 0 );
     AddReturn( $barcode, $branch );
-    $item = GetItem( $itemnumber );
-    is( $item->{location}, $permanent_location,
+    $item = Koha::Items->find( $itemnumber );
+    is( $item->location, $permanent_location,
         "InProcessingToShelvingCart functions as intended" );
 };
 

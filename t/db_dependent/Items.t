@@ -65,11 +65,11 @@ subtest 'General Add, Get and Del tests' => sub {
     cmp_ok($item_bibitemnum, '==', $biblio->biblioitem->biblioitemnumber, "New item is linked to correct biblioitemnumber.");
 
     # Get item.
-    my $getitem = GetItem($itemnumber);
-    cmp_ok($getitem->{'itemnumber'}, '==', $itemnumber, "Retrieved item has correct itemnumber.");
-    cmp_ok($getitem->{'biblioitemnumber'}, '==', $item_bibitemnum, "Retrieved item has correct biblioitemnumber.");
-    is( $getitem->{location}, $location, "The location should not have been modified" );
-    is( $getitem->{permanent_location}, $location, "The permanent_location should have been set to the location value" );
+    my $getitem = Koha::Items->find($itemnumber);
+    cmp_ok($getitem->itemnumber, '==', $itemnumber, "Retrieved item has correct itemnumber.");
+    cmp_ok($getitem->biblioitemnumber, '==', $item_bibitemnum, "Retrieved item has correct biblioitemnumber.");
+    is( $getitem->location, $location, "The location should not have been modified" );
+    is( $getitem->permanent_location, $location, "The permanent_location should have been set to the location value" );
 
 
     # Do not modify anything, and do not explode!
@@ -79,35 +79,35 @@ subtest 'General Add, Get and Del tests' => sub {
 
     # Modify item; setting barcode.
     ModItem({ barcode => '987654321' }, $biblio->biblionumber, $itemnumber);
-    my $moditem = GetItem($itemnumber);
-    cmp_ok($moditem->{'barcode'}, '==', '987654321', 'Modified item barcode successfully to: '.$moditem->{'barcode'} . '.');
+    my $moditem = Koha::Items->find($itemnumber);
+    cmp_ok($moditem->barcode, '==', '987654321', 'Modified item barcode successfully to: '.$moditem->barcode . '.');
 
     # Delete item.
     DelItem({ biblionumber => $biblio->biblionumber, itemnumber => $itemnumber });
-    my $getdeleted = GetItem($itemnumber);
-    is($getdeleted->{'itemnumber'}, undef, "Item deleted as expected.");
+    my $getdeleted = Koha::Items->find($itemnumber);
+    is($getdeleted, undef, "Item deleted as expected.");
 
     ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, permanent_location => 'my permanent location', itype => $itemtype->{itemtype} } , $biblio->biblionumber);
-    $getitem = GetItem($itemnumber);
-    is( $getitem->{location}, $location, "The location should not have been modified" );
-    is( $getitem->{permanent_location}, 'my permanent location', "The permanent_location should not have modified" );
+    $getitem = Koha::Items->find($itemnumber);
+    is( $getitem->location, $location, "The location should not have been modified" );
+    is( $getitem->permanent_location, 'my permanent location', "The permanent_location should not have modified" );
 
     ModItem({ location => $location }, $biblio->biblionumber, $itemnumber);
-    $getitem = GetItem($itemnumber);
-    is( $getitem->{location}, $location, "The location should have been set to correct location" );
-    is( $getitem->{permanent_location}, $location, "The permanent_location should have been set to location" );
+    $getitem = Koha::Items->find($itemnumber);
+    is( $getitem->location, $location, "The location should have been set to correct location" );
+    is( $getitem->permanent_location, $location, "The permanent_location should have been set to location" );
 
     ModItem({ location => 'CART' }, $biblio->biblionumber, $itemnumber);
-    $getitem = GetItem($itemnumber);
-    is( $getitem->{location}, 'CART', "The location should have been set to CART" );
-    is( $getitem->{permanent_location}, $location, "The permanent_location should not have been set to CART" );
+    $getitem = Koha::Items->find($itemnumber);
+    is( $getitem->location, 'CART', "The location should have been set to CART" );
+    is( $getitem->permanent_location, $location, "The permanent_location should not have been set to CART" );
 
     t::lib::Mocks::mock_preference('item-level_itypes', '1');
-    $getitem = GetItem($itemnumber);
-    is( $getitem->{itype}, $itemtype->{itemtype}, "Itemtype set correctly when using item-level_itypes" );
+    $getitem = Koha::Items->find($itemnumber);
+    is( $getitem->effective_itemtype, $itemtype->{itemtype}, "Itemtype set correctly when using item-level_itypes" );
     t::lib::Mocks::mock_preference('item-level_itypes', '0');
-    $getitem = GetItem($itemnumber);
-    is( $getitem->{itype}, $biblio->biblioitem->itemtype, "Itemtype set correctly when not using item-level_itypes" );
+    $getitem = Koha::Items->find($itemnumber);
+    is( $getitem->effective_itemtype, $biblio->biblioitem->itemtype, "Itemtype set correctly when not using item-level_itypes" );
 
     $schema->storage->txn_rollback;
 };
@@ -195,8 +195,8 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     my @itemnumbers = ($item1_itemnumber,$item2_itemnumber);
     my @hidden;
     my @items;
-    push @items, GetItem( $item1_itemnumber );
-    push @items, GetItem( $item2_itemnumber );
+    push @items, Koha::Items->find( $item1_itemnumber )->unblessed;
+    push @items, Koha::Items->find( $item2_itemnumber )->unblessed;
 
     # Empty OpacHiddenItems
     t::lib::Mocks::mock_preference('OpacHiddenItems','');
@@ -521,8 +521,8 @@ subtest 'SearchItems test' => sub {
     ModItemFromMarc($item3_record, $biblio->biblionumber, $item3_itemnumber);
 
     # Make sure the link is used
-    my $item3 = GetItem($item3_itemnumber);
-    ok($item3->{itemnotes} eq 'foobar', 'itemnotes eq "foobar"');
+    my $item3 = Koha::Items->find($item3_itemnumber);
+    ok($item3->itemnotes eq 'foobar', 'itemnotes eq "foobar"');
 
     # Do the same search again.
     # This time it will search in items.itemnotes
@@ -738,21 +738,21 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     my (undef, undef, $item_itemnumber) = AddItemFromMarc($item_record, $biblio->biblionumber);
 
     # Make sure everything has been set up
-    my $item = GetItem($item_itemnumber);
-    is( $item->{barcode}, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
+    my $item = Koha::Items->find($item_itemnumber);
+    is( $item->barcode, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
 
     # Delete the barcode field and save the record
     $item_record->delete_fields( $barcode_field );
     $item_record->append_fields( $itemtype_field ); # itemtype is mandatory
     ModItemFromMarc($item_record, $biblio->biblionumber, $item_itemnumber);
-    $item = GetItem($item_itemnumber);
-    is( $item->{barcode}, undef, 'The default value should have been set to the barcode, the field is mapped to a kohafield' );
+    $item = Koha::Items->find($item_itemnumber);
+    is( $item->barcode, undef, 'The default value should have been set to the barcode, the field is mapped to a kohafield' );
 
     # Re-add the barcode field and save the record
     $item_record->append_fields( $barcode_field );
     ModItemFromMarc($item_record, $biblio->biblionumber, $item_itemnumber);
-    $item = GetItem($item_itemnumber);
-    is( $item->{barcode}, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
+    $item = Koha::Items->find($item_itemnumber);
+    is( $item->barcode, $a_barcode, 'Everything has been set up correctly, the barcode is defined as expected' );
 
     # Remove the mapping for barcode
     Koha::MarcSubfieldStructures->search({ frameworkcode => '', tagfield => '952', tagsubfield => 'p' })->delete;
@@ -772,8 +772,8 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     $item_record->append_fields( $another_barcode_field );
     # The DB value should not have been updated
     ModItemFromMarc($item_record, $biblio->biblionumber, $item_itemnumber);
-    $item = GetItem($item_itemnumber);
-    is ( $item->{barcode}, $a_barcode, 'items.barcode is not mapped anymore, so the DB column has not been updated' );
+    $item = Koha::Items->find($item_itemnumber);
+    is ( $item->barcode, $a_barcode, 'items.barcode is not mapped anymore, so the DB column has not been updated' );
 
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache( "MarcSubfieldStructure-" );

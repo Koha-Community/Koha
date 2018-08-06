@@ -25,7 +25,6 @@ use CGI qw ( -utf8 );
 
 use C4::Auth qw(get_template_and_user);
 use C4::Output qw(output_html_with_http_headers);
-use C4::Items qw(GetItem);
 use C4::Creators;
 use C4::Labels;
 
@@ -89,7 +88,7 @@ elsif ($op eq 'add') {
         my @numbers_list = split /\n/, $number_list; # Entries are effectively passed in as a <cr> separated list
         foreach my $number (@numbers_list) {
             $number =~ s/\r$//; # strip any naughty return chars
-            if( $number_type eq "itemnumber" && GetItem($number) ) {
+            if( $number_type eq "itemnumber" && Koha::Items->find($number) ) {
                 push @item_numbers, $number;
             }
             elsif ($number_type eq "barcode" ) {  # we must test in case an invalid barcode is passed in; we effectively disgard them atm

@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Items;
 use Data::Dumper;
 use Getopt::Long;
+use Koha::Items;
 
 my $dbh = C4::Context->dbh;
 
@@ -73,7 +74,8 @@ if ($issues == 1) {
 		    my $insert = "INSERT INTO statistics (datetime, branch, value, type, other, itemnumber, itemtype, borrowernumber)
 					 VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		    $substh = $dbh->prepare($insert);
-		    my $item = GetItem($hashref->{'itemnumber'});
+            my $item = Koha::Items->find($hashref->{'itemnumber'});
+            my $itemtype = $item->effective_itemtype;
 
 		    $substh->execute(
 			$hashref->{'issuedate'},
@@ -82,10 +84,10 @@ if ($issues == 1) {
 			'issue',
 			'',
 			$hashref->{'itemnumber'},
-			$item->{'itype'},
+            $itemtype,
 			$hashref->{'borrowernumber'}
 		    );
-		    print "date: $hashref->{'issuedate'} branchcode: $hashref->{'branchcode'} type: issue itemnumber: $hashref->{'itemnumber'} itype: $item->{'itype'} borrowernumber: $hashref->{'borrowernumber'}\n";
+            print "date: $hashref->{'issuedate'} branchcode: $hashref->{'branchcode'} type: issue itemnumber: $hashref->{'itemnumber'} itype: $itemtype borrowernumber: $hashref->{'borrowernumber'}\n";
 		    $count_issues++;
 		}
 
@@ -106,7 +108,8 @@ if ($issues == 1) {
 			my $insert = "INSERT INTO statistics (datetime, branch, value, type, other, itemnumber, itemtype, borrowernumber)
 					 VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 			$substh = $dbh->prepare($insert);
-			my $item = GetItem($hashref->{'itemnumber'});
+            my $item = Koha::Items->find($hashref->{'itemnumber'});
+            my $itemtype = $item->effective_itemtype;
 
 			$substh->execute(
 			    $hashref->{'lastreneweddate'},
@@ -115,10 +118,10 @@ if ($issues == 1) {
 			    'renew',
 			    '',
 			    $hashref->{'itemnumber'},
-			    $item->{'itype'},
+                $itemtype,
 			    $hashref->{'borrowernumber'}
 			    );
-			print "date: $hashref->{'lastreneweddate'} branchcode: $hashref->{'branchcode'} type: renew itemnumber: $hashref->{'itemnumber'} itype: $item->{'itype'} borrowernumber: $hashref->{'borrowernumber'}\n";
+            print "date: $hashref->{'lastreneweddate'} branchcode: $hashref->{'branchcode'} type: renew itemnumber: $hashref->{'itemnumber'} itype: $itemtype borrowernumber: $hashref->{'borrowernumber'}\n";
 			$count_renewals++;
 
 		    }
@@ -145,7 +148,8 @@ if ($returns == 1) {
 		my $insert = "INSERT INTO statistics (datetime, branch, value, type, other, itemnumber, itemtype, borrowernumber)
 				     VALUES(?, ?, ?, ?, ?, ?, ?, ?)";
 		$substh = $dbh->prepare($insert);
-		my $item = GetItem($hashref->{'itemnumber'});
+        my $item = Koha::Items->find($hashref->{'itemnumber'});
+        my $itemtype = $item->effective_itemtype;
 
 		$substh->execute(
 		    $hashref->{'returndate'},
@@ -154,10 +158,10 @@ if ($returns == 1) {
 		    'return',
 		    '',
 		    $hashref->{'itemnumber'},
-		    $item->{'itype'},
+            $itemtype,
 		    $hashref->{'borrowernumber'}
 		);
-		print "date: $hashref->{'returndate'} branchcode: $hashref->{'branchcode'} type: return itemnumber: $hashref->{'itemnumber'} itype: $item->{'itype'} borrowernumber: $hashref->{'borrowernumber'}\n";
+        print "date: $hashref->{'returndate'} branchcode: $hashref->{'branchcode'} type: return itemnumber: $hashref->{'itemnumber'} itype: $itemtype borrowernumber: $hashref->{'borrowernumber'}\n";
 		$count_returns++;
 	    }
 

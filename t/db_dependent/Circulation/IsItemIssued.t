@@ -25,6 +25,7 @@ use C4::Items;
 use C4::Biblio;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Items;
 use Koha::Patrons;
 
 use t::lib::TestBuilder;

@@ -177,10 +177,9 @@ sub CartToShelf {
         croak "FAILED CartToShelf() - no itemnumber supplied";
     }
 
-    my $item = GetItem($itemnumber);
-    if ( $item->{location} eq 'CART' ) {
-        $item->{location} = $item->{permanent_location};
-        ModItem($item, undef, $itemnumber);
+    my $item = Koha::Items->find($itemnumber);
+    if ( $item->location eq 'CART' ) {
+        ModItem({ location => $item->permanent_location}, undef, $itemnumber);
     }
 }
 
@@ -200,9 +199,7 @@ sub ShelfToCart {
         croak "FAILED ShelfToCart() - no itemnumber supplied";
     }
 
-    my $item = GetItem($itemnumber);
-    $item->{'location'} = 'CART';
-    ModItem($item, undef, $itemnumber);
+    ModItem({ location => 'CART'}, undef, $itemnumber);
 }
 
 =head2 AddItemFromMarc
@@ -555,12 +552,12 @@ sub ModItem {
 
     my @fields = qw( itemlost withdrawn damaged );
 
-    # Only call GetItem if we need to set an "on" date field
+    # Only retrieve the item if we need to set an "on" date field
     if ( $item->{itemlost} || $item->{withdrawn} || $item->{damaged} ) {
-        my $pre_mod_item = GetItem( $item->{'itemnumber'} );
+        my $pre_mod_item = Koha::Items->find( $item->{'itemnumber'} );
         for my $field (@fields) {
             if (    defined( $item->{$field} )
-                and not $pre_mod_item->{$field}
+                and not $pre_mod_item->$field
                 and $item->{$field} )
             {
                 $item->{ $field . '_on' } =
@@ -1338,13 +1335,12 @@ sub GetMarcItem {
     # while the other treats the MARC representation as authoritative
     # under certain circumstances.
 
-    my $itemrecord = GetItem($itemnumber);
+    my $item = Koha::Items->find($itemnumber) or return;
 
     # Tack on 'items.' prefix to column names so that C4::Biblio::TransformKohaToMarc will work.
     # Also, don't emit a subfield if the underlying field is blank.
 
-    
-    return Item2Marc($itemrecord,$biblionumber);
+    return Item2Marc($item->unblessed, $biblionumber);
 
 }
 sub Item2Marc {
@@ -1783,31 +1779,21 @@ sub ItemSafeToDelete {
 
     my $countanalytics = GetAnalyticsCount($itemnumber);
 
-    # check that there is no issue on this item before deletion.
-    my $sth = $dbh->prepare(
-        q{
-        SELECT COUNT(*) FROM issues
-        WHERE itemnumber = ?
-    }
-    );
-    $sth->execute($itemnumber);
-    my ($onloan) = $sth->fetchrow;
+    my $item = Koha::Items->find($itemnumber) or return;
 
-    my $item = GetItem($itemnumber);
-
-    if ($onloan) {
+    if ($item->checkout) {
         $status = "book_on_loan";
     }
     elsif ( defined C4::Context->userenv
         and !C4::Context->IsSuperLibrarian()
         and C4::Context->preference("IndependentBranches")
-        and ( C4::Context->userenv->{branch} ne $item->{'homebranch'} ) )
+        and ( C4::Context->userenv->{branch} ne $item->homebranch ) )
     {
         $status = "not_same_branch";
     }
     else {
         # check it doesn't have a waiting reserve
-        $sth = $dbh->prepare(
+        my $sth = $dbh->prepare(
             q{
             SELECT COUNT(*) FROM reserves
             WHERE (found = 'W' OR found = 'T')
@@ -2692,7 +2678,6 @@ sub ToggleNewStatus {
         while ( my $values = $sth->fetchrow_hashref ) {
             my $biblionumber = $values->{biblionumber};
             my $itemnumber = $values->{itemnumber};
-            my $item = C4::Items::GetItem( $itemnumber );
             for my $substitution ( @$substitutions ) {
                 next unless $substitution->{field};
                 C4::Items::ModItem( {$substitution->{field} => $substitution->{value}}, $biblionumber, $itemnumber )

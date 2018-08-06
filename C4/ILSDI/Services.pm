@@ -535,17 +535,17 @@ sub GetServices {
     my $borrower = $patron->unblessed;
     # Get the item, or return an error code if not found
     my $itemnumber = $cgi->param('item_id');
-    my $item = GetItem( $itemnumber );
-    return { code => 'RecordNotFound' } unless $$item{itemnumber};
+    my $item = Koha::Items->find($itemnumber);
+    return { code => 'RecordNotFound' } unless $item;
 
     my @availablefor;
 
     # Reserve level management
-    my $biblionumber = $item->{'biblionumber'};
+    my $biblionumber = $item->biblionumber;
     my $canbookbereserved = CanBookBeReserved( $borrower, $biblionumber );
     if ($canbookbereserved->{status} eq 'OK') {
         push @availablefor, 'title level hold';
-        my $canitembereserved = IsAvailableForItemLevelRequest($item, $borrower);
+        my $canitembereserved = IsAvailableForItemLevelRequest($item->unblessed, $borrower);
         if ($canitembereserved) {
             push @availablefor, 'item level hold';
         }
@@ -568,7 +568,7 @@ sub GetServices {
     }
 
     # Issuing management
-    my $barcode = $item->{'barcode'} || '';
+    my $barcode = $item->barcode || '';
     $barcode = barcodedecode($barcode) if ( $barcode && C4::Context->preference('itemBarcodeInputFilter') );
     if ($barcode) {
         my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $barcode );
@@ -607,14 +607,17 @@ sub RenewLoan {
 
     # Get the item, or return an error code
     my $itemnumber = $cgi->param('item_id');
-    my $item = GetItem( $itemnumber );
-    return { code => 'RecordNotFound' } unless $$item{itemnumber};
+    my $item = Koha::Items->find($itemnumber);
+    return { code => 'RecordNotFound' } unless $item;
 
     # Add renewal if possible
     my @renewal = CanBookBeRenewed( $borrowernumber, $itemnumber );
     if ( $renewal[0] ) { AddRenewal( $borrowernumber, $itemnumber ); }
 
-    my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return; # FIXME should be handled
+    return unless $item; # FIXME should be handled
+
+    my $issue = $item->checkout;
+    return $issue; # FIXME should be handled
 
     # Hashref building
     my $out;
@@ -745,11 +748,11 @@ sub HoldItem {
 
     # Get the item or return an error code
     my $itemnumber = $cgi->param('item_id');
-    my $item = GetItem( $itemnumber );
-    return { code => 'RecordNotFound' } unless $$item{itemnumber};
+    my $item = Koha::Items->find($itemnumber);
+    return { code => 'RecordNotFound' } unless $item;
 
     # If the biblio does not match the item, return an error code
-    return { code => 'RecordNotFound' } if $$item{biblionumber} ne $biblio->biblionumber;
+    return { code => 'RecordNotFound' } if $item->biblionumber ne $biblio->biblionumber;
 
     # Check for item disponibility
     my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber )->{status};
@@ -823,25 +826,25 @@ Returns, for an itemnumber, an array containing availability information.
 
 sub _availability {
     my ($itemnumber) = @_;
-    my $item = GetItem( $itemnumber, undef, undef );
+    my $item = Koha::Items->find($itemnumber);
 
-    if ( not $item->{'itemnumber'} ) {
+    unless ( $item ) {
         return ( undef, 'unknown', 'Error: could not retrieve availability for this ID', undef );
     }
 
-    my $biblionumber = $item->{'biblioitemnumber'};
-    my $library = Koha::Libraries->find( $item->{holdingbranch} );
+    my $biblionumber = $item->biblioitemnumber;
+    my $library = Koha::Libraries->find( $item->holdingbranch );
     my $location = $library ? $library->branchname : '';
 
-    if ( $item->{'notforloan'} ) {
+    if ( $item->notforloan ) {
         return ( $biblionumber, 'not available', 'Not for loan', $location );
-    } elsif ( $item->{'onloan'} ) {
+    } elsif ( $item->onloan ) {
         return ( $biblionumber, 'not available', 'Checked out', $location );
-    } elsif ( $item->{'itemlost'} ) {
+    } elsif ( $item->itemlost ) {
         return ( $biblionumber, 'not available', 'Item lost', $location );
-    } elsif ( $item->{'withdrawn'} ) {
+    } elsif ( $item->withdrawn ) {
         return ( $biblionumber, 'not available', 'Item withdrawn', $location );
-    } elsif ( $item->{'damaged'} ) {
+    } elsif ( $item->damaged ) {
         return ( $biblionumber, 'not available', 'Item damaged', $location );
     } else {
         return ( $biblionumber, 'available', undef, $location );
