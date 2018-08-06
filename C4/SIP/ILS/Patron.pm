@@ -22,7 +22,6 @@ use C4::Context;
 use C4::Koha;
 use C4::Members;
 use C4::Reserves;
-use C4::Items qw( GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
 
 use Koha::Items;

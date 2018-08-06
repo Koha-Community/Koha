@@ -652,8 +652,8 @@ if ($op eq "additem") {
 #-------------------------------------------------------------------------------
 } elsif ($op eq "delallitems") {
 #-------------------------------------------------------------------------------
-    my $itemnumbers = C4::Items::GetItemnumbersForBiblio( $biblionumber );
-    foreach my $itemnumber ( @$itemnumbers ) {
+    my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber })->get_column('itemnumber');
+    foreach my $itemnumber ( @itemnumbers ) {
         $error = C4::Items::DelItemCheck( $biblionumber, $itemnumber );
         next if $error == 1; # Means ok
         push @errors,$error;

@@ -30,6 +30,7 @@ use C4::Biblio;
 
 use Koha::Authorities;
 use Koha::Biblios;
+use Koha::Items;
 
 my $input = new CGI;
 my $op = $input->param('op') // q|form|;
@@ -84,7 +85,7 @@ if ( $op eq 'form' ) {
             $biblio = $biblio->unblessed;
             my $record = &GetMarcBiblio({ biblionumber => $record_id });
             $biblio->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $record_id ) );
-            $biblio->{itemnumbers} = C4::Items::GetItemnumbersForBiblio( $record_id );
+            $biblio->{itemnumbers} = [Koha::Items->search({ biblionumber => $record_id })->get_column('itemnumber')];
             $biblio->{holds_count} = $holds_count;
             $biblio->{issues_count} = C4::Biblio::CountItemsIssued( $record_id );
             push @records, $biblio;
@@ -165,7 +166,7 @@ if ( $op eq 'form' ) {
             }
 
             # Delete items
-            my @itemnumbers = @{ C4::Items::GetItemnumbersForBiblio( $biblionumber ) };
+            my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber })->get_column('itemnumber');
             ITEMNUMBER: for my $itemnumber ( @itemnumbers ) {
                 my $error = eval { C4::Items::DelItemCheck( $biblionumber, $itemnumber ) };
                 if ( $error != 1 or $@ ) {

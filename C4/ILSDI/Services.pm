@@ -38,6 +38,7 @@ use Koha::DateUtils;
 
 use Koha::Biblios;
 use Koha::Checkouts;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
 
@@ -138,14 +139,15 @@ sub GetAvailability {
         } else {
             my $status;
             my $msg;
-            my $items = GetItemnumbersForBiblio($id);
-            if ($items) {
+            my $items = Koha::Items->search({ biblionumber => $id });
+            if ($items->count) {
                 # Open XML
                 $out .= "  <dlf:record>\n";
                 $out .= "    <dlf:bibliographic id=\"" .$id. "\" />\n";
                 $out .= "    <dlf:items>\n";
                 # We loop over the items to clean them
-                foreach my $itemnumber (@$items) {
+                while ( my $item = $items->next ) {
+                    my $itemnumber = $item->itemnumber;
                     my ( $biblionumber, $status, $msg, $location ) = _availability($itemnumber);
                     $out .= "      <dlf:item id=\"" . $itemnumber . "\">\n";
                     $out .= "        <dlf:simpleavailability>\n";

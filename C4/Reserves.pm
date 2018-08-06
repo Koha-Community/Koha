@@ -275,16 +275,16 @@ See CanItemBeReserved() for possible return values.
 sub CanBookBeReserved{
     my ($borrowernumber, $biblionumber) = @_;
 
-    my $items = GetItemnumbersForBiblio($biblionumber);
+    my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber})->get_column("itemnumber");
     #get items linked via host records
     my @hostitems = get_hostitemnumbers_of($biblionumber);
     if (@hostitems){
-    push (@$items,@hostitems);
+        push (@itemnumbers, @hostitems);
     }
 
     my $canReserve;
-    foreach my $item (@$items) {
-        $canReserve = CanItemBeReserved( $borrowernumber, $item );
+    foreach my $itemnumber (@itemnumbers) {
+        $canReserve = CanItemBeReserved( $borrowernumber, $itemnumber );
         return $canReserve if $canReserve->{status} eq 'OK';
     }
     return $canReserve;
