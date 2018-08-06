@@ -228,7 +228,7 @@ sub GetRecords {
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
         my $holds  = $biblio->current_holds->unblessed;
         my $issues           = GetBiblioIssues($biblionumber);
-        my $items            = GetItemsByBiblioitemnumber($biblioitemnumber);
+        my $items            = $biblio->items->unblessed;
 
         # We loop over the items to clean them
         foreach my $item (@$items) {

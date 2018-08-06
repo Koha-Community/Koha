@@ -69,7 +69,6 @@ BEGIN {
         CheckItemPreSave
     
         GetItemsForInventory
-        GetItemsByBiblioitemnumber
         GetItemsInfo
 	GetItemsLocationInfo
 	GetHostItemsInfo
@@ -780,11 +779,6 @@ The following functions provide various ways of
 getting an item record, a set of item records, or
 lists of authorized values for certain item fields.
 
-Some of the functions in this group are candidates
-for refactoring -- for example, some of the code
-in C<GetItemsByBiblioitemnumber> and C<GetItemsInfo>
-has copy-and-paste work.
-
 =cut
 
 =head2 GetItemsForInventory
@@ -935,58 +929,6 @@ sub GetItemsForInventory {
     }
 
     return (\@results, $iTotalRecords);
-}
-
-=head2 GetItemsByBiblioitemnumber
-
-  GetItemsByBiblioitemnumber($biblioitemnumber);
-
-Returns an arrayref of hashrefs suitable for use in a TMPL_LOOP
-Called by C<C4::XISBN>
-
-=cut
-
-sub GetItemsByBiblioitemnumber {
-    my ( $bibitem ) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM items WHERE items.biblioitemnumber = ?") || die $dbh->errstr;
-    # Get all items attached to a biblioitem
-    my $i = 0;
-    my @results; 
-    $sth->execute($bibitem) || die $sth->errstr;
-    while ( my $data = $sth->fetchrow_hashref ) {  
-        # Foreach item, get circulation information
-        my $sth2 = $dbh->prepare( "SELECT * FROM issues,borrowers
-                                   WHERE itemnumber = ?
-                                   AND issues.borrowernumber = borrowers.borrowernumber"
-        );
-        $sth2->execute( $data->{'itemnumber'} );
-        if ( my $data2 = $sth2->fetchrow_hashref ) {
-            # if item is out, set the due date and who it is out too
-            $data->{'date_due'}   = $data2->{'date_due'};
-            $data->{'cardnumber'} = $data2->{'cardnumber'};
-            $data->{'borrowernumber'}   = $data2->{'borrowernumber'};
-        }
-        else {
-            # set date_due to blank, so in the template we check itemlost, and withdrawn
-            $data->{'date_due'} = '';                                                                                                         
-        }    # else         
-        # Find the last 3 people who borrowed this item.                  
-        my $query2 = "SELECT * FROM old_issues, borrowers WHERE itemnumber = ?
-                      AND old_issues.borrowernumber = borrowers.borrowernumber
-                      ORDER BY returndate desc,timestamp desc LIMIT 3";
-        $sth2 = $dbh->prepare($query2) || die $dbh->errstr;
-        $sth2->execute( $data->{'itemnumber'} ) || die $sth2->errstr;
-        my $i2 = 0;
-        while ( my $data2 = $sth2->fetchrow_hashref ) {
-            $data->{"timestamp$i2"} = $data2->{'timestamp'};
-            $data->{"card$i2"}      = $data2->{'cardnumber'};
-            $data->{"borrower$i2"}  = $data2->{'borrowernumber'};
-            $i2++;
-        }
-        push(@results,$data);
-    } 
-    return (\@results); 
 }
 
 =head2 GetItemsInfo
