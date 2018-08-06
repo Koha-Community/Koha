@@ -22,9 +22,10 @@ use C4::Context;
 use C4::Koha;
 use C4::Members;
 use C4::Reserves;
-use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
+use C4::Items qw( GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
 
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Patrons;
 
@@ -315,7 +316,8 @@ sub hold_items {
     my $self = shift;
     my $item_arr = $self->x_items('hold_items', @_);
     foreach my $item (@{$item_arr}) {
-        $item->{barcode} = GetBarcodeFromItemnumber($item->{itemnumber});
+        my $item_obj = Koha::Items->find($item->{itemnumber});
+        $item_arr->{barcode} = $item_obj ? $item_obj->barcode : undef;
     }
     return $item_arr;
 }
@@ -483,15 +485,18 @@ sub _get_outstanding_holds {
     while ( my $hold = $holds->next ) {
         my $item;
         if ($hold->itemnumber) {
-            $item = $hold->itemnumber;
+            $item = $hold->item;
         }
         else {
             # We need to return a barcode for the biblio so the client
             # can request the biblio info
-            $item = ( GetItemnumbersForBiblio($hold->biblionumber) )->[0];
+            my $items = $hold->biblio->items;
+            $item = $items->count ? $item->next : undef;
         }
         my $unblessed_hold = $hold->unblessed;
-        $unblessed_hold->{barcode} = GetBarcodeFromItemnumber($item);
+
+        $unblessed_hold->{barcode} = $item ? $item->barcode : undef;
+
         push @holds, $unblessed_hold;
     }
     return \@holds;

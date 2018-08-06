@@ -24,10 +24,11 @@ use CGI;
 use JSON qw(to_json);
 
 use C4::Circulation;
-use C4::Items qw(GetBarcodeFromItemnumber GetItem ModItem);
+use C4::Items qw(GetItem ModItem);
 use C4::Context;
 use C4::Auth qw(check_cookie_auth);
 use Koha::Checkouts;
+use Koha::Items;
 
 my $input = new CGI;
 
@@ -53,7 +54,9 @@ my $branchcode     = $input->param('branchcode')
 $override_limit = $override_limit ? $override_limit eq 'true' : undef;
 $exempt_fine    = $exempt_fine    ? $exempt_fine eq 'true'    : undef;
 
-my $barcode = GetBarcodeFromItemnumber($itemnumber);
+my $item = Koha::Items->find($itemnumber);
+
+my $barcode = $item ? $item->barcode : undef; # We certainly will want to return an error code
 
 my $data;
 $data->{itemnumber}     = $itemnumber;

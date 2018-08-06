@@ -903,6 +903,8 @@ foreach my $tag ( keys %{$tagslib}){
 }
 @loop_data = sort {$a->{subfield} cmp $b->{subfield} } @loop_data;
 
+my $item = Koha::Items->find($itemnumber); # We certainly want to fetch it earlier
+
 # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
 $template->param(
     biblionumber => $biblionumber,
@@ -912,7 +914,7 @@ $template->param(
     item_header_loop => \@header_value_loop,
     item             => \@loop_data,
     itemnumber       => $itemnumber,
-    barcode          => GetBarcodeFromItemnumber($itemnumber),
+    barcode          => $item ? $item->barcode : undef,
     itemtagfield     => $itemtagfield,
     itemtagsubfield  => $itemtagsubfield,
     op      => $nextop,
