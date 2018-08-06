@@ -187,7 +187,11 @@ function submitForm(form) {
                                 </form>
                             </div>
                         [% END %]
-                        <div class="col-xs-6 col-xs-pull-6">
+                        [% IF ( closedbg ) %]
+                            <div class="col-xs-12">
+                        [% ELSE %]
+                            <div class="col-xs-6 col-xs-pull-6">
+                        [% END %]
                             <form action="" method="post" id="groupingform" onsubmit="return submitForm(this)">
                                 <fieldset id="various" class="brief">
                                     <ol>
