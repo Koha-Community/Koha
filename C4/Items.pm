@@ -745,10 +745,10 @@ sub CheckItemPreSave {
 
     # check for duplicate barcode
     if (exists $item_ref->{'barcode'} and defined $item_ref->{'barcode'}) {
-        my $existing_itemnumber = GetItemnumberFromBarcode($item_ref->{'barcode'});
-        if ($existing_itemnumber) {
+        my $existing_item= Koha::Items->find({barcode => $item_ref->{'barcode'}});
+        if ($existing_item) {
             if (!exists $item_ref->{'itemnumber'}                       # new item
-                or $item_ref->{'itemnumber'} != $existing_itemnumber) { # existing item
+                or $item_ref->{'itemnumber'} != $existing_item->itemnumber) { # existing item
                 $errors{'duplicate_barcode'} = $item_ref->{'barcode'};
             }
         }

@@ -593,8 +593,9 @@ $template->param(
     AudioAlerts        => C4::Context->preference("AudioAlerts"),
 );
 
-$itemnumber = GetItemnumberFromBarcode( $barcode );
-if ( $itemnumber ) {
+my $item_from_barcode = Koha::Items->find({barcode => $barcode }); # How many times do we fetch this item?!?
+if ( $item_from_barcode ) {
+    $itemnumber = $item_from_barcode->itemnumber;
     my ( $holdingBranch, $collectionBranch ) = GetCollectionItemBranches( $itemnumber );
     if ( $holdingBranch and $collectionBranch ) {
         $holdingBranch //= '';

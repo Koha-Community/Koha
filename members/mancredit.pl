@@ -34,6 +34,7 @@ use C4::Items;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
 use Koha::Account;
+use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Token;
@@ -67,7 +68,8 @@ if ($add){
         my $barcode = $input->param('barcode');
         my $item_id;
         if ($barcode) {
-            $item_id = GetItemnumberFromBarcode($barcode);
+            my $item = Koha::Items->find({barcode => $barcode});
+            $item_id = $item->itemnumber if $item;
         }
         my $description = $input->param('desc');
         my $note        = $input->param('note');

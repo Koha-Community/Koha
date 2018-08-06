@@ -24,6 +24,8 @@ use C4::Context;
 use C4::RotatingCollections;
 use C4::Items;
 
+use Koha::Items;
+
 use CGI qw ( -utf8 );
 
 my $query = new CGI;
@@ -44,7 +46,8 @@ if ( $query->param('action') eq 'addItem' ) {
     my $colId      = $query->param('colId');
     my $barcode    = $query->param('barcode');
     my $removeItem = $query->param('removeItem');
-    my $itemnumber = GetItemnumberFromBarcode($barcode);
+    my $item       = Koha::Items->find({barcode => $barcode});
+    my $itemnumber = $item ? $item->itemnumber : undef;
 
     my ( $success, $errorCode, $errorMessage );
 

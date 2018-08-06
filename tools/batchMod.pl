@@ -245,15 +245,10 @@ if ($op eq "show"){
 
         @contentlist = uniq @contentlist;
         if ($filecontent eq 'barcode_file') {
-            foreach my $barcode (@contentlist) {
-
-                my $itemnumber = GetItemnumberFromBarcode($barcode);
-                if ($itemnumber) {
-                    push @itemnumbers,$itemnumber;
-                } else {
-                    push @notfoundbarcodes, $barcode;
-                }
-            }
+            my $existing_items = Koha::Items->search({ itemnumber => \@contentlist });
+            @itemnumbers = $existing_items->get_column('itemnumber');
+            my %exists = map {$_=>1} @{$existing_items->get_column('barcode')};
+            @notfoundbarcodes = grep { !$exists{$_} } @contentlist;
         }
         elsif ( $filecontent eq 'itemid_file') {
             @itemnumbers = Koha::Items->search({ itemnumber => \@contentlist })->get_column('itemnumber');
@@ -270,16 +265,10 @@ if ($op eq "show"){
         if ( my $list=$input->param('barcodelist')){
             push my @barcodelist, uniq( split(/\s\n/, $list) );
 
-            foreach my $barcode (@barcodelist) {
-
-                my $itemnumber = GetItemnumberFromBarcode($barcode);
-                if ($itemnumber) {
-                    push @itemnumbers,$itemnumber;
-                } else {
-                    push @notfoundbarcodes, $barcode;
-                }
-            }
-
+            my $existing_items = Koha::Items->search({ barcode => \@barcodelist });
+            @itemnumbers = $existing_items->get_column('itemnumber');
+            my %exists = map {$_=>1} @{$existing_items->get_column('barcode')};
+            @notfoundbarcodes = grep { !$exists{$_} } @barcodelist;
         }
     }
 

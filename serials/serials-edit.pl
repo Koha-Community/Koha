@@ -72,7 +72,9 @@ use C4::Output;
 use C4::Context;
 use C4::Serials;
 use C4::Search qw/enabled_staff_search_views/;
+
 use Koha::DateUtils;
+use Koha::Items;
 use Koha::Serial::Items;
 
 use List::MoreUtils qw/uniq/;
@@ -372,11 +374,8 @@ if ( $op and $op eq 'serialchangestatus' ) {
                         )
                       )
                     {
-                        $exists = GetItemnumberFromBarcode(
-                            $bib_record->subfield(
-                                $barcodetagfield, $barcodetagsubfield
-                            )
-                        );
+                        my $barcode = $bib_record->subfield( $barcodetagfield, $barcodetagsubfield );
+                        $exists = Koha::Items->find({barcode => $barcode});
                     }
 
                     #           push @errors,"barcode_not_unique" if($exists);

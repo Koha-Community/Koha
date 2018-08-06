@@ -27,6 +27,7 @@ use C4::Items;
 use C4::Charset;
 use C4::AuthoritiesMarc;
 use C4::MarcModificationTemplates;
+use Koha::Items;
 use Koha::Plugins::Handler;
 use Koha::Logger;
 
@@ -747,7 +748,7 @@ sub BatchCommitItems {
 
         my $item = TransformMarcToKoha( $item_marc );
 
-        my $duplicate_barcode = exists( $item->{'barcode'} ) && GetItemnumberFromBarcode( $item->{'barcode'} );
+        my $duplicate_barcode = exists( $item->{'barcode'} ) && Koha::Items->find({ barcode => $item->{'barcode'} });
         my $duplicate_itemnumber = exists( $item->{'itemnumber'} );
 
         my $updsth = $dbh->prepare("UPDATE import_items SET status = ?, itemnumber = ? WHERE import_items_id = ?");
@@ -761,7 +762,7 @@ sub BatchCommitItems {
             $updsth->finish();
             $num_items_replaced++;
         } elsif ( $action eq "replace" && $duplicate_barcode ) {
-            my $itemnumber = GetItemnumberFromBarcode( $item->{'barcode'} );
+            my $itemnumber = $duplicate_barcode->itemnumber;
             ModItemFromMarc( $item_marc, $biblionumber, $itemnumber );
             $updsth->bind_param( 1, 'imported' );
             $updsth->bind_param( 2, $item->{itemnumber} );
