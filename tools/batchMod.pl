@@ -233,7 +233,7 @@ if ($op eq "action") {
 if ($op eq "show"){
     my $filefh = $input->upload('uploadfile');
     my $filecontent = $input->param('filecontent');
-    my @notfoundbarcodes;
+    my ( @notfoundbarcodes, @notfounditemnumbers);
 
     my @contentlist;
     if ($filefh){
@@ -255,7 +255,9 @@ if ($op eq "show"){
             }
         }
         elsif ( $filecontent eq 'itemid_file') {
-            @itemnumbers = @contentlist;
+            @itemnumbers = Koha::Items->search({ itemnumber => \@contentlist })->get_column('itemnumber');
+            my %exists = map {$_=>1} @itemnumbers;
+            @notfounditemnumbers = grep { !$exists{$_} } @contentlist;
         }
     } else {
         if (defined $biblionumber){
@@ -496,11 +498,11 @@ $authorised_values_sth->finish;
 
 
     # what's the next op ? it's what we are not in : an add if we're editing, otherwise, and edit.
-    $template->param(item => \@loop_data);
-    if (@notfoundbarcodes) { 
-	my @notfoundbarcodesloop = map{{barcode=>$_}}@notfoundbarcodes;
-    	$template->param(notfoundbarcodes => \@notfoundbarcodesloop);
-    }
+    $template->param(
+        item                => \@loop_data,
+        notfoundbarcodes    => \@notfoundbarcodes,
+        notfounditemnumbers => \@notfounditemnumbers
+    );
     $nextop="action"
 } # -- End action="show"
 

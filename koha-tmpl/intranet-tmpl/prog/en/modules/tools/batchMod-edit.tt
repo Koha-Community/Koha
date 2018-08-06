@@ -90,24 +90,44 @@ $(document).ready(function(){
 [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot Delete</strong>: item is checked out.</div>[% END %]
 [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot Delete</strong>: item has a waiting hold.</div>[% END %]
 
-    [% IF ( notfoundbarcodes ) %]
-      <div class="dialog alert"><p>Warning, the following barcodes were not found:</p></div>
-      <table style="margin:auto;">
-    <thead>
-        <tr><th>Barcodes not found</th></tr>
-    </thead>
-    <tbody>
-        [% FOREACH notfoundbarcode IN notfoundbarcodes %]
-      <tr><td>[% notfoundbarcode.barcode |html %]</td></td>
+    [% IF ( notfoundbarcodes.size ) %]
+        <div class="dialog alert"><p>Warning, the following barcodes were not found:</p></div>
+        <table style="margin:auto;">
+            <thead>
+                <tr><th>Barcodes not found</th></tr>
+            </thead>
+            <tbody>
+                [% FOREACH notfoundbarcode IN notfoundbarcodes %]
+                    <tr><td>[% notfoundbarcode |html %]</td></td>
+                [% END %]
+            </tbody>
+        </table>
+        [% IF ( item_loop ) %]
+            [% UNLESS ( too_many_items ) %]
+                <h4>The following barcodes were found: </h4>
+            [% END %]
         [% END %]
-    </tbody>
-      </table>
-      [% IF ( item_loop ) %]
-          [% UNLESS ( too_many_items ) %]
-          <h4>The following barcodes were found: </h4>
-          [% END %]
-      [% END %]
-  [% END %] <!-- /notfoundbarcodes -->
+    [% END %] <!-- /notfoundbarcodes -->
+    [% IF ( notfounditemnumbers.size ) %]
+        <div class="dialog alert"><p>Warning, the following itemnumbers were not found:</p></div>
+        <table style="margin:auto;">
+            <thead>
+                <tr><th>Itemnumbers not found</th></tr>
+            </thead>
+            <tbody>
+                [% FOREACH notfounditemnumber IN notfounditemnumbers %]
+                    <tr><td>[% notfounditemnumber |html %]</td></td>
+                [% END %]
+            </tbody>
+        </table>
+        [% IF ( item_loop ) %]
+            [% UNLESS ( too_many_items ) %]
+                <h4>The following itemnumbers were found: </h4>
+            [% END %]
+        [% END %]
+    [% END %] <!-- /notfounditemnumbers -->
+
+
 
 <form name="f" action="batchMod.pl" method="post">
      <input type="hidden" name="op" value="[% op %]" />
