@@ -67,6 +67,7 @@ use C4::Suggestions;
 
 use Koha::Acquisition::Baskets;
 use Koha::Acquisition::Bookseller;
+use Koha::Acquisition::Orders;
 use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Biblios;
@@ -125,6 +126,7 @@ my $subtotal_for_funds;
 for my $order ( @orders ) {
     $order->{'unitprice'} += 0;
 
+    my $order_object = Koha::Acquisition::Orders->find($order->{ordernumber});
     if ( $bookseller->invoiceincgst ) {
         $order->{ecost}     = $order->{ecost_tax_included};
         $order->{unitprice} = $order->{unitprice_tax_included};
@@ -138,7 +140,7 @@ for my $order ( @orders ) {
 
     my %line = %{ $order };
     $line{invoice} = $invoice->{invoicenumber};
-    my @itemnumbers = GetItemnumbersFromOrder( $order->{ordernumber} );
+    my @itemnumbers = $order_object->items->get_column('itemnumbers');
     my $biblio = Koha::Biblios->find( $line{biblionumber} );
     $line{total_holds} = $biblio ? $biblio->holds->count : 0;
     $line{item_holds} = $biblio ? $biblio->current_holds->search(
@@ -241,11 +243,12 @@ unless( defined $invoice->{closedate} ) {
         my $biblio = Koha::Biblios->find( $biblionumber );
         my $countbiblio = CountBiblioInOrders($biblionumber);
         my $ordernumber = $line{'ordernumber'};
+        my $order_object = Koha::Acquisition::Orders->find($ordernumber);
         my $cnt_subscriptions = $biblio ? $biblio->subscriptions->count: 0;
         my $itemcount   = $biblio ? $biblio->items->count : 0;
         my $holds_count = $biblio ? $biblio->holds->count : 0;
-        my @items = GetItemnumbersFromOrder( $ordernumber );
-        my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
+        my @itemnumbers = $order_object->items->get_column('itemnumbers');
+        my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@itemnumbers } })->count : 0;
 
         my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
         $line{suggestionid}         = $suggestion->{suggestionid};
@@ -253,8 +256,8 @@ unless( defined $invoice->{closedate} ) {
         $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
 
         # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
-        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !($cnt_subscriptions) && !($holds_count);
-        $line{items}                = ($itemcount) - (scalar @items);
+        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @itemnumbers && !($cnt_subscriptions) && !($holds_count);
+        $line{items}                = ($itemcount) - (scalar @itemnumbers);
         $line{left_item}            = 1 if $line{items} >= 1;
         $line{left_biblio}          = 1 if $countbiblio > 1;
         $line{biblios}              = $countbiblio - 1;

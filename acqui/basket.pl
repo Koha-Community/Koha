@@ -34,6 +34,7 @@ use C4::Items;
 use C4::Suggestions;
 use Koha::Biblios;
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Orders;
 use Koha::Libraries;
 use C4::Letters qw/SendAlerts/;
 use Date::Calc qw/Add_Delta_Days/;
@@ -474,12 +475,13 @@ sub get_order_infos {
         my $cnt_subscriptions = $biblio->subscriptions->count;
         my $itemcount   = $biblio->items->count;
         my $holds_count = $biblio->holds->count;
-        my @items = GetItemnumbersFromOrder( $ordernumber );
-        my $itemholds  = $biblio->holds->search({ itemnumber => { -in => \@items } })->count;
+        my $order = Koha::Acquisition::Orders->find($ordernumber); # FIXME We should certainly do that at the beginning of this sub
+        my $items = $order->items;
+        my $itemholds  = $biblio->holds->search({ itemnumber => { -in => [ $items->get_column('itemnumber') ] } })->count;
 
         # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
-        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !($cnt_subscriptions) && !($holds_count);
-        $line{items}                = ($itemcount) - (scalar @items);
+        $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == $items->count && !($cnt_subscriptions) && !($holds_count);
+        $line{items}                = $itemcount - $items->count;
         $line{left_item}            = 1 if $line{items} >= 1;
         $line{left_biblio}          = 1 if $countbiblio > 1;
         $line{biblios}              = $countbiblio - 1;

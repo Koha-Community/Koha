@@ -89,7 +89,7 @@ $order->add_item( $itemnumber );
 
 CancelReceipt($ordernumber);
 
-is(scalar GetItemnumbersFromOrder($ordernumber), 0, "Create items on receiving: 0 item exist after cancelling a receipt");
+is($order->items->count, 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
 my $itemnumber1 = AddItem( { itype => $itemtype }, $biblionumber );
 my $itemnumber2 = AddItem( { itype => $itemtype }, $biblionumber );
@@ -114,7 +114,7 @@ $order->add_item( $itemnumber1 );
 $order->add_item( $itemnumber2 );
 
 is(
-    scalar( GetItemnumbersFromOrder( $order->ordernumber ) ),
+    $order->items->count,
     2,
     "Create items on ordering: 2 items should be linked to the order before receiving"
 );
@@ -128,23 +128,23 @@ my ( undef, $new_ordernumber ) = ModReceiveOrder(
     }
 );
 
-my $new_order = GetOrder( $new_ordernumber );
+my $new_order = Koha::Acquisition::Orders->find( $new_ordernumber );
 
-is( $new_order->{ordernumber}, $new_ordernumber,
+is( $new_order->ordernumber, $new_ordernumber,
     "ModReceiveOrder should return a correct ordernumber" );
 isnt( $new_ordernumber, $ordernumber,
     "ModReceiveOrder should return a different ordernumber" );
-is( $new_order->{parent_ordernumber}, $ordernumber,
+is( $new_order->parent_ordernumber, $ordernumber,
     "The new order created by ModReceiveOrder should be linked to the parent order"
 );
 
 is(
-    scalar( GetItemnumbersFromOrder( $order->ordernumber ) ),
+    $order->items->count,
     1,
     "Create items on ordering: 1 item should still be linked to the original order after receiving"
 );
 is(
-    scalar( GetItemnumbersFromOrder($new_ordernumber) ),
+    $new_order->items->count,
     1,
     "Create items on ordering: 1 item should be linked to new order after receiving"
 );
@@ -152,12 +152,12 @@ is(
 CancelReceipt($new_ordernumber);
 
 is(
-    scalar( GetItemnumbersFromOrder($new_ordernumber) ),
+    $new_order->items->count,
     0,
     "Create items on ordering: no item should be linked to the cancelled order"
 );
 is(
-    scalar( GetItemnumbersFromOrder( $order->ordernumber ) ),
+    $order->items->count,
     2,
     "Create items on ordering: items are not deleted after cancelling a receipt"
 );

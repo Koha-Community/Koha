@@ -153,17 +153,21 @@ if ($quantityrec > $origquantityrec ) {
     }
 }
 
-ModItem(
-    {
-        booksellerid         => $booksellerid,
-        dateaccessioned      => $datereceived,
-        datelastseen         => $datereceived,
-        price                => $unitprice,
-        replacementprice     => $replacementprice,
-        replacementpricedate => $datereceived,
-    },
-    $biblionumber,
-    $_
-) foreach GetItemnumbersFromOrder($new_ordernumber);
+my $new_order_object = Koha::Acquisition::Orders->find( $new_ordernumber ); # FIXME we should not need to refetch it
+my $items = $new_order_object->items;
+while ( my $item = $items->next )  {
+    ModItem(
+        {
+            booksellerid         => $booksellerid,
+            dateaccessioned      => $datereceived,
+            datelastseen         => $datereceived,
+            price                => $unitprice,
+            replacementprice     => $replacementprice,
+            replacementpricedate => $datereceived,
+        },
+        $biblionumber,
+        $item->itemnumber,
+    );
+}
 
 print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid&sticky_filters=1");

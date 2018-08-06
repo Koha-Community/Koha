@@ -112,7 +112,8 @@ unless ( $results and @$results) {
 
 # prepare the form for receiving
 my $order = $results->[0];
-my $basket = Koha::Acquisition::Orders->find( $ordernumber )->basket;
+my $order_object = Koha::Acquisition::Orders->find( $ordernumber );
+my $basket = $order_object->basket;
 my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 # Check if ACQ framework exists
@@ -129,10 +130,10 @@ if ($AcqCreateItem eq 'receiving') {
     );
 } elsif ($AcqCreateItem eq 'ordering') {
     my $fw = ($acq_fw) ? 'ACQ' : '';
-    my @itemnumbers = GetItemnumbersFromOrder($order->{ordernumber});
+    my @itemnumbers = $order_object->items->get_column('itemnumbers');
     my @items;
     foreach (@itemnumbers) {
-        my $item = GetItem($_);
+        my $item = GetItem($_); # FIXME We do not need this call, we already have the Koha::Items
         my $descriptions;
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $fw, kohafield => 'items.notforloan', authorised_value => $item->{notforloan} });
         $item->{notforloan} = $descriptions->{lib} // '';

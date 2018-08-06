@@ -84,8 +84,6 @@ BEGIN {
         &DelInvoice
         &MergeInvoices
 
-        &GetItemnumbersFromOrder
-
         &AddClaim
         &GetBiblioCountByBasketno
 
@@ -120,28 +118,6 @@ sub GetOrderFromItemnumber {
     return ( $order  );
 
 }
-
-# Returns the itemnumber(s) associated with the ordernumber given in parameter
-sub GetItemnumbersFromOrder {
-    my ($ordernumber) = @_;
-    my $dbh          = C4::Context->dbh;
-    my $query        = "SELECT itemnumber FROM aqorders_items WHERE ordernumber=?";
-    my $sth = $dbh->prepare($query);
-    $sth->execute($ordernumber);
-    my @tab;
-
-    while (my $order = $sth->fetchrow_hashref) {
-    push @tab, $order->{'itemnumber'};
-    }
-
-    return @tab;
-
-}
-
-
-
-
-
 
 =head1 NAME
 
@@ -1608,8 +1584,8 @@ sub CancelReceipt {
 
     my $parent_ordernumber = $order->{'parent_ordernumber'};
 
-    my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
     my $order_obj = Koha::Acquisition::Orders->find( $ordernumber ); # FIXME rewrite all this subroutine using this object
+    my @itemnumbers = $order_obj->items->get_column('itemnumber');
 
     if($parent_ordernumber == $ordernumber || not $parent_ordernumber) {
         # The order line has no parent, just mark it as not received
@@ -1685,7 +1661,7 @@ sub CancelReceipt {
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceiptIsCancelled");
         if ( @affects ) {
             for my $in ( @itemnumbers ) {
-                my $item = Koha::Items->find( $in );
+                my $item = Koha::Items->find( $in ); # FIXME We do not need that, we already have Koha::Items from $order_obj->items
                 my $biblio = $item->biblio;
                 my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber', $biblio->frameworkcode );
                 my $item_marc = C4::Items::GetMarcItem( $biblio->biblionumber, $in );
@@ -1707,7 +1683,7 @@ sub _cancel_items_receipt {
     my ( $order, $parent_ordernumber ) = @_;
     $parent_ordernumber ||= $order->ordernumber;
 
-    my @itemnumbers = GetItemnumbersFromOrder($order->ordernumber); # FIXME Must be $order->items
+    my $items = $order->items;
     if ( $order->basket->effective_create_items eq 'receiving' ) {
         # Remove items that were created at receipt
         my $query = qq{
@@ -1717,13 +1693,13 @@ sub _cancel_items_receipt {
         };
         my $dbh = C4::Context->dbh;
         my $sth = $dbh->prepare($query);
-        foreach my $itemnumber (@itemnumbers) {
-            $sth->execute($itemnumber, $itemnumber);
+        while ( my $item = $items->next ) {
+            $sth->execute($item->itemnumber, $item->itemnumber);
         }
     } else {
         # Update items
-        foreach my $itemnumber (@itemnumbers) {
-            ModItemOrder($itemnumber, $parent_ordernumber);
+        while ( my $item = $items->next ) {
+            ModItemOrder($item->itemnumber, $parent_ordernumber);
         }
     }
 }
@@ -1927,9 +1903,10 @@ sub DelOrder {
     }
     $sth->finish;
 
-    my @itemnumbers = GetItemnumbersFromOrder( $ordernumber );
-    foreach my $itemnumber (@itemnumbers){
-        my $delcheck = C4::Items::DelItemCheck( $bibnum, $itemnumber );
+    my $order = Koha::Acquisition::Orders->find($ordernumber);
+    my $items = $order->items;
+    while ( my $item = $items->next ) { # Should be moved to Koha::Acquisition::Order->delete
+        my $delcheck = C4::Items::DelItemCheck( $bibnum, $item->itemnumber );
 
         if($delcheck != 1) {
             $error->{'delitem'} = 1;
