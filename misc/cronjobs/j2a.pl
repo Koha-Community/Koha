@@ -167,7 +167,11 @@ if ( not $noaction ) {
         $verbose and print "Looking for patrons of $mybranch to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
         my $query = qq|
             UPDATE borrowers
-            SET guarantorid ='0',
+            SET guarantorid = NULL,
+                relationship = NULL,
+                contactname = NULL,
+                contactfirstname = NULL,
+                contacttitle = NULL,
                 categorycode = ?
             WHERE dateofbirth <= ?
               AND dateofbirth != '0000-00-00'
@@ -193,7 +197,11 @@ if ( not $noaction ) {
         $verbose and print "Looking in all branches for patrons to update from $fromcat to $tocat that were born before $itsyourbirthday\n";
         my $query = qq|
             UPDATE borrowers
-            SET guarantorid = '0',
+            SET guarantorid = NULL,
+                relationship = NULL,
+                contactname = NULL,
+                contactfirstname = NULL,
+                contacttitle = NULL,
                 categorycode = ?
             WHERE dateofbirth <= ?
               AND dateofbirth!='0000-00-00'
