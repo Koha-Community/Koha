@@ -83,8 +83,8 @@ use Koha::Authorities;
             new_section("Items have invalid itype defined");
             while ( my $item = $items_with_invalid_itype->next ) {
                 new_item(
-                    sprintf "Item with itemnumber=%s does not have a valid itype value (%s)",
-                    $item->itemnumber, $item->itype
+                    sprintf "Item with itemnumber=%s, biblionumber=%s does not have a valid itype value (%s)",
+                    $item->itemnumber, $item->biblionumber, $item->itype
                 );
             }
             new_hint("The items must have a itype value that is defined in the item types of Koha (Home › Administration › Item types administration)");
