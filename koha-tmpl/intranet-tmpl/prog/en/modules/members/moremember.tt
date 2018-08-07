@@ -559,7 +559,7 @@ function validate1(date) {
                 </a>
             </li>
         [% END %]
-        [% IF CAN_user_tools_manage_patron_lists%]
+        [% IF CAN_user_privacy_patron_data%]
             <li><a id="patrondata-tab-link" href="#patrondata">Patron's data</a></li>
         [% END %]
     </ul>
@@ -606,7 +606,7 @@ function validate1(date) {
 [% INCLUDE borrower_debarments.inc %]
 
 <div id="patrondata">
-    [% IF CAN_user_tools_manage_patron_lists %]
+    [% IF CAN_user_privacy_patron_data %]
         <p>Print or send patron's complete Koha data.</p>
         <div class="buttons">
             <button id="printData" class="btn btn-default" style="font-size:12px;"><i class="fa fa-print" aria-hidden="true"></i> Print data for patron</button>

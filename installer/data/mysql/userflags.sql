@@ -21,5 +21,6 @@ INSERT INTO permission_modules (module, description) VALUES
 ('clubs', 'Patron clubs'),
 ('labels', 'Permissions related to getting all kinds of labels to bibliographic items'),
 ('messages', 'Permission regarding notifications and messages in message queue.'),
-('auth','Permission regarding authentications and allowing to authenticate other users.')
+('auth','Permission regarding authentications and allowing to authenticate other users.'),
+('privacy','Permission regarding patrons privacy data')
 ;

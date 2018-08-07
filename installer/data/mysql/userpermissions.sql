@@ -103,5 +103,6 @@ INSERT INTO permissions (module, code, description) VALUES
    ( 'messages',        'update_message', 'Allows to update messages in message queue.'),
    ( 'messages',        'delete_message', 'Allows to delete a message and queue it.'),
    ( 'messages',        'resend_message', 'Allows to resend messages in message queue.'),
-   ( 'auth',            'get_session', 'Allow querying if the given session is active, and get very basic user details for the session; email, lastname, firstname')
+   ( 'auth',            'get_session', 'Allow querying if the given session is active, and get very basic user details for the session; email, lastname, firstname'),
+   ( 'privacy',         'patron_data', 'Allows to print or send patrons data')
 ;
