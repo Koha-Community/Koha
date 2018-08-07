@@ -27,7 +27,6 @@ BEGIN {
     @ISA = qw(Exporter);
 
     @EXPORT = qw(
-        GetItem
         AddItemFromMarc
         AddItem
         AddItemBatchFromMarc
@@ -100,12 +99,6 @@ indexed (e.g., by Zebra), but means that each item
 modification transaction must keep the items table
 and the MARC XML in sync at all times.
 
-Consequently, all code that creates, modifies, or deletes
-item records B<must> use an appropriate function from 
-C<C4::Items>.  If no existing function is suitable, it is
-better to add one to C<C4::Items> than to use add
-one-off SQL statements to add or modify items.
-
 The items table will be considered authoritative.  In other
 words, if there is ever a discrepancy between the items
 table and the MARC XML, the items table should be considered
@@ -122,41 +115,6 @@ The following functions are meant for use by users
 of C<C4::Items>
 
 =cut
-
-=head2 GetItem
-
-  $item = GetItem($itemnumber,$barcode,$serial);
-
-Return item information, for a given itemnumber or barcode.
-The return value is a hashref mapping item column
-names to values.  If C<$serial> is true, include serial publication data.
-
-=cut
-
-sub GetItem {
-    my ($itemnumber,$barcode, $serial) = @_;
-    my $dbh = C4::Context->dbh;
-
-    my $item;
-    if ($itemnumber) {
-        $item = Koha::Items->find( $itemnumber );
-    } else {
-        $item = Koha::Items->find( { barcode => $barcode } );
-    }
-
-    return unless ( $item );
-
-    my $data = $item->unblessed();
-    $data->{itype} = $item->effective_itemtype(); # set the correct itype
-
-    if ($serial) {
-        my $ssth = $dbh->prepare("SELECT serialseq,publisheddate from serialitems left join serial on serialitems.serialid=serial.serialid where serialitems.itemnumber=?");
-        $ssth->execute( $data->{'itemnumber'} );
-        ( $data->{'serialseq'}, $data->{'publisheddate'} ) = $ssth->fetchrow_array();
-    }
-
-    return $data;
-}    # sub GetItem
 
 =head2 CartToShelf
 
