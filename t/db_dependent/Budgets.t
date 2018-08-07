@@ -11,6 +11,7 @@ use C4::Acquisition;
 
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
+use Koha::Acquisition::Funds;
 use Koha::Patrons;
 
 use t::lib::TestBuilder;
@@ -477,6 +478,12 @@ is ( GetBudgetOrdered( $fund ), '20', "total ordered price is 20");
 
 
 # CloneBudgetPeriod
+# Let's make sure our timestamp is old
+my @orig_funds = Koha::Acquisition::Funds->search({ budget_period_id => $budget_period_id });
+foreach my $fund (@orig_funds){
+    $fund->timestamp('1999-12-31 23:59:59')->store;
+}
+
 my $budget_period_id_cloned = C4::Budgets::CloneBudgetPeriod(
     {
         budget_period_id        => $budget_period_id,
@@ -490,12 +497,9 @@ my $budget_period_cloned = C4::Budgets::GetBudgetPeriod($budget_period_id_cloned
 is($budget_period_cloned->{budget_period_description}, 'Budget Period Cloned', 'Cloned budget\'s description is updated.');
 
 my $budget_cloned = C4::Budgets::GetBudgets({ budget_period_id => $budget_period_id_cloned });
-my $test =  $budget_cloned->[0]->{timestamp};
-my $budget_time = Koha::DateUtils::dt_from_string($test);
-my $local_time = Koha::DateUtils::dt_from_string();
+my $budget_time =  $budget_cloned->[0]->{timestamp};
 
-
-is(DateTime::compare($budget_time, $local_time), 0, "New budget got the right timestamp");
+isnt($budget_time, '1999-12-31 23:59:59', "New budget has an updated timestamp");
 
 
 
