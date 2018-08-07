@@ -172,7 +172,7 @@ sub getBiblioItemData {
 
     if($rows && $rows->count > 0 ){
          $row = $rows->next;
-         if($row && defined $row->isbn && defined $row->biblionumber->biblionumber && defined $row->biblioitemnumber ){
+         if($row && defined $row->biblionumber->biblionumber && defined $row->biblioitemnumber ){
             @result = ($row->biblionumber->biblionumber, $row->biblioitemnumber, $row->isbn);
          }
     }
