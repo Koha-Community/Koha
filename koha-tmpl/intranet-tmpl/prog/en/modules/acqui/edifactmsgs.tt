@@ -28,7 +28,7 @@ $(document).ready(function() {
         e.preventDefault();
         EDIModal.modal("hide");
     });
-    EDIModal.on("hidden", function(){
+    EDIModal.on("hidden.bs.modal", function(){
         EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
     });
     $(".delete_msg").on("click",function(){
