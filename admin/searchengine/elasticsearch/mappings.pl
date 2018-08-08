@@ -97,7 +97,7 @@ if ( $op eq 'edit' ) {
         $schema->storage->txn_commit;
     }
 }
-elsif( $op eq 'reset' || $op eq 'reset_confirmed' ) {
+elsif( $op eq 'reset_confirmed' ) {
     Koha::SearchMarcMaps->delete;
     Koha::SearchFields->delete;
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
