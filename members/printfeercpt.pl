@@ -84,9 +84,8 @@ my %row = (
     'amountcredit'            => $accountline->{'amountcredit'},
     'amountoutstandingcredit' => $accountline->{'amountoutstandingcredit'},
     'description'             => $accountline->{'description'},
-    'amount'                  => sprintf( "%.2f", $accountline->{'amount'} ),
-    'amountoutstanding' =>
-      sprintf( "%.2f", $accountline->{'amountoutstanding'} ),
+    'amount'                  => $accountline->{'amount'},
+    'amountoutstanding'       => $accountline->{'amountoutstanding'},
     'accountno' => $accountline->{'accountno'},
     accounttype => $accountline->{accounttype},
     'note'      => $accountline->{'note'},
@@ -96,7 +95,7 @@ my %row = (
 $template->param(
     patron               => $patron,
     finesview           => 1,
-    total               => sprintf("%.2f",$total),
+    total               => $total,
     totalcredit         => $totalcredit,
     accounts            => [$accountline], # FIXME There is always only 1 row!
 );
