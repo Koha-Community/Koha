@@ -97,7 +97,7 @@ if ( $op eq 'edit' ) {
         $schema->storage->txn_commit;
     }
 }
-elsif( $op eq 'reset' || $op eq 'reset_confirmed' ) {
+elsif( $op eq 'reset_confirmed' ) {
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
     push @messages, { type => 'message', code => 'success_on_reset' };
 }

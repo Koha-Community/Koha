@@ -114,18 +114,17 @@ a.add, a.delete {
     [% IF reset_confirm %]
         <div class="dialog alert">
             <h3>The current mappings you see on the screen will be erased and replaced by the mappings in the mappings.yaml file.</h3>
-            <form action="?" method="post">
+            <form method="post">
                 <input type="hidden" name="op" value="reset_confirmed" />
                 <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, reset mappings</button>
             </form>
             <br>
-            <form action="?" method="post">
+            <form method="post">
                 <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not reset mappings</button>
             </form>
         </div>
     [% END %]
     <form method="post">
-        <input type="hidden" name="op" value="edit" />
         <div id="tabs" class="toptabs" style="clear:both">
             <ul>
                 <li><a href="#search_fields">Search fields</a></li>
@@ -314,8 +313,8 @@ a.add, a.delete {
             [% END %]
         </div>
         <p>
-            <button class="btn btn-default" type="submit"><i class="fa fa-hdd-o" aria-hidden="true"></i> Save</button>
-            <a class="btn btn-default" href="?op=reset_confirm"><i class="fa fa-refresh" aria-hidden="true"></i> Reset Mappings</a>
+            <button class="btn btn-default" type="submit" name="op" value="edit"><i class="fa fa-hdd-o" aria-hidden="true"></i> Save</button>
+            <button class="btn btn-default" type="submit" name="op" value="reset_confirm"><i class="fa fa-refresh" aria-hidden="true"></i> Reset Mappings</button>
         </p>
     </form>
 </div>
