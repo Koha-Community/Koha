@@ -23,7 +23,6 @@ use strict;
 use C4::Context;
 use C4::Stats;
 use C4::Members;
-use C4::Circulation qw(ReturnLostItem);
 use C4::Log qw(logaction);
 use Koha::Account;
 use Koha::Account::Lines;
