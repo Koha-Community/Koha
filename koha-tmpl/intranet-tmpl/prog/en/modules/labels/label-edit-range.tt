@@ -15,17 +15,26 @@
 
         function validate() {
             var error = false;
-            if (parseInt(document.getElementById("from-input").value) < 1) {
+            var from_input = document.getElementById("from-input").value;
+            var to_input = document.getElementById("to-input").value;
+
+            if (isNaN(parseInt(from_input))) {
+                document.getElementById("from-error").innerHTML = "  *Must be a positive integer";
+                error = true;
+            } else if (parseInt(from_input) < 1) {
                 document.getElementById("from-error").innerHTML = "  *Cannot be smaller than 1";
                 error = true;
             } else {
                 document.getElementById("from-error").innerHTML = "";
             }
-            if (parseInt(document.getElementById("from-input").value) > parseInt(document.getElementById("to-input").value)) {
+
+            if (isNaN(parseInt(to_input))) {
+                document.getElementById("to-error").innerHTML = "  *Must be a positive integer";
+                error = true;
+            } else if (parseInt(from_input) > parseInt(to_input)) {
                 document.getElementById("to-error").innerHTML = "  *Cannot be smaller than starting value";
                 error = true;
-            }
-            else {
+            } else {
                 document.getElementById("to-error").innerHTML = "";
             }
 
