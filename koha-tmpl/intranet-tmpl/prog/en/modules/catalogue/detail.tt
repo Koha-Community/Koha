@@ -63,11 +63,9 @@
   <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
 [% ELSE %]
 
-[%
-    IntranetCoce    = Koha.Preference('IntranetCoce')
-    CoceProviders   = Koha.Preference('CoceProviders')
-    CoceHost        = Koha.Preference('CoceHost')
-%]
+[% IntranetCoce    = Koha.Preference('IntranetCoce') %]
+[% CoceProviders   = Koha.Preference('CoceProviders') %]
+[% CoceHost        = Koha.Preference('CoceHost') %]
 
 [% INCLUDE 'cat-toolbar.inc' %]
     [% IF ( ocoins ) %]
@@ -770,7 +768,7 @@
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
-    <script type="text/javascript" src="[% interface %]/prog/js/coce_[% KOHA_VERSION %].js"></script>
+    [% Asset.js("js/coce.js") %]
     <script>
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";

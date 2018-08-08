@@ -27,11 +27,9 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-[%
-    IntranetCoce    = Koha.Preference('IntranetCoce')
-    CoceProviders   = Koha.Preference('CoceProviders')
-    CoceHost        = Koha.Preference('CoceHost')
-%]
+[% IntranetCoce    = Koha.Preference('IntranetCoce') %]
+[% CoceProviders   = Koha.Preference('CoceProviders') %]
+[% CoceHost        = Koha.Preference('CoceHost') %]
 
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
@@ -666,7 +664,7 @@
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    [% Asset.js("prog/js/coce.js") %]
+    [% Asset.js("js/coce.js") %]
     <script>
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");

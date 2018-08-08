@@ -247,7 +247,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IntranetBiblioDefaultView','normal','normal|marc|isbd|labeled_marc','Choose the default detail view in the staff interface; choose between normal, labeled_marc, marc or isbd','Choice'),
 ('intranetbookbag','1','','If ON, enables display of Cart feature in the intranet','YesNo'),
 ('IntranetCirculationHomeHTML', '', NULL, 'Show the following HTML in a div on the bottom of the reports home page', 'Free'),
-('IntranetCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the staff intranet', 'YesNo'),
+('IntranetCoce','0', NULL, 'If on, enables cover retrieval from the configured Coce server in the staff client', 'YesNo'),
 ('intranetcolorstylesheet','','50','Define the color stylesheet to use in the Staff Client','free'),
 ('IntranetFavicon','','','Enter a complete URL to an image to replace the default Koha favicon on the Staff client','free'),
 ('IntranetmainUserblock','','70|10','Add a block of HTML that will display on the intranet home page','Textarea'),
