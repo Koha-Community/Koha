@@ -150,7 +150,7 @@
                 patronExportModal.modal("show");
             });
 
-            patronExportModal.on("hidden", function(){
+            patronExportModal.on("hidden.bs.modal", function(){
                 patronExportModalBody.html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
 

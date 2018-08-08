@@ -301,7 +301,7 @@
                 $("#marcPreview .modal-body").load(page + " div");
                 $('#marcPreview').modal({show:true});
             });
-            $("#marcPreview").on("hidden", function(){
+            $("#marcPreview").on("hidden.bs.modal", function(){
                 $("#marcPreviewLabel").html("");
                 $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
