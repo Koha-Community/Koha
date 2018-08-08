@@ -137,8 +137,8 @@
                 e.preventDefault();
                 EDIModal.modal("hide");
             });
-            EDIModal.on("hidden", function(){
-                EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+            EDIModal.on("hidden.bs.modal", function(){
+                EDIModalBody.html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
             $(".delete_msg").on("click",function(){
                 return confirm(_("Are you sure you want to delete this message?"));

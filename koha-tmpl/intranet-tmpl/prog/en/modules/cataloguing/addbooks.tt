@@ -248,7 +248,7 @@
                 $("#dataPreview .modal-body").load(page + " div");
                 $('#dataPreview').modal({show:true});
             });
-            $("#dataPreview").on("hidden", function(){
+            $("#dataPreview").on("hidden.bs.modal", function(){
                 $("#dataPreviewLabel").html("");
                 $("#dataPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface %]/[% theme %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
             });
