@@ -38,6 +38,7 @@ use C4::Overdues;
 use Koha::Calendar;
 use Koha::DateUtils;
 use Koha::Patrons;
+use Koha::Libraries;
 
 sub usage {
     pod2usage( -verbose => 2 );
@@ -59,6 +60,7 @@ my $library_code;
 my $help;
 my $outfile;
 my $skip_patrons_with_email;
+my $patron_branchcode;
 
 # maps to convert I-tiva terms to Koha terms
 my $type_module_map = {
@@ -74,20 +76,26 @@ my $type_notice_map = {
 };
 
 GetOptions(
-    'o|output:s'            => \$outfile,
-    'v'                     => \$verbose,
-    'lang:s'                => \$language,
-    'type:s'                => \@types,
-    'w|waiting-hold-day:s'  => \@holds_waiting_days_to_call,
-    'c|code|library-code:s' => \$library_code,
+    'o|output:s'             => \$outfile,
+    'v'                      => \$verbose,
+    'lang:s'                 => \$language,
+    'type:s'                 => \@types,
+    'w|waiting-hold-day:s'   => \@holds_waiting_days_to_call,
+    'c|code|library-code:s'  => \$library_code,
     's|skip-patrons-with-email' => \$skip_patrons_with_email,
-    'help|h'                => \$help,
+    'pb|patron-branchcode:s' => \$patron_branchcode,
+    'h|help'                 => \$help,
 );
 
 $language = uc($language);
 $library_code ||= '';
 
 pod2usage( -verbose => 1 ) if $help;
+
+if ($patron_branchcode) {
+    die("Invalid branchcode '$patron_branchcode' passed in -pb --patron-branchcode parameter")
+      unless Koha::Libraries->search( { branchcode => $patron_branchcode } )->count;
+}
 
 # output log or STDOUT
 my $OUT;
@@ -108,11 +116,11 @@ foreach my $type (@types) {
 
     my @loop;
     if ( $type eq 'OVERDUE' ) {
-        @loop = GetOverdueIssues();
+        @loop = GetOverdueIssues( $patron_branchcode );
     } elsif ( $type eq 'PREOVERDUE' ) {
-        @loop = GetPredueIssues();
+        @loop = GetPredueIssues( $patron_branchcode );
     } elsif ( $type eq 'RESERVE' ) {
-        @loop = GetWaitingHolds();
+        @loop = GetWaitingHolds( $patron_branchcode );
     } else {
         print "Unknown or unsupported message type $type; skipping...\n"
           if ( defined $verbose );
@@ -214,11 +222,22 @@ consortium purposes and apply library specific settings, such as
 prompts, to those notices.
 This field can be blank if all messages are from a single library.
 
+=item B<--patron-branchcode> B<--pb>
+
+OPTIONAL
+
+Limits the the patrons to generate notices for based on the patron's home library.
+Items and holds from other libraries will still be included for the given patron.
+
 =back
 
 =cut
 
 sub GetOverdueIssues {
+    my ( $patron_branchcode ) = @_;
+
+    my $patron_branchcode_filter = $patron_branchcode ? "AND borrowers.branchcode = '$patron_branchcode'" : q{};
+
     my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, issues.date_due,
                 max(overduerules.branchcode) as rulebranch, TO_DAYS(NOW())-TO_DAYS(date_due) as daysoverdue, delay1, delay2, delay3,
@@ -234,6 +253,7 @@ sub GetOverdueIssues {
                 AND ( (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay1
                   OR  (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay2
                   OR  (TO_DAYS(NOW())-TO_DAYS(date_due) ) = delay3 )
+                $patron_branchcode_filter
                 GROUP BY items.itemnumber
                 ";
     my $sth = $dbh->prepare($query);
@@ -256,6 +276,10 @@ sub GetOverdueIssues {
 }
 
 sub GetPredueIssues {
+    my ( $patron_branchcode ) = @_;
+
+    my $patron_branchcode_filter = $patron_branchcode ? "AND borrowers.branchcode = '$patron_branchcode'" : q{};
+
     my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, issues.date_due,
                 issues.branchcode as site, branches.branchname as site_name
@@ -269,6 +293,7 @@ sub GetPredueIssues {
                 WHERE ( TO_DAYS( date_due ) - TO_DAYS( NOW() ) ) = days_in_advance
                 AND message_transport_type = 'phone'
                 AND message_name = 'Advance_Notice'
+                $patron_branchcode_filter
                 ";
     my $sth = $dbh->prepare($query);
     $sth->execute();
@@ -281,6 +306,10 @@ sub GetPredueIssues {
 }
 
 sub GetWaitingHolds {
+    my ( $patron_branchcode ) = @_;
+
+    my $patron_branchcode_filter = $patron_branchcode ? "AND borrowers.branchcode = '$patron_branchcode'" : q{};
+
     my $query = "SELECT borrowers.borrowernumber, borrowers.cardnumber, borrowers.title as patron_title, borrowers.firstname, borrowers.surname,
                 borrowers.phone, borrowers.email, borrowers.branchcode, biblio.biblionumber, biblio.title, items.barcode, reserves.waitingdate,
                 reserves.branchcode AS site, branches.branchname AS site_name,
@@ -295,6 +324,7 @@ sub GetWaitingHolds {
                 WHERE ( reserves.found = 'W' )
                 AND message_transport_type = 'phone'
                 AND message_name = 'Hold_Filled'
+                $patron_branchcode_filter
                 ";
     my $pickupdelay = C4::Context->preference("ReservesMaxPickUpDelay");
     my $sth         = $dbh->prepare($query);
