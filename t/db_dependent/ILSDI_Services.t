@@ -217,13 +217,11 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
 
     # Build a structure for comparison:
     my $cmp = {
-        category_code     => $attr_type_visible->{'category_code'},
-        class             => $attr_type_visible->{'class'},
-        code              => $attr_shown->{'code'},
-        description       => $attr_type_visible->{'description'},
-        display_checkout  => $attr_type_visible->{'display_checkout'},
+        borrowernumber    => $brwr->{borrowernumber},
         value             => $attr_shown->{'attribute'},
-        value_description => undef,
+        value_description => $attr_shown->{'attribute'},
+        %$attr_type_visible,
+        %$attr_shown,
     };
 
     is( $reply->{'charges'}, '10.00',

@@ -506,8 +506,18 @@ sub GetPatronInfo {
     if ( $show_attributes && $show_attributes eq "1" ) {
         # FIXME Regression expected here, we do not retrieve the same field as previously
         # Waiting for answer on bug 14257 comment 15
-        my $attrs = $patron->extended_attributes->search({ opac_display => 1 })->unblessed;
-        $borrower->{'attributes'} = $attrs;
+        $borrower->{'attributes'} = [
+            map {
+                $_->type->opac_display
+                  ? {
+                    %{ $_->unblessed },
+                    %{ $_->type->unblessed },
+                    value             => $_->attribute,   # Backward compatibility
+                    value_description => $_->description, # Awkward retro-compability...
+                  }
+                  : ()
+            } $patron->extended_attributes->search
+        ];
     }
 
     # Add is expired information
