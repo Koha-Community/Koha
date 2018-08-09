@@ -131,7 +131,7 @@
                                                                     [% IF ( text_field.field_name == '_item_type_tbl' ) %]
                                                                         [% ItemTypes.GetDescription( text_field.field_value ) | html %]
                                                                     [% ELSE %]
-                                                                        [% text_field.field_value | html %]
+                                                                        [% text_field.field_value | $raw %]
                                                                     [% END %]
                                                                 </td>
                                                             [% END %]
