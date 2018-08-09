@@ -21,31 +21,21 @@
           <span class="required">Required</span>
   </li>
   <li>
-    <label for="tagfield" required="required">MARC field: </label>
-    <select id="tagfield" name="tagfield" class="required" required="required">
-      [% FOREACH tagfield IN ['001'..'999'] %]
-        [% IF field && field.tagfield == tagfield %]
-          <option value="[% tagfield | html %]" selected="selected">[% tagfield | html %]</option>
-        [% ELSE %]
-          <option value="[% tagfield | html %]">[% tagfield | html %]</option>
-        [% END %]
-      [% END %]
-    </select>
+    <label class="required" for="tagfield">MARC field: </label>
+    [% IF field && field.tagfield == tagfield %]
+        <input type="text" id="tagfield" name="tagfield" maxlength="3" size="3" class="required" required="required" value="[% tagfield | html %]" />
+    [% ELSE %]
+        <input type="text" id="tagfield" name="tagfield" maxlenght="3" size="3" class="required" required="required" />
+    [% END %]
     <span class="required">Required</span>
   </li>
   <li>
     <label for="tagsubfield">MARC subfield: </label>
-    <select id="tagsubfield" name="tagsubfield">
-      [% codes = [''] %]
-      [% codes = codes.merge([0..9], ['a'..'z']) %]
-      [% FOREACH tagsubfield IN codes %]
-        [% IF field && field.tagsubfield == tagsubfield %]
-          <option value="[% tagsubfield | html %]" selected="selected">[% tagsubfield | html %]</option>
-        [% ELSE %]
-          <option value="[% tagsubfield | html %]">[% tagsubfield | html %]</option>
-        [% END %]
-      [% END %]
-    </select>
+    [% IF field && field.tagsubfield == tagsubfield %]
+        <input type="text" id="tagsubfield" name="tagsubfield" maxlength="1" size="1" value="[% tagsubfield | html %]" />
+    [% ELSE %]
+        <input type="text" id="tagsubfield" name="tagsubfield" maxlength="1" size="1" />
+    [% END %]
   </li>
   <li>
     <label for="authorised_values_category">Authorised values category: </label>
