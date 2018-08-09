@@ -1,6 +1,6 @@
 [% USE raw %]
+[% USE To %]
 [% USE Asset %]
-[% USE JSON.Escape %]
 
 [% BLOCK form_label %]
   [% SWITCH label %]
@@ -97,6 +97,17 @@
     <label for="[% name | html %]_no">No</label>
   </div>
 [% END %]
+
+[%# We need to escape html characters for 'value' and 'label' %]
+[%- BLOCK escape_html_value_label -%]
+    [%- SET escaped = [] -%]
+    [%- FOR e IN elts -%]
+        [%- value = BLOCK %][% e.value | html %][% END -%]
+        [%- label = BLOCK %][% e.label | html %][% END -%]
+        [%- escaped.push({ 'value' => value, 'label' => label }) -%]
+    [%- END -%]
+    [%- To.json(escaped) -%]
+[%- END -%]
 
 [%# Page starts here %]
 
@@ -375,22 +386,22 @@
                     { 'type': 'text' },
                     { 'type': 'text' },
                     [% IF ccodes.size %]
-                        { 'type': 'select', 'values': [% ccodes.json | html %] },
+                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => ccodes %] },
                     [% ELSE %]
                         null,
                     [% END %]
                     { 'type': 'text' },
                     { 'type': 'text' },
-                    { 'type': 'select', 'values': [% branches.json | html %] },
-                    { 'type': 'select', 'values': [% branches.json | html %] },
+                    { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => branches %] },
+                    { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => branches %] },
                     [% IF locations.size %]
-                        { 'type': 'select', 'values': [% locations.json | html %] },
+                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => locations %] },
                     [% ELSE %]
                         null,
                     [% END %]
                     { 'type': 'text' },
                     [% IF notforloans.size %]
-                        { 'type': 'select', 'values': [% notforloans.json | html %] },
+                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => notforloans %] },
                     [% ELSE %]
                         null,
                     [% END %]
