@@ -377,6 +377,11 @@ my $target_map = {
   # ignore files and directories created by the install itself
   './pm_to_blib'                => 'NONE',
   './blib'                      => 'NONE',
+  '.sass-lint.yml'              => 'NONE',
+  '.scss-lint.yml'              => 'NONE',
+  'gulpfile.js'                 => 'NONE',
+  'package.json'                => 'NONE',
+  'yarn.lock'                   => 'NONE',
 };
 
 =head1 CONFIGURATION OPTIONS
