@@ -146,30 +146,39 @@ body#basket a {
 }
 
 body#basket table {
-    border-left: 1px solid #EEE;
-    border-top: 1px solid #EEE;
+    border-collapse: collapse;
 }
 body#basket td,
 body#basket th {
     background-color: transparent;
+    border: 0;
     padding: 2px;
 }
 
 body#basket th {
     background-color: #EEE;
+    border: 0;
 }
 
 body#basket th,
 body#basket th[scope=col] {
+    border: 0;
     text-align: center;
     vertical-align: middle;
 }
 
 body#basket th[scope=row] {
+    border: 0;
     font-size: 89%;
     text-align: right;
     vertical-align: top;
     width: 10%;
+}
+
+#basket {
+    tr {
+        border-bottom: 1px solid #DDD;
+    }
 }
 
 body#basket p {
@@ -237,7 +246,8 @@ a[href]:after,
 fieldset.action,
 h2 span.hint,
 input,
-td.resultscontrol {
+td.resultscontrol,
+.cart-control {
     display: none;
 }
 
@@ -248,4 +258,9 @@ td.resultscontrol {
 #views,
 #ulactioncontainer {
     display: none;
+}
+
+.main,
+.table-bordered {
+    border: 0;
 }

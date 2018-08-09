@@ -148,13 +148,7 @@ a {
         padding-left: 27px;
     }
 
-    &.deleteshelf {
-        @extend %initial_icon;
 
-        &.disabled {
-            @extend %initial_icon;
-        }
-    }
 
     &.detail {
         @extend %initial_icon;
@@ -226,7 +220,7 @@ a {
 
     &.print-large {
         @extend %initial_icon;
-        background-position: -5px -186px; /* Toolbar print */
+        background-position: 0 -187px; /* Toolbar print */
         padding-left: 35px;
     }
 
@@ -257,6 +251,12 @@ a {
         @extend %initial_icon;
         background-position: 2px -386px; /* Email */
         padding-left: 28px;
+    }
+
+    &.sharelist {
+        @extend %initial_icon;
+        background-position: 2px -1148px; /* List share */
+        padding-left: 26px;
     }
 
     &.tag_add {
@@ -578,6 +578,16 @@ th {
     list-style: none outside none;
     margin: 10px 20px;
     padding: 5px 10px;
+}
+
+.buttons-print {
+    @extend %initial_icon;
+    background-color: transparent;
+    background-position: 0 -184px; /* Toolbar print */
+    border: 0;
+    color: #0076B2;
+    font-size: 100%;
+    padding-left: 35px;
 }
 
 .form-inline {
@@ -927,31 +937,6 @@ ul {
 }
 
 /* end jQueryUI core */
-
-/* jQueryUI autocomplete */
-
-.ui-autocomplete {
-    @include shadowed;
-    cursor: default;
-    position: absolute;
-
-    &.ui-widget-content .ui-state-hover {
-        background: #E6F0F2 none;
-        border: 1px solid #AAA;
-        color: #212121;
-        font-weight: normal;
-    }
-}
-
-.ui-autocomplete-loading {
-    background: #FFF url( "../../img/loading-small.gif" ) right center no-repeat;
-}
-
-.ui-menu li {
-    list-style: none;
-}
-
-/* end jQueryUI autocomplete */
 
 .item-thumbnail {
     max-width: none;
@@ -1716,7 +1701,7 @@ input {
     &.editshelf {
         @extend %initial_icon;
         background-color: transparent;
-        background-position: 2px -735px; /* List edit */
+        background-position: 2px -734px; /* List edit */
         border: 0;
         color: #006699;
         cursor: pointer;
@@ -1750,7 +1735,7 @@ input {
 .deleteshelf {
     @extend %initial_icon;
     background-color: transparent;
-    background-position: 2px -688px; /* Delete */
+    background-position: 2px -687px; /* Delete */
     border: 0;
     color: #006699;
     cursor: pointer;
@@ -1765,6 +1750,10 @@ input {
 
     &:hover {
         color: #990033;
+    }
+
+    &.disabled {
+        background-position: 0 -712px; /* Delete */
     }
 }
 
