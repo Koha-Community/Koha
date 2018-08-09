@@ -5,6 +5,7 @@
 [% USE Branches %]
 [% USE Categories %]
 [% USE ItemTypes %]
+[% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
@@ -292,6 +293,9 @@
                     <th>Barcode</th>
                     <th>Home library</th>
                     <th>Last location</th>
+                [% IF itemdata_ccode %]
+                    <th>Collection</th>
+                [% END %]
                     <th>Call no.</th>
                     <th>Copy number</th>
                 [% IF itemdata_enumchron %]
@@ -361,6 +365,11 @@
                     <td>
                         [% Branches.GetName( itemloo.holdingbranch ) | html %]
                     </td>
+                [% IF itemdata_ccode %]
+                    <td>
+                        [% IF ( itemloo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemloo.ccode ) %][% END %]
+                    </td>
+                [% END %]
                     <td>
                         [% itemloo.itemcallnumber | html %]
                     </td>

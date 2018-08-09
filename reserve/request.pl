@@ -204,6 +204,7 @@ my $patron = Koha::Patrons->find( $borrowernumber_hold );
 my $logged_in_patron = Koha::Patrons->find( $borrowernumber );
 
 my $itemdata_enumchron = 0;
+my $itemdata_ccode = 0;
 my @biblioloop = ();
 foreach my $biblionumber (@biblionumbers) {
     next unless $biblionumber =~ m|^\d+$|;
@@ -498,6 +499,10 @@ foreach my $biblionumber (@biblionumbers) {
                 if ($item->{enumchron}) {
                     $itemdata_enumchron = 1;
                 }
+                # Show collection when needed
+                if ($item->{ccode}) {
+                    $itemdata_ccode = 1;
+                }
             }
 
             push @{ $biblioitem->{itemloop} }, $item;
@@ -609,6 +614,7 @@ foreach my $biblionumber (@biblionumbers) {
                      optionloop        => \@optionloop,
                      bibitemloop       => \@bibitemloop,
                      itemdata_enumchron => $itemdata_enumchron,
+                     itemdata_ccode    => $itemdata_ccode,
                      date              => $date,
                      biblionumber      => $biblionumber,
                      findborrower      => $findborrower,
