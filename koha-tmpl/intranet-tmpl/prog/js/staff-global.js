@@ -15,6 +15,16 @@ function formatstr(str, col) {
     });
 }
 
+var HtmlCharsToEscape = {
+    '&': '&amp;',
+    '<': '&lt;',
+    '>': '&gt;'
+};
+String.prototype.escapeHtml = function() {
+    return this.replace(/[&<>]/g, function(c) {
+        return HtmlCharsToEscape[c] || c;
+    });
+};
 
 // http://stackoverflow.com/questions/14859281/select-tab-by-name-in-jquery-ui-1-10-0/16550804#16550804
 $.fn.tabIndex = function () {
