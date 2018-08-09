@@ -22,16 +22,16 @@ $(document).ready(function() {
                             title = "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "'>"
-                                  + oObj.title;
+                                  + oObj.title.escapeHtml();
 
                             $.each(oObj.subtitle, function( index, value ) {
-                                      title += " " + value.subfield;
+                                      title += " " + value.subfield.escapeHtml();
                             });
 
                             title += "</a>";
 
                             if ( oObj.author ) {
-                                title += " " + BY.replace( "_AUTHOR_",  oObj.author );
+                                title += " " + BY.replace( "_AUTHOR_",  oObj.author.escapeHtml() );
                             }
 
                             if ( oObj.itemnotes ) {
@@ -39,7 +39,7 @@ $(document).ready(function() {
                                 if ( $.datepicker.formatDate('yy-mm-dd', new Date(oObj.issuedate) ) == ymd ) {
                                     span_class = "circ-hlt";
                                 }
-                                title += " - <span class='" + span_class + "'>" + oObj.itemnotes + "</span>"
+                                title += " - <span class='" + span_class + "'>" + oObj.itemnotes.escapeHtml() + "</span>"
                             }
 
                             return title;
@@ -47,7 +47,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function( oObj ) {
-                            return oObj.itemcallnumber || "";
+                            return oObj.itemcallnumber.escapeHtml() || "";
                         }
                     },
                     {
@@ -91,7 +91,7 @@ $(document).ready(function() {
                                   + "#"
                                   + oObj.itemnumber
                                   + "'>"
-                                  + oObj.barcode
+                                  + oObj.barcode.escapeHtml()
                                   + "</a>";
                             }
 
@@ -114,12 +114,12 @@ $(document).ready(function() {
                                         selectedbranch = '';
                                         setbranch = '';
                                     }
-                                    branchSelect += '<option value="'+ oObj.branches[i].branchcode +'"'+selectedbranch+'>'+oObj.branches[i].branchname+setbranch+'</option>';
+                                    branchSelect += '<option value="'+ oObj.branches[i].branchcode.escapeHtml() +'"'+selectedbranch+'>'+oObj.branches[i].branchname.escapeHtml()+setbranch+'</option>';
                                 }
                                 branchSelect +='</select>';
                                 return branchSelect;
                             }
-                            else { return oObj.branchcode || ""; }
+                            else { return oObj.branchcode.escapeHtml() || ""; }
                         }
                     },
                     { "mDataProp": "expirationdate_formatted" },
