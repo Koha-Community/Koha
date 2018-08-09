@@ -3,6 +3,7 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% USE ItemTypes %]
+[% USE AuthorisedValues %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Placing a hold</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -334,6 +335,9 @@
                                                                     <th>Home library</th>
                                                                     <th>Last location</th>
                                                                 [% END %]
+                                                                [% IF ( itemdata_ccode ) %]
+                                                                    <th>Collection</th>
+                                                                [% END %]
                                                                 <th>Call number</th>
                                                                 [% IF ( itemdata_enumchron ) %]
                                                                     <th>Vol info</th>
@@ -372,6 +376,9 @@
                                                                     [% UNLESS ( singleBranchMode ) %]
                                                                         <td class="homebranch">[% Branches.GetName( itemLoo.homeBranchName ) | html %]</td>
                                                                         <td class="holdingbranch">[% Branches.GetName( itemLoo.holdingBranchName ) | html %]</td>
+                                                                    [% END %]
+                                                                    [% IF ( itemdata_ccode ) %]
+                                                                        <td class="ccode"> [% IF ( itemLoo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemLoo.ccode ) %][% END %]</td>
                                                                     [% END %]
                                                                     <td class="call_no">[% itemLoo.callNumber | html %]</td>
                                                                     [% IF ( itemdata_enumchron ) %]

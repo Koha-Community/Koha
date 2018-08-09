@@ -382,6 +382,7 @@ unless ($noreserves) {
 my $biblioLoop = [];
 my $numBibsAvailable = 0;
 my $itemdata_enumchron = 0;
+my $itemdata_ccode = 0;
 my $anyholdable = 0;
 my $itemLevelTypes = C4::Context->preference('item-level_itypes');
 $template->param('item_level_itypes' => $itemLevelTypes);
@@ -442,6 +443,7 @@ foreach my $biblioNum (@biblionumbers) {
         $itemLoopIter->{homeBranchName} = $itemInfo->{homebranch};
         $itemLoopIter->{callNumber} = $itemInfo->{itemcallnumber};
         $itemLoopIter->{enumchron} = $itemInfo->{enumchron};
+        $itemLoopIter->{ccode} = $itemInfo->{ccode};
         $itemLoopIter->{copynumber} = $itemInfo->{copynumber};
         if ($itemLevelTypes) {
             $itemLoopIter->{translated_description} = $itemInfo->{translated_description};
@@ -546,10 +548,17 @@ foreach my $biblioNum (@biblionumbers) {
         if ($itemLoopIter->{enumchron}) {
             $itemdata_enumchron = 1;
         }
+    # Show collection when needed
+        if ($itemLoopIter->{ccode}) {
+            $itemdata_ccode = 1;
+        }
 
         push @{$biblioLoopIter{itemLoop}}, $itemLoopIter;
     }
-    $template->param( itemdata_enumchron => $itemdata_enumchron );
+    $template->param(
+        itemdata_enumchron => $itemdata_enumchron,
+        itemdata_ccode     => $itemdata_ccode,
+    );
 
     if ($numCopiesAvailable > 0) {
         $numBibsAvailable++;
