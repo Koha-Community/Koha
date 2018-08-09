@@ -173,6 +173,7 @@ $sth = $dbh->prepare($query).
 =cut
 
 sub GetSerialStatusFromSerialId {
+    warn "C4::Serials::GetSerialStatusFromSerialId will be deprecated as of 18.11.0\n";
     my $dbh   = C4::Context->dbh;
     my $query = qq|
         SELECT status
@@ -853,6 +854,7 @@ This function returns the field distributedto for the subscription matching subs
 =cut
 
 sub GetDistributedTo {
+    warn "C4::Serials::GetDistributedTo will be deprecated as of 18.11.0\n";
     my $dbh = C4::Context->dbh;
     my $distributedto;
     my ($subscriptionid) = @_;
@@ -1726,6 +1728,7 @@ This function update the value of distributedto for a subscription given on inpu
 =cut
 
 sub SetDistributedto {
+    warn "C4::Serials::SetDistributedto will be deprecated as of 18.11.0\n";
     my ( $distributedto, $subscriptionid ) = @_;
     my $dbh   = C4::Context->dbh;
     my $query = qq|
