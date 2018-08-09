@@ -475,7 +475,7 @@ sub GetPatronInfo {
     }
 
     if ( $cgi->param('show_attributes') eq "1" ) {
-        my $attrs = GetBorrowerAttributes( $borrowernumber, 0, 1 );
+        my $attrs = GetBorrowerAttributes( $borrowernumber, 1 );
         $borrower->{'attributes'} = $attrs;
     }
 
