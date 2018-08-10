@@ -84,6 +84,9 @@ $.fn.selectTabByID = function (tabID) {
         $("a[href$=\"/" + path + params + "\"]", navmenulist).addClass("current");
     }
 
+    $("#catalog-search-link a").on("hover", function(){
+        $("#catalog-search-dropdown a").toggleClass("catalog-search-dropdown-hover");
+    });
 });
 
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html

@@ -5,8 +5,11 @@
         <ul id="toplevelmenu" class="nav navbar-nav">
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li>[% END %]
             [% IF CAN_user_borrowers_edit_borrowers %]<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>[% END %]
-            <li class="dropdown">
-                <a href="/cgi-bin/koha/catalogue/search.pl" class="dropdown-toggle" data-toggle="dropdown">Search <b class="caret"></b></a>
+            <li id="catalog-search-link">
+                <a href="/cgi-bin/koha/catalogue/search.pl">Search</a>
+            </li>
+            <li class="dropdown" id="catalog-search-dropdown">
+                <a href="/cgi-bin/koha/catalogue/search.pl" class="dropdown-toggle" data-toggle="dropdown"><b class="caret"></b></a>
                 <ul class="dropdown-menu dropdown-menu-right">
                     [% IF ( CAN_user_catalogue ) %]<li><a href="/cgi-bin/koha/catalogue/search.pl">Advanced search</a></li>
                     <li><a href="/cgi-bin/koha/catalogue/itemsearch.pl">Item search</a></li>[% END %]

@@ -4103,6 +4103,27 @@ span {
 
 // ==== MODULE LINKS - End ====
 
+#catalog-search-link {
+    border-right: 1px solid lighten( #E6F0F2, 15% );
+    padding-right: .3em;
+}
+
+#catalog-search-dropdown {
+    padding: 0;
+
+    & > a {
+        border-left: 1px solid darken( #B4D2D8, 5% );
+        margin-right: .6em;
+        padding: .4em .6em;
+
+        &:hover,
+        &.catalog-search-dropdown-hover {
+            background-color: darken( #E6F0F2, 5% );
+            border-left: 1px solid darken( #B4D2D8, 15% );
+        }
+    }
+}
+
 @media (min-width: 200px) {
     .navbar-nav > li {
         float: left;
