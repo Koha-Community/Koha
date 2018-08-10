@@ -704,11 +704,11 @@
                                                         [% IF RESERVE.suspend %]
                                                             <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                                                 <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id | html %]" />
-                                                                <button class="btn btn-link" type="submit" name="submit"><i class="icon-play"></i> Resume</button>
+                                                                <button class="btn btn-link" type="submit" name="submit"><i class="fa fa-play"></i> Resume</button>
                                                             </form>
                                                         [% ELSE %]
                                                             [% IF AutoResumeSuspendedHolds %]
-                                                                <a class="btn btn-link js-show" href="#suspendModal[% RESERVE.reserve_id | html %]" role="button" data-toggle="modal"><i class="icon-pause"></i> Suspend</a>
+                                                                <a class="btn btn-link js-show" href="#suspendModal[% RESERVE.reserve_id | html %]" role="button" data-toggle="modal"><i class="fa fa-pause"></i> Suspend</a>
                                                                 [% # hold suspend modal form %]
                                                                 <div id="suspendModal[% RESERVE.reserve_id | html %]" class="modal-nojs" tabindex="-1" role="dialog" aria-labelledby="suspendModal[% RESERVE.reserve_id | html %]Label" aria-hidden="true">
                                                                     <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
@@ -737,7 +737,7 @@
                                                             [% ELSE %]
                                                                 <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
                                                                     <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id | html %]" />
-                                                                    <button class="btn btn-link" type="submit" name="submit"><i class="icon-pause"></i> Suspend</button>
+                                                                    <button class="btn btn-link" type="submit" name="submit"><i class="fa fa-pause"></i> Suspend</button>
                                                                 </form>
                                                             [% END # / IF AutoResumeSuspendedHolds %]
                                                         [% END # / IF RESERVE.suspend %]
@@ -749,7 +749,7 @@
                                                     <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                                     <input type="hidden" name="biblionumber" value="[% RESERVE.biblionumber | html %]" />
                                                     <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id | html %]" />
-                                                    <button type="submit" name="submit" class="btn btn-mini btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="icon-remove icon-white"></i> Cancel</button></form>
+                                                    <button type="submit" name="submit" class="btn btn-xs btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="fa fa-remove"></i> Cancel</button></form>
                                                 [% END %]
                                             </td>
                                         </tr>
@@ -760,7 +760,7 @@
                             [% IF SuspendHoldsOpac %]
                                 <div>
                                     <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_SUSPEND_HOLDS);"><i class="icon-pause"></i> Suspend all holds</button>
+                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_SUSPEND_HOLDS);"><i class="fa fa-pause"></i> Suspend all holds</button>
                                         <input type="hidden" name="suspend" value="1" />
 
                                         [% IF AutoResumeSuspendedHolds %]
@@ -773,7 +773,7 @@
                                 <br/>
                                 <div>
                                     <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_RESUME_HOLDS);"><i class="icon-play"></i> Resume all suspended holds</button>
+                                        <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_RESUME_HOLDS);"><i class="fa fa-play"></i> Resume all suspended holds</button>
                                         <input type="hidden" name="suspend" value="0" />
                                     </form>
                                 </div>
@@ -869,7 +869,7 @@
 
                                                 <td class="article-request-cancel">
                                                     <span class="tdlabel">Cancel:</span>
-                                                    <a class="btn btn-mini btn-danger" href="opac-article-request-cancel.pl?id=[% ar.id | html %]" onclick="return confirmDelete(MSG_CONFIRM_DELETE_ARTREQ);"><i class="icon-remove icon-white"></i> Cancel</a>
+                                                    <a class="btn btn-xs btn-danger" href="opac-article-request-cancel.pl?id=[% ar.id | html %]" onclick="return confirmDelete(MSG_CONFIRM_DELETE_ARTREQ);"><i class="fa fa-remove"></i> Cancel</a>
                                                 </td>
                                             </tr>
                                         [% END %]

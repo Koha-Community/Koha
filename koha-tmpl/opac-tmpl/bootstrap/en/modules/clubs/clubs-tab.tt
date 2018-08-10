@@ -23,7 +23,7 @@
                     <td>
                         [% IF e.club.club_template.is_enrollable_from_opac %]
                             <button class="btn btn-xs btn-default" onclick="cancelEnrollment( [% e.id | html %] )">
-                                <i class="icon-remove"></i> Cancel enrollment
+                                <i class="fa fa-remove"></i> Cancel enrollment
                             </button>
                         [% ELSE %]
                             Contact your library to be disenrolled from this club.
@@ -55,8 +55,8 @@
                     <td>[% c.description | html %]</td>
                     <td>
                         [% IF !c.club_template.is_email_required || ( c.club_template.is_email_required && borrower.first_valid_email_address ) %]
-                            <button class="btn btn-xs btn-default" onclick="loadEnrollmentForm([% c.id | html %])">
-                                <i class="icon-plus"></i> Enroll
+                            <button class="btn btn-xs btn-default" onclick="loadEnrollmentForm([% c.id | html%])">
+                                <i class="fa fa-plus"></i> Enroll
                             </button>
                         [% ELSE %]
                             <span class="hint">You must have an email address to enroll</span>

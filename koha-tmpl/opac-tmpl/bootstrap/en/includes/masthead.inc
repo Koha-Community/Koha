@@ -23,7 +23,7 @@
                         [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
                             <li class="dropdown">
                                 <a href="#" title="Collect items you are interested in" class="dropdown-toggle" id="cartmenulink" data-toggle="dropdown" role="button">
-                                    <i id="carticon" class="icon-shopping-cart icon-white"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span> <b class="caret"></b>
+                                    <i id="carticon" class="fa fa-shopping-cart fa-icon-white"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span> <b class="caret"></b>
                                 </a>
                                 <ul aria-labelledby="cartmenulink" role="menu" class="dropdown-menu">
                                     <li role="presentation">
@@ -37,7 +37,7 @@
                         [% END %]
                         [% IF ( Koha.Preference( 'virtualshelves' ) == 1 ) %]
                             <li class="dropdown">
-                                <a href="#" title="Show lists" class="dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button"><i class="icon-list icon-white"></i> <span class="listslabel">Lists</span> <b class="caret"></b></a>
+                                <a href="#" title="Show lists" class="dropdown-toggle" id="listsmenu" data-toggle="dropdown" role="button"><i class="fa fa-list fa-icon-white"></i> <span class="listslabel">Lists</span> <b class="caret"></b></a>
                                 <ul aria-labelledby="listsmenu" role="menu" class="dropdown-menu">
                                 [% IF some_public_shelves.count %]
                                     <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem"><strong>Public lists</strong></a></li>
@@ -86,7 +86,7 @@
                     </ul> <!-- / .nav -->
                     [% IF Koha.Preference( 'virtualshelves' ) == 1 %]<div id="listsDetails"></div>[% END %]
                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 || opaclanguagesdisplay || EnableOpacSearchHistory %]
-                        <a id="user-menu-trigger" class="pull-right" href="#"><i class="icon-user"></i> <span class="caret"></span></a>
+                        <a id="user-menu-trigger" class="pull-right" href="#"><i class="fa fa-user fa-icon-white"></i> <span class="caret"></span></a>
                         <div id="members">
                             <ul class="nav pull-right">
 
