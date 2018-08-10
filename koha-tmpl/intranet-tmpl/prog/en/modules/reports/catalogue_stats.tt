@@ -134,9 +134,9 @@
       </tr>
 			 <tr>
                 <td>Item type</td>
-				<td><input type="radio" name="Line" value="[% item_itype %]" /></td>
-				<td><input type="radio" name="Column" value="[% item_itype %]" /></td>
-				<td><select name="Filter" id="[% item_itype %]">
+				<td><input type="radio" name="Line" value="[% item_itype | html %]" /></td>
+				<td><input type="radio" checked="checked" name="Column" value="[% item_itype | html %]" /></td>
+				<td><select name="Filter" id="[% item_itype | html %]">
 					<option value=""> </option>
                     [% FOREACH itemtype IN itemtypes %]
                         <option value="[% itemtype.itemtype %]">[% itemtype.translated_description %]</option>
@@ -158,7 +158,7 @@
 			</tr>
 			<tr>
                 <td>Home library</td>
-				<td><input type="radio" name="Line" value="items.homebranch" /></td>
+				<td><input type="radio" checked="checked" name="Line" value="items.homebranch" /></td>
 				<td><input type="radio" name="Column" value="items.homebranch" /></td>
 				<td><select name="Filter" id="branch">
                     <option value=""> </option>
