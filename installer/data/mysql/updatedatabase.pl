@@ -16228,6 +16228,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 11911 - Add separate permission for managing suggestions)\n";
 }
 
+$DBversion = '18.06.00.013';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `account_offset_types` (`type`) VALUES ('Credit Applied');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20997 - Add Koha::Account::Line::apply)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
