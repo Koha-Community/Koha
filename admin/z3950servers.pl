@@ -67,7 +67,7 @@ if( $op eq 'delete_confirmed' && $id ) {
     $id = 0;
 } elsif ( $op eq 'add_validated' ) {
     my @fields=qw/host port db userid password rank syntax encoding timeout
-        recordtype checked servername servertype sru_options sru_fields
+        recordtype checked servername servertype sru_options sru_fields attributes
         add_xslt/;
     my $formdata = _form_data_hashref( $input, \@fields );
     if( $id ) {

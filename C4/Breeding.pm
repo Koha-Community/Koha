@@ -151,10 +151,14 @@ sub Z3950Search {
     );
     my @servers = $rs->all;
     foreach my $server ( @servers ) {
+        my $server_zquery = $zquery;
+        if(my $attributes = $server->{attributes}){
+            $server_zquery = "$attributes $zquery";
+        }
         $oConnection[$s] = _create_connection( $server );
         $oResult[$s] =
             $server->{servertype} eq 'zed'?
-                $oConnection[$s]->search_pqf( $zquery ):
+                $oConnection[$s]->search_pqf( $server_zquery ):
                 $oConnection[$s]->search(new ZOOM::Query::CQL(
                     _translate_query( $server, $squery )));
         $s++;
@@ -554,12 +558,19 @@ sub Z3950SearchAuth {
         while ( my $server = $sth->fetchrow_hashref ) {
             $oConnection[$s] = _create_connection( $server );
 
-            $oResult[$s] =
-            $server->{servertype} eq 'zed'?
-                $oConnection[$s]->search_pqf( $zquery ):
-                $oConnection[$s]->search(new ZOOM::Query::CQL(
-                    _translate_query( $server, $squery )));
-            $encoding[$s]   = $server->{encoding} // "iso-5426";
+            if ( $server->{servertype} eq 'zed' ) {
+                my $server_zquery = $zquery;
+                if ( my $attributes = $server->{attributes} ) {
+                    $server_zquery = "$attributes $zquery";
+                }
+                $oResult[$s] = $oConnection[$s]->search_pqf( $server_zquery );
+            }
+            else {
+                $oResult[$s] = $oConnection[$s]->search(
+                    new ZOOM::Query::CQL(_translate_query( $server, $squery ))
+                );
+            }
+            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
             $servers[$s] = $server;
             $s++;
         }   ## while fetch

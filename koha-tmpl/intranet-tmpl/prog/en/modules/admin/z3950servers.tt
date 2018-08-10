@@ -81,6 +81,10 @@
         </li>
         <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% server.rank | html %]" />
         </li>
+        [% IF (server.servertype||type) == 'zed' %]
+        <li><label for="attributes">Attributes (additional PQF attributes added to each query): </label><input type="text" name="attributes" id="attributes" size="30" value="[% server.attributes %]" />
+        </li>
+        [% END %]
 
         <li><label for="syntax">Syntax (z3950 can send<br /> records in various format. Choose one): </label>
         <select name="syntax" id="syntax">
@@ -157,7 +161,8 @@
         You searched for [% searchfield | html %]
     [% END %]
     <table id="serverst">
-        <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th></th>
+
+        <thead><tr><th>Target</th><th>Hostname/Port</th><th>Database</th><th>Userid</th><th>Password</th><th>Preselected</th><th>Rank</th><th>Syntax</th><th>Encoding</th><th>Timeout</th><th>Record type</th><th>Attributes</th><th>Options</th>
         </tr></thead>
         <tbody>
         [% FOREACH loo IN loop %]
@@ -170,6 +175,7 @@
                 <span>Authority</span>
                 [% END %]
             </td>
+            <td>[% loo.attributes %]</td>
             <td>
                 <div class="dropdown">
                     <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown" href="#">
@@ -252,7 +258,7 @@
             $(document).ready(function() {
                 $("#serverst").dataTable($.extend(true, {}, dataTablesDefaults, {
                     "aoColumnDefs": [
-                        { "aTargets": [2,3,4,7,8,9,10,11], "bSortable": false, "bSearchable": false },
+                        { "aTargets": [-1], "bSortable": false, "bSearchable": false },
                     ],
                     "sPaginationType": "full"
                 }));
