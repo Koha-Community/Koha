@@ -47,7 +47,7 @@
 [% IF ( no_op_set ) %]
     <h1>Notices &amp; slips</h1>
     <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
-      <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
+      <input type="hidden" name="searchfield" value="[% searchfield %]" />
     [% UNLESS independant_branch %]
       <p>
         Select a library :
@@ -64,7 +64,7 @@
     </form>
 
 		[% IF ( search ) %]
-        <p>You searched for <b>[% searchfield | html %]</b></p>
+        <p>You searched for <b>[% searchfield %]</b></p>
 		[% END %]
 		[% IF ( letter && !independant_branch) %]
             [% select_for_copy = BLOCK %]
@@ -92,7 +92,21 @@
                 [% can_edit = lette.branchcode || !independant_branch %]
                 <tr>
                   <td>[% IF lette.branchname %][% lette.branchname %][% ELSE %](All libraries)[% END %]</td>
-                  <td>[% lette.module %]</td>
+                  <td>
+                      [% SWITCH lette.module %]
+                          [% CASE 'acquisition' %]Acquisition
+                          [% CASE 'catalogue' %]Catalog
+                          [% CASE 'circulation' %]Circulation
+                          [% CASE 'orderacquisition' %]Order acquisition
+                          [% CASE 'claimacquisition' %]Claim acquisition
+                          [% CASE 'claimissues' %]Claim serial issue
+                          [% CASE 'reserves' %]Holds
+                          [% CASE 'members' %]Patrons
+                          [% CASE 'serial' %]Serials (new issue)
+                          [% CASE 'suggestions' %]Suggestions
+                          [% CASE %][% lette.module %]
+                      [% END %]
+                  </td>
                   <td>[% lette.code %]</td>
                   <td>[% lette.name %]</td>
                   <td class="actions">
@@ -233,9 +247,9 @@
                                       <option value="reserves">Holds</option>
                                     [% END %]
                                     [% IF ( module == "members" ) %]
-                                      <option value="members" selected="selected">Members</option>
+                                      <option value="members" selected="selected">Patrons</option>
                                     [% ELSE %]
-                                      <option value="members">Members</option>
+                                      <option value="members">Patrons</option>
                                     [% END %]
                                     [% IF ( module == "serial" ) %]
                                       <option value="serial" selected="selected">Serials (new issue)</option>
@@ -360,7 +374,7 @@
                         <td class="actions">
                             <button type="button" data-containerid="[% letter.message_transport_type %]_[% lang %]" class="btn btn-default btn-sm insert">Insert <i class="fa fa-long-arrow-right"></i></button>
                         </td>
-                      <td><textarea name="content" data-lang="[% lang %]" class="content_[% letter.message_transport_type %]" id="content_[% letter.message_transport_type %]_[% lang %]" cols="80" rows="15">[% letter.content | html %]</textarea></td>
+                      <td><textarea name="content" data-lang="[% lang %]" class="content_[% letter.message_transport_type %]" id="content_[% letter.message_transport_type %]_[% lang %]" cols="80" rows="15">[% letter.content %]</textarea></td>
                     </tr>
                   </table>
                 </li>
