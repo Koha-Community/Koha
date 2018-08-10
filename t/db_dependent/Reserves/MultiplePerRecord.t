@@ -277,17 +277,17 @@ $rule = $rules_rs->new(
 )->insert();
 
 my $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
-is( $can, 'OK', 'Hold can be placed with 0 holds' );
+is( $can->{status}, 'OK', 'Hold can be placed with 0 holds' );
 my $hold_id = AddReserve( $library->{branchcode}, $patron->{borrowernumber}, $biblio->{biblionumber}, '', 1 );
 ok( $hold_id, 'First hold was placed' );
 
 $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
-is( $can, 'OK', 'Hold can be placed with 1 hold' );
+is( $can->{status}, 'OK', 'Hold can be placed with 1 hold' );
 $hold_id = AddReserve( $library->{branchcode}, $patron->{borrowernumber}, $biblio->{biblionumber}, '', 1 );
 ok( $hold_id, 'Second hold was placed' );
 
 $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
-is( $can, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
+is( $can->{status}, 'tooManyHoldsForThisRecord', 'Third hold exceeds limit of holds per record' );
 
 $schema->storage->txn_rollback;
 

@@ -285,7 +285,7 @@ sub CanBookBeReserved{
     my $canReserve;
     foreach my $item (@$items) {
         $canReserve = CanItemBeReserved( $borrowernumber, $item );
-        return 'OK' if $canReserve eq 'OK';
+        return $canReserve if $canReserve->{status} eq 'OK';
     }
     return $canReserve;
 }
@@ -293,14 +293,14 @@ sub CanBookBeReserved{
 =head2 CanItemBeReserved
 
   $canReserve = &CanItemBeReserved($borrowernumber, $itemnumber)
-  if ($canReserve eq 'OK') { #We can reserve this Item! }
+  if ($canReserve->{status} eq 'OK') { #We can reserve this Item! }
 
-@RETURNS OK,              if the Item can be reserved.
-         ageRestricted,   if the Item is age restricted for this borrower.
-         damaged,         if the Item is damaged.
-         cannotReserveFromOtherBranches, if syspref 'canreservefromotherbranches' is OK.
-         tooManyReserves, if the borrower has exceeded his maximum reserve amount.
-         notReservable,   if holds on this item are not allowed
+@RETURNS { status => OK },              if the Item can be reserved.
+         { status => ageRestricted },   if the Item is age restricted for this borrower.
+         { status => damaged },         if the Item is damaged.
+         { status => cannotReserveFromOtherBranches }, if syspref 'canreservefromotherbranches' is OK.
+         { status => tooManyReserves, limit => $limit }, if the borrower has exceeded his maximum reserve amount.
+         { status => notReservable },   if holds on this item are not allowed
 
 =cut
 
@@ -320,17 +320,17 @@ sub CanItemBeReserved {
     my $borrower = $patron->unblessed;
 
     # If an item is damaged and we don't allow holds on damaged items, we can stop right here
-    return 'damaged'
+    return { status =>'damaged' }
       if ( $item->{damaged}
         && !C4::Context->preference('AllowHoldsOnDamagedItems') );
 
     # Check for the age restriction
     my ( $ageRestriction, $daysToAgeRestriction ) =
       C4::Circulation::GetAgeRestriction( $biblio->biblioitem->agerestriction, $borrower );
-    return 'ageRestricted' if $daysToAgeRestriction && $daysToAgeRestriction > 0;
+    return { status => 'ageRestricted' } if $daysToAgeRestriction && $daysToAgeRestriction > 0;
 
     # Check that the patron doesn't have an item level hold on this item already
-    return 'itemAlreadyOnHold'
+    return { status =>'itemAlreadyOnHold' }
       if Koha::Holds->search( { borrowernumber => $borrowernumber, itemnumber => $itemnumber } )->count();
 
     my $controlbranch = C4::Context->preference('ReservesControlBranch');
@@ -375,7 +375,7 @@ sub CanItemBeReserved {
         }
     );
     if ( $holds->count() >= $holds_per_record ) {
-        return "tooManyHoldsForThisRecord";
+        return { status => "tooManyHoldsForThisRecord", limit => $holds_per_record };
     }
 
     # we retrieve count
@@ -406,7 +406,7 @@ sub CanItemBeReserved {
 
     # we check if it's ok or not
     if ( $reservecount >= $allowedreserves ) {
-        return 'tooManyReserves';
+        return { status => 'tooManyReserves', limit => $allowedreserves };
     }
 
     # Now we need to check hold limits by patron category
@@ -429,7 +429,7 @@ sub CanItemBeReserved {
             }
         )->count();
 
-        return 'tooManyReserves' if $total_holds_count >= $rule->max_holds;
+        return { status => 'tooManyReserves', limit => $rule->max_holds } if $total_holds_count >= $rule->max_holds;
     }
 
     my $circ_control_branch =
@@ -438,13 +438,13 @@ sub CanItemBeReserved {
       C4::Circulation::GetBranchItemRule( $circ_control_branch, $item->itype );
 
     if ( $branchitemrule->{holdallowed} == 0 ) {
-        return 'notReservable';
+        return { status => 'notReservable' };
     }
 
     if (   $branchitemrule->{holdallowed} == 1
         && $borrower->{branchcode} ne $item->homebranch )
     {
-        return 'cannotReserveFromOtherBranches';
+        return { status => 'cannotReserveFromOtherBranches' };
     }
 
     # If reservecount is ok, we check item branch if IndependentBranches is ON
@@ -454,11 +454,11 @@ sub CanItemBeReserved {
     {
         my $itembranch = $item->homebranch;
         if ( $itembranch ne $borrower->{branchcode} ) {
-            return 'cannotReserveFromOtherBranches';
+            return { status => 'cannotReserveFromOtherBranches' };
         }
     }
 
-    return 'OK';
+    return { status => 'OK' };
 }
 
 =head2 CanReserveBeCanceledFromOpac

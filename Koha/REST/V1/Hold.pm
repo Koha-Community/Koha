@@ -89,7 +89,7 @@ sub add {
       ? CanItemBeReserved( $borrowernumber, $itemnumber )
       : CanBookBeReserved( $borrowernumber, $biblionumber );
 
-    unless ($can_reserve eq 'OK') {
+    unless ($can_reserve->{status} eq 'OK') {
         return $c->render( status => 403, openapi => {
             error => "Reserve cannot be placed. Reason: $can_reserve"
         } );

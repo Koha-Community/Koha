@@ -542,7 +542,7 @@ sub GetServices {
     # Reserve level management
     my $biblionumber = $item->{'biblionumber'};
     my $canbookbereserved = CanBookBeReserved( $borrower, $biblionumber );
-    if ($canbookbereserved eq 'OK') {
+    if ($canbookbereserved->{status} eq 'OK') {
         push @availablefor, 'title level hold';
         my $canitembereserved = IsAvailableForItemLevelRequest($item, $borrower);
         if ($canitembereserved) {
@@ -662,7 +662,7 @@ sub HoldTitle {
     my $title = $biblio ? $biblio->title : '';
 
     # Check if the biblio can be reserved
-    return { code => 'NotHoldable' } unless CanBookBeReserved( $borrowernumber, $biblionumber ) eq 'OK';
+    return { code => 'NotHoldable' } unless CanBookBeReserved( $borrowernumber, $biblionumber )->{status} eq 'OK';
 
     my $branch;
 
@@ -740,7 +740,7 @@ sub HoldItem {
     # Check for item disponibility
     my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber );
     my $canbookbereserved = C4::Reserves::CanBookBeReserved( $borrowernumber, $biblionumber );
-    return { code => 'NotHoldable' } unless $canbookbereserved eq 'OK' and $canitembereserved eq 'OK';
+    return { code => 'NotHoldable' } unless $canbookbereserved->{status} eq 'OK' and $canitembereserved->{status} eq 'OK';
 
     # Pickup branch management
     my $branch;

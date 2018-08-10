@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 56;
+use Test::More tests => 55;
 use MARC::Record;
 use Koha::Patrons;
 use C4::Items;
@@ -261,7 +261,7 @@ t::lib::Mocks::mock_preference('item-level_itypes', 1);
 # if IndependentBranches is OFF, a $branch_1 patron can reserve an $branch_2 item
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
 ok(
-    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'OK',
+    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber)->{status} eq 'OK',
     '$branch_1 patron allowed to reserve $branch_2 item with IndependentBranches OFF (bug 2394)'
 );
 
@@ -269,14 +269,14 @@ ok(
 t::lib::Mocks::mock_preference('IndependentBranches', 1);
 t::lib::Mocks::mock_preference('canreservefromotherbranches', 0);
 ok(
-    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'cannotReserveFromOtherBranches',
+    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber)->{status} eq 'cannotReserveFromOtherBranches',
     '$branch_1 patron NOT allowed to reserve $branch_2 item with IndependentBranches ON ... (bug 2394)'
 );
 
 # ... unless canreservefromotherbranches is ON
 t::lib::Mocks::mock_preference('canreservefromotherbranches', 1);
 ok(
-    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber) eq 'OK',
+    CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber)->{status} eq 'OK',
     '... unless canreservefromotherbranches is ON (bug 2394)'
 );
 
@@ -299,7 +299,7 @@ ok(
 
 ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
-is( CanItemBeReserved( $borrowernumbers[0], $itemnumber), 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
 
 $hold = Koha::Hold->new(
@@ -309,13 +309,13 @@ $hold = Koha::Hold->new(
         biblionumber   => $item_bibnum,
     }
 )->store();
-is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'itemAlreadyOnHold',
     "Patron cannot place a second item level hold for a given item" );
 $hold->delete();
 
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 0 );
-ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
+ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'damaged', "Patron cannot reserve damaged item with AllowHoldsOnDamagedItems disabled" );
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
 # Regression test for bug 9532
@@ -329,19 +329,19 @@ AddReserve(
     1,
 );
 is(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber), 'tooManyReserves',
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'tooManyReserves',
     "cannot request item if policy that matches on item-level item type forbids it"
 );
 ModItem({ itype => 'CAN' }, $item_bibnum, $itemnumber);
 ok(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'OK',
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'OK',
     "can request item if policy that matches on item type allows it"
 );
 
 t::lib::Mocks::mock_preference('item-level_itypes', 0);
 ModItem({ itype => undef }, $item_bibnum, $itemnumber);
 ok(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber) eq 'tooManyReserves',
+    CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'tooManyReserves',
     "cannot request item if policy that matches on bib-level item type forbids it (bug 9532)"
 );
 
@@ -370,18 +370,18 @@ $dbh->do(q{
 ($bibnum, $title, $bibitemnum) = create_helper_biblio('CANNOT');
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $bibnum);
-is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'notReservable',
+is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'notReservable',
     "CanItemBeReserved should return 'notReservable'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_2, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
-is(CanItemBeReserved($borrowernumbers[0], $itemnumber),
+is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status},
     'cannotReserveFromOtherBranches',
     "CanItemBeReserved should return 'cannotReserveFromOtherBranches'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
-is(CanItemBeReserved($borrowernumbers[0], $itemnumber), 'OK',
+is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'OK',
     "CanItemBeReserved should return 'OK'");
 
 # Bug 12632
@@ -403,12 +403,12 @@ $dbh->do(
     {},
     '*', '*', 'ONLY1', 1, 99
 );
-is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'OK', 'Patron can reserve item with hold limit of 1, no holds placed' );
 
 my $res_id = AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
 
-is( CanItemBeReserved( $borrowernumbers[0], $itemnumber ),
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
 
 subtest 'Test max_holds per library/patron category' => sub {
@@ -438,7 +438,7 @@ subtest 'Test max_holds per library/patron category' => sub {
     is( $count, 3, 'Patron now has 3 holds' );
 
     my $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
-    is( $ret, 'OK', 'Patron can place hold with no borrower circ rules' );
+    is( $ret->{status}, 'OK', 'Patron can place hold with no borrower circ rules' );
 
     my $rule_all = $schema->resultset('DefaultBorrowerCircRule')->new(
         {
@@ -456,19 +456,19 @@ subtest 'Test max_holds per library/patron category' => sub {
     )->insert();
 
     $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
-    is( $ret, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 3' );
+    is( $ret->{status}, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 3' );
 
     $rule_branch->delete();
 
     $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
-    is( $ret, 'tooManyReserves', 'Patron cannot place hold with only a category rule of 3' );
+    is( $ret->{status}, 'tooManyReserves', 'Patron cannot place hold with only a category rule of 3' );
 
     $rule_all->delete();
     $rule_branch->max_holds(3);
     $rule_branch->insert();
 
     $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
-    is( $ret, 'tooManyReserves', 'Patron cannot place hold with only a branch/category rule of 3' );
+    is( $ret->{status}, 'tooManyReserves', 'Patron cannot place hold with only a branch/category rule of 3' );
 
     $rule_branch->max_holds(5);
     $rule_branch->update();
@@ -476,7 +476,7 @@ subtest 'Test max_holds per library/patron category' => sub {
     $rule_all->insert();
 
     $ret = CanItemBeReserved( $borrowernumbers[0], $itemnumber );
-    is( $ret, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 5' );
+    is( $ret->{status}, 'OK', 'Patron can place hold with branch/category rule of 5, category rule of 5' );
 };
 
 # Helper method to set up a Biblio.
