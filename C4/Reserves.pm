@@ -413,7 +413,7 @@ sub CanItemBeReserved {
     my $schema = Koha::Database->new()->schema();
     my $rule = $schema->resultset('BranchBorrowerCircRule')->find(
         {
-            branchcode   => $borrower->{branchcode},
+            branchcode   => $branchcode,
             categorycode => $borrower->{categorycode},
         }
     );
