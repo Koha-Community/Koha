@@ -226,7 +226,21 @@ $(document).ready(function() {
                 [% can_edit = lette.branchcode || !independant_branch %]
                 <tr>
                   <td>[% IF lette.branchname %][% lette.branchname %][% ELSE %](All libraries)[% END %]</td>
-                  <td>[% lette.module %]</td>
+                  <td>
+                      [% SWITCH lette.module %]
+                          [% CASE 'acquisition' %]Acquisition
+                          [% CASE 'catalogue' %]Catalog
+                          [% CASE 'circulation' %]Circulation
+                          [% CASE 'orderacquisition' %]Order acquisition
+                          [% CASE 'claimacquisition' %]Claim acquisition
+                          [% CASE 'claimissues' %]Claim serial issue
+                          [% CASE 'reserves' %]Holds
+                          [% CASE 'members' %]Patrons
+                          [% CASE 'serial' %]Serials (new issue)
+                          [% CASE 'suggestions' %]Suggestions
+                          [% CASE %][% lette.module %]
+                      [% END %]
+                  </td>
                   <td>[% lette.code %]</td>
                   <td>[% lette.name %]</td>
                   <td class="actions">
@@ -367,9 +381,9 @@ $(document).ready(function() {
                                       <option value="reserves">Holds</option>
                                     [% END %]
                                     [% IF ( module == "members" ) %]
-                                      <option value="members" selected="selected">Members</option>
+                                      <option value="members" selected="selected">Patrons</option>
                                     [% ELSE %]
-                                      <option value="members">Members</option>
+                                      <option value="members">Patrons</option>
                                     [% END %]
                                     [% IF ( module == "serial" ) %]
                                       <option value="serial" selected="selected">Serials (routing list)</option>
