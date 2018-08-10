@@ -209,13 +209,12 @@ sub GetRecords {
 
         # Get the biblioitem from the biblionumber
         my $biblio = Koha::Biblios->find( $biblionumber );
-        my $biblioitem = $biblio->biblioitem;
-        if ( $biblioitem ) {
-            $biblioitem = $biblioitem->unblessed;
-        } else {
-            $biblioitem->{code} = "RecordNotFound";
-            # FIXME We should not need to process something else; next?
+        unless ( $biblio ) {
+            push @records, { code => "RecordNotFound" };
+            next;
         }
+
+        my $biblioitem = $biblio->biblioitem->unblessed;
 
         my $embed_items = 1;
         my $record = GetMarcBiblio({
