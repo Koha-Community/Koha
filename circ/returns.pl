@@ -551,6 +551,8 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
         }
 
         my $item = Koha::Items->find({ barcode => $bar_code });
+        next unless $item; # FIXME The item has been deleted in the meantime,
+                           # we could handle that better displaying a message in the template
         my $biblio = $item->biblio;
         # FIXME pass $item to the template and we are done here...
         $ri{itembiblionumber}    = $biblio->biblionumber;
