@@ -267,18 +267,18 @@
                           [% FOREACH chooser IN choosers %]
                             [% IF ( visit.chooser_brwnumber == chooser.borrowernumber ) %]
                               <option value="[% chooser.borrowernumber %]" selected="selected">
-                                [% INCLUDE 'patron-title.inc' borrowernumber = chooser.borrowernumber category_type = chooser.categorycode firstname = chooser.firstname surname = chooser.surname othernames = chooser.othernames cardnumber = chooser.cardnumber invert_name = 0 %]
+                                [% INCLUDE 'patron-title.inc' patron = chooser invert_name = 0 %]
                               </option>
                             [% ELSE %]
                               <option value="[% chooser.borrowernumber %]">
-                                [% INCLUDE 'patron-title.inc' borrowernumber = chooser.borrowernumber category_type = chooser.categorycode firstname = chooser.firstname surname = chooser.surname othernames = chooser.othernames cardnumber = chooser.cardnumber invert_name = 0 %]
+                                [% INCLUDE 'patron-title.inc' patron = chooser invert_name = 0 %]
                               </option>
                             [% END %]
                           [% END %]
                         [% ELSE %]
                           [% FOREACH chooser IN choosers %]
                             <option value="[% chooser.borrowernumber %]">
-                              [% INCLUDE 'patron-title.inc' borrowernumber = chooser.borrowernumber category_type = chooser.categorycode firstname = chooser.firstname surname = chooser.surname othernames = chooser.othernames cardnumber = chooser.cardnumber invert_name = 0 %]
+                                [% INCLUDE 'patron-title.inc' patron = chooser invert_name = 0 %]
                             </option>
                           [% END %]
                         [% END %]
@@ -293,18 +293,18 @@
                           [% FOREACH deliverer IN deliverers %]
                             [% IF ( visit.deliverer_brwnumber == deliverer.borrowernumber ) %]
                               <option value="[% deliverer.borrowernumber %]" selected="selected">
-                                [% INCLUDE 'patron-title.inc' borrowernumber = deliverer.borrowernumber category_type = deliverer.categorycode firstname = deliverer.firstname surname = deliverer.surname othernames = deliverer.othernames cardnumber = deliverer.cardnumber invert_name = 0 %]
+                                [% INCLUDE 'patron-title.inc' patron = deliverer invert_name = 0 %]
                               </option>
                             [% ELSE %]
                               <option value="[% deliverer.borrowernumber %]">
-                                [% INCLUDE 'patron-title.inc' borrowernumber = deliverer.borrowernumber category_type = deliverer.categorycode firstname = deliverer.firstname surname = deliverer.surname othernames = deliverer.othernames cardnumber = deliverer.cardnumber invert_name = 0 %]
+                                [% INCLUDE 'patron-title.inc' patron = deliverer invert_name = 0 %]
                               </option>
                             [% END %]
                           [% END %]
                         [% ELSE %]
                           [% FOREACH deliverer IN deliverers %]
                             <option value="[% deliverer.borrowernumber %]">
-                              [% INCLUDE 'patron-title.inc' borrowernumber = deliverer.borrowernumber category_type = deliverer.categorycode firstname = deliverer.firstname surname = deliverer.surname othernames = deliverer.othernames cardnumber = deliverer.cardnumber invert_name = 0 %]
+                              [% INCLUDE 'patron-title.inc' patron = deliverer invert_name = 0 %]
                             </option>
                           [% END %]
                         [% END %]
@@ -390,12 +390,12 @@
                       <td>[% entry.appointment_date | $KohaDates %] ([% entry.day_segment %])</td>
                       <td>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.chooser.borrowernumber %]">
-                          [% INCLUDE 'patron-title.inc' borrowernumber = entry.chooser.borrowernumber category_type = entry.chooser.categorycode firstname = entry.chooser.firstname surname = entry.chooser.surname othernames = entry.chooser.othernames cardnumber = entry.chooser.cardnumber invert_name = 0 %]
+                          [% INCLUDE 'patron-title.inc' patron = entry.chooser invert_name = 0 %]
                         </a>
                       </td>
                       <td>
                         <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.deliverer.borrowernumber %]">
-                          [% INCLUDE 'patron-title.inc' borrowernumber = entry.deliverer.borrowernumber category_type = entry.deliverer.categorycode firstname = entry.deliverer.firstname surname = entry.deliverer.surname othernames = entry.deliverer.othernames cardnumber = entry.deliverer.cardnumber invert_name = 0 %]
+                          [% INCLUDE 'patron-title.inc' patron = entry.deliverer invert_name = 0 %]
                         </a>
                       </td>
                       <td class="actions">
