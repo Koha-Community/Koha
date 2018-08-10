@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 64;
+use Test::More tests => 65;
 use Test::MockModule;
 use Test::Warn;
 
@@ -489,6 +489,100 @@ is($err2, 1, "Successfully sent serial notification");
 is($mail{'To'}, 'john.smith@test.de', "mailto correct in sent serial notification");
 is($mail{'Message'}, 'Silence in the library,'.$subscriptionid.',No. 0', 'Serial notification text constructed successfully');
 }
+
+subtest 'SendAlerts - claimissue' => sub {
+    plan tests => 8;
+
+    use C4::Serials;
+
+    $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('claimissues','TESTSERIALCLAIM','Serial claim test','Serial claim test','<<serial.serialid>>|<<subscription.startdate>>|<<biblio.title>>|<<biblioitems.issn>>');});
+
+    my $bookseller = Koha::Acquisition::Bookseller->new(
+        {
+            name => "my vendor",
+            address1 => "bookseller's address",
+            phone => "0123456",
+            active => 1,
+            deliverytime => 5,
+        }
+    )->store;
+    my $booksellerid = $bookseller->id;
+
+    Koha::Acquisition::Bookseller::Contact->new( { name => 'Leo Tolstoy', phone => '0123456x2', claimissues => 1, booksellerid => $booksellerid } )->store;
+
+    my $bib = MARC::Record->new();
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        $bib->append_fields(
+            MARC::Field->new('011', ' ', ' ', a => 'xxxx-yyyy'),
+            MARC::Field->new('200', ' ', ' ', a => 'Silence in the library'),
+        );
+    } else {
+        $bib->append_fields(
+            MARC::Field->new('022', ' ', ' ', a => 'xxxx-yyyy'),
+            MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
+        );
+    }
+    my ($biblionumber) = AddBiblio($bib, '');
+
+    $dbh->do(q|UPDATE subscription_numberpatterns SET numberingmethod='No. {X}' WHERE id=1|);
+    my $subscriptionid = NewSubscription(
+         undef, "", $booksellerid, undef, undef, $biblionumber,
+        '2013-01-01', 1, undef, undef,  undef,
+        undef,  undef,  undef, undef, undef, undef,
+        1, 'public',undef, '2013-01-01', undef, 1,
+        undef, undef,  0, 'internal',  0,
+        undef, undef, 0,  undef, '2013-12-31', 0
+    );
+
+    my ($serials_count, @serials) = GetSerials($subscriptionid);
+    my  @serialids = ($serials[0]->{serialid});
+
+    my $err;
+    warning_like {
+        $err = SendAlerts( 'claimissues', \@serialids, 'TESTSERIALCLAIM' ) }
+        qr/^Bookseller .* without emails at/,
+        "Warn on vendor without email address";
+
+    $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+    $bookseller->contacts->next->email('testemail@mydomain.com')->store;
+
+    # Ensure that the preference 'LetterLog' is set to logging
+    t::lib::Mocks::mock_preference( 'LetterLog', 'on' );
+
+    # SendAlerts needs branchemail or KohaAdminEmailAddress as sender
+    C4::Context->_new_userenv('DUMMY');
+    C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'My Library', 0, '', '');
+    t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
+
+    {
+    warning_is {
+        $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' ) }
+        "Fake sendmail",
+        "SendAlerts is using the mocked sendmail routine (claimissues)";
+    is($err, 1, "Successfully sent claim");
+    is($mail{'To'}, 'testemail@mydomain.com', "mailto correct in sent claim");
+    is($mail{'Message'}, "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy", 'Serial claim letter for 1 issue constructed successfully');
+    }
+
+    {
+    my $publisheddate = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
+    my $serialexpected = ( C4::Serials::findSerialsByStatus( 1, $subscriptionid ) )[0];
+    ModSerialStatus( $serials[0]->{serialid}, "No. 1", $publisheddate, $publisheddate, $publisheddate, '3', 'a note' );
+    ($serials_count, @serials) = GetSerials($subscriptionid);
+    push @serialids, ($serials[1]->{serialid});
+
+    $err = SendAlerts( 'claimissues', \@serialids , 'TESTSERIALCLAIM' );
+    is($mail{'Message'}, "$serialids[0]|2013-01-01|Silence in the library|xxxx-yyyy\n$serialids[1]|2013-01-01|Silence in the library|xxxx-yyyy", "Serial claim letter for 2 issues constructed successfully");
+
+    $dbh->do(q{DELETE FROM letter WHERE code = 'TESTSERIALCLAIM';});
+    warning_like {
+        $err = SendAlerts( 'orderacquisition', $basketno , 'TESTSERIALCLAIM' ) }
+        qr/No orderacquisition TESTSERIALCLAIM letter transported by email/,
+        "GetPreparedLetter warns about missing notice template";
+    is($err->{'error'}, 'no_letter', "No TESTSERIALCLAIM letter was defined");
+    }
+
+};
 
 subtest 'GetPreparedLetter' => sub {
     plan tests => 4;

@@ -393,22 +393,23 @@ sub SendAlerts {
 
         if ($type eq 'claimissues') {
             $strsth = qq{
-            SELECT serial.*,subscription.*, biblio.*, aqbooksellers.*,
+            SELECT serial.*,subscription.*, biblio.*, biblioitems.*, aqbooksellers.*,
             aqbooksellers.id AS booksellerid
             FROM serial
             LEFT JOIN subscription ON serial.subscriptionid=subscription.subscriptionid
             LEFT JOIN biblio ON serial.biblionumber=biblio.biblionumber
+            LEFT JOIN biblioitems ON serial.biblionumber = biblioitems.biblionumber
             LEFT JOIN aqbooksellers ON subscription.aqbooksellerid=aqbooksellers.id
             WHERE serial.serialid IN (
             };
 
             if (!@$externalid){
-                carp "No Order selected";
-                return { error => "no_order_selected" };
+                carp "No issues selected";
+                return { error => "no_issues_selected" };
             }
 
             $strsth .= join( ",", ('?') x @$externalid ) . ")";
-            $action = "CLAIM ISSUE";
+            $action = "SERIAL CLAIM";
             $sthorders = $dbh->prepare($strsth);
             $sthorders->execute( @$externalid );
             $dataorders = $sthorders->fetchall_arrayref( {} );
