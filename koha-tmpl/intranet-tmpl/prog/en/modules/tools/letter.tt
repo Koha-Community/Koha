@@ -93,7 +93,21 @@
                 [% can_edit = lette.branchcode || !independant_branch | html %]
                 <tr>
                   <td>[% IF lette.branchname %][% lette.branchname | html %][% ELSE %](All libraries)[% END %]</td>
-                  <td>[% lette.module | html %]</td>
+                  <td>
+                      [% SWITCH lette.module %]
+                          [% CASE 'acquisition' %]Acquisition
+                          [% CASE 'catalogue' %]Catalog
+                          [% CASE 'circulation' %]Circulation
+                          [% CASE 'orderacquisition' %]Order acquisition
+                          [% CASE 'claimacquisition' %]Claim acquisition
+                          [% CASE 'claimissues' %]Claim serial issue
+                          [% CASE 'reserves' %]Holds
+                          [% CASE 'members' %]Patrons
+                          [% CASE 'serial' %]Serials (new issue)
+                          [% CASE 'suggestions' %]Suggestions
+                          [% CASE %][% lette.module | html %]
+                      [% END %]
+                  </td>
                   <td>[% lette.code | html %]</td>
                   <td>[% lette.name | html %]</td>
                   <td class="actions">
@@ -234,9 +248,9 @@
                                       <option value="reserves">Holds</option>
                                     [% END %]
                                     [% IF ( module == "members" ) %]
-                                      <option value="members" selected="selected">Members</option>
+                                      <option value="members" selected="selected">Patrons</option>
                                     [% ELSE %]
-                                      <option value="members">Members</option>
+                                      <option value="members">Patrons</option>
                                     [% END %]
                                     [% IF ( module == "serial" ) %]
                                       <option value="serial" selected="selected">Serials (new issue)</option>
