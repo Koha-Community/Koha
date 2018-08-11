@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [%- USE Branches -%]
+[%- USE Price -%]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate | html %]</title>
@@ -53,6 +54,7 @@
           <th>Barcode</th>
           <th>Call number</th>
           <th>Price</th>
+          <th>Non-public note</th>
         </tr>
       </thead>
       [%- BLOCK subject -%]Overdue:[%- END -%]
@@ -70,7 +72,8 @@
           <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title | html %]  [% overdueloo.subtitle | html %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
           <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | html %]&amp;itemnumber=[% overdueloo.itemnum | html %]#item[% overdueloo.itemnum | html %]">[% overdueloo.barcode | html %]</a></td>
           <td>[% overdueloo.itemcallnumber | html %]</td>
-          <td>[% overdueloo.replacementprice | html %]</td>
+          <td>[% overdueloo.replacementprice | $Price %]</td>
+          <td>[% overdueloo.itemnotes_nonpublic | html %]</td>
         </tr>
       [% END %]
       </tbody>

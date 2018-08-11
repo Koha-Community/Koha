@@ -238,7 +238,8 @@ if ($noreport) {
         biblio.biblionumber,
         items.itemcallnumber,
         items.replacementprice,
-        items.enumchron
+        items.enumchron,
+        items.itemnotes_nonpublic
       FROM issues
     LEFT JOIN borrowers   ON (issues.borrowernumber=borrowers.borrowernumber )
     LEFT JOIN items       ON (issues.itemnumber=items.itemnumber)
@@ -325,6 +326,7 @@ if ($noreport) {
             holdingbranchcode      => $data->{holdingbranchcode},
             itemcallnumber         => $data->{itemcallnumber},
             replacementprice       => $data->{replacementprice},
+            itemnotes_nonpublic    => $data->{itemnotes_nonpublic},
             enumchron              => $data->{enumchron},
             patron_attr_value_loop => \@patron_attr_value_loop,
         };
@@ -374,7 +376,7 @@ sub build_csv {
     # build header ...
     my @keys =
       qw ( duedate title author borrowertitle firstname surname phone barcode email address address2 zipcode city country
-      branchcode itemcallnumber biblionumber borrowernumber itemnum issuedate replacementprice streetnumber streettype);
+      branchcode itemcallnumber biblionumber borrowernumber itemnum issuedate replacementprice itemnotes_nonpublic streetnumber streettype);
     my $csv = Text::CSV_XS->new();
     $csv->combine(@keys);
     push @lines, $csv->string();
