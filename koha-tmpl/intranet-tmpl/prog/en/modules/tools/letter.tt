@@ -95,16 +95,16 @@
                   <td>[% IF lette.branchname %][% lette.branchname | html %][% ELSE %](All libraries)[% END %]</td>
                   <td>
                       [% SWITCH lette.module %]
-                          [% CASE 'acquisition' %]Acquisition
-                          [% CASE 'catalogue' %]Catalog
-                          [% CASE 'circulation' %]Circulation
-                          [% CASE 'orderacquisition' %]Order acquisition
-                          [% CASE 'claimacquisition' %]Claim acquisition
-                          [% CASE 'claimissues' %]Claim serial issue
-                          [% CASE 'reserves' %]Holds
-                          [% CASE 'members' %]Patrons
-                          [% CASE 'serial' %]Serials (new issue)
-                          [% CASE 'suggestions' %]Suggestions
+                          [% CASE 'acquisition' %]<span>Acquisition</span>
+                          [% CASE 'catalogue' %]<span>Catalog</span>
+                          [% CASE 'circulation' %]<span>Circulation</span>
+                          [% CASE 'orderacquisition' %]<span>Order acquisition</span>
+                          [% CASE 'claimacquisition' %]<span>Claim acquisition</span>
+                          [% CASE 'claimissues' %]<span>Claim serial issue</span>
+                          [% CASE 'reserves' %]<span>Holds</span>
+                          [% CASE 'members' %]<span>Patrons</span>
+                          [% CASE 'serial' %]<span>Serials (new issue)</span>
+                          [% CASE 'suggestions' %]<span>Suggestions</span>
                           [% CASE %][% lette.module | html %]
                       [% END %]
                   </td>
