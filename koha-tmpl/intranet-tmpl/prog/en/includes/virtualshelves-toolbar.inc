@@ -17,7 +17,7 @@
         <div class="btn-group">
             <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Download list <span class="caret"></span></button>
                 <ul class="dropdown-menu">
-                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=iso2709&amp;shelfid=[% shelf.shelfnumber | html %]">iso2709</a></li>
+                    <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=iso2709&amp;shelfid=[% shelf.shelfnumber | html %]">MARC</a></li>
                     <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=ris&amp;shelfid=[% shelf.shelfnumber | html %]">RIS</a></li>
                     <li><a href="/cgi-bin/koha/virtualshelves/downloadshelf.pl?format=bibtex&amp;shelfid=[% shelf.shelfnumber | html %]">BibTex</a></li>
                     [% FOREACH csv_profile IN csv_profiles %]

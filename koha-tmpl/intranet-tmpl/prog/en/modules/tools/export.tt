@@ -139,12 +139,12 @@
         <ol><li>
             <label for="output_format">File format: </label>
             <select id="output_format" name="output_format">
-                <option value="iso2709">marc</option>
-                <option value="xml">xml</option>
+                <option value="iso2709">MARC</option>
+                <option value="xml">XML</option>
                 [% IF csv_profiles %]
-                    <option value="csv">csv</option>
+                    <option value="csv">CSV</option>
                 [% ELSE %]
-                    <option value="csv" disabled data-toggle="tooltip" data-placement="left" title="You must create a CSV profile for MARC exports to use this option.">csv</option>
+                    <option value="csv" disabled data-toggle="tooltip" data-placement="left" title="You must create a CSV profile for MARC exports to use this option.">CSV</option>
                 [% END %]
             </select>
         </li>

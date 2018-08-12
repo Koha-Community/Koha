@@ -54,8 +54,8 @@
                     <fieldset>
                         <label for="issues-table-output-format"><b>Export checkouts using format:</b></label>
                         <select name="issues-table-output-format" id="issues-table-output-format">
-                            <option value="iso2709_995">ISO2709 with items</option>
-                            <option value="iso2709">ISO2709 without items</option>
+                            <option value="iso2709_995">MARC with items</option>
+                            <option value="iso2709">MARC without items</option>
                             [% IF csv_profiles.size %]
                                 <option value="csv">CSV</option>
                             [% END %]
@@ -68,7 +68,7 @@
                                 [% END %]
                             </select>
                         [% END %]
-                       <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% Koha.Preference('ExportRemoveFields') | html %]" title="Use for iso2709 exports" />
+                       <label for="export_remove_fields">Don't export fields:</label> <input type="text" id="export_remove_fields" name="export_remove_fields" value="[% Koha.Preference('ExportRemoveFields') | html %]" title="Use for MARC exports" />
                         <input type="hidden" name="op" value="export" />
                         <input type="hidden" id="output_format" name="output_format" value="iso2709" />
                         <input type="hidden" id="dont_export_item" name="dont_export_item" value="0" />

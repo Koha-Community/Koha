@@ -259,7 +259,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             }
         },
         'iso2709': {
-            saveLabel: _("Save as ISO2709 (.mrc) file"),
+            saveLabel: _("Save as MARC (.mrc) file"),
             save: function( id, record, done ) {
                 saveAs( new Blob( [record.toISO2709()], { 'type': 'application/octet-stream;charset=utf-8' } ), 'record.mrc' );
 
