@@ -9,7 +9,6 @@
     var CAN_user_borrowers_edit_borrowers = "[% CAN_user_borrowers_edit_borrowers | html %]";
 
     var dateformat = "[% Koha.Preference('dateformat') | html %]";
-    var NorwegianPatronDBEnable = "[% Koha.Preference('NorwegianPatronDBEnable') | html %]";
 
     var borrowernumber;
     var number_of_adult_categories = 0;

@@ -23,7 +23,6 @@ use Modern::Perl;
 use Carp;
 use List::MoreUtils qw( uniq );
 use JSON qw( to_json );
-use Module::Load::Conditional qw( can_load );
 use Text::Unaccent qw( unac_string );
 
 use C4::Accounts;
@@ -44,10 +43,6 @@ use Koha::Virtualshelves;
 use Koha::Club::Enrollments;
 use Koha::Account;
 use Koha::Subscription::Routinglists;
-
-if ( ! can_load( modules => { 'Koha::NorwegianPatronDB' => undef } ) ) {
-   warn "Unable to load Koha::NorwegianPatronDB";
-}
 
 use base qw(Koha::Object);
 
@@ -245,24 +240,6 @@ sub store {
 
                 $self = $self->SUPER::store;
 
-                # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
-                # cronjob will use for syncing with NL
-                if (   C4::Context->preference('NorwegianPatronDBEnable')
-                    && C4::Context->preference('NorwegianPatronDBEnable') == 1 )
-                {
-                    Koha::Database->new->schema->resultset('BorrowerSync')
-                      ->create(
-                        {
-                            'borrowernumber' => $self->borrowernumber,
-                            'synctype'       => 'norwegianpatrondb',
-                            'sync'           => 1,
-                            'syncstatus'     => 'new',
-                            'hashed_pin' =>
-                              Koha::NorwegianPatronDB::NLEncryptPIN($self->plain_text_password),
-                        }
-                      );
-                }
-
                 $self->add_enrolment_fee_if_needed;
 
                 logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
@@ -291,28 +268,6 @@ sub store {
                     $self_from_storage->category->categorycode )
                 {
                     $self->add_enrolment_fee_if_needed;
-                }
-
-                # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
-                # cronjob will use for syncing with NL
-                if (   C4::Context->preference('NorwegianPatronDBEnable')
-                    && C4::Context->preference('NorwegianPatronDBEnable') == 1 )
-                {
-                    my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
-                        'synctype'       => 'norwegianpatrondb',
-                        'borrowernumber' => $self->borrowernumber,
-                    });
-                    # Do not set to "edited" if syncstatus is "new". We need to sync as new before
-                    # we can sync as changed. And the "new sync" will pick up all changes since
-                    # the patron was created anyway.
-                    if ( $borrowersync->syncstatus ne 'new' && $borrowersync->syncstatus ne 'delete' ) {
-                        $borrowersync->update( { 'syncstatus' => 'edited' } );
-                    }
-                    # Set the value of 'sync'
-                    # FIXME THIS IS BROKEN # $borrowersync->update( { 'sync' => $data{'sync'} } );
-
-                    # Try to do the live sync
-                    Koha::NorwegianPatronDB::NLSync({ 'borrowernumber' => $self->borrowernumber });
                 }
 
                 my $borrowers_log = C4::Context->preference("BorrowersLog");
@@ -684,11 +639,6 @@ sub update_password {
     return if $@; # Make sure the userid is not already in used by another patron
 
     return 0 if $password eq '****' or $password eq '';
-
-    if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-        # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
-        Koha::NorwegianPatronDB::NLUpdateHashedPIN( $self->borrowernumber, $password );
-    }
 
     my $digest = Koha::AuthUtils::hash_password($password);
     $self->update(

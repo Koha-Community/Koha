@@ -28,14 +28,9 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Members;
-use Module::Load;
 use Koha::Patrons;
 use Koha::Token;
 use Koha::Patron::Categories;
-
-if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-    load Koha::NorwegianPatronDB, qw( NLMarkForDeletion NLSync );
-}
 
 my $input = new CGI;
 
@@ -60,20 +55,6 @@ if ( $loggedinuser == $member ) {
 my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
 my $patron         = Koha::Patrons->find( $member );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
-
-# Handle deletion from the Norwegian national patron database, if it is enabled
-# If the "deletelocal" parameter is set to "false", the regular deletion will be
-# short circuited, and only a deletion from the national database can be carried
-# out. If "deletelocal" is set to "true", or not set to anything normal
-# deletion will be done.
-my $deletelocal  = $input->param('deletelocal')  eq 'false' ? 0 : 1; # Deleting locally is the default
-if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-    if ( $input->param('deleteremote') eq 'true' ) {
-        # Mark for deletion, then try a live sync
-        NLMarkForDeletion( $member );
-        NLSync({ 'borrowernumber' => $member });
-    }
-}
 
 my $charges = $patron->account->non_issues_charges;
 my $countissues = $patron->checkouts->count;
@@ -104,7 +85,7 @@ if (C4::Context->preference("IndependentBranches")) {
 my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $dbh->selectrow_array("SELECT COUNT(*) FROM borrowers WHERE guarantorid=?", undef, $member);
-if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor or $deletelocal == 0) {
+if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor ) {
 
     $template->param(
         patron => $patron,
@@ -118,11 +99,9 @@ if ( $op eq 'delete_confirm' or $countissues > 0 or $charges or $is_guarantor or
     if ($is_guarantor) {
         $template->param(guarantees => 1);
     }
-    if ($deletelocal == 0) {
-        $template->param(keeplocal => 1);
-    }
+
     # This is silly written but reflect the same conditions as above
-    if ( not $countissues > 0 and not $charges and not $is_guarantor and not $deletelocal == 0 ) {
+    if ( not $countissues > 0 and not $charges and not $is_guarantor ) {
         $template->param(
             op         => 'delete_confirm',
             csrf_token => Koha::Token->new->generate_csrf({ session_id => scalar $input->cookie('CGISESSID') }),

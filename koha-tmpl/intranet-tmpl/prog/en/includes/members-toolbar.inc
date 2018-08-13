@@ -4,7 +4,6 @@
 [% USE Branches %]
 [% USE Categories %]
 [% USE AuthorisedValues %]
-[% SET NorwegianPatronDBEnable = Koha.Preference( 'NorwegianPatronDBEnable' ) %]
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( guarantor ) %]
@@ -72,13 +71,7 @@
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers %]
-                    [% IF ( NorwegianPatronDBEnable == 1 ) %]
-                        <li><a id="deletepatronlocal" href="#">Delete local</a></li>
-                        <li><a id="deletepatronremote" href="#">Delete remote</a></li>
-                        <li><a id="deletepatronboth" href="#">Delete local and remote</a></li>
-                    [% ELSE %]
-                        <li><a id="deletepatron" href="#">Delete</a></li>
-                    [% END %]
+                    <li><a id="deletepatron" href="#">Delete</a></li>
                 [% ELSE %]
                     <li class="disabled"><a data-toggle="tooltip" data-placement="left" title="You are not authorized to delete patrons" id="deletepatron" href="#">Delete</a></li>
                 [% END %]

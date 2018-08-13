@@ -1698,24 +1698,6 @@ CREATE TABLE borrower_debarments ( -- tracks restrictions on the patron's record
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table borrower_sync
---
-
-DROP TABLE IF EXISTS `borrower_sync`;
-CREATE TABLE borrower_sync (
-  borrowersyncid int(11) NOT NULL AUTO_INCREMENT, -- Primary key, unique identifier
-  borrowernumber int(11) NOT NULL, -- Connects data about synchronisations to a borrower
-  synctype varchar(32) NOT NULL, -- There could potentially be more than one kind of syncing going on, a text string here can be used to tell them apart. E.g.: The Norwegian national patron database uses 'norwegianpatrondb' in this column
-  sync tinyint(1) NOT NULL DEFAULT '0', -- A boolean (1/0) for turning syncing off and on for individual borrowers
-  syncstatus varchar(10) DEFAULT NULL, -- The sync status for any given borrower. Could be text strings like 'new', 'edited', 'synced' etc. The values used here will depend on the actual syncing being done.
-  lastsync varchar(50) DEFAULT NULL, -- Date of the last successfull sync. The date format might be different depending on the service that is being used, so no special date format is being enforced here.
-  hashed_pin varchar(64) DEFAULT NULL, -- Perhaps specific to The Norwegian national patron database, this column holds a hashed PIN code
-  PRIMARY KEY (borrowersyncid),
-  KEY borrowernumber (borrowernumber),
-  CONSTRAINT borrower_sync_ibfk_1 FOREIGN KEY (borrowernumber) REFERENCES borrowers (borrowernumber) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table api_keys
 --
 

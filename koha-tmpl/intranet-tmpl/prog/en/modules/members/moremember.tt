@@ -494,32 +494,6 @@
                                             </li>
                                         [% END %]
 
-                                        [% IF Koha.Preference( 'NorwegianPatronDBEnable' ) == 1 %]
-                                            [% IF ( sync == 1 ) %]
-                                                <li>
-                                                    <span class="label">Activate sync: </span>
-                                                    Yes
-                                                </li>
-                                                [% IF ( syncstatus ) %]
-                                                    <li>
-                                                        <span class="label">Sync status: </span>
-                                                        [% syncstatus | html %]
-                                                    </li>
-                                                [% END %]
-                                                [% IF ( lastsync ) %]
-                                                    <li>
-                                                        <span class="label">Last sync: </span>
-                                                        [% lastsync | $KohaDates %]
-                                                    </li>
-                                                [% END %]
-                                            [% ELSE %]
-                                                <li>
-                                                    <span class="label">Activate sync: </span>
-                                                    No
-                                                </li>
-                                            [% END %]
-                                        [% END %]
-
                                         [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
                                             <li>
                                                 <span class="label">Check previous checkouts: </span>

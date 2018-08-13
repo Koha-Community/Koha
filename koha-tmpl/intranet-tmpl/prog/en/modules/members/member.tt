@@ -28,11 +28,6 @@
             </div>
           [% END %]
 
-          [% IF Koha.Preference( 'NorwegianPatronDBEnable' ) == 1 %]
-            [% SET nl_search_form_title='Search the Norwegian national patron database' %]
-            [% INCLUDE 'nl-search-form.tt' %]
-          [% END %]
-
           [% INCLUDE 'patron-toolbar.inc' %]
           [% INCLUDE 'noadd-warnings.inc' %]
 

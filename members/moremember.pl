@@ -55,10 +55,6 @@ use Koha::AuthorisedValues;
 use Koha::CsvProfiles;
 use Koha::Patron::Debarments qw(GetDebarments);
 use Koha::Patron::Messages;
-use Module::Load;
-if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-    load Koha::NorwegianPatronDB, qw( NLGetSyncDataFromBorrowernumber );
-}
 #use Smart::Comments;
 #use Data::Dumper;
 use DateTime;
@@ -239,16 +235,6 @@ if ($borrowernumber) {
     $template->param(
         holds_count => Koha::Database->new()->schema()->resultset('Reserve')
           ->count( { borrowernumber => $borrowernumber } ) );
-}
-
-# Add sync data to the user data
-if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
-    my $sync = NLGetSyncDataFromBorrowernumber( $borrowernumber );
-    if ( $sync ) {
-        $data->{'sync'}       = $sync->sync;
-        $data->{'syncstatus'} = $sync->syncstatus;
-        $data->{'lastsync'}   = $sync->lastsync;
-    }
 }
 
 # Generate CSRF token for upload and delete image buttons

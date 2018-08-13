@@ -75,11 +75,7 @@ sub is_testable {
     my ($module_name) = @_;
     my @needed_module_names;
     my $return_value = 1;
-    if ( $module_name =~ /Koha::NorwegianPatronDB/xsm ) {
-        @needed_module_names =
-          ( 'SOAP::Lite', 'Crypt::GCrypt', 'Digest::SHA', 'Convert::BaseN' );
-    }
-    elsif ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Indexer/xsm ) {
+    if ( $module_name =~ /Koha::SearchEngine::Elasticsearch::Indexer/xsm ) {
         @needed_module_names =
           ( 'Catmandu::Importer::MARC', 'Catmandu::Store::ElasticSearch' );
     }

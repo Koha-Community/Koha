@@ -50,12 +50,6 @@ use Koha::Schema;
 
 our (@ISA,@EXPORT,@EXPORT_OK,$debug);
 
-use Module::Load::Conditional qw( can_load );
-if ( ! can_load( modules => { 'Koha::NorwegianPatronDB' => undef } ) ) {
-   $debug && warn "Unable to load Koha::NorwegianPatronDB";
-}
-
-
 BEGIN {
     $debug = $ENV{DEBUG} || 0;
     require Exporter;

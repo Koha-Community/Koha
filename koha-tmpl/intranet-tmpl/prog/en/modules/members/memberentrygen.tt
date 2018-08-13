@@ -635,18 +635,6 @@
     [% IF ( mandatorysort2 ) %]<span class="required">Required</span>[% END %]
     </li>
         [% END %]
-    [% IF ( Koha.Preference( 'NorwegianPatronDBEnable' ) == 1 ) %]
-        <li>
-            <label for="sort2">Sync with the Norwegian national patron database:</label>
-            [% IF ( sync == 0 ) %]
-                <input type="radio" id="sync" name="sync" value="1"> Yes
-                <input type="radio" id="sync" name="sync" value="0" checked> No
-            [% ELSE %]
-                <input type="radio" id="sync" name="sync" value="1" checked> Yes
-                <input type="radio" id="sync" name="sync" value="0"> No
-            [% END %]
-        </li>
-    [% END %]
     [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
       <li><label for="checkprevcheckout">Check for previous checkouts: </label>
         <select name="checkprevcheckout" id="checkprevcheckout">

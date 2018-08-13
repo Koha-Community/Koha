@@ -1,9 +1,0 @@
-<form method="POST" action="nl-search.pl" autocomplete="off"> <!-- This form will be used for things like social security numbers, so it makes sense not to remember them. -->
-<input type="hidden" name="op" value="search" />
-    <fieldset>
-        <legend>[% nl_search_form_title | html %]</legend>
-        <label for="q">Social security or card number: </label>
-        <input type="text" name="q" value="[% q | html %]">
-        <input type="submit" value="Search">
-    </fieldset>
-</form>

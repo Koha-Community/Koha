@@ -1,4 +1,4 @@
-/* global borrowernumber advsearch dateformat _ CAN_user_borrowers_edit_borrowers NorwegianPatronDBEnable number_of_adult_categories destination */
+/* global borrowernumber advsearch dateformat _ CAN_user_borrowers_edit_borrowers number_of_adult_categories destination */
 
 $(document).ready(function(){
     $("#filteraction_off, #filteraction_on").on('click', function(e) {
@@ -31,27 +31,9 @@ $(document).ready(function(){
     });
 
     if( CAN_user_borrowers_edit_borrowers ){
-        if( NorwegianPatronDBEnable == 1 ){
-            $("#deletepatronlocal").click(function(){
-                confirm_local_deletion();
-                $(".btn-group").removeClass("open");
-                return false;
-            });
-            $("#deletepatronremote").click(function(){
-                confirm_remote_deletion();
-                $(".btn-group").removeClass("open");
-                return false;
-            });
-            $("#deletepatronboth").click(function(){
-                confirm_both_deletion();
-                $(".btn-group").removeClass("open");
-                return false;
-            });
-        } else {
-            $("#deletepatron").click(function(){
-                window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber;
-            });
-        }
+        $("#deletepatron").click(function(){
+            window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber;
+        });
         $("#renewpatron").click(function(){
             confirm_reregistration();
             $(".btn-group").removeClass("open");
@@ -101,24 +83,6 @@ $(document).ready(function(){
         $("#borrower_message").val( $(this).val() );
     });
 });
-function confirm_local_deletion() {
-    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron from the local database? This cannot be undone."));
-    if (is_confirmed) {
-        window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber + '&deletelocal=true&deleteremote=false';
-    }
-}
-function confirm_remote_deletion() {
-    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron from the Norwegian national patron database? This cannot be undone."));
-    if (is_confirmed) {
-        window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber + '&deletelocal=false&deleteremote=true';
-    }
-}
-function confirm_both_deletion() {
-    var is_confirmed = window.confirm(_("Are you sure you want to delete this patron both from the local database and from the Norwegian national patron database? This cannot be undone."));
-    if (is_confirmed) {
-        window.location='/cgi-bin/koha/members/deletemem.pl?member=' + borrowernumber + '&deletelocal=true&deleteremote=true';
-    }
-}
 
 function confirm_updatechild() {
     var is_confirmed = window.confirm(_("Are you sure you want to update this child to an Adult category?  This cannot be undone."));
