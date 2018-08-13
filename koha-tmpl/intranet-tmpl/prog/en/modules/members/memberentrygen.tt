@@ -38,9 +38,9 @@
     [% INCLUDE 'blocking_errors.inc' %]
     [% IF error_alert %]
         [% IF ( error_alert == "no_email" ) %]
-            <div class="error">This member has no email</div>
+            <div class="dialog alert">This member has no email</div>
         [% ELSE %]
-            <div class="error">[% error_alert | html %]</div>
+            <div class="dialog alert">[% error_alert | html %]</div>
         [% END %]
     [% END %]
     [% IF info_alert %]

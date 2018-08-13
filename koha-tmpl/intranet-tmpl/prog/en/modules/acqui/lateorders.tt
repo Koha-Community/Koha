@@ -26,11 +26,11 @@
 
 [% IF error_claim %]
     [% IF ( error_claim == "no_email" ) %]
-        <div class="error">This vendor has no email</div>
+        <div class="dialog alert">This vendor has no email</div>
     [% ELSIF ( error_claim == "no_order_selected" ) %]
-        <div class="error">No order selected</div>
+        <div class="dialog alert">No order selected</div>
     [% ELSE %]
-        <div class="error">[% error_claim | html %]</div>
+        <div class="dialog alert">[% error_claim | html %]</div>
     [% END %]
 [% END %]
 [% IF info_claim %]

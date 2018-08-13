@@ -78,11 +78,15 @@
                                         [% plugin.metadata.description | html %]
 
                                         [% IF ( plugin.metadata.minimum_version && koha_version < plugin.metadata.minimum_version ) %]
-                                            <div class="error">Warning: This report was written for a newer version of Koha. Run at your own risk.</div>
+                                            <div class="dialog alert">
+                                                Warning: This report was written for a newer version of Koha. Run at your own risk.
+                                            </div>
                                         [% END %]
 
                                         [% IF ( plugin.metadata.maximum_version && koha_version > plugin.metadata.maximum_version ) %]
-                                            <div class="error">Warning: This report was written for an older version of Koha. Run at your own risk.</div>
+                                            <div class="dialog alert">
+                                                Warning: This report was written for an older version of Koha. Run at your own risk.
+                                            </div>
                                         [% END %]
                                     </td>
                                     <td>[% plugin.metadata.author | html %]</td>
