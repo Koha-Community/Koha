@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 118;
 
+use Data::Dumper;
 use DateTime;
 use POSIX qw( floor );
 use t::lib::Mocks;
@@ -1741,7 +1742,7 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
 };
 
 subtest 'AddReturn + suspension_chargeperiod' => sub {
-    plan tests => 14;
+    plan tests => 21;
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
@@ -2417,8 +2418,10 @@ sub test_debarment_on_checkout {
     my $line_number = $caller[2];
     AddIssue( $patron, $item->{barcode}, $due_date );
 
-    AddReturn( $item->{barcode}, $library->{branchcode},
+    my ( undef, $message ) = AddReturn( $item->{barcode}, $library->{branchcode},
         undef, undef, $return_date );
+    is( $message->{WasReturned} && exists $message->{Debarred}, 1, 'AddReturn must have debarred the patron' )
+        or diag('AddReturn returned message ' . Dumper $message );
     my $debarments = Koha::Patron::Debarments::GetDebarments(
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
     is( scalar(@$debarments), 1, 'Test at line ' . $line_number );
