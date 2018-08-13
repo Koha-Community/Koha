@@ -174,7 +174,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF alert.HIGHHOLDS %]
-    <div class="dialog message">High demand item. <b>Loan period was not shortened due to override.</b> Shortened due date would have been [% alert.HIGHHOLDS.returndate %] ([% alert.HIGHHOLDS.duration %] days).</div>
+    <div class="dialog message">High demand item. <b>Loan period was not shortened due to override.</b> Shortened due date would have been [% alert.HIGHHOLDS.returndate | $KohaDates %] ([% alert.HIGHHOLDS.duration | html %] days).</div>
 [% END %]
 
 [% IF ( nopermission ) %]
@@ -283,7 +283,7 @@ $(document).ready(function() {
 [% END %]
 
 [% IF HIGHHOLDS %]
-    <li>High demand item. Loan period shortened to [% HIGHHOLDS.duration %] days (due [% HIGHHOLDS.returndate %]). Check out anyway?</li>
+    <li>High demand item. Loan period shortened to [% HIGHHOLDS.duration | html %] days (due [% HIGHHOLDS.returndate | $KohaDates %]). Check out anyway?</li>
 [% END %]
 
 [% IF PREVISSUE %]
