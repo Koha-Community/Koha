@@ -88,11 +88,11 @@ a.add, a.delete {
     [% END %]
 
     <h1>Search engine configuration</h1>
-    <div class="warning">
+    <div class="dialog message">
         Warning: Any changes to the configuration will only take effect after a full reindex. Until then searching may not work correctly.
     </div>
     [% IF errors %]
-        <div class="error">
+        <div class="dialog alert">
         Changes have not been applied. Please check the following values:
           <ul>
             [% FOREACH e IN errors %]

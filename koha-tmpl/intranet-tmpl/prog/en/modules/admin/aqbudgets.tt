@@ -33,7 +33,7 @@
 [% UNLESS op == 'delete_confirm' %][% INCLUDE 'budgets-admin-toolbar.inc' %][% END %]
 
 [% IF (error_not_authorised_to_modify) %]
-    <div class="error">
+    <div class="dialog alert">
         <p>You are not authorized to modify this fund</p>
     </div>
 [% END %]
