@@ -382,6 +382,9 @@ Parameters:
     whether or not to return hold request information in the response
   - show_loans (Optional, default 0)
     whether or not to return loan information request information in the response
+  - show_attributes (Optional, default 0)
+    whether or not to return additional patron attributes, when enabled the attributes
+    are limited to those marked as opac visible only.
 
 =cut
 
