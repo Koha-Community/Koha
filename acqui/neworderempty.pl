@@ -384,7 +384,7 @@ $template->param(
 );
 
 # For UI-improvements (KD-722)
-$template->param(commonMarcFieldRef => get_common_fields_template($biblionumber));
+$template->param(commonMarcFieldRef => get_common_fields_template($biblionumber)) if (defined $biblionumber);
 
 output_html_with_http_headers $input, $cookie, $template->output;
 
