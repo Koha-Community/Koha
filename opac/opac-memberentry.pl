@@ -89,7 +89,7 @@ if ( defined $min ) {
 
 $template->param(
     action            => $action,
-    hidden            => GetHiddenFields( $mandatory, 'registration' ),
+    hidden            => GetHiddenFields( $mandatory, $action ),
     mandatory         => $mandatory,
     libraries         => \@libraries,
     OPACPatronDetails => C4::Context->preference('OPACPatronDetails'),
@@ -316,7 +316,7 @@ elsif ( $action eq 'edit' ) {    #Display logged in borrower's data
     $template->param(
         borrower  => $borrower,
         guarantor => scalar Koha::Patrons->find($borrowernumber)->guarantor(),
-        hidden => GetHiddenFields( $mandatory, 'modification' ),
+        hidden => GetHiddenFields( $mandatory, 'edit' ),
         csrf_token => Koha::Token->new->generate_csrf({
             session_id => scalar $cgi->cookie('CGISESSID'),
         }),
@@ -345,7 +345,7 @@ sub GetHiddenFields {
     my ( $mandatory, $action ) = @_;
     my %hidden_fields;
 
-    my $BorrowerUnwantedField = $action eq 'modification' ?
+    my $BorrowerUnwantedField = $action eq 'edit' || $action eq 'update' ?
       C4::Context->preference( "PatronSelfModificationBorrowerUnwantedField" ) :
       C4::Context->preference( "PatronSelfRegistrationBorrowerUnwantedField" );
 
