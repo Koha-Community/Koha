@@ -327,7 +327,7 @@
                     [% END %]
                     [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
                         <div id="forgotpassword-modal" class="forgotpassword">
-                            <p><a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a></p>
+                            <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
                         </div>
                     [% END %]
                     [% IF PatronSelfRegistration && PatronSelfRegistrationDefaultCategory %]
@@ -339,7 +339,6 @@
             </div>
             <div class="modal-footer">
                 <input type="submit" class="btn btn-primary" value="Log in" />
-                <a href="#" data-dismiss="modal" aria-hidden="true" class="cancel">Cancel</a>
             </div>
         </form> <!-- /#auth -->
     </div>  <!-- /#modalAuth  -->

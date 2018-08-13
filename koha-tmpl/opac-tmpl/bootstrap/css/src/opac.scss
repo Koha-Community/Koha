@@ -2377,6 +2377,59 @@ button.closebtn {
     padding: 0;
 }
 
+.modal {
+    form {
+        margin: 0;
+    }
+}
+
+#loginModal {
+    margin-left: -200px;
+    width: 400px;
+
+    input {
+        box-sizing: border-box;
+        display: block;
+        font-size: 150%;
+        height: auto;
+        padding: .4em;
+        width: 100%;
+
+        &[type='submit'] {
+            background: #006DCC none;
+            font-size: 100%;
+            padding: .5em;
+            transition: background-color .5s ease;
+
+            &:hover {
+                background: #0088CC none;
+            }
+        }
+    }
+
+    .closebtn {
+        color: #C00;
+        opacity: 1;
+
+        &:hover {
+            opacity: .4;
+        }
+    }
+
+    .modal-header,
+    .modal-body,
+    .modal-footer {
+        font-size: 120%;
+        padding: 1em 2em;
+    }
+}
+
+.nologininstructions,
+.forgotpassword,
+.patronregistration {
+    padding-top: 1em;
+}
+
 .btn-group {
     label,
     select {
