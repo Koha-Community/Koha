@@ -12,11 +12,13 @@ use Koha::DateUtils qw( dt_from_string );
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-our $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema = Koha::Database->schema;
+$schema->storage->txn_begin;
 
+our $dbh = C4::Context->dbh;
 $dbh->do(q|DELETE FROM issues|);
+
+t::lib::Mocks::mock_preference('item-level_itypes', '1');
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -51,6 +53,15 @@ my $biblio = $builder->build(
     }
 );
 
+my $itemtype = $builder->build(
+    {
+        source => 'Itemtype',
+        value => {
+            defaultreplacecost => 6,
+        },
+    }
+);
+
 my $item = $builder->build(
     {
         source => 'Item',
@@ -59,6 +70,7 @@ my $item = $builder->build(
             homebranch       => $branch->{branchcode},
             holdingbranch    => $branch->{branchcode},
             replacementprice => '5.00',
+            itype            => $itemtype->{itemtype},
         },
     }
 );
@@ -110,7 +122,9 @@ subtest 'Test basic functionality' => sub {
 };
 
 subtest 'Test cap_fine_to_replacement_price' => sub {
-    plan tests => 1;
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('useDefaultReplacementCost', '1');
     my $issuingrule = $builder->build(
         {
             source => 'Issuingrule',
@@ -143,7 +157,14 @@ subtest 'Test cap_fine_to_replacement_price' => sub {
 
     my ($amount) = CalcFine( $item, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
 
-    is( $amount, '5.00', 'Amount is calculated correctly' );
+    is( int($amount), 5, 'Amount is calculated correctly' );
+
+
+    # Use default replacement cost (useDefaultReplacementCost) is item's replacement price is 0
+    my $item_obj = Koha::Items->find($item->{itemnumber});
+    $item_obj->replacementprice(0)->store;
+    ($amount) = CalcFine( $item_obj->unblessed, $patron->{categorycode}, $branch->{branchcode}, $start_dt, $end_dt );
+    is( int($amount), 6, 'Amount is calculated correctly' );
 
     teardown();
 };
