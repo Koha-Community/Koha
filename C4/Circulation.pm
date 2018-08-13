@@ -1034,14 +1034,14 @@ sub CanBookBeIssued {
                 $alerts{HIGHHOLDS} = {
                     num_holds  => $check->{outstanding},
                     duration   => $check->{duration},
-                    returndate => output_pref( $check->{due_date} ),
+                    returndate => output_pref( { dt => dt_from_string($check->{due_date}), dateformat => 'iso', timeformat => '24hr' }),
                 };
             }
             else {
                 $needsconfirmation{HIGHHOLDS} = {
                     num_holds  => $check->{outstanding},
                     duration   => $check->{duration},
-                    returndate => output_pref( $check->{due_date} ),
+                    returndate => output_pref( { dt => dt_from_string($check->{due_date}), dateformat => 'iso', timeformat => '24hr' }),
                 };
             }
         }
