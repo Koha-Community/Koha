@@ -7,6 +7,7 @@
 <title>Koha &rsaquo; Patron search</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
+<style> .modal-body .close { display: none; } </style>
 </head>
 
 <body id="common_patron_search" class="common">
@@ -88,6 +89,29 @@
         </div>
 
 <div id="closewindow"><a href="#" class="btn btn-default btn-default close">Close</a></div>
+
+<!-- Patron preview modal -->
+<div class="modal" id="patronPreview" tabindex="-1" role="dialog" aria-labelledby="patronPreviewLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="patronPreviewLabel"></h4>
+            </div>
+            <div class="modal-body">
+                <div id="loading">
+                    <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</div>
+</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -198,6 +222,18 @@
                 var borrowernumber = $(this).data("borrowernumber");
                 var borrower_data = $("#borrower_data"+borrowernumber).val();
                 select_user( borrowernumber, JSON.parse(borrower_data) );
+            });
+
+            $("body").on("click",".patron_preview", function( e ){
+                e.preventDefault();
+                var borrowernumber = $(this).data("borrowernumber");
+                var page = "/cgi-bin/koha/members/moremember.pl?print=brief&borrowernumber=" + borrowernumber;
+                $("#patronPreview .modal-body").load( page + " div.container-fluid" );
+                $('#patronPreview').modal({show:true});
+            });
+
+            $("#patronPreview").on('hidden.bs.modal', function (e) {
+                $("#patronPreview .modal-body").html("<img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> Loading");
             });
 
         });
