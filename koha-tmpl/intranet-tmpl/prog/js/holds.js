@@ -47,7 +47,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function( oObj ) {
-                            return oObj.itemcallnumber.escapeHtml() || "";
+                            return oObj.itemcallnumber && oObj.itemcallnumber.escapeHtml() || "";
                         }
                     },
                     {
