@@ -29,7 +29,7 @@
 [% IF ( IntranetUserJS ) %]
     <script type="text/javascript">
     //<![CDATA[
-    [% IntranetUserJS | html %]
+    [% IntranetUserJS | $raw %]
     //]]>
     </script>
 [% END %]
