@@ -240,6 +240,8 @@ sub CalcFine {
     my $itemtype = $item->{itemtype} || $item->{itype};
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule({ categorycode => $bortype, itemtype => $itemtype, branchcode => $branchcode });
 
+    $itemtype = Koha::ItemTypes->find($itemtype);
+
     return unless $issuing_rule; # If not rule exist, there is no fine
 
     my $fine_unit = $issuing_rule->lengthunit || 'days';
@@ -257,7 +259,15 @@ sub CalcFine {
     } # else { # a zero (or null) chargeperiod or negative units_minus_grace value means no charge. }
 
     $amount = $issuing_rule->overduefinescap if $issuing_rule->overduefinescap && $amount > $issuing_rule->overduefinescap;
+
+    # This must be moved to Koha::Item (see also similar code in C4::Accounts::chargelostitem
+    $item->{replacementprice} ||= $itemtype->defaultreplacecost
+      if $itemtype
+      && $item->{replacementprice} == 0
+      && C4::Context->preference("useDefaultReplacementCost");
+
     $amount = $item->{replacementprice} if ( $issuing_rule->cap_fine_to_replacement_price && $item->{replacementprice} && $amount > $item->{replacementprice} );
+
     $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $issuing_rule->chargename, $units_minus_grace, $chargeable_units);
     return ($amount, $issuing_rule->chargename, $units_minus_grace, $chargeable_units);
     # FIXME: chargename is NEVER populated anywhere.
