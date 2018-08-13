@@ -830,7 +830,7 @@ if ($parentbiblio) {
 
 $is_a_modif = 0;
     
-if ($biblionumber) {
+if ($biblionumber && $record ne '-1') {
     $is_a_modif = 1;
     my $title = C4::Context->preference('marcflavour') eq "UNIMARC" ? $record->subfield('200', 'a') : $record->title;
     $template->param( title => $title );
