@@ -249,7 +249,7 @@ function check_additem(unique_item_fields) {
     data['field'] = new Array();
     data['value'] = new Array();
     var array_fields = unique_item_fields.split(' ');
-    $(".error").empty(); // Clear error div
+    $(".order_error").empty(); // Clear error div
 
     // Check if a value is duplicated in form
     for ( field in array_fields ) {
@@ -270,7 +270,7 @@ function check_additem(unique_item_fields) {
         var sorted_arr = values.sort();
         for (var i = 0; i < sorted_arr.length - 1; i += 1) {
             if (sorted_arr[i + 1] == sorted_arr[i]) {
-                $(".error").append(
+                $(".order_error").append(
                     fieldname + " '" + sorted_arr[i] + "' "
                     + (window.MSG_ADDITEM_JS_IS_DUPLICATE || "is duplicated")
                     + "<br/>");
@@ -281,7 +281,7 @@ function check_additem(unique_item_fields) {
 
     // If there is a duplication, we raise an error
     if ( success == false ) {
-        $(".error").show();
+        $(".order_error").show();
         return false;
     }
 
@@ -295,7 +295,7 @@ function check_additem(unique_item_fields) {
                 success = false;
                 for (var i=0; i < data[field].length; i++) {
                     var value = data[field][i];
-                    $(".error").append(
+                    $(".order_error").append(
                         field + " '" + value + "' "
                         + (window.MSG_ADDITEM_JS_ALREADY_EXISTS_IN_DB
                             || "already exists in database")
@@ -307,7 +307,7 @@ function check_additem(unique_item_fields) {
     });
 
     if ( success == false ) {
-        $(".error").show();
+        $(".order_error").show();
     }
     return success;
 }
