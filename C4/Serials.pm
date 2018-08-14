@@ -345,6 +345,8 @@ sub GetSerialInformation {
     $rq->execute($serialid);
     my $data = $rq->fetchrow_hashref;
 
+    return $data if (not defined($data->{'serialid'}));
+
     # create item information if we have serialsadditems for this subscription
     if ( $data->{'serialsadditems'} ) {
         my $queryitem = $dbh->prepare("SELECT itemnumber from serialitems where serialid=?");
