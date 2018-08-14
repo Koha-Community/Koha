@@ -978,6 +978,8 @@ sub _copyFieldsTo {
     $targetField = $sourceField unless $targetField;
     $targetSubfield = $sourceSubfield unless $targetSubfield;
 
+    return if ((not defined $oldRecord) || (not defined $newRecord));
+
     my @oldFields = $oldRecord->field($sourceField);
     my @newFields = $newRecord->field($targetField);
 
