@@ -160,9 +160,8 @@ if ( $op eq 'modify' or $op eq 'save' or $op eq 'duplicate' ) {
 
     $borrower_data = $patron->unblessed;
     $borrower_data->{category_type} = $patron->category->category_type;
-} else {
-    $patron = Koha::Patron->new;
 }
+
 my $categorycode  = $input->param('categorycode') || $borrower_data->{'categorycode'};
 my $category_type = $input->param('category_type') || '';
 unless ($category_type or !($categorycode)){
@@ -285,21 +284,23 @@ $newdata{'lang'}    = $input->param('lang')    if defined($input->param('lang'))
 # builds default userid
 # userid input text may be empty or missing because of syspref BorrowerUnwantedField
 if ( ( defined $newdata{'userid'} && $newdata{'userid'} eq '' ) || $check_BorrowerUnwantedField =~ /userid/ && !defined $data{'userid'} ) {
+    my $fake_patron = Koha::Patron->new;
+    $fake_patron->userid($patron->userid) if $patron; # editing
     if ( ( defined $newdata{'firstname'} || $category_type eq 'I' ) && ( defined $newdata{'surname'} ) ) {
         # Full page edit, firstname and surname input zones are present
-        $patron->firstname($newdata{firstname});
-        $patron->surname($newdata{surname});
-        $patron->generate_userid;
-        $newdata{'userid'} = $patron->userid;
+        $fake_patron->firstname($newdata{firstname});
+        $fake_patron->surname($newdata{surname});
+        $fake_patron->generate_userid;
+        $newdata{'userid'} = $fake_patron->userid;
     }
     elsif ( ( defined $data{'firstname'} || $category_type eq 'I' ) && ( defined $data{'surname'} ) ) {
         # Partial page edit (access through "Details"/"Library details" tab), firstname and surname input zones are not used
         # Still, if the userid field is erased, we can create a new userid with available firstname and surname
         # FIXME clean thiscode newdata vs data is very confusing
-        $patron->firstname($data{firstname});
-        $patron->surname($data{surname});
-        $patron->generate_userid;
-        $newdata{'userid'} = $patron->userid;
+        $fake_patron->firstname($data{firstname});
+        $fake_patron->surname($data{surname});
+        $fake_patron->generate_userid;
+        $newdata{'userid'} = $fake_patron->userid;
     }
     else {
         $newdata{'userid'} = $data{'userid'};
