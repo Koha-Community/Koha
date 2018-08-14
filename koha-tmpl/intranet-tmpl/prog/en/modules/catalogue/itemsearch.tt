@@ -106,7 +106,7 @@
         [%- label = BLOCK %][% e.label | html %][% END -%]
         [%- escaped.push({ 'value' => value, 'label' => label }) -%]
     [%- END -%]
-    [%- To.json(escaped) -%]
+    [%- To.json(escaped) | $raw -%]
 [%- END -%]
 
 [%# Page starts here %]

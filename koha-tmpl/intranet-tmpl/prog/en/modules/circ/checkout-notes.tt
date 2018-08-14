@@ -7,7 +7,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Home &rsaquo; Circulation &rsaquo; Checkout notes</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="circ_checkout-notes" class="circ">
@@ -115,7 +115,7 @@
 </div> <!-- doc3 -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     <script>
