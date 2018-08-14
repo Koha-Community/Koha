@@ -2,25 +2,30 @@
 [% USE KohaDates %]
 [% IF ( patron.borrowernumber ) %]
 <div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
+
 <input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber | html %]">
 <input type="hidden" id="hiddenborrowername" value="[% patron.surname | html %] [% patron.firstname | html %]">
 <input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber | html %]">
-<!--[if IE 6]>
-<style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
-}</style>
-<![endif]-->
+
+[% IF ( patronimages ) %]
+    <div>
+        <div class="patronimage-container">
+            [% IF ( patron.image ) %]
+                <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
+                <div class="patronimage-controls">
+                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default btn-sm edit-patronimage" title="Edit patron image" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
+                </div>
+            [% ELSE %]
+                <div class="patronimage empty"></div>
+                <div class="patronimage-controls">
+                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default btn-sm edit-patronimage" title="Add patron image" href="#"><i class="fa fa-plus"></i> Add</a></div>
+                </div>
+            [% END %]
+        </div>
+    </div>
+[% END %]
+
 <ul class="patronbriefinfo">
-    [% IF ( patronimages ) %]
-        [% IF ( patron.image ) %]
-            <li>
-                <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" id="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
-            </li>
-        [% ELSE %]
-            <li id="patronbasics">
-                <div></div>
-            </li>
-        [% END %]
-    [% END %]
     [% IF !(Koha.Preference('HidePersonalPatronDetailOnCirculation')) %]
         [% SWITCH Koha.Preference( 'AddressFormat' ) %]
             [% CASE 'de' %]
@@ -130,4 +135,23 @@
         <li><a href="/cgi-bin/koha/ill/ill-requests.pl?borrowernumber=[% patron.borrowernumber | uri %]">Interlibrary loans</a></li>
     [% END %]
 </ul></div>
+
+<!-- Modal -->
+<div class="modal" id="patronImageEdit" tabindex="-1" role="dialog" aria-labelledby="patronImageEditLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="patronImageEditLabel">Modal title</h4>
+            </div>
+            <div class="modal-body">
+                <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" />
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 [% END %]

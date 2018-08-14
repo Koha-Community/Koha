@@ -1712,25 +1712,58 @@ dd {
     + #menu {
         margin-right: 0;
     }
-}
 
-#patronbasics {
-    div {
-        background: transparent url("../img/patron-blank.min.svg") 10px 5px no-repeat;
-        border: 1px solid #CCCCCC;
-        height: 125px;
-        margin: .3em 0 .3em .3em;
-        padding: 0;
-        width: 105px;
+    > div {
+        border-right: 1px solid #B9D8D9;
+        width: 100%;
     }
 }
 
-#patronimage {
-    border: 1px solid #CCCCCC;
-    margin: .3em 0 .3em .3em;
-    max-width: 140px;
+/* Patron image */
+
+.patronimage-container {
     padding: .2em;
+    position: relative;
+
+    &:hover {
+        .patronimage {
+            opacity: .8;
+        }
+
+        .patronimage-controls {
+            opacity: 1;
+        }
+    }
 }
+
+.patronimage {
+    display: block;
+    max-width: 160px;
+    opacity: 1;
+    transition: .2s ease;
+
+    .empty {
+        background: transparent url( "../img/patron-blank.min.svg" ) center 5px no-repeat;
+        height: 125px;
+        margin: .3em 0 .3em .3em;
+        padding: 0;
+        width: 80%;
+    }
+}
+
+.patronimage-controls {
+    left: 50%;
+    opacity: 0;
+    position: absolute;
+    text-align: center;
+    top: 80%;
+    transform: translate( -50%, -50% );
+    transition: .5s ease;
+}
+
+.patronimage-control {
+    padding: 1em 2em;
+ }
 
 .patronviews {
     border-right: 1px solid #000;

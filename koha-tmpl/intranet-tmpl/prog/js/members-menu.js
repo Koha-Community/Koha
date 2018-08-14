@@ -89,6 +89,19 @@ $(document).ready(function(){
     $("#select_patron_messages").on("change",function(){
         $("#borrower_message").val( $(this).val() );
     });
+
+    $(".edit-patronimage").on("click", function(e){
+        e.preventDefault();
+        var borrowernumber = $(this).data("borrowernumber");
+        $.get("/cgi-bin/koha/members/moremember.pl", { borrowernumber : borrowernumber }, function( data ){
+            var image_form = $(data).find("#picture-upload");
+            image_form.show().find(".cancel").remove();
+            $("#patronImageEdit .modal-body").html( image_form );
+        });
+        var modalTitle = $(this).attr("title");
+        $("#patronImageEdit .modal-title").text(modalTitle);
+        $("#patronImageEdit").modal("show");
+    });
 });
 
 function confirm_updatechild() {
