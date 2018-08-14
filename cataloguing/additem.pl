@@ -415,7 +415,7 @@ my ($template, $loggedinuser, $cookie)
 if (not defined $biblionumber) {
     # biblionumber invalid -> report and exit
     $template->param( undefinedbiblionumber => 1 );
-    output_html_with_http_headers $query, $cookie, $template->output;
+    output_html_with_http_headers $input, $cookie, $template->output;
     exit;
 }
 
