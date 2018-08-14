@@ -144,6 +144,8 @@ function confirm_deletion() {
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cataloging-search.inc' %]
 
+[% IF ( undefinedbiblionumber ) %]<div class="dialog alert">Biblionumber was not defined.</div></body>[% STOP %][% END %]
+
 <div id="breadcrumbs">
           <a href="/cgi-bin/koha/mainpage.pl">Home</a>
  &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
