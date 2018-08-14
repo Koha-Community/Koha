@@ -1,0 +1,19 @@
+
+<record xmlns="http://www.loc.gov/MARC21/slim">
+[%- FOREACH field IN record %]
+  [%- IF field.0 == 'LDR' %]
+  <leader>[% field.4 | xml %]</leader>
+  [%- ELSIF field.0 < 10 %]
+  <controlfield tag="[% field.0 | xml %]">[% field.4 | xml %]</controlfield>
+  [%- ELSE %]
+  <datafield tag="[% field.0 | xml %]" ind1="[% field.1 | xml %]" ind2="[% field.2 | xml %]">
+    [%- c = 3 %]
+    [%- WHILE c < field.size %]
+      [%- di = c + 1 %]
+    <subfield code="[% field.$c | xml %]">[% field.$di | xml %]</subfield>
+      [%- c = c + 2 %]
+    [%- END %]
+    </datafield>
+  [%- END %]
+[%- END %]
+</record>

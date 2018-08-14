@@ -1,0 +1,15 @@
+charset: "UTF-8"
+content_type: "text/xml"
+logger: console
+plugins:
+    'Catmandu::SRU':
+        store: sru
+        bag: data
+        default_record_schema: marcxml
+        limit: 20
+        maximum_limit: 1000
+        record_schemas:
+            -
+                identifier: "info:srw/schema/1/marcxml-v1.1"
+                name: marcxml
+                template: marcxml.tt

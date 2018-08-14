@@ -1,0 +1,208 @@
+---
+store:
+  sru:
+    package: ElasticSearch
+    options:
+      bags:
+        data:
+          cql_mapping:
+            # Make sure to keep all index names lowercase
+            default_index: cql.serverchoice
+            indexes:
+              rec.id:
+                op:
+                  '=': true
+                  'exact': true
+                field: 'Local-number'
+              dc.identifier:
+                op:
+                  '=': true
+                  'exact': true
+                field: 'control-number'
+              dc.title:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'title'
+              dc.subject:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'subject'
+              dc.creator:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'author'
+              dc.author:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'author'
+              dc.itemtype:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'itype'
+              dc.branch:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: ['homebranch', 'holdingbranch']
+              dc.isbn:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'isbn'
+              dc.issn:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'issn'
+              dc.any:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: '_all'
+              dc.pname:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'Personal-name'
+              dc.publisher:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'publisher'
+              dc.date:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'copydate'
+              dc.format:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'material-type'
+              dc.resourceidentifier:
+                op:
+                  '=': true
+                  'exact': true
+                field: 'Local-number'
+              bath.keytitle:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'title'
+              bath.possessinginstitution:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: ['homebranch', 'holdingbranch']
+              bath.name:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'author'
+              bath.personalname:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'Personal-name'
+              bath.corporatename:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'author'
+              bath.conferencename:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'Meeting-name'
+              bath.isbn:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'isbn'
+              bath.issn:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'issn'
+              bath.geographicname:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'su-geo'
+              bath.topicalsubject:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'subject'
+              cql.serverchoice:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: '_all'
+              koha.titlemain:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'title-main'
+              koha.biblevel:
+                op:
+                  'any': true
+                  'all': true
+                  '=': true
+                  'exact': true
+                field: 'bib-level'

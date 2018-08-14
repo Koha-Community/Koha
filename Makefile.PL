@@ -610,6 +610,7 @@ get_file_map($target_map, $dirtree, $file_map);
 
 my $pl_files = {
       'rewrite-config.PL' => [
+         'blib/SCRIPT_DIR/koha-sru-server.sh',
          'blib/KOHA_CONF_DIR/koha-conf.xml',
          'blib/KOHA_CONF_DIR/koha-httpd.conf',
          'blib/KOHA_CONF_DIR/log4perl.conf',
