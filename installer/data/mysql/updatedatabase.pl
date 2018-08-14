@@ -16237,6 +16237,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20997 - Add Koha::Account::Line::apply)\n";
 }
 
+$DBversion = '18.06.00.014';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+            INSERT IGNORE INTO  systempreferences (variable, value, options, explanation) VALUES ('HidePersonalPatronDetailOnCirculation', 0, 'YesNo', 'Hide patrons phone number, email address, street address and city in the circulation page');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21121 - New syspref to allow hiding of private patron data in circulation page)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
