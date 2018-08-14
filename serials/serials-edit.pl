@@ -141,6 +141,11 @@ foreach my $serialid (@serialids) {
     {
         my $serinfo = GetSerialInformation($serialid); #TODO duplicates work done by GetSerials2 above
 
+        if (not defined($serinfo->{'serialid'})) {
+            warn "Nonexistent serial id=$serialid";
+            next;
+        }
+
         for my $d ( qw( publisheddate planneddate )){
             if ( $serinfo->{$d} =~m/^00/ ) {
                 $serinfo->{$d} = q{};
