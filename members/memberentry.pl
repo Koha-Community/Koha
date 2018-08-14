@@ -78,6 +78,10 @@ my ($template, $loggedinuser, $cookie)
 my $borrowernumber = $input->param('borrowernumber');
 my $patron         = Koha::Patrons->find($borrowernumber);
 
+if ( $borrowernumber and not $patron ) {
+    output_and_exit( $input, $cookie, $template,  'unknown_patron' );
+}
+
 if ( C4::Context->preference('SMSSendDriver') eq 'Email' ) {
     my @providers = Koha::SMS::Providers->search();
     $template->param( sms_providers => \@providers );
