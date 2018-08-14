@@ -11,5 +11,5 @@
     [% END %]
 
     [% INCLUDE 'intranet-bottom.inc' %]
-    [% STOP | html %] [%# Will stop gracefully without processing any more of the template document.%]
+    [% STOP %] [%# Will stop gracefully without processing any more of the template document.%]
 [% END %]
