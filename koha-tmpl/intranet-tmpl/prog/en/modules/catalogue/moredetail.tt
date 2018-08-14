@@ -23,6 +23,9 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
+[% IF ( undefinedrecord ) %]<div class="dialog alert">Biblio record not found.</div></body>[% STOP %][% END %]
+[% IF ( undefinedbiblionumber ) %]<div class="dialog alert">Biblionumber was not defined.</div></body>[% STOP %][% END %]
+
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item details for <i>[% title |html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield|html %][% END %]</i></div>
 
 <div id="doc3" class="yui-t2">

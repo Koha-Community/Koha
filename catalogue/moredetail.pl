@@ -90,6 +90,12 @@ my $subscriptionsnumber = CountSubscriptionFromBiblionumber($biblionumber);
 # $dewey=~ s/\.$//;
 # $data->{'dewey'}=$dewey;
 
+if (not defined $biblionumber) {
+    $template->param( undefinedbiblionumber => 1 );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
+}
+
 my $fw = GetFrameworkCode($biblionumber);
 my @all_items= GetItemsInfo($biblionumber);
 my @items;
@@ -102,6 +108,12 @@ for my $itm (@all_items) {
 }
 
 my $record=GetMarcBiblio($biblionumber);
+
+if (not defined $record) {
+    $template->param( undefinedrecord => 1 );
+    output_html_with_http_headers $query, $cookie, $template->output;
+    exit;
+}
 
 my $hostrecords;
 # adding items linked via host biblios
