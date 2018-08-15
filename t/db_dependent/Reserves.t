@@ -647,14 +647,11 @@ subtest '_koha_notify_reserve() tests' => sub {
             }
         })->{borrowernumber};
 
-    my $hold = $builder->build({
-            source => 'Reserve',
-            value => {
-               borrowernumber=>$hold_borrower
-            }
-        });
+    C4::Reserves::AddReserve(
+        $item->{homebranch}, $hold_borrower,
+        $item->{biblionumber} );
 
-    ModReserveAffect($hold->{itemnumber}, $hold->{borrowernumber}, 0);
+    ModReserveAffect($item->{itemnumber}, $hold_borrower, 0);
     my $sms_message_address = $schema->resultset('MessageQueue')->search({
             letter_code     => 'HOLD',
             message_transport_type => 'sms',
