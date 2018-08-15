@@ -83,9 +83,6 @@ KOHA_CRON_PATH = /usr/share/koha/bin/cronjobs
 # for both authorities and bibs
 */10 * * * *  __KOHA_USER__  $KOHA_CRON_PATH/../migration_tools/rebuild_zebra.pl -b -a -z >/dev/null
 
-# services_throttle -- resets the xISBN service
-59 23 * * *  __KOHA_USER__ $KOHA_CRON_PATH/services_throttle.pl > /dev/null 2>&1
-
 # clean up databases nightly.  Be sure not to run this with --sessions during a time when the system is in use!
 16 1 * * * __KOHA_USER__ $KOHA_CRON_PATH/cleanup_database.pl --sessions --zebraqueue 10 --list-invites --temp-uploads
 

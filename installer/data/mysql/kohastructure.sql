@@ -2326,17 +2326,6 @@ CREATE TABLE `zebraqueue` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `services_throttle`
---
-
-DROP TABLE IF EXISTS `services_throttle`;
-CREATE TABLE `services_throttle` (
-  `service_type` varchar(10) NOT NULL default '',
-  `service_count` varchar(45) default NULL,
-  PRIMARY KEY  (`service_type`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `language_subtag_registry`
 -- http://www.w3.org/International/articles/language-tags/
 -- RFC4646

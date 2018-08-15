@@ -141,34 +141,6 @@ sub _get_url {
 
 }
 
-
-# Throttle services to the specified amount
-sub _service_throttle {
-    my ($service_type,$daily_limit) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare(q{ SELECT service_count FROM services_throttle WHERE service_type=? });
-    $sth->execute($service_type);
-    my $count = 0;
-
-    if ($sth->rows == 0) {
-        # initialize services throttle
-        my $sth2 = $dbh->prepare(q{ INSERT INTO services_throttle (service_type, service_count) VALUES (?, ?) });
-        $sth2->execute($service_type, $count);
-    } else {
-        $count = $sth->fetchrow_array;
-    }
-
-    # we're over the limit
-    return 1 if $count >= $daily_limit;
-
-    # not over the limit
-    $count++;
-    my $sth3 = $dbh->prepare(q{ UPDATE services_throttle SET service_count=? WHERE service_type=? });
-    $sth3->execute($count, $service_type);
-
-    return undef;
-}
-
 1;
 __END__
 
