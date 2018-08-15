@@ -5,7 +5,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 3;
 use MARC::Record;
 use C4::Biblio;
 use C4::XISBN;
@@ -51,7 +51,6 @@ is( $trial->{biblionumber},
 
 ## Test ThingISBN
 t::lib::Mocks::mock_preference( 'ThingISBN', 1 );
-t::lib::Mocks::mock_preference( 'XISBN', 0 );
 
 my $results_thingisbn;
 eval { $results_thingisbn = C4::XISBN::get_xisbns($isbn1); };
@@ -61,20 +60,6 @@ SKIP: {
     is( $results_thingisbn->[0]->{biblionumber},
         $biblionumber3,
         "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
-}
-
-## Test XISBN
-t::lib::Mocks::mock_preference( 'ThingISBN', 0 );
-t::lib::Mocks::mock_preference( 'XISBN', 1 );
-
-my $results_xisbn;
-eval { ($results_xisbn, $errors) = C4::XISBN::get_xisbns($isbn1); };
-SKIP: {
-    skip "Problem retrieving XISBN (" . $errors->{xisbn} . ")", 1
-        if $errors->{xisbn};
-    is( $results_xisbn->[0]->{biblionumber},
-        $biblionumber3,
-        "Gets correct biblionumber from a book with a similar isbn using XISBN." );
 }
 
 $dbh->rollback;

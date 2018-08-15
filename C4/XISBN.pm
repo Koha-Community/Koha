@@ -80,7 +80,7 @@ sub _get_biblio_from_xisbn {
 
 sub get_xisbns {
     my ( $isbn ) = @_;
-    my ($response,$thing_response,$xisbn_response,$syndetics_response,$errors);
+    my ($response,$thing_response,$syndetics_response,$errors);
     # THINGISBN
     if ( C4::Context->preference('ThingISBN') ) {
         my $url = "http://www.librarything.com/api/thingISBN/".$isbn;
@@ -96,21 +96,7 @@ sub get_xisbns {
 		$syndetics_response = {isbn => \@syndetics_response};
 	}
 
-    # XISBN
-    if ( C4::Context->preference('XISBN') ) {
-        my $affiliate_id=C4::Context->preference('OCLCAffiliateID');
-        my $limit = C4::Context->preference('XISBNDailyLimit') || 999;
-        my $reached_limit = _service_throttle('xisbn',$limit);
-        my $url = "http://xisbn.worldcat.org/webservices/xid/isbn/".$isbn."?method=getEditions&format=xml&fl=form,year,lang,ed";
-        $url.="&ai=".$affiliate_id if $affiliate_id;
-        unless ($reached_limit) {
-            $xisbn_response = _get_url($url,'xisbn');
-        }
-        $errors->{xisbn} = $xisbn_response->{ stat }
-            if $xisbn_response->{ stat } ne 'ok';
-    }
-
-    $response->{isbn} = [ @{ $xisbn_response->{isbn} or [] },  @{ $syndetics_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] } ];
+    $response->{isbn} = [ @{ $syndetics_response->{isbn} or [] }, @{ $thing_response->{isbn} or [] } ];
     my @xisbns;
     my $unique_xisbns; # a hashref
 
