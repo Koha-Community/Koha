@@ -85,4 +85,25 @@ sub InIndependentBranchesMode {
     return ( not C4::Context->preference("IndependentBranches") or C4::Context::IsSuperLibrarian );
 }
 
+sub pickup_locations {
+    my ( $self, $params ) = @_;
+    $params->{search_params} ||= {};
+    $params->{search_params}->{pickup_location} = 1;
+    return $self->all($params);
+
+    my $selected  = $params->{selected};
+    my $libraries = Koha::Libraries->pickup_locations($params);
+    for my $l (@$libraries) {
+        if ( defined $selected and $l->{branchcode} eq $selected
+            or not defined $selected
+            and C4::Context->userenv
+            and $l->{branchcode} eq C4::Context->userenv->{branch} )
+        {
+            $l->{selected} = 1;
+        }
+    }
+
+    return $libraries;
+}
+
 1;
