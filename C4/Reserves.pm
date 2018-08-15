@@ -273,7 +273,7 @@ See CanItemBeReserved() for possible return values.
 =cut
 
 sub CanBookBeReserved{
-    my ($borrowernumber, $biblionumber, $branchcode) = @_;
+    my ($borrowernumber, $biblionumber, $pickup_branchcode) = @_;
 
     my @itemnumbers = Koha::Items->search({ biblionumber => $biblionumber})->get_column("itemnumber");
     #get items linked via host records
@@ -284,7 +284,7 @@ sub CanBookBeReserved{
 
     my $canReserve;
     foreach my $itemnumber (@itemnumbers) {
-        $canReserve = CanItemBeReserved( $borrowernumber, $itemnumber, $branchcode );
+        $canReserve = CanItemBeReserved( $borrowernumber, $itemnumber, $pickup_branchcode );
         return $canReserve if $canReserve->{status} eq 'OK';
     }
     return $canReserve;
@@ -307,7 +307,7 @@ sub CanBookBeReserved{
 =cut
 
 sub CanItemBeReserved {
-    my ( $borrowernumber, $itemnumber, $branchcode_to ) = @_;
+    my ( $borrowernumber, $itemnumber, $pickup_branchcode ) = @_;
 
     my $dbh = C4::Context->dbh;
     my $ruleitemtype;    # itemtype of the matching issuing rule
@@ -460,9 +460,9 @@ sub CanItemBeReserved {
         }
     }
 
-    if ($branchcode_to) {
+    if ($pickup_branchcode) {
         my $destination = Koha::Libraries->find({
-            branchcode => $branchcode_to,
+            branchcode => $pickup_branchcode,
         });
         unless ($destination) {
             return { status => 'libraryNotFound' };
