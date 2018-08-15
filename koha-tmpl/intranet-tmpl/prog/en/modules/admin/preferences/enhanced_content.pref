@@ -186,22 +186,6 @@ Enhanced Content:
                   yes: Add
                   no: "Don't add"
             - the rating from <a href='https://idreambooks.com/'>IDreamBooks.com</a> to OPAC search results.
-    OCLC:
-        -
-            - pref: XISBN
-              choices:
-                  yes: Use
-                  no: "Don't use"
-            - the OCLC xISBN service to show other editions of a title (when either FRBRizeEditions or OPACFRBRizeEditions is on).
-        -
-            - Use the <a href="http://www.worldcat.org/affiliate/webservices/xisbn/app.jsp">OCLC affiliate ID</a>
-            - pref: OCLCAffiliateID
-            - to access the xISBN service. Note that unless you have signed up for an ID, you are limited to 1000 requests per day.
-        -
-            - Only use the xISBN service
-            - pref: XISBNDailyLimit
-              class: integer
-            - times a day. Unless you are paying for the xISBN service, you should leave this at the default of 999 (as detailed above).
     Syndetics:
         -
             - pref: SyndeticsEnabled
