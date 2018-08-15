@@ -256,7 +256,7 @@ sub initFromRequest{
                                          $nullSelected = 1;
                                          #$nullSelectColumns->{$filter->getField()} = 1;
                                     }
-                                    push $tmpOptions, $selectedOption->{name};
+                                    push @{$tmpOptions}, $selectedOption->{name};
                                 }
                             }
                             $tmpOptions = $filter->modifyOptions($tmpOptions);
@@ -402,10 +402,10 @@ sub addGrouping{
     my $grouping = $self->getObjectFactory()->createObject($class);
     if($grouping && $grouping->getName()){
         $self->{groupingsHash}->{$grouping->getName()} = $grouping;
-        push $self->{groupings}, $grouping;
+        push @{$self->{groupings}}, $grouping;
 
         if(defined $grouping->getUseAlways()){
-            push $self->{hard_coded_groupings}, $grouping->getName();
+            push @{$self->{hard_coded_groupings}}, $grouping->getName();
         }
     }
 }
@@ -440,7 +440,7 @@ sub addOrdering{
     my $ordering = $_[1];
     if($name && $ordering){
         $self->{orderingsHash}->{$name} = $ordering;
-        push $self->{orderings}, $ordering;
+        push @{$self->{orderings}}, $ordering;
     }
 }
 
@@ -450,7 +450,7 @@ sub addFilter{
     my $filter = $self->getObjectFactory()->createObject($class);
     if($filter && $filter->getName()){
         $self->{filtersHash}->{$filter->getName()} = $filter;
-        push $self->{filters}, $filter;
+        push @{$self->{filters}}, $filter;
     }
 }
 

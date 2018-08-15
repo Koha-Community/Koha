@@ -24,7 +24,7 @@ sub loadOptions{
 
     while ($i < 12 ) {
        $i++;
-       push $options, {'name' => "$i", 'description' => "$i"};
+       push @{$options}, {'name' => "$i", 'description' => "$i"};
     }
 
     return $options;

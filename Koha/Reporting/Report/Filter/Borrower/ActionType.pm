@@ -31,7 +31,7 @@ sub getConditionString{
                 $notLoaned = $self->getNotLoanedCondition($table);
             }
             else{
-                push $tmpOptions, $option;
+                push @{$tmpOptions}, $option;
             }
         }
         $options = $tmpOptions;

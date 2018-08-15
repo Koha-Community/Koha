@@ -113,7 +113,7 @@ sub addReportToList{
     my $name = $_[0];
     my $class = $_[1];
     if($name && $class){
-        push $self->{reports_class_map_names}, $name;
+        push @{$self->{reports_class_map_names}}, $name;
         $self->{reports_class_map}->{$name} = $class;
     }
 }
@@ -127,7 +127,7 @@ sub createReport{
         $report = $self->getObjectFactory()->createObject($class);
         if($report){
             $report->setName($name);
-            push $self->{reports_list},  $report;
+            push @{$self->{reports_list}}, $report;
             $self->{reports_hash}->{$report->getName()} = $report;
         }
     }

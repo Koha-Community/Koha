@@ -45,24 +45,24 @@ sub loadOptions{
             my $name = '';
             if($row->{category} eq 'DAMAGED'){
                 $name  = 'damaged-' . $row->{authorised_value};
-                push $damaged, $name;
+                push @{$damaged}, $name;
             }
             elsif($row->{category} eq 'NOT_LOAN'){
                 $name  = 'notforloan-' . $row->{authorised_value};
-                push $notloan, $name;
+                push @{$notloan}, $name;
             }
             elsif($row->{category} eq 'LOST'){
                 $name  = 'lost-' . $row->{authorised_value};
-                push $lost, $name;
+                push @{$lost}, $name;
             }
         }
     }
 
-    push $options, { 'name' => 'loaned', 'description' => 'Loaned', 'linked_filter' => 'item_status_no_summary_options'  };
-    push $options, { 'name' => 'available', 'description' => 'Available' , 'linked_filter' => 'item_status_no_summary_options'};
-    push $options, { 'name' => 'damaged', 'description' => 'Damaged' , 'linked_options' => $damaged, 'linked_filter' => 'item_status_no_summary_options'};
-    push $options, { 'name' => 'notforloan', 'description' => 'Not for loan' , 'linked_options' => $notloan, 'linked_filter' => 'item_status_no_summary_options'};
-    push $options, { 'name' => 'lost', 'description' => 'Lost' , 'linked_options' => $lost, 'linked_filter' => 'item_status_no_summary_options'};
+    push @{$options}, { 'name' => 'loaned', 'description' => 'Loaned', 'linked_filter' => 'item_status_no_summary_options'  };
+    push @{$options}, { 'name' => 'available', 'description' => 'Available' , 'linked_filter' => 'item_status_no_summary_options'};
+    push @{$options}, { 'name' => 'damaged', 'description' => 'Damaged' , 'linked_options' => $damaged, 'linked_filter' => 'item_status_no_summary_options'};
+    push @{$options}, { 'name' => 'notforloan', 'description' => 'Not for loan' , 'linked_options' => $notloan, 'linked_filter' => 'item_status_no_summary_options'};
+    push @{$options}, { 'name' => 'lost', 'description' => 'Lost' , 'linked_options' => $lost, 'linked_filter' => 'item_status_no_summary_options'};
     return $options;
 }
 
@@ -96,7 +96,7 @@ sub customLogic{
                 if(@$linkedOptionsTmp){
                     foreach my $linkedOption (@$linkedOptionsTmp){
                         if(defined $linkedOption->{name}){
-                           push $linkedOptions, $linkedOption->{name};
+                           push @{$linkedOptions}, $linkedOption->{name};
                         }
                     }
                 }
@@ -117,7 +117,7 @@ sub customLogic{
                 }
                 $dimension->addExtraJoin('INNER JOIN items on ' . $dimension->getFullColumn('itemnumber') . ' = items.itemnumber ');
                 if(defined $conditionString && $conditionString ne ''){
-                    push $dimension->{filters}, {'logic' => $self->getLogic(), 'condition' => $conditionString, 'type' => 'filter'};
+                    push @{$dimension->{filters}}, {'logic' => $self->getLogic(), 'condition' => $conditionString, 'type' => 'filter'};
                 }
                 my $processedDateSelect = 'IF(items.damaged = 3, items.timestamp, "-") ';
                 my $processedAlias = 'Processed Date';
@@ -131,7 +131,7 @@ sub customLogic{
                 }
                 $dimension->addExtraJoin('INNER JOIN items on ' . $dimension->getFullColumn('itemnumber') . ' = items.itemnumber ');
                 if(defined $conditionString && $conditionString ne ''){
-                    push $dimension->{filters}, {'logic' => $self->getLogic(), 'condition' => $conditionString, 'type' => 'filter'};
+                    push @{$dimension->{filters}}, {'logic' => $self->getLogic(), 'condition' => $conditionString, 'type' => 'filter'};
                 }
             }
             elsif($selectedValue eq 'lost'){
@@ -141,7 +141,7 @@ sub customLogic{
                 }
                 $dimension->addExtraJoin('INNER JOIN items on ' . $dimension->getFullColumn('itemnumber') . ' = items.itemnumber ');
                 if(defined $conditionString && $conditionString ne ''){
-                    push $dimension->{filters}, {'logic' => $self->getLogic(), 'condition' => $conditionString, 'type' => 'filter'};
+                    push @{$dimension->{filters}}, {'logic' => $self->getLogic(), 'condition' => $conditionString, 'type' => 'filter'};
                 }
             }
         }
@@ -159,7 +159,7 @@ sub getLinkedOptionsCondition{
         $selectedValue .= '-';
         foreach my $linkedOption (@$linkedOptions){
             $linkedOption =~ s/$selectedValue//g;
-            push $linkedOptionsTmp, $linkedOption;
+            push @{$linkedOptionsTmp}, $linkedOption;
         }
         $conditionString = $self->getArrayCondition($linkedOptionsTmp);
     }

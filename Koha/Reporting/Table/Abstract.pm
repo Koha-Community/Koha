@@ -171,7 +171,7 @@ sub addFilter{
     if(defined $filter && defined $options){
         $conditionString = $filter->getConditionString($self, $options);
         if(defined $conditionString && $conditionString ne ''){
-            push $self->{filters}, {'logic' => $filter->getLogic(), 'condition' => $conditionString, 'type' => $filter->getFilterType(), 'name' => $filter->getName()};
+            push @{$self->{filters}}, {'logic' => $filter->getLogic(), 'condition' => $conditionString, 'type' => $filter->getFilterType(), 'name' => $filter->getName()};
             $self->setIsNeeded(1);
         }
     }
@@ -205,7 +205,7 @@ sub addFieldToSelect{
 
     if(! defined $self->{select_columns_hash}->{$selectField} ){
         $self->{select_columns_hash}->{$selectField} = $field;
-        push $self->{select_columns}, $selectField;
+        push @{$self->{select_columns}}, $selectField;
         if(defined $alias && $alias ne ''){
             $self->{select_columns_alias_hash}->{$selectField} = $alias;
         }
@@ -230,7 +230,7 @@ sub groupBy{
 
     if(defined $groupField){
         $self->addFieldToSelect($field, $alias, $noFullField, $selectNulls);
-        push $self->{groups}, $groupField;
+        push @{$self->{groups}}, $groupField;
         $self->setIsNeeded(1);
     }
 
@@ -265,7 +265,7 @@ sub orderBy{
     }
 
     if($field){
-        push $self->{orderings}, {'field' => $orderField, 'direction' => $direcition };
+        push @{$self->{orderings}}, {'field' => $orderField, 'direction' => $direcition };
         $self->setIsNeeded(1);
     }
 }
@@ -283,7 +283,7 @@ sub addExtraJoin{
     my $self = shift;
     my $join = $_[0];
     if(defined $join){
-        push $self->{extra_joins}, $join;
+        push @{$self->{extra_joins}}, $join;
     }
 }
 
@@ -446,7 +446,7 @@ sub getRowBusinessKey{
     my $row = $_[0];
     my $keys = {};
     my $businessKeyNumbers = $self->getImportRowBusinessKeyNo();
-    foreach my $column (keys $businessKeyNumbers){
+    foreach my $column (keys %{$businessKeyNumbers}){
         if($row && defined $businessKeyNumbers->{$column} && defined $$row[$businessKeyNumbers->{$column}]){
            $keys->{$column} = $$row[$businessKeyNumbers->{$column}];
         }
@@ -512,7 +512,7 @@ sub addImportColumn{
     my $column = $_[0];
     my $ref;
     if($column){
-        push $self->{import_columns}, $column;
+        push @{$self->{import_columns}}, $column;
         my $businessKeys = $self->getBusinessKey();
         foreach my $businessKey (@$businessKeys){
            if($businessKey eq $column){

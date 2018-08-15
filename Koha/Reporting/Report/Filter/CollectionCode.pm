@@ -27,7 +27,7 @@ sub loadOptions{
     if ($stmnt->rows >= 1){
         while ( my $row = $stmnt->fetchrow_hashref ) {
             my $option = {'name' => $row->{'authorised_value'}, 'description' => $row->{'lib'}};
-            push $options, $option;
+            push @{$options}, $option;
         }
     }
     return $options;

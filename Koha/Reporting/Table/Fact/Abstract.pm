@@ -314,7 +314,7 @@ sub addImportColumn{
     my $column = $_[0];
     my $ref;
     if($column){
-        push $self->{import_columns}, $column;
+        push @{$self->{import_columns}}, $column;
     }
 }
 
@@ -322,7 +322,7 @@ sub addTmpImportRow{
     my $self = shift;
     my $row = $_[0];
     if(%$row){
-        push $self->{tmp_import_rows}, $row;
+        push @{$self->{tmp_import_rows}}, $row;
     }
 }
 
@@ -330,7 +330,7 @@ sub addImportRow{
     my $self = shift;
     my $row = $_[0];
     if(@$row){
-        push $self->{import_rows}, $row;
+        push @{$self->{import_rows}}, $row;
     }
 }
 

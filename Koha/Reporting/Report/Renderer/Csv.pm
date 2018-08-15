@@ -130,7 +130,7 @@ sub generateRows {
                     if(!defined $row->{$group}){
                        last;
                     }
-                    push $groupValues->{$group}, $row->{$group};
+                    push @{$groupValues->{$group}}, $row->{$group};
                     my $key = $row->{$group};
                     if($group ne $lastGroup){
                         if(!defined $dataHash->{$key}){
@@ -151,7 +151,7 @@ sub generateRows {
             }
         }
 
-        foreach my $group (keys $groupValues){
+        foreach my $group (keys %{$groupValues}){
              my $groupArray = $groupValues->{$group};
              $groupArray = $self->uniq($groupArray);
 	     my @tmp = $self->nsort(@$groupArray); 
@@ -172,7 +172,7 @@ sub generateRows {
                 my $tmpDataHash;
                 my $dataRow = [];
                 $self->{current_column} = [];
-                push $dataRow, $value; #Header value
+                push @{$dataRow}, $value; #Header value
                 if(defined $datas->{$value}){
                     $tmpDataHash = $datas->{$value};
                 }
@@ -182,18 +182,18 @@ sub generateRows {
                     my $currentRow = $self->getCurrentRow();
                     if(defined $self->{row_counters}->{$currentRow}){
                         my $rowCounterValue = $self->getReport()->formatSumValue($self->{row_counters}->{$currentRow});
-                        push $dataRow, $rowCounterValue;
+                        push @{$dataRow}, $rowCounterValue;
                     }
                 }
                 elsif(ref $tmpDataHash ne 'HASH'){
                     $self->setCurrentRow($value);
                     $self->addToRowCounter($tmpDataHash);
                     $tmpDataHash = $self->getReport()->formatSumValue($tmpDataHash);
-                    push $dataRow, $tmpDataHash;
+                    push @{$dataRow}, $tmpDataHash;
                 }
 
                 if($dataRow){
-                    push $rowDatas, $dataRow;
+                    push @{$rowDatas}, $dataRow;
                 }
             }
         }
@@ -208,18 +208,18 @@ sub generateRows {
                         if($column eq $dataColumn){
                             $colValue = $self->getReport()->formatSumValue($colValue);
                         }
-                        push $rowData, $colValue;
+                        push @{$rowData}, $colValue;
                     }
                 }
-                push $rowDatas, $rowData;
+                push @{$rowDatas}, $rowData;
             }
         }
     }
     if(@{$self->{column_counters}}){
         my $sumRow = ['sum'];
-        push $sumRow, $self->getColumnCounterSumValues();
+        push @{$sumRow}, $self->getColumnCounterSumValues();
         if(%{$self->{row_counters}}){
-            push $sumRow, $self->getRowCounterSum();
+            push @{$sumRow}, $self->getRowCounterSum();
             if(@$headerRows){
                 for my $index (0 .. $#$headerRows) {
                     my $headerRow = @$headerRows[$index];
@@ -227,17 +227,17 @@ sub generateRows {
                     if($index == 0){
                         $heading = 'sum';
                     }
-                    push $headerRow, $heading;
+                    push @{$headerRow}, $heading;
                 }
             }
         }
-        push $rowDatas, $sumRow;
+        push @{$rowDatas}, $sumRow;
     }
     else{
         my $sumRow = ['sum'];
         if(%{$self->{row_counters}}){
-            push $sumRow, $self->getRowCounterSum();
-            push $rowDatas, $sumRow;
+            push @{$sumRow}, $self->getRowCounterSum();
+            push @{$rowDatas}, $sumRow;
         }
     }
     return ($headerRows, $rowDatas);
@@ -254,11 +254,11 @@ sub getHeaderRows{
         my $groupsValues = $self->getGroupsValues()->{$group};
         my $groupValuesLength = @$groupsValues;
         foreach my $value (@$groupsValues){
-            push $row, $value;
-            push $row, $self->addEmptyColumns($groupValuesLengths);
+            push @{$row}, $value;
+            push @{$row}, $self->addEmptyColumns($groupValuesLengths);
         }
-        push $headerRows, $row;
-        push $groupValuesLengths, $groupValuesLength;
+        push @{$headerRows}, $row;
+        push @{$groupValuesLengths}, $groupValuesLength;
     }
     $headerRows = $self->multiplyHeaderRows($headerRows);
     my @headerRows = reverse @$headerRows;
@@ -272,14 +272,14 @@ sub getOneHeaderRow{
     my $columns = $self->getColumns();
     my $headerRow = [];
     if(defined $firstGroup){
-        push $headerRow, $firstGroup;
+        push @{$headerRow}, $firstGroup;
     }
     foreach my $column (@$columns){
-        push $headerRow, $column;
+        push @{$headerRow}, $column;
     }
 
     if(@$headerRow){
-        push $headerRows, $headerRow;
+        push @{$headerRows}, $headerRow;
     }
     return $headerRows;
 }
@@ -298,10 +298,10 @@ sub multiplyHeaderRows{
                 if($rowLength){
                     my $multiplier = $lastLength / $rowLength;
                     while($multiplier > 0){
-                        push $tmpRow, @$row;
+                        push @{$tmpRow}, @$row;
                         $multiplier--;
                     }
-                    push $newHeader, $tmpRow;
+                    push @{$newHeader}, $tmpRow;
                 }
             }
         }
@@ -358,7 +358,7 @@ sub getDataRow{
              $self->addToColumnCounter(\@currentColumn, $value, $val);
              $self->addToRowCounter($val);
              $val = $self->getReport()->formatSumValue($val);
-             push $row, $val;
+             push @{$row}, $val;
          }
          else{
              push @currentColumn, $value;
@@ -400,7 +400,7 @@ sub addToColumnCounter{
             $index = @{$self->{column_counters}};
         }
         $hash->{$lastColumnPart} = @{$self->{column_counters}};
-        push $self->{column_counters}, $value;
+        push @{$self->{column_counters}}, $value;
     }
     else{
         $self->{column_counters}[$hash->{$lastColumnPart}] += $value;
@@ -423,7 +423,7 @@ sub getColumnCounterSumValues{
     my $self = shift;
     my $counterValues = [];
     foreach my $counterValue (@{$self->{column_counters}}){
-        push $counterValues, $self->getReport()->formatSumValue($counterValue);
+        push @{$counterValues}, $self->getReport()->formatSumValue($counterValue);
     }
     return @$counterValues;
 }
@@ -449,7 +449,7 @@ sub addGroup{
     my $groupField = $_[0];
 
    if($groupField){
-       push $self->{groups}, $groupField;
+       push @{$self->{groups}}, $groupField;
    }
 }
 
@@ -458,7 +458,7 @@ sub addColumn{
     my $column = $_[0];
 
    if($column){
-       push $self->{columns}, $column;
+       push @{$self->{columns}}, $column;
    }
 }
 
@@ -470,7 +470,7 @@ sub uniq {
     foreach my $value (@$arrayRef){
         if(!defined $valueHash->{$value}){
             $valueHash->{$value} = $value;
-            push $result, $value;
+            push @{$result}, $value;
         }
     }
     return $result;

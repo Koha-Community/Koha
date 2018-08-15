@@ -98,28 +98,28 @@ sub update{
                 }
 
                 if($self->compareDates($date, $compareDate)){
-                    push $datesByBiblioitem->{$biblioitemnumber}->{$branchGroup}->{'item_ids'}, $itemId;
+                    push @{$datesByBiblioitem->{$biblioitemnumber}->{$branchGroup}->{'item_ids'}}, $itemId;
                 }
                 else{
                     $datesByBiblioitem->{$biblioitemnumber}->{$branchGroup}->{'date'} = $date;
                     $datesByBiblioitem->{$biblioitemnumber}->{$branchGroup}->{'item_ids'} = [];
-                    push $datesByBiblioitem->{$biblioitemnumber}->{$branchGroup}->{'item_ids'}, $itemId;
+                    push @{$datesByBiblioitem->{$biblioitemnumber}->{$branchGroup}->{'item_ids'}}, $itemId;
                 }
             }
         }
     }
 
-    foreach my $bibNumber (keys $datesByBiblioitem){
+    foreach my $bibNumber (keys %{$datesByBiblioitem}){
        my $firstDatas = $datesByBiblioitem->{$bibNumber};
-       foreach my $branchGroup (keys $firstDatas){
+       foreach my $branchGroup (keys %{$firstDatas}){
             if(defined $firstDatas->{$branchGroup}->{item_ids}){
                 my $itemIds = $firstDatas->{$branchGroup}->{item_ids};
                 if(defined $branchGroup && @$itemIds){
                     foreach my $itemId(@$itemIds){
                         if(defined $itemId && defined $branchGroup){
                             my $row = [];
-                            push $row, $itemId;
-                            push $row, $branchGroup;
+                            push @{$row}, $itemId;
+                            push @{$row}, $branchGroup;
                             $self->addRowToBunch($row);
                         }
                     }
@@ -201,7 +201,7 @@ sub loadBranchGroups{
                 if(!defined $self->{branch_groups}->{$row->{branchcode}}){
                     $self->{branch_groups}->{$row->{branchcode}} = [];
                 }
-                push $self->{branch_groups}->{$row->{branchcode}}, $row->{categorycode};
+                push @{$self->{branch_groups}->{$row->{branchcode}}}, $row->{categorycode};
             }
         }
     }
@@ -286,17 +286,18 @@ sub addRowToBunch{
         my $bunches = $self->getBunches();
         my $bunchRowCount = $self->getBunchRowCount();
         if(@$bunches == 0){
-            push $bunches, [];
+            push @{$bunches}, [];
         }
 
         if($bunchRowCount >= $self->getBunchLimit()){
             $currentBunch++;
             $self->setCurrentBunch($currentBunch);
             $bunchRowCount = 0;
-            push $bunches, [];
+            push @{$bunches}, [];
         }
-        if(defined @$bunches[$currentBunch]){
-            push @$bunches[$currentBunch], $row;
+	my @tmpbunch = @{$bunches};
+        if(defined $tmpbunch[$currentBunch]){
+            push @{$tmpbunch[$currentBunch]}, $row;
         }
         $self->setBunches($bunches);
         $bunchRowCount++;

@@ -198,7 +198,7 @@ sub getConditionString{
                    $addNullOr = 1;
                }
                else{
-                   push $tmpOptions, $option;
+                   push @{$tmpOptions}, $option;
                }
             }
             $options = $tmpOptions;
@@ -239,10 +239,10 @@ sub getOptions{
     if(@$options <= 0){
         $options = $self->loadOptions();
         if($self->getAddSelectAllOption()){
-            unshift $options, {'name' => 'select_all', 'description' => 'Select All'};
+            unshift @{$options}, {'name' => 'select_all', 'description' => 'Select All'};
         }
         if($self->getAddNotSetOption()){
-            push $options, {'name' => 'null', 'description' => 'Not set'};
+            push @{$options}, {'name' => 'null', 'description' => 'Not set'};
         }
         $self->{options} = $options;
     }

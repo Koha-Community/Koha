@@ -25,12 +25,12 @@ sub loadOptions{
     my $dbh = C4::Context->dbh;
     my $options = [];
 
-    push $options, { 'name' => 'nothing_selected', 'description' => 'Nothing Selected' };
-    push $options, { 'name' => 'loaned', 'description' => 'Loaned' };
-    push $options, { 'name' => 'available', 'description' => 'Available' };
-    push $options, { 'name' => 'damaged', 'description' => 'Damaged' };
-    push $options, { 'name' => 'notforloan', 'description' => 'Not for loan' };
-    push $options, { 'name' => 'lost', 'description' => 'Lost' };
+    push @{$options}, { 'name' => 'nothing_selected', 'description' => 'Nothing Selected' };
+    push @{$options}, { 'name' => 'loaned', 'description' => 'Loaned' };
+    push @{$options}, { 'name' => 'available', 'description' => 'Available' };
+    push @{$options}, { 'name' => 'damaged', 'description' => 'Damaged' };
+    push @{$options}, { 'name' => 'notforloan', 'description' => 'Not for loan' };
+    push @{$options}, { 'name' => 'lost', 'description' => 'Lost' };
     return $options;
 }
 

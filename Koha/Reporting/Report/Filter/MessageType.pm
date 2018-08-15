@@ -27,7 +27,7 @@ sub loadOptions{
     if ($stmnt->rows >= 1){
         while ( my $row = $stmnt->fetchrow_hashref ) {
             my $option = {'name' => $row->{'message_type'}, 'description' => $row->{'message_type'}};
-            push $options, $option;
+            push @{$options}, $option;
         }
     }
 

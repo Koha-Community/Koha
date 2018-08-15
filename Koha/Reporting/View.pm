@@ -40,7 +40,7 @@ sub createReportsViewJson{
             if(!defined $grouping->getNoDisplay()){
                 my $groupingHash = $grouping->toHash();
                 if($groupingHash){
-                    push $jsonData->{'groupings'}, $groupingHash;
+                    push @{$jsonData->{'groupings'}}, $groupingHash;
                 }
             }
         }
@@ -50,7 +50,7 @@ sub createReportsViewJson{
         foreach my $filter (@$filters){
             my $filterHash = $filter->toHash();
             if($filterHash){
-                push $jsonData->{'filters'}, $filterHash;
+                push @{$jsonData->{'filters'}}, $filterHash;
             }
         }
         my $hasTopLimit = $report->getHasTopLimit();
@@ -61,7 +61,7 @@ sub createReportsViewJson{
             }
         }
 
-        push $jsonDatas, $jsonData;
+        push @{$jsonDatas}, $jsonData;
     }
     return $jsonDatas;
 }
