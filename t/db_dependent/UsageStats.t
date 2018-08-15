@@ -468,7 +468,6 @@ sub mocking_systempreferences_to_a_set_value {
         LocalCoverImages
         OPACLocalCoverImages
         NovelistSelectEnabled
-        XISBN
         OpenLibraryCovers
         OpenLibrarySearch
         UseKohaPlugins

@@ -215,7 +215,6 @@ sub BuildReport {
         LocalCoverImages
         OPACLocalCoverImages
         NovelistSelectEnabled
-        XISBN
         OpenLibraryCovers
         OpenLibrarySearch
         UseKohaPlugins
