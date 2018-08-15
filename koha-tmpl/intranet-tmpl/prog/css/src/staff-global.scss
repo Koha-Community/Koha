@@ -30,16 +30,6 @@ a {
         text-decoration: none;
     }
 
-    &.btn {
-        color: #004D99;
-        text-decoration: none;
-
-        &:link,
-        &:visited {
-            color: #333333;
-        }
-    }
-
     &:hover,
     &:active {
         color: #538200;
@@ -52,17 +42,23 @@ a {
         }
     }
 
-    .btn-link {
+    &.btn {
         &:link,
         &:visited {
-            color: #004D99;
+            color: #333333;
         }
 
-        &:hover {
-            color: #538200;
+        &.btn-link {
+            &:link,
+            &:visited {
+                color: #004D99;
+            }
+
+            &:hover {
+                color: #538200;
+            }
         }
     }
-
 
     &.cancel {
         padding-left: 1em;
