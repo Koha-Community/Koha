@@ -75,7 +75,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     }
 );
 
-my %renewed = map { $_ => 1 } split( ':', $query->param('renewed') );
+my %renewed = map { $_ => 1 } split( ':', $query->param('renewed') || '' );
 
 my $show_priority;
 for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
@@ -364,7 +364,7 @@ $template->param(
 # back to the opac-results page
 my $search_query = $query->param('has-search-query');
 
-if ($search_query ne '') {
+if ($search_query) {
 
     print $query->redirect(
         -uri    => "/cgi-bin/koha/opac-search.pl?$search_query",
