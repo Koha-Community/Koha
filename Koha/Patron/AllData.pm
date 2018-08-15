@@ -71,7 +71,7 @@ sub getall {
         $jsonObject->{suggestions} = Koha::Suggestions->search({suggestedby => $borrowernumber})->unblessed;
         my ($ills, $illserror) = Koha::Patron::AllData->getill({borrowernumber => $borrowernumber});
         if ($ills) {
-            foreach my $key (keys $ills) {
+            foreach my $key (keys %{$ills}) {
                 $jsonObject->{$key} = $ills->{$key};
             }
         }
@@ -267,7 +267,7 @@ sub getill {
         my $config = from_json($remoteApis);
         if ($config->{ill}) {
             my $apiparams = "?";
-            foreach my $key (keys $config->{ill}->{params}) {
+            foreach my $key (keys %{$config->{ill}->{params}}) {
                 if (exists $patron->{$config->{ill}->{params}->{$key}}) {
                     $apiparams .= $key."=".$patron->{$config->{ill}->{params}->{$key}};
                 } else {
