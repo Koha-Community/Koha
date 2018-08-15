@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 62;
+use Test::More tests => 55;
 use MARC::Record;
 use Koha::Patrons;
 use C4::Items;
