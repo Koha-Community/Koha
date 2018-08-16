@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Exception;
 
 subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
@@ -41,3 +41,23 @@ subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
 
+subtest 'Koha::Exceptions::Password tests' => sub {
+
+    plan tests => 5;
+
+    use_ok('Koha::Exceptions::Password');
+
+    throws_ok
+        { Koha::Exceptions::Password::TooShort->throw( length => 4, min_length => 5 ); }
+        'Koha::Exceptions::Password::TooShort',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", 'Password length (4) is shorter than required (5)', 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Password::TooShort->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Password::TooShort',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+};
