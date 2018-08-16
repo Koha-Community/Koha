@@ -503,6 +503,15 @@ sub ModSuggestion {
         # fetch the entire updated suggestion so that we can populate the letter
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
         my $patron = Koha::Patrons->find( $full_suggestion->{suggestedby} );
+        my $transport;
+
+        #Set message_transport_type of suggestion notice to email by default, unless the patron has a smsalertnumber set and no email address set
+        if ($patron->smsalertnumber && (!$patron->email)) {
+            $transport="sms";
+        } else {
+            $transport="email";
+        }
+
         if (
             my $letter = C4::Letters::GetPreparedLetter(
                 module      => 'suggestions',
@@ -524,7 +533,7 @@ sub ModSuggestion {
                     borrowernumber => $full_suggestion->{suggestedby},
                     suggestionid   => $full_suggestion->{suggestionid},
                     LibraryName    => C4::Context->preference("LibraryName"),
-                    message_transport_type => 'email',
+                    message_transport_type => $transport,
                 }
             ) or warn "can't enqueue letter $letter";
         }
