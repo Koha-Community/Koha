@@ -1936,7 +1936,9 @@ sub AddReturn {
         UpdateHoldingbranch($branch, $item->{'itemnumber'});
         $item->{'holdingbranch'} = $branch; # update item data holdingbranch too
     }
-    ModDateLastSeen( $item->{'itemnumber'} );
+
+    my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
+    ModDateLastSeen( $item->{itemnumber}, $leave_item_lost );
 
     # check if we have a transfer for this document
     my ($datesent,$frombranch,$tobranch) = GetTransfers( $item->{'itemnumber'} );

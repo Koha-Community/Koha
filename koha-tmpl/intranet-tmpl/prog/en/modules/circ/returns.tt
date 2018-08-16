@@ -494,7 +494,12 @@
                 <p class="problem">Local use recorded</p>
             [% END %]
             [% IF ( errmsgloo.waslost ) %]
-                <p class="problem">Item was lost, now found.</p>
+                [% IF Koha.Preference('BlockReturnOfLostItems') %]
+                    <p class="problem">Item is lost, cannot be checked in.</p>
+                [% ELSE %]
+                    <p class="problem">Item was lost, now found.</p>
+                [% END %]
+
                 [% IF LostItemFeeRefunded and not Koha.Preference('BlockReturnOfLostItems') %]
                     <p class="problem">A refund has been applied to the borrowing patron's account.</p>
                 [% ELSIF Koha.Preference('BlockReturnOfLostItems') %]
