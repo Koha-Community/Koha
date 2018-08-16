@@ -86,7 +86,7 @@ subtest 'set() (authorized user tests)' => sub {
 
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(400)->json_is({ error => 'Password contains trailing spaces, which is forbidden.' });
+    $t->request_ok($tx)->status_is(400)->json_is({ error => '[Password contains leading/trailing whitespace character(s)]' });
 
     $new_password = 'abcdefg';
     $tx
@@ -106,7 +106,7 @@ subtest 'set() (authorized user tests)' => sub {
 
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
-    $t->request_ok($tx)->status_is(400)->json_is({ error => 'Password is too weak' });
+    $t->request_ok($tx)->status_is(400)->json_is({ error => '[Password is too weak]' });
 
     $new_password = 'ABcde123%&';
     $tx
