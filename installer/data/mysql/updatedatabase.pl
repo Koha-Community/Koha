@@ -16246,6 +16246,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21121 - New syspref to allow hiding of private patron data in circulation page)\n";
 }
 
+$DBversion = '18.06.00.015';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{DELETE FROM systempreferences where variable="OCLCAffiliateID";});
+    $dbh->do(q{DELETE FROM systempreferences where variable="XISBN";});
+    $dbh->do(q{DELETE FROM systempreferences where variable="XISBNDailyLimit";});
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21226 - Remove prefs OCLCAffiliateID, XISBN and XISBNDailyLimit)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
