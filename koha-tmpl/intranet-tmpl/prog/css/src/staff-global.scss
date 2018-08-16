@@ -4,7 +4,7 @@ $font-main: Arial, Verdana, Helvetica, sans-serif;
 $font-monospace: "Courier New", Courier, monospace;
 
 @mixin default-button {
-    background: linear-gradient(to bottom, #FFFFFF 0%, #F7F7F7 35%, #E0E0E0 100%); /* W3C */
+    background: linear-gradient(to bottom, #FFFFFF 0%, #F7F7F7 35%, #E0E0E0 100%);
     border: 1px outset #999999;
     border-left-color: #666;
     border-top-color: #666;
@@ -20,7 +20,7 @@ $font-monospace: "Courier New", Courier, monospace;
 
 ::selection {
     background: #538200;
-    color: #FFFFFF; /* Safari and Opera */
+    color: #FFFFFF;
 }
 
 a {
@@ -153,14 +153,14 @@ a {
 
 aside {
     h5 {
-        font-size : 100%;
-        margin : .5em 0;
+        font-size: 100%;
+        margin: .5em 0;
     }
 
     fieldset {
         &.brief {
             margin: 0;
-            padding : .4em .7em;
+            padding: .4em .7em;
 
             fieldset {
                 margin: 0;
@@ -182,22 +182,24 @@ aside {
                     label {
                         display: inline;
                     }
+
                     span {
                         &.label {
-                            display: inline
+                            display: inline;
                         }
                     }
                 }
 
                 &.radio {
+                    padding: .7em 0;
+
                     input {
                         padding: .3em 0;
                     }
+
                     label {
                         display: inline;
                     }
-
-                    padding: .7em 0;
 
                     span {
                         &.label {
@@ -208,13 +210,13 @@ aside {
             }
 
             ol {
-                font-size : 85%;
-                margin : 0;
-                padding : 0;
+                font-size: 85%;
+                margin: 0;
+                padding: 0;
             }
 
             select,
-            input[type="text"] {
+            [type="text"] {
                 width: 100%;
             }
         }
@@ -244,7 +246,7 @@ main {
     .yui-b {
         fieldset {
             &.brief {
-                input[type="text"],
+                [type="text"],
                 select {
                     width: auto;
                 }
@@ -273,7 +275,7 @@ table {
         }
     }
 
-    & > caption {
+    > caption {
         span {
             &.actions {
                 font-size: 66%;
@@ -290,6 +292,10 @@ table {
         td {
             border: 0;
         }
+    }
+
+    + table {
+        margin-top: 1em;
     }
 }
 
@@ -341,13 +347,9 @@ th {
     }
 }
 
-table + table {
-    margin-top: 1em;
-}
-
 body {
     font-family: $font-main;
-    padding: 0 0 4em 0;
+    padding: 0 0 4em;
     text-align: left;
 }
 
@@ -419,7 +421,7 @@ hr {
 }
 
 p {
-    margin: .5em 0 .5em 0;
+    margin: .5em 0;
 }
 
 strong {
@@ -477,7 +479,7 @@ input {
         }
 
         &:disabled {
-            @include disabled-button
+            @include disabled-button;
         }
     }
 
@@ -494,7 +496,7 @@ input {
         }
 
         &:disabled {
-            @include disabled-button
+            @include disabled-button;
         }
     }
 
@@ -528,7 +530,7 @@ label,
         font-weight: bold;
     }
 
-    /* Permissions Labels */
+    // Permissions Labels
     &.permissioncode {
         font-style: italic;
 
@@ -587,7 +589,7 @@ label,
     margin-top: 1em;
 }
 
-#login_controls  {
+#login_controls {
     padding: .4em .5em;
     position: absolute;
     right: .5em;
@@ -650,7 +652,7 @@ ul {
         }
     }
 
-    /* For Font Awesome icon bullets */
+    // For Font Awesome icon bullets
     &.fa-ul {
         li {
             list-style-type: none;
@@ -866,7 +868,7 @@ fieldset {
     margin: 1em 1em 1em 0;
     padding: 1em;
 
-    & + fieldset {
+    + fieldset {
         &.action {
             padding-top: 20px;
         }
@@ -884,7 +886,7 @@ fieldset {
         border: 0;
         clear: both;
         float: none;
-        margin: .9em 0 0 0;
+        margin: .9em 0 0;
         padding: .4em;
         width: auto;
     }
@@ -945,7 +947,7 @@ fieldset {
         clear: left;
         float: left;
         font-size: 90%;
-        margin: .9em 0 0 0;
+        margin: .9em 0 0;
         padding: 0;
         width: 100%;
 
@@ -1080,7 +1082,7 @@ fieldset {
 
         ol {
             list-style-type: none;
-            padding: 1em 1em 0 1em;
+            padding: 1em 1em 0;
 
             &.radio {
                 label {
@@ -1146,7 +1148,7 @@ fieldset {
             margin: 1em 0 0 11em;
         }
 
-        &+h3 {
+        + h3 {
             clear: both;
             padding-top: .5em;
         }
@@ -1257,12 +1259,24 @@ details[open] {
     padding: .2em .5em .4em 10px;
 }
 
-#header + #breadcrumbs {
-    margin-top: 1em;
-}
+#header {
+    &.navbar {
+        margin-bottom: 0;
+    }
 
-#header > .container-fluid {
-    padding: 0;
+    &.navbar-default {
+        background: #E6F0F2;
+        border: 0;
+        box-shadow: none;
+    }
+
+    + #breadcrumbs {
+        margin-top: 1em;
+    }
+
+    > .container-fluid {
+        padding: 0;
+    }
 }
 
 div {
@@ -1271,14 +1285,14 @@ div {
         border: 0;
         clear: both;
         float: none;
-        margin: .9em 0 0 0;
+        margin: .9em 0 0;
         padding: .4em;
         width: auto;
     }
 
     .circmessage {
         margin-bottom: .3em;
-        padding: 0 .4em .4em .4em;
+        padding: 0 .4em .4em;
 
         &:first-child {
             margin-top: 1em;
@@ -1299,7 +1313,7 @@ div {
     }
 
     &.help {
-        margin: .9em 0 0 0;
+        margin: .9em 0 0;
     }
 
     &.justify {
@@ -1307,7 +1321,7 @@ div {
     }
 
     &.message {
-        background: linear-gradient(to bottom, #ffffff 0%, #f4f6fa 2%, #eaeef5 23%, #e8edf6 94%, #cddbf2 100%);
+        background: linear-gradient(to bottom, #FFFFFF 0%, #F4F6FA 2%, #EAEEF5 23%, #E8EDF6 94%, #CDDBF2 100%);
         border: 1px solid #BCBCBC;
         text-align: center;
         width: 55%;
@@ -1324,7 +1338,7 @@ div {
     }
 
     &.note {
-        background: linear-gradient(to bottom, #F4F6FA 0%, #E8EDF6 100%); /* W3C */
+        background: linear-gradient(to bottom, #F4F6FA 0%, #E8EDF6 100%); // W3C
         border: 1px solid #BCBCBC;
         margin: .5em 0;
         padding: .5em;
@@ -1338,7 +1352,7 @@ div {
         }
     }
 
-    /* Tools > automatic_item_modification_by_age */
+    // Tools > automatic_item_modification_by_age
     &.rules {
         display: block;
     }
@@ -1367,13 +1381,13 @@ div {
     }
 
     &.listgroup {
-        clear:  left;
+        clear: left;
 
         h4 {
             font-style: italic;
 
             a {
-                font-size:  80%;
+                font-size: 80%;
             }
         }
 
@@ -1402,18 +1416,18 @@ div {
     &.rows {
         clear: left;
         float: left;
-        margin: 0 0 0 0;
+        margin: 0;
         padding: 0;
         width: 100%;
 
-        & + div {
+        + div {
             &.rows {
                 margin-top: .6em;
             }
         }
 
         li {
-            border-bottom:  1px solid #EEE;
+            border-bottom: 1px solid #EEE;
             clear: left;
             float: left;
             list-style-type: none;
@@ -1450,7 +1464,7 @@ div {
 
         a {
             font-weight: bold;
-            padding: 1px 5px 1px 5px;
+            padding: 1px 5px;
             text-decoration: none;
 
             &:link,
@@ -1470,14 +1484,14 @@ div {
             background-color: #E6FCB7;
             color: #666;
             font-weight: bold;
-            padding: 1px 5px 1px 5px;
+            padding: 1px 5px;
         }
 
         .inactive {
             background-color: #F3F3F3;
             color: #BCBCBC;
             font-weight: bold;
-            padding: 1px 5px 1px 5px;
+            padding: 1px 5px;
         }
     }
 
@@ -1490,7 +1504,7 @@ div {
     background-position: .5em .5em;
     background-repeat: no-repeat;
     float: left;
-    margin: .3em 0 .5em 0;
+    margin: .3em 0 .5em;
 
     input {
         font-size: 1.3em;
@@ -1504,7 +1518,7 @@ div {
         &.residentsearch {
             border: 0;
             border-bottom: 1px solid #85CA11;
-            padding: 0 0 .2em 0;
+            padding: 0 0 .2em;
         }
     }
 
@@ -1542,11 +1556,11 @@ div {
         border-radius: 0 0 4px 4px;
     }
 
-    & > div,
-    & > ul {
+    > div,
+    > ul {
         display: none;
 
-        & > li {
+        > li {
             display: none;
 
             &:first-of-type {
@@ -1602,7 +1616,7 @@ dd {
     border: 1px solid #E6F0F2;
     border-radius: 5px 5px 0 0;
     margin: 0;
-    padding: 5px 5px 5px 5px;
+    padding: 5px;
 }
 
 #disabled {
@@ -1651,7 +1665,7 @@ dd {
         }
     }
 
-    & + #menu {
+    + #menu {
         margin-right: 0;
     }
 }
@@ -1675,10 +1689,10 @@ dd {
 }
 
 .patronviews {
-    border-right:  1px solid #000;
+    border-right: 1px solid #000;
     border-top: 1px solid #000;
     margin-bottom: .5em;
-    padding: .5em 0 .5em 0;
+    padding: .5em 0;
 }
 
 .column-tool {
@@ -1769,7 +1783,7 @@ dd {
             }
 
             select,
-            input[type=text] {
+            [type=text] {
                 width: 100%;
             }
         }
@@ -1801,7 +1815,7 @@ dd {
         fieldset {
             &.brief {
                 select,
-                input[type=text] {
+                [type=text] {
                     width: auto;
                 }
             }
@@ -1838,30 +1852,29 @@ dd {
 
 .content_hidden {
     display: none;
-    visibility: hidden; /* you propably don't need to change this one */
+    visibility: hidden; // you propably don't need to change this one
 }
 
-/* the property for the displayed tab */
+// the property for the displayed tab
 .content_visible {
     display: block;
-    visibility: visible; /* you propably don't need to change this one */
+    visibility: visible; // you propably don't need to change this one
 }
 
 #z3950searcht {
     table {
-        /* doesn't have desired effect in catalogue/results.tmpl - I'll leave this here for now but there do seem to be casscading CSS errors in this and other CSS fiels - RICKW 20081118 */
         border: 0;
         padding: 20px;
     }
 }
 
 #z3950_search_targets {
-    height:     338px;
+    height: 338px;
     overflow-y: auto;
 }
 
 #z3950_search_targets_acq {
-    height:     308px;
+    height: 308px;
     overflow-y: auto;
 }
 
@@ -1881,7 +1894,7 @@ dd {
     background-color: #FF0000;
 }
 
-/* Font Awesome icons */
+// Font Awesome icons
 i {
     &.error {
         color: #CC0000;
@@ -2017,7 +2030,7 @@ i {
 }
 
 .alert {
-    background: linear-gradient(to bottom, #FEF8D3 0%, #FFEC91 9%, #FFED87 89%, #F9DC00 100%); /* W3C */
+    background: linear-gradient(to bottom, #FEF8D3 0%, #FFEC91 9%, #FFED87 89%, #F9DC00 100%);
     border: 1px solid #E0C726;
     color: inherit;
     text-align: center;
@@ -2027,8 +2040,8 @@ i {
         color: #900;
     }
 
-    /* Redefine a new style for Bootstrap's class "close" since we use that already */
-    /* Use <a class="closebtn" href="#">&times;</a> */
+    // Redefine a new style for Bootstrap's class "close" since we use that already
+    // Use <a class="closebtn" href="#">&times;</a>
     .closebtn {
         line-height: 20px;
         position: relative;
@@ -2075,7 +2088,7 @@ i {
     color: #990000;
 }
 
-/* style for shelving location in catalogsearch */
+// style for shelving location in catalogsearch
 .shelvingloc {
     display: block;
     font-style: italic;
@@ -2089,19 +2102,19 @@ i {
 
     li {
         a {
-            background: linear-gradient(to bottom, #e8f0f6 0%, #e8f0f6 96%, #c1c1c1 100%);
+            background: linear-gradient(to bottom, #E8F0F6 0%, #E8F0F6 96%, #C1C1C1 100%);
             border: 1px solid #B9D8D9;
             border-bottom-left-radius: 5px;
             border-top-left-radius: 5px;
             display: block;
             font-size: 111%;
             margin: .5em 0;
-            margin-right:  -1px;
+            margin-right: -1px;
             padding: .4em .3em;
             text-decoration: none;
 
             &:hover {
-                background: linear-gradient(to bottom, #fafafa 0%, #ffffff 96%, #e6e6e6 97%, #cccccc 99%, #c1c1c1 100%);
+                background: linear-gradient(to bottom, #FAFAFA 0%, #FFFFFF 96%, #E6E6E6 97%, #CCCCCC 99%, #C1C1C1 100%);
                 border-bottom: 1px solid #85CA11;
                 border-left: 1px solid #85CA11;
                 border-top: 1px solid #85CA11;
@@ -2121,7 +2134,7 @@ i {
 
                 &:hover {
                     background-color: #FFFFFF;
-                    color:  #538200;
+                    color: #538200;
                 }
             }
         }
@@ -2162,7 +2175,7 @@ i {
 }
 
 .barcode {
-    font-size:  200%;
+    font-size: 200%;
     vertical-align: middle;
 }
 
@@ -2177,7 +2190,7 @@ li {
 .patronbriefinfo {
     li {
         &.email {
-            font-size:  87%;
+            font-size: 87%;
             padding: 0 10px 0 0;
             width: 90%;
         }
@@ -2211,7 +2224,7 @@ li {
     display: block;
     margin: auto;
 
-    & > li {
+    > li {
         list-style-type: none;
     }
 }
@@ -2417,7 +2430,7 @@ li {
         border: 0;
         font-family: $font-monospace;
         font-size: 95%;
-        margin: .7em 0 0 0;
+        margin: .7em 0 0;
     }
 
     tbody {
@@ -2498,7 +2511,7 @@ li {
     color: #707070;
     display: block;
     font-size: 85%;
-    padding: 0 0 .5em 0;
+    padding: 0 0 .5em;
 
     a {
         font-weight: normal;
@@ -2578,7 +2591,7 @@ li {
         }
     }
 
-     .importing {
+    .importing {
         background: none;
         padding: inherit;
     }
@@ -2655,7 +2668,7 @@ li {
         display: block;
         font-size: 160%;
         font-weight: bold;
-        padding: 0 .7em .2em .7em;
+        padding: 0 .7em .2em;
         text-decoration: none;
         text-shadow: 0 -1px 0 #666;
 
@@ -2672,7 +2685,7 @@ li {
     display: inline-block;
     font-size: 85%;
     margin: .4em 0;
-    padding: .3em .5em .3em .5em;
+    padding: .3em .5em;
 
     img {
         vertical-align: middle;
@@ -2709,20 +2722,20 @@ li {
 }
 
 #acqui_order_supplierlist {
-    & > div {
+    > div {
         &.supplier {
             border: 1px solid #EEEEEE;
             margin: .5em;
             padding: 1em;
         }
 
-        & > div {
-            & > .baskets {
+        > div {
+            > .baskets {
                 margin-top: .5em;
             }
         }
 
-        & > span {
+        > span {
             &.action {
                 margin-left: 5em;
             }
@@ -2748,7 +2761,7 @@ li {
     display: none;
 }
 
-/* Override core jQueryUI widgets */
+// Override core jQueryUI widgets
 .ui-widget-content {
     background: #FFFFFF none;
     border: 1px solid #B9D8D9;
@@ -2794,7 +2807,7 @@ li {
 
 .ui-state-highlight,
 .ui-widget-content .ui-state-highlight,
-.ui-widget-header .ui-state-highlight  {
+.ui-widget-header .ui-state-highlight {
     background: #FFF4C6;
     border: 1px solid #FED22F;
     color: #363636;
@@ -2803,12 +2816,12 @@ li {
 .ui-state-error,
 .ui-widget-content .ui-state-error,
 .ui-widget-header .ui-state-error {
-    border: 1px solid #CD0A0A;
     background: #FEF1EC;
+    border: 1px solid #CD0A0A;
     color: #CD0A0A;
 }
 
-/* Override jQuery Autocomplete */
+// Override jQuery Autocomplete
 .ui-autocomplete {
     box-shadow: 2px 2px 2px rgba(0, 0, 0, .3);
     cursor: default;
@@ -2828,7 +2841,7 @@ li {
     background: #FFF url("../img/spinner-small.gif") right center no-repeat;
 }
 
-/* jQuery UI standard tabs */
+// jQuery UI standard tabs
 .ui-menu {
     li {
         list-style: none;
@@ -3128,7 +3141,7 @@ li {
     }
 }
 
-/* jQuery UI Datepicker */
+// jQuery UI Datepicker
 .ui-datepicker {
     box-shadow: 1px 1px 3px 0 #666;
 
@@ -3154,7 +3167,7 @@ li {
     vertical-align: middle;
 }
 
-/* css for timepicker */
+// css for timepicker
 .ui-timepicker-div {
     dl {
         text-align: left;
@@ -3191,7 +3204,7 @@ li {
     display: none;
 }
 
-/* jQuery UI Accordion */
+// jQuery UI Accordion
 .ui-accordion-header,
 .ui-widget-content .ui-accordion-header {
     font-size: 110%;
@@ -3202,7 +3215,7 @@ video {
     width: 480px;
 }
 
-/* Bootstrap overrides */
+// Bootstrap overrides
 button,
 .btn {
     border-color: #ADADAD #ADADAD #949494;
@@ -3287,18 +3300,6 @@ button,
     }
 
 
-}
-
-#header {
-    &.navbar {
-        margin-bottom: 0;
-    }
-
-    &.navbar-default {
-        background: #E6F0F2;
-        border: 0;
-        box-shadow: none;
-    }
 }
 
 #changelanguage {
@@ -3438,7 +3439,7 @@ label {
 
 .closebtn {
     color: #000;
-    filter: alpha(opacity=20);
+    filter: alpha(opacity = 20);
     float: right;
     font-size: 21px;
     font-weight: bold;
@@ -3450,7 +3451,7 @@ label {
     &:focus {
         color: #000;
         cursor: pointer;
-        filter: alpha(opacity=50);
+        filter: alpha(opacity = 50);
         opacity: .5;
         text-decoration: none;
     }
@@ -3462,7 +3463,7 @@ label {
 }
 
 .modal-content {
-    background-color : #EDF4F6;
+    background-color: #EDF4F6;
 }
 
 .btn-group {
@@ -3503,7 +3504,7 @@ code {
     font-weight: bold;
 }
 
-/* End Bootstrap overrides */
+// End Bootstrap overrides
 
 .waiting {
     cursor: wait;
@@ -3575,7 +3576,7 @@ progress {
     }
 }
 
-/* Class to be added to toolbar when it starts being fixed at the top of the screen*/
+// Class to be added to toolbar when it starts being fixed at the top of the screen
 
 .floating {
     box-shadow: 0 3px 2px 0 rgba(0, 0, 0, .5);
@@ -3660,9 +3661,9 @@ span {
 
 .result-biblio-itemtype {
     float: right;
-    padding: .5em;
-    margin: .5em;
     font-size: 85%;
+    margin: .5em;
+    padding: .5em;
     text-align: center;
 
     img {
@@ -3733,7 +3734,7 @@ span {
 }
 
 #merge {
-    margin: .5em 0 0 0;
+    margin: .5em 0 0;
 }
 
 #merge_table {
@@ -3884,7 +3885,7 @@ span {
     }
 }
 
-#fixedlengthbuilderaction  {
+#fixedlengthbuilderaction {
     border: 3px solid #E6F0F2;
     left: 80%;
     padding: 5px;
@@ -4053,48 +4054,46 @@ span {
     }
 }
 
-/* ==== MODULE LINKS - Start ==== */
+// ==== MODULE LINKS - Start ====
 
-ul {
-    &.buttons-list {
-        /* List containing the module links */
-        padding: 0;
-        margin-bottom: 30px;
+.buttons-list {
+    // List containing the module links
+    margin-bottom: 30px;
+    padding: 0;
 
-        li {
-            /* Standard attributes for the list elements */
-            list-style-type:none;
+    li {
+        // Standard attributes for the list elements
+        list-style-type: none;
 
-            a {
-                &.circ-button {
-                    /* Class used for each module link */
-                    background-color: #F4F8F9;
-                    background-position: 5px 3px;
-                    background-repeat: no-repeat;
-                    border: solid 2px #b9d8d9;
-                    border-radius: 6px;
-                    box-sizing: content-box;
-                    color: #000000;
-                    display: block;
-                    font-size: 110%;
-                    font-weight: bold;
-                    max-width: 260px;
-                    margin: .5em 0;
-                    padding: 8px;
-                    text-decoration: none;
+        a {
+            &.circ-button {
+                // Class used for each module link
+                background-color: #F4F8F9;
+                background-position: 5px 3px;
+                background-repeat: no-repeat;
+                border: 2px solid #B9D8D9;
+                border-radius: 6px;
+                box-sizing: content-box;
+                color: #000000;
+                display: block;
+                font-size: 110%;
+                font-weight: bold;
+                margin: .5em 0;
+                max-width: 260px;
+                padding: 8px;
+                text-decoration: none;
 
-                    &:hover {
-                        /* Class used for each module link hover state */
-                        border-color: #538200;
-                        color: #538200;
-                    }
+                &:hover {
+                    // Class used for each module link hover state
+                    border-color: #538200;
+                    color: #538200;
                 }
             }
         }
     }
 }
 
-/* ==== MODULE LINKS - End ==== */
+// ==== MODULE LINKS - End ====
 
 @media (min-width: 200px) {
     .navbar-nav > li {
@@ -4112,7 +4111,7 @@ ul {
 
         .open {
             .dropdown-menu {
-                background-color: #fff;
+                background-color: #FFF;
                 border: 1px solid rgba(0, 0, 0, .15);
                 box-shadow: 0 6px 12px rgba(0, 0, 0, .175);
                 float: left;
@@ -4139,10 +4138,10 @@ ul {
                         > a {
                             &:hover,
                             &:focus {
-                                background-color: #0081c2;
-                                background-image: linear-gradient(to bottom, #0088cc, #0077b3);
+                                background-color: #0081C2;
+                                background-image: linear-gradient(to bottom, #0088CC, #0077B3);
                                 background-repeat: repeat-x;
-                                color: #ffffff;
+                                color: #FFFFFF;
                                 text-decoration: none;
                             }
                         }
