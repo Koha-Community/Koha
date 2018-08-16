@@ -17,7 +17,7 @@ ok(defined $QParser, 'Successfully created empty QP object');
 ok($QParser->load_config('./etc/searchengine/queryparser.yaml'), 'Loaded QP config');
 
 is($QParser->search_class_count, 4, 'Initialized 4 search classes');
-is (scalar(@{$QParser->search_fields()->{'keyword'}}), 111, "Correct number of search fields for 'keyword' class");
+is (scalar(@{$QParser->search_fields()->{'keyword'}}), 113, "Correct number of search fields for 'keyword' class");
 
 # Set keyword search as the default
 $QParser->default_search_class('keyword');
