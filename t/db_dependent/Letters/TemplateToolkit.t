@@ -20,6 +20,7 @@
 
 use Modern::Perl;
 use Test::More tests => 18;
+use Test::MockModule;
 use Test::Warn;
 
 use MARC::Record;
@@ -56,7 +57,9 @@ $dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM letter|);
 
-my $date = dt_from_string;
+my $now_value       = DateTime->now();
+my $mocked_datetime = Test::MockModule->new('DateTime');
+$mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 
 my $library = $builder->build( { source => 'Branch' } );
 my $patron  = $builder->build( { source => 'Borrower' } );
