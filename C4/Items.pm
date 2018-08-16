@@ -645,18 +645,24 @@ sub ModItemTransfer {
 
 =head2 ModDateLastSeen
 
-  ModDateLastSeen($itemnum);
+ModDateLastSeen( $itemnumber, $leave_item_lost );
 
 Mark item as seen. Is called when an item is issued, returned or manually marked during inventory/stocktaking.
-C<$itemnum> is the item number
+C<$itemnumber> is the item number
+C<$leave_item_lost> determines if a lost item will be found or remain lost
 
 =cut
 
 sub ModDateLastSeen {
-    my ($itemnumber) = @_;
+    my ( $itemnumber, $leave_item_lost ) = @_;
 
     my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-    ModItem( { itemlost => 0, datelastseen => $today }, undef, $itemnumber, { log_action => 0 } );
+
+    my $params;
+    $params->{datelastseen} = $today;
+    $params->{itemlost} = 0 unless $leave_item_lost;
+
+    ModItem( $params, undef, $itemnumber, { log_action => 0 } );
 }
 
 =head2 DelItem
