@@ -14706,6 +14706,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20773 - expirationdate filled for waiting holds)\n";
 }
 
+$DBversion = '17.05.13.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{DELETE FROM systempreferences where variable="OCLCAffiliateID";});
+    $dbh->do(q{DELETE FROM systempreferences where variable="XISBN";});
+    $dbh->do(q{DELETE FROM systempreferences where variable="XISBNDailyLimit";});
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21226 - Remove prefs OCLCAffiliateID, XISBN and XISBNDailyLimit)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
