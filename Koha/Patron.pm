@@ -32,6 +32,7 @@ use Koha::AuthUtils;
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils;
+use Koha::Exceptions::Password;
 use Koha::Holds;
 use Koha::Old::Checkouts;
 use Koha::Patron::Categories;
@@ -651,6 +652,66 @@ sub update_password {
     logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
     return $digest;
 }
+
+=head3 set_password
+
+    $patron->set_password( $plain_text_password );
+
+Set the patron's password.
+
+=head4 Exceptions
+
+The passed string is validated against the current password enforcement policy.
+Exceptions are thrown if the password is not good enough.
+
+=over 4
+
+=item Koha::Exceptions::Password::TooShort
+
+=item Koha::Exceptions::Password::TrailingWhitespaces
+
+=item Koha::Exceptions::Password::TooWeak
+
+=back
+
+=cut
+
+sub set_password {
+    my ( $self, $password ) = @_;
+
+    my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password );
+
+    if ( !$is_valid ) {
+        if ( $error eq 'too_short' ) {
+            my $min_length = C4::Context->preference('minPasswordLength');
+            $min_length = 3 if not $min_length or $min_length < 3;
+
+            my $password_length = length($password);
+            Koha::Exceptions::Password::TooShort->throw(
+                { length => $password_length, min_length => $min_length } );
+        }
+        elsif ( $error eq 'has_whitespaces' ) {
+            Koha::Exceptions::Password::TrailingWhitespaces->throw(
+                "Password contains trailing spaces, which is forbidden.");
+        }
+        elsif ( $error eq 'too_weak' ) {
+            Koha::Exceptions::Password::TooWeak->throw();
+        }
+    }
+
+    my $digest = Koha::AuthUtils::hash_password($password);
+    $self->update(
+        {   password       => $digest,
+            login_attempts => 0,
+        }
+    );
+
+    logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" )
+        if C4::Context->preference("BorrowersLog");
+
+    return $self;
+}
+
 
 =head3 renew_account
 
