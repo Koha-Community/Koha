@@ -301,7 +301,7 @@
             add_to_map( current_elt, latlng );
         [% END %]
         [% FOR l IN libraries %]
-            [% NEXT | html UNLESS l.geolocation %]
+            [% NEXT UNLESS l.geolocation %]
             add_to_map( { 'text': "[% l.branchname | html %]", 'id': "geolocation_[% l.branchcode | html %]" }, [ [% l.geolocation | html %] ] );
         [% END %]
 

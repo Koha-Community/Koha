@@ -67,6 +67,7 @@ my @tt_directives = (
     qr{^\s*BLOCK},
     qr{^\s*FILTER},
     qr{^\s*STOP},
+    qr{^\s*NEXT},
 );
 
 sub process_tt_content {
