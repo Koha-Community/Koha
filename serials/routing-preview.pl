@@ -94,7 +94,16 @@ if($ok){
                     branchcode     => $branch
                 });
             } else {
-                AddReserve($branch,$routing->{borrowernumber},$biblionumber,undef,$routing->{ranking}, undef, undef, $notes,$title);
+                AddReserve(
+                    {
+                        branchcode     => $branch,
+                        borrowernumber => $routing->{borrowernumber},
+                        biblionumber   => $biblionumber,
+                        priority       => $routing->{ranking},
+                        notes          => $notes,
+                        title          => $title,
+                    }
+                );
         }
     }
 	}

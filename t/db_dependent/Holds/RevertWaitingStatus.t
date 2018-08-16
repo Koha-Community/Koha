@@ -73,17 +73,11 @@ foreach my $i ( 1 .. $borrowers_count ) {
 # Create five item level holds
 foreach my $borrowernumber (@borrowernumbers) {
     AddReserve(
-        $branchcode,
-        $borrowernumber,
-        $biblio->biblionumber,
-        my $bibitems   = q{},
-        my $priority,
-        my $resdate,
-        my $expdate,
-        my $notes = q{},
-        'a title',
-        my $checkitem,
-        my $found,
+        {
+            branchcode     => $branchcode,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+        }
     );
 }
 

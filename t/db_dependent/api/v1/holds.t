@@ -127,12 +127,26 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-my $reserve_id = C4::Reserves::AddReserve($branchcode, $patron_1->borrowernumber,
-    $biblio_1->biblionumber, undef, 1, undef, undef, undef, '', $item_1->itemnumber);
+my $reserve_id = C4::Reserves::AddReserve(
+    {
+        branchcode     => $branchcode,
+        borrowernumber => $patron_1->borrowernumber,
+        biblionumber   => $biblio_1->biblionumber,
+        priority       => 1,
+        itemnumber     => $item_1->itemnumber,
+    }
+);
 
 # Add another reserve to be able to change first reserve's rank
-my $reserve_id2 = C4::Reserves::AddReserve($branchcode, $patron_2->borrowernumber,
-    $biblio_1->biblionumber, undef, 2, undef, undef, undef, '', $item_1->itemnumber);
+my $reserve_id2 = C4::Reserves::AddReserve(
+    {
+        branchcode     => $branchcode,
+        borrowernumber => $patron_2->borrowernumber,
+        biblionumber   => $biblio_1->biblionumber,
+        priority       => 2,
+        itemnumber     => $item_1->itemnumber,
+    }
+);
 
 my $suspended_until = DateTime->now->add(days => 10)->truncate( to => 'day' );
 my $expiration_date = DateTime->now->add(days => 10)->truncate( to => 'day' );
@@ -469,23 +483,32 @@ subtest 'PUT /holds/{hold_id}/priority tests' => sub {
 
     my $hold_1 = Koha::Holds->find(
         AddReserve(
-            $library->branchcode,  $patron_1->borrowernumber,
-            $biblio->biblionumber, undef,
-            1
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron_1->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+            }
         )
     );
     my $hold_2 = Koha::Holds->find(
         AddReserve(
-            $library->branchcode,  $patron_2->borrowernumber,
-            $biblio->biblionumber, undef,
-            2
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron_2->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 2,
+            }
         )
     );
     my $hold_3 = Koha::Holds->find(
         AddReserve(
-            $library->branchcode,  $patron_3->borrowernumber,
-            $biblio->biblionumber, undef,
-            3
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron_3->borrowernumber,
+                biblionumber   => $biblio->biblionumber,
+                priority       => 3,
+            }
         )
     );
 

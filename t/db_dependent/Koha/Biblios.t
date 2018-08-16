@@ -64,7 +64,13 @@ subtest 'store' => sub {
 
 subtest 'holds + current_holds' => sub {
     plan tests => 5;
-    C4::Reserves::AddReserve( $patron->branchcode, $patron->borrowernumber, $biblio->biblionumber );
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $patron->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+        }
+    );
     my $holds = $biblio->holds;
     is( ref($holds), 'Koha::Holds', '->holds should return a Koha::Holds object' );
     is( $holds->count, 1, '->holds should only return 1 hold' );
@@ -72,7 +78,14 @@ subtest 'holds + current_holds' => sub {
     $holds->delete;
 
     # Add a hold in the future
-    C4::Reserves::AddReserve( $patron->branchcode, $patron->borrowernumber, $biblio->biblionumber, undef, undef, dt_from_string->add( days => 2 ) );
+    C4::Reserves::AddReserve(
+        {
+            branchcode       => $patron->branchcode,
+            borrowernumber   => $patron->borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            reservation_date => dt_from_string->add( days => 2 ),
+        }
+    );
     $holds = $biblio->holds;
     is( $holds->count, 1, '->holds should return future holds' );
     $holds = $biblio->current_holds;

@@ -85,19 +85,40 @@ Koha::CirculationRules->set_rules(
 );
 
 # Home branch matches pickup branch
-my $reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+my $reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 my ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup branch matches home branch targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
-$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_B,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is($status, q{}, "Hold where pickup ne home, pickup eq home not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
-$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, q{}, "Hold where pickup ne home, pickup ne holding not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
@@ -116,19 +137,40 @@ Koha::CirculationRules->set_rules(
 );
 
 # Home branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, q{}, "Hold where pickup eq home, pickup ne holding not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
-$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_B,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup eq holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
-$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, q{}, "Hold where pickup ne home, pickup ne holding not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
@@ -147,19 +189,40 @@ Koha::CirculationRules->set_rules(
 );
 
 # Home branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup eq home, pickup ne holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
-$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_B,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup eq holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
-$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup ne holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
@@ -176,7 +239,14 @@ my $limit = Koha::Item::Transfer::Limit->new(
         itemtype   => $item->effective_itemtype,
     }
 )->store();
-$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1
+    }
+);
 ($status) = CheckReserves($itemnumber);
 is( $status, '',  "No hold where branch transfer is not allowed" );
 Koha::Holds->find($reserve_id)->cancel;

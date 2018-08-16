@@ -60,11 +60,14 @@ subtest 'cancel' => sub {
             }
         );
         my $reserve_id = C4::Reserves::AddReserve(
-            $library->branchcode, $patron->borrowernumber,
-            $item->biblionumber,  '',
-            $priority,            undef,
-            undef,                '',
-            "title for fee",      $item->itemnumber,
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $item->biblionumber,
+                priority       => $priority,
+                title          => "title for fee",
+                itemnumber     => $item->itemnumber,
+            }
         );
         my $hold = Koha::Holds->find($reserve_id);
         push @patrons, $patron;
@@ -107,30 +110,31 @@ subtest 'cancel' => sub {
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { categorycode => $patron_category->categorycode } });
         is( $patron->account->balance, 0, 'A new patron does not have any charges' );
 
-        my @hold_info = (
-            $library->branchcode, $patron->borrowernumber,
-            $item->biblionumber,  '',
-            1,                    undef,
-            undef,                '',
-            "title for fee",      $item->itemnumber,
-        );
+        my $hold_info = {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            title          => "title for fee",
+            itemnumber     => $item->itemnumber,
+        };
 
         # First, test cancelling a reserve when there's no charge configured.
         t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 0);
-        my $reserve_id = C4::Reserves::AddReserve( @hold_info );
+        my $reserve_id = C4::Reserves::AddReserve( $hold_info );
         Koha::Holds->find( $reserve_id )->cancel( { charge_cancel_fee => 1 } );
         is( $patron->account->balance, 0, 'ExpireReservesMaxPickUpDelayCharge=0 - The patron should not have been charged' );
 
         # Then, test cancelling a reserve when there's no charge desired.
         t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 42);
-        $reserve_id = C4::Reserves::AddReserve( @hold_info );
+        $reserve_id = C4::Reserves::AddReserve( $hold_info );
         Koha::Holds->find( $reserve_id )->cancel(); # charge_cancel_fee => 0
         is( $patron->account->balance, 0, 'ExpireReservesMaxPickUpDelayCharge=42, but charge_cancel_fee => 0, The patron should not have been charged' );
 
 
         # Finally, test cancelling a reserve when there's a charge desired and configured.
         t::lib::Mocks::mock_preference('ExpireReservesMaxPickUpDelayCharge', 42);
-        $reserve_id = C4::Reserves::AddReserve( @hold_info );
+        $reserve_id = C4::Reserves::AddReserve( $hold_info );
         Koha::Holds->find( $reserve_id )->cancel( { charge_cancel_fee => 1 } );
         is( int($patron->account->balance), 42, 'ExpireReservesMaxPickUpDelayCharge=42 and charge_cancel_fee => 1, The patron should have been charged!' );
     };
@@ -139,12 +143,15 @@ subtest 'cancel' => sub {
         plan tests => 1;
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
         my $reserve_id = C4::Reserves::AddReserve(
-            $library->branchcode, $patron->borrowernumber,
-            $item->biblionumber,  '',
-            1,                    undef,
-            undef,                '',
-            "title for fee",      $item->itemnumber,
-            'W',
+            {
+                branchcode     => $library->branchcode,
+                borrowernumber => $patron->borrowernumber,
+                biblionumber   => $item->biblionumber,
+                priority       => 1,
+                title          => "title for fee",
+                itemnumber     => $item->itemnumber,
+                found          => 'W',
+            }
         );
         Koha::Holds->find( $reserve_id )->cancel;
         my $hold_old = Koha::Old::Holds->find( $reserve_id );
@@ -154,22 +161,23 @@ subtest 'cancel' => sub {
     subtest 'HoldsLog' => sub {
         plan tests => 2;
         my $patron = $builder->build_object({ class => 'Koha::Patrons' });
-        my @hold_info = (
-            $library->branchcode, $patron->borrowernumber,
-            $item->biblionumber,  '',
-            1,                    undef,
-            undef,                '',
-            "title for fee",      $item->itemnumber,
-        );
+        my $hold_info = {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            title          => "title for fee",
+            itemnumber     => $item->itemnumber,
+        };
 
         t::lib::Mocks::mock_preference('HoldsLog', 0);
-        my $reserve_id = C4::Reserves::AddReserve(@hold_info);
+        my $reserve_id = C4::Reserves::AddReserve($hold_info);
         Koha::Holds->find( $reserve_id )->cancel;
         my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )->count;
         is( $number_of_logs, 0, 'Without HoldsLog, Koha::Hold->cancel should not have logged' );
 
         t::lib::Mocks::mock_preference('HoldsLog', 1);
-        $reserve_id = C4::Reserves::AddReserve(@hold_info);
+        $reserve_id = C4::Reserves::AddReserve($hold_info);
         Koha::Holds->find( $reserve_id )->cancel;
         $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'HOLDS', action => 'CANCEL', object => $reserve_id } )->count;
         is( $number_of_logs, 1, 'With HoldsLog, Koha::Hold->cancel should have logged' );
@@ -189,16 +197,17 @@ subtest 'cancel' => sub {
                 value => { categorycode => $patron_category->categorycode }
             }
         );
-        my @hold_info = (
-            $library->branchcode, $patron->borrowernumber,
-            $item->biblionumber,  '',
-            1,                    undef,
-            undef,                '',
-            "title for fee",      $item->itemnumber,
-        );
+        my $hold_info = {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            title          => "title for fee",
+            itemnumber     => $item->itemnumber,
+        };
 
         t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelayCharge',42 );
-        my $reserve_id = C4::Reserves::AddReserve(@hold_info);
+        my $reserve_id = C4::Reserves::AddReserve($hold_info);
         my $hold       = Koha::Holds->find($reserve_id);
 
         # Add a row with the same id to make the cancel fails

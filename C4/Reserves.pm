@@ -141,7 +141,21 @@ BEGIN {
 
 =head2 AddReserve
 
-    AddReserve($branch,$borrowernumber,$biblionumber,$bibitems,$priority,$resdate,$expdate,$notes,$title,$checkitem,$found)
+    AddReserve(
+        {
+            branch           => $branchcode,
+            borrowernumber   => $borrowernumber,
+            biblionumber     => $biblionumber,
+            priority         => $priority,
+            reservation_date => $reservation_date,
+            expiration_date  => $expiration_date,
+            notes            => $notes,
+            title            => $title,
+            itemnumber       => $itemnumber,
+            found            => $found,
+            itemtype         => $itemtype,
+        }
+    );
 
 Adds reserve and generates HOLDPLACED message.
 
@@ -157,11 +171,18 @@ The following tables are available witin the HOLDPLACED message:
 =cut
 
 sub AddReserve {
-    my (
-        $branch,   $borrowernumber, $biblionumber, $bibitems,
-        $priority, $resdate,        $expdate,      $notes,
-        $title,    $checkitem,      $found,        $itemtype
-    ) = @_;
+    my ($params)       = @_;
+    my $branch         = $params->{branchcode};
+    my $borrowernumber = $params->{borrowernumber};
+    my $biblionumber   = $params->{biblionumber};
+    my $priority       = $params->{priority};
+    my $resdate        = $params->{reservation_date};
+    my $expdate        = $params->{expiration_date};
+    my $notes          = $params->{notes};
+    my $title          = $params->{title};
+    my $checkitem      = $params->{itemnumber};
+    my $found          = $params->{found};
+    my $itemtype       = $params->{itemtype};
 
     $resdate = output_pref( { str => dt_from_string( $resdate ), dateonly => 1, dateformat => 'iso' })
         or output_pref({ dt => dt_from_string, dateonly => 1, dateformat => 'iso' });

@@ -296,26 +296,32 @@ subtest 'current_item_level_holds() tests' => sub {
     my $item_3 = $builder->build_sample_item( { biblionumber => $biblio->biblionumber } );
 
     C4::Reserves::AddReserve(
-        $patron->branchcode,   $patron->borrowernumber,
-        $biblio->biblionumber, undef,
-        undef, dt_from_string->add( days => -2 ),
-        undef, undef,
-        undef, $item_1->itemnumber
+        {
+            branchcode       => $patron->branchcode,
+            borrowernumber   => $patron->borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            reservation_date => dt_from_string->add( days => -2 ),
+            itemnumber       => $item_1->itemnumber,
+        }
     );
     C4::Reserves::AddReserve(
-        $patron->branchcode,   $patron->borrowernumber,
-        $biblio->biblionumber, undef,
-        undef, dt_from_string->add( days => -2 ),
-        undef, undef,
-        undef, $item_2->itemnumber
+        {
+            branchcode       => $patron->branchcode,
+            borrowernumber   => $patron->borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            reservation_date => dt_from_string->add( days => -2 ),
+            itemnumber       => $item_2->itemnumber,
+        }
     );
     # Add a hold in the future
     C4::Reserves::AddReserve(
-        $patron->branchcode,   $patron->borrowernumber,
-        $biblio->biblionumber, undef,
-        undef, dt_from_string->add( days => 2 ),
-        undef, undef,
-        undef, $item_3->itemnumber
+        {
+            branchcode       => $patron->branchcode,
+            borrowernumber   => $patron->borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            reservation_date => dt_from_string->add( days => 2 ),
+            itemnumber       => $item_3->itemnumber,
+        }
     );
 
     # Add an order with no biblionumber

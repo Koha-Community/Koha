@@ -114,7 +114,14 @@ $dbh->do("DELETE FROM reserves");
 my $bibitems = undef;
 my $priority = 1;
 # Make a reserve
-AddReserve ( $borrower_branchcode, $borrowernumber, $biblionumber, $bibitems,  $priority );
+AddReserve(
+    {
+        branchcode     => $borrower_branchcode,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => $priority,
+    }
+);
 #                           $resdate, $expdate, $notes, $title, $checkitem, $found
 $dbh->do("UPDATE reserves SET reservedate = DATE_SUB( reservedate, INTERVAL 1 DAY )");
 
@@ -533,7 +540,14 @@ $dbh->do( "UPDATE systempreferences SET value = ? WHERE variable = 'StaticHoldsQ
     undef, join( ',', $library_B, $library_A, $library_C ) );
 $dbh->do( "UPDATE systempreferences SET value = 0 WHERE variable = 'RandomizeHoldsQueueWeight'" );
 
-my $reserve_id = AddReserve ( $library_C, $borrowernumber, $biblionumber, '', 1 );
+my $reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( @$holds_queue, 1, "Bug 14297 - Holds Queue building ignoring holds where pickup & home branch don't match and item is not from le");
@@ -577,7 +591,15 @@ $dbh->do("
     VALUES ($biblionumber, $biblioitemnumber, '$library_A', '$library_A', 0, 0, 0, 0, NULL, '$itemtype')
 ");
 
-$reserve_id = AddReserve ( $library_B, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_B,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( @$holds_queue, 0, "Bug 15062 - Holds queue with Transport Cost Matrix will transfer item even if transfers disabled");
@@ -628,21 +650,46 @@ Koha::CirculationRules->set_rules(
 );
 
 # Home branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup branch matches home branch targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
-$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_B,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup ne home, pickup eq home not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
-$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup ne home, pickup ne holding not targeted" );
@@ -662,21 +709,45 @@ Koha::CirculationRules->set_rules(
 );
 
 # Home branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup eq home, pickup ne holding not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
-$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_B,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup ne home, pickup eq holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
-$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Hold where pickup ne home, pickup ne holding not targeted" );
@@ -696,21 +767,45 @@ Koha::CirculationRules->set_rules(
 );
 
 # Home branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup eq home, pickup ne holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
-$reserve_id = AddReserve( $library_B, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_B,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup ne home, pickup eq holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
-$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_C,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Hold where pickup ne home, pickup ne holding targeted" );
@@ -763,21 +858,47 @@ Koha::CirculationRules->set_rules(
 );
 
 # Home branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $wrong_itemtype );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+        itemtype       => $wrong_itemtype,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 0, "Item with incorrect itemtype not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Holding branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $right_itemtype );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+        itemtype       => $right_itemtype,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Item with matching itemtype is targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Neither branch matches pickup branch
-$reserve_id = AddReserve( $library_A, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $library_A,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
+
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref( "SELECT * FROM tmp_holdsqueue", { Slice => {} } );
 is( @$holds_queue, 1, "Item targeted when hold itemtype is not set" );
@@ -819,12 +940,22 @@ subtest "Test Local Holds Priority - Bib level" => sub {
         }
     );
 
-    my $reserve_id =
-      AddReserve( $branch2->branchcode, $other_patron->borrowernumber,
-        $biblio->biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
-    my $reserve_id2 =
-      AddReserve( $item->homebranch, $local_patron->borrowernumber,
-        $biblio->biblionumber, '', 2, undef, undef, undef, undef, undef, undef, undef );
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch2->branchcode,
+            borrowernumber => $other_patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+    my $reserve_id2 = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $local_patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 2,
+        }
+    );
 
     C4::HoldsQueue::CreateQueue();
 
@@ -871,12 +1002,24 @@ subtest "Test Local Holds Priority - Item level" => sub {
         }
     );
 
-    my $reserve_id =
-      AddReserve( $branch2->branchcode, $other_patron->borrowernumber,
-        $biblio->biblionumber, '', 1, undef, undef, undef, undef, $item->id, undef, undef );
-    my $reserve_id2 =
-      AddReserve( $item->homebranch, $local_patron->borrowernumber,
-        $biblio->biblionumber, '', 2, undef, undef, undef, undef, $item->id, undef, undef );
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch2->branchcode,
+            borrowernumber => $other_patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->id,
+        }
+    );
+    my $reserve_id2 = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $local_patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 2,
+            itemnumber     => $item->id,
+        }
+    );
 
     C4::HoldsQueue::CreateQueue();
 
@@ -924,12 +1067,23 @@ subtest "Test Local Holds Priority - Item level hold over Record level hold (Bug
         }
     );
 
-    my $reserve_id =
-      AddReserve( $branch2->branchcode, $other_patron->borrowernumber,
-        $biblio->biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
-    my $reserve_id2 =
-      AddReserve( $item->homebranch, $local_patron->borrowernumber,
-        $biblio->biblionumber, '', 2, undef, undef, undef, undef, $item->id, undef, undef );
+    my $reserve_id = AddReserve(
+        {
+            branchcode     => $branch2->branchcode,
+            borrowernumber => $other_patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
+    );
+    my $reserve_id2 = AddReserve(
+        {
+            branchcode     => $item->homebranch,
+            borrowernumber => $local_patron->borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 2,
+            itemnumber     => $item->id,
+        }
+    );
 
     C4::HoldsQueue::CreateQueue();
 
@@ -987,9 +1141,14 @@ subtest "Test Local Holds Priority - Ensure no duplicate requests in holds queue
         }
     );
 
-    $reserve_id =
-      AddReserve( $item1->homebranch, $patron->borrowernumber, $biblio->id, '',
-        1, undef, undef, undef, undef, undef, undef, undef );
+    $reserve_id = AddReserve(
+        {
+            branchcode     => $item1->homebranch,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio->id,
+            priority       => 1
+        }
+    );
 
     C4::HoldsQueue::CreateQueue();
 

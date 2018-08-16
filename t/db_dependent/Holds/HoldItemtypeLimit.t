@@ -99,19 +99,43 @@ Koha::CirculationRules->set_rules(
 );
 
 # Itemtypes match
-my $reserve_id = AddReserve( $branchcode, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $right_itemtype );
+my $reserve_id = AddReserve(
+    {
+        branchcode     => $branchcode,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+        itemtype       => $right_itemtype,
+    }
+);
 my ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where itemtype matches item's itemtype targed" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # Itemtypes don't match
-$reserve_id = AddReserve( $branchcode, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, $wrong_itemtype );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $branchcode,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+        itemtype       => $wrong_itemtype,
+    }
+);
+
 ( $status ) = CheckReserves($itemnumber);
 is($status, q{}, "Hold where itemtype does not match item's itemtype not targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
 
 # No itemtype set
-$reserve_id = AddReserve( $branchcode, $borrowernumber, $biblionumber, '', 1, undef, undef, undef, undef, undef, undef, undef );
+$reserve_id = AddReserve(
+    {
+        branchcode     => $branchcode,
+        borrowernumber => $borrowernumber,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+    }
+);
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Item targeted with no hold itemtype set" );
 Koha::Holds->find( $reserve_id )->cancel;

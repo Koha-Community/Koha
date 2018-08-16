@@ -76,17 +76,13 @@ foreach (1..$borrowers_count) {
 # Create five item level holds
 foreach my $borrowernumber ( @borrowernumbers ) {
     AddReserve(
-        $branch_1,
-        $borrowernumber,
-        $biblio->biblionumber,
-        my $bibitems = q{},
-        my $priority = C4::Reserves::CalculatePriority( $biblio->biblionumber ),
-        my $resdate,
-        my $expdate,
-        my $notes = q{},
-        'a title',
-        my $checkitem = $itemnumber,
-        my $found,
+        {
+            branchcode     => $branch_1,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => C4::Reserves::CalculatePriority( $biblio->biblionumber ),
+            itemnumber     => $itemnumber,
+        }
     );
 }
 
@@ -191,19 +187,14 @@ is( $hold->suspend, 0, "Test resuming with SuspendAll()" );
 is( $hold->suspend_until, undef, "Test resuming with SuspendAll(), should have no suspend until date" );
 
 # Add a new hold for the borrower whose hold we canceled earlier, this time at the bib level
-AddReserve(
-    $branch_1,
-    $borrowernumbers[0],
-    $biblio->biblionumber,
-    my $bibitems = q{},
-    my $priority,
-    my $resdate,
-    my $expdate,
-    my $notes = q{},
-    'a title',
-    my $checkitem,
-    my $found,
-);
+    AddReserve(
+        {
+            branchcode     => $branch_1,
+            borrowernumber => $borrowernumbers[0],
+            biblionumber   => $biblio->biblionumber,
+        }
+    );
+
 $patron = Koha::Patrons->find( $borrowernumber );
 $holds = $patron->holds;
 my $reserveid = Koha::Holds->search({ biblionumber => $biblio->biblionumber, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
@@ -297,11 +288,35 @@ ok(
     # Regression test for bug 11336 # Test if ModReserve correctly recalculate the priorities
     $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
     ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
-    my $reserveid1 = AddReserve($branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1);
+    my $reserveid1 = AddReserve(
+        {
+            branchcode     => $branch_1,
+            borrowernumber => $borrowernumbers[0],
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1
+        }
+    );
+
     ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
-    my $reserveid2 = AddReserve($branch_1, $borrowernumbers[1], $biblio->biblionumber, '', 2);
+    my $reserveid2 = AddReserve(
+        {
+            branchcode     => $branch_1,
+            borrowernumber => $borrowernumbers[1],
+            biblionumber   => $biblio->biblionumber,
+            priority       => 2
+        }
+    );
+
     ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
-    my $reserveid3 = AddReserve($branch_1, $borrowernumbers[2], $biblio->biblionumber, '', 3);
+    my $reserveid3 = AddReserve(
+        {
+            branchcode     => $branch_1,
+            borrowernumber => $borrowernumbers[2],
+            biblionumber   => $biblio->biblionumber,
+            priority       => 3
+        }
+    );
+
     my $hhh = Koha::Holds->search({ biblionumber => $biblio->biblionumber });
     my $hold3 = Koha::Holds->find( $reserveid3 );
     is( $hold3->priority, 3, "The 3rd hold should have a priority set to 3" );
@@ -335,11 +350,12 @@ ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for d
 $biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);
 AddReserve(
-    $branch_1,
-    $borrowernumbers[0],
-    $biblio->biblionumber,
-    '',
-    1,
+    {
+        branchcode     => $branch_1,
+        borrowernumber => $borrowernumbers[0],
+        biblionumber   => $biblio->biblionumber,
+        priority       => 1,
+    }
 );
 is(
     CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'tooManyReserves',
@@ -442,7 +458,14 @@ Koha::CirculationRules->set_rules(
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'OK', 'Patron can reserve item with hold limit of 1, no holds placed' );
 
-my $res_id = AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
+my $res_id = AddReserve(
+    {
+        branchcode     => $branch_1,
+        borrowernumber => $borrowernumbers[0],
+        biblionumber   => $biblio->biblionumber,
+        priority       => 1,
+    }
+);
 
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
@@ -474,9 +497,17 @@ subtest 'Test max_holds per library/patron category' => sub {
             }
         }
     );
-    AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
-    AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
-    AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
+
+    for ( 1 .. 3 ) {
+        AddReserve(
+            {
+                branchcode     => $branch_1,
+                borrowernumber => $borrowernumbers[0],
+                biblionumber   => $biblio->biblionumber,
+                priority       => 1,
+            }
+        );
+    }
 
     my $count =
       Koha::Holds->search( { borrowernumber => $borrowernumbers[0] } )->count();
@@ -635,7 +666,14 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         'Patron can reserve item with hold limit of 1, no holds placed'
     );
 
-    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_1->biblionumber, '', 1, );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio_1->biblionumber,
+            priority       => 1,
+        }
+    );
 
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_1 ),
@@ -662,7 +700,14 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     );
 
     # Add a second reserve
-    my $res_id = AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_2->biblionumber, '', 1, );
+    my $res_id = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio_2->biblionumber,
+            priority       => 1,
+        }
+    );
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_2 ),
         { status => 'tooManyReservesToday', limit => 2 },
@@ -718,14 +763,36 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         { status => 'OK' },
         'Patron can reserve if holds_per_day is undef (i.e. undef is unlimited daily cap)'
     );
-    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_1->biblionumber, '', 1, );
-    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_2->biblionumber, '', 1, );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio_1->biblionumber,
+            priority       => 1,
+        }
+    );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio_2->biblionumber,
+            priority       => 1,
+        }
+    );
+
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_3 ),
         { status => 'OK' },
         'Patron can reserve if holds_per_day is undef (i.e. undef is unlimited daily cap)'
     );
-    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_3->biblionumber, '', 1, );
+    AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblio_3->biblionumber,
+            priority       => 1,
+        }
+    );
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_3 ),
         { status => 'tooManyReserves', limit => 3 },

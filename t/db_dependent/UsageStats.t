@@ -301,7 +301,15 @@ sub construct_objects_needed {
     my $issue_id1 = $dbh->last_insert_id( undef, undef, 'old_issues', undef );
 
     # ---------- Add 1 old_reserves
-    AddReserve( $branchcode, $borrowernumber1, $biblionumber1, '', 1, undef, undef, '', 'Title', undef, undef );
+    AddReserve(
+        {
+            branchcode     => $branchcode,
+            borrowernumber => $borrowernumber1,
+            biblionumber   => $biblionumber1,
+            priority       => 1,
+            title          => 'Title',
+        }
+    );
     my $biblio = Koha::Biblios->find( $biblionumber1 );
     my $holds = $biblio->holds;
     $holds->next->cancel if $holds->count;

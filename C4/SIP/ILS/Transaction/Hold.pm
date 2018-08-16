@@ -66,7 +66,13 @@ sub do_hold {
         return $self;
     }
 
-    AddReserve( $branch, $patron->borrowernumber, $item->biblionumber );
+    AddReserve(
+        {
+            branch         => $branch,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblionumber
+        }
+    );
 
     # unfortunately no meaningful return value
     $self->ok(1);

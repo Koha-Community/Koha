@@ -433,8 +433,16 @@ ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not up
 
 
 # Bug 14640 - Cancel the hold on checking out if asked
-my $reserve_id = AddReserve($branchcode_1, $borrower_id1, $biblionumber,
-    undef,  1, undef, undef, "a note", "a title", undef, '');
+my $reserve_id = AddReserve(
+    {
+        branchcode     => $branchcode_1,
+        borrowernumber => $borrower_id1,
+        biblionumber   => $biblionumber,
+        priority       => 1,
+        notes          => "a note",
+        title          => "a title",
+    }
+);
 ok( $reserve_id, 'The reserve should have been inserted' );
 AddIssue( $borrower_2, $barcode_1, dt_from_string, 'cancel' );
 my $hold = Koha::Holds->find( $reserve_id );

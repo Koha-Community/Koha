@@ -161,18 +161,19 @@ sub add {
         }
 
         my $hold_id = C4::Reserves::AddReserve(
-            $pickup_library_id,
-            $patron_id,
-            $biblio_id,
-            undef,    # $bibitems param is unused
-            $priority,
-            $hold_date,
-            $expiration_date,
-            $notes,
-            $biblio->title,
-            $item_id,
-            undef,    # TODO: Why not?
-            $item_type
+            {
+                branchcode       => $pickup_library_id,
+                borrowernumber   => $patron_id,
+                biblionumber     => $biblio_id,
+                priority         => $priority,
+                reservation_date => $hold_date,
+                expiration_date  => $expiration_date,
+                notes            => $notes,
+                title            => $biblio->title,
+                itemnumber       => $item_id,
+                found            => undef,                # TODO: Why not?
+                itemtype         => $item_type,
+            }
         );
 
         unless ($hold_id) {

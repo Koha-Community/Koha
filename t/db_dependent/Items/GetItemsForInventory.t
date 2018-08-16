@@ -100,15 +100,34 @@ subtest 'Skip items with waiting holds' => sub {
     is( $first_items_count + 2, $second_items_count, 'Two items added, count makes sense' );
 
     # Add 2 waiting holds
-    C4::Reserves::AddReserve( $library->branchcode, $patron_1->borrowernumber,
-        $item_1->biblionumber, '', 1, undef, undef, '', "title for fee",
-        $item_1->itemnumber, 'W' );
-    C4::Reserves::AddReserve( $library->branchcode, $patron_1->borrowernumber,
-        $item_2->biblionumber, '', 1, undef, undef, '', "title for fee",
-        $item_2->itemnumber, undef );
-    C4::Reserves::AddReserve( $library->branchcode, $patron_2->borrowernumber,
-        $item_2->biblionumber, '', 2, undef, undef, '', "title for fee",
-        $item_2->itemnumber, undef );
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_1->borrowernumber,
+            biblionumber   => $item_1->biblionumber,
+            priority       => 1,
+            itemnumber     => $item_1->itemnumber,
+            found          => 'W'
+        }
+    );
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_1->borrowernumber,
+            biblionumber   => $item_2->biblionumber,
+            priority       => 1,
+            itemnumber     => $item_2->itemnumber,
+        }
+    );
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron_2->borrowernumber,
+            biblionumber   => $item_2->biblionumber,
+            priority       => 2,
+            itemnumber     => $item_2->itemnumber,
+        }
+    );
 
     my ( $new_items, $new_items_count ) = GetItemsForInventory( { ignore_waiting_holds => 1 } );
     is( $new_items_count, $first_items_count + 1, 'Item on hold skipped, count makes sense' );

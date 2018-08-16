@@ -309,10 +309,19 @@ if ( $query->param('place_reserve') ) {
         # Here we actually do the reserveration. Stage 3.
         if ($canreserve) {
             my $reserve_id = AddReserve(
-                $branch,          $borrowernumber, $biblioNum,
-                [$biblioNum],     $rank,           $startdate,
-                $expiration_date, $notes,          $biblioData->{title},
-                $itemNum,         $found,          $itemtype,
+                {
+                    branchcode       => $branch,
+                    borrowernumber   => $borrowernumber,
+                    biblionumber     => $biblioNum,
+                    priority         => $rank,
+                    reservation_date => $startdate,
+                    expiration_date  => $expiration_date,
+                    notes            => $notes,
+                    title            => $biblioData->{title},
+                    itemnumber       => $itemNum,
+                    found            => $found,
+                    itemtype         => $itemtype,
+                }
             );
             $failed_holds++ unless $reserve_id;
             ++$reserve_cnt;

@@ -69,17 +69,12 @@ foreach ( 1 .. $borrowers_count ) {
 my $i = 1;
 foreach my $borrowernumber (@borrowernumbers) {
     AddReserve(
-        $branchcodes[$i],
-        $borrowernumber,
-        $biblio->biblionumber,
-        my $bibitems   = q{},
-        my $priority = $i,
-        my $resdate,
-        my $expdate,
-        my $notes = q{},
-        'a title',
-        my $checkitem,
-        my $found,
+        {
+            branchcode     => $branchcodes[$i],
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblio->biblionumber,
+            priority       => $i,
+        }
     );
 
     $i++;

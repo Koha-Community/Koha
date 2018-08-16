@@ -205,17 +205,13 @@ sub acctlines { #calculate number of accountlines for a patron
 
 sub addreserve {
     return AddReserve(
-        $library->{branchcode},
-        $_[0],
-        $biblio->{biblionumber},
-        undef,
-        '1',
-        undef,
-        undef,
-        '',
-        $biblio->{title},
-        undef,
-        ''
+        {
+            branchcode     => $library->{branchcode},
+            borrowernumber => $_[0],
+            biblionumber   => $biblio->{biblionumber},
+            priority       => '1',
+            title          => $biblio->{title},
+        }
     );
 }
 

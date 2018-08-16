@@ -919,11 +919,22 @@ subtest 'holds and old_holds' => sub {
         'Koha::Patron->holds should return a Koha::Holds objects' );
     is( $holds->count, 0, 'There should not be holds placed by this patron yet' );
 
-    C4::Reserves::AddReserve( $library->{branchcode},
-        $patron->borrowernumber, $biblionumber_1 );
+    C4::Reserves::AddReserve(
+        {
+            branchcode     => $library->{branchcode},
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $biblionumber_1
+        }
+    );
     # In the future
-    C4::Reserves::AddReserve( $library->{branchcode},
-        $patron->borrowernumber, $biblionumber_2, undef, undef, dt_from_string->add( days => 2 ) );
+    C4::Reserves::AddReserve(
+        {
+            branchcode      => $library->{branchcode},
+            borrowernumber  => $patron->borrowernumber,
+            biblionumber    => $biblionumber_2,
+            expiration_date => dt_from_string->add( days => 2 )
+        }
+    );
 
     $holds = $patron->holds;
     is( $holds->count, 2, 'There should be 2 holds placed by this patron' );

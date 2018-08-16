@@ -385,9 +385,17 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Biblio-level hold, renewal test
     AddReserve(
-        $branch, $reserving_borrowernumber, $biblio->biblionumber,
-        $bibitems,  $priority, $resdate, $expdate, $notes,
-        'a title', $checkitem, $found
+        {
+            branchcode       => $branch,
+            borrowernumber   => $reserving_borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            notes            => $notes,
+            itemnumber       => $checkitem,
+            found            => $found,
+        }
     );
 
     # Testing of feature to allow the renewal of reserved items if other items on the record can fill all needed holds
@@ -458,9 +466,17 @@ subtest "CanBookBeRenewed tests" => sub {
 
     # Item-level hold, renewal test
     AddReserve(
-        $branch, $reserving_borrowernumber, $biblio->biblionumber,
-        $bibitems,  $priority, $resdate, $expdate, $notes,
-        'a title', $item_1->itemnumber, $found
+        {
+            branchcode       => $branch,
+            borrowernumber   => $reserving_borrowernumber,
+            biblionumber     => $biblio->biblionumber,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            notes            => $notes,
+            itemnumber       => $item_1->itemnumber,
+            found            => $found,
+        }
     );
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber, 1);
@@ -1378,9 +1394,12 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with no hold on the record' );
 
     AddReserve(
-        $library2->{branchcode}, $borrowernumber2, $biblio->biblionumber,
-        '',  1, undef, undef, '',
-        undef, undef, undef
+        {
+            branchcode     => $library2->{branchcode},
+            borrowernumber => $borrowernumber2,
+            biblionumber   => $biblio->biblionumber,
+            priority       => 1,
+        }
     );
 
     Koha::CirculationRules->set_rules(
@@ -1799,9 +1818,17 @@ subtest 'MultipleReserves' => sub {
     );
     my $reserving_borrowernumber1 = Koha::Patron->new(\%reserving_borrower_data1)->store->borrowernumber;
     AddReserve(
-        $branch, $reserving_borrowernumber1, $biblio->biblionumber,
-        $bibitems,  $priority, $resdate, $expdate, $notes,
-        'a title', $checkitem, $found
+        {
+            branchcode       => $branch,
+            borrowernumber   => $reserving_borrowernumber1,
+            biblionumber     => $biblio->biblionumber,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            notes            => $notes,
+            itemnumber       => $checkitem,
+            found            => $found,
+        }
     );
 
     my %reserving_borrower_data2 = (
@@ -1812,9 +1839,17 @@ subtest 'MultipleReserves' => sub {
     );
     my $reserving_borrowernumber2 = Koha::Patron->new(\%reserving_borrower_data2)->store->borrowernumber;
     AddReserve(
-        $branch, $reserving_borrowernumber2, $biblio->biblionumber,
-        $bibitems,  $priority, $resdate, $expdate, $notes,
-        'a title', $checkitem, $found
+        {
+            branchcode       => $branch,
+            borrowernumber   => $reserving_borrowernumber2,
+            biblionumber     => $biblio->biblionumber,
+            priority         => $priority,
+            reservation_date => $resdate,
+            expiration_date  => $expdate,
+            notes            => $notes,
+            itemnumber       => $checkitem,
+            found            => $found,
+        }
     );
 
     {
@@ -2861,8 +2896,13 @@ subtest 'Set waiting flag' => sub {
 
     set_userenv( $library_2 );
     my $reserve_id = AddReserve(
-        $library_2->{branchcode}, $patron_2->{borrowernumber}, $item->{biblionumber},
-        '', 1, undef, undef, '', undef, $item->{itemnumber},
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->{borrowernumber},
+            biblionumber   => $item->{biblionumber},
+            priority       => 1,
+            itemnumber     => $item->{itemnumber},
+        }
     );
 
     set_userenv( $library_1 );
@@ -2899,7 +2939,13 @@ subtest 'Cancel transfers on lost items' => sub {
 
     set_userenv( $library_2 );
     my $reserve_id = AddReserve(
-        $library_2->{branchcode}, $patron_2->{borrowernumber}, $item->biblionumber, '', 1, undef, undef, '', undef, $item->itemnumber,
+        {
+            branchcode     => $library_2->{branchcode},
+            borrowernumber => $patron_2->{borrowernumber},
+            biblionumber   => $item->biblionumber,
+            priority       => 1,
+            itemnumber     => $item->itemnumber,
+        }
     );
 
     #Return book and add transfer

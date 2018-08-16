@@ -81,8 +81,21 @@ subtest fill_holds_at_checkout => sub {
         }
     );
 
-    my $reserve1 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->{biblionumber});
-    my $reserve2 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->{biblionumber});
+    my $reserve1 = AddReserve(
+        {
+            branchcode     => $branch->{branchcode},
+            borrowernumber => $borrower->{borrowernumber},
+            biblionumber   => $biblio->{biblionumber}
+        }
+    );
+    my $reserve2 = AddReserve(
+        {
+            branchcode     => $branch->{branchcode},
+            borrowernumber => $borrower->{borrowernumber},
+            biblionumber   => $biblio->{biblionumber}
+        }
+    );
+
     my $bib = Koha::Biblios->find( $biblio->{biblionumber} );
     is( $bib->holds->count(), 2, "Bib has 2 holds");
 
@@ -174,10 +187,14 @@ subtest cancel_hold => sub {
         }
     );
 
-    my $reserve1 =
-      AddReserve( $library->branchcode, $patron->borrowernumber,
-        $item->biblio->biblionumber,
-        undef, undef, undef, undef, undef, undef, $item->itemnumber );
+    my $reserve1 = AddReserve(
+        {
+            branchcode     => $library->branchcode,
+            borrowernumber => $patron->borrowernumber,
+            biblionumber   => $item->biblio->biblionumber,
+            itemnumber     => $item->itemnumber,
+        }
+    );
     is( $item->biblio->holds->count(), 1, "Hold was placed on bib");
     is( $item->holds->count(),1,"Hold was placed on specific item");
 

@@ -91,18 +91,18 @@ sub add {
         my $priority = C4::Reserves::CalculatePriority($params->{biblio_id});
 
         my $hold_id = C4::Reserves::AddReserve(
-            $params->{pickup_library_id},
-            $patron_id,
-            $params->{biblio_id},
-            undef,    # $bibitems param is unused
-            $priority,
-            undef,    # hold date, we don't allow it currently
-            $params->{expiration_date},
-            $params->{notes},
-            $biblio->title,
-            $params->{item_id},
-            undef,    # TODO: Why not?
-            $params->{item_type}
+            {
+                branchcode      => $params->{pickup_library_id},
+                borrowernumber  => $patron_id,
+                biblionumber    => $params->{biblio_id},
+                priority        => $priority,
+                expiration_date => $params->{expiration_date},
+                notes           => $params->{notes},
+                title           => $biblio->title,
+                itemnumber      => $params->{item_id},
+                found           => undef,                       # TODO: Why not?
+                itemtype        => $params->{item_type},
+            }
         );
         if ($hold_id) {
             Koha::Club::Hold::PatronHold->new({

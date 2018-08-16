@@ -733,7 +733,15 @@ sub HoldTitle {
     #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
     #    $title,      $checkitem, $found
     my $priority= C4::Reserves::CalculatePriority( $biblionumber );
-    AddReserve( $branch, $borrowernumber, $biblionumber, undef, $priority, undef, undef, undef, $title, undef, undef );
+    AddReserve(
+        {
+            branch         => $branch,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblionumber,
+            priority       => $priority,
+            title          => $title,
+        }
+    );
 
     # Hashref building
     my $out;
@@ -808,11 +816,17 @@ sub HoldItem {
     return { code => $canitembereserved } unless $canitembereserved eq 'OK';
 
     # Add the reserve
-    #    $branch,    $borrowernumber, $biblionumber,
-    #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
-    #    $title,      $checkitem, $found
-    my $priority= C4::Reserves::CalculatePriority( $biblionumber );
-    AddReserve( $branch, $borrowernumber, $biblionumber, undef, $priority, undef, undef, undef, $title, $itemnumber, undef );
+    my $priority = C4::Reserves::CalculatePriority($biblionumber);
+    AddReserve(
+        {
+            branch         => $branch,
+            borrowernumber => $borrowernumber,
+            biblionumber   => $biblionumber,
+            priority       => $priority,
+            title          => $title,
+            itemnumber     => $itemnumber,
+        }
+    );
 
     # Hashref building
     my $out;

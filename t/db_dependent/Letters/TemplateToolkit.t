@@ -524,8 +524,25 @@ You have [% count %] items due
 
         my $code = 'HOLD_SLIP';
 
-        C4::Reserves::AddReserve( $library->{branchcode}, $patron->{borrowernumber}, $biblio1->{biblionumber}, undef, undef, undef, undef, "a note", undef, $item1->{itemnumber}, 'W' );
-        C4::Reserves::AddReserve( $library->{branchcode}, $patron->{borrowernumber}, $biblio2->{biblionumber}, undef, undef, undef, undef, "another note", undef, $item2->{itemnumber} );
+        C4::Reserves::AddReserve(
+            {
+                branchcode     => $library->{branchcode},
+                borrowernumber => $patron->{borrowernumber},
+                biblionumber   => $biblio1->{biblionumber},
+                notes          => "a note",
+                itemnumber     => $item1->{itemnumber},
+                found          => 'W'
+            }
+        );
+        C4::Reserves::AddReserve(
+            {
+                branchcode     => $library->{branchcode},
+                borrowernumber => $patron->{borrowernumber},
+                biblionumber   => $biblio2->{biblionumber},
+                notes          => "another note",
+                itemnumber     => $item2->{itemnumber},
+            }
+        );
 
         my $template = <<EOF;
 <h5>Date: <<today>></h5>

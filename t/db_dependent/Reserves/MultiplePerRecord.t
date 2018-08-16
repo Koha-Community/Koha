@@ -285,12 +285,26 @@ Koha::CirculationRules->set_rules(
 
 my $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
 is( $can->{status}, 'OK', 'Hold can be placed with 0 holds' );
-my $hold_id = AddReserve( $library->{branchcode}, $patron->{borrowernumber}, $biblio->{biblionumber}, '', 1 );
+my $hold_id = AddReserve(
+    {
+        branchcode     => $library->{branchcode},
+        borrowernumber => $patron->{borrowernumber},
+        biblionumber   => $biblio->{biblionumber},
+        priority       => 1
+    }
+);
 ok( $hold_id, 'First hold was placed' );
 
 $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
 is( $can->{status}, 'OK', 'Hold can be placed with 1 hold' );
-$hold_id = AddReserve( $library->{branchcode}, $patron->{borrowernumber}, $biblio->{biblionumber}, '', 1 );
+$hold_id = AddReserve(
+    {
+        branchcode     => $library->{branchcode},
+        borrowernumber => $patron->{borrowernumber},
+        biblionumber   => $biblio->{biblionumber},
+        priority       => 1
+    }
+);
 ok( $hold_id, 'Second hold was placed' );
 
 $can = CanBookBeReserved($patron->{borrowernumber}, $biblio->{biblionumber});
