@@ -570,15 +570,18 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     { carped => 'EmbedItemsInMarcBiblio: No MARC record passed' },
       'Should crap is no record passed.';
 
+    Koha::Caches->flush();
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber );
     my @items = $record->field($itemfield);
     is( scalar @items, $number_of_items, 'Should return all items' );
 
+    Koha::Caches->flush();
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber,
         [ $itemnumbers[1], $itemnumbers[3] ] );
     @items = $record->field($itemfield);
     is( scalar @items, 2, 'Should return all items present in the list' );
 
+    Koha::Caches->flush();
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, 1 );
     @items = $record->field($itemfield);
     is( scalar @items, $number_of_items, 'Should return all items for opac' );
@@ -587,12 +590,14 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
         homebranch: ['$library1->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
 
+    Koha::Caches->flush();
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber );
     @items = $record->field($itemfield);
     is( scalar @items,
         $number_of_items,
         'Even with OpacHiddenItems set, all items should have been embedded' );
 
+    Koha::Caches->flush();
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, 1 );
     @items = $record->field($itemfield);
     is(
@@ -604,6 +609,7 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     $opachiddenitems = "
         homebranch: ['$library1->{branchcode}', '$library2->{branchcode}']";
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', $opachiddenitems );
+    Koha::Caches->flush();
     C4::Biblio::EmbedItemsInMarcBiblio( $record, $biblionumber, undef, 1 );
     @items = $record->field($itemfield);
     is(
