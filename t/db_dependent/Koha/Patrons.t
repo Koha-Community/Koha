@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 use Test::Warn;
 use Test::Exception;
 use Time::Fake;
@@ -1499,6 +1499,78 @@ subtest '->store' => sub {
     $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
 };
+
+
+subtest '->set_password' => sub {
+
+    plan tests => 11;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons', value => { login_attempts => 3 } } );
+
+    # Disable logging password changes for this tests
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
+
+    # Password-length tests
+    t::lib::Mocks::mock_preference( 'minPasswordLength', undef );
+    throws_ok { $patron->set_password('ab'); }
+        'Koha::Exceptions::Password::TooShort',
+        'minPasswordLength is undef, fall back to 3, fail test';
+
+    t::lib::Mocks::mock_preference( 'minPasswordLength', 2 );
+    throws_ok { $patron->set_password('ab'); }
+        'Koha::Exceptions::Password::TooShort',
+        'minPasswordLength is 2, fall back to 3, fail test';
+
+    t::lib::Mocks::mock_preference( 'minPasswordLength', 5 );
+    throws_ok { $patron->set_password('abcb'); }
+        'Koha::Exceptions::Password::TooShort',
+        'minPasswordLength is 5, fail test';
+
+    # Trailing spaces tests
+    throws_ok { $patron->set_password('abcD12d   '); }
+        'Koha::Exceptions::Password::TrailingWhitespaces',
+        'Password contains trailing spaces, exception is thrown';
+
+    # Require strong password tests
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 1 );
+    throws_ok { $patron->set_password('abcd   a'); }
+        'Koha::Exceptions::Password::TooWeak',
+        'Password is too weak, exception is thrown';
+
+    # Refresh patron from DB, just to make sure
+    $patron->discard_changes;
+    is( $patron->login_attempts, 3, 'Previous tests kept login attemps count' );
+
+    $patron->set_password('abcD12 34');
+    $patron->discard_changes;
+
+    is( $patron->login_attempts, 0, 'Changing the password resets the login attempts count' );
+
+    # Completeness
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    $patron->login_attempts(3)->store;
+    my $old_digest = $patron->password;
+    $patron->set_password('abcd   a');
+    $patron->discard_changes;
+
+    isnt( $patron->password, $old_digest, 'Password has been updated' );
+    is( $patron->login_attempts, 0, 'Login attemps have been reset' );
+
+    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;
+    is( $number_of_logs, 0, 'Without BorrowerLogs, Koha::Patron->set_password doesn\'t log password changes' );
+
+    # Enable logging password changes
+    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
+    $patron->set_password('abcd   b');
+
+    $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;
+    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->set_password does log password changes' );
+
+    $schema->storage->txn_rollback;
+};
+
 
 
 # TODO Move to t::lib::Mocks and reuse it!
