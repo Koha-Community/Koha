@@ -267,7 +267,8 @@ if ($op eq "show"){
 
             my $existing_items = Koha::Items->search({ barcode => \@barcodelist });
             @itemnumbers = $existing_items->get_column('itemnumber');
-            my %exists = map {$_=>1} @{$existing_items->get_column('barcode')};
+            my @barcodes = $existing_items->get_column('barcode');
+            my %exists = map {$_=>1} @barcodes;
             @notfoundbarcodes = grep { !$exists{$_} } @barcodelist;
         }
     }
