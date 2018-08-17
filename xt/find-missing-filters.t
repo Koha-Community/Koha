@@ -103,11 +103,6 @@ sub process_tt_content {
             {
                 my $tt_block = $+{tt_block};
 
-                if ( $tt_block =~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)} )
-                {    # Specific for [% foo UNLESS bar %]
-                    push @errors, { error => 'missing_filter', line => $line };
-                }
-
                 # It's a TT directive, no filters needed
                 next if grep { $tt_block =~ $_ } @tt_directives;
 
@@ -121,6 +116,8 @@ sub process_tt_content {
                   && $tt_block !~ m{=}            # assignment, maybe we should require to use SET (?)
                   && $tt_block !~ m{\|\s?ur(l|i)} # already has url or uri filter
                   && $tt_block !~ m{\|\s?html}    # already has html filter
+                  && $tt_block !~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)} # Specific for [% foo UNLESS bar %]
+                ;
             }
         }
     }
