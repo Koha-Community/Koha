@@ -2819,7 +2819,7 @@ sub PrepareItemrecordDisplay {
                     $subfield_data{marc_value} = {
                         type    => 'select',
                         values  => \@authorised_values,
-                        default => "$defaultvalue",
+                        default => "" . ($defaultvalue || ""),
                         labels  => \%authorised_lib,
                     };
                 } elsif ( $tagslib->{$tag}->{$subfield}->{value_builder} ) {
@@ -2836,6 +2836,7 @@ sub PrepareItemrecordDisplay {
                     }
                     if( !$plugin->errstr ) {
                         #TODO Move html to template; see report 12176/13397
+			$defaultvalue //= "";
                         my $tab= $plugin->noclick? '-1': '';
                         my $class= $plugin->noclick? ' disabled': '';
                         my $title= $plugin->noclick? 'No popup': 'Tag editor';

@@ -1720,15 +1720,13 @@ sub NewIssue {
     unless ($serialseq_x || $serialseq_y || $serialseq_z) {
         #Because the subcription's lastvalues are not updated yet, we need to find
         #them the hard way.
-        my $pattern = Koha::Subscriptions::Numberpatterns->find(
-            $subscription->numberpattern
-        );
+        my $pattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($subscription->numberpattern);
         my ($calculated,
             $newlastvalue1, $newlastvalue2, $newlastvalue3,
             $newinnerloop1, $newinnerloop2, $newinnerloop3) =
-                C4::Serials::GetNextSeq(XYZ
+                C4::Serials::GetNextSeq(
                     $subscription->unblessed(),
-                    $pattern->unblessed(),
+                    $pattern,
                     $planneddate
                 );
         $serialseq_x = $newlastvalue1;
