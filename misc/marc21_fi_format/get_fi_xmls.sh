@@ -13,7 +13,7 @@ function getfiles() {
  for x in $FILES; do
     FNAME="$DATADIR/$SDIR-${x}.xml"
     if [ ! -e "$FNAME" ]; then
-	wget "http://www.kansalliskirjasto.fi/extra/marc21/$SDIR/${x}.xml" -O "$FNAME"
+	wget "http://marc21.kansalliskirjasto.fi/$SDIR/${x}.xml" -O "$FNAME"
     fi
  done
 }
