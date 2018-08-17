@@ -87,6 +87,34 @@ $.fn.selectTabByID = function (tabID) {
     $("#catalog-search-link a").on("hover", function(){
         $("#catalog-search-dropdown a").toggleClass("catalog-search-dropdown-hover");
     });
+
+    if (typeof $.cookie("lastborrowernumber") !== "undefined" && $("#hiddenborrowernumber").val() != $.cookie("lastborrowernumber")) {
+        $("#lastborrowerlink").show();
+        $("#lastborrowerlink").prop("title", $.cookie("lastborrowername") + " (" + $.cookie("lastborrowercard") + ")");
+        $("#lastborrowerlink").prop("href", "/cgi-bin/koha/circ/circulation.pl?borrowernumber=" + $.cookie("lastborrowernumber"));
+        $("#lastborrower-window").css("display", "inline-block");
+    }
+    if ($("a#logout").length > 0) {
+        $("a#logout").click(function() {
+            delCookie("lastborrowernumber");
+            delCookie("lastborrowername");
+            delCookie("lastborrowercard");
+            delCookie("currentborrowernumber");
+        });
+    }
+    $("#lastborrower-remove").click(function() {
+        delCookie("lastborrowernumber");
+        delCookie("lastborrowername");
+        delCookie("lastborrowercard");
+        delCookie("currentborrowernumber");
+        $("#lastborrower-window").hide();
+    });
+    if (typeof $.cookie("lastborrowernumber") === "undefined" || ($("#hiddenborrowernumber").val() != $.cookie("lastborrowernumber") && $.cookie("currentborrowernumber") != $("#hiddenborrowernumber").val())) {
+        $.cookie("lastborrowernumber", $("#hiddenborrowernumber").val(), { path: "/" });
+        $.cookie("lastborrowername", $("#hiddenborrowername").val(), { path: "/" });
+        $.cookie("lastborrowercard", $("#hiddenborrowercard").val(), { path: "/" });
+    }
+    $.cookie("currentborrowernumber", $("#hiddenborrowernumber").val(), { path: "/" });
 });
 
 // http://jennifermadden.com/javascript/stringEnterKeyDetector.html

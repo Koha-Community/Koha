@@ -2,6 +2,9 @@
 [% USE KohaDates %]
 [% IF ( patron.borrowernumber ) %]
 <div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
+<input type="hidden" id="hiddenborrowernumber" value="[% patron.borrowernumber %]">
+<input type="hidden" id="hiddenborrowername" value="[% patron.surname %] [% patron.firstname %]">
+<input type="hidden" id="hiddenborrowercard" value="[% patron.cardnumber %]">
 <!--[if IE 6]>
 <style type="tex/css">img { width: expression(this.width > 140 ? 140: true);
 }</style>

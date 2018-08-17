@@ -148,5 +148,6 @@
             [% END %]
         </ul>
     </div>
+    [% INCLUDE 'last-borrower.inc' %]
     [% IF ( intranetbookbag ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
 </div>
