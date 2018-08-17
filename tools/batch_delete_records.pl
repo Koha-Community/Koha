@@ -57,6 +57,7 @@ if ( $op eq 'form' ) {
         $recordtype = 'biblio';
     } elsif ( my $uploadfile = $input->param('uploadfile') ) {
         # A file of id is given
+        binmode $uploadfile, ':encoding(UTF-8)';
         while ( my $content = <$uploadfile> ) {
             next unless $content;
             $content =~ s/[\r\n]*$//;
