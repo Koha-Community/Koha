@@ -34,8 +34,6 @@ my %field_data = (
 	    '2' => qr/[0-9]/,
 	    '3' => qr/[0-9]/,
 	    '4' => qr/[0-9]/,
-	    '10' => qr/[2]/,
-	    '11' => qr/[2]/,
 	    '12' => qr/[0-9]/,
 	    '13' => qr/[0-9]/,
 	    '14' => qr/[0-9]/,
@@ -186,10 +184,6 @@ sub CheckMARC21FormatErrors {
     my @errors;
 
     return \@errors if (!defined($formatdata));
-
-    # grumble ...
-    $field_data{'regex'}{'000'}{10} = qr/[2]/;
-    $field_data{'regex'}{'000'}{11} = qr/[2]/;
 
     my %ignore_fields = %{$formatdata->{'ignore_fields'}};
     my %valid_fields = %{$formatdata->{'valid_fields'}};
