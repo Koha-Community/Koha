@@ -74,9 +74,9 @@ if ( $src eq 'circ' ) {
     use C4::Members::Attributes qw(GetBorrowerAttributes);
     my $borrowernumber = $object;
     my $patron = Koha::Patrons->find( $borrowernumber );
+    my $circ_info = 1;
     unless ( $patron ) {
-        print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
-        exit;
+         $circ_info = 0;
     }
     if ( C4::Context->preference('ExtendedPatronAttributes') ) {
         my $attributes = GetBorrowerAttributes( $borrowernumber );
@@ -88,7 +88,7 @@ if ( $src eq 'circ' ) {
 
     $template->param(
         patron      => $patron,
-        circulation => 1,
+        circulation => $circ_info,
     );
 }
 
