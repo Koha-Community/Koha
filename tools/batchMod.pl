@@ -238,6 +238,7 @@ if ($op eq "show"){
 
     my @contentlist;
     if ($filefh){
+        binmode $filefh, ':encoding(UTF-8)';
         while (my $content=<$filefh>){
             $content =~ s/[\r\n]*$//;
             push @contentlist, $content if $content;
