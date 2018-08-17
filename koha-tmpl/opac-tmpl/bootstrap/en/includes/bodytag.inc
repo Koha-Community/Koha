@@ -1,5 +1,5 @@
 [% USE raw %]
-[% classprop  = 'class="' | html %]
+[% SET classprop  = 'class="' %]
 [% IF LoginBranchcode.defined %]
     [% classprop = classprop _ 'branch-' _ LoginBranchcode %]
 [% ELSE %]
@@ -11,6 +11,6 @@
 [% classprop = classprop _ '"' %]
 
 [% IF bodyid.defined %]
-    [% idprop = 'ID="' _ bodyid _ '" ' | html %]
+    [% SET idprop = 'ID="' _ bodyid _ '" ' %]
 [% END %]
-<body [% idprop | html %][% classprop | $raw %] >
+<body [%idprop|$raw%][%classprop|$raw%] >
