@@ -18,7 +18,7 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; [% IF ( done_searched ) %]<a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Search results[% ELSE %]Serials [% END %] </div>
 
-[% url_params = [] | html %]
+[% url_params = [] %]
 [% FOREACH param IN CGI.params.pairs %]
     [% escaped_value = BLOCK %][% param.value | uri %][% END %]
     [% url_params.push(param.key _ '=' _ escaped_value) | html %]

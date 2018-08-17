@@ -272,7 +272,7 @@
                                                         </li>
 
                                                         [% IF Koha.Preference('AllowHoldItemTypeSelection') %]
-                                                            [% itemtypes = [] | html %]
+                                                            [% itemtypes = [] %]
                                                             [% FOREACH item IN bibitemloo.itemLoop %]
                                                                 [% itemtypes.push( item.itype ) | html %]
                                                             [%- END %]

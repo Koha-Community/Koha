@@ -47,7 +47,7 @@
             <tr><td>[% member.name | html %]</td>
                 <td>
                     <select name="itemrank" class="itemrank" data-subscriptionid="[% subscriptionid | html %]" data-routingid="[% member.routingid | html %]">
-                    [% rankings = [1 .. m_loop.size] | html %]
+                    [% rankings = [1 .. m_loop.size] %]
                     [% FOREACH r IN rankings %]
                         [% IF r == member.ranking %]
                           <option selected="selected" value="[% r | html %]">[% r | html %]</option>

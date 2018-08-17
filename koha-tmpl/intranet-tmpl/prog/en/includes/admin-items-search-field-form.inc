@@ -36,7 +36,7 @@
   <li>
     <label for="tagsubfield">MARC subfield: </label>
     <select id="tagsubfield" name="tagsubfield">
-      [% codes = [''] | html %]
+      [% codes = [''] %]
       [% codes = codes.merge([0..9], ['a'..'z']) | html %]
       [% FOREACH tagsubfield IN codes %]
         [% IF field && field.tagsubfield == tagsubfield %]
