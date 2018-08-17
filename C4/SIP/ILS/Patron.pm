@@ -317,7 +317,7 @@ sub hold_items {
     my $item_arr = $self->x_items('hold_items', @_);
     foreach my $item (@{$item_arr}) {
         my $item_obj = Koha::Items->find($item->{itemnumber});
-        $item_arr->{barcode} = $item_obj ? $item_obj->barcode : undef;
+        $item->{barcode} = $item_obj ? $item_obj->barcode : undef;
     }
     return $item_arr;
 }
