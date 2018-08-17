@@ -97,7 +97,7 @@
             [% IF ( holdshistoryview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/holdshistory.pl?borrowernumber=[% patron.borrowernumber | html %]">Holds history</a></li>
         [% END %]
     [% END %]
-    [% IF ( CAN_user_parameters ) %]
+    [% IF ( CAN_user_tools_view_system_logs ) %]
         [% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=circulation&amp;object=[% patron.borrowernumber | html %]&amp;src=circ">Modification log</a></li>
     [% END %]
     [% IF CAN_user_borrowers_edit_borrowers %]
