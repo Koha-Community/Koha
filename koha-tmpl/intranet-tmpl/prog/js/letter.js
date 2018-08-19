@@ -1,5 +1,5 @@
 /* Variables defined in letter.tt: */
-/* global _ module add_form copy_form dataTablesDefaults no_op_set MSG_EMPTY_TITLE_AND_CONTENT MSG_EMPTY_TEMPLATES code MSG_CODE_EXISTS MSG_CODE_EXISTS_FOR_LIBRARY MSG_DT_LOADING_RECORDS interface theme */
+/* global _ module add_form copy_form no_op_set MSG_EMPTY_TITLE_AND_CONTENT MSG_EMPTY_TEMPLATES code MSG_CODE_EXISTS MSG_CODE_EXISTS_FOR_LIBRARY MSG_DT_LOADING_RECORDS interface theme KohaTable columns_settings */
 
 var modal_loading = "<div id=\"loading\"><img src=\"" + interface + "/" + theme + "/img/spinner-small.gif\" alt=\"\" /> "+ MSG_DT_LOADING_RECORDS +"</div>";
 
@@ -35,13 +35,18 @@ $(document).ready(function() {
         $('#toolbar').fixFloat();
     }
 
-    $("#lettert:has(tbody tr)").dataTable($.extend(true, {}, dataTablesDefaults, {
-        "sDom": 't',
-        "aoColumnDefs": [
-            { "bSortable": false, "bSearchable": false, 'aTargets': [ 'nosort' ] }
+    var ntable = KohaTable("lettert", {
+        "autoWidth": false,
+        "paging": false,
+        "aaSorting": [[ 3, "asc" ]],
+        "columnDefs": [
+            { "bSortable": false, "aTargets": [ "nosort" ] },
+            { "sType": "title-string", "aTargets" : [ "title-string"] }
         ],
-        "bPaginate": false
-    }));
+        "oLanguage": {
+            "sZeroRecords": MSG_NO_NOTICE_FOUND
+        },
+    }, columns_settings);
 
     if( no_op_set ){
         $('#branch').change(function() {

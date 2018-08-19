@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Notices[% IF ( add_form or copy_form ) %][% IF ( modify ) %] &rsaquo; Modify notice[% ELSE %] &rsaquo; Add notice[% END %][% END %][% IF ( add_validate or copy_validate) %] &rsaquo; Notice added[% END %][% IF ( delete_confirm ) %] &rsaquo; Confirm deletion[% END %]</title>
@@ -460,6 +461,7 @@
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.insertatcaret.js") | $raw %]
     <script>
@@ -476,6 +478,8 @@
         var MSG_EMPTY_TITLE_AND_CONTENT = _("Please specify title and content for %s");
         var MSG_EMPTY_TEMPLATES = _("Please fill at least one template.");
         var MSG_LOADING = _("Loading");
+        var MSG_NO_NOTICE_FOUND = _("No matching notices found");
+        var columns_settings = [% ColumnsSettings.GetColumns( 'tools', 'notices', 'lettert', 'json' ) | $raw %];
      </script>
     [% Asset.js("js/letter.js") | $raw %]
 [% END %]
