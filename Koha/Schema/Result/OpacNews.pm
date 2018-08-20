@@ -60,7 +60,7 @@ __PACKAGE__->table("opac_news");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 expirationdate
@@ -102,7 +102,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "expirationdate",
@@ -168,8 +168,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-21 12:39:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wfBMbKlWykwfNNNLGkl4BA
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:5tOOLZNr/ddhusb13r5dmQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

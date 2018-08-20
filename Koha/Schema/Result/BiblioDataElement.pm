@@ -38,7 +38,7 @@ __PACKAGE__->table("biblio_data_elements");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 deleted
@@ -98,7 +98,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "deleted",
@@ -146,8 +146,8 @@ __PACKAGE__->set_primary_key("id");
 __PACKAGE__->add_unique_constraint("bibitnoidx", ["biblioitemnumber"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-06-16 18:11:28
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:DpwbIsn8hLAVLe4ucfn+Lg
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:THW8gRBK89fyrBDca5dsUg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

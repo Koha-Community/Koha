@@ -85,7 +85,7 @@ __PACKAGE__->table("old_issues");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 issuedate
@@ -150,7 +150,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "issuedate",
@@ -226,8 +226,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-05-03 04:12:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rvUGkBhLE7AwPNp1viI23Q
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PrmRHw0wZwbHBDxQ20Yb2w
 
 sub koha_objects_class {
     'Koha::Old::Checkouts';

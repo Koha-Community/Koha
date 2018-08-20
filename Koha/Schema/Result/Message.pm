@@ -55,7 +55,7 @@ __PACKAGE__->table("messages");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 manager_id
@@ -81,7 +81,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "manager_id",
@@ -123,8 +123,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-31 10:39:36
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Lmkl/u8Lr1cQumfZvn5D4A
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:X6LwMObEpXo7kW4nHUGQXA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

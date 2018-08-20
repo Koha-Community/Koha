@@ -51,7 +51,7 @@ __PACKAGE__->table("import_records");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 import_date
@@ -129,7 +129,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "import_date",
@@ -193,6 +193,21 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("import_record_id");
 
 =head1 RELATIONS
+
+=head2 batch_overlay_diff_headers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::BatchOverlayDiffHeader>
+
+=cut
+
+__PACKAGE__->has_many(
+  "batch_overlay_diff_headers",
+  "Koha::Schema::Result::BatchOverlayDiffHeader",
+  { "foreign.breedingid" => "self.import_record_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
 
 =head2 import_auths
 
@@ -270,8 +285,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-07-11 09:26:55
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:jhzXlqw5mA1lGsI9SZEv/Q
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0uRJJMz6ERaZ4Z2v3gtq7g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

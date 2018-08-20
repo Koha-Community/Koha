@@ -44,7 +44,7 @@ __PACKAGE__->table("ratings");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =cut
@@ -60,7 +60,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
 );
@@ -112,8 +112,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07025 @ 2013-10-14 20:56:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:YT3jPQbA2TBuOuUXfEt7gQ
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nNCe88vKatqtKmtYor9mXw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

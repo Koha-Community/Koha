@@ -67,7 +67,7 @@ __PACKAGE__->table("search_history");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =cut
@@ -96,7 +96,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
 );
@@ -114,8 +114,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-03-11 14:59:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:IDEfmaznxc6sCi0r/8ibhg
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gYedgNgWK6cUs+FFVLhOsA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

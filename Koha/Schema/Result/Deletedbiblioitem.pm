@@ -118,7 +118,7 @@ __PACKAGE__->table("deletedbiblioitems");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 illus
@@ -249,7 +249,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "illus",
@@ -301,8 +301,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("biblioitemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-01-13 08:36:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZFXb+BlsrsArv8qE2DrkkA
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kuzQOsJ6mjxYx0orLSPzgw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

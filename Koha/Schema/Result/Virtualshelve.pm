@@ -58,7 +58,7 @@ __PACKAGE__->table("virtualshelves");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 created_on
@@ -101,7 +101,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "created_on",
@@ -181,8 +181,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-03-08 14:19:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xoq0lhLouCbkAp6F4ZyMGQ
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4k3z+jH6D0z/V0x8FqMOEA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

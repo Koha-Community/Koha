@@ -275,8 +275,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-07-08 13:37:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:LH3DdDDYXaGsNsILAUZzng
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OWYqW7N95UmmbZpFx7EKDA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

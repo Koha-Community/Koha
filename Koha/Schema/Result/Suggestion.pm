@@ -114,7 +114,7 @@ __PACKAGE__->table("suggestions");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 volumedesc
@@ -245,7 +245,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "volumedesc",
@@ -315,8 +315,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-09 15:14:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FlZsyhm/ugCqtMJ+HoYOkw
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Xkr+j5hXxKePB6bRWNLsLQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

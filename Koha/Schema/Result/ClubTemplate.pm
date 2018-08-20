@@ -62,7 +62,7 @@ __PACKAGE__->table("club_templates");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 date_updated
@@ -96,7 +96,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "date_updated",
@@ -189,7 +189,7 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-26 16:17:25
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:29ssLVCIoLxBmUi8E5gHqg
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/bz+mgZSHAvt3Y9Wq+v4gg
 
 1;

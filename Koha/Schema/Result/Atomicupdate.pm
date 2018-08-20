@@ -46,7 +46,7 @@ __PACKAGE__->table("atomicupdates");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =cut
@@ -67,7 +67,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
 );
@@ -99,8 +99,8 @@ __PACKAGE__->set_primary_key("atomicupdate_id");
 __PACKAGE__->add_unique_constraint("atomic_issue_id", ["issue_id"]);
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2015-08-20 16:04:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vECF28CFdwiSozjA4WL7DA
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:1wWCGsQhplzyRAKdwAOhoA
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

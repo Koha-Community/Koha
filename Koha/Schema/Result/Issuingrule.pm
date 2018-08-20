@@ -405,6 +405,10 @@ __PACKAGE__->set_primary_key("issuingrules_id");
 
 =item * L</genre>
 
+=item * L</circulation_level>
+
+=item * L</reserve_level>
+
 =back
 
 =cut
@@ -425,8 +429,8 @@ __PACKAGE__->add_unique_constraint(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 19:15:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:D1443VWPcoIXN3+lIkckIQ
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:zyiq4IGMeiPNV/hhjHa1OQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

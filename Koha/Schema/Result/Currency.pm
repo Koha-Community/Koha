@@ -46,7 +46,7 @@ __PACKAGE__->table("currency");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 rate
@@ -79,7 +79,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "rate",
@@ -150,8 +150,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-09 15:14:35
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0xP1adf+TPUi2cBn8Qah5A
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:g2BHIXoYffRHyLtTveoh+w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

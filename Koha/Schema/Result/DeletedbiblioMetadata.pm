@@ -56,7 +56,7 @@ __PACKAGE__->table("deletedbiblio_metadata");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =cut
@@ -76,7 +76,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
 );
@@ -132,8 +132,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-12-07 10:24:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kk2GBiYaECKD+QtnKnycKQ
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:oDs7EGAqYl0ld7ZRwJXnPQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

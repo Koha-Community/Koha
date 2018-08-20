@@ -137,7 +137,7 @@ __PACKAGE__->table("aqorders");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 rrp
@@ -357,7 +357,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "rrp",
@@ -625,8 +625,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-10-28 15:05:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FyZsBWGJ8wsPkFdYUAetmg
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kIqlHCaQ5fm2seIqSzY/KQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

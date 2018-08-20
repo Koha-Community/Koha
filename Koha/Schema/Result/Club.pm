@@ -68,7 +68,7 @@ __PACKAGE__->table("clubs");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 date_updated
@@ -98,7 +98,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "date_updated",
@@ -189,8 +189,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-04-27 18:47:08
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RKvHFP2y+c5hjpjzKsEQXA
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sUzmbUl0pO8WJ3VUGV5NFg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

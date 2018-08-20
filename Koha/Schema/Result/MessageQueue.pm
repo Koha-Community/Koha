@@ -74,7 +74,7 @@ __PACKAGE__->table("message_queue");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 to_address
@@ -125,7 +125,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "to_address",
@@ -172,21 +172,6 @@ __PACKAGE__->belongs_to(
   },
 );
 
-=head2 message_transport_type
-
-Type: belongs_to
-
-Related object: L<Koha::Schema::Result::MessageTransportType>
-
-=cut
-
-__PACKAGE__->belongs_to(
-  "message_transport_type",
-  "Koha::Schema::Result::MessageTransportType",
-  { message_transport_type => "message_transport_type" },
-  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
-);
-
 =head2 message_queue_items
 
 Type: has_many
@@ -202,9 +187,24 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 message_transport_type
 
-# Created by DBIx::Class::Schema::Loader v0.07045 @ 2017-04-27 13:05:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Irdj30QHaI9gf5h/JEQHFQ
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::MessageTransportType>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "message_transport_type",
+  "Koha::Schema::Result::MessageTransportType",
+  { message_transport_type => "message_transport_type" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "CASCADE" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:29
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d10RwZds8ydfmLRUvv4AJQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

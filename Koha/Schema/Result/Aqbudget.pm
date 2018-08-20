@@ -82,7 +82,7 @@ __PACKAGE__->table("aqbudgets");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 budget_period_id
@@ -153,7 +153,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "budget_period_id",
@@ -283,8 +283,8 @@ Composing rels: L</aqbudgetborrowers> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqbudgetborrowers", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07033 @ 2015-03-04 10:26:49
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:E4J/D0+2j0/8JZd0YRnoeA
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-08-20 11:50:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UlejySELuSZpAEonGPRx7w
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
