@@ -21,17 +21,13 @@ use Modern::Perl qw(2014);
 use utf8;
 use Test::More;
 
-use Koha::Database;
 use Koha::SearchEngine::Elasticsearch;
 use Koha::SearchMappingManager;
 
-my $schema = Koha::Database->schema;
 
 subtest "Reset Elasticsearch mappings", \&reset_elasticsearch_mappings;
 sub reset_elasticsearch_mappings {
     my ($rv, $mappings, $count, $mapping);
-
-    $schema->storage->txn_begin;
 
     ok(1, 'Scenario: Reset Elasticsearch mappings to an empty database');
     #There might or might not be any mappings. Whatever the initial status is, make sure we start from empty tables
@@ -73,15 +69,11 @@ sub reset_elasticsearch_mappings {
     $mappings = Koha::SearchMappingManager::get_search_mappings({index_name => 'biblios'});
     $count = $mappings->count();
     ok($count > 10, 'Then search mapping tables have been populated');
-
-    $schema->storage->txn_rollback;
 }
 
 subtest "Get Elasticsearch mappings", \&get_search_mappings;
 sub get_search_mappings {
     my ($mappings, $mapping);
-
-    $schema->storage->txn_begin;
 
     ok(1, 'Scenario: Get a single search mapping by name');
     $mappings = Koha::SearchMappingManager::get_search_mappings({index_name => 'biblios', name => 'ff7-00'});
@@ -98,16 +90,12 @@ sub get_search_mappings {
     ok(1, 'Scenario: Get all search mappings');
     $mappings = Koha::SearchMappingManager::get_search_mappings({index_name => 'biblios'});
     ok($mappings, 'When search mappings are fetched');
-    ok($mappings->count() > 10, 'Then we have "'.$mappings->count().'" search mappings :)');
-
-    $schema->storage->txn_rollback;
+    ok($mappings->count() > 10, 'Then we have "'.$mappings->count().'" search mappings :)')
 }
 
 subtest "Add a search mapping", \&add_mapping;
 sub add_mapping {
     my ($rv, $mappings, $mapping, $count);
-
-    $schema->storage->txn_begin;
 
     ok(1, "Scenario: Add the same mapping twice and hope for no duplicate mappings");
     $rv = Koha::SearchMappingManager::add_mapping({name => 'ln-test',
@@ -133,8 +121,6 @@ sub add_mapping {
     $mappings = Koha::SearchMappingManager::get_search_mappings({index_name => 'biblios', name => 'ln-test'});
     $count = $mappings->count();
     is($count, 1, "Then we received only one mapping from the database");
-
-    $schema->storage->txn_rollback;
 }
 
 done_testing;
