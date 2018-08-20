@@ -173,6 +173,7 @@ foreach my $biblioNumber (@biblionumbers) {
 
     # Compute the priority rank.
     my $biblio = Koha::Biblios->find( $biblioNumber );
+    $biblioData->{object} = $biblio;
     my $holds = $biblio->holds;
     my $rank = $holds->count;
     $biblioData->{reservecount} = 1;    # new reserve
@@ -390,7 +391,6 @@ $template->param('item_level_itypes' => $itemLevelTypes);
 
 foreach my $biblioNum (@biblionumbers) {
 
-    my @not_available_at = ();
     my $record = GetMarcBiblio({ biblionumber => $biblioNum });
     # Init the bib item with the choices for branch pickup
     my %biblioLoopIter;
@@ -400,6 +400,12 @@ foreach my $biblioNum (@biblionumbers) {
     if (! $biblioData) {
         $template->param(message=>1, bad_biblionumber=>$biblioNum);
         &get_out($query, $cookie, $template->output);
+    }
+
+    my @not_available_at = ();
+    my $biblio = $biblioData->{object};
+    foreach my $library ( $pickup_locations->as_list ) {
+        push( @not_available_at, $library->branchcode ) unless $biblio->can_be_transferred({ to => $library });
     }
 
     my $frameworkcode = GetFrameworkCode( $biblioData->{biblionumber} );
