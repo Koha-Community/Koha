@@ -285,8 +285,29 @@ sub XSLTParse4Display {
     }
     $varxml .= "</variables>\n";
 
+    my $partsxml = '';
+    # possibly insert component records into Detail views
+    if ( $xslsyspref eq "OPACXSLTDetailsDisplay" || $xslsyspref eq "XSLTDetailsDisplay" ) {
+        my $showcomp = C4::Context->preference('ShowComponentRecords');
+        if ( $showcomp eq 'both' ||
+             ($showcomp eq 'staff' && $xslsyspref !~ m/OPAC/ ) ||
+             ($showcomp eq 'opac' && $xslsyspref =~ m/OPAC/  ) ) {
+            my $biblio = Koha::Biblios->find( $biblionumber );
+            if ( $biblio->components() ) {
+                my @componentPartRecordXML = ('<componentPartRecords>');
+                for my $cb ( @{ $biblio->components() } ) {
+                    # Remove the xml header
+                    $cb =~ s/^<\?xml.*?\?>//;
+                    push @componentPartRecordXML, decode('utf8', $cb);
+                }
+                push @componentPartRecordXML, '</componentPartRecords>';
+                $partsxml = join "\n", @componentPartRecordXML;
+            }
+        }
+    }
+
     my $sysxml = get_xslt_sysprefs();
-    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$varxml\<\/record\>/;
+    $xmlrecord =~ s/\<\/record\>/$itemsxml$sysxml$varxml$partsxml\<\/record\>/;
     if ($fixamps) { # We need to correct the ampersand entities that Zebra outputs
         $xmlrecord =~ s/\&amp;amp;/\&amp;/g;
         $xmlrecord =~ s/\&amp\;lt\;/\&lt\;/g;

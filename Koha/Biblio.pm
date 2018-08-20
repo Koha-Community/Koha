@@ -41,6 +41,8 @@ use Koha::Items;
 use Koha::Libraries;
 use Koha::Suggestions;
 use Koha::Subscriptions;
+use Koha::SearchEngine;
+use Koha::SearchEngine::Search;
 
 =head1 NAME
 
@@ -474,6 +476,49 @@ sub suggestions {
 
     my $suggestions_rs = $self->_result->suggestions;
     return Koha::Suggestions->_new_from_dbic( $suggestions_rs );
+}
+
+=head3 components
+
+my $components = $self->components();
+
+Returns an array of MARCXML data, which are component parts of
+this object (MARC21 773$w points to this)
+
+=cut
+
+sub components {
+    my ($self) = @_;
+
+    return undef if (C4::Context->preference('marcflavour') ne 'MARC21');
+
+    if (!defined($self->{_components})) {
+        my $marc = C4::Biblio::GetMarcBiblio({ biblionumber => $self->id });
+        my $pf001 = $marc->field('001') || undef;
+        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+
+        if (defined($pf001)) {
+            my $pf003 = $marc->field('003') || undef;
+            my $searchstr;
+
+            if (!defined($pf003)) {
+                # search for 773$w='Host001'
+                $searchstr = "rcn='".$pf001->data()."'";
+            } else {
+                # search for (773$w='Host001' and 003='Host003') or 773$w='Host003 Host001')
+                $searchstr = "(rcn='".$pf001->data()."' and cni='".$pf003->data()."')";
+                $searchstr .= " or rcn='".$pf003->data()." ".$pf001->data()."'";
+            }
+
+            my ( $errors, $results, $total_hits ) = $searcher->simple_search_compat( $searchstr, 0, undef );
+
+            $self->{_components} = $results if ( defined($results) && scalar(@$results) );
+        } else {
+            warn "Record $self->id has no 001";
+        }
+    }
+
+    return $self->{_components};
 }
 
 =head3 subscriptions

@@ -615,6 +615,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('ShelfBrowserUsesHomeBranch','1','1','Use the item home branch when finding items for the shelf browser.','YesNo'),
 ('ShelfBrowserUsesLocation','1','1','Use the item location when finding items for the shelf browser.','YesNo'),
 ('ShowAllCheckins', '0', '', 'Show all checkins', 'YesNo'),
+('ShowComponentRecords', 'nowhere', 'nowhere|staff|opac|both','In which record detail pages to show list of the component records, as linked via 773','Choice'),
 ('showLastPatron','0','','If ON, enables the last patron feature in the intranet','YesNo'),
 ('ShowPatronImageInWebBasedSelfCheck','0','','If ON, displays patron image when a patron uses web-based self-checkout','YesNo'),
 ('ShowReviewer','full','none|full|first|surname|firstandinitial|username','Choose how a commenter\'s identity is presented alongside comments in the OPAC','Choice'),

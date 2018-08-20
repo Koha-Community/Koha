@@ -542,6 +542,72 @@
         </xsl:if>
     </xsl:template>
 
+    <xsl:template name="showComponentParts">
+        <!-- Component part records: Displaying title and author of component part records -->
+        <xsl:if test="marc:componentPartRecords">
+            <div class="results_summary componentPartRecordsContainer">
+                <h5>Component part records</h5>
+                <ol class="componentParts">
+                    <xsl:for-each select="marc:componentPartRecords/marc:record">
+                        <li>
+                            <span class="componentPartRecord">
+                                <span class="componentPartRecordTitle">
+                                    <a>
+                                    <xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']" /></xsl:attribute>
+                                    <xsl:choose>
+                                        <xsl:when test="marc:datafield[@tag=245]/marc:subfield[@code='a']">
+                                            <xsl:value-of select="substring-before( concat(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/'), '/')" />
+                                        </xsl:when>
+                                        <xsl:when test="marc:datafield[@tag=240]/marc:subfield[@code='a']">
+                      <xsl:for-each select="marc:datafield[@tag=240]">
+                        <xsl:call-template name="chopPunctuation">
+                          <xsl:with-param name="chopString">
+                        <xsl:call-template name="subfieldSelect">
+                          <xsl:with-param name="codes">amnp</xsl:with-param>
+                        </xsl:call-template>
+                          </xsl:with-param>
+                        </xsl:call-template>
+                      </xsl:for-each>
+                                        </xsl:when>
+                                        <xsl:when test="marc:datafield[@tag=130]/marc:subfield[@code='a']">
+                      <xsl:for-each select="marc:datafield[@tag=130]">
+                        <xsl:call-template name="chopPunctuation">
+                          <xsl:with-param name="chopString">
+                        <xsl:call-template name="subfieldSelect">
+                          <xsl:with-param name="codes">amnp</xsl:with-param>
+                        </xsl:call-template>
+                          </xsl:with-param>
+                        </xsl:call-template>
+                      </xsl:for-each>
+                                        </xsl:when>
+                                        <xsl:otherwise>
+                                            <xsl:text>[Record with no title statement]</xsl:text>
+                                        </xsl:otherwise>
+                                    </xsl:choose>
+                                    </a>
+                                </span>
+                <xsl:choose>
+                                  <xsl:when test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
+                                    -
+                                    <span class="componentPartRecordAuthor">
+                                        <xsl:value-of select="marc:datafield[@tag=100]/marc:subfield[@code='a']" />
+                                    </span>
+                                  </xsl:when>
+                                  <xsl:when test="marc:datafield[@tag=110]/marc:subfield[@code='a']">
+                                    -
+                                    <span class="componentPartRecordAuthor">
+                                        <xsl:value-of select="marc:datafield[@tag=110]/marc:subfield[@code='a']" />
+                                    </span>
+                                  </xsl:when>
+                </xsl:choose>
+                            </span>
+                        </li>
+                    </xsl:for-each>
+                </ol>
+            </div>
+        </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
