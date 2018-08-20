@@ -379,11 +379,22 @@ my @nolimits = map uri_unescape($_), $cgi->multi_param('nolimit');
 my %is_nolimit = map { $_ => 1 } @nolimits;
 @limits = grep { not $is_nolimit{$_} } @limits;
 
+my $branchfield = C4::Context->preference('AdvancedSearchBranchFieldToUse');
+
 if($params->{'multibranchlimit'}) {
     my $search_group = Koha::Library::Groups->find( $params->{multibranchlimit} );
     my @libraries = $search_group->all_libraries;
-    my $multibranch = '('.join( " OR ", map { '(homebranch: ' . $_->branchcode .')' } @libraries ) .')';
-    push @limits, $multibranch if ($multibranch ne  '()');
+
+    if ( $branchfield eq "homebranch") {
+        my $multihomebranch = '('.join( " OR ", map { 'homebranch:     ' . $_->branchcode } @libraries ) .')';
+        push @limits, $multihomebranch if ( $multihomebranch ne '()');
+    } elsif ( $branchfield eq "holdingbranch") {
+        my $multiholdingbranch = '('.join( " OR ", map { 'holdingbranch: ' . $_->branchcode } @libraries ) .')';
+        push @limits, $multiholdingbranch if ( $multiholdingbranch ne '()');
+    } else {
+        my $multihomeandholdingbranch = '('.join( " OR ", map { 'homebranch: ' . $_->branchcode, 'holdingbranch: ' . $_->branchcode}  @libraries ) .')';
+        push @limits, $multihomeandholdingbranch if ($multihomeandholdingbranch ne  '()');
+    }
 }
 
 my $available;

@@ -1,0 +1,1 @@
+INSERT INTO systempreferences (variable, value, options, explanation, type) VALUES ('AdvancedSearchBranchFieldToUse', 'homebranch and holdingbranch', 'homebranch|holdingbranch|homebranch and holdingbranch', 'When a library or group of libraries is selected from the advanced search compare the selected branch value against this branch field(s) selected', 'choice');
