@@ -90,7 +90,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 my $record = GetMarcBiblio({
     biblionumber => $biblionumber,
     embed_items  => 1 });
-$template->param( ocoins => GetCOinSBiblio($record) );
 
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit
@@ -100,6 +99,8 @@ if ( not defined $record ) {
     output_html_with_http_headers $query, $cookie, $template->output;
     exit;
 }
+
+$template->param( ocoins => GetCOinSBiblio($record) );
 
 my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
