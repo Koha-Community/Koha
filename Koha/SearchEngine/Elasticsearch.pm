@@ -24,7 +24,6 @@ use C4::Context;
 use Koha::Database;
 use Koha::SearchFields;
 use Koha::SearchMarcMaps;
-use Koha::SearchMappingManager;
 
 use Carp;
 use JSON;
@@ -427,7 +426,27 @@ sub _foreach_mapping {
     my ( $self, $sub ) = @_;
 
     # TODO use a caching framework here
-    my $search_fields = Koha::SearchMappingManager::get_search_mappings({index_name => 'biblios'});
+    my $search_fields = Koha::Database->schema->resultset('SearchField')->search(
+        {
+            'search_marc_map.index_name' => $self->index,
+        },
+        {   join => { search_marc_to_fields => 'search_marc_map' },
+            '+select' => [
+                'search_marc_to_fields.facet',
+                'search_marc_to_fields.suggestible',
+                'search_marc_to_fields.sort',
+                'search_marc_map.marc_type',
+                'search_marc_map.marc_field',
+            ],
+            '+as'     => [
+                'facet',
+                'suggestible',
+                'sort',
+                'marc_type',
+                'marc_field',
+            ],
+        }
+    );
 
     while ( my $search_field = $search_fields->next ) {
         $sub->(
