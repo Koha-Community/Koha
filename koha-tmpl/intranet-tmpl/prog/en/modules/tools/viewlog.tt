@@ -81,7 +81,6 @@
 	<div id="bd">
 		<div id="yui-main">
 			<div class="yui-b">
-                [% IF ( CAN_user_tools_view_system_logs ) %]
 				<h1>Browse system logs</h1>
 				<form method="post" action="/cgi-bin/koha/tools/viewlog.pl">
 					[% IF ( do_it ) %]
@@ -190,7 +189,6 @@
 						<input type="hidden" name="do_it" value="1" />
 					</fieldset>
 			</form>
-                [% END %]
                 [% IF ( do_it ) %]
                     [% IF ( total ) %]
                         <h4>[% total | html %] lines found.</h4>
