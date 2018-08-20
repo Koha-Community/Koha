@@ -52,6 +52,7 @@ sub status {
             surname        => $borrower->surname || '',
             firstname      => $borrower->firstname || '',
             homebranch     => $borrower->branchcode || '',
+            age            => $borrower->get_age || '',
             fines          => $ilsBorrower->fines_amount ? $ilsBorrower->fines_amount+0 : 0,
             language       => 'fin' || '',
             charge_privileges_denied    => _bool(!$ilsBorrower->charge_ok),
