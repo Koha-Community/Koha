@@ -16266,6 +16266,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20773 - expirationdate filled for waiting holds)\n";
 }
 
+$DBversion = '18.06.00.017';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('ROADTYPE');|);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21144: Add ROADTYPE to default authorised values categories)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
