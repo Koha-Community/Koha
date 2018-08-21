@@ -14695,6 +14695,17 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Koha 17.05.13)\n";
 }
 
+$DBversion = '17.05.13.001';
+if( CheckVersion( $DBversion ) ) {
+    my $dtf  = Koha::Database->new->schema->storage->datetime_parser;
+    my $days = C4::Context->preference('MaxPickupDelay') || 7;
+    my $date = DateTime->now()->add( days => $days );
+    my $sql  = q|UPDATE reserves SET expirationdate = ? WHERE expirationdate IS NULL AND waitingdate IS NOT NULL|;
+    $dbh->do( $sql, undef, $dtf->format_datetime($date) );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20773 - expirationdate filled for waiting holds)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
