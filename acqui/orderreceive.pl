@@ -130,7 +130,7 @@ if ($AcqCreateItem eq 'receiving') {
     );
 } elsif ($AcqCreateItem eq 'ordering') {
     my $fw = ($acq_fw) ? 'ACQ' : '';
-    my @itemnumbers = $order_object->items->get_column('itemnumbers');
+    my @itemnumbers = $order_object->items->get_column('itemnumber');
     my @items;
     foreach (@itemnumbers) {
         my $item = GetItem($_); # FIXME We do not need this call, we already have the Koha::Items

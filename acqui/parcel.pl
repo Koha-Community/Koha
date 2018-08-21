@@ -140,7 +140,7 @@ for my $order ( @orders ) {
 
     my %line = %{ $order };
     $line{invoice} = $invoice->{invoicenumber};
-    my @itemnumbers = $order_object->items->get_column('itemnumbers');
+    my @itemnumbers = $order_object->items->get_column('itemnumber');
     my $biblio = Koha::Biblios->find( $line{biblionumber} );
     $line{total_holds} = $biblio ? $biblio->holds->count : 0;
     $line{item_holds} = $biblio ? $biblio->current_holds->search(
@@ -247,7 +247,7 @@ unless( defined $invoice->{closedate} ) {
         my $cnt_subscriptions = $biblio ? $biblio->subscriptions->count: 0;
         my $itemcount   = $biblio ? $biblio->items->count : 0;
         my $holds_count = $biblio ? $biblio->holds->count : 0;
-        my @itemnumbers = $order_object->items->get_column('itemnumbers');
+        my @itemnumbers = $order_object->items->get_column('itemnumber');
         my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@itemnumbers } })->count : 0;
 
         my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
