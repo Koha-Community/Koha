@@ -403,15 +403,30 @@
 
     <!-- koha-suomi: kielletty alle -->
     <xsl:template name="show-age-rating">
-      <xsl:if test="marc:datafield[@tag=521]/marc:subfield[@code='a']">
-        <xsl:for-each select="marc:datafield[@tag=521]">
-          <xsl:variable name="agelimit" select="translate(marc:subfield[@code='a'], ' .-;', '')"/>
-          <xsl:choose>
-            <xsl:when test="starts-with($agelimit, 'K')">
-              <span class="results_summary age_limit">Age restriction: <xsl:value-of select="substring($agelimit, 2)"/>.</span>
-            </xsl:when>
-            </xsl:choose>
-        </xsl:for-each>
+      <xsl:choose>
+	<xsl:when test="marc:datafield[@tag=521]/marc:subfield[@code='a']">
+	  <xsl:for-each select="marc:datafield[@tag=521]/marc:subfield[@code='a']">
+	    <xsl:call-template name="show-age-rating-span">
+              <xsl:with-param name="agelimit" select="."/>
+	    </xsl:call-template>
+	  </xsl:for-each>
+	</xsl:when>
+	<xsl:otherwise>
+	  <xsl:if test="marc:datafield[@tag=049]/marc:subfield[@code='c']">
+	    <xsl:for-each select="marc:datafield[@tag=049]/marc:subfield[@code='c']">
+	      <xsl:call-template name="show-age-rating-span">
+		<xsl:with-param name="agelimit" select="."/>
+	      </xsl:call-template>
+	    </xsl:for-each>
+	  </xsl:if>
+	</xsl:otherwise>
+      </xsl:choose>
+    </xsl:template>
+    <xsl:template name="show-age-rating-span">
+      <xsl:param name="agelimit"/>
+      <xsl:variable name="tagelimit" select="translate($agelimit, ' .-;', '')"/>
+      <xsl:if test="starts-with($tagelimit, 'K')">
+        <span class="results_summary age_limit">Age restriction: <xsl:value-of select="$tagelimit"/>.</span>
       </xsl:if>
     </xsl:template>
     <!-- /koha-suomi: kielletty alle -->
