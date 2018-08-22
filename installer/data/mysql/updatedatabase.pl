@@ -16284,6 +16284,17 @@ WHERE issues.itemnumber IS NULL
     print "Upgrade to $DBversion done (Bug 20487: Clear items.onloan for unissued items)\n";
 }
 
+$DBversion = '18.06.00.019';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q|
+INSERT IGNORE INTO columns_settings (module, page, tablename, columnname, cannot_be_toggled, is_hidden) VALUES
+("circ", "circulation", "issues-table", "collection", 0, 1),
+("members", "moremember", "issues-table", "collection", 0, 1);
+    |);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19719: Default to hiding collection code column)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
