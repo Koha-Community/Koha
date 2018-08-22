@@ -16273,6 +16273,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21144: Add ROADTYPE to default authorised values categories)\n";
 }
 
+$DBversion = '18.06.00.018';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q|
+UPDATE items LEFT JOIN issues USING (itemnumber)
+SET items.onloan = NULL
+WHERE issues.itemnumber IS NULL
+    |);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20487: Clear items.onloan for unissued items)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
