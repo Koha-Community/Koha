@@ -425,7 +425,6 @@ if ( $messages->{'ResFound'}) {
         my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
 
         my $patron = Koha::Patrons->find( $nextreservinfo );
-        my $name   = $patron ? $patron->surname . ", " . $patron->title . " " . $patron->firstname : '';
 
         $template->param(
             hold_auto_filled => 1,
@@ -441,7 +440,6 @@ if ( $messages->{'ResFound'}) {
                 itemnumber     => $item->itemnumber,
                 itembiblionumber => $biblio->biblionumber,
                 iteminfo       => $biblio->author,
-                name           => $name,
                 diffbranch     => 1,
             );
         }
@@ -464,7 +462,6 @@ if ( $messages->{'ResFound'}) {
 
     # same params for Waiting or Reserved
     $template->param(
-        # FIXME The full patron object should be passed to the template
         found          => 1,
         patron         => $patron,
         barcode        => $barcode,
