@@ -214,7 +214,7 @@ subtest '/availability/item' => sub {
     plan tests => 3;
 
     subtest '/hold' => sub {
-        plan tests => 20;
+        plan tests => 21;
 
         $schema->storage->txn_begin;
 
@@ -249,6 +249,7 @@ subtest '/availability/item' => sub {
           ->json_is('/0/itemnumber' => $item->itemnumber)
           ->json_is('/0/hold_queue_length' => 1)
           ->json_is('/0/ccode' => $item->ccode)
+          ->json_is('/0/sub_location' => $item->sub_location)
           ->json_is('/0/itemcallnumber_display' => $item->cn_sort)
           ->json_is('/0/availability/unavailabilities/Patron::GoneNoAddress' => {})
           ->json_is('/0/availability/unavailabilities/Item::NotForLoan' => {

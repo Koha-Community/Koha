@@ -163,8 +163,13 @@ sub swaggerize {
         category => 'LOC',
         authorised_value => $item->location
     })->next;
+    my $subloc_desc = Koha::AuthorisedValues->search({
+        category => 'SUBLOC',
+        authorised_value => $item->sub_location
+    })->next;
     $ccode_desc = $ccode_desc->lib if defined $ccode_desc;
     $loc_desc   = $loc_desc->lib if defined $loc_desc;
+    $subloc_desc = $subloc_desc->lib if defined $subloc_desc;
     my $hash = {
         itemnumber => 0+$item->itemnumber,
         biblionumber => 0+$item->biblionumber,
@@ -182,6 +187,8 @@ sub swaggerize {
         ccode => $item->ccode,
         ccode_description => $ccode_desc,
         holding_id => $item->holding_id,
+        sub_location => $item->sub_location,
+        sub_description => $subloc_desc,
     };
     $hash->{'hold_queue_length'} = Koha::Holds->search({
         itemnumber => $item->itemnumber
