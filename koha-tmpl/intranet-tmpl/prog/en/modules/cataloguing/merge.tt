@@ -218,6 +218,9 @@ $(document).ready(function(){
                     [% END %]
                     ([% record.biblionumber %]) <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% record.biblionumber %]" class="previewData">View MARC</a>
                 </label>
+                [% IF (record.components) %]
+                <div class="has_components"><a href="cgi-bin/koha/catalogue/detail.pl?biblionumber=[% record.biblionumber %]">This record has [% record.components %] component parts</a></div>
+                [% END %]
             </li>
         [% END %]
 

@@ -235,10 +235,13 @@ if ($merge) {
         my @records;
         foreach my $biblionumber (@biblionumbers) {
             my $frameworkcode = GetFrameworkCode($biblionumber);
+            my $marcrecord = GetMarcBiblio($biblionumber);
+            my $components = C4::Biblio::getComponentBiblionumbers($marcrecord);
             my $record = {
                 biblionumber => $biblionumber,
                 data => GetBiblioData($biblionumber),
                 frameworkcode => $frameworkcode,
+                components => scalar(@{$components}),
             };
             push @records, $record;
         }
