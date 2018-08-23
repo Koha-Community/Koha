@@ -2833,8 +2833,8 @@ CREATE TABLE `aqbudgets` ( -- information related to Funds
   `budget_name` varchar(80) default NULL, -- name assigned to the fund by the user
   `budget_branchcode` varchar(10) default NULL, -- branch that this fund belongs to (branches.branchcode)
   `budget_amount` decimal(28,6) NULL default '0.00', -- total amount for this fund
-  `budget_encumb` decimal(28,6) NULL default '0.00', -- not used in the code
-  `budget_expend` decimal(28,6) NULL default '0.00', -- not used in the code
+  `budget_encumb` decimal(28,6) NULL default '0.00', -- budget warning at percentage
+  `budget_expend` decimal(28,6) NULL default '0.00', -- budget warning at amount
   `budget_notes` LONGTEXT, -- notes related to this fund
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this fund was last touched (created or modified)
   `budget_period_id` int(11) default NULL, -- id of the budget that this fund belongs to (aqbudgetperiods.budget_period_id)
