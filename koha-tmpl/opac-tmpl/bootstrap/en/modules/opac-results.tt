@@ -599,7 +599,7 @@
 
                     [% END # / IF total %]
 
-                    [% IF Koha.Preference( 'suggestion' ) == 1 && ( Koha.Preference( 'AnonSuggestions' ) == 1 || loggedinusername || Koha.Preference( 'ILLModule' ) == 1 )   %]
+                    [% IF Koha.Preference( 'suggestion' ) == 1 && ( Koha.Preference( 'AnonSuggestions' ) == 1 || loggedinusername )   %]
                         <div class="suggestion">
                             Not finding what you're looking for?
                             <ul>
