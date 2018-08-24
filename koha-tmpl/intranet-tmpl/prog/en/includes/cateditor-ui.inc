@@ -1,3 +1,4 @@
+[% USE Koha %]
 [% Asset.js("lib/codemirror/codemirror-compressed.js") %]
 [% Asset.js("lib/filesaver.js") %]
 [% Asset.js("lib/koha/cateditor/marc-mode.js") %]
@@ -177,7 +178,13 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
     }
 
     function getFieldHelpURL( tag ) {
-        [% IF ( marcflavour == 'MARC21' ) %]
+        [% IF Koha.Preference('marcfielddocurl') %]
+            var docurl = "[% Koha.Preference('marcfielddocurl').replace('"','&quot;') | html %]";
+            docurl = docurl.replace("{MARC}", "[% marcflavour | html %]");
+            docurl = docurl.replace("{FIELD}", ""+tag);
+            docurl = docurl.replace("{LANG}", "[% lang | html %]");
+            return docurl;
+        [% ELSIF ( marcflavour == 'MARC21' ) %]
             if ( tag == '000' ) {
                 return "http://www.loc.gov/marc/bibliographic/bdleader.html";
             } else if ( tag >= '090' && tag < '100' ) {
