@@ -299,7 +299,7 @@ sub CanBookBeReserved{
          { status => ageRestricted },   if the Item is age restricted for this borrower.
          { status => damaged },         if the Item is damaged.
          { status => cannotReserveFromOtherBranches }, if syspref 'canreservefromotherbranches' is OK.
-         { status => tooManyReserves, limit => $limit }, if the borrower has exceeded his maximum reserve amount.
+         { status => tooManyReserves, limit => $limit }, if the borrower has exceeded their maximum reserve amount.
          { status => notReservable },   if holds on this item are not allowed
 
 =cut

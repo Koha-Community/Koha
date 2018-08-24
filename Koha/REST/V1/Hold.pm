@@ -91,7 +91,7 @@ sub add {
 
     unless ($can_reserve->{status} eq 'OK') {
         return $c->render( status => 403, openapi => {
-            error => "Reserve cannot be placed. Reason: $can_reserve"
+            error => "Reserve cannot be placed. Reason: ". $can_reserve->{status}
         } );
     }
 
