@@ -16125,7 +16125,7 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20773 - expirationdate filled for waiting holds)\n";
 }
 
-$DBversion = '18.05.03.004';
+$DBversion = '18.05.02.004';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q|INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('ROADTYPE');|);
     SetVersion( $DBversion );
