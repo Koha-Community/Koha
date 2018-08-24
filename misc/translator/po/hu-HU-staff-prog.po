@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2018-07-17 23:53-0300\n"
+"POT-Creation-Date: 2018-08-17 07:03-0300\n"
 "PO-Revision-Date: 2018-06-15 21:04+0000\n"
 "Last-Translator: Hamar Zoltán <zhamarusa@gmail.com>\n"
 "Language-Team: Koha Translation Team <koha-translate@nongnu.org>\n"
@@ -34,6 +34,11 @@ msgstr ""
 msgid ""
 "\") symbol by Edward Boatman, Saul Tannenbaum, Stephen Kennedy, Nikki Snow, "
 "Brooke Hamilton ; Search (\""
+msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:942
+#, c-format
+msgid "\") symbol by Iconstock. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:934
@@ -66,7 +71,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:942
 #, c-format
-msgid "\") symbol by National Park Service "
+msgid "\") symbol by National Park Service ; Interlibrary loan (\""
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/about.tt:934
@@ -2160,10 +2165,12 @@ msgid ""
 "already exists ("
 msgstr ""
 
+#. For the first occurrence,
 #. %1$s:  END 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:277
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:230
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:303
 #, c-format
 msgid "%s %s This record has no items. %s "
 msgstr "%s %s Ehhez a bejegyzéshez nem tartozik példány. %s "
@@ -2322,7 +2329,7 @@ msgstr "%s %s által "
 #. %3$s:  biblio.author 
 #. %4$s:  END 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:187
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:21
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:26
 #, c-format
 msgid "%s %s by %s%s"
 msgstr "%s %s által %s%s"
@@ -2689,18 +2696,19 @@ msgstr "0 Kölcsönzések"
 
 #. %1$s:  SWITCH account_offset.type 
 #. %2$s:  CASE 'Payment' 
-#. %3$s:  CASE 'Manual Debit' 
-#. %4$s:  CASE 'Lost Item Return' 
-#. %5$s:  CASE 'Writeoff' 
-#. %6$s:  CASE 'Void Payment' 
-#. %7$s:  CASE 
-#. %8$s:  account_offset.type 
-#. %9$s: - END -
+#. %3$s:  CASE 'Manual Credit' 
+#. %4$s:  CASE 'Manual Debit' 
+#. %5$s:  CASE 'Lost Item Return' 
+#. %6$s:  CASE 'Writeoff' 
+#. %7$s:  CASE 'Void Payment' 
+#. %8$s:  CASE 
+#. %9$s:  account_offset.type 
+#. %10$s: - END -
 #: intranet-tmpl/prog/en/includes/account_offset_type.inc:1
 #, c-format
 msgid ""
-"%s %sPayment %sManual invoice %sLost item returned %sWriteoff %sVoid payment "
-"%s%s %s "
+"%s %sPayment %sManual credit %sManual invoice %sLost item returned "
+"%sWriteoff %sVoid payment %s%s %s "
 msgstr ""
 
 #. For the first occurrence,
@@ -3846,7 +3854,7 @@ msgstr "Minden könyvtár "
 #. %4$s:  ELSIF hold.found == 'T' 
 #. %5$s:  ELSE 
 #. %6$s:  END 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:78
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:91
 #, c-format
 msgid "%s Fulfilled %s Cancelled %s Waiting %s In transit %s Pending %s "
 msgstr ""
@@ -4098,7 +4106,7 @@ msgstr "Vonalkód %s "
 #. %2$s:  END 
 #. %3$s:  END 
 #. %4$s:  IF biblio.article_requests_current && !patron 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:210
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:213
 #, c-format
 msgid "%s No article requests can be made for this record. %s %s %s "
 msgstr ""
@@ -4211,7 +4219,7 @@ msgstr ""
 #. %1$s:  ELSE 
 #. %2$s:  END 
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:73
-#: intranet-tmpl/prog/en/modules/labels/result.tt:79
+#: intranet-tmpl/prog/en/modules/labels/result.tt:70
 #, c-format
 msgid "%s No results found %s "
 msgstr "%s Nincs találat. %s "
@@ -4403,7 +4411,7 @@ msgstr "%s %s (%s) "
 #. %4$s:  ELSIF ar.status == 'CANCELED' 
 #. %5$s:  END 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:69
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:256
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:259
 #, c-format
 msgid "%s Pending %s Processing %s Completed %s Canceled %s "
 msgstr ""
@@ -4862,7 +4870,7 @@ msgstr ""
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:253
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:254
 #, fuzzy, c-format
 msgid "%s This ordernumber does not exist. %s "
 msgstr "%s tétel tárolva "
@@ -5334,13 +5342,13 @@ msgstr "%s példány"
 #. %2$s:  FOREACH not_deleted_itemnumber IN not_deleted_itemnumbers 
 #. %3$s:  not_deleted_itemnumber.itemnumber 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:151
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:173
 #, fuzzy, c-format
 msgid "%s item(s) could not be deleted: %s%s%s"
 msgstr "A %s képet áthelyeztük a %s helyéről ide: %s"
 
 #. %1$s:  deleted_items 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:139
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:161
 #, fuzzy, c-format
 msgid "%s item(s) deleted."
 msgstr "% példány törölve lett."
@@ -5380,19 +5388,19 @@ msgstr "%s talált sorok."
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:14
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:9
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:272
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:273
 #, fuzzy
 msgid "%s mandatory fields empty (highlighted)"
 msgstr " üres kötelező mezők (lásd vastagított almezőket)"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, fuzzy
 msgid "%s month"
 msgstr "2 hónap"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, fuzzy
 msgid "%s months"
 msgstr "2 hónap"
@@ -5574,7 +5582,7 @@ msgid "%s record(s)"
 msgstr "%s tétel(ek)"
 
 #. %1$s:  deleted_records 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:140
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:162
 #, c-format
 msgid "%s record(s) deleted."
 msgstr "%s bejegyzés törlődött"
@@ -5703,14 +5711,14 @@ msgid "%s will expire before "
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, fuzzy
 msgid "%s year"
 msgstr "%s évek"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:279
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:280
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:389
@@ -5904,7 +5912,7 @@ msgstr ""
 #. %5$s:  membersurname 
 #. %6$s:  ELSE 
 #. %7$s:  END 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:176
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:177
 #, fuzzy, c-format
 msgid "%s%s%s%s %s%sNo name%s"
 msgstr "%s %s (%s)"
@@ -5981,19 +5989,10 @@ msgstr "%s Keret"
 #. %2$s:  lastdate | $KohaDates 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:33
 #, c-format
 msgid "%s%s%sItem has no transfer record%s"
 msgstr ""
-
-#. %1$s:  IF ( LibraryNameTitle ) 
-#. %2$s:  LibraryNameTitle 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:27
-#, fuzzy, c-format
-msgid "%s%s%sKoha online%s Catalog &rsaquo; Your cart"
-msgstr "&rsaquo; <a1>Katalógizálás</a> &rsaquo; <a2>Szerkeszt %s"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -6121,14 +6120,6 @@ msgstr "; Kiadta %s "
 msgid "%s%sModify tag "
 msgstr "%s%sHívójel módosítása "
 
-#. %1$s:  END 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:230
-#, fuzzy, c-format
-msgid "%s%sThis record has no items.%s"
-msgstr "%s tétel tárolva"
-
 #. %1$s:  IF ( suggestions_loo.copyrightdate ) 
 #. %2$s:  suggestions_loo.copyrightdate |html 
 #. %3$s:  END 
@@ -6155,6 +6146,14 @@ msgstr "%s %s (%s) "
 #, fuzzy, c-format
 msgid "%s&nbsp;%stotal (%s shown / %s hidden) "
 msgstr "dokumentumok. <a1>Összes dokumentum</a> "
+
+#. %1$s:  UNLESS blocking_error 
+#. %2$s:  title |html 
+#. %3$s:  END 
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:15
+#, fuzzy, c-format
+msgid "%s&rsaquo; Circulation statistics for %s%s "
+msgstr "&rsaquo; Katalógus Statisztikák"
 
 #. %1$s:  IF op == 'edit' 
 #. %2$s:  PROCESS ServerType 
@@ -6256,8 +6255,8 @@ msgstr ""
 #. %1$s:  IF ( item_loo.author ) 
 #. %2$s:  item_loo.author 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:85
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:157
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:107
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:177
 #, fuzzy, c-format
 msgid "%s, by %s%s"
 msgstr ", %s által"
@@ -6710,7 +6709,7 @@ msgstr ""
 #. %1$s:  IF ( not_deleted_loo.book_on_loan ) 
 #. %2$s:  ELSIF ( not_deleted_loo.book_reserved ) 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:166
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:188
 #, fuzzy, c-format
 msgid "%sItem is checked out%sItem has a waiting hold%s"
 msgstr ": ennek a dokumentumnak van egy várakozó előjegyzése."
@@ -6852,29 +6851,6 @@ msgstr "%s tételek"
 msgid "%sOverdue:%s "
 msgstr "%s tételek"
 
-#. %1$s:  IF ( s.ASKED ) 
-#. %2$s:  END 
-#. %3$s:  IF ( s.CHECKED ) 
-#. %4$s:  END 
-#. %5$s:  IF ( s.ACCEPTED ) 
-#. %6$s:  END 
-#. %7$s:  IF ( s.ORDERED ) 
-#. %8$s:  END 
-#. %9$s:  IF ( s.REJECTED ) 
-#. %10$s:  END 
-#. %11$s:  IF ( s.AVAILABLE ) 
-#. %12$s:  END 
-#. %13$s:  IF ( s.reason ) 
-#. %14$s:  s.reason 
-#. %15$s:  END 
-#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:77
-#, c-format
-msgid ""
-"%sRequested%s %sChecked by the library%s %sAccepted by the library%s "
-"%sOrdered by the library%s %sSuggestion declined %s %sAvailable in the "
-"library%s %s(%s)%s "
-msgstr ""
-
 #. %1$s:  IF ( reserved ) 
 #. %2$s:  branchname 
 #. %3$s:  END 
@@ -6992,18 +6968,10 @@ msgid "%sYes%sNo%s "
 msgstr "%sIgen%sNem%s "
 
 #. %1$s:  CASE 'cannot_see_patron_infos' 
-#. %2$s:  CASE 
-#. %3$s:  blocking_error 
-#. %4$s:  END 
-#. %5$s:  INCLUDE 'intranet-bottom.inc' 
-#. %6$s:  STOP 
-#. %7$s: # Will stop gracefully without processing any more of the template document.
-#. %8$s:  END 
+#. %2$s:  CASE 'unknown_biblio' 
 #: intranet-tmpl/prog/en/includes/blocking_errors.inc:4
-#, c-format
-msgid ""
-"%sYou are not allowed to see the information of this patron. %s%s %s %s %s "
-"%s %s "
+#, fuzzy, c-format
+msgid "%sYou are not allowed to see the information of this patron. %s "
 msgstr ""
 "%sÖnnek nincs jogosultsága ahhoz, hogy megnézze az erre az olvasóra "
 "vonatkozó információkat. %s%s %s %s %s %s %s "
@@ -7070,7 +7038,7 @@ msgstr "%s %s %s %s (%s) "
 #. %15$s:  result_se.pages 
 #. %16$s:  END 
 #. %17$s:  IF ( result_se.isbn ) 
-#: intranet-tmpl/prog/en/modules/labels/result.tt:96
+#: intranet-tmpl/prog/en/modules/labels/result.tt:87
 #, c-format
 msgid "%sby %s%s [%s], %s%s %s%s%s %s%s%s, %s%s%s%s%s, "
 msgstr ""
@@ -8102,12 +8070,6 @@ msgstr "&rsaquo; Kölcsönzésre és bírságra vonatkozó szabályok"
 msgid "&rsaquo; Circulation history for %s"
 msgstr "&rsaquo; %s korábbi kölcsönzései"
 
-#. %1$s:  title |html 
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:13
-#, fuzzy, c-format
-msgid "&rsaquo; Circulation statistics for %s"
-msgstr "&rsaquo; Katalógus Statisztikák"
-
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:15
 #, fuzzy, c-format
 msgid "&rsaquo; Claims"
@@ -8365,7 +8327,7 @@ msgid "&rsaquo; Hold ratios"
 msgstr "&rsaquo; Előjegyzési arányok"
 
 #. %1$s:  INCLUDE 'patron-title.inc' 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:18
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:19
 #, fuzzy, c-format
 msgid "&rsaquo; Holds history for %s"
 msgstr "&rsaquo; %s korábbi kölcsönzései"
@@ -8683,9 +8645,10 @@ msgstr "&rsaquo; Meghosszabbítás"
 msgid "&rsaquo; Reports"
 msgstr "&rsaquo; Összesítések"
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:23
+#. %1$s:  END 
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:24
 #, fuzzy, c-format
-msgid "&rsaquo; Request article "
+msgid "&rsaquo; Request article %s "
 msgstr "&rsaquo; %s "
 
 #: intranet-tmpl/prog/en/modules/course_reserves/add_items-step2.tt:12
@@ -9242,7 +9205,7 @@ msgstr ""
 
 #. %1$s:  budget_period_description 
 #. %2$s:  bookfund 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:175
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:176
 #, fuzzy, c-format
 msgid "(Current: %s - %s)"
 msgstr "Bármely fiókkönyvtár"
@@ -9895,9 +9858,9 @@ msgstr "000 "
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:158
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:119
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:96
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:60
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:67
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:74
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:65
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:72
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:79
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:585
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:56
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:63
@@ -10129,7 +10092,7 @@ msgstr "Abby Robertson"
 
 #: intranet-tmpl/prog/en/includes/header.inc:49
 #: intranet-tmpl/prog/en/modules/about.tt:19
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:119
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:121
 #, c-format
 msgid "About Koha"
 msgstr "A Koha-ról"
@@ -10160,6 +10123,11 @@ msgstr "Elfogadott"
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:634
 #, c-format
 msgid "Accepted by"
+msgstr "Elfogadta"
+
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:81
+#, fuzzy, c-format
+msgid "Accepted by the library"
 msgstr "Elfogadta"
 
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:711
@@ -10207,7 +10175,7 @@ msgstr ""
 msgid "Access to the files stored on the server"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/labels/result.tt:111
+#: intranet-tmpl/prog/en/modules/labels/result.tt:102
 #, fuzzy, c-format
 msgid "Accession date"
 msgstr "A bejelentkezés dátuma:"
@@ -10395,7 +10363,7 @@ msgstr "Beszerzési táblák"
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:24
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:48
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:37
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:95
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:97
 #, c-format
 msgid "Acquisitions"
 msgstr "Beszerzések"
@@ -10596,7 +10564,7 @@ msgstr ": %s"
 msgid "Actual cost tax inc."
 msgstr ": %s"
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:239
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:240
 #, c-format
 msgid "Actual cost:"
 msgstr "Tényleges ár:"
@@ -10630,7 +10598,7 @@ msgstr "Adam Thick"
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:283
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:422
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:408
-#: intranet-tmpl/prog/en/modules/labels/result.tt:129
+#: intranet-tmpl/prog/en/modules/labels/result.tt:120
 #, c-format
 msgid "Add"
 msgstr "Hozzáadás"
@@ -10795,7 +10763,7 @@ msgstr "Vonalkód: "
 msgid "Add by borrowernumber(s): "
 msgstr "Vonalkód: "
 
-#: intranet-tmpl/prog/en/modules/labels/result.tt:86
+#: intranet-tmpl/prog/en/modules/labels/result.tt:77
 #, c-format
 msgid "Add checked"
 msgstr "Hozzáad ellenőrzöttet"
@@ -10865,7 +10833,7 @@ msgstr "a fülben"
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/additem.js.inc:1
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:345
-#: intranet-tmpl/prog/en/modules/labels/result.tt:107
+#: intranet-tmpl/prog/en/modules/labels/result.tt:98
 #, c-format
 msgid "Add item"
 msgstr "Példány hozzáadása"
@@ -11271,7 +11239,7 @@ msgid "Additional SRU options: "
 msgstr "További szerzők:"
 
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:64
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1023
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1026
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:312
 #, fuzzy, c-format
 msgid "Additional attributes and identifiers"
@@ -11339,7 +11307,7 @@ msgstr "További paraméterek"
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:123
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:75
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:26
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:50
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:53
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:181
 #, c-format
 msgid "Address"
@@ -11578,7 +11546,7 @@ msgid "Afternoon "
 msgstr "Délután "
 
 #: intranet-tmpl/prog/en/modules/tools/automatic_item_modification_by_age.tt:175
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, c-format
 msgid "Age"
 msgstr "Kor"
@@ -12476,11 +12444,12 @@ msgstr "Bármely tartalom"
 msgid "Any format"
 msgstr "Bármely formátum"
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:198
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:201
 #, fuzzy, c-format
 msgid "Any item "
 msgstr "<em>adatbázis neve : </em>%s "
 
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:87
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:418
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:87
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:99
@@ -12528,7 +12497,7 @@ msgstr "Bármely forgalmazó"
 msgid "Any word"
 msgstr "Bármely szó"
 
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:36
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:35
 #, c-format
 msgid "Any: "
 msgstr "Bármely: "
@@ -12655,7 +12624,7 @@ msgid "Are you sure you want to cancel your changes?"
 msgstr "Biztos vagy, hogy le akarod törölni ezt a dokumentumot?"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:302
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:305
 #, fuzzy
 msgid ""
 "Are you sure you want to change the pickup library from %s to %s for this "
@@ -12963,7 +12932,7 @@ msgstr "Biztos vagy, hogy le akarod törölni ezt a dokumentumot?"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:232
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:199
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:201
 #, fuzzy
 msgid "Are you sure you want to delete this news item? This cannot be undone."
 msgstr "Biztos vagy, hogy le akarod törölni ezt a dokumentumot?"
@@ -13252,7 +13221,7 @@ msgstr "Arslan Farooq"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:28
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:93
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:350
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:133
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:135
 #, c-format
 msgid "Article requests"
 msgstr ""
@@ -13411,14 +13380,14 @@ msgstr "Auth"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:99
 #: intranet-tmpl/prog/en/modules/serials/result.tt:16
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:53
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:39
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:42
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:37
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:78
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:102
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:107
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:174
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:629
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:226
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:229
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:63
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:63
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:174
@@ -13467,7 +13436,7 @@ msgstr "Szerző (találkozó/konferencia)"
 msgid "Author (personal): "
 msgstr "Szerző (személy): "
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:104
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:89
 #, c-format
 msgid "Author(s)"
 msgstr "Szerző(k)"
@@ -13501,7 +13470,7 @@ msgstr "Szerző(k) %s%s%s %s %s; %s %s %s %s%s %s %s;%s %s %s"
 #: intranet-tmpl/prog/en/modules/acqui/lateorders.tt:95
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:122
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:250
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:98
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:101
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:919
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:73
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:251
@@ -13518,7 +13487,7 @@ msgstr "Szerző:"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:132
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:135
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:28
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:44
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:43
 #, c-format
 msgid "Author: "
 msgstr "Szerző: "
@@ -13565,7 +13534,7 @@ msgstr "Engedélyezett érték "
 #: intranet-tmpl/prog/en/modules/authorities/merge.tt:17
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:119
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:117
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:75
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:70
 #, c-format
 msgid "Authorities"
 msgstr "Besorolási adatok"
@@ -13827,6 +13796,11 @@ msgstr "Elérhető másodpéldányok száma"
 msgid "Available enumeration"
 msgstr "Minden helyszín"
 
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:84
+#, fuzzy, c-format
+msgid "Available in the library"
+msgstr "Elérhető"
+
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:63
 #, fuzzy, c-format
 msgid "Available item types"
@@ -13930,15 +13904,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/course_reserves/course-details.tt:60
 #: intranet-tmpl/prog/en/modules/rotating_collections/addItems.tt:100
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:166
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:38
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:157
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:179
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:280
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:6
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:210
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:36
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:344
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:55
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:40
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:43
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:700
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:41
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:500
@@ -13957,7 +13930,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:629
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:72
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:200
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:155
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:28
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:64
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:187
@@ -13965,14 +13938,14 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:272
 #: intranet-tmpl/prog/en/modules/labels/search.tt:61
 #: intranet-tmpl/prog/en/modules/labels/search.tt:62
-#: intranet-tmpl/prog/en/modules/labels/result.tt:113
+#: intranet-tmpl/prog/en/modules/labels/result.tt:104
 #: intranet-tmpl/prog/en/modules/offline_circ/list.tt:31
 #, c-format
 msgid "Barcode"
 msgstr "Vonalkód"
 
 #. %1$s:  barcode 
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:23
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:27
 #, c-format
 msgid "Barcode %s"
 msgstr "Vonalkód %s"
@@ -14068,6 +14041,7 @@ msgstr "Vonalkód: %s "
 msgid "Barcodes file"
 msgstr "Vonalkód fájl: "
 
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:37
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:97
 #, c-format
 msgid "Barcodes not found"
@@ -14568,7 +14542,7 @@ msgid "BibLibre, France"
 msgstr "BibLibre, Franciaország"
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:22
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:62
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:54
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:18
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:35
 #, c-format
@@ -14763,12 +14737,16 @@ msgstr ""
 msgid "Billing place"
 msgstr "Hozzáadta a %s besorolási szabályt"
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:56
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:204
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:210
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:218
 #, fuzzy, c-format
 msgid "Billing place:"
+msgstr "Hozzáadta a %s besorolási szabályt"
+
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:56
+#, fuzzy, c-format
+msgid "Billing place: "
 msgstr "Hozzáadta a %s besorolási szabályt"
 
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:183
@@ -14839,12 +14817,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:73
 #, c-format
 msgid "Borrower"
-msgstr ""
-
-#: intranet-tmpl/prog/en/modules/members/discharge.tt:38
-#, c-format
-msgid ""
-"Borrower has reserves: they will be canceled if the discharge is generated."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:76
@@ -14966,7 +14938,7 @@ msgstr "Brice Sanchez"
 msgid "Bridge Material Type Icons Project"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:51
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:43
 #, fuzzy, c-format
 msgid "Brief display"
 msgstr "Minden helyszín"
@@ -15064,7 +15036,7 @@ msgstr "Vonalkód "
 msgid "Budgeted cost"
 msgstr "szűrő "
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:237
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:238
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:444
 #, fuzzy, c-format
 msgid "Budgeted cost: "
@@ -15253,7 +15225,7 @@ msgstr "CSV-fájl"
 #. For the first occurrence,
 #. %1$s:  csv_profile.profile 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:24
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:64
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:56
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:20
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:37
 #, c-format
@@ -15387,7 +15359,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:629
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:69
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:197
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:157
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:160
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:63
 #: intranet-tmpl/prog/en/modules/reports/serials_stats.tt:34
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:67
@@ -15397,7 +15369,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:270
 #: intranet-tmpl/prog/en/modules/labels/search.tt:44
 #: intranet-tmpl/prog/en/modules/labels/search.tt:45
-#: intranet-tmpl/prog/en/modules/labels/result.tt:109
+#: intranet-tmpl/prog/en/modules/labels/result.tt:100
 #, c-format
 msgid "Call number"
 msgstr "Raktári jelzet"
@@ -15591,9 +15563,9 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:177
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:65
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:278
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:127
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:149
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:151
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:259
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:279
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:280
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:324
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:111
@@ -15639,7 +15611,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:76
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:133
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:135
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:252
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:253
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:283
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:106
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:124
@@ -15660,7 +15632,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/branchtransfers.tt:71
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:75
 #: intranet-tmpl/prog/en/modules/admin/items_search_field.tt:34
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:69
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:68
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:147
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:246
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:322
@@ -15757,7 +15729,7 @@ msgid "Cancel and return to order"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:280
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:283
 #, fuzzy
 msgid "Cancel article request"
 msgstr ". <a1>Visszavonom előjegyzésem</a>"
@@ -15884,7 +15856,7 @@ msgstr ". <a1>Visszavonom előjegyzésem</a>"
 msgid "Cancel?"
 msgstr "Mégsem"
 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:48
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:130
 #, fuzzy, c-format
 msgid "Cancellation date"
@@ -16009,8 +15981,8 @@ msgstr "&rsaquo; Nem tudja törölni az osztályozási szabályt "
 msgid "Cannot delete patron"
 msgstr "Hozzáad gyerek olvasót"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:84
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:106
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:170
 #, fuzzy, c-format
 msgid "Cannot edit"
 msgstr "%s %s (%s) "
@@ -16227,7 +16199,7 @@ msgid "Card width:"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/import_borrowers.tt:148
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:47
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:50
 #, c-format
 msgid "Cardnumber"
 msgstr ""
@@ -16372,7 +16344,7 @@ msgstr "&rsaquo; Katalógus Statisztikák"
 #: intranet-tmpl/prog/en/modules/cataloguing/merge.tt:19
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:8
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:129
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:71
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:84
 #, c-format
 msgid "Cataloging"
 msgstr "Katalogizálás"
@@ -16414,7 +16386,7 @@ msgstr "Hozzáad forgalmazót"
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:78
 #: intranet-tmpl/prog/en/modules/members/member.tt:105
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:63
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:48
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:51
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:57
 #, c-format
 msgid "Category"
@@ -16519,7 +16491,7 @@ msgstr ""
 
 #. INPUT type=button
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:374
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:261
 msgid "Change"
 msgstr "Megváltoztatás"
@@ -16553,7 +16525,7 @@ msgid "Change internal note"
 msgstr "Bármely tartalom"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1072
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1075
 msgid "Change messaging preferences to default for this category?"
 msgstr ""
 
@@ -16633,14 +16605,14 @@ msgid "Changes saved."
 msgstr "Bármely tartalom"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:14
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:231
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:234
 #, c-format
 msgid "Chapters"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:127
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:255
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:123
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:126
 #, c-format
 msgid "Chapters:"
 msgstr ""
@@ -16851,7 +16823,7 @@ msgid ""
 msgstr ""
 
 #. INPUT type=checkbox name=disable_input
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:234
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:254
 msgid "Check to delete subfield [% ite.subfield %]"
 msgstr ""
 
@@ -16922,6 +16894,11 @@ msgstr "Hozzáad ellenőrzöttet"
 msgid "Checked"
 msgstr "Hozzáad ellenőrzöttet"
 
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:80
+#, fuzzy, c-format
+msgid "Checked by the library"
+msgstr "Minden könyvtár"
+
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
 #, fuzzy
@@ -16965,7 +16942,7 @@ msgstr "0 Kölcsönzések "
 msgid "Checked out %s %s %s by %s to %s %s %s : due %s "
 msgstr "0 Kölcsönzések "
 
-#. %1$s:  checkouts.count 
+#. %1$s:  checkouts.size 
 #: intranet-tmpl/prog/en/modules/catalogue/issuehistory.tt:30
 #, fuzzy, c-format
 msgid "Checked out %s times"
@@ -17047,7 +17024,7 @@ msgstr "&rsaquo; Kikölcsönözve %s, %s (%s) részére "
 msgid "Checking out to %s"
 msgstr "%s kölcsönzése"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:189
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:209
 #, c-format
 msgid ""
 "Checking the box right next the subfield label will disable the entry and "
@@ -17453,7 +17430,7 @@ msgstr "(válassz ki egy könyvtárat)"
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:45
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:19
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:11
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:13
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:15
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:17
 #: intranet-tmpl/prog/en/modules/admin/columns_settings.tt:135
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:51
@@ -17695,7 +17672,7 @@ msgid "ClassSources"
 msgstr ""
 
 #: intranet-tmpl/prog/en/columns.def:127
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:195
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:190
 #, c-format
 msgid "Classification"
 msgstr "Besorolás"
@@ -17759,7 +17736,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:248
 #: intranet-tmpl/prog/en/modules/cataloguing/editor.tt:123
 #: intranet-tmpl/prog/en/modules/members/member.tt:224
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1053
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1056
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:417
 #: intranet-tmpl/prog/en/modules/acqui/parcels.tt:198
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:550
@@ -17781,8 +17758,8 @@ msgstr "Törlés"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:138
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:166
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:125
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:64
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:86
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:145
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:106
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:64
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:321
@@ -17800,7 +17777,7 @@ msgstr "Törlés"
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:45
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:41
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:433
-#: intranet-tmpl/prog/en/modules/labels/result.tt:89
+#: intranet-tmpl/prog/en/modules/labels/result.tt:80
 #, c-format
 msgid "Clear all"
 msgstr "Összes kiválasztás törlése"
@@ -17841,7 +17818,7 @@ msgstr "Mezők törlése"
 msgid "Clear filter"
 msgstr "Szűrő törlése"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:145
 #, fuzzy, c-format
 msgid "Clear on loan"
 msgstr "#- Nem életrajzi anyag"
@@ -18054,7 +18031,7 @@ msgid "Client ID"
 msgstr ""
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:244
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:264
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:387
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:326
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:713
@@ -18071,7 +18048,7 @@ msgid "Clone these rules to:"
 msgstr ""
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:244
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:264
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:387
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:326
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:713
@@ -18120,7 +18097,7 @@ msgstr "Második cím"
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:262
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:27
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:94
-#: intranet-tmpl/prog/en/modules/labels/result.tt:145
+#: intranet-tmpl/prog/en/modules/labels/result.tt:151
 #, c-format
 msgid "Close"
 msgstr "Bezárás"
@@ -18317,7 +18294,7 @@ msgstr "(válassz ki egy könyvtárat) "
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:13
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:210
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:340
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:137
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:125
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:49
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:68
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:67
@@ -18526,7 +18503,7 @@ msgstr "Megjegyzések e fájllal kapcsolatban: "
 msgid "Comments awaiting moderation"
 msgstr "Engedélyezésre váró hozzászólások"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:148
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:150
 #, c-format
 msgid "Comments pending approval"
 msgstr "Jóváhagyásra váró hozzászólsáok"
@@ -19017,7 +18994,7 @@ msgstr "Bármely tartalom "
 msgid "Control number:"
 msgstr "Kosár szám: %s"
 
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:32
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:31
 #, fuzzy, c-format
 msgid "Control number: "
 msgstr "Kosár szám: %s"
@@ -19122,7 +19099,7 @@ msgid "Copy to clipboard"
 msgstr "Másolás a vágólapra"
 
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:45
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:154
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:146
 #, c-format
 msgid "Copyright"
 msgstr "Szerzői jog"
@@ -19612,7 +19589,7 @@ msgstr ""
 msgid "Created by:"
 msgstr "%S Megrendelte "
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:176
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:177
 #, fuzzy, c-format
 msgid "Created by: "
 msgstr "%S Megrendelte "
@@ -19750,7 +19727,7 @@ msgstr ""
 msgid "Currency: "
 msgstr "Bármely fiókkönyvtár "
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:219
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:222
 #, fuzzy, c-format
 msgid "Current article requests"
 msgstr "Bármely fiókkönyvtár"
@@ -19768,7 +19745,7 @@ msgstr "0 Kölcsönzések "
 
 #: intranet-tmpl/prog/en/columns.def:94
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:57
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:25
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, fuzzy, c-format
 msgid "Current library"
 msgstr "Minden könyvtár"
@@ -20109,7 +20086,7 @@ msgstr "Adatbázis: "
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:108
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:74
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:202
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:229
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:232
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:28
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:148
 #: intranet-tmpl/prog/en/modules/admin/searchengine/elasticsearch/mappings.tt:150
@@ -20143,7 +20120,7 @@ msgid "Date and time: "
 msgstr "Kölcsönzés lejártának dátuma:"
 
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:649
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:25
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, fuzzy, c-format
 msgid "Date arrived"
 msgstr "%s hozzáadott adat"
@@ -20324,7 +20301,7 @@ msgstr "Változás dátuma/ideje"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:125
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:253
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:113
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:116
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:915
 #, c-format
 msgid "Date:"
@@ -20895,7 +20872,7 @@ msgid "Delete "
 msgstr "Törlés "
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:122
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:144
 #, fuzzy
 msgid "Delete ALL submitted items"
 msgstr "(válassz ki egy könyvtárat)"
@@ -21124,7 +21101,7 @@ msgstr "Idézet8ek) törlése"
 msgid "Delete record"
 msgstr "Bejegyzés törlése"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:120
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:142
 #, fuzzy, c-format
 msgid "Delete records if no items remain."
 msgstr "Hozzáad tétel találati szabályt"
@@ -21155,7 +21132,7 @@ msgid "Delete selected alerts"
 msgstr "1-5 A nyilvántartásban levő dátum"
 
 #. INPUT type=submit name=mainformsubmit
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:124
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:146
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:325
 #, fuzzy, c-format
 msgid "Delete selected items"
@@ -21369,7 +21346,6 @@ msgstr "Hozzáad forgalmazót"
 msgid "Delivery place"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:63
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:216
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:224
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:229
@@ -21377,6 +21353,11 @@ msgstr ""
 #, c-format
 msgid "Delivery place:"
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:63
+#, fuzzy, c-format
+msgid "Delivery place: "
+msgstr "(válassz ki egy könyvtárat) "
 
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:237
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:286
@@ -21581,7 +21562,7 @@ msgstr "Hozzáad rekordot"
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:747
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:82
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:40
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:131
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:118
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:361
 #, c-format
 msgid "Details"
@@ -21620,7 +21601,7 @@ msgid ""
 "Szukics, Mirko Tietgen and Marc Véron"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:189
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:183
 #, c-format
 msgid "Dewey"
 msgstr "Dewey"
@@ -21644,7 +21625,7 @@ msgstr "ETO:"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:76
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:38
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:94
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:56
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:55
 #, c-format
 msgid "Dewey: "
 msgstr "ETO: "
@@ -21762,7 +21743,7 @@ msgstr ""
 msgid "Discharge"
 msgstr "Késedelmi díjak és más költségek"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:170
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:172
 #, c-format
 msgid "Discharge requests pending"
 msgstr ""
@@ -22035,7 +22016,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/timepicker.inc:1
 #: intranet-tmpl/prog/en/includes/calendar.inc:2
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:42
-#: intranet-tmpl/prog/en/modules/labels/result.tt:87
+#: intranet-tmpl/prog/en/modules/labels/result.tt:78
 #: intranet-tmpl/prog/en/modules/labels/label-print.tt:54
 #, c-format
 msgid "Done"
@@ -22063,7 +22044,7 @@ msgid "Download"
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/reports-toolbar.inc:58
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:58
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:50
 #, fuzzy, c-format
 msgid "Download "
 msgstr "Hozzáadja az új listához: "
@@ -22279,7 +22260,7 @@ msgstr "Hozzáad rekordot"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:272
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:273
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:525
 msgid "Duplicate values detected. Please correct the errors and resubmit."
 msgstr ""
@@ -22525,7 +22506,7 @@ msgstr "Részletek szerkesztése"
 msgid "Edit Item #%s%s / Barcode %s%s"
 msgstr "%s- számú példány szerkesztése%s / Vonalkód %s%s"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:188
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:208
 #, c-format
 msgid "Edit Items"
 msgstr ""
@@ -22981,7 +22962,7 @@ msgstr "Emma Heath"
 msgid "Emojiarea plug-in for jQuery"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:69
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:61
 #, c-format
 msgid "Empty and close"
 msgstr "Kiürítés és bezárás"
@@ -23274,7 +23255,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/patron-search.inc:8
 #: intranet-tmpl/prog/en/includes/patron-search-box.inc:3
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:278
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:74
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:77
 #, c-format
 msgid "Enter patron card number or partial name:"
 msgstr "Adja meg az olvasójegy számát vagy az olvasó nevének egy részét:"
@@ -23364,7 +23345,7 @@ msgstr "Animáció"
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:88
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:71
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:199
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:158
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:161
 #, fuzzy, c-format
 msgid "Enumeration"
 msgstr "Felnőtt, Általános"
@@ -23742,7 +23723,7 @@ msgstr "Lejárat ideje"
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:83
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:59
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:43
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:43
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:46
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:38
 #, c-format
 msgid "Expiration date"
@@ -24974,7 +24955,7 @@ msgstr "Elengedés"
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:14
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:9
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:272
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:273
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:525
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:398
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:181
@@ -25974,8 +25955,8 @@ msgstr "Hozzáad alkalmazott tagot"
 msgid "Hide all"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:67
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:130
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:44
 #, c-format
 msgid "Hide all columns"
@@ -26007,7 +25988,7 @@ msgstr ""
 msgid "Hide patron's info for librarians outside of this group."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:70
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:62
 #, c-format
 msgid "Hide window"
 msgstr ""
@@ -26098,7 +26079,7 @@ msgstr ""
 msgid "Hold at"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:42
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:45
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:697
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:883
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:98
@@ -26303,13 +26284,13 @@ msgid "Holds awaiting pickup for your library on: %s %s "
 msgstr "Elvitelre váró előjegyzések a könyvtárában (%s) %s "
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:94
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:25
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:26
 #, fuzzy, c-format
 msgid "Holds history"
 msgstr "Hozzáadja a polchoz"
 
 #. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:9
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:10
 #, fuzzy, c-format
 msgid "Holds history for %s"
 msgstr "%s kölcsönzési előzményei"
@@ -26523,7 +26504,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:15
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:15
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:18
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:19
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:21
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:19
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:17
@@ -26600,7 +26581,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:45
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:17
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:11
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:13
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:14
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:19
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:17
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:14
@@ -26688,15 +26669,6 @@ msgstr ""
 msgid "Home"
 msgstr "Kezdőlap"
 
-#. %1$s:  IF ( do_it ) 
-#. %2$s:  ELSE 
-#. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tags/review.tt:5
-#, fuzzy, c-format
-msgid ""
-"Home &rsaquo; Tools &rsaquo; Tags &rsaquo; %sReview &rsaquo; %sReview tags%s"
-msgstr "<a1>Főoldal</a> &rsaquo; <a2>Eszközök</a> &rsaquo;"
-
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:110
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:77
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:148
@@ -26722,8 +26694,8 @@ msgstr "Minden könyvtár"
 #: intranet-tmpl/prog/en/modules/circ/transferstoreceive.tt:38
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:107
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:629
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:25
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:156
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:159
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:182
 #: intranet-tmpl/prog/en/modules/reports/issues_stats.tt:243
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:125
@@ -26901,7 +26873,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/header.inc:32
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:291
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:79
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:74
 #, fuzzy, c-format
 msgid "ILL requests"
 msgstr ". <a1>Visszavonom előjegyzésem</a>"
@@ -26959,7 +26931,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:102
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:160
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:103
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:97
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:82
 #: intranet-tmpl/prog/en/modules/labels/search.tt:38
 #: intranet-tmpl/prog/en/modules/labels/search.tt:39
 #, c-format
@@ -27006,8 +26978,8 @@ msgstr "ISBN:"
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:169
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:172
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:29
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:24
-#: intranet-tmpl/prog/en/modules/labels/result.tt:97
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:23
+#: intranet-tmpl/prog/en/modules/labels/result.tt:88
 #, c-format
 msgid "ISBN: "
 msgstr ""
@@ -27108,7 +27080,7 @@ msgstr "ISSN:"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:72
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:35
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:90
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:48
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:47
 #, c-format
 msgid "ISSN: "
 msgstr "ISSN: "
@@ -27953,7 +27925,7 @@ msgstr "a fülben"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:155
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:82
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:242
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:243
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:453
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:461
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:353
@@ -28023,7 +27995,7 @@ msgid "Invalid course!"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, fuzzy
 msgid "Invalid day entered in field %s"
 msgstr "1-5 A nyilvántartásban levő dátum "
@@ -28040,7 +28012,7 @@ msgid "Invalid input. Enter something like: 245,a"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, fuzzy
 msgid "Invalid month entered in field %s"
 msgstr "1-5 A nyilvántartásban levő dátum "
@@ -28075,7 +28047,7 @@ msgid "Invalid value for %s"
 msgstr "Engedélyezett érték"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, fuzzy
 msgid "Invalid year entered in field %s"
 msgstr "1-5 A nyilvántartásban levő dátum "
@@ -28251,7 +28223,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:11
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:383
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:228
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:231
 #, c-format
 msgid "Issue"
 msgstr ""
@@ -28281,7 +28253,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/routing-preview.tt:26
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:124
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:252
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:108
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:111
 #, c-format
 msgid "Issue:"
 msgstr ""
@@ -28340,7 +28312,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:89
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:281
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:267
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:233
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:236
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:39
 #, c-format
 msgid "Item"
@@ -28671,7 +28643,7 @@ msgid "Item should now be waiting at library: %s"
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:248
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:253
 #, fuzzy
 msgid "Item sorting"
 msgstr "import"
@@ -28698,7 +28670,6 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:21
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:337
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:38
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:46
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:658
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:39
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:498
@@ -28707,7 +28678,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:76
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:119
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:269
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:247
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:251
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:853
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:156
 #: intranet-tmpl/prog/en/modules/circ/offline.tt:174
@@ -28716,7 +28687,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:73
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:68
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:196
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:154
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:157
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:67
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:324
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:639
@@ -28856,16 +28827,22 @@ msgstr "%s olvasókat sikeresen törölte"
 msgid "Item(s) not removed from batch %s."
 msgstr "%s olvasókat sikeresen törölte"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:156
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:178
 #, fuzzy, c-format
 msgid "Itemnumber"
 msgstr "dokszám"
+
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:57
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:115
+#, fuzzy, c-format
+msgid "Itemnumbers not found"
+msgstr ": Nem találja ezt a vonalkódot"
 
 #: intranet-tmpl/prog/en/includes/biblio-view-menu.inc:26
 #: intranet-tmpl/prog/en/modules/tools/batch_delete_records.tt:103
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:154
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:102
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:248
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:253
 #: intranet-tmpl/prog/en/modules/circ/reserveratios.tt:40
 #: intranet-tmpl/prog/en/modules/about.tt:214
 #, c-format
@@ -29097,7 +29074,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/manage-marc-import.tt:230
 #: intranet-tmpl/prog/en/modules/tools/stage-marc-import.tt:187
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:199
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:255
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:275
 #: intranet-tmpl/prog/en/modules/offline_circ/process_koc.tt:61
 #, c-format
 msgid "Job progress: "
@@ -30408,7 +30385,7 @@ msgstr ""
 msgid "Koha &rsaquo; Authority details"
 msgstr "<a1>Főoldal</a> &rsaquo; Authority-k"
 
-#: intranet-tmpl/prog/en/modules/labels/result.tt:24
+#: intranet-tmpl/prog/en/modules/labels/result.tt:3
 #, fuzzy, c-format
 msgid "Koha &rsaquo; Barcodes and labels &rsaquo; Search results"
 msgstr "&rsaquo; Olvasó statisztikák &rsaquo; Találatok"
@@ -30526,6 +30503,11 @@ msgstr "Koha &rsaquo; Katalógus &rsaquo; Kiadvány keresése"
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; Search history"
 msgstr "Koha &rsaquo; Katalógus &rsaquo; Keresési előzmények"
+
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:27
+#, fuzzy, c-format
+msgid "Koha &rsaquo; Catalog &rsaquo; Your cart"
+msgstr "Koha &rsaquo; Katalogizálás &rsaquo; "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbooks.tt:4
 #, c-format
@@ -31751,10 +31733,12 @@ msgstr "<a1>Főoldal</a> &rsaquo; <a2>Eszközök</a> &rsaquo;"
 msgid "Koha &rsaquo; Tools &rsaquo; Stage MARC records for import"
 msgstr "&rsaquo; <a1>Kezeld a félretett MARC tételeket</a> &rsaquo; %s Köteg"
 
+#. For the first occurrence,
 #. %1$s:  IF ( do_it ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
 #: intranet-tmpl/prog/en/modules/tags/list.tt:4
+#: intranet-tmpl/prog/en/modules/tags/review.tt:5
 #, fuzzy, c-format
 msgid ""
 "Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; %sReview &rsaquo; %sReview tags%s"
@@ -31895,7 +31879,7 @@ msgid "Koha SAB CINECA"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:17
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:115
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:117
 #, c-format
 msgid "Koha administration"
 msgstr "Koha adminisztrációja"
@@ -32069,7 +32053,7 @@ msgstr "LC raktári jelzet: "
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:73
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:32
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:91
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:28
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:27
 #, c-format
 msgid "LC call number: "
 msgstr "LC raktári jelzet: "
@@ -32078,7 +32062,7 @@ msgstr "LC raktári jelzet: "
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:32
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:103
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:104
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:201
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:197
 #, c-format
 msgid "LCCN"
 msgstr "LCCN"
@@ -32327,7 +32311,7 @@ msgstr "Utolsó"
 
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:174
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:343
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:37
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:41
 #, c-format
 msgid "Last seen"
 msgstr ""
@@ -32592,7 +32576,7 @@ msgstr "07- Romanization scheme "
 #: intranet-tmpl/prog/en/modules/serials/serials-collection.tt:45
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:37
 #: intranet-tmpl/prog/en/modules/common/patron_search.tt:77
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:41
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
 #: intranet-tmpl/prog/en/modules/members/discharges.tt:27
 #: intranet-tmpl/prog/en/modules/members/member.tt:106
 #: intranet-tmpl/prog/en/modules/members/merge-patrons.tt:64
@@ -32603,8 +32587,8 @@ msgstr "07- Romanization scheme "
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:36
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:82
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:50
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:35
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:49
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:39
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:52
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:28
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:135
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:50
@@ -33225,7 +33209,7 @@ msgstr "Hely"
 msgid "Location and availability"
 msgstr "Lelőhely és kölcsönözhetőség"
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:223
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:221
 #, fuzzy, c-format
 msgid "Location(s)"
 msgstr "Cselekmény"
@@ -34837,7 +34821,7 @@ msgstr "Módosítás"
 msgid "Modify %s server"
 msgstr "%s szerver módosítása"
 
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:13
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:12
 #, fuzzy, c-format
 msgid "Modify SRU search fields mapping"
 msgstr "Apache verzió:"
@@ -35069,7 +35053,7 @@ msgstr "Egyebek "
 msgid "More &rsaquo; Set permissions"
 msgstr "Tovább &rsaquo; Jogosultságok beállítása"
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:53
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:45
 #, c-format
 msgid "More details"
 msgstr "További részletek"
@@ -35350,7 +35334,7 @@ msgstr "Nahuel Angelinetti"
 #: intranet-tmpl/prog/en/modules/acqui/booksellers.tt:87
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:318
 #: intranet-tmpl/prog/en/modules/acqui/invoice-files.tt:35
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:46
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:49
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:61
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:142
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:62
@@ -35540,7 +35524,7 @@ msgstr "Nelsonville Public Library, Ohio, USA"
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:79
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:83
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:87
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:50
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:54
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:221
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:225
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:229
@@ -35549,7 +35533,7 @@ msgid "Never"
 msgstr "Soha"
 
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:270
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1055
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1058
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:66
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:68
 #: intranet-tmpl/prog/en/modules/admin/marc_subfields_structure.tt:51
@@ -36043,11 +36027,6 @@ msgstr "Hírek: "
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:164
 #: intranet-tmpl/prog/en/modules/reports/dictionary.tt:213
 msgid "Next"
-msgstr "Következő"
-
-#: intranet-tmpl/prog/en/modules/labels/result.tt:16
-#, fuzzy, c-format
-msgid "Next "
 msgstr "Következő"
 
 #: intranet-tmpl/prog/en/includes/page-numbers.inc:16
@@ -36698,7 +36677,7 @@ msgid "No patron records have been removed"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:271
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:37
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:40
 #, c-format
 msgid "No patron with this name, please, try another"
 msgstr "Nincs ilyen nevű olvasó, kérjünk próbálkozzon másik névvel."
@@ -36752,7 +36731,7 @@ msgid ""
 msgstr ""
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:220
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:240
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:369
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:301
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:688
@@ -36990,7 +36969,7 @@ msgstr "Hozzáad megjegyzést"
 msgid "No. of items:"
 msgstr "dokumentumok"
 
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:36
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:40
 #, c-format
 msgid "No. of times checked out"
 msgstr ""
@@ -37374,7 +37353,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 msgid "Note: Quick add guarantor form populates address fields in full form"
 msgstr ""
 
@@ -37414,7 +37393,7 @@ msgstr "Megjegyzés: A következő 2 mező egyikének 1-nek kell lennie!"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:78
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:121
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:271
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:161
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:153
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:58
 #: intranet-tmpl/prog/en/modules/circ/view_holdsqueue.tt:113
 #: intranet-tmpl/prog/en/modules/reports/cash_register_stats.tt:184
@@ -37614,7 +37593,7 @@ msgstr "Év/Szám "
 msgid "Number of baskets"
 msgstr "2. Gyakoriság"
 
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:25
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, fuzzy, c-format
 msgid "Number of checkouts"
 msgstr "2. Gyakoriság"
@@ -38586,6 +38565,11 @@ msgstr "(#%s számú megrendelés)"
 msgid "Ordered amount:"
 msgstr "(#%s számú megrendelés)"
 
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:82
+#, fuzzy, c-format
+msgid "Ordered by the library"
+msgstr "Minden könyvtár"
+
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:153
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:266
 #, c-format
@@ -38977,14 +38961,14 @@ msgid "Page width:"
 msgstr "Oldal szélessége:"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:13
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:233
 #, fuzzy, c-format
 msgid "Pages"
 msgstr "(Sérült)"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:126
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:254
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:118
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:121
 #, fuzzy, c-format
 msgid "Pages:"
 msgstr "Vonalkód fájl: "
@@ -39152,7 +39136,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:73
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:201
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:38
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:224
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:227
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:28
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:70
 #, c-format
@@ -39386,6 +39370,11 @@ msgstr ": a dokumentumot kivonták a gyűjtményből "
 msgid "Patron has had overdue items and is restricted until: %s"
 msgstr ": a dokumentumot kivonták a gyűjtményből "
 
+#: intranet-tmpl/prog/en/modules/members/discharge.tt:38
+#, c-format
+msgid "Patron has holds. They will be cancelled if the discharge is generated."
+msgstr ""
+
 #: intranet-tmpl/prog/en/includes/checkouts-table.inc:81
 #, c-format
 msgid "Patron has nothing checked out."
@@ -39518,7 +39507,7 @@ msgstr "Olvasólisták"
 msgid "Patron lists:"
 msgstr "Olvasólisták:"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1067
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1070
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:343
 #, fuzzy, c-format
 msgid "Patron messaging preferences"
@@ -39532,7 +39521,7 @@ msgid "Patron name"
 msgstr "Olvasó neve"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:271
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:36
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:39
 #, fuzzy, c-format
 msgid "Patron not found"
 msgstr ": Nem találja ezt a vonalkódot"
@@ -39553,14 +39542,14 @@ msgstr ""
 msgid "Patron note"
 msgstr "8- Előpublikálási szint"
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:232
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:235
 #, fuzzy, c-format
 msgid "Patron notes"
 msgstr "8- Előpublikálási szint"
 
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:128
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:256
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:128
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:131
 #, fuzzy, c-format
 msgid "Patron notes:"
 msgstr "Felnőtt olvasó"
@@ -39799,7 +39788,7 @@ msgstr "Olvasó:"
 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:277
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:353
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:73
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:76
 #, c-format
 msgid "Patron: "
 msgstr "Olvasó: "
@@ -39820,7 +39809,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/reports-menu.inc:21
 #: intranet-tmpl/prog/en/includes/header.inc:6
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:17
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:18
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:19
 #: intranet-tmpl/prog/en/modules/members/statistics.tt:22
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:19
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:18
@@ -39890,7 +39879,7 @@ msgid "Patrons in list"
 msgstr "Listában szereplő olvasók száma"
 
 #: intranet-tmpl/prog/en/modules/members/member.tt:47
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:163
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:165
 #, fuzzy, c-format
 msgid "Patrons requesting modifications"
 msgstr "%S egy alkalmazásba %s %s"
@@ -40322,7 +40311,7 @@ msgstr "Felvétel helye:"
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:17
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:746
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:235
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:238
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:162
 #, fuzzy, c-format
 msgid "Pickup library"
@@ -40333,7 +40322,7 @@ msgstr "Minden könyvtár"
 msgid "Pickup library is different. "
 msgstr "Minden könyvtár"
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:133
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:136
 #, fuzzy, c-format
 msgid "Pickup library:"
 msgstr "Minden könyvtár"
@@ -40381,7 +40370,7 @@ msgstr ""
 #. %2$s:  patron.firstname 
 #. %3$s:  patron.surname 
 #. %4$s:  patron.cardnumber 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:89
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:92
 #, fuzzy, c-format
 msgid "Place article request from %s for %s %s ( %s )"
 msgstr "%s %s (%s)"
@@ -40444,7 +40433,7 @@ msgid "Place of publication"
 msgstr "1- Konferencia kiadvány"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:208
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:211
 #, fuzzy
 msgid "Place request"
 msgstr ". <a1>Visszavonom előjegyzésem</a>"
@@ -40457,7 +40446,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:7
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:79
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:138
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:223
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:226
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:95
 #, c-format
 msgid "Placed on"
@@ -40633,7 +40622,7 @@ msgid "Please confirm subscription deletion"
 msgstr "= adj ki egy dokumentumot az olvasónak"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 msgid "Please confirm whether this is a duplicate patron"
 msgstr ""
 
@@ -41425,8 +41414,6 @@ msgstr "Hozzáadja az új listához:"
 #: intranet-tmpl/prog/en/includes/browser-strings.inc:1
 #: intranet-tmpl/prog/en/includes/cateditor-ui.inc:32
 #: intranet-tmpl/prog/en/includes/datatables.inc:10
-#: intranet-tmpl/prog/en/modules/labels/result.tt:6
-#, c-format
 msgid "Previous"
 msgstr "Előző"
 
@@ -41559,7 +41546,7 @@ msgstr "0 Dokumentumok formája"
 #: intranet-tmpl/prog/en/modules/serials/routing-preview-slip.tt:37
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:69
 #: intranet-tmpl/prog/en/modules/members/boraccount.tt:71
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:68
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:60
 #, c-format
 msgid "Print"
 msgstr "Nyomtatás"
@@ -42133,7 +42120,7 @@ msgstr "; Kiadta %s "
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:305
 #: intranet-tmpl/prog/en/modules/serials/result.tt:17
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:44
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:124
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:110
 #: intranet-tmpl/prog/en/modules/reports/catalogue_stats.tt:113
 #, c-format
 msgid "Publisher"
@@ -42266,7 +42253,7 @@ msgstr ""
 msgid "Quantity received"
 msgstr "%s hozzáadott adat"
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:184
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:185
 #, c-format
 msgid "Quantity received: "
 msgstr ""
@@ -42276,7 +42263,7 @@ msgstr ""
 msgid "Quantity search"
 msgstr "Authority Keresés"
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:177
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:178
 #, c-format
 msgid "Quantity to receive: "
 msgstr ""
@@ -42305,7 +42292,7 @@ msgstr ""
 msgid "Queued request"
 msgstr ". <a1>Visszavonom előjegyzésem</a>"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1143
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1146
 #, c-format
 msgid "Quick add"
 msgstr ""
@@ -42362,7 +42349,7 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:98
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:21
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:61
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:53
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:17
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:34
 #, c-format
@@ -42444,7 +42431,7 @@ msgstr ": %s "
 msgid "Raw (any): "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:158
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:180
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:320
 #, c-format
 msgid "Reason"
@@ -42453,7 +42440,7 @@ msgstr "Ok"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:317
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:302
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:305
 #, fuzzy
 msgid "Reason for cancellation:"
 msgstr "Beszerzés "
@@ -43277,7 +43264,7 @@ msgstr "Bejegyzés felülírása Z39.50/SRU adataival"
 msgid "Replace the current record's contents"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:236
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:237
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:436
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:439
 #, c-format
@@ -43402,7 +43389,7 @@ msgstr "Jelenlegi (%s) állapot"
 #: intranet-tmpl/prog/en/modules/reports/itemtypes.tt:17
 #: intranet-tmpl/prog/en/modules/reports/issues_avg_stats.tt:12
 #: intranet-tmpl/prog/en/modules/reports/borrowers_stats.tt:16
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:102
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:104
 #, c-format
 msgid "Reports"
 msgstr "Összesítések"
@@ -43437,7 +43424,7 @@ msgstr "00 Dokumentum kategória"
 msgid "Request article"
 msgstr "dokumentum mezők"
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:33
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:36
 #, fuzzy, c-format
 msgid "Request article from "
 msgstr "0 Kölcsönzések "
@@ -43482,6 +43469,7 @@ msgstr "dokumentum mezők"
 #. For the first occurrence,
 #. SCRIPT
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:12
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:79
 #: intranet-tmpl/prog/en/modules/members/discharge.tt:51
 #, fuzzy, c-format
 msgid "Requested"
@@ -43497,6 +43485,11 @@ msgstr "dokumentum mezők"
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:12
 #, fuzzy
 msgid "Requested from partners"
+msgstr "dokumentum mezők"
+
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:50
+#, fuzzy, c-format
+msgid "Requested item type"
 msgstr "dokumentum mezők"
 
 #: intranet-tmpl/prog/en/modules/clubs/templates-add-modify.tt:71
@@ -43611,7 +43604,7 @@ msgstr "hiányzó szó"
 #: intranet-tmpl/prog/en/modules/tools/csv-profiles.tt:196
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:256
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:266
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:236
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:256
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:305
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:329
 #: intranet-tmpl/prog/en/modules/serials/checkexpiration.tt:44
@@ -43887,7 +43880,7 @@ msgstr "Találatok"
 #. %3$s:  IF ( total ) 
 #. %4$s:  total 
 #. %5$s:  END 
-#: intranet-tmpl/prog/en/modules/labels/result.tt:79
+#: intranet-tmpl/prog/en/modules/labels/result.tt:70
 #, fuzzy, c-format
 msgid "Results %s through %s %s of %s%s"
 msgstr "Hozzáad dokumentumokat %s részére"
@@ -43945,16 +43938,16 @@ msgstr "8- Előpublikálási szint"
 msgid "Return policy"
 msgstr "Vissza az elejére"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:131
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:146
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:181
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:153
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:168
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:203
 #, fuzzy, c-format
 msgid "Return to batch item deletion"
 msgstr "%S egy alkalmazásba %s %s"
 
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:83
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:263
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:272
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:283
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:292
 #, fuzzy, c-format
 msgid "Return to batch item modification"
 msgstr "%S egy alkalmazásba %s %s"
@@ -44023,10 +44016,10 @@ msgstr ""
 msgid "Return to the basket without making a new order."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:142
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:177
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:164
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:199
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:79
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:268
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:288
 #, fuzzy, c-format
 msgid "Return to the record"
 msgstr "Vissza az elejére"
@@ -44036,10 +44029,10 @@ msgstr "Vissza az elejére"
 msgid "Return to tools"
 msgstr "Vissza az elejére"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:144
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:179
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:166
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:201
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:81
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:270
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:290
 #, fuzzy, c-format
 msgid "Return to where you were"
 msgstr "Vissza az elejére"
@@ -44376,13 +44369,13 @@ msgstr "Kosár szám: %s"
 msgid "SMS cellular providers"
 msgstr "Mobilszolgáltatók"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1117
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1120
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:349
 #, fuzzy, c-format
 msgid "SMS number:"
 msgstr "Kosár szám: %s"
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1122
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1125
 #, fuzzy, c-format
 msgid "SMS provider:"
 msgstr "Vonalkód fájl:"
@@ -44474,7 +44467,7 @@ msgstr "szombatonként"
 #: intranet-tmpl/prog/en/modules/tools/holidays.tt:185
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:277
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:143
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:258
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:278
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:214
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:429
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:145
@@ -44503,7 +44496,7 @@ msgstr "szombatonként"
 #: intranet-tmpl/prog/en/modules/clubs/clubs-add-modify.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/invoice.tt:79
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:131
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:251
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:252
 #: intranet-tmpl/prog/en/modules/acqui/basketgroup.tt:283
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:479
 #: intranet-tmpl/prog/en/modules/acqui/modordernotes.tt:36
@@ -44511,7 +44504,7 @@ msgstr "szombatonként"
 #: intranet-tmpl/prog/en/modules/acqui/uncertainprice.tt:130
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:375
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:28
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:68
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:67
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:147
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:245
 #: intranet-tmpl/prog/en/modules/admin/oai_set_mappings.tt:85
@@ -44849,7 +44842,7 @@ msgstr "Sean Hamlin"
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:288
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:123
 #: intranet-tmpl/prog/en/modules/acqui/acqui-home.tt:42
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:76
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:79
 #: intranet-tmpl/prog/en/modules/admin/marctagstructure.tt:162
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:27
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:36
@@ -45191,7 +45184,7 @@ msgstr "Olvasók keresése"
 
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:84
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:125
-#: intranet-tmpl/prog/en/modules/labels/result.tt:75
+#: intranet-tmpl/prog/en/modules/labels/result.tt:54
 #, c-format
 msgid "Search results"
 msgstr "Keresési találatok"
@@ -45479,11 +45472,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/acqui-search-result.tt:24
 #: intranet-tmpl/prog/en/modules/members/tables/guarantor_search.tt:20
 #: intranet-tmpl/prog/en/modules/acqui/tables/members_results.tt:19
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:67
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:70
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1198
 #: intranet-tmpl/prog/en/modules/reports/guided_reports_start.tt:1220
 #: intranet-tmpl/prog/en/modules/labels/label-edit-batch.tt:274
-#: intranet-tmpl/prog/en/modules/labels/result.tt:115
+#: intranet-tmpl/prog/en/modules/labels/result.tt:106
 #, c-format
 msgid "Select"
 msgstr ""
@@ -45638,8 +45631,8 @@ msgstr "(válassz ki egy könyvtárat)"
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:137
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:165
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:125
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:64
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:125
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:86
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:145
 #: intranet-tmpl/prog/en/modules/patron_lists/list.tt:105
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:62
 #: intranet-tmpl/prog/en/modules/catalogue/detail.tt:320
@@ -45660,7 +45653,7 @@ msgstr "(válassz ki egy könyvtárat)"
 #: intranet-tmpl/prog/en/modules/admin/preferences.tt:160
 #: intranet-tmpl/prog/en/modules/reports/itemslost.tt:40
 #: intranet-tmpl/prog/en/modules/virtualshelves/shelves.tt:433
-#: intranet-tmpl/prog/en/modules/labels/result.tt:89
+#: intranet-tmpl/prog/en/modules/labels/result.tt:80
 #, c-format
 msgid "Select all"
 msgstr "Összes kiválasztása"
@@ -45711,7 +45704,7 @@ msgstr "(válassz ki egy könyvtárat) "
 msgid "Select files: "
 msgstr "(válassz ki egy könyvtárat) "
 
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:150
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:153
 #, fuzzy, c-format
 msgid "Select item:"
 msgstr "1-5 A nyilvántartásban levő dátum"
@@ -45920,7 +45913,7 @@ msgstr "vesszővel elválasztott szöveg"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:33
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:56
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:48
 #: intranet-tmpl/prog/en/modules/virtualshelves/sendshelfform.tt:33
 #, c-format
 msgid "Send"
@@ -45998,7 +45991,7 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 msgid "Separator must be / in field %s"
 msgstr ""
 
@@ -46020,7 +46013,7 @@ msgstr ""
 msgid "Serhij Dubyk"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:183
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:176
 #, c-format
 msgid "Serial"
 msgstr ""
@@ -46116,7 +46109,7 @@ msgstr "Arias "
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:15
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:17
 #: intranet-tmpl/prog/en/modules/reports/reports-home.tt:52
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:88
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:90
 #, c-format
 msgid "Serials"
 msgstr "Időszaki kiadványok"
@@ -46307,7 +46300,7 @@ msgstr ""
 
 #. INPUT type=button
 #: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:376
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 #, fuzzy
 msgid "Set to patron"
 msgstr "Felnőtt olvasó"
@@ -46589,8 +46582,8 @@ msgstr "Minden aktív kosár megjelenítése"
 msgid "Show all baskets"
 msgstr "Minden kosár megjelenítése"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:67
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:130
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:44
 #, c-format
 msgid "Show all columns"
@@ -46740,8 +46733,8 @@ msgstr "Hozzáad új előfizetést"
 msgid "Show tags"
 msgstr "Cimkék megjelenítése"
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:67
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:130
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:89
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:150
 #: intranet-tmpl/prog/en/modules/admin/aqplan.tt:44
 #, c-format
 msgid "Show/hide columns:"
@@ -47234,7 +47227,7 @@ msgstr "Könyvtárosok kliense"
 msgid "Staff members are not allowed to access patron's checkout history"
 msgstr "A könyvtárosok nem férhetnek hozzá az olvasó olvasási előzményeihez."
 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:28
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:29
 #, fuzzy, c-format
 msgid "Staff members are not allowed to access patron's holds history"
 msgstr "A könyvtárosok nem férhetnek hozzá az olvasó olvasási előzményeihez."
@@ -47341,7 +47334,7 @@ msgstr "8- Előpublikálási szint"
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:32
 #: intranet-tmpl/prog/en/modules/cataloguing/z3950_search.tt:78
 #: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:39
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:60
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:59
 #, c-format
 msgid "Standard ID: "
 msgstr ""
@@ -47551,7 +47544,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:120
 #: intranet-tmpl/prog/en/modules/serials/claims.tt:94
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:263
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:47
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:52
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:41
 #: intranet-tmpl/prog/en/modules/members/notices.tt:36
 #: intranet-tmpl/prog/en/modules/members/moremember-print.tt:44
@@ -47559,7 +47552,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:131
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:386
 #: intranet-tmpl/prog/en/modules/acqui/edifactmsgs.tt:38
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:234
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:237
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:474
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:612
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:614
@@ -47930,7 +47923,7 @@ msgstr "(kapcsolodó keresések:"
 msgid "Subject sub-division: "
 msgstr "17- Tárgy típusának alegységei "
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:144
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:132
 #, c-format
 msgid "Subject(s)"
 msgstr ""
@@ -47940,7 +47933,7 @@ msgstr ""
 msgid "Subject:"
 msgstr "(kapcsolodó keresések: "
 
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:52
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:51
 #, fuzzy, c-format
 msgid "Subject: "
 msgstr "(kapcsolodó keresések: "
@@ -48352,6 +48345,11 @@ msgstr "%S megrendelte:"
 msgid "Suggestion"
 msgstr ""
 
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:83
+#, fuzzy, c-format
+msgid "Suggestion declined"
+msgstr "Javaslatok kereése:"
+
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:648
 #, fuzzy, c-format
 msgid "Suggestion information"
@@ -48379,7 +48377,7 @@ msgstr "Javaslatok"
 msgid "Suggestions management"
 msgstr "Engedélyezett érték kezelése"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:141
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:143
 #, fuzzy, c-format
 msgid "Suggestions pending approval"
 msgstr "#- Nem életrajzi anyag"
@@ -48823,8 +48821,8 @@ msgid "Tag deleted"
 msgstr "Üres kosár"
 
 #. A
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:216
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:222
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:236
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:242
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:365
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:371
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:293
@@ -48886,7 +48884,7 @@ msgstr ". Kezdete"
 msgid "Tags"
 msgstr "Cimkék"
 
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:155
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:157
 #, c-format
 msgid "Tags pending approval"
 msgstr "Jóváhagyásra váró cimkék"
@@ -48932,7 +48930,7 @@ msgstr "Minden könyvtár"
 msgid "Tax number registered: "
 msgstr "Minden könyvtár "
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:221
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:222
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:400
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:403
 #: intranet-tmpl/prog/en/modules/acqui/supplier.tt:218
@@ -49523,7 +49521,7 @@ msgid ""
 "less than the third for the "
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:48
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:47
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:107
 #, fuzzy, c-format
 msgid "The following barcodes were found: "
@@ -49575,7 +49573,13 @@ msgstr ""
 msgid "The following ids exist in both tables %s and %s:"
 msgstr ": Nem találja ezt a vonalkódot "
 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:167
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:67
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:125
+#, fuzzy, c-format
+msgid "The following itemnumbers were found: "
+msgstr ": Nem találja ezt a vonalkódot "
+
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:187
 #, fuzzy, c-format
 msgid "The following items were modified:"
 msgstr ": Nem találja ezt a vonalkódot"
@@ -50439,6 +50443,11 @@ msgstr ""
 msgid "This authority type cannot be deleted"
 msgstr ": Nem találja ezt a vonalkódot "
 
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:7
+#, fuzzy, c-format
+msgid "This bibliographic record does not exist."
+msgstr "%s tétel tárolva "
+
 #: intranet-tmpl/prog/en/modules/admin/aqbudgetperiods.tt:273
 #, fuzzy, c-format
 msgid ""
@@ -50530,7 +50539,7 @@ msgid ""
 "a list of anonymized loans, please run a report."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:30
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:31
 #, c-format
 msgid "This is the anonymous patron, so no holds history is displayed."
 msgstr ""
@@ -50553,6 +50562,11 @@ msgstr ""
 #, fuzzy
 msgid "This item cannot be removed. It is checked out"
 msgstr "%s olvasókat sikeresen törölte"
+
+#: intranet-tmpl/prog/en/includes/blocking_errors.inc:9
+#, fuzzy, c-format
+msgid "This item does not exist."
+msgstr "%s tétel tárolva "
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/js_includes.inc:37
@@ -50729,12 +50743,12 @@ msgstr "Ennek az olvasónak nincsenek korábbi kölcsönzései."
 msgid "This patron has no files attached."
 msgstr "Ez az olvasó nem töltött fel fájlokat."
 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:32
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:33
 #, fuzzy, c-format
 msgid "This patron has no holds history."
 msgstr "Ennek az olvasónak nincsenek korábbi kölcsönzései."
 
-#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:92
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:101
 #, c-format
 msgid "This patron has not submitted any purchase suggestions"
 msgstr "Ez az olvasó nem tett javaslatot beszerzésre."
@@ -50885,7 +50899,7 @@ msgstr ""
 #. %1$s:  IF ( too_many_items ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:117
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:139
 #, c-format
 msgid "This will delete %sall the%sthe selected%s items."
 msgstr ""
@@ -51066,8 +51080,8 @@ msgstr "TinyMCE WYSIWYG szerlkesztő (v3.5.8)"
 #: intranet-tmpl/prog/en/modules/tools/koha-news.tt:167
 #: intranet-tmpl/prog/en/modules/tools/inventory.tt:169
 #: intranet-tmpl/prog/en/modules/tools/batch_record_modification.tt:145
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:77
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:139
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:99
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:159
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:9
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:210
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:233
@@ -51084,7 +51098,7 @@ msgstr "TinyMCE WYSIWYG szerlkesztő (v3.5.8)"
 #: intranet-tmpl/prog/en/modules/serials/serials-search.tt:53
 #: intranet-tmpl/prog/en/modules/serials/subscription-batchedit.tt:34
 #: intranet-tmpl/prog/en/modules/members/readingrec.tt:52
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:38
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:41
 #: intranet-tmpl/prog/en/modules/members/members-update.tt:21
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:657
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:698
@@ -51095,7 +51109,7 @@ msgstr "TinyMCE WYSIWYG szerlkesztő (v3.5.8)"
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:29
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:122
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:33
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:246
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:250
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:852
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:884
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:51
@@ -51117,7 +51131,7 @@ msgstr "TinyMCE WYSIWYG szerlkesztő (v3.5.8)"
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:193
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:37
 #: intranet-tmpl/prog/en/modules/circ/branchoverdues.tt:72
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:225
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:228
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:28
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:78
 #: intranet-tmpl/prog/en/modules/reports/orders_by_budget.tt:41
@@ -51194,7 +51208,7 @@ msgstr "dokumentum"
 #: intranet-tmpl/prog/en/modules/acqui/invoices.tt:263
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:121
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:249
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:93
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:96
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:67
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:247
 #: intranet-tmpl/prog/en/modules/suggestion/suggestion.tt:641
@@ -51214,7 +51228,7 @@ msgstr "Cím:"
 #: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:33
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:125
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:27
-#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:20
+#: intranet-tmpl/prog/en/modules/admin/sru_modmapping.tt:19
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:186
 #: intranet-tmpl/prog/en/modules/admin/library_groups.tt:236
 #, c-format
@@ -51526,14 +51540,14 @@ msgid "Too many holds: "
 msgstr "<a1>%s %s </a> túl sok előjegyzése van."
 
 #. %1$s:  too_many_items 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:108
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:130
 #, c-format
 msgid "Too many items (%s) to display individually."
 msgstr ""
 
 #. %1$s:  too_many_items 
 #. %2$s:  Koha.Preference('MaxItemsToProcessForBatchMod') 
-#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:180
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:200
 #, c-format
 msgid ""
 "Too many items (%s): You are not allowed to edit more than %s items in a "
@@ -51615,7 +51629,7 @@ msgstr "Beszerzés"
 #: intranet-tmpl/prog/en/modules/labels/label-edit-layout.tt:55
 #: intranet-tmpl/prog/en/modules/labels/label-edit-profile.tt:44
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:44
-#: intranet-tmpl/prog/en/modules/intranet-main.tt:109
+#: intranet-tmpl/prog/en/modules/intranet-main.tt:111
 #, c-format
 msgid "Tools"
 msgstr "Eszközök"
@@ -52166,7 +52180,7 @@ msgstr ""
 msgid "URL"
 msgstr ": %s"
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:209
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:205
 #, fuzzy, c-format
 msgid "URL(s)"
 msgstr ": %s"
@@ -52353,7 +52367,7 @@ msgstr "Vonalkód fájl:"
 msgid "Unhighlight"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:177
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:169
 #, c-format
 msgid "Unified title"
 msgstr ""
@@ -52460,7 +52474,8 @@ msgstr ""
 msgid "Universidad ORT Uruguay (Ernesto Silva, Andres Tarallo)"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1124
+#: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:90
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1127
 #, fuzzy, c-format
 msgid "Unknown"
 msgstr "Hozzáad új dokumentumot"
@@ -53326,7 +53341,7 @@ msgstr "Összetett keresés"
 
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:160
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:86
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:244
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:245
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:458
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:465
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:357
@@ -53650,7 +53665,7 @@ msgstr "Évf."
 
 #: intranet-tmpl/prog/en/includes/patron-article-requests.inc:10
 #: intranet-tmpl/prog/en/modules/serials/subscription-detail.tt:383
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:227
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:230
 #, c-format
 msgid "Volume"
 msgstr "Évfolyam"
@@ -53673,7 +53688,7 @@ msgstr "Évfolyam száma"
 #: intranet-tmpl/prog/en/modules/catalogue/moredetail.tt:37
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:123
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:251
-#: intranet-tmpl/prog/en/modules/circ/request-article.tt:103
+#: intranet-tmpl/prog/en/modules/circ/request-article.tt:106
 #, c-format
 msgid "Volume:"
 msgstr "Évfolyam:"
@@ -53696,7 +53711,7 @@ msgstr "Várjuk"
 msgid "Waiting "
 msgstr "A bejelentkezés dátuma: "
 
-#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
+#: intranet-tmpl/prog/en/modules/members/holdshistory.tt:47
 #: intranet-tmpl/prog/en/modules/reports/reserves_stats.tt:122
 #, fuzzy, c-format
 msgid "Waiting date"
@@ -53804,6 +53819,12 @@ msgstr "Figyelmeztetés: Nem találjuk ezt az olvasójegyszámot"
 msgid "Warning, the following cardnumbers were not found:"
 msgstr "Figyelmeztetés: Nem találjuk ezt az olvasójegyszámot"
 
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:53
+#: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:112
+#, fuzzy, c-format
+msgid "Warning, the following itemnumbers were not found:"
+msgstr "Figyelmeztetés: Nem találjuk ezt az olvasójegyszámot"
+
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:382
 #, c-format
 msgid ""
@@ -53811,7 +53832,7 @@ msgid ""
 "data ( e.g. branches.branchname ) will refer to the borrower's home branch."
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:213
+#: intranet-tmpl/prog/en/modules/acqui/orderreceive.tt:214
 #, c-format
 msgid ""
 "Warning, you have entered more items than expected. Items will not be "
@@ -53834,17 +53855,17 @@ msgid ""
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 msgid "Warning: Duplicate organization"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 msgid "Warning: Duplicate patron"
 msgstr ""
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1162
+#: intranet-tmpl/prog/en/modules/members/memberentrygen.tt:1165
 msgid "Warning: Expiration date falls before enrollment date"
 msgstr "Figyelmeztetés: a lejárat dátuma korábbi, mint a beiratkozásé!"
 
@@ -53907,6 +53928,11 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:33
 #, c-format
 msgid "Warning: no barcodes were found"
+msgstr "Figyelmeztetés: Nem találjuk ezt a vonalkódot"
+
+#: intranet-tmpl/prog/en/modules/tools/batchMod-del.tt:53
+#, fuzzy, c-format
+msgid "Warning: no itemnumbers were found"
 msgstr "Figyelmeztetés: Nem találjuk ezt a vonalkódot"
 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:141
@@ -55207,7 +55233,7 @@ msgstr ""
 msgid "Your authority search history is empty."
 msgstr "Authority keresés találatai"
 
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:47
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:39
 #, c-format
 msgid "Your cart"
 msgstr ""
@@ -55783,7 +55809,7 @@ msgstr "Kosár"
 msgid "at : "
 msgstr "%s - %s "
 
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:25
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, fuzzy, c-format
 msgid "at current library "
 msgstr "Minden könyvtár "
@@ -56202,8 +56228,8 @@ msgid "csv"
 msgstr ""
 
 #. SPAN
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:93
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:270
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:77
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:289
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author %]&rft.btitle=[% BIBLIO_RESULT.title |url %]&rft."
@@ -56379,6 +56405,11 @@ msgstr ""
 #, c-format
 msgid "ex: barcode, itemcallnumber, title, \"050a 050b\", 300a "
 msgstr ""
+
+#: intranet-tmpl/prog/en/modules/about.tt:942
+#, fuzzy, c-format
+msgid "exchange"
+msgstr "Megváltoztatás"
 
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:253
 #, fuzzy, c-format
@@ -56731,7 +56762,7 @@ msgid "is restricted. Please verify this patron should still be restricted. "
 msgstr ""
 
 #: intranet-tmpl/prog/en/includes/virtualshelves-toolbar.inc:20
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:60
+#: intranet-tmpl/prog/en/modules/basket/basket.tt:52
 #: intranet-tmpl/prog/en/modules/basket/downloadcart.tt:16
 #: intranet-tmpl/prog/en/modules/virtualshelves/downloadshelf.tt:33
 #, c-format
@@ -57551,7 +57582,7 @@ msgstr "setSpec: "
 msgid "since %s %s Waiting to be pulled "
 msgstr "%s nem megnyitható "
 
-#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:25
+#: intranet-tmpl/prog/en/modules/circ/bookcount.tt:29
 #, fuzzy, c-format
 msgid "since last transfer"
 msgstr "<a1></a>Kölcsönzési Átutalások"
@@ -57666,7 +57697,6 @@ msgstr "&rsaquo; Szerkeszd a Listát %s "
 #: intranet-tmpl/prog/en/modules/catalogue/showmarc.tt:3
 #: intranet-tmpl/prog/en/modules/members/moremember-receipt.tt:7
 #: intranet-tmpl/prog/en/modules/batch/print-notices.tt:3
-#: intranet-tmpl/prog/en/modules/basket/basket.tt:30
 #: intranet-tmpl/prog/en/modules/circ/printslip.tt:14
 #: intranet-tmpl/prog/en/modules/reports/convert_report.tt:3
 #: intranet-tmpl/prog/en/modules/labels/spinelabel-print.tt:6
@@ -57980,7 +58010,7 @@ msgstr "igen"
 
 #. %1$s:  END -
 #. %2$s:  END 
-#: intranet-tmpl/prog/en/modules/labels/result.tt:117
+#: intranet-tmpl/prog/en/modules/labels/result.tt:108
 #, fuzzy, c-format
 msgid "z %s %s "
 msgstr "%s / %s "
