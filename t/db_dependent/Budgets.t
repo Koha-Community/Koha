@@ -1,6 +1,6 @@
 #!/usr/bin/perl
 use Modern::Perl;
-use Test::More tests => 146;
+use Test::More tests => 147;
 
 BEGIN {
     use_ok('C4::Budgets')
@@ -969,7 +969,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
 
 subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
 
-    plan tests => 16;
+    plan tests => 24;
 
 #Let's build an order, we need a couple things though
     t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
@@ -987,8 +987,13 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
             authorised_value => 'PICKLE',
         }
     });
+    my $spent_budget_period = $builder->build({ source => 'Aqbudgetperiod', value => {
+        }
+    });
     my $spent_budget = $builder->build({ source => 'Aqbudget', value => {
             sort1_authcat => $budget_authcat->{category_name},
+            budget_period_id => $spent_budget_period->{budget_period_id},
+            budget_parent_id => undef,
         }
     });
     my $spent_orderinfo = {
@@ -1032,6 +1037,16 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
     t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
     $spent_ordered = GetBudgetOrdered( $spent_order->{budget_id} );
     is($spent_ordered,'78.8',"We expect the ordered amount to be equal to the estimated price rounded times quantity");
+
+    #Test GetBudgetHierarchy for rounding
+    t::lib::Mocks::mock_preference('OrderPriceRounding','');
+    my $gbh = GetBudgetHierarchy($spent_budget->{budget_period_id});
+    is ( @$gbh[0]->{budget_spent}+0, 0, "We expect this to be an exact order cost * quantity");
+    is ( @$gbh[0]->{budget_ordered}+0, 78.8336, "We expect this to be an exact order cost * quantity");
+    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
+    $gbh = GetBudgetHierarchy($spent_budget->{budget_period_id});
+    is ( @$gbh[0]->{budget_spent}+0, 0, "We expect this to be an rounded order cost * quantity");
+    is ( @$gbh[0]->{budget_ordered}+0, 78.8, "We expect this to be an exact order cost * quantity");
 
 #Let's test some budget planning
 #Regression tests for bug 18736
@@ -1097,7 +1112,7 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
     });
     my $received_order = $builder->build({ source => 'Aqorder', value => $spent_orderinfo });
 
-#And receive
+#And receive a copy of the order so we have both spent and ordered values
 
     ModReceiveOrder({
             biblionumber => $spent_order->{biblionumber},
@@ -1117,6 +1132,16 @@ subtest 'GetBudgetSpent GetBudgetOrdered GetBudgetsPlanCell tests' => sub {
     t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
     $spent_spent = GetBudgetSpent( $spent_order->{budget_id} );
     is($spent_spent,'78.8',"We expect the spent amount to be equal to the estimated price rounded times quantity");
+
+    #Test GetBudgetHierarchy for rounding
+    t::lib::Mocks::mock_preference('OrderPriceRounding','');
+    $gbh = GetBudgetHierarchy($spent_budget->{budget_period_id});
+    is ( @$gbh[0]->{budget_spent}, 78.8336, "We expect this to be an exact order cost * quantity");
+    is ( @$gbh[0]->{budget_ordered}, 78.8336, "We expect this to be an exact order cost * quantity");
+    t::lib::Mocks::mock_preference('OrderPriceRounding','nearest_cent');
+    $gbh = GetBudgetHierarchy($spent_budget->{budget_period_id});
+    is ( @$gbh[0]->{budget_spent}+0, 78.8, "We expect this to be a rounded order cost * quantity");
+    is ( @$gbh[0]->{budget_ordered}, 78.8, "We expect this to be a rounded order cost * quantity");
 
 };
 
