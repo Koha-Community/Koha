@@ -608,16 +608,9 @@ sub _new_Zconn {
     my $tried=0; # first attempt
     my $Zconn; # connection object
     my $elementSetName;
-    my $index_mode;
     my $syntax;
 
     $server //= "biblioserver";
-
-    if ( $server eq 'biblioserver' ) {
-        $index_mode = $context->{'config'}->{'zebra_bib_index_mode'} // 'dom';
-    } elsif ( $server eq 'authorityserver' ) {
-        $index_mode = $context->{'config'}->{'zebra_auth_index_mode'} // 'dom';
-    }
 
     $syntax = 'xml';
     $elementSetName = 'marcxml';
