@@ -18,7 +18,7 @@ __END_SRU_PUBLICSERVER__
 <listen id="mergeserver">tcp:@:__MERGE_SERVER_PORT__</listen>
 <server id="mergeserver"  listenref="mergeserver">
     <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
-    <config>/etc/koha/sites/__KOHASITE__/__ZEBRA_BIBLIOS_CFG__</config>
+    <config>/etc/koha/sites/__KOHASITE__/zebra-biblios-dom.cfg</config>
     <cql2rpn>/var/lib/koha/__KOHASITE__/pqf.properties</cql2rpn>
 </server>
 -->
@@ -26,10 +26,13 @@ __END_SRU_PUBLICSERVER__
 <!-- BIBLIOGRAPHIC RECORDS -->
 <server id="biblioserver"  listenref="biblioserver">
     <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
-    <config>/etc/koha/sites/__KOHASITE__/__ZEBRA_BIBLIOS_CFG__</config>
+    <config>/etc/koha/sites/__KOHASITE__/zebra-biblios-dom.cfg</config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-    __START_BIBLIOS_RETRIEVAL_INFO__
+  <xi:include href="/etc/koha/__ZEBRA_MARC_FORMAT__-retrieval-info-bib-dom.xml"
+              xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:fallback>
+      <retrievalinfo>
        <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="F"/>
        <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="B"/>
        <retrieval syntax="xml" name="F"/>
@@ -76,7 +79,9 @@ __END_SRU_PUBLICSERVER__
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-    __END_BIBLIOS_RETRIEVAL_INFO__
+      </retrievalinfo>
+    </xi:fallback>
+  </xi:include>
 
     <!-- The stuff below is used to enable SRU. It's currently disabled
          until we come up with a good way to make it get magically set up by
@@ -104,10 +109,13 @@ __END_SRU_PUBLICSERVER__
 <!-- AUTHORITY RECORDS -->
 <server id="authorityserver"  listenref="authorityserver" >
     <directory>/var/lib/koha/__KOHASITE__/authorities</directory>
-    <config>/etc/koha/sites/__KOHASITE__/__ZEBRA_AUTHORITIES_CFG__</config>
+    <config>/etc/koha/sites/__KOHASITE__/zebra-authorities-dom.cfg</config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-    __START_AUTHORITIES_RETRIEVAL_INFO__
+  <xi:include href="/etc/koha/__ZEBRA_MARC_FORMAT__-retrieval-info-auth-dom.xml"
+              xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:fallback>
+      <retrievalinfo>
        <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="F"/>
        <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="B"/>
        <retrieval syntax="xml" name="marcxml"
@@ -145,7 +153,9 @@ __END_SRU_PUBLICSERVER__
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-    __END_AUTHORITIES_RETRIEVAL_INFO__
+      </retrievalinfo>
+    </xi:fallback>
+  </xi:include>
 
     <!-- The stuff below is used to enable SRU. It's currently disabled
          until we come up with a good way to make it get magically set up by
@@ -175,10 +185,13 @@ __END_SRU_PUBLICSERVER__
 __START_SRU_PUBLICSERVER__
 <server id="publicserver"  listenref="publicserver">
     <directory>/var/lib/koha/__KOHASITE__/biblios</directory>
-    <config>/etc/koha/sites/__KOHASITE__/__ZEBRA_BIBLIOS_CFG__</config>
+    <config>/etc/koha/sites/__KOHASITE__/zebra-biblios-dom.cfg</config>
     <cql2rpn>/etc/koha/zebradb/pqf.properties</cql2rpn>
 
-    __START_BIBLIOS_RETRIEVAL_INFO__
+  <xi:include href="/etc/koha/__ZEBRA_MARC_FORMAT__-retrieval-info-bib-dom.xml"
+              xmlns:xi="http://www.w3.org/2001/XInclude">
+    <xi:fallback>
+      <retrievalinfo>
        <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="F"/>
        <retrieval syntax="__ZEBRA_MARC_FORMAT__" name="B"/>
        <retrieval syntax="xml" name="F"/>
@@ -225,7 +238,9 @@ __START_SRU_PUBLICSERVER__
            <xslt stylesheet="/usr/share/koha/intranet/htdocs/intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl"/>
          </backend>
        </retrieval>
-    __END_BIBLIOS_RETRIEVAL_INFO__
+      </retrievalinfo>
+    </xi:fallback>
+  </xi:include>
 
     <xi:include href="/etc/koha/zebradb/explain-biblios.xml"
                 xmlns:xi="http://www.w3.org/2001/XInclude">

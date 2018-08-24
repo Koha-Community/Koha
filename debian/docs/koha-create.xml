@@ -27,8 +27,6 @@
       <arg choice="req"><option>--create-db</option>|<option>--request-db</option>|<option>--populate-db</option>|<option>--use-db</option></arg>
       <arg><option>--marcflavor</option> marc21|normarc|unimarc</arg>
       <arg><option>--zebralang</option> en|es|fr|gr|nb|ru|uk</arg>
-      <arg><option>--auth-idx</option> dom|grs1</arg>
-      <arg><option>--biblio-idx</option> dom|grs1</arg>
       <arg><option>--memcached-servers</option> server:port</arg>
       <arg><option>--memcached-prefix</option> namespace_prefix</arg>
       <arg><option>--defaultsql</option> /path/to/some.sql</arg>
@@ -134,20 +132,6 @@
       <term><option>--zebralang</option></term>
       <listitem>
         <para>Primary language for Zebra indexing. Corresponds to the ZEBRA_LANGUAGE config file variable.</para>
-      </listitem>
-    </varlistentry>
-
-    <varlistentry>
-      <term><option>--auth-idx</option></term>
-      <listitem>
-        <para>Specified the desired indexing mode for authority records. Valid options are <option>dom</option> (default) and <option>grs1</option>.</para>
-      </listitem>
-    </varlistentry>
-
-    <varlistentry>
-      <term><option>--biblio-idx</option></term>
-      <listitem>
-        <para>Specified the desired indexing mode for bibliographic records. Valid options are <option>dom</option> (default) and <option>grs1</option>.</para>
       </listitem>
     </varlistentry>
 
