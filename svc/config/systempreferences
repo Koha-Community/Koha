@@ -47,7 +47,11 @@ our ( $query, $response ) = C4::Service->init( parameters => 'manage_sysprefs' )
 
 =over 4
 
+=item url path
+
 POST /svc/config/systempreferences/$preference
+
+=item url query
 
 value=$value
 
@@ -72,7 +76,11 @@ sub set_preference {
 
 =over 4
 
+=item url path
+
 POST /svc/config/systempreferences/
+
+=item url query
 
 pref_$pref1=$value1&pref_$pref2=$value2
 
