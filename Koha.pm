@@ -29,7 +29,7 @@ use vars qw{ $VERSION };
 # - #4 : the developer version. The 4th number is the database subversion.
 #        used by developers when the database changes. updatedatabase take care of the changes itself
 #        and is automatically called by Auth.pm when needed.
-$VERSION = "18.06.00.019";
+$VERSION = "18.06.00.020";
 
 sub version {
     return $VERSION;
