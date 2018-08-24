@@ -693,9 +693,9 @@ No patron matched <span class="ex">[% message | html %]</span>
                    [% IF ( debarredcomment ) %]
                        with the explanation: <br/><i>
                        [% IF debarredcomment.search('OVERDUES_PROCESS') %]
-                           Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | raw | html_line_break %]
+                           Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | $raw | html_line_break %]
                        [% ELSE %]
-                           [% debarredcomment | raw | html_line_break %]
+                           [% debarredcomment | $raw | html_line_break %]
                        [% END %]
                        </i>
                    [% END %]
