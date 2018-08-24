@@ -297,12 +297,12 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
-                        return oObj.collection.escapeHtml();
+                        return ( oObj.collection ? oObj.collection.escapeHtml() : '' );
                     }
                 },
                 {
                     "mDataProp": function ( oObj ) {
-                        return oObj.location.escapeHtml();
+                        return ( oObj.location ? oObj.location.escapeHtml() : '' );
                     }
                 },
                 {
@@ -318,7 +318,7 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
-                        return oObj.itemcallnumber.escapeHtml();
+                        return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
                     }
                 },
                 {
@@ -638,12 +638,12 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            return oObj.collection.escapeHtml();
+                            return ( oObj.collection ? oObj.collection.escapeHtml() : '' );
                         }
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            return oObj.location.escapeHtml();
+                            return ( oObj.location ? oObj.location.escapeHtml() : '' );
                         }
                     },
                     { "mDataProp": "issuedate_formatted" },
@@ -654,7 +654,7 @@ $(document).ready(function() {
                     },
                     {
                         "mDataProp": function ( oObj ) {
-                            return oObj.itemcallnumber.escapeHtml();
+                            return ( oObj.itemcallnumber ? oObj.itemcallnumber.escapeHtml() : '' );
                         }
                     },
                     {
