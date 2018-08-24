@@ -95,6 +95,7 @@ mode. A configuration file koha-oai.conf can look like that:
       xsl_file: /usr/local/koha/koha-tmpl/intranet-tmpl/xslt/UNIMARCslim2OAIDC.xsl
 
 Note the 'include_items' parameter which is the only mean to return item-level info.
+If summary holdings are enabled, 'include_items' includes their location information too.
 
 =cut
 

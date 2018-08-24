@@ -415,6 +415,40 @@ sub GetMarcHoldingsByBiblionumber {
     return \@records;
 }
 
+=head2 GetMarcHoldingsFields
+
+  my @marc_fields = GetMarcHoldingsFields($biblionumber);
+
+Returns an array of MARC::Record objects of the holdings for the biblio.
+
+=cut
+
+sub GetMarcHoldingsFields {
+	my ( $biblionumber ) = @_;
+
+    # This is so much faster than using Koha::Holdings->search that it makes sense even if it's ugly.
+    my $sth = C4::Context->dbh->prepare( 'SELECT * FROM holdings WHERE biblionumber = ?' );
+    $sth->execute( $biblionumber );
+    my $holdings = $sth->fetchall_arrayref({});
+    $sth->finish();
+    my @holdings_fields;
+    my ( $holdingstag, $holdingssubfield ) = GetMarcHoldingFromKohaField( 'holdings.holdingbranch' );
+
+    ITEMLOOP: foreach my $holding (@$holdings) {
+
+        my $mungedholding = {
+            map {
+                defined($holding->{$_}) && $holding->{$_} ne '' ? ("holdings.$_" => $holding->{$_}) : ()
+            } keys %{ $holding }
+        };
+        my $marc = TransformKohaHoldingToMarc($mungedholding);
+
+        push @holdings_fields, $marc->field( $holdingstag );
+    }
+
+    return \@holdings_fields;
+}
+
 =head2 GetHoldingFrameworkCode
 
   $frameworkcode = GetFrameworkCode( $holding_id )
@@ -769,6 +803,47 @@ sub TransformMarcHoldingToKohaOneField {
     $retval = join ' | ', uniq(@rv);
 
     return $retval;
+}
+
+=head2 TransformKohaToMarc
+
+    $record = TransformKohaToMarc( $hash )
+
+This function builds partial MARC::Record from a hash
+Hash entries can be from biblio or biblioitems.
+
+This function is called in acquisition module, to create a basic catalogue
+entry from user entry
+
+=cut
+
+
+sub TransformKohaHoldingToMarc {
+    my $hash = shift;
+    my $record = MARC::Record->new();
+    SetMarcUnicodeFlag( $record, C4::Context->preference("marcflavour") );
+    my $mss = C4::Biblio::GetMarcSubfieldStructure( 'HLD' );
+    my $tag_hr = {};
+    while ( my ($kohafield, $value) = each %$hash ) {
+        next unless exists $mss->{$kohafield};
+        next unless $mss->{$kohafield};
+        my $tagfield    = $mss->{$kohafield}{tagfield} . '';
+        my $tagsubfield = $mss->{$kohafield}{tagsubfield};
+        foreach my $value ( split(/\s?\|\s?/, $value, -1) ) {
+            next if $value eq '';
+            $tag_hr->{$tagfield} //= [];
+            push @{$tag_hr->{$tagfield}}, [($tagsubfield, $value)];
+        }
+    }
+    foreach my $tag (sort keys %$tag_hr) {
+        my @sfl = @{$tag_hr->{$tag}};
+        @sfl = sort { $a->[0] cmp $b->[0]; } @sfl;
+        @sfl = map { @{$_}; } @sfl;
+        $record->insert_fields_ordered(
+            MARC::Field->new($tag, " ", " ", @sfl)
+        );
+    }
+    return $record;
 }
 
 1;
