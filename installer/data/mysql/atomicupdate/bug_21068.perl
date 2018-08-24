@@ -7,6 +7,9 @@ if( CheckVersion( $DBversion ) ) {
             DELETE FROM systempreferences
             WHERE variable IN ('NorwegianPatronDBEnable', 'NorwegianPatronDBEndpoint', 'NorwegianPatronDBUsername', 'NorwegianPatronDBPassword', 'NorwegianPatronDBSearchNLAfterLocalHit')
         |);
+        if ( TableExists('borrower_sync') ) {
+            $dbh->do(q|DROP TABLE borrower_sync|);
+        }
     }
 
     SetVersion( $DBversion );
