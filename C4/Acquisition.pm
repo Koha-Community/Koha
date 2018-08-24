@@ -2026,7 +2026,7 @@ returns a price rounded as specified in OrderPriceRounding system preference.
 sub get_rounded_price {
     my ( $price ) =  @_;
     my $rounding_pref = C4::Context->preference('OrderPriceRounding');
-    if( $rounding_pref eq 'nearest_cent' ) { return Koha::Number::Price->new( $price )->format(); }
+    if( $rounding_pref eq 'nearest_cent' ) { return Koha::Number::Price->new( $price )->round(); }
     else                                   { return $price; }
 }
 

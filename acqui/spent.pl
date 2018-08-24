@@ -34,6 +34,7 @@ use C4::Auth;
 use C4::Output;
 use Modern::Perl;
 use CGI qw ( -utf8 );
+use C4::Acquisition;
 use Koha::Acquisition::Invoice::Adjustments;
 
 my $dbh      = C4::Context->dbh;
