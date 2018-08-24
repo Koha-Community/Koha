@@ -35,9 +35,9 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Password',
         description => 'Password is too weak'
     },
-    'Koha::Exceptions::Password::TrailingWhitespaces' => {
+    'Koha::Exceptions::Password::TrailingWhitespace' => {
         isa => 'Koha::Exceptions::Password',
-        description => 'Password contains trailing whitespace(s)'
+        description => 'Password contains trailing whitespace character(s)'
     }
 );
 
@@ -77,7 +77,7 @@ Password is too short.
 
 Password is too weak.
 
-=head2 Koha::Exceptions::Password::TrailingWhitespaces
+=head2 Koha::Exceptions::Password::TrailingWhitespace
 
 Password contains trailing spaces, which is forbidden.
 
