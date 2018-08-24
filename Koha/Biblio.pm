@@ -360,7 +360,7 @@ sub holdings_full {
     if ( !$self->{_holdings_full} ) {
         my $schema = Koha::Database->new()->schema();
         my @holdings = $schema->resultset('Holding')->search(
-            { 'biblionumber' => $self->biblionumber(), deleted_on => undef, suppress => undef, -or => [ suppress => undef, suppress => 0 ] },
+            { 'biblionumber' => $self->biblionumber(), 'me.deleted_on' => undef, -or => [ suppress => undef, suppress => 0 ] },
             {
                 join         => 'holdings_metadatas',
                 '+columns'   => [ qw/ holdings_metadatas.format holdings_metadatas.marcflavour holdings_metadatas.metadata / ],
