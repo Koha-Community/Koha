@@ -66,16 +66,17 @@
 				<p> <b>The branch is part of [% branchcategory %].</b> Show all items from this group <input class="showgroup" type="checkbox"/></p>
 			[% END %]
 			</div>
+[% BLOCK show_page_controls %]
 		<div class="pagecontrol">
 			<a class="btn btn-small pagefirst" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=1&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&branch=[% branch %]">&lt;&lt;</a>
 				<a class="btn btn-small pageprev" href="">&lt;</a>
 				<span class="pagenumber">[% page %]</span>
 				<a class="btn btn-small pagenext" href="">&gt;</a>
 				<a class="btn btn-small pagelast" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=[% sqlrows %]&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&bypatron=[% bypatron %]&branch=[% branch %]">&gt;&gt;</a>
-				<label for="jumptopage">Go to page</label><input class="jumptopage" type="number" min="1" max="[% sqlrows %]" placeholder="page number" value="[% page %]"/>
+				<label for="ctrljumptopage">Go to page</label><input class="jumptopage" id="ctrljumptopage" type="number" min="1" max="[% sqlrows %]" placeholder="page number" value="[% page %]"/>
 				<span>/[% sqlrows %]</span>
 				<a class="btn btn-small gotopage" href="#">Go</a>
-				<label for="pageresults">Results per page</label><select class="pageresults">
+				<label for="selectpageresults">Results per page</label><select class="pageresults" id="selectpageresults">
 					<option value="10">10</option>
 					<option value="20">20</option>
 					<option value="30">30</option>
@@ -87,12 +88,14 @@
 					<option value="90">90</option>
 					<option value="100">100</option>
 				</select>
-				<label for="showall">Show all results</label><input class="showall" type="checkbox"/>
-				<label for="showbilled">Show only billed</label><input class="showbilled" type="checkbox"/>
-				<label for="shownotbilled">Show only not billed</label><input class="shownotbilled" type="checkbox"/>
-				<label for="bypatron">Order by patron</label><input class="bypatron" type="checkbox"/>
-				<label for="selectall">Select all</label><input class="selectall" type="checkbox"/>
+				<label for="chkshowall">Show all results</label><input class="showall" id="chkshowall" type="checkbox"/>
+				<label for="chkshowbilled">Show only billed</label><input class="showbilled" id="chkshowbilled" type="checkbox"/>
+				<label for="chkshownotbilled">Show only not billed</label><input class="shownotbilled" id="chkshownotbilled" type="checkbox"/>
+				<label for="chkbypatron">Order by patron</label><input class="bypatron" id="chkbypatron" type="checkbox"/>
+				<label for="chkselectall">Select all</label><input class="selectall" id="chkselectall" type="checkbox"/>
 			</div>
+[% END # show_page_controls %]
+[% PROCESS show_page_controls %]
 			<div class="searchresults">
 			<table id="overduest">
 			<thead><tr>
@@ -141,34 +144,8 @@
 			[% END %]</tbody>
 			</table>
 			</div>
-			<div class="pagecontrol">
 			<input class="maxpage" type="hidden" value="[% sqlrows %]"/>
-			<a class="btn btn-small pagefirst" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=1&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&branch=[% branch %]">&lt;&lt;</a>
-				<a class="btn btn-small pageprev" href="">&lt;</a>
-				<span class="pagenumber">[% page %]</span>
-				<a class="btn btn-small pagenext" href="">&gt;</a>
-				<a class="btn btn-small pagelast" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=[% sqlrows %]&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&bypatron=[% bypatron %]&branch=[% branch %]">&gt;&gt;</a>
-				<label for="jumptopage">Go to page</label><input class="jumptopage" type="number" min="1" max="[% sqlrows %]" placeholder="page number" value="[% page %]"/>
-				<span>/[% sqlrows %]</span>
-				<a class="btn btn-small gotopage" href="#">Go</a>
-				<label for="pageresults">Results per page</label><select class="pageresults">
-					<option value="10">10</option>
-					<option value="20">20</option>
-					<option value="30">30</option>
-					<option value="40">40</option>
-					<option value="50">50</option>
-					<option value="60">60</option>
-					<option value="70">70</option>
-					<option value="80">80</option>
-					<option value="90">90</option>
-					<option value="100">100</option>
-				</select>
-				<label for="showall">Show all results</label><input class="showall" type="checkbox"/>
-				<label for="showbilled">Show only billed</label><input class="showbilled" type="checkbox"/>
-				<label for="shownotbilled">Show only not billed</label><input class="shownotbilled" type="checkbox"/>
-				<label for="bypatron">Order by patron</label><input class="bypatron" type="checkbox"/>
-				<label for="selectall">Select all</label><input class="selectall" type="checkbox"/>
-			</div>
+[% PROCESS show_page_controls %]
 			<div>
 				<form id="sendform" action="/cgi-bin/koha/tools/sendOverdueBills.pl" method="post">
 					<input type="hidden" name="page" value="[% page %]"/>
