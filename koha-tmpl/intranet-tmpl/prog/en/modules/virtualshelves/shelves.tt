@@ -184,11 +184,11 @@
                    [% END %]
                  </th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction %][% END %]">Date added</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | html %][% END %]">Date added</a>
                     [% IF sortfield == 'dateadded' %]
-                        <img src="[% interface %]/[% theme %]/img/[% direction %].gif" alt="[% direction %] sort" />
+                        <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
                     [% ELSE %]
-                        <img src="[% interface %]/[% theme %]/img/ascdesc.gif" alt="" />
+                        <img src="[% interface | html %]/[% theme | html %]/img/ascdesc.gif" alt="" />
                     [% END %]
                 </th>
                 <th>
