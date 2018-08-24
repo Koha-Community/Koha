@@ -16064,7 +16064,6 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (18.05.02 release)\n";
 }
 
-
 $DBversion = '18.05.02.001';
 if( CheckVersion( $DBversion ) ) {
 
@@ -16141,6 +16140,12 @@ WHERE issues.itemnumber IS NULL
     |);
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 20487: Clear items.onloan for unissued items)\n";
+}
+
+$DBversion = "18.05.03.000";
+if ( CheckVersion($DBversion) ) {
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (18.05.03 release)\n";
 }
 
 # SEE bug 13068
