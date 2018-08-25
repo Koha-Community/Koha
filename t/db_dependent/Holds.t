@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 55;
+use Test::More tests => 56;
 use MARC::Record;
 use Koha::Patrons;
 use C4::Items;
@@ -487,6 +487,13 @@ subtest 'Pickup location availability tests' => sub {
     my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio('ONLY1');
     my ( $item_bibnum, $item_bibitemnum, $itemnumber )
     = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $bibnum );
+    #Add a default rule to allow some holds
+    $dbh->do(
+        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
+          VALUES (?, ?, ?, ?, ?)},
+        {},
+        '*', '*', '*', 25, 99
+    );
     my $item = Koha::Items->find($itemnumber);
     my $branch_to = $builder->build({ source => 'Branch' })->{ branchcode };
     my $library = Koha::Libraries->find($branch_to);
@@ -495,12 +502,12 @@ subtest 'Pickup location availability tests' => sub {
     t::lib::Mocks::mock_preference('UseBranchTransferLimits', 1);
     t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
     $library->pickup_location('1')->store;
-    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to),
+    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to)->{status},
        'OK', 'Library is a pickup location');
     $library->pickup_location('0')->store;
-    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to),
+    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to)->{status},
        'libraryNotPickupLocation', 'Library is not a pickup location');
-    is(CanItemBeReserved($patron, $item->itemnumber, 'nonexistent'),
+    is(CanItemBeReserved($patron, $item->itemnumber, 'nonexistent')->{status},
        'libraryNotFound', 'Cannot set unknown library as pickup location');
 };
 
