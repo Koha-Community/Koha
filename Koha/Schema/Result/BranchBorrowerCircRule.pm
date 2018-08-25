@@ -47,6 +47,11 @@ __PACKAGE__->table("branch_borrower_circ_rules");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 max_holds
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -57,6 +62,8 @@ __PACKAGE__->add_columns(
   "maxissueqty",
   { data_type => "integer", is_nullable => 1 },
   "maxonsiteissueqty",
+  { data_type => "integer", is_nullable => 1 },
+  "max_holds",
   { data_type => "integer", is_nullable => 1 },
 );
 
@@ -107,8 +114,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2015-05-13 17:48:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MrhgFhfjV71AC5PXmvRPzg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-08-25 15:10:08
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lgs8B3omV3Au570af/VF2g
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
