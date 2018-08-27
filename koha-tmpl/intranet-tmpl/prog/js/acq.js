@@ -184,12 +184,14 @@ function updateCosts(){
     var gst_on=false;
 
     var rrp   = new Number(listprice*exchangerate);
+    var rep   = new Number(listprice*exchangerate);
     var ecost = rrp;
     if ( 100-discount != 100 ) { //Prevent rounding issues if no discount
         ecost = new Number(Math.floor(rrp * (100 - discount )) / 100);
     }
     var total =  new Number( ecost * quantity);
     $("#rrp").val(rrp.toFixed(2));
+    $("#replacementprice").val(rep.toFixed(2));
     $("#ecost").val(ecost.toFixed(2));
     $("#total").val(total.toFixed(2));
     $("listprice").val(listprice.toFixed(2));
