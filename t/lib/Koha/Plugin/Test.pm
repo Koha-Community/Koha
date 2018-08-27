@@ -3,6 +3,8 @@ package Koha::Plugin::Test;
 ## It's good practice to use Modern::Perl
 use Modern::Perl;
 
+use Mojo::JSON qw(decode_json);
+
 ## Required for all plugins
 use base qw(Koha::Plugins::Base);
 
@@ -91,4 +93,67 @@ sub test_output {
 sub test_output_html {
     my ( $self ) = @_;
     $self->output_html( '¡Hola output_html!' );
+}
+
+sub api_namespace {
+    return "testplugin";
+}
+
+sub api_routes {
+    my ( $self, $args ) = @_;
+
+    my $spec = qq{
+{
+  "/patrons/{patron_id}/bother": {
+    "put": {
+      "x-mojo-to": "Koha::Plugin::Test#bother",
+      "operationId": "BotherPatron",
+      "tags": ["patrons"],
+      "parameters": [{
+        "name": "patron_id",
+        "in": "path",
+        "description": "Internal patron identifier",
+        "required": true,
+        "type": "integer"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A bothered patron",
+          "schema": {
+              "type": "object",
+                "properties": {
+                  "bothered": {
+                    "description": "If the patron has been bothered",
+                    "type": "boolean"
+                  }
+                }
+          }
+        },
+        "404": {
+          "description": "An error occurred",
+          "schema": {
+              "type": "object",
+                "properties": {
+                  "error": {
+                    "description": "An explanation for the error",
+                    "type": "string"
+                  }
+                }
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "1"
+        }
+      }
+    }
+  }
+}
+    };
+
+    return decode_json($spec);
 }
