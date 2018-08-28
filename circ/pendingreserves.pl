@@ -223,7 +223,7 @@ sub check_issuingrules {
                 reserve_level => $item->reserve_level,
             }
         );
-        if (defined $issuing_rule->reservesallowed && $issuing_rule->reservesallowed != 0) {
+        if (defined $issuing_rule->{reservesallowed} && $issuing_rule->reservesallowed != 0) {
             my $colid = GetItemsCollection($itemnumber);
 
             if ($colid) {
