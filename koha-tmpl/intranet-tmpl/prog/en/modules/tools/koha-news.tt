@@ -98,7 +98,10 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             <li>
                 <label for="to">Expiration date: </label>
                 <input id="to" type="text" name="expirationdate" size="15" value="[% new_detail.expirationdate | html %]" class="datepickerto" />
-				<div class="hint">[% INCLUDE 'date-format.inc' %]</div>
+                <div class="hint">
+                    [% INCLUDE 'date-format.inc' %]
+                    <br>News will still be accessible by direct URL if expired.
+                </div>
             </li>
             <li>
                 <label for="number">Appear in position: </label>
