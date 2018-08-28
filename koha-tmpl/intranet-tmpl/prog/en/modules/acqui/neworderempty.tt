@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno | html %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %]</title>
@@ -442,7 +443,7 @@
             </li>
             <li>
                 <label for="replacementprice">Replacement cost: </label>
-                <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | html %]" />
+                <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | html | $Price on_editing => 1 %]" />
             </li>
             <li>
                 <label for="ecost">Budgeted cost: </label>
