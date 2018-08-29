@@ -87,7 +87,7 @@ my $query = '
      (profile_id      , template_code, template_desc, page_width,
       page_height     , label_width  , label_height , top_text_margin,
       left_text_margin, top_margin   , left_margin  , cols,
-      rows            , col_gap      , row_gap      , units,
+      `rows`            , col_gap      , row_gap      , units,
       creator)
   VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $insert_sth = $dbh->prepare($query);
@@ -369,7 +369,7 @@ $templates = get_all_templates( { filters => { rows => 7} } );
 $query = '
   SELECT count(*)
   FROM   creator_templates
-  WHERE  rows = 7
+  WHERE  `rows` = 7
   ';
 $count = $dbh->selectrow_array($query);
 is( $count,      1,      'There is 1 template matching' );
