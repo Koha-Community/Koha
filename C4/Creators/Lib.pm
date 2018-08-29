@@ -67,7 +67,7 @@ C4::Creators::Lib
 
 sub _SELECT {
     my @params = @_;
-    my $query = "SELECT $params[0] FROM $params[1]";
+    my $query = "SELECT `$params[0]` FROM $params[1]";
     $params[2] ? $query .= " WHERE $params[2];" : $query .= ';';
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
@@ -145,7 +145,7 @@ my $output_formats = [
 sub _build_query {
     my ( $params, $table ) = @_;
     my @fields = exists $params->{fields} ? @{ $params->{fields} } : ();
-    my $query = "SELECT " . ( @fields ? join(', ', @fields ) : '*' ) . " FROM $table";
+    my $query = "SELECT " . ( @fields ? join(', ', map {"`$_`"} @fields ) : '*' ) . " FROM $table";
     my @where_args;
     if ( exists $params->{filters} ) {
         $query .= ' WHERE 1 ';
