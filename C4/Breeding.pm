@@ -375,6 +375,7 @@ sub _add_custom_field_rowdata
 {
     my ( $row, $record ) = @_;
     my $pref_newtags = C4::Context->preference('AdditionalFieldsInZ3950ResultSearch');
+    my $pref_flavour = C4::Context->preference('MarcFlavour');
 
     $pref_newtags =~ s/^\s+|\s+$//g;
     $pref_newtags =~ s/\h+/ /g;
@@ -399,7 +400,9 @@ sub _add_custom_field_rowdata
                     if ( not $str eq '') {
                         push @content, $str;
                     }
-                } elsif ( $tag <= 10 ) {
+                } elsif ( $tag == 10 ) {
+                    push @content, ( $pref_flavour eq "MARC21" ? $marcfield->data : $marcfield->as_string );
+                } elsif ( $tag < 10 ) {
                     push @content, $marcfield->data();
                 } else {
                     push @content, $marcfield->as_string();
