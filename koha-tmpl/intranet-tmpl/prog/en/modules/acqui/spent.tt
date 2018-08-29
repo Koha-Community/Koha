@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE KohaDates %]
 [% USE ItemTypes %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Spent</title>
@@ -62,7 +63,7 @@
                 [% order.quantityreceived | html %]
             </td>
             <td class="cell">
-                [% order.unitprice | html %]
+                [% order.unitprice_tax_included | $Price %]
             </td>
             <td class="cell">
                 <span title="[% order.entrydate | html %]">[% order.entrydate | $KohaDates %]</span>
