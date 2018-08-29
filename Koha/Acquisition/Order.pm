@@ -168,6 +168,14 @@ sub subscription {
     return Koha::Subscription->_new_from_dbic( $subscription_rs );
 }
 
+=head3 items
+
+    my $items = $order->items
+
+Returns the items associated to the order.
+
+=cut
+
 sub items {
     my ( $self )  = @_;
     # aqorders_items is not a join table
@@ -176,6 +184,16 @@ sub items {
     my @itemnumbers = $items_rs->get_column( 'itemnumber' )->all;
     return Koha::Items->search({ itemnumber => \@itemnumbers });
 }
+
+=head3 duplicate_to
+
+    my $duplicated_order = $order->duplicate_to($basket, [$default_values]);
+
+Duplicate an existing order and attach it to a basket. $default_values can be specified as a hashref
+that contain default values for the different order's attributes.
+Items will be duplicated as well but barcodes will be set to null.
+
+=cut
 
 sub duplicate_to {
     my ( $self, $basket, $default_values ) = @_;
