@@ -325,9 +325,9 @@
 [% END %]
 </ul>
 
-[% items_table_block_iter = 0 | html %]
+[% items_table_block_iter = 0 %]
 [% BLOCK items_table %]
-    [% items_table_block_iter = items_table_block_iter + 1 | html %]
+    [% items_table_block_iter = items_table_block_iter + 1 %]
     <div class="[% tab | html %]_table_table_controls">
         [% IF (StaffDetailItemSelection) %]
             | <a href="#" class="SelectAll" data-tab="[% tab | html %]"><i class="fa fa-check"></i> Select all</a> |
