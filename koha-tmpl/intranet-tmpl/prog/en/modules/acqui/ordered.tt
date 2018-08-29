@@ -1,5 +1,6 @@
 [% USE KohaDates %]
 [% USE ItemTypes %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Ordered</title>
 <link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables.css" />
@@ -72,7 +73,7 @@
 	    [% order.left %]
 	</td>
     <td class="data cell">
-	    [% order.ecost %]
+        [% order.ecost_tax_included | $Price %]
 	</td>
     <td class="cell">
         <span title="[% order.entrydate %]">[% order.entrydate | $KohaDates %]</span>
