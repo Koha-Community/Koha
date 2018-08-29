@@ -136,7 +136,7 @@ $sth->do("INSERT INTO `creator_batches_tmp` (label_id, batch_id, item_number, ti
 
 $sth->do("INSERT INTO `creator_layouts_tmp` (layout_id, barcode_type, printing_type, layout_name, guidebox, callnum_split, text_justify, format_string) SELECT layout_id, barcode_type, printing_type, layout_name, guidebox, callnum_split, text_justify, format_string FROM labels_layouts;") or die "DB ERROR: " . $sth->errstr . "\n";
 
-$sth->do("INSERT INTO `creator_templates_tmp` (template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, rows, col_gap, row_gap, units) SELECT template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, rows, col_gap, row_gap, units FROM labels_templates;") or die "DB ERROR: " . $sth->errstr . "\n";
+$sth->do("INSERT INTO `creator_templates_tmp` (template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, `rows`, col_gap, row_gap, units) SELECT template_id, template_code, template_desc, page_width, page_height, label_width, label_height, top_margin, left_margin, cols, `rows`, col_gap, row_gap, units FROM labels_templates;") or die "DB ERROR: " . $sth->errstr . "\n";
 
 # Drop old tables....
 
