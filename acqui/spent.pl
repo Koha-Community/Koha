@@ -55,14 +55,14 @@ my $query = <<EOQ;
 SELECT
     aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
     quantity-quantityreceived AS tleft,
-    ecost, budgetdate, entrydate,
+    budgetdate, entrydate,
     aqbasket.booksellerid,
     itype,
     title,
     aqorders.invoiceid,
     aqinvoices.invoicenumber,
     quantityreceived,
-    unitprice,
+    unitprice_tax_included,
     datereceived,
     aqbooksellers.name as vendorname
 FROM (aqorders, aqbasket)
@@ -94,9 +94,9 @@ my @spent;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $recv = $data->{'quantityreceived'};
     if ( $recv > 0 ) {
-        my $rowtotal = $recv * $data->{'unitprice'};
+        my $rowtotal = $recv * $data->{'unitprice_tax_included'};
         $data->{'rowtotal'}  = sprintf( "%.2f", $rowtotal );
-        $data->{'unitprice'} = sprintf( "%.2f", $data->{'unitprice'} );
+        $data->{'unitprice_tax_included'} = sprintf( "%.2f", $data->{'unitprice_tax_included'} );
         $subtotal += $rowtotal;
         push @spent, $data;
     }
