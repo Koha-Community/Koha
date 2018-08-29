@@ -82,7 +82,7 @@
         <li><label for="rank">Rank (display order): </label> <input type="text" name="rank" id="rank" size="4" value="[% server.rank | html %]" />
         </li>
         [% IF (server.servertype||type) == 'zed' %]
-        <li><label for="attributes">Attributes (additional PQF attributes added to each query): </label><input type="text" name="attributes" id="attributes" size="30" value="[% server.attributes %]" />
+        <li><label for="attributes">Attributes (additional PQF attributes added to each query): </label><input type="text" name="attributes" id="attributes" size="30" value="[% server.attributes | html %]" />
         </li>
         [% END %]
 
@@ -175,7 +175,7 @@
                 <span>Authority</span>
                 [% END %]
             </td>
-            <td>[% loo.attributes %]</td>
+            <td>[% loo.attributes | html %]</td>
             <td>
                 <div class="dropdown">
                     <a class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown" href="#">
