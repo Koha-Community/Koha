@@ -78,7 +78,7 @@
                   [% ELSE %]
                     <option type="text" value="[% h_loo.budget_id | html %]" branchcode="[% h_loo.budget_branchcode | html %]">
                   [% END %]
-                        [% h_loo.budget_display_name %]
+                        [% h_loo.budget_display_name | html %]
                     </option>
                 [% END %]
                 </optgroup>

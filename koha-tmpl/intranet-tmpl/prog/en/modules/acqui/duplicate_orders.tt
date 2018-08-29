@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
@@ -5,11 +6,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo;
 [% UNLESS blocking_error %]
-Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
+Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
 [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
     .picked_to_duplicate > td { background-color: #bcdb89 !important; }
 </style>
@@ -24,8 +25,8 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
     <a href="/cgi-bin/koha/mainpage.pl">Home</a>
     &rsaquo; <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
     [% UNLESS blocking_error %]
-    &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id %]">[% vendor.name %]</a>
-    &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]">Basket [% basket.basketno %]</a>
+    &rsaquo; <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% vendor.id | uri %]">[% vendor.name | html %]</a>
+    &rsaquo; <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">Basket [% basket.basketno | html %]</a>
     &rsaquo; Duplicate existing orders
     [% END %]
 </div>
@@ -54,9 +55,9 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
         <div id="orders_filters">
             [% INCLUDE 'filter-orders.inc' %]
             <input type="hidden" name="op" value="select" />
-            <input type="hidden" name="basketno" value="[% basket.basketno %]" />
+            <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
 
-            <input type="hidden" name="ordernumbers" value="[% ordernumbers.join(',') %]" />
+            <input type="hidden" name="ordernumbers" value="[% ordernumbers.join(',') | html %]" />
             <fieldset class="action"><input type="submit" value="Search" /></fieldset>
         </div>
     </fieldset>
@@ -65,18 +66,18 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
 
 [% BLOCK display_order_line %]
     [% IF selected %]
-    <tr class="picked_to_duplicate" data-ordernumber="[% order.ordernumber %]">
+    <tr class="picked_to_duplicate" data-ordernumber="[% order.ordernumber | html %]">
     [% ELSE %]
-    <tr data-ordernumber="[% order.ordernumber %]">
+    <tr data-ordernumber="[% order.ordernumber | html %]">
     [% END %]
         <td>
             [% IF selected %]
-                <input type="checkbox" name="ordernumber" value="[% order.ordernumber %]" checked="checked" />
+                <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" checked="checked" />
             [% ELSE %]
-                <input type="checkbox" name="ordernumber" value="[% order.ordernumber %]" />
+                <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" />
             [% END %]
             [% order.ordernumber %]
-            [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber %])[% END %]
+            [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber | html %])[% END %]
         </td>
         <td>
             [% SWITCH order.orderstatus %]
@@ -87,38 +88,38 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
                 [% CASE 'cancelled' %]Cancelled
             [% END %]
         </td>
-        <td>[% order.basketname %] (<a href="basket.pl?basketno=[% order.basketno %]">[% order.basketno %]</a>)</td>
-        <td>[% order.authorisedbyname %]</td>
+        <td>[% order.basketname | html %] (<a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>
+        <td>[% order.authorisedbyname | html %]</td>
         <td>
             [% IF ( order.basketgroupid ) %]
-                [% order.groupname %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id %]&basketgroupid=[% order.basketgroupid %]">[% order.basketgroupid %]</a>)
+                [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid %]">[% order.basketgroupid | html %]</a>)
             [% ELSE %]
                 &nbsp;
             [% END %]
         </td>
         <td>[% IF ( order.invoicenumber ) %]
-                <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid %]">[% order.invoicenumber %]</a>
+                <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
             [% ELSE %]
                 &nbsp;
             [% END %]
         </td>
         <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber %]">[% order.title |html %]</a>
-            <br />[% order.author %] <br /> [% order.isbn %]
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title |html %]</a>
+            <br />[% order.author | html %] <br /> [% order.isbn | html %]
         </td>
-        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id %]">[% order.name %]</a></td>
+        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
         <td><span title="[% order.creationdate %]">[% order.creationdate | $KohaDates %]</span></td>
         <td>
             [% IF order.datereceived %]
-                <span title="[% order.datereceived %]">[% order.datereceived | $KohaDates %]</span>
+                <span title="[% order.datereceived | html %]">[% order.datereceived | $KohaDates %]</span>
             [% ELSE %]
                 <span title="0000-00-00"></span>
             [% END %]
         </td>
-        <td>[% order.quantityreceived %]</td>
-        <td>[% order.quantity %]</td>
-        <td>[% order.ecost %]</td>
-        <td>[% order.budget_name %]</td>
+        <td>[% order.quantityreceived | html %]</td>
+        <td>[% order.quantity | html %]</td>
+        <td>[% order.ecost | html %]</td>
+        <td>[% order.budget_name | html %]</td>
     </tr>
 [% END %]
 
@@ -163,7 +164,7 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
         </table>
         <fieldset class="action">
             <input type="hidden" name="op" value="batch_edit" />
-            <input type="hidden" name="basketno" value="[% basket.basketno %]" />
+            <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
             <button type="submit" class="btn btn-default go_to_batch_edit">Next <i class="fa fa-fw fa-arrow-right"></i></button>
         </fieldset>
         </form>
@@ -188,9 +189,9 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
                           <select name="all_currency" id="all_currency">
                           [% FOREACH currency IN currencies %]
                               [% IF currency.currency == vendor.listprice %]
-                                  <option value="[% currency.currency %]" selected="selected">[% currency.currency %]</option>
+                                  <option value="[% currency.currency | html %]" selected="selected">[% currency.currency | html %]</option>
                               [% ELSIF not currency.archived %]
-                                  <option value="[% currency.currency %]">[% currency.currency %]</option>
+                                  <option value="[% currency.currency | html %]">[% currency.currency | html %]</option>
                               [% END %]
                           [% END %]
                           </select>
@@ -202,8 +203,8 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
                           <select id="all_budget_id" size="1" name="all_budget_id">
                             <option value="">Select a fund</option>
                           [% FOREACH budget_loo IN budget_loop %]
-                              [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %]</option>
-                              [% ELSE %]<option value="[% budget_loo.b_id %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat %]">[% budget_loo.b_txt %] (inactive)</option>
+                              [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>
+                              [% ELSE %]<option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %] (inactive)</option>
                               [% END %]
                           [% END %]
                           </select>
@@ -244,10 +245,10 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
 
     <fieldset class="action">
         [% FOREACH ordernumber IN ordernumbers %]
-            <input type="hidden" name="ordernumber" value="[% ordernumber %]" />
+            <input type="hidden" name="ordernumber" value="[% ordernumber | html %]" />
         [% END %]
         <input type="hidden" name="op" value="do_duplicate" />
-        <input type="hidden" name="basketno" value="[% basket.basketno %]" />
+        <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
         <button type="submit" class="btn btn-default">Duplicate orders</button>
         <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno %]">Cancel</a>
     </fieldset>
@@ -297,14 +298,14 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/acquisitions-menu.js") %]
+    [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("js/autocomplete/patrons.js") %]
-    [% Asset.js("js/acq.js") %]
-    [% Asset.js("js/funds_sorts.js") %]
-    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") %]
+    [% Asset.js("js/autocomplete/patrons.js") | $raw %]
+    [% Asset.js("js/acq.js") | $raw %]
+    [% Asset.js("js/funds_sorts.js") | $raw %]
+    [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
         function update_ordernumber_list(){
             var ordernumbers = [];
@@ -319,7 +320,7 @@ Basket [% basket.basketno %] &rsaquo; Duplicate existing orders
         var MSG_NO_FUND_SELECTED = _("No fund selected.");
         $(document).ready(function() {
             $('.hint').hide();
-            var columns_settings;// = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) %];
+            var columns_settings;// = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("table_orders", {
                 "aoColumnDefs": [
                     { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
