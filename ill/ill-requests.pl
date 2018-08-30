@@ -184,19 +184,18 @@ if ( $backends_available ) {
         handle_commit_maybe($backend_result, $request);
 
     } elsif ( $op eq 'generic_confirm' ) {
+        my $backend_result;
+        my $request;
         try {
-            my $request = Koha::Illrequests->find($params->{illrequest_id});
+            $request = Koha::Illrequests->find($params->{illrequest_id});
             $params->{current_branchcode} = C4::Context->mybranch;
-            my $backend_result = $request->generic_confirm($params);
+            $backend_result = $request->generic_confirm($params);
             $template->param(
                 whole => $backend_result,
                 request => $request,
             );
             $template->param( error => $params->{error} )
                 if $params->{error};
-
-            # handle special commit rules & update type
-            handle_commit_maybe($backend_result, $request);
         }
         catch {
             my $error;
@@ -216,6 +215,9 @@ if ( $backends_available ) {
                 "&error=$error" );
             exit;
         };
+
+        # handle special commit rules & update type
+        handle_commit_maybe($backend_result, $request);
     } elsif ( $op eq 'illlist') {
 
         # If we receive a pre-filter, make it available to the template
