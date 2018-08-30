@@ -2098,6 +2098,7 @@ CREATE TABLE `subscription` ( -- information related to the subscription
   `itemtype` VARCHAR( 10 ) NULL,
   `previousitemtype` VARCHAR( 10 ) NULL,
   PRIMARY KEY  (`subscriptionid`),
+  KEY `by_biblionumber` (`biblionumber`),
   CONSTRAINT subscription_ibfk_1 FOREIGN KEY (periodicity) REFERENCES subscription_frequencies (id) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT subscription_ibfk_2 FOREIGN KEY (numberpattern) REFERENCES subscription_numberpatterns (id) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
