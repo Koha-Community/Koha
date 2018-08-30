@@ -16311,6 +16311,22 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 15524 - Set limit on maximum possible holds per patron by category)\n";
 }
 
+$DBversion = '18.06.00.021';
+if( CheckVersion( $DBversion ) ) {
+    my $dbh = C4::Context->dbh;
+    unless ( C4::Context->preference('NorwegianPatronDBEnable') ) {
+        $dbh->do(q|
+            DELETE FROM systempreferences
+            WHERE variable IN ('NorwegianPatronDBEnable', 'NorwegianPatronDBEndpoint', 'NorwegianPatronDBUsername', 'NorwegianPatronDBPassword', 'NorwegianPatronDBSearchNLAfterLocalHit')
+        |);
+        if ( TableExists('borrower_sync') ) {
+            $dbh->do(q|DROP TABLE borrower_sync|);
+        }
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21068 - Remove system preferences NorwegianPatronDB*)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
