@@ -9,7 +9,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Details for subscription #[% subscriptionid | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="ser_subscription-detail" class="ser">
@@ -360,7 +360,7 @@
                         <td>
                         [% IF order.invoice %]
                             [% IF CAN_user_acquisition %]
-                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid %]" title="Invoice detail page">
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | html %]" title="Invoice detail page">
                                    [% order.invoice.invoicenumber | html %]</a>
                             [% ELSE %]
                                 [% order.invoice.invoicenumber | html %]
@@ -387,13 +387,13 @@
                         <td>[% order.fund.budget_name | html %]</td>
                         <td>
                             [% UNLESS order.datereceived %]
-                                [% order.ecost_tax_excluded | $Price %] / [% order.ecost_tax_included | $Price %]
+                                [% order.ecost_tax_excluded | $Price | html %] / [% order.ecost_tax_included | $Price | html %]
                             [% END %]
                         </td>
                         <td>
                             [% IF order.datereceived %]
                                 [%# FIXME What if unitprice has not been filled? %]
-                                [% order.unitprice_tax_excluded | $Price %] / [% order.unitprice_tax_included | $Price %]
+                                [% order.unitprice_tax_excluded | $Price | html %] / [% order.unitprice_tax_included | $Price | html %]
                             [% END %]
                         </td>
                     </tr>
