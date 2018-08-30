@@ -55,26 +55,26 @@
     [% IF hold_auto_filled %]
         <div class="dialog alert hold-auto-filled">
             [% IF ( reservenotes ) %]
-                <h4>Notes: [% reservenotes %]</h4>
+                <h4>Notes: [% reservenotes | html %]</h4>
             [% END %]
             <h3>Hold filled for:</h3>
                 <li>
                     [% INCLUDE 'patron-title.inc' patron=patron %]
-                    <span class="patron-category"> - [% patron.category.description %]</span>
+                    <span class="patron-category"> - [% patron.category.description | html %]</span>
                 </li>
 
                 [% INCLUDE display_holdpatron_address %]
 
                 [% IF ( patron.phone ) %]
-                    <li>[% patron.phone  %]</li>
+                    <li>[% patron.phone | html %]</li>
                 [% END %]
 
                 [% IF ( patron.email ) %]
                     <li>
                         [% IF ( transfertodo ) %]
-                            [% patron.email %]
+                            [% patron.email | html %]
                         [% ELSE %]
-                            <a id="boremail" href="mailto:[% patron.email %]">[% patron.email %]</a>
+                            <a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>
                         [% END %]
                     </li>
                 [% END %]
@@ -92,9 +92,9 @@
                 [% END %]
 
             [% IF ( transfertodo ) %]
-                <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) %]</h4>
+                <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
             [% ELSE %]
-                <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) %]</h4>
+                <h4><strong>Hold at</strong> [% Branches.GetName( destbranch ) | html %]</h4>
             [% END %]
 
             <a href="#" class="btn btn-default print print-slip">
@@ -767,7 +767,7 @@
 
             $(".print-slip").on('click', function(e) {
                 e.preventDefault();
-                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber %]&amp;biblionumber=[% biblionumber %]');
+                Dopop('hold-transfer-slip.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;biblionumber=[% biblionumber | html %]');
             });
 
             [% IF print_slip %]

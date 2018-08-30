@@ -16327,6 +16327,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21068 - Remove system preferences NorwegianPatronDB*)\n";
 }
 
+$DBversion = '18.06.00.022';
+if( CheckVersion( $DBversion ) ) {
+    my $dbh = C4::Context->dbh;
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('HoldsAutoFill','0',NULL,'If on, librarian will not be asked if hold should be filled, it will be filled automatically','YesNo'),
+        ('HoldsAutoFillPrintSlip','0',NULL,'If on, hold slip print dialog will be displayed automatically','YesNo')
+    |);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19383 - Add ability to print hold receipts automatically)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
