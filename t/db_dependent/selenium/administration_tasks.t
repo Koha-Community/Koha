@@ -82,7 +82,7 @@ SKIP: {
         $s->click( { href => '/admin/biblio_framework.pl', main_class => 'main container-fluid' } )
           ;    # MARC bibliographic framework
         $s->click(
-            { href => '/admin/biblio_framework.pl?op=add_form', main => 'doc3' } )
+            { href => '/admin/biblio_framework.pl?op=add_form', main_class => 'main container-fluid' } )
           ;    # New framework
         $s->fill_form(
             {
@@ -95,7 +95,7 @@ SKIP: {
         $s->click(
             {
                 href => 'marctagstructure.pl?frameworkcode=' . $frameworkcode,
-                main => 'doc3'
+                main_class => 'main container-fluid'
             }
         );    # MARC structure # FIXME '/admin/' is missing in the url
               # TODO Click on OK to create the MARC structure
@@ -107,14 +107,14 @@ SKIP: {
           ;    # Koha administration
         $s->click( { href => '/admin/branches.pl', main_class => 'main container-fluid' } )
           ;    # Libraries and groups
-        $s->click( { href => '/admin/branches.pl?op=add_form', main => 'doc3' } )
+        $s->click( { href => '/admin/branches.pl?op=add_form', main_class => 'main container-fluid' } )
           ;    # New library
         $s->fill_form( { branchcode => $branchcode, branchname => 'my library' } );
         $s->submit_form;
         $s->click(
             {
                 href => '/admin/branches.pl?op=add_form&branchcode=' . $branchcode,
-                main => 'doc3'
+                main_class => 'main container-fluid'
             }
         );     # Edit
         $s->fill_form( { branchname => 'another branchname' } );
@@ -132,14 +132,14 @@ SKIP: {
 
         $s->click( { href => '/admin/authorised_values.pl', main_class => 'main container-fluid' } ); #Authorized values
 
-        $s->click( { href => { 'ends-with' => '/admin/authorised_values.pl?op=add_form' }, main => 'doc3' } ); # New category
+        $s->click( { href => { 'ends-with' => '/admin/authorised_values.pl?op=add_form' }, main_class => 'main container-fluid' } ); # New category
         $s->fill_form( { category => $av_category } );
         $s->submit_form;
 
         $s->click(
             {
                 href => '/admin/authorised_values.pl?op=add_form&category=' . $av_category,
-                main => 'doc3'
+                main_class => 'main container-fluid'
             }
         );    # New authorised value for ...
         $s->fill_form(
@@ -157,7 +157,7 @@ SKIP: {
         $s->click(
             {
                 href => '/admin/authorised_values.pl?op=delete&searchfield=' . $av_category . '&id=' . $av_id,
-                main => 'doc3'
+                main_class => 'main container-fluid'
             }
         );
         $s->driver->accept_alert; # Accept the modal "Are you sure you want to delete this authorized value?"
@@ -167,7 +167,7 @@ SKIP: {
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } ); # Koha administration
         $s->click( { href => '/admin/categories.pl', main_class => 'main container-fluid' } ); # Patron categories
-        $s->click( { href => '/admin/categories.pl?op=add_form', main => 'doc3' } ); # New patron category
+        $s->click( { href => '/admin/categories.pl?op=add_form', main_class => 'main container-fluid' } ); # New patron category
 
         $s->fill_form( { categorycode => $category_code, description => 'Test category', enrolmentperiod => 12, category_type => 'A' } );
         $s->submit_form;
@@ -175,7 +175,7 @@ SKIP: {
         $s->click(
             {
                 href => '/admin/categories.pl?op=delete_confirm&categorycode=' . $category_code,
-                main => 'doc3'
+                main_class => 'main container-fluid'
             }
         ); # Delete button
 
