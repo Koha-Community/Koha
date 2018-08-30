@@ -22,6 +22,7 @@ use Modern::Perl;
 use C4::Output;
 use C4::Auth;
 use C4::Utils::DataTables::Members;
+use C4::Search;
 use Koha::Biblios;
 use Koha::Patrons;
 use Koha::ArticleRequests;
@@ -109,6 +110,7 @@ if ( !$patron && $patron_cardnumber ) {
 $template->param(
     biblio => $biblio,
     patron => $patron,
+    C4::Search::enabled_staff_search_views,
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;
