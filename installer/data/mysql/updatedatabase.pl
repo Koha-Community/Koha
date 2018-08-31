@@ -16339,6 +16339,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19383 - Add ability to print hold receipts automatically)\n";
 }
 
+$DBversion = '18.06.00.023';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'aqorders', 'replacementprice' ) ){
+        $dbh->do( "ALTER TABLE aqorders ADD COLUMN replacementprice DECIMAL(28,6)" );
+        $dbh->do( "UPDATE aqorders set replacementprice = rrp WHERE replacementprice IS NULL" );
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18639 - Add replacementprice field to aqorders table)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 

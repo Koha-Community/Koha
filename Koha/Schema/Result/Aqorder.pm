@@ -152,6 +152,12 @@ __PACKAGE__->table("aqorders");
   is_nullable: 1
   size: [13,2]
 
+=head2 replacementprice
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [28,6]
+
 =head2 rrp_tax_excluded
 
   data_type: 'decimal'
@@ -370,6 +376,8 @@ __PACKAGE__->add_columns(
   },
   "rrp",
   { data_type => "decimal", is_nullable => 1, size => [13, 2] },
+  "replacementprice",
+  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "rrp_tax_excluded",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "rrp_tax_included",
@@ -653,8 +661,8 @@ Composing rels: L</aqorder_users> -> borrowernumber
 __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-06 14:12:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:/CljC8eGYHoYM3506qYavg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-08-31 11:51:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:GQEXetlivZm7buQohl8m4A
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
