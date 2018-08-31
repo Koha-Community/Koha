@@ -173,7 +173,6 @@ if ( $xslfile ) {
 }
 
 my $OpacBrowseResults = C4::Context->preference("OpacBrowseResults");
-$template->{VARS}->{'OpacBrowseResults'} = $OpacBrowseResults;
 
 # We look for the busc param to build the simple paging from the search
 if ($OpacBrowseResults) {
@@ -460,6 +459,7 @@ if ($session->param('busc')) {
     }
     $template->param('listResults' => \@listResults) if (@listResults);
     $template->param('indexPag' => 1 + $offset, 'totalPag' => $arrParamsBusc{'total'}, 'indexPagEnd' => scalar(@arrBiblios) + $offset);
+    $template->param( 'offset' => $offset );
 }
 }
 

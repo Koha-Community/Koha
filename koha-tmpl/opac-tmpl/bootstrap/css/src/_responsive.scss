@@ -497,17 +497,24 @@
 }
 
 @media only screen and ( max-width: 1040px ) {
+    #a_listResults,
+    #close_pagination {
+        padding: 5px;
+    }
+
     .pg_menu {
         li {
             a {
+                display: block;
                 float: none;
                 text-align: left;
             }
 
             &.back_results {
                 a {
-                    border: 1px solid #D0D0D0;
-                    border-width: 1px 0 1px 0;
+                    border: 0;
+                    border-bottom: 1px solid #DDD;
+                    border-top: 1px solid #DDD;
                 }
             }
         }

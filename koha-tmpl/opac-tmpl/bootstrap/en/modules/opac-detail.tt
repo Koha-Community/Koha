@@ -1062,19 +1062,20 @@
         <div class="span3">
             <div id="ulactioncontainer">
 
-                [% IF ( OpacBrowseResults && busc ) %]
+                [% IF ( Koha.Preference('OpacBrowseResults') && busc ) %]
                     <div class="nav_results">
-                        <div class="l_Results">
+                        <div class="l_Results" style="display:none;">
                             [% IF ( listResults ) %]
-                                <a href="#" id="a_listResults">Browse results</a>
+                                <a href="#" id="a_listResults"><i class="fa fa-bars"></i> Browse results</a>
                             [% ELSE %]
-                                <span>Browse results</span>
+                                <span><i class="fa fa-bars"></i> Browse results</span>
                             [% END %]
+                            <a href="#" class="close_pagination"><i class="fa fa-remove"></i> Close</a>
                         </div>
                         <ul class="pg_menu clearfix">
                             <li class="left_results">
                                 [% IF ( previousBiblionumber ) %]
-                                    <a href="opac-detail.pl?biblionumber=[% previousBiblionumber | html %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous biblio[% END %]">&laquo; Previous</a>
+                                    <a href="opac-detail.pl?biblionumber=[% previousBiblionumber | html %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous biblio[% END %]"><i class="fa fa-angle-double-left"></i> Previous</a>
                                 [% ELSE %]
                                     <span>Previous</span>
                                 [% END %]
@@ -1083,7 +1084,7 @@
                             <li class="back_results"><a href="opac-search.pl?[% busc | html %]" title="Back to the results search list">Back to results</a></li>
                             <li class="right_results">
                                 [% IF ( nextBiblionumber ) %]
-                                    <a href="opac-detail.pl?biblionumber=[% nextBiblionumber | html %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END %]">Next &raquo;</a>
+                                    <a href="opac-detail.pl?biblionumber=[% nextBiblionumber | html %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END %]">Next <i class="fa fa-angle-double-right"></i></a>
                                 [% ELSE %]
                                     <span>Next</span>
                                 [% END %]
@@ -1092,14 +1093,33 @@
                         [% IF ( listResults ) %]
                         <div class="results-pagination">
                             <div class="nav_pages">
-                                <span class="close_pagination"><a href="#" id="close_pagination">Close</a></span>
-                                <ul id="listResults"></ul>
+                                <ul id="listResults">
+                                    [% FOREACH listitem IN listResults %]
+                                        [% IF ( listitem.biblionumber == biblionumber ) %]
+                                            <li class="li_pag_[% loop.count %] highlight">
+                                        [% ELSE %]
+                                            <li class="li_pag_[% loop.count %]">
+                                        [% END %]
+                                        <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber %]&amp;query_desc=[% query_desc |uri %]" title="View record &quot;[% listitem.title %]&quot;" class="a_pag" id="a_pag_[% loop.count %]">[% loop.count + offset %]</a></li>
+                                    [% END %]
+                                </ul>
                             </div>
                             <div class="pagination_list">
-                                <ul id="ul_pagination_list"></ul>
+                                <ul id="ul_pagination_lists">
+                                    [% FOREACH listitem IN listResults %]
+                                        [% IF ( listitem.biblionumber == biblionumber ) %]
+                                            <li id="li_pag_[% loop.count %]" class="highlight" title="Go to detail"><span class="li_pag_index"><i class="fa fa-arrow-left"></i> [% loop.count  + offset %]</span><a href="opac-detail.pl?biblionumber=[% biblionumber %]&amp;query_desc=[% query_desc |uri %]">[% title %]</a><br> [% IF ( author ) %]by [% author %][% END %]</li>
+                                        [% ELSE %]
+                                            <li id="li_pag_[% loop.count %]" title="Go to detail"><span class="li_pag_index">[% loop.count + offset %]</span><a href="opac-detail.pl?biblionumber=[% listitem.biblionumber %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title %]</a><br> [% IF ( listitem.author ) %]by [% listitem.author %][% END %]</li>
+                                        [% END %]
+                                    [% END %]
+                                </ul>
                             </div>
                         </div>
                         [% END %]
+                        <div class="pagination_footer">
+                            <a href="#" class="close_pagination"><i class="fa fa-remove"></i> Close</a>
+                        </div>
                     </div>
                 [% END # / IF OpacBrowseResults && busc %]
 
@@ -1354,7 +1374,7 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 [% IF ( SocialNetworks ) %]
-    <script src="https://apis.google.com/js/plusone.js"></script>
+    <script src="https://apis.google.com/js/plusone.js">
     //<![CDATA[
       {lang: '[% lang | html %]'}
     //]]>
@@ -1366,23 +1386,6 @@
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
 
 <script>
-//<![CDATA[
-
-    [% IF ( OpacBrowseResults && busc ) %]
-        var arrPagination = new Array();
-        var pag_index_ini = [% indexPag | html %];
-        [% IF ( listResults ) %]
-            [% FOREACH listResult IN listResults %]
-                arrPagination[[% listResult.index | html %]] = {
-                    url:"[% listResult.url | html %][% IF ( listResult.url && query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]",
-                    title:"[% listResult.title|remove('\n') | html %]",
-                    author:"[% listResult.author | html %]",
-                    biblionumber:[% listResult.biblionumber | html %]
-                };
-           [% END %]
-        [% END %]
-    [% END %]
-
     [% IF ( OpacHighlightedWords ) %]
         var q_array = new Array();  // holds search terms if available
 
@@ -1419,6 +1422,19 @@
                 return element.html();
             }
         });
+
+        [% IF ( Koha.Preference('OpacBrowseResults') && busc ) %]
+            $(".l_Results").show();
+            $("#a_listResults").on("click", function(e){
+                e.preventDefault();
+                $(".results-pagination, .close_pagination, .pg_menu").toggle();
+            });
+
+            $(".close_pagination").on("click", function(e){
+                e.preventDefault();
+                $(".results-pagination, .close_pagination, .pg_menu").toggle();
+            });
+        [% END %]
 
         var columns_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'holdingst', 'json' ) | $raw %];
 
@@ -1528,34 +1544,6 @@
             });
     [% END %]
 
-    [% IF ( OpacBrowseResults && busc ) %]
-        var list_title_showmsg = _("Show pagination list (%s-%s / %s)").format([% indexPag | html %], [% indexPagEnd | html %], [% totalPag | html %]);
-        var list_title_hidemsg = _("Hide pagination list (%s-%s / %s)").format([% indexPag | html %], [% indexPagEnd | html %], [% totalPag | html %]);
-        if (arrPagination.length > 0) {
-            renderPagIndexList(pag_index_ini, $("#listResults"));
-            var reslist = $("#a_listResults");
-            reslist.attr('title', list_title_showmsg);
-        }
-        $("#a_listResults").click(function(e) {
-            if (arrPagination.length > 0) {
-                e.preventDefault();
-                var navigation = $(".results-pagination");
-                if (navigation.css("display") == 'none') {
-                    navigation.show();
-                    $(this).attr('title',list_title_hidemsg);
-                    renderPagination(pag_index_ini, arrPagination.length - 1, $("#ul_pagination_list"), false);
-                } else {
-                    navigation.hide();
-                    $(this).attr('title',list_title_showmsg);
-                }
-            }
-        });
-        $("#close_pagination").click(function(e) {
-            e.preventDefault();
-            var navigation = $(".results-pagination");
-            navigation.hide();
-        });
-    [% END %]
 [% IF ( OPACShelfBrowser ) %]
 
     (function prepareShelfBrowser(){
@@ -1721,118 +1709,6 @@
         }
     [% END # / IF IDreamBooksReviews || IDreamBooksReadometer %]
 
-    [% IF ( OpacBrowseResults && busc ) %]
-        var timeoutRFW;
-        var totalPagItemList = 10;
-
-        function rewindList()
-        {
-            var ul = $("#listResults");
-            var li_ini = ul.children(':first').next();
-            var index_ini = pag_index_ini;
-            if (li_ini) {
-                index_ini = parseInt(li_ini.attr("class").substring(7), 10);
-            }
-            var li_end = ul.children(':last').prev();
-            var index_end = arrPagination.length - 1;
-            if (li_end) {
-                index_end = parseInt(li_end.attr("class").substring(7), 10);
-            }
-            if (index_ini > pag_index_ini) {
-                renderPagIndexList(index_ini - 1, ul, false);
-                renderPagination(index_ini - 1, arrPagination.length - 1, $("#ul_pagination_list"), true);
-            }
-        }//rewindList
-
-        function forwardList()
-        {
-            var ul = $("#listResults");
-            var li_ini = ul.children(':first').next();
-            var index_ini = pag_index_ini;
-            if (li_ini) {
-                index_ini = parseInt(li_ini.attr("class").substring(7), 10);
-            }
-            var li_end = ul.children(':last').prev();
-            var index_end = arrPagination.length - 1;
-            if (li_end) {
-                index_end = parseInt(li_end.attr("class").substring(7), 10);
-            }
-            if (index_end < arrPagination.length - 1) {
-                renderPagIndexList(index_ini + 1, ul, false);
-                renderPagination(index_ini + 1, arrPagination.length - 1, $("#ul_pagination_list"), true);
-            }
-        }//forwardList
-
-        function renderPagIndexList(index, ul)
-        {
-            var $kids = ul.children("li");
-            if ($kids.length > 0) {
-                $kids.each(function() {
-                    $(this).remove();
-                });
-            }
-            var li;
-            var html = "";
-            var ini = index - 1;
-            var end = ini + totalPagItemList - 1;
-            li = $("<li />");
-            html = (index > pag_index_ini)?"<a href='#' id='rew_list_index' onclick='rewindList()' title='" + _("Click to rewind the list to") + " " + ini + " - " + end + "'>&laquo;</a>":"&laquo;";
-            li.html(html);
-            ul.append(li);
-            var title = "";
-            for (var i=index; i < arrPagination.length && i < index + totalPagItemList; i++) {
-                if (arrPagination[i] == undefined) continue;
-                var li = $("<li />");
-                if (arrPagination[i].url != "") {
-                    title = _("See biblio") + " &quot;" + arrPagination[i].title + "&quot; ";
-                    if (arrPagination[i].author != "") title += " " + _("by") + "&quot;" + arrPagination[i].author + "&quot;";
-                    title += " " + _("with biblionumber") + " " + arrPagination[i].biblionumber;
-                    html = "<a href='" + arrPagination[i].url + "' title='" + title + "' class='a_pag' id='a_pag_" + i + "'";
-                    html += " onmouseover='renderPagination(" + i + ", " + (arrPagination.length - 1) + ", $(\"#ul_pagination_list\"), true)'";
-                    html += ">" + i + "</a>";
-                } else html = i;
-                li.html(html);
-                li.attr("class", "li_pag_" + i);
-                ul.append(li);
-            }
-            li = $("<li />");
-            ini = index + 1;
-            end = (arrPagination.length > index + totalPagItemList)?index + totalPagItemList:arrPagination.length - 1;
-            html = (end <= arrPagination.length - 1 && (end - index) >= totalPagItemList)?"<a href='#' id='fw_list_index' onclick='forwardList()' title='" + _("Click to forward the list to") + " " + ini + " - " + end + "'>&raquo;</a>":"&raquo;";
-            li.html(html);
-            ul.append(li);
-        }//renderPagIndexList
-
-
-        function renderPagination(index, total, ul, highlIndex)
-        {
-            for (var i = pag_index_ini; i <= total; i++) {
-                if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
-                $("#li_pag_" + i).remove();
-            }
-            var j = 0;
-            for (var i = index; i <= total && j < totalPagItemList; i++) {
-                if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
-                var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='" + _("Go to detail") + "' />");
-                var html = "<span class='li_pag_index'>" + i + "</span><a href='" + arrPagination[i].url + "'>" + arrPagination[i].title + "</a>";
-                if (arrPagination[i].author) html += "<br /> " + _("by") + " " + arrPagination[i].author;
-                li.html(html);
-                if (highlIndex && i == index) li.css("backgroundColor", "#DDDDDD");
-                ul.append(li);
-                j++;
-            }
-            for (i = pag_index_ini; i < index && j < totalPagItemList; i++) {
-                if (arrPagination[i] == undefined || arrPagination[i].url == "") continue;
-                $("#li_pag_" + i).remove();
-                var li = $("<li id='li_pag_" + i + "' " + ((j % 2 == 0)?"class='highlight'":"")  + " title='" + _("Go to detail") + "' />");
-                var html = "<span class='li_pag_index'>" + i + "</span><a href='" + arrPagination[i].url + "'>" + arrPagination[i].title + "</a>";
-                if (arrPagination[i].author) html += "<br /> " + _("by") + " " + arrPagination[i].author;
-                li.html(html);
-                ul.append(li);
-                j++;
-            }
-        }//renderPagination
-    [% END # / IF ( OpacBrowseResults && busc ) %]
 //]]>
 </script>
 
