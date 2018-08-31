@@ -122,7 +122,8 @@ sub add_credit {
             if $date;
 
         my $debits_ids = $body->{account_lines_ids};
-        my $debits = Koha::Account::Lines->search({ accountlines_id => { -in => $debits_ids } })
+        my $debits;
+        $debits = Koha::Account::Lines->search({ accountlines_id => { -in => $debits_ids } })
             if $debits_ids;
 
         my $outstanding_credit = $credit->amountoutstanding;
