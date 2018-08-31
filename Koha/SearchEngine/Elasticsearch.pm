@@ -296,6 +296,9 @@ sub reset_elasticsearch_mappings {
     my ( $self ) = @_;
     my $indexes = $self->_load_elasticsearch_mappings();
 
+    Koha::SearchMarcMaps->delete;
+    Koha::SearchFields->delete;
+
     while ( my ( $index_name, $fields ) = each %$indexes ) {
         while ( my ( $field_name, $data ) = each %$fields ) {
 

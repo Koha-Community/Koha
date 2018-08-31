@@ -166,8 +166,6 @@ if ( $op eq 'edit' ) {
     }
 }
 elsif( $op eq 'reset_confirmed' ) {
-    Koha::SearchMarcMaps->delete;
-    Koha::SearchFields->delete;
     Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings;
     $clear_cache->();
     push @messages, { type => 'message', code => 'success_on_reset' };
