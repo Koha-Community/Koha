@@ -71,10 +71,12 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
     <tr data-ordernumber="[% order.ordernumber | html %]">
     [% END %]
         <td>
-            [% IF selected %]
-                <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" checked="checked" />
-            [% ELSE %]
-                <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" />
+            [% IF can_check %]
+                [% IF selected %]
+                    <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" checked="checked" />
+                [% ELSE %]
+                    <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" />
+                [% END %]
             [% END %]
             [% order.ordernumber %]
             [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber | html %])[% END %]
@@ -153,12 +155,12 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
             </thead>
             <tfoot>
             [% FOREACH order IN selected_order_loop %]
-                [% INCLUDE display_order_line selected => 1 %]
+                [% INCLUDE display_order_line selected => 1 can_check => 1%]
             [% END %]
             </tfoot>
             <tbody>
             [% FOREACH order IN result_order_loop %]
-                [% INCLUDE display_order_line %]
+                [% INCLUDE display_order_line can_check => 1 %]
             [% END %]
             </tbody>
         </table>
