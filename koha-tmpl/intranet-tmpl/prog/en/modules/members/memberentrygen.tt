@@ -327,7 +327,9 @@ $(document).ready(function() {
                 <input type="text" name="ssn_ssn" class="valid">
             </li>
             <li>
-                <input type="hidden" name="ssn_url" value="[% ssn_url %]"> 
+                <input type="hidden" name="ssn_url" value="[% ssn_url %]">
+                <input type="hidden" name="hetula_url" value="[% hetula_url %]">
+                <input type="hidden" name="hetula_organization" value="[% hetula_organization %]">
             </li>
        </ol>
         <input id="ssn_submit" type="submit" value="Lisää sotu!" style="margin-left: 129px; margin-bottom: 13px;">
@@ -1359,3 +1361,6 @@ $(document).ready(function() {
 [% INCLUDE 'intranet-bottom.inc' %]
 
 <script type="text/javascript" src="[% themelang %]/js/ssn-service.js"></script>
+<script type="text/javascript" src="[% interface %]/lib/hetula.0.0.1.min.js"></script>
+<script type="text/javascript" src="[% themelang %]/js/hetula-service.js"></script>
+

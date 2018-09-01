@@ -779,6 +779,8 @@ $template->param(
   modify          => $modify,
   nok     => $nok,#flag to know if an error
   NoUpdateLogin =>  $NoUpdateLogin,
+  hetula_url => C4::Context->config('hetula')->{'url'},
+  hetula_organization => C4::Context->config('hetula')->{'organization'},
   ssn_url => C4::Context->config('ssnProvider')->{'url'} . '/ssn/addssn?ajax=1', #Feature #1132, config for ssn url + KD#1844, changes in koha-conf.xml
   ssn_user => C4::Context->config('ssnProvider')->{'findSSN'}->{'user'}, # for KD-2571 (autologin)
   ssn_pass => C4::Context->config('ssnProvider')->{'findSSN'}->{'password'}, # for KD-2571 (autologin)

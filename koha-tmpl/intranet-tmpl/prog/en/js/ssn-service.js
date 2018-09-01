@@ -1,3 +1,6 @@
+var ssn_url = $("input[name=ssn_url]").val();
+
+if (ssn_url.match(/^http/)) {
 $("input[id=ssn_submit]").click(function( event ) { 
 
     event.preventDefault();
@@ -6,7 +9,6 @@ $("input[id=ssn_submit]").click(function( event ) {
     var ssn_username = $("input[name=ssn_username]").val();
     var ssn_password = $("input[name=ssn_password]").val();
     var ssn_value = $("input[name=ssn_ssn]").val();
-    var ssn_url = $("input[name=ssn_url]").val();
 
     $.ajax({
         type: "POST",
@@ -52,4 +54,4 @@ $("input[id=ssn_submit]").click(function( event ) {
         alert("Joku ihmeen tietoliikennehärö tapahtui! " +msg);
     }); 
 });
-
+}
