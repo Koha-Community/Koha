@@ -139,7 +139,7 @@
                                     <td>
                                         [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
                                     </td>
-                                    <td>[% request.capabilities.$status.name | html %]</td>
+                                    <td>[% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]</td>
                                     <td><span title="[% request.placed | html %]">[% request.placed | $KohaDates %]</span></td>
                                     <td><span title="[% request.updated | html %]">[% request.updated | $KohaDates %]</span></td>
                                     <td>
@@ -178,7 +178,7 @@
                                     </li>
                                     <li>
                                         <label for="status">Status:</label>
-                                        [% request.capabilities.$status.name | html %]
+                                        [% request.status_alias ? request.statusalias.lib_opac : request.capabilities.$status.name | html %]
                                     </li>
                                     <li>
                                         <label for="medium">Request type:</label>
