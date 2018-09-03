@@ -15,9 +15,10 @@ our $builder = t::lib::TestBuilder->new;
 our $cache = Koha::Caches->get_instance;
 
 subtest 'guess_article_requestable_itemtypes' => sub {
-    plan tests => 12;
+    plan tests => 13;
 
     t::lib::Mocks::mock_preference('ArticleRequests', 1);
+    t::lib::Mocks::mock_preference('ArticleRequestsLinkControl', 'calc');
     $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
     Koha::IssuingRules->delete;
     my $itype1 = $builder->build_object({ class => 'Koha::ItemTypes' });
@@ -63,6 +64,11 @@ subtest 'guess_article_requestable_itemtypes' => sub {
     is( $res->{'*'}, undef, 'Item type * seems not permitted' );
     is( $res->{$itype1->itemtype}, 1, 'Item type 1 seems permitted' );
     is( $res->{$itype2->itemtype}, undef, 'Item type 2 seems not permitted' );
+
+    # Finally test the overriding pref
+    t::lib::Mocks::mock_preference('ArticleRequestsLinkControl', 'always');
+    $res = Koha::IssuingRules->guess_article_requestable_itemtypes({});
+    is( $res->{'*'}, 1, 'Override algorithm with pref setting' );
 
     $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
 };

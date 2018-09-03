@@ -47,6 +47,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AnonSuggestions','0',NULL,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber','YesNo'),
 ('AnonymousPatron','0',NULL,'Set the identifier (borrowernumber) of the anonymous patron. Used for Suggestion and reading history privacy',''),
 ('ArticleRequests', '0', NULL, 'Enables the article request feature', 'YesNo'),
+('ArticleRequestsLinkControl', 'calc', 'always|calc', 'Control display of article request link on search results', 'Choice'),
 ('ArticleRequestsMandatoryFields', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''yes''', 'multiple'),
 ('ArticleRequestsMandatoryFieldsItemsOnly', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''item_only''', 'multiple'),
 ('ArticleRequestsMandatoryFieldsRecordOnly', '', NULL, 'Comma delimited list of required fields for bibs where article requests rule = ''bib_only''', 'multiple'),

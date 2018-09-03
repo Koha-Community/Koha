@@ -221,10 +221,11 @@ subtest 'search_limited' => sub {
 };
 
 subtest 'may_article_request' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     # mocking
     t::lib::Mocks::mock_preference('ArticleRequests', 1);
+    t::lib::Mocks::mock_preference('ArticleRequestsLinkControl', 'calc');
     $cache->set_in_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY, {
         '*'  => { 'CR' => 1 },
         'S'  => { '*'  => 1 },
@@ -235,6 +236,8 @@ subtest 'may_article_request' => sub {
     is( $itemtype->may_article_request, 1, 'SER/* should be true' );
     is( $itemtype->may_article_request({ categorycode => 'S' }), 1, 'SER/S should be true' );
     is( $itemtype->may_article_request({ categorycode => 'PT' }), '', 'SER/PT should be false' );
+    t::lib::Mocks::mock_preference('ArticleRequestsLinkControl', 'always');
+    is( $itemtype->may_article_request({ categorycode => 'PT' }), '1', 'Result should be true when LinkControl is set to always' );
 
     # Cleanup
     $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );

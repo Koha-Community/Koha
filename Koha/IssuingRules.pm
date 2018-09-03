@@ -150,6 +150,8 @@ sub article_requestable_rules {
     'article requested'. Constructed by an intelligent guess in the
     issuing rules (see article_requestable_rules).
 
+    Note: pref ArticleRequestsLinkControl overrides the algorithm.
+
     Optional parameters: categorycode.
 
     Note: the routine is used in opac-search to obtain a reasonable
@@ -164,6 +166,7 @@ sub guess_article_requestable_itemtypes {
     my ( $class, $params ) = @_;
     my $category = $params->{categorycode};
     return {} if !C4::Context->preference('ArticleRequests');
+    return { '*' => 1 } if C4::Context->preference('ArticleRequestsLinkControl') eq 'always';
 
     my $cache = Koha::Caches->get_instance;
     my $last_article_requestable_guesses = $cache->get_from_cache(GUESSED_ITEMTYPES_KEY);
