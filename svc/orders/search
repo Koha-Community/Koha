@@ -1,0 +1,210 @@
+#!/usr/bin/perl
+
+# Copyright 2018 Koha-Suomi Oy
+#
+# This file is part of Koha
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+
+use Modern::Perl;
+use CGI;
+
+use C4::Auth qw( get_template_and_user );
+use C4::Utils::DataTables qw( dt_get_params );
+use C4::Output qw( output_with_http_headers );
+use C4::Acquisition;
+use C4::Biblio;
+use C4::Suggestions;
+use C4::Budgets;
+
+my $input = new CGI;
+
+my ($template, $user, $cookie) = get_template_and_user({
+    template_name   => $input->param('template_path') || 'acqui/tables/pendingorders_results.tt',
+    query           => $input,
+    type            => "intranet",
+    authnotrequired => 0,
+    flagsrequired   => {acquisition => 'order_receive'}
+});
+
+my $invoiceid = $input->param('invoiceid');
+my $summaryfilter = $input->param('summaryfilter');
+my $basketfilter = $input->param('basketfilter');
+my $basketgroupnamefilter = $input->param('basketgroupnamefilter');
+my $orderfilter = $input->param('orderfilter');
+my $eanfilter = $input->param('eanfilter') || undef;
+
+
+my $sEcho = $input->param('sEcho') || 0;
+
+my %dt_params = dt_get_params($input);
+foreach (grep {$_ =~ /^mDataProp/} keys %dt_params) {
+    $dt_params{$_} =~ s/^dt_//;
+}
+
+my $invoice;
+$invoice = GetInvoiceDetails($invoiceid) if $invoiceid;
+
+unless( $invoiceid and $invoice->{invoiceid} ) {
+    warn "No invoice '".$invoiceid."'";
+    exit;
+}
+
+my $booksellerid = $invoice->{booksellerid};
+my $bookseller = Koha::Acquisition::Booksellers->find( $booksellerid );
+my @orders        = @{ $invoice->{orders} };
+my @loop_received = ();
+
+my %foot;
+my $total_tax_excluded = 0;
+my $total_tax_included = 0;
+
+
+my $countpendings;
+
+my @loop_orders = ();
+unless( defined $invoice->{closedate} ) {
+    my $pendingorders;
+    #my ( $search, $ean, $basketname, $orderno, $basketgroupname );
+
+    $pendingorders = SearchOrders({
+        booksellerid => $booksellerid,
+        basketname => $basketfilter,
+        ordernumber => $orderfilter,
+        search => $summaryfilter,
+        ean => $eanfilter,
+        basketgroupname => $basketgroupnamefilter,
+        pending => 1,
+        ordered => 1,
+                                  });
+    $template->param(
+        summaryfilter => $summaryfilter,
+        eanfilter => $eanfilter,
+        basketfilter => $basketfilter,
+        orderfilter => $orderfilter,
+        basketgroupnamefilter => $basketgroupnamefilter,
+        );
+
+    $countpendings = scalar @$pendingorders;
+    for (my $i = 0 ; $i < $countpendings ; $i++) {
+        my $order = $pendingorders->[$i];
+
+        if ( defined $order->{biblionumber} ){ # if this biblio has been deleted and the orderline hasn't been cancelled
+            if ( $bookseller->invoiceincgst ) {
+                $order->{ecost} = $order->{ecost_tax_included};
+            } else {
+                $order->{ecost} = $order->{ecost_tax_excluded};
+            }
+            $order->{total} = $order->{ecost} * $order->{quantity};
+
+            my %line = %$order;
+
+            $line{invoice} = $invoice;
+            $line{booksellerid} = $booksellerid;
+
+            my $biblionumber = $line{'biblionumber'};
+            my $biblio = Koha::Biblios->find( $biblionumber );
+            my $countbiblio = CountBiblioInOrders($biblionumber);
+            my $ordernumber = $line{'ordernumber'};
+            my @subscriptions = GetSubscriptionsId ($biblionumber);
+            my $itemcount   = $biblio->items->count;
+            my $holds_count = $biblio->holds->count;
+            my @items = GetItemnumbersFromOrder( $ordernumber );
+            my $itemholds = $biblio ? $biblio->holds->search({ itemnumber => { -in => \@items } })->count : 0;
+
+            my $suggestion   = GetSuggestionInfoFromBiblionumber($line{biblionumber});
+            $line{suggestionid}         = $suggestion->{suggestionid};
+            $line{surnamesuggestedby}   = $suggestion->{surnamesuggestedby};
+            $line{firstnamesuggestedby} = $suggestion->{firstnamesuggestedby};
+
+            # if the biblio is not in other orders and if there is no items elsewhere and no subscriptions and no holds we can then show the link "Delete order and Biblio" see bug 5680
+            $line{can_del_bib}          = 1 if $countbiblio <= 1 && $itemcount == scalar @items && !(@subscriptions) && !($holds_count);
+            $line{items}                = ($itemcount) - (scalar @items);
+            $line{left_item}            = 1 if $line{items} >= 1;
+            $line{left_biblio}          = 1 if $countbiblio > 1;
+            $line{biblios}              = $countbiblio - 1;
+            $line{left_subscription}    = 1 if scalar @subscriptions >= 1;
+            $line{subscriptions}        = scalar @subscriptions;
+            $line{left_holds}           = ($holds_count >= 1) ? 1 : 0;
+            $line{left_holds_on_order}  = 1 if $line{left_holds}==1 && ($line{items} == 0 || $itemholds );
+            $line{holds}                = $holds_count;
+            $line{holds_on_order}       = $itemholds?$itemholds:$holds_count if $line{left_holds_on_order};
+
+            my $budget_name = GetBudgetName( $line{budget_id} );
+            $line{budget_name} = $budget_name;
+
+            push @loop_orders, \%line;
+        }
+    }
+
+    $template->param(
+        loop_orders  => \@loop_orders,
+        );
+}
+
+
+
+$template->param(
+    sEcho => $sEcho,
+    iTotalDisplayRecords => $countpendings,
+    invoiceid             => $invoice->{invoiceid},
+    booksellerid          => $bookseller->id,
+    loop_orders           => \@loop_orders,
+    (uc(C4::Context->preference("marcflavour"))) => 1,
+    );
+
+output_with_http_headers $input, $cookie, $template->output, 'json';
+
+__END__
+
+=head1 NAME
+
+search - a search script for finding pending orders
+
+=head1 SYNOPSIS
+
+This script provides a service for pending order search using DataTables
+
+=head2 Performing a search
+
+The invoiceid is required, the other params are optional:
+    invoiceid => 123
+    summaryfilter => "text"
+    basketfilter => "text"
+    basketgroupnamefilter => "text"
+    orderfilter => "text"
+    template_path => "path/to/template.tt"
+
+=cut
+
+=back
+
+=head1 LICENSE
+
+Copyright 2018 Koha-Suomi Oy
+
+This file is part of Koha.
+
+Koha is free software; you can redistribute it and/or modify it under the
+terms of the GNU General Public License as published by the Free Software
+Foundation; either version 2 of the License, or (at your option) any later
+version.
+
+Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+A PARTICULAR PURPOSE.  See the GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License along
+with Koha; if not, write to the Free Software Foundation, Inc.,
+51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.

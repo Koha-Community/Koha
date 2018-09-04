@@ -1,0 +1,86 @@
+[% USE KohaDates %]
+[% USE Price %]
+{
+    "sEcho": [% sEcho %],
+    [%- # "iTotalRecords": iTotalRecords, -%]
+    "iTotalDisplayRecords": [% iTotalDisplayRecords %],
+    "aaData": [
+        [% FOREACH loop_order IN loop_orders %]
+            {
+                "dt_basketname":
+                    "[% loop_order.basketname | html %] (<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]\">[% loop_order.basketno %]</a>)",
+                "dt_basketgroupname":
+                  [%- IF data.basketgroupid -%]
+                    "[% data.basketgroupname | html %] (<a href=\"/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_order.booksellerid %]\">[% loop_order.basketgroupid %]</a>)"
+                  [%- ELSE -%]
+                    "No basket group"
+                  [%- END -%]
+                ,
+                "dt_orderline":
+                    "<a href=\"neworderempty.pl?ordernumber=[% loop_order.ordernumber %]&amp;booksellerid=[% loop_order.booksellerid %]\">[% loop_order.ordernumber %]</a>",
+                "dt_summary":
+                    "<a href=\"/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber %]\">[% loop_order.title |html %]</a>
+                [%- IF ( loop_order.author ) %] by [% loop_order.author %][% END -%]
+                [%- IF ( loop_order.isbn ) %] &ndash; [% loop_order.isbn %][% END -%]
+                [%- IF ( loop_order.publishercode ) -%]
+<br />Publisher: [% loop_order.publishercode -%]
+                    [%- IF    ( loop_order.publicationyear && loop_order.publicationyear > 0) -%], [% loop_order.publicationyear -%]
+                    [%- ELSIF ( loop_order.copyrightdate && loop_order.copyrightdate   > 0) -%] [% loop_order.copyrightdate -%]
+                    [%- END -%]
+                [%- END -%]
+                [%- IF ( loop_order.suggestionid ) -%]
+<br/>Suggested by: [% loop_order.surnamesuggestedby %][% IF ( loop_order.firstnamesuggestedby ) %], [% loop_order.firstnamesuggestedby %] [% END -%]
+(<a href=\"/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid %]&amp;op=show\">suggestion #[% loop_order.suggestionid %]</a>)
+                [%- END -%]
+<br />
+                [%- IF ( loop_order.order_internalnote ) -%]
+<p class=\"ordernote\"><strong>Internal note: </strong>[% loop_order.order_internalnote|html %] [<a href=\"/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=internal\">Change internal note</a>]</p>
+                [%- ELSE -%]
+[<a href=\"/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=internal\">Add internal note</a>]
+                [%- END -%]
+                [%- IF ( loop_order.order_vendornote ) -%]
+<p class=\"ordernote\"><strong>Vendor note: </strong>[% loop_order.order_vendornote|html %]</p>
+                [%- ELSE -%]
+[<a href=\"/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid %]&type=vendor\">Add vendor note</a>]
+                [%- END -%]
+",
+                "dt_previewdata":
+                    "<a href=\"/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber %]\" class=\"previewData\">MARC</a> | <a href=\"/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber %]\" class=\"previewData\">Card</a>",
+                "dt_quantity":
+                    "[% loop_order.quantity %]",
+                "dt_unitcost":
+                    "[% loop_order.ecost | $Price %]",
+                "dt_ordercost":
+                    "[% loop_order.total | $Price %]",
+                "dt_budgetname":
+                    "[% loop_order.budget_name %]",
+                "dt_receivetransfer":
+                    "<a href=\"orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;invoiceid=[% invoiceid %]\">Receive</a><br /><a href=\"#\" onclick=\"transfer_order_popup([% loop_order.ordernumber %]); return false;\">Transfer</a>",
+                "dt_canceldelete":
+                    "[% IF ( loop_order.left_holds_on_order ) -%]
+<span class=\"button\" title=\"Can't cancel order, ([% loop_order.holds_on_order %]) holds are linked with this order cancel holds first\">Can't cancel order</span><br>
+                        [%- ELSE -%]
+<a href=\"/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber %]&biblionumber=[% loop_order.biblionumber %]&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]\">Cancel order</a><br />
+                        [%- END -%]
+                        [%- IF ( loop_order.can_del_bib ) -%]
+<a href=\"/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber %]&biblionumber=[% loop_order.biblionumber %]&del_biblio=1&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]\">Cancel order and catalog record</a><br />
+                        [%- ELSE -%]
+<span class=\"button\" title=\"Can't delete catalog record, see constraints below\">Can't cancel order and delete catalog record</span><br>
+                        [%- END -%]
+                        [%- IF ( loop_order.left_item ) -%]
+<b title=\"Can't delete catalog record, because of [% loop_order.items %] existing item(s)\" >[% loop_order.items %] item(s) left</b><br>
+                        [%- END -%]
+                        [%- IF ( loop_order.left_biblio ) -%]
+<b title=\"Can't delete catalog record, delete other orders linked to it first\">[% loop_order.biblios %] order(s) left</b><br>
+                        [%- END -%]
+                        [%- IF ( loop_order.left_subscription ) -%]
+<b title=\"Can't delete catalog record, delete subscriptions first\">[% loop_order.subscriptions %] subscription(s) left</b><br>
+                        [%- END -%]
+                        [%- IF ( loop_order.left_holds ) -%]
+<b title=\"Can't delete catalog record or order, cancel holds first\">[% loop_order.holds %] hold(s) left</b>
+                        [%- END -%]
+"
+            }[% UNLESS loop.last %],[% END %]
+        [% END %]
+    ]
+}
