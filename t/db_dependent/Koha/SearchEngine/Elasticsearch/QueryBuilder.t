@@ -17,9 +17,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
 use C4::Context;
 use Test::Exception;
+use t::lib::TestBuilder;
 use Test::More tests => 3;
 
 use Koha::Database;
@@ -160,11 +160,10 @@ subtest 'build_query with weighted fields tests' => sub {
     undef, undef, undef, { weighted_fields => 1 });
 
     my $fields = $query->{query}{query_string}{fields};
-
     is(scalar(@$fields), 3, 'Search is done on 3 fields');
     is($fields->[0], '_all', 'First search field is _all');
-    is($fields->[1], 'title^25', 'Second search field is title');
-    is($fields->[2], 'subject^15', 'Third search field is subject');
+    is($fields->[1], 'title^25.00', 'Second search field is title');
+    is($fields->[2], 'subject^15.00', 'Third search field is subject');
 };
 
 $schema->storage->txn_rollback;

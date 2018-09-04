@@ -193,10 +193,10 @@ my @w_fields = Koha::SearchFields->weighted_fields();
 is(scalar(@w_fields), 3, 'weighted_fields should return 3 weighted fields.');
 
 is($w_fields[0]->name, 'title', 'First field is title.');
-is($w_fields[0]->weight, 25, 'Title weight is 25.');
+is($w_fields[0]->weight+0, 25, 'Title weight is 25.');
 is($w_fields[1]->name, 'subject', 'Second field is subject.');
-is($w_fields[1]->weight, 15, 'Subject weight is 15.');
+is($w_fields[1]->weight+0, 15, 'Subject weight is 15.');
 is($w_fields[2]->name, 'author', 'Third field is author.');
-is($w_fields[2]->weight, 5, 'Author weight is 5.');
+is($w_fields[2]->weight+0, 5, 'Author weight is 5.');
 
 $schema->storage->txn_rollback;
