@@ -662,7 +662,7 @@ CREATE TABLE `deleteditems` (
   `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and due date for checked out)
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
   `cn_sort` varchar(255) default NULL, -- normalized form of the call number (MARC21 952$o) used for sorting
-  `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
+  `ccode` varchar(80) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
   `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
   `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
   `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
@@ -924,7 +924,7 @@ CREATE TABLE `items` ( -- holdings/item information
   `onloan` date default NULL, -- defines if item is checked out (NULL for not checked out, and due date for checked out)
   `cn_source` varchar(10) default NULL, -- classification source used on this item (MARC21 952$2)
   `cn_sort` varchar(255) default NULL,  -- normalized form of the call number (MARC21 952$o) used for sorting
-  `ccode` varchar(10) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
+  `ccode` varchar(80) default NULL, -- authorized value for the collection code associated with this item (MARC21 952$8)
   `materials` MEDIUMTEXT default NULL, -- materials specified (MARC21 952$3)
   `uri` varchar(255) default NULL, -- URL for the item (MARC21 952$u)
   `itype` varchar(10) default NULL, -- foreign key from the itemtypes table defining the type for this item (MARC21 952$y)
@@ -1989,7 +1989,7 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this item (MARC21 952$c)
   `borrowernumber` int(11) default NULL, -- foreign key from the borrowers table, links transaction to a specific borrower
   `associatedborrower` int(11) default NULL, -- unused in Koha
-  `ccode` varchar(10) default NULL, -- foreign key from the items table, links transaction to a specific collection code
+  `ccode` varchar(80) default NULL, -- foreign key from the items table, links transaction to a specific collection code
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
   KEY `proccode_idx` (`proccode`),
@@ -2631,7 +2631,7 @@ CREATE TABLE branch_transfer_limits (
     toBranch varchar(10) NOT NULL,
     fromBranch varchar(10) NOT NULL,
     itemtype varchar(10) NULL,
-    ccode varchar(10) NULL,
+    ccode varchar(80) NULL,
     PRIMARY KEY  (limitId)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -3800,7 +3800,7 @@ CREATE TABLE `course_items` (
   `ci_id` int(11) NOT NULL AUTO_INCREMENT, -- course item id
   `itemnumber` int(11) NOT NULL, -- items.itemnumber for the item on reserve
   `itype` varchar(10) DEFAULT NULL, -- new itemtype for the item to have while on reserve (optional)
-  `ccode` varchar(10) DEFAULT NULL, -- new category code for the item to have while on reserve (optional)
+  `ccode` varchar(80) DEFAULT NULL, -- new category code for the item to have while on reserve (optional)
   `holdingbranch` varchar(10) DEFAULT NULL, -- new holding branch for the item to have while on reserve (optional)
   `location` varchar(80) DEFAULT NULL, -- new shelving location for the item to have while on reseve (optional)
   `enabled` enum('yes','no') NOT NULL DEFAULT 'no', -- if at least one enabled course has this item on reseve, this field will be 'yes', otherwise it will be 'no'
