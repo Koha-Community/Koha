@@ -100,6 +100,10 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-09 15:50:42
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lTIDZ+w+46Kniub5Tqpqlg
 
+__PACKAGE__->add_columns(
+  '+cyclical' => { is_boolean => 1 },
+  '+active' => { is_boolean => 1 }
+);
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
