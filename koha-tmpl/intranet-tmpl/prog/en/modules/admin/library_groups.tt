@@ -121,22 +121,22 @@
 [% IF added %]
     <div class="dialog message group-added">
         [% IF added.branchcode %]
-            [% added.library.branchname | $KohaSpan class = 'name' | html %] added to group.
+            [% added.library.branchname | $KohaSpan class = 'name' | $raw %] added to group.
         [% ELSE %]
-            Group [% added.title | $KohaSpan class = 'name' | html %] created.
+            Group [% added.title | $KohaSpan class = 'name' | $raw %] created.
         [% END %]
     </div>
 [% ELSIF deleted %]
     <div class="dialog message group-deleted">
         [% IF deleted.title %]
-            Group [% deleted.title | $KohaSpan class = 'name' | html %] has been deleted.
+            Group [% deleted.title | $KohaSpan class = 'name' | $raw %] has been deleted.
         [% ELSE %]
-            [% deleted.library | $KohaSpan class = 'name' | html %] has been removed from group.
+            [% deleted.library | $KohaSpan class = 'name' | $raw %] has been removed from group.
         [% END %]
     </div>
 [% ELSIF error_duplicate_title %]
     <div class="dialog alert error-duplicate-group-title">
-            A group with the title [% error_duplicate_title | $KohaSpan class = 'name' | html %] already exists.
+            A group with the title [% error_duplicate_title | $KohaSpan class = 'name' | $raw %] already exists.
     </div>
 [% END %]
 
