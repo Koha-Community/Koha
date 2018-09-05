@@ -1,3 +1,5 @@
+/* global BROWSER_PREVIOUS BROWSER_NEXT BROWSER_RETURN_TO_SEARCH */
+
 if ( KOHA === undefined ) var KOHA = {};
 
 KOHA.browser = function (searchid, biblionumber) {
@@ -70,7 +72,7 @@ KOHA.browser = function (searchid, biblionumber) {
                 if ( ev.which == 2 || ev.which == 1 && ev.ctrlKey ) {
                     // Middle click or ctrl + click
                     ev.preventDefault();
-                    var newwindow = window.open( $(this).attr('href') + '&searchid=' + me.searchid, '_blank' )
+                    var newwindow = window.open( $(this).attr('href') + '&searchid=' + me.searchid, '_blank' );
                     newwindow.blur();
                     window.focus();
                 } else if ( ev.which == 1 ) {
@@ -102,7 +104,7 @@ KOHA.browser = function (searchid, biblionumber) {
                     } else {
                         nextbutton = '<a href="#" id="browse-next" class="browse-button">' + BROWSER_NEXT + ' »</a>';
                     }
-                    $('#menu').before('<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' + searchURL + '" id="browse-return-to-results" class="browse-button searchwithcontext">' + BROWSER_RETURN_TO_SEARCH + '</a></div><div class="browse-prev-next">' + prevbutton + nextbutton + '</div></div></div>');
+                    $('#menu').before('<div class="browse-controls"><div class="browse-controls-inner"><div class="browse-label"><a href="' + searchURL + '" id="browse-return-to-results" class="searchwithcontext">' + BROWSER_RETURN_TO_SEARCH + '</a></div><div class="browse-prev-next">' + prevbutton + nextbutton + '</div></div></div>');
                     $('a#browse-previous').click(function (ev) {
                         ev.preventDefault();
                         browseRecords(-1);

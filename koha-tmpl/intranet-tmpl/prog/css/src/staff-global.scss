@@ -3682,16 +3682,26 @@ progress {
 }
 
 #browse-return-to-results {
-    border-top-left-radius: 3px;
-    border-top-right-radius: 3px;
+    background-color: #E8F0F6;
+    border: 1px solid #B9D8D9;
+    border-bottom-width: 0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
     display: block;
+    padding: .5em;
     text-align: center;
 }
 
 .browse-button {
+    background-color: #FFF;
+    border: 1px solid #B9D8D9;
     color: #004D99;
-    display: inline-block;
+    display: block;
+    overflow: hidden;
     padding: .4em .6em;
+    text-align: center;
+    white-space: nowrap;
+    width: 100%;
 
     &:hover {
         background: #FAFAFA;
@@ -3741,34 +3751,13 @@ span {
     }
 }
 
-.browse-label,
-.browse-prev-next {
-    border: 1px solid #B9D8D9;
-}
-
-.browse-label {
-    background-color: #E8F0F6;
-    border-top-left-radius: 5px;
-    border-top-right-radius: 5px;
-}
-
-.browse-prev-next {
-    border-bottom-left-radius: 5px;
-    border-bottom-right-radius: 5px;
-    border-top-width: 0;
-}
-
 #browse-previous {
-    border-bottom-left-radius: 5px;
-    border-right: 1px solid #B9D8D9;
-    padding-right: 1em;
+    border-bottom-width: 0;
 }
 
 #browse-next {
     border-bottom-right-radius: 5px;
-    border-top-width: 0;
-    float: right;
-    padding-right: 1em;
+    border-bottom-left-radius: 5px;
 }
 
 .loading-overlay {
@@ -4550,6 +4539,24 @@ span {
     }
 }
 
+@media only screen and ( max-width: 768px ) {
+    .browse-button {
+        display: inline-block;
+        width: 50%;
+    }
+
+    #browse-previous {
+        border-bottom-left-radius: 5px;
+        border-bottom-width: 1px;
+        border-right-width: 0;
+    }
+
+    #browse-next {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 5px;
+    }
+}
+
 @media (min-width: 800px) {
 
 
@@ -4579,4 +4586,23 @@ span {
 
 div#makechart ol li {
     list-style: none;
+}
+
+@media only screen and ( min-width: 1200px ) {
+    .browse-button {
+        display: inline-block;
+        width: 50%;
+    }
+
+    #browse-previous {
+        border-bottom-left-radius: 5px;
+        border-bottom-width: 1px;
+        border-right-width: 0;
+    }
+
+    #browse-next {
+        border-bottom-left-radius: 0;
+        border-bottom-right-radius: 5px;
+        text-align: right;
+    }
 }
