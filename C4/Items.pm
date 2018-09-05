@@ -949,6 +949,7 @@ Called by C<C4::XISBN>
 
 sub GetItemsByBiblioitemnumber {
     my ( $bibitem ) = @_;
+    warn "C4::Items::GetItemsByBiblioitemnumber will be deprecated as of 18.11. - See Bug 21202 for details\n";
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT * FROM items WHERE items.biblioitemnumber = ?") || die $dbh->errstr;
     # Get all items attached to a biblioitem
