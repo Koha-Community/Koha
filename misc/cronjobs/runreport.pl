@@ -67,6 +67,7 @@ runreport.pl [ -h | -m ] [ -v ] reportID [ reportID ... ]
    --to=s          e-mail address to send report to
    --from=s        e-mail address to send report from
    --subject=s     subject for the e-mail
+   --params=s      parameters for the report
    --store-results store the result of the report
    --csv-header    add column names as first line of csv output
 
@@ -122,6 +123,10 @@ E-mail address to send report from. Defaults to KohaAdminEmailAddress.
 
 Subject for the e-mail message. Defaults to "Koha Saved Report"
 
+=item B<--params>
+
+Repeatable, should provide one param per param requested for the report
+
 =item B<--store-results>
 
 Store the result of the report into the saved_reports DB table.
@@ -175,6 +180,7 @@ my $format  = "text";
 my $to      = "";
 my $from    = "";
 my $subject = "";
+my @params = ();
 my $separator = ',';
 my $quote = '"';
 my $store_results = 0;
@@ -192,6 +198,7 @@ GetOptions(
     'to=s'              => \$to,
     'from=s'            => \$from,
     'subject=s'         => \$subject,
+    'param=s'           => \@params,
     'email'             => \$email,
     'a|attachment'      => \$attachment,
     'username:s'        => \$username,
@@ -254,7 +261,11 @@ foreach my $report_id (@ARGV) {
             $subject = 'Koha Saved Report';
         }
     }
-    my ($sth) = execute_query( $sql, undef, undef, undef, $report_id );
+
+    # convert SQL parameters to placeholders
+    $sql =~ s/(<<.*?>>)/\?/g;
+
+    my ($sth) = execute_query( $sql, undef, undef, \@params, $report_id );
     my $count = scalar($sth->rows);
     unless ($count) {
         print "NO OUTPUT: 0 results from execute_query\n";
