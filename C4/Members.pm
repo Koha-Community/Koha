@@ -298,6 +298,7 @@ sub ModMember {
             delete $data{password};
         } else {
             if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+                warn "C4::Members::ModMember - NorwegianPatronDB hooks will be deprecated as of 18.11.0\n";
                 # Update the hashed PIN in borrower_sync.hashed_pin, before Koha hashes it
                 Koha::NorwegianPatronDB::NLUpdateHashedPIN( $data{'borrowernumber'}, $data{password} );
             }
@@ -355,6 +356,7 @@ sub ModMember {
         # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
         # cronjob will use for syncing with NL
         if ( C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+            warn "C4::Members::ModMember - NorwegianPatronDB hooks will be deprecated as of 18.11.0\n";
             my $borrowersync = Koha::Database->new->schema->resultset('BorrowerSync')->find({
                 'synctype'       => 'norwegianpatrondb',
                 'borrowernumber' => $data{'borrowernumber'}
@@ -465,6 +467,7 @@ sub AddMember {
     # If NorwegianPatronDBEnable is enabled, we set syncstatus to something that a
     # cronjob will use for syncing with NL
     if ( exists $data{'borrowernumber'} && C4::Context->preference('NorwegianPatronDBEnable') && C4::Context->preference('NorwegianPatronDBEnable') == 1 ) {
+        warn "C4::Members::AddMember - NorwegianPatronDB hooks will be deprecated as of 18.11.0\n";
         Koha::Database->new->schema->resultset('BorrowerSync')->create({
             'borrowernumber' => $data{'borrowernumber'},
             'synctype'       => 'norwegianpatrondb',
