@@ -67,7 +67,11 @@ C4::Creators::Lib
 
 sub _SELECT {
     my @params = @_;
-    my $query = "SELECT `$params[0]` FROM $params[1]";
+    my $fields_list = $params[0];
+    if (index($fields_list, ' ')==-1 && index($fields_list,',')==-1 && $fields_list ne '*') {
+        $fields_list = "`$fields_list`";
+    }
+    my $query = "SELECT $fields_list FROM $params[1]";
     $params[2] ? $query .= " WHERE $params[2];" : $query .= ';';
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
@@ -145,16 +149,25 @@ my $output_formats = [
 sub _build_query {
     my ( $params, $table ) = @_;
     my @fields = exists $params->{fields} ? @{ $params->{fields} } : ();
-    my $query = "SELECT " . ( @fields ? join(', ', map {"`$_`"} @fields ) : '*' ) . " FROM $table";
+    my @fields2 = ();
+    foreach my $field_name (@fields) {
+        if (index($field_name,' ')==-1 && $field_name ne '*') {
+            push @fields2, "`$field_name`";
+        } else {
+            push @fields2, $field_name;
+        }
+    }
+    @fields = @fields2;
+    my $query = "SELECT " . ( @fields ? join(', ', @fields ) : '*' ) . " FROM $table";
     my @where_args;
     if ( exists $params->{filters} ) {
         $query .= ' WHERE 1 ';
         while ( my ( $field, $values ) = each %{ $params->{filters} } ) {
             if ( ref( $values ) ) {
-                $query .= " AND $field IN ( " . ( ('?,') x (@$values-1) ) . "? ) "; # a comma separates elements in a list...
+                $query .= " AND `$field` IN ( " . ( ('?,') x (@$values-1) ) . "? ) "; # a comma separates elements in a list...
                 push @where_args, @$values;
             } else {
-                $query .= " AND $field = ? ";
+                $query .= " AND `$field` = ? ";
                 push @where_args, $values;
             }
         }
