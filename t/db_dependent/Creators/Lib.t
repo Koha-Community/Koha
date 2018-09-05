@@ -398,7 +398,7 @@ is( $templates->[0]->{creator},          'Labels',     'creator          is good
 $templates = get_all_templates( { filters => { rows => [-42, 7]} } );
 is( @$templates, $count, 'There is 1 template matching' );
 # With orderby param ------------------
-$templates = get_all_templates( { orderby => 'rows DESC' } );
+$templates = get_all_templates( { orderby => '`rows` DESC' } );
 
 $query = '
   SELECT    count(*)
