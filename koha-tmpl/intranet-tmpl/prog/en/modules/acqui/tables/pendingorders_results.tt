@@ -10,8 +10,8 @@
                 "dt_basketname":
                     "[% loop_order.basketname | html %] (<a href=\"/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]\">[% loop_order.basketno %]</a>)",
                 "dt_basketgroupname":
-                  [%- IF data.basketgroupid -%]
-                    "[% data.basketgroupname | html %] (<a href=\"/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_order.booksellerid %]\">[% loop_order.basketgroupid %]</a>)"
+                  [%- IF loop_order.basketgroupid -%]
+                    "[% loop_order.basketgroupname | html %] (<a href=\"/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_order.booksellerid %]\">[% loop_order.basketgroupid %]</a>)"
                   [%- ELSE -%]
                     "No basket group"
                   [%- END -%]
