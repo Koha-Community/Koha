@@ -170,6 +170,11 @@ if ($enddate_iso) {
 
 my $item_type = C4::Context->preference('item-level_itypes') ? "items.itype" : "biblioitems.itemtype";
 
+# Bug 21320
+if ( ! C4::Context->preference('AllowHoldsOnDamagedItems') ) {
+    $sqldatewhere .= " AND damaged = 0";
+}
+
 my $strsth =
     "SELECT min(reservedate) as l_reservedate,
             reserves.reserve_id,
@@ -214,7 +219,7 @@ my $strsth =
     AND issues.itemnumber IS NULL
     AND reserves.priority <> 0 
     AND reserves.suspend = 0
-    AND notforloan = 0 AND damaged = 0 AND itemlost = 0 AND withdrawn = 0
+    AND notforloan = 0 AND itemlost = 0 AND withdrawn = 0
     ";
     # GROUP BY reserves.biblionumber allows only items that are not checked out, else multiples occur when 
     #    multiple patrons have a hold on an item
