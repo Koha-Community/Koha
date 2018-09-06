@@ -146,7 +146,17 @@
                 <li><label for="branchip">IP: </label><input type="text" name="branchip" id="branchip"  size="15" maxlength="15" value="[% library.branchip | html %]" /> <span class="hint">Can be entered as a single IP, or a subnet such as 192.168.1.*</span></li>
                 <li><label for="marcorgccode">MARC organization code</label> <input type="text" name="marcorgcode" id="marcorgcode" size="16" value="[% library.marcorgcode | html %]" /> <span class="hint">If not filled in defaults to system preference MARCOrgCode. You can obtain your code from <a href="http://www.loc.gov/marc/organizations/orgshome.html" target="_blank">Library of Congress</a>.</span>
                 <li><label for="branchnotes">Notes: </label><input type="text" name="branchnotes" id="branchnotes" size="80" value="[% library.branchnotes | html %]" /></li>
-                <li><label for="pickup_location">Pickup location: </label><select name="pickup_location" id="pickup_location"><option value="1" [% IF !library || library.pickup_location == 1 %]selected="selected"[% END %]>Yes</option><option value="0" [% IF library && library.pickup_location == 0 %]selected="selected"[% END %]>No</option></select></li>
+                <li><label for="pickup_location">Pickup location: </label>
+                    <select name="pickup_location" id="pickup_location">
+                        [% IF !library || library.pickup_location == 1 %]
+                        <option value="1" selected="selected">Yes</option>
+                        <option value="0">No</option>
+                        [% ELSE %]
+                        <option value="1">Yes</option>
+                        <option value="0" selected="selected">No</option>
+                        [% END %]
+                    </select>
+                </li>
             </ol>
         </fieldset>
         <fieldset class="action">
