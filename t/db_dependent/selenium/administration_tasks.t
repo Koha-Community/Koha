@@ -53,7 +53,7 @@ SKIP: {
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
         $s->click( { href => '/admin/itemtypes.pl', main_class => 'main container-fluid' } );  # Item Types
-        $s->click( { href => '/admin/itemtypes.pl?op=add_form', main => 'doc3' } )
+        $s->click( { href => '/admin/itemtypes.pl?op=add_form', main_class => 'main container-fluid' } )
           ;    # New item type
         $s->fill_form(
             { itemtype => $itemtype, description => "Digital Optical Disc" } );
@@ -61,7 +61,7 @@ SKIP: {
         $s->click(
             {
                 href => '/admin/itemtypes.pl?op=add_form&itemtype=' . $itemtype,
-                main => 'doc3'
+                main_class => 'main container-fluid'
             }
         );     # New item type
     };
