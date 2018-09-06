@@ -16349,6 +16349,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18639 - Add replacementprice field to aqorders table)\n";
 }
 
+$DBversion = '18.06.00.024';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'branches', 'pickup_location' ) ){
+        $dbh->do( "ALTER TABLE branches ADD COLUMN pickup_location TINYINT(1) not null default 1" );
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 7534 - Let libraries have configuration for pickup locations)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
