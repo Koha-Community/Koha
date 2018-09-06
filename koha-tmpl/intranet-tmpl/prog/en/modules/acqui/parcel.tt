@@ -142,15 +142,27 @@ $(document).ready(function(){
       $.cookie("basketfilter", $("#basketfilter").val());
       $.cookie("orderfilter", $("#orderfilter").val());
       $.cookie("basketgroupnamefilter", $("#basketgroupnamefilter").val());
+      [% IF (UNIMARC) %]
       $.cookie("eanfilter", $("#eanfilter").val());
+      [% END %]
 
       $("#filterform").on('submit', function(){
         search=1;
+        $("#summaryfilter").val($("#summaryfilter").val().trim());
+        $("#basketfilter").val($("#basketfilter").val().trim());
+        $("#orderfilter").val($("#orderfilter").val().trim());
+        $("#basketgroupnamefilter").val($("#basketgroupnamefilter").val().trim());
+        [% IF (UNIMARC) %]
+            $("#eanfilter").val($("#eanfilter").val().trim());
+        [% END %]
+
         $.cookie("summaryfilter", $("#summaryfilter").val());
         $.cookie("basketfilter", $("#basketfilter").val());
         $.cookie("orderfilter", $("#orderfilter").val());
         $.cookie("basketgroupnamefilter", $("#basketgroupnamefilter").val());
+        [% IF (UNIMARC) %]
         $.cookie("eanfilter", $("#eanfilter").val());
+        [% END %]
         dtPendingt.fnDraw();
         $("#acqui_receive_search").show();
         return false;
