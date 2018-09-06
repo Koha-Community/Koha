@@ -43,6 +43,7 @@ my $srchany       = $input->param('srchany');
 my $op            = $input->param('op')||'';
 my $page            = $input->param('current_page') || 1;
 $page = $input->param('goto_page') if $input->param('changepage_goto');
+my $controlnumber    = $input->param('controlnumber');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
         template_name   => "cataloguing/z3950_auth_search.tt",
@@ -63,6 +64,7 @@ $template->param(
     subjectsubdiv   => $subjectsubdiv,
     srchany      => $srchany,
     authid => $authid,
+    controlnumber => $controlnumber,
 );
 
 if ( $op ne "do_search" ) {
@@ -100,6 +102,7 @@ my $pars= {
         subjectsubdiv => $subjectsubdiv,
         srchany => $srchany,
         authid => $authid,
+        controlnumber => $controlnumber,
 };
 Z3950SearchAuth($pars, $template);
 output_html_with_http_headers $input, $cookie, $template->output;

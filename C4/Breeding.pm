@@ -230,6 +230,7 @@ sub Z3950Search {
 sub _auth_build_query {
     my ( $pars ) = @_;
 
+    #FIXME These variables are not used
     my $nameany= $pars->{nameany};
     my $authorany= $pars->{authorany};
     my $authorpersonal= $pars->{authorpersonal};
@@ -253,6 +254,7 @@ sub _auth_build_query {
         title             => '@attr 1=4 "#term" ',
         uniformtitle      => '@attr 1=6 "#term" ',
         srchany           => '@attr 1=1016 "#term" ',
+        controlnumber     => '@attr 1=12 "#term" ',
     };
 
     my $zquery='';
