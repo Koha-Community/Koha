@@ -44,7 +44,7 @@ GetOptions(
     'm|method:s'        => \$method,
     'h|help|?'          => \$help,
     'v|verbose'         => \$verbose,
-    't|type'            => \$type,
+    't|type:s'          => \$type,
 );
 my $usage = << 'ENDUSAGE';
 
