@@ -9,19 +9,19 @@
 
     [% IF marcflavour == 'UNIMARC' %]
         [% IF authid %]
-            [% link = BLOCK %]<a href="[% authidurl _ authid %]">[% heading | html %]</a>[% END %]
+            [% link = BLOCK %]<a href="[% authidurl _ authid | $raw %]">[% heading | html %]</a>[% END %]
         [% ELSE %]
             [% link = BLOCK %][% heading | html %][% END %]
         [% END %]
         [% SWITCH type %]
         [% CASE 'broader' %]
-            <span class="BT"><abbr title="Broader Term">BT</abbr>: [% link %]</span>
+            <span class="BT"><abbr title="Broader Term">BT</abbr>: [% link | $raw %]</span>
         [% CASE 'narrower' %]
-            <span class="NT"><abbr title="Narrower Term">NT</abbr>: [% link %]</span>
+            <span class="NT"><abbr title="Narrower Term">NT</abbr>: [% link | $raw %]</span>
         [% CASE 'seefrom' %]
-            <span class="UF"><abbr title="Used For">UF</abbr>: [% link %]</span>
+            <span class="UF"><abbr title="Used For">UF</abbr>: [% link | $raw %]</span>
         [% CASE 'seealso' %]
-            <span class="RT"><abbr title="Related Term">RT</abbr>: [% link %]</span>
+            <span class="RT"><abbr title="Related Term">RT</abbr>: [% link | $raw %]</span>
         [% END %]
     [% ELSE %]
         <span class="heading">
