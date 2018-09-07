@@ -24,6 +24,7 @@ use Koha::Acquisition::Funds;
 use Koha::Acquisition::Invoices;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
+use Koha::Biblios;
 use Koha::Items;
 use Koha::Subscriptions;
 
@@ -185,6 +186,20 @@ sub items {
     return Koha::Items->search({ itemnumber => \@itemnumbers });
 }
 
+=head3 biblio
+
+    my $biblio = $order->biblio
+
+Returns the bibliographic record associated to the order
+
+=cut
+
+sub biblio {
+    my ( $self ) = @_;
+    my $biblio_rs= $self->_result->biblionumber;
+    return Koha::Biblio->_new_from_dbic( $biblio_rs );
+}
+
 =head3 duplicate_to
 
     my $duplicated_order = $order->duplicate_to($basket, [$default_values]);
@@ -231,13 +246,16 @@ sub duplicate_to {
             $order_info->{basketno} = $basket->basketno;
 
             $new_order = Koha::Acquisition::Order->new($order_info)->store;
-            my $items = $self->items;
-            while ( my ($item) = $items->next ) {
-                my $item_info = $item->unblessed;
-                undef $item_info->{itemnumber};
-                undef $item_info->{barcode};
-                my $new_item = Koha::Item->new($item_info)->store;
-                $new_order->add_item( $new_item->itemnumber );
+
+            if ( not $self->biblio->serial || $self->basket->effective_create_items eq 'ordering') { # Do copy items if not a serial OR if items are created on ordering
+                my $items = $self->items;
+                while ( my ($item) = $items->next ) {
+                    my $item_info = $item->unblessed;
+                    undef $item_info->{itemnumber};
+                    undef $item_info->{barcode};
+                    my $new_item = Koha::Item->new($item_info)->store;
+                    $new_order->add_item( $new_item->itemnumber );
+                }
             }
         }
     );
