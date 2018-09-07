@@ -242,7 +242,8 @@ sub duplicate_to {
                 $order_info->{$field} = $value;
             }
 
-            # FIXME $order_info->{created_by} = logged_in_user?
+            my $userenv = C4::Context->userenv;
+            $order_info->{created_by} = $userenv->{number};
             $order_info->{basketno} = $basket->basketno;
 
             $new_order = Koha::Acquisition::Order->new($order_info)->store;
