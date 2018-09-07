@@ -243,6 +243,7 @@ sub drop_index {
         my $conf = $self->get_elasticsearch_params();
         my $elasticsearch = $self->get_elasticsearch();
         $elasticsearch->indices->delete(index => $conf->{index_name});
+        $self->index_status_recreate_required(1);
     }
 }
 
