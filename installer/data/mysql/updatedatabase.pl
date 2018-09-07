@@ -16378,6 +16378,13 @@ INSERT IGNORE INTO  systempreferences (variable, value, options, explanation, ty
     print "Upgrade to $DBversion done (Bug 17530 - Add pref ArticleRequestsLinkControl)\n";
 }
 
+$DBversion = '18.06.00.027';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "DROP TABLE IF EXISTS services_throttle" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21235: Remove table services_throttle)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
