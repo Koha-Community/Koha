@@ -1,3 +1,4 @@
+[% USE raw %]
 [% BLOCK showreference %]
 [%# Parameters: %]
 [%# heading: the heading itself %]
