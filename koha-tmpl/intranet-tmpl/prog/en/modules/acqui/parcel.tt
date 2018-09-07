@@ -249,7 +249,7 @@
                 [% ELSE %]
                     <td colspan="6" class="total">(Tax exc.)</td>
                 [% END %]
-                <td colspan="2"><i>Subtotal for</i> [% key | html %]</td>
+                <td colspan="3"><i>Subtotal for</i> [% key | html %]</td>
                 <td>[% subtotal_for_funds.$key.ecost | $Price | html %]</td>
                 <td>[% subtotal_for_funds.$key.unitprice | $Price | html %]</td>
                 <td>&nbsp;</td>
@@ -257,19 +257,19 @@
             </tr>
         [% END %]
         <tr>
-            <th colspan="10" class="total">Total tax exc.</th>
+            <th colspan="11" class="total">Total tax exc.</th>
             <th>[% total_tax_excluded | $Price | html %]</th>
             <th></th>
         </tr>
         [% FOREACH book_foot IN book_foot_loop %]
             <tr>
-                <th colspan="10">Total (GST [% book_foot.tax_rate * 100 | html %]%)</th>
+                <th colspan="11">Total (GST [% book_foot.tax_rate * 100 | html %]%)</th>
                 <th>[% book_foot.tax_value | $Price | html %]</th>
                 <th></th>
             </tr>
         [% END %]
         <tr>
-            <th colspan="10" class="total">Total tax inc.</th>
+            <th colspan="11" class="total">Total tax inc.</th>
             <th>[% total_tax_included | $Price | html %]</th>
             <th></th>
         </tr>
@@ -510,6 +510,7 @@
                     { "sType": "html" },
                     { "sType": "num-html" },
                     { "sType": "anti-the" },
+                    null,
                     null,
                     null,
                     null,
