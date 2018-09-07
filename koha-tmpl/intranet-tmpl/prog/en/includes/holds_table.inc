@@ -1,3 +1,4 @@
+[% USE Koha %]
 <table>
     <tr>
         [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
@@ -25,7 +26,11 @@
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                 <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />
                 <input type="hidden" name="biblionumber" value="[% hold.biblionumber | html %]" />
-                <select name="rank-request">
+                [% IF Koha.Preference('HoldsSplitQueue') == "nothing" %]
+                    <select name="rank-request">
+                [% ELSE %]
+                    <select name="rank-request" disabled>
+                [% END %]
                     [% IF ( hold.found ) %]
                         [% IF ( hold.intransit ) %]
                             <option value="T" selected="selected">In transit</option>
