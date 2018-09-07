@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 use Test::MockModule;
 use t::lib::Mocks;
 
@@ -29,26 +29,41 @@ my $schema = Koha::Database->schema();
 
 use_ok('Koha::SearchEngine::Elasticsearch::Indexer');
 
-my $indexer;
-ok(
-    $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblio' }),
-    'Creating new indexer object'
-);
+subtest 'create_index() tests' => sub {
+    plan tests => 4;
+    my $se = Test::MockModule->new( 'Koha::SearchEngine::Elasticsearch' );
+    $se->mock( 'get_elasticsearch_params', sub {
+            my ($self, $sub ) = @_;
+            my $method = $se->original( 'get_elasticsearch_params' );
+            my $params = $method->( $self );
+            $params->{index_name} .= '__test';
+            return $params;
+        });
 
-my $marc_record = MARC::Record->new();
-$marc_record->append_fields(
-	MARC::Field->new( '001', '1234567' ),
-	MARC::Field->new( '020', '', '', 'a' => '1234567890123' ),
-	MARC::Field->new( '245', '', '', 'a' => 'Title' )
-);
-my $records = [$marc_record];
+    my $indexer;
+    ok(
+        $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ 'index' => 'biblios' }),
+        'Creating a new indexer object'
+    );
 
-SKIP: {
+    is(
+        $indexer->create_index(),
+        Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_OK(),
+        'Creating an index'
+    );
 
-    eval { $indexer->get_elasticsearch_params; };
+    my $marc_record = MARC::Record->new();
+    $marc_record->append_fields(
+        MARC::Field->new('001', '1234567'),
+        MARC::Field->new('020', '', '', 'a' => '1234567890123'),
+        MARC::Field->new('245', '', '', 'a' => 'Title')
+    );
+    my $records = [$marc_record];
+    ok($indexer->update_index(undef, $records), 'Update Index');
 
-    skip 'Elasticsearch configuration not available', 1
-        if $@;
-
-    ok( $indexer->update_index(undef, $records), 'Update Index' );
-}
+    is(
+        $indexer->drop_index(),
+        Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_RECREATE_REQUIRED(),
+        'Dropping the index'
+    );
+};
