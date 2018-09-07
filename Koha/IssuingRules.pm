@@ -182,7 +182,8 @@ sub guess_article_requestable_itemtypes {
     foreach my $rule ( $rules->as_list ) {
         $res->{ $rule->itemtype } = 1;
     }
-    $cache->set_in_cache(GUESSED_ITEMTYPES_KEY, $res);
+    $last_article_requestable_guesses->{$key} = $res;
+    $cache->set_in_cache(GUESSED_ITEMTYPES_KEY, $last_article_requestable_guesses);
     return $res;
 }
 
