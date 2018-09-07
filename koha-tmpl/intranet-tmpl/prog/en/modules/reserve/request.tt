@@ -508,10 +508,10 @@
 
 [% UNLESS ( patron ) %]
     [% IF ( reserveloop ) %]
-        <form name="T[% time %]" action="modrequest.pl" method="post">
+        <form name="T[% time | html %]" action="modrequest.pl" method="post">
             [% IF ( multi_hold ) %]
                 <input type = "hidden" name="multi_hold" value="1"/>
-                <input type = "hidden" name="biblionumbers" value="[% biblionumbers %]"/>
+                <input type = "hidden" name="biblionumbers" value="[% biblionumbers | html %]"/>
             [% END %]
 
             <fieldset class="rows left">
@@ -521,7 +521,7 @@
                     [% IF ( biblioloo.reserveloop ) %]
                         [% IF ( multi_hold ) %]
                             <h3>
-                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber %]">
+                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | html %]">
                                     [% biblioloo.title | html %]
                                 </a>
                             </h3>
@@ -531,7 +531,7 @@
                             [% SET branchcodes = [] %]
 
                             [% FOREACH h IN biblioloo.reserveloop %]
-                                [% branchcodes.push( h.branchcode ) %]
+                                [% branchcodes.push( h.branchcode ) | $raw %]
                             [% END %]
                             [% branchcodes = branchcodes.unique %]
 
@@ -539,11 +539,11 @@
                                 [% SET holds_by_branch = [] %]
                                 [% FOREACH h IN biblioloo.reserveloop %]
                                     [% IF h.branchcode == b %]
-                                        [% holds_by_branch.push( h ) %]
+                                        [% holds_by_branch.push( h ) | $raw %]
                                     [% END %]
                                 [% END %]
                                 <fieldset>
-                                    <legend>[% Branches.GetName( b ) %]</legend>
+                                    <legend>[% Branches.GetName( b ) | html %]</legend>
                                     [% INCLUDE holds_table.inc holds=holds_by_branch %]
                                 </fieldset>
                             [% END %]
@@ -552,7 +552,7 @@
 
                             [% FOREACH h IN biblioloo.reserveloop %]
                                 [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                [% itemtypes_all.push( hold_itemtype ) %]
+                                [% itemtypes.push( hold_itemtype ) | $raw %]
                             [% END %]
                             [% itemtypes = itemtypes.unique %]
 
@@ -561,13 +561,13 @@
                                 [% FOREACH h IN biblioloo.reserveloop %]
                                     [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
                                     [% IF hold_itemtype == i %]
-                                        [% holds_by_itemtype.push( h ) %]
+                                        [% holds_by_itemtype.push( h ) | $raw %]
                                     [% END %]
                                 [% END %]
 
                                 <fieldset>
                                     [% IF i %]
-                                        <legend>[% ItemTypes.GetDescription( i ) %]</legend>
+                                        <legend>[% ItemTypes.GetDescription( i ) | html %]</legend>
                                     [% ELSE %]
                                         <legend>Any item type</legend>
                                     [% END %]
@@ -578,31 +578,31 @@
                             [% SET branchcodes = [] %]
 
                             [% FOREACH h IN biblioloo.reserveloop %]
-                                [% branchcodes.push( h.branchcode ) %]
+                                [% branchcodes.push( h.branchcode ) | $raw %]
                             [% END %]
                             [% branchcodes = branchcodes.unique %]
 
                             [% FOREACH b IN branchcodes.sort %]
                                 <fieldset class="contrast">
-                                    <legend>[% Branches.GetName( b ) %]</legend>
+                                    <legend>[% Branches.GetName( b ) | html %]</legend>
                                     [% SET holds_by_branch = [] %]
                                     [% FOREACH h IN biblioloo.reserveloop %]
                                         [% IF h.branchcode == b %]
-                                            [% holds_by_branch.push( h ) %]
+                                            [% holds_by_branch.push( h ) | $raw %]
                                         [% END %]
                                     [% END %]
 
                                     [% SET itemtypes = [] %]
                                     [% FOREACH h IN holds_by_branch %]
                                         [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
-                                        [% itemtypes.push( hold_itemtype ) %]
+                                        [% itemtypes.push( hold_itemtype ) | $raw %]
                                     [% END %]
                                     [% itemtypes = itemtypes.unique %]
 
                                     [% FOREACH i IN itemtypes.sort %]
                                         <fieldset class="standard">
                                             [% IF i %]
-                                                <legend>[% ItemTypes.GetDescription( i ) %]</legend>
+                                                <legend>[% ItemTypes.GetDescription( i ) | html %]</legend>
                                             [% ELSE %]
                                                 <legend>Any item type</legend>
                                             [% END %]
@@ -611,7 +611,7 @@
                                             [% FOREACH h IN holds_by_branch %]
                                                 [% SET hold_itemtype = h.object.item.effective_itemtype || h.itemtype %]
                                                 [% IF hold_itemtype == i %]
-                                                    [% holds_by_itemtype.push( h ) %]
+                                                    [% holds_by_itemtype.push( h ) | $raw %]
                                                 [% END %]
                                             [% END %]
                                             [% INCLUDE holds_table.inc holds=holds_by_itemtype %]
