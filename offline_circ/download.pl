@@ -27,8 +27,7 @@ use C4::Context;
 use C4::Koha;
 
 my $query = new CGI;
-my ( $template, $loggedinuser, $cookie, $flags ) =
-  checkauth( $query, undef, { circulate => "circulate_remaining_permissions" },
+checkauth( $query, undef, { circulate => "circulate_remaining_permissions" },
     "intranet" );
 
 my $page     = $query->param('page') || 0;
