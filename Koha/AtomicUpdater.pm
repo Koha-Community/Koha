@@ -26,6 +26,8 @@ use Git;
 use YAML::XS;
 use File::Slurp;
 
+use C4::Installer;
+
 use Koha::Database;
 use Koha::Cache;
 use Koha::AtomicUpdate;
