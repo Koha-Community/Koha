@@ -16358,6 +16358,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 7534 - Let libraries have configuration for pickup locations)\n";
 }
 
+$DBversion = '18.06.00.025';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('KohaManualBaseURL','https://koha-community.org/manual/','','Where is the Koha manual/documentation located?','Free'),
+        ('KohaManualLanguage','en','en|ar|cs|es|de|fr|it|pt_BR|tr|zh_TW','What is the language of the online manual you want to use?','Choice')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19817: Add pref KohaManualLanguage and KohaManualBaseURL)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
