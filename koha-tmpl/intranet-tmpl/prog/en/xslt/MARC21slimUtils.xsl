@@ -448,6 +448,17 @@
     </xsl:template>
     <!-- /koha-suomi: lehden numero -->
 
+    <!-- koha-suomi: ilmestymistiheys -->
+    <xsl:template name="show-curr-pub-freq">
+      <xsl:if test="//marc:datafield[@tag=310]/marc:subfield[@code='a']">
+	<span class="results_summary curr_pub_freq">
+	  <span class="label">Current publication frequency: </span>
+	<xsl:value-of select="//marc:datafield[@tag=310]/marc:subfield[@code='a']"/>
+	</span>
+      </xsl:if>
+    </xsl:template>
+    <!-- /koha-suomi: ilmestymistiheys -->
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.

@@ -419,6 +419,8 @@
             </xsl:call-template>
         </xsl:if>
 
+	<xsl:call-template name="show-curr-pub-freq"/> <!-- koha-suomi: ilmestymistiheys -->
+
         <!-- Publisher info and RDA related info from tags 260, 264 -->
         <xsl:choose>
             <xsl:when test="marc:datafield[@tag=264]">
