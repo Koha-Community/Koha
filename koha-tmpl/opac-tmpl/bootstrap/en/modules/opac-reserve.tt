@@ -221,7 +221,7 @@
 
 
                                                     [% UNLESS ( singleBranchMode ) %]
-                                                        [% IF ( bibitemloo.holdable && choose_branch ) %]
+                                                        [% IF ( bibitemloo.holdable && Koha.Preference('OPACAllowUserToChooseBranch')) %]
                                                             <li class="branch">
                                                                 <label for="branch_[% bibitemloo.biblionumber | html %]">Pick up location:</label>
                                                                 [% UNLESS ( bibitemloo.holdable ) %]
@@ -248,7 +248,7 @@
                                                                     [% END %]
                                                                 [% END # / UNLESS bibitemloo.holdable %]
                                                             </li>
-                                                        [% END # / IF bibitemloo.holdable && choose_branch %]
+                                                        [% END # / IF bibitemloo.holdable && Koha.Preference('OPACAllowUserToChooseBranch') %]
                                                     [% END # / UNLESS singleBranchMode %]
                                                 </ul>
 

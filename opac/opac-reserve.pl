@@ -140,11 +140,6 @@ if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
 my $branch = $query->param('branch') || $patron->branchcode || C4::Context->userenv->{branch} || '' ;
 $template->param( branch => $branch );
 
-# Is the person allowed to choose their branch
-my $OPACChooseBranch = (C4::Context->preference("OPACAllowUserToChooseBranch")) ? 1 : 0;
-
-$template->param( choose_branch => $OPACChooseBranch);
-
 #
 #
 # Build hashes of the requested biblio(item)s and items.
@@ -240,7 +235,7 @@ if ( $query->param('place_reserve') ) {
         my $canreserve = 0;
 
         my $singleBranchMode = Koha::Libraries->search->count == 1;
-        if ( $singleBranchMode || !$OPACChooseBranch )
+        if ( $singleBranchMode || ! C4::Context->preference("OPACAllowUserToChooseBranch") )
         {    # single branch mode or disabled user choosing
             $branch = $patron->branchcode;
         }
