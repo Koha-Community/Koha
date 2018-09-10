@@ -731,6 +731,9 @@ my $changed_framework = $input->param('changed_framework');
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not( defined $frameworkcode) and $op ne 'addbiblio' );
 
+$frameworkcode = &GetFrameworkCode($parentbiblio)
+    if ( $parentbiblio and not(defined $frameworkcode) and $op ne 'addbiblio' );
+
 if ($frameworkcode eq 'FA'){
     $userflags = 'fast_cataloging';
 }
@@ -822,6 +825,9 @@ if ($parentbiblio) {
     my $marcflavour = C4::Context->preference('marcflavour');
     $record = MARC::Record->new();
     SetMarcUnicodeFlag($record, $marcflavour);
+    my @tmpfields = $record->fields('...');
+    $record->delete_fields(@tmpfields);
+    $record->leader('');
     my $hostfield = prepare_host_field($parentbiblio,$marcflavour);
     if ($hostfield) {
         $record->append_fields($hostfield);
