@@ -700,6 +700,25 @@ sub enforceField001FromNewBiblionumber {
     ModBiblio( $record, $biblionumber, $frameworkcode );
 }
 
+=head hostFrameworkToComponentFramework
+
+Change a biblio framework code to another, based on the value in
+AddbiblioHostFrameworkToComponentFramework preference.
+The preference is eg. "NUO=>ONU,KIR=>OSA,SR=>MUO",
+which would change eg. "NUO" to "ONU" or "KIR" to "OSA"
+=cut
+sub hostFrameworkToComponentFramework {
+    my ($frameworkcode) = @_;
+    my $cnv = C4::Context->preference('AddbiblioHostFrameworkToComponentFramework');
+
+    my @tmp = split(/,/, $cnv);
+    foreach my $t (@tmp) {
+	my @x = split(/=>/, $t);
+	return $x[1] if ($frameworkcode eq $x[0]);
+    }
+    return $frameworkcode;
+}
+
 # ========================
 #          MAIN
 #=========================
@@ -731,7 +750,7 @@ my $changed_framework = $input->param('changed_framework');
 $frameworkcode = &GetFrameworkCode($biblionumber)
   if ( $biblionumber and not( defined $frameworkcode) and $op ne 'addbiblio' );
 
-$frameworkcode = &GetFrameworkCode($parentbiblio)
+$frameworkcode = hostFrameworkToComponentFramework(&GetFrameworkCode($parentbiblio))
     if ( $parentbiblio and not(defined $frameworkcode) and $op ne 'addbiblio' );
 
 if ($frameworkcode eq 'FA'){
