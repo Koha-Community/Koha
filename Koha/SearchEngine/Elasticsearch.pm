@@ -80,7 +80,8 @@ sub get_elasticsearch {
         $self->{elasticsearch} = Search::Elasticsearch->new(
             client => "5_0::Direct",
             nodes => $conf->{nodes},
-            cxn_pool => 'Sniff'
+            cxn_pool => 'Sniff',
+            request_timeout => 60
         );
     }
     return $self->{elasticsearch};
@@ -351,8 +352,10 @@ sub marc_records_to_documents {
                 }
             }
             else {
-                my $subfields_mappings = $data_fields_rules->{$field->tag()};
-                if ($subfields_mappings) {
+                my $data_field_rules = $data_fields_rules->{$field->tag()};
+
+                if ($data_field_rules) {
+                    my $subfields_mappings = $data_field_rules->{subfields};
                     my $wildcard_mappings = $subfields_mappings->{'*'};
                     foreach my $subfield ($field->subfields()) {
                         my ($code, $data) = @{$subfield};
@@ -362,6 +365,23 @@ sub marc_records_to_documents {
                         }
                         if (@{$mappings}) {
                             _process_mappings($mappings, $data, $record_document);
+                        }
+                    }
+
+                    my $subfields_join_mappings = $data_field_rules->{subfields_join};
+                    if ($subfields_join_mappings) {
+                        foreach my $subfields_group (keys %{$subfields_join_mappings}) {
+                            # Map each subfield to values, remove empty values, join with space
+                            my $data = join(
+                                ' ',
+                                grep(
+                                    $_,
+                                    map { join(' ', $field->subfield($_)) } split(//, $subfields_group)
+                                )
+                            );
+                            if ($data) {
+                                _process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document);
+                            }
                         }
                     }
                 }
@@ -466,7 +486,7 @@ sub get_marc_mapping_rules {
         }
         return @mappings;
     };
-    my $field_spec_regexp = qr/^([0-9]{3})([0-9a-z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
+    my $field_spec_regexp = qr/^([0-9]{3})([()0-9a-z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
     my $leader_regexp = qr/^leader(?:_\/(\d+(?:-\d+)?))?$/;
     my $rules = {
         'leader' => [],
@@ -491,19 +511,63 @@ sub get_marc_mapping_rules {
 
         if ($marc_field =~ $field_spec_regexp) {
             my $field_tag = $1;
-            my $subfields = defined $2 ? $2 : '*';
+
+            my @subfields;
+            my @subfield_groups;
+            # Parse and separate subfields form subfield groups
+            if (defined $2) {
+                my $subfield_group = '';
+                my $open_group = 0;
+
+                foreach my $token (split //, $2) {
+                    if ($token eq "(") {
+                        if ($open_group) {
+                            die("Unmatched opening parenthesis for $marc_field");
+                        }
+                        else {
+                            $open_group = 1;
+                        }
+                    }
+                    elsif ($token eq ")") {
+                        if ($open_group) {
+                            if ($subfield_group) {
+                                push @subfield_groups, $subfield_group;
+                                $subfield_group = '';
+                            }
+                            $open_group = 0;
+                        }
+                        else {
+                            die("Unmatched closing parenthesis for $marc_field");
+                        }
+                    }
+                    elsif ($open_group) {
+                        $subfield_group .= $token;
+                    }
+                    else {
+                        push @subfields, $token;
+                    }
+                }
+            }
+            else {
+                push @subfields, '*';
+            }
+
             my $range = defined $3 ? $3 : undef;
+            my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
+
             if ($field_tag < 10) {
                 $rules->{control_fields}->{$field_tag} //= [];
-                my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
                 push @{$rules->{control_fields}->{$field_tag}}, @mappings;
             }
             else {
                 $rules->{data_fields}->{$field_tag} //= {};
-                foreach my $subfield (split //, $subfields) {
-                    $rules->{data_fields}->{$field_tag}->{$subfield} //= [];
-                    my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
-                    push @{$rules->{data_fields}->{$field_tag}->{$subfield}}, @mappings;
+                foreach my $subfield (@subfields) {
+                    $rules->{data_fields}->{$field_tag}->{subfields}->{$subfield} //= [];
+                    push @{$rules->{data_fields}->{$field_tag}->{subfields}->{$subfield}}, @mappings;
+                }
+                foreach my $subfield_group (@subfield_groups) {
+                    $rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group} //= [];
+                    push @{$rules->{data_fields}->{$field_tag}->{subfields_join}->{$subfield_group}}, @mappings;
                 }
             }
         }
