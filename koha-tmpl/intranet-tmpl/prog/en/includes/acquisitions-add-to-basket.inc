@@ -16,6 +16,7 @@
         <li><a href="/cgi-bin/koha/acqui/newordersubscription.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">From a subscription</a></li>
         <li><a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">From a new (empty) record</a></li>
         <li><a href="/cgi-bin/koha/acqui/z3950_search.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">From an external source</a></li>
+        <li><a href="/cgi-bin/koha/tools/stage-marc-import.pl?basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]"> From a new file</a></li>
         <li><a href="/cgi-bin/koha/acqui/addorderiso2709.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]"> From a staged file</a></li>
         [% IF ( CAN_user_circulate ) %]<li><a href="/cgi-bin/koha/circ/reserveratios.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">From titles with highest hold ratios</a></li>[% END %]
       </ul>

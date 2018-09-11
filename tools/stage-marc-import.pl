@@ -58,6 +58,8 @@ my $record_type                = $input->param('record_type');
 my $encoding                   = $input->param('encoding') || 'UTF-8';
 my $format                     = $input->param('format') || 'ISO2709';
 my $marc_modification_template = $input->param('marc_modification_template_id');
+my $basketno                   = $input->param('basketno');
+my $booksellerid               = $input->param('booksellerid');
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
@@ -74,6 +76,8 @@ $template->param(
     SCRIPT_NAME => '/cgi-bin/koha/tools/stage-marc-import.pl',
     uploadmarc  => $fileID,
     record_type => $record_type,
+    basketno => $basketno,
+    booksellerid => $booksellerid,
 );
 
 my %cookies = parse CGI::Cookie($cookie);
@@ -181,7 +185,9 @@ if ($completedJobID) {
         checked_matches => $checked_matches,
         matcher_failed  => $matcher_failed,
         matcher_code    => $matcher_code,
-        import_batch_id => $batch_id
+        import_batch_id => $batch_id,
+        booksellerid    => $booksellerid,
+        basketno        => $basketno
     };
     if ($runinbackground) {
         $job->finish($results);
@@ -195,7 +201,9 @@ if ($completedJobID) {
                          checked_matches => $checked_matches,
                          matcher_failed => $matcher_failed,
                          matcher_code => $matcher_code,
-                         import_batch_id => $batch_id
+                         import_batch_id => $batch_id,
+                         booksellerid => $booksellerid,
+                         basketno => $basketno
                         );
     }
 

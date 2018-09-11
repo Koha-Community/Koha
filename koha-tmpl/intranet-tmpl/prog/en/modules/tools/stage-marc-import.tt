@@ -41,6 +41,9 @@
 	<li>[% total | html %]  records in file</li>
 	<li>[% import_errors | html %] records not staged because of MARC error</li>
 	<li>[% staged | html %] records staged</li>
+[% IF basketno && booksellerid %]
+    <li><a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% import_batch_id | html %]&basketno=[% basketno | html %]&booksellerid=[% booksellerid | html %]">Add staged files to basket</a></li>
+[% END %]
     [% IF ( checked_matches ) %]
 	<li>[% matched | html %] records with at least one match in catalog per matching rule 
         &quot;[% matcher_code | html %]&quot;</li>
@@ -90,6 +93,10 @@
 </form>
 
     <form method="post" id="processfile" action="[% SCRIPT_NAME | html %]" enctype="multipart/form-data">
+[% IF basketno && booksellerid %]
+    <input type="hidden" name="basketno" id="basketno" value="[% basketno | html %]" />
+    <input type="hidden" name="booksellerid" id="booksellerid" value="[% booksellerid | html %]" />
+[% END %]
 <fieldset class="rows">
         <input type="hidden" name="uploadedfileid" id="uploadedfileid" value="" />
         <input type="hidden" name="runinbackground" id="runinbackground" value="" />
