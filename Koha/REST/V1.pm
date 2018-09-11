@@ -45,7 +45,12 @@ sub startup {
     });
 
     # Force charset=utf8 in Content-Type header for JSON responses
-    $self->types->type(json => 'application/json; charset=utf8');
+    $self->types->type( json    => 'application/json; charset=utf8' );
+    # MARC-related types
+    $self->types->type( marcxml => 'application/marcxml+xml' );
+    $self->types->type( mij     => 'application/marc-in-json' );
+    $self->types->type( marc    => 'application/marc' );
+
 
     my $secret_passphrase = C4::Context->config('api_secret_passphrase');
     if ($secret_passphrase) {
