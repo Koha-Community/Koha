@@ -464,6 +464,14 @@ System group that will own Koha's files.
 Your prefix that comes in Finna.fi URLs before biblionumbers. Must end
 in a dot.
 
+=item HETULA_URL
+
+URL of your Hetula server.
+
+=item HETULA_ORGANIZATION
+
+Name of the organization that you use with Hetula.
+
 =back
 
 =cut
@@ -495,6 +503,8 @@ my %config_defaults = (
   'KOHA_USER'         => 'koha',
   'KOHA_GROUP'        => 'koha',
   'FINNA_PREFIX'      => '',
+  'HETULA_URL'        => '',
+  'HETULA_ORGANIZATION' => '',
   'MERGE_SERVER_HOST' => 'localhost',
   'MERGE_SERVER_PORT' => '11001',
   'PAZPAR2_HOST' => 'localhost',
@@ -1337,6 +1347,12 @@ database to be used by Koha);
 
   $msg = q(If you will integrate with Finna.fi, please specify your Finna prefix);
   $config{'FINNA_PREFIX'} = _get_value('FINNA_PREFIX', $msg, $defaults->{'FINNA_PREFIX'}, $valid_values, $install_log_values);
+
+  $msg = q(If you use Hetula, please specify its URL);
+  $config{'HETULA_URL'} = _get_value('HETULA_URL', $msg, $defaults->{'HETULA_URL'}, $valid_values, $install_log_values);
+
+  $msg = q(If you use Hetula, please specify the organization name used with it);
+  $config{'HETULA_ORGANIZATION'} = _get_value('HETULA_ORGANIZATION', $msg, $defaults->{'HETULA_ORGANIZATION'}, $valid_values, $install_log_values);
 
     print "\n\n";
 
