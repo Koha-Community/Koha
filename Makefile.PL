@@ -459,6 +459,11 @@ System user account that will own Koha's files.
 
 System group that will own Koha's files.
 
+=item FINNA_PREFIX
+
+Your prefix that comes in Finna.fi URLs before biblionumbers. Must end
+in a dot.
+
 =back
 
 =cut
@@ -489,6 +494,7 @@ my %config_defaults = (
   'ZEBRA_SRU_AUTHORITIES_PORT'    => '9999',
   'KOHA_USER'         => 'koha',
   'KOHA_GROUP'        => 'koha',
+  'FINNA_PREFIX'      => '',
   'MERGE_SERVER_HOST' => 'localhost',
   'MERGE_SERVER_PORT' => '11001',
   'PAZPAR2_HOST' => 'localhost',
@@ -1328,6 +1334,9 @@ Please specify the password of the user that owns the
 database to be used by Koha);
       $config{'TEST_DB_PASS'} = _get_value('TEST_DB_PASS', $msg, $defaults->{'TEST_DB_PASS'}, $valid_values, $install_log_values);
   }
+
+  $msg = q(If you will integrate with Finna.fi, please specify your Finna prefix);
+  $config{'FINNA_PREFIX'} = _get_value('FINNA_PREFIX', $msg, $defaults->{'FINNA_PREFIX'}, $valid_values, $install_log_values);
 
     print "\n\n";
 
