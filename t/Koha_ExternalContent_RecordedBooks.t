@@ -8,7 +8,7 @@ use Test::MockModule;
 
 use Module::Load::Conditional qw( can_load );
 
-plan tests => 5;
+plan tests => 3;
 
 SKIP: {
     skip "cannot find WebService::ILS::RecordedBooks::Partner", 5
@@ -25,7 +25,8 @@ SKIP: {
     my $client = Koha::ExternalContent::RecordedBooks->new();
     local $@;
     eval { $client->search({query => "art"}) };
-    ok($@ =~ /not authorized/, "Invalid RecordedBooks partner credentials");
+
+    ok($@ =~ /This endpoint can be called by authorized trusted app or trusted partner only/, "Invalid RecordedBooks partner credentials");
 
     SKIP: {
         skip "no RecordedBooks partner credentials", 1 unless $ENV{RECORDEDBOOKS_TEST_LIBRARY_ID};
