@@ -96,6 +96,9 @@ sub do_checkout {
                     $noerror = 0;
                     last;
                 }
+             } elsif ($confirmation eq 'PREVISSUE') {
+                $self->screen_msg("This item was previously checked out by you");
+                last;
             } else {
                 # We've been returned a case other than those above
                 $self->screen_msg("Item cannot be issued: $confirmation");
