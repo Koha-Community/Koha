@@ -286,9 +286,9 @@
                                         [% END %]
                                         <form method="post" id="picture-upload" style="display:none;" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
                                             [% IF ( patron.image ) %]
-                                                <div class="hint">To update the image for [% patron.title | html %] [% patron.surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.</div>
+                                                <div class="hint">To update the image for [% patron.title %] [% patron.firstname | html %] [% patron.surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.</div>
                                             [% ELSE %]
-                                                <div class="hint">[% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title | html %] [% patron.surname | html %], enter the name of an image file to upload.</div>
+                                                <div class="hint">[% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %], enter the name of an image file to upload.</div>
                                             [% END %]
                                             <p>Only PNG, GIF, JPEG, XPM formats are supported.</p>
                                             <label for="uploadfile">Select the file to upload: </label>
@@ -884,18 +884,6 @@
                 ],
                 "bPaginate": false
             }));
-            [% IF ( patron.image ) %]
-                $('#delpicture').click(function(){
-                     return confirm(_("Are you sure you want to delete this patron image? This cannot be undone."));
-                });
-                $('#manage-patron-image').find("input[value*=Upload]").click(function(){
-                    if($("#uploadfile").val() == ""){
-                        alert(_("Please choose a file to upload"));
-                        return false;
-                    }
-                    return confirm(_("Are you sure you want to replace the current patron image? This cannot be undone."));
-                });
-            [% END %]
 
             $("#suspend_until").datepicker({
                 onClose: function(dateText, inst) {

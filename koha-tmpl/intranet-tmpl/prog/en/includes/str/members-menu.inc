@@ -2,7 +2,7 @@
 [% USE Koha %]
 [% USE Categories %]
 
-<script type="text/javascript">
+<script>
     var advsearch = "[% advsearch | html %]";
     var destination = "[% destination | html %]";
 
@@ -19,5 +19,18 @@
             [% SET number_of_adult_categories = adult_categories.count %]
             number_of_adult_categories = [% number_of_adult_categories | html %]
         [% END %]
+    [% END %]
+
+    [% IF ( patron.image ) %]
+        $("body").on("click", "#delpicture", function(){
+             return confirm(_("Are you sure you want to delete this patron image? This cannot be undone."));
+        });
+        $('#manage-patron-image').find("input[value*=Upload]").click(function(){
+            if($("#uploadfile").val() == ""){
+                alert(_("Please choose a file to upload"));
+                return false;
+            }
+            return confirm(_("Are you sure you want to replace the current patron image? This cannot be undone."));
+        });
     [% END %]
 </script>

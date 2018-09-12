@@ -1737,15 +1737,16 @@ dd {
 }
 
 .patronimage {
+    border: 1px solid #EEE;
     display: block;
     max-width: 160px;
+    margin: auto;
     opacity: 1;
     transition: .2s ease;
 
-    .empty {
+    &.empty {
         background: transparent url( "../img/patron-blank.min.svg" ) center 5px no-repeat;
         height: 125px;
-        margin: .3em 0 .3em .3em;
         padding: 0;
         width: 80%;
     }
