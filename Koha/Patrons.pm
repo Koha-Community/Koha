@@ -236,6 +236,128 @@ sub delete {
     return $patrons_deleted;
 }
 
+=head3 search_unsubscribed
+
+    Koha::Patrons->search_unsubscribed;
+
+    Returns a set of Koha patron objects for patrons that recently
+    unsubscribed and are not locked (candidates for locking).
+    Depends on UnsubscribeReflectionDelay.
+
+=cut
+
+sub search_unsubscribed {
+    my ( $class ) = @_;
+
+    my $delay = C4::Context->preference('UnsubscribeReflectionDelay');
+    if( !defined($delay) || $delay eq q{} ) {
+        # return empty set
+        return $class->search({ borrowernumber => undef });
+    }
+    my $parser = Koha::Database->new->schema->storage->datetime_parser;
+    my $dt = dt_from_string()->subtract( days => $delay );
+    my $str = $parser->format_datetime($dt);
+    my $fails = C4::Context->preference('FailedLoginAttempts') || 0;
+    my $cond = [ undef, 0, 1..$fails-1 ]; # NULL, 0, 1..fails-1 (if fails>0)
+    return $class->search(
+        {
+            'patron_consents.refused_on' => { '<=' => $str },
+            'login_attempts' => $cond,
+        },
+        { join => 'patron_consents' },
+    );
+}
+
+=head3 search_anonymize_candidates
+
+    Koha::Patrons->search_anonymize_candidates({ locked => 1 });
+
+    Returns a set of Koha patron objects for patrons whose account is expired
+    and locked (if parameter set). These are candidates for anonymizing.
+    Depends on PatronAnonymizeDelay.
+
+=cut
+
+sub search_anonymize_candidates {
+    my ( $class, $params ) = @_;
+
+    my $delay = C4::Context->preference('PatronAnonymizeDelay');
+    if( !defined($delay) || $delay eq q{} ) {
+        # return empty set
+        return $class->search({ borrowernumber => undef });
+    }
+    my $cond = {};
+    my $parser = Koha::Database->new->schema->storage->datetime_parser;
+    my $dt = dt_from_string()->subtract( days => $delay );
+    my $str = $parser->format_datetime($dt);
+    $cond->{dateexpiry} = { '<=' => $str };
+    $cond->{flgAnonymized} = [ undef, 0 ]; # not yet done
+    if( $params->{locked} ) {
+        my $fails = C4::Context->preference('FailedLoginAttempts');
+        $cond->{login_attempts} = [ -and => { '!=' => undef }, { -not_in => [0, 1..$fails-1 ] } ]; # -not_in does not like undef
+    }
+    return $class->search( $cond );
+}
+
+=head3 search_anonymized
+
+    Koha::Patrons->search_anonymized;
+
+    Returns a set of Koha patron objects for patron accounts that have been
+    anonymized before and could be removed.
+    Depends on PatronRemovalDelay.
+
+=cut
+
+sub search_anonymized {
+    my ( $class ) = @_;
+
+    my $delay = C4::Context->preference('PatronRemovalDelay');
+    if( !defined($delay) || $delay eq q{} ) {
+        # return empty set
+        return $class->search({ borrowernumber => undef });
+    }
+    my $cond = {};
+    my $parser = Koha::Database->new->schema->storage->datetime_parser;
+    my $dt = dt_from_string()->subtract( days => $delay );
+    my $str = $parser->format_datetime($dt);
+    $cond->{dateexpiry} = { '<=' => $str };
+    $cond->{flgAnonymized} = 1;
+    return $class->search( $cond );
+}
+
+=head3 lock
+
+    Koha::Patrons->search({ some filters })->lock({ expire => 1, remove => 1 })
+
+    Lock the passed set of patron objects. Optionally expire and remove holds.
+    Wrapper around Koha::Patron->lock.
+
+=cut
+
+sub lock {
+    my ( $self, $params ) = @_;
+    while( my $patron = $self->next ) {
+        $patron->lock($params);
+    }
+}
+
+=head3 anonymize
+
+    Koha::Patrons->search({ some filters })->anonymize;
+
+    Anonymize passed set of patron objects.
+    Wrapper around Koha::Patron->anonymize.
+
+=cut
+
+sub anonymize {
+    my ( $self ) = @_;
+    while( my $patron = $self->next ) {
+        $patron->anonymize;
+    }
+}
+
 =head3 _type
 
 =cut

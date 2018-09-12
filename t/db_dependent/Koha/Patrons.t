@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 34;
+use Test::More tests => 39;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -1625,3 +1625,165 @@ subtest '->set_password' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+$schema->storage->txn_begin;
+subtest 'search_unsubscribed' => sub {
+    plan tests => 4;
+
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 3 );
+    t::lib::Mocks::mock_preference( 'UnsubscribeReflectionDelay', '' );
+    is( Koha::Patrons->search_unsubscribed->count, 0, 'Empty delay should return empty set' );
+
+    my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
+
+    t::lib::Mocks::mock_preference( 'UnsubscribeReflectionDelay', 0 );
+    Koha::Patron::Consents->delete; # for correct counts
+    Koha::Patron::Consent->new({ borrowernumber => $patron1->borrowernumber, type => 'GDPR_PROCESSING',  refused_on => dt_from_string })->store;
+    is( Koha::Patrons->search_unsubscribed->count, 1, 'Find patron1' );
+
+    # Add another refusal but shift the period
+    t::lib::Mocks::mock_preference( 'UnsubscribeReflectionDelay', 2 );
+    Koha::Patron::Consent->new({ borrowernumber => $patron2->borrowernumber, type => 'GDPR_PROCESSING',  refused_on => dt_from_string->subtract(days=>2) })->store;
+    is( Koha::Patrons->search_unsubscribed->count, 1, 'Find patron2 only' );
+
+    # Try another (special) attempts setting
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 0 );
+    # Lockout is now disabled
+    # Patron2 still matches: refused earlier, not locked
+    is( Koha::Patrons->search_unsubscribed->count, 1, 'Lockout disabled' );
+};
+
+subtest 'search_anonymize_candidates' => sub {
+    plan tests => 5;
+    my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
+    $patron1->flgAnonymized(0);
+    $patron1->dateexpiry( dt_from_string->add(days => 1) )->store;
+    $patron2->flgAnonymized(undef);
+    $patron2->dateexpiry( dt_from_string->add(days => 1) )->store;
+
+    t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', q{} );
+    is( Koha::Patrons->search_anonymize_candidates->count, 0, 'Empty set' );
+
+    t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', 0 );
+    my $cnt = Koha::Patrons->search_anonymize_candidates->count;
+    $patron1->dateexpiry( dt_from_string->subtract(days => 1) )->store;
+    $patron2->dateexpiry( dt_from_string->subtract(days => 3) )->store;
+    is( Koha::Patrons->search_anonymize_candidates->count, $cnt+2, 'Delay 0' );
+
+    t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', 2 );
+    $patron1->dateexpiry( dt_from_string->add(days => 1) )->store;
+    $patron2->dateexpiry( dt_from_string->add(days => 1) )->store;
+    $cnt = Koha::Patrons->search_anonymize_candidates->count;
+    $patron1->dateexpiry( dt_from_string->subtract(days => 1) )->store;
+    $patron2->dateexpiry( dt_from_string->subtract(days => 3) )->store;
+    is( Koha::Patrons->search_anonymize_candidates->count, $cnt+1, 'Delay 2' );
+
+    t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', 4 );
+    $patron1->dateexpiry( dt_from_string->add(days => 1) )->store;
+    $patron2->dateexpiry( dt_from_string->add(days => 1) )->store;
+    $cnt = Koha::Patrons->search_anonymize_candidates->count;
+    $patron1->dateexpiry( dt_from_string->subtract(days => 1) )->store;
+    $patron2->dateexpiry( dt_from_string->subtract(days => 3) )->store;
+    is( Koha::Patrons->search_anonymize_candidates->count, $cnt, 'Delay 4' );
+
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 3 );
+    $patron1->dateexpiry( dt_from_string->subtract(days => 5) )->store;
+    $patron1->login_attempts(0)->store;
+    $patron2->dateexpiry( dt_from_string->subtract(days => 5) )->store;
+    $patron2->login_attempts(0)->store;
+    $cnt = Koha::Patrons->search_anonymize_candidates({locked => 1})->count;
+    $patron1->login_attempts(3)->store;
+    is( Koha::Patrons->search_anonymize_candidates({locked => 1})->count,
+        $cnt+1, 'Locked flag' );
+};
+
+subtest 'search_anonymized' => sub {
+    plan tests => 3;
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    t::lib::Mocks::mock_preference( 'PatronRemovalDelay', q{} );
+    is( Koha::Patrons->search_anonymized->count, 0, 'Empty set' );
+
+    t::lib::Mocks::mock_preference( 'PatronRemovalDelay', 1 );
+    $patron1->dateexpiry( dt_from_string );
+    $patron1->flgAnonymized(0)->store;
+    my $cnt = Koha::Patrons->search_anonymized->count;
+    $patron1->flgAnonymized(1)->store;
+    is( Koha::Patrons->search_anonymized->count, $cnt, 'Number unchanged' );
+    $patron1->dateexpiry( dt_from_string->subtract(days => 1) )->store;
+    is( Koha::Patrons->search_anonymized->count, $cnt+1, 'Found patron1' );
+};
+
+subtest 'lock' => sub {
+    plan tests => 8;
+
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $hold = $builder->build_object({
+        class => 'Koha::Holds',
+        value => { borrowernumber => $patron1->borrowernumber },
+    });
+
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 3 );
+    my $expiry = dt_from_string->add(days => 1);
+    $patron1->dateexpiry( $expiry );
+    $patron1->lock;
+    is( $patron1->login_attempts, Koha::Patron::ADMINISTRATIVE_LOCKOUT, 'Check login_attempts' );
+    is( $patron1->dateexpiry, $expiry, 'Not expired yet' );
+    is( $patron1->holds->count, 1, 'No holds removed' );
+
+    $patron1->lock({ expire => 1, remove => 1});
+    isnt( $patron1->dateexpiry, $expiry, 'Expiry date adjusted' );
+    is( $patron1->holds->count, 0, 'Holds removed' );
+
+    # Disable lockout feature
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', q{} );
+    $patron1->login_attempts(0);
+    $patron1->dateexpiry( $expiry );
+    $patron1->store;
+    $patron1->lock;
+    is( $patron1->login_attempts, Koha::Patron::ADMINISTRATIVE_LOCKOUT, 'Check login_attempts' );
+
+    # Trivial wrapper test (Koha::Patrons->lock)
+    $patron1->login_attempts(0)->store;
+    Koha::Patrons->search({ borrowernumber => [ $patron1->borrowernumber, $patron2->borrowernumber ] })->lock;
+    $patron1->discard_changes; # refresh
+    $patron2->discard_changes;
+    is( $patron1->login_attempts, Koha::Patron::ADMINISTRATIVE_LOCKOUT, 'Check login_attempts patron 1' );
+    is( $patron2->login_attempts, Koha::Patron::ADMINISTRATIVE_LOCKOUT, 'Check login_attempts patron 2' );
+};
+
+subtest 'anonymize' => sub {
+    plan tests => 9;
+
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
+
+    # First try patron with issues
+    my $issue = $builder->build_object({ class => 'Koha::Checkouts', value => { borrowernumber => $patron2->borrowernumber } });
+    warning_like { $patron2->anonymize } qr/still has issues/, 'Skip patron with issues';
+    $issue->delete;
+
+    t::lib::Mocks::mock_preference( 'BorrowerMandatoryField', 'surname|email|cardnumber' );
+    my $surname = $patron1->surname; # expect change, no clear
+    my $branchcode = $patron1->branchcode; # expect skip
+    $patron1->anonymize;
+    is($patron1->flgAnonymized, 1, 'Check flag' );
+
+    is( $patron1->dateofbirth, undef, 'Birth date cleared' );
+    is( $patron1->firstname, undef, 'First name cleared' );
+    isnt( $patron1->surname, $surname, 'Surname changed' );
+    ok( $patron1->surname =~ /^\w{10}$/, 'Mandatory surname randomized' );
+    is( $patron1->branchcode, $branchcode, 'Branch code skipped' );
+
+    # Test wrapper in Koha::Patrons
+    $patron1->surname($surname)->store; # restore
+    my $rs = Koha::Patrons->search({ borrowernumber => [ $patron1->borrowernumber, $patron2->borrowernumber ] })->anonymize;
+    $patron1->discard_changes; # refresh
+    isnt( $patron1->surname, $surname, 'Surname patron1 changed again' );
+    $patron2->discard_changes; # refresh
+    is( $patron2->firstname, undef, 'First name patron2 cleared' );
+};
+$schema->storage->txn_rollback;

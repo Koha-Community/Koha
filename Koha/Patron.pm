@@ -44,8 +44,11 @@ use Koha::Virtualshelves;
 use Koha::Club::Enrollments;
 use Koha::Account;
 use Koha::Subscription::Routinglists;
+use Koha::Token;
 
 use base qw(Koha::Object);
+
+use constant ADMINISTRATIVE_LOCKOUT => -1;
 
 our $RESULTSET_PATRON_ID_MAPPING = {
     Accountline          => 'borrowernumber',
@@ -1312,6 +1315,76 @@ sub attributes {
         borrowernumber => $self->borrowernumber,
         branchcode     => $self->branchcode,
     });
+}
+
+=head3 lock
+
+    Koha::Patrons->find($id)->lock({ expire => 1, remove => 1 });
+
+    Lock and optionally expire a patron account.
+    Remove holds and article requests if remove flag set.
+    In order to distinguish from locking by entering a wrong password, let's
+    call this an administrative lockout.
+
+=cut
+
+sub lock {
+    my ( $self, $params ) = @_;
+    $self->login_attempts( ADMINISTRATIVE_LOCKOUT );
+    if( $params->{expire} ) {
+        $self->dateexpiry( dt_from_string->subtract(days => 1) );
+    }
+    $self->store;
+    if( $params->{remove} ) {
+        $self->holds->delete;
+        $self->article_requests->delete;
+    }
+    return $self;
+}
+
+=head3 anonymize
+
+    Koha::Patrons->find($id)->anonymize;
+
+    Anonymize or clear borrower fields. Fields in BorrowerMandatoryField
+    are randomized, other personal data is cleared too.
+    Patrons with issues are skipped.
+
+=cut
+
+sub anonymize {
+    my ( $self ) = @_;
+    if( $self->_result->issues->count ) {
+        warn "Exiting anonymize: patron ".$self->borrowernumber." still has issues";
+        return;
+    }
+    my $mandatory = { map { (lc $_, 1); }
+        split /\s*\|\s*/, C4::Context->preference('BorrowerMandatoryField') };
+    $mandatory->{userid} = 1; # needed since sub store does not clear field
+    my @columns = $self->_result->result_source->columns;
+    @columns = grep { !/borrowernumber|branchcode|categorycode|^date|password|flags|updated_on|lastseen|lang|login_attempts|flgAnonymized/ } @columns;
+    push @columns, 'dateofbirth'; # add this date back in
+    foreach my $col (@columns) {
+        if( $mandatory->{lc $col} ) {
+            my $str = $self->_anonymize_column($col);
+            $self->$col($str);
+        } else {
+            $self->$col(undef);
+        }
+    }
+    $self->flgAnonymized(1)->store;
+}
+
+sub _anonymize_column {
+    my ( $self, $col ) = @_;
+    my $type = $self->_result->result_source->column_info($col)->{data_type};
+    if( $type =~ /char|text/ ) {
+        return Koha::Token->new->generate({ pattern => '\w{10}' });
+    } elsif( $type =~ /integer|int$|float|dec|double/ ) {
+        return 0;
+    } elsif( $type =~ /date|time/ ) {
+        return dt_from_string;
+    }
 }
 
 =head2 Internal methods
