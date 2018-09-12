@@ -210,7 +210,7 @@ sub anonymise_issue_history {
 
 =head3 delete
 
-    Koha::Patrons->search({ some filters here })->delete({ move => 1 });
+    Koha::Patrons->search({ some filters here })->delete({ move => 1, verbose => 1 });
 
     Delete passed set of patron objects.
     Wrapper for Koha::Patron->delete. (We do not want to bypass Koha::Patron
@@ -227,11 +227,13 @@ sub delete {
     my $patrons_deleted;
     $self->_resultset->result_source->schema->txn_do( sub {
         my ( $set, $params ) = @_;
+        my $count = $set->count;
         while( my $patron = $set->next ) {
             $patron->move_to_deleted if $params->{move};
             $patron->delete == 1 || Koha::Exceptions::Patron::FailedDelete->throw;
             $patrons_deleted++;
         }
+        warn "Deleted $count patrons\n" if $params->{verbose};
     }, $self, $params );
     return $patrons_deleted;
 }
@@ -328,33 +330,43 @@ sub search_anonymized {
 
 =head3 lock
 
-    Koha::Patrons->search({ some filters })->lock({ expire => 1, remove => 1 })
+    Koha::Patrons->search({ some filters })->lock({ expire => 1, remove => 1, verbose => 1 })
 
     Lock the passed set of patron objects. Optionally expire and remove holds.
+    Optional verbose flag is used in cron job.
     Wrapper around Koha::Patron->lock.
 
 =cut
 
 sub lock {
     my ( $self, $params ) = @_;
+    my $count = $self->count;
     while( my $patron = $self->next ) {
         $patron->lock($params);
+    }
+    if( $params->{verbose} ) {
+        warn "Locked $count patrons\n";
     }
 }
 
 =head3 anonymize
 
-    Koha::Patrons->search({ some filters })->anonymize;
+    Koha::Patrons->search({ some filters })->anonymize({ verbose => 1 });
 
     Anonymize passed set of patron objects.
+    Optional verbose flag is used in cron job.
     Wrapper around Koha::Patron->anonymize.
 
 =cut
 
 sub anonymize {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
+    my $count = $self->count;
     while( my $patron = $self->next ) {
         $patron->anonymize;
+    }
+    if( $params->{verbose} ) {
+        warn "Anonymized $count patrons\n";
     }
 }
 

@@ -305,6 +305,14 @@ if($allDebarments) {
     print "$count restrictions were deleted.\nDone with all restrictions purge.\n" if $verbose;
 }
 
+# Handle unsubscribe requests from GDPR consent form, depends on UnsubscribeReflectionDelay preference
+Koha::Patrons->search_unsubscribed->lock({ expire => 1, remove => 1, verbose => $verbose });
+# Anonymize patron data, depending on PatronAnonymizeDelay
+Koha::Patrons->search_anonymize_candidates({ locked => 1 })->anonymize({ verbose => $verbose });
+# Remove patron data, depending on PatronRemovalDelay (will raise an exception if problem encountered
+eval { Koha::Patrons->search_anonymized->delete({ move => 1, verbose => $verbose }) };
+warn $@ if $@;
+
 if( $pExpSelfReg ) {
     DeleteExpiredSelfRegs();
 }
