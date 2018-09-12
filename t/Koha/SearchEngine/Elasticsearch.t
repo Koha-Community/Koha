@@ -145,7 +145,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             suggestible => 1,
             sort => 1,
             marc_type => 'marc21',
-            marc_field => '245a',
+            marc_field => '245(ab)ab',
         },
         {
             name => 'unimarc_title',
@@ -228,7 +228,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('100', '', '', a => 'Author 1'),
         MARC::Field->new('110', '', '', a => 'Corp Author'),
         MARC::Field->new('210', '', '', a => 'Title 1'),
-        MARC::Field->new('245', '', '', a => 'Title: first record'),
+        MARC::Field->new('245', '', '', a => 'Title:', b => 'first record'),
         MARC::Field->new('999', '', '', c => '1234567'),
         # '  ' for testing trimming of white space in boolean value callback:
         MARC::Field->new('952', '', '', 0 => '  ', g => '123.30'),
@@ -261,8 +261,8 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     is(scalar @{$docs->[0][1]->{author__sort}}, 2, 'First document author__sort field should have two values');
     is_deeply($docs->[0][1]->{author__sort}, ['Author 1', 'Corp Author'], 'First document author__sort field should be set correctly');
 
-    is(scalar @{$docs->[0][1]->{title__sort}}, 1, 'First document title__sort field should have one value');
-    is_deeply($docs->[0][1]->{title__sort}, ['Title: first record'], 'First document title__sort field should be set correctly');
+    is(scalar @{$docs->[0][1]->{title__sort}}, 3, 'First document title__sort field should have three values');
+    is_deeply($docs->[0][1]->{title__sort}, ['Title:', 'first record', 'Title: first record'], 'First document title__sort field should be set correctly');
 
     is(scalar @{$docs->[0][1]->{author__suggestion}}, 2, 'First document author__suggestion field should contain two values');
     is_deeply(
@@ -278,10 +278,14 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         'First document author__suggestion field should be set correctly'
     );
 
-    is(scalar @{$docs->[0][1]->{title__suggestion}}, 1, 'First document title__suggestion field should contain one value');
+    is(scalar @{$docs->[0][1]->{title__suggestion}}, 3, 'First document title__suggestion field should contain three values');
     is_deeply(
         $docs->[0][1]->{title__suggestion},
-        [{ 'input' => 'Title: first record' }],
+        [
+            { 'input' => 'Title:' },
+            { 'input' => 'first record' },
+            { 'input' => 'Title: first record' }
+        ],
         'First document title__suggestion field should be set correctly'
     );
 
