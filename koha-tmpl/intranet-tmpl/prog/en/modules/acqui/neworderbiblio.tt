@@ -68,10 +68,10 @@
                 [% biblio.copyrightdate | html %]
             </td>
         <td>
-        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | html %]&amp;viewas=html" class="previewMARC">View MARC</a>
+        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | html %]&amp;viewas=html" class="btn btn-default btn-xs previewMARC">View MARC</a>
         </td>
             <td>
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;biblionumber=[% biblio.biblionumber | html %]" title="Order this one">
+            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;biblionumber=[% biblio.biblionumber | html %]" class="btn btn-default btn-xs" title="Order this one">
                 Order
             </a>
             </td>
@@ -80,7 +80,7 @@
     </tbody>
     </table>
     <div id="marcPreview" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="marcPreviewLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-wide">
         <div class="modal-content">
         <div class="modal-header">
             <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
