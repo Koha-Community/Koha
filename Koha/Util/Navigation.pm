@@ -1,4 +1,4 @@
-package Koha::Util;
+package Koha::Util::Navigation;
 
 # Copyright Rijksmuseum 2018
 #
@@ -26,9 +26,9 @@ Koha::Util
 
 =head1 SYNOPSIS
 
-    use Koha::Util;
+    use Koha::Util::Navigation;
     my $cgi = CGI->new;
-    my $referer = Koha::Util::localReferer($cgi);
+    my $referer = Koha::Util::Navigation::local_referer($cgi);
 
 =head1 DESCRIPTION
 
@@ -36,9 +36,9 @@ Utility class
 
 =head1 FUNCTIONS
 
-=head2 localReferer
+=head2 local_referer
 
-    my $referer = Koha::Util::localReferer( $cgi, { fallback => '/', remove_language => 1, staff => 1 });
+    my $referer = Koha::Util::Navigation::local_referer( $cgi, { fallback => '/', remove_language => 1, staff => 1 });
 
     If the referer is a local URI, return local path.
     Otherwise return fallback.
@@ -47,7 +47,7 @@ Utility class
 
 =cut
 
-sub localReferer {
+sub local_referer {
     my ( $cgi, $params ) = @_;
     my $referer = $cgi->referer;
     my $fallback = $params->{fallback} // '/';

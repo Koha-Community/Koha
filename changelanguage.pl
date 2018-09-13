@@ -18,10 +18,10 @@
 use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Templates;
-use Koha::Util;
+use Koha::Util::Navigation;
 
 my $query = new CGI;
 my $language = $query->param('language');
-my $url = Koha::Util::localReferer($query, {remove_language => 1, staff => 1});
+my $url = Koha::Util::Navigation::local_referer($query, {remove_language => 1, staff => 1});
 
 C4::Templates::setlanguagecookie( $query, $language, $url );
