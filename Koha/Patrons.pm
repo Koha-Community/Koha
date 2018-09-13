@@ -209,23 +209,23 @@ sub anonymise_issue_history {
 
 =head3 delete
 
-    Koha::Patrons->search({ some filters here })->delete;
+    Koha::Patrons->search({ some filters here })->delete({ move => 1 });
 
     Delete passed set of patron objects.
     Wrapper for Koha::Patron->delete. (We do not want to bypass Koha::Patron
     and let DBIx do the job without further housekeeping.)
-    NOTE: By default includes a move to deletedborrowers.
+    Includes a move to deletedborrowers if move flag set.
 
     Return value (if relevant) is based on the individual return values.
 
 =cut
 
 sub delete {
-    my ( $self ) = @_;
+    my ( $self, $params ) = @_;
     my (@res, $rv);
     $rv = 1;
     while( my $patron = $self->next ) {
-        $patron->move_to_deleted; # Needed here, since it is no default action..
+        $patron->move_to_deleted if $params->{move};
         push @res, $patron->delete;
         $rv=-1 if $res[-1]==-1;
         $rv=0 if $rv==1 && $res[-1]==0;
