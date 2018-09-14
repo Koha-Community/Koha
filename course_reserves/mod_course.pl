@@ -62,7 +62,7 @@ if ( $action eq 'del' ) {
     my @instructors = $cgi->multi_param('instructors');
     ModCourseInstructors(
         mode        => 'replace',
-        cardnumbers => \@instructors,
+        borrowernumbers => \@instructors,
         course_id   => $new_course_id
     );
     print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=$new_course_id");
