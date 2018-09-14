@@ -228,7 +228,6 @@ our $to_api_mapping = {
     accounttype       => 'account_type',
     amountoutstanding => 'amount_outstanding',
     borrowernumber    => 'patron_id',
-    dispute           => undef,
     issue_id          => 'checkout_id',
     itemnumber        => 'item_id',
     manager_id        => 'user_id',
