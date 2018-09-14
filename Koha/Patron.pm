@@ -668,7 +668,7 @@ Exceptions are thrown if the password is not good enough.
 
 =item Koha::Exceptions::Password::TooShort
 
-=item Koha::Exceptions::Password::TrailingWhitespaces
+=item Koha::Exceptions::Password::WhitespaceCharacters
 
 =item Koha::Exceptions::Password::TooWeak
 
@@ -691,8 +691,7 @@ sub set_password {
                 { length => $password_length, min_length => $min_length } );
         }
         elsif ( $error eq 'has_whitespaces' ) {
-            Koha::Exceptions::Password::TrailingWhitespaces->throw(
-                "Password contains trailing spaces, which is forbidden.");
+            Koha::Exceptions::Password::WhitespaceCharacters->throw();
         }
         elsif ( $error eq 'too_weak' ) {
             Koha::Exceptions::Password::TooWeak->throw();

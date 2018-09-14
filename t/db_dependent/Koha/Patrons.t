@@ -1500,7 +1500,6 @@ subtest '->store' => sub {
     $schema->storage->txn_rollback;
 };
 
-
 subtest '->set_password' => sub {
 
     plan tests => 11;
@@ -1530,7 +1529,7 @@ subtest '->set_password' => sub {
 
     # Trailing spaces tests
     throws_ok { $patron->set_password('abcD12d   '); }
-        'Koha::Exceptions::Password::TrailingWhitespaces',
+        'Koha::Exceptions::Password::WhitespaceCharacters',
         'Password contains trailing spaces, exception is thrown';
 
     # Require strong password tests
