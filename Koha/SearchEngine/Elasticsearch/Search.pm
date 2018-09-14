@@ -84,23 +84,21 @@ sub search {
     my ($self, $query, $page, $count, %options) = @_;
 
     my $params = $self->get_elasticsearch_params();
-    my %paging;
     # 20 is the default number of results per page
-    $paging{limit} = $count || 20;
-    # ES/Catmandu doesn't want pages, it wants a record to start from.
+    $query->{size} = $count || 20;
+    # ES doesn't want pages, it wants a record to start from.
     if (exists $options{offset}) {
-        $paging{start} = $options{offset};
+        $query->{from} = $options{offset};
     } else {
         $page = (!defined($page) || ($page <= 0)) ? 0 : $page - 1;
-        $paging{start} = $page * $paging{limit};
+        $query->{from} = $page * $query->{size};
     }
-    $self->store(
-        Catmandu::Store::ElasticSearch->new(
-            %$params,
-        )
-    ) unless $self->store;
+    my $elasticsearch = $self->get_elasticsearch();
     my $results = eval {
-        $self->store->bag->search( %$query, %paging );
+        $elasticsearch->search(
+            index => $params->{index_name},
+            body => $query
+        );
     };
     if ($@) {
         die $self->process_error($@);
@@ -163,13 +161,15 @@ sub search_compat {
     # opac-search expects results to be put in the
     # right place in the array, according to $offset
     my $index = $offset;
-    $results->each(sub {
-        $records[$index++] = $self->decode_record_from_result(@_);
-    });
+    my $hits = $results->{'hits'};
+    foreach my $es_record (@{$hits->{'hits'}}) {
+        $records[$index++] = $self->decode_record_from_result($es_record->{'_source'});
+    }
+
     # consumers of this expect a name-spaced result, we provide the default
     # configuration.
     my %result;
-    $result{biblioserver}{hits} = $results->total;
+    $result{biblioserver}{hits} = $hits->{'total'};
     $result{biblioserver}{RECORDS} = \@records;
     return (undef, \%result, $self->_convert_facets($results->{aggregations}, $expanded_facet));
 }
@@ -177,7 +177,7 @@ sub search_compat {
 =head2 search_auth_compat
 
     my ( $results, $total ) =
-      $searcher->search_auth_compat( $query, $page, $count, %options );
+      $searcher->search_auth_compat( $query, $offset, $count, $skipmetadata, %options );
 
 This has a similar calling convention to L<search>, however it returns its
 results in a form the same as L<C4::AuthoritiesMarc::SearchAuthorities>.
@@ -185,32 +185,39 @@ results in a form the same as L<C4::AuthoritiesMarc::SearchAuthorities>.
 =cut
 
 sub search_auth_compat {
-    my $self = shift;
+    my ($self, $query, $offset, $count, $skipmetadata, %options) = @_;
 
-    # TODO handle paging
+    if ( !defined $offset or $offset <= 0 ) {
+        $offset = 1;
+    }
+    # Uh, authority search uses 1-based offset..
+    $options{offset} = $offset - 1;
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
-    my $res      = $self->search(@_);
+    my $res      = $self->search($query, undef, $count, %options);
+
     my $bib_searcher = Koha::SearchEngine::Elasticsearch::Search->new({index => 'biblios'});
     my @records;
-    $res->each(
-        sub {
-            my %result;
+    my $hits = $res->{'hits'};
+    foreach my $es_record (@{$hits->{'hits'}}) {
+        my $record = $es_record->{'_source'};
+        my %result;
 
-            # I wonder if these should be real values defined in the mapping
-            # rather than hard-coded conversions.
-            my $record    = $_[0];
-            # Handle legacy nested arrays indexed with splitting enabled.
-            my $authid = $record->{ 'Local-number' }[0];
-            $authid = @$authid[0] if (ref $authid eq 'ARRAY');
+        # I wonder if these should be real values defined in the mapping
+        # rather than hard-coded conversions.
+        #my $record    = $_[0];
+        # Handle legacy nested arrays indexed with splitting enabled.
+        my $authid = $record->{ 'Local-number' }[0];
+        $authid = @$authid[0] if (ref $authid eq 'ARRAY');
 
-            $result{authid} = $authid;
+        $result{authid} = $authid;
 
+        if (!defined $skipmetadata || !$skipmetadata) {
             # TODO put all this info into the record at index time so we
             # don't have to go and sort it all out now.
             my $authtypecode = $record->{authtype};
             my $rs           = $schema->resultset('AuthType')
-              ->search( { authtypecode => $authtypecode } );
+            ->search( { authtypecode => $authtypecode } );
 
             # FIXME there's an assumption here that we will get a result.
             # the original code also makes an assumption that some provided
@@ -219,7 +226,7 @@ sub search_auth_compat {
             # it's not reproduced here yet.
             my $authtype           = $rs->single;
             my $auth_tag_to_report = $authtype ? $authtype->auth_tag_to_report : "";
-            my $marc               = $self->decode_record_from_result(@_);
+            my $marc               = $self->decode_record_from_result($record);
             my $mainentry          = $marc->field($auth_tag_to_report);
             my $reported_tag;
             if ($mainentry) {
@@ -233,13 +240,13 @@ sub search_auth_compat {
 
             # Reimplementing BuildSummary is out of scope because it'll be hard
             $result{summary} =
-              C4::AuthoritiesMarc::BuildSummary( $marc, $result{authid},
+            C4::AuthoritiesMarc::BuildSummary( $marc, $result{authid},
                 $authtypecode );
             $result{used} = $self->count_auth_use($bib_searcher, $authid);
-            push @records, \%result;
         }
-    );
-    return ( \@records, $res->total );
+        push @records, \%result;
+    }
+    return ( \@records, $hits->{'total'} );
 }
 
 =head2 count_auth_use

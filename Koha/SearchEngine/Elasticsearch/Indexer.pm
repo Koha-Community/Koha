@@ -398,7 +398,8 @@ sub _sanitise_records {
         # tears in rain...
         if ( $rec ) {
             $rec->delete_fields($rec->field('999'));
-            $rec->append_fields(MARC::Field->new('999','','','c' => $bibnum, 'd' => $bibnum));
+            # Make sure biblionumber is a string. Elasticsearch would consider int and string different IDs.
+            $rec->append_fields(MARC::Field->new('999','','','c' => "" . $bibnum, 'd' => "" . $bibnum));
         }
     }
 }

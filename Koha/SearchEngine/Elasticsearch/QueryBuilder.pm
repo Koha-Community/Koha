@@ -103,10 +103,8 @@ sub build_query {
               if $d && ( $d ne 'asc' && $d ne 'desc' );
             $d = 'asc' unless $d;
 
-            # TODO account for fields that don't have a 'phrase' type
-
             $f = $self->_sort_field($f);
-            push @{ $res->{sort} }, { "$f.phrase" => { order => $d } };
+            push @{ $res->{sort} }, { $f => { order => $d } };
         }
     }
 
@@ -172,7 +170,7 @@ sub build_browse_query {
                 }
             }
         },
-        sort => [ { "$sort.phrase" => { order => "asc" } } ],
+        sort => [ { $sort => { order => "asc" } } ],
     };
 }
 
@@ -301,22 +299,18 @@ sub build_authorities_query {
     foreach my $s ( @{ $search->{searches} } ) {
         my ( $wh, $op, $val ) = @{$s}{qw(where operator value)};
         $wh = '_all' if $wh eq '';
-        if ( $op eq 'is' || $op eq '=' ) {
+        if ( $op eq 'is' || $op eq '='  || $op eq 'exact' ) {
 
             # look for something that matches a term completely
             # note, '=' is about numerical vals. May need special handling.
             # Also, we lowercase our search because the ES
             # index lowercases its values, and term searches don't get the
             # search analyzer applied to them.
-            push @query_parts, { term => {"$wh.phrase" => lc $val} };
-        }
-        elsif ( $op eq 'exact' ) {
-            # left and right truncation, otherwise an exact phrase
             push @query_parts, { match_phrase => {"$wh.phrase" => lc $val} };
         }
         elsif ( $op eq 'start' ) {
             # startswith search, uses lowercase untokenized version of heading
-            push @query_parts, { prefix => {"$wh.lc_raw" => lc $val} };
+            push @query_parts, { match_phrase_prefix => {"$wh.phrase" => lc $val} };
         }
         else {
             # regular wordlist stuff
@@ -332,19 +326,17 @@ sub build_authorities_query {
     # 'should' behaves like 'or'
     # 'must' behaves like 'and'
     # Zebra results seem to match must so using that here
-    my $query = { query=>
+    my $query = { query =>
                  { bool =>
                      { must => \@query_parts  }
                  }
              };
 
-    # We need to add '.phrase' to all the sort headings otherwise it'll sort
-    # based on the tokenised form.
     my %s;
     if ( exists $search->{sort} ) {
         foreach my $k ( keys %{ $search->{sort} } ) {
             my $f = $self->_sort_field($k);
-            $s{"$f.phrase"} = $search->{sort}{$k};
+            $s{$f} = $search->{sort}{$k};
         }
         $search->{sort} = \%s;
     }
@@ -385,9 +377,9 @@ Also ignored.
 
 =item operator
 
-What form of search to do. Options are: is (phrase, no trunction, whole field
-must match), = (number exact match), exact (phrase, but with left and right
-truncation). If left blank, then word list, right truncted, anywhere is used.
+What form of search to do. Options are: is (phrase, no truncation, whole field
+must match), = (number exact match), exact (phrase, no truncation, whole field
+must match). If left blank, then word list, right truncated, anywhere is used.
 
 =item value
 
@@ -419,7 +411,8 @@ our $koha_to_index_name = {
     'match-heading' => 'Match-heading',
     'see-from'      => 'Match-heading-see-from',
     thesaurus       => 'Subject-heading-thesaurus',
-    all              => ''
+    any             => '',
+    all             => ''
 };
 
 sub build_authorities_query_compat {
@@ -448,8 +441,8 @@ sub build_authorities_query_compat {
 
     my %sort;
     my $sort_field =
-        ( $orderby =~ /^Heading/ ) ? 'Heading__sort'
-      : ( $orderby =~ /^Auth/ )    ? 'Local-Number'
+        ( $orderby =~ /^Heading/ ) ? 'Heading'
+      : ( $orderby =~ /^Auth/ )    ? 'Local-number'
       :                              undef;
     if ($sort_field) {
         my $sort_order = ( $orderby =~ /Asc$/ ) ? 'asc' : 'desc';
@@ -773,16 +766,27 @@ sub _fix_limit_special_cases {
 
     my $field = $self->_sort_field($field);
 
-Given a field name, this works out what the actual name of the version to sort
-on should be. Often it's the same, sometimes it involves sticking "__sort" on
-the end. Maybe it'll be something else in the future, who knows?
+Given a field name, this works out what the actual name of the field to sort
+on should be. A '__sort' suffix is added for fields with a sort version, and
+for text fields either '.phrase' (for sortable versions) or '.raw' is appended
+to avoid sorting on a tokenized value.
 
 =cut
 
 sub _sort_field {
     my ($self, $f) = @_;
-    if ($self->sort_fields()->{$f}) {
+
+    my $mappings = $self->get_elasticsearch_mappings();
+    my $textField = defined $mappings->{data}{properties}{$f}{type} && $mappings->{data}{properties}{$f}{type} eq 'text';
+    if (!defined $self->sort_fields()->{$f} || $self->sort_fields()->{$f}) {
         $f .= '__sort';
+        # We need to add '.phrase' to text fields, otherwise it'll sort
+        # based on the tokenised form.
+        $f .= '.phrase' if $textField;
+    } else {
+        # We need to add '.raw' to text fields without a sort field,
+        # otherwise it'll sort based on the tokenised form.
+        $f .= '.raw' if $textField;
     }
     return $f;
 }

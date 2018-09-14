@@ -664,7 +664,10 @@ sub get_matches {
                     #NOTE: double-quote the values so you don't get a "Embedded truncation not supported" error when a term has a ? in it.
             }
 
-            my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+            # Use state variables to avoid recreating the objects every time.
+            # With Elasticsearch this also avoids creating a massive amount of
+            # ES connectors that would eventually run out of file descriptors.
+            state $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
             ( $error, $searchresults, $total_hits ) =
               $searcher->simple_search_compat( $query, 0, $max_matches, undef, skip_normalize => 1 );
 
@@ -703,8 +706,11 @@ sub get_matches {
                 push @operator, 'exact';
                 push @value,    $key;
             }
-            my $builder  = Koha::SearchEngine::QueryBuilder->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
-            my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
+            # Use state variables to avoid recreating the objects every time.
+            # With Elasticsearch this also avoids creating a massive amount of
+            # ES connectors that would eventually run out of file descriptors.
+            state $builder  = Koha::SearchEngine::QueryBuilder->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
+            state $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::AUTHORITIES_INDEX});
             my $search_query = $builder->build_authorities_query_compat(
                 \@marclist, \@and_or, \@excluding, \@operator,
                 \@value, undef, 'AuthidAsc'

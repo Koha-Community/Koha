@@ -195,9 +195,10 @@ sub process_bib {
         return;
     }
 
+    my $frameworkcode = GetFrameworkCode($biblionumber);
+
     my ( $headings_changed, $results ) =
-      LinkBibHeadingsToAuthorities( $linker, $bib,
-        GetFrameworkCode($biblionumber) );
+      LinkBibHeadingsToAuthorities( $linker, $bib, $frameworkcode );
     foreach my $key ( keys %{ $results->{'unlinked'} } ) {
         $unlinked_headings{$key} += $results->{'unlinked'}->{$key};
     }
@@ -211,11 +212,15 @@ sub process_bib {
     if ($headings_changed) {
         if ($verbose) {
             my $title = substr( $bib->title, 0, 20 );
-            print
-"Bib $biblionumber ($title): $headings_changed headings changed\n";
+            printf(
+                "Bib %12d (%-20s): %3d headings changed\n",
+                $biblionumber,
+                $title,
+                $headings_changed
+            );
         }
         if ( not $test_only ) {
-            ModBiblio( $bib, $biblionumber, GetFrameworkCode($biblionumber) );
+            ModBiblio( $bib, $biblionumber, $frameworkcode );
             $num_bibs_modified++;
         }
     }
