@@ -35,9 +35,9 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Password',
         description => 'Password is too weak'
     },
-    'Koha::Exceptions::Password::TrailingWhitespace' => {
+    'Koha::Exceptions::Password::WhitespaceCharacters' => {
         isa => 'Koha::Exceptions::Password',
-        description => 'Password contains trailing whitespace character(s)'
+        description => 'Password contains leading/trailing whitespace character(s)'
     }
 );
 
