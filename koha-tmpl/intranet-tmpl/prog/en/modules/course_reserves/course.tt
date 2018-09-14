@@ -79,8 +79,8 @@
                             <span class="label">Instructors:</span>
 
                             <fieldset id="course_instructors">
-                                 <div id="instructors">[% FOREACH i IN instructors %]<div id="borrower_[% i.cardnumber | html %]">[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"> Remove </a> )
-                                             <input type='hidden' name='instructors' value='[% i.cardnumber | html %]' /></div>[% END %]</div>
+                                 <div id="instructors">[% FOREACH i IN instructors %]<div id="borrower_[% i.borrowernumber | html %]">[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"> Remove </a> )
+                                             <input type='hidden' name='instructors' value='[% i.borrowernumber | html %]' /></div>[% END %]</div>
                             </fieldset>
 
                             <fieldset>
@@ -150,7 +150,7 @@
                     source: "/cgi-bin/koha/circ/ysearch.pl",
                     minLength: 3,
                     select: function( event, ui ) {
-                        AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.cardnumber );
+                        AddInstructor( ui.item.surname + ", " + ui.item.firstname, ui.item.borrowernumber );
                         return false;
                     }
                 })
@@ -168,21 +168,21 @@
                 $("body").on("click",".removeInstructor",function(e){
                     e.preventDefault();
                     var divid = $(this).parent().attr("id");
-                    var cardnumber = divid.replace("borrower_","");
-                    RemoveInstructor(cardnumber);
+                    var borrowernumber = divid.replace("borrower_","");
+                    RemoveInstructor(borrowernumber);
                 });
             });
 
-            function AddInstructor( name, cardnumber ) {
-                div = "<div id='borrower_" + cardnumber + "'>" + name + " ( <a href='#' class='removeInstructor'> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + cardnumber + "' /></div>";
+            function AddInstructor( name, borrowernumber ) {
+                div = "<div id='borrower_" + borrowernumber + "'>" + name + " ( <a href='#' class='removeInstructor'> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
                 $('#instructors').append( div );
 
                 $('#find_instructor').val('').focus();
                 $('#course_instructors').show();
             }
 
-            function RemoveInstructor( cardnumber ) {
-                $( '#borrower_' + cardnumber ).remove();
+            function RemoveInstructor( borrowernumber ) {
+                $( '#borrower_' + borrowernumber ).remove();
 
                 if ( ! $('#instructors').html() ) {
                     $('#course_instructors').hide( 800 );
