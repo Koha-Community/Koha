@@ -77,9 +77,9 @@ Password is too short.
 
 Password is too weak.
 
-=head2 Koha::Exceptions::Password::TrailingWhitespace
+=head2 Koha::Exceptions::Password::WhitespaceCharacters
 
-Password contains trailing spaces, which is forbidden.
+Password contains leading/trailing spaces, which is forbidden.
 
 =head1 Class methods
 
