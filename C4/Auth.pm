@@ -1229,8 +1229,8 @@ sub checkauth {
     my @inputs = ();
     foreach my $name ( param $query) {
         (next) if ( $name eq 'userid' || $name eq 'password' || $name eq 'ticket' );
-        my $value = $query->param($name);
-        push @inputs, { name => $name, value => $value };
+        my @value = $query->multi_param($name);
+        push @inputs, { name => $name, value => $_ } for @value;
     }
 
     my $patron = Koha::Patrons->find({ userid => $q_userid }); # Not necessary logged in!
