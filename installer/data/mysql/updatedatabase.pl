@@ -16385,6 +16385,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21235: Remove table services_throttle)\n";
 }
 
+$DBversion = '18.06.00.028';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+('HoldsSplitQueue','nothing','nothing|branch|itemtype|branch_itemtype','In the staff client, split the holds view by the given criteria','Choice'),
+('HoldsSplitQueueNumbering', 'actual', 'actual|virtual', 'If the holds queue is split, decide if the acual priorities should be displayed', 'Choice');
+});
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19469 - Add ability to split view of holds view on record by pickup library and/or itemtype)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
