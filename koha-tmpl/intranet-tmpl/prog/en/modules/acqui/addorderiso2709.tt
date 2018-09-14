@@ -292,7 +292,7 @@
                                             [% END %]
                                             </select>
                                         [% ELSE %]
-                                        [% iteminformatio.marc_value | html %]
+                                        [% iteminformatio.marc_value | $raw %]
                                         [% END %]
                                         <input type="hidden" name="itemid" value="1" />
                                         <input type="hidden" name="kohafield" value="[% iteminformatio.kohafield | html %]" />
