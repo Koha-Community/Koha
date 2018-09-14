@@ -5,7 +5,8 @@
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="marc items">
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="marc items str">
     <xsl:import href="NORMARCslimUtils.xsl"/>
     <xsl:output method = "html" indent="yes" omit-xml-declaration = "yes" encoding="UTF-8"/>
     <xsl:key name="item-by-status" match="items:item" use="items:status"/>
@@ -308,7 +309,7 @@
             <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
-        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="nameABCDQ"/></a>
@@ -323,7 +324,7 @@
             <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
-        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="nameABCDN"/></a>
@@ -345,7 +346,7 @@
             <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
         </xsl:when>
         <xsl:otherwise>
-        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
         </xsl:otherwise>
     </xsl:choose>
     <xsl:call-template name="nameACDEQ"/></a>
@@ -407,10 +408,10 @@
             <a>
             <xsl:choose>
             <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="marc:controlfield[@tag=001]"/>+and+(bib-level:a+or+bib-level:b)</xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+and+(bib-level:a+or+bib-level:b)</xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Host-item:<xsl:value-of select="translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', '')"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Host-item:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:text>Show analytics</xsl:text>
@@ -452,10 +453,10 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f773, '()', ''), true())"/></xsl:attribute>
                         <xsl:value-of select="$f773"/>
                     </a>
-                    <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
+                    <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="str:encode-uri(marc:subfield[@code='g'], true())"/></xsl:if>
                 </xsl:otherwise>
             </xsl:choose>
         </span>

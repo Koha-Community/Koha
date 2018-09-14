@@ -7,7 +7,8 @@
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="marc items">
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="marc items str">
     <xsl:import href="NORMARCslimUtils.xsl"/>
     <xsl:output method = "html" indent="yes" omit-xml-declaration = "yes" encoding="UTF-8"/>
     <xsl:template match="/">
@@ -108,7 +109,7 @@
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:<xsl:value-of select="marc:subfield[@code='a']"/></xsl:attribute>
+            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="nameABCDQ"/></a>
@@ -123,7 +124,7 @@
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:<xsl:value-of select="marc:subfield[@code='a']"/></xsl:attribute>      
+            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="nameABCDN"/></a>
@@ -137,7 +138,7 @@
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:<xsl:value-of select="marc:subfield[@code='a']"/></xsl:attribute>
+            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
             </xsl:otherwise>
         </xsl:choose>
         <xsl:call-template name="nameACDEQ"/></a>
@@ -170,8 +171,9 @@
         <xsl:if test="marc:datafield[@tag=440 or @tag=490]">
 	        <span class="results_summary"><span class="label">Series: </span>
 	        <xsl:for-each select="marc:datafield[@tag=440]">
-	             <a href="/cgi-bin/koha/catalogue/search.pl?q=se:{marc:subfield[@code='a']}">
-	            <xsl:call-template name="chopPunctuation">
+	            <a>
+                    <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=se:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
+	                <xsl:call-template name="chopPunctuation">
 	                            <xsl:with-param name="chopString">
 	                                <xsl:call-template name="subfieldSelect">
 	                                    <xsl:with-param name="codes">av</xsl:with-param>
@@ -184,7 +186,8 @@
 	        </xsl:for-each>
 	
 	        <xsl:for-each select="marc:datafield[@tag=490][@ind1=0]">
-	             <a href="/cgi-bin/koha/catalogue/search.pl?q=se:{marc:subfield[@code='a']}">
+	            <a>
+                    <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=se:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
 	                        <xsl:call-template name="chopPunctuation">
 	                            <xsl:with-param name="chopString">
 	                                <xsl:call-template name="subfieldSelect">
@@ -205,10 +208,10 @@
             <a>
             <xsl:choose>
             <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="marc:controlfield[@tag=001]"/>+and+(bib-level:a+or+bib-level:b)</xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+and+(bib-level:a+or+bib-level:b)</xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Host-item:<xsl:value-of select="translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', '')"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Host-item:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:text>Show analytics</xsl:text>
@@ -250,7 +253,7 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f773, '()', ''), true())"/></xsl:attribute>
                         <xsl:value-of select="$f773"/>
                     </a>
                     <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
@@ -418,7 +421,7 @@
                 </xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="marc:subfield[@code='a']"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su<xsl:value-of select="$SubjectModifier"/>:<xsl:value-of select="$TracingQuotesLeft"/><xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/><xsl:value-of select="$TracingQuotesRight"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="chopPunctuation">
@@ -537,7 +540,7 @@
                         <xsl:with-param name="codes">a_t</xsl:with-param>
                     </xsl:call-template>
                 </xsl:variable>
-             <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="translate($f780, '()', '')"/></xsl:attribute>
+             <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri(translate($f780, '()', ''), true())"/></xsl:attribute>
                 <xsl:value-of select="translate($f780, '()', '')"/>
             </a>
         </span>
@@ -588,7 +591,7 @@
                     </xsl:call-template>
                 </xsl:variable>
 
-                <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="translate($f785, '()', '')"/></xsl:attribute>
+                <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri(translate($f785, '()', ''), true())"/></xsl:attribute>
                 <xsl:value-of select="translate($f785, '()', '')"/>
             </a>
 

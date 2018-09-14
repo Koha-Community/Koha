@@ -2,7 +2,10 @@
 
 <!DOCTYPE stylesheet [<!ENTITY nbsp "&#160;" >]>
 
-<xsl:stylesheet version="1.0" xmlns:marc="http://www.loc.gov/MARC21/slim" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<xsl:stylesheet version="1.0"
+  xmlns:marc="http://www.loc.gov/MARC21/slim"
+  xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:str="http://exslt.org/strings">
 	<xsl:template name="datafield">
 		<xsl:param name="tag"/>
 		<xsl:param name="ind1"><xsl:text> </xsl:text></xsl:param>
@@ -227,7 +230,7 @@
                         </xsl:when>
                         <xsl:when test="boolean($index)">
                             <a>
-                                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of  select="$index"/>:<xsl:value-of  select="marc:subfield[@code='a']"/></xsl:attribute>
+                                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of  select="$index"/>:<xsl:value-of  select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
                                 <xsl:value-of select="$str"/>
                             </a>
                         </xsl:when>
