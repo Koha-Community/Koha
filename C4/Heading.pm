@@ -200,12 +200,24 @@ sub _search {
     #        push @operator, 'is';
     #        push @value, $self->{'thesaurus'};
     #    }
-    require C4::AuthoritiesMarc;
-    return C4::AuthoritiesMarc::SearchAuthorities(
+
+    require Koha::SearchEngine::QueryBuilder;
+    require Koha::SearchEngine::Search;
+
+    # Use state variables to avoid recreating the objects every time.
+    # With Elasticsearch this also avoids creating a massive amount of
+    # ES connectors that would eventually run out of file descriptors.
+    state $builder = Koha::SearchEngine::QueryBuilder->new(
+        { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
+    state $searcher = Koha::SearchEngine::Search->new(
+        {index => $Koha::SearchEngine::AUTHORITIES_INDEX} );
+
+    my $search_query = $builder->build_authorities_query_compat(
         \@marclist, \@and_or, \@excluding, \@operator,
-        \@value,    0,        20,          $self->{'auth_type'},
-        'AuthidAsc',         $skipmetadata
+        \@value,    $self->{'auth_type'},
+        'AuthidAsc'
     );
+    return $searcher->search_auth_compat( $search_query, 0, 20, $skipmetadata );
 }
 
 =head1 INTERNAL FUNCTIONS

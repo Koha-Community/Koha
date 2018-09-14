@@ -100,12 +100,12 @@ This passes the search query on to C4::AuthoritiesMarc::SearchAuthorities
 =cut
 
 sub search_auth_compat {
-    my ( $self, $q, $startfrom, $resperpage ) = @_;
+    my ( $self, $q, $startfrom, $resperpage, $skipmetadata ) = @_;
 
     my @params = (
         @{$q}{ 'marclist', 'and_or', 'excluding', 'operator', 'value' },
         $startfrom - 1,
-        $resperpage, @{$q}{ 'authtypecode', 'orderby' }
+        $resperpage, @{$q}{ 'authtypecode', 'orderby' }, $skipmetadata
     );
     C4::AuthoritiesMarc::SearchAuthorities(@params);
 }
