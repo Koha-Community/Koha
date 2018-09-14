@@ -112,6 +112,7 @@ if ( $send_notices ) {
                     items     => $issue->itemnumber,
                     biblio    => $item->biblionumber,
                 },
+                lang => $patron->lang,
             );
 
             my $library = Koha::Libraries->find( $patron->branchcode );
