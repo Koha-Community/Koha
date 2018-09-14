@@ -35,7 +35,7 @@
 [% UNLESS ( shelfnumber ) %]
 
 [% UNLESS ( newshelf ) %]
-    [% IF ( private_shelves.count ) %]
+    [% IF private_shelves.count OR public_shelves.count OR private_shelves_shared_with_me.count %]
      <fieldset class="rows">
     <legend>Select an existing list</legend>
     <ol>
