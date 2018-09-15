@@ -16155,6 +16155,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21235: Remove table services_throttle)\n";
 }
 
+$DBversion = '18.05.03.002';
+if( CheckVersion( $DBversion ) ) {
+    unless ( index_exists( 'subscription', 'by_biblionumber' ) ) {
+        $dbh->do(q{
+            CREATE INDEX `by_biblionumber` ON `subscription` (`biblionumber`)
+        });
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21288: Slowness in acquisition caused by GetInvoices\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
