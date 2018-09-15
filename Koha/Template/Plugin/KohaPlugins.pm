@@ -93,4 +93,60 @@ sub get_plugins_opac_js {
     return join( "\n", @data );
 }
 
+=head3 get_plugins_intranet_head
+
+[% KohaPlugins.get_plugins_intranet_head %]
+
+This method collects the output of all plugins with an intranet_head method
+to output to the head section of intranet pages.
+
+=cut
+
+sub get_plugins_intranet_head {
+    return q{}
+      unless C4::Context->preference('UseKohaPlugins');
+
+    my $p = Koha::Plugins->new();
+
+    return q{} unless $p;
+
+    my @plugins = $p->GetPlugins(
+        {
+            method => 'intranet_head',
+        }
+    );
+
+    my @data = map { $_->intranet_head || q{} } @plugins;
+
+    return join( "\n", @data );
+}
+
+=head3 get_plugins_intranet_js
+
+[% KohaPlugins.get_plugins_intranet_js %]
+
+This method collects the output of all plugins with an intranet_js method
+to output to the javascript section of at the bottom of intranet pages.
+
+=cut
+
+sub get_plugins_intranet_js {
+    return q{}
+      unless C4::Context->preference('UseKohaPlugins');
+
+    my $p = Koha::Plugins->new();
+
+    return q{} unless $p;
+
+    my @plugins = $p->GetPlugins(
+        {
+            method => 'intranet_js',
+        }
+    );
+
+    my @data = map { $_->intranet_js || q{} } @plugins;
+
+    return join( "\n", @data );
+}
+
 1;

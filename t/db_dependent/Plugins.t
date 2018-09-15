@@ -47,6 +47,8 @@ ok( $plugin->can('opac_online_payment_begin'), 'Test plugin can opac_online_paym
 ok( $plugin->can('opac_online_payment_end'), 'Test plugin can opac_online_payment_end' );
 ok( $plugin->can('opac_head'), 'Test plugin can opac_head' );
 ok( $plugin->can('opac_js'), 'Test plugin can opac_js' );
+ok( $plugin->can('intranet_head'), 'Test plugin can intranet_head' );
+ok( $plugin->can('intranet_js'), 'Test plugin can intranet_js' );
 ok( $plugin->can('configure'), 'Test plugin can configure' );
 ok( $plugin->can('install'), 'Test plugin can install' );
 ok( $plugin->can('upgrade'), 'Test plugin can upgrade' );

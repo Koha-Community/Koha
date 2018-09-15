@@ -70,6 +70,16 @@ sub opac_js {
     return "Koha::Plugin::Test::opac_js";
 }
 
+sub intranet_head {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::intranet_head";
+}
+
+sub intranet_js {
+    my ( $self, $args ) = @_;
+    return "Koha::Plugin::Test::intranet_js";
+}
+
 sub configure {
     my ( $self, $args ) = @_;
     return "Koha::Plugin::Test::configure";;
