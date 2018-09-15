@@ -1617,30 +1617,6 @@ wildcards.
 sub GetBranchBorrowerCircRule {
     my ( $branchcode, $categorycode ) = @_;
 
-    # Set search prededences
-    my @params = (
-        {
-            branchcode   => $branchcode,
-            categorycode => $categorycode,
-            itemtype     => undef,
-        },
-        {
-            branchcode   => $branchcode,
-            categorycode => undef,
-            itemtype     => undef,
-        },
-        {
-            branchcode   => undef,
-            categorycode => $categorycode,
-            itemtype     => undef,
-        },
-        {
-            branchcode   => undef,
-            categorycode => undef,
-            itemtype     => undef,
-        },
-    );
-
     # Initialize default values
     my $rules = {
         patron_maxissueqty       => undef,
@@ -1649,19 +1625,16 @@ sub GetBranchBorrowerCircRule {
 
     # Search for rules!
     foreach my $rule_name (qw( patron_maxissueqty patron_maxonsiteissueqty )) {
-        foreach my $params (@params) {
-            my $rule = Koha::CirculationRules->search(
-                {
-                    rule_name => $rule_name,
-                    %$params,
-                }
-            )->next();
-
-            if ( $rule ) {
-                $rules->{$rule_name} = $rule->rule_value;
-                last;
+        my $rule = Koha::CirculationRules->get_effective_rule(
+            {
+                categorycode => $categorycode,
+                itemtype     => undef,
+                branchcode   => $branchcode,
+                rule_name    => $rule_name,
             }
-        }
+        );
+
+        $rules->{$rule_name} = $rule->rule_value if defined $rule;
     }
 
     return $rules;
