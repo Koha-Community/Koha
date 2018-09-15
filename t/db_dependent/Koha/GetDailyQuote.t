@@ -61,7 +61,7 @@ $quote = GetDailyQuote('random'=>1);
 ok($quote, "Got a random quote.");
 cmp_ok($quote->{'id'}, '>', 0, 'Id is greater than 0');
 
-my $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string->add( hours => 1 )); # To make it the last one
+my $timestamp = DateTime::Format::MySQL->format_datetime(dt_from_string->add( seconds => 1 )); # To make it the last one
 my $query = 'UPDATE quotes SET timestamp = ? WHERE id = ?';
 my $sth = C4::Context->dbh->prepare($query);
 $sth->execute( $timestamp , $expected_quote->{'id'});
@@ -70,7 +70,7 @@ $expected_quote->{'timestamp'} = $timestamp;
 
 $quote = GetDailyQuote(); # this is the "default" mode of selection
 cmp_ok($quote->{'id'}, '==', $expected_quote->{'id'}, "Id is correct");
-is($quote->{'quote'}, $expected_quote->{'quote'}, "Quote is correct");
+is($quote->{'source'}, $expected_quote->{'source'}, "Source is correct");
 is($quote->{'timestamp'}, $expected_quote->{'timestamp'}, "Timestamp $timestamp is correct");
 
 $dbh->do(q|DELETE FROM quotes|);
