@@ -16396,6 +16396,17 @@ INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanat
     print "Upgrade to $DBversion done (Bug 19469 - Add ability to split view of holds view on record by pickup library and/or itemtype)\n";
 }
 
+$DBversion = '18.06.00.029';
+if( CheckVersion( $DBversion ) ) {
+    unless ( index_exists( 'subscription', 'by_biblionumber' ) ) {
+        $dbh->do(q{
+            CREATE INDEX `by_biblionumber` ON `subscription` (`biblionumber`)
+        });
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21288: Slowness in acquisition caused by GetInvoices\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
