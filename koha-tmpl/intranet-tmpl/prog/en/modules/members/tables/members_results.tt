@@ -10,7 +10,7 @@
     "aaData": [
         [% FOREACH data IN aaData %]
             {
-                [% IF CAN_user_tools_manage_patron_lists %]
+                [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
                 "dt_borrowernumber":
                     "<input type='checkbox' class='selection' name='borrowernumber' value='[% data.borrowernumber | html %]' />",
                 [% END %]
