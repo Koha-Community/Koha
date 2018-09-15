@@ -71,4 +71,5 @@
         [% jsinclude # Parse the page template's JavaScript block if necessary %]
     [% END %]
     </body>
+[% KohaPlugins.get_plugins_intranet_js | html %]
 </html>
