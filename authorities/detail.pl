@@ -143,7 +143,14 @@ sub build_tabs {
                                      . C4::Koha::display_marc_indicators($field) 
                                      . ' - '
                                      . $tagslib->{$field->tag()}->{lib};
+                      $tag_data{tag_number} = $tag;
+                      $tag_data{tag_desc} = $tagslib->{$field->tag()}->{lib};
                       $tag_data{subfield} = \@subfields_data;
+                      if ($tag >= 10){ # no indicator for theses tag
+                            $tag_data{ind1} = $field->indicator(1);
+                            $tag_data{ind2} = $field->indicator(2);
+                      }
+
                       push (@loop_data, \%tag_data);
                     }
                   }
