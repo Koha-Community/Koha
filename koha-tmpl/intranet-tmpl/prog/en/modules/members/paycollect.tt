@@ -101,7 +101,7 @@
     <li>
         <label for="paid">Collect from patron: </label>
             <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% amountoutstanding | html %]" />
+        <input name="paid" id="paid" value="[% amountoutstanding | html %]"  type="text" />
     </li>
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]
@@ -157,7 +157,7 @@
                 <li>
                     <label for="paid">Writeoff amount: </label>
                     <!-- default to writing off all -->
-                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 | html %]" />
+                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding | $Price on_editing => 1 | html %]" type="text" />
                 </li>
             </ol>
         </fieldset>
@@ -198,7 +198,7 @@
             <label for="paid">Collect from patron: </label>
         [% END %]
         <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% total | format('%.2f') %]" />
+        <input name="paid" id="paid" value="[% total | format('%.2f') %]" type="text" />
     </li>
     [% SET payment_types = AuthorisedValues.GetAuthValueDropbox('PAYMENT_TYPE') %]
     [% IF payment_types %]

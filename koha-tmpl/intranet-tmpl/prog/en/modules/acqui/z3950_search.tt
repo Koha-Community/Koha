@@ -167,7 +167,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% IF ( show_nextbutton ) %]
             <input type="button" name="changepage_next" value="Next page" data-currentpage="[% current_page | html %]" />
         [% END %]
-        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" /><input type="submit" name="changepage_goto" value="Go" />
+        <br />Go to page : <input id="goto_page" name="goto_page" value="[% current_page | html %]" size="4" type="text" /> <input type="submit" name="changepage_goto" value="Go" />
     </form>
 
     [% ELSE %]
