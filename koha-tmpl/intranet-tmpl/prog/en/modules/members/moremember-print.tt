@@ -109,13 +109,34 @@
                <tr>
                   <td>[% account.date | $KohaDates %]</td>
                   <td>
-                    [% INCLUDE 'accounttype.inc' accountline => account %]
-                    [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
-                    [%- IF account.description %], [% account.description | html %][% END %]
-                    &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber | html %]">[% account.item.biblio.title | html %]</a>[% END %]</td>
-                  <td>[% account.note | html_line_break %]</td>
-                  [% IF ( account.amount < 0 ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price | html %]</td>
-                  [% IF ( account.amountoutstanding < 0 ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price | html %]</td>
+                      [% INCLUDE 'accounttype.inc' accountline => account %]
+                      [%- IF account.payment_type %]
+                          , [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %]
+                      [% END %]
+                      [%- IF account.description %]
+                          , [% account.description | html %]
+                      [% END %]
+                      &nbsp;
+                      [% IF ( account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' ) %]
+                          <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber | html %]">[% account.item.biblio.title | html %]</a>
+                      [% END %]
+                  </td>
+                  <td>
+                      [% account.note | html_line_break %]
+                  </td>
+                  [% IF ( account.amount < 0 ) %]
+                      <td class="credit" style="text-align: right;">
+                  [% ELSE %]
+                      <td class="debit" style="text-align: right;">
+                  [% END %][% account.amount | $Price | html %]
+                      </td>
+                  [% IF ( account.amountoutstanding < 0 ) %]
+                      <td class="credit" style="text-align: right;">
+                  [% ELSE %]
+                      <td class="debit" style="text-align: right;">
+                  [% END %]
+                          [% account.amountoutstanding | $Price | html %]
+                      </td>
                 </tr>
             [% END %]
 
