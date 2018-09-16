@@ -1382,7 +1382,7 @@ returns the correct SQL routine based on OrderPriceRounding system preference.
 sub _get_rounding_sql {
     my $to_round = shift;
     my $rounding_pref = C4::Context->preference('OrderPriceRounding');
-    if   ($rounding_pref eq 'nearest_cent') { return "CAST($to_round*100 AS INTEGER)/100"; }
+    if   ($rounding_pref eq 'nearest_cent') { return "CAST($to_round*100 AS UNSIGNED)/100"; }
     else { return "$to_round"; }
 }
 
