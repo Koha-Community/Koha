@@ -145,8 +145,11 @@ EOS
     };
 
     subtest 'Daily loans' => sub {
-        plan tests => 2;
-        skip "It's 23:59!", 2 if $today->hour == 23 and $today->minute == 59;
+        if ( $today->hour == 23 and $today->minute == 59 ) {
+            plan skip_all => "It's 23:59!";
+        } else {
+            plan tests => 2;
+        }
         # Test 1: No overdue
         my $today_daily = $today->clone->set( hour => 23, minute => 59 );
         my $today_daily_as_formatted = output_pref( $today_daily );
@@ -219,8 +222,11 @@ EOS
     };
 
     subtest 'Hourly loans' => sub {
-        plan tests => 2;
-        skip "It's 23:59!", 2 if $today->hour == 23 and $today->minute == 59;
+        if ( $today->hour == 23 and $today->minute == 59 ) {
+            plan skip_all => "It's 23:59!";
+        } else {
+            plan tests => 2;
+        }
         # Test 1: No overdue
         my ( $date_due_in_time, $date_due_in_time_as_formatted, $date_due_in_late, $date_due_in_late_as_formatted, $issue_date, $slip, $expected_slip );
         # Assuming today is not hour = 23 and minute = 59
@@ -307,8 +313,11 @@ EOS
     };
 
     subtest 'Daily loans' => sub {
-        plan tests => 2;
-        skip "It's 23:59!", 2 if $today->hour == 23 and $today->minute == 59;
+        if ( $today->hour == 23 and $today->minute == 59 ) {
+            plan skip_all => "It's 23:59!";
+        } else {
+            plan tests => 2;
+        }
         # Test 1: No overdue
         my $today_daily = $today->clone->set( hour => 23, minute => 59 );
         my $today_daily_as_formatted = output_pref( $today_daily );
