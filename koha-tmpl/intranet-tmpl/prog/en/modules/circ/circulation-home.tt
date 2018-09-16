@@ -39,6 +39,11 @@
                             </li>
                         [% END %]
                     [% END %]
+                    [% IF Koha.Preference('OnSiteCheckouts') %]
+                        <li>
+                            <a class="circ-button" href="/cgi-bin/koha/circ/on-site_checkouts.pl"><i class="fa fa-map-marker"></i> Pending on-site checkouts</a>
+                        </li>
+                    [% END %]
                 </ul>
             </div>
 
@@ -104,11 +109,6 @@
                             title="Limited to your library.  See report help for other details."
                         ><i class="fa fa-clock-o"></i> Overdues with fines</a>
                     </li>
-                    [% IF Koha.Preference('OnSiteCheckouts') %]
-                        <li>
-                            <a class="circ-button" href="/cgi-bin/koha/circ/on-site_checkouts.pl">Pending on-site checkouts</a>
-                        </li>
-                    [% END %]
                 </ul>
             </div>
         </div>
