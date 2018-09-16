@@ -831,9 +831,6 @@ if ( $op eq "addbiblio" ) {
     # it is not a duplicate (determined either by Koha itself or by user checking it's not a duplicate)
     if ( !$duplicatebiblionumber or $confirm_not_duplicate ) {
         my $oldbibitemnum;
-        if (C4::Context->preference("BiblioAddsAuthorities")){
-            BiblioAutoLink( $record, $frameworkcode );
-        } 
         if ( $is_a_modif ) {
             ModBiblio( $record, $biblionumber, $frameworkcode );
         }
