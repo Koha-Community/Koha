@@ -13,6 +13,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
 [% Asset.css("css/datatables.css") | $raw %]
 <style type="text/css">
     .picked_to_duplicate > td { background-color: #bcdb89 !important; }
+    span.hint { margin-left: 1em; }
 </style>
 </head>
 
@@ -179,41 +180,36 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
       <p>Duplicate all the orders with the following accounting details:</p>
       <fieldset class="rows" style="float:none;">
           <legend>Accounting details</legend>
+          <div class="hint" style="margin: 1em 1em 0">Check boxes to duplicate the original values</div>
           <ol>
               <li>
-                  <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
-                  <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
+                  <label for="all_currency">Currency:</label>
+                  <input type="checkbox" name="copy_existing_value" value="currency" title="Copy existing value" />
+                  <select name="all_currency" id="all_currency">
+                  [% FOREACH currency IN currencies %]
+                      [% IF currency.currency == vendor.listprice %]
+                          <option value="[% currency.currency | html %]" selected="selected">[% currency.currency | html %]</option>
+                      [% ELSIF not currency.archived %]
+                          <option value="[% currency.currency | html %]">[% currency.currency | html %]</option>
+                      [% END %]
+                  [% END %]
+                  </select>
+                  <span class="hint" id="hint_currency">The original currency value will be copied</span>
               </li>
               <li>
-                      <li>
-                          <label for="all_currency">Currency:</label>
-                          <input type="checkbox" name="copy_existing_value" value="currency" title="Copy existing value" />
-                          <select name="all_currency" id="all_currency">
-                          [% FOREACH currency IN currencies %]
-                              [% IF currency.currency == vendor.listprice %]
-                                  <option value="[% currency.currency | html %]" selected="selected">[% currency.currency | html %]</option>
-                              [% ELSIF not currency.archived %]
-                                  <option value="[% currency.currency | html %]">[% currency.currency | html %]</option>
-                              [% END %]
-                          [% END %]
-                          </select>
-                          <span class="hint" id="hint_currency">The original currency value will be copied</span>
-                      </li>
-                      <li>
-                          <label for="all_budget_id">Fund: </label>
-                          <input type="checkbox" name="copy_existing_value" value="budget_id" title="Copy existing value" />
-                          <select id="all_budget_id" size="1" name="all_budget_id">
-                            <option value="">Select a fund</option>
-                          [% FOREACH budget_loo IN budget_loop %]
-                              [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>
-                              [% ELSE %]<option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %] (inactive)</option>
-                              [% END %]
-                          [% END %]
-                          </select>
-                          <label for="all_showallbudgets" style="float:none;width:auto;">&nbsp;Show inactive:</label>
-                          <input type="checkbox" id="all_showallbudgets" />
-                          <span class="hint" id="hint_budget_id">The original fund will be used</span>
-                      </li>
+                  <label for="all_budget_id">Fund: </label>
+                  <input type="checkbox" name="copy_existing_value" value="budget_id" title="Copy existing value" />
+                  <select id="all_budget_id" size="1" name="all_budget_id">
+                    <option value="">Select a fund</option>
+                  [% FOREACH budget_loo IN budget_loop %]
+                      [% IF ( budget_loo.b_active ) %]<option value="[% budget_loo.b_id | html %]" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %]</option>
+                      [% ELSE %]<option value="[% budget_loo.b_id | html %]" class="b_inactive" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]">[% budget_loo.b_txt | html %] (inactive)</option>
+                      [% END %]
+                  [% END %]
+                  </select>
+                  <label for="all_showallbudgets" style="float:none;width:auto;margin-right:0;">&nbsp;Show inactive:</label>
+                  <input type="checkbox" id="all_showallbudgets" />
+                  <span class="hint" id="hint_budget_id">The original fund will be used</span>
               </li>
               <li>
                   <label for="all_order_internalnote">Internal note: </label>
@@ -251,6 +247,8 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
         [% END %]
         <input type="hidden" name="op" value="do_duplicate" />
         <input type="hidden" name="basketno" value="[% basket.basketno | html %]" />
+        <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
+        <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
         <button type="submit" class="btn btn-default">Duplicate orders</button>
         <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno %]">Cancel</a>
     </fieldset>
@@ -321,7 +319,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NO_FUND_SELECTED = _("No fund selected.");
         $(document).ready(function() {
-            $('.hint').hide();
+            $('span.hint').hide();
             var columns_settings;// = [% ColumnsSettings.GetColumns( 'acqui', 'histsearch', 'histsearcht', 'json' ) | $raw %];
             KohaTable("table_orders", {
                 "aoColumnDefs": [
