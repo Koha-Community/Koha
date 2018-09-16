@@ -80,7 +80,7 @@ sub update_bib {
     my $query = shift;
     my $biblionumber = shift;
     my $old_record = GetMarcBiblio({ biblionumber => $biblionumber });
-    my $frameworkcode = $query->url_param('frameworkcode') // '';
+    my $frameworkcode = $query->url_param('frameworkcode') // GetFrameworkCode($biblionumber);
     unless  (defined $old_record) {
         print $query->header(-type => 'text/xml', -status => '404 Not Found');
         return;
