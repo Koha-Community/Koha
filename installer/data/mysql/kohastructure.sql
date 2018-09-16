@@ -266,7 +266,6 @@ CREATE TABLE `branches` ( -- information about your libraries or branches are st
   `branchurl` LONGTEXT, -- the URL for your library or branch's website
   `issuing` tinyint(4) default NULL, -- unused in Koha
   `branchip` varchar(15) default NULL, -- the IP address for your library or branch
-  `branchprinter` varchar(100) default NULL, -- unused in Koha
   `branchnotes` LONGTEXT, -- notes related to your library or branch
   opac_info MEDIUMTEXT, -- HTML that displays in OPAC
   `geolocation` VARCHAR(255) default NULL, -- geolocation of your library
@@ -1238,19 +1237,6 @@ CREATE TABLE pending_offline_operations (
   amount decimal(28,6) DEFAULT NULL,
   PRIMARY KEY (operationid)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
-
---
--- Table structure for table `printers`
---
-
-DROP TABLE IF EXISTS `printers`;
-CREATE TABLE `printers` (
-  `printername` varchar(40) NOT NULL default '',
-  `printqueue` varchar(20) default NULL,
-  `printtype` varchar(20) default NULL,
-  PRIMARY KEY (`printername`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Table structure for table `printers_profile`

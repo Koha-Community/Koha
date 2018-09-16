@@ -37,8 +37,6 @@ Updated:<ul>
     [% FOREACH update IN updated %]
     [% IF ( update.updated_branch ) %]
         <li>Library: [% update.old_branch or "?" | html %] &rArr; [% update.LoginBranchcode or "?" | html %]</li>
-    [% ELSIF ( update.updated_printer ) %]
-      <!-- FIXME:  <li>Printer: [% update.old_printer or "?" | html %] &rArr; [% update.new_printer or "?" | html %]</li> -->
     [% ELSE %]
         <li>ERROR - unknown</li>
     [% END %]
@@ -67,19 +65,6 @@ Updated:<ul>
             [% PROCESS options_for_libraries libraries => Branches.all( selected => branch ) %]
         </select></li>
     [% END %]
-<!--
-    [% IF ( printerloop ) %]
-        <li><label for="printer">Choose a network printer:</label>
-        <select name="printer" id="printer">
-            [% FOREACH printerloo IN printerloop %]
-                [% IF ( printerloo.selected ) %]
-                    <option value="[% printerloo.value | html %]" selected="selected">[% printerloo.name | html %]</option>
-                [% ELSE %]
-                    <option value="[% printerloo.value | html %]">[% printerloo.name | html %]</option>
-                [% END %]
-            [% END %]
-        </select></li>
-    [% END %] -->
     </ol>
 </fieldset>
 <fieldset class="action">

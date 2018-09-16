@@ -848,7 +848,7 @@ sub checkauth {
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('branchprinter'),
+                $session->param('emailaddress'),
                 $session->param('shibboleth')
             );
             C4::Context::set_shelves_userenv( 'bar', $session->param('barshelves') );
@@ -1069,14 +1069,12 @@ sub checkauth {
                     C4::Context->_unset_userenv($sessionID);
                 }
                 my ( $borrowernumber, $firstname, $surname, $userflags,
-                    $branchcode, $branchname, $branchprinter, $emailaddress );
+                    $branchcode, $branchname, $emailaddress );
 
                 if ( $return == 1 ) {
                     my $select = "
                     SELECT borrowernumber, firstname, surname, flags, borrowers.branchcode,
-                    branches.branchname    as branchname,
-                    branches.branchprinter as branchprinter,
-                    email
+                    branches.branchname    as branchname, email
                     FROM borrowers
                     LEFT JOIN branches on borrowers.branchcode=branches.branchcode
                     ";
@@ -1097,7 +1095,7 @@ sub checkauth {
                     }
                     if ( $sth->rows ) {
                         ( $borrowernumber, $firstname, $surname, $userflags,
-                            $branchcode, $branchname, $branchprinter, $emailaddress ) = $sth->fetchrow;
+                            $branchcode, $branchname, $emailaddress ) = $sth->fetchrow;
                         $debug and print STDERR "AUTH_3 results: " .
                           "$cardnumber,$borrowernumber,$userid,$firstname,$surname,$userflags,$branchcode,$emailaddress\n";
                     } else {
@@ -1139,8 +1137,7 @@ sub checkauth {
                         if ( $domain && $ip =~ /^$domain/ ) {
                             $branchcode = $branches->{$br}->{'branchcode'};
 
-                            # new op dev : add the branchprinter and branchname in the cookie
-                            $branchprinter = $branches->{$br}->{'branchprinter'};
+                            # new op dev : add the branchname to the cookie
                             $branchname    = $branches->{$br}->{'branchname'};
                         }
                     }
@@ -1165,8 +1162,7 @@ sub checkauth {
                     $session->param('cardnumber'),   $session->param('firstname'),
                     $session->param('surname'),      $session->param('branch'),
                     $session->param('branchname'),   $session->param('flags'),
-                    $session->param('emailaddress'), $session->param('branchprinter'),
-                    $session->param('shibboleth')
+                    $session->param('emailaddress'), $session->param('shibboleth')
                 );
 
             }
@@ -1444,7 +1440,7 @@ sub check_api_auth {
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('branchprinter')
+                $session->param('emailaddress')
             );
 
             my $ip       = $session->param('ip');
@@ -1532,35 +1528,35 @@ sub check_api_auth {
                 my (
                     $borrowernumber, $firstname,  $surname,
                     $userflags,      $branchcode, $branchname,
-                    $branchprinter,  $emailaddress
+                    $emailaddress
                 );
                 my $sth =
                   $dbh->prepare(
-"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname,branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
+"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where userid=?"
                   );
                 $sth->execute($userid);
                 (
                     $borrowernumber, $firstname,  $surname,
                     $userflags,      $branchcode, $branchname,
-                    $branchprinter,  $emailaddress
+                    $emailaddress
                 ) = $sth->fetchrow if ( $sth->rows );
 
                 unless ( $sth->rows ) {
                     my $sth = $dbh->prepare(
-"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, branches.branchprinter as branchprinter, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
+"select borrowernumber, firstname, surname, flags, borrowers.branchcode, branches.branchname as branchname, email from borrowers left join branches on borrowers.branchcode=branches.branchcode where cardnumber=?"
                     );
                     $sth->execute($cardnumber);
                     (
                         $borrowernumber, $firstname,  $surname,
                         $userflags,      $branchcode, $branchname,
-                        $branchprinter,  $emailaddress
+                        $emailaddress
                     ) = $sth->fetchrow if ( $sth->rows );
 
                     unless ( $sth->rows ) {
                         $sth->execute($userid);
                         (
                             $borrowernumber, $firstname,  $surname,       $userflags,
-                            $branchcode,     $branchname, $branchprinter, $emailaddress
+                            $branchcode,     $branchname, $emailaddress
                         ) = $sth->fetchrow if ( $sth->rows );
                     }
                 }
@@ -1581,8 +1577,7 @@ sub check_api_auth {
                     if ( $domain && $ip =~ /^$domain/ ) {
                         $branchcode = $branches->{$br}->{'branchcode'};
 
-                        # new op dev : add the branchprinter and branchname in the cookie
-                        $branchprinter = $branches->{$br}->{'branchprinter'};
+                        # new op dev : add the branchname to the cookie
                         $branchname    = $branches->{$br}->{'branchname'};
                     }
                 }
@@ -1605,7 +1600,7 @@ sub check_api_auth {
                 $session->param('cardnumber'),   $session->param('firstname'),
                 $session->param('surname'),      $session->param('branch'),
                 $session->param('branchname'),   $session->param('flags'),
-                $session->param('emailaddress'), $session->param('branchprinter')
+                $session->param('emailaddress')
             );
             return ( "ok", $cookie, $sessionID );
         } else {
@@ -1693,7 +1688,7 @@ sub check_cookie_auth {
             $session->param('cardnumber'),   $session->param('firstname'),
             $session->param('surname'),      $session->param('branch'),
             $session->param('branchname'),   $session->param('flags'),
-            $session->param('emailaddress'), $session->param('branchprinter')
+            $session->param('emailaddress')
         );
 
         my $ip       = $session->param('ip');

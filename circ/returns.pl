@@ -35,6 +35,9 @@ use CGI qw ( -utf8 );
 use DateTime;
 
 use C4::Auth qw/:DEFAULT get_session/;
+use C4::Output;
+use C4::Circulation;
+use C4::Reserves;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Context;
@@ -43,7 +46,6 @@ use C4::Koha;   # FIXME : is it still useful ?
 use C4::Members::Messaging;
 use C4::Members;
 use C4::Output;
-use C4::Print;
 use C4::Reserves;
 use C4::RotatingCollections;
 use Koha::AuthorisedValues;
@@ -83,16 +85,11 @@ if ( $query->param('print_slip') ) {
 
 #####################
 #Global vars
-my $printers = GetPrinters();
 my $userenv = C4::Context->userenv;
 my $userenv_branch = $userenv->{'branch'} // '';
-my $printer = $userenv->{'branchprinter'} // '';
 my $forgivemanualholdsexpire = $query->param('forgivemanualholdsexpire');
 
 my $overduecharges = (C4::Context->preference('finesMode') && C4::Context->preference('finesMode') ne 'off');
- #
-# Some code to handle the error if there is no branch or printer setting.....
-#
 
 # Set up the item stack ....
 my %returneditems;
@@ -619,7 +616,6 @@ foreach ( sort { $a <=> $b } keys %returneditems ) {
 
 $template->param(
     riloop         => \@riloop,
-    printer        => $printer,
     errmsgloop     => \@errmsgloop,
     exemptfine     => $exemptfine,
     dropboxmode    => $dropboxmode,

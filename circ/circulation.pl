@@ -30,9 +30,8 @@ use DateTime;
 use DateTime::Duration;
 use Scalar::Util qw( looks_like_number );
 use C4::Output;
-use C4::Print;
 use C4::Auth qw/:DEFAULT get_session haspermission/;
-use C4::Koha;   # GetPrinter
+use C4::Koha;
 use C4::Circulation;
 use C4::Utils::DataTables::Members;
 use C4::Members;
@@ -179,7 +178,6 @@ if ( $restoreduedatespec && $restoreduedatespec eq "highholds_empty" ) {
 }
 my $issueconfirmed = $query->param('issueconfirmed');
 my $cancelreserve  = $query->param('cancelreserve');
-my $print          = $query->param('print') || q{};
 my $debt_confirmed = $query->param('debt_confirmed') || 0; # Don't show the debt error dialog twice
 my $charges        = $query->param('charges') || q{};
 
@@ -215,27 +213,12 @@ if( $onsite_checkout && !$duedatespec_allow ) {
     }
 }
 
-# check and see if we should print
-if ( @$barcodes == 0 && $print eq 'maybe' ) {
-    $print = 'yes';
-}
-
 my $inprocess = (@$barcodes == 0) ? '' : $query->param('inprocess');
 if ( @$barcodes == 0 && $charges eq 'yes' ) {
     $template->param(
         PAYCHARGES     => 'yes',
         borrowernumber => $borrowernumber
     );
-}
-
-if ( $print eq 'yes' && $borrowernumber ne '' ) {
-    if ( C4::Context->boolean_preference('printcirculationslips') ) {
-        my $letter = IssueSlip($branch, $borrowernumber, "QUICK");
-        NetworkPrint($letter->{content});
-    }
-    $query->param( 'borrowernumber', '' );
-    $borrowernumber = '';
-    undef $patron;
 }
 
 #

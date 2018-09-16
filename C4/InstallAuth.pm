@@ -259,8 +259,7 @@ sub checkauth {
                 $session->param('branch'),
                 $session->param('branchname'),
                 $session->param('flags'),
-                $session->param('emailaddress'),
-                $session->param('branchprinter')
+                $session->param('emailaddress')
             );
             $cookie = $query->cookie(
                 -name     => 'CGISESSID',

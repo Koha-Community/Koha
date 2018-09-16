@@ -39,7 +39,6 @@ BEGIN {
 	require Exporter;
 	@ISA    = qw(Exporter);
 	@EXPORT = qw(
-        &GetPrinters &GetPrinter
         &GetItemTypesCategorized
         &getallthemes
         &getFacets
@@ -274,45 +273,6 @@ sub getImageSets {
         
     }
     return \@imagesets;
-}
-
-=head2 GetPrinters
-
-  $printers = &GetPrinters();
-  @queues = keys %$printers;
-
-Returns information about existing printer queues.
-
-C<$printers> is a reference-to-hash whose keys are the print queues
-defined in the printers table of the Koha database. The values are
-references-to-hash, whose keys are the fields in the printers table.
-
-=cut
-
-sub GetPrinters {
-    my %printers;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("select * from printers");
-    $sth->execute;
-    while ( my $printer = $sth->fetchrow_hashref ) {
-        $printers{ $printer->{'printqueue'} } = $printer;
-    }
-    return ( \%printers );
-}
-
-=head2 GetPrinter
-
-  $printer = GetPrinter( $query, $printers );
-
-=cut
-
-sub GetPrinter {
-    my ( $query, $printers ) = @_;    # get printer for this query from printers
-    my $printer = $query->param('printer');
-    my %cookie = $query->cookie('userenv');
-    ($printer) || ( $printer = $cookie{'printer'} ) || ( $printer = '' );
-    ( $printers->{$printer} ) || ( $printer = ( keys %$printers )[0] );
-    return $printer;
 }
 
 =head2 getnbpages

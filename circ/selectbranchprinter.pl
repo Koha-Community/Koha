@@ -23,12 +23,9 @@ use CGI qw ( -utf8 );
 use C4::Context;
 use C4::Output;
 use C4::Auth qw/:DEFAULT get_session/;
-use C4::Print;  # GetPrinters
 use C4::Koha;
 use Koha::BiblioFrameworks;
 use Koha::Libraries;
-
-# this will be the script that chooses branch and printer settings....
 
 my $query = CGI->new();
 
@@ -44,14 +41,8 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user({
 my $sessionID = $query->cookie("CGISESSID");
 my $session = get_session($sessionID);
 
-# try to get the branch and printer settings from http, fallback to userenv
-my $printers = GetPrinters();
 my $branch   = $query->param('branch' );
-my $printer  = $query->param('printer');
-# fallbacks for $branch and $printer after possible session updates
-
 my $userenv_branch  = C4::Context->userenv->{'branch'}        || '';
-my $userenv_printer = C4::Context->userenv->{'branchprinter'} || '';
 my @updated;
 
 # $session lddines here are doing the updating
@@ -72,47 +63,12 @@ if ( $branch and my $library = Koha::Libraries->find($branch) ) {
     $branch = $userenv_branch;  # fallback value
 }
 
-# FIXME: branchprinter is not retained by session.  This feature was not adequately
-# ported from Koha 2.2.3 where it had been a separate cookie.
-# So this needs to be fixed for Koha 3 or removed outright.
-#   --atz (w/ info from chris cormack)
-
-if ($printer) {
-    if (! $userenv_printer or $userenv_printer ne $printer ) {
-        $session->param('branchprinter', $printer);         # update sesssion in DB
-        $session->flush();
-        $template->param('new_printer', $printer);          # update template
-        push @updated, {
-            updated_printer => 1,
-                old_printer => $userenv_printer,
-        };
-    } # else printer is the same, no update
-} else {
-    $printer = $userenv_printer;  # fallback value
-}
-
 $template->param(updated => \@updated) if (scalar @updated);
-
-my @printkeys = sort keys %$printers;
-if (scalar(@printkeys) == 1 or not $printers->{$printer}) {
-    $printer = $printkeys[0];   # if printer didn't really exist, or there is only 1 anyway, then replace it w/ one that does
-}
-
-my @printerloop;
-foreach ( @printkeys ) {
-    next unless ($_); # skip printer if blank.
-    push @printerloop, {
-        selected => ( $_ eq $printer ),
-        name     => $printers->{$_}->{'printername'},
-        value    => $_,
-    };
-}
 
 my @recycle_loop;
 foreach ($query->param()) {
     $_ or next;                   # disclude blanks
     $_ eq "branch"     and next;  # disclude branch
-    $_ eq "printer"    and next;  # disclude printer
     $_ eq "oldreferer" and next;  # disclude oldreferer
     push @recycle_loop, {
         param => $_,
@@ -130,7 +86,6 @@ if (scalar @updated and not scalar @recycle_loop) {
 
 $template->param(
     referer     => $referer,
-    printerloop => \@printerloop,
     branch      => $branch,
     recycle_loop=> \@recycle_loop,
 );
