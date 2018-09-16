@@ -791,7 +791,7 @@ sub FindDuplicateAuthority {
     if ($QParser) {
         $op = '&&';
     } else {
-        $op = 'and';
+        $op = 'AND';
     }
     my $query='at:'.$authtypecode.' ';
     my $filtervalues=qr([\001-\040\Q!'"`#$%&*+,-./:;<=>?@(){[}_|~\E\]]);

@@ -526,7 +526,9 @@ our %index_field_convert = (
     'hi'      => 'Host-Item-Number',
     'rcn'     => 'record-control-number',
     'cni'     => 'control-number-identifier',
-    'Control-number' => 'control-number'
+    'Control-number' => 'control-number',
+    'at'      => 'authtype',
+    'he'      => 'Heading'
 );
 
 sub _convert_index_fields {
