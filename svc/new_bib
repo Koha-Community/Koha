@@ -50,6 +50,7 @@ sub add_bib {
 
     my $result = {};
     my $inxml = $query->param('POSTDATA');
+    my $frameworkcode = $query->url_param('frameworkcode') // '';
     print $query->header(-type => 'text/xml', -charset => 'utf-8');
 
     my $marcflavour = C4::Context->preference('marcflavour') || 'MARC21';
@@ -73,7 +74,7 @@ sub add_bib {
         foreach my $field ( $record->field($itemtag) ) {
             $record->delete_field($field);
         }
-        my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, '' );
+        my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $record, $frameworkcode );
         my $new_record = GetMarcBiblio({ biblionumber => $biblionumber });
         if ( $query->url_param('items') ) {
             foreach my $field ( $fullrecord->field($itemtag) ) {

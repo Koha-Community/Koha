@@ -127,16 +127,21 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
         },
 
         CreateRecord: function( record, callback ) {
+            var frameworkcode = record.frameworkcode;
             record = record.clone();
             _removeBiblionumberFields( record );
 
             $.ajax( {
                 type: 'POST',
-                url: '/cgi-bin/koha/svc/new_bib',
+                url: '/cgi-bin/koha/svc/new_bib?frameworkcode=' + encodeURIComponent(frameworkcode),
                 data: record.toXML(),
                 contentType: 'text/xml'
             } ).done( function( data ) {
-                callback( _fromXMLStruct( data ) );
+                var record = _fromXMLStruct( data );
+                if ( record.marcxml ) {
+                    record.marcxml[0].frameworkcode = frameworkcode;
+                }
+                callback( record );
             } ).fail( function( data ) {
                 callback( { error: _('Could not save record') } );
             } );
@@ -159,7 +164,7 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
                 }
                 callback( record );
             } ).fail( function( data ) {
-                callback( { data: { error: data } } );
+                callback( { error: _('Could not save record') } );
             } );
         },
 
