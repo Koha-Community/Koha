@@ -64,7 +64,11 @@
         [% IF ( innerloo.tag ) %]
             <div class="tag">
             <div class="tag_title">
-                [% innerloo.tag %]
+                <span class="tag_num">[% innerloo.tag_number | html %]</span>
+                [% IF (innerloo.defined("ind1") ) %]
+                    <span class="tag_ind1">[% innerloo.ind1 %]</span><span class="tag_ind2">[% innerloo.ind2 | html %]</span>
+                [% END %]
+                [% IF (innerloo.tag_desc) %]<span class="dashwrapper"> -</span> <span class="tag_desc">[% innerloo.tag_desc | html %]</span>[% END %]
             </div>
         [% ELSE %]
             <div class="tag">
@@ -72,9 +76,9 @@
         [% FOREACH subfiel IN innerloo.subfield %]
             <p>
                 <label class="labelsubfield">&nbsp;
-                [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield %]</b>[% END %]
-                <span title="[% subfiel.long_desc %]">[% subfiel.short_desc %]</span></label>
-                [% subfiel.marc_value %]
+                [% UNLESS ( subfiel.hide_marc ) %]<b>[% subfiel.marc_subfield | html %]</b>[% END %]
+                <span title="[% subfiel.long_desc | html %]" class="desc">[% subfiel.short_desc | html %]</span></label>
+                [% subfiel.marc_value | html %]
                 [% IF ( subfiel.link ) %]
                     <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
                         <img src="[% interface %]/[% theme %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value %]">
