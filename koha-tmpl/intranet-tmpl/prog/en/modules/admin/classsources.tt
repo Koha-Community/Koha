@@ -244,7 +244,7 @@
         <li id="regex_block">
             <label for="split_regex" class="required">Regular expression: </label>
             <div>
-                [% IF split_rule %]
+                [% IF split_rule AND split_rule.regexs.count %]
                     [% FOR re IN split_rule.regexs %]
                         <div class="split_regex">
                             <input type="text" name="split_regex" id="split_regex" value="[% re | html %]" />
