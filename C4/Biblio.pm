@@ -207,6 +207,10 @@ sub AddBiblio {
         $defer_marc_save = 1;
     }
 
+    if (C4::Context->preference('BiblioAddsAuthorities')) {
+        BiblioAutoLink( $record, $frameworkcode );
+    }
+
     my ( $biblionumber, $biblioitemnumber, $error );
     my $dbh = C4::Context->dbh;
 
@@ -266,6 +270,10 @@ sub ModBiblio {
     if ( C4::Context->preference("CataloguingLog") ) {
         my $newrecord = GetMarcBiblio({ biblionumber => $biblionumber });
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio BEFORE=>" . $newrecord->as_formatted );
+    }
+
+    if (C4::Context->preference('BiblioAddsAuthorities')) {
+        BiblioAutoLink( $record, $frameworkcode );
     }
 
     # Cleaning up invalid fields must be done early or SetUTF8Flag is liable to

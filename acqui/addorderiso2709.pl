@@ -163,7 +163,7 @@ if ($op eq ""){
         my $c_sort1 = shift( @sort1 ) || $input->param('all_sort1') || '';
         my $c_sort2 = shift( @sort2 ) || $input->param('all_sort2') || '';
 
-        # 1st insert the biblio, or find it through matcher
+        # Insert the biblio, or find it through matcher
         unless ( $biblionumber ) {
             if ($matcher_id) {
                 if ( $matcher_id eq '_TITLE_AUTHOR_' ) {
@@ -194,10 +194,6 @@ if ($op eq ""){
             }
             ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $cgiparams->{'frameworkcode'} || '' );
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
-            # 2nd add authorities if applicable
-            if (C4::Context->preference("BiblioAddsAuthorities")){
-                my $headings_linked =BiblioAutoLink($marcrecord, $cgiparams->{'frameworkcode'});
-            }
         } else {
             SetImportRecordStatus( $biblio->{'import_record_id'}, 'imported' );
         }

@@ -164,9 +164,6 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
         exit;
     }
     #from this point: add a new record
-        if (C4::Context->preference("BiblioAddsAuthorities")){
-            my $headings_linked=BiblioAutoLink($marcrecord, $params->{'frameworkcode'});
-        }
         my $bibitemnum;
         $params->{'frameworkcode'} or $params->{'frameworkcode'} = "";
         ( $biblionumber, $bibitemnum ) = AddBiblio( $marcrecord, $params->{'frameworkcode'} );
