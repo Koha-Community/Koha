@@ -344,11 +344,11 @@ sub simple_search_compat {
     }
     my $results = $self->search($query, undef, $max_results, %options);
     my @records;
-    $results->each(sub {
-            my $marc = $self->decode_record_from_result(@_);
-            push @records, $marc;
-        });
-    return (undef, \@records, $results->total);
+    my $hits = $results->{'hits'};
+    foreach my $es_record (@{$hits->{'hits'}}) {
+        push @records, $self->decode_record_from_result($es_record->{'_source'});
+    }
+    return (undef, \@records, $hits->{'total'});
 }
 
 =head2 extract_biblionumber

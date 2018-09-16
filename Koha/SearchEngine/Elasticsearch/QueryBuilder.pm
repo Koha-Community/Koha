@@ -523,6 +523,8 @@ our %index_field_convert = (
     'mus'     => 'rtype',
     'aud'     => 'ta',
     'hi'      => 'Host-Item-Number',
+    'at'      => 'authtype',
+    'he'      => 'Heading'
 );
 
 sub _convert_index_fields {
