@@ -62,7 +62,7 @@
 [% FOREACH BIG_LOO IN BIG_LOOP %]
     <div id="tab[% BIG_LOO.number | html %]XX">
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
-        [% IF ( innerloo.tag ) %]
+        [% IF ( innerloo.tag_number ) %]
             <div class="tag">
             <div class="tag_title">
                 <span class="tag_num">[% innerloo.tag_number | html %]</span>
