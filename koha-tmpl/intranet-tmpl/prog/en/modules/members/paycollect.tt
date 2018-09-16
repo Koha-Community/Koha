@@ -146,7 +146,7 @@ function moneyFormat(textObj) {
     <li>
         <label for="paid">Collect from patron: </label>
             <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% amountoutstanding %]" />
+        <input name="paid" id="paid" value="[% amountoutstanding | html %]"  type="text" />
     </li>
 </ol>
 </fieldset>
@@ -194,7 +194,7 @@ function moneyFormat(textObj) {
                 <li>
                     <label for="paid">Writeoff amount: </label>
                     <!-- default to writing off all -->
-                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding %]" />
+                    <input name="amountwrittenoff" id="amountwrittenoff" value="[% amountoutstanding %]" type="text" />
                 </li>
             </ol>
         </fieldset>
@@ -219,7 +219,7 @@ function moneyFormat(textObj) {
     <li>
         <label for="paid">Collect from patron: </label>
         <!-- default to paying all -->
-        <input name="paid" id="paid" value="[% total | format('%.2f') %]" />
+        <input name="paid" id="paid" value="[% total | format('%.2f') %]" type="text" />
     </li>
     <li>
         <label for="selected_accts_notes">Note: </label>
