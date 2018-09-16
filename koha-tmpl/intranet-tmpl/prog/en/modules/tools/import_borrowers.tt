@@ -186,9 +186,9 @@
                         </li>
                     [% CASE %]
                         <li>
-                            <label class="description" for="[% borrower_field.field %]">[% borrower_field.description %]: </label>
-                            <input id="[% borrower_field.field %]" name="[% borrower_field.field %]" />
-                            <span class="field_hint">[% borrower_field.field %]</span>
+                            <label class="description" for="[% borrower_field.field | html %]">[% borrower_field.description | html %]: </label>
+                            <input id="[% borrower_field.field | html %]" name="[% borrower_field.field | html %]" type="text" />
+                            <span class="field_hint">[% borrower_field.field | html %]</span>
                         </li>
                     [% END %]
                 [% END %]
@@ -196,7 +196,7 @@
                 [% IF ( Koha.Preference('ExtendedPatronAttributes') == 1 ) %]
                     <li>
                         <label class="description" for="patron_attributes">Patron attributes: </label>
-                        <input id="patron_attributes" name="patron_attributes" />
+                        <input id="patron_attributes" name="patron_attributes" type="text" />
                         <span class="field_hint">patron_attributes</span>
                     </li>
                 [% END %]
