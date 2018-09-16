@@ -66,8 +66,25 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
         while ( record.removeField(bibnumTag) );
     }
 
+    function initFramework( frameworkcode, callback ) {
+        if ( typeof _frameworks[frameworkcode] === 'undefined' ) {
+            $.get(
+                '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=' + frameworkcode
+            ).done( function( framework ) {
+                _importFramework( frameworkcode, framework.framework );
+                callback();
+            } ).fail( function( data ) {
+                callback( 'Could not fetch framework settings' );
+            } );
+        } else {
+            callback();
+        }
+    }
+
     var KohaBackend = {
         NOT_EMPTY: {}, // Sentinel value
+
+        InitFramework: initFramework,
 
         GetAllTagsInfo: function( frameworkcode, tagnumber ) {
             return _framework_mappings[frameworkcode];
@@ -89,12 +106,23 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
         GetRecord: function( id, callback ) {
             $.get(
                 '/cgi-bin/koha/svc/bib/' + id
-            ).done( function( data ) {
-                var record = new MARC.Record();
-                record.loadMARCXML(data);
-                callback(record);
-            } ).fail( function( data ) {
-                callback( { error: data } );
+            ).done( function( metadata ) {
+                $.get(
+                    '/cgi-bin/koha/svc/bib_framework/' + id
+                ).done( function( frameworkcode ) {
+                    var record = new MARC.Record();
+                    record.loadMARCXML(metadata);
+                    record.frameworkcode = $(frameworkcode).find('frameworkcode').text();
+                    initFramework( record.frameworkcode, function( error ) {
+                        if ( typeof error === 'undefined' ) {
+                            callback( record );
+                        } else {
+                            callback( { error: error } );
+                        }
+                    });
+                } ).fail( function( data ) {
+                    callback( { error: _('Could not fetch frameworkcode for record') } );
+                } );
             } );
         },
 
@@ -110,21 +138,26 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
             } ).done( function( data ) {
                 callback( _fromXMLStruct( data ) );
             } ).fail( function( data ) {
-                callback( { error: data } );
+                callback( { error: _('Could not save record') } );
             } );
         },
 
         SaveRecord: function( id, record, callback ) {
+            var frameworkcode = record.frameworkcode;
             record = record.clone();
             _removeBiblionumberFields( record );
 
             $.ajax( {
                 type: 'POST',
-                url: '/cgi-bin/koha/svc/bib/' + id,
+                url: '/cgi-bin/koha/svc/bib/' + id + '?frameworkcode=' + encodeURIComponent(frameworkcode),
                 data: record.toXML(),
                 contentType: 'text/xml'
             } ).done( function( data ) {
-                callback( _fromXMLStruct( data ) );
+                var record = _fromXMLStruct( data );
+                if ( record.marcxml ) {
+                    record.marcxml[0].frameworkcode = frameworkcode;
+                }
+                callback( record );
             } ).fail( function( data ) {
                 callback( { data: { error: data } } );
             } );
@@ -196,10 +229,10 @@ define( [ '/cgi-bin/koha/svc/cataloguing/framework?frameworkcode=&callback=defin
         ValidateRecord: function( frameworkcode, record ) {
             var errors = [];
 
-            var mandatoryTags = KohaBackend.GetTagsBy( '', 'mandatory', '1' );
-            var mandatorySubfields = KohaBackend.GetSubfieldsBy( '', 'mandatory', '1' );
-            var nonRepeatableTags = KohaBackend.GetTagsBy( '', 'repeatable', '0' );
-            var nonRepeatableSubfields = KohaBackend.GetSubfieldsBy( '', 'repeatable', '0' );
+            var mandatoryTags = KohaBackend.GetTagsBy( record.frameworkcode, 'mandatory', '1' );
+            var mandatorySubfields = KohaBackend.GetSubfieldsBy( record.frameworkcode, 'mandatory', '1' );
+            var nonRepeatableTags = KohaBackend.GetTagsBy( record.frameworkcode, 'repeatable', '0' );
+            var nonRepeatableSubfields = KohaBackend.GetSubfieldsBy( record.frameworkcode, 'repeatable', '0' );
 
             $.each( mandatoryTags, function( tag ) {
                 if ( !record.hasField( tag ) ) errors.push( { type: 'missingTag', tag: tag } );

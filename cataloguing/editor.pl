@@ -30,6 +30,7 @@ use C4::Output;
 use DBIx::Class::ResultClass::HashRefInflator;
 use Koha::Database;
 use Koha::MarcSubfieldStructures;
+use Koha::BiblioFrameworks;
 
 my $input = CGI->new;
 
@@ -59,6 +60,9 @@ $template->{VARS}->{DefaultLanguageField008} = pack( 'A3', C4::Context->preferen
 
 my $authtags = Koha::MarcSubfieldStructures->search({ authtypecode => { '!=' => '' }, 'frameworkcode' => '' });
 $template->{VARS}->{authtags} = $authtags;
+
+my $frameworks = Koha::BiblioFrameworks->search({}, { order_by => ['frameworktext'] });
+$template->{VARS}->{frameworks} = $frameworks;
 
 # Z39.50 servers
 my $dbh = C4::Context->dbh;

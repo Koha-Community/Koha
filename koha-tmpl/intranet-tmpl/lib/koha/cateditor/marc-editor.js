@@ -478,6 +478,8 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
     } );
 
     function MARCEditor( options ) {
+        this.frameworkcode = '';
+
         this.cm = CodeMirror(
             options.position,
             {
@@ -535,9 +537,32 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             this.cm.refresh();
         },
 
+        setFrameworkCode: function( code, callback ) {
+            this.frameworkcode = code;
+            $( 'a.change-framework i.selected' ).addClass( 'hidden' );
+            $( 'a.change-framework i.unselected' ).removeClass( 'hidden' );
+            $( 'a.change-framework[data-frameworkcode="' + code + '"] i.unselected' ).addClass( 'hidden' );
+            $( 'a.change-framework[data-frameworkcode="' + code + '"] i.selected' ).removeClass( 'hidden ');
+            KohaBackend.InitFramework( code, callback );
+        },
+
         displayRecord: function( record ) {
             this.cm.setValue( TextMARC.RecordToText(record) );
             this.modified = false;
+            var cm = this.cm;
+            this.setFrameworkCode(
+                typeof record.frameworkcode !== 'undefined' ? record.frameworkcode : '',
+                function ( error ) {
+                    if ( typeof error !== 'undefined' ) {
+                        humanMsg.displayAlert( _(error), { className: 'humanError' } );
+                    }
+                    cm.setOption( 'mode', {
+                        name: 'marc',
+                        nonRepeatableTags: KohaBackend.GetTagsBy( this.frameworkcode, 'repeatable', '0' ),
+                        nonRepeatableSubfields: KohaBackend.GetSubfieldsBy( this.frameworkcode, 'repeatable', '0' )
+                    });
+                }
+            );
         },
 
         getRecord: function() {
@@ -553,6 +578,7 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
 
             this.textMode = false;
 
+            record.frameworkcode = this.frameworkcode;
             return record;
         },
 

@@ -329,6 +329,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             if (data.newRecord) {
                 var record = new MARC.Record();
                 record.loadMARCXML(data.newRecord);
+                record.frameworkcode = data.newRecord.frameworkcode;
                 editor.displayRecord( record );
             }
 
@@ -841,7 +842,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
 
         // Click bindings
         $( '#save-record, #save-dropdown a' ).click( function() {
-            $( '#save-record' ).find('i').attr( 'class', 'fa fa-spinner' ).siblings( 'span' ).text( _("Saving...") );
+             $( '#save-record' ).find('i').attr( 'class', 'fa fa-spinner fa-spin' ).siblings( 'span' ).text( _("Saving...") );
 
             function finishCb(result) {
                 if ( result.error == 'syntax' ) {
@@ -1093,6 +1094,19 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 { return undefined; }
         };
 
+        $('a.change-framework').click( function() {
+            $("#loading").show();
+            editor.setFrameworkCode(
+                $(this).data( 'frameworkcode' ),
+                function ( error ) {
+                    if ( typeof error !== 'undefined' ) {
+                        humanMsg.displayAlert( _("Failed to change framework"), { className: 'humanError' } );
+                    }
+                    $('#loading').hide();
+                }
+            );
+        } );
+
         // Start editor
         Preferences.Load( [% logged_in_user.borrowernumber || 0 | html %] );
         displayPreferences(editor);
@@ -1104,7 +1118,10 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         } );
 
         function finishCb( data ) {
-            if ( data.error ) openRecord( 'new/', editor, finishCb );
+            if ( data.error ) {
+                humanMsg.displayAlert( data.error );
+                openRecord( 'new/', editor, finishCb );
+            }
 
             Resources.GetAll().done( function() {
                 $("#loading").hide();

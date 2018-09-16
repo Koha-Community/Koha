@@ -49,6 +49,23 @@
             <ul id="prefs-menu" class="dropdown-menu">
                 <li><a id="switch-editor" href="#">Switch to basic editor</a></li>
                 <li><a id="set-field-widgets" href="#"></a></li>
+                <li class="nav-header">Change framework</li>
+                <li>
+                    <a class="change-framework" data-frameworkcode="">
+                        <i class="fa fa-fw unselected">&nbsp;</i>
+                        <i class="fa fa-fw fa-check selected">&nbsp;</i>
+                        Default
+                    </a>
+                </li>
+                [% FOREACH framework IN frameworks %]
+                    <li>
+                        <a class="change-framework" data-frameworkcode="[% framework.frameworkcode | html %]">
+                            <i class="fa fa-fw fa-check selected"></i>
+                            <i class="fa fa-fw unselected">&nbsp;</i>
+                            [% framework.frameworktext | html %]
+                        </a>
+                    </li>
+                [% END %]
                 <li class="divider"></li>
                 <li><a class="set-fontSize" style="font-size: .92em" href="#">Small text</a></li>
                 <li><a class="set-fontSize" style="font-size: 1em" href="#">Normal text</a></li>

@@ -1,0 +1,64 @@
+#!/usr/bin/perl
+# Copyright 2007 LibLime
+# Copyright 2012 software.coop and MJ Ray
+#
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
+#
+use strict;
+use warnings;
+use CGI qw ( -utf8 );
+use C4::Auth qw/check_api_auth/;
+use C4::Biblio;
+use C4::Items;
+use XML::Simple;
+
+binmode STDOUT, ':encoding(UTF-8)';
+
+my $query = new CGI;
+my ($status, $cookie, $sessionID) = check_api_auth($query, { editcatalogue => 'edit_catalogue'} );
+unless ($status eq 'ok') {
+    print $query->header(-type => 'text/xml', -status => '403 Forbidden');
+    print XMLout({ auth_status => $status }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    exit 0;
+}
+
+# do initial validation
+my $path_info = $query->path_info();
+my $biblionumber = undef;
+if ($path_info =~ m!^/(\d+)$!) {
+    $biblionumber = $1;
+} else {
+    print $query->header(-type => 'text/xml', -status => '400 Bad Request');
+}
+if ($query->request_method eq 'GET') {
+    fetch_bib_framework($query, $biblionumber);
+} else {
+    print $query->header(-type => 'text/xml', -status => '405 Method not allowed');
+    print XMLout({ error => 'Method not allowed' }, NoAttr => 1, RootName => 'response', XMLDecl => 1);
+    exit 0;
+}
+exit 0;
+
+sub fetch_bib_framework {
+    my $query = shift;
+    my $biblionumber = shift;
+    my $frameworkcode = GetFrameworkCode( $biblionumber );
+    my $result = {
+        'frameworkcode' => $frameworkcode
+    };
+    print $query->header(-type => 'text/xml',-charset => 'utf-8',);
+    print XMLout($result, NoAttr => 1, RootName => 'response', XMLDecl => 1, NoEscape => 0);
+}
