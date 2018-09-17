@@ -76,7 +76,7 @@ $scriptname
 This script lets you manage the plack daemon for your Koha instance.
 
 Usage:
-$scriptname start|stop|restart|reload [development|deployement|test] [debug] [debugger]
+$scriptname start|stop|restart|reload [development|deployement|test] [debug] [debugger] [listen :8000]
 $scriptname -h|--help
 
     start               Start the plack daemon for the specified instances
@@ -88,11 +88,12 @@ $scriptname -h|--help
     deployment          Set the plack mode
     development         Set the plack mode
     test                Set the plack mode
+    listen              Port or socket to listen on, defaults to $LISTEN
     --help|-h           Display this help message
 
 EXAMPLE
 
-bash -x /etc/init.d/koha-plack-daemon start development debug debugger
+bash -x /etc/init.d/koha-plack-daemon start development debug debugger listen :8000
 
 EOF
 }
@@ -107,35 +108,37 @@ start_plack()
 
     STARMANOPTS="-M FindBin \
                  --user=$DAEMON_USER --group=$DAEMON_GROUP \
-                 --pid $PIDFILE \
+                 --listen $LISTEN \
                  -E $MODE \
                  $PSGIFILE "
 
-    test "$MODE" != "deployment" && STARMANOPTS="$STARMANOPTS --workers 1"
+    if [[ "$MODE" != "deployment" ]]; then
+        STARMANOPTS="$STARMANOPTS --workers 1"
+        $DEBUGGER_STR $STARMAN $STARMANOPTS
+    fi
 
-    test "$MODE" == "deployment" && STARMANOPTS="$STARMANOPTS --daemonize \
-                                                              --max-requests $REQUESTS \
-                                                              --workers $WORKERS \
-                                                              --access-log $LOGDIR/plack.log \
-                                                              --error-log $LOGDIR/plack-error.log"
+    if [[ "$MODE" == "deployment" ]]; then
+        test "$MODE" == "deployment" && STARMANOPTS="$STARMANOPTS --daemonize \
+                                                                  --pid $PIDFILE \
+                                                                  --max-requests $REQUESTS \
+                                                                  --workers $WORKERS \
+                                                                  --access-log $LOGDIR/plack.log \
+                                                                  --error-log $LOGDIR/plack-error.log"
 
-    test -n "$PLACKSOCKET" && STARMANOPTS="$STARMANOPTS --listen $PLACKSOCKET "
+        test -n "$PLACKSOCKET" && STARMANOPTS="$STARMANOPTS --listen $PLACKSOCKET "
 
-    test -n "$LISTEN" && STARMANOPTS="$STARMANOPTS --listen $LISTEN "
+        if ! is_plack_running; then
+            log_daemon_msg "Starting Plack daemon"
 
-
-
-    if ! is_plack_running; then
-        log_daemon_msg "Starting Plack daemon"
-
-        if $DEBUGGER_STR $STARMAN $STARMANOPTS; then
-            log_end_msg 0
+            if $DEBUGGER_STR $STARMAN $STARMANOPTS; then
+                log_end_msg 0
+            else
+                log_end_msg 1
+            fi
         else
+            log_daemon_msg "Error: Plack already running"
             log_end_msg 1
         fi
-    else
-        log_daemon_msg "Error: Plack already running"
-        log_end_msg 1
     fi
 }
 
@@ -266,6 +269,9 @@ while [ $# -gt 0 ]; do
         test)
             MODE="test"
             shift ;;
+        listen)
+            LISTEN="$2"
+            shift; shift; ;;
         -*)
             die "Error: invalid option switch ($1)" ;;
         *)
