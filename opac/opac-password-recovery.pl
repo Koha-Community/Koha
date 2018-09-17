@@ -73,7 +73,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         $errMultipleAccountsForEmail = 1;
     }
     elsif ( $borrower = $search_results->next() ) {    # One matching borrower
-        my @emails = ( $borrower->email, $borrower->emailpro, $borrower->B_email );
+        my @emails = ( $borrower->email || '', $borrower->emailpro || '', $borrower->B_email || '');
 
         my $firstNonEmptyEmail = '';
         foreach my $address ( @emails ) {
@@ -82,7 +82,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         }
 
         # Is the given email one of the borrower's ?
-        if ( $email && !( grep { $_ eq $email } @emails ) ) {
+        if ( $email && !( grep /^$email$/i, @emails ) ) {
             $hasError    = 1;
             $errNoBorrowerFound = 1;
         }
