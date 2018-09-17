@@ -106,7 +106,13 @@ builder {
     enable_if { $proxies } "Plack::Middleware::RealIP",
         header => 'X-Forwarded-For',
         trusted_proxy => defined $proxies ? [split /[ ,]+/, $proxies] : [];
-    enable "Plack::Middleware::Static";
+
+    #Plack can do static content delivery as well when debugging without Apache2
+    enable "Plack::Middleware::Static",
+        path => qr{^/intranet-tmpl/}, root => "koha-tmpl/";
+    enable "Plack::Middleware::Static",
+        path => qr{^/opac-tmpl/}, root => "koha-tmpl/";
+
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";
 
