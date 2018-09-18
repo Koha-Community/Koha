@@ -1377,18 +1377,16 @@ sub AddIssue {
 
             ## If item was lost, it has now been found, reverse any list item charges if necessary.
             if ( $item->{'itemlost'} ) {
-                if (
-                    Koha::RefundLostItemFeeRules->should_refund(
-                        {
-                            current_branch      => C4::Context->userenv->{branch},
-                            item_home_branch    => $item->{homebranch},
-                            item_holding_branch => $item->{holdingbranch}
-                        }
-                    )
-                  )
-                {
-                    _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef,
-                        $item->{'barcode'} );
+                my $should_refund = Koha::RefundLostItemFeeRules->should_refund(
+                    {
+                        current_branch      => C4::Context->userenv->{branch},
+                        item_home_branch    => $item->{homebranch},
+                        item_holding_branch => $item->{holdingbranch}
+                    }
+                );
+
+                if ($should_refund) {
+                    _FixAccountForLostAndReturned( $item->{'itemnumber'}, undef, $item->{'barcode'}, $should_refund eq '2' );
                 }
             }
 
@@ -1967,18 +1965,16 @@ sub AddReturn {
     if ( $item->{'itemlost'} ) {
         $messages->{'WasLost'} = 1;
         unless ( C4::Context->preference("BlockReturnOfLostItems") ) {
-            if (
-                Koha::RefundLostItemFeeRules->should_refund(
-                    {
-                        current_branch      => C4::Context->userenv->{branch},
-                        item_home_branch    => $item->{homebranch},
-                        item_holding_branch => $item_holding_branch
-                    }
-                )
-              )
-            {
-                _FixAccountForLostAndReturned( $item->{'itemnumber'},
-                    $borrowernumber, $barcode );
+            my $should_refund = Koha::RefundLostItemFeeRules->should_refund(
+                {
+                    current_branch      => C4::Context->userenv->{branch},
+                    item_home_branch    => $item->{homebranch},
+                    item_holding_branch => $item_holding_branch
+                }
+            );
+
+            if ($should_refund) {
+                _FixAccountForLostAndReturned( $item->{itemnumber}, $borrowernumber, $barcode, $should_refund eq '2' );
                 $messages->{'LostItemFeeRefunded'} = 1;
             }
         }
@@ -2391,6 +2387,7 @@ sub _FixAccountForLostAndReturned {
     my $itemnumber     = shift or return;
     my $borrowernumber = @_ ? shift : undef;
     my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
+    my $skip_paid      = @_ ? shift : 0;
 
     # check for charge made for lost book
     my $accountline = Koha::Account::Lines->search(
@@ -2405,6 +2402,7 @@ sub _FixAccountForLostAndReturned {
 
     return unless $accountline;
     return if $accountline->accounttype eq 'W';    # Written off
+    return if $skip_paid && $accountline->amountoutstanding <= 0;
 
     $accountline->accounttype('LR');
     $accountline->store();
@@ -2412,7 +2410,7 @@ sub _FixAccountForLostAndReturned {
     my $account = Koha::Account->new( { patron_id => $accountline->borrowernumber } );
     my $credit_id = $account->pay(
         {
-            amount       => $accountline->amount,
+            amount       => $skip_paid ? $accountline->amountoutstanding : $accountline->amount,
             description  => "Item Returned " . $item_id,
             account_type => 'CR',
             offset_type  => 'Lost Item Return',
