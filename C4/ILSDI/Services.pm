@@ -740,9 +740,8 @@ sub HoldItem {
     return { code => 'RecordNotFound' } if $$item{biblionumber} ne $biblio->biblionumber;
 
     # Check for item disponibility
-    # CanItemBeReserved codes are passed back too.
-    my $canbookbereserved = C4::Reserves::CanBookBeReserved( $borrowernumber, $biblionumber )->{status};
-    return { code => $canbookbereserved } unless $canbookbereserved eq 'OK';
+    my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber )->{status};
+    return { code => $canitembereserved } unless $canitembereserved eq 'OK';
 
     # Pickup branch management
     my $branch;
