@@ -299,7 +299,7 @@ subtest 'LookupPatron test' => sub {
 
 subtest 'Holds test' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -387,6 +387,52 @@ subtest 'Holds test' => sub {
 
     $reply = C4::ILSDI::Services::HoldItem( $query );
     is( $reply->{code}, 'tooManyReserves', "Too many reserves" );
+
+    my $biblio3 = $builder->build({
+        source => 'Biblio',
+    });
+
+    my $biblioitems3 = $builder->build({
+        source => 'Biblioitem',
+        value => {
+            biblionumber => $biblio3->{biblionumber},
+        }
+    });
+
+    # Adding a holdable item to biblio 3.
+    my $item3 = $builder->build({
+        source => 'Item',
+        value => {
+            biblionumber => $biblio3->{biblionumber},
+            damaged => 0,
+        }
+    });
+
+    my $item4 = $builder->build({
+        source => 'Item',
+        value => {
+            biblionumber => $biblio3->{biblionumber},
+            damaged => 1,
+        }
+    });
+
+    my $issuingrule2 = $builder->build({
+        source => 'Issuingrule',
+        value => {
+            categorycode => $patron->{categorycode},
+            itemtype => $item3->{itype},
+            branchcode => $patron->{branchcode},
+            reservesallowed => 10,
+        }
+    });
+
+    $query = new CGI;
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $biblio3->{biblionumber});
+    $query->param( 'item_id', $item4->{itemnumber});
+
+    $reply = C4::ILSDI::Services::HoldItem( $query );
+    is( $reply->{code}, 'damaged', "Item is damaged" );
 
     $schema->storage->txn_rollback;
 };
