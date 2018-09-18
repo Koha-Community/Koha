@@ -64,6 +64,8 @@ if (
     $patron_attrs->{password} ||= Koha::AuthUtils::generate_password;
 
     $patron_attrs->{categorycode} ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
+    delete $patron_attrs->{timestamp};
+    delete $patron_attrs->{verification_token};
     my $patron = Koha::Patron->new( $patron_attrs )->store;
 
     if ($patron) {
