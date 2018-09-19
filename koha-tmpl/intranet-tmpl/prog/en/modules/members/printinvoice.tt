@@ -76,7 +76,7 @@
         [%- IF account.description %], [% account.description %][% END %]
       </td>
       <td>[% account.note %]</td>
-      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount %]</td>
+      [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | $Price %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding | $Price %]</td>
     </tr>
 
