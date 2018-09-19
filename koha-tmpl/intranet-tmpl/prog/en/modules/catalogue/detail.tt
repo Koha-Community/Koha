@@ -354,7 +354,7 @@
                 [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
                 <th>Call number</th>
                 <th>Status</th>
-                <th>Last seen</th>
+                <th class="title-string">Last seen</th>
                 <th>Barcode</th>
                 [% IF ( volinfo ) %]<th>Serial enumeration / chronology</th>[% END %]
                 [% IF ( itemdata_uri ) %]<th>URL</th>[% END %]
@@ -475,7 +475,7 @@
                         [% END %]
 
                     </td>
-                    <td class="datelastseen">[% item.datelastseen | $KohaDates %]</td>
+                    <td class="datelastseen"><span title="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</span></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;biblionumber=[% item.biblionumber | html %]&amp;bi=[% item.biblioitemnumber | html %]#item[% item.itemnumber | html %]">[% item.barcode | html %]</a></td>
                     [% IF ( volinfo ) %]
                         <td class="enumchron">
@@ -1101,7 +1101,8 @@
                     'bPaginate': false,
                     'bAutoWidth': false,
                     "aoColumnDefs": [
-                        { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] }
+                        { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                        { "sType": "title-string", "aTargets" : [ "title-string" ] }
                     ]
                 };
                 var table = KohaTable(id, dt_parameters, null, 'with_filters');
