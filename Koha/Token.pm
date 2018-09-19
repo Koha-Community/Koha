@@ -79,6 +79,7 @@ sub new {
     });
 
     Generate several types of tokens. Now includes CSRF.
+    For non-CSRF tokens an optional pattern parameter overrides length.
     Room for future extension.
 
 =cut
@@ -196,8 +197,8 @@ sub _gen_rand {
     my ( $params ) = @_;
     my $length = $params->{length} || 1;
     $length = 1 unless $length > 0;
-
-    return String::Random::random_string( '.' x $length );
+    my $pattern = $params->{pattern} // '.{'.$length.'}'; # pattern overrides length parameter
+    return String::Random::random_regex( $pattern );
 }
 
 =head1 AUTHOR
