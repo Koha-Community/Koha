@@ -480,16 +480,14 @@
                     </div>
 
                 [% ELSIF query_type == 'illview' %]
-                    [% actions = request.available_actions | html %]
-                    [% capabilities = request.capabilities | html %]
-                    [% req_status = request.status | html %]
+                    [% req_status = request.status %]
                     <h1>Manage ILL request</h1>
                     <div id="toolbar" class="btn-toolbar">
                         <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
                         <span class="fa fa-pencil"></span>
                         Edit request
                         </a>
-                        [% FOREACH action IN actions %]
+                        [% FOREACH action IN request.available_actions %]
                             [% IF action.method != 0 %]
                                 <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | html %]&amp;illrequest_id=[% request.illrequest_id | html %]">
                                 <span class="fa [% action.ui_method_icon | html %]"></span>
@@ -531,7 +529,7 @@
                                 </div>
                                 <div class="status">
                                     <span class="label status">Status:</span>
-                                    [% capabilities.$req_status.name | html %]
+                                    [% request.capabilities.$req_status.name | html %]
                                 </div>
                                 <div class="updated">
                                     <span class="label updated">Last updated:</span>
