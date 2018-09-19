@@ -350,6 +350,8 @@
                         <th class="title-string">Creation date</th>
                         <th class="title-string">Receive date</th>
                         <th class="title-string">Status</th>
+                        <th>Internal note</th>
+                        <th>Vendor note</th>
                         <th>Fund</th>
                         <th title="ecost tax exc. / ecost tax inc.">Ordered</th>
                         <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
@@ -385,6 +387,8 @@
                             [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
                           [% END %]
                         </td>
+                        <td>[% order.order_internalnote | html %]</td>
+                        <td>[% order.order_vendornote | html %]</td>
                         <td>[% order.fund.budget_name | html %]</td>
                         <td>
                             [% UNLESS order.datereceived %]
