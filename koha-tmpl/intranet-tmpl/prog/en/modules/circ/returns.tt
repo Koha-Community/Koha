@@ -607,16 +607,16 @@
 <div class="yui-g">
     <form id="checkin-form" method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off" >
     <div class="yui-u first">
-            <fieldset>
-	<legend>Check in</legend>
+        <fieldset>
+            <legend>Check in</legend>
             <label for="barcode">Enter item barcode: </label>
-			[% IF ( exemptfine ) %]
-			<input name="barcode" id="barcode" size="14" class="focus alert" type="text" />
-			[% ELSIF ( dropboxmode ) %]
-			<input name="barcode" id="barcode" size="14" class="focus alert" type="text" />
-			[% ELSE %]
-			<input name="barcode" id="barcode" size="14" class="focus" type="text" />
-			[% END %]
+            [% IF ( exemptfine ) %]
+            <input name="barcode" id="barcode" size="14" class="focus alert" type="text" />
+            [% ELSIF ( dropboxmode ) %]
+            <input name="barcode" id="barcode" size="14" class="focus alert" type="text" />
+            [% ELSE %]
+            <input name="barcode" id="barcode" size="14" class="focus" type="text" />
+            [% END %]
             <input type="submit" class="submit" value="Submit" />
 
             [% IF Koha.Preference('SpecifyReturnDate') %]
