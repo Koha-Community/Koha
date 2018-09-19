@@ -198,6 +198,12 @@ Circulation:
                   no: "Don't allow"
             - staff to manually override renewal blocks and renew a checkout when it would go over the renewal limit or be premature with respect to the "No renewal before" setting in the circulation policy or has been scheduled for automatic renewal.
         -
+            - pref: AllowRenewalOnHoldOverride
+              choices:
+                  yes: Allow
+                  no: "Don't allow"
+            - staff to renew items that are on hold by manually specifying a due date.
+        -
             - pref: AllowItemsOnHoldCheckout
               choices:
                   yes: Allow
