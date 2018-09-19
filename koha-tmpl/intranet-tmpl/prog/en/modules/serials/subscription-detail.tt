@@ -5,6 +5,7 @@
 [% USE Branches %]
 [% USE AuthorisedValues %]
 [% USE Price %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; Details for subscription #[% subscriptionid | html %]</title>
@@ -420,6 +421,7 @@
     </script>
     [% Asset.js("js/serials-toolbar.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     <script type="text/javascript">
         // the english words used in display purposes
         var text = new Array(_("Number"),_("Volume"),_("Issue"),_("Month"),_("Week"),_("Starting with:"),_("Rollover at:"),_("Choose Hemisphere:"),_("Northern"),_("Southern",
@@ -431,14 +433,15 @@
                 return false;
             })
 
-            var table = $("#orders").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var columns_settings = [% ColumnsSettings.GetColumns( 'serials', 'subscription-detail', 'orders', 'json' ) | $raw %];
+            var table = KohaTable("orders", {
                 'bPaginate': false,
                 'bAutoWidth': false,
                 "aaSorting": [[ 5, "asc" ], [ 2, "desc" ]], // Order by status then ordernumber
                 "aoColumnDefs": [
                     { "aTargets": "title-string", "sType": "title-string" }
                 ]
-            }));
+            }, columns_settings);
 
             $("#hide_received_orders").click(function(e){
                 e.preventDefault();
