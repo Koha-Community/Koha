@@ -59,7 +59,7 @@
             <fieldset class="rows" id="manual_restriction_form">
                 <legend>Add manual restriction</legend>
                 <ol>
-                    <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" type="text" /></li>
+                    <li><label for="rcomment">Comment:</label> <input type="text" id="rcomment" name="comment" /></li>
                     <li><label for="rexpiration">Expiration:</label> <input name="expiration" id="rexpiration" size="10" value="" class="datepicker" type="text" />
                         <a href="#" class="clear-date" id="clear-date-rexpiration">Clear date</a></li>
                 </ol>
