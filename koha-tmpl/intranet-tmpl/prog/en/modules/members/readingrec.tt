@@ -84,7 +84,7 @@
             [% END %]
           </td>
 
-          <td>[% issue.barcode | html %]</td>
+          <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% issue.itemnumber | html %]&amp;biblionumber=[% issue.biblionumber | html %]&amp;bi=[% issue.biblioitemnumber | html %]#item[% issue.itemnumber | html %]">[% issue.barcode | html %]</a></td>
           <td>[% issue.renewals | html %]</td>
           <td>
             <span title="[% issue.issuedate | html %]">[% issue.issuedate |$KohaDates with_hours => 1 | html %]</span>
