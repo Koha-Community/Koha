@@ -118,7 +118,7 @@
                       [% END %]
                       &nbsp;
                       [% IF ( account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' ) %]
-                          <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber %]&amp;itemnumber=[% account.itemnumber | html %]">[% account.item.biblio.title | html %]</a>
+                          <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | html %]&amp;itemnumber=[% account.itemnumber | html %]">[% account.item.biblio.title | html %]</a>
                       [% END %]
                   </td>
                   <td>
