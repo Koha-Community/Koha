@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% SET consentview = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your consents</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Your consents</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
@@ -11,7 +11,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="/cgi-bin/koha/opac-user.pl">[% patron.firstname %] [% patron.surname %]</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-user.pl">[% patron.firstname | html %] [% patron.surname | html %]</a> <span class="divider">&rsaquo;</span></li>
         <li><a href="#">Your consents</a></li>
     </ul>
 
@@ -38,14 +38,14 @@
                         [% IF Koha.Preference('GDPR_Policy') %]
                             <h5>GDPR consents</h5>
                             <input type="hidden" name="op" value="gdpr_proc_save"/>
-                            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]"/>
+                            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]"/>
                             <fieldset>
                                 <ul><li>
-                                    <p>I have read the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') %]">privacy policy</a> and agree with your processing of my personal data as outlined therein.</p>
+                                    <p>I have read the <a target="_blank" href="[% Koha.Preference('PrivacyPolicyURL') | url %]">privacy policy</a> and agree with your processing of my personal data as outlined therein.</p>
                                     <p><input type="radio" name="gdpr_processing" value="agreed"> Yes, I agree.<br>
                                     <input type="radio" name="gdpr_processing" value="disagreed"> No, I do not agree. Please remove my account within a reasonable time.</p>
                                     [% IF gdpr_proc_consent %]
-                                        <p>Your consent was registered on [% gdpr_proc_consent %].</p>
+                                        <p>Your consent was registered on [% gdpr_proc_consent | html %].</p>
                                     [% END %]
                                 </li></ul>
                             </fieldset>
