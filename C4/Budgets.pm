@@ -24,6 +24,7 @@ use Koha::Database;
 use Koha::Patrons;
 use Koha::Acquisition::Invoice::Adjustments;
 use C4::Debug;
+use C4::Acquisition;
 use vars qw(@ISA @EXPORT);
 
 BEGIN {
@@ -211,7 +212,7 @@ sub GetBudgetsPlanCell {
     my ( $cell, $period, $budget ) = @_; #FIXME we don't use $period
     my ($actual, $sth);
     my $dbh = C4::Context->dbh;
-    my $roundsql = _get_rounding_sql(qq|ecost_tax_included|);
+    my $roundsql = C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|);
     if ( $cell->{'authcat'} eq 'MONTHS' ) {
         # get the actual amount
         # FIXME we should consider quantity
@@ -336,7 +337,7 @@ sub GetBudgetSpent {
     # unitprice_tax_included should always been set here
     # we should not need to retrieve ecost_tax_included
     my $sth = $dbh->prepare(qq|
-        SELECT SUM( | . _get_rounding_sql("COALESCE(unitprice_tax_included, ecost_tax_included)") . qq| * quantity ) AS sum FROM aqorders
+        SELECT SUM( | . C4::Acquisition::get_rounding_sql("COALESCE(unitprice_tax_included, ecost_tax_included)") . qq| * quantity ) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived > 0 AND
             datecancellationprinted IS NULL
@@ -367,7 +368,7 @@ sub GetBudgetOrdered {
 	my ($budget_id) = @_;
 	my $dbh = C4::Context->dbh;
 	my $sth = $dbh->prepare(qq|
-        SELECT SUM(| . _get_rounding_sql(qq|ecost_tax_included|) . qq| *  quantity) AS sum FROM aqorders
+        SELECT SUM(| . C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|) . qq| *  quantity) AS sum FROM aqorders
             WHERE budget_id = ? AND
             quantityreceived = 0 AND
             datecancellationprinted IS NULL
@@ -561,14 +562,14 @@ sub GetBudgetHierarchy {
     # Get all the budgets totals in as few queries as possible
     my $hr_budget_spent = $dbh->selectall_hashref(q|
         SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
-               SUM( | . _get_rounding_sql(qq|COALESCE(unitprice_tax_included, ecost_tax_included)|) . q| * quantity ) AS budget_spent
+               SUM( | . C4::Acquisition::get_rounding_sql(qq|COALESCE(unitprice_tax_included, ecost_tax_included)|) . q| * quantity ) AS budget_spent
         FROM aqorders JOIN aqbudgets USING (budget_id)
         WHERE quantityreceived > 0 AND datecancellationprinted IS NULL
         GROUP BY budget_id, budget_parent_id
         |, 'budget_id');
     my $hr_budget_ordered = $dbh->selectall_hashref(q|
         SELECT aqorders.budget_id, aqbudgets.budget_parent_id,
-               SUM( | . _get_rounding_sql(qq|ecost_tax_included|) . q| *  quantity) AS budget_ordered
+               SUM( | . C4::Acquisition::get_rounding_sql(qq|ecost_tax_included|) . q| *  quantity) AS budget_ordered
         FROM aqorders JOIN aqbudgets USING (budget_id)
         WHERE quantityreceived = 0 AND datecancellationprinted IS NULL
         GROUP BY budget_id, budget_parent_id
@@ -1365,25 +1366,6 @@ sub MoveOrders {
           };
     }
     return \@report;
-}
-
-=head1 INTERNAL FUNCTIONS
-
-=cut
-
-=head3 _get_rounding_sql
-
-    $rounding_sql = _get_rounding_sql("mysql_variable_to_round_string");
-
-returns the correct SQL routine based on OrderPriceRounding system preference.
-
-=cut
-
-sub _get_rounding_sql {
-    my $to_round = shift;
-    my $rounding_pref = C4::Context->preference('OrderPriceRounding');
-    if   ($rounding_pref eq 'nearest_cent') { return "CAST($to_round*100 AS UNSIGNED)/100"; }
-    else { return "$to_round"; }
 }
 
 END { }    # module clean-up code here (global destructor)

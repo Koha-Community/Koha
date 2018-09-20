@@ -95,6 +95,7 @@ BEGIN {
         &FillWithDefaultValues
 
         &get_rounded_price
+        &get_rounding_sql
     );
 }
 
@@ -1463,8 +1464,8 @@ sub ModReceiveOrder {
         $dbh->do(q|
             UPDATE aqorders
             SET
-                tax_value_on_ordering = quantity * | . _get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
-                tax_value_on_receiving = quantity * | . _get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
+                tax_value_on_ordering = quantity * | . get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
+                tax_value_on_receiving = quantity * | . get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
             WHERE ordernumber = ?
         |, undef, $order->{ordernumber});
 
@@ -1647,8 +1648,8 @@ sub CancelReceipt {
         $dbh->do(q|
             UPDATE aqorders
             SET
-                tax_value_on_ordering = quantity * | . _get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
-                tax_value_on_receiving = quantity * | . _get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
+                tax_value_on_ordering = quantity * | . get_rounding_sql(q|ecost_tax_excluded|) . q| * tax_rate_on_ordering,
+                tax_value_on_receiving = quantity * | . get_rounding_sql(q|unitprice_tax_excluded|) . q| * tax_rate_on_receiving
             WHERE ordernumber = ?
         |, undef, $parent_ordernumber);
 
@@ -2000,15 +2001,15 @@ sub TransferOrder {
     return $newordernumber;
 }
 
-=head3 _get_rounding_sql
+=head3 get_rounding_sql
 
-    $rounding_sql = _get_rounding_sql("mysql_variable_to_round_string");
+    $rounding_sql = get_rounding_sql("mysql_variable_to_round_string");
 
 returns the correct SQL routine based on OrderPriceRounding system preference.
 
 =cut
 
-sub _get_rounding_sql {
+sub get_rounding_sql {
     my ( $round_string ) = @_;
     my $rounding_pref = C4::Context->preference('OrderPriceRounding');
     if ( $rounding_pref eq "nearest_cent"  ) { return ("CAST($round_string*100 AS UNSIGNED)/100"); }
