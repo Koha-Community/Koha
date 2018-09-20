@@ -25,7 +25,7 @@
 [% END %]
 [% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS | $raw %]</style>[% END %]
 
-[% KohaPlugins.get_plugins_intranet_head | html %]
+[% KohaPlugins.get_plugins_intranet_head | $raw %]
 
 [% UNLESS ( footerjs ) %]
     [% INCLUDE js_includes.inc %]

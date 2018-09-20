@@ -56,4 +56,4 @@
 [% Asset.js("lib/modernizr.min.js") | $raw %]
 [% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% PROCESS 'html_helpers.inc' %]
-[% KohaPlugins.get_plugins_opac_head | html %]
+[% KohaPlugins.get_plugins_opac_head | $raw %]
