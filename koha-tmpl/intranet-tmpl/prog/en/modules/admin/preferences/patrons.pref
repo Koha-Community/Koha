@@ -243,3 +243,11 @@ Patrons:
                Permissive: 'Permissive'
          - "GDPR is the EU General Data Protection Regulation. When you enforce, patrons need to give consent before using the OPAC. If you set to permissive, Koha will warn but not enforce."
          - "<br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
+     -
+         - Lock/expire patrons that submitted an unsubscribe request (refused consent) after
+         - pref: UnsubscribeReflectionDelay
+         - days, anonymize locked/expired accounts after
+         - pref: PatronAnonymizeDelay
+         - days and remove anonymized patron accounts after
+         - pref: PatronRemovalDelay
+         - days.<br>IMPORTANT: No action is performed when these delays are empty (no text). But a zero value ('0') is interpreted as no delay (do it now)! The actions are performed by the cleanup database cron job.
