@@ -23,16 +23,16 @@ use t::lib::Mocks;
 
 use_ok( 'C4::Acquisition' );
 
-subtest 'Tests for _get_rounding_sql' => sub {
+subtest 'Tests for get_rounding_sql' => sub {
 
     plan tests => 2;
 
     my $value = '3.141592';
 
     t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{} );
-    my $no_rounding_result = C4::Acquisition::_get_rounding_sql($value);
+    my $no_rounding_result = C4::Acquisition::get_rounding_sql($value);
     t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{nearest_cent} );
-    my $rounding_result = C4::Acquisition::_get_rounding_sql($value);
+    my $rounding_result = C4::Acquisition::get_rounding_sql($value);
 
     ok( $no_rounding_result eq $value, "Value ($value) not to be rounded" );
     ok( $rounding_result =~ /CAST/,    "Value ($value) will be rounded" );
