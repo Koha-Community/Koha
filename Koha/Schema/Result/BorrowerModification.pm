@@ -415,6 +415,12 @@ __PACKAGE__->table("borrower_modifications");
   data_type: 'mediumtext'
   is_nullable: 1
 
+=head2 gdpr_proc_consent
+
+  data_type: 'datetime'
+  datetime_undef_if_invalid: 1
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -581,6 +587,12 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "extended_attributes",
   { data_type => "mediumtext", is_nullable => 1 },
+  "gdpr_proc_consent",
+  {
+    data_type => "datetime",
+    datetime_undef_if_invalid => 1,
+    is_nullable => 1,
+  },
 );
 
 =head1 PRIMARY KEY
@@ -598,8 +610,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("verification_token", "borrowernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Vv0bJqR71Ust1MZAkYqTig
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-20 13:00:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:qQ0BWngri+79YvK9S8zZPg
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -1145,6 +1145,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 patron_consents
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::PatronConsent>
+
+=cut
+
+__PACKAGE__->has_many(
+  "patron_consents",
+  "Koha::Schema::Result::PatronConsent",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 patron_list_patrons
 
 Type: has_many
@@ -1401,8 +1416,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-08-30 15:33:44
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4C4USKLUfuOaydGmIfeOnQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-20 13:00:20
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:QT6EPIG26F/kNK6prauRgw
 
 __PACKAGE__->belongs_to(
     "guarantor",
