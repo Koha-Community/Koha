@@ -55,6 +55,7 @@ $template->param(
     patron            => $patron,
     findborrower      => $findborrower,
     branch            => $branch, # FIXME This is confusing
+    routinglistview   => 1,
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
