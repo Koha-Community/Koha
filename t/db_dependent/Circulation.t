@@ -226,7 +226,7 @@ C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
 C4::Context->dbh->do("DELETE FROM accountlines");
 {
 # CanBookBeRenewed tests
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', '' ); #Ensure pref doesn't affect current tests
+    C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
     my $title = 'Silence in the library';
     my ($biblionumber, $biblioitemnumber) = add_biblio($title, 'Moffat, Steven');
@@ -2463,7 +2463,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
 subtest 'ItemsDeniedRenewal preference' => sub {
     plan tests => 18;
 
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', '' );
+    C4::Context->set_preference('ItemsDeniedRenewal','');
 
     $dbh->do('DELETE FROM issues');
     $dbh->do('DELETE FROM items');
@@ -2528,7 +2528,7 @@ subtest 'ItemsDeniedRenewal preference' => sub {
 
     $idr_rules="withdrawn: [1]";
 
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 0, 'Renewal blocked when 1 rules (withdrawn)' );
@@ -2540,7 +2540,7 @@ subtest 'ItemsDeniedRenewal preference' => sub {
 
     $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]";
 
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 0, 'Renewal blocked when 2 rules matched (withdrawn, itype)' );
@@ -2552,7 +2552,7 @@ subtest 'ItemsDeniedRenewal preference' => sub {
 
     $idr_rules="withdrawn: [1]\nitype: [HIDE,INVISIBLE]\nlocation: [PROC]";
 
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 0, 'Renewal blocked when 3 rules matched (withdrawn, itype, location)' );
@@ -2563,23 +2563,23 @@ subtest 'ItemsDeniedRenewal preference' => sub {
     is( $idr_error, undef, 'Renewal allowed when 3 rules not matched (withdrawn, itype, location)' );
 
     $idr_rules="itemcallnumber: [NULL]";
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 0, 'Renewal blocked for undef when NULL in pref' );
     $idr_rules="itemcallnumber: ['']";
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 1, 'Renewal not blocked for undef when "" in pref' );
 
     $idr_rules="itemnotes: [NULL]";
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 1, 'Renewal not blocked for "" when NULL in pref' );
     $idr_rules="itemnotes: ['']";
-    t::lib::Mocks::mock_preference( 'ItemsDeniedRenewal', $idr_rules );
+    C4::Context->set_preference('ItemsDeniedRenewal',$idr_rules);
     ( $idr_mayrenew, $idr_error ) =
     CanBookBeRenewed( $idr_borrower->borrowernumber, $deny_issue->itemnumber );
     is( $idr_mayrenew, 0, 'Renewal blocked for empty string when "" in pref' );
@@ -2742,6 +2742,7 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
 };
 
 $schema->storage->txn_rollback;
+C4::Context->clear_syspref_cache();
 $cache->clear_from_cache('single_holidays');
 
 sub set_userenv {

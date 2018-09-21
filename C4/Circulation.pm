@@ -57,6 +57,7 @@ use Koha::RefundLostItemFeeRule;
 use Koha::RefundLostItemFeeRules;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::Config::SysPrefs;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -4130,18 +4131,7 @@ sub _item_denied_renewal {
     my $item = $params->{item};
     return unless $item;
 
-    my @lines = split /\n/, C4::Context->preference('ItemsDeniedRenewal')//'';
-    my $denyingrules;
-    foreach my $line (@lines){
-        my ($field,$array) = split /:/, $line;
-        next if !$array;
-        $field =~ s/^\s*|\s*$//g;
-        $array =~ s/[ [\]\r]//g;
-        my @array = split /,/, $array;
-        @array = map { $_ eq '""' || $_ eq "''" ? '' : $_ } @array;
-        @array = map { $_ eq 'NULL' ? undef : $_ } @array;
-        $denyingrules->{$field} = \@array;
-    }
+    my $denyingrules = Koha::Config::SysPrefs->find('ItemsDeniedRenewal')->get_yaml_pref_hash();
     return unless $denyingrules;
     foreach my $field (keys %$denyingrules) {
         my $val = $item->{$field};

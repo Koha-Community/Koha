@@ -1,6 +1,6 @@
-package Koha::Config::SysPref;
+package Koha::Util::SystemPreferences;
 
-# Copyright ByWater Solutions 2014
+# Copyright 2018 Koha Development Team
 #
 # This file is part of Koha.
 #
@@ -19,35 +19,29 @@ package Koha::Config::SysPref;
 
 use Modern::Perl;
 
-use Carp;
+use parent qw( Exporter );
 
-use Koha::Database;
-
-use C4::Log;
-
-use base qw(Koha::Object);
+our @EXPORT = qw(
+  get_yaml_pref_hash
+);
 
 =head1 NAME
 
-Koha::Config::SysPref - Koha System Preference Object class
+Koha::Util::SystemPreferences - utility class with System Preference routines
 
-=head1 API
+=head1 METHODS
 
-=head2 Class Methods
-
-=cut
-
-=head3 get_yaml_pref_hash
+=head2 get_yaml_pref_hash
 
 Turn a pref defined via YAML as a hash
 
 =cut
 
 sub get_yaml_pref_hash {
-    my ( $self ) = @_;
-    return if !defined( $self );
+    my ( $pref ) = @_;
+    return if !defined( $pref );
 
-    my @lines = split /\n/, $self->value//'';
+    my @lines = split /\n/, C4::Context->preference($pref)//'';
     my $pref_as_hash;
     foreach my $line (@lines){
         my ($field,$array) = split /:/, $line;
@@ -63,49 +57,13 @@ sub get_yaml_pref_hash {
     return $pref_as_hash;
 }
 
-
-=head3 store
-
-=cut
-
-sub store {
-    my ($self) = @_;
-
-    my $action = $self->in_storage ? 'MODIFY' : 'ADD';
-
-    C4::Log::logaction( 'SYSTEMPREFERENCE', $action, undef, $self->variable . ' | ' . $self->value );
-
-    return $self->SUPER::store($self);
-}
-
-=head3 delete
-
-=cut
-
-sub delete {
-    my ($self) = @_;
-
-    my $variable = $self->variable;
-    my $value    = $self->value;
-    my $deleted  = $self->SUPER::delete($self);
-
-    C4::Log::logaction( 'SYSTEMPREFERENCE', 'DELETE', undef, " $variable | $value" );
-
-    return $deleted;
-}
-
-=head3 type
-
-=cut
-
-sub _type {
-    return 'Systempreference';
-}
+1;
+__END__
 
 =head1 AUTHOR
 
-Kyle M Hall <kyle@bywatersolutions.com>
+Koha Development Team <http://koha-community.org/>
+
+Nick Clemens <nick@bywatersolutions.com>
 
 =cut
-
-1;
