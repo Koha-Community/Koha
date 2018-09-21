@@ -2145,7 +2145,6 @@ sub GetHistory {
     my $ordernumbers = $params{ordernumbers} || [];
     my $additional_fields = $params{additional_fields} // [];
 
-    my @order_loop;
     my $total_qty         = 0;
     my $total_qtyreceived = 0;
     my $total_price       = 0;

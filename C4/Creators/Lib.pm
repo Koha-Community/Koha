@@ -527,7 +527,7 @@ be passed off as a template parameter and used to build an html table.
 sub html_table {
     my $headers = shift;
     my $data = shift;
-    return undef if scalar(@$data) == 0;      # no need to generate a table if there is not data to display
+    return if scalar(@$data) == 0;      # no need to generate a table if there is not data to display
     my $table = [];
     my $fields = [];
     my @table_columns = ();

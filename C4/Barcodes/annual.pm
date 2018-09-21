@@ -36,7 +36,7 @@ BEGIN {
 	$width = 4;
 }
 
-sub db_max ($;$) {
+sub db_max {
 	my $self = shift;
 	my $query = "SELECT substring_index(barcode,'-',-1) AS chunk,barcode FROM items WHERE barcode LIKE ? ORDER BY chunk DESC LIMIT 1";
 		# FIXME: unreasonably expensive query on large datasets (I think removal of group by does this?)
@@ -64,7 +64,7 @@ sub initial () {
     return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) .'-'. sprintf('%'."$width.$width".'d', 1);
 }
 
-sub parse ($;$) {
+sub parse {
 	my $self = shift;
     my $barcode = (@_) ? shift : $self->value;
 	unless ($barcode =~ /(\d{4}-)(\d+)$/) {    # non-greedy match in first part
@@ -74,12 +74,12 @@ sub parse ($;$) {
 	$debug and warn "Barcode '$barcode' parses into: '$1', '$2', ''";
 	return ($1,$2,'');  # the third part is in anticipation of barcodes that include checkdigits
 }
-sub width ($;$) {
+sub width {
 	my $self = shift;
 	(@_) and $width = shift;	# hitting the class variable.
 	return $width;
 }
-sub process_head($$;$$) {	# (self,head,whole,specific)
+sub process_head {
 	my ($self,$head,$whole,$specific) = @_;
 	$specific and return $head;	# if this is built off an existing barcode, just return the head unchanged.
     return substr(output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 }), 0, 4 ) . '-'; # else get new YYYY-

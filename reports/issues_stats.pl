@@ -148,9 +148,6 @@ if ($do_it) {
 
 
 my $dbh = C4::Context->dbh;
-my @values;
-my %labels;
-my %select;
 
     # location list
 my @locations;
@@ -525,7 +522,7 @@ sub calculate {
         or ( $colsource eq 'items' ) || @$filters[5] || @$filters[6] || @$filters[7] || @$filters[8] || @$filters[9] || @$filters[10] || @$filters[11] || @$filters[12] || @$filters[13] );
 
     $strcalc .= "WHERE 1=1 ";
-    @$filters = map { defined($_) and s/\*/%/g; $_ } @$filters;
+    @$filters = map { my $f = $_; defined($f) and $f =~ s/\*/%/g; $f } @$filters;
     $strcalc .= " AND statistics.datetime >= '" . @$filters[0] . "'"       if ( @$filters[0] );
     $strcalc .= " AND statistics.datetime <= '" . @$filters[1] . " 23:59:59'"       if ( @$filters[1] );
     $strcalc .= " AND borrowers.categorycode LIKE '" . @$filters[2] . "'" if ( @$filters[2] );

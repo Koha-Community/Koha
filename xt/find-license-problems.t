@@ -42,10 +42,10 @@ sub wanted {
 find({ wanted => \&wanted, no_chdir => 1 }, File::Spec->curdir());
 
 foreach my $name (@files) {
-    open( FILE, $name ) || die "cannot open file $name $!";
+    open( my $fh, '<', $name ) || die "cannot open file $name $!";
     my ( $hascopyright, $hasgpl, $hasv3, $hasorlater, $haslinktolicense,
         $hasfranklinst, $is_not_us ) = (0)x7;
-    while ( my $line = <FILE> ) {
+    while ( my $line = <$fh> ) {
         $hascopyright = 1 if ( $line =~ /^(#|--)?\s*Copyright.*\d\d/ );
         $hasgpl       = 1 if ( $line =~ /GNU General Public License/ );
         $hasv3        = 1 if ( $line =~ /either version 3/ );
@@ -56,6 +56,7 @@ foreach my $name (@files) {
         $hasfranklinst    = 1 if ( $line =~ /51 Franklin Street/ );
         $is_not_us        = 1 if $line =~ m|This file is part of the Zebra server|;
     }
+    close $fh;
     next unless $hascopyright;
     next if $is_not_us;
     is(    $hasgpl

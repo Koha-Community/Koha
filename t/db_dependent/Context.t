@@ -68,8 +68,6 @@ ok($config = $koha->{config}, 'Getting $koha->{config} ');
 # Testing syspref caching
 use Test::DBIx::Class;
 
-my $history;
-
 my $schema = Koha::Database->new()->schema();
 $schema->storage->debug(1);
 my $trace_read;

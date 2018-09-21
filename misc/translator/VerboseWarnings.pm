@@ -40,32 +40,32 @@ verbose warnings.
 use vars qw( $appName $input $input_abbr $pedantic_p $pedantic_tag $quiet);
 use vars qw( $warned $erred );
 
-sub set_application_name ($) {
+sub set_application_name {
     my($s) = @_;
     $appName = $& if !defined $appName && $s =~ /[^\/]+$/;
 }
 
-sub application_name () {
+sub application_name {
     return $appName;
 }
 
-sub set_input_file_name ($) {
+sub set_input_file_name {
     my($s) = @_;
     $input = $s;
     $input_abbr = $& if defined $s && $s =~ /[^\/]+$/;
 }
 
-sub set_pedantic_mode ($) {
+sub set_pedantic_mode {
     my($p) = @_;
     $pedantic_p = $p;
     $pedantic_tag = $pedantic_p? '': ' (negligible)';
 }
 
-sub pedantic_p () {
+sub pedantic_p {
     return $pedantic_p;
 }
 
-sub construct_warn_prefix ($$) {
+sub construct_warn_prefix {
     my($prefix, $lc) = @_;
     die "construct_warn_prefix called before set_application_name"
 	    unless defined $appName;
@@ -80,20 +80,20 @@ sub construct_warn_prefix ($$) {
     return "$appName: $prefix: " . (defined $lc? "$input_abbr: line $lc: ": defined $input_abbr? "$input_abbr: ": '');
 }
 
-sub warn_additional ($$) {
+sub warn_additional {
     my($msg, $lc) = @_;
     my $prefix = construct_warn_prefix('Warning', $lc);
     $msg .= "\n" unless $msg =~ /\n$/s;
     warn "$prefix$msg";
 }
 
-sub warn_normal ($$) {
+sub warn_normal {
     my($msg, $lc) = @_;
     $warned += 1;
     warn_additional($msg, $lc);
 }
 
-sub warn_pedantic ($$$) {
+sub warn_pedantic {
     my($msg, $lc, $flag) = @_;
     my $prefix = construct_warn_prefix("Warning$pedantic_tag", $lc);
     $msg .= "\n" unless $msg =~ /\n$/s;
@@ -106,20 +106,20 @@ sub warn_pedantic ($$$) {
     $warned += 1;
 }
 
-sub error_additional ($$) {
+sub error_additional {
     my($msg, $lc) = @_;
     my $prefix = construct_warn_prefix('ERROR', $lc);
     $msg .= "\n" unless $msg =~ /\n$/s;
     warn "$prefix$msg";
 }
 
-sub error_normal ($$) {
+sub error_normal {
     my($msg, $lc) = @_;
     $erred += 1;
     error_additional($msg, $lc);
 }
 
-sub warned () {
+sub warned {
     return $warned; # number of times warned
 }
 

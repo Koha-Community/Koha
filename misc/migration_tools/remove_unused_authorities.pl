@@ -71,7 +71,6 @@ unless ($nb > 0) {
 }
 
 my $dbh=C4::Context->dbh;
-my @results;
 # prepare the request to retrieve all authorities of the requested types
 my $rqsql = q{ SELECT authid,authtypecode FROM auth_header };
 $rqsql .= q{ WHERE authtypecode IN (}.join(',',map{ '?' }@authtypes).')' if @authtypes;

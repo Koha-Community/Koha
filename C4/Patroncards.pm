@@ -1,5 +1,7 @@
 package C4::Patroncards;
 
+use Modern::Perl;
+
 BEGIN {
     use vars qw(@EXPORT @ISA);
     @ISA = qw(Exporter);

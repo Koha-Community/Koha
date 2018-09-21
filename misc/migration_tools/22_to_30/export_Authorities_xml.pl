@@ -1,6 +1,5 @@
 #!/usr/bin/perl
-#use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -31,7 +30,7 @@ open my $fileoutput, '>:encoding(UTF-8)', "./$filename/$authid.xml" or die "unab
 			
 #  if (C4::Context->preference('marcflavour') eq "UNIMARC"){
 	$record->leader('     nac  22     1u 4500');
-    my $string=$1 if $time=~m/([0-9\-]+)/;
+    my $string = ($time=~m/([0-9\-]+)/) ? $1 : undef
     $string=~s/\-//g;
      $string = sprintf("%-*s",26, $string);
      substr($string,9,6,"frey50");

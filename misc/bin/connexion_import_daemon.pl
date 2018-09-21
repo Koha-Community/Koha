@@ -132,6 +132,7 @@ sub parse_config {
         die "Invalid config line $line: $_" unless defined $v;
         $param{$p} = $v;
     }
+    close($conf_fh);
 
     $self->{koha} = delete( $param{koha} )
       or die "No koha base url in config file";

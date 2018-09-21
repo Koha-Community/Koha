@@ -22,8 +22,8 @@ sub check_sys_pref {
     if ( !-d _ ) {
         my $name = $File::Find::name;
         if ( $name =~ /(\.pl|\.pm)$/ ) {
-            open( FILE, "$_" ) || die "can't open $name";
-            while ( my $inp = <FILE> ) {
+            open( my $fh, '<', $_ ) || die "can't open $name";
+            while ( my $inp = <$fh> ) {
                 if ( $inp =~ /C4::Context->preference\((.*?)\)/ ) {
                     my $variable = $1;
                     $variable =~ s /\'|\"//g;
@@ -37,7 +37,7 @@ sub check_sys_pref {
 "$name has a reference to $variable, this does not exist in the database\n";
                 }
             }
-            close FILE;
+            close $fh;
         }
     }
     $sth->finish();

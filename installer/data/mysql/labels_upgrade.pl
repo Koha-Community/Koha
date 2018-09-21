@@ -17,6 +17,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use Modern::Perl;
+
 use C4::Context;
 
 my $sth = C4::Context->dbh;

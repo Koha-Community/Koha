@@ -148,7 +148,6 @@ sub manualinvoice {
 
     my $manager_id = C4::Context->userenv ? C4::Context->userenv->{'number'} : undef;
     my $dbh      = C4::Context->dbh;
-    my $insert;
     my $amountleft = $amount;
 
     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;

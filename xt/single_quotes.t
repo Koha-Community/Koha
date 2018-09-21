@@ -42,7 +42,7 @@ close $dh;
 my @files;
 find(
     sub {
-        open my $fh, $_ or die "Could not open $_: $!";
+        open my $fh, '<', $_ or die "Could not open $_: $!";
         my @lines = sort grep /\_\(\'/, <$fh>;
         push @files, { name => "$_", lines => \@lines } if @lines;
     },

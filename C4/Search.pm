@@ -88,9 +88,6 @@ sub FindDuplicate {
     my $result = TransformMarcToKoha( $record, '' );
     my $sth;
     my $query;
-    my $search;
-    my $type;
-    my ( $biblionumber, $title );
 
     # search duplicate on ISBN, easy and fast..
     # ... normalize first
@@ -310,7 +307,6 @@ sub getRecords {
     $offset = 0 if $offset < 0;
 
     # Initialize variables for the ZOOM connection and results object
-    my $zconn;
     my @zconns;
     my @results;
     my $results_hashref = ();
@@ -429,7 +425,6 @@ sub getRecords {
                 }
 
                 for ( my $j = $offset ; $j < $times ; $j++ ) {
-                    my $records_hash;
                     my $record;
 
                     ## Check if it's an index scan

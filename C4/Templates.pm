@@ -118,7 +118,7 @@ sub output {
     $vars = { %$vars, %{ $self->{VARS} } };
 
     my $data;
-    binmode( STDOUT, ":utf8" );
+    binmode( STDOUT, ":encoding(UTF-8)" );
     $template->process( $self->filename, $vars, \$data )
       || die "Template process failed: ", $template->error();
     return $data;

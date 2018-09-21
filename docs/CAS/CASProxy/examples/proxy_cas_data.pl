@@ -54,10 +54,10 @@ if ($cgi->param('PGTIOU')) {
       # At this point, we must retrieve the PgtId by matching the PgtIou we
       # just received and the PgtIou given by the CAS Server to the callback URL
       # The callback page stored it in the application vars (in our case a storable object in a file)
-      open FILE, "casSession.tmp" or die "Unable to open file";
-      my $hashref = fd_retrieve(\*FILE);
+      open my $fh, '<', "casSession.tmp" or die "Unable to open file";
+      my $hashref = fd_retrieve($fh);
       my $pgtId = %{$hashref->{$cgi->param('PGTIOU')}};
-      close FILE;
+      close $fh;
 
       # Now that we have a PgtId, we can ask the cas server for a proxy ticket...
       my $rp = $cas->proxy( $pgtId, $target_service );

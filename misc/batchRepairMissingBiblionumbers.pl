@@ -18,7 +18,6 @@ use C4::Biblio;
 
 
 my $dbh = C4::Context->dbh;
-my %kohafields;
 
 my $sth=$dbh->prepare("SELECT biblio.biblionumber, biblioitemnumber, frameworkcode FROM biblio JOIN biblioitems USING (biblionumber)");
 $sth->execute();

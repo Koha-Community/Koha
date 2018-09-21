@@ -94,6 +94,12 @@ END {
     cleanup();
 }
 
+sub matchesExplodedTerms {
+    my ($message, $query, @terms) = @_;
+    my $match = '(' . join ('|', map { " \@attr 1=Subject \@attr 4=1 \"$_\"" } @terms) . "){" . scalar(@terms) . "}";
+    like($query, qr/$match/, $message);
+}
+
 our $QueryStemming = 0;
 our $QueryAutoTruncate = 0;
 our $QueryWeightFields = 0;

@@ -191,7 +191,7 @@ sub add_form {
             code       => $code,
         );
         my $first_flag_name = 1;
-        my ( $lang, @templates );
+        my $lang;
         # The letter name is contained into each mtt row.
         # So we can only sent the first one to the template.
         for my $letter ( @$letters ) {

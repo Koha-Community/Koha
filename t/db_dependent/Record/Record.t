@@ -45,48 +45,48 @@ $ ./Record_test.pl
 ok (1, 'module compiled');
 
 # open some files for testing
-open MARC21MARC8,WHEREAMI."/marc21_marc8.dat" or die $!;
+open my $MARC21MARC8, '<', WHEREAMI."/marc21_marc8.dat" or die $!;
 my $marc21_marc8; # = scalar (MARC21MARC8);
-foreach my $line (<MARC21MARC8>) {
+foreach my $line (<$MARC21MARC8>) {
     $marc21_marc8 .= $line;
 }
 $marc21_marc8 =~ s/\n$//;
-close MARC21MARC8;
+close $MARC21MARC8;
 
-open (MARC21UTF8,"<:utf8",WHEREAMI."/marc21_utf8.dat") or die $!;
+open (my $MARC21UTF8, '<:encoding(UTF-8)', WHEREAMI."/marc21_utf8.dat") or die $!;
 my $marc21_utf8;
-foreach my $line (<MARC21UTF8>) {
+foreach my $line (<$MARC21UTF8>) {
 	$marc21_utf8 .= $line;
 }
 $marc21_utf8 =~ s/\n$//;
-close MARC21UTF8;
+close $MARC21UTF8;
 
-open MARC21MARC8COMBCHARS,WHEREAMI."/marc21_marc8_combining_chars.dat" or die $!;
+open(my $MARC21MARC8COMBCHARS, '<', WHEREAMI."/marc21_marc8_combining_chars.dat" or die $!;
 my $marc21_marc8_combining_chars;
-foreach my $line(<MARC21MARC8COMBCHARS>) {
+foreach my $line(<$MARC21MARC8COMBCHARS>) {
 	$marc21_marc8_combining_chars.=$line;
 }
 $marc21_marc8_combining_chars =~ s/\n$//; #FIXME: why is a newline ending up here?
-close MARC21MARC8COMBCHARS;
+close $MARC21MARC8COMBCHARS;
 
-open (MARC21UTF8COMBCHARS,"<:utf8",WHEREAMI."/marc21_utf8_combining_chars.dat") or die $!;
+open (my $MARC21UTF8COMBCHARS, '<:encoding(UTF-8)', WHEREAMI."/marc21_utf8_combining_chars.dat") or die $!;
 my $marc21_utf8_combining_chars;
-foreach my $line(<MARC21UTF8COMBCHARS>) {
+foreach my $line(<$MARC21UTF8COMBCHARS>) {
 	$marc21_utf8_combining_chars.=$line;
 }
-close MARC21UTF8COMBCHARS;
+close $MARC21UTF8COMBCHARS;
 
-open (MARCXMLUTF8,"<:utf8",WHEREAMI."/marcxml_utf8.xml") or die $!;
+open (my $MARCXMLUTF8, '<:encoding(UTF-8)', WHEREAMI."/marcxml_utf8.xml") or die $!;
 my $marcxml_utf8;
-foreach my $line (<MARCXMLUTF8>) {
+foreach my $line (<$MARCXMLUTF8>) {
 	$marcxml_utf8 .= $line;
 }
-close MARCXMLUTF8;
+close $MARCXMLUTF8;
 
 $marcxml_utf8 =~ s/\n//g;
 
 ## The Tests:
-my $error; my $marc; my $marcxml; my $dcxml; # some scalars to store values
+my $error; my $marc; my $marcxml; # some scalars to store values
 ## MARC to MARCXML
 print "\n1. Checking conversion of simple ISO-2709 (MARC21) records to MARCXML\n";
 ok (($error,$marcxml) = marc2marcxml($marc21_marc8,'UTF-8','MARC21'), 'marc2marcxml - from MARC-8 to UTF-8 (MARC21)');

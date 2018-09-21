@@ -227,11 +227,13 @@ sub draw_text {
                 $parse_line = $2;
             }
             my $borrower_attributes = get_borrower_attributes($self->{'borrower_number'},@fields);
-            grep{ # substitute data for db fields
-                if ($_ =~ m/<([A-Za-z0-9_]+)>/) {
+            @orig_line = map { # substitute data for db fields
+                my $l = $_;
+                if ($l =~ m/<([A-Za-z0-9_]+)>/) {
                     my $field = $1;
-                    $_ =~ s/$_/$borrower_attributes->{$field}/;
+                    $l =~ s/$l/$borrower_attributes->{$field}/;
                 }
+                $l;
             } @orig_line;
             $line = join(' ',@orig_line);
         }

@@ -77,8 +77,8 @@ sub fixshebang{
             # to make it writable.  Note that stat and chmod
             # (the Perl functions) should work on Win32
             my $old_perm;
-            $old_perm = (stat $pathfile)[2] & 07777;
-            my $new_perm = $old_perm | 0200;
+            $old_perm = (stat $pathfile)[2] & oct(7777);
+            my $new_perm = $old_perm | oct(200);
             chmod $new_perm, $pathfile;
 
             # tie the file -- note that we're explicitly setting the line (record)

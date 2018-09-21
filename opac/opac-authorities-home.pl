@@ -56,7 +56,6 @@ if ( $op eq "do_search" ) {
     my @value = $query->multi_param('value');
     $value[0] ||= q||;
 
-    my @tags;
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
     my $searcher = Koha::SearchEngine::Search->new(

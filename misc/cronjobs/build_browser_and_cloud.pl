@@ -22,7 +22,7 @@ use Getopt::Long;
 use C4::Log;
 
 my ( $input_marc_file, $number) = ('',0);
-my ($version, $confirm,$test_parameter,$field,$batch,$max_digits,$cloud_tag);
+my ($version, $confirm,$field,$batch,$max_digits,$cloud_tag);
 GetOptions(
 	'c' => \$confirm,
 	'h' => \$version,

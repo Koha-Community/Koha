@@ -888,8 +888,8 @@ sub get_install_log_values {
     my $install_log = shift;
     my $values = shift;
 
-    open LOG, "<$install_log" or die "Cannot open install log $install_log: $!\n";
-    while (<LOG>) {
+    open my $log, '<', $install_log or die "Cannot open install log $install_log: $!\n";
+    while (<$log>) {
         chomp;
         next if /^#/ or /^\s*$/;
         next if /^=/;
@@ -898,7 +898,7 @@ sub get_install_log_values {
         my ($key, $value) = split /=/, $_, 2;
         $values->{$key} = $value;
     }
-    close LOG;
+    close $log;
 
     print <<_EXPLAIN_INSTALL_LOG_;
 Reading values from install log $install_log.  You

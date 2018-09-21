@@ -17,7 +17,7 @@ use C4::Context;
 use C4::Biblio;
 use C4::Auth;
 my $outfile = $ARGV[0];
-open(OUT,">$outfile") or die $!;
+open(my $fh, '>', $outfile) or die $!;
 my $dbh=C4::Context->dbh;
 #$dbh->do("set character_set_client='latin5'"); 
 $dbh->do("set character_set_connection='utf8'");
@@ -25,6 +25,6 @@ $dbh->do("set character_set_connection='utf8'");
 my $sth=$dbh->prepare("select marc from auth_header order by authid");
 $sth->execute();
 while (my ($marc) = $sth->fetchrow) {
-    print OUT $marc;
+    print $fh $marc;
  }
-close(OUT);
+close($fh);

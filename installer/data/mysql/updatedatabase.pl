@@ -53,14 +53,10 @@ use File::Slurp;
 my $debug = 0;
 
 my (
-    $sth, $sti,
+    $sth,
     $query,
-    %existingtables,    # tables already in database
-    %types,
     $table,
-    $column,
-    $type, $null, $key, $default, $extra,
-    $prefitem,          # preference item in systempreferences table
+    $type,
 );
 
 my $schema = Koha::Database->new()->schema();
@@ -22241,7 +22237,7 @@ foreach my $file ( sort readdir $dirh ) {
         my $rv = $installer->load_sql( $update_dir . $file ) ? 0 : 1;
     } elsif ( $file =~ /\.perl$/ ) {
         my $code = read_file( $update_dir . $file );
-        eval $code;
+        eval $code; ## no critic (StringyEval)
         say "Atomic update generated errors: $@" if $@;
     }
 }

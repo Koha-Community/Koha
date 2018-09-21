@@ -155,7 +155,6 @@ if (C4::Context->preference("RequestOnOpac")) {
 
 # fill arrays
 my @loop_data = ();
-my $tag;
 
 # loop through each tab 0 through 9
 for ( my $tabloop = 0 ; $tabloop <= 9 ; $tabloop++ ) {

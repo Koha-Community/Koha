@@ -34,8 +34,6 @@ my $dbh        = C4::Context->dbh;
 my $selectview = $query->param('selectview');
 $selectview = C4::Context->preference("SubscriptionHistory") unless $selectview;
 
-my $sth;
-
 # my $id;
 my ( $template, $loggedinuser, $cookie );
 my $biblionumber = $query->param('biblionumber');

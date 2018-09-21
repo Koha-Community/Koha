@@ -12,9 +12,9 @@ qx(grep -r "^ *use" $dir | grep -v "C4\|strict\|vars" >/tmp/modulesKoha.log);
 $dir=C4::Context->config('opacdir');
 qx(grep -r "^ *use" $dir | grep -v "C4\|strict\|vars" >>/tmp/modulesKoha.log);
 
-open FILE, "< /tmp/modulesKoha.log" ||die "unable to open file /tmp/modulesKoha.log";
+open my $fh, '<', '/tmp/modulesKoha.log' ||die "unable to open file /tmp/modulesKoha.log";
 my %modulehash;
-while (my $line=<FILE>){
+while (my $line=<$fh>){
   if ( $line=~m#(.*)\:\s*use\s+([A-Z][^\s;]+)# ){
     my ($file,$module)=($1,$2);
     my @filename = split /\//, $file;
@@ -23,5 +23,5 @@ while (my $line=<FILE>){
 }
 print "external modules used in Koha ARE :\n";
 map {print "* $_ \t in files ",join (",",@{$modulehash{$_}}),"\n" } sort keys %modulehash;
-close FILE;
+close $fh;
 unlink "/tmp/modulesKoha.log";

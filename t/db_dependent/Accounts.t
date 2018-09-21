@@ -61,7 +61,6 @@ $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM borrowers|);
 
 my $branchcode = $library->{branchcode};
-my $borrower_number;
 
 my $context = new Test::MockModule('C4::Context');
 $context->mock( 'userenv', sub {

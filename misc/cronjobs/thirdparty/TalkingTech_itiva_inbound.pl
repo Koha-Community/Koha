@@ -77,6 +77,7 @@ if ( defined $infile ) {
         $updated += $result;
         $total++;
     }
+    close($IN);
 }
 else {
     die pod2usage( -verbose => 1 );

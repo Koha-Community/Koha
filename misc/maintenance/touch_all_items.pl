@@ -70,10 +70,11 @@ if ($whereclause) {
 }
 
 # output log or STDOUT
+my $fh;
 if (defined $outfile) {
-   open (OUT, ">$outfile") || die ("Cannot open output file");
+   open ($fh, '>', $outfile) || die ("Cannot open output file");
 } else {
-   open(OUT, ">&STDOUT") || die ("Couldn't duplicate STDOUT: $!");
+   open($fh, '>&', \*STDOUT) || die ("Couldn't duplicate STDOUT: $!");
 }
 
 # FIXME Would be better to call Koha::Items->search here
@@ -88,15 +89,16 @@ while (my ($biblionumber, $itemnumber, $itemcallnumber) = $sth_fetch->fetchrow_a
 
   if ($modok) {
      $goodcount++;
-     print OUT "Touched item $itemnumber\n" if (defined $verbose);
+     print $fh "Touched item $itemnumber\n" if (defined $verbose);
   } else {
      $badcount++;
-     print OUT "ERROR WITH ITEM $itemnumber !!!!\n";
+     print $fh "ERROR WITH ITEM $itemnumber !!!!\n";
   }
 
   $totalcount++;
 
 }
+close($fh);
 
 # Benchmarking
 my $endtime = time();

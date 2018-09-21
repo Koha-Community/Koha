@@ -102,7 +102,7 @@ sub string_list {
 sub text_extract {
     my($h) = @_;
     for (;;) {
-        my $s = TmplTokenizer::next_token $h;
+        my $s = TmplTokenizer::next_token($h);
         last unless defined $s;
         my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
         if ($kind eq C4::TmplTokenType::TEXT) {
@@ -124,7 +124,7 @@ sub text_extract {
                     next if $a eq 'value' && ($tag ne 'input'
                         || (ref $attr->{'type'} && $attr->{'type'}->[1] =~ /^(?:hidden|radio|checkbox)$/)); # FIXME
                     my($key, $val, $val_orig, $order) = @{$attr->{$a}}; #FIXME
-                    $val = TmplTokenizer::trim $val;
+                    $val = TmplTokenizer::trim($val);
                     # for selected attributes replace '[%..%]' with '%s' globally
                     if ( $a =~ /title|value|alt|content|placeholder/ ) {
                         $val =~ s/\[\%.*?\%\]/\%s/g;
@@ -155,7 +155,7 @@ sub generate_strings_list {
 sub generate_po_file {
     # We don't emit the Plural-Forms header; it's meaningless for us
     my $pot_charset = (defined $charset_out? $charset_out: 'CHARSET');
-    $pot_charset = TmplTokenizer::charset_canon $pot_charset;
+    $pot_charset = TmplTokenizer::charset_canon($pot_charset);
     # Time stamps aren't exactly right semantically. I don't know how to fix it.
     my $time = POSIX::strftime('%Y-%m-%d %H:%M%z', localtime(time));
     my $time_pot = $time;
@@ -244,9 +244,11 @@ EOF
 	    $cformat_p = 1 if $token->type == C4::TmplTokenType::TEXT_PARAMETRIZED;
 	}
         printf $OUTPUT "#, c-format\n" if $cformat_p;
-        printf $OUTPUT "msgid %s\n", TmplTokenizer::quote_po
-		TmplTokenizer::string_canon
-		TmplTokenizer::charset_convert $t, $charset_in, $charset_out;
+        printf $OUTPUT "msgid %s\n", TmplTokenizer::quote_po(
+            TmplTokenizer::string_canon(
+                TmplTokenizer::charset_convert($t, $charset_in, $charset_out)
+            )
+        );
         printf $OUTPUT "msgstr %s\n\n", (defined $translation{$t}?
 		TmplTokenizer::quote_po( $translation{$t} ): "\"\"");
     }
@@ -256,7 +258,7 @@ EOF
 
 sub convert_translation_file {
     open(my $INPUT, '<:encoding(utf-8)', $convert_from) || die "$convert_from: $!\n";
-    VerboseWarnings::set_input_file_name $convert_from;
+    VerboseWarnings::set_input_file_name($convert_from);
     while (<$INPUT>) {
 	chomp;
 	my($msgid, $msgstr) = split(/\t/);
@@ -273,13 +275,13 @@ sub convert_translation_file {
 	$translation{$msgid} = $msgstr unless $msgstr eq '*****';
 
 	if ($msgid  =~ /\bcharset=(["']?)([^;\s"']+)\1/s) {
-	    my $candidate = TmplTokenizer::charset_canon $2;
+	    my $candidate = TmplTokenizer::charset_canon($2);
 	    die "Conflicting charsets in msgid: $candidate vs $charset_in\n"
 		    if defined $charset_in && $charset_in ne $candidate;
 	    $charset_in = $candidate;
 	}
 	if ($msgstr =~ /\bcharset=(["']?)([^;\s"']+)\1/s) {
-	    my $candidate = TmplTokenizer::charset_canon $2;
+	    my $candidate = TmplTokenizer::charset_canon($2);
 	    die "Conflicting charsets in msgid: $candidate vs $charset_out\n"
 		    if defined $charset_out && $charset_out ne $candidate;
 	    $charset_out = $candidate;
@@ -287,7 +289,7 @@ sub convert_translation_file {
     }
     # The following assumption is correct; that's what HTML::Template assumes
     if (!defined $charset_in) {
-	$charset_in = $charset_out = TmplTokenizer::charset_canon 'utf-8';
+	$charset_in = $charset_out = TmplTokenizer::charset_canon('utf-8');
 	warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n";
     }
 }
@@ -355,8 +357,8 @@ GetOptions(
     'help'				=> sub { usage(0) },
 ) || usage_error;
 
-VerboseWarnings::set_application_name $0;
-VerboseWarnings::set_pedantic_mode $pedantic_p;
+VerboseWarnings::set_application_name($0);
+VerboseWarnings::set_pedantic_mode($pedantic_p);
 
 usage_error('Missing mandatory option -f')
 	unless defined $files_from || defined $convert_from;
@@ -381,7 +383,7 @@ if (defined $files_from) {
 	my $input = /^\//? $_: "$directory/$_";
 	my $h = TmplTokenizer->new( $input );
 	$h->set_allow_cformat( 1 );
-	VerboseWarnings::set_input_file_name $input;
+	VerboseWarnings::set_input_file_name($input);
 	print STDERR "$0: Processing file \"$input\"\n" if $verbose_p;
 	text_extract( $h );
     }

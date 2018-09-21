@@ -43,7 +43,7 @@ sub split_callnumber {
     my ($cn_item, $regexs) = @_;
 
     for my $regex ( @$regexs ) {
-        eval "\$cn_item =~ $regex";
+        eval "\$cn_item =~ $regex"; ## no critic (StringyEval)
     }
     my @lines = split "\n", $cn_item;
 

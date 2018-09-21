@@ -165,7 +165,7 @@ sub fetch {
     $sth->execute($id);
     my $row = $sth->fetchrow_hashref;
     $sth->finish();
-    return undef unless defined $row;
+    return unless defined $row;
 
     my $self = {};
     $self->{'id'} = $row->{'matcher_id'};

@@ -72,7 +72,7 @@ my $result = GetOptions(
     'h|help'       => \$want_help
 );
 
-binmode( STDOUT, ":utf8" );
+binmode( STDOUT, ":encoding(UTF-8)" );
 
 if ( defined $since && defined $interval ) {
     print "The --since and --interval options are mutually exclusive.\n\n";

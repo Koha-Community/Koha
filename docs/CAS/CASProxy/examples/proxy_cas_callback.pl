@@ -49,9 +49,9 @@ if ($cgi->param('pgtId')) {
 
     # Now we store the pgtIou and the pgtId in the application vars (in our case a storable object in a file), 
     # so that the page requesting the webservice can retrieve the pgtId matching it's PgtIou 
-    open FILE, ">", "casSession.tmp" or die "Unable to open file";
-    nstore_fd({$pgtIou => $pgtId}, \*FILE);
-    close FILE;
+    open my $fh, ">", "casSession.tmp" or die "Unable to open file";
+    nstore_fd({$pgtIou => $pgtId}, $fh);
+    close $fh;
 
 } else {
     warn "Failed to get a Proxy Ticket\n";

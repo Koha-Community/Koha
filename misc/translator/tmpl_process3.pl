@@ -35,7 +35,7 @@ use vars qw( $charset_in $charset_out );
 
 ###############################################################################
 
-sub find_translation ($) {
+sub find_translation {
     my($s) = @_;
     my $key = $s;
     if ($s =~ /\S/s) {
@@ -56,13 +56,13 @@ sub find_translation ($) {
     }
 }
 
-sub text_replace_tag ($$) {
+sub text_replace_tag {
     my($t, $attr) = @_;
     my $it;
     my @ttvar;
 
     # value [tag=input], meta
-    my $tag = lc($1) if $t =~ /^<(\S+)/s;
+    my $tag = ($t =~ /^<(\S+)/s) ? lc($1) : undef;
     my $translated_p = 0;
     for my $a ('alt', 'content', 'title', 'value', 'label', 'placeholder') {
     if ($attr->{$a}) {
@@ -117,10 +117,10 @@ sub text_replace_tag ($$) {
     return $it;
 }
 
-sub text_replace (**) {
+sub text_replace {
     my($h, $output) = @_;
     for (;;) {
-    my $s = TmplTokenizer::next_token $h;
+    my $s = TmplTokenizer::next_token($h);
     last unless defined $s;
     my($kind, $t, $attr) = ($s->type, $s->string, $s->attributes);
     if ($kind eq C4::TmplTokenType::TEXT) {
@@ -138,7 +138,7 @@ sub text_replace (**) {
         for my $t (@{$s->js_data}) {
         # FIXME for this whole block
         if ($t->[0]) {
-            printf $output "%s%s%s", $t->[2], find_translation $t->[3],
+            printf $output "%s%s%s", $t->[2], find_translation($t->[3]),
                 $t->[2];
         } else {
             print $output $t->[1];
@@ -178,14 +178,14 @@ sub listfiles {
             }
         }
     } else {
-        warn_normal "$dir: $!", undef;
+        warn_normal("$dir: $!", undef);
     }
     return @it;
 }
 
 ###############################################################################
 
-sub mkdir_recursive ($) {
+sub mkdir_recursive {
     my($dir) = @_;
     local($`, $&, $', $1);
     $dir = $` if $dir ne /^\/+$/ && $dir =~ /\/+$/;
@@ -194,13 +194,13 @@ sub mkdir_recursive ($) {
     if (!-d $dir) {
     print STDERR "Making directory $dir...\n" unless $quiet;
     # creates with rwxrwxr-x permissions
-    mkdir($dir, 0775) || warn_normal "$dir: $!", undef;
+    mkdir($dir, 0775) || warn_normal("$dir: $!", undef);
     }
 }
 
 ###############################################################################
 
-sub usage ($) {
+sub usage {
     my($exitcode) = @_;
     my $h = $exitcode? *STDERR: *STDOUT;
     print $h <<EOF;
@@ -238,7 +238,7 @@ EOF
 
 ###############################################################################
 
-sub usage_error (;$) {
+sub usage_error {
     for my $msg (split(/\n/, $_[0])) {
     print STDERR "$msg\n";
     }
@@ -260,10 +260,10 @@ GetOptions(
     'quiet|q'               => \$quiet,
     'pedantic-warnings|pedantic'    => sub { $pedantic_p = 1 },
     'help'              => \&usage,
-) || usage_error;
+) || usage_error();
 
-VerboseWarnings::set_application_name $0;
-VerboseWarnings::set_pedantic_mode $pedantic_p;
+VerboseWarnings::set_application_name($0);
+VerboseWarnings::set_pedantic_mode($pedantic_p);
 
 # keep the buggy Locale::PO quiet if it says stupid things
 $SIG{__WARN__} = sub {
@@ -307,7 +307,7 @@ $href = Locale::PO->load_file_ashash($str_file, 'utf-8');
 # guess the charsets. HTML::Templates defaults to iso-8859-1
 if (defined $href) {
     die "$str_file: PO file is corrupted, or not a PO file\n" unless defined $href->{'""'};
-    $charset_out = TmplTokenizer::charset_canon $2 if $href->{'""'}->msgstr =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/;
+    $charset_out = TmplTokenizer::charset_canon($2) if $href->{'""'}->msgstr =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/;
     $charset_in = $charset_out;
 #     for my $msgid (keys %$href) {
 #   if ($msgid =~ /\bcharset=(["']?)([^;\s"'\\]+)\1/) {
@@ -326,22 +326,22 @@ if (defined $href) {
         next if $id_count == $str_count ||
                 $msg->{msgstr} eq '""' ||
                 grep { /fuzzy/ } @{$msg->{_flags}};
-        warn_normal
+        warn_normal(
             "unconsistent %s count: ($id_count/$str_count):\n" .
             "  line:   " . $msg->{loaded_line_number} . "\n" .
             "  msgid:  " . $msg->{msgid} . "\n" .
-            "  msgstr: " . $msg->{msgstr} . "\n", undef;
+            "  msgstr: " . $msg->{msgstr} . "\n", undef);
     }
 }
 
 # set our charset in to UTF-8
 if (!defined $charset_in) {
-    $charset_in = TmplTokenizer::charset_canon 'UTF-8';
+    $charset_in = TmplTokenizer::charset_canon('UTF-8');
     warn "Warning: Can't determine original templates' charset, defaulting to $charset_in\n" unless ( $quiet );
 }
 # set our charset out to UTF-8
 if (!defined $charset_out) {
-    $charset_out = TmplTokenizer::charset_canon 'UTF-8';
+    $charset_out = TmplTokenizer::charset_canon('UTF-8');
     warn "Warning: Charset Out defaulting to $charset_out\n" unless ( $quiet );
 }
 my $xgettext = './xgettext.pl'; # actual text extractor script
@@ -376,23 +376,22 @@ if ($action eq 'create')  {
     # FIXME: msgmerge(1) is a Unix dependency
     # FIXME: need to check the return value
     unless (-f $str_file) {
-        local(*INPUT, *OUTPUT);
-        open(INPUT, "<$tmpfile2");
-        open(OUTPUT, ">$str_file");
-        while (<INPUT>) {
-        print OUTPUT;
+        open(my $infh, '<', $tmpfile2);
+        open(my $outfh, '>', $str_file);
+        while (<$infh>) {
+        print $outfh;
         last if /^\n/s;
         }
-        close INPUT;
-        close OUTPUT;
+        close $infh;
+        close $outfh;
     }
     $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile2 -o - | msgattrib --no-obsolete -o $str_file");
     } else {
-    error_normal "Text extraction failed: $xgettext: $!\n", undef;
-    error_additional "Will not run msgmerge\n", undef;
+    error_normal("Text extraction failed: $xgettext: $!\n", undef);
+    error_additional("Will not run msgmerge\n", undef);
     }
-    unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
-    unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
+    unlink $tmpfile1 || warn_normal("$tmpfile1: unlink failed: $!\n", undef);
+    unlink $tmpfile2 || warn_normal("$tmpfile2: unlink failed: $!\n", undef);
 
 } elsif ($action eq 'update') {
     my($tmph1, $tmpfile1) = tmpnam();
@@ -421,11 +420,11 @@ if ($action eq 'create')  {
             $st = system("msgmerge ".($quiet?'-q':'')." -s $str_file $tmpfile2 -o - | msgattrib --no-obsolete -o $str_file");
         }
     } else {
-        error_normal "Text extraction failed: $xgettext: $!\n", undef;
-        error_additional "Will not run msgmerge\n", undef;
+        error_normal("Text extraction failed: $xgettext: $!\n", undef);
+        error_additional("Will not run msgmerge\n", undef);
     }
-    unlink $tmpfile1 || warn_normal "$tmpfile1: unlink failed: $!\n", undef;
-    unlink $tmpfile2 || warn_normal "$tmpfile2: unlink failed: $!\n", undef;
+    unlink $tmpfile1 || warn_normal("$tmpfile1: unlink failed: $!\n", undef);
+    unlink $tmpfile2 || warn_normal("$tmpfile2: unlink failed: $!\n", undef);
 
 } elsif ($action eq 'install') {
     if(!defined($out_dir)) {
@@ -448,8 +447,8 @@ if ($action eq 'create')  {
     -d $out_dir || die "$out_dir: The directory does not exist\n";
 
     # Try to open the file, because Locale::PO doesn't check :-/
-    open(INPUT, "<$str_file") || die "$str_file: $!\n";
-    close INPUT;
+    open(my $fh, '<', $str_file) || die "$str_file: $!\n";
+    close $fh;
 
     # creates the new tmpl file using the new translation
     for my $input (@in_files) {
@@ -457,17 +456,17 @@ if ($action eq 'create')  {
             unless substr($input, 0, length($in_dir) + 1) eq "$in_dir/";
 
         my $target = $out_dir . substr($input, length($in_dir));
-        my $targetdir = $` if $target =~ /[^\/]+$/s;
+        my $targetdir = ($target =~ /[^\/]+$/s) ? $` : undef;
 
         if (!defined $type || $input =~ /\.(?:$type)$/) {
             my $h = TmplTokenizer->new( $input );
             $h->set_allow_cformat( 1 );
-            VerboseWarnings::set_input_file_name $input;
+            VerboseWarnings::set_input_file_name($input);
             mkdir_recursive($targetdir) unless -d $targetdir;
             print STDERR "Creating $target...\n" unless $quiet;
-            open( OUTPUT, ">:encoding(UTF-8)", "$target" ) || die "$target: $!\n";
-            text_replace( $h, *OUTPUT );
-            close OUTPUT;
+            open( my $fh, ">:encoding(UTF-8)", "$target" ) || die "$target: $!\n";
+            text_replace( $h, $fh );
+            close $fh;
         } else {
         # just copying the file
             mkdir_recursive($targetdir) unless -d $targetdir;

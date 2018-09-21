@@ -147,8 +147,9 @@ if($marc_mod_template ne '') {
 my $dbh = C4::Context->dbh;
 my $heading_fields=get_heading_fields();
 
+my $idmapfh;
 if (defined $idmapfl) {
-  open(IDMAP,">$idmapfl") or die "cannot open $idmapfl \n";
+  open($idmapfh, '>', $idmapfl) or die "cannot open $idmapfl \n";
 }
 
 if ((not defined $sourcesubfield) && (not defined $sourcetag)){
@@ -441,11 +442,11 @@ RECORD: while (  ) {
 			 	if ($sourcetag < "010"){
 					if ($record->field($sourcetag)){
 					  my $source = $record->field($sourcetag)->data();
-					  printf(IDMAP "%s|%s\n",$source,$biblionumber);
+					  printf($idmapfh "%s|%s\n",$source,$biblionumber);
 					}
 			    } else {
 					my $source=$record->subfield($sourcetag,$sourcesubfield);
-					printf(IDMAP "%s|%s\n",$source,$biblionumber);
+					printf($idmapfh "%s|%s\n",$source,$biblionumber);
 			  }
 			}
 					# create biblio, unless we already have it ( either match or isbn )

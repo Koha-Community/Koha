@@ -57,7 +57,6 @@ my $dbh = C4::Context->dbh;
 $intranet =~ s#/$##;
 
 my $agent = Test::WWW::Mechanize->new( autocheck => 1 );
-my $jsonresponse;
 my ($category, $expected_base, $add_form_link_exists, $delete_form_link_exists);
 
 # -------------------------------------------------- LOGIN

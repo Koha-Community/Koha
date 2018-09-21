@@ -270,7 +270,6 @@ sub checkauth {
             $loggedin = 1;
             $userid   = $session->param('cardnumber');
         }
-        my ( $ip, $lasttime );
 
         if ($logout) {
 

@@ -534,8 +534,6 @@ my $hits;
 # Define some global variables
 my ($error,$query,$simple_query,$query_cgi,$query_desc,$limit,$limit_cgi,$limit_desc,$query_type);
 
-my @results;
-
 my $suppress = 0;
 if (C4::Context->preference('OpacSuppression')) {
     # OPAC suppression by IP address
@@ -604,9 +602,7 @@ $template->param ( OPACResultsSidebar => C4::Context->preference('OPACResultsSid
 ## II. DO THE SEARCH AND GET THE RESULTS
 my $total = 0; # the total results for the whole set
 my $facets; # this object stores the faceted results that display on the left-hand of the results page
-my @results_array;
 my $results_hashref;
-my @coins;
 
 if ($tag) {
     $query_cgi = "tag=" .  uri_escape_utf8( $tag ) . "&" . $query_cgi;
@@ -969,7 +965,6 @@ for (my $i=0;$i<@servers;$i++) {
     # FIXME: can add support for other targets as needed here
     $template->param(           outer_sup_results_loop => \@sup_results_array);
 } #/end of the for loop
-#$template->param(FEDERATED_RESULTS => \@results_array);
 
 for my $facet ( @$facets ) {
     for my $entry ( @{ $facet->{facets} } ) {

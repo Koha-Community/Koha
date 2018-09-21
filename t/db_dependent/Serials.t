@@ -47,7 +47,6 @@ my $bookseller = Koha::Acquisition::Bookseller->new(
 
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
 
-my $budgetid;
 my $bpid = AddBudgetPeriod({
     budget_period_startdate   => '2015-01-01',
     budget_period_enddate     => '2015-12-31',

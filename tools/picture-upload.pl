@@ -219,7 +219,8 @@ sub handle_dir {
               if ( $filename =~ m/datalink\.txt/i
                 || $filename =~ m/idlink\.txt/i );
         }
-        unless ( open( FILE, $file ) ) {
+        my $fh;
+        unless ( open( $fh, '<', $file ) ) {
             warn "Opening $dir/$file failed!";
             $direrrors{'OPNLINK'} = $file;
             # This error is fatal to the import of this directory contents
@@ -227,7 +228,7 @@ sub handle_dir {
             return \%direrrors;
         }
 
-        while ( my $line = <FILE> ) {
+        while ( my $line = <$fh> ) {
             $debug and warn "Reading contents of $file";
             chomp $line;
             $debug and warn "Examining line: $line";
@@ -247,7 +248,7 @@ sub handle_dir {
             $source = "$dir/$filename";
             %counts = handle_file( $cardnumber, $source, $template, %counts );
         }
-        close FILE;
+        close $fh;
         closedir DIR;
     }
     else {
@@ -290,9 +291,9 @@ sub handle_file {
             return %count;
         }
         my ( $srcimage, $image );
-        if ( open( IMG, "$source" ) ) {
-            $srcimage = GD::Image->new(*IMG);
-            close(IMG);
+        if ( open( my $fh, '<', $source ) ) {
+            $srcimage = GD::Image->new($fh);
+            close($fh);
             if ( defined $srcimage ) {
                 my $imgfile;
                 my $mimetype = 'image/png';
@@ -343,7 +344,6 @@ sub handle_file {
                     undef $srcimage; # This object can get big...
                 }
                 $debug and warn "Image is of mimetype $mimetype";
-                my $dberror;
                 if ($mimetype) {
                     my $patron = Koha::Patrons->find({ cardnumber => $cardnumber });
                     if ( $patron ) {

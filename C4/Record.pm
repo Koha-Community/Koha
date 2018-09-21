@@ -375,7 +375,6 @@ sub marc2endnote {
         Year => $marc_rec_obj->publication_date,
         Abstract => $abstract,
     };
-    my $endnote;
     my $style = new Biblio::EndnoteStyle();
     my $template;
     $template.= "DB - DB\n" if C4::Context->preference("LibraryName");
@@ -420,7 +419,7 @@ sub marc2csv {
     }
 
     # Preprocessing
-    eval $preprocess if ($preprocess);
+    eval $preprocess if ($preprocess); ## no critic (StringyEval)
 
     my $firstpass = 1;
     if ( @$itemnumbers ) {
@@ -438,7 +437,7 @@ sub marc2csv {
     }
 
     # Postprocessing
-    eval $postprocess if ($postprocess);
+    eval $postprocess if ($postprocess); ## no critic (StringyEval)
 
     return $output;
 }
@@ -575,7 +574,6 @@ sub marcrecord2csv {
         if ( $content =~ m|\[\%.*\%\]| ) {
             my $tt = Template->new();
             my $template = $content;
-            my $vars;
             # Replace 00X and 0XX with X or XX
             $content =~ s|fields.00(\d)|fields.$1|g;
             $content =~ s|fields.0(\d{2})|fields.$1|g;
@@ -624,7 +622,7 @@ sub marcrecord2csv {
                         # Field processing
                         my $marcfield = $tag->{fieldtag}; # This line fixes a retrocompatibility concern
                                                           # The "processing" could be based on the $marcfield variable.
-                        eval $fieldprocessing if ($fieldprocessing);
+                        eval $fieldprocessing if ($fieldprocessing); ## no critic (StringyEval)
 
                         push @loop_values, $value;
                     }

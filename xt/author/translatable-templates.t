@@ -69,7 +69,7 @@ sub test_string_extraction {
 
     my $command = "PERL5LIB=\$PERL5LIB:$misc_translator_dir ./tmpl_process3.pl create -i $template_dir -s $po_dir/$module.po -r --pedantic-warnings";
    
-    open (NULL, ">", File::Spec->devnull);
+    open (NULL, ">", File::Spec->devnull); ## no critic (BarewordFileHandles)
     print NULL "foo"; # avoid warning;
     my $pid = open3(gensym, ">&NULL", \*PH, $command); 
     my @warnings;

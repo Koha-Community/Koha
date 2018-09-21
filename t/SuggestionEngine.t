@@ -13,7 +13,7 @@ BEGIN {
 my $plugindir = File::Spec->rel2abs('Koha/SuggestionEngine/Plugin');
 
 opendir(my $dh, $plugindir);
-my @installed_plugins = map { ( /\.pm$/ && -f "$plugindir/$_" && s/\.pm$// ) ? "Koha::SuggestionEngine::Plugin::$_" : () } readdir($dh);
+my @installed_plugins = map { my $p = $_; ( $p =~ /\.pm$/ && -f "$plugindir/$p" && $p =~ s/\.pm$// ) ? "Koha::SuggestionEngine::Plugin::$p" : () } readdir($dh);
 my @available_plugins = Koha::SuggestionEngine::AvailablePlugins();
 
 foreach my $plugin (@installed_plugins) {

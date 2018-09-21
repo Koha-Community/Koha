@@ -126,9 +126,6 @@ if ($do_it) {
 }
 
 my $dbh = C4::Context->dbh;
-my @values;
-my %labels;
-my %select;
 
 my $itemtypes = Koha::ItemTypes->search_with_localization;
 
@@ -260,7 +257,6 @@ sub calculate {
 	push @loopfilter, {crit=>'SQL =', sql=>1, filter=>$strcalc};
 	@sqlparams=(@sqlparams,@sqlorparams);
 	$dbcalc->execute(@sqlparams);
-	my ($emptycol,$emptyrow); 
 	my $data = $dbcalc->fetchall_hashref([qw(line col)]);
 	my %cols_hash;
 	foreach my $row (keys %$data){

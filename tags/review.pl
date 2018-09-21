@@ -36,7 +36,7 @@ use C4::Tags qw(get_tags get_approval_rows approval_counts whitelist blacklist i
 my $script_name = "/cgi-bin/koha/tags/review.pl";
 my $needed_flags = { tools => 'moderate_tags' };    # FIXME: replace when more specific permission is created.
 
-sub ajax_auth_cgi ($) { # returns CGI object
+sub ajax_auth_cgi { # returns CGI object
     my $needed_flags = shift;
     my %cookies = CGI::Cookie->fetch;
     my $input = CGI->new;
@@ -122,8 +122,8 @@ foreach (keys %$counts) {
     $template->param($_ => $counts->{$_});
 }
 
-sub pagination_calc ($;$) {
-    my $query = shift or return undef;
+sub pagination_calc {
+    my $query = shift or return;
     my $hardlimit = (@_) ? shift : 100;     # hardcoded, could be another syspref
     my $pagesize = $query->param('limit' ) || $hardlimit;
     my $page     = $query->param('page'  ) || 1;

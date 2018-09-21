@@ -47,7 +47,7 @@ my $result = GetOptions(
     'h|help'         => \$want_help
 );
 
-binmode( STDOUT, ":utf8" );
+binmode( STDOUT, ":encoding(UTF-8)" );
 
 if ( not $result or $want_help ) {
     usage();

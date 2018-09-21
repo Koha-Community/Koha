@@ -324,10 +324,13 @@ sub GetFullSubscription {
     my $sth = $dbh->prepare($query);
     $sth->execute($subscriptionid);
     my $subscriptions = $sth->fetchall_arrayref( {} );
-    my $cannotedit = not can_edit_subscription( $subscriptions->[0] ) if scalar @$subscriptions;
-    for my $subscription ( @$subscriptions ) {
-        $subscription->{cannotedit} = $cannotedit;
+    if (scalar @$subscriptions) {
+        my $cannotedit = not can_edit_subscription( $subscriptions->[0] );
+        for my $subscription ( @$subscriptions ) {
+            $subscription->{cannotedit} = $cannotedit;
+        }
     }
+
     return $subscriptions;
 }
 
@@ -347,9 +350,6 @@ sub PrepareSerialsData {
     my $year;
     my @res;
     my $startdate;
-    my $aqbooksellername;
-    my $bibliotitle;
-    my @loopissues;
     my $first;
     my $previousnote = "";
 
@@ -482,10 +482,13 @@ sub GetFullSubscriptionsFromBiblionumber {
     my $sth = $dbh->prepare($query);
     $sth->execute($biblionumber);
     my $subscriptions = $sth->fetchall_arrayref( {} );
-    my $cannotedit = not can_edit_subscription( $subscriptions->[0] ) if scalar @$subscriptions;
-    for my $subscription ( @$subscriptions ) {
-        $subscription->{cannotedit} = $cannotedit;
+    if (scalar @$subscriptions) {
+        my $cannotedit = not can_edit_subscription( $subscriptions->[0] );
+        for my $subscription ( @$subscriptions ) {
+            $subscription->{cannotedit} = $cannotedit;
+        }
     }
+
     return $subscriptions;
 }
 

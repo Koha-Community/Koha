@@ -1,6 +1,5 @@
 #!/usr/bin/perl
-#use strict;
-#use warnings; FIXME - Bug 2505
+use Modern::Perl;
 # script to shift marc to biblioitems
 # scraped from updatedatabase for dev week by chris@katipo.co.nz
 BEGIN {

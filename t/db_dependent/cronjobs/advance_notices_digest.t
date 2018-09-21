@@ -177,14 +177,10 @@ sub run_script {
     my $script = shift;
     local @ARGV = @_;
 
-    ## no critic
-
     # We simulate script execution by evaluating the script code in the context
     # of this unit test.
 
-    eval $script; #Violates 'ProhibitStringyEval'
-
-    ## use critic
+    eval $script; ## no critic (StringyEval)
 
     die $@ if $@;
 }

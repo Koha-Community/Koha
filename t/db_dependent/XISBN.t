@@ -27,7 +27,6 @@ my $search_module = new Test::MockModule("Koha::SearchEngine::${engine}::Search"
 
 $search_module->mock('simple_search_compat', \&Mock_simple_search_compat );
 
-my $errors;
 my $context = C4::Context->new;
 
 my ( $biblionumber_tag, $biblionumber_subfield ) =
