@@ -46,6 +46,8 @@
                                     <input type="radio" name="gdpr_processing" value="disagreed"> No, I do not agree. Please remove my account within a reasonable time.</p>
                                     [% IF gdpr_proc_consent %]
                                         <p>Your consent was registered on [% gdpr_proc_consent | html %].</p>
+                                    [% ELSIF gdpr_proc_refusal %]
+                                        <p>You indicated recently that you do not consent, and we will process your request soon.</p>
                                     [% END %]
                                 </li></ul>
                             </fieldset>
