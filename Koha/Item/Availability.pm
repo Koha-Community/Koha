@@ -152,6 +152,11 @@ sub swaggerize {
         $availability->{'notes'} = $notes;
     }
     if (keys %{$unavailabilities} > 0) {
+        # Don't reveal borrowernumber through REST API.
+        foreach my $key (keys %{$unavailabilities}) {
+            delete $unavailabilities->{$key}{'borrowernumber'};
+        }
+
         $availability->{'unavailabilities'} = $unavailabilities;
     }
 

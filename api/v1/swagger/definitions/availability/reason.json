@@ -177,9 +177,6 @@
       "description": "Item is checked out to a patron.",
       "type": "object",
       "properties": {
-        "borrowernumber": {
-          "type": ["integer", "null"]
-        },
         "date_due": {
           "type": ["string", "null"],
           "format": "date-time"
@@ -213,9 +210,6 @@
       "description": "Someone has placed a hold on this item.",
       "type": "object",
       "properties": {
-        "borrowernumber": {
-          "$ref": "../../x-primitives.json#/borrowernumber"
-        },
         "status": {
           "type": ["string", "null"]
         },
