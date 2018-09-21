@@ -91,6 +91,7 @@ $template->param(
     borrowernumber    => $borrowernumber,
     branch            => $branch,
     categoryname      => $patron_info->{description},
+    routinglistview   => 1,
 );
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
