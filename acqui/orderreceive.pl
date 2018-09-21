@@ -73,6 +73,7 @@ use C4::Suggestions;
 use C4::Koha;
 
 use Koha::Acquisition::Booksellers;
+use Koha::Acquisition::Currencies;
 use Koha::Acquisition::Orders;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::ItemTypes;
@@ -112,6 +113,7 @@ unless ( $results and @$results) {
 # prepare the form for receiving
 my $order = $results->[0];
 my $basket = Koha::Acquisition::Orders->find( $ordernumber )->basket;
+my $active_currency = Koha::Acquisition::Currencies->get_active;
 
 # Check if ACQ framework exists
 my $acq_fw = GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
@@ -203,6 +205,10 @@ $template->param(
     booksellerid          => $order->{'booksellerid'},
     freight               => $freight,
     name                  => $bookseller->name,
+    cur_active_sym        => $active_currency->symbol,
+    cur_active            => $active_currency->currency,
+    listincgst            => $bookseller->listincgst,
+    invoiceincgst         => $bookseller->invoiceincgst,
     title                 => $order->{'title'},
     author                => $order->{'author'},
     copyrightdate         => $order->{'copyrightdate'},
