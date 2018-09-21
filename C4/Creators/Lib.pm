@@ -67,11 +67,8 @@ C4::Creators::Lib
 
 sub _SELECT {
     my @params = @_;
-    my $fields_list = $params[0];
-    if (index($fields_list, ' ')==-1 && index($fields_list,',')==-1 && $fields_list ne '*') {
-        $fields_list = "`$fields_list`";
-    }
-    my $query = "SELECT $fields_list FROM $params[1]";
+    my $fieldname = _add_backtics($params[0]);
+    my $query = "SELECT $fieldname FROM $params[1]";
     $params[2] ? $query .= " WHERE $params[2];" : $query .= ';';
     my $sth = C4::Context->dbh->prepare($query);
 #    $sth->{'TraceLevel'} = 3;
@@ -85,6 +82,19 @@ sub _SELECT {
         push(@$record_set, $row);
     }
     return $record_set;
+}
+
+sub _add_backtics {
+    my ( @args ) = @_;
+    s/(?:^|\b)(\w+)(?:\b|$)/`$1`/g for @args;
+    # Too bad that we need to correct a few exceptions: aggregate functions
+    my @aggregates = ( 'COUNT', 'MAX', 'MIN', 'SUM' ); # add when needed..
+    foreach my $aggr (@aggregates) {
+        s/`$aggr`\(/$aggr\(/gi for @args;
+    }
+    # And correct aliases
+    s/(`|\))\s+`AS`\s+`/$1 AS `/gi for @args;
+    return wantarray ? @args : $args[0];
 }
 
 my $barcode_types = [
@@ -148,17 +158,8 @@ my $output_formats = [
 
 sub _build_query {
     my ( $params, $table ) = @_;
-    my @fields = exists $params->{fields} ? @{ $params->{fields} } : ();
-    my @fields2 = ();
-    foreach my $field_name (@fields) {
-        if (index($field_name,' ')==-1 && $field_name ne '*') {
-            push @fields2, "`$field_name`";
-        } else {
-            push @fields2, $field_name;
-        }
-    }
-    @fields = @fields2;
-    my $query = "SELECT " . ( @fields ? join(', ', @fields ) : '*' ) . " FROM $table";
+    my @fields = exists $params->{fields} ? _add_backtics( @{ $params->{fields} } ) : ('*');
+    my $query = "SELECT " . join(', ', @fields ) . " FROM $table";
     my @where_args;
     if ( exists $params->{filters} ) {
         $query .= ' WHERE 1 ';
