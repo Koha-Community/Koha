@@ -61,56 +61,74 @@ INPUT
 
 my @expected_errors = (
     {
-        error  => q{missing_filter},
-        line   => q{        [% just_a_var %] A N D [% another_one_on_same_line %]},
+        error => q{missing_filter},
+        line =>
+q{        [% just_a_var %] A N D [% another_one_on_same_line %]},
+        line_number => 6,
     },
     {
-        error  => q{missing_filter},
-        line   => q{        [% just_a_var %] A N D [% another_one_on_same_line %]},
+        error => q{missing_filter},
+        line =>
+q{        [% just_a_var %] A N D [% another_one_on_same_line %]},
+        line_number => 6,
     },
     {
-        error  => q{missing_filter},
-        line   => q{    [% IF ( patron.othernames | html ) %]&ldquo;[% patron.othernames %]&rdquo;[% END %]},
+        error => q{missing_filter},
+        line =>
+q{    [% IF ( patron.othernames | html ) %]&ldquo;[% patron.othernames %]&rdquo;[% END %]},
+        line_number => 12,
     },
     {
-        error  => q{asset_must_be_raw},
-        line   => q{    [% Asset.css("css/datatables.css").raw %]},
+        error       => q{asset_must_be_raw},
+        line        => q{    [% Asset.css("css/datatables.css").raw %]},
+        line_number => 13,
     },
     {
-        error  => q{missing_filter},
-        line   => q{<a href="tel:[% patron.phone %]">[% patron.phone %]</a>},
+        error => q{missing_filter},
+        line  => q{<a href="tel:[% patron.phone %]">[% patron.phone %]</a>},
+        line_number => 16,
     },
     {
-        error  => q{missing_filter},
-        line   => q{<a href="tel:[% patron.phone %]">[% patron.phone %]</a>},
+        error => q{missing_filter},
+        line  => q{<a href="tel:[% patron.phone %]">[% patron.phone %]</a>},
+        line_number => 16,
     },
     {
-        error  => q{missing_filter},
-        line   => q{<a title="[% patron.emailpro %]" href="mailto:[% patron.emailpro | uri %]">[% patron.emailpro %]</a>},
+        error => q{missing_filter},
+        line =>
+q{<a title="[% patron.emailpro %]" href="mailto:[% patron.emailpro | uri %]">[% patron.emailpro %]</a>},
+        line_number => 17,
     },
     {
-        error  => q{missing_filter},
-        line   => q{<a title="[% patron.emailpro %]" href="mailto:[% patron.emailpro | uri %]">[% patron.emailpro %]</a>},
+        error => q{missing_filter},
+        line =>
+q{<a title="[% patron.emailpro %]" href="mailto:[% patron.emailpro | uri %]">[% patron.emailpro %]</a>},
+        line_number => 17,
     },
     {
-        error  => q{missing_filter},
-        line   => q{[% patron_message.get_column('manager_surname') %]},
+        error       => q{missing_filter},
+        line        => q{[% patron_message.get_column('manager_surname') %]},
+        line_number => 18,
     },
     {
-        error  => q{missing_filter},
-        line   => q{[%- var -%]},
+        error       => q{missing_filter},
+        line        => q{[%- var -%]},
+        line_number => 29,
     },
     {
-        error  => q{missing_filter},
-        line   => q{[% - var - %]},
+        error       => q{missing_filter},
+        line        => q{[% - var - %]},
+        line_number => 30,
     },
     {
-        error  => q{missing_filter},
-        line   => q{[%~ var ~%]},
+        error       => q{missing_filter},
+        line        => q{[%~ var ~%]},
+        line_number => 31,
     },
     {
-        error  => q{missing_filter},
-        line   => q{[% ~ var ~ %]},
+        error       => q{missing_filter},
+        line        => q{[% ~ var ~ %]},
+        line_number => 32,
     }
 );
 

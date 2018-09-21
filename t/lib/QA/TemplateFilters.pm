@@ -30,7 +30,9 @@ sub missing_filters {
     my ($content) = @_;
     my ( $use_raw, $has_use_raw );
     my @errors;
+    my $line_number;
     for my $line ( split "\n", $content ) {
+        $line_number++;
         if ( $line =~ m{\[%[^%]+%\]} ) {
 
             # handle exceptions first
@@ -39,7 +41,7 @@ sub missing_filters {
 
             # Do we have Asset without the raw filter?
             if ( $line =~ m{^\s*\[% Asset} ) {
-                push @errors, { error => 'asset_must_be_raw', line => $line }
+                push @errors, { error => 'asset_must_be_raw', line => $line, line_number => $line_number }
                   and next
                   unless $line =~ m{\|\s*\$raw};
             }
@@ -67,7 +69,7 @@ sub missing_filters {
                   ;    # We could escape it but should be safe
                 next if $tt_block =~ m{^\#};    # Is a comment, skip it
 
-                push @errors, { error => 'missing_filter', line => $line }
+                push @errors, { error => 'missing_filter', line => $line, line_number => $line_number }
                   if $tt_block !~ m{\|\s?\$raw}   # already escaped correctly with raw
                   && $tt_block !~ m{=}            # assignment, maybe we should require to use SET (?)
                   && $tt_block !~ m{\|\s?ur(l|i)} # already has url or uri filter
