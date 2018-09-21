@@ -23,6 +23,8 @@ use Carp;
 use Data::Dumper;
 use List::MoreUtils qw( uniq );
 
+use C4::Circulation qw( ReturnLostItem );
+use C4::Letters;
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
 
@@ -264,7 +266,6 @@ sub pay {
     }
 
     if ( C4::Context->preference('UseEmailReceipts') ) {
-        require C4::Letters;
         if (
             my $letter = C4::Letters::GetPreparedLetter(
                 module                 => 'circulation',
