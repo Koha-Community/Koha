@@ -16,7 +16,7 @@ $('#current-article-requests').ready(function() {
 });
 
 $(document).ready(function() {
-    [% UNLESS (patron ) %]
+    if ( $( "#patron" ).size() ){
         $( "#patron" ).autocomplete({
             source: "/cgi-bin/koha/circ/ysearch.pl",
             minLength: 3,
@@ -35,7 +35,7 @@ $(document).ready(function() {
                      item.country + "</small></a>" )
             .appendTo( ul );
         };
-    [% END %]
+    }
 
     $( ".ar-update-branchcode" ).on('focus', function(){
         previous_branchcode = this.value;
