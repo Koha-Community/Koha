@@ -3,14 +3,37 @@ $(document).ready(function() {
 
     var barcodefield = $("#barcode");
 
+    var onHoldDueDateSet = false;
+
+    var onHoldChecked = function() {
+        var isChecked = false;
+        $('input[data-on-reserve]').each(function() {
+            if ($(this).is(':checked')) {
+                isChecked=true;
+            }
+        });
+        return isChecked;
+    };
+
+    var showHideOnHoldRenewal = function() {
+        // Display the date input
+        if (onHoldChecked()) {
+            $('#newonholdduedate').show()
+        } else {
+            $('#newonholdduedate').hide();
+        }
+    };
+
     // Handle the select all/none links for checkouts table columns
     $("#CheckAllRenewals").on("click",function(){
         $("#UncheckAllCheckins").click();
         $(".renew:visible").prop("checked", true);
+        showHideOnHoldRenewal();
         return false;
     });
     $("#UncheckAllRenewals").on("click",function(){
         $(".renew:visible").prop("checked", false);
+        showHideOnHoldRenewal();
         return false;
     });
 
@@ -24,6 +47,16 @@ $(document).ready(function() {
         return false;
     });
 
+    $("#newduedate").on("change", function() {
+        if (!onHoldDueDateSet) {
+            $('#newonholdduedate input').val($('#newduedate').val());
+        }
+    });
+
+    $("#newonholdduedate").on("change", function() {
+        onHoldDueDateSet = true;
+    });
+
     // Don't allow both return and renew checkboxes to be checked
     $(document).on("change", '.renew', function(){
         if ( $(this).is(":checked") ) {
@@ -34,6 +67,12 @@ $(document).ready(function() {
         if ( $(this).is(":checked") ) {
             $( "#renew_" + $(this).val() ).prop("checked", false);
         }
+    });
+
+    // Display on hold due dates input when an on hold item is
+    // selected
+    $(document).on('change', '.renew', function(){
+        showHideOnHoldRenewal();
     });
 
     $("#output_format > option:first-child").attr("selected", "selected");
@@ -92,17 +131,27 @@ $(document).ready(function() {
         $(".renew:checked:visible").each(function() {
             var override_limit = $("#override_limit").is(':checked') ? 1 : 0;
 
+            var isOnReserve = $(this).data().hasOwnProperty('onReserve');
+
             var itemnumber = $(this).val();
 
             $(this).parent().parent().replaceWith("<img id='renew_" + itemnumber + "' src='" + interface + "/" + theme + "/img/spinner-small.gif' />");
 
             var params = {
-                itemnumber:     itemnumber,
-                borrowernumber: borrowernumber,
-                branchcode:     branchcode,
-                override_limit: override_limit,
-                date_due:       $("#newduedate").val()
+                itemnumber:      itemnumber,
+                borrowernumber:  borrowernumber,
+                branchcode:      branchcode,
+                override_limit:  override_limit,
             };
+
+            // Determine which due date we need to use
+            var dueDate = isOnReserve ?
+                $("#newonholdduedate input").val() :
+                $("#newduedate").val();
+
+            if (dueDate && dueDate.length > 0) {
+                params.date_due = dueDate
+            }
 
             $.post( "/cgi-bin/koha/svc/renew", params, function( data ) {
                 var id = "#renew_" + data.itemnumber;
@@ -146,6 +195,7 @@ $(document).ready(function() {
     $("#RenewAll").on("click",function(){
         $("#CheckAllRenewals").click();
         $("#UncheckAllCheckins").click();
+        showHideOnHoldRenewal();
         $("#RenewCheckinChecked").click();
 
         // Prevent form submit
@@ -351,79 +401,77 @@ $(document).ready(function() {
                     "bVisible": AllowCirculate ? true : false,
                     "mDataProp": function ( oObj ) {
                         var content = "";
+                        var msg = "";
                         var span_style = "";
                         var span_class = "";
-
-                        content += "<span>";
-                        content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
 
                         if ( oObj.can_renew ) {
                             // Do nothing
                         } else if ( oObj.can_renew_error == "on_reserve" ) {
-                            content += "<span class='renewals-disabled-no-override'>"
+                            msg += "<span class='renewals-disabled-no-override'>"
                                     + "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>"
                                     + "</span>";
 
-                            span_style = "display: none";
+                            span_style = AllowRenewalLimitOverride ? "" : "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "too_many" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "restriction" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_RESTRICTION
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "overdue" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_OVERDUE
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "too_soon" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_TOO_SOON.format( oObj.can_renew_date )
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_too_soon" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_AUTO_TOO_SOON
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_too_late" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_AUTO_TOO_LATE
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_too_much_oweing" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_AUTO_TOO_MUCH_OWEING
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_account_expired" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_AUTO_ACCOUNT_EXPIRED
                                     + "</span>";
 
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "auto_renew" ) {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE_AUTO_RENEW
                                     + "</span>";
 
@@ -439,7 +487,7 @@ $(document).ready(function() {
                             span_style = "display: none";
                             span_class = "renewals-allowed";
                         } else {
-                            content += "<span class='renewals-disabled'>"
+                            msg += "<span class='renewals-disabled'>"
                                     + oObj.can_renew_error
                                     + "</span>";
 
@@ -447,17 +495,26 @@ $(document).ready(function() {
                             span_class = "renewals-allowed";
                         }
 
-                        var can_force_renew = ( oObj.onsite_checkout == 0 ) && ( oObj.can_renew_error != "on_reserve" );
+                        var can_force_renew = ( oObj.onsite_checkout == 0 ) &&
+                            ( oObj.can_renew_error != "on_reserve" || (oObj.can_renew_error == "on_reserve" && AllowRenewalOnHoldOverride))
+                            ? true : false;
                         var can_renew = ( oObj.renewals_remaining > 0  && !oObj.can_renew_error );
+                        content += "<span>";
                         if ( can_renew || can_force_renew ) {
+                            content += "<span style='padding: 0 1em;'>" + oObj.renewals_count + "</span>";
                             content += "<span class='" + span_class + "' style='" + span_style + "'>"
                                     +  "<input type='checkbox' ";
                             if ( oObj.date_due_overdue && can_renew ) {
                                 content += "checked='checked' ";
                             }
+                            if (oObj.can_renew_error == "on_reserve") {
+                                content += "data-on-reserve ";
+                            }
                             content += "class='renew' id='renew_" + oObj.itemnumber + "' name='renew' value='" + oObj.itemnumber +"'/>"
                                     +  "</span>";
-
+                        }
+                        content += msg;
+                        if ( can_renew || can_force_renew ) {
                             content += "<span class='renewals'>("
                                     + RENEWALS_REMAINING.format( oObj.renewals_remaining, oObj.renewals_allowed )
                                     + ")</span>";

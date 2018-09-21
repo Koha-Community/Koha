@@ -28,7 +28,7 @@ $(document).ready(function() {
         radioCheckBox($(this));
     });
 
-    $("#newduedate").datetimepicker({
+    $("#newduedate, #newonholdduedate input").datetimepicker({
         onClose: function(dateText, inst) {
             validate_date(dateText, inst);
         },

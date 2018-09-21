@@ -1023,6 +1023,7 @@
         var branchcode = "[% branch | html %]";
         var exports_enabled = "[% Koha.Preference('ExportCircHistory') | html %]";
         var AllowRenewalLimitOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalLimitOverride') )? 1: 0 | html %];
+        var AllowRenewalOnHoldOverride = [% (CAN_user_circulate_override_renewals && Koha.Preference('AllowRenewalOnHoldOverride') )? 1: 0 | html %];
         var AllowCirculate = [% (CAN_user_circulate_circulate_remaining_permissions)? 1 : 0 | html %];
         var script = "circulation";
         var relatives_borrowernumbers = new Array();

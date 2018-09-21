@@ -59,6 +59,12 @@ $data->{branchcode} = $branchcode;
 ( $data->{renew_okay}, $data->{error} ) =
   CanBookBeRenewed( $borrowernumber, $itemnumber, $override_limit );
 
+# If we're allowing reserved items to be renewed...
+if ( $data->{error} && $data->{error} eq 'on_reserve' && C4::Context->preference('AllowRenewalOnHoldOverride')) {
+    $data->{renew_okay} = 1;
+    $data->{error} = undef;
+}
+
 if ( $data->{renew_okay} ) {
     $date_due = AddRenewal( $borrowernumber, $itemnumber, $branchcode, $date_due );
     $data->{date_due} = output_pref( { dt => $date_due, as_due_date => 1 } );

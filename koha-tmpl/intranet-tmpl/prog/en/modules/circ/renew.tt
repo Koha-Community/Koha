@@ -1,3 +1,5 @@
+[% USE raw %]
+[% USE Asset %]
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
@@ -118,6 +120,9 @@
                                     <input type="hidden" name="barcode" value="[% item.barcode | html %]"/>
                                     <input type="hidden" name="override_limit" value="1" />
                                     <input type="hidden" name="override_holds" value="1" />
+                                    <div>
+                                        <label for="renewonholdduedate">Renewal due date:</label> <input type="text" size="12" id="renewonholdduedate" name="renewonholdduedate" value="" />
+                                    </div>
                                     <button type="submit" class="approve"><i class="fa fa-check"></i> Override and renew</button>
                                 </form>
 
@@ -188,6 +193,9 @@
     </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'calendar.inc' %]
+    [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
+    [% INCLUDE 'timepicker.inc' %]
     [% IF error %]
         <script>
             $( document ).ready(function() {
@@ -195,6 +203,20 @@
             });
         </script>
     [% END %]
+    <script type="text/javascript">
+        $( document ).ready(function() {
+            $("#renewonholdduedate").datetimepicker({
+                onClose: function(dateText, inst) {
+                    validate_date(dateText, inst);
+                },
+                minDate: 1, // require that renewal date is after today
+                hour: 23,
+                minute: 59
+            }).on('change', function(e) {
+                if ( ! is_valid_date( $(this).val() ) ) {$(this).val('');}
+            });
+        });
+    </script>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
