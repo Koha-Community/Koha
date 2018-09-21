@@ -211,15 +211,6 @@
                                 You do not have anything public yet.
                             [% END %]
                         </li>
-                        <li>
-                            <label for="MyPublicLink">See your public page: </label>
-                            [% IF Koha.Preference('UsageStatsPublicID') %]
-                                [% SET my_url = 'https://hea.koha-community.org/libraries/' _  Koha.Preference('UsageStatsPublicID') %]
-                                <a href="[% my_url | html %]">[% my_url | html %]</a>
-                            [% ELSE %]
-                                You do not have anything public yet.
-                            [% END %]
-                        </li>
 
                     </ol>
                 </fieldset>
