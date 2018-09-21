@@ -67,7 +67,6 @@ my $starttime = gettimeofday;
 my $sth = $dbh->prepare("select bibid from marc_biblio");
 $sth->execute;
 my $i=1;
-my %alreadydone;
 my $counter;
 my %hash;
 while (my ($bibid) = $sth->fetchrow) {

@@ -42,8 +42,8 @@ fixtures_ok [
 
 my $bookseller_module = Test::MockModule->new('Koha::Acquisition::Bookseller');
 
-my ( $basketno_0_0,  $basketno_1_1,  $basketno_1_0,  $basketno_0_1 );
-my ( $invoiceid_0_0, $invoiceid_1_1, $invoiceid_1_0, $invoiceid_0_1 );
+my ( $basketno_0_0,  $basketno_1_1 );
+my ( $invoiceid_0_0, $invoiceid_1_1 );
 my $today;
 
 for my $currency_format ( qw( US FR ) ) {

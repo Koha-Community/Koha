@@ -69,10 +69,11 @@ if ($whereclause) {
 }
 
 # output log or STDOUT
+my $fh;
 if (defined $outfile) {
-   open (OUT, ">$outfile") || die ("Cannot open output file");
+   open ($fh, '>', $outfile) || die ("Cannot open output file");
 } else {
-   open(OUT, ">&STDOUT") || die ("Couldn't duplicate STDOUT: $!");
+   open($fh, '>&', \*STDOUT) || die ("Couldn't duplicate STDOUT: $!");
 }
 
 my $sth1 = $dbh->prepare("SELECT biblionumber, frameworkcode FROM biblio $whereclause");
@@ -86,15 +87,16 @@ while (my ($biblionumber, $frameworkcode) = $sth1->fetchrow_array){
 
   if ($modok) {
      $goodcount++;
-     print OUT "Touched biblio $biblionumber\n" if (defined $verbose);
+     print $fh "Touched biblio $biblionumber\n" if (defined $verbose);
   } else {
      $badcount++;
-     print OUT "ERROR WITH BIBLIO $biblionumber !!!!\n";
+     print $fh "ERROR WITH BIBLIO $biblionumber !!!!\n";
   }
 
   $totalcount++;
 
 }
+close($fh);
 
 # Benchmarking
 my $endtime = time();

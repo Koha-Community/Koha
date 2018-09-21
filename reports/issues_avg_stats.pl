@@ -389,7 +389,6 @@ sub calculate {
 #	warn "fin des titres colonnes";
 
     my $i=0;
-    my @totalcol;
     my $hilighted=-1;
     
     #Initialization of cell values.....
@@ -442,12 +441,8 @@ sub calculate {
     $dbcalc->execute;
 # 	warn "filling table";
     my $issues_count=0;
-    my $previous_row; 
-    my $previous_col;
     my $loanlength; 
-    my $err;
     my $emptycol;
-    my $weightrow;
 
     while (my  @data = $dbcalc->fetchrow) {
         my ($row, $col, $issuedate, $returndate, $weight)=@data;

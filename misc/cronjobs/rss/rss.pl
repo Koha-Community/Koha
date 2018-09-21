@@ -74,8 +74,8 @@ sub getConf {
     my %return;
     my $inSection = 0;
 
-    open( FILE, $file ) or die "can't open $file";
-    while (<FILE>) {
+    open( my $fh, '<', $file ) or die "can't open $file";
+    while (<$fh>) {
         if ($inSection) {
             my @line = split( /=/, $_, 2 );
             unless ( $line[1] ) {
@@ -91,7 +91,7 @@ sub getConf {
             if ( $_ eq "$section\n" ) { $inSection = 1 }
         }
     }
-    close FILE;
+    close $fh;
     return %return;
 }
 

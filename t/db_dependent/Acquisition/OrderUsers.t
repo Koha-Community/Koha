@@ -41,7 +41,6 @@ my $budgetid = C4::Budgets::AddBudget(
 );
 my $budget = C4::Budgets::GetBudget($budgetid);
 
-my @ordernumbers;
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( MARC::Record->new, '' );
 
 my $order = Koha::Acquisition::Order->new(

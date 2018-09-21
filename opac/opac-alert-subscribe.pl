@@ -32,7 +32,6 @@ my $query = new CGI;
 my $op    = $query->param('op') || '';
 my $dbh   = C4::Context->dbh;
 
-my $sth;
 my ( $template, $loggedinuser, $cookie );
 my $subscriptionid = $query->param('subscriptionid');
 my $referer      = $query->param('referer') || 'detail';

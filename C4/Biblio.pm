@@ -2146,7 +2146,6 @@ sub TransformHtmlToXml {
     # MARC::Record->new_from_xml will fail (and Koha will die)
     my $unimarc_and_100_exist = 0;
     $unimarc_and_100_exist = 1 if $auth_type eq 'ITEM';    # if we rebuild an item, no need of a 100 field
-    my $prevvalue;
     my $prevtag = -1;
     my $first   = 1;
     my $j       = -1;

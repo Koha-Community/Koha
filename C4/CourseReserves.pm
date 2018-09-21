@@ -84,7 +84,7 @@ sub GetCourse {
     warn whoami() . "( $course_id )" if $DEBUG;
 
     my $course = Koha::Courses->find( $course_id );
-    return undef unless $course;
+    return unless $course;
     $course = $course->unblessed;
 
     my $dbh = C4::Context->dbh;

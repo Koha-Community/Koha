@@ -30,7 +30,6 @@ my $bookseller = Koha::Acquisition::Bookseller->new(
 )->store;
 
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
-my $budgetid;
 my $bpid = AddBudgetPeriod({
     budget_period_startdate   => '2015-01-01',
     budget_period_enddate     => '2015-12-31',
@@ -55,7 +54,7 @@ my $subscriptionid = NewSubscription(
 );
 die unless $subscriptionid;
 
-my ($basket, $basketno);
+my $basketno;
 ok($basketno = NewBasket($bookseller->id, 1), "NewBasket(  " . $bookseller->id . ", 1  ) returns $basketno");
 
 my $cost = 42.00;

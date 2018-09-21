@@ -313,7 +313,6 @@ sub SendAlerts {
           or warn( "No biblionumber for '$subscriptionid'" ),
              return;
 
-        my %letter;
         # find the list of subscribers to notify
         my $subscription = Koha::Subscriptions->find( $subscriptionid );
         my $subscribers = $subscription->subscribers;

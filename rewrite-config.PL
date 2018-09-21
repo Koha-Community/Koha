@@ -19,6 +19,7 @@
 # 
 # 2007/11/12	Added DB_PORT and changed other keywords to reflect multi-dbms support.	-fbcit
 
+use Modern::Perl;
 use Sys::Hostname;
 use Socket;
 
@@ -158,7 +159,7 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
 );
 
 # Override configuration from the environment
-foreach $key (keys %configuration) {
+foreach my $key (keys %configuration) {
   if (defined($ENV{$key})) {
     $configuration{$key} = $ENV{$key};
   }
@@ -180,21 +181,22 @@ $file =~ s/__.*?__/exists $configuration{$&} ? $configuration{$&} : $&/seg;
 # to make it writable.  Note that stat and chmod
 # (the Perl functions) should work on Win32
 my $old_perm;
-$old_perm = (stat $fname)[2] & 07777;
-my $new_perm = $old_perm | 0200;
+$old_perm = (stat $fname)[2] & oct(7777);
+my $new_perm = $old_perm | oct(200);
 chmod $new_perm, $fname;
 
-open(OUTPUT,">$fname") || die "Can't open $fname for write: $!";
-print OUTPUT $file;
-close(OUTPUT);
+open(my $output, ">", $fname) || die "Can't open $fname for write: $!";
+print $output $file;
+close($output);
 
 chmod $old_perm, $fname;
 
 # Idea taken from perlfaq5
-sub read_file($) {
-  local(*INPUT,$/);
-  open(INPUT,$_[0]) || die "Can't open $_[0] for read";
-  my $file = <INPUT>;
+sub read_file {
+  local $/;
+  open(my $fh , '<', $_[0]) || die "Can't open $_[0] for read";
+  my $file = <$fh>;
+  close $fh;
   return $file;
 }
 

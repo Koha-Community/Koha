@@ -2,7 +2,7 @@
 
 # Remove a perl module
 
-use warnings;
+use Modern::Perl;
 use ExtUtils::Packlist;
 use ExtUtils::Installed;
 

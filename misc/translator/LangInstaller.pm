@@ -1087,7 +1087,7 @@ sub get_all_langs {
     opendir( my $dh, $self->{path_po} );
     my @files = grep { $_ =~ /-pref.(po|po.gz)$/ }
         readdir $dh;
-    @files = map { $_ =~ s/-pref.(po|po.gz)$//; $_ } @files;
+    @files = map { $_ =~ s/-pref.(po|po.gz)$//r } @files;
 }
 
 

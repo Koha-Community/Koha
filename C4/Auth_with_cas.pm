@@ -257,17 +257,17 @@ sub logout_if_required {
     my $params = C4::Auth::_get_session_params();
     my $success = CGI::Session->find( $params->{dsn}, sub {delete_cas_session(@_, $ticket)}, $params->{dsn_args} );
 
-    sub delete_cas_session {
-        my $session = shift;
-        my $ticket = shift;
-        if ($session->param('cas_ticket') && $session->param('cas_ticket') eq $ticket ) {
-            $session->delete;
-            $session->flush;
-        }
-    }
-
     print $query->header;
     exit;
+}
+
+sub delete_cas_session {
+    my $session = shift;
+    my $ticket = shift;
+    if ($session->param('cas_ticket') && $session->param('cas_ticket') eq $ticket ) {
+        $session->delete;
+        $session->flush;
+    }
 }
 
 1;

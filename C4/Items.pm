@@ -224,7 +224,6 @@ Additional information appropriate to the error condition.
 
 sub AddItemBatchFromMarc {
     my ($record, $biblionumber, $biblioitemnumber, $frameworkcode) = @_;
-    my $error;
     my @itemnumbers = ();
     my @errors = ();
     my $dbh = C4::Context->dbh;

@@ -14,7 +14,7 @@ use Time::HiRes qw(gettimeofday);
 
 use Getopt::Long;
 my ( $fields, $number,$language) = ('',0);
-my ($version, $verbose, $test_parameter, $field,$delete,$subfields);
+my ($version, $verbose, $test_parameter, $delete);
 GetOptions(
     'h' => \$version,
     'd' => \$delete,

@@ -25,7 +25,6 @@ use Koha::Util::OpenDocument;
 use MIME::Lite;
 
 my (
-    $stylesheet,
     $help,
     $split,
     $html,
@@ -231,7 +230,7 @@ sub generate_csv {
 
     open my $OUTPUT, '>encoding(utf-8)', $filepath
         or die "Could not open $filepath: $!";
-    my ( @csv_lines, $headers );
+    my $headers;
     foreach my $message ( @$messages ) {
         my @lines = split /\n/, $message->{content};
         chomp for @lines;

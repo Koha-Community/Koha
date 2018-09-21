@@ -163,7 +163,6 @@ sub _get_barcode_data {
         }
         elsif ( $f =~ /^([0-9a-z]{3})(\w)(\W?).*?/ ) {
             my ($field,$subf,$ws) = ($1,$2,$3);
-            my $subf_data;
             my ($itemtag, $itemsubfieldcode) = &GetMarcFromKohaField( "items.itemnumber" );
             my @marcfield = $record->field($field);
             if(@marcfield) {
@@ -313,8 +312,8 @@ sub create_label {
     my $label_text = '';
     my ($text_llx, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor);
     {
-        no strict 'refs';
-        ($text_llx, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor) = &{"_$self->{'printing_type'}"}($self); # an obfuscated call to the correct printing type sub
+        my $sub = \&{'_' . $self->{printing_type}};
+        ($text_llx, $text_lly, $line_spacer, $barcode_llx, $barcode_lly, $barcode_width, $barcode_y_scale_factor) = $sub->($self); # an obfuscated call to the correct printing type sub
     }
     if ($self->{'printing_type'} =~ /BIB/) {
         $label_text = draw_label_text(  $self,

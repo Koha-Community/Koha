@@ -344,8 +344,6 @@ sub _build_languages_arrayref {
         my @languages_loop; # the final reference to an array of hashrefs
         my @enabled_languages = @$enabled_languages;
         # how many languages are enabled, if one, take note, some contexts won't need to display it
-        my %seen_languages; # the language tags we've seen
-        my %found_languages;
         my $language_groups;
         my $track_language_groups;
         my $current_language_regex = regex_lang_subtags($current_language);
@@ -585,7 +583,7 @@ sub accept_language {
     }
     # No primary matches. Secondary? (ie, en-us requested and en supported)
     return $secondaryMatch if $secondaryMatch;
-    return undef;   # else, we got nothing.
+    return;   # else, we got nothing.
 }
 
 =head2 getlanguage

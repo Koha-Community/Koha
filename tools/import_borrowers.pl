@@ -58,7 +58,6 @@ use Text::CSV;
 
 use CGI qw ( -utf8 );
 
-my ( @errors, @feedback );
 my $extended = C4::Context->preference('ExtendedPatronAttributes');
 
 my @columnkeys = map { $_ ne 'borrowernumber' ? $_ : () } Koha::Patrons->columns();
@@ -66,8 +65,6 @@ push( @columnkeys, 'patron_attributes' ) if $extended;
 push( @columnkeys, qw( relationship guarantor_id  guarantor_firstname guarantor_surname ) );
 
 my $input = CGI->new();
-
-#push @feedback, {feedback=>1, name=>'backend', value=>$csv->backend, backend=>$csv->backend}; #XXX
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {

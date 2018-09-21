@@ -114,7 +114,6 @@ if ($show_marc) {
 
 # fill arrays
     my @loop_data = ();
-    my $tag;
 
 # loop through each tag
     my @fields    = $record->fields();

@@ -66,8 +66,6 @@ output_html_with_http_headers $input, $cookie, $template->output;
 
 sub calculate {
     my ( $limit, $column, $filters ) = @_;
-    my @loopline;
-    my @looprow;
     my %globalline;
     my %columns = ();
     my $dbh     = C4::Context->dbh;

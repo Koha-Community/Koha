@@ -86,7 +86,6 @@ $restrictededition = 0 if ($restrictededition != 0 && C4::Context->IsSuperLibrar
 
 $template->param(del       => $del);
 
-my $itemrecord;
 my $nextop="";
 my @errors; # store errors found while checking data BEFORE saving item.
 my $items_display_hashref;
@@ -428,7 +427,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{marc_lib}   ="<span id=\"error$i\" title=\"".$tagslib->{$tag}->{$subfield}->{lib}."\">".$tagslib->{$tag}->{$subfield}->{lib}."</span>";
 	$subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
-	my ($x,$value);
+	my $value;
    if ( $use_default_values) {
 	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 	    # get today date & replace YYYY, MM, DD if provided in the default value

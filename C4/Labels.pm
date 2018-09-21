@@ -1,5 +1,7 @@
 package C4::Labels;
 
+use Modern::Perl;
+
 BEGIN {
 
     use C4::Labels::Batch;

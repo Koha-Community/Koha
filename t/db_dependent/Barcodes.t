@@ -149,7 +149,7 @@ my %thash = (
     EAN13 => ['0000000695152','892685001928'],
 );
 
-my ($obj1,$obj2,$format,$value,$initial,$serial,$re,$next,$previous,$temp);
+my ($obj1,$obj2,$format,$value,$initial,$serial,$next,$previous,$temp);
 my @formats = sort keys %thash;
 foreach (@formats) {
     my $pre = sprintf '(%-12s)', $_;
@@ -214,7 +214,7 @@ foreach (@formats) {
     }
 }
 
-foreach $format (@formats) {
+foreach my $format (@formats) {
     my $pre = sprintf '(%-12s)', $format;
     foreach my $testval (@{$thash{ $format }}) {
         if ($format eq 'hbyymmincr') {

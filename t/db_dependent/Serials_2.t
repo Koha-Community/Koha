@@ -38,7 +38,6 @@ my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
 
 my $my_branch = $library1->{branchcode};
 my $another_branch = $library2->{branchcode};
-my $budgetid;
 my $bpid = AddBudgetPeriod({
     budget_period_startdate   => '2015-01-01',
     budget_period_enddate     => '2015-12-31',

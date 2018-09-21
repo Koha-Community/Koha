@@ -88,7 +88,6 @@ END_SQL
     my $sth = C4::Context->dbh->prepare($sql);
     $sth->execute(@bind_params);
     my $return;
-    my %transports; # helps build a list of unique message_transport_types
     ROW: while ( my $row = $sth->fetchrow_hashref() ) {
         next ROW unless $row->{'message_attribute_id'};
         $return->{'days_in_advance'} = $row->{'days_in_advance'} if defined $row->{'days_in_advance'};

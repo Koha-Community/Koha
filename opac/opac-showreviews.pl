@@ -85,7 +85,6 @@ my $reviews = Koha::Reviews->search(
 my $marcflavour      = C4::Context->preference("marcflavour");
 my $hits = Koha::Reviews->search({ approved => 1 })->count;
 my $i = 0;
-my $latest_comment_date;
 for my $result (@$reviews){
     my $biblionumber = $result->{biblionumber};
     my $biblio = Koha::Biblios->find( $biblionumber );

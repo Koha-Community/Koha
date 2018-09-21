@@ -35,7 +35,6 @@ my (
     $table,
     $column,
     $type, $null, $key, $default, $extra,
-    $prefitem,          # preference item in systempreferences table
 );
 
 my $silent;
@@ -3048,7 +3047,7 @@ my $DBversion = "3.00.00.000";
                              ],
     );
 
-    foreach $table ( keys %required_prereq_fields ) {
+    foreach my $table ( keys %required_prereq_fields ) {
         print "Check table $table\n" if $debug and not $silent;
         $sth = $dbh->prepare("show columns from $table");
         $sth->execute();
@@ -3157,7 +3156,7 @@ my $DBversion = "3.00.00.000";
     
     
     # Now add any missing tables
-    foreach $table ( keys %requiretables ) {
+    foreach my $table ( keys %requiretables ) {
         unless ( $existingtables{$table} ) {
         print "Adding $table table...\n" unless $silent;
             my $sth = $dbh->prepare("create table $table $requiretables{$table} ENGINE=InnoDB DEFAULT CHARSET=utf8");
@@ -3172,7 +3171,7 @@ my $DBversion = "3.00.00.000";
     #---------------------------------
     # Columns
     
-    foreach $table ( keys %requirefields ) {
+    foreach my $table ( keys %requirefields ) {
         print "Check table $table\n" if $debug and not $silent;
         $sth = $dbh->prepare("show columns from $table");
         $sth->execute();
@@ -3181,7 +3180,7 @@ my $DBversion = "3.00.00.000";
         {
             $types{$column} = $type;
         }    # while
-        foreach $column ( keys %{ $requirefields{$table} } ) {
+        foreach my $column ( keys %{ $requirefields{$table} } ) {
             print "  Check column $column  [$types{$column}]\n" if $debug and not $silent;
             if ( !$types{$column} ) {
     
@@ -3200,7 +3199,7 @@ my $DBversion = "3.00.00.000";
         }    # foreach column
     }    # foreach table
     
-    foreach $table ( sort keys %fielddefinitions ) {
+    foreach my $table ( sort keys %fielddefinitions ) {
         print "Check table $table\n" if $debug;
         $sth = $dbh->prepare("show columns from $table");
         $sth->execute();
@@ -3454,7 +3453,7 @@ my $DBversion = "3.00.00.000";
         }
     }
     # now drop useless tables
-    foreach $table ( @TableToDelete ) {
+    foreach my $table ( @TableToDelete ) {
         if ( $existingtables{$table} ) {
             print "Dropping unused table $table\n" if $debug and not $silent;
             $dbh->do("drop table $table");
@@ -3499,9 +3498,8 @@ my $DBversion = "3.00.00.000";
     }
     
     # at last, remove useless fields
-    foreach $table ( keys %uselessfields ) {
+    foreach my $table ( keys %uselessfields ) {
         my @fields = split (/,/,$uselessfields{$table});
-        my $fields;
         my $exists;
         foreach my $fieldtodrop (@fields) {
             $fieldtodrop =~ s/\t//g;

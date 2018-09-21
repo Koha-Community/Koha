@@ -112,19 +112,19 @@ sub dashcomment {
 
 sub readfile {
     my ($filename) = @_;
-    open(FILE, $filename) || die("Can't open $filename for reading");
+    open(my $fh, '<', $filename) || die("Can't open $filename for reading");
     my @lines;
-    while (my $line = <FILE>) {
+    while (my $line = <$fh>) {
         push @lines, $line;
     }
-    close(FILE);
+    close($fh);
     return join '', @lines;
 }
 
 
 sub try_to_fix {
     my ($data, @patterns) = @_;
-    return undef;
+    return;
 }
 
 

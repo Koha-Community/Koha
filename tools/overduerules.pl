@@ -215,8 +215,6 @@ my $letters = C4::Letters::GetLettersAvailableForALibrary(
     }
 );
 
-my @line_loop;
-
 my $message_transport_types = C4::Letters::GetMessageTransportTypes();
 my ( @first, @second, @third );
 for my $patron_category (@patron_categories) {

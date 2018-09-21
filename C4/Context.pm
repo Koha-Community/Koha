@@ -248,7 +248,6 @@ sub new {
     }
 
     my $conf_cache = Koha::Caches->get_instance('config');
-    my $config_from_cache;
     if ( $conf_cache->cache ) {
         $self = $conf_cache->get_from_cache('koha_conf');
     }
@@ -695,7 +694,6 @@ sub dbh
 {
     my $self = shift;
     my $params = shift;
-    my $sth;
 
     unless ( $params->{new} ) {
         return Koha::Database->schema->storage->dbh;

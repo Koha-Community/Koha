@@ -90,7 +90,6 @@ C<$record> - a MARC::Record object
 
 sub marc2ris {
     my ($record) = @_;
-    my $output;
 
     my $marcflavour = C4::Context->preference("marcflavour");
     my $intype = lc($marcflavour);

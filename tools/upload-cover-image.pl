@@ -132,8 +132,8 @@ if ($fileID) {
                 else {
                     next;
                 }
-                if ( open( FILE, $file ) ) {
-                    while ( my $line = <FILE> ) {
+                if ( open( my $fh, '<', $file ) ) {
+                    while ( my $line = <$fh> ) {
                         my $delim =
                             ( $line =~ /\t/ ) ? "\t"
                           : ( $line =~ /,/ )  ? ","
@@ -171,7 +171,7 @@ if ($fileID) {
                             undef $srcimage;
                         }
                     }
-                    close(FILE);
+                    close($fh);
                 }
                 else {
                     $error = 'OPNLINK';

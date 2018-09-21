@@ -275,7 +275,7 @@ cronlogaction();
 # In my opinion, this line is safe SQL to have outside the API. --atz
 our $bounds_sth = C4::Context->dbh->prepare("SELECT DATE_SUB(CURDATE(), INTERVAL ? DAY)");
 
-sub bounds ($) {
+sub bounds {
     $bounds_sth->execute(shift);
     return $bounds_sth->fetchrow;
 }
@@ -408,10 +408,10 @@ foreach my $startrange (sort keys %$lost) {
     $endrange = $startrange;
 }
 
-sub summarize ($$) {
+sub summarize {
     my $arg = shift;    # ref to array
     my $got_items = shift || 0;     # print "count" line for items
-    my @report = @$arg or return undef;
+    my @report = @$arg or return;
     my $i = 0;
     for my $range (@report) {
         printf "\nRange %s\nDue %3s - %3s days ago (%s to %s), lost => %s\n", ++$i,

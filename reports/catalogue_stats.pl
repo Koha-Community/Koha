@@ -114,11 +114,7 @@ if ($do_it) {
     }
 } else {
 	my $dbh = C4::Context->dbh;
-	my @values;
-	my %labels;
 	my $count=0;
-	my $req;
-	my @select;
 
     my $itemtypes = Koha::ItemTypes->search_with_localization;
 
@@ -397,7 +393,6 @@ sub calculate {
     }
 
     my $i = 0;
-    my @totalcol;
     my $hilighted = -1;
 
     #Initialization of cell values.....

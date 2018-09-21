@@ -110,11 +110,7 @@ if ($do_it) {
 # Displaying choices
 } else {
     my $dbh = C4::Context->dbh;
-    my @values;
-    my %labels;
-    my %select;
-    my $req;
-    
+
     my $CGIextChoice = ( 'CSV' ); # FIXME translation
 	my $CGIsepChoice = GetDelimiterChoices;
 
@@ -133,7 +129,6 @@ sub calculate {
     my @mainloop;
     my @loopfooter;
     my @loopcol;
-    my @loopline;
     my @looprow;
     my %globalline;
     my $grantotal =0;

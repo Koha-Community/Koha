@@ -426,7 +426,6 @@ sub calculate {
     }
 
     my $i = 0;
-    my @totalcol;
     my $hilighted = -1;
 
     #Initialization of cell values.....

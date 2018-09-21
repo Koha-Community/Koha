@@ -117,7 +117,6 @@ sub SearchAuthorities {
         # the marclist may contain "mainentry". In this case, search the tag_to_report, that depends on
         # the authtypecode. Then, search on $a of this tag_to_report
         # also store main entry MARC tag, to extract it at end of search
-    my $mainentrytag;
     ##first set the authtype search and may be multiple authorities
     if ($authtypecode) {
         my $n=0;

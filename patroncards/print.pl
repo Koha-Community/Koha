@@ -40,14 +40,14 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $op = $cgi->param('op') || 'none';
-my @label_ids = $cgi->multi_param('label_id') if $cgi->param('label_id');   # this will handle individual card printing; we use label_id to maintain consistency with the column names in the creator_batches table
-my @batch_ids = $cgi->multi_param('batch_id') if $cgi->param('batch_id');
+my @label_ids = $cgi->multi_param('label_id');   # this will handle individual card printing; we use label_id to maintain consistency with the column names in the creator_batches table
+my @batch_ids = $cgi->multi_param('batch_id');
 my $patronlist_id = $cgi->param('patronlist_id') || undef;
 my $layout_id = $cgi->param('layout_id') || undef;
 my $layout_back_id = $cgi->param('layout_back_id') || undef;
 my $template_id = $cgi->param('template_id') || undef;
 my $start_card = $cgi->param('start_card') || 1;
-my @borrower_numbers = $cgi->multi_param('borrower_number') if $cgi->param('borrower_number');
+my @borrower_numbers = $cgi->multi_param('borrower_number');
 my $output_format = $cgi->param('output_format') || 'pdf';
 my $referer = $cgi->param('referer') || undef;
 
@@ -123,9 +123,9 @@ elsif ($op eq 'none') {
     # setup select menus for selecting layout and template for this run...
     $referer = $ENV{'HTTP_REFERER'};
     $referer =~ s/^.*?:\/\/.*?(\/.*)$/$1/m;
-    @batch_ids = grep{$_ = {batch_id => $_}} @batch_ids;
-    @label_ids = grep{$_ = {label_id => $_}} @label_ids;
-    @borrower_numbers = grep{$_ = {borrower_number => $_}} @borrower_numbers;
+    @batch_ids = map { {batch_id => $_} } @batch_ids;
+    @label_ids = map { {label_id => $_} } @label_ids;
+    @borrower_numbers = map { {borrower_number => $_} } @borrower_numbers;
     $templates = get_all_templates( { fields => [qw( template_id template_code ) ], filters => { creator => "Patroncards" } });
     $layouts = get_all_layouts({ fields => [ qw( layout_id layout_name ) ], filters => { creator => "Patroncards" } });
     $output_formats = get_output_formats();

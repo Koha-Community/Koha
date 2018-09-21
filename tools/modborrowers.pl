@@ -63,10 +63,9 @@ if ( $op eq 'show' ) {
     my $patron_list_id = $input->param('patron_list_id');
     my @borrowers;
     my @cardnumbers;
-    my ( @notfoundcardnumbers, @from_another_group_of_libraries );
+    my @notfoundcardnumbers;
 
     # Get cardnumbers from a file or the input area
-    my @contentlist;
     if ($filefh) {
         while ( my $content = <$filefh> ) {
             $content =~ s/[\r\n]*$//g;

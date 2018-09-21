@@ -52,8 +52,8 @@ my @sort_routines = GetSortRoutineNames();
 foreach my $sort_routine (@sort_routines) {
     if (eval "require C4::ClassSortRoutine::$sort_routine") {
         my $ref;
-        eval "\$ref = \\\&C4::ClassSortRoutine::${sort_routine}::get_class_sort_key";
-        if (eval "\$ref->(\"a\", \"b\")") {
+        $ref = \&{"C4::ClassSortRoutine::${sort_routine}::get_class_sort_key"};
+        if (eval { $ref->("a", "b") }) {
             $loaded_routines{$sort_routine} = $ref;
         } else {
             $loaded_routines{$sort_routine} = \&_get_class_sort_key;

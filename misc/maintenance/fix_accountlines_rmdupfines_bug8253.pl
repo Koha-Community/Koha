@@ -76,7 +76,6 @@ $query =
 "SELECT * FROM accountlines WHERE description LIKE ? AND description NOT LIKE ?";
 $sth = $dbh->prepare($query);
 
-my @fines;
 foreach my $keeper (@$results) {
 
     warn "WORKING ON KEEPER: " . Data::Dumper::Dumper( $keeper );

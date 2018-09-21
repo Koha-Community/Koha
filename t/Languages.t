@@ -37,7 +37,7 @@ $module_context->mock(
     preference => sub {
         my ($self, $pref) = @_;
         if ($return_undef) {
-            return undef;
+            return;
         } elsif ($pref =~ /language/) {
             return join ',', @languages;
         } else {

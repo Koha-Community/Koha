@@ -93,8 +93,6 @@ if ( $op eq "export" ) {
     my @biblionumbers      = $query->multi_param("biblionumbers");
     my @itemnumbers        = $query->multi_param("itemnumbers");
     my $strip_items_not_from_libraries =  $query->param('strip_items_not_from_libraries');
-    my @sql_params;
-    my $sql_query;
 
     my $libraries = Koha::Libraries->search_filtered->unblessed;
     my $only_export_items_for_branches = $strip_items_not_from_libraries ? \@branch : undef;

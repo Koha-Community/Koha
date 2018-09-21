@@ -138,7 +138,7 @@ BEGIN {
 sub parenleft  () { '(' }
 sub parenright () { ')' }
 
-sub _split_js ($) {
+sub _split_js {
     my ($s0) = @_;
     my @it = ();
     while (length $s0) {
@@ -190,7 +190,7 @@ sub STATE_STRING_LITERAL () { 3 }
 
 # XXX This is a crazy hack. I don't want to write an ECMAScript parser.
 # XXX A scanner is one thing; a parser another thing.
-sub _identify_js_translatables (@) {
+sub _identify_js_translatables {
     my @input = @_;
     my @output = ();
     # We mark a JavaScript translatable string as in C, i.e., _("literal")
@@ -227,7 +227,7 @@ sub _identify_js_translatables (@) {
 
 ###############################################################################
 
-sub string_canon ($) {
+sub string_canon {
   my $s = shift;
   # Fold all whitespace into single blanks
   $s =~ s/\s+/ /g;
@@ -236,7 +236,7 @@ sub string_canon ($) {
 }
 
 # safer version used internally, preserves new lines
-sub string_canon_safe ($) {
+sub string_canon_safe {
   my $s = shift;
   # fold tabs and spaces into single spaces
   $s =~ s/[\ \t]+/ /gs;
@@ -252,7 +252,7 @@ sub _quote_cformat{
 
 sub _formalize_string_cformat{
   my $s = shift;
-  return _quote_cformat( string_canon_safe $s );
+  return _quote_cformat( string_canon_safe($s) );
 }
 
 sub _formalize{
@@ -314,7 +314,7 @@ sub next_token {
                 return $self->_parametrize_internal(@parts);
             }
             else {
-                return undef;
+                return;
             }
         }
         # if cformat mode is off, dont bother parametrizing, just return them as they come
@@ -337,7 +337,7 @@ sub next_token {
                  push @tail, $3;
                 $s0 = $2;
             }
-            push @head, _split_js $s0;
+            push @head, _split_js($s0);
             $next->set_js_data(_identify_js_translatables(@head, @tail) );
 	    return $next unless @parts;	    
 	    $self->{_parser}->unshift_token($next);
@@ -359,7 +359,7 @@ sub next_token {
 
 # function taken from old version
 # used by tmpl_process3
-sub parametrize ($$$$) {
+sub parametrize {
     my($fmt_0, $cformat_p, $t, $f) = @_;
     my $it = '';
     if ($cformat_p) {
@@ -379,13 +379,13 @@ sub parametrize ($$$$) {
 		    ;
 		} elsif (defined $params[$i - 1]) {
 		    my $param = $params[$i - 1];
-		    warn_normal "$fmt_0: $&: Expected a TMPL_VAR, but found a "
-			    . $param->type->to_string . "\n", undef
+		    warn_normal("$fmt_0: $&: Expected a TMPL_VAR, but found a "
+			    . $param->type->to_string . "\n", undef)
 			    if $param->type != C4::TmplTokenType::DIRECTIVE;
-		    warn_normal "$fmt_0: $&: Unsupported "
-				. "field width or precision\n", undef
+		    warn_normal("$fmt_0: $&: Unsupported "
+				. "field width or precision\n", undef)
 			    if defined $width || defined $prec;
-		    warn_normal "$fmt_0: $&: Parameter $i not known", undef
+		    warn_normal("$fmt_0: $&: Parameter $i not known", undef)
 			    unless defined $param;
 		    $it .= defined $f? &$f( $param ): $param->string;
 		}
@@ -396,27 +396,27 @@ sub parametrize ($$$$) {
 
 		my $param = $params[$i - 1];
 		if (!defined $param) {
-		    warn_normal "$fmt_0: $&: Parameter $i not known", undef;
+		    warn_normal("$fmt_0: $&: Parameter $i not known", undef);
 		} else {
 		    if ($param->type == C4::TmplTokenType::TAG
 			    && $param->string =~ /^<input\b/is) {
 			my $type = defined $param->attributes?
 				lc($param->attributes->{'type'}->[1]): undef;
 			if ($conv eq 'S') {
-			    warn_normal "$fmt_0: $&: Expected type=text, "
-					. "but found type=$type", undef
+			    warn_normal("$fmt_0: $&: Expected type=text, "
+					. "but found type=$type", undef)
 				    unless $type eq 'text';
 			} elsif ($conv eq 'p') {
-			    warn_normal "$fmt_0: $&: Expected type=radio, "
-					. "but found type=$type", undef
+			    warn_normal("$fmt_0: $&: Expected type=radio, "
+					. "but found type=$type", undef)
 				    unless $type eq 'radio';
 			}
 		    } else {
-			warn_normal "$&: Expected an INPUT, but found a "
-				. $param->type->to_string . "\n", undef
+			warn_normal("$&: Expected an INPUT, but found a "
+				. $param->type->to_string . "\n", undef)
 		    }
-		    warn_normal "$fmt_0: $&: Unsupported "
-				. "field width or precision\n", undef
+		    warn_normal("$fmt_0: $&: Unsupported "
+				. "field width or precision\n", undef)
 			    if defined $width || defined $prec;
 		    $it .= defined $f? &$f( $param ): $param->string;
 		}
@@ -439,7 +439,7 @@ sub parametrize ($$$$) {
 	    my $i  = $1;
 	    $fmt = $';
 	    my $anchor = $anchors[$i - 1];
-	    warn_normal "$&: Anchor $1 not found for msgid \"$fmt_0\"", undef #FIXME
+	    warn_normal("$&: Anchor $1 not found for msgid \"$fmt_0\"", undef) #FIXME
 		    unless defined $anchor;
 	    $it .= $anchor->string;
 	} else {
@@ -452,12 +452,12 @@ sub parametrize ($$$$) {
 
 # Other simple functions (These are not methods)
 
-sub blank_p ($) {
+sub blank_p {
     my($s) = @_;
     return $s =~ /^(?:\s|\&nbsp$re_end_entity|$re_tmpl_var|$re_xsl)*$/osi;
 }
 
-sub trim ($) {
+sub trim {
     my($s0) = @_;
     my $l0 = length $s0;
     my $s = $s0;
@@ -466,7 +466,7 @@ sub trim ($) {
     return wantarray? (substr($s0, 0, $l1), $s, substr($s0, $l0 - $l2)): $s;
 }
 
-sub quote_po ($) {
+sub quote_po {
     my($s) = @_;
     # Locale::PO->quote is buggy, it doesn't quote newlines :-/
     $s =~ s/([\\"])/\\$1/gs;
@@ -475,7 +475,7 @@ sub quote_po ($) {
     return "\"$s\"";
 }
 
-sub charset_canon ($) {
+sub charset_canon {
     my($charset) = @_;
     $charset = uc($charset);
     $charset = "$1-$2" if $charset =~ /^(ISO|UTF)(\d.*)/i;
@@ -508,7 +508,7 @@ use vars qw( @latin1_utf8 );
     "\303\270", "\303\271", "\303\272", "\303\273", "\303\274", "\303\275",
     "\303\276", "\303\277" );
 
-sub charset_convert ($$$) {
+sub charset_convert {
     my($s, $charset_in, $charset_out) = @_;
     if ($s !~ /[\200-\377]/s) { # FIXME: don't worry about iso2022 for now
 	;

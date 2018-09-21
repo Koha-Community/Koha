@@ -50,7 +50,7 @@ my $uploadfile     = $input->upload('uploadfile');
 my $uploadlocation = $input->param('uploadlocation');
 my $op             = $input->param('op') || q{};
 
-my ( $total, $handled, @counts, $tempfile, $tfh );
+my ( $tempfile, $tfh );
 
 my %errors;
 

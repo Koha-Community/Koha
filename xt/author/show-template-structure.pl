@@ -56,7 +56,7 @@ Output is sent to STDOUT.
 
 scalar(@ARGV) == 1 or die "Usage: $0 template-file\n";
 my $file = $ARGV[0];
-open IN, $file or die "Failed to open template file $file: $!\n";
+open my $fh, '<', $file or die "Failed to open template file $file: $!\n";
 
 my %valid_tmpl_tags = (
     tmpl_var     => 1,
@@ -87,7 +87,7 @@ sub emit {
     print "  " x ( $level - 1 ), shift;
 }
 
-while (<IN>) {
+while (<$fh>) {
     $lineno++;
 
     # look for TMPL_IF, TMPL_ELSE, TMPL_UNLESS, and TMPL_LOOPs in HTML comments
@@ -147,7 +147,7 @@ while (<IN>) {
     }
 }
 
-close IN;
+close $fh;
 
 # anything left in the stack?
 if (scalar @tag_stack > 0) {

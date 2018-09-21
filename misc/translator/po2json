@@ -37,7 +37,7 @@ sub usage {
 
 sub main
 {
-    my ($src_fh, $src);
+    my $src;
 
     my $pretty = 0;
     if ($ARGV[0] =~ /^--?p$/) {
@@ -124,7 +124,8 @@ sub main
         # on a normal msgid
         } else {
             my $qmsgctxt = $po->msgctxt;
-            my $msgctxt = $po->dequote($qmsgctxt) if $qmsgctxt;
+            my $msgctxt;
+            $msgctxt = $po->dequote($qmsgctxt) if $qmsgctxt;
 
             # build the new msgid key
             my $msg_ctxt_id = defined($msgctxt) ? join($gettext_context_glue, ($msgctxt, $msgid1)) : $msgid1;
@@ -134,7 +135,8 @@ sub main
 
             # msgid plural side
             my $qmsgid_plural = $po->msgid_plural;
-            my $msgid2 = $po->dequote( $qmsgid_plural ) if $qmsgid_plural;
+            my $msgid2;
+            $msgid2 = $po->dequote( $qmsgid_plural ) if $qmsgid_plural;
             push(@trans, $msgid2);
 
             # translated string
@@ -145,14 +147,16 @@ sub main
                 for (my $i=0; $i<$plural_form_count; $i++)
                 {
                     my $qstr = ref($plurals) ? $$plurals{$i} : undef;
-                    my $str  = $po->dequote( $qstr ) if $qstr;
+                    my $str;
+                    $str  = $po->dequote( $qstr ) if $qstr;
                     push(@trans, $str);
                 }
 
             # singular
             } else {
                 my $qmsgstr = $po->msgstr;
-                my $msgstr = $po->dequote( $qmsgstr ) if $qmsgstr;
+                my $msgstr;
+                $msgstr = $po->dequote( $qmsgstr ) if $qmsgstr;
                 push(@trans, $msgstr);
             }
 

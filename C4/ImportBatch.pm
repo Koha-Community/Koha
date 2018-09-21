@@ -1502,10 +1502,10 @@ sub RecordsFromISO2709File {
     my $marc_type = C4::Context->preference('marcflavour');
     $marc_type .= 'AUTH' if ($marc_type eq 'UNIMARC' && $record_type eq 'auth');
 
-    open IN, "<$input_file" or die "$0: cannot open input file $input_file: $!\n";
+    open my $fh, '<', $input_file or die "$0: cannot open input file $input_file: $!\n";
     my @marc_records;
     $/ = "\035";
-    while (<IN>) {
+    while (<$fh>) {
         s/^\s+//;
         s/\s+$//;
         next unless $_; # skip if record has only whitespace, as might occur
@@ -1517,7 +1517,7 @@ sub RecordsFromISO2709File {
                 "Unexpected charset $charset_guessed, expecting $encoding";
         }
     }
-    close IN;
+    close $fh;
     return ( \@errors, \@marc_records );
 }
 
@@ -1560,15 +1560,15 @@ sub RecordsFromMarcPlugin {
     return \@return if !$input_file || !$plugin_class;
 
     # Read input file
-    open IN, "<$input_file" or die "$0: cannot open input file $input_file: $!\n";
+    open my $fh, '<', $input_file or die "$0: cannot open input file $input_file: $!\n";
     $/ = "\035";
-    while (<IN>) {
+    while (<$fh>) {
         s/^\s+//;
         s/\s+$//;
         next unless $_;
         $text .= $_;
     }
-    close IN;
+    close $fh;
 
     # Convert to large MARC blob with plugin
     $text = Koha::Plugins::Handler->run({
