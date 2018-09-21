@@ -708,10 +708,12 @@ sub GetBasketsInfosByBookseller {
           LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
         WHERE booksellerid = ?};
 
-    unless ( $allbaskets ) {
-        $query.=" AND (closedate IS NULL OR (aqorders.quantity > aqorders.quantityreceived AND datecancellationprinted IS NULL))";
-    }
     $query.=" GROUP BY aqbasket.basketno, aqbasket.basketname, aqbasket.note, aqbasket.booksellernote, aqbasket.contractnumber, aqbasket.creationdate, aqbasket.closedate, aqbasket.booksellerid, aqbasket.authorisedby, aqbasket.booksellerinvoicenumber, aqbasket.basketgroupid, aqbasket.deliveryplace, aqbasket.billingplace, aqbasket.branch, aqbasket.is_standing, aqbasket.create_items";
+
+    unless ( $allbaskets ) {
+        # Don't show the basket if it's NOT CLOSED or is FULLY RECEIVED
+        $query.=" HAVING (closedate IS NULL OR (expected_items > 0))"
+    }
 
     my $sth = $dbh->prepare($query);
     $sth->execute($supplierid);
