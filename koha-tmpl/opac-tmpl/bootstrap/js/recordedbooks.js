@@ -89,7 +89,7 @@ KOHA.RecordedBooks = new function() {
         $('<div id="action_'+item.isbn+'" class="actions-menu">')
             .append(actions)
             .appendTo(line);
-        $('<span id="waiting_'+item.isbn+'" style="display:none;"><img class="throbber" src="/opac-tmpl/lib/jquery/plugins/themes/classic/throbber.gif" /></span>').appendTo(line);
+        $('<span id="waiting_'+item.isbn+'" style="display:none;"><img class="throbber" src="' + SPINNER_THROBBER + '" /></span>').appendTo(line);
         $(ul_el).append(line);
     }
 

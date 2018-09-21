@@ -271,6 +271,10 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 [% END %]
 
+[% IF (RecordedBooksEnabled) %]
+  var SPINNER_THROBBER = "[% interface %]/lib/jquery/plugins/themes/classic/throbber.gif";
+[% END %]
+
 [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]
 <script>
 $(document).ready(function() {
