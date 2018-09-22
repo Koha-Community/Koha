@@ -5,7 +5,7 @@
         <li>
           <form action="/cgi-bin/koha/acqui/neworderbiblio.pl" method="post">
             <label>From an existing record:
-                <input type="text"  size="25" name="q" />
+                <input type="text"  size="25" name="q" required="required"/>
             </label>
             <input type="hidden" name="booksellerid" value="[% booksellerid | html %]" />
             <input type="hidden" name="basketno" value="[% basketno | html %]" />
