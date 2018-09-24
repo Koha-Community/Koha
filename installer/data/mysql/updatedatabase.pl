@@ -16178,6 +16178,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20777 - Remove unused field accountlines.dispute)\n";
 }
 
+$DBversion = "18.05.04.000";
+if ( CheckVersion($DBversion) ) {
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (18.05.04 release)\n";
+}
+
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
