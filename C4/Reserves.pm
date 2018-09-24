@@ -314,7 +314,7 @@ sub CanItemBeReserved {
     my $ruleitemtype;    # itemtype of the matching issuing rule
     my $allowedreserves  = 0; # Total number of holds allowed across all records
     my $holds_per_record = 1; # Total number of holds allowed for this one given record
-    my $holds_per_day    = 0; # Total number of holds allowed per day for the given patron
+    my $holds_per_day;        # Default to unlimited
 
     # we retrieve borrowers and items informations #
     # item->{itype} will come for biblioitems if necessery
