@@ -15188,7 +15188,7 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21144: Add ROADTYPE to default authorised values categories)\n";
 }
 
-$DBversion = '18.05.03.002';
+$DBversion = '17.11.09.003';
 if( CheckVersion( $DBversion ) ) {
     unless ( index_exists( 'subscription', 'by_biblionumber' ) ) {
         $dbh->do(q{
