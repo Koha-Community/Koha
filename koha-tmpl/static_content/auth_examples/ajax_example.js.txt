@@ -1,0 +1,83 @@
+<script type="text/javascript">
+
+/*
+
+== Koha REST-API ajax-example ==
+
+Authentication system explained:
+
+For authentication to succeed, the client have to send 2 HTTP headers:
+
+    X-Koha-Date: the standard HTTP Date header complying to RFC 1123, simply wrapped to X-Koha-Date, since the w3-specification forbids setting the Date-header from javascript.
+    Authorization: the standard HTTP Authorization header, see below for how it is constructed.
+
+HTTP Request example
+
+  GET /api/v1/borrowers/12 HTTP/1.1
+  Host: api.yourkohadomain.fi
+  X-Koha-Date: Mon, 26 Mar 2007 19:37:58 +0000
+  Authorization: Koha admin69:frJIUN8DYpKDtOLCwo//yllqDzg=
+
+
+Constructing the Authorization header
+
+    You brand the authorization header with "Koha"
+    Then you give the userid/cardnumber of the user authenticating.
+    Then the hashed signature.
+
+Signature
+
+The signature is a HMAC-SHA256-HEX hash of several elements of the request, separated by spaces:
+
+    HTTP method (uppercase)
+    userid/cardnumber
+    X-Koha-Date-header
+
+Signed with the Borrowers API key
+
+*/
+
+$(function () {
+
+  var borrowernum = "1234567890";
+  getBorrower(borrowernum);
+
+  /*
+   * Function getBorrower does a Koha REST-API-call with the given borrowernumber and pops
+   * an alert if the call was successful.
+   */
+  function getBorrower(borrowernum) {
+
+    var borrowernum = borrowernum || '123456789';
+    var myapikey = "My koha api key";
+    var httpVerb = 'get';
+    var apiUserId = 'My api userid';
+    var date = new Date();
+    var myKohaInstanceURI = "koha.example.com";
+
+    /*
+     * Form the HMAC and the 'Authorization' header required by the api.
+     */
+    var shaObj = new jsSHA("SHA-256", "TEXT");
+    shaObj.setHMACKey(apikey, "TEXT");
+    var message = httpVerb.toUpperCase() + " " + apiUserId + " " + date;
+    shaObj.update(message);
+    var authHeader = "Koha " + apiUserId + ":" + shaObj.getHMAC("HEX");
+
+    $.ajax({
+      type: "GET",
+      dataType: "json",
+      headers: {
+        "Authorization": authHeader,
+        "X-Koha-Date": date
+      },
+      url: myKohaInstanceURI + "/v1/borrowers/" + borrowernum,
+      success: function(data){
+        alert(data);
+      }
+    });
+
+  }
+
+});
+</script>

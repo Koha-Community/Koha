@@ -1,0 +1,76 @@
+require 'net/http'
+require 'net/https'
+require 'uri'
+require 'json'
+require 'openssl'
+
+# == Koha REST-API ruby example ==
+
+# Authentication system explained:
+
+# For authentication to succeed, the client have to send 2 HTTP headers:
+
+#     X-Koha-Date: the standard HTTP Date header complying to RFC 1123, simply wrapped to X-Koha-Date, since the w3-specification forbids setting the Date-header from javascript.
+#     Authorization: the standard HTTP Authorization header, see below for how it is constructed.
+
+# HTTP Request example
+
+#   GET /api/v1/borrowers/12 HTTP/1.1
+#   Host: api.yourkohadomain.fi
+#   X-Koha-Date: Mon, 26 Mar 2007 19:37:58 +0000
+#   Authorization: Koha admin69:frJIUN8DYpKDtOLCwo//yllqDzg=
+
+
+# Constructing the Authorization header
+
+#     You brand the authorization header with "Koha"
+#     Then you give the userid/cardnumber of the user authenticating.
+#     Then the hashed signature.
+
+# Signature
+
+# The signature is a HMAC-SHA256-HEX hash of several elements of the request, separated by spaces:
+
+#     HTTP method (uppercase)
+#     userid/cardnumber
+#     X-Koha-Date-header
+
+# Signed with the Borrowers API key
+
+class RubyExample
+
+    # A koha borrowernumber expected by the API-route '/v1/borrowers/id'
+    borrowernum = '1234567890'
+
+    # The Koha user id that has your active API-key and proper permission to do your requests.
+    koha_user_id = 'My api userid'
+
+    http_verb = 'GET'
+
+    # Standard date for the 'X-Koha-Date' required by the API.
+    date = DateTime.now
+
+    # Form the HMAC-SHA256 and the 'Authorization' header required by the API.
+    digest = OpenSSL::Digest.new('sha256')
+    message = http_verb + ' ' + koha_user_id + ' ' + date.to_s
+    hmac = OpenSSL::HMAC.hexdigest(digest, koha_api_key, message)
+    auth_header = 'Koha ' + user_id + ':' + hmac.to_s
+
+    # Form the request, add headers & do the call.
+    uri = URI('my-koha-instance-uri' + '/v1/borrowers/' + borrowernum)
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Get.new(uri.path)
+    request.add_field('X-Koha-Date', date)
+    request.add_field('Authorization', auth_header)
+    request.add_field('Cache-Control', 'no-cache')
+    response = http.request(request)
+
+    # Anything except '200' from the api means a failed call.
+    # For example, 404 means that no borrower with our id was found.
+    return nil unless response.code == '200'
+
+    result_data = JSON.parse(response.body)
+
+    # Do stuff with the data...
+end
+
