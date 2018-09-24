@@ -3,7 +3,9 @@
 [% USE KohaDates %]
 [% USE Koha %]
 [% USE ColumnsSettings %]
+[% USE JSON.Escape %]
 [% SET footerjs = 1 %]
+
 [%- BLOCK area_name -%]
     [%- SWITCH area -%]
         [%- CASE 'CIRC' -%]Circulation
@@ -36,6 +38,7 @@
     [% Asset.css("css/reports.css") | $raw %]
     [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
+[% Asset.css("../lib/d3c3/c3.min.css") | $raw %]
 </head>
 
 <body id="rep_guided_reports_start" class="rep">
@@ -696,6 +699,7 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF ( execute ) %]
 <h1>[% name | html %]</h1>
+[% INCLUDE 'chart.inc' %]
 [% IF ( notes ) %]<p><span class="label">Notes:</span> [% notes | html %]</p>[% END %]
 [% IF ( unlimited_total ) %]<p><span class="label">Total number of results:</span> [% unlimited_total | html %][% IF unlimited_total > limit %] ([% limit | html %] shown)[% END %].</p>[% END %]
 <div id="sql_output" style="display:none;"><span class="label">Report SQL:</span><pre>[% sql | html %]</pre></div>
@@ -751,6 +755,7 @@ canned reports and writing custom SQL reports.</p>
             [% END %]
         </table>
     </form>
+
 [% END %]
 [% END %]
 
@@ -934,12 +939,44 @@ $(document).ready(function() {
 </div>
 
 [% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/charts.js") | $raw %]
+    [% Asset.js("../lib/d3c3/d3.min.js") | $raw %]
+    [% Asset.js("../lib/d3c3/c3.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% IF ( saved1 ) %]
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'columns_settings.inc' %]
     [% END %]
     <script>
+
+        function hide_bar_element() {
+            $('#chart-column-horizontal').hide()
+            $('.chart-column-group').each(function( index ) {
+                $( this ).hide();
+            });
+            $('.chart-column-line').each(function( index ) {
+                $( this ).hide()
+            });
+        }
+
+        function show_bar_element() {
+            $('#chart-column-horizontal').show()
+            $('.chart-column-group').each(function( index ) {
+                $( this ).show()
+            });
+            $('.chart-column-line').each(function( index ) {
+                $( this ).show()
+            });
+        }
+
+        function removeColumn(id) {
+            $('#'+id).remove();
+
+            if ( $('.chart-column-conf').length == 1 ) {
+                $('.chart-column-delete').remove();
+            }
+        }
+
         var MSG_CONFIRM_DELETE = _("Are you sure you want to delete this report? This cannot be undone.");
         var group_subgroups = {};
         [% FOREACH group IN groups_with_subgroups %]
@@ -969,6 +1006,111 @@ $(document).ready(function() {
         }
 
         $(document).ready(function(){
+
+            hide_bar_element();
+
+            if ( $('.chart-column-conf').length == 1 ) {
+                $('.chart-column-delete').remove();
+            }
+
+            $(".chart-column-delete").on('click', function(e){
+                e.preventDefault();
+                removeColumn('column_' + $(this).data('column'));
+            })
+
+            $('#download-chart').click(function() {
+                var svg = '<svg>' + $('#chart svg').html() + '</svg>';
+                this.href = 'data:application/octet-stream;base64,' + btoa(svg);
+                this.setAttribute('download', 'chart.svg');
+            });
+
+            $('#chart-type').change(function() {
+                if ($(this).val() == 'bar') {
+                    show_bar_element();
+                }
+                else {
+                    hide_bar_element();
+                }
+            });
+
+            $('#download-chart').hide();
+            var chart;
+
+            [% IF results && !errors %]
+                $('#draw-chart').click(function() {
+
+                    var btn_text = $("#draw-chart").html();
+                    $("#draw-chart").html(_("Loading..."));
+
+                    var x_elements = $('select[name="x"]').val();
+                    var y_elements = [];
+                    var groups = [];
+                    var lines = [];
+                    var options = {};
+
+                    headers = [% header_row.json %];
+
+                    var results;
+                    if ($('input[name="chart-include-all"]').prop('checked')) {
+                        results = [% allresults.json %]
+                    }
+                    else {
+                        results = [% results.json %]
+                    }
+
+                    if ($('input[name="chart-exclude-last"]').prop('checked')) {
+                        results.splice(-1, 1);
+                    }
+
+                    $('select[name="y"]').each(function( index ) {
+                        y_elements.push( $(this).val() );
+                    });
+                    $('select[name="group"]').each(function( index ) {
+                        groups.push( $(this).val() );
+                    });
+                    $('.column-line').each(function( index ) {
+                        if ($(this).prop('checked')) {
+                            lines.push( $(this).attr('name') );
+                        }
+                    });
+
+                    // Remove deleted columns from headers and results.
+                    var deleted_indexes = [];
+                    var kept_headers = [];
+                    $.each(headers, function(index, value) {
+                        if (value.cell != x_elements && $.inArray(value.cell, y_elements) === -1) {
+                            // This header is neither a x element nor in y elements. Don't need it.
+                            deleted_indexes.push(index);
+                        }
+                        else {
+                            kept_headers.push({cell: value.cell});
+                        }
+                    });
+
+                    // Remove coresponding cells.
+                    var kept_results = [];
+                    $.each(results, function(index, value) {
+                        var line = {};
+                        line['cells'] = [];
+                        $.each(value.cells, function(i, val) {
+                            if ($.inArray(i, deleted_indexes) === -1) {
+                                line['cells'].push({cell: val.cell});
+                            }
+                        });
+                        kept_results.push(line);
+                    });
+
+                    options.type = $('select[name="chart-type"]').val();
+                    options.horizontal = $('input[name="column-horizontal"]').prop('checked');
+                    options.lines = lines;
+
+                    chart = create_chart(kept_headers, kept_results, x_elements, y_elements, groups, options);
+                    $('#chart').prepend('<div style="font-size: 1rem; text-align: center;">' + "[% name %]" + '</div>');
+                    $('#download-chart').show();
+                    $("#draw-chart").html(_(btn_text));
+                    $("html, body").animate({ scrollTop: $(document).height() }, "slow");
+                });
+            [% END %]
 
             $('[data-toggle="tooltip"]').tooltip();
             var columns_settings = [% ColumnsSettings.GetColumns( 'reports', 'saved-sql', 'table_reports', 'json' ) | $raw %];
@@ -1106,6 +1248,12 @@ $(document).ready(function() {
                     $("#sql_output").toggle();
                     $("#toggle_sql_hid").toggle();
                     $("#toggle_sql_vis").toggle();
+                });
+
+                $(".toggle_chart_settings").click(function(){
+                    $("#makechart").toggle();
+                    $("#toggle_chart_settings_hid").toggle();
+                    $("#toggle_chart_settings_vis").toggle();
                 });
 
                 $("#table_reports").delegate(".confirmdelete", 'click', function(){

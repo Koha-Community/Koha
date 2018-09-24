@@ -60,11 +60,18 @@
                     <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">[% PROCESS 'delimiter_text.inc' %]</a></li>
                     <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
                     <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
+                    [% IF (results.json) %]
+                        <li><a id="download-chart" href="#">Download chart</a></li>
+                    [% END %]
                 </ul>
             </div>
             <div class="btn-group">
                 <a class="btn btn-default btn-sm toggle_sql" id="toggle_sql_hid" href="#"><i class="fa fa-eye"></i> Show SQL code</a>
                 <a class="btn btn-default btn-sm toggle_sql" id="toggle_sql_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide SQL code</a>
+            </div>
+            <div class="btn-group">
+                <a class="btn btn-default btn-sm toggle_chart_settings" id="toggle_chart_settings_hid" href="#"><i class="fa fa-eye"></i> Show chart settings</a>
+                <a class="btn btn-default btn-sm toggle_chart_settings" id="toggle_chart_settings_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide chart settings</a>
             </div>
         [% END %]
 

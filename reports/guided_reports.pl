@@ -693,6 +693,7 @@ elsif ($phase eq 'Run this report'){
         $notes = $report->notes;
 
         my @rows = ();
+        my @allrows = ();
         # if we have at least 1 parameter, and it's not filled, then don't execute but ask for parameters
         if ($sql =~ /<</ && !@sql_params) {
             # split on ??. Each odd (2,4,6,...) entry should be a parameter to fill
@@ -809,6 +810,7 @@ elsif ($phase eq 'Run this report'){
         } else {
             my $sql = get_prepped_report( $sql, \@param_names, \@sql_params);
             my ( $sth, $errors ) = execute_query( $sql, $offset, $limit, undef, $report_id );
+            my ($sth2, $errors2) = execute_query($sql);
             my $total = nb_rows($sql) || 0;
             unless ($sth) {
                 die "execute_query failed to return sth for report $report_id: $sql";
@@ -819,6 +821,10 @@ elsif ($phase eq 'Run this report'){
                     my @cells = map { +{ cell => $_ } } @$row;
                     push @rows, { cells => \@cells };
                 }
+                while (my $row = $sth2->fetchrow_arrayref()) {
+                    my @cells = map { +{ cell => $_ } } @$row;
+                    push @allrows, { cells => \@cells };
+                }
             }
 
             my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
@@ -828,6 +834,7 @@ elsif ($phase eq 'Run this report'){
             }
             $template->param(
                 'results' => \@rows,
+                'allresults' => \@allrows,
                 'sql'     => $sql,
                 original_sql => $original_sql,
                 'id'      => $report_id,
