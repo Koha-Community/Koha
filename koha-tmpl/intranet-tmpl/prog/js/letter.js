@@ -1,5 +1,5 @@
 /* Variables defined in letter.tt: */
-/* global _ module add_form copy_form no_op_set MSG_EMPTY_TITLE_AND_CONTENT MSG_EMPTY_TEMPLATES code MSG_CODE_EXISTS MSG_CODE_EXISTS_FOR_LIBRARY MSG_DT_LOADING_RECORDS interface theme KohaTable columns_settings */
+/* global _ module add_form copy_form no_op_set MSG_EMPTY_TITLE_AND_CONTENT MSG_EMPTY_TEMPLATES code MSG_CODE_EXISTS MSG_CODE_EXISTS_FOR_LIBRARY MSG_DT_LOADING_RECORDS MSG_NO_NOTICE_FOUND interface theme KohaTable columns_settings */
 
 var modal_loading = "<div id=\"loading\"><img src=\"" + interface + "/" + theme + "/img/spinner-small.gif\" alt=\"\" /> "+ MSG_DT_LOADING_RECORDS +"</div>";
 
@@ -46,6 +46,7 @@ $(document).ready(function() {
         "oLanguage": {
             "sZeroRecords": MSG_NO_NOTICE_FOUND
         },
+        "exportColumns": [0,1,2,3],
     }, columns_settings);
 
     if( no_op_set ){

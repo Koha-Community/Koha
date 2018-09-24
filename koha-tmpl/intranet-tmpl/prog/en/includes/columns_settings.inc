@@ -1,6 +1,6 @@
 [% USE ColumnsSettings %]
 
-<script type="text/javascript">
+<script>
 function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
     var counter = 0;
     var hidden_ids = [];
@@ -20,41 +20,48 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         }
         counter++;
     });
+
+    var exportColumns = ":visible";
+    if( dt_parameters.hasOwnProperty("exportColumns") ){
+        // A custom buttons configuration has been passed from the page
+        exportColumns = dt_parameters["exportColumns"];
+    }
+
     dt_parameters[ "buttons" ] = [
         {
             extend: 'colvis',
             columns: included_ids,
             text: _("Column visibility"),
             exportOptions: {
-                columns: ':visible'
+                columns: exportColumns
             },
         },
         {
             extend: 'excelHtml5',
             text: _("Excel"),
             exportOptions: {
-                columns: ':visible'
+                columns: exportColumns
             },
         },
         {
             extend: 'csvHtml5',
             text: _("CSV"),
             exportOptions: {
-                columns: ':visible'
+                columns: exportColumns
             },
         },
         {
             extend: 'copyHtml5',
             text: _("Copy"),
             exportOptions: {
-                columns: ':visible'
+                columns: exportColumns
             },
         },
         {
             extend: 'print',
             text: _("Print"),
             exportOptions: {
-                columns: ':visible'
+                columns: exportColumns
             },
         },
     ];
