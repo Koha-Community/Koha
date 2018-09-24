@@ -61,7 +61,7 @@
                     <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Tab separated text</a></li>
                     <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;report_id=[% id | html %]&amp;reportname=[% name |uri %][% PROCESS params %]">Open Document Spreadsheet</a></li>
                     [% IF (results.json) %]
-                        <li><a id="download-chart" href="#">Download chart</a></li>
+                        <li><a id="download-chart" href="#">Chart (.svg)</a></li>
                     [% END %]
                 </ul>
             </div>

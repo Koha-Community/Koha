@@ -21,9 +21,9 @@
             <li>
                 <label for="x_element">x column:</label>
                 <select id="x_element" name="x">
-                    <option value="[% supposed_x %]" selected>[% supposed_x %]</option>
+                    <option value="[% supposed_x | html %]" selected>[% supposed_x | html %]</option>
                     [% FOREACH header IN header_row %]
-                        <option value="[% header.cell %]">[% header.cell %]</option>
+                        <option value="[% header.cell | html %]">[% header.cell | html %]</option>
                     [% END %]
                 </select>
             </li>
@@ -40,22 +40,22 @@
             [% column = 1 %]
             <li>
                 [% FOREACH header IN header_row %]
-                    <fieldset class="chart-column-conf" id="column_[% column %]" style="display: inline !important;">
+                    <fieldset class="chart-column-conf" id="column_[% column | html %]" style="display: inline !important;">
                         <legend>
-                            Column [% column %]
-                            <a class="chart-column-delete" href="#" data-column="[% column %]">
-                                <img src="[% interface %]/[% theme %]/img/x.png" alt="Delete" />
+                            Column [% column | html %]
+                            <a class="chart-column-delete" href="#" data-column="[% column | html %]">
+                                <img src="[% interface | html %]/[% theme | html %]/img/x.png" alt="Delete" />
                             </a>
                         </legend>
                         <div>
-                            <label for="y_[% column %]" >y:</label>
-                            <select id="y_[% column %]" name="y">
-                                <option value="[% supposed_x %]" selected>[% supposed_x %]</option>
+                            <label for="y_[% column | html %]" >y:</label>
+                            <select id="y_[% column | html %]" name="y">
+                                <option value="[% supposed_x | html %]" selected>[% supposed_x | html %]</option>
                                 [% FOREACH h IN header_row %]
                                     [% IF header.cell == h.cell %]
-                                        <option value="[% h.cell %]" selected>[% h.cell %]</option>
+                                        <option value="[% h.cell | html %]" selected>[% h.cell | html %]</option>
                                     [% ELSE %]
-                                        <option value="[% h.cell %]">[% h.cell %]</option>
+                                        <option value="[% h.cell | html %]">[% h.cell | html %]</option>
                                     [% END %]
                             [% END %]
                             </select>
@@ -63,13 +63,13 @@
 
                         <div class="chart-column-group">
                             [% i = 1 %]
-                            <label for="group_[% column %]">Group:</label>
-                            <select id="group_[% column %]" name="group">
+                            <label for="group_[% column | html %]">Group:</label>
+                            <select id="group_[% column | html %]" name="group">
                                 [% FOREACH h IN header_row %]
                                     [% IF i == column %]
-                                        <option value="[% i %]" selected>[% i %]</option>
+                                        <option value="[% i | html %]" selected>[% i | html %]</option>
                                     [% ELSE %]
-                                        <option value="[% i %]">[% i %]</option>
+                                        <option value="[% i | html %]">[% i | html %]</option>
                                     [% END %]
                                     [% i = i + 1 %]
                                 [% END %]
@@ -77,8 +77,8 @@
                         </div>
 
                         <div class="chart-column-line">
-                            <label for="line_[% column %]">line:</label>
-                            <input class="column-line" id="column-line" name="[% header.cell %]" type="checkbox">
+                            <label for="line_[% column | html %]">line:</label>
+                            <input class="column-line" id="column-line" name="[% header.cell | html %]" type="checkbox">
                         </div>
                     </fieldset>
                     [% column = column + 1 %]
@@ -91,6 +91,6 @@
         </ol>
     </fieldset>
     [% item = { cell = supposed_x } %]
-    [% header_row.unshift(item) %]
+    [% header_row.unshift(item) | html %]
     <div id="chart"></div>
 </div>

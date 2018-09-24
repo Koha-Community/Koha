@@ -1048,14 +1048,14 @@ $(document).ready(function() {
                     var lines = [];
                     var options = {};
 
-                    headers = [% header_row.json %];
+                    headers = [% header_row.json | $raw %];
 
                     var results;
                     if ($('input[name="chart-include-all"]').prop('checked')) {
-                        results = [% allresults.json %]
+                        results = [% allresults.json | $raw %]
                     }
                     else {
-                        results = [% results.json %]
+                        results = [% results.json | $raw %]
                     }
 
                     if ($('input[name="chart-exclude-last"]').prop('checked')) {
@@ -1105,7 +1105,7 @@ $(document).ready(function() {
                     options.lines = lines;
 
                     chart = create_chart(kept_headers, kept_results, x_elements, y_elements, groups, options);
-                    $('#chart').prepend('<div style="font-size: 1rem; text-align: center;">' + "[% name %]" + '</div>');
+                    $('#chart').prepend('<div style="font-size: 1rem; text-align: center;">' + "[% name | html %]" + '</div>');
                     $('#download-chart').show();
                     $("#draw-chart").html(_(btn_text));
                     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
