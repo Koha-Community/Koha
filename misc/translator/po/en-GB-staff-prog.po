@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 17.11\n"
-"POT-Creation-Date: 2018-08-17 07:35-0300\n"
-"PO-Revision-Date: 2018-06-21 13:21+0000\n"
+"POT-Creation-Date: 2018-09-14 23:40-0300\n"
+"PO-Revision-Date: 2018-09-21 09:40+0000\n"
 "Last-Translator: Jon McGowan <jon.mcgowan@ptfs-europe.com>\n"
 "Language-Team: Koha-translate <koha-translate@lists.koha.org>\n"
 "Language: en_GB\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1529587294.275667\n"
+"X-POOTLE-MTIME: 1537522816.333088\n"
 "X-Pootle-Path: /en_GB/17.11/en-GB-staff-prog.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -48,7 +48,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/about.tt:847
 #, c-format
 msgid "\") symbol by Jeremy J. Bristol; Cataloging (\""
-msgstr ""
+msgstr "\") symbol by Jeremy J. Bristol; Cataloguing (\""
 
 #: intranet-tmpl/prog/en/modules/about.tt:851
 #, c-format
@@ -1586,14 +1586,14 @@ msgstr ""
 "already exist. %s An error occurred when deleting this library. Check the "
 "logs. %s Library updated successfully. %s Library added successfully. %s "
 "Library deleted successfully. %s This library cannot be deleted. Users or "
-"items are still using it %s (%s patrons and %s items). %s (%s patrons). %s "
-"(%s items). %s %s An error occurred when updating this library category. "
-"Perhaps it already exists. %s An error occurred when adding this library "
-"category. The categorycode might already exist. %s An error occurred when "
-"deleting this library category. Check the logs. %s Library category updated "
-"successfully. %s Library category added successfully. %s Library category "
-"deleted successfully. %s This library category cannot be deleted. %s "
-"libraries are still using it. %s %s %s "
+"items are still using it %s (%s patronusers and %s items). %s (%s "
+"patronusers). %s (%s items). %s %s An error occurred when updating this "
+"library category. Perhaps it already exists. %s An error occurred when "
+"adding this library category. The categorycode might already exist. %s An "
+"error occurred when deleting this library category. Check the logs. %s "
+"Library category updated successfully. %s Library category added "
+"successfully. %s Library category deleted successfully. %s This library "
+"category cannot be deleted. %s libraries are still using it. %s %s %s "
 
 #. For the first occurrence,
 #. %1$s:  SWITCH m.code 
@@ -1811,9 +1811,9 @@ msgstr ""
 #. %6$s:  IF Koha.Preference('intranetbookbag') == 1 
 #. %7$s:  IF ( SEARCH_RESULT.incart ) 
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:691
-#, fuzzy, c-format
+#, c-format
 msgid "%s %s Holds (%s) %s %s %s %s | "
-msgstr "%s (%s) %s %sclassnumber: %s%s"
+msgstr "%s %s Reservations (%s) %s %s %s %s | "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -8315,7 +8315,7 @@ msgstr "&rsaquo; Reservation ratios"
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:34
 #, c-format
 msgid "&rsaquo; Holds history for %s"
-msgstr "&rsaquo; Borrowing history for %s"
+msgstr "&rsaquo; Reservation history for %s"
 
 #: intranet-tmpl/prog/en/modules/circ/pendingreserves.tt:80
 #, c-format
@@ -25872,15 +25872,15 @@ msgstr "Reservations awaiting pickup for your library on: %s %s "
 
 #: intranet-tmpl/prog/en/includes/circ-menu.inc:93
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:41
-#, fuzzy, c-format
+#, c-format
 msgid "Holds history"
-msgstr "History"
+msgstr "Reservation history"
 
 #. %1$s:  INCLUDE 'patron-title.inc' no_html = 1 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:7
-#, fuzzy, c-format
+#, c-format
 msgid "Holds history for %s"
-msgstr "Borrowing history for %s"
+msgstr "Reservation history for %s"
 
 #. %1$s:  ReservesMaxPickUpDelay 
 #: intranet-tmpl/prog/en/modules/circ/waitingreserves.tt:138
@@ -27225,6 +27225,10 @@ msgid ""
 "renewal policy, hold policy, etc. For example a circulation rule applied to "
 "the DVD item type may enforce a payment of $1.00 for checking out any DVD."
 msgstr ""
+"Importantl: Item types are what you apply circulation rules to. Circulation "
+"rules govern how your institution will lend its items: loan length, renewal "
+"policy, reservation policy, etc. For example a circulation rule applied to "
+"the DVD item type may enforce a payment of £1.00 for borrowing any DVD."
 
 #. For the first occurrence,
 #. SCRIPT
@@ -28026,9 +28030,8 @@ msgstr ""
 
 #. TH
 #: intranet-tmpl/prog/en/modules/acqui/parcel.tt:354
-#, fuzzy
 msgid "Item holds / Total holds"
-msgstr "Item level reservations"
+msgstr "Item reservations / Total reservations"
 
 #: intranet-tmpl/prog/en/modules/circ/overdue.tt:225
 #, c-format
@@ -28102,7 +28105,7 @@ msgstr "Item is withdrawn."
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:595
 #, c-format
 msgid "Item level hold forced from OPAC %s %s "
-msgstr "Item level reservation forced from OPAC %s %s"
+msgstr "Item level reservation forced from OPAC %s %s "
 
 #. %1$s:  ELSIF itemloo.item_level_holds == "F" 
 #: intranet-tmpl/prog/en/modules/reserve/request.tt:593
@@ -29864,7 +29867,7 @@ msgstr ""
 #, c-format
 msgid "Koha &rsaquo; Catalog &rsaquo; %s Unknown record %s ISBD details %s "
 msgstr ""
-"Koha &rsaquo; Catalogue &rsaquo; %s Unknown record %s ISBD details for %s"
+"Koha &rsaquo; Catalogue &rsaquo; %s Unknown record %s ISBD details for %s "
 
 #. %1$s:  IF ( unknownbiblionumber ) 
 #. %2$s:  ELSE 
@@ -32918,6 +32921,9 @@ msgid ""
 "bibliographic information about an item. MARC21 is used globally, whereas "
 "UNIMARC tends to be used in Europe. "
 msgstr ""
+"MARC stands for Machine Readable Cataloguing. A MARC record contains "
+"bibliographic information about an item. MARC21 is used globally, UNIMARC "
+"tends to be used in a few European countries."
 
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:171
 #: intranet-tmpl/prog/en/modules/admin/biblio_framework.tt:150
@@ -35976,6 +35982,8 @@ msgid ""
 "No plugins that can process online payments via the public catalog are "
 "installed"
 msgstr ""
+"No plugins that can process online payments via the public catalogue are "
+"installed"
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:220
@@ -36834,9 +36842,8 @@ msgstr "Number of loans"
 
 #. SCRIPT
 #: intranet-tmpl/prog/en/includes/strings.inc:1
-#, fuzzy
 msgid "Number of checkouts by item type"
-msgstr "Number of loans"
+msgstr "Number of loans by item type"
 
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:124
 #: intranet-tmpl/prog/en/modules/labels/label-edit-template.tt:131
@@ -46228,9 +46235,9 @@ msgid "Staff members are not allowed to access patron's checkout history"
 msgstr "Staff members are not allowed to access users borrowing history"
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:44
-#, fuzzy, c-format
+#, c-format
 msgid "Staff members are not allowed to access patron's holds history"
-msgstr "Staff members are not allowed to access users borrowing history"
+msgstr "Staff members are not allowed to access users reservation history"
 
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:181
 #, c-format
@@ -48517,7 +48524,7 @@ msgid ""
 "them in."
 msgstr ""
 "The following reservations have not been filled. Please retrieve them and "
-"retun them."
+"return them."
 
 #. For the first occurrence,
 #. %1$s:  "borrowers" | $HtmlTags tag="strong" 
@@ -48605,6 +48612,8 @@ msgid ""
 "The item has not been checked in due to a configuration issue in your "
 "system. You must ask an administrator to take a look at the "
 msgstr ""
+"The item has not been returned due to a configuration issue in your system. "
+"You must ask an administrator to take a look at the "
 
 #. %1$s:  INCLUDE 'biblio-default-view.inc' 
 #: intranet-tmpl/prog/en/modules/cataloguing/moveitem.tt:51
@@ -49454,11 +49463,9 @@ msgstr ""
 "list of anonymized loans, please run a report."
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:46
-#, fuzzy, c-format
+#, c-format
 msgid "This is the anonymous patron, so no holds history is displayed."
-msgstr ""
-"This is the anonymous user, so no circulation history is displayed. To get a "
-"list of anonymized loans, please run a report."
+msgstr "This is the anonymous user, so no reservation history is displayed."
 
 #. For the first occurrence,
 #. %1$s:  Branches.GetName( itemhomebranch ) 
@@ -49641,7 +49648,7 @@ msgstr ""
 #: intranet-tmpl/prog/en/modules/circ/circulation_batch_checkouts.tt:167
 #, c-format
 msgid "This patron can't check out this item per library circulation policy."
-msgstr "This user can't check out this item per library circulation policy."
+msgstr "This user can't borrow this item per library circulation policy."
 
 #: intranet-tmpl/prog/en/modules/members/moremember.tt:182
 #: intranet-tmpl/prog/en/modules/circ/circulation.tt:1061
@@ -49661,9 +49668,9 @@ msgid "This patron has no files attached."
 msgstr "This user has no files attached."
 
 #: intranet-tmpl/prog/en/modules/members/holdshistory.tt:48
-#, fuzzy, c-format
+#, c-format
 msgid "This patron has no holds history."
-msgstr "This user has no circulation history."
+msgstr "This user has no reservation history."
 
 #: intranet-tmpl/prog/en/modules/members/purchase-suggestions.tt:101
 #, c-format
@@ -52950,6 +52957,8 @@ msgid ""
 "When adding to your institution's catalog you will create an item of a "
 "particular item type."
 msgstr ""
+"When adding to your institution's catalogue you will create an item of a "
+"particular item type."
 
 #: intranet-tmpl/prog/en/modules/admin/currency.tt:238
 #, c-format
@@ -54808,9 +54817,9 @@ msgid "cannot be repeated"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:122
-#, fuzzy, c-format
+#, c-format
 msgid "cataloging the record"
-msgstr "Cataloguing editor"
+msgstr "cataloguing the record"
 
 #: intranet-tmpl/prog/en/modules/acqui/addorderiso2709.tt:356
 #, c-format
@@ -55024,9 +55033,9 @@ msgid "display detail for this librarian."
 msgstr "display detail for this librarian."
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:552
-#, fuzzy, c-format
+#, c-format
 msgid "do a catalog search"
-msgstr "Catalogue search"
+msgstr "do a catalogue search"
 
 #: intranet-tmpl/prog/en/modules/serials/subscription-add.tt:564
 #, c-format
@@ -56478,9 +56487,9 @@ msgid "uri"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:117
-#, fuzzy, c-format
+#, c-format
 msgid "use default (cataloging the record)"
-msgstr "Cancel order and catalogue record"
+msgstr "use default (cataloguing the record)"
 
 #: intranet-tmpl/prog/en/modules/acqui/basketheader.tt:118
 #, c-format
@@ -56550,9 +56559,9 @@ msgid "which should be set up by your system administrator."
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/onboarding/onboardingstep2.tt:92
-#, fuzzy, c-format
+#, c-format
 msgid "which should be set up by your system administrator. "
-msgstr "Please contact your system administrator"
+msgstr ""
 
 #: intranet-tmpl/prog/en/modules/tools/cleanborrowers.tt:125
 #, c-format
