@@ -2465,16 +2465,14 @@ subtest 'ItemsDeniedRenewal preference' => sub {
 
     C4::Context->set_preference('ItemsDeniedRenewal','');
 
-    $dbh->do('DELETE FROM issues');
-    $dbh->do('DELETE FROM items');
-    $dbh->do('DELETE FROM issuingrules');
+    my $idr_lib = $builder->build_object({ class => 'Koha::Libraries'});
     $dbh->do(
         q{
         INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, maxissueqty, issuelength, lengthunit, renewalsallowed, renewalperiod,
                     norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
         },
         {},
-        '*', '*', '*', 25,
+        '*', $idr_lib->branchcode, '*', 25,
         20,  14,  'days',
         10,   7,
         undef,  0,
@@ -2482,6 +2480,7 @@ subtest 'ItemsDeniedRenewal preference' => sub {
     );
 
     my $deny_book = $builder->build_object({ class => 'Koha::Items', value => {
+        homebranch => $idr_lib->branchcode,
         withdrawn => 1,
         itype => 'HIDE',
         location => 'PROC',
@@ -2490,13 +2489,17 @@ subtest 'ItemsDeniedRenewal preference' => sub {
         }
     });
     my $allow_book = $builder->build_object({ class => 'Koha::Items', value => {
+        homebranch => $idr_lib->branchcode,
         withdrawn => 0,
         itype => 'NOHIDE',
         location => 'NOPROC'
         }
     });
 
-    my $idr_borrower = $builder->build_object({ class => 'Koha::Patrons'});
+    my $idr_borrower = $builder->build_object({ class => 'Koha::Patrons', value=> {
+        branchcode => $idr_lib->branchcode,
+        }
+    });
     my $future = dt_from_string->add( days => 1 );
     my $deny_issue = $builder->build_object({ class => 'Koha::Checkouts', value => {
         returndate => undef,
