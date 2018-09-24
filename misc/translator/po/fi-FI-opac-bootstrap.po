@@ -6,8 +6,8 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2018-08-17 06:58-0300\n"
-"PO-Revision-Date: 2018-04-11 08:39+0000\n"
+"POT-Creation-Date: 2018-09-14 23:02-0300\n"
+"PO-Revision-Date: 2018-08-27 05:59+0000\n"
 "Last-Translator: AnneliÖ <anneli.osterman@ouka.fi>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: fi\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1523435983.473597\n"
+"X-POOTLE-MTIME: 1535349589.795988\n"
 "X-Pootle-Path: /fi/18.05/fi-FI-opac-bootstrap.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -380,7 +380,7 @@ msgstr ""
 #. %32$s:  ACCOUNT_LINE.title 
 #. %33$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-account.tt:108
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s %sPayment, thanks %sPayment, thanks (cash via SIP2) %sPayment, thanks "
 "(VISA via SIP2) %sPayment, thanks (credit card via SIP2) %sNew card %sFine "
@@ -394,7 +394,7 @@ msgstr ""
 "%sTilinhoitomaksu %sMuu maksu %sKadonnut nide %sPoistettu %sKertyvä maksu "
 "%sNoutamaton varaus %sLainausmaksu %sAnnettu anteeksi %sKadonneen aineiston "
 "palautusmaksu %sKäsittelymaksu %sMaksu %sPoisto %sCredit %sCredit %s%s %s "
-"%s, %s%s %s(%s)%s "
+"%s, %s%s %s, %s%s %s(%s)%s "
 
 #. %1$s:  IF s.is_private 
 #. %2$s:  IF s.is_shared 
@@ -706,7 +706,7 @@ msgstr "%s Teokseen on varauksia %s Uusintakerrat täynnä %s "
 #. %10$s:  IF ( WrongPass ) 
 #. %11$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:32
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "%s Passwords do not match. Please re-type your new password. %s %s Password "
 "must be at least %s characters long. %s %s Password must contain at least "
@@ -716,9 +716,11 @@ msgid ""
 "password for you. %s "
 msgstr ""
 "%s Salasanat eivät täsmää. Kirjoita salasanasi uudelleen. %s %s Uuden "
-"salasanan on oltava vähintään %s merkkiä pitkä. %s %s Kirjoitit nykyisen "
-"salasanan väärin. Jos ongelma toistuu, pyydä kirjaston henkilökunnalta uusi "
-"salasana. %s %s Salasanassasi on tyhjiä merkkejä alussa ja/tai lopussa. %s "
+"salasanan on oltava vähintään %s merkkiä pitkä. %s %s Salasanassa pitää olla "
+"vähintään yksi numero, yksi pieni kirjain ja yksi iso kirjain. %s %s "
+"Salasanassa ei saa olla tyhjiä merkkejä alussa tai lopussa. %s %s Kirjoitit "
+"nykyisen salasanan väärin. Jos ongelma toistuu, pyydä kirjaston "
+"henkilökunnalta uusi salasana. %s "
 
 #. %1$s:  IF ar.status == 'PENDING' 
 #. %2$s:  ELSIF ar.status == 'PROCESSING' 
@@ -809,18 +811,16 @@ msgstr ""
 
 #. %1$s:  ELSIF (errLinkNotValid) 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
-#, fuzzy, c-format
+#, c-format
 msgid "%s The link you clicked is either invalid, or expired. "
-msgstr ""
-"Salasanan on oltava vähintään %s merkkiä pitkä. %s Klikkaamasi linkki on "
-"joko virheellinen tai vanhentunut. "
+msgstr "%s Klikkaamasi linkki on joko virheellinen tai vanhentunut. "
 
 #. %1$s:  ELSIF (errPassNotMatch) 
 #. %2$s:  ELSIF password_too_short 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:68
-#, fuzzy, c-format
+#, c-format
 msgid "%s The passwords do not match. %s "
-msgstr "Salasanat eivät täsmää. "
+msgstr "%s Salasanat eivät täsmää. %s "
 
 #. %1$s:  IF ( circ_error_UNKNOWN_BARCODE ) 
 #. %2$s:  ELSIF ( circ_error_max_loans_allowed ) 
@@ -3119,9 +3119,8 @@ msgstr "Lisää"
 
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:283
-#, fuzzy
 msgid "Add to: "
-msgstr "Lisää tähän %s"
+msgstr "Lisää tähän: "
 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:129
 #, c-format
@@ -7763,10 +7762,12 @@ msgstr "Salasanan on oltava vähintään %s merkkiä pitkä."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:74
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:73
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Password must contain at least one digit, one lowercase and one uppercase."
-msgstr "Salasanan on oltava vähintään %s merkkiä pitkä."
+msgstr ""
+"Salasanassa pitää olla vähintään yksi numero, yksi pieni kirjain ja yksi iso "
+"kirjain."
 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:76
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:76
@@ -8154,13 +8155,13 @@ msgstr "Syötä seuraavat merkit laatikkoon: "
 #. %1$s:  ELSIF (errAlreadyStartRecovery) 
 #. %2$s:  IF username 
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:59
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Please use the field 'Login' as well. %s The process of password recovery "
 "has already been started for this account %s (\""
 msgstr ""
-"Täytä myös Kirjastokortti-kenttä. %s Tälle käyttäjälle on jo lähetty "
-"salasanan palautusviesti (\""
+"Täytä myös Kirjastokortti-kenttä. %s Käyttäjälle %s on jo lähetty salasanan "
+"palautusviesti (\""
 
 #. OPTGROUP
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:2
@@ -8959,15 +8960,15 @@ msgstr "Tallenna"
 msgid "Save record "
 msgstr "Tallenna tietue "
 
-#: opac-tmpl/bootstrap/en/modules/opac-results.tt:532
-#, c-format
-msgid "Save to Lists"
-msgstr "Vie listalle"
-
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:465
 #, c-format
 msgid "Save to another list"
 msgstr "Vie toiseen listaan"
+
+#: opac-tmpl/bootstrap/en/modules/opac-results.tt:532
+#, fuzzy, c-format
+msgid "Save to lists"
+msgstr "Vie listalle"
 
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:23
 #, c-format
