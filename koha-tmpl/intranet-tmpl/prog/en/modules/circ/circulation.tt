@@ -512,6 +512,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 [% END %]
     [% IF ( DisplayClearScreenButton ) %]
         <span id="clearscreen"><a href="/cgi-bin/koha/circ/circulation.pl" title="Clear screen">x</a></span>
+        <span id="printclearscreen"><a href="#" title="Print slip and clear screen"><i class="fa fa-print"></i></a></span>
     [% END %]
 
     [% IF (forceallow) %]<input type="hidden" name="forceallow" value="1">[% END %]

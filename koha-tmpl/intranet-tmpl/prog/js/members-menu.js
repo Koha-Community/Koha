@@ -75,6 +75,10 @@ $(document).ready(function(){
         $(".btn-group").removeClass("open");
         return false;
     });
+    $("#printclearscreen").click(function(){
+        printx_window("slip");
+        window.location.replace("/cgi-bin/koha/circ/circulation.pl");
+    });
     $("#searchtohold").click(function(){
         searchToHold();
         return false;
