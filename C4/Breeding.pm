@@ -230,19 +230,6 @@ sub Z3950Search {
 sub _auth_build_query {
     my ( $pars ) = @_;
 
-    #FIXME These variables are not used
-    my $nameany= $pars->{nameany};
-    my $authorany= $pars->{authorany};
-    my $authorpersonal= $pars->{authorpersonal};
-    my $authorcorp= $pars->{authorcorp};
-    my $authormeetingcon= $pars->{authormeetingcon};
-    my $title= $pars->{title};
-    my $uniformtitle= $pars->{uniformtitle};
-    my $subject= $pars->{subject};
-    my $subjectsubdiv= $pars->{subjectsubdiv};
-    my $srchany= $pars->{srchany};
-    my $authid= $pars->{authid};
-
     my $qry_build = {
         nameany           => '@attr 1=1002 "#term" ',
         authorany         => '@attr 1=1003 "#term" ',
