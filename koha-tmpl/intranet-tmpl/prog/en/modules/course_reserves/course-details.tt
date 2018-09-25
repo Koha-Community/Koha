@@ -3,6 +3,7 @@
 [% USE AuthorisedValues %]
 [% USE ItemTypes %]
 [% USE Branches %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo; Course details for [% course.course_name | html %]</title>
@@ -20,7 +21,7 @@
 
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-md-8 col-md-offset-2">
+            <div class="col-md-10 col-md-offset-1">
 
             [% IF CAN_user_coursereserves_add_reserves OR CAN_user_coursereserves_manage_courses OR CAN_user_coursereserves_manage_courses %]
             <div id="toolbar">
@@ -53,8 +54,8 @@
             </div>
 
             [% IF course_reserves %]
+            <h1>Reserves</h1>
             <table id="course_reserves_table">
-                <caption>Reserves</caption>
                 <thead>
                     <tr>
                         <th class="antithe">Title</th>
@@ -202,15 +203,18 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    [% INCLUDE 'columns_settings.inc' %]
+    <script>
+        var columns_settings = [% ColumnsSettings.GetColumns( 'coursereserves', 'reserves', 'course_reserves_table', 'json' ) | $raw %];
         $(document).ready(function(){
-            $("#course_reserves_table").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var rtable = KohaTable("course_reserves_table", {
                 "sPaginationType": "four_button",
+                "bAutoWidth": false,
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [ 'NoSort' ] },
                     { 'sType': "anti-the", 'aTargets' : [ 'antithe'] }
                 ]
-            }));
+            }, columns_settings );
 
             $(".delete_item").click(function(){
                 return confirmDelete(_("Are you sure you want to remove this item from the course?"));
