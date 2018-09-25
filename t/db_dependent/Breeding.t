@@ -55,13 +55,13 @@ subtest '_do_xslt_proc' => sub {
 sub test_build_translate_query {
     my $str;
     #First pass no parameters
-    my @queries= C4::Breeding::_build_query( {} );
+    my @queries= C4::Breeding::_bib_build_query( {} );
     is( defined $queries[0] && $queries[0] eq '' && defined $queries[1] &&
-        $queries[1] eq '', 1, '_build_query gets no parameters');
+        $queries[1] eq '', 1, '_bib_build_query gets no parameters');
 
     #We now pass one parameter
     my $pars1= { isbn => '234567' };
-    @queries= C4::Breeding::_build_query( $pars1 );
+    @queries= C4::Breeding::_bib_build_query( $pars1 );
     #Passed only one par: zquery should start with @attr 1=\d+
     is( $queries[0] =~ /^\@attr 1=\d+/, 1, 'Z39.50 query with one parameter');
     $str=$pars1->{isbn};
@@ -82,7 +82,7 @@ sub test_build_translate_query {
 
     #We now pass two parameters
     my $pars2= { isbn => '123456', title => 'You should read this.' };
-    @queries= C4::Breeding::_build_query( $pars2 );
+    @queries= C4::Breeding::_bib_build_query( $pars2 );
     #The Z39.50 query should start with @and (we passed two pars)
     is( $queries[0] =~ /^\@and/, 1, 'Second Z39.50 query starts with @and');
     #We should also find two @attr 1=\d+
@@ -104,7 +104,7 @@ sub test_build_translate_query {
 
     #We now pass a third wrong parameter (should not make a difference)
     my $pars3= { isbn => '123456', title => 'You should read this.', xyz => 1 };
-    my @queries2= C4::Breeding::_build_query( $pars3 );
+    my @queries2= C4::Breeding::_bib_build_query( $pars3 );
     is( $queries[0] eq $queries2[0] && $queries[1] eq $queries2[1], 1,
         'Third query makes no difference');
 
