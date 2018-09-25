@@ -318,7 +318,6 @@
                         <xsl:with-param name="codes">a</xsl:with-param>
                     </xsl:call-template>
                     <xsl:text> </xsl:text>
-                    <xsl:call-template name="maybe-show-f362a"/> <!-- koha-suomi -->
                     <!-- 13381 add additional subfields-->
                     <xsl:for-each select="marc:subfield[contains('bnp', @code)]">
                         <xsl:choose>
@@ -336,6 +335,7 @@
                             </xsl:otherwise>
                         </xsl:choose>
                     </xsl:for-each>
+                    <xsl:call-template name="maybe-show-f362a"/> <!-- koha-suomi -->
                 </xsl:for-each>
 		<xsl:if test="marc:datafield[@tag=100 or @tag=110]/marc:subfield[@code='a']">
 		  <xsl:for-each select="marc:datafield[@tag=100 or @tag=110]">
