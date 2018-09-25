@@ -357,6 +357,7 @@
                     $("#compareinv2barcd").prop('disabled',false);
                     $("#compareinv2barcd").attr('checked',true); // default
                     $("#dont_checkin").prop('disabled',false);
+                    $("#out_of_order").prop('disabled',false);
                     if( $("#compareinv2barcd").attr('checked') ) {
                         $("fieldset#optionalfilters").show();
                         $("#ignoreissued").attr('checked',true); // default
@@ -370,6 +371,8 @@
                     $("#compareinv2barcd").attr('checked',false);
                     $("#dont_checkin").prop('disabled',true);
                     $("#dont_checkin").attr('checked',false);
+                    $("#out_of_order").prop('disabled',true);
+                    $("#out_of_order").attr('checked',false);
                     $("fieldset#optionalfilters").show();
                 }
             });
