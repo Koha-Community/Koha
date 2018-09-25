@@ -44,7 +44,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AlternateHoldingsSeparator','',NULL,'The string to use to separate subfields in alternate holdings displays.','free'),
 ('AmazonAssocTag','','','See:  http://aws.amazon.com','free'),
 ('AmazonCoverImages','0','','Display Cover Images in Staff Client from Amazon Web Services','YesNo'),
-('AmazonLocale','US','US|CA|DE|FR|JP|UK','Use to set the Locale of your Amazon.com Web Services','Choice'),
+('AmazonLocale','US','US|CA|DE|FR|IN|JP|UK','Use to set the Locale of your Amazon.com Web Services','Choice'),
 ('AnonSuggestions','0',NULL,'Set to enable Anonymous suggestions to AnonymousPatron borrowernumber','YesNo'),
 ('AnonymousPatron','0',NULL,'Set the identifier (borrowernumber) of the anonymous patron. Used for Suggestion and reading history privacy',''),
 ('ArticleRequests', '0', NULL, 'Enables the article request feature', 'YesNo'),

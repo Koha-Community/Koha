@@ -37,6 +37,7 @@ sub get_amazon_tld {
         CA => '.ca',
         DE => '.de',
         FR => '.fr',
+        IN => '.in',
         JP => '.jp',
         UK => '.co.uk',
         US => '.com',
