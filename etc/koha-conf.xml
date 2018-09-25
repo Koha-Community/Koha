@@ -177,6 +177,13 @@ __PAZPAR2_TOGGLE_XML_POST__
      <!-- Path to where Illbackends are located on the system
           - This setting should normally not be touched -->
      <backend_directory>__PERL_MODULE_DIR__/Koha/Illbackends</backend_directory>
+     <!-- At least one <branch> block is required. -->
+     <branch>
+         <!-- The code of this branch -->
+         <code>CPL</code>
+         <!-- An optional prefix for all ILL request IDs for this branch -->
+         <prefix>ILL</prefix>
+     </branch>
      <!-- How should we treat staff comments?
           - hide: don't show in OPAC
           - show: show in OPAC -->
