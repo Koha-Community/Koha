@@ -147,7 +147,7 @@ sub Z3950Search {
     my $s = 0;
     my $imported=0;
 
-    my ( $zquery, $squery ) = _build_query( $pars );
+    my ( $zquery, $squery ) = _bib_build_query( $pars );
 
     my $schema = Koha::Database->new()->schema();
     my $rs = $schema->resultset('Z3950server')->search(
@@ -244,26 +244,11 @@ sub _auth_build_query {
         controlnumber     => '@attr 1=12 "#term" ',
     };
 
-    my $zquery='';
-    my $squery='';
-    my $nterms=0;
-    foreach my $k ( sort keys %$pars ) {
-    #note that the sort keys forces an identical result under Perl 5.18
-    #one of the unit tests is based on that assumption
-        if( ( my $val=$pars->{$k} ) && $qry_build->{$k} ) {
-            $qry_build->{$k} =~ s/#term/$val/g;
-            $zquery .= $qry_build->{$k};
-            $squery .= "[$k]=\"$val\" and ";
-            $nterms++;
-        }
-    }
-    $zquery = "\@and " . $zquery for 2..$nterms;
-    $squery =~ s/ and $//;
-    return ( $zquery, $squery );
-
+    return _build_query( $pars, $qry_build );
 }
 
-sub _build_query {
+sub _bib_build_query {
+
     my ( $pars ) = @_;
 
     my $qry_build = {
@@ -279,6 +264,13 @@ sub _build_query {
         srchany => '@attr 1=1016 "#term" ',
         stdid   => '@attr 1=1007 "#term" ',
     };
+
+    return _build_query( $pars, $qry_build );
+}
+
+sub _build_query {
+
+    my ( $pars, $qry_build ) = @_;
 
     my $zquery='';
     my $squery='';
