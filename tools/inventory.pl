@@ -52,6 +52,7 @@ my $branch     = $input->param('branch');
 my $op         = $input->param('op');
 my $compareinv2barcd = $input->param('compareinv2barcd');
 my $dont_checkin = $input->param('dont_checkin');
+my $out_of_order = $input->param('out_of_order');
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {   template_name   => "tools/inventory.tt",
@@ -252,7 +253,10 @@ if( @scanned_items ) {
 
 # Report scanned items that are on the wrong place, or have a wrong notforloan
 # status, or are still checked out.
-foreach my $item ( @scanned_items ) {
+for ( my $i = 0; $i < @scanned_items; $i++ ) {
+
+    my $item = $scanned_items[$i];
+
     $item->{notforloancode} = $item->{notforloan}; # save for later use
     my $fc = $item->{'frameworkcode'} || '';
 
@@ -269,6 +273,24 @@ foreach my $item ( @scanned_items ) {
     if( none { $item->{'notforloancode'} eq $_ } @notforloans ) {
         $item->{problems}->{changestatus} = 1;
         additemtoresults( $item, $results );
+    }
+
+    # Check for items shelved out of order
+    if ($out_of_order) {
+        unless ( $i == 0 ) {
+            my $previous_item = $scanned_items[ $i - 1 ];
+            if ( $previous_item && $item->{cn_sort} lt $previous_item->{cn_sort} ) {
+                $item->{problems}->{out_of_order} = 1;
+                additemtoresults( $item, $results );
+            }
+        }
+        unless ( $i == scalar(@scanned_items) ) {
+            my $next_item = $scanned_items[ $i + 1 ];
+            if ( $next_item && $item->{cn_sort} gt $next_item->{cn_sort} ) {
+                $item->{problems}->{out_of_order} = 1;
+                additemtoresults( $item, $results );
+            }
+        }
     }
 
     # Report an item that is checked out (unusual!) or wrongly placed

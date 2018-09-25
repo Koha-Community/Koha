@@ -47,6 +47,7 @@
             <li><label for="setdate">Set inventory date to:</label> <input type="text" id="setdate" name="setdate" value="[% today | $KohaDates %]" class="datepicker" disabled /></li>
             <li><label for="compareinv2barcd">Compare barcodes list to results: </label><input type="checkbox" name="compareinv2barcd" id="compareinv2barcd" disabled /></li>
             <li><label for="dont_checkin">Do not check in items scanned during inventory: </label><input type="checkbox" name="dont_checkin" id="dont_checkin" disabled /></li>
+            <li><label for="out_of_order">Check barcodes list for items shelved out of order: </label><input type="checkbox" name="out_of_order" id="out_of_order" disabled /></li>
           </ol>
         </fieldset>
 
@@ -224,6 +225,8 @@
                     Still checked out<br/>
                 [% ELSIF problem.key == 'no_barcode' %]
                     No barcode<br/>
+                [% ELSIF problem.key == 'out_of_order' %]
+                    Item may be shelved out of order<br/>
                 [% END %]
             [% END %]
             </td>
