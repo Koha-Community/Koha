@@ -235,7 +235,7 @@ __PACKAGE__->table("deleteditems");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 80
 
 =head2 materials
 
@@ -375,7 +375,7 @@ __PACKAGE__->add_columns(
   "cn_sort",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "ccode",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "materials",
   { data_type => "mediumtext", is_nullable => 1 },
   "uri",
@@ -407,8 +407,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("itemnumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-18 16:41:11
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:xb11fPjp5PyXU7yfFWHycw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L7G0HG5gvgyhfpKb7LcUFw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

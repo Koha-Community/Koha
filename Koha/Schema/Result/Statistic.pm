@@ -95,7 +95,7 @@ __PACKAGE__->table("statistics");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 80
 
 =cut
 
@@ -129,12 +129,12 @@ __PACKAGE__->add_columns(
   "associatedborrower",
   { data_type => "integer", is_nullable => 1 },
   "ccode",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RI3X/GXlBlUEgG0oxToIIA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OECp3uSP488L8TUoS1HseQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

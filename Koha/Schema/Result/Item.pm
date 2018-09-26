@@ -239,7 +239,7 @@ __PACKAGE__->table("items");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 80
 
 =head2 materials
 
@@ -389,7 +389,7 @@ __PACKAGE__->add_columns(
   "cn_sort",
   { data_type => "varchar", is_nullable => 1, size => 255 },
   "ccode",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
   "materials",
   { data_type => "mediumtext", is_nullable => 1 },
   "uri",
@@ -687,8 +687,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-18 16:41:12
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CrNXvpDUvvcuPZK2Gfzs/Q
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:d5sg0dXWdq0NkHsYchyUyw
 
 __PACKAGE__->belongs_to( biblioitem => "Koha::Schema::Result::Biblioitem", "biblioitemnumber" );
 
