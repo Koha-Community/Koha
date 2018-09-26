@@ -18,11 +18,16 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 6;
 
+use Test::More tests => 7;
+use t::lib::TestBuilder;
+
+use C4::Biblio qw(AddBiblio);
+use C4::Reserves;
 use Koha::AuthorisedValues;
-
-$| = 1;
+use Koha::Biblios;
+use Koha::Database;
+use MARC::Record;
 
 BEGIN {
     use_ok('C4::Context');
@@ -33,16 +38,88 @@ BEGIN {
 
 can_ok('C4::Items','GetItemsForInventory');
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema  = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
 
-my ($oldResults, $oldCount) = OldWay($dbh);
-my ($newResults, $newCount) = GetItemsForInventory;
+subtest 'Old version is unchanged' => sub {
 
-is_deeply($newResults,$oldResults,"Inventory results unchanged.");
+    plan tests => 1;
 
-$dbh->rollback;
+    $schema->storage->txn_begin;
+
+    my $dbh = $schema->storage->dbh;
+
+    my ($oldResults, $oldCount) = OldWay($dbh);
+    my ($newResults, $newCount) = GetItemsForInventory;
+
+    is_deeply($newResults,$oldResults,"Inventory results unchanged.");
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Skip items with waiting holds' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $itemtype
+        = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $library->id } } );
+
+    my $title_1 = 'Title 1';
+    my $title_2 = 'Title 2';
+
+    my $biblio_1 = create_helper_biblio( $itemtype->itemtype, $title_1 );
+    my $biblio_2 = create_helper_biblio( $itemtype->itemtype, $title_2 );
+
+    my ( $items_1, $first_items_count ) = GetItemsForInventory();
+    is( scalar @{$items_1}, $first_items_count, 'Results and count match' );
+
+    # Add two items, so we don't depend on existing data
+    my $item_1 = $builder->build_object(
+        {   class => 'Koha::Items',
+            value => {
+                biblionumber     => $biblio_1->biblionumber,
+                biblioitemnumber => $biblio_1->biblioitem->biblioitemnumber,
+                homebranch       => $library->id,
+                holdingbranch    => $library->id,
+                itype            => $itemtype->itemtype,
+            }
+        }
+    );
+
+    my $item_2 = $builder->build_object(
+        {   class => 'Koha::Items',
+            value => {
+                biblionumber     => $biblio_2->biblionumber,
+                biblioitemnumber => $biblio_2->biblioitem->biblioitemnumber,
+                homebranch       => $library->id,
+                holdingbranch    => $library->id,
+                itype            => $itemtype->itemtype,
+            }
+        }
+    );
+
+    my ( $items_2, $second_items_count ) = GetItemsForInventory();
+    is( scalar @{$items_2},     $second_items_count, 'Results and count match' );
+    is( $first_items_count + 2, $second_items_count, 'Two items added, count makes sense' );
+
+    # Add a waiting hold
+    my $reserve_id
+        = C4::Reserves::AddReserve( $library->branchcode, $patron->borrowernumber,
+        $item_1->biblionumber, '', 1, undef, undef, '', "title for fee",
+        $item_1->itemnumber, 'W' );
+
+    my ( $new_items, $new_items_count ) = GetItemsForInventory( { ignore_waiting_holds => 1 } );
+    is( $new_items_count, $first_items_count + 1, 'Item on hold skipped, count makes sense' );
+    is( $new_items->[ scalar @{$new_items} - 1 ]->{title},
+        $title_2, 'Item on hold skipped, last item is the correct one' );
+
+    $schema->storage->txn_rollback;
+};
 
 sub OldWay {
     my ($tdbh)       = @_;
@@ -160,4 +237,20 @@ sub OldWay {
     }
 
     return (\@results, $iTotalRecords);
+}
+
+# Helper method to set up a Biblio.
+sub create_helper_biblio {
+    my $itemtype = shift;
+    my $title    = shift;
+    my $record   = MARC::Record->new();
+
+    $record->append_fields(
+        MARC::Field->new( '245', ' ', ' ', a => $title ),
+        MARC::Field->new( '942', ' ', ' ', c => $itemtype ),
+    );
+
+    my $biblio_id = AddBiblio( $record, '' );
+
+    return Koha::Biblios->find($biblio_id);
 }
