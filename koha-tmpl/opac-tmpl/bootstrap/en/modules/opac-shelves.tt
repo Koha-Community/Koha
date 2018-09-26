@@ -262,7 +262,7 @@
                                         </span>
                                         <span id="tagsel_form" style="display:none">
                                           <label for="tagsel_new">New tag(s), separated by a comma:</label>
-                                          <input name="tagsel_new" id="tagsel_new" maxlength="100" />
+                                          <input type="text" name="tagsel_new" id="tagsel_new" maxlength="100" />
                                           <input id="tagsel_button" name="tagsel_button" class="tagsel_button btn btn-small" title="tagsel_button" type="submit" value="Add" />
                                           <a href="#" id="tagsel_cancel">Cancel</a>
                                         </span>
@@ -448,9 +448,10 @@
                                                                 <span class="actions"><a class="tag_add hidden" id="tag_add[% itemsloo.biblionumber %]" href="#">Add tag</a></span>
                                                                 <div id="tagform[% itemsloo.biblionumber %]" class="tag_results_input" style="display:none;">
                                                                     <label for="newtag[% itemsloo.biblionumber %]">New tag(s), separated by a comma:</label>
-                                                                    <input name="newtag[% itemsloo.biblionumber %]" id="newtag[% itemsloo.biblionumber %]" maxlength="100" />
+                                                                    <input type="text" name="newtag[% itemsloo.biblionumber %]" id="newtag[% itemsloo.biblionumber %]" maxlength="100" />
                                                                     <input name="tagbutton" class="tagbutton btn btn-small" title="[% itemsloo.biblionumber %]" type="submit" value="Add" />
                                                                     <a class="cancel_tag_add" id="cancel[% itemsloo.biblionumber %]" href="#">(done)</a>
+
                                                                 </div>
                                                                 <div id="newtag[% itemsloo.biblionumber %]_status" class="tagstatus" style="display:none;">
                                                                 Tag status here.
