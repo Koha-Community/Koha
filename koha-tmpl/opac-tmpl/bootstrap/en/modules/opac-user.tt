@@ -723,7 +723,7 @@
                                                                         <div class="modal-body">
                                                                             <input type="hidden" name="reserve_id" value="[% RESERVE.reserve_id | html %]" />
                                                                             <label for="suspend_until_[% RESERVE.reserve_id | html %]">Suspend until:</label>
-                                                                            <input name="suspend_until" id="suspend_until_[% RESERVE.reserve_id | html %]" class="suspend-until" size="10" />
+                                                                            <input type="text" name="suspend_until" id="suspend_until_[% RESERVE.reserve_id | html %]" class="suspend-until" size="10" />
                                                                             [% INCLUDE 'date-format.inc' %]
                                                                             <p class="js-show"><a href="#" onclick="document.getElementById('suspend_until_[% RESERVE.reserve_id | html %]').value='';return false;">Clear date to suspend indefinitely</a></p>
                                                                             <button class="btn btn-mini js-hide" type="submit" name="submit">Suspend</button>
@@ -765,7 +765,7 @@
 
                                         [% IF AutoResumeSuspendedHolds %]
                                             <label for="suspend_until"> until </label>
-                                            <input name="suspend_until" id="suspend_until" class="suspend-until" readonly="readonly" size="10" />
+                                            <input type="text" name="suspend_until" id="suspend_until" class="suspend-until" readonly="readonly" size="10" />
                                             <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date to suspend indefinitely</a>
                                         [% END %]
                                     </form>

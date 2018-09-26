@@ -8,7 +8,7 @@
 <div id="renew_search" class="residentsearch">
     <p class="tip">Scan a barcode to renew:</p>
     <form method="post" action="/cgi-bin/koha/circ/renew.pl" autocomplete="off">
-        <input class="head-searchbox" name="barcode" id="ren_barcode" size="40" />
+        <input class="head-searchbox" type="text" name="barcode" id="ren_barcode" size="40" />
         <input value="Submit" class="submit" type="submit" />
     </form>
 </div>
