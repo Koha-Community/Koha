@@ -899,7 +899,7 @@ sub CheckReserves {
         my $priority = 10000000;
         foreach my $res (@reserves) {
             my $issuing_rules = CheckIssuingRules($itemnumber, $res->{'borrowernumber'});
-            return if ($issuing_rules->reservesallowed == 0);
+            return if (!defined $issuing_rules || $issuing_rules->reservesallowed == 0);
             if ( $res->{'itemnumber'} == $itemnumber && $res->{'priority'} == 0) {
                 return ( "Waiting", $res, \@reserves ); # Found it
             } else {
