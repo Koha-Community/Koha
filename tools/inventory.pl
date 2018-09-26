@@ -46,6 +46,7 @@ my $maxlocation=$input->param('maxlocation');
 $maxlocation=$minlocation.'Z' unless ( $maxlocation || ! $minlocation );
 my $location=$input->param('location') || '';
 my $ignoreissued=$input->param('ignoreissued');
+my $ignore_waiting_holds = $input->param('ignore_waiting_holds');
 my $datelastseen = $input->param('datelastseen'); # last inventory date
 my $branchcode = $input->param('branchcode') || '';
 my $branch     = $input->param('branch');
@@ -127,6 +128,7 @@ $template->param(
     datelastseen             => $datelastseen,
     compareinv2barcd         => $compareinv2barcd,
     uploadedbarcodesflag     => $uploadbarcodes ? 1 : 0,
+    ignore_waiting_holds     => $ignore_waiting_holds,
 );
 
 # Walk through uploaded barcodes, report errors, mark as seen, check in
@@ -230,6 +232,7 @@ if ( $op && ( !$uploadbarcodes || $compareinv2barcd )) {
       branch       => $branch,
       offset       => 0,
       statushash   => $staton,
+      ignore_waiting_holds => $ignore_waiting_holds,
     });
 }
 # Build rightplacelist used to check if a scanned item is in the right place.
@@ -244,6 +247,7 @@ if( @scanned_items ) {
       branch       => $branch,
       offset       => 0,
       statushash   => undef,
+      ignore_waiting_holds => $ignore_waiting_holds,
     });
     # Convert the structure to a hash on barcode
     $rightplacelist = {

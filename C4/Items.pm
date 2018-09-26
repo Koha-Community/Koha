@@ -813,6 +813,7 @@ sub GetItemsForInventory {
     my $offset       = $parameters->{'offset'}       // '';
     my $size         = $parameters->{'size'}         // '';
     my $statushash   = $parameters->{'statushash'}   // '';
+    my $ignore_waiting_holds = $parameters->{'ignore_waiting_holds'} // '';
 
     my $dbh = C4::Context->dbh;
     my ( @bind_params, @where_strings );
@@ -873,6 +874,11 @@ sub GetItemsForInventory {
     if ( $ignoreissued) {
         $query .= "LEFT JOIN issues ON items.itemnumber = issues.itemnumber ";
         push @where_strings, 'issues.date_due IS NULL';
+    }
+
+    if ( $ignore_waiting_holds ) {
+        $query .= "LEFT JOIN reserves ON items.itemnumber = reserves.itemnumber ";
+        push( @where_strings, q{reserves.found != 'W' OR reserves.found IS NULL} );
     }
 
     if ( @where_strings ) {
