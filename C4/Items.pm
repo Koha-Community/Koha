@@ -21,6 +21,42 @@ package C4::Items;
 use strict;
 #use warnings; FIXME - Bug 2505
 
+use vars qw(@ISA @EXPORT);
+BEGIN {
+    require Exporter;
+    @ISA = qw(Exporter);
+
+    @EXPORT = qw(
+        GetItem
+        AddItemFromMarc
+        AddItem
+        AddItemBatchFromMarc
+        ModItemFromMarc
+        Item2Marc
+        ModItem
+        ModDateLastSeen
+        ModItemTransfer
+        DelItem
+        CheckItemPreSave
+        GetItemsForInventory
+        GetItemsInfo
+        GetItemsLocationInfo
+        GetHostItemsInfo
+        get_hostitemnumbers_of
+        GetHiddenItemnumbers
+        ItemSafeToDelete
+        DelItemCheck
+        MoveItemFromBiblio
+        GetLatestAcquisitions
+        CartToShelf
+        ShelfToCart
+        GetAnalyticsCount
+        SearchItemsByField
+        SearchItems
+        PrepareItemrecordDisplay
+    );
+}
+
 use Carp;
 use C4::Context;
 use C4::Koha;
@@ -29,14 +65,14 @@ use Koha::DateUtils;
 use MARC::Record;
 use C4::ClassSource;
 use C4::Log;
-use List::MoreUtils qw/any/;
-use YAML qw/Load/;
+use List::MoreUtils qw(any);
+use YAML qw(Load);
 use DateTime::Format::MySQL;
 use Data::Dumper; # used as part of logging item record changes, not just for
                   # debugging; so please don't remove this
 
 use Koha::AuthorisedValues;
-use Koha::DateUtils qw/dt_from_string/;
+use Koha::DateUtils qw(dt_from_string);
 use Koha::Database;
 
 use Koha::Biblioitems;
@@ -45,52 +81,6 @@ use Koha::ItemTypes;
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::Libraries;
-
-use vars qw(@ISA @EXPORT);
-
-BEGIN {
-
-	require Exporter;
-    @ISA = qw( Exporter );
-
-    # function exports
-    @EXPORT = qw(
-        GetItem
-        AddItemFromMarc
-        AddItem
-        AddItemBatchFromMarc
-        ModItemFromMarc
-    Item2Marc
-        ModItem
-        ModDateLastSeen
-        ModItemTransfer
-        DelItem
-    
-        CheckItemPreSave
-    
-        GetItemsForInventory
-        GetItemsInfo
-	GetItemsLocationInfo
-	GetHostItemsInfo
-	get_hostitemnumbers_of
-        GetHiddenItemnumbers
-        ItemSafeToDelete
-        DelItemCheck
-    MoveItemFromBiblio
-    GetLatestAcquisitions
-
-        CartToShelf
-        ShelfToCart
-
-	GetAnalyticsCount
-
-        SearchItemsByField
-        SearchItems
-
-        PrepareItemrecordDisplay
-
-    );
-}
 
 =head1 NAME
 
@@ -233,10 +223,10 @@ sub AddItemFromMarc {
     # parse item hash from MARC
     my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
     my ($itemtag,$itemsubfield)=C4::Biblio::GetMarcFromKohaField("items.itemnumber",$frameworkcode);
-	
-	my $localitemmarc=MARC::Record->new;
-	$localitemmarc->append_fields($source_item_marc->field($itemtag));
-    my $item = &TransformMarcToKoha( $localitemmarc, $frameworkcode ,'items');
+
+    my $localitemmarc=MARC::Record->new;
+    $localitemmarc->append_fields($source_item_marc->field($itemtag));
+    my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode ,'items');
     my $unlinked_item_subfields = _get_unlinked_item_subfields($localitemmarc, $frameworkcode);
     return AddItem($item, $biblionumber, $dbh, $frameworkcode, $unlinked_item_subfields);
 }
@@ -498,7 +488,7 @@ sub ModItemFromMarc {
 
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
-    my $item = &TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+    my $item = TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
     my $default_values = _build_default_values_for_mod_marc();
     foreach my $item_field ( keys %$default_values ) {
         $item->{$item_field} = $default_values->{$item_field}
@@ -2452,7 +2442,7 @@ sub PrepareItemrecordDisplay {
     # Note: $tagslib obtained from GetMarcStructure() in 'unsafe' mode is
     # a shared data structure. No plugin (including custom ones) should change
     # its contents. See also GetMarcStructure.
-    my $tagslib = &GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
+    my $tagslib = GetMarcStructure( 1, $frameworkcode, { unsafe => 1 } );
 
     # return nothing if we don't have found an existing framework.
     return q{} unless $tagslib;
