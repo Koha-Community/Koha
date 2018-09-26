@@ -16443,6 +16443,16 @@ INSERT IGNORE INTO systempreferences ( variable, value, options, explanation, ty
     print "Upgrade to $DBversion done (Bug 20819: Add patron_consent)\n";
 }
 
+$DBversion = '18.06.00.032';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|ALTER TABLE items                   CHANGE COLUMN ccode ccode varchar(80) default NULL|);
+    $dbh->do(q|ALTER TABLE deleteditems            CHANGE COLUMN ccode ccode varchar(80) default NULL|);
+    $dbh->do(q|ALTER TABLE branch_transfer_limits  CHANGE COLUMN ccode ccode varchar(80) default NULL|);
+    $dbh->do(q|ALTER TABLE course_items            CHANGE COLUMN ccode ccode varchar(80) default NULL|);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 5458: length of items.ccode disagrees with authorised_values.authorised_value)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 

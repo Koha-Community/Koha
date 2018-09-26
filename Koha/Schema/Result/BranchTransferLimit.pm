@@ -54,7 +54,7 @@ __PACKAGE__->table("branch_transfer_limits");
 
   data_type: 'varchar'
   is_nullable: 1
-  size: 10
+  size: 80
 
 =cut
 
@@ -83,7 +83,7 @@ __PACKAGE__->add_columns(
   "itemtype",
   { data_type => "varchar", is_nullable => 1, size => 10 },
   "ccode",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 =head1 PRIMARY KEY
@@ -99,8 +99,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("limitId");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07039 @ 2014-08-18 13:01:05
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XPpJwcw5PRa7Fo7PRg32zg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wKere4dleMGrs9RO59qx9Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
