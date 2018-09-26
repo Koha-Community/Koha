@@ -359,7 +359,7 @@ subtest 'Backend testing (mocks)' => sub {
 
 subtest 'Backend core methods' => sub {
 
-    plan tests => 18;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -407,21 +407,6 @@ subtest 'Backend core methods' => sub {
                          { stage => 'bar', method => 'create' },
                          { stage => 'commit', method => 'create' },
                          { stage => 'commit', method => 'create' });
-    # Test Copyright Clearance
-    t::lib::Mocks::mock_preference("ILLModuleCopyrightClearance", "Test Copyright Clearance.");
-    is_deeply($illrq->backend_create({test => 1}),
-              {
-                  error   => 0,
-                  status  => '',
-                  message => '',
-                  method  => 'create',
-                  stage   => 'copyrightclearance',
-                  value   => {
-                      backend => "Mock"
-                  }
-              },
-              "Backend create: copyright clearance.");
-    t::lib::Mocks::mock_preference("ILLModuleCopyrightClearance", "");
     # Test non-commit
     is_deeply($illrq->backend_create({test => 1}),
               {
