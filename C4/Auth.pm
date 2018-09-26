@@ -980,7 +980,7 @@ sub checkauth {
             my $shibSuccess = 0;
             my ( $return, $cardnumber );
 
-	    # If shib is enabled and we have a shib login, does the login match a valid koha user
+            # If shib is enabled and we have a shib login, does the login match a valid koha user
             if ( $shib && $shib_login ) {
                 my $retuserid;
 

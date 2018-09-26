@@ -311,7 +311,7 @@ Given a shib_login attribute, this routine checks for a matching local user and 
 
   _get_uri();
 
-A sugar function to that simply returns the current page URI with appropriate protocal attached
+A sugar function to that simply returns the current page URI with appropriate protocol attached
 
 This routine is NOT exported
 
@@ -319,7 +319,7 @@ This routine is NOT exported
 
   my $config = _get_shib_config();
 
-A sugar function that checks for a valid sibboleth configuration, and if found returns a hashref of it's contents
+A sugar function that checks for a valid shibboleth configuration, and if found returns a hashref of it's contents
 
 This routine is NOT exported
 
