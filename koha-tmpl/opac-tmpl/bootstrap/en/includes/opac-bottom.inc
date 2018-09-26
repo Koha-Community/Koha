@@ -286,6 +286,6 @@ $(document).ready(function() {
         </script>
     [% END %]
 [% END %]
-[% KohaPlugins.get_plugins_opac_js | html %]
+[% KohaPlugins.get_plugins_opac_js | $raw %]
 </body>
 </html>
