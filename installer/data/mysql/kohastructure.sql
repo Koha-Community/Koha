@@ -3745,7 +3745,7 @@ DROP TABLE IF EXISTS edifact_ean;
 CREATE TABLE IF NOT EXISTS edifact_ean (
   ee_id int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
   description VARCHAR(128) NULL DEFAULT NULL,
-  branchcode VARCHAR(10) NOT NULL REFERENCES branches (branchcode),
+  branchcode VARCHAR(10) NULL DEFAULT NULL REFERENCES branches (branchcode),
   ean VARCHAR(15) NOT NULL,
   id_code_qualifier VARCHAR(3) NOT NULL DEFAULT '14',
   CONSTRAINT efk_branchcode FOREIGN KEY ( branchcode ) REFERENCES branches ( branchcode )
