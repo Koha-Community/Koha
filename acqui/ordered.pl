@@ -56,6 +56,7 @@ SELECT
     quantity-quantityreceived AS tleft,
     ecost, budgetdate, entrydate,
     aqbasket.booksellerid,
+    aqbooksellers.name as vendorname,
     itype,
     title
 FROM (aqorders, aqbasket)
@@ -65,6 +66,8 @@ LEFT JOIN aqorders_items ON
     aqorders.ordernumber=aqorders_items.ordernumber
 LEFT JOIN items ON
     items.itemnumber=aqorders_items.itemnumber
+LEFT JOIN aqbooksellers ON
+    aqbasket.booksellerid = aqbooksellers.id
 WHERE
     aqorders.basketno=aqbasket.basketno AND
     budget_id=? AND
