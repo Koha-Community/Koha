@@ -81,6 +81,16 @@ sub create_edi_order {
     my $ean_obj =
       $schema->resultset('EdifactEan')->search($ean_search_keys)->single;
 
+    # If no branch specific each can be found, look for a default ean
+    unless ($ean_obj) {
+        $ean_obj = $schema->resultset('EdifactEan')->search(
+            {
+                ean        => $ean,
+                branchcode => undef,
+            }
+        )->single;
+    }
+
     my $dbh     = C4::Context->dbh;
     my $arr_ref = $dbh->selectcol_arrayref(
 'select id from edifact_messages where basketno = ? and message_type = \'QUOTE\'',

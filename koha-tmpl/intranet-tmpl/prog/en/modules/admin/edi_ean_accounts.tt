@@ -70,6 +70,7 @@
           <li>
              <label for="branchcode">Library: </label>
              <select name="branchcode" id="branchcode">
+                <option value="">All libraries</option>
                 [% FOREACH branch IN branches %]
                     [% IF branch.branchcode == ean.branch.branchcode %]
                        <option value="[% branch.branchcode %]" selected="selected">[% branch.branchname %]</option>
