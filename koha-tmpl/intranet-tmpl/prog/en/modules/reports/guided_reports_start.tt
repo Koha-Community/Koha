@@ -83,10 +83,11 @@
     </div>
 </div>
 
-<div id="doc3" class="yui-t1">
-<div id="bd">
-<div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
     [% INCLUDE "reports-toolbar.inc" %]
 
 [% IF ( start ) %]
@@ -378,15 +379,6 @@ canned reports and writing custom SQL reports.</p>
     <input type="submit" name="submit" value="Next &gt;&gt;" />
 </fieldset>
 </form>
-</div>
-<div class="yui-gb"><div class="yui-u first"></div>
-
-<!--- Summary and Matrix reports have not yet been implemented-->
-<!--<div class="yui-u">Summary:
-<img src="[% interface | html %]/[% theme | html %]/img/reports-summary-graphic.gif" /></div>
-<div class="yui-u">Matrix:
-<img src="[% interface | html %]/[% theme | html %]/img/reports-matrix-graphic.gif" /></div>-->
-
 [% END %]
 
 [% IF ( build3 ) %]
@@ -400,8 +392,9 @@ canned reports and writing custom SQL reports.</p>
     <input type="hidden" name="public" value="[% public | html %]" />
     <input type="hidden" name="cache_expiry" value="[% cache_expiry | html %]" />
     <fieldset>
-<div class="yui-g">
-<div class="yui-u first">	<div style="float: left;"><select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width: 200px;height:300px;">
+<div class="row">
+<div class="col-sm-6">
+    <div style="float: left;"><select id="availableColumns" name="oldcolumns2" multiple="multiple" size="25" style="min-width: 200px;height:300px;">
 [% FOREACH column IN columns %]
 [% IF ( column.table ) %]
 
@@ -426,18 +419,16 @@ canned reports and writing custom SQL reports.</p>
 <input type="button" name="delete" value="&lt;&lt; Delete" class="button" style="width: 6em; margin: 1em 0;" id="delColumn" /></div>
 </div>
 
-<div class="yui-u">
+<div class="col-sm-6">
 <select id="selectedColumns" name="columns" multiple="multiple" size="25" style="width:200px; height:300px;"></select>
 </div>
 </div>
 </fieldset>
-<div class="yui-g">
 <fieldset class="action">
     <input type="hidden" name="phase" value="Choose these columns" />
     <input type="button" name="back" value="&lt;&lt; Back" class="goback" />
     <input type="submit" name="submit" value="Next &gt;&gt;" />
 </fieldset>
-</div>
 </form>
 
 [% END %]
@@ -905,9 +896,12 @@ $(document).ready(function() {
 </form>
 [% END %]
 
-</div>
-</div>
-<div class="yui-b">
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+
 
 [% IF ( saved1 ) %]
 <div id="saved-reports-filter">
@@ -935,8 +929,10 @@ $(document).ready(function() {
 
 
 [% INCLUDE 'guided-reports-view.inc' %]
-</div>
-</div>
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/charts.js") | $raw %]
