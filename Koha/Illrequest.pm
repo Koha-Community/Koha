@@ -578,8 +578,8 @@ Return a list of available backends.
 =cut
 
 sub available_backends {
-    my ( $self ) = @_;
-    my $backends = $self->_config->available_backends;
+    my ( $self, $reduced ) = @_;
+    my $backends = $self->_config->available_backends($reduced);
     return $backends;
 }
 

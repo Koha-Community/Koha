@@ -65,7 +65,7 @@ if ( $op eq 'list' ) {
     my $req = Koha::Illrequest->new;
     $template->param(
         requests => $requests,
-        backends    => $req->available_backends
+        backends    => $backends
     );
 
 } elsif ( $op eq 'view') {
