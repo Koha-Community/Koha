@@ -63,7 +63,8 @@ SELECT
     aqinvoices.invoicenumber,
     quantityreceived,
     unitprice,
-    datereceived
+    datereceived,
+    aqbooksellers.name as vendorname
 FROM (aqorders, aqbasket)
 LEFT JOIN biblio ON
     biblio.biblionumber=aqorders.biblionumber
@@ -73,6 +74,8 @@ LEFT JOIN items ON
     aqorders_items.itemnumber = items.itemnumber
 LEFT JOIN aqinvoices ON
     aqorders.invoiceid = aqinvoices.invoiceid
+LEFT JOIN aqbooksellers ON
+    aqbasket.booksellerid = aqbooksellers.id
 WHERE
     aqorders.basketno=aqbasket.basketno AND
     budget_id=? AND
