@@ -141,9 +141,13 @@
         </tr>
         [% FOREACH ean IN eans %]
             <tr>
-                <td>[% ean.branch.branchname %]</td>
-                <td>[% ean.description %]</td>
-                <td>[% ean.ean %]</td>
+                [% IF ean.branch %]
+                <td>[% ean.branch.branchname | html %]</td>
+                [% ELSE %]
+                <td>All libraries</td>
+                [% END %]
+                <td>[% ean.description | html %]</td>
+                <td>[% ean.ean | html %]</td>
                 <td>
                  [% FOREACH qualifier IN code_qualifiers %]
                     [% IF qualifier.code == ean.id_code_qualifier %]
