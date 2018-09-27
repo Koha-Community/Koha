@@ -69,7 +69,7 @@ else {
         if ($change) {
             $schema->resultset('EdifactEan')->find($id)->update(
                 {
-                    branchcode        => scalar $input->param('branchcode'),
+                    branchcode        => scalar $input->param('branchcode') || undef,
                     description       => scalar $input->param('description'),
                     ean               => scalar $input->param('ean'),
                     id_code_qualifier => scalar $input->param('id_code_qualifier'),
@@ -79,7 +79,7 @@ else {
         else {
             my $new_ean = $schema->resultset('EdifactEan')->new(
                 {
-                    branchcode        => scalar $input->param('branchcode'),
+                    branchcode        => scalar $input->param('branchcode') || undef,
                     description       => scalar $input->param('description'),
                     ean               => scalar $input->param('ean'),
                     id_code_qualifier => scalar $input->param('id_code_qualifier'),
