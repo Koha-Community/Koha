@@ -60,13 +60,13 @@ sub new {
         return;
     }
     if ( !$self->{recipient} ) {
-        carp
-"No vendor passed to order creation: basket = $self->{basket}->basketno()";
+        carp 'No vendor passed to order creation: basket = '
+          . $self->{basket}->basketno;
         return;
     }
     if ( !$self->{sender} ) {
-        carp
-"No sender ean passed to order creation: basket = $self->{basket}->basketno()";
+        carp 'No sender ean passed to order creation: basket = '
+          . $self->{basket}->basketno;
         return;
     }
 
