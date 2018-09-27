@@ -402,7 +402,7 @@
             });
 
             // Apply DataTables on the results table
-            var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) | $raw %];
+            var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) %];
             [% UNLESS CAN_user_borrowers_edit_borrowers OR CAN_user_tools_manage_patron_lists %]
                 [%# Remove the first column if we do not display the checkbox %]
                 columns_settings.splice(0, 1);
