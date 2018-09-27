@@ -142,7 +142,11 @@
         </tr>
         [% FOREACH ean IN eans %]
             <tr>
+                [% IF ean.branch %]
                 <td>[% ean.branch.branchname | html %]</td>
+                [% ELSE %]
+                <td>All libraries</td>
+                [% END %]
                 <td>[% ean.description | html %]</td>
                 <td>[% ean.ean | html %]</td>
                 <td>
