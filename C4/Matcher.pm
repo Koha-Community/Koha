@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use MARC::Record;
 
+use C4::Search;
+
 use Koha::SearchEngine;
 use Koha::SearchEngine::Search;
 use Koha::Util::Normalize qw/legacy_default remove_spaces upper_case lower_case/;
