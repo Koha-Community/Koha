@@ -367,7 +367,7 @@
                     </td>
                 [% IF itemdata_ccode %]
                     <td>
-                        [% IF ( itemloo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemloo.ccode ) %][% END %]
+                        [% IF ( itemloo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemloo.ccode ) | html %][% END %]
                     </td>
                 [% END %]
                     <td>

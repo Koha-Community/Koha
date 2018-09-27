@@ -378,7 +378,7 @@
                                                                         <td class="holdingbranch">[% Branches.GetName( itemLoo.holdingBranchName ) | html %]</td>
                                                                     [% END %]
                                                                     [% IF ( itemdata_ccode ) %]
-                                                                        <td class="ccode"> [% IF ( itemLoo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemLoo.ccode ) %][% END %]</td>
+                                                                        <td class="ccode"> [% IF ( itemLoo.ccode ) %][% AuthorisedValues.GetByCode( 'CCODE', itemLoo.ccode ) | html %][% END %]</td>
                                                                     [% END %]
                                                                     <td class="call_no">[% itemLoo.callNumber | html %]</td>
                                                                     [% IF ( itemdata_enumchron ) %]
