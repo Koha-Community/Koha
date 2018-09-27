@@ -52,7 +52,7 @@ my $sub_length;
 my $permission =
   ( $op eq 'modify' || $op eq 'modsubscription' ) ? "edit_subscription" : "create_subscription";
 
-my ($template, $loggedinuser, $cookie)
+our ($template, $loggedinuser, $cookie)
 = get_template_and_user({template_name => "serials/subscription-add.tt",
 				query => $query,
 				type => "intranet",
@@ -67,6 +67,9 @@ my $sub_on;
 
 my $subs;
 our $firstissuedate;
+
+my $mana_url = C4::Context->config('mana_config');
+$template->param( 'mana_url' => $mana_url );
 
 if ($op eq 'modify' || $op eq 'dup' || $op eq 'modsubscription') {
 

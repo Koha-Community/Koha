@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE raw %]
 
 <script type="text/javascript">
 //<![CDATA[
@@ -45,30 +46,30 @@ $(document).ready(function() {
             [% FOREACH report IN reports %]
                 [% UNLESS report.cannotdisplay %]
                     [% IF report.nbofcomment > highWarned %]
-                  <tr id="row[% report.id %]" class = "high-warned-row">
+                  <tr id="row[% report.id | $raw %]" class = "high-warned-row">
                     [% ELSIF report.nbofcomment > warned %]
-                  <tr id="row[% report.id %]" class = "warned-row">
+                  <tr id="row[% report.id | $raw %]" class = "warned-row">
                     [% ELSIF report.nbofcomment > lowWarned %]
-                  <tr id="row[% report.id %]" class = "highlighted-row">
+                  <tr id="row[% report.id | $raw %]" class = "highlighted-row">
                     [% END %]
-                    <input hidden class="rowid" value="[% report.id %]">
-                    <td>[% IF ( report.report_name ) %][% report.report_name %][% END %]</td>
-                    <td title="[% report.savedsql |html %]"><div>
+                    <input hidden class="rowid" value="[% report.id | $raw %]">
+                    <td>[% IF ( report.report_name ) %][% report.report_name | html %][% END %]</td>
+                    <td title="[% report.savedsql | html %]"><div>
                         [% IF report.notes.length > 200 %]
-                            [% report.notes.substr(0,200) %]<a class="showbutton">Show More</a></div><div hidden>
+                            [% report.notes.substr(0,200) | html %]<a class="showbutton">Show More</a></div><div hidden>
                         [% END %]
-                            [% report.notes %]
+                            [% report.notes | html %]
                         [% IF report.notes.length > 200 %]
                                 <a class="hidebutton">Show Less</a></div> </td>
                         [% END %]
-                    <td> [% report.type %] </td>
-                    <td>[% IF ( report.nbofusers ) %][% report.nbofusers %][% END %]</td>
-                    <td><span title="[% report.lastimport %]">[% report.lastimport | $KohaDates %]</span></td>
-                    <td>[% FOREACH comment IN report.comments %][% comment.message %] ([% comment.nb %]) <br>[% END %]</td>
+                    <td> [% report.type | html %] </td>
+                    <td>[% IF ( report.nbofusers ) %][% report.nbofusers | $raw %][% END %]</td>
+                    <td><span title="[% report.lastimport | $KohaDates %]">[% report.lastimport | $KohaDates %]</span></td>
+                    <td>[% FOREACH comment IN report.comments %][% comment.message | html %] ([% comment.nb | $raw %]) <br>[% END %]</td>
 
                     [% UNLESS search_only %]
                         <td>
-                            <button class="mana-use" id="mana-use-[% report.id %]"><i class="fa fa-inbox"></i> Use</button>
+                            <button class="mana-use" id="mana-use-[% report.id | $raw %]"><i class="fa fa-inbox"></i> Use</button>
                         </td>
                     [% END %]
                   </tr>
@@ -77,5 +78,5 @@ $(document).ready(function() {
         </tbody>
     </table>
 [% ELSE %]
-    <h4> [% msg %]  statuscode: [% statuscode %]</h4>
+    <h4> [% msg | html %]  statuscode: [% statuscode | $raw %]</h4>
 [% END %]

@@ -25,11 +25,7 @@ use base qw(Koha::Object);
 
 =head1 NAME
 
-<<<<<<< b4c9007cc708d995838eae801a5a24b47435095e
-Koha::Subscription::Frequency - Koha Subscription Frequency Object class
-=======
 Koha::Subscription::Frequency - Koha Subscription::Frequency Object class
->>>>>>> Bug 17047 subscriptions management with Mana-KB
 
 =head1 API
 

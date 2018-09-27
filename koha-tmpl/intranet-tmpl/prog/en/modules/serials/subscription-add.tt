@@ -214,11 +214,10 @@ width: 300px;  /* not enough for IE7 apparently */
 
                 <div id="page_2">
                     <div class="col-md-6">
-                [% IF ( Koha.Preference('Mana') == 2) %]
+                [% IF ( Koha.Preference('Mana') == 1) && !mana_url %]
                     <fieldset>
-                        <p><center>You haven't activated the Mana Knowledge Base, click
-                        <a href=/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=request+to+mana+webservice>here</a>
-                         to configure.</center></p>
+                        <p><center>The Mana Knowledge Base can be used to import subscription patterns submitted by other libraries and save you extra work. Ask your system administrator to configure this service and complete the configuration, or remove this message by disabling the system preference
+                        <a href=/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=request+to+mana+webservice>here</a></center></p>
                     </fieldset>
                 [% END %]
 
@@ -529,7 +528,7 @@ width: 300px;  /* not enough for IE7 apparently */
         [% FOREACH field IN dont_export_field_loop %]
             tags.push("[% field.fieldid | html %]");
         [% END %]
-        var mana_enabled = [% Koha.Preference('Mana') %]
+        var mana_enabled = [% IF (Koha.Preference('Mana') && mana_url) %]1[% ELSE %]0[% END %];
         var MSG_LINK_TO_VENDOR = _("If you wish to claim late or missing issues you must link this subscription to a vendor. Click OK to ignore or Cancel to return and enter a vendor");
         var MSG_LINK_BIBLIO = _("You must choose or create a bibliographic record");
         var MSG_REQUIRED_SUB_LENGTH = _("You must choose a subscription length or an end date.");

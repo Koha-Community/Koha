@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE raw %]
 [% INCLUDE 'mana.inc' %]
 <script type="text/javascript">
 //<![CDATA[
@@ -35,29 +36,29 @@ $(document).ready(function() {
             [% FOREACH subscription IN subscriptions %]
                 [% UNLESS subscription.cannotdisplay %]
                     [% IF subscription.nbofcomment > highWarned  %]
-                    <tr id="row[% subscription.subscriptionid %]" class = "high-warned-row" title="this resource has been reported more than [% highWarned %] times, take care!">
+                    <tr id="row[% subscription.subscriptionid | $raw %]" class = "high-warned-row" title="this resource has been reported more than [% highWarned | html %] times, take care!">
                     [% ELSIF subscription.nbofcomment > warned  %]
-                    <tr id="row[% subscription.subscriptionid %]" class = "warned-row" title="this resource has been reported more than [% warned %] times, take care!">
+                    <tr id="row[% subscription.subscriptionid | $raw %]" class = "warned-row" title="this resource has been reported more than [% warned | html %] times, take care!">
                     [% ELSIF subscription.nbofcomment > lowWarned  %]
-                    <tr id="row[% subscription.subscriptionid %]" class = "highlighted-row" title="this resource has been reported more than [% lowWarned %] times, take care!">
+                    <tr id="row[% subscription.subscriptionid | $raw %]" class = "highlighted-row" title="this resource has been reported more than [% lowWarned | html %] times, take care!">
                     [% END %]
-                    <input hidden class="rowid" value="[% subscription.id %]">
-                        <td>[% IF ( subscription.issn ) %][% subscription.issn %][% END %]</td>
-                        <td>[% subscription.title %]</a></td>
-                        <td>[% IF ( subscription.publishercode ) %][% subscription.publishercode %][% END %]</td>
-                        <td>[% IF ( subscription.sfdescription ) %][% subscription.sfdescription %][% END %]</td>
-                        <td>[% IF ( subscription.numberingmethod ) %][% subscription.numberingmethod %][% END %]</td>
-                        <td>[% IF ( subscription.nbofusers ) %][% subscription.nbofusers %][% END %]</td>
-                        <td><span title="[% subscription.lastimport %]">[% subscription.lastimport | $KohaDates %]</span></td>
-                        <td>[% FOREACH comment IN subscription.comments %][% comment.message %] ([% comment.nb %]) <br>[% END %]</td>
+                    <input hidden class="rowid" value="[% subscription.id | $raw %]">
+                        <td>[% IF ( subscription.issn ) %][% subscription.issn | html %][% END %]</td>
+                        <td>[% subscription.title | html %]</a></td>
+                        <td>[% IF ( subscription.publishercode ) %][% subscription.publishercode | html %][% END %]</td>
+                        <td>[% IF ( subscription.sfdescription ) %][% subscription.sfdescription | html %][% END %]</td>
+                        <td>[% IF ( subscription.numberingmethod ) %][% subscription.numberingmethod | html %][% END %]</td>
+                        <td>[% IF ( subscription.nbofusers ) %][% subscription.nbofusers | $raw %][% END %]</td>
+                        <td><span title="[% subscription.lastimport | $KohaDates %]">[% subscription.lastimport | $KohaDates %]</span></td>
+                        <td>[% FOREACH comment IN subscription.comments %][% comment.message | html %] ([% comment.nb | $raw %]) <br>[% END %]</td>
 
                         [% UNLESS search_only %]
                             <td>
-                                <button class="mana-use" id="mana-use-[% subscription.id %]"><i class="fa fa-inbox"></i> Use</button>
-                                <select class="mana-actions" id="mana-actions-[% subscription.id %]">
+                                <button class="mana-use" id="mana-use-[% subscription.id | $raw %]"><i class="fa fa-inbox"></i> Use</button>
+                                <select class="mana-actions" id="mana-actions-[% subscription.id | $raw %]">
                                     <option selected disabled>Report mistake</option>
                                     [% FOREACH comment IN subscription.comments %]
-                                        <option value="[% comment.id %]"> [% comment.message %] ([% comment.nb %])</option>
+                                        <option value="[% comment.id | $raw %]"> [% comment.message | html %] ([% comment.nb | $raw %])</option>
                                     [% END %]
                                         <option>other</option>
                                 </select>
@@ -70,7 +71,7 @@ $(document).ready(function() {
         </tbody>
     </table>
 [% ELSE %]
-    <h4>Mana search fails with the code: [% statuscode %] </h4>
+    <h4>Mana search fails with the code: [% statuscode | html %] </h4>
 [% END %]
 
 <div id="comment_box" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label" style="display: none;">

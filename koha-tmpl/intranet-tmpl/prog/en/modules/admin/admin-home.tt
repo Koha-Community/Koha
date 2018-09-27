@@ -13,11 +13,15 @@
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
-            [% IF ( Koha.Preference('Mana') == 2) %]
-                <fieldset>
-                    <p><center> You haven't decided if you want to activate Mana Knowlede Base, please let us know by clicking<center></p>
-                    <a href=/cgi-bin/koha/admin/preferences.pl?tab=&op=search&searchfield=request+to+mana+webservice><center>Here</center></a>
-                </fieldset>
+            [% IF ( Koha.Preference('Mana') == 1) && !mana_url %]
+                <div class="dialog message">
+                    <p><center>The Mana Knowledge Base feature is enabled but not configured.</center></p>
+                    <p>This feature allows you to retrieve and share data (subscription patterns and reports) with other Koha libaries.</p>
+                    <p>
+                        Ask your system administrator to configure this feature, or remove this note by disabling the 'Mana' system preference
+                        <a href=/cgi-bin/koha/admin/share_content.pl>here.</a>
+                    </p>
+                </div>
            [% END %]
         <h1>Koha administration</h1>
         <div class="row">
@@ -191,6 +195,10 @@
                     [% IF ( CAN_user_parameters_manage_usage_stats ) %]
                         <dt><a href="/cgi-bin/koha/admin/usage_statistics.pl">Share your usage statistics</a></dt>
                         <dd>Share with the Koha community the usage statistics of your Koha installation.</dd>
+                    [% END %]
+                    [% IF ( CAN_user_parameters ) %]
+                        <dt><a href="/cgi-bin/koha/admin/share_content.pl">Using Mana-KB</a></dt>
+                        <dd>Share content (subscriptions, reports) with Koha communty</dd>
                     [% END %]
                 </dl>
             [% END %]

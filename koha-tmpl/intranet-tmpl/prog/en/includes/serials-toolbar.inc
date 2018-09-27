@@ -7,7 +7,7 @@
             [% ELSE %]
                 <div class="btn-group"><a id="newsubscription" class="btn btn-default btn-sm" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div>
             [% END %]
-            [% IF Koha.Preference('Mana') and Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
+            [% IF Koha.Preference('Mana') == 1 and Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
                 [% IF one_language_enabled==0 or mana_id %]
                     <div class="btn-group"><a data-toggle="modal" data-toggle="tooltip" title="Share the subscription with other librairies. Your email address will be associated to your sharing." data-target="#mana_share_modal" class="btn btn-default btn-sm"><i class="fa fa-share-alt"></i> Share</a></div>
                 [% ELSE %]
@@ -66,8 +66,8 @@
                 <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> Report mistake <span class="caret"></span></button>
                 <ul class="dropdown-menu">
                     [% FOREACH c IN mana_comments %]
-                        <li class="mana-comment" data-id="[% c.id %]">
-                            <a href="#">[% c.message %] ([% c.nb %])</a>
+                        <li class="mana-comment" data-id="[% c.id | $raw %]">
+                            <a href="#">[% c.message | html %] ([% c.nb | html %])</a>
                         </li>
                     [% END %]
                     <li role="separator" class="divider"></li>
@@ -84,7 +84,7 @@
                         </div>
                         <div class="modal-body">
                             <input hidden id="mana-resource" value="subscription">
-                            <input hidden id="mana-resource-id" value="[% mana_id %]">
+                            <input hidden id="mana-resource-id" value="[% mana_id | $raw %]">
                             <div>
                                 <input type="text" maxlength="35" size="35" id="mana-comment">
                             </div>
@@ -109,12 +109,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="mana_share_modal_label">Share [% bibliotitle %] to Mana</h3>
+                <h3 id="mana_share_modal_label">Share [% bibliotitle | html %] to Mana</h3>
             </div>
             <div class="modal-body">
                 [% IF (mana_id) %]
                     <div class="alert">
-<h1>[% (mana_id) %]</h1>
+<h1>[% mana_id | $raw %]</h1>
                         <p>Your subscription is already linked with a Mana subscription model. Share it if you have made modifications, otherwise it will do nothing.</p>
                     </div>
                 [% END %]
@@ -122,10 +122,10 @@
                     [% UNLESS ( one_language_enabled ) %]
                         <div class="rows">
                                 <li><span class="label">Frequency: </span>
-                                        [% frequency.description %]
+                                        [% frequency.description | html %]
                                 </li>
                                 <li><span class="label">Number pattern: </span>
-                                    [% numberpattern.label %]
+                                    [% numberpattern.label | html %]
                                 </li>
                             </ol>
                         </div>
@@ -140,20 +140,20 @@
                                                     [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
                                                         [% IF ( sublanguages_loo.enabled ) %]
                                                             [% IF ( sublanguages_loo.sublanguage_current ) %]
-                                                                <option value="[% languages_loo.rfc4646_subtag %]" selected>
-                                                                    [% sublanguages_loo.native_description %]
-                                                                    [% sublanguages_loo.script_description %]
-                                                                    [% sublanguages_loo.region_description %]
-                                                                    [% sublanguages_loo.variant_description %]
-                                                                    ([% sublanguages_loo.rfc4646_subtag %])
+                                                                <option value="[% languages_loo.rfc4646_subtag | html %]" selected>
+                                                                    [% sublanguages_loo.native_description | html %]
+                                                                    [% sublanguages_loo.script_description | html %]
+                                                                    [% sublanguages_loo.region_description | html %]
+                                                                    [% sublanguages_loo.variant_description | html %]
+                                                                    ([% sublanguages_loo.rfc4646_subtag | html %])
                                                                 </option>
                                                             [% ELSE %]
-                                                                <option value="[% languages_loo.rfc4646_subtag %]">
-                                                                    [% sublanguages_loo.native_description %]
-                                                                    [% sublanguages_loo.script_description %]
-                                                                    [% sublanguages_loo.region_description %]
-                                                                    [% sublanguages_loo.variant_description %]
-                                                                    ([% sublanguages_loo.rfc4646_subtag %])
+                                                                <option value="[% languages_loo.rfc4646_subtag | html %]">
+                                                                    [% sublanguages_loo.native_description | html %]
+                                                                    [% sublanguages_loo.script_description | html %]
+                                                                    [% sublanguages_loo.region_description | html %]
+                                                                    [% sublanguages_loo.variant_description | html %]
+                                                                    ([% sublanguages_loo.rfc4646_subtag | html %])
                                                                 </option>
                                                             [% END %]
                                                         [% END %]
@@ -161,19 +161,19 @@
                                                 [% ELSE %]
                                                     [% IF ( languages_loo.group_enabled ) %]
                                                         [% IF ( languages_loo.current ) %]
-                                                            <option value="[% languages_loo.rfc4646_subtag %]" selected>
+                                                            <option value="[% languages_loo.rfc4646_subtag | html %]" selected>
                                                                 [% IF ( languages_loo.native_description ) %]
-                                                                    [% languages_loo.native_description %]
+                                                                    [% languages_loo.native_description | html %]
                                                                 [% ELSE %]
-                                                                    [% languages_loo.rfc4646_subtag %]
+                                                                    [% languages_loo.rfc4646_subtag | html %]
                                                                 [% END %]
                                                             </option>
                                                         [% ELSE %]
-                                                            <option value="[% languages_loo.rfc4646_subtag %]">
+                                                            <option value="[% languages_loo.rfc4646_subtag | html %]">
                                                                 [% IF ( languages_loo.native_description ) %]
-                                                                    [% languages_loo.native_description %]
+                                                                    [% languages_loo.native_description | html %]
                                                                 [% ELSE %]
-                                                                    [% languages_loo.rfc4646_subtag %]
+                                                                    [% languages_loo.rfc4646_subtag | html %]
                                                                 [% END %]
                                                             </option>
                                                         [% END %]
@@ -183,7 +183,7 @@
                                         [% END %]
                                     </select>
                                     <input type="hidden" id="op" name="op" value="share"/>
-                                    <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid %]"/>
+                                    <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | $raw %]"/>
                                 </fieldset>
                             </form>
                         </div>

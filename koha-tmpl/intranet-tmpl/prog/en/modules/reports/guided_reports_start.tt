@@ -137,7 +137,7 @@ canned reports and writing custom SQL reports.</p>
 
 [% IF report_converted %]
     <div class="dialog message">
-        The report "[% report_converted %]" has been converted.
+        The report "[% report_converted | html %]" has been converted.
     </div>
 [% END %]
 
@@ -179,7 +179,7 @@ canned reports and writing custom SQL reports.</p>
 <div style="display:inline-block">
     [% IF manamsg %]
      <div id="mana_search" class="dialog message">
-        <p> [% manamsg %] </p>
+        <p> [% manamsg | html %] </p>
     </div>
     [% END %]
 
@@ -355,85 +355,78 @@ canned reports and writing custom SQL reports.</p>
                 <div id="note-error" class="alert alert-danger" role="alert">
                     Please enter a report name and descriptive note before sharing (minimum 20 characters)
                 </div>
-                [% IF ( languages_loop ) %]
-                    [% UNLESS ( one_language_enabled ) %]
-                        <div class="shared_infos rows">
-                                <li> <span class="label">Id: </span><div id="shared_id"></div>
-                                </li>
-                                <li> <span class="label">Name: </span><div id="shared_name"></div>
-                                </li>
-                                <li> <span class="label">SQL: </span><div id="shared_sql"></div>
-                                </li>
-                                <li> <span class="label">Group: </span><div id="shared_group"></div>
-                                </li>
-                                <li> <span class="label">Type: </span><div id="shared_type"></div>
-                                </li>
-                                <li> <span class="label">Notes: </span><div id="shared_notes"></div>
-                                </li>
+                <div class="shared_infos rows">
+                    <li><span class="label">Id: </span><div id="shared_id"></div></li>
+                    <li><span class="label">Name: </span><div id="shared_name"></div></li>
+                    <li><span class="label">SQL: </span><div id="shared_sql"></div></li>
+                    <li><span class="label">Group: </span><div id="shared_group"></div></li>
+                    <li><span class="label">Type: </span><div id="shared_type"></div></li>
+                    <li><span class="label">Notes: </span><div id="shared_notes"></div></li>
+                </div>
+                <div class="rows">
+                    <form method="post" id="mana_share_form" action="/cgi-bin/koha/reports/guided_reports.pl" class="validated" >
+                        <input type="hidden" name="phase" value="Share">
 
-                        </div>
-                        <div class="rows">
-                            <form method="post" id="mana_share_form" action="/cgi-bin/koha/reports/guided_reports.pl?phase=Share" class="validated" >
-                                <input type="hidden" name="phase" value="Share">
+                        [% IF (languages_loop) %]
+                            <fieldset class="shared_infos">
+                                <label for="mana_language">Language:</label>
+                                <select id="mana_language" name="mana_language">
+                                    [% FOREACH languages_loo IN languages_loop %]
+                                        [% IF ( languages_loo.group_enabled ) %]
+                                            [% IF ( languages_loo.plural ) %]
+                                                [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
+                                                    [% IF ( sublanguages_loo.enabled ) %]
+                                                        [% IF ( sublanguages_loo.sublanguage_current ) %]
+                                                            <option value="[% languages_loo.rfc4646_subtag | html %]" selected>
+                                                                [% sublanguages_loo.native_description | html %]
+                                                                [% sublanguages_loo.script_description | html %]
+                                                                [% sublanguages_loo.region_description | html %]
 
-                                <fieldset class="shared_infos">
-                                    <label for="mana_language">Language:</label>
-                                    <select id="mana_language" name="mana_language">
-                                        [% FOREACH languages_loo IN languages_loop %]
-                                            [% IF ( languages_loo.group_enabled ) %]
-                                                [% IF ( languages_loo.plural ) %]
-                                                    [% FOREACH sublanguages_loo IN languages_loo.sublanguages_loop %]
-                                                        [% IF ( sublanguages_loo.enabled ) %]
-                                                            [% IF ( sublanguages_loo.sublanguage_current ) %]
-                                                                <option value="[% languages_loo.rfc4646_subtag %]" selected>
-                                                                    [% sublanguages_loo.native_description %]
-                                                                    [% sublanguages_loo.script_description %]
-                                                                    [% sublanguages_loo.region_description %]
-
-                                                                    [% sublanguages_loo.variant_description %]
-                                                                    ([% sublanguages_loo.rfc4646_subtag %])
-                                                                </option>
-                                                            [% ELSE %]
-                                                                <option value="[% languages_loo.rfc4646_subtag %]">
-                                                                    [% sublanguages_loo.native_description %]
-                                                                    [% sublanguages_loo.script_description %]
-                                                                    [% sublanguages_loo.region_description %]
-                                                                    [% sublanguages_loo.variant_description %]
-                                                                    ([% sublanguages_loo.rfc4646_subtag %])
-                                                                </option>
-                                                            [% END %]
-                                                        [% END %]
-                                                    [% END %]
-                                                [% ELSE %]
-                                                    [% IF ( languages_loo.group_enabled ) %]
-                                                        [% IF ( languages_loo.current ) %]
-                                                            <option value="[% languages_loo.rfc4646_subtag %]" selected>
-                                                                [% IF ( languages_loo.native_description ) %]
-                                                                    [% languages_loo.native_description %]
-                                                                [% ELSE %]
-                                                                    [% languages_loo.rfc4646_subtag %]
-                                                                [% END %]
+                                                                [% sublanguages_loo.variant_description | html %]
+                                                                ([% sublanguages_loo.rfc4646_subtag | html %])
                                                             </option>
                                                         [% ELSE %]
-                                                            <option value="[% languages_loo.rfc4646_subtag %]">
-                                                                [% IF ( languages_loo.native_description ) %]
-                                                                    [% languages_loo.native_description %]
-                                                                [% ELSE %]
-                                                                    [% languages_loo.rfc4646_subtag %]
-                                                                [% END %]
+                                                            <option value="[% languages_loo.rfc4646_subtag | html %]">
+                                                                [% sublanguages_loo.native_description | html %]
+                                                                [% sublanguages_loo.script_description | html %]
+                                                                [% sublanguages_loo.region_description | html %]
+                                                                [% sublanguages_loo.variant_description | html %]
+                                                                ([% sublanguages_loo.rfc4646_subtag | html %])
                                                             </option>
                                                         [% END %]
                                                     [% END %]
                                                 [% END %]
+                                            [% ELSE %]
+                                                [% IF ( languages_loo.group_enabled ) %]
+                                                    [% IF ( languages_loo.current ) %]
+                                                        <option value="[% languages_loo.rfc4646_subtag | html %]" selected>
+                                                            [% IF ( languages_loo.native_description ) %]
+                                                                [% languages_loo.native_description | html %]
+                                                            [% ELSE %]
+                                                                [% languages_loo.rfc4646_subtag | html %]
+                                                            [% END %]
+                                                        </option>
+                                                    [% ELSE %]
+                                                        <option value="[% languages_loo.rfc4646_subtag | html %]">
+                                                            [% IF ( languages_loo.native_description ) %]
+                                                                [% languages_loo.native_description | html %]
+                                                            [% ELSE %]
+                                                                [% languages_loo.rfc4646_subtag | html %]
+                                                            [% END %]
+                                                        </option>
+                                                    [% END %]
+                                                [% END %]
                                             [% END %]
                                         [% END %]
-                                    </select>
-                                    <input type="hidden" id="reportid" name="reportid" value="[% savedreport.id %]"/>
-                                </fieldset>
-                            </form>
-                        </div>
-                    [% END %]
-                [% END %]
+                                    [% END %]
+                                </select>
+                            </fieldset>
+                        [% ELSE %]
+                            <input type="hidden" name="mana_language" value="[% lang | html %]">
+                        [% END %]
+                        <input type="hidden" id="reportid" name="reportid"/>
+                    </form>
+                </div>
             </div>
             <div class="modal-footer">
                 <button class="btn" id="ManaCloseButton" data-dismiss="modal" aria-hidden="true">Close</button>
@@ -1291,6 +1284,7 @@ canned reports and writing custom SQL reports.</p>
                     $("#note-error").show();
                 }
                 else{
+                    $("#reportid").val($(this).closest("tr").find(".report_id").text());
                     $("#shared_id").html($(this).closest("tr").find(".report_id").text());
                     $("#shared_name").html($(this).closest("tr").find(".report_name").text());
                     $("#shared_sql").html($(this).closest("tr").find(".report_sql").val());
@@ -1496,7 +1490,11 @@ canned reports and writing custom SQL reports.</p>
             });
 
             $('div#ManaShareButton').click(function() {
-                window.location="/cgi-bin/koha/reports/guided_reports.pl?phase=Share";
+                $("#mana_share_form").submit();
+            });
+
+            $("#mana_search_form").submit(function(e){
+                e.preventDefault();
             });
         });
 

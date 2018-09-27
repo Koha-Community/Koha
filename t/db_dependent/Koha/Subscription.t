@@ -32,6 +32,8 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
+my $builder     = t::lib::TestBuilder->new;
+
 use_ok('Koha::Subscription');
 
 subtest 'Koha::Subscription->biblio' => sub {

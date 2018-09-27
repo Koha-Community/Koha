@@ -516,7 +516,7 @@
                 $(".ui-datepicker-trigger").hide();
                 $("label[for=location], select#location_filter").hide();
                 [% FOR field IN additional_fields_for_subscription %]
-                      $("label[for=additional_field_[% field.id %]], input#additional_field_[% field.id %]").hide();
+                      $("label[for=additional_field_[% field.id | $raw %]], input#additional_field_[% field.id | $raw %]").hide();
                 [% END %]
             [% END %]
         });

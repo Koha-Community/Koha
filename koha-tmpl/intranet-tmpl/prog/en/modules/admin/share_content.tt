@@ -1,0 +1,152 @@
+[% USE raw %]
+[% USE Asset %]
+[% SET footerjs = 1 %]
+[% USE Koha %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Administration &rsaquo; Koha usage statistics</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="admin_usage_statistics" class="admin">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'cat-search.inc' %]
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Usage statistics</div>
+
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <div class="col-sm-6">
+                [% IF result.code != 201 && result.msg %]
+                    <div class="alert alert-danger" role="alert">
+                        [% result.msg | html %]
+                    </div>
+                [% END %]
+
+                [% IF result.code == 201  %]
+                    <div class="dialog message" role="alert">
+Well done! You successfully created your Mana KB account. Check your mailbox and follow instructions.
+                    </div>
+                [% END %]
+
+                [% UNLESS (mana_url) %]
+                    <div class="alert alert-danger" role="alert">
+                        Mana config is currently empty, this feature will not work. Please contact your site administartor.
+                    </div>
+                [% END %]
+
+                <h1>Share content with the Koha community using Mana KB</h1>
+                <p>Mana-kb is a global knowledge base for library-centric data. It has been designed initially to interact with Koha, the Open Source ILS, but can be used by any other software.</p>
+
+                <p>Mana centralize commun information between other Koha to facilitate the creation of new subscriptions, vendors, report queries etc... You can search, share, import and comment the content of Mana. The informations shared with Mana KB are shared under the CC-0 license. More infos about CC-0 license <a href="https://creativecommons.org/choose/zero/">here</a>.</p>
+
+                <p>Learn more about Mana on the <a href="https://wiki.koha-community.org/wiki/Mana_central_database">official documentation</a>.</p>
+
+                [% IF (mana_url) %]
+                <p> Your Mana KB server is currently: <strong>[% mana_url | url %]</strong></p>
+                [% END %]
+
+                <form id="mana_preference" method="post">
+                    <fieldset class="rows">
+                        <ol>
+                            <li>
+                                <label for="mana">Use Mana KB for sharing content: </label>
+                                <select name="mana">
+                                    [% IF Koha.Preference('Mana') == 0 %]
+                                        <option value="0" selected="selected">No</option>
+                                    [% ELSE %]
+                                        <option value="0"">No</option>
+                                    [% END %]
+
+                                    [% IF Koha.Preference('Mana') == 1 %]
+                                        <option value="1" selected="selected">Yes</option>
+                                    [% ELSE %]
+                                        <option value="1">Yes</option>
+                                    [% END %]
+                                </select>
+                                <div class="hint">Enable Mana allow you to search, import and comment content from Mana server, and, to share your own.</div>
+                            </li>
+                            <li>
+                                <label for="autosharewithmana">Auto subscriptions sharing: </label>
+                                [% IF Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
+                                    <input type="checkbox" name="autosharewithmana">
+                                [% ELSE %]
+                                    <input type="checkbox" name="autosharewithmana" checked="checked">
+                                [% END %]
+                                <div class="hint">If checked, new subscriptions you created yourself will be automatically shared with Mana KB.</div>
+                            </li>
+                            <li>
+                                <input type="hidden" name="op" value="save">
+                                <input type="submit" value="Save">
+                            </li>
+                        </ol>
+                    </fieldset>
+                </form>
+
+                [% UNLESS Koha.Preference('ManaToken') %]
+                    <h3>Configure Mana KB</h3>
+                    <p>Once you have enabled Mana, let's start to set it up. Type your first name, last name, email address and click on send. This will send a account creation request to Mana KB that will respond back with a Mana token (a crypted id that uniquely identify your Koha). This token will automatically be saved in your database. Just after that, you will receive an email. Read it and follow the instructions.</p>
+                [% END %]
+
+                [% IF Koha.Preference('ManaToken') %]
+                    <form id="mana_token" method="post">
+                        <fieldset class="rows" id="mana_token">
+                        <legend>Mana KB token</legend>
+                            <ol>
+                                <li>
+                                    <label for="token">Mana token: </label>
+                                    <input type="text" name="token" value="[% Koha.Preference('ManaToken') | html %]" size="50" disabled="disabled">
+                                    <div class="hint">Your unique security token used for authentication on Mana KB service (anti spam).</div>
+                                </li>
+                                <li>
+                                    <input type="hidden" name="op" value="reset">
+                                    <input type="submit" value="Reset your token">
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </form>
+                [% ELSE %]
+                    <form id="mana_request" method="post">
+                        <fieldset class="rows" id="mana_subscription">
+                            <ol>
+                                <li>
+                                    <label for="firstname">First name: </label>
+                                    <input type="text" name="firstname">
+                                </li>
+                                <li>
+                                    <label for="lastname">Last name: </label>
+                                    <input type="text" name="lastname">
+                                </li>
+                                <li>
+                                    <label for="email">Email: </label>
+                                    <input type="text" name="email" size="45" required="required">
+                                </li>
+                                <li>
+                                    <input type="hidden" name="op" value="send">
+                                    <input type="submit" value="Send to Mana KB">
+                                </li>
+                            </ol>
+                        </fieldset>
+                    </form>
+                [% END %]
+            </div>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
+    <script>
+        $(document).ready(function() {
+            $('#mana_token').submit(function() {
+                return confirm("This will delete the Mana token from Koha. Do you want to continue?");
+            });
+        });
+    </script>
+[% END %]
+[% INCLUDE 'intranet-bottom.inc' %]

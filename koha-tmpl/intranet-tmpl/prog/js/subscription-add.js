@@ -507,7 +507,9 @@ function mana_use(mana_id){
 }
 
 $(document).ready(function() {
-    mana_search();
+    if ( mana_enabled == 1 ) {
+        mana_search();
+    }
     $("#displayexample").hide();
     $("#mana_search_result").modal("hide");
     $("#aqbooksellerid").on('keypress', function(e) {
@@ -617,7 +619,7 @@ $(document).ready(function() {
     });
     $("#subscription_add_next").on("click",function(){
         if ( Check_page1() ){
-            if ( mana_enabled ) {
+            if ( mana_enabled == 1 ) {
                 mana_search();
             }
             show_page_2();
