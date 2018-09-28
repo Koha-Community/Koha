@@ -2003,7 +2003,7 @@ sub TransferOrder {
 
 =head3 get_rounding_sql
 
-    $rounding_sql = get_rounding_sql("mysql_variable_to_round_string");
+    $rounding_sql = get_rounding_sql($column_name);
 
 returns the correct SQL routine based on OrderPriceRounding system preference.
 
@@ -2011,9 +2011,11 @@ returns the correct SQL routine based on OrderPriceRounding system preference.
 
 sub get_rounding_sql {
     my ( $round_string ) = @_;
-    my $rounding_pref = C4::Context->preference('OrderPriceRounding');
-    if ( $rounding_pref eq "nearest_cent"  ) { return ("CAST($round_string*100 AS UNSIGNED)/100"); }
-    else                                     { return ("$round_string"); }
+    my $rounding_pref = C4::Context->preference('OrderPriceRounding') // q{};
+    if ( $rounding_pref eq "nearest_cent"  ) {
+        return "CAST($round_string*100 AS UNSIGNED)/100";
+    }
+    return $round_string;
 }
 
 =head3 get_rounded_price
@@ -2026,9 +2028,11 @@ returns a price rounded as specified in OrderPriceRounding system preference.
 
 sub get_rounded_price {
     my ( $price ) =  @_;
-    my $rounding_pref = C4::Context->preference('OrderPriceRounding');
-    if( $rounding_pref eq 'nearest_cent' ) { return Koha::Number::Price->new( $price )->round(); }
-    else                                   { return $price; }
+    my $rounding_pref = C4::Context->preference('OrderPriceRounding') // q{};
+    if( $rounding_pref eq 'nearest_cent' ) {
+        return Koha::Number::Price->new( $price )->round();
+    }
+    return $price;
 }
 
 
