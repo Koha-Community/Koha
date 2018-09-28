@@ -30,12 +30,13 @@ sub get_link {
     my $heading     = shift;
     my $behavior    = shift || 'default';
     my $search_form = $heading->search_form();
+    my $auth_type = $heading->auth_type();
     my $authid;
     my $fuzzy = 0;
 
-    if ( $self->{'cache'}->{$search_form}->{'cached'} ) {
-        $authid = $self->{'cache'}->{$search_form}->{'authid'};
-        $fuzzy  = $self->{'cache'}->{$search_form}->{'fuzzy'};
+    if ( $self->{'cache'}->{$search_form.$auth_type}->{'cached'} ) {
+        $authid = $self->{'cache'}->{$search_form.$auth_type}->{'authid'};
+        $fuzzy  = $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'};
     }
     else {
 
@@ -72,9 +73,9 @@ sub get_link {
             }
         }
 
-        $self->{'cache'}->{$search_form}->{'cached'} = 1;
-        $self->{'cache'}->{$search_form}->{'authid'} = $authid;
-        $self->{'cache'}->{$search_form}->{'fuzzy'}  = $fuzzy;
+        $self->{'cache'}->{$search_form.$auth_type}->{'cached'} = 1;
+        $self->{'cache'}->{$search_form.$auth_type}->{'authid'} = $authid;
+        $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'}  = $fuzzy;
     }
     return $self->SUPER::_handle_auth_limit($authid), $fuzzy;
 }
@@ -84,11 +85,12 @@ sub update_cache {
     my $heading     = shift;
     my $authid      = shift;
     my $search_form = $heading->search_form();
+    my $auth_type = $heading->auth_type();
     my $fuzzy = 0;
 
-    $self->{'cache'}->{$search_form}->{'cached'} = 1;
-    $self->{'cache'}->{$search_form}->{'authid'} = $authid;
-    $self->{'cache'}->{$search_form}->{'fuzzy'}  = $fuzzy;
+    $self->{'cache'}->{$search_form.$auth_type}->{'cached'} = 1;
+    $self->{'cache'}->{$search_form.$auth_type}->{'authid'} = $authid;
+    $self->{'cache'}->{$search_form.$auth_type}->{'fuzzy'}  = $fuzzy;
 }
 
 sub flip_heading {
