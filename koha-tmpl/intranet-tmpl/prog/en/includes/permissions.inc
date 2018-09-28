@@ -48,14 +48,14 @@
     [%- CASE 'manage_cities' -%]<span>Manage cities and towns</span>
     [%- CASE 'manage_marc_frameworks' -%]<span>Manage MARC bibliographic and authority frameworks and test them</span>
     [%- CASE 'manage_keywords2koha_mappings' -%]<span>Manage keywords to Koha mappings</span>
-    [%- CASE 'manage_classfications' -%]<span>Manage classification sources and filing rules</span>
+    [%- CASE 'manage_classifications' -%]<span>Manage classification sources and filing rules</span>
     [%- CASE 'manage_matching_rules' -%]<span>Manage record matching rules</span>
     [%- CASE 'manage_oai_sets' -%]<span>Manage OAI sets</span>
     [%- CASE 'manage_item_search_fields' -%]<span>Manage item search fields</span>
-    [%- CASE 'manage_search_engine_config' -%]<span>Manage search enginge configuration</span>
-    [%- CASE 'manage_search_targets' -%]<span>Manage Z39.50 and SRU server confiugration</span>
+    [%- CASE 'manage_search_engine_config' -%]<span>Manage search engine configuration</span>
+    [%- CASE 'manage_search_targets' -%]<span>Manage Z39.50 and SRU server configuration</span>
     [%- CASE 'manage_didyoumean' -%]<span>Manage Did you mean? configuration</span>
-    [%- CASE 'manage_column_config' -%]<span>Manage column configuation</span>
+    [%- CASE 'manage_column_config' -%]<span>Manage column configuration</span>
     [%- CASE 'manage_audio_alerts' -%]<span>Manage audio alerts</span>
     [%- CASE 'manage_sms_providers' -%]<span>Manage SMS cellular providers</span>
     [%- CASE 'manage_usage_stats' -%]<span>Manage usage statistics settings</span>
