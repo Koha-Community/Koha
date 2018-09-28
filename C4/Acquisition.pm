@@ -2013,7 +2013,7 @@ sub get_rounding_sql {
     my ( $round_string ) = @_;
     my $rounding_pref = C4::Context->preference('OrderPriceRounding') // q{};
     if ( $rounding_pref eq "nearest_cent"  ) {
-        return "CAST($round_string*100 AS UNSIGNED)/100";
+        return "CAST($round_string*100 AS SIGNED)/100";
     }
     return $round_string;
 }
