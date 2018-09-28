@@ -269,6 +269,8 @@ Or (for Plack running):
    ShibUseHeaders On
  </Location>
 
+IMPORTANT: Please note, if you are running in the plack configuration you should consult https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPSpoofChecking for security advice regarding header spoof checking settings. (See also bug 17776 on Bugzilla about enabling ShibUseHeaders.)
+
 =item 5.
 
 Configure koha to listen for shibboleth environment variables.
