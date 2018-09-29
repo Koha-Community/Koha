@@ -506,7 +506,13 @@ NO_DB
     die;
 fi
 
-set_memcached $name
+if [ "$USE_MEMCACHED" = "no" ]; then
+    MEMCACHED_SERVERS=""
+    MEMCACHED_NAMESPACE=""
+    MEMCACHED_PREFIX=""
+else
+    set_memcached $name
+fi
 
 # Set template cache dir
 if [ "$CLO_TEMPLATE_CACHE_DIR" != "" ]; then
