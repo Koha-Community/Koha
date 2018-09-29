@@ -34,6 +34,8 @@
 [% BLOCK action_form -%]
 [%~ SET action_block = '' ~%]
 [%~ IF can_manage_shelf OR can_delete_shelf ~%]
+    [%~ shelfnumber = shelfnumber | html ~%]
+    [%~ type        = type | html ~%]
     [%~ IF can_manage_shelf ~%]
         [%~ action_block =                '<form action="shelves.pl" method="get">' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
