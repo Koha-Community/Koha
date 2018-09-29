@@ -94,7 +94,7 @@ if ($authid) {
         $letter ||= '@';
         next if defined $done_subfields{$letter};
         my @values = $field->subfield($letter);
-        push @subfield_loop, {marc_subfield => $letter, marc_values => @values };
+        push @subfield_loop, {marc_subfield => $letter, marc_values => \@values };
         $done_subfields{$letter} = 1;
     }
 
