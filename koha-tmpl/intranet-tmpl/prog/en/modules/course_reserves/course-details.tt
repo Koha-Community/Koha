@@ -104,9 +104,15 @@
                             <td>
                                 [% IF cr.course_item.itype.defined %]
                                     [% IF cr.course_item.enabled == 'yes' %]
-                                        [% ItemTypes.GetDescription( cr.item.itype ) | html %]
+                                        <strong>[% ItemTypes.GetDescription( cr.item.itype) | html %]</strong>
+                                        [% IF cr.item.itype %]
+                                            ([% ItemTypes.GetDescription( cr.course_item.itype ) | html %])
+                                        [% END %]
                                     [% ELSE %]
                                         [% ItemTypes.GetDescription( cr.course_item.itype ) | html %]
+                                        [% IF cr.item.itype %]
+                                            (<strong>[% ItemTypes.GetDescription( cr.item.itype) | html %]
+                                        [% END %]
                                     [% END %]
                                 [% ELSE %]
                                      <i>Unchanged</i>
@@ -119,9 +125,15 @@
                             <td>
                                  [% IF cr.course_item.ccode.defined %]
                                      [% IF cr.course_item.enabled == 'yes' %]
-                                          [% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %]
+                                        <strong>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %]</strong>
+                                        [% IF cr.item.ccode %]
+                                            ([% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) | html %])
+                                        [% END %]
                                      [% ELSE %]
-                                         [% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) | html %]
+                                        [% AuthorisedValues.GetByCode( 'CCODE', cr.course_item.ccode ) | html %]
+                                        [% IF cr.item.ccode %]
+                                            (<strong>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %]</strong>)
+                                        [% END %]
                                      [% END %]
                                  [% ELSE %]
                                      <i>Unchanged</i>
@@ -132,24 +144,36 @@
                             </td>
                             <td>
                                 [% IF cr.course_item.location.defined %]
-                                     [% IF cr.course_item.enabled == 'yes' %]
-                                         [% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) | html %]
+                                    [% IF cr.course_item.enabled == 'yes' %]
+                                        <strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>
+                                        [% IF cr.item.permanent_location %]
+                                            ([% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) | html %])
+                                        [% END %]
                                     [% ELSE %]
                                         [% AuthorisedValues.GetByCode( 'LOC', cr.course_item.location ) | html %]
+                                        [% IF cr.item.permanent_location %]
+                                            (<strong>[% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %]</strong>)
+                                        [% END %]
                                     [% END %]
                                 [% ELSE %]
                                     <i>Unchanged</i>
-                                    [% IF cr.item.location %]
-                                        ([% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) | html %])
+                                    [% IF cr.item.permanent_location %]
+                                        ([% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %])
                                     [% END %]
                                 [% END %]
                             </td>
                             <td>
                                 [% IF cr.course_item.holdingbranch.defined %]
                                     [% IF cr.course_item.enabled == 'yes' %]
-                                        [% Branches.GetName( cr.item.holdingbranch ) | html %]
+                                        <strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>
+                                        [% IF cr.item.holdingbranch %]
+                                            ([% Branches.GetName( cr.course_item.holdingbranch ) | html %])
+                                        [% END %]
                                     [% ELSE %]
                                         [% Branches.GetName( cr.course_item.holdingbranch ) | html %]
+                                        [% IF cr.item.holdingbranch %]
+                                            (<strong>[% Branches.GetName( cr.item.holdingbranch ) | html %]</strong>)
+                                        [% END %]
                                     [% END %]
                                 [% ELSE %]
                                     <i>Unchanged</i>
@@ -158,6 +182,7 @@
                                     [% END %]
                                 [% END %]
                             </td>
+<!-- FIX ME Course Reserves should not override existing notes.  Should temporarily append to existing notes! -->
                             <td>[% IF (cr.staff_note) %]
                                     [% cr.staff_note | html %]
                                 [% ELSIF (cr.item.itemnotes_nonpublic) %]
