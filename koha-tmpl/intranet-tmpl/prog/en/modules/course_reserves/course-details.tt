@@ -182,7 +182,6 @@
                                     [% END %]
                                 [% END %]
                             </td>
-<!-- FIX ME Course Reserves should not override existing notes.  Should temporarily append to existing notes! -->
                             <td>[% IF (cr.staff_note) %]
                                     [% cr.staff_note | html %]
                                 [% ELSIF (cr.item.itemnotes_nonpublic) %]
