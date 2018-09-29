@@ -20,8 +20,7 @@ package Koha::CirculationRules;
 
 use Modern::Perl;
 
-use Carp qw(croak);
-
+use Koha::Exceptions;
 use Koha::CirculationRule;
 
 use base qw(Koha::Objects);
@@ -48,7 +47,9 @@ sub get_effective_rule {
     my $itemtype     = $params->{itemtype};
     my $branchcode   = $params->{branchcode};
 
-    croak q{No rule name passed in!} unless $rule_name;
+    Koha::Exceptions::MissingParameter->throw(
+        "Required parameter 'rule_name' missing")
+      unless $rule_name;
 
     for my $v ( $branchcode, $categorycode, $itemtype ) {
         $v = undef if $v and $v eq '*';
@@ -81,16 +82,11 @@ sub get_effective_rule {
 sub set_rule {
     my ( $self, $params ) = @_;
 
-    croak q{set_rule requires the parameter 'branchcode'!}
-      unless exists $params->{branchcode};
-    croak q{set_rule requires the parameter 'categorycode'!}
-      unless exists $params->{categorycode};
-    croak q{set_rule requires the parameter 'itemtype'!}
-      unless exists $params->{itemtype};
-    croak q{set_rule requires the parameter 'rule_name'!}
-      unless exists $params->{rule_name};
-    croak q{set_rule requires the parameter 'rule_value'!}
-      unless exists $params->{rule_value};
+    for my $mandatory_parameter (qw( branchcode categorycode itemtype rule_name rule_value ) ){
+        Koha::Exceptions::MissingParameter->throw(
+            "Required parameter 'branchcode' missing")
+          unless exists $params->{$mandatory_parameter};
+    }
 
     my $branchcode   = $params->{branchcode};
     my $categorycode = $params->{categorycode};
