@@ -106,9 +106,9 @@ if ( $op eq "do_search" ) {
     push @field_data,
       { term => "value_main", val => scalar $query->param('value_main') || "" };
     push @field_data,
-      { term => "value_any", val => scalar $query->param('value_any') || "" };
-    push @field_data,
       { term => "value_match", val => scalar $query->param('value_match') || "" };
+    push @field_data,
+      { term => "value_any", val => scalar $query->param('value_any') || "" };
 
     my @numbers = ();
     if ( $total > $resultsperpage ) {
@@ -150,12 +150,10 @@ if ( $op eq "do_search" ) {
         from             => $from,
         to               => $to,
         numbers          => \@numbers,
-        operator_mainstr => ( @operator > 0 && $operator[0] )
-        ? $operator[0]
-        : '',
-        operator_main  => ( @operator > 1 && $operator[1] ) ? $operator[1] : '',
-        operator_any   => ( @operator > 2 && $operator[2] ) ? $operator[2] : '',
-        operator_match => ( @operator > 3 && $operator[3] ) ? $operator[3] : '',
+        operator_mainstr => ( @operator > 0 && $operator[0] ) ? $operator[0] : '',
+        operator_main    => ( @operator > 1 && $operator[1] ) ? $operator[1] : '',
+        operator_match   => ( @operator > 2 && $operator[2] ) ? $operator[2] : '',
+        operator_any     => ( @operator > 3 && $operator[3] ) ? $operator[3] : '',
     );
 }
 else {
