@@ -56,6 +56,7 @@ my $input = <<INPUT;
 [% foo UNLESS bar %]
 [% SET var = val %]
 [% var = val %]
+[% var | \$Price %]
 [%END%]
 INPUT
 
