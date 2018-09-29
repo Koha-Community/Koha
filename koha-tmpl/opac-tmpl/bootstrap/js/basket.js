@@ -209,7 +209,6 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
 function showCartUpdate(msg){
     // set body of popup window
     $("#cartDetails").html(msg);
-    $("#cartmenuitem").html(MSG_IN_YOUR_CART + " " + basketCount());
     showCart();
     setTimeout("hideCart()",2000);
 }
@@ -507,8 +506,8 @@ function updateAllLinks(target){
 }
 
 $("#cartDetails").ready(function(){
-    $("#cartDetails,#cartmenuitem,#cartmenulink").on("click",function(){ hideCart(); });
-    $("#cartmenuitem").click(function(e){
+    $("#cartDetails,#cartmenulink").on("click",function(){ hideCart(); });
+    $("#cartmenulink").click(function(e){
         e.preventDefault();
         openBasket();
         $("li").closest().removeClass("open");

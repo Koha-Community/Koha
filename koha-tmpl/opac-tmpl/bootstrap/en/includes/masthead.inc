@@ -21,15 +21,10 @@
                     [% END %]
                     <ul class="nav">
                         [% IF ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
-                            <li class="dropdown">
-                                <a href="#" title="Collect items you are interested in" class="dropdown-toggle" id="cartmenulink" data-toggle="dropdown" role="button">
-                                    <i id="carticon" class="fa fa-shopping-cart fa-icon-white"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span> <b class="caret"></b>
+                            <li>
+                                <a href="#" title="Collect items you are interested in" id="cartmenulink" role="button">
+                                    <i id="carticon" class="fa fa-shopping-cart fa-icon-white"></i> <span class="cartlabel">Cart</span> <span id="basketcount"></span>
                                 </a>
-                                <ul aria-labelledby="cartmenulink" role="menu" class="dropdown-menu">
-                                    <li role="presentation">
-                                        <a href="#" id="cartmenuitem" class="cart-message" tabindex="-1" role="menuitem">Your cart is empty.</a>
-                                    </li>
-                                </ul>
                             </li>
                         [% END %]
                         [% IF ( Koha.Preference( 'virtualshelves' ) == 1 ) && ( Koha.Preference( 'opacbookbag' ) == 1 ) %]
