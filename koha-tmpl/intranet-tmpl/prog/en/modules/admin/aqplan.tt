@@ -76,7 +76,7 @@
             <td>
         [% END %]
         <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_id=[% budget_line.budget_id | html %]&amp;budget_period_id=[% budget_period_id | html %]">[% budget_line.budget_name | html %]</a></td>
-        <td><span id="[% budget_line.budget_amount | html %]">[% budget_line.budget_amount | $Price | html %]&nbsp;</span>
+        <td><span id="[% budget_line.budget_amount | html %]">[% budget_line.budget_amount | $Price %]&nbsp;</span>
 
 
         <!-- NEXT DIV ELEMENT IS USED BY JS FOR CALC-ING AUTO-FILL AND ESTIMATED AMOUNTS -->
@@ -129,7 +129,7 @@
         [% ELSE %]
             <td id="budget_est_[% budget_line.budget_id | html %]">
         [% END %] 
-                [% budget_line.budget_est_remain | $Price | html %]&nbsp;
+                [% budget_line.budget_est_remain | $Price %]&nbsp;
             </td>
             </tr>
         </table>

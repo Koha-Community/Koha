@@ -99,11 +99,11 @@
 [% END %]
 
 [% IF ( DEBT ) %]
-    <li>The patron has a debt of [% DEBT | $Price | html %].</li>
+    <li>The patron has a debt of [% DEBT | $Price %].</li>
 [% END %]
 
 [% IF ( DEBT_GUARANTEES ) %]
-    <li>The patron's guarantees collectively have a debt of [% DEBT_GUARANTEES | $Price | html %].</li>
+    <li>The patron's guarantees collectively have a debt of [% DEBT_GUARANTEES | $Price %].</li>
 [% END %]
 
 [% IF ( RENTALCHARGE && RENTALCHARGE > 0 ) %]
@@ -718,7 +718,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
             [% IF ( charges_guarantees ) %]
                 <li>
-                    <span class="circ-hlt">Fees &amp; Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price | html %].
+                    <span class="circ-hlt">Fees &amp; Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
                         [% IF noissues %]
                             <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
                         [% END %]
@@ -728,7 +728,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
             [% IF ( credits ) %]
                 <li>
-                    <span class="circ-hlt">Credits:</span> Patron has a credit[% IF ( creditsamount ) %] of [% creditsamount | $Price | html %][% END %]
+                    <span class="circ-hlt">Credits:</span> Patron has a credit[% IF ( creditsamount ) %] of [% creditsamount | $Price %][% END %]
                 </li>
             [% END %]
 

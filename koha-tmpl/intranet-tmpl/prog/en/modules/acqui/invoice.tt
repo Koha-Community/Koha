@@ -109,7 +109,7 @@
                               [% total_adj = total_adj + adjustment.adjustment | html %]
                               <tr>
                                   <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id | html %]" />[% adjustment.adjustment_id | html %]</td>
-                                  <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price | html %]" /></td>
+                                  <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price %]" /></td>
                                   <td>
                                       [% reasons = AuthorisedValues.Get("ADJ_REASON") | html %]
                                       [% IF reasons.0 %]
@@ -273,14 +273,14 @@
                     [% END %]
                   </td>
                   <td><p>[% order.branchcode | html %]</p></td>
-                  <td class="number tax_excluded">[% order.unitprice_tax_excluded | $Price | html %]</td>
-                  <td class="number tax_included">[% order.unitprice_tax_included | $Price | html %]</td>
-                  <td class="number replacementprice">[% order.replacementprice | $Price | html %]</td>
+                  <td class="number tax_excluded">[% order.unitprice_tax_excluded | $Price %]</td>
+                  <td class="number tax_included">[% order.unitprice_tax_included | $Price %]</td>
+                  <td class="number replacementprice">[% order.replacementprice | $Price %]</td>
                   <td class="number">[% order.quantity | html %]</td>
-                  <td class="number tax_excluded">[% order.total_tax_excluded | $Price | html %]</td>
-                  <td class="number tax_included">[% order.total_tax_included | $Price | html %]</td>
+                  <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
+                  <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
                   <td class="number">[% order.tax_rate * 100 | html %]</td>
-                  <td class="number">[% order.tax_value | $Price | html %]</td>
+                  <td class="number">[% order.tax_value | $Price %]</td>
                   <td>[% order.budget_name | html %]</td>
                 </tr>
               [% END %]
@@ -293,10 +293,10 @@
                     <th class="tax_included"></th>
                     <th class="replacementprice"/>
                     <th>[% tf.quantity | html %]</th>
-                    <th class="tax_excluded">[% tf.total_tax_excluded | $Price | html %]</th>
-                    <th class="tax_included">[% tf.total_tax_included | $Price | html %]</th>
+                    <th class="tax_excluded">[% tf.total_tax_excluded | $Price %]</th>
+                    <th class="tax_included">[% tf.total_tax_included | $Price %]</th>
                     <th>&nbsp;</th>
-                    <th>[% tf.tax_value | $Price | html %]</th>
+                    <th>[% tf.tax_value | $Price %]</th>
                     <th>&nbsp;</th>
                 </tr>
               [% END %]
@@ -306,10 +306,10 @@
                 <th class="tax_included"></th>
                 <th class="replacementprice"/>
                 <th>[% total_quantity | html %]</th>
-                <th class="tax_excluded">[% total_tax_excluded | $Price | html %]</th>
-                <th class="tax_included">[% total_tax_included | $Price | html %]</th>
+                <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
+                <th class="tax_included">[% total_tax_included | $Price %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_tax_value | $Price | html %]</th>
+                <th>[% total_tax_value | $Price %]</th>
                 <th>&nbsp;</th>
               </tr>
               <tr>
@@ -318,10 +318,10 @@
                 <th class="tax_included"></th>
                 <th class="replacementprice"/>
                 <th>[% total_quantity | html %]</th>
-                <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price | html %]</th>
-                <th class="tax_included">[% total_tax_included_shipment | $Price | html %]</th>
+                <th class="tax_excluded">[% total_tax_excluded_shipment + total_adj | $Price %]</th>
+                <th class="tax_included">[% total_tax_included_shipment | $Price %]</th>
                 <th>&nbsp;</th>
-                <th>[% total_tax_value | $Price | html %]</th>
+                <th>[% total_tax_value | $Price %]</th>
                 <th>&nbsp;</th>
               </tr>
             </tfoot>
@@ -329,7 +329,7 @@
         [% ELSE %]
             <div class="dialog message"><p>No orders yet</p>
             [% IF adjustments && adjustments.count > 0 || shipmentcost && shipmentcost > 0 %]
-            <p>Adjustments plus shipping:[% total_adj + shipmentcost | $Price | html %]</p>
+            <p>Adjustments plus shipping:[% total_adj + shipmentcost | $Price %]</p>
             [% END %]
             </div>
         [% END %]

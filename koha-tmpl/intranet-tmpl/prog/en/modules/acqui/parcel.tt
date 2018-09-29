@@ -171,10 +171,10 @@
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber | html %]" class="previewData">MARC</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber | html %]" class="previewData">Card</a>
                 </td>
-                <td>[% loop_order.replacementprice | $Price | html %]</td>
+                <td>[% loop_order.replacementprice | $Price %]</td>
                 <td>[% loop_order.quantity | html %]</td>
-                <td>[% loop_order.ecost | $Price | html %]</td>
-                <td>[% loop_order.total | $Price | html %]</td>
+                <td>[% loop_order.ecost | $Price %]</td>
+                <td>[% loop_order.total | $Price %]</td>
                 <td>[% loop_order.budget_name | html %]</td>
 				<td>
                               <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber | html %]&amp;invoiceid=[% invoiceid | html %]">Receive</a>
@@ -250,27 +250,27 @@
                     <td colspan="6" class="total">(Tax exc.)</td>
                 [% END %]
                 <td colspan="3"><i>Subtotal for</i> [% key | html %]</td>
-                <td>[% subtotal_for_funds.$key.ecost | $Price | html %]</td>
-                <td>[% subtotal_for_funds.$key.unitprice | $Price | html %]</td>
+                <td>[% subtotal_for_funds.$key.ecost | $Price %]</td>
+                <td>[% subtotal_for_funds.$key.unitprice | $Price %]</td>
                 <td>&nbsp;</td>
                 <td>&nbsp;</td>
             </tr>
         [% END %]
         <tr>
             <th colspan="11" class="total">Total tax exc.</th>
-            <th>[% total_tax_excluded | $Price | html %]</th>
+            <th>[% total_tax_excluded | $Price %]</th>
             <th></th>
         </tr>
         [% FOREACH book_foot IN book_foot_loop %]
             <tr>
                 <th colspan="11">Total (GST [% book_foot.tax_rate * 100 | html %]%)</th>
-                <th>[% book_foot.tax_value | $Price | html %]</th>
+                <th>[% book_foot.tax_value | $Price %]</th>
                 <th></th>
             </tr>
         [% END %]
         <tr>
             <th colspan="11" class="total">Total tax inc.</th>
-            <th>[% total_tax_included | $Price | html %]</th>
+            <th>[% total_tax_included | $Price %]</th>
             <th></th>
         </tr>
     </tfoot>
@@ -324,12 +324,12 @@
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber | html %]" class="previewData">MARC</a><br>
                   <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber | html %]" class="previewData">Card</a>
                 </td>
-                <td>[% order.replacementprice | $Price | html %]</td>
+                <td>[% order.replacementprice | $Price %]</td>
                 <td>[% order.quantityreceived | html %]</td>
                 <td>[% order.budget.budget_name | html %]</td>
-                <td>[% order.ecost | $Price | html %]</td>
-                <td>[% order.unitprice | $Price | html %]</td>
-                <td>[% order.total | $Price | html %]</td>
+                <td>[% order.ecost | $Price %]</td>
+                <td>[% order.unitprice | $Price %]</td>
+                <td>[% order.total | $Price %]</td>
                 <td>
                     [% IF loop_receive.cannot_cancel or ( order.basket.effective_create_items == "receiving" and loop_receive.holds > 0 ) %]
                       [% IF loop_receive.cannot_cancel %]

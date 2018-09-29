@@ -385,10 +385,10 @@
                         <th class="tax_included">&nbsp;</th>
                         <th class="replacementprice">&nbsp;</th>
                         <th>[% foot_loo.quantity | html %]</th>
-                        <th class="tax_excluded">[% foot_loo.total_tax_excluded | $Price | html %]</th>
-                        <th class="tax_included">[% foot_loo.total_tax_included | $Price | html %]</th>
+                        <th class="tax_excluded">[% foot_loo.total_tax_excluded | $Price %]</th>
+                        <th class="tax_included">[% foot_loo.total_tax_included | $Price %]</th>
                         <th>&nbsp;</th>
-                        <th>[% foot_loo.tax_value | $Price | html %]</th>
+                        <th>[% foot_loo.tax_value | $Price %]</th>
                         <th>&nbsp;</th>
                         <th>&nbsp;</th>
                         [% IF ( active ) %]
@@ -408,10 +408,10 @@
                     <th class="tax_included">&nbsp;</th>
                     <th class="replacementprice">&nbsp;</th>
                     <th>[% total_quantity | html %]</th>
-                    <th class="tax_excluded">[% total_tax_excluded | $Price | html %]</th>
-                    <th class="tax_included">[% total_tax_included | $Price | html %]</th>
+                    <th class="tax_excluded">[% total_tax_excluded | $Price %]</th>
+                    <th class="tax_included">[% total_tax_included | $Price %]</th>
                     <th>&nbsp;</th>
-                    <th>[% total_tax_value | $Price | html %]</th>
+                    <th>[% total_tax_value | $Price %]</th>
                     <th>&nbsp;</th>
                     <th>&nbsp;</th>
                     [% IF ( active ) %]
@@ -478,16 +478,16 @@
                         </td>
                         [% SET zero_regex = "^0{1,}\.?0{1,}[^1-9]" %] [%# 0 or 0.0 or 0.00 or 00 or 00.0 or 00.00 or 0.000 ... %]
                         [%# FIXME: use of a regexp is not ideal; bugs 9410 and 10929 suggest better way of handling this %]
-                        <td class="number tax_excluded [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price | html %]</td>
-                        <td class="number tax_excluded [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price | html %]</td>
-                        <td class="number tax_included [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price | html %]</td>
-                        <td class="number tax_included [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price | html %]</td>
-                        <td class="number replacementprice [% IF books_loo.replacementprice.search(zero_regex) %]error[% END %]">[% books_loo.replacementprice | $Price | html %]</td>
+                        <td class="number tax_excluded [% IF books_loo.rrp_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_excluded | $Price %]</td>
+                        <td class="number tax_excluded [% IF books_loo.ecost_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_excluded | $Price %]</td>
+                        <td class="number tax_included [% IF books_loo.rrp_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.rrp_tax_included | $Price %]</td>
+                        <td class="number tax_included [% IF books_loo.ecost_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.ecost_tax_included | $Price %]</td>
+                        <td class="number replacementprice [% IF books_loo.replacementprice.search(zero_regex) %]error[% END %]">[% books_loo.replacementprice | $Price %]</td>
                         <td class="number [% IF books_loo.quantity.search(zero_regex) %]error[% END %]">[% books_loo.quantity | html %]</td>
-                        <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price | html %]</td>
-                        <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price | html %]</td>
+                        <td class="number tax_excluded [% IF books_loo.total_tax_excluded.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_excluded | $Price %]</td>
+                        <td class="number tax_included [% IF books_loo.total_tax_included.search(zero_regex) %]error[% END %]">[% books_loo.total_tax_included | $Price %]</td>
                         <td class="number">[% books_loo.tax_rate * 100 | html %]</td>
-                        <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price | html %]</td>
+                        <td class="number [% IF books_loo.tax_value.search(zero_regex) %]error[% END %]">[% books_loo.tax_value | $Price %]</td>
                         <td>[% books_loo.budget_name | html %]</td>
                         <td>[% books_loo.suppliers_report | html %]</td>
                         [% IF ( active ) %]
@@ -594,16 +594,16 @@
                         </p>
                       [% END %]
                     </td>
-                    <td class="number tax_excluded">[% order.rrp_tax_excluded | $Price | html %]</td>
-                    <td class="number tax_excluded">[% order.ecost_tax_excluded | $Price | html %]</td>
-                    <td class="number tax_included">[% order.rrp_tax_included | $Price | html %]</td>
-                    <td class="number tax_included">[% order.ecost_tax_included | $Price | html %]</td>
-                    <td class="number replacementprice">[% order.replacementprice | $Price | html %]</td>
+                    <td class="number tax_excluded">[% order.rrp_tax_excluded | $Price %]</td>
+                    <td class="number tax_excluded">[% order.ecost_tax_excluded | $Price %]</td>
+                    <td class="number tax_included">[% order.rrp_tax_included | $Price %]</td>
+                    <td class="number tax_included">[% order.ecost_tax_included | $Price %]</td>
+                    <td class="number replacementprice">[% order.replacementprice | $Price %]</td>
                     <td class="number">[% order.quantity | html %]</td>
-                    <td class="number tax_excluded">[% order.total_tax_excluded | $Price | html %]</td>
-                    <td class="number tax_included">[% order.total_tax_included | $Price | html %]</td>
+                    <td class="number tax_excluded">[% order.total_tax_excluded | $Price %]</td>
+                    <td class="number tax_included">[% order.total_tax_included | $Price %]</td>
                     <td class="number">[% order.tax_rate * 100 | html %]</td>
-                    <td class="number">[% order.tax_value | $Price | html %]</td>
+                    <td class="number">[% order.tax_value | $Price %]</td>
                     <td>[% order.budget_name | html %]
                   </tr>
                 [% END %]

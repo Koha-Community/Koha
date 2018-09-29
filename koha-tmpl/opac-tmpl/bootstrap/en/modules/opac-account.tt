@@ -89,7 +89,7 @@
                                     [%- SET COLSPAN = 3 -%]
                                 [%- END -%]
                                 <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
-                                <td class="sum">[% total | $Price | html %]</td>
+                                <td class="sum">[% total | $Price %]</td>
                             </tr>
                             </tfoot>
 
@@ -134,8 +134,8 @@
                                           [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description | html %][% END %]
                                           [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title | html %])[% END %]
                                         </td>
-                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price | html %]</td>
-                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding | $Price | html %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price %]</td>
+                                        [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding | $Price %]</td>
                                     </tr>
                                 [% END %]
                             </tbody>

@@ -178,7 +178,7 @@ function submitForm(form) {
                                                                         No name, basketnumber: [% basket.basketno | html %]
                                                                     [% END %]
                                                                 </a>, <br />
-                                                                Total: [% basket.total | $Price | html %]
+                                                                Total: [% basket.total | $Price %]
                                                                 <input type="hidden" class="basket" name="basket" value="[% basket.basketno | html %]" />
                                                             </li>
                                                         [% END %]
@@ -268,7 +268,7 @@ function submitForm(form) {
                                                                 No name, basketnumber: [% selectedbasket.basketno | html %]
                                                             [% END %]
                                                         </a>, <br />
-                                                        Total: [% selectedbasket.total | $Price | html %]
+                                                        Total: [% selectedbasket.total | $Price %]
                                                         <input type="hidden" class="basket" name="basket" value="[% selectedbasket.basketno | html %]" />
                                                     </li>
                                                 [% END %]

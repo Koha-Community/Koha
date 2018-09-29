@@ -368,7 +368,7 @@
             [% IF r.orders_moved.size > 0 %]
               [% FOR order IN r.orders_moved %]
                 <tr>
-                  <td>[% r.budget.budget_name | html %] (id=[% r.budget.budget_id | html %]) Amount=[% r.budget.budget_amount | $Price | html %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price | html %] remaining has been moved)[% END %]</td>
+                  <td>[% r.budget.budget_name | html %] (id=[% r.budget.budget_id | html %]) Amount=[% r.budget.budget_amount | $Price %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td>
                   <td>[% order.basketname | html %]</td>
                   <td>[% order.ordernumber | html %]</td>
                   <td>Moved!</td>
@@ -385,7 +385,7 @@
           [% ELSE %]
             [% IF r.error == 'budget_code_not_exists' %]
               <tr>
-                <td>[% r.budget.budget_id | html %] [% r.budget.budget_amount | $Price | html %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price | html %] remaining has been moved)[% END %]</td>
+                <td>[% r.budget.budget_id | html %] [% r.budget.budget_amount | $Price %][% IF r.unspent_moved %] ([% r.unspent_moved | $Price %] remaining has been moved)[% END %]</td>
                 <td></td>
                 <td></td>
                 <td>This fund code does not exist in the destination budget.</td>
@@ -439,7 +439,7 @@
                     <span style="color:green;">Locked</span>&nbsp;
                   [% END %]
                 </td>
-                <td class="data">[% period_active.budget_period_total | $Price | html %]</td>
+                <td class="data">[% period_active.budget_period_total | $Price %]</td>
                 <td>
                     [% PROCESS action_menu block_budget=period_active %]
                 </td>
@@ -471,7 +471,7 @@
                   <td><span title="[% period_loo.budget_period_startdate | html %]">[% period_loo.budget_period_startdate | $KohaDates %]</span></td>
                   <td><span title="[% period_loo.budget_period_enddate | html %]">[% period_loo.budget_period_enddate | $KohaDates %]</span></td>
                   <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>
-                  <td class="data">[% period_loo.budget_period_total | $Price | html %]</td>
+                  <td class="data">[% period_loo.budget_period_total | $Price %]</td>
                   <td>
                         [% PROCESS action_menu block_budget=period_loo %]
                   </td>

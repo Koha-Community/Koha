@@ -307,7 +307,7 @@ Item types administration
                     </td>
                 </tr>
             [% END %]
-            <tr><th scope="row">Rental charge</th><td>[% itemtype.rentalcharge | $Price | html %]</td></tr>
+            <tr><th scope="row">Rental charge</th><td>[% itemtype.rentalcharge | $Price %]</td></tr>
         </table>
         <form action="/cgi-bin/koha/admin/itemtypes.pl" method="post">
             <input type="hidden" name="op" value="delete_confirmed" /><input type="hidden" name="itemtype" value="[% itemtype.itemtype | html %]" />
@@ -369,11 +369,11 @@ Item types administration
             <td>[% IF ( itemtype.hideinopac ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
             <td>
             [% UNLESS ( itemtype.notforloan ) %]
-              [% itemtype.rentalcharge | $Price | html %]
+              [% itemtype.rentalcharge | $Price %]
             [% END %]
             </td>
-            <td>[% itemtype.defaultreplacecost | $Price | html %]</td>
-            <td>[% itemtype.processfee | $Price | html %]</td>
+            <td>[% itemtype.defaultreplacecost | $Price %]</td>
+            <td>[% itemtype.processfee | $Price %]</td>
             <td>[% itemtype.checkinmsg | html_line_break | $raw %]</td>
             <td class="actions">
               <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>

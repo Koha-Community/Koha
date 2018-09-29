@@ -129,7 +129,7 @@
                                     <li id="lost"><strong>Please note: </strong> Your library card has been marked as lost or stolen. <em>If this is an error, please contact the library.</em></li>
                                 [% END %]
                                 [% IF ( renewal_blocked_fines.defined ) && ( OpacRenewalAllowed ) %]
-                                    <li id="renewal_blocked_fines"><strong>Please note: </strong>You cannot renew your books online. Reason: [% IF ( renewal_blocked_fines ) > 0  %]Your fines exceed <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines | $Price | html %]</span>.[% ELSE %]You have fines.[% END %]
+                                    <li id="renewal_blocked_fines"><strong>Please note: </strong>You cannot renew your books online. Reason: [% IF ( renewal_blocked_fines ) > 0  %]Your fines exceed <span id="renewal_blocked_fines_amount">[% renewal_blocked_fines | $Price %]</span>.[% ELSE %]You have fines.[% END %]
                                 [% END %]
                             </ul>
                         </div>
@@ -145,9 +145,9 @@
                             [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count | html %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                                [% IF ( borrower.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price | html %])</a></li>[% END %]
-                                [% IF ( borrower.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price | html %])</a></li>[% END %]
-                                [% IF ( borrower.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price | html %])</a></li>[% END %]
+                                [% IF ( borrower.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( borrower.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( borrower.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price %])</a></li>[% END %]
                             [% END %]
 
                             [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
@@ -284,7 +284,7 @@
                                                             <input type="checkbox" name="item" value="[% ISSUE.itemnumber | html %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber | html %]&amp;borrowernumber=[% ISSUE.borrowernumber | html %]">Renew</a>
                                                         [% END %]
                                                         [% IF ISSUE.renewalfee > 0 %]
-                                                            <span class="renewalfee">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price | html %]</span>
+                                                            <span class="renewalfee">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
                                                         [% END %]
                                                         <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
                                                     [% ELSIF ( ISSUE.on_reserve ) %]
@@ -374,7 +374,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>You currently owe fines and charges amounting to:</td>
-                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price | html %]</a></td>
+                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -388,7 +388,7 @@
                                         <tbody>
                                             <tr>
                                                 <td>You currently owe fines and charges amounting to:</td>
-                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price | html %]</a></td>
+                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>
@@ -401,7 +401,7 @@
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
                                         <tbody>
                                             <tr>
-                                                <td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price | html %]</a></td>
+                                                <td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>

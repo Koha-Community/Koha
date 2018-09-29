@@ -128,14 +128,14 @@
                       <td class="credit" style="text-align: right;">
                   [% ELSE %]
                       <td class="debit" style="text-align: right;">
-                  [% END %][% account.amount | $Price | html %]
+                  [% END %][% account.amount | $Price %]
                       </td>
                   [% IF ( account.amountoutstanding < 0 ) %]
                       <td class="credit" style="text-align: right;">
                   [% ELSE %]
                       <td class="debit" style="text-align: right;">
                   [% END %]
-                          [% account.amountoutstanding | $Price | html %]
+                          [% account.amountoutstanding | $Price %]
                       </td>
                 </tr>
             [% END %]
@@ -143,7 +143,7 @@
             <tfoot>
                 <tr>
                     <td colspan="4">Total due</td>
-                    <td colspan="2" style="text-align:right;">[% totaldue | $Price | html %]</td>
+                    <td colspan="2" style="text-align:right;">[% totaldue | $Price %]</td>
                 </tr>
             </tfoot>
         </table>

@@ -52,7 +52,7 @@
 <tfoot>
 <tr>
     <td class="total" colspan="6">Total due:</td>
-    <td style="text-align: right;">[% total | $Price | html %]</td>
+    <td style="text-align: right;">[% total | $Price %]</td>
 </tr>
 </tfoot>
 <tbody>
@@ -105,15 +105,15 @@
     </td>
     <td><input type="text" name="payment_note_[% line.accountlines_id | html %]" /></td>
     <td>[% line.accounttype | html %]</td>
-    <td class="debit" style="text-align: right;">[% line.amount | $Price | html %]</td>
-    <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price | html %]</td>
+    <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
+    <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>
 </tr>
 [% END %]
 [% IF ( account_grp.total ) %]
 <tr>
 
     <td class="total" colspan="8" style="text-align: right;">Sub total:</td>
-    <td style="text-align: right;">[% account_grp.total | $Price | html %]</td>
+    <td style="text-align: right;">[% account_grp.total | $Price %]</td>
 </tr>
 [% END %]
 </tbody>
@@ -155,7 +155,7 @@
         $(document).ready(function(){
         $('#pay-fines-form').preventDoubleFormSubmit();
             $("#woall").click(function(event){
-                var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!").format( "[% total | $Price | html %]" );
+                var msg = _("Are you sure you want to write off %s in outstanding fines? This cannot be undone!").format( "[% total | $Price %]" );
                 var answer = confirm(msg);
                     if (!answer){
                         event.preventDefault();

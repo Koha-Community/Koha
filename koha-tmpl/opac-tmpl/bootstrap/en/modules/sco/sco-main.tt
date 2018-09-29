@@ -56,7 +56,7 @@
                                 [% ELSIF ( circ_error_NOT_FOR_LOAN ) %]
                                     This item is not for loan.
                                 [% ELSIF ( circ_error_DEBT ) %]
-                                    You owe the library [% DEBT | $Price | html %] and cannot check out.
+                                    You owe the library [% DEBT | $Price %] and cannot check out.
                                 [% ELSIF ( circ_error_WTHDRAWN ) %]
                                     This item has been withdrawn from the collection.
                                 [% ELSIF ( circ_error_RESTRICTED ) %]

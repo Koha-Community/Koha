@@ -239,12 +239,12 @@
             <input type="hidden" name="tax_rate" value="0" />
         [% END %]
 
-        <li><label for="rrp">Retail price: </label>[% rrp | $Price | html %]</li>
+        <li><label for="rrp">Retail price: </label>[% rrp | $Price %]</li>
         <li>
             <label for="replacementprice">Replacement price:</label>
-            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price | html %]" />
+            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price %]" />
         </li>
-        <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price | html %]</li>
+        <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %]</li>
         <li>
             <label for="unitprice">Actual cost:</label>
             <input type="text" size="20" name="unitprice" id="unitprice" value="[% unitprice | $Price on_editing => 1 | html %]" />

@@ -50,7 +50,7 @@
     [% END %]
     [% IF charges_guarantees %]
         <li>
-            <span class="circ-hlt">Fees &amp; Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price | html %].
+            <span class="circ-hlt">Fees &amp; Charges:</span> Patron's guarantees collectively owe [% chargesamount_guarantees | $Price %].
         </li>
         <li>
             <span class="circ-hlt">Checkouts are BLOCKED because fine balance is OVER THE LIMIT.</span>
@@ -249,7 +249,7 @@
                       <li><i class="fa fa-li fa-exclamation"></i>The barcode was not found [% checkout_info.barcode | html %].</li>
                   [% END %]
                   [% IF checkout_info.DEBT %]
-                      <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT | $Price | html %].</li> <!-- Need debt_confirmed -->
+                      <li><i class="fa fa-li fa-exclamation"></i>The patron has a debt of [% checkout_info.DEBT | $Price %].</li> <!-- Need debt_confirmed -->
                   [% END %]
                 </p>
               [% END %]

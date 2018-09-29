@@ -64,12 +64,12 @@
             <td>[% ordersloo.authorisedbyname | html %]</td>
             <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | html %]"> [% ordersloo.title | html %]</a></td>
             <td>[% ordersloo.currency | html %]</td>
-            <td>[% ordersloo.listprice | $Price | html %]</td>
-            <td>[% ordersloo.rrp | $Price | html %]</td>
-            <td>[% ordersloo.ecost | $Price | html %]</td>
+            <td>[% ordersloo.listprice | $Price %]</td>
+            <td>[% ordersloo.rrp | $Price %]</td>
+            <td>[% ordersloo.ecost | $Price %]</td>
             <td>[% ordersloo.quantity | html %]</td>
-            <td>[% ordersloo.total_rrp | $Price | html %]</td>
-            <td>[% ordersloo.total_ecost | $Price | html %]</td>
+            <td>[% ordersloo.total_rrp | $Price %]</td>
+            <td>[% ordersloo.total_ecost | $Price %]</td>
             <td>[% ordersloo.entrydate | html %]</td>
             <td>[% ordersloo.datereceived | html %]</td>
             <td>[% ordersloo.order_internalnote | html %]</td>
@@ -77,7 +77,7 @@
             </tr>
         [% END %]
         </tbody>
-        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity | html %]</th><th>[% total_rrp | $Price | html %]</th><th>[% total_ecost | $Price | html %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
+        <tfoot><tr><th>TOTAL</th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th></th><th>[% total_quantity | html %]</th><th>[% total_rrp | $Price %]</th><th>[% total_ecost | $Price %]</th><th></th><th></th><th></th><th></th></tr></tfoot>
         </table>
     [% END %]
     [% ELSE %]

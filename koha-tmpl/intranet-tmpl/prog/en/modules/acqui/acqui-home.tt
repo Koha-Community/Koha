@@ -128,34 +128,34 @@
                 <td>[% Branches.GetName( loop_budge.budget_branchcode ) | html %]</td>
                 <td class="data">
                     [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_amount | $Price | html %]
+                        [% loop_budge.budget_amount | $Price %]
                     [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_amount | $Price | html %]</span>
+                        <span class="total_amount">[% loop_budge.budget_amount | $Price %]</span>
                     [% END %]
                 </td>
                 <td class="data">
                     <a href="ordered.pl?fund=[% loop_budge.budget_id | html %]&amp;fund_code=[% loop_budge.budget_code | html %]">
                     [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_ordered | $Price | html %]
+                        [% loop_budge.budget_ordered | $Price %]
                     [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_ordered | $Price | html %]</span>
+                        <span class="total_amount">[% loop_budge.budget_ordered | $Price %]</span>
                     [% END %]
                     </a>
                 </td>
                 <td class="data">
                     <a href="spent.pl?fund=[% loop_budge.budget_id | html %]&amp;fund_code=[% loop_budge.budget_code | html %]">
                     [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_spent | $Price | html %]
+                        [% loop_budge.budget_spent | $Price %]
                     [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_spent | $Price | html %]</span>
+                        <span class="total_amount">[% loop_budge.budget_spent | $Price %]</span>
                     [% END %]
                     </a>
                 </td>
                 <td class="data">
                     [% IF loop_budge.budget_parent_id %]
-                        [% loop_budge.budget_avail | $Price | html %]
+                        [% loop_budge.budget_avail | $Price %]
                     [% ELSE %]
-                        <span class="total_amount">[% loop_budge.budget_avail | $Price | html %]</span>
+                        <span class="total_amount">[% loop_budge.budget_avail | $Price %]</span>
                     [% END %]
                 </td>
             </tr>

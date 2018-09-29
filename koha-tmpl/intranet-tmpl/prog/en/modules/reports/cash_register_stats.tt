@@ -228,7 +228,7 @@
                     [% END %]
                 </td>
                 <td>[% loopresul.note | html %]</td>
-                <td style="text-align:right;">[% loopresul.amount | $Price | html %]</td>
+                <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
                 <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | html %]">[% loopresul.title | html %]</a></td>
                 <td>[% loopresul.barcode | html %]</td>
                 <td>[% ItemTypes.GetDescription(loopresul.itype) | html %]</td>
@@ -238,7 +238,7 @@
         <tr>
             [% IF transaction_type == "ACT" %]
             <th colspan="7" style="text-align:right;">TOTAL</th>
-            <th style="text-align:right;">[% total  | $Price | html %]</th>
+            <th style="text-align:right;">[% total  | $Price %]</th>
             <th colspan="3">&nbsp;</th>
             [% END %]
         </tr>

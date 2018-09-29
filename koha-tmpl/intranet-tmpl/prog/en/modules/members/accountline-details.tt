@@ -61,11 +61,11 @@
                             </td>
 
                             <td>
-                                [% accountline.amount | $Price | html %]
+                                [% accountline.amount | $Price %]
                             </td>
 
                             <td>
-                                [% accountline.amountoutstanding | $Price | html %]
+                                [% accountline.amountoutstanding | $Price %]
                             </td>
                         </tr>
                     </tbody>
@@ -107,13 +107,13 @@
                                     <tr>
                                         <td>[% offset_accountline.date | $KohaDates %]</td>
                                         <td>[% offset_accountline.timestamp | $KohaDates with_hours => 1 | html %]</td>
-                                        <td>[% offset_accountline.amount | $Price | html %]</td>
-                                        <td>[% offset_accountline.amountoutstanding | $Price | html %]</td>
+                                        <td>[% offset_accountline.amount | $Price %]</td>
+                                        <td>[% offset_accountline.amountoutstanding | $Price %]</td>
                                         <td>[% INCLUDE 'accounttype.inc' account => offset_accountline %]</td>
                                         <td>[% offset_accountline.note | html %]</td>
                                         <td>[% IF offset_accountline.manager_id %]<a href="moremember.pl?borrowernumber=[% offset_accountline.manager_id | html %]">[% offset_accountline.manager_id | html %]</a>[% END %]</td>
                                         <td>[% ao.created_on | $KohaDates with_hours => 1 | html %]</td>
-                                        <td>[% ao.amount | $Price | html %]</td>
+                                        <td>[% ao.amount | $Price %]</td>
                                         <td>[% INCLUDE 'account_offset_type.inc' account_offset => ao %]</td>
                                         <td><a href="accountline-details.pl?accountlines_id=[% offset_accountline.id | html %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a></td>
                                     </tr>

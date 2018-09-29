@@ -81,14 +81,14 @@
     <tr>
     <th></th>
     <th></th>
-    <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF budget_period_total %][% budget_period_total | $Price | html %][% END %]  </th>
-    <th nowrap="nowrap" class="data"> [% period_alloc_total | $Price | html %]</th>
+    <th colspan="2" style="text-align: left;" nowrap="nowrap">Period allocated [% IF budget_period_total %][% budget_period_total | $Price %][% END %]  </th>
+    <th nowrap="nowrap" class="data"> [% period_alloc_total | $Price %]</th>
     <th></th>
-    <th class="data">[% ordered_total | $Price | html %]</th>
+    <th class="data">[% ordered_total | $Price %]</th>
     <th></th>
-    <th class="data">[% spent_total | $Price | html %]</th>
+    <th class="data">[% spent_total | $Price %]</th>
     <th></th>
-    <th class="data">[% available_total | $Price | html %]</th>
+    <th class="data">[% available_total | $Price %]</th>
     <th></th>
     </tr>
     </tfoot>
@@ -105,37 +105,37 @@
     <td>[% budget.budget_name | html %]</td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.budget_amount | $Price | html %]</span>
+        <span class="child_fund_amount">[% budget.budget_amount | $Price %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.budget_amount | $Price | html %]</span>
+        <span class="total_amount">[% budget.budget_amount | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.budget_ordered | $Price | html %]</span>
+        <span class="child_fund_amount">[% budget.budget_ordered | $Price %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.budget_ordered | $Price | html %]</span>
+        <span class="total_amount">[% budget.budget_ordered | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.total_ordered | $Price | html %]</span>
+        <span class="child_fund_amount">[% budget.total_ordered | $Price %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.total_ordered | $Price | html %]</span>
+        <span class="total_amount">[% budget.total_ordered | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.budget_spent | $Price | html %]</span>
+        <span class="child_fund_amount">[% budget.budget_spent | $Price %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.budget_spent | $Price | html %]</span>
+        <span class="total_amount">[% budget.budget_spent | $Price %]</span>
       [% END %]
     </td>
     <td class="data">
       [% IF budget.budget_parent_id %]
-        <span class="child_fund_amount">[% budget.total_spent | $Price | html %]</span>
+        <span class="child_fund_amount">[% budget.total_spent | $Price %]</span>
       [% ELSE %]
-        <span class="total_amount">[% budget.total_spent | $Price | html %]</span>
+        <span class="total_amount">[% budget.total_spent | $Price %]</span>
       [% END %]
     </td>
 
@@ -158,7 +158,7 @@
                 <span class="totalamount">
             [% END %]
         [% END %]
-            [% value | $Price | html %]
+            [% value | $Price %]
         </span>
     [% END %]
     <td class="data">
@@ -376,7 +376,7 @@
         <table>
             <tr>
             <th scope="row">Fund amount:</th>
-            <td>[% budget_amount | $Price | html %]</td>
+            <td>[% budget_amount | $Price %]</td>
             </tr>
         </table>
 

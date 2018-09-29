@@ -392,13 +392,13 @@
                         <td>[% order.fund.budget_name | html %]</td>
                         <td>
                             [% UNLESS order.datereceived %]
-                                [% order.ecost_tax_excluded | $Price | html %] / [% order.ecost_tax_included | $Price | html %]
+                                [% order.ecost_tax_excluded | $Price %] / [% order.ecost_tax_included | $Price %]
                             [% END %]
                         </td>
                         <td>
                             [% IF order.datereceived %]
                                 [%# FIXME What if unitprice has not been filled? %]
-                                [% order.unitprice_tax_excluded | $Price | html %] / [% order.unitprice_tax_included | $Price | html %]
+                                [% order.unitprice_tax_excluded | $Price %] / [% order.unitprice_tax_included | $Price %]
                             [% END %]
                         </td>
                     </tr>
