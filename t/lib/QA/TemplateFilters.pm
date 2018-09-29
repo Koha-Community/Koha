@@ -65,7 +65,8 @@ sub missing_filters {
                 next if grep { $tt_block =~ $_ } @tt_directives;
 
                 next
-                  if $tt_block =~ m{\s?\|\s?\$KohaDates\s?$}
+                  if   $tt_block =~ m{\s?\|\s?\$KohaDates\s?$}
+                    or $tt_block =~ m{\s?\|\s?\$Price\s?$}
                   ;    # We could escape it but should be safe
                 next if $tt_block =~ m{^\#};    # Is a comment, skip it
 
