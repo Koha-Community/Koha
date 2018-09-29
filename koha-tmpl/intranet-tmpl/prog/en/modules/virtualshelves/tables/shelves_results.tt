@@ -47,7 +47,6 @@
     [%~ END ~%]
     [%~ IF can_manage_shelf OR can_delete_shelf ~%]
         [%~ action_block = action_block _ ' <form action="shelves.pl" method="post">' ~%]
-        [%~ action_block = action_block _ '<input type="hidden" name="shelfoff" value="' _ shelfoff _ '" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelves" value="1" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="op" value="delete" />' ~%]
         [%~ action_block = action_block _ '<input type="hidden" name="shelfnumber" value="' _ shelfnumber  _ '" />' ~%]
