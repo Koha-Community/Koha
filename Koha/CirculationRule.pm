@@ -27,7 +27,7 @@ use Koha::ItemTypes;
 
 =head1 NAME
 
-Koha::Hold - Koha Hold object class
+Koha::CirculationRule - Koha CirculationRule  object class
 
 =head1 API
 

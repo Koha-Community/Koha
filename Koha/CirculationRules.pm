@@ -28,7 +28,7 @@ use base qw(Koha::Objects);
 
 =head1 NAME
 
-Koha::IssuingRules - Koha IssuingRule Object set class
+Koha::CirculationRules - Koha CirculationRule Object set class
 
 =head1 API
 
