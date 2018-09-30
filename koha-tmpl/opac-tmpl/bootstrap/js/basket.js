@@ -410,10 +410,8 @@ function updateBasket(updated_value,target) {
     }
     if(target){
         target.$('#basketcount').html(bcount);
-        target.$('.cart-message').html(MSG_IN_YOUR_CART+updated_value);
     } else {
         $('#basketcount').html(bcount);
-        $('.cart-message').html(MSG_IN_YOUR_CART+updated_value);
     }
 }
 

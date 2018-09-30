@@ -156,7 +156,6 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var MSG_CONFIRM_DEL_BASKET = _("Are you sure you want to empty your cart?");
         var MSG_CONFIRM_DEL_RECORDS = _("Are you sure you want to remove the selected items?");
         var MSG_ITEM_IN_CART = _("In your cart");
-        var MSG_IN_YOUR_CART = _("Items in your cart: ");
         var MSG_ITEM_NOT_IN_CART = _("Add to your cart");
     [% END %]
     [% IF ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) %]
