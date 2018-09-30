@@ -188,7 +188,7 @@ my $authtypecode = $authobj ? $authobj->authtypecode : q{};
 $tagslib = &GetTagsLabels(1,$authtypecode);
 
 # Build list of authtypes for showing them
-my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypecode']});
+my $authority_types = Koha::Authority::Types->search({}, { order_by => ['authtypetext']});
 
 my $record=GetAuthority($authid);
 
