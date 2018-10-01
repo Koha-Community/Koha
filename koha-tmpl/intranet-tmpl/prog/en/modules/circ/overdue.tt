@@ -66,7 +66,7 @@
                 [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | html %]?subject=[% INCLUDE subject %] [% overdueloo.title | html %]">email</a>][% END %]
                 [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]</td>
             [% END %]
-          <td>[% IF overdueloo.branchcode %][% Branches.GetName( overdueloo.branchcode ) | html %][% END %]</td>
+          <td>[% Branches.GetName( overdueloo.patron.branchcode ) | html %]</td>
           <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title | html %]  [% overdueloo.subtitle | html %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
           <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | html %]&amp;itemnumber=[% overdueloo.itemnum | html %]#item[% overdueloo.itemnum | html %]">[% overdueloo.barcode | html %]</a></td>
           <td>[% overdueloo.itemcallnumber | html %]</td>
