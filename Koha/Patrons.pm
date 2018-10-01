@@ -28,6 +28,7 @@ use Koha::DateUtils;
 use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
 use Koha::Patron;
+use Koha::Exceptions::Patron;
 
 use base qw(Koha::Objects);
 
@@ -216,25 +217,21 @@ sub anonymise_issue_history {
     and let DBIx do the job without further housekeeping.)
     Includes a move to deletedborrowers if move flag set.
 
-    Return value (if relevant) is based on the individual return values.
+    Just like DBIx, the delete will only succeed when all entries could be
+    deleted. Returns true or throws an exception.
 
 =cut
 
 sub delete {
     my ( $self, $params ) = @_;
-    my (@res, $rv);
-    $rv = 1;
-    while( my $patron = $self->next ) {
-        $patron->move_to_deleted if $params->{move};
-        push @res, $patron->delete;
-        $rv=-1 if $res[-1]==-1;
-        $rv=0 if $rv==1 && $res[-1]==0;
-    }
-
-    # Return -1 if we encountered a single -1
-    # Return 0 if we encountered a single 0 (but not a -1)
-    # Return 1 if all individual deletes passed
-    return $rv;
+    $self->_resultset->result_source->schema->txn_do( sub {
+        my ( $set, $params ) = @_;
+        while( my $patron = $set->next ) {
+            $patron->move_to_deleted if $params->{move};
+            $patron->delete == 1 || Koha::Exceptions::Patron::Delete->throw;
+        }
+    }, $self, $params );
+    return 1;
 }
 
 =head3 _type

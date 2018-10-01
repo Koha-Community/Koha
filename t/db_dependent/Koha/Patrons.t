@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More tests => 33;
 use Test::Warn;
 use Test::Exception;
+use Test::MockModule;
 use Time::Fake;
 use DateTime;
 use JSON;
@@ -423,16 +424,27 @@ subtest "delete" => sub {
 };
 
 subtest 'Koha::Patrons->delete' => sub {
-    plan tests => 3;
+    plan tests => 4;
+
+    my $mod_patron = Test::MockModule->new( 'Koha::Patron' );
+    my $moved_to_deleted = 0;
+    $mod_patron->mock( 'move_to_deleted', sub { $moved_to_deleted++; } );
+
     my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
     my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
     my $id1 = $patron1->borrowernumber;
     my $set = Koha::Patrons->search({ borrowernumber => { '>=' => $id1 }});
     is( $set->count, 2, 'Two patrons found as expected' );
-    my $count1 = $schema->resultset('Deletedborrower')->count;
     is( $set->delete({ move => 1 }), 1, 'Two patrons deleted' );
-    my $count2 = $schema->resultset('Deletedborrower')->count;
-    is( $count2, $count1 + 2, 'Patrons moved to deletedborrowers' );
+    is( $moved_to_deleted, 2, 'Patrons moved to deletedborrowers' );
+
+    # Add again, test if we can raise an exception
+    $mod_patron->mock( 'delete', sub { return -1; } );
+    $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
+    $id1 = $patron1->borrowernumber;
+    $set = Koha::Patrons->search({ borrowernumber => { '>=' => $id1 }});
+    throws_ok { $set->delete } 'Koha::Exceptions::Patron::Delete',
+        'Exception raised for deleting patron';
 };
 
 subtest 'add_enrolment_fee_if_needed' => sub {
