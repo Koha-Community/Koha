@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 20;
+use Test::More tests => 21;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -32,6 +32,7 @@ my $dbh     = C4::Context->dbh;
 # FIXME: SessionStorage defaults to mysql, but it seems to break transaction
 # handling
 t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
+t::lib::Mocks::mock_preference( 'GDPR_Policy', '' ); # Disabled
 
 $schema->storage->txn_begin;
 
@@ -315,3 +316,33 @@ my $hash2 = hash_password('password');
 
 ok(C4::Auth::checkpw_hash('password', $hash1), 'password validates with first hash');
 ok(C4::Auth::checkpw_hash('password', $hash2), 'password validates with second hash');
+
+subtest 'Check value of login_attempts in checkpw' => sub {
+    plan tests => 6;
+
+    t::lib::Mocks::mock_preference('FailedLoginAttempts', 3);
+
+    # Only interested here in regular login
+    $C4::Auth::cas  = 0;
+    $C4::Auth::ldap = 0;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    $patron->login_attempts(2);
+    $patron->password('123')->store; # yes, deliberately not hashed
+
+    is( $patron->account_locked, 0, 'Patron not locked' );
+    my @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+        # Note: 123 will not be hashed to 123 !
+    is( $test[0], 0, 'checkpw should have failed' );
+    $patron->discard_changes; # refresh
+    is( $patron->login_attempts, 3, 'Login attempts increased' );
+    is( $patron->account_locked, 1, 'Check locked status' );
+
+    # And another try to go over the limit: different return value!
+    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    is( @test, 0, 'checkpw failed again and returns nothing now' );
+    $patron->discard_changes; # refresh
+    is( $patron->login_attempts, 3, 'Login attempts not increased anymore' );
+};
+
+$schema->storage->txn_rollback;

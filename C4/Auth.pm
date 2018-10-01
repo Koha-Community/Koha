@@ -1851,7 +1851,7 @@ sub checkpw {
     if( $patron ) {
         if ( $passwd_ok ) {
             $patron->update({ login_attempts => 0 });
-        } else {
+        } elsif( !$patron->account_locked ) {
             $patron->update({ login_attempts => $patron->login_attempts + 1 });
         }
     }

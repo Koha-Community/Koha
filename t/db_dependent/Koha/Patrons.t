@@ -1121,7 +1121,7 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
 };
 
 subtest 'account_locked' => sub {
-    plan tests => 8;
+    plan tests => 9;
     my $patron = $builder->build({ source => 'Borrower', value => { login_attempts => 0 } });
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     for my $value ( undef, '', 0 ) {
@@ -1136,6 +1136,8 @@ subtest 'account_locked' => sub {
     is( $patron->account_locked, 0, 'Patron has 2 failed attempts, account should not be considered locked yet' );
     $patron->login_attempts(3)->store;
     is( $patron->account_locked, 1, 'Patron has 3 failed attempts, account should be considered locked yet' );
+    $patron->login_attempts(4)->store;
+    is( $patron->account_locked, 1, 'Patron could not have 4 failed attempts, but account should still be considered locked' );
 
     $patron->delete;
 };
