@@ -7,7 +7,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 1, 'manage_checkout_notes', 'Mark checkout notes as seen/not seen'),
    ( 3, 'parameters_remaining_permissions', 'Remaining system parameters permissions'),
    ( 3, 'manage_circ_rules', 'Manage circulation rules'),
-   ( 3, 'manage_circ_rules_restricted', 'Manage circ rules for any libraries'),
+   ( 3, 'manage_circ_rules_from_any_libraries', 'Manage circ rules for any libraries'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
    ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),
    ( 6, 'place_holds', 'Place holds for patrons'),
