@@ -54,7 +54,7 @@
 [% IF (invalidShibLogin ) %]
 <div id="login_error"><Strong>Error: </strong>Shibboleth login failed</div>
 [% END %]
-<p>If you have a shibboleth account, please <a href="[% shibbolethLoginUrl %]">click here</a> to login.</p>
+<p>If you have a shibboleth account, please <a href="[% shibbolethLoginUrl | uri %]">click here</a> to login.</p>
 [% END %]
 
 <!-- login prompt time-->
