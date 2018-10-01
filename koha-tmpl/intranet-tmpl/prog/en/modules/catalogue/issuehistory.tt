@@ -48,7 +48,11 @@
         [% FOREACH checkout IN checkouts %]
             <tr>
                 [% IF show_patron_column %]
-                <td>[% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]</td>
+                    <td>
+                        [% IF checkout.patron %][%# Not set for deleted patron records %]
+                            [% INCLUDE 'patron-title.inc' patron => checkout.patron hide_patron_infos_if_needed=1 %]
+                        [% END %]
+                    </td>
                 [% END %]
                 <td>
                     [% IF checkout.item.barcode %] [%# FIXME This test is not mandatory I think %]

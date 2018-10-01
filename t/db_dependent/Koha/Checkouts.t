@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 7;
 
+use C4::Circulation;
 use Koha::Checkouts;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -94,10 +95,31 @@ subtest 'item' => sub {
 };
 
 subtest 'patron' => sub {
-    plan tests => 2;
-    my $p = $new_checkout_1->patron;
-    is( ref($p), 'Koha::Patron', 'Koha::Checkout->patron should return a Koha::Patron' );
-    is( $p->borrowernumber, $patron->{borrowernumber}, 'Koha::Checkout->patron should return the correct patron' );
+    plan tests => 3;
+    my $patron = $builder->build_object({class=>'Koha::Patrons', value => {branchcode => $library->{branchcode}}});
+
+    my $item = $builder->build_object( { class=> 'Koha::Items' } );
+    my $checkout = Koha::Checkout->new(
+        {   borrowernumber => $patron->borrowernumber,
+            itemnumber     => $item->itemnumber,
+            branchcode     => $library->{branchcode},
+        }
+    )->store;
+
+    my $p = $checkout->patron;
+    is( ref($p), 'Koha::Patron',
+        'Koha::Checkout->patron should return a Koha::Patron' );
+    is( $p->borrowernumber, $patron->borrowernumber,
+        'Koha::Checkout->patron should return the correct patron' );
+
+    # Testing Koha::Old::Checkout->patron now
+    my $issue_id = $checkout->issue_id;
+    C4::Circulation::MarkIssueReturned( $p->borrowernumber, $checkout->itemnumber );
+    $p->delete;
+    my $old_issue = Koha::Old::Checkouts->find($issue_id);
+    is( $old_issue->patron, undef,
+        'Koha::Checkout->patron should return undef if the patron record has been deleted'
+    );
 };
 
 $retrieved_checkout_1->delete;
