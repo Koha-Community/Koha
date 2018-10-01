@@ -544,15 +544,15 @@ function Changefwk() {
 
 [% IF (marc_format_errors) %]
 [% BLOCK show_marc_err %]
-<li><b>[% MARC_ERR.field %]</b>:
+<li>
 [% SWITCH MARC_ERR.error %]
-[% CASE 'FIELD_LENGTH' %]<span>Length is [% MARC_ERR.length | $HtmlTags tag=>'b' %], should be [% MARC_ERR.wanted | $HtmlTags tag=>'b' %]</span>
-[% CASE 'FIELD_VALUE'  %]<span>Value is "[% MARC_ERR.value | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.required | html | $HtmlTags tag=>'b' %]</span>
-[% CASE 'FIELD_VALUE_POS'  %]<span>Value at position [% MARC_ERR.pos | $HtmlTags tag=>'b' %] is "[% MARC_ERR.value | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.required | html | $HtmlTags tag=>'b' %]</span>
-[% CASE 'NOT_REPEATABLE_SUBFIELD' %]<span>Subfield not repeatable, used [% MARC_ERR.count %] times</span>
-[% CASE 'NOT_REPEATABLE_FIELD' %]<span>Field not repeatable, used [% MARC_ERR.count %] times</span>
-[% CASE 'INDICATOR' %]<span>Indicator [% MARC_ERR.indicator %] is "[% MARC_ERR.current | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.valid | html | $HtmlTags tag=>'b' %]</span>
-[% CASE 'NOT_IN_FORMAT' %]<span>Not used in format</span>
+[% CASE 'FIELD_LENGTH' %]<span>[% MARC_ERR.field | $HtmlTags tag=>'b'  %]: Length is [% MARC_ERR.length | $HtmlTags tag=>'b' %], should be [% MARC_ERR.wanted | $HtmlTags tag=>'b' %]</span>
+[% CASE 'FIELD_VALUE'  %]<span>[% MARC_ERR.field | $HtmlTags tag=>'b'  %]: Illegal value "[% MARC_ERR.value | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.required %]</span>
+[% CASE 'FIELD_VALUE_POS'  %]<span>[% MARC_ERR.field | $HtmlTags tag=>'b'  %]/[% MARC_ERR.pos %]: Illegal value "[% MARC_ERR.value | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.required %]</span>
+[% CASE 'NOT_REPEATABLE_SUBFIELD' %]<span>[% MARC_ERR.field | $HtmlTags tag=>'b'  %]: Subfield not repeatable, used [% MARC_ERR.count %] times</span>
+[% CASE 'NOT_REPEATABLE_FIELD' %]<span>[% MARC_ERR.field | $HtmlTags tag=>'b'  %]: Field not repeatable, used [% MARC_ERR.count %] times</span>
+[% CASE 'INDICATOR' %]<span>[% MARC_ERR.field | $HtmlTags tag=>'b'  %]: Indicator [% MARC_ERR.indicator %] is "[% MARC_ERR.current | html | $HtmlTags tag=>'b' %]", should be [% MARC_ERR.valid | html | $HtmlTags tag=>'b' %]</span>
+[% CASE 'NOT_IN_FORMAT' %]<span>[% MARC_ERR.field | $HtmlTags tag=>'b'  %]: Not used in format</span>
 [% END %]
 </li>
 [% END %]
