@@ -1,1 +1,0 @@
-INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('AdditionalFieldsInZ3950ResultSearch', '', 'NULL', 'Determines which MARC field/subfields are displayed in -Additional field- column in the result of a search Z3950', 'Free');
