@@ -628,6 +628,11 @@ __PACKAGE__->many_to_many("borrowernumbers", "aqorder_users", "borrowernumber");
 # Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:K0GnMGYtZUQ1WCesHKIxHw
 
+sub koha_objects_class {
+    'Koha::Acquisition::Orders';
+}
+sub koha_object_class {
+    'Koha::Acquisition::Order';
+}
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
