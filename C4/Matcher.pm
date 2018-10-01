@@ -44,7 +44,7 @@ C4::Matcher - find MARC records matching another one
   $matcher->add_matchpoint('isbn', 1000, [ { tag => '020', subfields => 'a', norms => [] } ]);
 
   $matcher->add_simple_required_check('245', 'a', -1, 0, '', '245', 'a', -1, 0, '');
-  $matcher->add_required_check([ { tag => '245', subfields => 'a', norms => [] } ], 
+  $matcher->add_required_check([ { tag => '245', subfields => 'a', norms => [] } ],
                                [ { tag => '245', subfields => 'a', norms => [] } ]);
 
   my @matches = $matcher->get_matches($marc_record, $max_matches);
