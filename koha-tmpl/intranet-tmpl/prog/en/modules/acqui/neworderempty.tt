@@ -303,14 +303,16 @@
                     <input type="hidden" name="quantity" value="[% quantity | html %]" />[% quantity | html %]
                 [% ELSE %]
                     <label class="required" for="quantity">Quantity: </label>
-                    [% IF (AcqCreateItemOrdering) %]
-                        [% IF subscriptionid || basket.is_standing %]
+                    [% IF subscriptionid %]
+                        <input type="text" size="20" id="quantity" name="quantity" value="1" onchange="updateCosts();" />
+                    [% ELSIF AcqCreateItemOrdering %]
+                        [% IF basket.is_standing %]
                             <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
                         [% ELSE %]
                             <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="0" />
                         [% END %]
                     [% ELSE %]
-                        [% IF subscriptionid || basket.is_standing %]
+                        [% IF basket.is_standing %]
                             <input type="text" readonly="readonly" size="20" id="quantity" name="quantity" value="1" />
                         [% ELSE %]
                             <input type="text" size="20" id="quantity" name="quantity" value="[% quantityrec | html %]" onchange="updateCosts();" />
@@ -622,7 +624,7 @@
             });
 
             //We apply the fonction only for modify option
-            [% IF ( quantityrec ) %]
+            [% IF ( quantityrec and not subscriptionid ) %]
                 [% IF ( acqcreate ) %]
                     $('#quantity').blur(function(){
                         // if user decreases the quantity

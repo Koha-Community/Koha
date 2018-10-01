@@ -197,6 +197,18 @@ my @gst_values = map {
     option => $_ + 0.0
 }, split( '\|', C4::Context->preference("gist") );
 
+if ( $order->{subscriptionid} ) {
+    # Order from a subscription, we will display an history of what has been received
+    my $orders = Koha::Acquisition::Orders->search(
+        {
+            subscriptionid     => $order->{subscriptionid},
+            parent_ordernumber => $order->{ordernumber},
+            ordernumber        => { '!=' => $order->{ordernumber} }
+        }
+    );
+    $template->param( orders => $orders );
+}
+
 $template->param(
     AcqCreateItem         => $AcqCreateItem,
     count                 => 1,

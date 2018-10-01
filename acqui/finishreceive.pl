@@ -61,7 +61,8 @@ my $new_ordernumber  = $ordernumber;
 
 $unitprice = Koha::Number::Price->new( $unitprice )->unformat();
 $replacementprice = Koha::Number::Price->new( $replacementprice )->unformat();
-my $basket = Koha::Acquisition::Orders->find( $ordernumber )->basket;
+my $order_obj = Koha::Acquisition::Orders->find( $ordernumber );
+my $basket = $order_obj->basket;
 
 #need old receivedate if we update the order, parcel.pl only shows the right parcel this way FIXME
 if ($quantityrec > $origquantityrec ) {
@@ -100,6 +101,10 @@ if ($quantityrec > $origquantityrec ) {
 
     # save the quantity received.
     if ( $quantityrec > 0 ) {
+        if ( $order_obj->subscriptionid ) {
+            # Quantity can only be modified if linked to a subscription
+            $order->{quantity} = $quantity; # quantityrec will be deduced from this value in ModReceiveOrder
+        }
         ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
             {
                 biblionumber     => $biblionumber,

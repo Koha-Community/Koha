@@ -54,7 +54,62 @@
         </fieldset>
     [% END %]
 
-    [% IF (AcqCreateItemReceiving) %]
+    [% IF subscriptionid and orders.count %]
+        <fieldset class="rows">
+            <legend>Receipt history for this subscription</legend>
+            <table id="orders">
+                <thead>
+                    <tr>
+                        <th>Invoice</th>
+                        <th>Order number</th>
+                        <th class="title-string">Creation date</th>
+                        <th class="title-string">Receive date</th>
+                        <th>Quantity received</th>
+                        <th class="title-string">Status</th>
+                        <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
+                        <th>Internal note</th>
+                    </tr>
+                </thead>
+                <tbody>
+                [% FOR order IN orders %]
+                    <tr>
+                        <td>
+                        [% IF order.invoice %]
+                            [% IF CAN_user_acquisition %]
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | html %]" title="Invoice detail page">
+                                   [% order.invoice.invoicenumber | html %]</a>
+                            [% ELSE %]
+                                [% order.invoice.invoicenumber | html %]
+                            [% END %]
+                        [% END %]
+                        </td>
+                        <td>[% order.ordernumber | html %]</td>
+                        <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
+                        <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
+                        <td>[% order.quantityreceived | html %]</td>
+                        <td>
+                          [% SWITCH order.orderstatus %]
+                          [%# FIXME We should only see/display Complete here, right? %]
+                            [% CASE 'new' %]<span title="status_1">New</span>
+                            [% CASE 'ordered' %]<span title="status_2">Ordered</span>
+                            [% CASE 'partial' %]<span title="status_3">Partial</span>
+                            [% CASE 'complete' %]<span title="status_4">Complete</span>
+                            [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
+                          [% END %]
+                        </td>
+                        <td>
+                            [% IF order.datereceived %][%# FIXME Should only be true, right? %]
+                                [%# FIXME What if unitprice has not been filled? %]
+                                [% order.unitprice_tax_excluded | $Price | html %] / [% order.unitprice_tax_included | $Price | html %]
+                            [% END %]
+                        </td>
+                        <td>[% order.order_internalnote | html %]</td>
+                    </tr>
+                [% END %]
+                </tbody>
+            </table>
+        </fieldset>
+    [% ELSIF (AcqCreateItemReceiving) %]
         <div id="items_list" style="display:none">
             <p><b>Items list</b></p>
             <div style="width:100%;overflow:auto;">
@@ -181,19 +236,18 @@
         </span>
        </li>
        <li><label for="quantity_to_receive">Quantity to receive: </label><span class="label">
-           [% IF ( edit and not subscriptionid) %]
+           [% IF edit or subscriptionid %]
                <input type="text" id="quantity_to_receive" name="quantity" value="[% quantity | html %]" />
            [% ELSE%]
                <input type="text" readonly="readonly" id="quantity_to_receive" name="quantity" value="[% quantity | html %]" />
            [% END %]
            </span></li>
         <li><label for="quantity">Quantity received: </label>
-          [% IF (AcqCreateItemReceiving) %]
-            [% IF ( subscriptionid ) %]
-              <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="1" />
-            [% ELSE %]
+          [% IF subscriptionid %]
+              <input type="text" size="20" name="quantityrec" id="quantity" value="[% quantity | html %]" />
+              <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% quantityreceived | html %]" />
+          [% ELSIF AcqCreateItemReceiving %]
               <input readonly="readonly" type="text" size="20" name="quantityrec" id="quantity" value="0" />
-            [% END %]
           [% ELSE %]
             [% IF ( quantityreceived ) %]
                 [% IF ( edit ) %]
@@ -208,18 +262,14 @@
                     <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="[% quantityreceived | html %]" />
                 [% END %]
             [% ELSE %]
-                [% IF ( subscriptionid ) %]
-                    <input type="text" readonly="readonly" id="quantity" size="20" name="quantityrec" value="1" />
-                [% ELSE %]
-                    <input type="text" id="quantity" size="20" name="quantityrec" value="1" />
-                [% END %]
+                <input type="text" id="quantity" size="20" name="quantityrec" value="1" />
                 <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="0" />
             [% END %]
             <div id="qtyrecerror" style="display:none">
                 <p class="error">Warning, you have entered more items than expected.
                 Items will not be created.</p>
             </div>
-          [% END %][%# IF (AcqCreateItemReceiving) %]
+          [% END %][%# IF (subscriptionid) ELSIF (AcqCreateItemReceiving) %]
 		</li>
 
         [% IF ( gst_values ) %]
@@ -242,7 +292,7 @@
         <li><label for="rrp">Retail price: </label>[% rrp | $Price %] <span class="hint">(adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])</span></li>
         <li>
             <label for="replacementprice">Replacement price:</label>
-            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price %]" />
+            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price | html %]" />
         </li>
         <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %] <span class="hint">[% IF (listincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]</span></li>
         <li>
