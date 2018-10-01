@@ -37,14 +37,26 @@ Koha::ExternalContent::RecordedBooks
 =head1 SYNOPSIS
 
     use Koha::ExternalContent::RecordedBooks;
-    my $od_client = Koha::ExternalContent::RecordedBooks->new();
-    my $od_auth_url = $od_client->auth_url();
+    my $rb_client = Koha::ExternalContent::RecordedBooks->new();
+    my $rb_auth_url = $od_client->auth_url();
 
 =head1 DESCRIPTION
 
 A (very) thin wrapper around C<WebService::ILS::RecordedBooks::Patron>
 
 Takes "RecordedBooks*" Koha preferences
+
+=cut
+
+=head2 Class Methods
+
+=cut
+
+=head3 new
+
+my $rb_client = Koha::ExternalContent::RecordedBooks->new();
+
+Create the object for interacting with RecordedBooks
 
 =cut
 
