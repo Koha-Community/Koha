@@ -292,18 +292,18 @@ elsif ($op eq "add-branch-cat") {
 
     if ($branch eq "*") {
         if ($categorycode eq "*") {
+            #FIXME This block is will probably be never used
             my $sth_search = $dbh->prepare("SELECT count(*) AS total
                                             FROM default_circ_rules");
             my $sth_insert = $dbh->prepare(q|
                 INSERT INTO default_circ_rules
-                    (maxissueqty, maxonsiteissueqty, max_holds)
-                    VALUES (?, ?, ?)
+                    (maxissueqty, maxonsiteissueqty)
+                    VALUES (?, ?)
             |);
             my $sth_update = $dbh->prepare(q|
                 UPDATE default_circ_rules
                 SET maxissueqty = ?,
                     maxonsiteissueqty = ?,
-                    max_holds = ?
             |);
 
             $sth_search->execute();
@@ -385,14 +385,13 @@ elsif ($op eq "add-branch-cat") {
                                         AND   categorycode = ?");
         my $sth_insert = $dbh->prepare(q|
             INSERT INTO branch_borrower_circ_rules
-            (branchcode, categorycode, maxissueqty, maxonsiteissueqty, max_holds)
-            VALUES (?, ?, ?, ?, ?)
+            (branchcode, categorycode, maxissueqty, maxonsiteissueqty)
+            VALUES (?, ?, ?, ?)
         |);
         my $sth_update = $dbh->prepare(q|
             UPDATE branch_borrower_circ_rules
             SET maxissueqty = ?,
                 maxonsiteissueqty = ?
-                max_holds = ?
             WHERE branchcode = ?
             AND categorycode = ?
         |);
@@ -400,9 +399,9 @@ elsif ($op eq "add-branch-cat") {
         $sth_search->execute($branch, $categorycode);
         my $res = $sth_search->fetchrow_hashref();
         if ($res->{total}) {
-            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $max_holds, $branch, $categorycode);
+            $sth_update->execute($maxissueqty, $maxonsiteissueqty, $branch, $categorycode);
         } else {
-            $sth_insert->execute($branch, $categorycode, $maxissueqty, $maxonsiteissueqty, $max_holds);
+            $sth_insert->execute($branch, $categorycode, $maxissueqty, $maxonsiteissueqty);
         }
 
         Koha::CirculationRules->set_rule(
