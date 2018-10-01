@@ -1,5 +1,6 @@
 [% USE Asset %]
 [% USE Koha %]
+[% USE KohaPlugins %]
 [% USE String %]
 [% PROCESS 'html_helpers.inc' %]
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
