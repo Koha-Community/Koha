@@ -217,7 +217,7 @@ if ($noreport) {
         borrowers.surname,
         borrowers.firstname,
         borrowers.streetnumber,
-        borrowers.streettype, 
+        borrowers.streettype,
         borrowers.address,
         borrowers.address2,
         borrowers.city,
@@ -226,6 +226,8 @@ if ($noreport) {
         borrowers.phone,
         borrowers.email,
         borrowers.cardnumber,
+        borrowers.borrowernumber,
+        borrowers.branchcode,
         issues.itemnumber,
         issues.issuedate,
         items.barcode,
@@ -233,9 +235,7 @@ if ($noreport) {
         items.holdingbranch,
         biblio.title,
         biblio.author,
-        borrowers.borrowernumber,
         biblio.biblionumber,
-        borrowers.branchcode,
         items.itemcallnumber,
         items.replacementprice,
         items.enumchron
@@ -300,6 +300,21 @@ if ($noreport) {
         push @overduedata, {
             patron                 => scalar Koha::Patrons->find( $data->{borrowernumber} ),
             duedate                => $data->{date_due},
+            borrowernumber         => $data->{borrowernumber},
+            cardnumber             => $data->{cardnumber},
+            borrowertitle          => $data->{borrowertitle},
+            surname                => $data->{surname},
+            firstname              => $data->{firstname},
+            streetnumber           => $data->{streetnumber},
+            streettype             => $data->{streettype},
+            address                => $data->{address},
+            address2               => $data->{address2},
+            city                   => $data->{city},
+            zipcode                => $data->{zipcode},
+            country                => $data->{country},
+            phone                  => $data->{phone},
+            email                  => $data->{email},
+            branchcode             => $data->{branchcode},
             barcode                => $data->{barcode},
             itemnum                => $data->{itemnumber},
             issuedate              => output_pref({ dt => dt_from_string( $data->{issuedate} ), dateonly => 1 }),
@@ -364,7 +379,7 @@ sub build_csv {
     $csv->combine(@keys);
     push @lines, $csv->string();
 
-    my @private_keys = qw( dueborrowertitle firstname surname phone email address address2 zipcode city country streetnumber streettype );
+    my @private_keys = qw( title firstname surname phone email address address2 zipcode city country streetnumber streettype );
     # ... and rest of report
     foreach my $overdue ( @{ $overdues } ) {
         unless ( $logged_in_user->can_see_patron_infos( $overdue->{patron} ) ) {
