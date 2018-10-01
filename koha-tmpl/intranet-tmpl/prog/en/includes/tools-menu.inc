@@ -1,3 +1,5 @@
+[% USE Koha %]
+
 <div id="navmenu">
 <div id="navmenulist">
 <ul>
@@ -37,6 +39,9 @@
     [% END %]
     [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
 	<li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></li>
+    [% END %]
+    [% IF ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) %]
+    <li><a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a></li>
     [% END %]
 </ul>
 <h5>Catalog</h5>

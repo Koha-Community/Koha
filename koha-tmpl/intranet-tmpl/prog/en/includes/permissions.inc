@@ -119,8 +119,7 @@
   [%# self_check %]
     [%- CASE 'self_checkin_module' -%]<span>Log into the self check-in module. Note: this permission prevents the patron from using any other OPAC functionality</span>
     [%- CASE 'self_checkout_module' -%]<span>Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID</span>
+    [%- CASE 'manage_rota_items' -%]<span>Add and remove items from rotas</span>
+    [%- CASE 'manage_rotas' -%]<span>Create, edit and delete rotas</span>
   [%- END -%]
-    [%- CASE 'can_add_items_rotas' -%]<span>Add and remove items from rotas</span>
-    [%- CASE 'can_edit_rotas' -%]<span>Create, edit and delete rotas</span>
-    [%- END -%]
 [%- END -%]

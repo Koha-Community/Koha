@@ -1,0 +1,79 @@
+{
+    "/rotas/{rota_id}/stages/{stage_id}/position": {
+        "put": {
+            "x-mojo-to": "Stage#move",
+            "operationId": "moveStage",
+            "tags": ["rotas"],
+            "parameters": [{
+                "name": "rota_id",
+                "in": "path",
+                "required": true,
+                "description": "A rotas ID",
+                "type": "integer"
+            }, {
+                "name": "stage_id",
+                "in": "path",
+                "required": true,
+                "description": "A stages ID",
+                "type": "integer"
+            }, {
+                "name": "position",
+                "in": "body",
+                "required": true,
+                "description": "A stages position in the rota",
+                "schema": {
+                    "type": "integer"
+                }
+            }],
+            "produces": [
+                "application/json"
+            ],
+            "responses": {
+                "200": {
+                    "description": "OK"
+                },
+                "400": {
+                    "description": "Bad request",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "401": {
+                    "description": "Authentication required",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "403": {
+                    "description": "Access forbidden",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "404": {
+                    "description": "Position not found",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "500": {
+                    "description": "Internal server error",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                },
+                "503": {
+                    "description": "Under maintenance",
+                    "schema": {
+                        "$ref": "../definitions.json#/error"
+                    }
+                }
+            },
+            "x-koha-authorization": {
+                "permissions": {
+                    "borrowers": "1"
+                }
+            }
+        }
+    }
+}

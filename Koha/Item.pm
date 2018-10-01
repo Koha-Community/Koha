@@ -31,6 +31,8 @@ use Koha::Item::Transfer::Limits;
 use Koha::Item::Transfers;
 use Koha::Patrons;
 use Koha::Libraries;
+use Koha::StockRotationItem;
+use Koha::StockRotationRotas;
 
 use base qw(Koha::Object);
 
@@ -282,7 +284,52 @@ sub current_holds {
     return Koha::Holds->_new_from_dbic($hold_rs);
 }
 
-=head3 type
+=head3 stockrotationitem
+
+  my $sritem = Koha::Item->stockrotationitem;
+
+Returns the stock rotation item associated with the current item.
+
+=cut
+
+sub stockrotationitem {
+    my ( $self ) = @_;
+    my $rs = $self->_result->stockrotationitem;
+    return 0 if !$rs;
+    return Koha::StockRotationItem->_new_from_dbic( $rs );
+}
+
+=head3 add_to_rota
+
+  my $item = $item->add_to_rota($rota_id);
+
+Add this item to the rota identified by $ROTA_ID, which means associating it
+with the first stage of that rota.  Should this item already be associated
+with a rota, then we will move it to the new rota.
+
+=cut
+
+sub add_to_rota {
+    my ( $self, $rota_id ) = @_;
+    Koha::StockRotationRotas->find($rota_id)->add_item($self->itemnumber);
+    return $self;
+}
+
+=head3 biblio
+
+  my $biblio = $item->biblio;
+
+Returns the biblio associated with the current item.
+
+=cut
+
+sub biblio {
+    my ( $self ) = @_;
+    my $rs = $self->_result->biblio;
+    return Koha::Biblio->_new_from_dbic( $rs );
+}
+
+=head3 _type
 
 =cut
 

@@ -830,6 +830,67 @@ subtest 'Test logging for ModItem' => sub {
     $schema->resultset('ActionLog')->search()->delete();
     ModItem({ location => $location }, $bibnum, $itemnumber);
     is( $schema->resultset('ActionLog')->count(), 1, 'Undefined value defaults to true, triggers logging' );
+};
+
+subtest 'Check stockrotationitem relationship' => sub {
+    plan tests => 1;
+
+    $schema->storage->txn_begin();
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item = $builder->build({ source => 'Item' });
+
+    $builder->build({
+        source => 'Stockrotationitem',
+        value  => { itemnumber_id => $item->{itemnumber} }
+    });
+
+    my $sritem = Koha::Items->find($item->{itemnumber})->stockrotationitem;
+    isa_ok( $sritem, 'Koha::StockRotationItem', "Relationship works and correctly creates Koha::Object." );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Check add_to_rota method' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin();
+
+    my $builder = t::lib::TestBuilder->new;
+    my $item = $builder->build({ source => 'Item' });
+    my $rota = $builder->build({ source => 'Stockrotationrota' });
+    my $srrota = Koha::StockRotationRotas->find($rota->{rota_id});
+
+    $builder->build({
+        source => 'Stockrotationstage',
+        value  => { rota_id => $rota->{rota_id} },
+    });
+
+    my $sritem = Koha::Items->find($item->{itemnumber});
+    $sritem->add_to_rota($rota->{rota_id});
+
+    is(
+        Koha::StockRotationItems->find($item->{itemnumber})->stage_id,
+        $srrota->stockrotationstages->next->stage_id,
+        "Adding to a rota a new sritem item being assigned to its first stage."
+    );
+
+    my $newrota = $builder->build({ source => 'Stockrotationrota' });
+
+    my $srnewrota = Koha::StockRotationRotas->find($newrota->{rota_id});
+
+    $builder->build({
+        source => 'Stockrotationstage',
+        value  => { rota_id => $newrota->{rota_id} },
+    });
+
+    $sritem->add_to_rota($newrota->{rota_id});
+
+    is(
+        Koha::StockRotationItems->find($item->{itemnumber})->stage_id,
+        $srnewrota->stockrotationstages->next->stage_id,
+        "Moving an item results in that sritem being assigned to the new first stage."
+    );
 
     $schema->storage->txn_rollback;
 };

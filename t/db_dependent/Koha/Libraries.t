@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 6;
 
 use Koha::Library;
 use Koha::Libraries;
@@ -52,6 +52,29 @@ is( $retrieved_library_1->branchname, $new_library_1->branchname, 'Find a librar
 
 $retrieved_library_1->delete;
 is( Koha::Libraries->search->count, $nb_of_libraries + 1, 'Delete should have deleted the library' );
+
+# Stockrotation relationship testing
+
+my $new_library_sr = $builder->build({ source => 'Branch' });
+
+$builder->build({
+    source => 'Stockrotationstage',
+    value  => { branchcode_id => $new_library_sr->{branchcode} },
+});
+$builder->build({
+    source => 'Stockrotationstage',
+    value  => { branchcode_id => $new_library_sr->{branchcode} },
+});
+$builder->build({
+    source => 'Stockrotationstage',
+    value  => { branchcode_id => $new_library_sr->{branchcode} },
+});
+
+my $srstages = Koha::Libraries->find($new_library_sr->{branchcode})
+    ->stockrotationstages;
+is( $srstages->count, 3, 'Correctly fetched stockrotationstages associated with this branch');
+
+isa_ok( $srstages->next, 'Koha::StockRotationStage', "Relationship correctly creates Koha::Objects." );
 
 $schema->storage->txn_rollback;
 
