@@ -907,7 +907,7 @@ $(document).ready(function(){
         var $recordedbooks_results = $( '<div id="recordedbooks-results">' + MSG_SEARCHING.format('RecordedBooks') + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
         $( '#numresults' ) .append( ' ' )
             .append( $recordedbooks_results );
-        KOHA.RecordedBooks.search( querystring, [% OPACnumSearchResults || "null" %], null, function( data ) {
+        KOHA.RecordedBooks.search( querystring, [% OPACnumSearchResults || "null" | html %], null, function( data ) {
             if ( data.error ) {
                 $recordedbooks_results.html( MSG_ERROR_SEARCHING_COLLECTION.format('RecordedBooks')  + ': ' + data.error);
                 return;

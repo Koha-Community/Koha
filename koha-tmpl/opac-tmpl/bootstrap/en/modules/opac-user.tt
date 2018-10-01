@@ -1074,11 +1074,11 @@
     </script>
     [% END %]
     [% IF RecordedBooksCirculation %]
-        [% Asset.js("js/recordedbooks.js") %]
+        [% Asset.js("js/recordedbooks.js") | $raw %]
         <script type="text/JavaScript">
             $(document).ready(function() {
                 [% IF ( recordedbooks_error ) %]
-                    KOHA.RecordedBooks.display_error("#opac-user-recordedbooks", "[% recordedbooks_error.dquote %]");
+                    KOHA.RecordedBooks.display_error("#opac-user-recordedbooks", "[% recordedbooks_error.dquote | html %]");
                 [% END %]
                 [% IF ( recordedbooks_tab ) %]
                     $("#opac-user-views").tabs("select", "#opac-user-recordedbooks");

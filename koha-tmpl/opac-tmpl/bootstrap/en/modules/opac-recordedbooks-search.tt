@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo; RecordedBooks search for '[% q | html %]'</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; RecordedBooks search for '[% q | html %]'</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
 [% Asset.css("css/jquery.rating.css") | $raw %]
@@ -61,14 +61,14 @@
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
-[% Asset.js("js/recordedbooks.js") %]
-[% Asset.js("lib/jquery/plugins/jquery.rating.js") %]
+[% Asset.js("js/recordedbooks.js") | $raw %]
+[% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %]
 <script type="text/javascript">
 var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) |html %]";
-var results_per_page = [% OPACnumSearchResults || 20 %];
+var results_per_page = [% OPACnumSearchResults || 20 | html %];
 
 function search( page ) {
-    $( '#recordedbooks-status' ).html( MSG_SEARCHING.format("RecordedBooks") + ' <img class="throbber" src="[% interface %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
+    $( '#recordedbooks-status' ).html( MSG_SEARCHING.format("RecordedBooks") + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
 
     KOHA.RecordedBooks.search( querystring, results_per_page, page, function( data ) {
         if ( data.error ) {

@@ -16465,10 +16465,10 @@ if( CheckVersion( $DBversion ) ) {
 $DBversion = '18.06.00.034';
 if( CheckVersion( $DBversion ) ) {
     $dbh->do(q|
-	INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
-	VALUES ('RecordedBooksClientSecret','','30','Client key for RecordedBooks integration','YesNo'),
-	       ('RecordedBooksLibraryID','','','Library ID for RecordedBooks integration','Integer'),
-	       ('RecordedBooksDomain','','','RecordedBooks domain','Free');
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('RecordedBooksClientSecret','','30','Client key for RecordedBooks integration','YesNo'),
+               ('RecordedBooksLibraryID','','','Library ID for RecordedBooks integration','Integer'),
+               ('RecordedBooksDomain','','','RecordedBooks domain','Free');
     |);
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 17602 - Integrate support for OneClickdigital/Recorded Books API)\n";
