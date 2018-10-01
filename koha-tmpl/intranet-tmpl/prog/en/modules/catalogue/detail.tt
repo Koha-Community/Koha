@@ -266,7 +266,22 @@
                     <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.branchcode ) | html %] [% END %]</td>
                     <td class="homebranch">
                         [% Branches.GetName(item.homebranch) | html %]
-                        <span class="shelvingloc">[% item.location | html %]</span>
+                        <span class="shelvingloc">
+                            [%# 1 - If permanent location is defined %]
+                            [%#   a - display the description if available, display the code if not %]
+                            [%#   b - display the current location in parens %]
+                            [%# 2 - If permanent location is not defined, but location is defined %]
+                            [%#   a - display the current location description if available, display the code if not %]
+                            [%# 3 - If neither are defined, show nothing %]
+                            [% IF item.permanent_location %]
+                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.permanent_location ) | html %]
+                                [% IF item.location AND item.location != item.permanent_location %]
+                                    ([% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %])
+                                [% END %]
+                            [% ELSIF item.location %]
+                                [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.permanent_location ) | html %]
+                            [% END %]
+                        </span>
                     </td>
                     [% IF ( itemdata_ccode ) %]<td>[% item.ccode | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
