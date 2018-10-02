@@ -69,8 +69,9 @@ sub GetRecords {
         if ($include_items) {
             $sql .= "
                 OR biblionumber IN (SELECT biblionumber from deleteditems WHERE timestamp >= ? AND timestamp <= ?)
+                OR biblionumber IN (SELECT biblionumber from holdings WHERE timestamp >= ? AND timestamp <= ?)
             ";
-            push @bind_params, ($token->{'from_arg'}, $token->{'until_arg'});
+            push @bind_params, ($token->{'from_arg'}, $token->{'until_arg'}, $token->{'from_arg'}, $token->{'until_arg'});
             if (!$deleted) {
                 $sql .= "
                     OR biblionumber IN (SELECT biblionumber from items WHERE timestamp >= ? AND timestamp <= ?)
@@ -106,6 +107,8 @@ sub GetRecords {
                     SELECT timestamp FROM deletedbiblio_metadata WHERE biblionumber = ?
                     UNION
                     SELECT timestamp FROM deleteditems WHERE biblionumber = ?
+                    UNION
+                    SELECT timestamp FROM holdings WHERE biblionumber = ?
                 ) bis
             ";
         } else {
@@ -117,6 +120,8 @@ sub GetRecords {
                     SELECT timestamp FROM deleteditems WHERE biblionumber = ?
                     UNION
                     SELECT timestamp FROM items WHERE biblionumber = ?
+                    UNION
+                    SELECT timestamp FROM holdings WHERE biblionumber = ?
                 ) bi
             ";
         }
@@ -139,7 +144,8 @@ sub GetRecords {
                 );
                 last STAGELOOP;
             }
-            my @params = $deleted ? ( $biblionumber, $biblionumber ) : ( $biblionumber, $biblionumber, $biblionumber );
+            my @params = $deleted ? ( $biblionumber, $biblionumber, $biblionumber ) 
+                : ( $biblionumber, $biblionumber, $biblionumber, $biblionumber );
             $record_sth->execute( @params ) || die( 'Could not execute statement: ' . $sth->errstr );
 
             my ($timestamp) = $record_sth->fetchrow;
