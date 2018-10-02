@@ -37,7 +37,7 @@ use_ok('Koha::Illrequests');
 
 subtest 'Basic object tests' => sub {
 
-    plan tests => 22;
+    plan tests => 24;
 
     $schema->storage->txn_begin;
 
@@ -84,6 +84,19 @@ subtest 'Basic object tests' => sub {
        "Orderid getter works.");
     is($illrq_obj->backend, $illrq->{backend},
        "Backend getter works.");
+
+    is($illrq_obj->getType, '<span>N/A</span>',
+        'getType() returns placeholder if no type is set');
+    $builder->build({
+        source => 'Illrequestattribute',
+        value  => {
+            illrequest_id => $illrq_obj->illrequest_id,
+            type => 'type',
+            value => 'book'
+        }
+    });
+    is($illrq_obj->getType, 'book',
+        'getType() returns correct type if set');
 
     isnt($illrq_obj->status, 'COMP',
          "ILL is not currently marked complete.");
