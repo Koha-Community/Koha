@@ -216,6 +216,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('IDreamBooksResults','0','','Display IDreamBooks.com rating in search results','YesNo'),
 ('IDreamBooksReviews','0','','Display book review snippets from IDreamBooks.com','YesNo'),
 ('IdRef','0','','Disable/enable the IdRef webservice from the OPAC detail page.','YesNo'),
+('IllLog', 0, '', 'If ON, log information about ILL requests', 'YesNo'),
 ('ILLModule','0','If ON, enables the interlibrary loans module.','','YesNo'),
 ('ILLModuleCopyrightClearance','','70|10','Enter text to enable the copyright clearance stage of request creation. Text will be displayed','Textarea'),
 ('ILLOpacbackends',NULL,NULL,'ILL backends to enabled for OPAC initiated requests','multiple'),

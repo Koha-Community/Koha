@@ -32,6 +32,7 @@ use Koha::Exceptions::Ill;
 use Koha::Illcomments;
 use Koha::Illrequestattributes;
 use Koha::AuthorisedValue;
+use Koha::Illrequest::Logger;
 use Koha::Patron;
 use Koha::AuthorisedValues;
 
@@ -157,6 +158,16 @@ sub illcomments {
     );
 }
 
+=head3 logs
+
+=cut
+
+sub logs {
+    my ( $self ) = @_;
+    my $logger = Koha::Illrequest::Logger->new;
+    return $logger->get_request_logs($self);
+}
+
 =head3 patron
 
 =cut
@@ -169,15 +180,26 @@ sub patron {
 }
 
 =head3 status_alias
+
+    $Illrequest->status_alias(143);
+
 Overloaded getter/setter for status_alias,
 that only returns authorised values from the
-correct category
+correct category and records the fact that the status has changed
 
 =cut
 
 sub status_alias {
-    my ($self, $newval) = @_;
-    if ($newval) {
+    my ($self, $new_status_alias) = @_;
+
+    my $current_status_alias = $self->SUPER::status_alias;
+
+    if ($new_status_alias) {
+        # Keep a record of the previous status before we change it,
+        # we might need it
+        $self->{previous_status} = $current_status_alias ?
+            $current_status_alias :
+            scalar $self->status;
         # This is hackery to enable us to undefine
         # status_alias, since we need to have an overloaded
         # status_alias method to get us around the problem described
@@ -185,13 +207,19 @@ sub status_alias {
         # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
         # We need a way of accepting implied undef, so we can nullify
         # the status_alias column, when called from $self->status
-        my $val = $newval eq "-1" ? undef : $newval;
-        my $newval = $self->SUPER::status_alias($val);
-        if ($newval) {
-            return $newval;
+        my $val = $new_status_alias eq "-1" ? undef : $new_status_alias;
+        my $ret = $self->SUPER::status_alias($val);
+        my $val_to_log = $val ? $new_status_alias : scalar $self->status;
+        if ($ret) {
+            my $logger = Koha::Illrequest::Logger->new;
+            $logger->log_status_change({
+                request => $self,
+                value   => $val_to_log
+            });
         } else {
-            return;
+            delete $self->{previous_status};
         }
+        return $ret;
     }
     # We can't know which result is the right one if there are multiple
     # ILLSTATUS authorised values with the same authorised_value column value
@@ -210,25 +238,47 @@ sub status_alias {
 
 =head3 status
 
+    $Illrequest->status('CANREQ');
+
 Overloaded getter/setter for request status,
-also nullifies status_alias
+also nullifies status_alias and records the fact that the status has changed
 
 =cut
 
 sub status {
-    my ( $self, $newval) = @_;
-    if ($newval) {
-        # This is hackery to enable us to undefine
-        # status_alias, since we need to have an overloaded
-        # status_alias method to get us around the problem described
-        # here:
-        # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
-        # We need a way of passing implied undef to nullify status_alias
-        # so we pass -1, which is special cased in the overloaded setter
-        $self->status_alias("-1");
-        return $self->SUPER::status($newval);
+    my ( $self, $new_status) = @_;
+
+    my $current_status = $self->SUPER::status;
+    my $current_status_alias = $self->SUPER::status_alias;
+
+    if ($new_status) {
+        # Keep a record of the previous status before we change it,
+        # we might need it
+        $self->{previous_status} = $current_status_alias ?
+            $current_status_alias :
+            $current_status;
+        my $ret = $self->SUPER::status($new_status)->store;
+        if ($current_status_alias) {
+            # This is hackery to enable us to undefine
+            # status_alias, since we need to have an overloaded
+            # status_alias method to get us around the problem described
+            # here:
+            # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
+            # We need a way of passing implied undef to nullify status_alias
+            # so we pass -1, which is special cased in the overloaded setter
+            $self->status_alias("-1");
+        } else {
+            my $logger = Koha::Illrequest::Logger->new;
+            $logger->log_status_change({
+                request => $self,
+                value   => $new_status
+            });
+        }
+        delete $self->{previous_status};
+        return $ret;
+    } else {
+        return $current_status;
     }
-    return $self->SUPER::status;
 }
 
 =head3 load_backend
@@ -252,7 +302,10 @@ sub load_backend {
     my $location = join "/", @raw, $backend_name, "Base.pm";    # File to load
     my $backend_class = join "::", @raw, $backend_name, "Base"; # Package name
     require $location;
-    $self->{_my_backend} = $backend_class->new({ config => $self->_config });
+    $self->{_my_backend} = $backend_class->new({
+        config => $self->_config,
+        logger => Koha::Illrequest::Logger->new
+    });
     return $self;
 }
 
@@ -1105,6 +1158,33 @@ sub _censor {
     $params->{display_reply_date} = ( $censorship->{censor_reply_date} ) ? 0 : 1;
 
     return $params;
+}
+
+=head3 store
+
+    $Illrequest->store;
+
+Overloaded I<store> method that, in addition to performing the 'store',
+possibly records the fact that something happened
+
+=cut
+
+sub store {
+    my ( $self, $attrs ) = @_;
+
+    my $ret = $self->SUPER::store;
+
+    $attrs->{log_origin} = 'core';
+
+    if ($ret && defined $attrs) {
+        my $logger = Koha::Illrequest::Logger->new;
+        $logger->log_maybe({
+            request => $self,
+            attrs   => $attrs
+        });
+    }
+
+    return $ret;
 }
 
 =head3 TO_JSON

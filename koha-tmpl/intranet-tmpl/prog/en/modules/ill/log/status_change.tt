@@ -1,0 +1,11 @@
+<p>
+[% log.timestamp | $KohaDates with_hours => 1 %] : <b>Status changed</b>
+[% IF log.info.status_before %]
+[% before = log.info.status_before %]
+[% display_before = log.aliases.$before ? log.aliases.$before.lib : request.capabilities.$before.name %]
+from &quot;[% display_before | html %]&quot;
+[% END %]
+[% after = log.info.status_after %]
+[% display_after = log.aliases.$after ? log.aliases.$after.lib : request.capabilities.$after.name %]
+to &quot;[% display_after | html %]&quot;
+</p>

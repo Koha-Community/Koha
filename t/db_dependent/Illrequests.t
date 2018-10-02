@@ -39,7 +39,7 @@ use_ok('Koha::Illrequests');
 
 subtest 'Basic object tests' => sub {
 
-    plan tests => 24;
+    plan tests => 25;
 
     $schema->storage->txn_begin;
 
@@ -62,6 +62,8 @@ subtest 'Basic object tests' => sub {
        "Branchcode getter works.");
     is($illrq_obj->status, $illrq->{status},
        "Status getter works.");
+    is($illrq_obj->status_alias, $illrq->{status_alias},
+       "Status_alias getter works.");
     is($illrq_obj->placed, $illrq->{placed},
        "Placed getter works.");
     is($illrq_obj->replied, $illrq->{replied},

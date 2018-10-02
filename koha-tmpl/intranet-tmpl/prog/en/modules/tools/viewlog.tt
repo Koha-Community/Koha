@@ -29,6 +29,7 @@
 [%        CASE 'ACQUISITIONS' %]Acquisitions
 [%        CASE 'SERIAL'       %]Serials
 [%        CASE 'HOLDS'        %]Holds
+[%        CASE 'ILL'          %]Interlibrary loans
 [%        CASE 'CIRCULATION'  %]Circulation
 [%        CASE 'LETTER'       %]Letter
 [%        CASE 'FINES'        %]Fines
@@ -54,6 +55,7 @@
 [%        CASE 'CHANGE PASS' %]Change password
 [%        CASE 'ADDCIRCMESSAGE' %]Add circulation message
 [%        CASE 'DELCIRCMESSAGE' %]Delete circulation message
+[%        CASE 'STATUS_CHANGE'  %]Change ILL request status
 [%        CASE 'Run'    %]Run
 [%        CASE %][% action | html %]
 [%    END %]
@@ -103,7 +105,7 @@
                                     [% ELSE %]
                                         <option value="">All</option>
                                     [% END %]
-                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
+                                    [% FOREACH modx IN [ 'CATALOGUING' 'AUTHORITIES' 'MEMBERS' 'ACQUISITIONS' 'SERIAL' 'HOLDS' 'ILL' 'CIRCULATION' 'LETTER' 'FINES' 'SYSTEMPREFERENCE' 'CRONJOBS', 'REPORTS' ] %]
                                         [% IF modules.grep(modx).size %]
                                             <option value="[% modx | html %]" selected="selected">[% PROCESS translate_log_module module=modx %]</option>
                                         [% ELSE %]
