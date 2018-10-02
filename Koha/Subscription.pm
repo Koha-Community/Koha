@@ -24,6 +24,7 @@ use Carp;
 use Koha::Database;
 use Koha::Biblios;
 use Koha::Acquisition::Booksellers;
+use Koha::Subscription::Frequencies;
 
 use base qw(Koha::Object);
 
@@ -104,6 +105,20 @@ sub remove_subscriber {
     my $rs = $schema->resultset('Alert');
     my $subscriber = $rs->find({ externalid => $self->subscriptionid, borrowernumber => $patron->borrowernumber });
     $subscriber->delete if $subscriber;
+}
+
+=head3 frequency
+
+my $frequency = $subscription->frequency
+
+Return the subscription frequency
+
+=cut
+
+sub frequency {
+    my($self)=@_;
+    my $frequency_rs= $self->_result->periodicity;
+    return Koha::Subscription::Frequency->_new_from_dbic($frequency_rs);
 }
 
 =head3 type

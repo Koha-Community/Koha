@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Subscriptions;
 use Koha::Biblio;
@@ -86,6 +86,19 @@ subtest 'Koha::Subscription->vendor' => sub {
     my $object = Koha::Subscriptions->find( $subscription->{subscriptionid} );
     is( ref($object->vendor), 'Koha::Acquisition::Bookseller', 'Koha::Subscription->vendor should return a Koha::Acquisition::Bookseller' );
     is( $object->vendor->id, $subscription->{aqbooksellerid}, 'Koha::Subscription->vendor should return the correct vendor' );
+};
+
+subtest 'Koha::Subscription->frequency' => sub {
+    plan tests => 2;
+    my $frequency = $builder->build_object( { class => 'Koha::Subscription::Frequencies' } );
+    my $subscription = $builder->build_object(
+        {
+            class  => 'Koha::Subscriptions',
+            value  => { periodicity => $frequency->id }
+        }
+    );
+    is( ref($subscription->frequency), 'Koha::Subscription::Frequency', 'Koha::Subscription->frequency should return a Koha::Subscription::Frequency' );
+    is( $subscription->frequency->id, $frequency->id, 'Koha::Subscription->frequency should return the correct frequency' );
 };
 
 $schema->storage->txn_rollback;
