@@ -16474,6 +16474,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17602 - Integrate support for OneClickdigital/Recorded Books API)\n";
 }
 
+$DBversion = '18.06.00.035';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE `systempreferences` SET options = 'US|CA|DE|FR|IN|JP|UK' WHERE variable = 'AmazonLocale' AND options='US|CA|DE|FR|JP|UK';
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21403 - Add Indian Amazon Affiliate option to AmazonLocale setting)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
