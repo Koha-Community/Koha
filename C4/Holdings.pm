@@ -32,6 +32,7 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use POSIX qw(strftime);
 
+use C4::Biblio;
 use C4::Koha;
 use C4::Log;    # logaction
 use C4::ClassSource;
