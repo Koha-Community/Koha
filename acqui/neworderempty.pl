@@ -94,6 +94,7 @@ use Koha::MarcSubfieldStructures;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
+use Koha::Subscriptions;
 
 our $input           = new CGI;
 my $booksellerid    = $input->param('booksellerid');	# FIXME: else ERROR!
@@ -380,7 +381,11 @@ if ( defined $from_subscriptionid ) {
         $basket = GetBasket( $input->param('basketno') );
     }
 
-    $template->param( subscriptionid => $from_subscriptionid );
+    my $subscription = Koha::Subscriptions->find($from_subscriptionid);
+    $template->param(
+        subscriptionid => $from_subscriptionid,
+        subscription   => $subscription,
+    );
 }
 
 # Find the items.barcode subfield for barcode validations

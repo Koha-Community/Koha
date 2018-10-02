@@ -322,6 +322,16 @@
                 [% END %]
                 <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
                 <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
+
+                [% IF subscription %]
+                    <br/>
+                    <span class="hint">
+                        Frequency: [% subscription.frequency.description | html %] |
+                        [% IF subscription.numberlength %]Number of issues: [% subscription.numberlength | html %][% END %]
+                        [% IF subscription.weeklength   %]Number of weeks: [% subscription.weeklength | html %][% END %]
+                        [% IF subscription.monthlength  %]Number of months: [% subscription.monthlength | html %][% END %]
+                    </span>
+                [% END %]
             </li>
             <li>
                 [% IF ( close ) %]
