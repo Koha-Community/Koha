@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 72;
+use Test::More tests => 73;
 use t::lib::Mocks;
 use Koha::Database;
 
@@ -711,6 +711,45 @@ subtest 'ModReceiveOrder replacementprice tests' => sub {
     });
     $received_order = GetOrder($received_ordernumber);
     is ($received_order->{replacementprice},'16.120000',"Replacement price set if none passed in");
+};
+
+subtest 'ModReceiveOrder and subscription' => sub {
+    plan tests => 2;
+
+    my $builder     = t::lib::TestBuilder->new;
+    my $first_note  = 'first note';
+    my $second_note = 'second note';
+    my $subscription = $builder->build_object( { class => 'Koha::Subscriptions' } );
+    my $order = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value => {
+                subscriptionid     => $subscription->subscriptionid,
+                order_internalnote => $first_note,
+                quantity           => 5,
+                quantityreceived   => 0,
+            }
+        }
+    );
+    my $order_info = $order->unblessed;
+    # We do not want the note from the original note to be modified
+    # Keeping it will permit to display it for future receptions
+    $order_info->{order_internalnote} = $second_note;
+    my ( undef, my $received_ordernumber ) = ModReceiveOrder(
+        {
+            biblionumber     => $order->biblionumber,
+            order            => $order_info,
+            invoice          => $order->{invoiceid},
+            quantityreceived => 1,
+            budget_id        => $order->budget_id,
+        }
+    );
+    my $received_order = Koha::Acquisition::Orders->find($received_ordernumber);
+    is( $received_order->order_internalnote,
+        $second_note, "No price set if none passed in" );
+
+    $order->get_from_storage;
+    is( $order->get_from_storage->order_internalnote, $first_note );
 };
 
 $schema->storage->txn_rollback();

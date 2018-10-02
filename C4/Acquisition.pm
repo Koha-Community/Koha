@@ -1443,15 +1443,18 @@ sub ModReceiveOrder {
             UPDATE aqorders
             SET quantity = ?,
                 orderstatus = 'partial'|;
-        $query .= q|, order_internalnote = ?| if defined $order->{order_internalnote};
         $query .= q| WHERE ordernumber = ?|;
         my $sth = $dbh->prepare($query);
 
         $sth->execute(
             ( $is_standing ? 1 : ($order->{quantity} - $quantrec) ),
-            ( defined $order->{order_internalnote} ? $order->{order_internalnote} : () ),
             $order->{ordernumber}
         );
+
+        if ( not $order->{subscriptionid} && defined $order->{order_internalnote} ) {
+            $dbh->do(q|UPDATE aqorders
+                SET order_internalnote = ?|, {}, $order->{order_internalnote});
+        }
 
         # Recalculate tax_value
         $dbh->do(q|

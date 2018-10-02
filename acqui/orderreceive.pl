@@ -197,6 +197,8 @@ my @gst_values = map {
     option => $_ + 0.0
 }, split( '\|', C4::Context->preference("gist") );
 
+my $order_internalnote = $order->{order_internalnote};
+my $order_vendornote   = $order->{order_vendornote};
 if ( $order->{subscriptionid} ) {
     # Order from a subscription, we will display an history of what has been received
     my $orders = Koha::Acquisition::Orders->search(
@@ -206,7 +208,14 @@ if ( $order->{subscriptionid} ) {
             ordernumber        => { '!=' => $order->{ordernumber} }
         }
     );
-    $template->param( orders => $orders );
+    if ( $order->{parent_ordernumber} != $order->{ordernumber} ) {
+        my $parent_order = Koha::Acquisition::Orders->find($order->{parent_ordernumber});
+        $order_internalnote = $parent_order->{order_internalnote};
+        $order_vendornote   = $parent_order->{order_vendornote};
+    }
+    $template->param(
+        orders => $orders,
+    );
 }
 
 $template->param(
@@ -240,8 +249,8 @@ $template->param(
     invoiceid             => $invoice->{invoiceid},
     invoice               => $invoice->{invoicenumber},
     datereceived          => $datereceived,
-    order_internalnote    => $order->{order_internalnote},
-    order_vendornote      => $order->{order_vendornote},
+    order_internalnote    => $order_internalnote,
+    order_vendornote      => $order_vendornote,
     suggestionid          => $suggestion->{suggestionid},
     surnamesuggestedby    => $suggestion->{surnamesuggestedby},
     firstnamesuggestedby  => $suggestion->{firstnamesuggestedby},
