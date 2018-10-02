@@ -493,7 +493,7 @@ sub _koha_add_holding {
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $biblionumber, $biblioitemnumber, $frameworkcode,
-        $holding->{holdingbranch}, $holding->{location}, $holding->{callnumber}, $holding->{suppress}
+        $holding->{holdingbranch}, $holding->{location}, $holding->{callnumber}, $holding->{suppress} ? 1 : 0
     );
 
     my $holding_id = $dbh->{'mysql_insertid'};
@@ -532,7 +532,7 @@ sub _koha_modify_holding {
     my $sth = $dbh->prepare($query);
 
     $sth->execute(
-        $frameworkcode, $holding->{holdingbranch}, $holding->{location}, $holding->{callnumber}, $holding->{suppress}, $holding_id
+        $frameworkcode, $holding->{holdingbranch}, $holding->{location}, $holding->{callnumber}, $holding->{suppress} ? 1 : 0, $holding_id
     ) if $holding_id;
 
     if ( $dbh->errstr || !$holding_id ) {
