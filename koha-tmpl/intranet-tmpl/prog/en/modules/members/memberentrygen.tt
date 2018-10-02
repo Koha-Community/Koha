@@ -512,9 +512,9 @@ $(document).ready(function() {
      <label for="contactname">Surname: </label>
      [% IF ( guarantorid ) %]
      <span>[% contactname %]</span>
-     <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" />
+     <input name="contactname" id="contactname" type="hidden" size="20" value="[% contactname | html %]" readonly/>
      [% ELSE %]
-        <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" />
+        <input name="contactname" id="contactname" type="text" size="20" value="[% contactname | html %]" readonly/>
      [% END %]
  </li>
         [% END %]
@@ -523,9 +523,9 @@ $(document).ready(function() {
      <label for="contactfirstname">First name: </label>
      [% IF ( guarantorid ) %]
      <span>[% contactfirstname %]</span>
-     <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname | html %]" />
+     <input name="contactfirstname" id="contactfirstname" type="hidden" size="20" value="[% contactfirstname | html %]" readonly/>
      [% ELSE %]
-        <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname | html %]" />
+        <input name="contactfirstname" id="contactfirstname" type="text" size="20" value="[% contactfirstname | html %]" readonly/>
      [% END %]
  </li>
         [% END %]

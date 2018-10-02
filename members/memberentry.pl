@@ -173,7 +173,6 @@ if (C4::Context->preference('AnonymizeOthernames') == 1) {
 
 ##KD-258, making sure CGI parameters are defined if the same info is available in the borrowers-hash (%data) WTF is that variable name? 'data'? noNIIIN, whole Koha is about data.
 $guarantorid = $data{guarantorid} unless $guarantorid;
-
 # initialize %newdata
 my %newdata;                                                                             # comes from $input->param()
 if ( $op eq 'insert' || $op eq 'modify' || $op eq 'save' || $op eq 'duplicate' ) {
@@ -255,6 +254,10 @@ if ( $guarantorid ) {
         $guarantorinfo=$guarantordata->{'surname'}." , ".$guarantordata->{'firstname'};
         $newdata{'contactfirstname'}= $guarantordata->{'firstname'};
         $newdata{'contactname'}     = $guarantordata->{'surname'};
+        
+        $data{'contactfirstname'} =  $guarantordata->{'firstname'}; 
+        $data{'contactname'} = $guarantordata->{'surname'};
+        
         $newdata{'contacttitle'}    = $guarantordata->{'title'};
         if ( $op eq 'add' ) {
 	        foreach (qw(streetnumber address streettype address2
@@ -267,7 +270,6 @@ if ( $guarantorid ) {
 	push @errors, 'ERROR_guarantor_is_guarantee' if ( $guarantordata->{'guarantorid'} );
     }
 }
-
 ###############test to take the right zipcode, country and city name ##############
 # set only if parameter was passed from the form
 $newdata{'city'}    = $input->param('city')    if defined($input->param('city'));
@@ -519,6 +521,9 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                 })->store;
             }
         }
+
+        delete $newdata{'contactname'};
+        delete $newdata{'contactfirstname'};
 
         if ($NoUpdateLogin) {
             delete $newdata{'password'};
