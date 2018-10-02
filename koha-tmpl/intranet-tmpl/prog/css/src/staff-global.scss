@@ -90,11 +90,6 @@ a {
         color: #666;
     }
 
-    &.overdue,
-    &.debit {
-        color: #CC0000;
-    }
-
     &.popup {
         background: transparent url("../img/pop-up-link.png") center right no-repeat;
         padding-right: 15px;
@@ -731,13 +726,14 @@ tbody {
     }
 }
 
-.overdue {
-    td {
-        &.od {
-            color: #CC0000;
-            font-weight: bold;
-        }
-    }
+.overdue,
+.debit {
+    color: #CC0000;
+    font-weight: bold;
+}
+
+.strong {
+    font-weight: bold;
 }
 
 tr {
