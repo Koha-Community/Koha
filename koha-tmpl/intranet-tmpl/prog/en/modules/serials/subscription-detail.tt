@@ -368,6 +368,7 @@
                         <th>Internal note</th>
                         <th>Vendor note</th>
                         <th>Fund</th>
+                        <th>Quantity</th>
                         <th title="ecost tax exc. / ecost tax inc.">Ordered</th>
                         <th title="Actual cost tax exc. / Actual cost tax inc.">Spent</th>
                     </tr>
@@ -410,15 +411,16 @@
                         <td>[% order.order_internalnote | html %]</td>
                         <td>[% order.order_vendornote | html %]</td>
                         <td>[% order.fund.budget_name | html %]</td>
+                        <td>[% order.quantity | html %]</td>
                         <td>
                             [% UNLESS order.datereceived %]
-                                [% order.ecost_tax_excluded | $Price %] / [% order.ecost_tax_included | $Price %]
+                                [% order.ecost_tax_excluded * order.quantity | $Price %] / [% order.ecost_tax_included * order.quantity | $Price %]
                             [% END %]
                         </td>
                         <td>
                             [% IF order.datereceived %]
                                 [%# FIXME What if unitprice has not been filled? %]
-                                [% order.unitprice_tax_excluded | $Price %] / [% order.unitprice_tax_included | $Price %]
+                                [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
                             [% END %]
                         </td>
                     </tr>

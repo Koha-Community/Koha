@@ -100,7 +100,7 @@
                         <td>
                             [% IF order.datereceived %][%# FIXME Should only be true, right? %]
                                 [%# FIXME What if unitprice has not been filled? %]
-                                [% order.unitprice_tax_excluded | $Price | html %] / [% order.unitprice_tax_included | $Price | html %]
+                                [% order.unitprice_tax_excluded * order.quantity | $Price %] / [% order.unitprice_tax_included * order.quantity | $Price %]
                             [% END %]
                         </td>
                         <td>[% order.order_internalnote | html %]</td>
