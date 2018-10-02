@@ -1287,7 +1287,7 @@ subtest 'get_overdues' => sub {
 };
 
 subtest 'userid_is_valid' => sub {
-    plan tests => 8;
+    plan tests => 9;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron_category = $builder->build_object(
@@ -1307,6 +1307,7 @@ subtest 'userid_is_valid' => sub {
     my $expected_userid_patron_1 = 'tomasito.none';
     my $borrowernumber = AddMember(%data);
     my $patron_1       = Koha::Patrons->find($borrowernumber);
+    is( $patron_1->has_valid_userid, 1, "Should be valid when compared against them self" );
     is ( $patron_1->userid, $expected_userid_patron_1, 'The userid generated should be the one we expect' );
 
     $patron_1->userid( 'tomasito.non' );

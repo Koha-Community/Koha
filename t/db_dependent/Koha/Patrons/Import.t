@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 124;
+use Test::More tests => 142;
 use Test::Warn;
 
 # To be replaced by t::lib::Mock
@@ -89,6 +89,7 @@ t::lib::Mocks::mock_preference('dateformat', 'us');
 my $csv_headers  = 'cardnumber,surname,firstname,title,othernames,initials,streetnumber,streettype,address,address2,city,state,zipcode,country,email,phone,mobile,fax,dateofbirth,branchcode,categorycode,dateenrolled,dateexpiry,userid,password';
 my $res_header   = 'cardnumber, surname, firstname, title, othernames, initials, streetnumber, streettype, address, address2, city, state, zipcode, country, email, phone, mobile, fax, dateofbirth, branchcode, categorycode, dateenrolled, dateexpiry, userid, password';
 my $csv_one_line = '1000,Nancy,Jenkins,Dr,,NJ,78,Circle,Bunting,El Paso,Henderson,Texas,79984,United States,ajenkins0@sourceforge.net,7-(388)559-6763,3-(373)151-4471,8-(509)286-4001,10/16/1965,CPL,PT,12/28/2014,07/01/2015,jjenkins0,DPQILy';
+my $csv_one_line_a = '1001,Nancy,Jenkins,Dr,,NJ,78,Circle,Bunting,El Paso,Henderson,Texas,79984,United States,ajenkins0@sourceforge.net,7-(388)559-6763,3-(373)151-4471,8-(509)286-4001,10/16/1965,CPL,PT,12/28/2014,07/01/2015,jjenkins0,DPQILy';
 
 my $filename_1 = make_csv($temp_dir, $csv_headers, $csv_one_line);
 open(my $handle_1, "<", $filename_1) or die "cannot open < $filename_1: $!";
@@ -135,7 +136,7 @@ is($result_2->{imported}, 0, 'Got the expected 0 imported result from import_pat
 is($result_2->{invalid}, 1, 'Got the expected 1 invalid result from import_patrons with invalid card number');
 is($result_2->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons with invalid card number');
 
-# Given ... valid file handle, good matchpoint but same input as prior test.
+# Given ... valid file handle, good matchpoint that matches should not overwrite when not set.
 my $filename_3 = make_csv($temp_dir, $csv_headers, $csv_one_line);
 open(my $handle_3, "<", $filename_3) or die "cannot open < $filename_3: $!";
 my $params_3 = { file => $handle_3, matchpoint => 'cardnumber', };
@@ -144,17 +145,59 @@ my $params_3 = { file => $handle_3, matchpoint => 'cardnumber', };
 my $result_3 = $patrons_import->import_patrons($params_3);
 
 # Then ...
-is($result_3->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons with duplicate userid');
-is($result_3->{errors}->[0]->{duplicate_userid}, 1, 'Got the expected duplicate userid error from import patrons with duplicate userid');
-is($result_3->{errors}->[0]->{userid}, 'jjenkins0', 'Got the expected userid error from import patrons with duplicate userid');
+is($result_3->{already_in_db}, 1, 'Got the expected 1 already_in_db from import_patrons with duplicate userid');
+is($result_3->{errors}->[0]->{duplicate_userid}, undef, 'No duplicate userid error from import patrons with duplicate userid (it is our own)');
+is($result_3->{errors}->[0]->{userid}, undef, 'No duplicate userid error from import patrons with duplicate userid (it is our own)');
 
-is($result_3->{feedback}->[0]->{feedback}, 1, 'Got the expected 1 feedback from import_patrons with duplicate userid');
+is($result_3->{feedback}->[0]->{feedback}, 1, 'Got 1 expected feedback from import_patrons that matched but not overwritten');
 is($result_3->{feedback}->[0]->{name}, 'headerrow', 'Got the expected header row name from import_patrons with duplicate userid');
 is($result_3->{feedback}->[0]->{value}, $res_header, 'Got the expected header row value from import_patrons with duplicate userid');
 
-is($result_3->{imported}, 0, 'Got the expected 0 imported result from import_patrons with duplicate userid');
-is($result_3->{invalid}, 1, 'Got the expected 1 invalid result from import_patrons with duplicate userid');
-is($result_3->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons with duplicate userid');
+is($result_3->{imported}, 0, 'Got the expected 0 imported result from import_patrons');
+is($result_3->{invalid}, 0, 'Got the expected 0 invalid result from import_patrons');
+is($result_3->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons that matched');
+
+# Given ... valid file handle, good matchpoint that matches should overwrite when set.
+my $filename_3a = make_csv($temp_dir, $csv_headers, $csv_one_line);
+open(my $handle_3a, "<", $filename_3a) or die "cannot open < $filename_3: $!";
+my $params_3a = { file => $handle_3a, matchpoint => 'cardnumber', overwrite_cardnumber => 1};
+
+# When ...
+my $result_3a = $patrons_import->import_patrons($params_3a);
+
+# Then ...
+is($result_3a->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons when matched and overwrite set');
+is($result_3a->{errors}->[0]->{duplicate_userid}, undef, 'No duplicate userid error from import patrons with duplicate userid (it is our own)');
+is($result_3a->{errors}->[0]->{userid}, undef, 'No duplicate userid error from import patrons with duplicate userid (it is our own)');
+
+is($result_3a->{feedback}->[0]->{feedback}, 1, 'Got 1 expected feedback from import_patrons that matched and overwritten');
+is($result_3a->{feedback}->[0]->{name}, 'headerrow', 'Got the expected header row name from import_patrons with duplicate userid');
+is($result_3a->{feedback}->[0]->{value}, $res_header, 'Got the expected header row value from import_patrons with duplicate userid');
+
+is($result_3a->{imported}, 0, 'Got the expected 0 imported result from import_patrons');
+is($result_3a->{invalid}, 0, 'Got the expected 0 invalid result from import_patrons');
+is($result_3a->{overwritten}, 1, 'Got the expected 1 overwritten result from import_patrons that matched');
+
+# Given ... valid file handle, good matchpoint that does not match and conflicting userid.
+my $filename_3b = make_csv($temp_dir, $csv_headers, $csv_one_line_a);
+open(my $handle_3b, "<", $filename_3b) or die "cannot open < $filename_3: $!";
+my $params_3b = { file => $handle_3b, matchpoint => 'cardnumber', };
+
+# When ...
+my $result_3b = $patrons_import->import_patrons($params_3b);
+
+# Then ...
+is($result_3b->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons with duplicate userid');
+is($result_3b->{errors}->[0]->{duplicate_userid}, 1, 'Got the expected duplicate userid error from import patrons with duplicate userid');
+is($result_3b->{errors}->[0]->{userid}, 'jjenkins0', 'Got the expected userid error from import patrons with duplicate userid');
+
+is($result_3b->{feedback}->[0]->{feedback}, 1, 'Got the expected 1 feedback from import_patrons with duplicate userid');
+is($result_3b->{feedback}->[0]->{name}, 'headerrow', 'Got the expected header row name from import_patrons with duplicate userid');
+is($result_3b->{feedback}->[0]->{value}, $res_header, 'Got the expected header row value from import_patrons with duplicate userid');
+
+is($result_3b->{imported}, 0, 'Got the expected 0 imported result from import_patrons with duplicate userid');
+is($result_3b->{invalid}, 1, 'Got the expected 1 invalid result from import_patrons with duplicate userid');
+is($result_3b->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons with duplicate userid');
 
 # Given ... a new input and mocked C4::Context
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
