@@ -490,7 +490,7 @@ sub _get_outstanding_holds {
             # We need to return a barcode for the biblio so the client
             # can request the biblio info
             my $items = $hold->biblio->items;
-            $item = $items->count ? $item->next : undef;
+            $item = $items->count ? $items->next : undef;
         }
         my $unblessed_hold = $hold->unblessed;
 
