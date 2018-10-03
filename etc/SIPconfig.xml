@@ -10,6 +10,10 @@
   <server-params
     min_servers='1'
     min_spare_servers='0'
+    log_file='Log::Log4perl'
+    log4perl_conf='__KOHA_CONF_DIR__/log4perl.conf'
+    log4perl_poll='HUP'
+    log4perl_logger='sip'
   />
 
   <listeners>

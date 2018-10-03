@@ -17,8 +17,6 @@ use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType qw( handle login_core );
 
 use Koha::Logger;
-use C4::SIP::Trapper;
-tie *STDERR, "C4::SIP::Trapper";
 
 use base qw(Net::Server::PreFork);
 
@@ -98,7 +96,7 @@ sub process_request {
     $self->{logger} = _set_logger( Koha::Logger->get({ interface => 'sip' }) );
     #Flush previous MDCs to prevent accidentally leaking incorrect MDC-entries
     Log::Log4perl::MDC->put("accountid", undef);
-    Log::Log4perl::MDC->put("peeraddr", undef);
+    Log::Log4perl::MDC->put("peeraddr", $self->{server}->{peeraddr}); #peer address is known at this point, so reset it here. Other MDC depends on a successful login.
 
     my $sockname = getsockname(STDIN);
 
@@ -168,13 +166,12 @@ sub raw_transport {
     $self->{logger} = _set_logger( Koha::Logger->get( { interface => 'sip', category => $self->{account}->{id} } ) ); # Add id to namespace
     #Set MDCs after properly authenticating
     Log::Log4perl::MDC->put("accountid", $self->{account}->{id});
-    Log::Log4perl::MDC->put("peeraddr", $self->{server}->{peeraddr});
 
-    C4::SIP::SIPServer::get_logger()->debug("raw_transport: uname/inst: '$self->{account}->{id}/$self->{account}->{institution}'");
     if (! $self->{account}->{id}) {
         C4::SIP::SIPServer::get_logger()->error("Login failed shutting down");
         return;
     }
+    C4::SIP::SIPServer::get_logger()->debug("raw_transport: uname/inst: '$self->{account}->{id}/$self->{account}->{institution}'");
 
     $self->sip_protocol_loop();
 
