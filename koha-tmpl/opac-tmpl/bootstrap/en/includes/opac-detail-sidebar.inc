@@ -27,9 +27,9 @@
 
     [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
         [% IF ( incart ) %]
-            <li><a class="incart cart[% biblio.biblionumber | html %] addrecord" href="#">In your cart</a> <a class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart incart cart[% biblio.biblionumber | html %] addrecord" href="#">In your cart</a> <a data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
         [% ELSE %]
-            <li><a class="addtocart cart[% biblio.biblionumber | html %] addrecord" href="#">Add to your cart</a>  <a style="display:none;" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
+            <li><a data-biblionumber="[% biblio.biblionumber | html %]" class="addtocart cart[% biblio.biblionumber | html %] addrecord" href="#">Add to your cart</a>  <a style="display:none;" data-biblionumber="[% biblio.biblionumber | html %]" class="cartRemove cartR[% biblio.biblionumber | html %]" href="#">(remove)</a></li>
         [% END %]
     [% END %]
 

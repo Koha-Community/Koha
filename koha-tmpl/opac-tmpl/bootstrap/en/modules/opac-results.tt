@@ -535,9 +535,9 @@
 
                                                         [% IF Koha.Preference( 'opacbookbag' ) == 1 %]
                                                             [% IF ( SEARCH_RESULT.incart ) %]
-                                                                <span class="actions"><a class="addtocart cart[% SEARCH_RESULT.biblionumber | html %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber | html %]'); return false;">In your cart</a> <a class="cartRemove cartR[% SEARCH_RESULT.biblionumber | html %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber | html %]'); return false;">(remove)</a></span>
+                                                                <span class="actions"><a data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="addtocart cart[% SEARCH_RESULT.biblionumber | html %]" href="#">In your cart</a> <a data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="cartRemove cartR[% SEARCH_RESULT.biblionumber | html %]" href="#">(remove)</a></span>
                                                             [% ELSE %]
-                                                                <span class="actions"><a class="addtocart cart[% SEARCH_RESULT.biblionumber | html %]" href="#" onclick="addRecord('[% SEARCH_RESULT.biblionumber | html %]'); return false;">Add to cart</a> <a style="display:none;" class="cartRemove cartR[% SEARCH_RESULT.biblionumber | html %]" href="#" onclick="delSingleRecord('[% SEARCH_RESULT.biblionumber | html %]'); return false;">(remove)</a></span>
+                                                                <span class="actions"><a data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="addtocart cart[% SEARCH_RESULT.biblionumber | html %]" href="#">Add to your cart</a> <a style="display:none;" data-biblionumber="[% SEARCH_RESULT.biblionumber | html %]" class="cartRemove cartR[% SEARCH_RESULT.biblionumber | html %]" href="#">(remove)</a></span>
                                                             [% END %]
                                                         [% END # / IF opacbookbag %]
                                                 </div>
