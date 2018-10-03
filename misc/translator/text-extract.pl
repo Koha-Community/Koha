@@ -1,6 +1,10 @@
 #!/usr/bin/perl
 #use strict;
 #use warnings; FIXME - Bug 2505
+
+use FindBin;
+use lib $FindBin::Bin;
+
 use HTML::Tree;
 use Getopt::Std;
 getopt("f:");
