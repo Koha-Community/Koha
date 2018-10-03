@@ -6,6 +6,9 @@ xgettext.pl - xgettext(1)-like interface for .tt strings extraction
 
 =cut
 
+use FindBin;
+use lib $FindBin::Bin;
+
 use strict;
 use warnings;
 use Getopt::Long;

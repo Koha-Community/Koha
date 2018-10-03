@@ -4,6 +4,9 @@
 # Parts copyright 2003-2004 Jerome Vizcaino
 # Parts copyright 2004 Ambrose Li
 
+use FindBin;
+use lib $FindBin::Bin;
+
 =head1 NAME
 
 tmpl_process3.pl - Alternative version of tmpl_process.pl

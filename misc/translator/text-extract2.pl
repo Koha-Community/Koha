@@ -14,6 +14,9 @@
 # --> This will be relatively major rework, and requires corresponding
 # rework in tmpl_process.pl
 
+use FindBin;
+use lib $FindBin::Bin;
+
 use strict;
 #use warnings; FIXME - Bug 2505
 use Getopt::Long;
