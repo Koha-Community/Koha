@@ -424,6 +424,7 @@
                         <fieldset class="rows">
                             <legend>Request details</legend>
                             <ol>
+                                [% type = request.get_type %]
                                 <li class="borrowernumber">
                                     <label for="borrowernumber">Patron ID:</label>
                                     [% request.borrowernumber | html %]
@@ -449,7 +450,7 @@
                                 </li>
                                 <li class="medium">
                                     <label class="medium">Request type:</label>
-                                    [% request.getType | html %]
+                                    [% type ? type : 'N/A' | html %]
                                 </li>
                                 <li class="cost">
                                     <label class="cost">Cost:</label>
@@ -558,7 +559,8 @@
                                 </div>
                                 <div class="medium">
                                     <span class="label medium">Request type:</span>
-                                    [% request.getType | html %]
+                                    [% type = request.get_type  %]
+                                    [% type ? type : 'N/A' | html %]
                                 </div>
                                 <div class="cost">
                                     <span class="label cost">Cost:</span>

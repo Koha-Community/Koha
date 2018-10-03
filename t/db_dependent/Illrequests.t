@@ -85,8 +85,8 @@ subtest 'Basic object tests' => sub {
     is($illrq_obj->backend, $illrq->{backend},
        "Backend getter works.");
 
-    is($illrq_obj->getType, '<span>N/A</span>',
-        'getType() returns placeholder if no type is set');
+    is($illrq_obj->get_type, '<span>N/A</span>',
+        'get_type() returns placeholder if no type is set');
     $builder->build({
         source => 'Illrequestattribute',
         value  => {
@@ -95,8 +95,8 @@ subtest 'Basic object tests' => sub {
             value => 'book'
         }
     });
-    is($illrq_obj->getType, 'book',
-        'getType() returns correct type if set');
+    is($illrq_obj->get_type, 'book',
+        'get_type() returns correct type if set');
 
     isnt($illrq_obj->status, 'COMP',
          "ILL is not currently marked complete.");

@@ -125,7 +125,8 @@
                         </thead>
                         <tbody>
                             [% FOREACH request IN requests %]
-                                [% status = request.status %]
+                                [% status = request.status | html %]
+                                [% type = request.get_type %]
                                 <tr>
                                     <td>[% request.id | html %]</td>
                                     <td>
@@ -135,7 +136,7 @@
                                         [% IF request.metadata.Title %][% request.metadata.Title | html %][% ELSE %]<span>N/A</span>[% END %]
                                     </td>
                                     <td>[% request.backend | html %]</td>
-                                    <td>[% request.getType | html %]</td>
+                                    <td>[% type ? type : '<span>N/A</span>' | html %]</td>
                                     <td>[% request.capabilities.$status.name | html %]</td>
                                     <td><span title="[% request.placed | html %]">[% request.placed | $KohaDates %]</span></td>
                                     <td><span title="[% request.updated | html %]">[% request.updated | $KohaDates %]</span></td>
@@ -154,6 +155,7 @@
                             <fieldset class="rows">
                                 <legend id="library_legend">Details from library</legend>
                                 <ol>
+                                    [% type = request.get_type %]
                                     <li>
                                         <label for="request_id">Request ID:</label>
                                         [% request.id | html %]
@@ -178,7 +180,7 @@
                                     </li>
                                     <li>
                                         <label for="medium">Request type:</label>
-                                        [% request.getType | html %]
+                                        [% type ? type : '<span>N/A</span>' | html %]
                                     </li>
                                     <li>
                                         <label for="placed">Request placed:</label>

@@ -737,18 +737,18 @@ sub getPrefix {
         || "";                  # "the empty prefix"
 }
 
-=head3 getType
+=head3 get_type
 
-    my $type = $abstract->getType();
+    my $type = $abstract->get_type();
 
-Return a string representing the material type of this request
+Return a string representing the material type of this request or undef
 
 =cut
 
-sub getType {
+sub get_type {
     my ($self) = @_;
     my $attr = $self->illrequestattributes->find({ type => 'type'});
-    return $attr ? $attr->value : '<span>N/A</span>';
+    return $attr ? $attr->value : undef;
 };
 
 #### Illrequests Imports
