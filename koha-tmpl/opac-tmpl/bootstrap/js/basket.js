@@ -1,3 +1,5 @@
+/* global MSG_BASKET_EMPTY MSG_RECORD_IN_BASKET MSG_RECORD_ADDED MSG_NRECORDS_IN_BASKET MSG_NRECORDS_ADDED MSG_NO_RECORD_SELECTED MSG_NO_RECORD_ADDED MSG_IN_YOUR_CART MSG_RECORD_REMOVED MSG_CONFIRM_DEL_BASKET MSG_CONFIRM_DEL_RECORDS MSG_ITEM_IN_CART MSG_ITEM_NOT_IN_CART */
+
 //////////////////////////////////////////////////////////////////////////////
 // BASIC FUNCTIONS FOR COOKIE MANAGEMENT //
 //////////////////////////////////////////////////////////////////////////////
@@ -230,11 +232,12 @@ function selRecord(num, status) {
 }
 
 function delSingleRecord(biblionumber){
+    biblionumber = String( biblionumber );
     var nameCookie = "bib_list";
     var valCookie = readCookie(nameCookie);
     var arrayRecords = valCookie.split("/");
     var pos = jQuery.inArray(biblionumber,arrayRecords);
-    arrayRecords.splice(pos,1);
+    arrayRecords.splice( pos, 1 );
     valCookie = arrayRecords.join("/");
     writeCookie( nameCookie, valCookie );
     updateBasket( arrayRecords.length-1 );
