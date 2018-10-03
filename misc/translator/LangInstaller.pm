@@ -101,11 +101,6 @@ sub new {
             dir    => $context->config('intrahtdocs') . '/prog',
             suffix => '-staff-prog.po',
         },
-        {
-            name   => 'Intranet prog help',
-            dir    => $context->config('intrahtdocs') . '/prog/en/modules/help',
-            suffix => '-staff-help.po',
-        },
     ];
 
     # OPAC themes
@@ -368,11 +363,10 @@ sub install_tmpl {
                 "    With: $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
 
-            my $trans_dir = ( $trans->{name} =~ /help/ )?"$t_dir":"$t_dir/en/";
-            my $lang_dir  = ( $trans->{name} =~ /help/ )?"$t_dir":"$t_dir/$self->{lang}";
+            my $trans_dir = "$t_dir/en/";
+            my $lang_dir  = "$t_dir/$self->{lang}";
             $lang_dir =~ s|/en/|/$self->{lang}/|;
             mkdir $lang_dir unless -d $lang_dir;
-            my $excludes = ( $trans->{name} !~ /help/   )?"":"-x 'help'";
             # if installing MARC po file, only touch corresponding files
             my $marc     = ( $trans->{name} =~ /MARC/ )?"-m \"$trans->{name}\"":"";            # for MARC translations
             # if not installing MARC po file, ignore all MARC files
@@ -383,7 +377,6 @@ sub install_tmpl {
                 "-i $trans_dir " .
                 "-o $lang_dir  ".
                 "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
-                "$excludes " .
                 "$marc " .
                 ( @files   ? ' -f ' . join ' -f ', @files : '') .
                 ( @nomarc  ? ' -n ' . join ' -n ', @nomarc : '');
@@ -405,9 +398,7 @@ sub update_tmpl {
             "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
 
-        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":join("/en/ -i ",split(" ",$trans->{dir}))."/en/"; # multiple source dirs
-        # do no process 'help' dirs unless needed
-        my $excludes  = ( $trans->{name} !~ /help/ )?"-x help":"";
+        my $trans_dir = join("/en/ -i ",split(" ",$trans->{dir}))."/en/"; # multiple source dirs
         # if processing MARC po file, only use corresponding files
         my $marc      = ( $trans->{name} =~ /MARC/ )?"-m \"$trans->{name}\"":"";            # for MARC translations
         # if not processing MARC po file, ignore all MARC files
@@ -417,7 +408,6 @@ sub update_tmpl {
             "$self->{process} update " .
             "-i $trans_dir " .
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
-            "$excludes " .
             "$marc "     .
             ( @files   ? ' -f ' . join ' -f ', @files : '') .
             ( @nomarc  ? ' -n ' . join ' -n ', @nomarc : '');
@@ -450,8 +440,7 @@ sub create_tmpl {
             "    To  : $self->{path_po}/$self->{lang}$trans->{suffix}\n"
                 if $self->{verbose};
 
-        my $trans_dir = ( $trans->{name} =~ /help/ )?"$trans->{dir}":join("/en/ -i ",split(" ",$trans->{dir}))."/en/"; # multiple source dirs
-        my $excludes  = ( $trans->{name} !~ /help/ )?"-x help":"";
+        my $trans_dir = join("/en/ -i ",split(" ",$trans->{dir}))."/en/"; # multiple source dirs
         # if processing MARC po file, only use corresponding files
         my $marc      = ( $trans->{name} =~ /MARC/ )?"-m \"$trans->{name}\"":"";            # for MARC translations
         # if not processing MARC po file, ignore all MARC files
@@ -461,7 +450,6 @@ sub create_tmpl {
             "$self->{process} create " .
             "-i $trans_dir " .
             "-s $self->{path_po}/$self->{lang}$trans->{suffix} -r " .
-            "$excludes " .
             "$marc " .
             ( @files  ? ' -f ' . join ' -f ', @files   : '') .
             ( @nomarc ? ' -n ' . join ' -n ', @nomarc : '');
@@ -628,7 +616,7 @@ appropriate directory.
 
 Create 4 kinds of .po files in F<po> subdirectory:
 (1) one from each theme on opac pages templates,
-(2) intranet templates and help,
+(2) intranet templates,
 (3) preferences, and
 (4) one for each MARC dialect.
 
@@ -640,7 +628,7 @@ Create 4 kinds of .po files in F<po> subdirectory:
 Contains extracted text from english (en) OPAC templates found in
 <KOHA_ROOT>/koha-tmpl/opac-tmpl/{theme}/en/ directory.
 
-=item F<lang>-staff-prog.po and F<lang>-staff-help.po
+=item F<lang>-staff-prog.po
 
 Contains extracted text from english (en) intranet templates found in
 <KOHA_ROOT>/koha-tmpl/intranet-tmpl/prog/en/ directory.
