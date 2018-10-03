@@ -396,8 +396,7 @@ exit(-1) if TmplTokenizer::fatal_p;
 
 =head1 DESCRIPTION
 
-This is an experimental script based on the modularized
-text-extract2.pl script.  It has behaviour similar to
+This script has behaviour similar to
 xgettext(1), and generates gettext-compatible output files.
 
 A gettext-like format provides the following advantages:
