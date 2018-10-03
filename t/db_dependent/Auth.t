@@ -318,7 +318,7 @@ ok(C4::Auth::checkpw_hash('password', $hash1), 'password validates with first ha
 ok(C4::Auth::checkpw_hash('password', $hash2), 'password validates with second hash');
 
 subtest 'Check value of login_attempts in checkpw' => sub {
-    plan tests => 6;
+    plan tests => 11;
 
     t::lib::Mocks::mock_preference('FailedLoginAttempts', 3);
 
@@ -343,6 +343,22 @@ subtest 'Check value of login_attempts in checkpw' => sub {
     is( @test, 0, 'checkpw failed again and returns nothing now' );
     $patron->discard_changes; # refresh
     is( $patron->login_attempts, 3, 'Login attempts not increased anymore' );
+
+    # Administrative lockout cannot be undone?
+    # Pass the right password now (or: add a nice mock).
+    my $auth = Test::MockModule->new( 'C4::Auth' );
+    $auth->mock( 'checkpw_hash', sub { return 1; } ); # not for production :)
+    $patron->login_attempts(0)->store;
+    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    is( $test[0], 1, 'Build confidence in the mock' );
+    $patron->login_attempts(-1)->store;
+    is( $patron->account_locked, 1, 'Check administrative lockout' );
+    @test = checkpw( $dbh, $patron->userid, '123', undef, 'opac', 1 );
+    is( @test, 0, 'checkpw gave red' );
+    $patron->discard_changes; # refresh
+    is( $patron->login_attempts, -1, 'Still locked out' );
+    t::lib::Mocks::mock_preference('FailedLoginAttempts', ''); # disable
+    is( $patron->account_locked, 1, 'Check administrative lockout without pref' );
 };
 
 $schema->storage->txn_rollback;

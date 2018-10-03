@@ -1089,18 +1089,24 @@ sub get_enrollable_clubs {
 
 my $is_locked = $patron->account_locked
 
-Return true if the patron has reach the maximum number of login attempts (see pref FailedLoginAttempts).
+Return true if the patron has reached the maximum number of login attempts
+(see pref FailedLoginAttempts). If login_attempts is < 0, this is interpreted
+as an administrative lockout (independent of FailedLoginAttempts; see also
+Koha::Patron->lock).
 Otherwise return false.
-If the pref is not set (empty string, null or 0), the feature is considered as disabled.
+If the pref is not set (empty string, null or 0), the feature is considered as
+disabled.
 
 =cut
 
 sub account_locked {
     my ($self) = @_;
     my $FailedLoginAttempts = C4::Context->preference('FailedLoginAttempts');
-    return ( $FailedLoginAttempts
+    return 1 if $FailedLoginAttempts
           and $self->login_attempts
-          and $self->login_attempts >= $FailedLoginAttempts )? 1 : 0;
+          and $self->login_attempts >= $FailedLoginAttempts;
+    return 1 if ($self->login_attempts || 0) < 0; # administrative lockout
+    return 0;
 }
 
 =head3 can_see_patron_infos
