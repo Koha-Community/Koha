@@ -21,23 +21,28 @@ if( CheckVersion( $DBversion ) ) {
         });
     }
 
-    $dbh->do(q{
-        INSERT INTO circulation_rules ( branchcode, categorycode, itemtype, rule_name, rule_value )
-        SELECT branchcode, categorycode, NULL, 'max_holds', COALESCE( max_holds, '' ) FROM branch_borrower_circ_rules
-    });
 
-    $dbh->do(q{
-        INSERT INTO circulation_rules ( branchcode, categorycode, itemtype, rule_name, rule_value )
-        SELECT NULL, categorycode, NULL, 'max_holds', COALESCE( max_holds, '' ) FROM default_borrower_circ_rules
-    });
+    if (column_exists('branch_borrower_circ_rules', 'max_holds') ){
+        $dbh->do(q{
+            INSERT IGNORE INTO circulation_rules ( branchcode, categorycode, itemtype, rule_name, rule_value )
+            SELECT branchcode, categorycode, NULL, 'max_holds', COALESCE( max_holds, '' ) FROM branch_borrower_circ_rules
+        });
 
-    $dbh->do(q{
-        ALTER TABLE branch_borrower_circ_rules DROP COLUMN max_holds
-    });
+        $dbh->do(q{
+            ALTER TABLE branch_borrower_circ_rules DROP COLUMN max_holds
+        });
+    }
 
-    $dbh->do(q{
-        ALTER TABLE default_borrower_circ_rules DROP COLUMN max_holds
-    });
+    if (column_exists('default_borrower_circ_rules', 'max_holds') ){
+        $dbh->do(q{
+            INSERT IGNORE INTO circulation_rules ( branchcode, categorycode, itemtype, rule_name, rule_value )
+            SELECT NULL, categorycode, NULL, 'max_holds', COALESCE( max_holds, '' ) FROM default_borrower_circ_rules
+        });
+
+        $dbh->do(q{
+            ALTER TABLE default_borrower_circ_rules DROP COLUMN max_holds
+        });
+    }
 
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 18887 - Introduce new table 'circulation_rules', use for 'max_holds' rules)\n";
