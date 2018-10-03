@@ -162,7 +162,7 @@ $(document).ready(function() {
 
     // Apply DataTables on the results table
     var columns_settings = [% ColumnsSettings.GetColumns( 'members', 'member', 'memberresultst', 'json' ) %];
-    [% UNLESS CAN_user_borrowers_edit_borrowers OR CAN_user_tools_manage_patron_lists %]
+    [% UNLESS CAN_user_tools_manage_patron_lists %]
         [%# Remove the first column if we do not display the checkbox %]
         columns_settings.splice(0, 1);
     [% END %]
@@ -224,7 +224,7 @@ $(document).ready(function() {
             });
         },
         'aoColumns':[
-            [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
+            [% IF CAN_user_tools_manage_patron_lists %]
               { 'mDataProp': 'dt_borrowernumber', 'bSortable': false },
             [% END %]
             { 'mDataProp': 'dt_cardnumber' },
@@ -392,7 +392,7 @@ function filterByFirstLetterSurname(letter) {
             <table id="memberresultst">
               <thead>
                 <tr>
-                [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
+                [% IF CAN_user_tools_manage_patron_lists %]
                   <th>&nbsp;</th>
                 [% END %]
                   <th>Card</th>
