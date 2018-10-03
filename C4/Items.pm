@@ -1879,6 +1879,7 @@ sub _koha_new_item {
             more_subfields_xml  = ?,
             copynumber          = ?,
             stocknumber         = ?,
+            sub_location        = ?,
             new_status          = ?,
             holding_id          = ?
           ";
@@ -1925,6 +1926,7 @@ sub _koha_new_item {
             $item->{'more_subfields_xml'},
             $item->{'copynumber'},
             $item->{'stocknumber'},
+            $item->{'sub_location'},
             $item->{'new_status'},
             $item->{'holding_id'},
     );
