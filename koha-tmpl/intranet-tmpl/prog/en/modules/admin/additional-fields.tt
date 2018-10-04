@@ -1,15 +1,16 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo;
     [% SWITCH op %]
-        [% CASE 'add_form' %][% IF field %]Modify additional field '[% field.name %]'[% ELSE %]Add additional field[% END %]
+        [% CASE 'add_form' %][% IF field %]Modify additional field '[% field.name | html %]'[% ELSE %]Add additional field[% END %]
         [% CASE %]Manage additional fields
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css('css/datatables.css') %]
+[% Asset.css('css/datatables.css') | $raw %]
 </head>
 
 [% marcfield_tables = ['subscription'] %]
@@ -22,8 +23,8 @@
     <div id="breadcrumbs">
         <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
         [% SWITCH op %]
-            [% CASE 'add_form' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; [% IF field %]Modify field '[% field.name %]'[% ELSE %]Add field[% END %]
-            [% CASE 'list' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; Modify fields for '[% tablename %]'
+            [% CASE 'add_form' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; [% IF field %]Modify field '[% field.name | html %]'[% ELSE %]Add field[% END %]
+            [% CASE 'list' %]<a href="/cgi-bin/koha/admin/additional-fields.pl">Manage additional fields</a> &rsaquo; Modify fields for '[% tablename | html %]'
             [% CASE %]Manage additional fields
         [% END %]
     </div>
@@ -34,7 +35,7 @@
     <div class="yui-b">
     [% IF op == 'list' %]
         <div id="toolbar" class="btn-toolbar">
-            <a class="btn btn-default btn-sm" id="newfields" href="?op=add_form&amp;tablename=[% tablename %]"><i class="fa fa-plus"></i> Create field</a>
+            <a class="btn btn-default btn-sm" id="newfields" href="?op=add_form&amp;tablename=[% tablename | uri %]"><i class="fa fa-plus"></i> Create field</a>
         </div>
     [% END %]
 
@@ -66,14 +67,14 @@
         <h3>Additional fields</h3>
         <p>Select a table:</p>
         [% BLOCK table_option %]
-            <li><a href="?tablename=[% value %]">[% content %] (<tt>[% value %]</tt>)</a></li>
+            <li><a href="?tablename=[% value | uri %]">[% content | html %] (<tt>[% value | html %]</tt>)</a></li>
         [% END %]
         <ul>
             [% WRAPPER table_option value="aqbasket" %]Order baskets[% END %]
             [% WRAPPER table_option value="subscription" %]Subscriptions[% END %]
         </ul>
     [% ELSIF op == 'list' %]
-        <h3>Additional fields for '[% tablename %]'</h3>
+        <h3>Additional fields for '[% tablename | html %]'</h3>
         [% IF fields %]
             <table id="fieldst">
                 <thead>
@@ -90,17 +91,17 @@
                 <tbody>
                     [% FOR field IN fields %]
                         <tr>
-                            <td>[% field.name %]</td>
-                            <td>[% field.authorised_value_category %]</td>
+                            <td>[% field.name | html %]</td>
+                            <td>[% field.authorised_value_category | html %]</td>
                             [% IF show_marcfield %]
-                                <td>[% field.marcfield %]</td>
+                                <td>[% field.marcfield | html %]</td>
                             [% END %]
                             <td>
                                 [% IF field.searchable %]Yes[% ELSE %]No[% END %]
                             </td>
                             <td class="actions">
-                                <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id %]"><i class="fa fa-pencil"></i> Edit</a>
-                                <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id %]&amp;tablename=[% tablename %]"><i class="fa fa-trash"></i> Delete</a>
+                                <a class="btn btn-default btn-xs" href="?op=add_form&amp;field_id=[% field.id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                                <a class="confirmdelete btn btn-default btn-xs" href="?op=delete&amp;field_id=[% field.id | uri %]&amp;tablename=[% tablename | uri %]"><i class="fa fa-trash"></i> Delete</a>
                             </td>
                         </tr>
                     [% END %]
@@ -127,17 +128,13 @@
                         <label for="av">Authorised value category: </label>
                         <select name="authorised_value_category">
                             <option value="">None</option>
-                            [% PROCESS options_for_authorised_value_categories
-                                authorised_value_categories = AuthorisedValues.GetCategories({
-                                    selected => field.authorised_value_category
-                                })
-                            %]
+                            [% PROCESS options_for_authorised_value_categories authorised_value_categories = AuthorisedValues.GetCategories({selected => field.authorised_value_category}) %]
                         </select>
                     </li>
                     [% IF show_marcfield %]
                         <li>
                             <label for="marcfield">MARC field: </label>
-                            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield %]" />
+                            <input type="text" name="marcfield" id="marcfield" value="[% field.marcfield | html %]" />
                         </li>
                     [% END %]
                     <li>
@@ -152,12 +149,12 @@
             </fieldset>
             <fieldset class="action">
                 [% IF field %]
-                    <input type="hidden" name="field_id" value="[% field.id %]" />
+                    <input type="hidden" name="field_id" value="[% field.id | html %]" />
                 [% END %]
-                <input type="hidden" name="tablename" value="[% tablename %]" />
+                <input type="hidden" name="tablename" value="[% tablename | html %]" />
                 <input type="hidden" name="op" value="add" />
                 <input type="submit" value="Save" />
-                <a href="?tablename=[% tablename %]" class="cancel">Cancel</a>
+                <a href="?tablename=[% tablename | uri %]" class="cancel">Cancel</a>
             </fieldset>
         </form>
     [% END %]
