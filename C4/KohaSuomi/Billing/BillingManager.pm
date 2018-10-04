@@ -75,7 +75,7 @@ sub GetOverduedIssues {
     if ($group) {
         $query .= "AND (".$branches.") ";
     } else {
-        $query .= "AND items.homebranch = ? ";
+        $query .= "AND ".C4::Context->config("billingSetup")->{"branch"}." = ? ";
     }
     if ($showbilled) {$query.= "AND overduebills.billingdate IS NOT NULL ";}
     if ($shownotbilled) {$query.= "AND overduebills.billingdate IS NULL ";}
@@ -270,7 +270,7 @@ sub GetTotalPages {
         if ($group) {
             $query .= "(".$branches.") ";
         } else {
-            $query .= "items.homebranch = ? ";
+            $query .= C4::Context->config("billingSetup")->{"branch"}." = ? ";
         }
         $query .= "AND (NOW() > DATE_ADD(issues.date_due, INTERVAL ".$delay->{delaytime}." DAY))
         AND issues.date_due > (NOW() - INTERVAL 1 YEAR) ";
@@ -489,9 +489,9 @@ sub branch_string {
 
     foreach my $field (@fields) {
         if (\$field == \$fields[-1]) {
-            $string .= "items.homebranch = '".$field->branchcode."'";
+            $string .= C4::Context->config("billingSetup")->{"branch"}." = '".$field->branchcode."'";
         }else{
-            $string .= "items.homebranch = '".$field->branchcode."' or ";
+            $string .= C4::Context->config("billingSetup")->{"branch"}." = '".$field->branchcode."' or ";
         }
     }
 
@@ -501,7 +501,7 @@ sub branch_string {
 
 sub  trim {
     my $s = shift;
-    $s =~ s/^\s+|\s+$//g;
+    if (defined $s) {$s =~ s/^\s+|\s+$//g;}
     return $s
 };
 

@@ -216,7 +216,7 @@ foreach my $data (@{$issues}) {
     my $bdate;
 	my $borrowernumber = $data->{borrowernumber};
 
-	if($data->{billingdate} ne ""){
+	if(defined $data->{billingdate} && $data->{billingdate} ne ""){
 		$billingdt = output_pref(dt_from_string($data->{billingdate}));
         my ($y, $m, $d) = $data->{billingdate}=~ /^(\d\d\d\d)-(\d\d)-(\d\d)/;
         $bdate = $y."-".$m."-".$d;

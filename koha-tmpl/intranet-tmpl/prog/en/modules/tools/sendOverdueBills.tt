@@ -68,11 +68,11 @@
 			</div>
 [% BLOCK show_page_controls %]
 		<div class="pagecontrol">
-			<a class="btn btn-small pagefirst" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=1&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&branch=[% branch %]">&lt;&lt;</a>
+			<a class="btn btn-small pagefirst" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=1&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&branch=[% branch %]&group=[% group %]">&lt;&lt;</a>
 				<a class="btn btn-small pageprev" href="">&lt;</a>
 				<span class="pagenumber">[% page %]</span>
 				<a class="btn btn-small pagenext" href="">&gt;</a>
-				<a class="btn btn-small pagelast" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=[% sqlrows %]&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&bypatron=[% bypatron %]&branch=[% branch %]">&gt;&gt;</a>
+				<a class="btn btn-small pagelast" href="/cgi-bin/koha/tools/sendOverdueBills.pl?page=[% sqlrows %]&results=[% results %]&totalpages=[% sqlrows %]&showall=[% showall %]&showbilled=[% showbilled %]&shownotbilled=[% shownotbilled %]&bypatron=[% bypatron %]&branch=[% branch %]&group=[% group %]">&gt;&gt;</a>
 				<label for="ctrljumptopage">Go to page</label><input class="jumptopage" id="ctrljumptopage" type="number" min="1" max="[% sqlrows %]" placeholder="page number" value="[% page %]"/>
 				<span>/[% sqlrows %]</span>
 				<a class="btn btn-small gotopage" href="#">Go</a>
