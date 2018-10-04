@@ -42,7 +42,7 @@ Koha::Item - Koha Item object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
@@ -315,19 +315,7 @@ sub add_to_rota {
     return $self;
 }
 
-=head3 biblio
-
-  my $biblio = $item->biblio;
-
-Returns the biblio associated with the current item.
-
-=cut
-
-sub biblio {
-    my ( $self ) = @_;
-    my $rs = $self->_result->biblio;
-    return Koha::Biblio->_new_from_dbic( $rs );
-}
+=head2 Internal methods
 
 =head3 _type
 

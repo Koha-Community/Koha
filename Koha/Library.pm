@@ -36,43 +36,6 @@ Koha::Library - Koha Library Object class
 
 =head2 Class methods
 
-=head3 get_categories
-
-TODO: Ask the author to add a proper description
-
-=cut
-
-sub get_categories {
-    my ( $self, $params ) = @_;
-    # TODO This should return Koha::LibraryCategories
-    return $self->{_result}->categorycodes( $params );
-}
-
-=head3 update_categories
-
-TODO: Ask the author to add a proper description
-
-=cut
-
-sub update_categories {
-    my ( $self, $categories ) = @_;
-    $self->_result->delete_related( 'branchrelations' );
-    $self->add_to_categories( $categories );
-}
-
-=head3 add_to_categories
-
-TODO: Ask the author to add a proper description
-
-=cut
-
-sub add_to_categories {
-    my ( $self, $categories ) = @_;
-    for my $category ( @$categories ) {
-        $self->_result->add_to_categorycodes( $category->_result );
-    }
-}
-
 =head3 stockrotationstages
 
   my $stages = Koha::Library->stockrotationstages;
