@@ -33,7 +33,7 @@ use Koha::Caches;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 12;
+use Test::More tests => 14;
 
 use Test::Warn;
 
@@ -781,6 +781,8 @@ subtest '_mod_item_dates' => sub {
 subtest 'get_hostitemnumbers_of' => sub {
     plan tests => 1;
 
+    $schema->storage->txn_begin;
+
     my $bib = MARC::Record->new();
     $bib->append_fields(
         MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
@@ -791,6 +793,8 @@ subtest 'get_hostitemnumbers_of' => sub {
 
     my @itemnumbers = C4::Items::get_hostitemnumbers_of( $biblionumber );
     is( @itemnumbers, 0, );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Test logging for ModItem' => sub {
@@ -830,6 +834,8 @@ subtest 'Test logging for ModItem' => sub {
     $schema->resultset('ActionLog')->search()->delete();
     ModItem({ location => $location }, $bibnum, $itemnumber);
     is( $schema->resultset('ActionLog')->count(), 1, 'Undefined value defaults to true, triggers logging' );
+
+    $schema->storage->txn_rollback;
 };
 
 subtest 'Check stockrotationitem relationship' => sub {
