@@ -1,13 +1,14 @@
+[% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Stock rotation details for [% biblio.title %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Stock rotation details for [% biblio.title | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% INCLUDE 'browser-strings.inc' %]
-[% Asset.js("js/browser.js") %]
+[% Asset.js("js/browser.js") | $raw %]
 <script type="text/javascript">
 //<![CDATA[
-    var browser = KOHA.browser('[% searchid %]', parseInt('[% biblionumber %]', 10));
+    var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
     browser.show();
 //]]>
 </script>
@@ -17,7 +18,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Stock rotation details for <i>[% biblio.title | html %][% FOREACH subtitle IN biblio.subtitles %][% subtitle.subfield %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Stock rotation details for <i>[% biblio.title | html %][% FOREACH subtitle IN biblio.subtitles %][% subtitle.subfield | html %][% END %]</i></div>
 
 <div id="doc3" class="yui-t2">
 
@@ -46,10 +47,10 @@
                 <tbody>
                     [% FOREACH item IN items %]
                         <tr>
-                            <td>[% item.bib_item.barcode %]</td>
-                            <td>[% item.bib_item.itemcallnumber %]</td>
+                            <td>[% item.bib_item.barcode | html %]</td>
+                            <td>[% item.bib_item.itemcallnumber | html %]</td>
                             <td>
-                                [% item.rota.title %]
+                                [% item.rota.title | html %]
                             </td>
                             <td>
                                 [% IF item.rota %]
@@ -80,7 +81,7 @@
                                     [% ELSE %]
                                         <span class="stage">
                                     [% END %]
-                                    [% Branches.GetName(this_stage.branchcode_id) %] ([% this_stage.duration %])
+                                    [% Branches.GetName(this_stage.branchcode_id) | html %] ([% this_stage.duration | html %])
                                     </span>
                                     &raquo;
                                 [% END %]
@@ -98,7 +99,7 @@
                                 [% IF item.stockrotationitem %]
                                     [% in_transit = item.bib_item.get_transfer %]
                                     [% IF !in_transit && item.stages.size > 1 %]
-                                        <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;stage_id=[% item.stockrotationitem.stage.stage_id %]&amp;item_id=[% item.bib_item.id %]&amp;biblionumber=[% biblionumber %]">
+                                        <a class="btn btn-default btn-xs" href="?op=move_to_next_stage&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
                                     [% ELSE %]
                                         <a class="btn btn-default btn-xs" disabled>
                                     [% END %]
@@ -106,7 +107,7 @@
                                         Move to next stage
                                     </a>
                                     [% IF !in_transit %]
-                                        <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% item.stockrotationitem.stage.stage_id %]&amp;item_id=[% item.bib_item.id %]&amp;biblionumber=[% biblionumber %]">
+                                        <a class="btn btn-default btn-xs" href="?op=toggle_in_demand&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
                                     [% ELSE %]
                                         <a class="btn btn-default btn-xs" disabled>
                                     [% END %]
@@ -118,7 +119,7 @@
                                         [% END %]
                                     </a>
                                     [% IF !in_transit %]
-                                        <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stockrotationitem.stage.stage_id %]&amp;item_id=[% item.bib_item.id %]&amp;biblionumber=[% biblionumber %]">
+                                        <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stockrotationitem.stage.stage_id | uri %]&amp;item_id=[% item.bib_item.id | uri %]&amp;biblionumber=[% biblionumber | uri %]">
                                     [% ELSE %]
                                         <a class="btn btn-default btn-xs" disabled>
                                     [% END %]
@@ -129,13 +130,13 @@
                                     <form class="rota_select_form" method="post" enctype="multipart/form-data">
                                         <select class="item_select_rota" name="rota_id">
                                             [% FOREACH rota IN rotas %]
-                                                <option value="[% rota.rota_id %]">[% rota.title %]</option>
+                                                <option value="[% rota.rota_id | uri %]">[% rota.title | html %]</option>
                                             [% END %]
                                         </select>
                                         <button class="btn btn-default btn-xs" type="submit"><i class="fa fa-plus"></i> Add to rota</button>
                                         <input type="hidden" name="op" value="add_item_to_rota"></input>
-                                        <input type="hidden" name="item_id" value="[% item.bib_item.id %]"></input>
-                                        <input type="hidden" name="biblionumber" value="[% biblionumber %]"></input>
+                                        <input type="hidden" name="item_id" value="[% item.bib_item.id | uri %]"></input>
+                                        <input type="hidden" name="biblionumber" value="[% biblionumber | uri %]"></input>
                                     </form>
                                 [% END %]
                             </td>
@@ -154,8 +155,8 @@
         <div class="dialog alert">
             <h3>Are you sure you want to remove this item from it's rota?</h3>
             <p>
-                <a class="btn btn-default btn-xs approve" href="?op=remove_item_from_stage&amp;stage_id=[% stage_id %]&amp;item_id=[% item_id %]&amp;biblionumber=[% biblionumber %]"><i class="fa fa-fw fa-check"></i>Yes</a>
-                <a class="btn btn-default btn-xs deny" href="?biblionumber=[% biblionumber %]"><i class="fa fa-fw fa-remove"></i>No</a>
+                <a class="btn btn-default btn-xs approve" href="?op=remove_item_from_stage&amp;stage_id=[% stage_id | uri %]&amp;item_id=[% item_id | uri %]&amp;biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-check"></i>Yes</a>
+                <a class="btn btn-default btn-xs deny" href="?biblionumber=[% biblionumber | uri %]"><i class="fa fa-fw fa-remove"></i>No</a>
             </p>
         </div>
     [% END %]
