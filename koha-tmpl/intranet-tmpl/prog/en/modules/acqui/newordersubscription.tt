@@ -74,7 +74,7 @@
                                     [% END %]
                                     [% IF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid%]
                                         <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;biblionumber=[% sub.biblionumber | uri %]&amp;from_subscriptionid=[% sub.subscriptionid | uri %]" title="Order this one">
-                                            Order
+                                            Place order
                                         </a>
                                     [% ELSE %]
                                         <a title="This subscription depends on another supplier" style="cursor:help">Cannot be ordered</a>
