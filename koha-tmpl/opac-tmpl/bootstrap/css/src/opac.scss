@@ -212,7 +212,6 @@ a {
 
     &.new {
         @extend %initial_icon;
-        background-image: url( "../images/sprite.png" ); /* New */
         background-position: -4px -922px;
         padding-left: 23px;
     }
@@ -1428,12 +1427,9 @@ div {
         background-image: url( "../images/sprite.png" );
         background-repeat: no-repeat;
         font-size: 87%;
+        font-weight: normal;
         padding-left: 15px;
         text-decoration: none;
-    }
-
-    a {
-        font-weight: normal;
     }
 }
 
@@ -1449,7 +1445,7 @@ div {
 }
 
 #MARCview {
-    background-position: -9px -27px;
+    background-position: -9px -28px;
 }
 
 #ISBDview {
@@ -1457,7 +1453,13 @@ div {
 }
 
 #Normalview {
-    background-position: -8px 3px;
+    background-position: -8px 1px;
+}
+
+#Fullhistory,
+#Briefhistory {
+    background:  transparent none;
+    padding-left: 0;
 }
 
 /* pagination */
