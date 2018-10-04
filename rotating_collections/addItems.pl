@@ -41,7 +41,8 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-if ( $query->param('action') eq 'addItem' ) {
+if ( defined $query->param('action') and
+     $query->param('action') eq 'addItem' ) {
     ## Add the given item to the collection
     my $colId      = $query->param('colId');
     my $barcode    = $query->param('barcode');
@@ -91,7 +92,7 @@ if ( $query->param('action') eq 'addItem' ) {
 }
 
 my ( $colId, $colTitle, $colDescription, $colBranchcode ) =
-  GetCollection( $query->param('colId') );
+  GetCollection( scalar $query->param('colId') );
 my $collectionItems = GetItemsInCollection($colId);
 if ($collectionItems) {
     $template->param( collectionItemsLoop => $collectionItems );
