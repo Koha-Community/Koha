@@ -37,6 +37,7 @@ use C4::Reserves;
 use C4::Biblio;
 use C4::Items;
 use C4::Koha;
+use C4::Serials;
 use C4::Circulation;
 use Koha::DateUtils;
 use C4::Utils::DataTables::Members;
@@ -633,6 +634,7 @@ $template->param( biblioloop => \@biblioloop );
 $template->param( biblionumbers => $biblionumbers );
 $template->param( exceeded_maxreserves => $exceeded_maxreserves );
 $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
+$template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber));
 
 if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
     $template->param( reserve_in_future => 1 );

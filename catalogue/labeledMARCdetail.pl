@@ -27,6 +27,7 @@ use C4::Output;
 use C4::Biblio;
 use C4::Items;
 use C4::Search;		# enabled_staff_search_views
+use C4::Serials;
 use C4::Acquisition qw(GetOrdersByBiblionumber);
 
 use Koha::Biblios;
@@ -121,6 +122,7 @@ $template->param (
 	labeledmarcview => 1,
 	z3950_search_params		=> C4::Search::z3950_search_args($biblio),
 	C4::Search::enabled_staff_search_views,
+    subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
     searchid            => scalar $query->param('searchid'),
 );
 

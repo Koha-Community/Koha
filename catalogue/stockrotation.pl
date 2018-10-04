@@ -30,6 +30,7 @@ use CGI;
 use C4::Auth;
 use C4::Output;
 use C4::Search;
+use C4::Serials;
 
 use Koha::Biblio;
 use Koha::Item;
@@ -123,6 +124,7 @@ if (!defined $op) {
         biblio            => $biblio,
         biblionumber      => $biblio->biblionumber,
         stockrotationview => 1,
+        subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
         C4::Search::enabled_staff_search_views
     );
 
@@ -165,6 +167,7 @@ if (!defined $op) {
         item_id           => $params{item_id},
         biblionumber      => $params{biblionumber},
         stockrotationview => 1,
+        subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber),
         C4::Search::enabled_staff_search_views
     );
 
