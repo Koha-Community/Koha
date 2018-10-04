@@ -139,7 +139,7 @@ subtest 'move() tests' => sub {
 sub create_user_and_session {
 
     my $args  = shift;
-    my $flags = ( $args->{authorized} ) ? $args->{authorized} : 0;
+    my $flags = ( $args->{authorized} ) ? 2 ** 24 : 0; # stockrotation == 24
     my $dbh   = C4::Context->dbh;
 
     my $user = $builder->build(
