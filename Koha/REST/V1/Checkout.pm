@@ -265,53 +265,65 @@ sub expanded {
     });
     my $checkouts_json = $checkouts->TO_JSON;
 
+    my $patron_blocks = '';
+    # TODO: Create Koha::Availability::Renew for checking renewability
+    #       via Koha::Availability
+    my $patron_checks = Koha::Availability::Checks::Patron->new(
+        scalar Koha::Patrons->find($borrowernumber)
+    );
+    if ((my $err = $patron_checks->debt_renew_opac ||
+        $patron_checks->debarred || $patron_checks->gonenoaddress ||
+        $patron_checks->lost || $patron_checks->expired)
+    ) {
+        $err = ref($err);
+        $err =~ s/Koha::Exceptions::Patron:://;
+        $patron_blocks = lc($err);
+    }
+    # END TODO
+
     foreach my $checkout (@{$checkouts_json}) {
         my $item         = Koha::Items->find($checkout->{itemnumber});
         my $biblio       = Koha::Biblios->find($item->biblionumber);
         my $branchcode   = C4::Circulation::_GetCircControlBranch( $item->unblessed,
                                                                    $borrower);
-        my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
-            {   categorycode => $borrower->{categorycode},
-                itemtype     => $item->effective_itemtype,
-                branchcode   => $branchcode,
-                ccode        => $item->ccode,
-                permanent_location => $item->permanent_location,
-                sub_location => $item->sub_location,
-                genre        => $item->genre,
-                circulation_level => $item->circulation_level,
-                reserve_level => $item->reserve_level,
-            }
-        );
+
+        my $can_renew = 1;
+        my $max_renewals = 0;
+        my $blocks = '';
+        if ($patron_blocks) {
+            $can_renew = 0;
+            $blocks = $patron_blocks;
+        } else {
+            my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+                {   
+                    categorycode => $borrower->{categorycode},
+                    itemtype     => $item->effective_itemtype,
+                    branchcode   => $branchcode,
+                    ccode        => $item->ccode,
+                    permanent_location => $item->permanent_location,
+                    sub_location => $item->sub_location,
+                    genre        => $item->genre,
+                    circulation_level => $item->circulation_level,
+                    reserve_level => $item->reserve_level,
+                }
+            );
+            $max_renewals = $issuing_rule ? 0+$issuing_rule->renewalsallowed : 0;
+        }
         $checkout->{'enumchron'}       = $item->enumchron;
         $checkout->{'biblionumber'}    = $item->biblionumber;
         $checkout->{'title'}           = $biblio->title;
         $checkout->{'title_remainder'} = $biblio->title_remainder;
-        $checkout->{'max_renewals'}    = $issuing_rule
-            ? 0+$issuing_rule->renewalsallowed : 0;
-        my ($can_renew, $error);
-        if ($opac_renewability) {
-            ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
-            $borrowernumber, $checkout->{'itemnumber'});
+        $checkout->{'max_renewals'}    = $max_renewals;
+        if (!$blocks) {
+            if ($opac_renewability) {
+                ($can_renew, $blocks) = C4::Circulation::CanBookBeRenewed(
+                    $borrowernumber, $checkout->{'itemnumber'}
+                );
+            }
         }
 
-        # TODO: Create Koha::Availability::Renew for checking renewability
-        #       via Koha::Availability
-        my $patron_checks = Koha::Availability::Checks::Patron->new(
-            scalar Koha::Patrons->find($borrowernumber)
-        );
-        if (!$error && (my $err = $patron_checks->debt_renew_opac ||
-            $patron_checks->debarred || $patron_checks->gonenoaddress ||
-            $patron_checks->lost || $patron_checks->expired)) {
-            $err = ref($err);
-            $can_renew = 0;
-            $err =~ s/Koha::Exceptions::Patron:://;
-            $error = lc($err);
-        }
-        # END TODO
-
-        $checkout->{'renewable'} = $can_renew
-        ? Mojo::JSON->true : Mojo::JSON->false;
-        $checkout->{'renewability_error'} = $error;
+        $checkout->{'renewable'} = $can_renew ? Mojo::JSON->true : Mojo::JSON->false;
+        $checkout->{'renewability_error'} = $blocks;
     }
 
     return $c->render( status => 200, openapi => $checkouts_json );
