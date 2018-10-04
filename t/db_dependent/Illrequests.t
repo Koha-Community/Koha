@@ -85,8 +85,8 @@ subtest 'Basic object tests' => sub {
     is($illrq_obj->backend, $illrq->{backend},
        "Backend getter works.");
 
-    is($illrq_obj->get_type, '<span>N/A</span>',
-        'get_type() returns placeholder if no type is set');
+    is($illrq_obj->get_type, undef,
+        'get_type() returns undef if no type is set');
     $builder->build({
         source => 'Illrequestattribute',
         value  => {

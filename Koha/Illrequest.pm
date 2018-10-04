@@ -748,7 +748,8 @@ Return a string representing the material type of this request or undef
 sub get_type {
     my ($self) = @_;
     my $attr = $self->illrequestattributes->find({ type => 'type'});
-    return $attr ? $attr->value : undef;
+    return if !$attr;
+    return $attr->value;
 };
 
 #### Illrequests Imports

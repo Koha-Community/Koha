@@ -450,7 +450,7 @@
                                 </li>
                                 <li class="medium">
                                     <label class="medium">Request type:</label>
-                                    [% type ? type : 'N/A' | html %]
+                                    [% type || 'N/A' | html %]
                                 </li>
                                 <li class="cost">
                                     <label class="cost">Cost:</label>
@@ -559,8 +559,8 @@
                                 </div>
                                 <div class="medium">
                                     <span class="label medium">Request type:</span>
-                                    [% type = request.get_type  %]
-                                    [% type ? type : 'N/A' | html %]
+                                    % type = request.get_type %]
+                                    [% type || 'N/A' | html %]
                                 </div>
                                 <div class="cost">
                                     <span class="label cost">Cost:</span>
