@@ -409,7 +409,11 @@
                                                 <a class="btn btn-default btn-xs" disabled>
                                             [% END %]
                                                 <i class="fa fa-fire"></i>
-                                                [% item.indemand ? 'Remove &quot;In demand&quot;' : 'Add &quot;In demand&quot;' | html %]
+                                                [% IF item.indemand %]
+                                                <span>Remove &quot;In demand&quot;</span>
+                                                [% ELSE %]
+                                                <span>Add &quot;In demand&quot;</span>
+                                                [% END %]
                                             </a>
                                             [% IF !in_transit %]
                                                 <a class="btn btn-default btn-xs" href="?op=confirm_remove_from_rota&amp;stage_id=[% item.stage.stage_id | uri %]&amp;item_id=[% item.id | uri %]&amp;rota_id=[% rota.id | uri %]">
