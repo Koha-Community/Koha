@@ -14,6 +14,8 @@
         $('#navmenulist a[href$="/cgi-bin/koha/tools/batchMod.pl?del=1"]').addClass("current");
       } else if (path.indexOf("quotes-upload.pl") >= 0 ){
         $('#navmenulist a[href$="/cgi-bin/koha/tools/quotes.pl"]').addClass("current");
+      } else if (path.indexOf("stockrotation") >= 0 ) {
+          $('#navmenulist a[href$="/cgi-bin/koha/tools/stockrotation.pl"]').addClass("current");
       } else if (path.indexOf("plugins") >= 0 ) {
           $('#navmenulist a[href$="/cgi-bin/koha/plugins/plugins-home.pl?method=tool"]').addClass("current");
       }
