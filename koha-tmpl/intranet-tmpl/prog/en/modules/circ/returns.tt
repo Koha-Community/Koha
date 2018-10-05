@@ -276,12 +276,12 @@
                     <input type="hidden" name="cancel_reserve" value="0" />
 
                     <button type="submit" class="btn btn-default approve" data-dismiss="modal">
-                        <i class="fa fa-check"></i> Confirm
+                        <i class="fa fa-check"></i> Confirm hold
                     </button>
 
                     <input type="hidden" name="print_slip" value="0" />
                     <button type="submit" class="btn btn-default print" onclick="this.form.print_slip.value = 1; this.form.submit();">
-                        <i class="fa fa-print"></i> Print and confirm
+                        <i class="fa fa-print"></i> Print slip and confirm
                     </button>
 
                     <button type="submit" class="btn btn-default deny" onclick="this.form.cancel_reserve.value = 1; this.form.submit();">
@@ -497,7 +497,7 @@
                         </button>
                     [% END %]
 
-                    <button data-dismiss="modal" aria-hidden="true" type="submit" class="btn btn-danger deny" onclick="$('#barcode').focus(); return false;">
+                    <button data-dismiss="modal" aria-hidden="true" type="submit" class="btn btn-default deny" onclick="$('#barcode').focus(); return false;">
                         <i class="fa fa-times"></i> Ignore
                     </button>
                 </div>
