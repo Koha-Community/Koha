@@ -122,7 +122,7 @@ sub _set_js_mode {
     return $this;
 }
 
-#used in xgettext, tmpl_process3 and text-extract2
+#used in xgettext, tmpl_process3
 sub set_allow_cformat {
     my $this = shift;
     $this->{+ALLOW_CFORMAT_P} = $_[0];
