@@ -619,14 +619,14 @@
 
                     <div id="ill-view-panel" class="panel panel-default">
                         <div class="panel-heading">
-                            <h3>[% request.illcomments.count %] comments</h3>
+                            <h3>[% request.illcomments.count | html %] comments</h3>
                         </div>
                         <div class="panel-body">
                             [% IF request.illcomments.count && request.illcomments.count > 0 %]
                                 [% FOREACH comment IN request.illcomments %]
-                                    <div class="rows comment_[% comment.patron.categorycode %]">
+                                    <div class="rows comment_[% comment.patron.categorycode | html %]">
                                     <h5>Comment by:
-                                    <a href="[% borrowerlink %]" title="View borrower details">
+                                    <a href="[% borrowerlink | html %]" title="View borrower details">
                                     [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
                                     [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
                                     <p>[% comment.comment | html %]</p>
@@ -638,8 +638,8 @@
                                     <div id="addcomment" class="content_hidden">
                                         <form class="validated" method="post" action="/cgi-bin/koha/ill/ill-requests.pl">
                                             <input type="hidden" value="save_comment" name="method">
-                                            <input type="hidden" value="[% csrf_token %]" name="csrf_token">
-                                            <input type="hidden" value="[% request.illrequest_id %]" name="illrequest_id">
+                                            <input type="hidden" value="[% csrf_token | html %]" name="csrf_token">
+                                            <input type="hidden" value="[% request.illrequest_id | html %]" name="illrequest_id">
                                             <fieldset class="rows">
                                                 <ol>
                                                     <li>
