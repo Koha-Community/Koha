@@ -395,7 +395,8 @@ my @yaml_prefs = (
     "RisExportAdditionalFields",
     "UpdateItemWhenLostFromHoldList",
     "MarcFieldsToOrder",
-    "MarcItemFieldsToOrder"
+    "MarcItemFieldsToOrder",
+    "UpdateitemLocationOnCheckin"
 );
 my @bad_yaml_prefs;
 foreach my $syspref (@yaml_prefs) {
