@@ -32,6 +32,7 @@ use XML::Simple;
 use Config;
 use Search::Elasticsearch;
 use Try::Tiny;
+use YAML;
 
 use C4::Output;
 use C4::Auth;
@@ -384,6 +385,29 @@ if (  C4::Context->preference('WebBasedSelfCheck')
         AutoSelfCheckPatronHasTooManyPerm => $has_other_permissions,
     );
 }
+
+# Test YAML system preferences
+# FIXME: This is list of current YAML formatted prefs, should by type of preference
+my @yaml_prefs = (
+    "UpdateNotForLoanStatusOnCheckin",
+    "OpacHiddenItems",
+    "BibtexExportAdditionalFields",
+    "RisExportAdditionalFields",
+    "UpdateItemWhenLostFromHoldList",
+    "MarcFieldsToOrder",
+    "MarcItemFieldsToOrder"
+);
+my @bad_yaml_prefs;
+foreach my $syspref (@yaml_prefs) {
+    my $yaml = C4::Context->preference( $syspref );
+    if ( $yaml ) {
+        eval { YAML::Load( "$yaml\n\n" ); };
+        if ($@) {
+            push @bad_yaml_prefs, $syspref;
+        }
+    }
+}
+$template->param( 'bad_yaml_prefs' => \@bad_yaml_prefs ) if @bad_yaml_prefs;
 
 {
     my $dbh       = C4::Context->dbh;
