@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle %][% ELSE %]Koha online[% END %] catalog &rsaquo;   Your Interlibrary loan requests</title>[% INCLUDE 'doc-head-close.inc' %]
@@ -102,8 +103,8 @@
                                 <th>Requested from</th>
                                 <th>Request type</th>
                                 <th>Status</th>
-                                <th>Request placed</th>
-                                <th>Last updated</th>
+                                <th class="title-string">Request placed</th>
+                                <th class="title-string">Last updated</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -116,8 +117,8 @@
                                     <td>[% request.backend %]</td>
                                     <td>[% request.medium %]</td>
                                     <td>[% request.capabilities.$status.name %]</td>
-                                    <td>[% request.placed %]</td>
-                                    <td>[% request.updated %]</td>
+                                    <td>[% request.placed | $KohaDates %]</td>
+                                    <td>[% request.updated | $KohaDates %]</td>
                                     <td>
                                         <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id %]" class="btn btn-default btn-small pull-right">View</a>
                                     </td>
@@ -157,11 +158,11 @@
                                     </li>
                                     <li>
                                         <label for="placed">Request placed:</label>
-                                        [% request.placed %]
+                                        [% request.placed | $KohaDates %]
                                     </li>
                                     <li>
                                         <label for="updated">Last updated:</label>
-                                        [% request.updated %]
+                                        [% request.updated | $KohaDates %]
                                     </li>
                                     <li>
                                         <label for="notesopac">Notes:</label>
