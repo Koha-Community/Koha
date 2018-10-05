@@ -84,7 +84,7 @@ sub get_login_shib {
 
     my $matchAttribute = $config->{mapping}->{ $config->{matchpoint} }->{is};
 
-    if ( any { /(^psgi|^plack)/i } keys %ENV ) {
+    if ( any { /(^psgi\.|^plack\.)/i } keys %ENV ) {
       $debug and warn $matchAttribute . " value: " . $ENV{"HTTP_".uc($matchAttribute)};
       return $ENV{"HTTP_".uc($matchAttribute)} || '';
     } else {
