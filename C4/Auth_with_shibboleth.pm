@@ -171,7 +171,7 @@ sub _get_shib_config {
     my $config = C4::Context->config('shibboleth');
 
     if ( !$config ) {
-        carp 'shibboleth config not defined';
+        carp 'shibboleth config not defined' if $debug;
         return 0;
     }
 

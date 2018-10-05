@@ -41,9 +41,10 @@ use Koha::Patron::Consents;
 use POSIX qw/strftime/;
 use List::MoreUtils qw/ any /;
 use Encode qw( encode is_utf8);
+use C4::Auth_with_shibboleth;
 
 # use utf8;
-use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout $shib $shib_login);
+use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $debug $ldap $cas $caslogout);
 
 BEGIN {
     sub psgi_env { any { /^psgi\./ } keys %ENV }
@@ -62,21 +63,12 @@ BEGIN {
     %EXPORT_TAGS = ( EditPermissions => [qw(get_all_subpermissions get_user_subpermissions)] );
     $ldap      = C4::Context->config('useldapserver') || 0;
     $cas       = C4::Context->preference('casAuthentication');
-    $shib      = C4::Context->config('useshibboleth') || 0;
     $caslogout = C4::Context->preference('casLogout');
     require C4::Auth_with_cas;    # no import
 
     if ($ldap) {
         require C4::Auth_with_ldap;
         import C4::Auth_with_ldap qw(checkpw_ldap);
-    }
-    if ($shib) {
-        require C4::Auth_with_shibboleth;
-        import C4::Auth_with_shibboleth
-          qw(shib_ok checkpw_shib logout_shib login_shib_url get_login_shib);
-
-        # Check for good config
-        $shib = 0 unless shib_ok();
     }
     if ($cas) {
         import C4::Auth_with_cas qw(check_api_auth_cas checkpw_cas login_cas logout_cas login_cas_url logout_if_required);
@@ -153,7 +145,8 @@ sub get_template_and_user {
     my ( $user, $cookie, $sessionID, $flags );
 
     # Get shibboleth login attribute
-    $shib_login = get_login_shib() if $shib;
+    my $shib = C4::Context->config('useshibboleth') && shib_ok();
+    my $shib_login = $shib ? get_login_shib() : undef;
 
     C4::Context->interface( $in->{type} );
 
@@ -786,7 +779,8 @@ sub checkauth {
     $debug and warn "Checking Auth";
 
     # Get shibboleth login attribute
-    $shib_login = get_login_shib() if $shib;
+    my $shib = C4::Context->config('useshibboleth') && shib_ok();
+    my $shib_login = $shib ? get_login_shib() : undef;
 
     # $authnotrequired will be set for scripts which will run without authentication
     my $authnotrequired = shift;
@@ -1772,6 +1766,10 @@ sub get_session {
 sub checkpw {
     my ( $dbh, $userid, $password, $query, $type, $no_set_userenv ) = @_;
     $type = 'opac' unless $type;
+
+    # Get shibboleth login attribute
+    my $shib = C4::Context->config('useshibboleth') && shib_ok();
+    my $shib_login = $shib ? get_login_shib() : undef;
 
     my @return;
     my $patron = Koha::Patrons->find({ userid => $userid });
