@@ -39,16 +39,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $search_on = $cgi->param('search_on');
-my %params;
-if ($search_on) {
-    $params{'course_name'} = "%$search_on%";
-}
-
-my $courses = GetCourses(%params);
-if ( $search_on && @$courses == 1 ) {
-    print $cgi->redirect("/cgi-bin/koha/course_reserves/course-details.pl?course_id=" . $courses->[0]->{'course_id'});
-} else {
-    $template->param( courses => $courses );
-    output_html_with_http_headers $cgi, $cookie, $template->output;
-}
+my $courses = GetCourses();
+$template->param( courses => $courses );
+output_html_with_http_headers $cgi, $cookie, $template->output;
