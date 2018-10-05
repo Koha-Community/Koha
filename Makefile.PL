@@ -472,6 +472,18 @@ URL of your Hetula server.
 
 Name of the organization that you use with Hetula.
 
+=item ELASTICSEARCH_INDEX_CONFIG
+
+Elasticsearch default index settings config file.
+
+=item ELASTICSEARCH_FIELD_CONFIG
+
+Elasticsearch default field settings config file.
+
+=item ELASTICSEARCH_INDEX_MAPPINGS
+
+Elasticsearch index mapping settings config file.
+
 =back
 
 =cut
@@ -517,6 +529,9 @@ my %config_defaults = (
   'USE_ELASTICSEARCH'     => 'no',
   'ELASTICSEARCH_SERVERS' => '',
   'ELASTICSEARCH_INDEX'  => 'koha',
+  'ELASTICSEARCH_INDEX_CONFIG'  => '',
+  'ELASTICSEARCH_FIELD_CONFIG'  => '',
+  'ELASTICSEARCH_INDEX_MAPPINGS'  => '',
   'FONT_DIR'          => '/usr/share/fonts/truetype/ttf-dejavu'
 );
 
@@ -1300,6 +1315,17 @@ sharing the same Elasticsearch-cluster
 
 Elasticsearch index?);
       $config{'ELASTICSEARCH_INDEX'} = _get_value('ELASTICSEARCH_INDEX', $msg, $defaults->{'ELASTICSEARCH_INDEX'}, $valid_values, $install_log_values);
+
+      $msg = q(
+Elasticsearch index config file location?);
+      $config{'ELASTICSEARCH_INDEX_CONFIG'} = _get_value('ELASTICSEARCH_INDEX_CONFIG', $msg, $defaults->{'ELASTICSEARCH_INDEX_CONFIG'}, $valid_values, $install_log_values);
+      $msg = q(
+Elasticsearch field config file location?);
+      $config{'ELASTICSEARCH_FIELD_CONFIG'} = _get_value('ELASTICSEARCH_FIELD_CONFIG', $msg, $defaults->{'ELASTICSEARCH_FIELD_CONFIG'}, $valid_values, $install_log_values);
+      $msg = q(
+Elasticsearch mappings config file location?);
+      $config{'ELASTICSEARCH_INDEX_MAPPINGS'} = _get_value('ELASTICSEARCH_INDEX_MAPPINGS', $msg, $defaults->{'ELASTICSEARCH_INDEX_MAPPINGS'}, $valid_values, $install_log_values);
+
   }
 
   $msg = q(

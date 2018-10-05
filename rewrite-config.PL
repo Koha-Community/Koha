@@ -159,6 +159,9 @@ $prefix = $ENV{'INSTALL_BASE'} || "/usr";
   "__USE_ELASTICSEARCH__" => 'no',
   "__ELASTICSEARCH_SERVERS__" => "",
   "__ELASTICSEARCH_INDEX__" => "koha",
+  "__ELASTICSEARCH_INDEX_CONFIG__" => "",
+  "__ELASTICSEARCH_FIELD_CONFIG__" => "",
+  "__ELASTICSEARCH_INDEX_MAPPINGS__" => "",
   "__FONT_DIR__" => "/usr/share/fonts/truetype/ttf-dejavu",
 );
 

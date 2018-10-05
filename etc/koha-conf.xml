@@ -161,16 +161,16 @@ __PAZPAR2_TOGGLE_XML_POST__
      <server>__ELASTICSEARCH_SERVERS__</server>      <!-- may be repeated to include all servers on your cluster -->
      <index_name>__ELASTICSEARCH_INDEX__</index_name>  <!-- should be unique amongst all the indices on your cluster. _biblios and _authorities will be appended. -->
  </elasticsearch>
- <!-- Uncomment the following line if you want to override the Elasticsearch default index settings -->
- <!-- <elasticsearch_index_config>__KOHA_CONF_DIR__/searchengine/elasticsearch/index_config.yaml</elasticsearch_index_config> -->
- <!-- Uncomment the following line if you want to override the Elasticsearch default field settings -->
- <!-- <elasticsearch_field_config>__KOHA_CONF_DIR__/searchengine/elasticsearch/field_config.yaml</elasticsearch_field_config> -->
- <!-- Uncomment the following line if you want to override the Elasticsearch index default settings.
+ <!-- Elasticsearch default index settings config file -->
+ <elasticsearch_index_config>__ELASTICSEARCH_INDEX_CONFIG__</elasticsearch_index_config>
+ <!-- Elasticsearch default field settings config file -->
+ <elasticsearch_field_config>__ELASTICSEARCH_FIELD_CONFIG__</elasticsearch_field_config>
+ <!-- Elasticsearch index mapping settings config file.
       Note that any changes made to the mappings file only take effect if you reset the mappings in
       by visiting /cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl?op=reset&i_know_what_i_am_doing=1&reset_fields=1.
       Resetting mappings will override any changes made in the Search engine configuration UI.
  -->
- <!-- <elasticsearch_index_mappings>__KOHA_CONF_DIR__/searchengine/elasticsearch/mappings.yaml</elasticsearch_index_mappings> -->
+ <elasticsearch_index_mappings>__ELASTICSEARCH_INDEX_MAPPINGS__</elasticsearch_index_mappings>
 
  <!-- PageObject tests connect to these servers -->
  <testservers>
