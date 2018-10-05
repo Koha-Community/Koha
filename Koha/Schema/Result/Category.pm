@@ -251,6 +251,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 circulation_rules
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::CirculationRule>
+
+=cut
+
+__PACKAGE__->has_many(
+  "circulation_rules",
+  "Koha::Schema::Result::CirculationRule",
+  { "foreign.categorycode" => "self.categorycode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 default_borrower_circ_rule
 
 Type: might_have
@@ -267,8 +282,8 @@ __PACKAGE__->might_have(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:TGAiiFICSjlKNvnfa87kFQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-05 14:29:17
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yvHcgnSv1RXNMXJixVtt0Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
