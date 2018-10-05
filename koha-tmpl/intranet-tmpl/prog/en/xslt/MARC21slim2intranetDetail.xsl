@@ -1296,11 +1296,13 @@
             </xsl:call-template>
         </xsl:variable>
         <xsl:if test="string-length(normalize-space($partNumber))">
+	  <xsl:text>, </xsl:text>
                 <xsl:call-template name="chopPunctuation">
                     <xsl:with-param name="chopString" select="$partNumber"/>
                 </xsl:call-template>
         </xsl:if>
         <xsl:if test="string-length(normalize-space($partName))">
+	  <xsl:text>, </xsl:text>
                 <xsl:call-template name="chopPunctuation">
                     <xsl:with-param name="chopString" select="$partName"/>
                 </xsl:call-template>
