@@ -25,7 +25,7 @@
     <dd>Manage patron clubs..</dd>
     [% END %]
 
-[% IF ( CAN_user_tools_moderate_comments ) %]
+    [% IF ( CAN_user_tools_moderate_comments ) %]
     <dt><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a> [% IF ( pendingcomments ) %]<span class="number_box"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments | html %]</a></span>[% END %]</dt>
 	<dd>Moderate patron comments. </dd>
     [% END %]
@@ -68,11 +68,6 @@
     [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
     <dt><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></dt>
 	<dd>Upload patron images in a batch or one at a time</dd>
-    [% END %]
-
-    [% IF ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) %]
-    <dt><a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a></dt>
-    <dd>Manage Stock rotation rotas, rota stages and rota items</dd>
     [% END %]
 	</dl>
 </div>
@@ -180,6 +175,11 @@
     [% IF ( CAN_user_tools_rotating_collections ) %]
     <dt><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></dt>
     <dd>Manage rotating collections</dd>
+    [% END %]
+
+    [% IF ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) %]
+    <dt><a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a></dt>
+    <dd>Manage Stock rotation rotas, rota stages and rota items</dd>
     [% END %]
 
     [% IF ( CAN_user_tools_marc_modification_templates ) %]
