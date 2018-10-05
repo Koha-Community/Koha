@@ -213,7 +213,7 @@
                                                 [% IF ( ISSUE.overdue ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
                                                 [% IF ( JacketImages || AdlibrisEnabled ) %]<td class="jacketcell">
                                                     [% IF ( AdlibrisEnabled && ISSUE.normalized_isbn ) %]
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% issue.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% ISSUE.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
                                                     [% END %]
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( ISSUE.normalized_isbn ) %]

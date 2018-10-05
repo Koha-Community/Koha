@@ -128,9 +128,6 @@
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]
                                         [% END %]
-                                        [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
-                                            <img src="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]" alt="Adlibris cover image" />
-                                        [% END %]
                                         [% IF ( SyndeticsEnabled && SyndeticsCoverImages ) %]
                                             <img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% review.normalized_upc | html %]&amp;oclc=[% review.normalized_oclc | html %]" alt="" class="thumbnail" />
                                         [% END %]
