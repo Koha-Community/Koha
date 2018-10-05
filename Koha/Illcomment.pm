@@ -30,6 +30,10 @@ Koha::Illcomment - Koha Illcomment Object class
 
 =head3 patron
 
+    my $patron = Koha::Illcomment->patron;
+
+Return the patron object associated with this comment
+
 =cut
 
 sub patron {
@@ -42,6 +46,10 @@ sub patron {
 =head2 Internal methods
 
 =head3 _type
+
+    my $type = Koha::IllComment->_type;
+
+Return this object's type
 
 =cut
 
