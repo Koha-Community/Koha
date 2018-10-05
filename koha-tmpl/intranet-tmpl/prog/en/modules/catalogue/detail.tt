@@ -141,9 +141,9 @@
         [% END %]
         [% IF ( IntranetCoce && CoceProviders ) %]
           [% coce_id = normalized_ean || normalized_isbn %]
-            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% biblionumber |url %]">
+            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% biblionumber | url %]">
           [% IF ( coce_id ) %]
-            <span style="block" title="[% biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail-preview"></span>
+            <span style="block" title="[% biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></span>
           [% ELSE %]
             <span class="no-image">No cover image available</span>
           [% END %]
@@ -768,7 +768,7 @@
     [% INCLUDE 'catalog-strings.inc' %]
     [% Asset.js("js/catalog.js") | $raw %]
     [% INCLUDE 'greybox.inc' %]
-    [% Asset.js("js/coce.js") %]
+    [% Asset.js("js/coce.js") | $raw %]
     <script>
         var interface = "[% interface | html %]";
         var theme = "[% theme | html %]";
@@ -932,7 +932,7 @@
                 KOHA.LocalCover.GetCoverFromBibnumber(true);
             [% END %]
             [% IF ( IntranetCoce && CoceProviders ) %]
-                KOHA.coce.getURL('[% CoceHost %]', '[% CoceProviders %]');
+                KOHA.coce.getURL('[% CoceHost | html %]', '[% CoceProviders | html %]');
             [% END %]
 
             $("body").on("click",".previewMARC", function(e){

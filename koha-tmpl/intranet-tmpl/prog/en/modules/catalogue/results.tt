@@ -408,13 +408,13 @@
                                                     [% END # /IF AmazonCoverImages %]
                                                     [% IF ( IntranetCoce && CoceProviders ) %]
                                                         [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]
-                                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage %]?biblionumber=[% SEARCH_RESULT.biblionumber |url %]">
+                                                            <a class="p1" href="/cgi-bin/koha/catalogue/[% DetailPage | html %]?biblionumber=[% SEARCH_RESULT.biblionumber | url %]">
                                                         [% IF ( coce_id ) %]
-                                                            <span style="block" title="[% SEARCH_RESULT.biblionumber |url %]" class="[% coce_id %]" id="coce-thumbnail[% loop.count %]"></span>
+                                                            <span style="block" title="[% SEARCH_RESULT.biblionumber | url %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span>
                                                         [% END %]
-                                                        </a>
+                                                            </a>
                                                     [% END %]
                                                 </td>
                                             [% END # /IF( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled || IntranetCoce )%]
@@ -664,7 +664,7 @@
     [% Asset.js("js/browser.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    [% Asset.js("js/coce.js") %]
+    [% Asset.js("js/coce.js") | $raw %]
     <script>
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
         var MSG_NON_RESERVES_SELECTED = _("One or more selected items cannot be placed on hold.");
@@ -809,7 +809,7 @@
             [% END %]
 
             [% IF ( IntranetCoce && CoceProviders ) %]
-                KOHA.coce.getURL('[% CoceHost %]', '[% CoceProviders %]');
+                KOHA.coce.getURL('[% CoceHost | html %]', '[% CoceProviders | html %]');
             [% END %]
 
             $("#select_all").on("click",function(e){
