@@ -28,6 +28,7 @@ use JSON;
 
 use C4::Circulation;
 use C4::Biblio;
+use C4::Auth qw(checkpw_hash);
 
 use Koha::Holds;
 use Koha::Patrons;
@@ -1502,7 +1503,7 @@ subtest '->store' => sub {
 
 subtest '->set_password' => sub {
 
-    plan tests => 11;
+    plan tests => 12;
 
     $schema->storage->txn_begin;
 
@@ -1555,6 +1556,7 @@ subtest '->set_password' => sub {
     $patron->discard_changes;
 
     isnt( $patron->password, $old_digest, 'Password has been updated' );
+    ok( checkpw_hash('abcd   a', $patron->password), 'Password hash is correct' );
     is( $patron->login_attempts, 0, 'Login attemps have been reset' );
 
     my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $patron->borrowernumber } )->count;
