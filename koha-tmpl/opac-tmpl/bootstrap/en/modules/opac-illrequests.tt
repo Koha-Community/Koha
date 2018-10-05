@@ -1,8 +1,9 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE KohaDates %]
 [% USE Branches %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;   Your Interlibrary loan requests</title>[% INCLUDE 'doc-head-close.inc' %]
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;   Your interlibrary loan requests</title>[% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='opac-illrequests' bodyclass='scrollto' %]
@@ -24,9 +25,9 @@
         [% IF method != 'list' %]
             <li><a href="/cgi-bin/koha/opac-illrequests.pl">Interlibrary loan requests</a> <span class="divider">&rsaquo;</span></li>
             [% IF method == 'create' %]
-                <li>New Interlibrary loan request</li>
+                <li>New interlibrary loan request</li>
             [% ELSIF method == 'view' %]
-                <li>View Interlibrary loan request</li>
+                <li>View interlibrary loan request</li>
             [% END %]
         [% ELSE %]
             <li>Interlibrary loan requests</li>
@@ -54,7 +55,7 @@
           [% ELSE %]
             <div id="illrequests" class="maincontent">
                 [% IF method == 'create' %]
-                    <h2>New Interlibrary loan request</h2>
+                    <h2>New interlibrary loan request</h2>
                     [% IF stage == 'copyrightclearance' %]
                         [% INCLUDE messages %]
                         <div>
@@ -79,8 +80,8 @@
                                     </select>
                                 </fieldset>
                                 <fieldset class="action">
-                                    <input type="hidden" name="method" value="create">
-                                    <input type="submit" name="create_select_backend" value="Next">
+                                    <input type="hidden" name="method" value="create" />
+                                    <input type="submit" name="create_select_backend" value="Next" />
                                 </fieldset>
                             </form>
                         [% ELSE %]
@@ -117,8 +118,8 @@
                                 <th>Requested from</th>
                                 <th>Request type</th>
                                 <th>Status</th>
-                                <th>Request placed</th>
-                                <th>Last updated</th>
+                                <th class="title-string">Request placed</th>
+                                <th class="title-string">Last updated</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -136,8 +137,8 @@
                                     <td>[% request.backend | html %]</td>
                                     <td>[% request.medium | html %]</td>
                                     <td>[% request.capabilities.$status.name | html %]</td>
-                                    <td>[% request.placed | html %]</td>
-                                    <td>[% request.updated | html %]</td>
+                                    <td><span title="[% request.placed | html %]">[% request.placed | $KohaDates %]</span></td>
+                                    <td><span title="[% request.updated | html %]">[% request.updated | $KohaDates %]</span></td>
                                     <td>
                                         <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id | html %]" class="btn btn-default btn-small pull-right">View</a>
                                     </td>
@@ -146,7 +147,7 @@
                         </tbody>
                     </table>
                 [% ELSIF method == 'view' %]
-                    <h2>View Interlibrary loan request</h2>
+                    <h2>View interlibrary loan request</h2>
                     [% INCLUDE messages %]
                     [% status = request.status | html %]
                     <form method="post" action="?method=update" id="illrequestupdate-form" novalidate="novalidate">
@@ -181,11 +182,11 @@
                                     </li>
                                     <li>
                                         <label for="placed">Request placed:</label>
-                                        [% request.placed | html %]
+                                        [% request.placed | $KohaDates %]
                                     </li>
                                     <li>
                                         <label for="updated">Last updated:</label>
-                                        [% request.updated | html %]
+                                        [% request.updated | $KohaDates %]
                                     </li>
                                     <li>
                                         <label for="notesopac">Notes:</label>
@@ -207,13 +208,13 @@
                                 [% END %]
                             </div>
                             <fieldset class="action illrequest-actions">
-                                <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html %]">
-                                <input type="hidden" name="method" value="update">
+                                <input type="hidden" name="illrequest_id" value="[% request.illrequest_id | html %]" />
+                                <input type="hidden" name="method" value="update" />
                                 [% IF !request.completed %]
                                     [% IF request.status == "NEW" %]
                                         <a class="cancel-illrequest btn btn-danger" href="/cgi-bin/koha/opac-illrequests.pl?method=cancreq&amp;illrequest_id=[% request.illrequest_id | html %]">Request cancellation</a>
                                     [% END %]
-                                    <input type="submit" class="update-illrequest btn btn-default" value="Submit modifications">
+                                    <input type="submit" class="update-illrequest btn btn-default" value="Submit modifications" />
                                 [% END %]
                                 <span class="cancel"><a href="/cgi-bin/koha/opac-illrequests.pl">Cancel</a></span>
                             </fieldset>
@@ -234,7 +235,8 @@
     //<![CDATA[
         $("#illrequestlist").dataTable($.extend(true, {}, dataTablesDefaults, {
             "columnDefs": [
-                { "targets": [ -1 ], "sortable": false, "searchable": false }
+                { "targets": [ -1 ], "sortable": false, "searchable": false },
+                { "type": "title-string", "targets" : [ "title-string" ] }
             ],
             "order": [[ 3, "desc" ]],
             "deferRender": true
