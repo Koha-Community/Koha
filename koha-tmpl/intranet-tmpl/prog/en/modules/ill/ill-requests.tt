@@ -429,7 +429,7 @@
                                 </li>
                                 <li class="cost">
                                     <label class="cost">Cost:</label>
-                                    [% request.cost || 'N/A' | html %]
+                                    [% IF request.cost %][% request.cost | html %][% ELSE %]<span>N/A</span>[% END %]
                                 </li>
                                 <li class="price_paid">
                                     <label class="price_paid">Price paid:</label>
@@ -502,7 +502,7 @@
                             <div class="rows">
                                 <div class="orderid">
                                     <span class="label orderid">Order ID:</span>
-                                    [% request.orderid || "N/A" | html %]
+                                    [% IF request.orderid %][% request.orderid | html %][% ELSE %]<span>N/A</span>[% END %]
                                 </div>
                                 <div class="borrowernumber">
                                     <span class="label borrowernumber">Patron:</span>
@@ -514,7 +514,7 @@
 
                                 <div class="biblio_id">
                                     <span class="label biblio_id">Bibliographic record ID:</span>
-                                    [% request.biblio_id || "N/A" | html %]
+                                    [% IF request.biblio_id %][% request.biblio_id | html %][% ELSE %]<span>N/A</span>[% END %]
                                 </div>
                                 <div class="branchcode">
                                     <span class="label branchcode">Library:</span>
@@ -534,11 +534,11 @@
                                 </div>
                                 <div class="cost">
                                     <span class="label cost">Cost:</span>
-                                    [% request.cost || "N/A" | html %]
+                                    [% IF request.cost %][% request.cost | html %][% ELSE %]<span>N/A</span>[% END %]
                                 </div>
                                 <div class="price_paid">
                                     <span class="label price_paid">Price paid:</span>
-                                    [% request.price_paid || "N/A" %]
+                                    [% IF request.price_paid %][% request.price_paid | html %][% ELSE %]<span>N/A</span>[% END %]
                                 </div>
                                 <div class="req_id">
                                     <span class="label req_id">Request number:</span>

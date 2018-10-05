@@ -125,8 +125,12 @@
                             [% FOREACH request IN requests %]
                                 [% status = request.status | html %]
                                 <tr>
-                                    <td>[% request.metadata.Author || 'N/A' | html %]</td>
-                                    <td>[% request.metadata.Title || 'N/A' | html %]</td>
+                                    <td>
+                                        [% IF request.metadata.Author %][% request.metadata.Author | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    </td>
+                                    <td>
+                                        [% IF request.metadata.Title %][% request.metadata.Title | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    </td>
                                     <td>[% request.backend | html %]</td>
                                     <td>[% request.medium | html %]</td>
                                     <td>[% request.capabilities.$status.name | html %]</td>
@@ -192,7 +196,7 @@
                                 [% FOREACH meta IN request.metadata %]
                                     <div class="requestattr-[% meta.key | html %]">
                                         <span class="label">[% meta.key | html %]:</span>
-                                        [% meta.value || 'N/A' | html %]
+                                        [% IF meta.value %][% meta.value | html %][% ELSE %]<span>N/A</span>[% END %]
                                     </div>
                                 [% END %]
                             </div>

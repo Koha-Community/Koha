@@ -2,7 +2,7 @@ $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
      if( !column_exists( 'illrequests', 'price_paid' ) ) {
-        $dbh->do( "ALTER TABLE illrequests ADD COLUMN price_paid varchar(20) DEFAULT NULL" );
+        $dbh->do( "ALTER TABLE illrequests ADD COLUMN price_paid varchar(20) DEFAULT NULL AFTER 'cost'" );
      }
 
     SetVersion( $DBversion );
