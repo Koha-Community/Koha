@@ -1,27 +1,13 @@
 [% USE raw %]
+[% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Stock rotation</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("css/datatables.css") | $raw %]
-[% INCLUDE 'datatables.inc' %]
-[% Asset.js("js/pages/stockrotation.js") | $raw %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $('#sr_manage_items').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "autoWidth": false,
-            "aoColumnDefs": [
-                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                { "bSortable": true, "bSearchable": false, 'aTargets': [ 'NoSearch' ] }
-            ],
-            "sPaginationType": "four_button"
-        }));
-    });
-//]]>
-</script>
 </head>
 
 <body id="tools_stockrotation" class="tools">
@@ -508,4 +494,23 @@
         </div>
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("js/tools-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/pages/stockrotation.js") | $raw %]
+    <script type="text/javascript">
+    $(document).ready(function() {
+        $('#sr_manage_items').dataTable($.extend(true, {}, dataTablesDefaults, {
+            "autoWidth": false,
+            "aoColumnDefs": [
+                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                { "bSortable": true, "bSearchable": false, 'aTargets': [ 'NoSearch' ] }
+            ],
+            "sPaginationType": "four_button"
+        }));
+    });
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
