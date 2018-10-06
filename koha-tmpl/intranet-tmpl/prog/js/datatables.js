@@ -263,24 +263,24 @@ $.fn.dataTableExt.oPagination.four_button = {
             var buttons = an[i].getElementsByTagName('span');
             if ( oSettings._iDisplayStart === 0 )
             {
-                buttons[0].className = "paginate_disabled_previous";
+                buttons[0].className = "paginate_disabled_first";
                 buttons[1].className = "paginate_disabled_previous";
             }
             else
             {
-                buttons[0].className = "paginate_enabled_previous";
+                buttons[0].className = "paginate_enabled_first";
                 buttons[1].className = "paginate_enabled_previous";
             }
 
             if ( oSettings.fnDisplayEnd() == oSettings.fnRecordsDisplay() )
             {
                 buttons[2].className = "paginate_disabled_next";
-                buttons[3].className = "paginate_disabled_next";
+                buttons[3].className = "paginate_disabled_last";
             }
             else
             {
                 buttons[2].className = "paginate_enabled_next";
-                buttons[3].className = "paginate_enabled_next";
+                buttons[3].className = "paginate_enabled_last";
             }
         }
     }
