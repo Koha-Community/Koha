@@ -216,6 +216,13 @@ function confirmnotdup(redirect){
         <div class="btn-group">
             <a class="btn btn-default btn-sm" id="z3950submit" href="#"><i class="fa fa-search"></i> Z39.50 search</a>
         </div>
+        <div class="btn-group">
+            [% IF ( authid ) %]
+                <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/authorities/detail.pl?authid=[% authid | url %]">Cancel</a>
+            [% ELSE %]
+                <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/authorities/authorities-home.pl">Cancel</a>
+            [% END %]
+        </div>
     </div>
 
 <div id="authoritytabs" class="toptabs numbered">
@@ -425,10 +432,6 @@ function confirmnotdup(redirect){
     <input type="hidden" name="subfield" value="[% oldauthtypetagsubfield | html %]" />
     <input type="hidden" name="field_value" value="[% authtypecode | html %]" />
 [% END %]
-
-<fieldset class="action">
-        <input type="button" id="addauth2" value="Save" onclick="Check(this.form)" accesskey="w" />
-</fieldset>
 
 </form>
 
