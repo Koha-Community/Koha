@@ -4267,7 +4267,7 @@ sub _CalculateAndUpdateFine {
 
     $type ||= q{};
 
-    if ( C4::Context->preference('finesMode') eq 'production' ) {
+    if ( C4::Context->preference('CalculateFinesOnReturn') ) {
         if ( $amount > 0 ) {
             C4::Overdues::UpdateFine({
                 issue_id       => $issue->{issue_id},
