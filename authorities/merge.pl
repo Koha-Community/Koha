@@ -196,7 +196,7 @@ else {
                 title2          => $recordObj2->authorized_heading,
             );
             if ( $recordObj1->authtypecode ne $recordObj2->authtypecode ) {
-                my $authority_types = Koha::Authority::Types->search( { authtypecode => { '!=' => '' } }, { order_by => ['authtypecode'] } );
+                my $authority_types = Koha::Authority::Types->search( { authtypecode => { '!=' => '' } }, { order_by => ['authtypetext'] } );
                 $template->param(
                     frameworkselect => $authority_types->unblessed,
                     frameworkcode1  => $recordObj1->authtypecode,
