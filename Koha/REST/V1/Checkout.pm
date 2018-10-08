@@ -224,7 +224,6 @@ sub listhistory {
             $checkout->{'enumchron'}       = $item->enumchron;
             $checkout->{'biblionumber'}    = $item->biblionumber;
             $checkout->{'title'}           = $biblio->title;
-            $checkout->{'title_remainder'} = $biblio->title_remainder;
         }
 
         return $c->render( status => 200, openapi => {
@@ -260,9 +259,26 @@ sub expanded {
       or return;
     my $user = $c->stash('koha.user');
     my $opac_renewability = _opac_renewal_allowed($user, $borrowernumber);
-    my $checkouts = Koha::Checkouts->search({
-        borrowernumber => $borrowernumber
-    });
+    my $checkouts = Koha::Checkouts->search(
+        {
+            borrowernumber => $borrowernumber
+        },
+        {
+            join => { 'item' => ['biblio', 'biblioitem'] },
+            '+select' => [
+                'item.itype', 'item.homebranch', 'item.holdingbranch', 'item.ccode', 'item.permanent_location', 'item.sub_location', 
+                'item.genre', 'item.circulation_level', 'item.reserve_level', 'item.enumchron', 'item.biblionumber',
+                'biblioitem.itemtype',
+                'biblio.title'
+            ],
+            '+as' => [
+                'item_itype', 'homebranch', 'holdingbranch', 'ccode', 'permanent_location', 'sub_location', 
+                'genre', 'circulation_level', 'reserve_level', 'enumchron', 'biblionumber',
+                'biblio_itype',
+                'title'
+            ]
+        }
+    );
     my $checkouts_json = $checkouts->TO_JSON;
 
     my $patron_blocks = '';
@@ -281,12 +297,16 @@ sub expanded {
     }
     # END TODO
 
+    my $item_level_itypes = C4::Context->preference('item-level_itypes');
+
     foreach my $checkout (@{$checkouts_json}) {
-        my $item         = Koha::Items->find($checkout->{itemnumber});
-        my $biblio       = Koha::Biblios->find($item->biblionumber);
-        my $branchcode   = C4::Circulation::_GetCircControlBranch( $item->unblessed,
+        # _GetCircControlBranch takes an item, but we have all the required item
+        # fields in $checkout
+        my $branchcode   = C4::Circulation::_GetCircControlBranch($checkout,
                                                                    $borrower);
 
+        my $itype = $item_level_itypes && $checkout->{item_itype} 
+            ? $checkout->{item_itype} : $checkout->{biblio_itype};
         my $can_renew = 1;
         my $max_renewals = 0;
         my $blocks = '';
@@ -297,23 +317,19 @@ sub expanded {
             my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
                 {   
                     categorycode => $borrower->{categorycode},
-                    itemtype     => $item->effective_itemtype,
+                    itemtype     => $itype,
                     branchcode   => $branchcode,
-                    ccode        => $item->ccode,
-                    permanent_location => $item->permanent_location,
-                    sub_location => $item->sub_location,
-                    genre        => $item->genre,
-                    circulation_level => $item->circulation_level,
-                    reserve_level => $item->reserve_level,
+                    ccode        => $checkout->{ccode},
+                    permanent_location => $checkout->{permanent_location},
+                    sub_location => $checkout->{sub_location},
+                    genre        => $checkout->{genre},
+                    circulation_level => $checkout->{circulation_level},
+                    reserve_level => $checkout->{reserve_level},
                 }
             );
             $max_renewals = $issuing_rule ? 0+$issuing_rule->renewalsallowed : 0;
         }
-        $checkout->{'enumchron'}       = $item->enumchron;
-        $checkout->{'biblionumber'}    = $item->biblionumber;
-        $checkout->{'title'}           = $biblio->title;
-        $checkout->{'title_remainder'} = $biblio->title_remainder;
-        $checkout->{'max_renewals'}    = $max_renewals;
+        $checkout->{'max_renewals'} = $max_renewals;
         if (!$blocks) {
             if ($opac_renewability) {
                 ($can_renew, $blocks) = C4::Circulation::CanBookBeRenewed(

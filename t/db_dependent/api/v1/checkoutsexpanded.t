@@ -42,7 +42,7 @@ my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get() tests' => sub {
-    plan tests => 42;
+    plan tests => 40;
 
     $schema->storage->txn_begin;
 
@@ -121,7 +121,6 @@ subtest 'get() tests' => sub {
         ->json_is('/1/max_renewals' => 1)
         ->json_is('/0/biblionumber' => $biblionumber)
         ->json_is('/0/title' => 'RESTful Web APIs')
-        ->json_is('/0/title_remainder' => 'The Best')
         ->json_is('/0/enumchron' => 'ecTEST1001')
         ->json_hasnt('/2');
         
@@ -149,7 +148,6 @@ subtest 'get() tests' => sub {
         ->json_is('/1/max_renewals' => 1)
         ->json_is('/0/biblionumber' => $biblionumber)
         ->json_is('/0/title' => 'RESTful Web APIs')
-        ->json_is('/0/title_remainder' => 'The Best')
         ->json_is('/0/enumchron' => 'ecTEST1001')
         ->json_hasnt('/2');
     $schema->storage->txn_rollback;

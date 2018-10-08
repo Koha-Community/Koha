@@ -55,8 +55,6 @@ sub TO_JSON {
             my $biblio = $item->biblio;
             if (defined $biblio) {
                 my $title = $biblio->title;
-                my $remainder = $biblio->title_remainder;
-                $title .= ' ' . $remainder if defined $remainder;
                 $json->{description} = $title if defined $title;
             }
         }

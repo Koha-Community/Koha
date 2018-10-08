@@ -39,7 +39,7 @@ my $builder = t::lib::TestBuilder->new;
 my $patron = $builder->build( { source => 'Borrower' } );
 $patron = Koha::Patrons->find( $patron->{borrowernumber} );
 
-my $biblio = Koha::Biblio->new()->store();
+my $biblio = Koha::Biblio->new({datecreated => '2018-01-01'})->store();
 
 my $biblioitem = $schema->resultset('Biblioitem')->new(
     {
@@ -144,22 +144,13 @@ subtest 'can_be_transferred' => sub {
        .' invalid library is given.');
 };
 
-subtest 'title_remainder' => sub {
-    plan tests => 1;
-
-    my ($bibnum, $title, $bibitemnum) = create_helper_biblio('BK');
-
-    my $biblio = Koha::Biblios->find($bibnum);
-    is($biblio->title_remainder, 'Remainder', 'Got remainder of title');
-};
-
 subtest 'store' => sub {
     plan tests => 2;
 
     my ($bibnum, $title, $bibitemnum) = create_helper_biblio('BK');
 
     my $biblio = Koha::Biblios->find($bibnum);
-    $biblio->title_remainder;
+    $biblio->title;
     is(ref($biblio->{_record}), 'MARC::Record',
        'MARC::Record is cached in the object');
     $biblio->store;

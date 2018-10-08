@@ -82,11 +82,10 @@ subtest 'Create biblio' => sub {
 };
 
 subtest 'getexpanded() tests' => sub {
-    plan tests => 8;
+    plan tests => 6;
 
     my ($bibnum, $title, $bibitemnum) = create_helper_biblio({
-        itemtype => 'BK',
-        remainder_of_title => 'Remainder'
+        itemtype => 'BK'
     });
 
     my $tx = $t->ua->build_tx(GET => "/api/v1/biblios/$bibnum/expanded");
@@ -95,8 +94,7 @@ subtest 'getexpanded() tests' => sub {
     $t->request_ok($tx)
       ->status_is(200);
 
-    $t->json_is('/biblio/biblionumber' => $bibnum)
-      ->json_is('/biblio/title_remainder' => 'Remainder');
+    $t->json_is('/biblio/biblionumber' => $bibnum);
 
     ($bibnum, $title, $bibitemnum) = create_helper_biblio({ itemtype => 'BK' });
 
@@ -106,8 +104,7 @@ subtest 'getexpanded() tests' => sub {
     $t->request_ok($tx)
       ->status_is(200);
 
-    $t->json_is('/biblio/biblionumber' => $bibnum)
-      ->json_hasnt('/biblio/title_remainder');
+    $t->json_is('/biblio/biblionumber' => $bibnum);
 };
 
 subtest 'Delete biblio' => sub {

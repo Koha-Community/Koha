@@ -457,22 +457,6 @@ sub subscriptions {
 }
 
 
-=head3 title_remainder
-
-my $field = $self->title_remainder
-
-Returns the Remainder of title, 245$b.
-
-=cut
-
-sub title_remainder {
-    my ($self) = @_;
-
-    $self->{_record} ||= C4::Biblio::GetMarcBiblio($self->biblionumber);
-    return unless my $record = $self->{_record};
-    return $record->subfield('245','b');
-}
-
 =head3 store
 
 =cut
@@ -493,8 +477,6 @@ sub TO_JSON {
     my ($self) = @_;
 
     my $json = $self->SUPER::TO_JSON;
-    my $title_remainder = $self->title_remainder;
-    $json->{'title_remainder'} = $title_remainder if $title_remainder;
     return $json;
 }
 
