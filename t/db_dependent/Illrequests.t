@@ -37,7 +37,7 @@ use_ok('Koha::Illrequests');
 
 subtest 'Basic object tests' => sub {
 
-    plan tests => 21;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
@@ -74,6 +74,8 @@ subtest 'Basic object tests' => sub {
        "Accessurl getter works.");
     is($illrq_obj->cost, $illrq->{cost},
        "Cost getter works.");
+    is($illrq_obj->price_paid, $illrq->{price_paid},
+       "Price_paid getter works.");
     is($illrq_obj->notesopac, $illrq->{notesopac},
        "Notesopac getter works.");
     is($illrq_obj->notesstaff, $illrq->{notesstaff},
