@@ -9,7 +9,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 37;
+use Test::More tests => 39;
 
 use C4::Context;
 
