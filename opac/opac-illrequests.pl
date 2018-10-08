@@ -121,7 +121,7 @@ if ( $op eq 'list' ) {
             );
         } else {
             $template->param(
-                media       => [ "Book", "Article", "Journal" ],
+                types       => [ "Book", "Article", "Journal" ],
                 branches    => Koha::Libraries->search->unblessed,
                 whole       => $backend_result,
                 request     => $request

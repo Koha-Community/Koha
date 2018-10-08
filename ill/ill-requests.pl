@@ -273,7 +273,7 @@ if ( $backends_available ) {
 
 $template->param(
     backends   => $backends,
-    media      => [ "Book", "Article", "Journal" ],
+    types      => [ "Book", "Article", "Journal" ],
     query_type => $op,
     branches   => scalar Koha::Libraries->search,
 );
