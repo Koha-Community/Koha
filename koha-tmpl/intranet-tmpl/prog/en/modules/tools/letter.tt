@@ -47,7 +47,7 @@
 [% IF ( no_op_set ) %]
     <h1>Notices &amp; slips</h1>
     <form method="get" action="/cgi-bin/koha/tools/letter.pl" id="selectlibrary">
-      <input type="hidden" name="searchfield" value="[% searchfield %]" />
+      <input type="hidden" name="searchfield" value="[% searchfield | html %]" />
     [% UNLESS independant_branch %]
       <p>
         Select a library :
@@ -64,7 +64,7 @@
     </form>
 
 		[% IF ( search ) %]
-        <p>You searched for <b>[% searchfield %]</b></p>
+        <p>You searched for <b>[% searchfield | html %]</b></p>
 		[% END %]
 		[% IF ( letter && !independant_branch) %]
             [% select_for_copy = BLOCK %]
