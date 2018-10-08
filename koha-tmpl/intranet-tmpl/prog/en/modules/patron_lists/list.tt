@@ -245,11 +245,11 @@
             $('.merge-patrons').on('click', function() {
                 var checkedItems = $("input:checked");
                 if ($(checkedItems).length < 2) {
-                    alert(_("You must select one or more patrons to remove"));
+                    alert(_("You must select two or more patrons to merge"));
                     return false;
                 }
                 $(checkedItems).parents('tr').addClass("warn");
-                if (confirm(_("Are you sure you want to remove the selected patrons?"))) {
+                if (confirm(_("Are you sure you want to merge the selected patrons?"))) {
                     var merge_patrons_url = '/cgi-bin/koha/members/merge-patrons.pl?' +
                         $('.selection:checked')
                         .map(function() {
