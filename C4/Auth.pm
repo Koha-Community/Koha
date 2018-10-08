@@ -27,6 +27,7 @@ use CGI::Session;
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 use YAML::Syck;
+use C4::AuthExtra;
 
 require Exporter;
 use C4::Context;
@@ -473,7 +474,7 @@ sub get_template_and_user {
             EnableBorrowerFiles                                                        => C4::Context->preference('EnableBorrowerFiles'),
             UseKohaPlugins                                                             => C4::Context->preference('UseKohaPlugins'),
             UseCourseReserves                                                          => C4::Context->preference("UseCourseReserves"),
-            useDischarge                                                               => C4::Context->preference('useDischarge')
+            useDischarge                                                               => C4::Context->preference('useDischarge'),
         );
     }
     else {
@@ -820,6 +821,11 @@ sub checkauth {
             $ip          = $session->param('ip');
             $lasttime    = $session->param('lasttime');
             $userid      = $s_userid;
+           
+            ###################################
+            $timeout = C4::AuthExtra::get_timeout($userid,$timeout);            
+            ###################################           
+
             $sessiontype = $session->param('sessiontype') || '';
         }
         if ( ( $query->param('koha_login_context') && ( $q_userid ne $s_userid ) )
@@ -1267,7 +1273,7 @@ sub checkauth {
         PatronSelfRegistration                => C4::Context->preference("PatronSelfRegistration"),
         PatronSelfRegistrationDefaultCategory => C4::Context->preference("PatronSelfRegistrationDefaultCategory"),
         opac_css_override                     => $ENV{'OPAC_CSS_OVERRIDE'},
-        too_many_login_attempts               => ( $patron and $patron->account_locked )
+        too_many_login_attempts               => ( $patron and $patron->account_locked ),
     );
 
     $template->param( SCO_login => 1 ) if ( $query->param('sco_user_login') );
@@ -1427,6 +1433,11 @@ sub check_api_auth {
             my $ip       = $session->param('ip');
             my $lasttime = $session->param('lasttime');
             my $userid   = $session->param('id');
+            
+            #############################
+            $timeout =C4::AuthExtra::get_timeout($userid,$timeout);
+            ###############################
+
             if ( $lasttime < time() - $timeout ) {
 
                 # time out
@@ -1687,6 +1698,11 @@ sub check_cookie_auth {
         my $ip       = $session->param('ip');
         my $lasttime = $session->param('lasttime');
         my $userid   = $session->param('id');
+
+        ####################################
+        $timeout = C4::AuthExtra::get_timeout($userid,$timeout);
+        ####################################
+
         if ( $lasttime < time() - $timeout ) {
 
             # time out
