@@ -379,7 +379,7 @@ sub build_csv {
     $csv->combine(@keys);
     push @lines, $csv->string();
 
-    my @private_keys = qw( title firstname surname phone email address address2 zipcode city country streetnumber streettype );
+    my @private_keys = qw( borrowertitle firstname surname phone email address address2 zipcode city country streetnumber streettype );
     # ... and rest of report
     foreach my $overdue ( @{ $overdues } ) {
         unless ( $logged_in_user->can_see_patron_infos( $overdue->{patron} ) ) {
