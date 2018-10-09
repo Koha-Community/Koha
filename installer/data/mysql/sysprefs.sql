@@ -487,7 +487,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('RisExportAdditionalFields',  '', NULL ,  'Define additional RIS tags to export from MARC records in YAML format as an associative array with either a marc tag/subfield combination as the value, or a list of tag/subfield combinations.',  'textarea'),
 ('RoutingListAddReserves','0','','If ON the patrons on routing lists are automatically added to holds on the issue.','YesNo'),
 ('RotationPreventTransfers','0',NULL,'If ON, prevent any transfers for items on stock rotation rotas, except for stock rotation transfers','YesNo'),
-('RoutingListAddReserves','1','','If ON the patrons on routing lists are automatically added to holds on the issue.','YesNo'),
 ('RoutingListNote','To change this note edit <a href=\"/cgi-bin/koha/admin/preferences.pl?op=search&searchfield=RoutingListNote#jumped\">RoutingListNote</a> system preference.','70|10','Define a note to be shown on all routing lists','Textarea'),
 ('RoutingSerials','1',NULL,'If ON, serials routing is enabled','YesNo'),
 ('SCOMainUserBlock','','70|10','Add a block of HTML that will display on the self checkout screen','Textarea'),
