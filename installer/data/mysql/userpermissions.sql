@@ -89,7 +89,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    (21, 'edit_clubs', 'Create and update clubs'),
    (21, 'enroll', 'Enroll patrons in clubs'),
    (23, 'self_checkin_module', 'Log into the self check-in module'),
-   (23, 'self_checkout_module', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID')
+   (23, 'self_checkout_module', 'Perform self checkout at the OPAC. It should be used for the patron matching the AutoSelfCheckID'),
    (24, 'manage_rotas', 'Create, edit and delete rotas'),
    (24, 'manage_rota_items', 'Add and remove items from rotas')
 ;
