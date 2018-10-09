@@ -119,11 +119,12 @@
      </div>
      </div>
 
-     [% IF additional_fields_for_subscription %]
+    [% IF additional_fields_for_subscription %]
+    <hr>
     <div class="row">
       <div class="col-sm-6">
+        <h3>Additional fields:</h3>
         <div class="rows">
-          <legend>Additional fields:</legend>
           <ol>
             [% FOR field IN additional_fields_for_subscription %]
               <li>
