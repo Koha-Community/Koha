@@ -1,7 +1,7 @@
 [% USE Koha %]
 [% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( holding_id ) %]Editing record number [% holding_id %][% ELSE %]Add holding record[% END %]</title>
+<title>Koha &rsaquo; Cataloging &rsaquo; [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %]) &rsaquo; Holdings</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <script type="text/javascript" src="[% interface %]/lib/jquery/plugins/jquery.fixFloat_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/cataloging_[% KOHA_VERSION %].js"></script>
@@ -349,7 +349,12 @@ function Changefwk() {
 
 [% INCLUDE 'header.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>  &rsaquo; [% IF ( holding_id ) %]Editing record number [% holding_id %][% ELSE %]Add holding record[% END %]</div>
+<div id="breadcrumbs">
+          <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+ &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
+ &rsaquo; Edit <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">[% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</a>
+ &rsaquo; <a href="/cgi-bin/koha/cataloguing/addholding.pl?biblionumber=[% biblionumber | html %]">Holdings</a>
+</div>
 
 <div id="doc" class="yui-t7">
 

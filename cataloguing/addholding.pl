@@ -37,14 +37,13 @@ use C4::Koha;
 use C4::ClassSource;
 use C4::ImportBatch;
 use C4::Charset;
+use Koha::Biblios;
 use Koha::BiblioFrameworks;
 use Koha::DateUtils;
 use C4::Matcher;
 
 use Koha::ItemTypes;
 use Koha::Libraries;
-
-use Koha::BiblioFrameworks;
 
 use Date::Calc qw(Today);
 use MARC::File::USMARC;
@@ -695,7 +694,7 @@ elsif ( $op eq "delete" ) {
         $holding_id = "";
     }
 
-    if($changed_framework eq "changed"){
+    if($changed_framework eq "changed") {
         $record = TransformHtmlToMarc( $input, 1 );
     }
     elsif( $record ne -1 ) {
@@ -708,12 +707,15 @@ elsif ( $op eq "delete" ) {
             $record = $urecord;
         };
     }
+    my $biblio = Koha::Biblios->find( $biblionumber );
     build_tabs( $template, $record, $dbh, $encoding,$input );
     $template->param(
-        holding_id            => $holding_id,
+        holding_id               => $holding_id,
         biblionumber             => $biblionumber,
         biblionumbertagfield     => $biblionumbertagfield,
         biblionumbertagsubfield  => $biblionumbertagsubfield,
+        title                    => $biblio->title,
+        author                   => $biblio->author
     );
 }
 
