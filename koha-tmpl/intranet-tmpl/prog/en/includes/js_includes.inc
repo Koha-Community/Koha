@@ -1,4 +1,5 @@
 [% USE AudioAlerts %]
+[% USE To %]
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
     <script type="text/javascript">
@@ -66,8 +67,8 @@
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
     <script type="text/javascript">
         //<![CDATA[
-            var AUDIO_ALERT_PATH = '[% interface %]/[% theme %]/sound/';
-            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) %]' );
+            var AUDIO_ALERT_PATH = '[% interface | uri %]/[% theme | uri %]/sound/';
+            var AUDIO_ALERTS = JSON.parse( '[% To.json(AudioAlerts.AudioAlerts) %]' );
         //]]>
 
         $( document ).ready(function() {
