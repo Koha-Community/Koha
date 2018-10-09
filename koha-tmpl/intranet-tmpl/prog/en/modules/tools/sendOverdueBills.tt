@@ -115,7 +115,7 @@
 			</tr></thead>
 
 			<tbody>[% FOREACH overdueloo IN overdueloop %]
-			    <tr data-borrowernumber="[% IF ( overdueloo.guarantorid ) %][% overdueloo.guarantorid %][% ELSE %][% overdueloo.borrowernumber %][% END %]" data-child="[% IF ( overdueloo.guarantorid ) %]CHILD[% END %]" data-rownumber="[% overdueloo.rowcount %]" data-issueid="[% overdueloo.issue_id %]" data-itemnum="[% overdueloo.itemnum %]">
+			    <tr data-borrowernumber="[% IF ( overdueloo.guarantorid ) %][% overdueloo.guarantorid %][% ELSE %][% overdueloo.borrowernumber %][% END %]" data-child="[% IF ( overdueloo.guarantorid ) %]CHILD[% END %]" data-issueborrower="[% overdueloo.borrowernumber %]" data-rownumber="[% overdueloo.rowcount %]" data-issueid="[% overdueloo.issue_id %]" data-itemnum="[% overdueloo.itemnum %]">
 		        <td>[% overdueloo.duedate %]</td>
 		        <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% overdueloo.borrowernumber %]" target="_blank">[% overdueloo.surname %] [% overdueloo.firstname %]</a>
 		        [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email %]?subject=Overdue: [% overdueloo.title |html %]">email</a>][% END %]

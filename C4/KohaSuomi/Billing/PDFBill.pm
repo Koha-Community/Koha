@@ -158,6 +158,12 @@ sub set_message {
     $logger->trace("Setting letter") if $logger->is_trace();
 
     my $borrowernumber = $content->[0]->{borrowernumber};
+    my $patron = Koha::Patrons->find($content->[0]->{issueborrower});
+    my $substitute = {
+        issueborname => $patron->firstname.' '.$patron->surname,
+        issueborbarcode => $patron->cardnumber
+    };
+
     my $branch = $content->[0]->{branchcode};
 
     my @items = set_content($content, $borrowernumber);
@@ -172,6 +178,7 @@ sub set_message {
             module => 'circulation',
             letter_code => 'ODUECLAIM',
             branchcode => $branch,
+            substitute => $substitute,
             tables => \%tables,
             repeat => { item => \@items },
             message_transport_type => 'print',

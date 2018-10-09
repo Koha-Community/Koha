@@ -197,6 +197,7 @@ $(document).ready(function(){
 
 		var rissueid = $(this).parent().parent().attr("data-issueid"); // Issue id
 		var rborrowernumber = $(this).parent().parent().attr("data-borrowernumber"); // Borrowernumber
+		var issueborrower = $(this).parent().parent().attr("data-issueborrower"); // Borrowernumber
 		var ritemnum = $(this).parent().parent().attr("data-itemnum"); // itemnumber
 		var rchild = $(this).parent().parent().attr("data-child"); // itemnumber
 		var row = $(this).parent().parent().attr("data-rownumber"); // Rownumber
@@ -241,6 +242,7 @@ $(document).ready(function(){
 
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "issue_id_" + row).val(rissueid));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "borrowernumber_" + row).val(rborrowernumber));
+				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "issueborrower_" + row).val(issueborrower));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "itemnum_" + row).val(ritemnum));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "duedate_" + row).val(rduedate));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "surname_" + row).val(rpatron[0]));
@@ -267,6 +269,7 @@ $(document).ready(function(){
 
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "issue_id_" + row).val(rissueid));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "borrowernumber_" + row).val(rborrowernumber));
+				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "issueborrower_" + row).val(issueborrower));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "itemnum_" + row).val(ritemnum));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "duedate_" + row).val(rduedate));
 				brwrrow.append($("<input>").prop("type", "hidden").attr("name", "surname_" + row).val(rpatron[0]));

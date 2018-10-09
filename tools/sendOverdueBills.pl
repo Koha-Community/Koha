@@ -100,6 +100,7 @@ if($send){
 		if(defined param('issue_id_'.$j)){
 
 		$form{'borrowernumber'} = param('borrowernumber_'.$j);
+        $form{'issueborrower'} = param('issueborrower_'.$j);
             $form{'issue_id'} = param('issue_id_'.$j);
             $form{'duedate'} = param('duedate_'.$j);
             $form{'surname'} = param('surname_'.$j);
@@ -130,6 +131,7 @@ if($send){
 			push @paramdata, {
 
 				borrowernumber => $form{'borrowernumber'},
+                issueborrower => $form{'issueborrower'},
 				issue_id => $form{'issue_id'},
 				duedate => $form{'duedate'},
 				surname => $form{'surname'},
