@@ -44,7 +44,8 @@ INSERT IGNORE INTO authorised_value_categories( category_name )
     ('HINGS_C'),
     ('HINGS_AS'),
     ('HINGS_RD'),
-    ('STACK');
+    ('STACK')
+    ('CONTROL_NUM_SEQUENCE');
 
 -- UNIMARC specific?
 INSERT IGNORE INTO authorised_value_categories( category_name ) VALUES

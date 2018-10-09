@@ -113,56 +113,64 @@ require( [ 'koha-backend', 'widget' ], function( KohaBackend, Widget ) {
         },
     } );
 
-    Widget.Register( '001@', {
-        init: function() {
-            var $result = $(
-                '<span class="subfield-widget">'
-                + _("Control number: ")
-                + '<span class="control-number-widget-contents"></span>'
-                + '<button class="control-number-widget-assign">' + _("Assign next") + '</button>'
-                + '<select class="control-number-widget-sequence"></select>'
-                + '<button class="control-number-widget-override">Override</button>'
-                + '</span>'
-            );
+    /* Check to see if there are any Control Number entries
+     *  in the authorised values table.
+     * If not, let's not show the widget
+     */
+    var reg001 = KohaBackend.GetAuthorisedValues( 'CONTROL_NUM_SEQUENCE');
+    if(reg001) {
 
-            return $result[0];
-        },
-        setControlNumber: function( text ) {
-            if ( text ) this.setText( text );
-            $( this.node ).find('.control-number-widget-contents')
-                .html( text == '<empty>' ? ( '<span class="hint">' + _("unset") + '</span>' ) : text );
-            this.mark.changed();
-        },
-        postCreate: function( node, mark ) {
-            var widget = this;
-            this.setControlNumber( this.text );
-            $( this.node )
-                .find('.control-number-widget-assign').click( function() {
-                    var sequence = $( widget.node ).find('.control-number-widget-sequence').val();
-                    $.post(
-                        '/cgi-bin/koha/svc/cataloguing/control_num_sequences/' + sequence
-                    ).done( function( result ) {
-                        if ( result.next_value ) widget.setControlNumber( result.next_value );
-                    } );
-                } ).end()
-                .find('.control-number-widget-override').click( function() {
-                    var result = prompt( _("Enter new control number") );
+        Widget.Register( '001@', {
+            init: function() {
+                var $result = $(
+                    '<span class="subfield-widget">'
+                    + _("Control number: ")
+                    + '<span class="control-number-widget-contents"></span>'
+                    + '<button class="control-number-widget-assign">' + _("Assign next") + '</button>'
+                    + '<select class="control-number-widget-sequence"></select>'
+                    + '<button class="control-number-widget-override">Override</button>'
+                    + '</span>'
+                );
 
-                    if ( result ) widget.setControlNumber( result );
-                } ).end();
+                return $result[0];
+            },
+            setControlNumber: function( text ) {
+                if ( text ) this.setText( text );
+                $( this.node ).find('.control-number-widget-contents')
+                    .html( text == '<empty>' ? ( '<span class="hint">' + _("unset") + '</span>' ) : text );
+                this.mark.changed();
+            },
+            postCreate: function( node, mark ) {
+                var widget = this;
+                this.setControlNumber( this.text );
+                $( this.node )
+                    .find('.control-number-widget-assign').click( function() {
+                        var sequence = $( widget.node ).find('.control-number-widget-sequence').val();
+                        $.post(
+                            '/cgi-bin/koha/svc/cataloguing/control_num_sequences/' + sequence
+                        ).done( function( result ) {
+                            if ( result.next_value ) widget.setControlNumber( result.next_value );
+                        } );
+                    } ).end()
+                    .find('.control-number-widget-override').click( function() {
+                        var result = prompt( _("Enter new control number") );
 
-            var sequence_list = $.map( KohaBackend.GetAuthorisedValues( 'CONTROL_NUM_SEQUENCE' ), function( authval ) {
-                return authval.lib;
-            } );
-            sequence_list.sort();
+                        if ( result ) widget.setControlNumber( result );
+                    } ).end();
 
-            $.each( sequence_list, function( undef, sequence ) {
-                $( widget.node ).find('.control-number-widget-sequence').append( '<option>' + sequence + '</option>' );
-            } );
+                var sequence_list = $.map( KohaBackend.GetAuthorisedValues( 'CONTROL_NUM_SEQUENCE' ), function( authval ) {
+                    return authval.lib;
+                } );
+                sequence_list.sort();
 
-            // TODO: Make Enter on select click "Assign"
-        }
-    } );
+                $.each( sequence_list, function( undef, sequence ) {
+                    $( widget.node ).find('.control-number-widget-sequence').append( '<option>' + sequence + '</option>' );
+                } );
+
+                // TODO: Make Enter on select click "Assign"
+            }
+        } );
+        };
 
     Widget.Register( '005@', {
         init: function() {
