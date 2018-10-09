@@ -1,3 +1,5 @@
+[% USE Koha %]
+[% USE raw %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials  &rsaquo; Routing slip preview</title>
@@ -30,7 +32,7 @@
 </table>
 
 <div id="routingnotes">
-    <p id="generalroutingnote">[% generalroutingnote | html %]</p>
+    <p id="generalroutingnote">[% Koha.Preference('RoutingListNote') | $raw %]</p>
     <p id="routingnote">[% routingnotes | html %]</p>
 </div>
 
