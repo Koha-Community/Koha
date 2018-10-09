@@ -7,7 +7,7 @@
 [% Asset.js("js/cataloging.js") | $raw %]
 [% Asset.js("js/prevent_submit.js") | $raw %]
 [% INCLUDE 'calendar.inc' %]
-<script language="JavaScript" type="text/javascript">
+<script>
 //<![CDATA[
     $(document).ready(function() {
         $('#multi_receiving').on('show', function () {
@@ -68,7 +68,7 @@ $(document).ready(function() {
 });
 //]]>
 </script>
-<style type="text/css">#serials_edit fieldset.rows label, #serials_edit fieldset.rows span.label {
+<style>#serials_edit fieldset.rows label, #serials_edit fieldset.rows span.label {
 	font-size : 100%;
 	width : 25%;
 }
@@ -86,11 +86,10 @@ $(document).ready(function() {
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/serials/serials-home.pl">Serials</a> &rsaquo; Serial edition <i>[% bibliotitle | html %] [% IF ( callnumber ) %]([% callnumber | html %])[% END %]</i></div>
 
-<div id="doc3" class="yui-t2">
-   
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
     [% INCLUDE 'modals/serials_multi_receiving.inc' %]
 
@@ -434,22 +433,25 @@ $(document).ready(function() {
     </fieldset>
 </form>
 
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-<div class="yui-b">
-[% INCLUDE 'serials-menu.inc' %]
-<ul>
-    [% FOREACH subscription IN subscriptions %]
-        <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid | html %]" title="serial collection for [% subscription.bibliotitle | html %]">Serial collection #[% subscription.subscriptionid | html %]</a></li>
-        <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid | html %]</a></li>
-        [% IF ( subscription.abouttoexpire ) %]
-          [% UNLESS subscription.closed %]
-            <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid | html %])">Renew #[% subscription.subscriptionid | html %]</a></li>
-          [% END %]
-        [% END %]
-    [% END %]
-    <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view | html %].pl?biblionumber=[% biblionumber | html %]" title="go to [% bibliotitle | html %]">Show biblio</a></li></ul>
-</div>
-</div>
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'serials-menu.inc' %]
+                <ul>
+                    [% FOREACH subscription IN subscriptions %]
+                        <li><a href="serials-collection.pl?subscriptionid=[% subscription.subscriptionid | html %]" title="serial collection for [% subscription.bibliotitle | html %]">Serial collection #[% subscription.subscriptionid | html %]</a></li>
+                        <li><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]" title="detail of the subscription">Subscription #[% subscription.subscriptionid | html %]</a></li>
+                        [% IF ( subscription.abouttoexpire ) %]
+                            [% UNLESS subscription.closed %]
+                                <li><a href="#" onclick="javascript:popup([% subscription.subscriptionid | html %])">Renew #[% subscription.subscriptionid | html %]</a></li>
+                            [% END %]
+                        [% END %]
+                    [% END %]
+                    <li><a href="/cgi-bin/koha/catalogue/[% default_bib_view | html %].pl?biblionumber=[% biblionumber | html %]" title="go to [% bibliotitle | html %]">Show biblio</a></li></ul>
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
+
 [% INCLUDE 'intranet-bottom.inc' %]
