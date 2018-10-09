@@ -616,6 +616,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 stockrotationstages
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Stockrotationstage>
+
+=cut
+
+__PACKAGE__->has_many(
+  "stockrotationstages",
+  "Koha::Schema::Result::Stockrotationstage",
+  { "foreign.branchcode_id" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 transport_cost_frombranches
 
 Type: has_many
@@ -647,8 +662,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-09 10:38:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nKWRDScCAwZUDrRhm1kYMA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-09 15:50:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:0yMUX1UukdV7eMol06JXTQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
