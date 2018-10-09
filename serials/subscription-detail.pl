@@ -148,6 +148,7 @@ $template->param(
     irregular_issues => scalar @irregular_issues,
     default_bib_view => $default_bib_view,
     orders => $orders,
+    order_count => $orders->count,
     (uc(C4::Context->preference("marcflavour"))) => 1,
 );
 

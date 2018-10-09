@@ -65,6 +65,11 @@
     <li><a href="#subscription_planning">Planning</a></li>
     <li><a href="#subscription_issues">Issues</a></li>
     <li><a href="#subscription_summary">Summary</a></li>
+    [% IF order_count %]
+        <li>
+            <a href="#acquisition_details">Acquisition details</a>
+        </li>
+    [% END %]
 </ul>
 
 <div id="subscription_info">
@@ -340,7 +345,7 @@
     </div>
     </div>
 
-    [% IF orders %]
+    [% IF order_count %]
         <div id="acquisition_details">
             <h2>Acquisition details</h2>
             <table id="orders">
