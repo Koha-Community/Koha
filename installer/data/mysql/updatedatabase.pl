@@ -16552,6 +16552,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21417 - EDI ordering fails when basket and EAN libraries do not match)\n";
 }
 
+$DBversion = '18.06.00.039';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `permissions` (module_bit, code, description) VALUES(3, 'manage_circ_rules_from_any_libraries', 'Manage circ rules for any libraries');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15520 - Add more granular permission for only editing own library's circ rules)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
