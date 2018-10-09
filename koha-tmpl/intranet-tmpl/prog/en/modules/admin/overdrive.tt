@@ -1,3 +1,4 @@
+[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE HtmlTags %]
@@ -5,7 +6,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library OverDrive Info &rsaquo;</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="admin_overdrive" class="admin">
@@ -35,11 +36,11 @@
                 [% FOREACH b IN branches %]
                 <tr>
                 <td>
-                    [% Branches.GetName( b.branchcode ) %]
-                    <input type="hidden" name="branchcode" value="[% b.branchcode %]" />
+                    [% Branches.GetName( b.branchcode ) | html %]
+                    <input type="hidden" name="branchcode" value="[% b.branchcode | html %]" />
                 </td>
                 <td>
-                    <input type="text" name="authname" value="[% b.authname %]" />
+                    <input type="text" name="authname" value="[% b.authname | html %]" />
                 </td>
                 </tr>
                 [% END %]
@@ -56,7 +57,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") %]
+    [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script type="text/javascript">
