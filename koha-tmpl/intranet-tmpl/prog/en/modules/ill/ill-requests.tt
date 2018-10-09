@@ -10,7 +10,7 @@
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
 [% Asset.css("css/datatables.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
-<script type="text/javascript">
+<script>
     //<![CDATA[
     $(document).ready(function() {
 
@@ -503,7 +503,7 @@
                 [% ELSIF query_type == 'illview' %]
                     [% req_status = request.status %]
                     <h1>Manage ILL request</h1>
-                    <div id="toolbar" class="btn-toolbar">
+                    <div id="request-toolbar" class="btn-toolbar">
                         <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
                         <span class="fa fa-pencil"></span>
                         Edit request
@@ -521,79 +521,83 @@
                             Display supplier metadata
                         </a>
                     </div>
-                    <div id="ill-view-panel" class="panel panel-default">
+                    <div class="ill-view-panel panel panel-default">
                         <div class="panel-heading">
                             <h3>Request details</h3>
                         </div>
                         <div class="panel-body">
                             <h4>Details from library</h4>
                             <div class="rows">
-                                <div class="orderid">
-                                    <span class="label orderid">Order ID:</span>
-                                    [% IF request.orderid %][% request.orderid | html %][% ELSE %]<span>N/A</span>[% END %]
-                                </div>
-                                <div class="borrowernumber">
-                                    <span class="label borrowernumber">Patron:</span>
-                                    [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
-                                    <a href="[% borrowerlink | url %]" title="View borrower details">
-                                    [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
-                                    </a>
-                                </div>
+                                <ol>
+                                    <li class="orderid">
+                                        <span class="label orderid">Order ID:</span>
+                                        [% IF request.orderid %][% request.orderid | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    </li>
+                                    <li class="borrowernumber">
+                                        <span class="label borrowernumber">Patron:</span>
+                                        [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
+                                        <a href="[% borrowerlink | url %]" title="View borrower details">
+                                        [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
+                                        </a>
+                                    </li>
 
-                                <div class="biblio_id">
-                                    <span class="label biblio_id">Bibliographic record ID:</span>
-                                    [% IF request.biblio_id %]
-                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | uri %]">[% request.biblio_id | html %]</a>
-                                    [% ELSE %]
-                                        <span>N/A</span>
-                                    [% END %]
-                                </div>
-                                <div class="branchcode">
-                                    <span class="label branchcode">Library:</span>
-                                    [% Branches.GetName(request.branchcode) | html %]
-                                </div>
-                                <div class="status">
-                                    <span class="label status">Status:</span>
-                                    [% request.capabilities.$req_status.name | html %]
-                                </div>
-                                <div class="updated">
-                                    <span class="label updated">Last updated:</span>
-                                    [% request.updated | $KohaDates with_hours => 1 | html %]
-                                </div>
-                                <div class="medium">
-                                    <span class="label medium">Request type:</span>
-                                    [% type = request.get_type %]
-                                    [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
-                                </div>
-                                <div class="cost">
-                                    <span class="label cost">Cost:</span>
-                                    [% IF request.cost %][% request.cost | html %][% ELSE %]<span>N/A</span>[% END %]
-                                </div>
-                                <div class="price_paid">
-                                    <span class="label price_paid">Price paid:</span>
-                                    [% IF request.price_paid %][% request.price_paid | html %][% ELSE %]<span>N/A</span>[% END %]
-                                </div>
-                                <div class="req_id">
-                                    <span class="label req_id">Request number:</span>
-                                    [% request.id_prefix _ request.illrequest_id | html %]
-                                </div>
-                                <div class="notesstaff">
-                                    <span class="label notes_staff">Staff notes:</span>
-                                    <pre>[% request.notesstaff | html %]</pre>
-                                </div>
-                                <div class="notesopac">
-                                    <span class="label notes_opac">Notes:</span>
-                                    <pre>[% request.notesopac | html %]</pre>
-                                </div>
+                                    <li class="biblio_id">
+                                        <span class="label biblio_id">Bibliographic record ID:</span>
+                                        [% IF request.biblio_id %]
+                                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | uri %]">[% request.biblio_id | html %]</a>
+                                        [% ELSE %]
+                                            <span>N/A</span>
+                                        [% END %]
+                                    </li>
+                                    <li class="branchcode">
+                                        <span class="label branchcode">Library:</span>
+                                        [% Branches.GetName(request.branchcode) | html %]
+                                    </li>
+                                    <li class="status">
+                                        <span class="label status">Status:</span>
+                                        [% request.capabilities.$req_status.name | html %]
+                                    </li>
+                                    <li class="updated">
+                                        <span class="label updated">Last updated:</span>
+                                        [% request.updated | $KohaDates with_hours => 1 | html %]
+                                    </li>
+                                    <li class="medium">
+                                        <span class="label medium">Request type:</span>
+                                        [% type = request.get_type %]
+                                        [% IF type %][% type | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    </li>
+                                    <li class="cost">
+                                        <span class="label cost">Cost:</span>
+                                        [% IF request.cost %][% request.cost | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    </li>
+                                    <li class="price_paid">
+                                        <span class="label price_paid">Price paid:</span>
+                                        [% IF request.price_paid %][% request.price_paid | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    </li>
+                                    <li class="req_id">
+                                        <span class="label req_id">Request number:</span>
+                                        [% request.id_prefix _ request.illrequest_id | html %]
+                                    </li>
+                                    <li class="notesstaff">
+                                        <span class="label notes_staff">Staff notes:</span>
+                                        <p>[% request.notesstaff | html %]</p>
+                                    </li>
+                                    <li class="notesopac">
+                                        <span class="label notes_opac">Notes:</span>
+                                        <p>[% request.notesopac | html %]</p>
+                                    </li>
+                                </ol>
                             </div>
                             <div class="rows">
                                 <h4>Details from supplier ([% request.backend | html %])</h4>
-                                [% FOREACH meta IN request.metadata %]
-                                    <div class="requestmeta-[% meta.key.replace('\s','_') | html %]">
-                                        <span class="label">[% meta.key | html %]:</span>
-                                        [% meta.value | html %]
-                                    </div>
-                                [% END %]
+                                <ol>
+                                    [% FOREACH meta IN request.metadata %]
+                                        <li class="requestmeta-[% meta.key.replace('\s','_') | html %]">
+                                            <span class="label">[% meta.key | html %]:</span>
+                                            [% meta.value | html %]
+                                        </li>
+                                    [% END %]
+                                </ol>
                             </div>
                         </div>
                     </div>
@@ -622,7 +626,7 @@
                         </div>
                     </div>
 
-                    <div id="ill-view-panel" class="panel panel-default">
+                    <div class="ill-view-panel panel panel-default">
                         <div class="panel-heading">
                             <h3>[% request.illcomments.count | html %] comments</h3>
                         </div>
@@ -649,7 +653,7 @@
                                                 <ol>
                                                     <li>
                                                         <label class="required" for="comment">Comment: </label>
-                                                        <textarea type="text" class="required" required="required" value="" cols="80" rows="10" id="comment" name="comment"></textarea>
+                                                        <textarea class="required" required="required" cols="80" rows="10" id="comment" name="comment"></textarea>
                                                         <span class="required">Required</span>
                                                     </li>
                                                 </ol>
@@ -697,7 +701,6 @@
             </div>
         </div>
     </div>
-</div>
 
 [% TRY %]
 [% PROCESS backend_jsinclude %]
