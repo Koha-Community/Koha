@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE AudioAlerts %]
+[% USE To %]
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
     <script type="text/javascript">
@@ -70,7 +71,7 @@
     <script type="text/javascript">
         //<![CDATA[
             var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
-            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) | html %]' );
+            var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
         //]]>
 
         $( document ).ready(function() {
