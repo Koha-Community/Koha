@@ -47,8 +47,8 @@ eval {
             $action eq 'login' && do {
                 my $password = $cgi->param("password") // q{} ;
                 my $patron = Koha::Patrons->find({ userid => $user });
-                my $branch_info = Koha::Library::OverDriveInfos->find( $patron->branchcode ) if $patron;
-                my $branch_authname = $branch_info->authname if $branch_info;
+                my $branch_info = $patron ? Koha::Library::OverDriveInfos->find( $patron->branchcode ) : undef;
+                my $branch_authname = $branch_info ? $branch_info->authname : undef;
                 my $authname = $branch_authname || C4::Context->preference('OverDriveAuthname');
                 $od->auth_by_userid($user, $password,C4::Context->preference('OverDriveWebsiteID'),$authname);
                 $data{login_success} = 1;
