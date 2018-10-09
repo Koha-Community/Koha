@@ -93,7 +93,6 @@ sub build_query {
             default_field    => '_all',
             lenient          => JSON::true,
             fields           => $options{fields},
-            use_dis_max      => JSON::true,
         }
     };
 
