@@ -221,6 +221,8 @@
                                                         <a href="/cgi-bin/koha/catalogue/moredetail.pl?item=[% loopro.object %]&amp;biblionumber=[% loopro.biblionumber %]&amp;bi=[% loopro.biblioitemnumber %]#item[% loopro.object %]">Item [% loopro.object %]</a>
                                                     [% ELSIF ( loopro.info.substr(0, 6) == 'biblio' ) %]
                                                         <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.object %]" title="Display detail for this biblio">Biblio [% loopro.object %]</a>
+                                                    [% ELSIF ( loopro.info.substr(0, 7) == 'holding' ) %]
+                                                        <a href="/cgi-bin/koha/cataloguing/addholding.pl?op=edit&amp;holding_id=[% loopro.object | html %]" title="Display detail for this holding">Holding [% loopro.object | html %]</a>
                                                     [% ELSE %]
                                                         [% loopro.object %]
                                                     [% END %]

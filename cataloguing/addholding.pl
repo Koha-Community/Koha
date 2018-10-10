@@ -707,6 +707,11 @@ elsif ( $op eq "delete" ) {
             $record = $urecord;
         };
     }
+    if ( !$biblionumber ) {
+        # we must have a holding_id if we don't have a biblionumber
+        my $holdingRecord = Koha::Holdings->find( $holding_id );
+        $biblionumber = $holdingRecord->biblionumber;
+    }
     my $biblio = Koha::Biblios->find( $biblionumber );
     build_tabs( $template, $record, $dbh, $encoding,$input );
     $template->param(
