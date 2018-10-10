@@ -1358,7 +1358,9 @@ sub anonymize {
         warn "Exiting anonymize: patron ".$self->borrowernumber." still has issues";
         return;
     }
-    my $mandatory = { map { (lc $_, 1); }
+    # Mandatory fields come from the corresponding pref, but email fields
+    # are removed since scrambled email addresses only generate errors
+    my $mandatory = { map { (lc $_, 1); } grep { !/email/ }
         split /\s*\|\s*/, C4::Context->preference('BorrowerMandatoryField') };
     $mandatory->{userid} = 1; # needed since sub store does not clear field
     my @columns = $self->_result->result_source->columns;

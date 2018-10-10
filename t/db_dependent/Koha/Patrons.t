@@ -1761,7 +1761,7 @@ subtest 'lock' => sub {
 };
 
 subtest 'anonymize' => sub {
-    plan tests => 9;
+    plan tests => 10;
 
     my $patron1 = $builder->build_object( { class => 'Koha::Patrons' } );
     my $patron2 = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1782,6 +1782,7 @@ subtest 'anonymize' => sub {
     isnt( $patron1->surname, $surname, 'Surname changed' );
     ok( $patron1->surname =~ /^\w{10}$/, 'Mandatory surname randomized' );
     is( $patron1->branchcode, $branchcode, 'Branch code skipped' );
+    is( $patron1->email, undef, 'Email was mandatory, must be cleared' );
 
     # Test wrapper in Koha::Patrons
     $patron1->surname($surname)->store; # restore
