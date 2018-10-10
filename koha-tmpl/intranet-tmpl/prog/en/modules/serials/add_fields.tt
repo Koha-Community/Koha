@@ -30,7 +30,7 @@
 
   [% IF op == 'list' %]
     <div id="toolbar" class="btn-toolbar">
-      <a class="btn btn-default btn-sm" id="newfields" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form"><i class="fa fa-plus"></i> New fields</a>
+      <a class="btn btn-default btn-sm" id="newfields" href="/cgi-bin/koha/serials/add_fields.pl?op=add_form"><i class="fa fa-plus"></i> New field</a>
     </div>
   [% END %]
 
@@ -107,7 +107,7 @@
           </li>
           <li>
             <label for="av">Authorised value category: </label>
-            <select name="authorised_value_category">
+            <select id="av" name="authorised_value_category">
               <option value="">None</option>
               [% PROCESS options_for_authorised_value_categories authorised_value_categories => AuthorisedValues.GetCategories( selected => field.authorised_value_category ) %]
             </select>
@@ -154,11 +154,7 @@
 
             $("#fieldst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 'bAutoWidth': false,
-                'sDom': 't<"bottom pager"ilpf>',
                 'sPaginationType': 'four_button',
-                'aLengthMenu': [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]],
-                'iDisplayLength': 20,
-                'aaSorting': [[ 0, "asc" ]],
                 "aoColumnDefs": [
                     { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                 ]
