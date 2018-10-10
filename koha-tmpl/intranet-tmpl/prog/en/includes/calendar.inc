@@ -1,6 +1,5 @@
 [% USE Koha %]
-<script type="text/javascript">
-//<![CDATA[
+<script>
 
 var debug    = "[% debug | html %]";
 var dformat  = "[% dateformat | html %]";
@@ -161,11 +160,9 @@ function(value, element, params) {
 $(document).ready(function(){
 
 $.datepicker.setDefaults({
-        showOn: "both",
+        showOn: "focus",
         changeMonth: true,
         changeYear: true,
-        buttonImage: '[% interface | html %]/[% theme | html %]/img/famfamfam/silk/calendar.png',
-        buttonImageOnly: true,
         showButtonPanel: true,
         showOtherMonths: true,
         selectOtherMonths: true,
@@ -203,5 +200,4 @@ $("#dateofbirth").datepicker({
         if ( ! is_valid_date( $(this).val() ) ) {$(this).val("");}
     });
 });
-//]]>
 </script>
