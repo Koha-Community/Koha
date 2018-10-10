@@ -57,10 +57,10 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
 
     # Find the borrower by userid, card number, or email
     if ($username) {
-        $search_results = Koha::Patrons->search( { -or => { userid => $username, cardnumber => $username } } );
+        $search_results = Koha::Patrons->search( { -or => { userid => $username, cardnumber => $username }, login_attempts => { '!=', Koha::Patron::ADMINISTRATIVE_LOCKOUT } } );
     }
     elsif ($email) {
-        $search_results = Koha::Patrons->search( { -or => { email => $email, emailpro => $email, B_email  => $email } } );
+        $search_results = Koha::Patrons->search( { -or => { email => $email, emailpro => $email, B_email  => $email }, login_attempts => { '!=', Koha::Patron::ADMINISTRATIVE_LOCKOUT } } );
     }
 
     if ( !defined $search_results || $search_results->count < 1) {
