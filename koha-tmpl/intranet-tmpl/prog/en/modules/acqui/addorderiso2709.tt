@@ -222,6 +222,7 @@
                         </li>
 
                         <li><label for="ccode_item_[% item.item_id | html %]">ccode</label><select id="ccode_item_[% item.item_id | html %]" name="ccode_[% item.biblio_count | html %]">
+                        <option value=""> </option>
                         [% FOREACH ccodeloo IN ccodeloop %]
                             [% IF ( ccodeloo.code ) == (item.ccode) %]<option value="[% ccodeloo.code | html %]" selected="selected">[% ccodeloo.description | html %]</option>[% ELSE %]<option value="[% ccodeloo.code | html %]">[% ccodeloo.description | html %]</option>[% END %]
                         [% END %]
@@ -229,6 +230,7 @@
                         </li>
 
                         <li><label for="notforloan_item_[% item.item_id | html %]">notforloan</label><select id="notforloan_item_[% item.item_id | html %]" name="notforloan_[% item.biblio_count | html %]">
+                        <option value=""> </option>
                         [% FOREACH n IN notforloanloop %]
                             [% IF n.code == item.notforloan %]
                                 <option value="[% n.code | html %]" selected="selected">[% n.description | html %]</option>
