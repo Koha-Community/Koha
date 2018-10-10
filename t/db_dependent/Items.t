@@ -28,7 +28,7 @@ use Koha::Library;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 12;
+use Test::More tests => 10;
 
 use Test::Warn;
 
