@@ -16180,7 +16180,6 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = "18.05.04.000";
 if ( CheckVersion($DBversion) ) {
-    B
     SetVersion ($DBversion);
     print "Upgrade to $DBversion done (18.05.04 release)\n";
 }
