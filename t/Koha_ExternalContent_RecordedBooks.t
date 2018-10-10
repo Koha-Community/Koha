@@ -11,7 +11,7 @@ use Module::Load::Conditional qw( can_load );
 plan tests => 3;
 
 SKIP: {
-    skip "cannot find WebService::ILS::RecordedBooks::Partner", 5
+    skip "cannot find WebService::ILS::RecordedBooks::Partner", 3
       unless can_load( modules => { 'WebService::ILS::RecordedBooks::Patron' => undef } );
 
     use_ok('Koha::ExternalContent::RecordedBooks');
