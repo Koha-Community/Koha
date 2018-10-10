@@ -27,6 +27,7 @@ use C4::Serials;
 use C4::Letters;
 use C4::Output;
 use C4::Context;
+use Koha::Serial::Items;
 
 use Koha::DateUtils qw( dt_from_string );
 
@@ -110,6 +111,29 @@ if($op eq 'gennext' && @subscriptionid){
     exit;
 }
 
+my $countitems = 0;
+my @serialsid = $query->multi_param('serialid');
+my $subscriptionid = $subscriptionid[0];
+
+if($op eq 'delete_confirm'){
+    foreach my $serialid (@serialsid){
+        $countitems += Koha::Serial::Items->search({serialid => $serialid})->count();
+    }
+}elsif($op eq 'delete_confirmed'){
+    if($query->param('delitems') eq "Yes"){
+        foreach my $serialid (@serialsid){
+            my @itemnumbers = Koha::Serial::Items->search({serialid => $serialid})->get_column('itemnumber');
+            foreach my $itemnumber (@itemnumbers){
+                C4::Items::DelItem({'biblionumber' => $biblionumber, 'itemnumber' => $itemnumber});
+            }
+        }
+    }
+    for my $serialid (@serialsid){
+        ModSerialStatus($serialid,"","","","",6);
+    }
+    print $query->redirect('/cgi-bin/koha/serials/serials-collection.pl?subscriptionid='.$subscriptionid);
+}
+
 my $subscriptioncount;
 my ($location, $callnumber);
 if (@subscriptionid){
@@ -181,6 +205,11 @@ $template->param(
           callnumber	       => $callnumber,
           uc(C4::Context->preference("marcflavour")) => 1,
           serialsadditems   => $subscriptiondescs->[0]{'serialsadditems'},
+          delete => ($op eq 'delete_confirm'),
+          subscriptionid => $subscriptionid,
+          countitems => $countitems,
+          serialnumber => scalar @serialsid,
+          serialsid => \@serialsid,
           );
 
 output_html_with_http_headers $query, $cookie, $template->output;

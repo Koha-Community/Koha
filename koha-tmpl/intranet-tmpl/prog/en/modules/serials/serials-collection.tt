@@ -30,6 +30,31 @@
 		[% IF ( callnumber ) %]callnumber: [% callnumber | html %][% END %]</h1>
 [% END %]
 
+[% IF ( delete ) %]
+    <div class="dialog alert">
+        <h3>You are about to delete [% serialnumber | html %] serial(s). Do you want to continue?</h3>
+        <form action="/cgi-bin/koha/serials/serials-collection.pl/#">
+            [% IF countitems > 0 %]
+                <h5>Number of items available: [% countitems | html %]</h5>
+                <p>
+                  <label>Delete associated items? <input type="checkbox" name="delitems" value="Yes" />Yes</label>
+                </p>
+            [% END %]
+            <input type="hidden" name="op" value="delete_confirmed" />
+            <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
+            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+            [% FOREACH serialid IN serialsid %]
+                <input type="hidden" name="serialid" value="[% serialid | html %]" />
+            [% END %]
+            <button type="submit" class="approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+        </form>
+        <form action="/cgi-bin/koha/serials/serials-collection.pl">
+            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+            <button type="submit" class="deny"><i class="fa fa-fw fa-remove"></i> No, do not delete</button>
+        </form>
+    </div>
+[% END %]
+
 [% IF ( subscriptions ) %]
 <table>
 [% IF ( subscriptions.size == 1 ) %]
@@ -119,6 +144,7 @@
                     <div class="btn-group"><input type="button" value="Multi receiving" href="#multi_receiving" class="btn btn-default btn-sm" data-toggle="modal"></div>
                 [% END %]
             [% END %]
+            <input type="button" value="Delete selected issues" class="delete-issues btn btn-default btn-sm" data-subscriptionids="[% subscriptionidlist | html %]" />
         </p>
     [% END %]
       <span class="checkall">
@@ -162,8 +188,12 @@
                     [% IF ( serial.subscriptionexpired ) %]
                     <input type="checkbox" name="serialid" value="[% serial.serialid | html %]" disabled="disabled" />
                     [% ELSE %]
-                      [% IF ( serial.checked ) %]
-                    <input type="checkbox" class="checkboxed" name="serialid" checked="checked" value="[% serial.serialid | html %]" />
+                      [% IF ( delete ) %]
+                        [% IF serialsid.grep("${serial.serialid}").size %]
+                          <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" disabled checked />
+                        [% ELSE %]
+                          <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" disabled />
+                        [% END %]
                       [% ELSE %]
                     <input type="checkbox" class="checkboxed" name="serialid" value="[% serial.serialid | html %]" />
                       [% END %]
@@ -280,6 +310,19 @@
 
     <script>
 
+        function deleteIssues(subscriptionid) {
+            var serialschecked = $("form[name='edition'] input[name='serialid']:checked");
+            if (serialschecked.length > 0) {
+                var location = 'serials-collection.pl?subscriptionid='+subscriptionid+'&op=delete_confirm';
+                for (i=0; i < serialschecked.length; i++) {
+                    location += '&serialid=' + serialschecked[i].value;
+                }
+                document.location = location;
+            } else {
+                alert(_("No serials selected"));
+            }
+        }
+
         function print_slip(subscriptionid,issue){
             var myurl = 'routing-preview.pl?ok=1&subscriptionid='+subscriptionid+'&issue='+issue;
             window.open(myurl,'PrintSlip','width=500,height=500,toolbar=no,scrollbars=yes');
@@ -329,6 +372,11 @@
                     return 0;
                 }
                 return 1;
+            });
+
+            $(".delete-issues").on("click", function(e){
+                e.preventDefault();
+                deleteIssues("[% subscriptionidlist | html %]");
             });
         });
 
