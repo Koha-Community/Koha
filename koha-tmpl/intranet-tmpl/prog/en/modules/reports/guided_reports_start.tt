@@ -747,7 +747,7 @@ canned reports and writing custom SQL reports.</p>
                         [% IF header_row.$place.cell == 'itemnumber' %]
                             <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
                         [% END %]
-                        <td>[% cells.cell | html %]</td>
+                        <td>[% cells.cell | $raw %]</td>
                     [% END %]
                 </tr>
             [% END %]
