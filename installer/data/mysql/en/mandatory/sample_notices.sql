@@ -174,3 +174,41 @@ INSERT INTO `letter` (`module`, `code`, `branchcode`, `name`, `is_html`, `title`
 ('circulation', 'AR_PENDING', '', 'Article request - open', 0, 'Article request received', 'Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>)\r\n\r\nWe have received your request for an article from <<biblio.title>> (<<items.barcode>>).\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n\r\n\r\nThank you!', 'email'),
 ('circulation', 'AR_SLIP', '', 'Article request - print slip', 0, 'Article request', 'Article request:\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),\r\n\r\nTitle: <<biblio.title>>\r\nBarcode: <<items.barcode>>\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n', 'print'),
 ('circulation', 'AR_PROCESSING', '', 'Article request - processing', 0, 'Article request processing', 'Dear <<borrowers.firstname>> <<borrowers.surname>> (<<borrowers.cardnumber>>),\r\n\r\nWe are now processing your request for an article from <<biblio.title>> (<<items.barcode>>).\r\n\r\nArticle requested:\r\nTitle: <<article_requests.title>>\r\nAuthor: <<article_requests.author>>\r\nVolume: <<article_requests.volume>>\r\nIssue: <<article_requests.issue>>\r\nDate: <<article_requests.date>>\r\nPages: <<article_requests.pages>>\r\nChapters: <<article_requests.chapters>>\r\nNotes: <<article_requests.patron_notes>>\r\n\r\nThank you!', 'email');
+
+INSERT INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
+VALUES ('circulation', 'FINESLIP', '', 'Asiakkaan maksut - TULOSTUSKUITTI', 1, 'Asiakkaan maksut',
+'<<borrowers.firstname>> <<borrowers.surname>><br>
+<<today>>
+<br>
+<h3>Maksuja:</h3>
+<ul>
+<fines>
+<li><<fines.date_due>>, <<fines.amount>> €<br>
+<<fines.description>>
+</fines>
+</ul>
+Yhteensä: <<total.amount>> €
+<br>
+<br>
+<br>
+www.vaarakirjastot.fi',
+
+'print', 'default');
+
+INSERT INTO letter (module, code, branchcode, name, is_html, title, content, message_transport_type, lang)
+VALUES ('circulation', 'CHECKINSLIP', '', 'Palautuskuitti - TULOSTUS', 1, 'Tänään palautetut niteet',
+'<<borrowers.firstname>> <<borrowers.surname>><br>
+<<today>>
+
+<h3>Tänään palautetut</h3>
+<ul>
+<checkedin>
+<li><<biblio.title>> <<biblio.author>>, <<items.barcode>>
+</checkedin>
+</ul>
+<br>
+<br>
+<br>
+www.vaarakirjastot.fi',
+
+'print', 'default');
