@@ -96,6 +96,7 @@ if ( $patron->is_debarred ) {
         $template->param( 'userdebarreddate' => $patron->debarred );
     }
 }
+$template->param( flagged => 1 ) if $patron->account_locked;
 
 my @relatives;
 if ( my $guarantor = $patron->guarantor ) {

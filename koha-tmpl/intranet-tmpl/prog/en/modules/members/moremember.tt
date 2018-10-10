@@ -151,6 +151,10 @@
                                             <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit details</a>
                                         </li>
                                     [% END %]
+
+                                    [% IF patron.account_locked %]
+                                        <li class="blocker">Account has been [% IF patron.login_attempts < 0 %]administratively [% END %]locked out.</li>
+                                    [% END %]
                                 </ul>
                             </div>
                         [% END %]
