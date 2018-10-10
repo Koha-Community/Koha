@@ -54,19 +54,10 @@
                             [% END %]
 
 
-                            [% IF too_many_login_attempts %]
+                            [% IF invalid_username_or_password || too_many_login_attempts %]
+                                <!-- This is what is displayed if user doesnt have permission or account is locked. (Do not expose more information than needed.) -->
                                 <div class="alert alert-info">
-                                This account has been locked!
-                                [% IF Koha.Preference('OpacResetPassword') %]
-                                    <a href="/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
-                                [% ELSE %]
-                                    Please contact a library staff member.
-                                [% END %]
-                                </div>
-                            [% ELSIF invalid_username_or_password %]
-                                <!-- This is what is displayed if user doesnt have permission -->
-                                <div class="alert alert-info">
-                                    <p>You entered an incorrect username or password. Please try again! And remember, passwords are case sensitive.</p>
+                                    <p>You entered an incorrect username or password. Please try again! And remember, passwords are case sensitive. Please contact a library staff member if you continue to have problems.</p>
                                 </div>
                             [% END %]
 
