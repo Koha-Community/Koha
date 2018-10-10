@@ -887,7 +887,10 @@
 </div> <!-- /#main -->
 
 [% IF ( OverDriveCirculation ) %]
-[% INCLUDE 'overdrive-checkout.inc' %]
+    [% INCLUDE 'overdrive-checkout.inc' %]
+    [% IF ( Koha.Preference('OverDrivePasswordRequired') ) %]
+        [% INCLUDE 'overdrive-login.inc' %]
+    [% END %]
 [% END %]
 
 [% INCLUDE 'opac-bottom.inc' %]
