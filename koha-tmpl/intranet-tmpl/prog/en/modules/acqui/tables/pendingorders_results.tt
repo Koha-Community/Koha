@@ -59,7 +59,8 @@
                     "<a href=\"orderreceive.pl?ordernumber=[% loop_order.ordernumber %]&amp;invoiceid=[% invoiceid %]\">Receive</a><br /><a href=\"#\" onclick=\"transfer_order_popup([% loop_order.ordernumber %]); return false;\">Transfer</a>",
                 "dt_canceldelete":
                     "[% IF ( loop_order.left_holds_on_order ) -%]
-<span class=\"button\" title=\"Can't cancel order, ([% loop_order.holds_on_order %]) holds are linked with this order cancel holds first\">Can't cancel order</span><br>
+                     [%- cannot_cancel_title = BLOCK %]Can't cancel order, ([% loop_order.holds_on_order %]) holds are linked with this order cancel holds first[% END -%]
+<span class=\"button\" title=\"[% cannot_cancel_title %]\">Can't cancel order</span><br>
                         [%- ELSE -%]
 <a href=\"/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber %]&biblionumber=[% loop_order.biblionumber %]&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]\">Cancel order</a><br />
                         [%- END -%]
@@ -69,7 +70,8 @@
 <span class=\"button\" title=\"Can't delete catalog record, see constraints below\">Can't cancel order and delete catalog record</span><br>
                         [%- END -%]
                         [%- IF ( loop_order.left_item ) -%]
-<b title=\"Can't delete catalog record, because of [% loop_order.items %] existing item(s)\" >[% loop_order.items %] item(s) left</b><br>
+                        [%- cannot_delete_title = BLOCK %]Can't delete catalog record, because of [% loop_order.items %] existing item(s)[% END -%]
+<b title=\"[% cannot_delete_title %]\" >[% loop_order.items %] item(s) left</b><br>
                         [%- END -%]
                         [%- IF ( loop_order.left_biblio ) -%]
 <b title=\"Can't delete catalog record, delete other orders linked to it first\">[% loop_order.biblios %] order(s) left</b><br>
