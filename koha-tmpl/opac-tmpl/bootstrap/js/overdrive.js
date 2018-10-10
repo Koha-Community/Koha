@@ -71,10 +71,11 @@ KOHA.OverDriveCirculation = new function() {
     var login_link = $('<a href="#">')
         .click(function(e) {
             e.preventDefault();
-            var passwd = OD_password_required ? prompt("Please enter your password") : "";
-            login(passwd);
+            if( OD_password_required ) { $("#overdrive-login").modal('show'); }
+            else { login(""); }
         })
         .text(_("Login to OverDrive account"));
+
     var login_div = $('<div class="overdrive-login">').append(login_link);
 
     var details = null;
@@ -97,6 +98,12 @@ KOHA.OverDriveCirculation = new function() {
             window.close();
         }
         checkout_popup = $("#overdrive-checkout");
+        $("#overdrive-login-form").submit(function(e){
+            e.preventDefault();
+            $("#overdrive-login").modal('hide');
+            var ODpassword = $("input[name='ODpassword']").val();
+            login( ODpassword );
+        });
     });
 
     function display_account (container, data) {
