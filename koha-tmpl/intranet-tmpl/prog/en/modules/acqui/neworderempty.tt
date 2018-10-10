@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Price %]
+[% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Acquisitions &rsaquo; Basket [% basketno | html %] &rsaquo; [% IF ( ordernumber ) %]Modify order details (line #[% ordernumber | html %])[% ELSE %]New order[% END %]</title>
@@ -730,7 +731,7 @@
             <select name="bib_field_value">
             [% END %]
                 <option value=""></option>
-                [% PROCESS options_for_itemtypes itemtypes => ItemTypes.Get(), selected_itemtype => "FIXME" %]
+                [% PROCESS options_for_item_types itemtypes => ItemTypes.Get(), selected_itemtype => "FIXME" %]
             </select>
         [% CASE 'cn_source' %]
         [% CASE %]
