@@ -68,7 +68,7 @@
                             [% ELSE %]
                             <div id="celldiv_[% bt.id | html %]">
                             [% END %]
-                            <div class="enable_cost_input" data-cost-id="[% bt.id | html %]">[% bt.disabled ? '&nbsp;' : bt.value | html %]</div>
+                            <div class="enable_cost_input" data-cost-id="[% bt.id | html %]">[% IF bt.disabled %]&nbsp;[% ELSE %][% bt.value | html %][% END %]</div>
                             <input type="hidden" name="cost_[% bt.id | html %]" value="[% bt.value | html %]" />
                             [% IF bt.disabled %]
                             <input type="hidden" name="disable_[% bt.id | html %]" value="1" />
