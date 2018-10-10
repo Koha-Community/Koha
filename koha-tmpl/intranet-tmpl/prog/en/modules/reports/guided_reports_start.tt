@@ -34,11 +34,17 @@
 [%- END -%]</title>
 
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("lib/codemirror/codemirror.css") | $raw %]
+<style>
+.CodeMirror {
+    resize:  vertical;
+}
+</style>
 [% IF ( saved1 ) %]
     [% Asset.css("css/reports.css") | $raw %]
     [% Asset.css("css/datatables.css") | $raw %]
 [% END %]
-[% Asset.css("../lib/d3c3/c3.min.css") | $raw %]
+[% Asset.css("lib/d3c3/c3.min.css") | $raw %]
 </head>
 
 <body id="rep_guided_reports_start" class="rep">
@@ -379,6 +385,7 @@ canned reports and writing custom SQL reports.</p>
     <input type="submit" name="submit" value="Next &gt;&gt;" />
 </fieldset>
 </form>
+
 [% END %]
 
 [% IF ( build3 ) %]
@@ -751,11 +758,6 @@ canned reports and writing custom SQL reports.</p>
 [% END %]
 
 [% IF ( create ) %]
-<script type="text/javascript">
-$(document).ready(function() {
-    load_group_subgroups();
-});
-</script>
 <form action="/cgi-bin/koha/reports/guided_reports.pl" method="post" class="validated">
 <fieldset class="rows">
 <legend>Create report from SQL</legend>
@@ -936,13 +938,15 @@ $(document).ready(function() {
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/charts.js") | $raw %]
-    [% Asset.js("../lib/d3c3/d3.min.js") | $raw %]
-    [% Asset.js("../lib/d3c3/c3.min.js") | $raw %]
+    [% Asset.js("lib/d3c3/d3.min.js") | $raw %]
+    [% Asset.js("lib/d3c3/c3.min.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% IF ( saved1 ) %]
         [% INCLUDE 'datatables.inc' %]
         [% INCLUDE 'columns_settings.inc' %]
     [% END %]
+    [% Asset.js( "lib/codemirror/codemirror-compressed.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/sql.min.js" ) | $raw %]
     <script>
 
         function hide_bar_element() {
@@ -983,6 +987,23 @@ $(document).ready(function() {
                 var sgname = "[% subgroup.name | html %]";
                 group_subgroups[gid].push([sgid, sgname]);
             [% END %]
+        [% END %]
+
+        [% IF ( create || editsql || save ) %]
+            var editor = CodeMirror.fromTextArea(sql, {
+                lineNumbers: true,
+                mode: "text/x-sql",
+                lineWrapping: true
+            });
+        [% END %]
+
+        [% IF ( showsql ) %]
+            var editor = CodeMirror.fromTextArea(sql, {
+                lineNumbers: false,
+                mode: "text/x-sql",
+                lineWrapping: true,
+                readOnly: true
+            });
         [% END %]
 
         function load_group_subgroups () {
@@ -1106,6 +1127,9 @@ $(document).ready(function() {
                     $("#draw-chart").html(_(btn_text));
                     $("html, body").animate({ scrollTop: $(document).height() }, "slow");
                 });
+            [% END %]
+            [% IF ( create ) %]
+                load_group_subgroups();
             [% END %]
 
             $('[data-toggle="tooltip"]').tooltip();
