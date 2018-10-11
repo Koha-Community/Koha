@@ -126,6 +126,7 @@ div.dataTables_paginate {
     border-right : 0;
     padding-right : 25px;
 }
+
 div.bottom.pager .paging_full_numbers a.paginate_button.last {
     border-right-width : 0;
 }
@@ -199,33 +200,52 @@ div.dataTables_paginate.paging_four_button {
     margin-left : .3em;
 }
 
+.paging_full_numbers a.paginate_button.first.disabled,
 .paginate_disabled_first {
     background: transparent url("../img/first-disabled.png") no-repeat 3px top;
+    color: #666;
+    cursor: default;
 }
 .paginate_enabled_first {
     background: transparent url("../img/first.png") no-repeat 3px top;
     cursor: pointer;
 }
+.paging_full_numbers a.paginate_button.previous.disabled,
 .paginate_disabled_previous {
     background: transparent url("../img/prev-disabled.png") no-repeat 3px top;
+    color: #666;
+    cursor: default;
 }
 .paginate_enabled_previous {
     background: transparent url("../img/prev.png") no-repeat 3px top;
     cursor: pointer;
 }
+.paging_full_numbers a.paginate_button.next.disabled,
 .paginate_disabled_next {
     background: transparent url("../img/next-disabled.png") no-repeat right top;
+    color: #666;
+    cursor: default;
 }
 .paginate_enabled_next {
     background: transparent url("../img/next.png") no-repeat right top;
     cursor: pointer;
 }
+.paging_full_numbers a.paginate_button.last.disabled,
 .paginate_disabled_last {
     background: transparent url("../img/last-disabled.png") no-repeat right top;
+    color: #666;
+    cursor: default;
 }
 .paginate_enabled_last {
     background: transparent url("../img/last.png") no-repeat right top;
     cursor: pointer;
+}
+
+.paging_full_numbers a.paginate_button.first.disabled,
+.paging_full_numbers a.paginate_button.previous.disabled,
+.paging_full_numbers a.paginate_button.next.disabled,
+.paging_full_numbers a.paginate_button.last.disabled {
+    background-position-y: 7px;
 }
 
 .dataTables_processing {
