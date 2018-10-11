@@ -46,7 +46,6 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 if ( C4::Context->preference("OpacPasswordChange") ) {
-    my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
     if (   $query->param('Oldkey')
         && $query->param('Newkey')
         && $query->param('Confirm') )
@@ -54,7 +53,7 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
         my $error;
         my $new_password = $query->param('Newkey');
         my $confirm_password = $query->param('Confirm');
-        if ( goodkey( $dbh, $borrowernumber, $query->param('Oldkey') ) ) {
+        if ( C4::Auth::checkpw_hash( scalar $query->param('Oldkey'), $patron->password ) ) {
 
             if ( $new_password ne $confirm_password ) {
                 $template->param( 'Ask_data'       => '1' );
@@ -68,8 +67,7 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
                     $error = 'password_has_whitespaces' if $error eq 'has_whitespaces';
                 } else {
                     # Password is valid and match
-                    my $clave = hash_password( $new_password );
-                    $sth->execute( $clave, $borrowernumber );
+                    $patron->set_password( $new_password );
                     $template->param( 'password_updated' => '1' );
                     $template->param( 'borrowernumber'   => $borrowernumber );
                 }
@@ -111,23 +109,3 @@ $template->param(
 
 
 output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
-
-sub goodkey {
-    my ( $dbh, $borrowernumber, $key ) = @_;
-
-    my $sth =
-      $dbh->prepare("SELECT password FROM borrowers WHERE borrowernumber=?");
-    $sth->execute($borrowernumber);
-    if ( $sth->rows ) {
-        my $hash;
-        my ($stored_hash) = $sth->fetchrow;
-        if ( substr($stored_hash,0,2) eq '$2') {
-            $hash = hash_password($key, $stored_hash);
-        } else {
-            $hash = md5_base64($key);
-        }
-        if ( $hash eq $stored_hash ) { return 1; }
-        else { return 0; }
-    }
-    else { return 0; }
-}
