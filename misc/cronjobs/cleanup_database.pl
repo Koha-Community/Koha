@@ -400,7 +400,20 @@ if($allDebarments) {
     }
 }
 
+# Lock expired patrons?
+my $days = C4::Context->preference('LockExpiredDelay');
+if( defined $days && $days ne q{} ) {
+    say "Start locking expired patrons" if $verbose;
+    my $expired_patrons = Koha::Patrons->search_expired({ days => $days })->search({ login_attempts => { '!=' => -1 } });
+    my $count = $expired_patrons->count;
+    $expired_patrons->lock({ remove => 1 }) if $confirm;
+    if( $verbose ) {
+        say $confirm ? sprintf("Locked %d patrons", $count) : sprintf("Found %d patrons", $count);
+    }
+}
+
 # Handle unsubscribe requests from GDPR consent form, depends on UnsubscribeReflectionDelay preference
+say "Start lock unsubscribed, anonymize and delete" if $verbose;
 my $unsubscribed_patrons = Koha::Patrons->search_unsubscribed;
 my $count = $unsubscribed_patrons->count;
 $unsubscribed_patrons->lock( { expire => 1, remove => 1 } ) if $confirm;

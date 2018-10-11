@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 40;
+use Test::More tests => 41;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -1798,6 +1798,18 @@ subtest '->set_password' => sub {
 };
 
 $schema->storage->txn_begin;
+subtest 'search_expired' => sub {
+    plan tests => 3;
+    my $count1 = Koha::Patrons->search_expired({ days => 28 })->count;
+    my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
+    $patron1->dateexpiry( dt_from_string->subtract(days => 27) )->store;
+    is( Koha::Patrons->search_expired({ days => 28 })->count, $count1, 'No more expired' );
+    $patron1->dateexpiry( dt_from_string->subtract(days => 28) )->store;
+    is( Koha::Patrons->search_expired({ days => 28 })->count, $count1 + 1, 'One more expired' );
+    $patron1->dateexpiry( dt_from_string->subtract(days => 29) )->store;
+    is( Koha::Patrons->search_expired({ days => 28 })->count, $count1 + 1, 'Same number again' );
+};
+
 subtest 'search_unsubscribed' => sub {
     plan tests => 4;
 
