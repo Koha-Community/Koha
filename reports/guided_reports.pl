@@ -923,37 +923,41 @@ elsif ($phase eq 'Export'){
                 my $ods_fh = File::Temp->new( UNLINK => 0 );
                 my $ods_filepath = $ods_fh->filename;
 
+                # Create document
                 use OpenOffice::OODoc;
                 my $tmpdir = dirname $ods_filepath;
                 odfWorkingDirectory( $tmpdir );
-                my $container = odfContainer( $ods_filepath, create => 'spreadsheet' );
-                my $doc = odfDocument (
-                    container => $container,
-                    part      => 'content'
-                );
-                my $table = $doc->getTable(0);
+                my $doc = odfDocument( file => $ods_filepath, create => 'spreadsheet' );
+
+                # Prepare sheet
                 my @headers = header_cell_values( $sth );
                 my $rows = $sth->fetchall_arrayref();
                 my ( $nb_rows, $nb_cols ) = ( 0, 0 );
                 $nb_rows = @$rows;
                 $nb_cols = @headers;
-                $doc->expandTable( $table, $nb_rows + 1, $nb_cols );
+                my $sheet = $doc->expandTable( 0, $nb_rows + 1, $nb_cols );
+                my @rows = $doc->getTableRows($sheet);
 
-                my $row = $doc->getRow( $table, 0 );
+                # Write headers row
+                my $row = $rows[0];
                 my $j = 0;
                 for my $header ( @headers ) {
                     $doc->cellValue( $row, $j, $header );
                     $j++;
                 }
+
+                # Write all rows
                 my $i = 1;
                 for ( @$rows ) {
-                    $row = $doc->getRow( $table, $i );
+                    $row = $rows[$i];
                     for ( my $j = 0 ; $j < $nb_cols ; $j++ ) {
                         my $value = Encode::encode( 'UTF8', $rows->[$i - 1][$j] );
                         $doc->cellValue( $row, $j, $value );
                     }
                     $i++;
                 }
+
+                # Done
                 $doc->save();
                 binmode(STDOUT);
                 open $ods_fh, '<', $ods_filepath;
