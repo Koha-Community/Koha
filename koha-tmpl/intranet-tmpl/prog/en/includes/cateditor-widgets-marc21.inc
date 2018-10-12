@@ -128,7 +128,7 @@ require( [ 'koha-backend', 'widget' ], function( KohaBackend, Widget ) {
                     + '<span class="control-number-widget-contents"></span>'
                     + '<button class="control-number-widget-assign">' + _("Assign next") + '</button>'
                     + '<select class="control-number-widget-sequence"></select>'
-                    + '<button class="control-number-widget-override">Override</button>'
+                    + '<button class="control-number-widget-override">' + _("Override") + '</button>'
                     + '</span>'
                 );
 
@@ -158,7 +158,7 @@ require( [ 'koha-backend', 'widget' ], function( KohaBackend, Widget ) {
                         if ( result ) widget.setControlNumber( result );
                     } ).end();
 
-                var sequence_list = $.map( KohaBackend.GetAuthorisedValues( 'CONTROL_NUM_SEQUENCE' ), function( authval ) {
+                var sequence_list = $.map( reg001 , function( authval ) {
                     return authval.lib;
                 } );
                 sequence_list.sort();
