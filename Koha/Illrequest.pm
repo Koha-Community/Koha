@@ -112,15 +112,19 @@ available for request.
 
 =head3 statusalias
 
+    my $statusalias = $request->statusalias;
+
+Return a request's status alias, if one is defined, otherwise
+return implicit undef
+
 =cut
 
 sub statusalias {
     my ( $self ) = @_;
-    return $self->status_alias ?
-        Koha::AuthorisedValue->_new_from_dbic(
-            scalar $self->_result->status_alias
-        ) :
-        undef;
+    return unless $self->status_alias;
+    return Koha::AuthorisedValue->_new_from_dbic(
+        scalar $self->_result->status_alias
+    );
 }
 
 =head3 illrequestattributes
