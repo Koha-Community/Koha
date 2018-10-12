@@ -43,6 +43,7 @@ function confirm_deletion(link) {
         is_confirmed = confirm( CONFIRM_RECORD_DELETION );
     }
     if (is_confirmed) {
+        $("#deletebiblio").unbind('click');
         window.location="/cgi-bin/koha/cataloguing/addbiblio.pl?op=delete&amp;biblionumber=" + biblionumber;
     } else {
         return false;
