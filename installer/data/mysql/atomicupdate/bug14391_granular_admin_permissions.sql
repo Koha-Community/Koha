@@ -75,8 +75,4 @@ INSERT INTO user_permissions (borrowernumber, module_bit, code)
     WHERE borrowernumber IN
         (SELECT borrowernumber FROM user_permissions WHERE code = 'catalogue');
 
-/* Clean up now obsolete permission */
-DELETE FROM user_permissions WHERE module_bit = 3 and code = 'parameters_remaining_permissions';
-DELETE FROM permissions WHERE module_bit = 3 and code = 'parameters_remaining_permissions';
-
 -- Bug 14391: Add granular permissions to the administration module
