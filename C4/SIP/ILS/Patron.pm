@@ -130,7 +130,13 @@ sub new {
 
     # FIXME: populate fine_items recall_items
     $ilspatron{unavail_holds} = _get_outstanding_holds($kp->{borrowernumber});
-    $ilspatron{items} = $patron->pending_checkouts->unblessed;
+    my $pending_checkouts = $patron->pending_checkouts;
+    my @items_infos;
+    while ( my $c = $pending_checkouts->next ) {
+        push @items_infos, $c->unblessed_all_relateds;
+    }
+    $ilspatron{items} = \@items_infos;
+
     $self = \%ilspatron;
     $debug and warn Dumper($self);
     syslog("LOG_DEBUG", "new ILS::Patron(%s): found patron '%s'", $patron_id,$self->{id});
