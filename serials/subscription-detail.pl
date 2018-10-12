@@ -129,7 +129,7 @@ for my $field ( @$additional_fields ) {
 $template->param( additional_fields_for_subscription => $additional_fields );
 
 # FIXME Do we want to hide canceled orders?
-my $orders = Koha::Acquisition::Orders->search( { subscriptionid => $subscriptionid } );
+my $orders = Koha::Acquisition::Orders->search( { subscriptionid => $subscriptionid }, { order_by => { -desc => 'parent_ordernumber' } } );
 
 $template->param(
     subscriptionid => $subscriptionid,

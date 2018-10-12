@@ -358,7 +358,6 @@
 
                 <thead>
                     <tr>
-                        <th class="NoVisible">Timestamp</th>
                         <th>Invoice</th>
                         <th>Basket</th>
                         <th>Order number</th>
@@ -380,7 +379,6 @@
                     [% ELSE %]
                         <tr data-tt-id="[% order.parent_ordernumber | html %]">
                     [% END %]
-                        <td>[% order.timestamp | html %]</td>
                         <td>
                         [% IF order.invoice %]
                             [% IF CAN_user_acquisition %]
@@ -472,9 +470,7 @@
 
                 'bPaginate': false,
                 'bAutoWidth': false,
-                'bSort': true,
-                'aaSortingFixed': [[ 0, 'desc' ]],
-                "bSortCellsTop": true
+                'bSort': false,
             }, columns_settings);
 
             $(table).treetable({
