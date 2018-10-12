@@ -929,6 +929,13 @@ fieldset {
                 margin-left: 1em;
                 width: auto;
             }
+
+            &.radio,
+            &.checkbox {
+                label {
+                    display: inline;
+                }
+            }
         }
 
         ol,
@@ -4256,6 +4263,15 @@ span {
         &.catalog-search-dropdown-hover {
             background-color: darken( #E6F0F2, 5% );
             border-left: 1px solid darken( #B4D2D8, 15% );
+        }
+    }
+}
+
+#tools_holidays {
+    .radio,
+    .checkbox {
+        label {
+            margin-left: 0;
         }
     }
 }
