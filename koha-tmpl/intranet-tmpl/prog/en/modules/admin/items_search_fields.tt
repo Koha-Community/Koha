@@ -102,7 +102,7 @@
               </div>
           [% END %]
 
-          <form id="add_field_form" action="/cgi-bin/koha/admin/items_search_fields.pl" method="POST" class="validated">
+          <form id="add_field_form" action="/cgi-bin/koha/admin/items_search_fields.pl" method="POST">
             <fieldset class="rows">
               <legend>Add a new field</legend>
               [% INCLUDE 'admin-items-search-field-form.inc' field=undef %]
@@ -110,7 +110,7 @@
             </fieldset>
             <fieldset class="action">
               <input type="submit" value="Submit" />
-              <a href="#" class="cancel">Cancel</a>
+              <a href="#" class="cancel hide_form">Cancel</a>
             </fieldset>
           </form>
 

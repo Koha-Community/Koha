@@ -46,7 +46,7 @@
 
           <h1>Item search field: [% field.label | html %]</h1>
 
-          <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" class="validated">
+          <form action="/cgi-bin/koha/admin/items_search_field.pl" method="POST" id="edit_search_fields">
             <fieldset class="rows">
               <legend>Edit field</legend>
               [% INCLUDE 'admin-items-search-field-form.inc' field=field %]
@@ -72,6 +72,7 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/item_search_fields.js") | $raw %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
