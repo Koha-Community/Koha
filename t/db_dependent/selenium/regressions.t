@@ -60,17 +60,13 @@ subtest 'OPAC - Remove from cart' => sub {
 
     $driver->get( $opac_base_url . "opac-search.pl?q=d" );
 
-    my $basket_count_elt;
-    eval {
-        # FIXME This will produce a STRACE
-        # A better way to do that would be to modify the way we display the basket count
-        # We should show/hide the count instead or recreate the node
-        $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span')
-    };
-    like($@, qr{An element could not be located on the page}, 'Basket should be empty');
+    # A better way to do that would be to modify the way we display the basket count
+    # We should show/hide the count instead or recreate the node
+    my @basket_count_elts = $driver->find_elements('//span[@id="basketcount"]/span');
+    is( scalar(@basket_count_elts), 0, 'Basket should be empty');
 
     $driver->find_element('//a[@class="addtocart cart1"]')->click;
-    $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span');
+    my $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span');
     is( $basket_count_elt->get_text(),
         1, 'One element should have been added to the cart' );
 
