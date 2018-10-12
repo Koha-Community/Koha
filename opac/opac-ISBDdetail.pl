@@ -78,11 +78,10 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
+my $patron = Koha::Patrons->find( $loggedinuser );
 my $borcat = q{};
-if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
-    # we need to fetch the borrower info here, so we can pass the category
-    my $patron = Koha::Patrons->find( { borrowernumber => $loggedinuser } );
-    $borcat = $patron ? $patron->categorycode : $borcat;
+if ( $patron && C4::Context->preference('OpacHiddenItemsExceptions') ) {
+    $borcat = $patron->categorycode;
 }
 
 my $record = GetMarcBiblio({
@@ -179,7 +178,6 @@ my $res = GetISBDView({
 });
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-my $patron = Koha::Patrons->find( $loggedinuser );
 for my $itm (@all_items) {
     my $item = Koha::Items->find( $itm->{itemnumber} );
     $norequests = 0

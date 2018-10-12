@@ -22,8 +22,8 @@ use Test::More tests => 3;
 use_ok('Koha::BiblioUtils');
 use_ok('Koha::BiblioUtils::Iterator');
 
-use C4::Biblio;
 use C4::Items;
+use C4::Biblio;
 use DBI;
 use t::lib::TestBuilder;
 use t::lib::Mocks;

@@ -85,7 +85,7 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 my @all_items = GetItemsInfo($biblionumber);
 my @hiddenitems;
 my $patron = Koha::Patrons->find( $borrowernumber );
-my $borcat= q{};
+our $borcat= q{};
 if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
     $borcat = $patron ? $patron->categorycode : q{};
 }

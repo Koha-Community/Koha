@@ -2116,7 +2116,7 @@ sub searchResults {
                 $onloan_items->{$key}->{itemcallnumber} = $item->{itemcallnumber};
                 $onloan_items->{$key}->{description}    = $item->{description};
                 $onloan_items->{$key}->{imageurl} =
-                  getitemtypeimagelocation( $search_context, $itemtypes{ $item->{itype} }->{imageurl} );
+                  getitemtypeimagelocation( $search_context->{'interface'}, $itemtypes{ $item->{itype} }->{imageurl} );
 
                 # if something's checked out and lost, mark it as 'long overdue'
                 if ( $item->{itemlost} ) {
@@ -2215,8 +2215,8 @@ sub searchResults {
                 else {
                     $can_place_holds = 1;
                     $available_count++;
-					$available_items->{$prefix}->{count}++ if $item->{$hbranch};
-					foreach (qw(branchname itemcallnumber description)) {
+                    $available_items->{$prefix}->{count}++ if $item->{$hbranch};
+                    foreach (qw(branchname itemcallnumber description)) {
                         $available_items->{$prefix}->{$_} = $item->{$_};
                     }
                     $available_items->{$prefix}->{location} = $shelflocations->{ $item->{location} };
@@ -2246,7 +2246,6 @@ sub searchResults {
 
         # XSLT processing of some stuff
         # we fetched the sysprefs already before the loop through all retrieved record!
-        my $interface = $search_context->{'interface'} eq 'opac' ? 'OPAC' : '';
         if (!$scan && $xslfile) {
             $oldbiblio->{XSLTResultsRecord} = XSLTParse4Display($oldbiblio->{biblionumber}, $marcrecord, $xslsyspref, 1, \@hiddenitems, $sysxml, $xslfile, $lang);
         }

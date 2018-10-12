@@ -1548,7 +1548,8 @@ sub GetAuthorisedValueDesc {
 
         #---- branch
         if ( $tagslib->{$tag}->{$subfield}->{'authorised_value'} eq "branches" ) {
-            return Koha::Libraries->find($value)->branchname;
+            my $branch = Koha::Libraries->find($value);
+            return $branch? $branch->branchname: q{};
         }
 
         #---- itemtypes

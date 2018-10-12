@@ -125,6 +125,7 @@ else {
     authnotrequired => ( C4::Context->preference("OpacPublic") ? 1 : 0 ),
     }
 );
+my $patron = Koha::Patrons->find( $borrowernumber );
 
 my $lang = C4::Languages::getlanguage($cgi);
 
@@ -627,8 +628,6 @@ my @sup_results_array;
 my $search_context = {};
 $search_context->{'interface'} = 'opac';
 if (C4::Context->preference('OpacHiddenItemsExceptions')){
-    # we need to fetch the borrower info here, so we can pass the category
-    my $patron = Koha::Patrons->find( { borrowernumber => $borrowernumber } );
     $search_context->{'category'} = $patron ? $patron->categorycode : q{};
 }
 
@@ -655,7 +654,6 @@ for (my $i=0;$i<@servers;$i++) {
 
         my $art_req_itypes;
         if( C4::Context->preference('ArticleRequests') ) {
-            my $patron = $borrowernumber ? Koha::Patrons->find( $borrowernumber ) : undef;
             $art_req_itypes = Koha::IssuingRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
         }
 

@@ -18,6 +18,8 @@
 use Modern::Perl;
 
 use CGI qw ( -utf8 );
+use List::Util qw/none/; # well just one :)
+
 use C4::Koha;
 use C4::Biblio;
 use C4::Items;
@@ -59,8 +61,8 @@ if (C4::Context->preference('TagsEnabled')) {
 my $borcat = q{};
 if ( C4::Context->preference('OpacHiddenItemsExceptions') ) {
     # we need to fetch the borrower info here, so we can pass the category
-    my $borrower = Koha::Patron->find( { borrowernumber -> $borrowernumber } );
-    $borcat = $borrower ? $borrower->categorycode : $borcat;
+    my $patron = Koha::Patrons->find($borrowernumber);
+    $borcat = $patron ? $patron->categorycode : $borcat;
 }
 
 my $record_processor = Koha::RecordProcessor->new({ filters => 'ViewPolicy' });

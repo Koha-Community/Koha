@@ -26,8 +26,8 @@ use MARC::Record;
 use MARC::Field;
 use Data::Dumper;
 
-use C4::Biblio;
 use C4::Items;
+use C4::Biblio;
 use C4::Labels::Layout;
 
 use Koha::Database;
