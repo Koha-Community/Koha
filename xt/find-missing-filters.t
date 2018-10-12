@@ -52,8 +52,8 @@ find({ wanted => \&wanted, no_chdir => 1 }, @themes );
 my @errors;
 for my $file ( @files ) {
     my $content = read_file($file);
-    my @e = t::lib::QA::TemplateFilters::missing_filters($content);
-    push @errors, { file => $file, errors => \@e } if @e;
+    my $e = t::lib::QA::TemplateFilters::search_missing_filters($content);
+    push @errors, { file => $file, errors => $e } if @$e;
 }
 
 is( @errors, 0, "Template variables should be correctly escaped" )

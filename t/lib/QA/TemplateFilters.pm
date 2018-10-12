@@ -27,24 +27,43 @@ our @tt_directives = (
     qr{^\s*LAST},
 );
 
-sub missing_filters {
+sub fix_filters {
+    return _process_tt_content( @_ )->{new_content};
+}
+
+sub search_missing_filters {
+    return _process_tt_content( @_ )->{errors};
+
+}
+
+sub _process_tt_content {
     my ($content) = @_;
     my ( $use_raw, $has_use_raw );
     my @errors;
+    my @new_lines;
     my $line_number;
     for my $line ( split "\n", $content ) {
+        my $new_line = $line;
         $line_number++;
         if ( $line =~ m{\[%[^%]+%\]} ) {
 
             # handle exceptions first
-            $use_raw = 1
-              if $line =~ m{|\s*\$raw};    # Is the file use the raw filter?
+            if ( $line =~ m{\|\s*\$raw} ) {    # Is the file use the raw filter?
+                $use_raw = 1;
+            }
 
             # Do we have Asset without the raw filter?
-            if ( $line =~ m{^\s*\[% Asset} ) {
-                push @errors, { error => 'asset_must_be_raw', line => $line, line_number => $line_number }
-                  and next
-                  unless $line =~ m{\|\s*\$raw};
+            if ( $line =~ m{^\s*\[% Asset} && $line !~ m{\|\s*\$raw} ) {
+                push @errors,
+                  {
+                    error       => 'asset_must_be_raw',
+                    line        => $line,
+                    line_number => $line_number
+                  };
+                $new_line =~ s/\)\s*%]/) | \$raw %]/;
+                $use_raw = 1;
+                push @new_lines, $new_line;
+                next;
             }
 
             $has_use_raw++
@@ -60,29 +79,132 @@ sub missing_filters {
                     %\]}gmxs
               )
             {
-                my $tt_block = $+{tt_block};
+                my $tt_block   = $+{tt_block};
+                my $pre_chomp  = $+{pre_chomp};
+                my $post_chomp = $+{post_chomp};
 
-                # It's a TT directive, no filters needed
-                next if grep { $tt_block =~ $_ } @tt_directives;
+                next if
+                    # It's a TT directive, no filters needed
+                    grep { $tt_block =~ $_ } @tt_directives
 
-                next
-                  if   $tt_block =~ m{\s?\|\s?\$KohaDates\s?$}
+                    # It is a comment
+                    or $tt_block =~ m{^\#}
+
+                    # Already escaped with a special filter
+                    # We could escape it but should be safe
+                    or $tt_block =~ m{\s?\|\s?\$KohaDates\s?$}
                     or $tt_block =~ m{\s?\|\s?\$Price\s?$}
-                  ;    # We could escape it but should be safe
-                next if $tt_block =~ m{^\#};    # Is a comment, skip it
 
-                push @errors, { error => 'missing_filter', line => $line, line_number => $line_number }
-                  if $tt_block !~ m{\|\s?\$raw}   # already escaped correctly with raw
-                  && $tt_block !~ m{=}            # assignment, maybe we should require to use SET (?)
-                  && $tt_block !~ m{\|\s?ur(l|i)} # already has url or uri filter
-                  && $tt_block !~ m{\|\s?html}    # already has html filter
-                  && $tt_block !~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)} # Specific for [% foo UNLESS bar %]
+                    # Already escaped correctly with raw
+                    or $tt_block =~ m{\|\s?\$raw}
+
+                    # Assignment, maybe we should require to use SET (?)
+                    or $tt_block =~ m{=}
+
+                    # Already has url or uri filter
+                    or $tt_block =~ m{\|\s?ur(l|i)}
+
+                    # Specific for [% foo UNLESS bar %]
+                    or $tt_block =~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)}
                 ;
+
+                $pre_chomp =
+                    $pre_chomp
+                  ? $pre_chomp =~ m|-|
+                      ? q|- |
+                      : $pre_chomp =~ m|~|
+                        ? q|~ |
+                        : q| |
+                  : q| |;
+                $post_chomp =
+                    $post_chomp
+                  ? $post_chomp =~ m|-|
+                      ? q| -|
+                      : $post_chomp =~ m|~|
+                        ? q| ~|
+                        : q| |
+                  : q| |;
+
+                if (
+
+                    # Use the uri filter
+                    # If html filtered or not filtered
+                    $new_line =~ qr{
+                        <a\shref="(tel:|mailto:)?
+                        \[%
+                            \s*$pre_chomp\s*
+                            \Q$tt_block\E
+                            \s*$post_chomp\s*
+                            (\|\s*html)?
+                            \s*
+                        %\]
+                    }xms
+
+                    # And not already uri or url filtered
+                    and not $new_line =~ qr{
+                        <a\shref="(tel:|mailto:)?
+                        \[%
+                            \s*$pre_chomp\s*
+                            \Q$tt_block\E
+                            \s|\s(uri|url)
+                            \s*$post_chomp\s*
+                        %\]
+                    }xms
+                  )
+                {
+                    $tt_block =~ s/^\s*|\s*$//g;    # trim
+                    $tt_block =~ s/\s*\|\s*html\s*//;
+                    $new_line =~ s{
+                            \[%
+                            \s*$pre_chomp\s*
+                            \Q$tt_block\E(\s*\|\s*html)?
+                            \s*$post_chomp\s*
+                            %\]
+                        }{[%$pre_chomp$tt_block | uri$post_chomp%]}xms;
+                    push @errors,
+                      {
+                        error       => 'wrong_html_filter',
+                        line        => $line,
+                        line_number => $line_number
+                      };
+                    next;
+                }
+                elsif (
+                    $tt_block !~ m{\|\s?html} # already has html filter
+                  )
+                {
+                    $tt_block =~ s/^\s*|\s*$//g; # trim
+                    $new_line =~ s{
+                        \[%
+                        \s*$pre_chomp\s*
+                        \Q$tt_block\E
+                        \s*$post_chomp\s*
+                        %\]
+                    }{[%$pre_chomp$tt_block | html$post_chomp%]}xms;
+
+                    push @errors,
+                      {
+                        error       => 'missing_filter',
+                        line        => $line,
+                        line_number => $line_number
+                      };
+                    next;
+                }
             }
+            push @new_lines, $new_line;
         }
+        else {
+            push @new_lines, $new_line;
+        }
+
     }
 
-    return @errors;
+    # Adding [% USE raw %] on top if the filter is used
+    @new_lines = ( '[% USE raw %]', @new_lines )
+      if $use_raw and not $has_use_raw;
+
+    my $new_content = join "\n", @new_lines;
+    return { errors => \@errors, new_content => $new_content };
 }
 
 1;
@@ -94,7 +216,8 @@ t::lib::QA::TemplateFilters - Module used by tests and QA script to catch missin
 =head1 SYNOPSIS
 
     my $content = read_file($filename);
-    my @e = t::lib::QA::TemplateFilters::missing_filters($content);
+    my $new_content = t::lib::QA::TemplateFilters::fix_filters($content);
+    my $errors      = t::lib::QA::TemplateFilters::search_missing_filters($content);
 
 =head1 DESCRIPTION
 
@@ -103,15 +226,26 @@ and to not duplicate the code.
 
 =head1 METHODS
 
-=head2 missing_filters
+=head2 fix_filters
 
-    Take a template content file in parameter and return an array of errors.
-    An error is a hashref with 2 keys, error and line.
+    Take a template content file in parameter and return the same content with
+    the correct (guessed) filters.
+    It will also add the [% USE raw %] statement if it is needed.
+
+=head2 search_missing_filters
+
+    Take a template content file in parameter and return an arrayref of errors.
+
+    An error is a hashref with 3 keys, error and line, line_number.
     * error can be:
     asset_must_be_raw - When Asset is called without using raw
     missing_filter    - When a TT variable is displayed without filter
+    wrong_html_filter - When a TT variable is using the html filter when uri (or url)
+                        should be used instead.
 
     * line is the line where the error has been found.
+    * line_number is the line number where the error has been found.
+
 
 =head1 AUTHORS
 
