@@ -6,7 +6,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Stock rotation details for [% biblio.title | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% INCLUDE 'browser-strings.inc' %]
 </head>
 <body id="catalog_stockrotation" class="catalog">
 [% USE KohaDates %]
@@ -166,6 +165,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
+    [% INCLUDE 'browser-strings.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
     <script type="text/javascript">
         var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
