@@ -23,6 +23,7 @@ use CGI qw( -utf8 );
 
 use C4::Auth;
 use C4::Output;
+use C4::Serials;
 use Koha::Subscriptions;
 use Koha::Acquisition::Booksellers;
 use Koha::AdditionalField;
