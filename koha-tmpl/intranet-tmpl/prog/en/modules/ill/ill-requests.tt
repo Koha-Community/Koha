@@ -747,7 +747,7 @@
             // Render function for request status
             var createStatus = function(data, type, row, meta) {
                 if (row.status_alias) {
-                    return row.status_alias.lib;
+                    return row.status_alias.lib ? row.status_alias.lib : 'N/A';
                 } else {
                     var origData = meta.settings.oInit.originalData;
                     if (origData.length > 0) {
