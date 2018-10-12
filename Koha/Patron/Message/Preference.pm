@@ -207,10 +207,10 @@ sub fix_misconfigured_preference {
 
     my $valid_mtts = [];
     foreach my $mtt (keys %{$self->message_transport_types}) {
-        my $transport = Koha::Patron::Message::Transports->find({
+        my $transport = Koha::Patron::Message::Transports->search({
             message_attribute_id => $self->message_attribute_id,
             message_transport_type => $mtt
-        });
+        }, {rows => 1})->single();
         unless ($transport) {
             next;
         }
@@ -519,10 +519,10 @@ sub _set_message_transport_types {
     $self->_validate_message_transport_types({ message_transport_types => $types });
     foreach my $type (@$types) {
         unless (exists $self->{'_message_transport_types'}->{$type}) {
-            my $transport = Koha::Patron::Message::Transports->find({
+            my $transport = Koha::Patron::Message::Transports->search({
                 message_attribute_id => $self->message_attribute_id,
                 message_transport_type => $type
-            });
+            }, {rows => 1})->single();
             unless ($transport) {
                 Koha::Exceptions::BadParameter->throw(
                     error => 'No transport configured for '.$self->message_name.
