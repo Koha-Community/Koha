@@ -129,7 +129,21 @@ for my $field ( @$additional_fields ) {
 $template->param( additional_fields_for_subscription => $additional_fields );
 
 # FIXME Do we want to hide canceled orders?
-my $orders = Koha::Acquisition::Orders->search( { subscriptionid => $subscriptionid }, { order_by => { -desc => 'parent_ordernumber' } } );
+my $orders = Koha::Acquisition::Orders->search( { subscriptionid => $subscriptionid }, { order_by => [ { -desc => 'timestamp' }, \[ "field(orderstatus, 'ordered', 'partial', 'complete')" ] ] } );
+my $orders_grouped;
+while ( my $o = $orders->next ) {
+    if ( $o->ordernumber == $o->parent_ordernumber ) {
+        $orders_grouped->{$o->parent_ordernumber}->{datereceived} = $o->datereceived;
+        $orders_grouped->{$o->parent_ordernumber}->{orderstatus} = $o->orderstatus;
+        $orders_grouped->{$o->parent_ordernumber}->{basket} = $o->basket;
+    }
+    $orders_grouped->{$o->parent_ordernumber}->{quantity} += $o->quantity;
+    $orders_grouped->{$o->parent_ordernumber}->{ecost_tax_excluded} += sprintf('%.2f', $o->ecost_tax_excluded * $o->quantity);
+    $orders_grouped->{$o->parent_ordernumber}->{ecost_tax_included} += sprintf('%.2f', $o->ecost_tax_included * $o->quantity);
+    $orders_grouped->{$o->parent_ordernumber}->{unitprice_tax_excluded} += sprintf('%.2f', $o->unitprice_tax_excluded * $o->quantity);
+    $orders_grouped->{$o->parent_ordernumber}->{unitprice_tax_included} += sprintf('%.2f', $o->unitprice_tax_included * $o->quantity);
+    push @{$orders_grouped->{$o->parent_ordernumber}->{orders}}, $o;
+}
 
 $template->param(
     subscriptionid => $subscriptionid,
@@ -147,7 +161,7 @@ $template->param(
     intranetcolorstylesheet => C4::Context->preference('intranetcolorstylesheet'),
     irregular_issues => scalar @irregular_issues,
     default_bib_view => $default_bib_view,
-    orders => $orders,
+    orders_grouped => $orders_grouped,
     (uc(C4::Context->preference("marcflavour"))) => 1,
 );
 

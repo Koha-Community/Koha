@@ -346,7 +346,7 @@
     </div>
     </div>
 
-    [% IF orders.count %]
+    [% IF orders_grouped.size %]
         <div id="acquisition_details">
             <h2>Acquisition details</h2>
             <table id="orders">
@@ -373,12 +373,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                [% FOR order IN orders %]
-                    [% IF order.parent_ordernumber != order.ordernumber %]
-                        <tr data-tt-id="[% order.ordernumber | html %]" data-tt-parent-id="[% order.parent_ordernumber | html %]">
-                    [% ELSE %]
-                        <tr data-tt-id="[% order.parent_ordernumber | html %]">
-                    [% END %]
+                [% FOR ordernumber IN orders_grouped.keys %]
+                    [% SET parent_tree_id = loop.count %]
+                    [% SET parent_order = orders_grouped.$ordernumber %]
+                    <tr data-tt-id="[% parent_tree_id | html %]" class="highlighted-row">
+                        <td></td> [%# invoice %]
+                        <td>
+                            [% IF CAN_user_acquisition_order_manage %]
+                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basket.basketno | uri %]">[% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])</a>
+                            [% ELSE %]
+                                [% parent_order.basket.basketname | html %] ([% parent_order.basket.basketno | html %])
+                            [% END %]
+                        </td>
+                        <td></td> [%# ordernumber %]
+                        <td>[% parent_order.basket.creationdate | $KohaDates %]</td>
+                        <td>[% parent_order.datereceived | $KohaDates %]</td>
+                        <td>
+                          [% SWITCH parent_order.orderstatus %]
+                            [% CASE 'new' %]<span title="status_1">New</span>
+                            [% CASE 'ordered' %]<span title="status_2">Ordered</span>
+                            [% CASE 'partial' %]<span title="status_3">Partial</span>
+                            [% CASE 'complete' %]<span title="status_4">Complete</span>
+                            [% CASE 'cancelled' %]<span title="status_5">Cancelled</span>
+                          [% END %]
+                        </td>
+                        <td></td> [%# internalnote %]
+                        <td></td> [%# vendornote %]
+                        <td></td> [%# fund %]
+                        <td>[% parent_order.quantity | html %]</td>
+                        <td>[% parent_order.ecost_tax_excluded | $Price %] / [% parent_order.ecost_tax_included | $Price %]</td>
+                        <td>[% parent_order.unitprice_tax_excluded | $Price %] / [% parent_order.unitprice_tax_included | $Price %]</td>
+                    </tr>
+                    [% FOR order IN parent_order.orders %]
+                        <tr data-tt-id="0" data-tt-parent-id="[% parent_tree_id | html %]">
                         <td>
                         [% IF order.invoice %]
                             [% IF CAN_user_acquisition %]
@@ -389,11 +416,7 @@
                             [% END %]
                         [% END %]
                         </td>
-                        <td>[% IF CAN_user_acquisition_order_manage %]
-                            <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno | uri %]">[% order.basket.basketname | html %] ([% order.basketno | html %])</a>
-                        [% ELSE %]
-                            [% order.basket.basketname | html %] ([% order.basketno | html %])
-                        [% END %]</td>
+                        <td></td> [%# basket %]
                         <td>[% order.ordernumber | html %]</td>
                         <td><span title="[% order.basket.creationdate | uri %]">[% order.basket.creationdate | $KohaDates%]</span></td>
                         <td>[% IF order.datereceived %]<span title="[% order.datereceived | uri %]">[% order.datereceived | $KohaDates %]</span>[% END %]</td>
@@ -422,6 +445,7 @@
                             [% END %]
                         </td>
                     </tr>
+                    [% END %]
                 [% END %]
                 </tbody>
             </table>
