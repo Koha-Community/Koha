@@ -22,15 +22,23 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More;
 use Test::Warn;
+
+use Text::CSV;
+use Text::CSV_XS;
+
+use Module::Load::Conditional qw/check_install/;
+
 BEGIN {
-	use FindBin;
-	use lib $FindBin::Bin;
-	use_ok('Text::CSV');
-	use_ok('Text::CSV_XS');
-	use_ok('Text::CSV::Unicode');
+    if ( check_install( module => 'Text::CSV::Unicode' ) ) {
+        plan tests => 29;
+    } else {
+        plan skip_all => "Need Text::CSV::Unicode"
+    }
 }
+
+use Text::CSV::Unicode;
 
 sub pretty_line {
 	my $max = 54;
