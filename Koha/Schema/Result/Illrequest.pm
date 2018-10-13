@@ -97,6 +97,12 @@ __PACKAGE__->table("illrequests");
   is_nullable: 1
   size: 20
 
+=head2 price_paid
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 20
+
 =head2 notesopac
 
   data_type: 'mediumtext'
@@ -155,6 +161,8 @@ __PACKAGE__->add_columns(
   "accessurl",
   { data_type => "varchar", is_nullable => 1, size => 500 },
   "cost",
+  { data_type => "varchar", is_nullable => 1, size => 20 },
+  "price_paid",
   { data_type => "varchar", is_nullable => 1, size => 20 },
   "notesopac",
   { data_type => "mediumtext", is_nullable => 1 },
@@ -231,8 +239,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Rh8DSs3xj3KRmyd7WNGDAg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-01 02:46:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MMKr4JAAAsNnFcQn9SPTcw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

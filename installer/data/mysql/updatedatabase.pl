@@ -16644,6 +16644,32 @@ if( CheckVersion( $DBversion ) ) {
     SetVersion( $DBversion );
 }
 
+$DBversion = '18.06.00.041';
+if( CheckVersion( $DBversion ) ) {
+
+     if( !column_exists( 'illrequests', 'price_paid' ) ) {
+        $dbh->do(q{
+            ALTER TABLE illrequests
+                ADD COLUMN price_paid varchar(20) DEFAULT NULL
+                AFTER cost
+        });
+     }
+
+     if( !column_exists( 'illrequestattributes', 'readonly' ) ) {
+        $dbh->do(q{
+            ALTER TABLE illrequestattributes
+                ADD COLUMN readonly tinyint(1) NOT NULL DEFAULT 1
+                AFTER value
+        });
+        $dbh->do(q{
+            UPDATE illrequestattributes SET readonly = 1
+        });
+     }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20772 - Add illrequestattributes.readonly and illrequest.price_paid columns)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
