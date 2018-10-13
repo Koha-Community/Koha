@@ -100,6 +100,8 @@ __PACKAGE__->belongs_to(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-05-17 09:17:53
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:sFY1giVMz5AkXCPidhyGjw
 
+__PACKAGE__->add_columns(
+    '+readonly' => { is_boolean => 1 }
+);
 
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
 1;
