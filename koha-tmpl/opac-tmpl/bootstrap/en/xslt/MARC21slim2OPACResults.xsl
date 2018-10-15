@@ -1323,7 +1323,7 @@
                                 <xsl:when test="$OPACItemLocation='location'"><b><xsl:value-of select="concat(items:location,' ')"/></b></xsl:when>
                                 <xsl:when test="$OPACItemLocation='ccode'"><b><xsl:value-of select="concat(items:ccode,' ')"/></b></xsl:when>
                             </xsl:choose>
-                            <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> <xsl:value-of select="items:itemcallnumber"/></xsl:if>
+                            <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"><span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/></span></xsl:if>
                             <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
                         </xsl:for-each>
                     </span>
@@ -1336,7 +1336,7 @@
                                 <xsl:when test="$OPACItemLocation='location'"><b><xsl:value-of select="concat(items:location,' ')"/></b></xsl:when>
                                 <xsl:when test="$OPACItemLocation='ccode'"><b><xsl:value-of select="concat(items:ccode,' ')"/></b></xsl:when>
                             </xsl:choose>
-                            <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"> <xsl:value-of select="items:itemcallnumber"/></xsl:if>
+                            <xsl:if test="items:itemcallnumber != '' and items:itemcallnumber"><span class="CallNumber"><xsl:value-of select="items:itemcallnumber"/></span></xsl:if>
                             <xsl:choose><xsl:when test="position()=last()"><xsl:text>. </xsl:text></xsl:when><xsl:otherwise><xsl:text>, </xsl:text></xsl:otherwise></xsl:choose>
                         </xsl:for-each>
                     </span>
