@@ -60,10 +60,7 @@ unless ( $patron ) {
 
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-if ( $action eq 'reverse' ) {
-  ReversePayment( scalar $input->param('accountlines_id') );
-}
-elsif ( $action eq 'void' ) {
+if ( $action eq 'void' ) {
     my $payment_id = scalar $input->param('accountlines_id');
     my $payment    = Koha::Account::Lines->find( $payment_id );
     $payment->void();
@@ -87,6 +84,7 @@ my @accountlines;
 while ( my $line = $accts->next ) {
     # FIXME We should pass the $accts iterator to the template and do this formatting part there
     my $accountline = $line->unblessed;
+    $accountline->{object} = $line;
     $accountline->{amount} += 0.00;
     if ($accountline->{amount} <= 0 ) {
         $accountline->{amountcredit} = 1;

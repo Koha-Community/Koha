@@ -54,10 +54,6 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in"
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-if ( $action eq 'print' ) {
-#  ReversePayment( $borrowernumber, $input->param('accountno') );
-}
-
 #get account details
 my $total = $patron->account->balance;
 

@@ -40,7 +40,6 @@ BEGIN {
       &manualinvoice
       &getnextacctno
       &chargelostitem
-      &ReversePayment
       &purge_zero_balance_fees
     );
 }
@@ -279,50 +278,21 @@ sub manualinvoice {
     return 0;
 }
 
-#FIXME: ReversePayment should be replaced with a Void Payment feature
-sub ReversePayment {
-    my ($accountlines_id) = @_;
-    my $dbh = C4::Context->dbh;
+sub getcharges {
+    my ( $borrowerno, $timestamp, $accountno ) = @_;
+    my $dbh        = C4::Context->dbh;
+    my $timestamp2 = $timestamp - 1;
+    my $query      = "";
+    my $sth = $dbh->prepare(
+            "SELECT * FROM accountlines WHERE borrowernumber=? AND accountno = ?"
+          );
+    $sth->execute( $borrowerno, $accountno );
 
-    my $accountline        = Koha::Account::Lines->find($accountlines_id);
-    my $amount_outstanding = $accountline->amountoutstanding;
-
-    my $new_amountoutstanding =
-      $amount_outstanding <= 0 ? $accountline->amount * -1 : 0;
-
-    $accountline->description( $accountline->description . " Reversed -" );
-    $accountline->amountoutstanding($new_amountoutstanding);
-    $accountline->store();
-
-    my $account_offset = Koha::Account::Offset->new(
-        {
-            credit_id => $accountline->id,
-            type      => 'Reverse Payment',
-            amount    => $amount_outstanding - $new_amountoutstanding,
-        }
-    )->store();
-
-    if ( C4::Context->preference("FinesLog") ) {
-        my $manager_id = 0;
-        $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
-
-        logaction(
-            "FINES", 'MODIFY',
-            $accountline->borrowernumber,
-            Dumper(
-                {
-                    action                => 'reverse_fee_payment',
-                    borrowernumber        => $accountline->borrowernumber,
-                    old_amountoutstanding => $amount_outstanding,
-                    new_amountoutstanding => $new_amountoutstanding,
-                    ,
-                    accountlines_id => $accountline->id,
-                    accountno       => $accountline->accountno,
-                    manager_id      => $manager_id,
-                }
-            )
-        );
+    my @results;
+    while ( my $data = $sth->fetchrow_hashref ) {
+        push @results,$data;
     }
+    return (@results);
 }
 
 =head2 purge_zero_balance_fees
