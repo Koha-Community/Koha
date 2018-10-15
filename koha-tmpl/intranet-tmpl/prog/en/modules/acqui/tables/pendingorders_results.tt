@@ -1,6 +1,6 @@
 [% USE KohaDates %]
 [% USE Price %]
-[%- FILTER remove('\t') -%]
+[%- FILTER remove('[\t\r]') -%]
 {
     "sEcho": [% sEcho %],
     [%- # "iTotalRecords": iTotalRecords, -%]
