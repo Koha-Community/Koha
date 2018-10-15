@@ -753,6 +753,14 @@ $frameworkcode = &GetFrameworkCode($biblionumber)
 $frameworkcode = hostFrameworkToComponentFramework(&GetFrameworkCode($parentbiblio))
     if ( $parentbiblio and not(defined $frameworkcode) and $op ne 'addbiblio' );
 
+if ( ($frameworkcode eq '' || !defined($frameworkcode)) && $z3950 && $breedingid ) {
+    my ($tmpmarc, $tmpencoding) = GetImportRecordMarc($breedingid);
+    if ($tmpmarc) {
+        my $tmprecord = MARC::Record->new_from_usmarc($tmpmarc);
+        $frameworkcode = C4::Biblio::GetAutoFrameworkCode($tmprecord);
+    }
+}
+
 if ($frameworkcode eq 'FA'){
     $userflags = 'fast_cataloging';
 }

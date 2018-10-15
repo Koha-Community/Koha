@@ -28,6 +28,7 @@ use MARC::File::USMARC;
 use MARC::File::XML;
 use POSIX qw(strftime);
 use Module::Load::Conditional qw(can_load);
+use YAML qw(Load);
 
 use C4::Koha;
 use C4::Log;    # logaction
@@ -101,6 +102,7 @@ BEGIN {
       &GetMarcFromKohaField
       &GetMarcSubfieldStructureFromKohaField
       &GetFrameworkCode
+      &GetAutoFrameworkCode
       &TransformKohaToMarc
       &PrepHostMarcField
 
@@ -248,6 +250,7 @@ sub AddBiblio {
 
     # transform the data into koha-table style data
     SetUTF8Flag($record);
+    $frameworkcode = GetAutoFrameworkCode($record) if (!$frameworkcode || $frameworkcode eq '');
     my $olddata = TransformMarcToKoha( $record, $frameworkcode );
     ( $biblionumber, $error ) = _koha_add_biblio( $dbh, $olddata, $frameworkcode );
     $olddata->{'biblionumber'} = $biblionumber;
@@ -318,6 +321,7 @@ sub ModBiblio {
     my $dbh = C4::Context->dbh;
 
     $frameworkcode = "" if !$frameworkcode || $frameworkcode eq "Default"; # XXX
+    $frameworkcode = GetAutoFrameworkCode($record) if ($frameworkcode eq '');
 
     _strip_item_fields($record, $frameworkcode);
 
@@ -2619,6 +2623,135 @@ sub GetFrameworkCode {
     return $frameworkcode;
 }
 
+=head2 _matchRecordFieldspec
+
+ $language = _matchRecordFieldspec($record, '008/35-37');
+
+Returns field value from record. Fieldspec is a string of the following type:
+'003', '100$a', '000/07', '008/35-37', or any of those types joined with plus sign.
+If a matching field has been repeated in the record, the value from the first one is returned.
+
+=cut
+
+sub _matchRecordFieldspec {
+    my ($record, $fieldstr) = @_;
+
+    $fieldstr =~ s/^\s+//;
+    $fieldstr =~ s/\s+$//;
+
+    if ($fieldstr =~ /^(\d\d\d)$/) {
+        my $fld = $1;
+        my $data = '';
+        if ($fld eq '000') {
+            $data = $record->leader();
+        } else {
+            my $field = $record->field($fld);
+            $data = $field->data() if ($field && $field->is_control_field());
+        }
+        return $data;
+    } elsif ($fieldstr =~ /^(\d\d\d)\$(\S)$/) {
+        my ($fld, $subfld) = ($1, $2);
+        my $data = '';
+        my @fields = $record->field($fld);
+        foreach my $field (@fields) {
+            if ($field && !$field->is_control_field() && $field->subfield($subfld)) {
+                return $field->subfield($subfld);
+            }
+        }
+        return $data;
+    } elsif ($fieldstr =~ /^(\d\d\d)\/(\d+)$/) {
+        my ($fld, $pos) = ($1, int($2));
+        my $data = '';
+        if ($fld eq '000') {
+            $data = $record->leader();
+        } else {
+            my $field = $record->field($fld);
+            $data = $field->data() if ($field && $field->is_control_field());
+        }
+        return substr($data, $pos, 1);
+    } elsif ($fieldstr =~ /^(\d\d\d)\/(\d+)-(\d+)$/) {
+        my ($fld, $spos, $epos) = ($1, int($2), int($3));
+        my $data = '';
+        if ($fld eq '000') {
+            $data = $record->leader();
+        } else {
+            my $field = $record->field($fld);
+            $data = $field->data() if ($field && $field->is_control_field());
+        }
+        return substr($data, $spos, ($epos-$spos)+1);
+    } elsif ($fieldstr =~ /^(.+)\+(.+)$/) {
+        my ($fld1, $fld2) = ($1, $2);
+        return _matchRecordFieldspec($record, $fld1) . '+' . _matchRecordFieldspec($record, $fld2);
+    } else {
+        warn "_matchRecordFieldspec: unknown fieldspec '$fieldstr'";
+    }
+    return '';
+}
+
+=head2 GetAutoFrameworkCode
+
+  $frameworkcode = GetAutoFrameworkCode( $marcRecord );
+
+Uses the MarcToFrameworkcodeAutoconvert system preference to determine what
+framework code the MARC record should have, based on the record field values.
+
+=cut
+
+sub GetAutoFrameworkCode {
+    my ($record) = @_;
+
+    my $prefname = 'MarcToFrameworkcodeAutoconvert';
+
+    my $cache = Koha::Caches->get_instance();
+    my $cache_key = "parsed-pref-$prefname";
+    my $fwcoderules = $cache->get_from_cache($cache_key);
+
+    if (!$fwcoderules) {
+        my $yaml = C4::Context->preference($prefname) || '';
+        return '' if ($yaml !~ /\S/);
+
+        $yaml = "$yaml\n\n";
+        eval {
+            $fwcoderules = YAML::Load($yaml);
+        };
+        if ($@) {
+            warn "Unable to parse $prefname syspref: $@";
+            return '';
+        }
+
+        if (ref($fwcoderules) ne 'ARRAY') {
+            warn "$prefname YAML root element is not array";
+            return '';
+        }
+
+        $cache->set_in_cache($cache_key, $fwcoderules);
+    }
+
+    foreach my $elem (@$fwcoderules) {
+        if (ref($elem) ne 'HASH') {
+            warn "$prefname 2nd level YAML element not a hash";
+            $cache->clear_from_cache($cache_key);
+            return '';
+        }
+        foreach my $ekey (keys(%{$elem})) {
+            my $matchvalue = _matchRecordFieldspec($record, $ekey) || '';
+            if (defined($elem->{$ekey})) {
+                my $matches = $elem->{$ekey};
+                if (ref($elem->{$ekey}) ne 'HASH') {
+                    warn "$prefname 3rd level YAML element not a hash";
+                    $cache->clear_from_cache($cache_key);
+                    return '';
+                }
+                my %hmatches = %{$matches};
+                foreach my $elm (keys(%hmatches)) {
+                    return $hmatches{$elm} if ($elm eq $matchvalue);
+                }
+            }
+        }
+    }
+    return '';
+}
+
 =head UpdateDatereceived
 
     my $error = C4::Biblio::UpdateDatereceived($bibliodataOrBiblionumber, $datereceived, $record);
@@ -4031,6 +4164,7 @@ sub ModBiblioMarc {
     if ( !$frameworkcode ) {
         $frameworkcode = "";
     }
+    $frameworkcode = GetAutoFrameworkCode($record) if ($frameworkcode eq '');
     my $sth = $dbh->prepare("UPDATE biblio SET frameworkcode=? WHERE biblionumber=?");
     $sth->execute( $frameworkcode, $biblionumber );
     $sth->finish;

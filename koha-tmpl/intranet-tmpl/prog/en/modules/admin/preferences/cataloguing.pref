@@ -126,6 +126,12 @@ Cataloging:
             - Note that the FA framework is excluded from the permission.
             - If the pref is empty, no fields are restricted.
         -
+            - Rules to automatically set the framework code based on values in the record, if the framework is not set or is the default.
+            - This is YAML.
+            - pref: MarcToFrameworkcodeAutoconvert
+              type: textarea
+              class: code
+        -
             - Define a list of subfields for which editing is authorized when items_batchmod_restricted permission is enabled, separated by spaces.
             - pref: SubfieldsToAllowForRestrictedBatchmod
             - 'Examples:'
