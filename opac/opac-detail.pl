@@ -758,9 +758,12 @@ my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($bib
 
 if( C4::Context->preference('ArticleRequests') ) {
     my $patron = $borrowernumber ? Koha::Patrons->find($borrowernumber) : undef;
+    my $itemtype = Koha::ItemTypes->find($biblio->itemtype);
     my $artreqpossible = $patron
         ? $biblio->can_article_request( $patron )
-        : Koha::ItemTypes->find($biblio->itemtype)->may_article_request;
+        : $itemtype
+        ? $itemtype->may_article_request
+        : q{};
     $template->param( artreqpossible => $artreqpossible );
 }
 
