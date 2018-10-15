@@ -163,10 +163,7 @@ if ( $backends_available ) {
             };
             $template->param(
                 whole          => $backend_result,
-                request        => $request,
-                status_aliases => scalar Koha::AuthorisedValues->search(
-                    { category => 'ILLSTATUS' }
-                )
+                request        => $request
             );
         } else {
             # Commit:

@@ -4,6 +4,8 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
+[% USE AuthorisedValues %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -200,7 +202,7 @@
                                         [% END %]
                                             [% request.capabilities.$stat.name | html %]
                                         </option>
-                                        [% FOREACH alias IN status_aliases %]
+                                        [% FOREACH alias IN AuthorisedValues.Get('ILLSTATUS') %]
                                             [% IF alias.id == current_alias %]
                                             <option value="[% alias.id %]" selected>
                                             [% ELSE %]
