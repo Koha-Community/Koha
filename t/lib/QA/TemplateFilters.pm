@@ -69,6 +69,23 @@ sub _process_tt_content {
             $has_use_raw++
               if $line =~ m{\[% USE raw %\]};    # Does [% Use raw %] exist?
 
+            my $e;
+            if ( $line =~ qr{<a href="([^"]+)} ) {
+                my $to_uri_escape = $1;
+                while (
+                    $to_uri_escape =~ m{
+                        \[%
+                        (?<pre_chomp>(\s|\-|~)*)
+                        (?<tt_block>[^%\-~]+)
+                        (?<post_chomp>(\s|\-|~)*)
+                        %\]}gmxs
+                  )
+                {
+                    ( $new_line, $e ) = process_tt_block($new_line, { %+, filter => 'uri' });
+                    push @errors, { line => $line, line_number => $line_number, error => $e } if $e;
+                }
+            }
+
             # Loop on TT blocks
             while (
                 $line =~ m{
@@ -79,118 +96,10 @@ sub _process_tt_content {
                     %\]}gmxs
               )
             {
-                my $tt_block   = $+{tt_block};
-                my $pre_chomp  = $+{pre_chomp};
-                my $post_chomp = $+{post_chomp};
-
-                next if
-                    # It's a TT directive, no filters needed
-                    grep { $tt_block =~ $_ } @tt_directives
-
-                    # It is a comment
-                    or $tt_block =~ m{^\#}
-
-                    # Already escaped with a special filter
-                    # We could escape it but should be safe
-                    or $tt_block =~ m{\s?\|\s?\$KohaDates\s?$}
-                    or $tt_block =~ m{\s?\|\s?\$Price\s?$}
-
-                    # Already escaped correctly with raw
-                    or $tt_block =~ m{\|\s?\$raw}
-
-                    # Assignment, maybe we should require to use SET (?)
-                    or $tt_block =~ m{=}
-
-                    # Already has url or uri filter
-                    or $tt_block =~ m{\|\s?ur(l|i)}
-
-                    # Specific for [% foo UNLESS bar %]
-                    or $tt_block =~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)}
-                ;
-
-                $pre_chomp =
-                    $pre_chomp
-                  ? $pre_chomp =~ m|-|
-                      ? q|- |
-                      : $pre_chomp =~ m|~|
-                        ? q|~ |
-                        : q| |
-                  : q| |;
-                $post_chomp =
-                    $post_chomp
-                  ? $post_chomp =~ m|-|
-                      ? q| -|
-                      : $post_chomp =~ m|~|
-                        ? q| ~|
-                        : q| |
-                  : q| |;
-
-                if (
-
-                    # Use the uri filter
-                    # If html filtered or not filtered
-                    $new_line =~ qr{
-                        <a\shref="(tel:|mailto:)?
-                        \[%
-                            \s*$pre_chomp\s*
-                            \Q$tt_block\E
-                            \s*$post_chomp\s*
-                            (\|\s*html)?
-                            \s*
-                        %\]
-                    }xms
-
-                    # And not already uri or url filtered
-                    and not $new_line =~ qr{
-                        <a\shref="(tel:|mailto:)?
-                        \[%
-                            \s*$pre_chomp\s*
-                            \Q$tt_block\E
-                            \s|\s(uri|url)
-                            \s*$post_chomp\s*
-                        %\]
-                    }xms
-                  )
-                {
-                    $tt_block =~ s/^\s*|\s*$//g;    # trim
-                    $tt_block =~ s/\s*\|\s*html\s*//;
-                    $new_line =~ s{
-                            \[%
-                            \s*$pre_chomp\s*
-                            \Q$tt_block\E(\s*\|\s*html)?
-                            \s*$post_chomp\s*
-                            %\]
-                        }{[%$pre_chomp$tt_block | uri$post_chomp%]}xms;
-                    push @errors,
-                      {
-                        error       => 'wrong_html_filter',
-                        line        => $line,
-                        line_number => $line_number
-                      };
-                    next;
-                }
-                elsif (
-                    $tt_block !~ m{\|\s?html} # already has html filter
-                  )
-                {
-                    $tt_block =~ s/^\s*|\s*$//g; # trim
-                    $new_line =~ s{
-                        \[%
-                        \s*$pre_chomp\s*
-                        \Q$tt_block\E
-                        \s*$post_chomp\s*
-                        %\]
-                    }{[%$pre_chomp$tt_block | html$post_chomp%]}xms;
-
-                    push @errors,
-                      {
-                        error       => 'missing_filter',
-                        line        => $line,
-                        line_number => $line_number
-                      };
-                    next;
-                }
+                ( $new_line, $e ) = process_tt_block($new_line, \%+);
+                push @errors, { line => $line, line_number => $line_number, error => $e } if $e;
             }
+
             push @new_lines, $new_line;
         }
         else {
@@ -205,6 +114,96 @@ sub _process_tt_content {
 
     my $new_content = join "\n", @new_lines;
     return { errors => \@errors, new_content => $new_content };
+}
+
+sub process_tt_block {
+    my ( $line, $params ) = @_;
+    my $tt_block   = $params->{tt_block};
+    my $pre_chomp  = $params->{pre_chomp};
+    my $post_chomp = $params->{post_chomp};
+    my $filter     = $params->{filter} || 'html';
+    my $error;
+
+    return ( $line, $error ) if
+        # It's a TT directive, no filters needed
+        grep { $tt_block =~ $_ } @tt_directives
+
+        # It is a comment
+        or $tt_block =~ m{^\#}
+
+        # Already escaped with a special filter
+        # We could escape it but should be safe
+        or $tt_block =~ m{\s?\|\s?\$KohaDates\s?$}
+        or $tt_block =~ m{\s?\|\s?\$Price\s?$}
+
+        # Already escaped correctly with raw
+        or $tt_block =~ m{\|\s?\$raw}
+
+        # Assignment, maybe we should require to use SET (?)
+        or $tt_block =~ m{=}
+
+        # Already has url or uri filter
+        or $tt_block =~ m{\|\s?ur(l|i)}
+
+        # Specific for [% foo UNLESS bar %]
+        or $tt_block =~ m{^(?<before>\S+)\s+UNLESS\s+(?<after>\S+)}
+    ;
+
+    $pre_chomp =
+        $pre_chomp
+      ? $pre_chomp =~ m|-|
+          ? q|- |
+          : $pre_chomp =~ m|~|
+            ? q|~ |
+            : q| |
+      : q| |;
+    $post_chomp =
+        $post_chomp
+      ? $post_chomp =~ m|-|
+          ? q| -|
+          : $post_chomp =~ m|~|
+            ? q| ~|
+            : q| |
+      : q| |;
+
+    if (
+        # Use the uri filter is needed
+        # If html filtered or not filtered
+        $filter ne 'html'
+            and (
+                    $tt_block !~ m{\|}
+                or  $tt_block =~ m{\|\s?html}
+                or $tt_block !~ m{\s*|\s*(uri|url)}
+      )
+    ) {
+        $tt_block =~ s/^\s*|\s*$//g;    # trim
+        $tt_block =~ s/\s*\|\s*html\s*//;
+        $line =~ s{
+                \[%
+                \s*$pre_chomp\s*
+                \Q$tt_block\E(\s*\|\s*html)?
+                \s*$post_chomp\s*
+                %\]
+            }{[%$pre_chomp$tt_block | uri$post_chomp%]}xms;
+
+        $error = 'wrong_html_filter';
+    }
+    elsif (
+        $tt_block !~ m{\|\s?html} # already has html filter
+      )
+    {
+        $tt_block =~ s/^\s*|\s*$//g; # trim
+        $line =~ s{
+            \[%
+            \s*$pre_chomp\s*
+            \Q$tt_block\E
+            \s*$post_chomp\s*
+            %\]
+        }{[%$pre_chomp$tt_block | html$post_chomp%]}xms;
+
+        $error = 'missing_filter';
+    }
+    return ( $line, $error );
 }
 
 1;
