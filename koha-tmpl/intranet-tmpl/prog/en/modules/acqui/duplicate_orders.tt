@@ -79,7 +79,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
                     <input type="checkbox" name="ordernumber" value="[% order.ordernumber | html %]" />
                 [% END %]
             [% END %]
-            [% order.ordernumber %]
+            [% order.ordernumber | html %]
             [% IF order.ordernumber != order.parent_ordernumber %]([% order.parent_ordernumber | html %])[% END %]
         </td>
         <td>
@@ -95,7 +95,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
         <td>[% order.authorisedbyname | html %]</td>
         <td>
             [% IF ( order.basketgroupid ) %]
-                [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid %]">[% order.basketgroupid | html %]</a>)
+                [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | html %]">[% order.basketgroupid | html %]</a>)
             [% ELSE %]
                 &nbsp;
             [% END %]
@@ -111,7 +111,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
             <br />[% order.author | html %] <br /> [% order.isbn | html %]
         </td>
         <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
-        <td><span title="[% order.creationdate %]">[% order.creationdate | $KohaDates %]</span></td>
+        <td><span title="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</span></td>
         <td>
             [% IF order.datereceived %]
                 <span title="[% order.datereceived | html %]">[% order.datereceived | $KohaDates %]</span>
@@ -250,7 +250,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
         <!-- origquantityrec only here for javascript compatibility (additem.js needs it, useless here, useful when receiveing an order -->
         <input id="origquantityrec" readonly="readonly" type="hidden" name="origquantityrec" value="1" />
         <button type="submit" class="btn btn-default">Duplicate orders</button>
-        <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno %]">Cancel</a>
+        <a class="cancel" href="/cgi-bin/koha/acqui/duplicate_orders.pl?basketno=[% basket.basketno | html %]">Cancel</a>
     </fieldset>
 </form>
 
@@ -281,7 +281,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
             [% END %]
             </tbody>
         </table>
-        <a class="btn btn-default" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno %]"><i class="fa fa-fw fa-arrow-left"></i> Return to the basket</a
+        <a class="btn btn-default" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"><i class="fa fa-fw fa-arrow-left"></i> Return to the basket</a
     [% ELSE %]
         <span>No order has been duplicated. Maybe something wrong happened?</span>
     [% END %]
