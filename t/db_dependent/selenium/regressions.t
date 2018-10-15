@@ -21,6 +21,7 @@ use C4::Context;
 
 use Test::More tests => 2;
 
+use C4::Context;
 use Koha::AuthUtils;
 use t::lib::Selenium;
 use t::lib::TestBuilder;
@@ -33,6 +34,10 @@ my $s = t::lib::Selenium->new;
 my $driver = $s->driver;
 my $opac_base_url = $s->opac_base_url;
 my $builder = t::lib::TestBuilder->new;
+
+# It seems that we do not have enough records indexed with ES
+my $SearchEngine_value = C4::Context->preference('SearchEngine');
+C4::Context->set_preference('SearchEngine', 'Zebra');
 
 our @cleanup;
 subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
@@ -89,5 +94,6 @@ subtest 'OPAC - Remove from cart' => sub {
 };
 
 END {
+    C4::Context->preference('SearchEngine', $SearchEngine_value);
     $_->delete for @cleanup;
 };
