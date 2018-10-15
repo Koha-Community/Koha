@@ -69,7 +69,7 @@ if ( $action eq 'void' ) {
 #get account details
 my $total = $patron->account->balance;
 
-my $accts = Koha::Account::Lines->search(
+my @accountlines = Koha::Account::Lines->search(
     { borrowernumber => $patron->borrowernumber },
     { order_by       => { -desc => 'accountlines_id' } }
 );
@@ -80,35 +80,6 @@ if($total <= 0){
 }
 
 my $reverse_col = 0; # Flag whether we need to show the reverse column
-my @accountlines;
-while ( my $line = $accts->next ) {
-    # FIXME We should pass the $accts iterator to the template and do this formatting part there
-    my $accountline = $line->unblessed;
-    $accountline->{object} = $line;
-    $accountline->{amount} += 0.00;
-    if ($accountline->{amount} <= 0 ) {
-        $accountline->{amountcredit} = 1;
-    }
-    $accountline->{amountoutstanding} += 0.00;
-    if ( $accountline->{amountoutstanding} <= 0 ) {
-        $accountline->{amountoutstandingcredit} = 1;
-    }
-
-    $accountline->{amount} = sprintf '%.2f', $accountline->{amount};
-    $accountline->{amountoutstanding} = sprintf '%.2f', $accountline->{amountoutstanding};
-    if ($accountline->{amount} < 0) {
-        $accountline->{payment} = 1
-          if ( $accountline->{accounttype} =~ /^Pay/ );
-
-        $reverse_col = 1;
-    }
-
-    if ( $accountline->{itemnumber} ) {
-        # Because we will not have access to the object from the template
-        $accountline->{item} = $line->item;
-    }
-    push @accountlines, $accountline;
-}
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);

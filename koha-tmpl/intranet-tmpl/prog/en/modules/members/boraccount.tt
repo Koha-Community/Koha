@@ -67,17 +67,17 @@
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>[% END %]</td>
       <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
-      [% IF ( account.amountcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
-      [% IF ( account.amountoutstandingcredit ) %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
+      [% IF account.amount <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>
+      [% IF account.amountoutstanding <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amountoutstanding | $Price %]</td>
       <td class="actions">
-        [% IF ( account.payment ) %]
+        [% IF ( account.is_credit ) %]
           <a target="_blank" href="printfeercpt.pl?action=print&amp;accountlines_id=[% account.accountlines_id | html %]&amp;borrowernumber=[% account.borrowernumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% ELSE %]
           <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | html %]&amp;borrowernumber=[% account.borrowernumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% END %]
         <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>
         [% IF ( reverse_col) %]
-          [% IF account.object.is_credit %]
+          [% IF account.is_credit %]
               <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id | uri %]&amp;borrowernumber=[% account.borrowernumber | uri %]" class="btn btn-default btn-xs void"><i class="fa fa-ban"></i> Void</a>
           [% ELSE %]
             &nbsp;
