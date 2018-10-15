@@ -249,7 +249,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 <tbody>
   [% FOREACH EXCEPTION_HOLIDAYS_LOO IN EXCEPTION_HOLIDAYS_LOOP %]
   <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | html %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE | html %]"><span title="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT | html %]">[% EXCEPTION_HOLIDAYS_LOO.DATE | html %]</span></a></td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% EXCEPTION_HOLIDAYS_LOO.DATE | uri %]"><span title="[% EXCEPTION_HOLIDAYS_LOO.DATE_SORT | html %]">[% EXCEPTION_HOLIDAYS_LOO.DATE | html %]</span></a></td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.TITLE | html %]</td>
   <td>[% EXCEPTION_HOLIDAYS_LOO.DESCRIPTION | html %]</td>
   </tr>
@@ -320,7 +320,7 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
 <tbody>
     [% FOREACH HOLIDAYS_LOO IN HOLIDAYS_LOOP %]
 <tr>
-  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | html %]&amp;calendardate=[% HOLIDAYS_LOO.DATE | html %]"><span title="[% HOLIDAYS_LOO.DATE_SORT | html %]">[% HOLIDAYS_LOO.DATE | html %]</span></a></td>
+  <td><a href="/cgi-bin/koha/tools/holidays.pl?branch=[% branch | uri %]&amp;calendardate=[% HOLIDAYS_LOO.DATE | uri %]"><span title="[% HOLIDAYS_LOO.DATE_SORT | html %]">[% HOLIDAYS_LOO.DATE | html %]</span></a></td>
   <td>[% HOLIDAYS_LOO.TITLE | html %]</td>
   <td>[% HOLIDAYS_LOO.DESCRIPTION.replace('\\\r\\\n', '<br />') | html %]</td>
 </tr>

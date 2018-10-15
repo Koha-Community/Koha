@@ -59,7 +59,7 @@
                 [% END %]
 
                 [% IF CAN_user_borrowers_edit_borrowers && useDischarge %]
-                    <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber | html %]">Discharge</a></li>
+                    <li><a href="/cgi-bin/koha/members/discharge.pl?borrowernumber=[% patron.borrowernumber | uri %]">Discharge</a></li>
                 [% END %]
 
                 [% IF Koha.Preference('RESTOAuth2ClientCredentials') %]

@@ -49,20 +49,20 @@
 <td><span title="[% msg.transfer_date | html %]">[% msg.transfer_date | $KohaDates %]</span></td>
 <td>[% msg.status | html %]</td>
 <td>
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% msg.vendor_id | html %]">
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% msg.vendor_id | uri %]">
         [% msg.vendor.name | html %]
     </a>
 </td>
 <td>
 [% IF msg.message_type == 'QUOTE' || msg.message_type == 'ORDERS' %]
     [% IF msg.basketno %]
-    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% msg.basketno.basketno | html %]">
+    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% msg.basketno.basketno | uri %]">
     Basket: [% msg.basketno.basketno | html %]
     </a>
     [% END %]
 [% ELSE %]
 <!-- Assuming invoices -->
-     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id | html %]">
+     <a href="/cgi-bin/koha/acqui/invoices.pl?message_id=[% msg.id | uri %]">
       Invoices
      </a>
 [% END %]

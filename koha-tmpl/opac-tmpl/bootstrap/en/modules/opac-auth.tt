@@ -91,7 +91,7 @@
                                     </div>
                             [% ELSE %]
                                 <h4>Shibboleth Login</h4>
-                                <p><a href="[% shibbolethLoginUrl | html %]">If you have a Shibboleth account, please click here to log in.</a></p>
+                                <p><a href="[% shibbolethLoginUrl | uri %]">If you have a Shibboleth account, please click here to log in.</a></p>
                             [% END %]
                             [% IF ( casAuthentication ) %]
                                 <h4>CAS login</h4>
@@ -106,14 +106,14 @@
                         [% IF ( casAuthentication ) %]
                             [% IF ( shibbolethAuthentication ) %]
                                 [% IF ( casServerUrl ) %]
-                                    <p><a href="[% casServerUrl | html %]">Please click here to log in.</a><p>
+                                    <p><a href="[% casServerUrl | uri %]">Please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
                                     <p>Please choose against which one you would like to authenticate: </p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                            <li><a href="[% casServer.value | html %]">[% casServer.name | html %]</a></li>
+                                            <li><a href="[% casServer.value | uri %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]
@@ -126,14 +126,14 @@
                                 [% END %]
 
                                 [% IF ( casServerUrl ) %]
-                                   <p><a href="[% casServerUrl | html %]">If you have a CAS account, please click here to log in.</a><p>
+                                   <p><a href="[% casServerUrl | uri %]">If you have a CAS account, please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
                                     <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                        <li><a href="[% casServer.value | html %]">[% casServer.name | html %]</a></li>
+                                        <li><a href="[% casServer.value | uri %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]
@@ -201,7 +201,7 @@
                     [% ELSE %]
                         <h4>Logging on to the catalog has not been enabled by the library.</h4>
                         <ul>
-                            <li>To report this error, you can email the Koha Administrator.<a href="mailto:[% admin | html %]">Email</a></li>
+                            <li>To report this error, you can email the Koha Administrator.<a href="mailto:[% admin | uri %]">Email</a></li>
                             <li>Use top menu bar to navigate to another part of Koha.</li>
                         </ul>
                     [% END # / IF opacuserlogin %]

@@ -119,7 +119,7 @@ Item types administration
                     <label for="description" class="required">Description: </label>
                     <input type="text" id="description" name="description" size="48" value="[% itemtype.description | html %]" required="required" /> <span class="required">Required</span>
                     [% IF can_be_translated %]
-                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype | html %]" title="Translate item type [% itemtype.itemtype | html %]" rel="gb_page_center[600,500]"><i class="fa fa-pencil"></i> Translate into other languages</a>
+                        <a href="/cgi-bin/koha/admin/localization.pl?entity=itemtypes&code=[% itemtype.itemtype | uri %]" title="Translate item type [% itemtype.itemtype | html %]" rel="gb_page_center[600,500]"><i class="fa fa-pencil"></i> Translate into other languages</a>
                     [% END %]
                 </li>
                 <li>
@@ -157,7 +157,7 @@ Item types administration
                             [% ELSE %]
                                 <li>
                             [% END %]
-                            <a href="#[% imageset.imagesetname | html %]">[% imageset.imagesetname | html %]</a>
+                            <a href="#[% imageset.imagesetname | uri %]">[% imageset.imagesetname | html %]</a>
                             </li>
                         [% END %]
                         [% IF itemtype.image_location('intranet').match('^http') %]<li class="ui-tabs-active">[% ELSE %]<li>[% END %]<a href="#remote">Remote image</a></li>
@@ -345,7 +345,7 @@ Item types administration
                     </td>
                 [% END %]
             <td>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | html %]">
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]">
                 [% itemtype.itemtype | html %]
               </a>
             </td>
@@ -376,8 +376,8 @@ Item types administration
             <td>[% itemtype.processfee | $Price %]</td>
             <td>[% itemtype.checkinmsg | html_line_break | $raw %]</td>
             <td class="actions">
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+              <a href="/cgi-bin/koha/admin/itemtypes.pl?op=delete_confirm&amp;itemtype=[% itemtype.itemtype | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
           [% END %]

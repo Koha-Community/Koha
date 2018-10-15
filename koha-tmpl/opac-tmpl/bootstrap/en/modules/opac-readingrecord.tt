@@ -96,7 +96,7 @@
                                                 <td>
                                                     [% IF  OPACAmazonCoverImages %]
                                                         [% IF  issue.normalized_isbn %]
-                                                            <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
+                                                            <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
                                                         [% ELSE %]
                                                              <span class="no-image">No cover image available</span>
                                                         [% END %]
@@ -113,7 +113,7 @@
                                                 [% IF BakerTaylorEnabled %]
                                                     [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) %]
                                                     [% IF ( bt_id ) %]
-                                                       <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                                       <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                                     [% ELSE %]
                                                        <span class="no-image">No cover image available</span>
                                                     [% END %]

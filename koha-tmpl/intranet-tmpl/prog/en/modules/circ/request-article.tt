@@ -22,7 +22,7 @@
         <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>
         [% UNLESS blocking_error %]
         &rsaquo;
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">[% biblio.title | html %]</a>
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">[% biblio.title | html %]</a>
         &rsaquo;
         Request article
         [% END %]
@@ -34,7 +34,7 @@
             <div id="yui-main">
                 <div class="yui-b">
 
-                    <h1>Request article from <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.id | html %]">[% biblio.title | html %]</a></h1>
+                    <h1>Request article from <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.id | uri %]">[% biblio.title | html %]</a></h1>
                     [% IF no_patrons_found %]
                         <div class="dialog alert">
                             <h3>Patron not found</h3>
@@ -243,7 +243,7 @@
                                 [% FOREACH ar IN biblio.article_requests_current %]
                                     <tr>
                                         <td>[% ar.created_on | $KohaDates %]</td>
-                                        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ar.borrowernumber | html %]">[% ar.borrower.firstname | html %] [% ar.borrower.surname | html %]</a></td>
+                                        <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% ar.borrowernumber | uri %]">[% ar.borrower.firstname | html %] [% ar.borrower.surname | html %]</a></td>
                                         <td>[% ar.title | html %]</td>
                                         <td>[% ar.author | html %]</td>
                                         <td>[% ar.volume | html %]</td>
@@ -254,7 +254,7 @@
                                         <td>[% ar.patron_notes | html %]</td>
                                         <td>
                                             [% IF ar.item %]
-                                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% ar.itemnumber | html %]&biblionumber=[% ar.biblionumber | html %]">[% ar.item.barcode | html %]</a>
+                                                <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% ar.itemnumber | uri %]&biblionumber=[% ar.biblionumber | uri %]">[% ar.item.barcode | html %]</a>
                                             [% END %]
                                         </td>
                                         <td>

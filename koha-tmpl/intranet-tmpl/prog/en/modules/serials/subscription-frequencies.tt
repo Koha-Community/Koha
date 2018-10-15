@@ -107,7 +107,7 @@
                 <ul id="blocking_subs" style="display:none">
                     [% FOREACH sub IN subscriptions %]
                         <li style="list-style-type:none">
-                            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid | html %]">[% sub.title | html %]</a>
+                            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid | uri %]">[% sub.title | html %]</a>
                         </li>
                     [% END %]
                 </ul>

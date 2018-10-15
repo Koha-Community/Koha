@@ -54,7 +54,7 @@
       </thead>
       <tbody>
       [% FOREACH hold IN holds %]
-          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblio.biblionumber | html %]">[% hold.biblio.title | html %]</a></td>
+          <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblio.biblionumber | uri %]">[% hold.biblio.title | html %]</a></td>
           <td>[% hold.biblio.author | html %]</td>
           <td>[% hold.item.barcode | html %]</td>
           <td>[% Branches.GetName( hold.branchcode ) | html %]</td>

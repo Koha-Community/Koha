@@ -213,7 +213,7 @@
 
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( ISSUE.normalized_isbn ) %]
-                                                            <a href="http://www.amazon.com/gp/reader/[% ISSUE.normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% ISSUE.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail"/></a>
+                                                            <a href="http://www.amazon.com/gp/reader/[% ISSUE.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% ISSUE.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail"/></a>
                                                         [% ELSE %]
                                                             <a href="#"><span class="no-image">No cover image available</span></a>
                                                         [% END %]
@@ -230,7 +230,7 @@
                                                     [% IF ( BakerTaylorEnabled ) %]
                                                         [% bt_id = ( ISSUE.normalized_upc || ISSUE.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                                            <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_upc or normalized_isbn! -->
                                                         [% END %]
@@ -286,7 +286,7 @@
                                                     [% IF ISSUE.renewed %]<span class="blabel label-success">Renewed!</span><br />[% END %]
                                                     [% IF ( ISSUE.status ) %]
                                                         [% IF ( canrenew ) %]
-                                                            <input type="checkbox" name="item" value="[% ISSUE.itemnumber | html %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber | html %]&amp;borrowernumber=[% ISSUE.borrowernumber | html %]">Renew</a>
+                                                            <input type="checkbox" name="item" value="[% ISSUE.itemnumber | uri %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber | uri %]&amp;borrowernumber=[% ISSUE.borrowernumber | uri %]">Renew</a>
                                                         [% END %]
                                                         [% IF ISSUE.renewalfee > 0 %]
                                                             <span class="renewalfee">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
@@ -432,7 +432,7 @@
                                             [% FOREACH i IN r.issues %]
                                                 <tr>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.item.biblio.biblionumber | html %]">
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.item.biblio.biblionumber | uri %]">
                                                             [% i.item.biblio.title | html %][% IF ( i.item.enumchron ) %] [% i.item.enumchron | html %][% END %]
                                                         </a>
                                                     </td>
@@ -488,7 +488,7 @@
                                                     <td class="jacketcell">
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( OVERDUE.normalized_isbn ) %]
-                                                            <a href="http://www.amazon.com/gp/reader/[% OVERDUE.normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% OVERDUE.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail" /></a>
+                                                            <a href="http://www.amazon.com/gp/reader/[% OVERDUE.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link" title="View on Amazon.com"><img src="https://images-na.ssl-images-amazon.com/images/P/[% OVERDUE.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="View on Amazon.com" class="item-thumbnail" /></a>
                                                         [% ELSE %]
                                                             <a href="#"><span class="no-image">No cover image available</span></a>
                                                         [% END %]
@@ -505,7 +505,7 @@
                                                     [% IF ( BakerTaylorEnabled ) %]
                                                         [% bt_id = ( OVERDUE.normalized_upc || OVERDUE.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                                            <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                                         [% ELSE %]
                                                             <span class="no-image">No cover image available</span><!-- BakerTaylor needs normalized_upc or normalized_isbn! -->
                                                         [% END %]
@@ -551,7 +551,7 @@
                                                             Account frozen
                                                         [% ELSIF ( OVERDUE.status ) %]
                                                             [% IF ( canrenew ) %]
-                                                                <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber | html %]&amp;bornum=[% OVERDUE.borrowernumber | html %]">Renew</a>
+                                                                <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% OVERDUE.itemnumber | uri %]&amp;bornum=[% OVERDUE.borrowernumber | uri %]">Renew</a>
                                                             [% END %]
                                                                 <span class="renewals">([% OVERDUE.renewsleft | html %] of [% OVERDUE.renewsallowed | html %] renewals remaining)</span>
                                                         [% ELSIF ( OVERDUE.norenew_overdue ) %]

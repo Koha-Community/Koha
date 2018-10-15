@@ -22,7 +22,7 @@
 <div id="macles" class="toptabs numbered">
     [% IF ( BIGLOOP ) %]<ul>
     [% FOREACH BIGLOO IN BIGLOOP %]
-        <li><a href="#tab[% BIGLOO.number | html %]XX">[% BIGLOO.number | html %]</a></li>
+        <li><a href="#tab[% BIGLOO.number | uri %]XX">[% BIGLOO.number | html %]</a></li>
     [% END %]
     </ul>[% END %]
     <!-- RESET PAGINATION -->
@@ -68,7 +68,7 @@
             [% FOREACH List IN BIGLOO.Lists %]
                 <h3>[% List.lib | html %]</h3>
                 [% FOREACH liblis IN List.liblist %]
-                <a href="#[% liblis.listvalue | html %]" onclick="check_multiple([% liblis.listvalue | html %])"> [% liblis.listlib | html %]</a><br />
+                <a href="#[% liblis.listvalue | uri %]" onclick="check_multiple([% liblis.listvalue | html %])"> [% liblis.listlib | html %]</a><br />
                 [% END %]
             [% END %]
             [% END %]

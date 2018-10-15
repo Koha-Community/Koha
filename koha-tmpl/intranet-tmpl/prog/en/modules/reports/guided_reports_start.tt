@@ -234,7 +234,7 @@ canned reports and writing custom SQL reports.</p>
                         </td>
                         <td class="report_json_url">
                         [% IF (savedreport.public) %]
-                            <a href="[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                            <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% ELSE %]
                             <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% END %]
@@ -242,14 +242,14 @@ canned reports and writing custom SQL reports.</p>
                         <td>[% savedreport.cache_expiry | html %]</td>
                         <td>
                             [% FOR result IN savedreport.results %]
-                                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id | html %]">[% result.date_run | html %]</a>
+                                <a href="/cgi-bin/koha/reports/guided_reports.pl?phase=retrieve%20results&amp;id=[% result.id | uri %]">[% result.date_run | html %]</a>
                                 <br/>
                             [% END %]
                         </td>
                         <td>
                             [% IF savedreport.seems_obsolete %]
                                 This report seems obsolete, it uses biblioitems.marcxml field.
-                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id | html %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
+                                <a href="/cgi-bin/koha/svc/convert_report?report_id=[% savedreport.id | uri %]" data-report_id="[% savedreport.id | html %]" class="update_sql btn btn-default btn-xs" title="Update SQL"><i class="fa fa-eye"></i> Update SQL</a>
                             [% END %]
                         </td>
                         <td>
@@ -262,12 +262,12 @@ canned reports and writing custom SQL reports.</p>
                                        class="btn btn-default btn-xs dropdown-toggle" id="reportactions[% savedreport.id | html %]" role="button" data-toggle="dropdown"
                                        href="#"><b class="caret"></b></a>
                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
+                                        <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Show%20SQL"><i class="fa fa-search"></i> Show</a></li>
                                         [% IF ( CAN_user_reports_create_reports ) %]
-                                            <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
+                                            <li><a href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | uri %]&amp;phase=Edit%20SQL"><i class="fa fa-pencil"></i> Edit</a></li>
                                             <li><a title="Duplicate this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?phase=Create report from SQL&amp;sql=[% savedreport.savedsql |uri %]&amp;reportname=[% savedreport.report_name |uri %]&amp;notes=[% savedreport.notes |uri %]"><i class="fa fa-copy"></i> Duplicate</a></li>
                                         [% END %]
-                                        <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | html %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
+                                        <li><a href="/cgi-bin/koha/tools/scheduler.pl?id=[% savedreport.id | uri %]"><i class="fa fa-clock-o"></i> Schedule</a></li>
                                         [% IF ( CAN_user_reports_delete_reports ) %]
                                             <li><a class="confirmdelete" title="Delete this saved report" href="/cgi-bin/koha/reports/guided_reports.pl?reports=[% savedreport.id | html %]&amp;phase=Delete%20Saved"><i class="fa fa-trash"></i> Delete</a></li>
                                         [% END %]

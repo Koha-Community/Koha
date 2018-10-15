@@ -115,15 +115,15 @@
 [% END %]
 
 [% IF ( RESERVE_WAITING ) %]
-    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | html %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% reswaitingdate | $KohaDates %]</li>
+    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) has been waiting for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% reswaitingdate | $KohaDates %]</li>
 [% END %]
 
 [% IF ( RESERVED ) %]
-    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | html %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% resreservedate | $KohaDates %]</li>
+    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) has been on hold for <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% resborrowernumber | uri %]">[% resfirstname | html %] [% ressurname | html %]</a> ([% rescardnumber | html %]) at [% Branches.GetName( resbranchcode ) | html %] since [% resreservedate | $KohaDates %]</li>
 [% END %]
 
 [% IF ( ISSUED_TO_ANOTHER ) %]
-    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber | html %]">[% issued_firstname | html %] [% issued_surname | html %]</a> ([% issued_cardnumber | html %]).
+    <li>Item <i>[% getTitleMessageIteminfo | html %]</i> ([% getBarcodeMessageIteminfo | html %]) is checked out to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% issued_borrowernumber | uri %]">[% issued_firstname | html %] [% issued_surname | html %]</a> ([% issued_cardnumber | html %]).
       [% IF CAN_user_circulate_force_checkout %]
         Check in and check out?
       [% END %]
@@ -656,7 +656,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 			[% IF ( warndeparture ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
-            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit Details</a>
+            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -669,7 +669,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 			[% IF ( expired ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
-            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit Details</a>
+            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit Details</a>
 
 			</li>
 			[% END %]
@@ -703,7 +703,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                    <a class="btn btn-default btn-sm" href="#reldebarments" onclick="$('#debarments-tab-link').click()"><i class="fa fa-ban"></i> View restrictions</a>
                     [% IF (noissues && patron && CAN_user_circulate_force_checkout) %]
                         <span class="override_debarment">
-                            <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% patron.borrowernumber | html %]" class="btn btn-default btn-sm">Override restriction temporarily</a>
+                            <a href="/cgi-bin/koha/circ/circulation.pl?forceallow=1&amp;borrowernumber=[% patron.borrowernumber | uri %]" class="btn btn-default btn-sm">Override restriction temporarily</a>
                         </span>
                     [% END %]
                </li>
@@ -741,7 +741,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                     [% FOREACH w IN WaitingHolds %]
                         <ul>
                             <li>
-                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | html %]">[% w.biblio.title | html %]</a>
+                                <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% w.biblio.biblionumber | uri %]">[% w.biblio.title | html %]</a>
                                 ([% ItemTypes.GetDescription( w.item.effective_itemtype ) | html %]),
                                 [% IF ( w.biblio.author ) %] by [% w.biblio.author | html %] [% END %]
                                 [% IF ( w.item.itemcallnumber ) %] [[% w.item.itemcallnumber | html %]] [% END %]
@@ -780,7 +780,7 @@ No patron matched <span class="ex">[% message | html %]</span>
                         [% message.message_date | $KohaDates %]
                         [% Branches.GetName( message.branchcode ) | html %]
                         [% IF message.manager_id %]
-                            ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id | html %]">[% message.get_column('manager_firstname') | html %] [% message.get_column('manager_surname') | html %]</a> )
+                            ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% message.manager_id | uri %]">[% message.get_column('manager_firstname') | html %] [% message.get_column('manager_surname') | html %]</a> )
                         [% END %]
                         <i>"[% message.message | html %]"</i>
                     </span>

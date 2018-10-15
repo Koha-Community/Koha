@@ -80,7 +80,7 @@
                                               [% END %]
                                             </td>
                                             <td><span class="tdlabel">Checkouts: </span> <span title="[% result.count | html %]">[% result.count | html %]</span></td>
-                                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<td>[% IF Koha.Preference( 'RequestOnOpac' ) == 1 %][% UNLESS ( result.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% result.biblionumber | html %]">Place hold</a>[% END %][% END %]</td>[% END %]
+                                            [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]<td>[% IF Koha.Preference( 'RequestOnOpac' ) == 1 %][% UNLESS ( result.norequests ) %]<a href="/cgi-bin/koha/opac-reserve.pl?biblionumber=[% result.biblionumber | uri %]">Place hold</a>[% END %][% END %]</td>[% END %]
                                             </tr>
                                     [% END %]
                                 </tbody>

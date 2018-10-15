@@ -49,10 +49,10 @@
                             <br />Barcode : [% overduesloo.barcode | html %]
                     </td>
                     <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber | html %]">[% overduesloo.borrowersurname | html %], [% overduesloo.borrowerfirstname | html %]</a>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overduesloo.borrowernumber | uri %]">[% overduesloo.borrowersurname | html %], [% overduesloo.borrowerfirstname | html %]</a>
                         <br />[% overduesloo.cardnumber | html %]
                         <br />[% overduesloo.borrowerphone | html %]<br />
-                    [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail | html %]?subject=Overdue: [% overduesloo.title | html %]">
+                    [% IF ( overduesloo.borroweremail ) %]<a href="mailto:[% overduesloo.borroweremail | uri %]?subject=Overdue: [% overduesloo.title | uri %]">
                     [% overduesloo.borroweremail | html %]</a>[% END %]
                     </td>
                     <td>[% Branches.GetName( overduesloo.homebranch ) | html %] [% overduesloo.itemcallnumber | html %]
@@ -83,23 +83,23 @@
                         </td>
                         <td>
                             <p>
-                                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% todayoverduesloo.biblionumber | html %]">[% todayoverduesloo.title | html %]</a>
+                                <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% todayoverduesloo.biblionumber | uri %]">[% todayoverduesloo.title | html %]</a>
                                 &nbsp; (<b>[% todayoverduesloo.description | html %]</b>)
                                 <br />Barcode : [% todayoverduesloo.barcode | html %]
                             </p>
                         </td>
                         <td>
-                            <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% todayoverduesloo.borrowernumber | html %]">[% todayoverduesloo.borrowersurname | html %] &nbsp; [% todayoverduesloo.borrowerfirstname | html %]</a>
+                            <p><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% todayoverduesloo.borrowernumber | uri %]">[% todayoverduesloo.borrowersurname | html %] &nbsp; [% todayoverduesloo.borrowerfirstname | html %]</a>
                             <br />[% todayoverduesloo.cardnumber | html %]<br />
                             <br />[% todayoverduesloo.borrowerphone | html %]<br />
-                        [% IF ( todayoverduesloo.borroweremail ) %]<a href="mailto:[% todayoverduesloo.borroweremail | html %]?subject=Overdue: [% todayoverduesloo.title | html %]">
+                        [% IF ( todayoverduesloo.borroweremail ) %]<a href="mailto:[% todayoverduesloo.borroweremail | uri %]?subject=Overdue: [% todayoverduesloo.title | uri %]">
                         [% todayoverduesloo.borroweremail | html %]</a>[% END %]
                             </p>
                         </td>
                         <td><p>[% Branches.GetName( todayoverduesloo.homebranch ) | html %] [% todayoverduesloo.itemcallnumber | html %]</p>
                         </td>
                         <td>
-                        <a href="branchoverdues.pl?action=remove&amp;borrowernumber=[% todayoverduesloo.borrowernumber | html %]&amp;itemnumber=[% todayoverduesloo.itemnumber | html %]&amp;method=phone&amp;location=[% todayoverduesloo.location | html %]">Cancel notification</a>
+                        <a href="branchoverdues.pl?action=remove&amp;borrowernumber=[% todayoverduesloo.borrowernumber | uri %]&amp;itemnumber=[% todayoverduesloo.itemnumber | uri %]&amp;method=phone&amp;location=[% todayoverduesloo.location | uri %]">Cancel notification</a>
                         </td>
                     </tr>
                 [% END %]

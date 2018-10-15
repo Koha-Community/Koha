@@ -110,8 +110,8 @@
                 [% subscriptions_loo.expirationdate | $KohaDates %]
             </td>
             <td class="actions">
-                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid | html %]" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa fa-refresh"></i> Renew</a>
+                <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                <a href="/cgi-bin/koha/serials/subscription-renew.pl?subscriptionid=[% subscriptions_loo.subscriptionid | uri %]" data-subscriptionid="[% subscriptions_loo.subscriptionid | html %]" class="btn btn-default btn-xs renew_subscription"><i class="fa fa-refresh"></i> Renew</a>
             </td>
         </tr>
     [% END %]

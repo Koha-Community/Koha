@@ -46,7 +46,7 @@
         </div>
     </div>
 
-<p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | html %]">Return to staged MARC batch [% batchid | html %]</a></p>
+<p><a href="/cgi-bin/koha/tools/manage-marc-import.pl?import_batch_id=[% batchid | uri %]">Return to staged MARC batch [% batchid | html %]</a></p>
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]

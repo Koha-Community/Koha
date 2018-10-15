@@ -53,7 +53,7 @@
         [% FOREACH routinglist IN routinglists %]
             <tr>
                 <td>
-                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% routinglist.subscription.subscriptionid | html %]">
+                    <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% routinglist.subscription.subscriptionid | uri %]">
                         [% routinglist.subscription.biblio.title | html %]
                     </a>
                 </td>
@@ -61,7 +61,7 @@
                     [% routinglist.ranking | html %]
                 </td>
                 <td>
-                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% routinglist.subscription.subscriptionid | html %]">
+                    <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% routinglist.subscription.subscriptionid | uri %]">
                         Edit routing list
                     </a>
                     <input type="hidden" name="biblionumber" value="[% routinglist.subscription.biblionumber | html %]" />

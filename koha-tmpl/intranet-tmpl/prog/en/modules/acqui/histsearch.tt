@@ -159,26 +159,26 @@
                             [% CASE 'cancelled' %]Cancelled
                         [% END %]
                     </td>
-                    <td>[% order.basketname | html %] (<a href="basket.pl?basketno=[% order.basketno | html %]">[% order.basketno | html %]</a>)</td>
+                    <td>[% order.basketname | html %] (<a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>
                     <td>[% order.authorisedbyname | html %]</td>
                     <td>
                         [% IF ( order.basketgroupid ) %]
-                            [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | html %]&basketgroupid=[% order.basketgroupid | html %]">[% order.basketgroupid | html %]</a>)
+                            [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.basketgroupid | html %]</a>)
                         [% ELSE %]
                             &nbsp;
                         [% END %]
                     </td>
                     <td>[% IF ( order.invoicenumber ) %]
-                            <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | html %]">[% order.invoicenumber | html %]</a>
+                            <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
                         [% ELSE %]
                             &nbsp;
                         [% END %]
                     </td>
                     <td>
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | html %]">[% order.title | html %]</a>
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title | html %]</a>
                         <br />[% order.author | html %] <br /> [% order.isbn | html %]
                     </td>
-                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | html %]">[% order.name | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.id | uri %]">[% order.name | html %]</a></td>
                     <td><span title="[% order.creationdate | html %]">[% order.creationdate | $KohaDates %]</span></td>
                     <td>
                         [% IF order.datereceived %]

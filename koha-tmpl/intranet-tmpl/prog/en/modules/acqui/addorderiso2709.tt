@@ -88,7 +88,7 @@
                               <span class="citation">[% biblio.citation | html %]</span>
                             </label>
                             <span class="links" style="font-weight: normal;">
-                              ( <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id | html %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id | html %]" class="previewData">Card</a> | <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;breedingid=[% biblio.import_record_id | html %]&amp;import_batch_id=[% biblio.import_batch_id | html %]&amp;biblionumber=[% biblio.match_biblionumber | html %]">Add order</a> )
+                              ( <a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% biblio.import_record_id | uri %]" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% biblio.import_record_id | html %]" class="previewData">Card</a> | <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;breedingid=[% biblio.import_record_id | html %]&amp;import_batch_id=[% biblio.import_batch_id | html %]&amp;biblionumber=[% biblio.match_biblionumber | html %]">Add order</a> )
                             </span>
                           </legend>
                           <div style="float:left">
@@ -105,7 +105,7 @@
                                     [% biblio_lis.overlay_status | html %]
                                 [% END %]
                                 [% IF ( biblio.match_biblionumber ) %]
-                                  Matches biblio [% biblio.match_biblionumber | html %] (score = [% biblio.match_score | html %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.match_biblionumber | html %]">[% biblio.match_citation | html %]</a>
+                                  Matches biblio [% biblio.match_biblionumber | uri %] (score = [% biblio.match_score | html %]): <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.match_biblionumber | uri %]">[% biblio.match_citation | html %]</a>
                                 [% END %]
                               </span>
                             </li>
@@ -413,7 +413,7 @@
                         </td>
                         <td><span title="[% batch_lis.staged_date | html %]">[% batch_lis.staged_date | $KohaDates with_hours => 1 | html %]</span></td>
                         <td>[% batch_lis.num_records | html %]</td>
-                        <td><a href="[% batch_lis.scriptname | html %]?import_batch_id=[% batch_lis.import_batch_id | html %]&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]">Add orders</a></td>
+                        <td><a href="[% batch_lis.scriptname | uri %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]">Add orders</a></td>
                       </tr>
                       [% END %]
                     </tbody>

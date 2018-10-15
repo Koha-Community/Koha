@@ -41,7 +41,7 @@
         [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote | html %]</li>[% END %]
         [% IF ( basketcontractno ) %]
             <li><span class="label">Contract number: </span>[% basketcontractno | html %]</li>
-            <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | html %]">[% basketcontractname | html %]</a></li>
+            <li><span class="label">Contract name:</span> <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | uri %]">[% basketcontractname | html %]</a></li>
         [% END %]
         [% IF ( authorisedbyname ) %]<li><span class="label">Managed by:</span>  [% authorisedbyname | html %]</li>[% END %]
         [% IF ( creationdate ) %]<li><span class="label">Open on:</span>  [% creationdate | $KohaDates %]</li>[% END %]
@@ -99,7 +99,7 @@
         <legend>
             Catalog details
             [% IF ( biblionumber ) %]
-                <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]"> Edit record</a></span>
+                <span><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | uri %]"> Edit record</a></span>
             [% END %]
         </legend>
         [% UNLESS ( existing ) %]
@@ -241,7 +241,7 @@
         <ol>
           <li>
             <span class="label">Suggested by: </span>
-            [% surnamesuggestedby | html %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid | html %]&amp;op=show">suggestion #[% suggestionid | html %]</a>)
+            [% surnamesuggestedby | html %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid | uri %]&amp;op=show">suggestion #[% suggestionid | html %]</a>)
           </li>
         </ol>
         </fieldset>

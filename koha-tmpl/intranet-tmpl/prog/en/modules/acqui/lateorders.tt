@@ -106,7 +106,7 @@
             </td>
             <td>
                 [% IF ( CAN_user_acquisition_order_manage ) %]
-                    <a href="basket.pl?basketno=[% lateorder.basketno | html %]" title="basket">[% lateorder.basketname | html %] ([% lateorder.basketno | html %])</a>
+                    <a href="basket.pl?basketno=[% lateorder.basketno | uri %]" title="basket">[% lateorder.basketname | html %] ([% lateorder.basketno | html %])</a>
                 [% ELSE %]
                     [% lateorder.basketname | html %] ([% lateorder.basketno | html %])
                 [% END %]
@@ -114,7 +114,7 @@
             <td>
                 [% IF ( lateorder.basketgroupid ) %]
                     [% IF ( CAN_user_acquisition_group_manage ) %]
-                        <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.supplierid | html %]&basketgroupid=[% lateorder.basketgroupid | html %]" title="basketgroup">[% lateorder.basketgroupname | html %] ([% lateorder.basketgroupid | html %])</a>
+                        <a href="basketgroup.pl?op=add&booksellerid=[% lateorder.supplierid | uri %]&basketgroupid=[% lateorder.basketgroupid | uri %]" title="basketgroup">[% lateorder.basketgroupname | html %] ([% lateorder.basketgroupid | html %])</a>
                     [% ELSE %]
                         [% lateorder.basketgroupname | html %] ([% lateorder.basketgroupid | html %])</a>
                     [% END %]

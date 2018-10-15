@@ -53,14 +53,14 @@
                             <br />Barcode: [% reser.barcode | html %]
                     </td>
                     <td>[% IF ( reser.patron ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber | html %]">
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reser.patron.borrowernumber | uri %]">
                             [% reser.patron.surname | html %][%IF ( reser.patron.firstname ) %], [% reser.patron.firstname | html %][% END %]
                         </a>
                         [% IF ( reser.patron.phone ) %]<br />[% reser.patron.phone | html %][% END %]
                             [% IF ( reser.patron.first_valid_email_address ) %]
                                 <br />
                                 [% BLOCK subject %]Hold:[% END %]
-                                <a href="mailto:[% reser.patron.first_valid_email_address | html %]?subject=[% INCLUDE subject %] [% reser.title | html %]">
+                                <a href="mailto:[% reser.patron.first_valid_email_address | uri %]?subject=[% INCLUDE subject %] [% reser.title | uri %]">
                                     [% reser.patron.first_valid_email_address | html %]
                                 </a>
                             [% END %]
@@ -70,7 +70,7 @@
                     </td>
                     <td>[% IF reser.homebranch %][% Branches.GetName( reser.homebranch ) | html %][% END %]</td>
                     <td>[% reser.itemcallnumber | html %]</td>
-                    <td class="actions"><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber | html %]&amp;canceltransfer=1&amp;dest=ttr" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Cancel transfer</a></td>
+                    <td class="actions"><a href="/cgi-bin/koha/circ/returns.pl?itemnumber=[% reser.itemnumber | uri %]&amp;canceltransfer=1&amp;dest=ttr" class="btn btn-default btn-xs"><i class="fa fa-times"></i> Cancel transfer</a></td>
                 </tr>
             [% END %]</tbody>
             </table>

@@ -148,7 +148,7 @@
                                                 [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
                                                     <p>
                                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                        - <a href="[% MARCNOTE.marcnote | html %]">[% MARCNOTE.marcnote | html %]</a>
+                                                        - <a href="[% MARCNOTE.marcnote | uri %]">[% MARCNOTE.marcnote | html %]</a>
                                                     [% ELSE %]
                                                         - [% MARCNOTE.marcnote | html %]
                                                     [% END %]
@@ -201,9 +201,9 @@
                                                         [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
 
                                                         [% IF OPACURLOpenInNewWindow %]
-                                                            <a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">[% MARCurl.linktext | html %]</a>
+                                                            <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">[% MARCurl.linktext | html %]</a>
                                                         [% ELSE %]
-                                                            <a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+                                                            <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
                                                         [% END %]
 
                                                         [% IF MARCurl.notes %][% FOREACH note IN MARCurl.notes %]<p>[% note.note | html %]</p>[% END %][% END %]

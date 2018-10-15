@@ -50,7 +50,7 @@
     <ul>
         [% FOREACH record IN sourcerecords %]
             <li>
-                <a href="#tabrecord[% record.recordid | html %]">
+                <a href="#tabrecord[% record.recordid | uri %]">
                     [% record.recordid | html %]
                     [% IF record.reference %](ref)[% END %]
                 </a>

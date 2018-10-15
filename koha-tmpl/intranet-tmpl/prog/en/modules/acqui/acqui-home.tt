@@ -113,14 +113,14 @@
                 <td>Budget [% loop_budge.budget_period_description | html %] [id=[% loop_budge.budget_period_id | html %]][% UNLESS loop_budge.budget_period_active %] (inactive)[% END %]</td>
                 <td>
                     [% IF ( CAN_user_acquisition_budget_manage ) %]
-                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id | html %]">[% loop_budge.budget_code | html %]</a>
+                        <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% loop_budge.budget_period_id | uri %]">[% loop_budge.budget_code | html %]</a>
                     [% ELSE %]
                         [% loop_budge.budget_code | html %]
                     [% END %]
                 </td>
                 <td>[% loop_budge.budget_name | html %]</td>
                 <td>[% IF ( loop_budge.budget_owner ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner.borrowernumber | html %]">[% loop_budge.budget_owner.surname | html %], [% loop_budge.budget_owner.firstname | html %]</a>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loop_budge.budget_owner.borrowernumber | uri %]">[% loop_budge.budget_owner.surname | html %], [% loop_budge.budget_owner.firstname | html %]</a>
                     [% ELSE %]
                         &nbsp;
                     [% END %]
@@ -134,7 +134,7 @@
                     [% END %]
                 </td>
                 <td class="data">
-                    <a href="ordered.pl?fund=[% loop_budge.budget_id | html %]&amp;fund_code=[% loop_budge.budget_code | html %]">
+                    <a href="ordered.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
                     [% IF loop_budge.budget_parent_id %]
                         [% loop_budge.budget_ordered | $Price %]
                     [% ELSE %]
@@ -143,7 +143,7 @@
                     </a>
                 </td>
                 <td class="data">
-                    <a href="spent.pl?fund=[% loop_budge.budget_id | html %]&amp;fund_code=[% loop_budge.budget_code | html %]">
+                    <a href="spent.pl?fund=[% loop_budge.budget_id | uri %]&amp;fund_code=[% loop_budge.budget_code | uri %]">
                     [% IF loop_budge.budget_parent_id %]
                         [% loop_budge.budget_spent | $Price %]
                     [% ELSE %]

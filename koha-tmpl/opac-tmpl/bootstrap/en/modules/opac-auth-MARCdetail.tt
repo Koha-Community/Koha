@@ -46,13 +46,13 @@
                         [% END %]
 
                         <h1>Entry [% authtypetext | html %]</h1>
-                        <p><a href="opac-search.pl?type=opac&amp;q=[% authid | html %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a></p>
+                        <p><a href="opac-search.pl?type=opac&amp;q=[% authid | uri %]&amp;idx=an,phr">Number of records used in: [% count | html %]</a></p>
                             [% FOREACH Tag0X IN Tab0XX %]
                                 <p><b>[% Tag0X.tag | html %]</b></p>
                                 <ul>
                                 [% FOREACH subfiel IN Tag0X.subfield %]
                                     <li><b>[% subfiel.marc_lib | $raw %]:</b>
-                                    [% IF subfiel.isurl %]<a href="[% subfiel.marc_value | html %]">[% subfiel.marc_value | html %]</a>
+                                    [% IF subfiel.isurl %]<a href="[% subfiel.marc_value | uri %]">[% subfiel.marc_value | html %]</a>
                                     [% ELSE %][% subfiel.marc_value | html %][% END %]</li>
                                 [% END %]
                                 </ul>

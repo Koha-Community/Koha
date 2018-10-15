@@ -118,7 +118,7 @@
 [% IF ( collectionItemNeedsTransferred ) %]
  <div id="rotating-collection" class="dialog message">
         <h3>Please transfer item to: [% Branches.GetName( collectionBranch ) | html %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
             <p>This item is part of a rotating collection.</p>
             <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;branchcode=[% collectionBranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
 </div>
@@ -129,7 +129,7 @@
     <div class="dialog message">
         <h1>Patron note</h1>
         <p>[% issue.notedate | $KohaDates %]</p>
-        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber | html %]"> [% title | html %]</a> [% author | html %]</p>
+        <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itembiblionumber | uri %]"> [% title | html %]</a> [% author | html %]</p>
         <p>[% issue.note | html %]</p>
     </div>
 [% END %]
@@ -138,7 +138,7 @@
 [% IF ( fines ) %]
     <div class="dialog alert">
         <h3>Patron has outstanding fines of [% fines | html %].</h3>
-        <p><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% fineborrowernumber | html %]">Make payment</a>.</p>
+        <p><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% fineborrowernumber | uri %]">Make payment</a>.</p>
     </div>
 [% END %]
 
@@ -146,7 +146,7 @@
 [% IF ( waiting_holds ) %]
     <div id="awaiting-pickup" class="dialog message">
         <h3>[% holdsfirstname | html %] [% holdssurname | html %] has [% waiting_holds | html %] hold(s) waiting for pickup.</h3>
-        <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% holdsborrowernumber | html %]">Check out to this patron</a>.</p>
+        <p><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% holdsborrowernumber | uri %]">Check out to this patron</a>.</p>
     </div>
 [% END %]
 
@@ -154,7 +154,7 @@
 [% IF return_date_was_overriden && Borrowers.IsDebarred( borrower ) %]
     <div id="restricted_backdated" class="dialog message">
         <h3>
-            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">
                 [% patron.firstname | html %] [% patron.surname | html %]
             </a>
             is restricted. Please verify this patron should still be restricted.
@@ -164,7 +164,7 @@
 
 [% IF ( wrongbranch ) %]
     <div class="dialog alert"><h3>Cannot check in</h3>
-        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
+        <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
         </p><strong>NOT CHECKED IN</strong></p>
         <p>This item must be checked in at following library: <strong>[% Branches.GetName( rightbranch ) | html %]</strong></p>
     </div>
@@ -175,12 +175,12 @@
     <div id="return2" class="dialog message">
         <!-- WrongTransfer -->
         <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) | html %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
         <button type="submit" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
         <button class="deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber | html %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
 [% IF ( patron.cardnumber ) %]<h5>Hold for:</h5>
         <ul>
-            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">
+            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">
             [% patron.surname | html %], [% patron.firstname | html %]</a> ([% patron.cardnumber | html %]) <span class="patron-category"> - [% patron.category.description | html %]</span> </li>
             [% INCLUDE display_holdpatron_address %]
             [% IF ( patron.phone ) %]<li>[% patron.phone | html %]</li>[% END %]
@@ -212,7 +212,7 @@
                     <h3>
                         Hold found (item is already waiting):
                         <br/>
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
                             [% itembarcode | html %]: [% title | html %]
                         </a>
                     </h3>
@@ -226,7 +226,7 @@
                     <h4>Hold for:</h4>
                     <ul>
                     <li>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.surname | html %], [% patron.firstname | html %]</a> ([% patron.cardnumber | html %])
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.surname | html %], [% patron.firstname | html %]</a> ([% patron.cardnumber | html %])
                         <span class="patron-category"> - [% patron.category.description | html %]</span>
                     </li>
                     [% INCLUDE display_holdpatron_address %]
@@ -298,10 +298,10 @@
 		<!-- diffbranch -->
         <div id="transfer-needed" class="dialog message audio-alert-action">
             <h3>Hold needing transfer found</h3>
-                <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
+                <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
                 <h4>Hold for: </h4>
                     <ul>
-                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | html %]">[% patron.surname | html %], [% patron.firstname | html %]</a> ([% patron.cardnumber | html %]) <span class="patron-category"> - [% patron.category.description | html %]</span> </li>
+                        <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.surname | html %], [% patron.firstname | html %]</a> ([% patron.cardnumber | html %]) <span class="patron-category"> - [% patron.category.description | html %]</span> </li>
                         [% INCLUDE display_holdpatron_address %]
                         [% IF ( patron.phone ) %]<li>[% patron.phone | html %]</li>[% END %]
                         [% IF ( patron.email ) %]<li>[% IF ( transfertodo ) %][% patron.email | html %][% ELSE %]<a id="boremail" href="mailto:[% patron.email | html %]">[% patron.email | html %]</a>[% END %]</li>[% END %]
@@ -341,7 +341,7 @@
     <!-- transfer: item with no reservation, must be returned according to home library circulation rules -->
         <div id="return1" class="dialog message audio-alert-action">
             <h3>Please return item to: [% Branches.GetName( returnbranch ) | html %]</h3>
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
             <p><button type="button" class="openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;branchcode=[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button></p>
         </div>
     [% END %]
@@ -376,7 +376,7 @@
 	<!-- diffbranch -->
         <h3 class="audio-alert-action">Item consigned:</h3>
         <table>
-        <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% title | html %]</a></caption>
+        <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a></caption>
         <tr>
             <th>Hold for:</th>
             <td>[% INCLUDE 'patron-title.inc' patron=patron %]</td>
@@ -410,7 +410,7 @@
                     <h3>
                         Hold found:
                         <br/>
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
                             [% itembarcode | html %]: [% title | html %]
                         </a>
                 </div>
@@ -512,7 +512,7 @@
     <div class="dialog alert audio-alert-warning">
         <h3>Check in message</h3>
         [% IF itembiblionumber %]
-            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | html %]">[% itembarcode | html %]: [% title | html %]</a></p>
+            <p><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% itembarcode | html %]: [% title | html %]</a></p>
         [% END %]
         [% FOREACH errmsgloo IN errmsgloop %]
             [% IF ( errmsgloo.NotForLoanStatusUpdated ) %]
@@ -568,7 +568,7 @@
                <p class="problem">Item is withdrawn.</p>
             [% END %]
             [% IF ( errmsgloo.debarred ) %]
-                <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber | html %]">[% errmsgloo.debarname | html %]([% errmsgloo.debarcardnumber | html %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %].</p>
+                <p class="problem"><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% errmsgloo.debarborrowernumber | uri %]">[% errmsgloo.debarname | html %]([% errmsgloo.debarcardnumber | html %])</a> is now debarred until [% errmsgloo.debarred | $KohaDates %].</p>
             [% END %]
             [% IF ( errmsgloo.prevdebarred ) %]
                 <p class="problem"><b>Reminder: </b>Patron was earlier restricted until [% errmsgloo.prevdebarred | $KohaDates %].</p>
@@ -695,7 +695,7 @@
                 [% ELSE %]Not checked out
                 [% END %]
             </td>
-            <td class="ci-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | html %]">
+            <td class="ci-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% riloo.itembiblionumber | uri %]">
                     [% riloo.itemtitle | html %]
                 </a>
                 [% IF ( riloo.enumchron ) %]
@@ -704,7 +704,7 @@
                 [% END %]
             </td>
             <td class="ci-author">[% riloo.itemauthor | html %]</td>
-            <td class="ci-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber | html %]&amp;itemnumber=[% riloo.itemnumber | html %]#item[% riloo.itemnumber | html %]">[% riloo.barcode | html %]</a></td>
+            <td class="ci-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber | uri %]&amp;itemnumber=[% riloo.itemnumber | uri %]#item[% riloo.itemnumber | uri %]">[% riloo.barcode | html %]</a></td>
             <td class="ci-homelibrary">[% Branches.GetName( riloo.homebranch ) | html %]</td>
             <td class="ci-holdinglibrary">[% Branches.GetName( riloo.holdingbranch ) | html %]</td>
             <td class="ci-shelvinglocation">[% riloo.location | html %]</td>
@@ -712,14 +712,14 @@
             <td class="ci-dateaccessioned">[% riloo.dateaccessioned | $KohaDates %]</td>
             <td class="ci-type">[% ItemTypes.GetDescription( riloo.itemtype ) | html %] [% AuthorisedValues.GetByCode('CCODE', riloo.ccode) | html %]</td>
             <td class="ci-patron">[% IF ( riloo.duedate ) %]
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.patron.borrowernumber | html %]">
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% riloo.patron.borrowernumber | uri %]">
                     [% riloo.patron.surname | html %], [% riloo.patron.firstname | html %] ([% riloo.patron.category.description | html %])
                 </a>
                 [% IF riloo.borissuescount %]
                     <span class="results_summary nowrap">
                         <span class="label">Checkouts:</span>
                         <span class="number_box">
-                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.patron.borrowernumber | html %]">[% riloo.borissuescount | html %]</a>
+                            <a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% riloo.patron.borrowernumber | uri %]">[% riloo.borissuescount | html %]</a>
                         </span>
                     </span>
                 [% END %]

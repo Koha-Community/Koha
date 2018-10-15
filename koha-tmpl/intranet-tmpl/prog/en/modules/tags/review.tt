@@ -119,7 +119,7 @@ tr > td input,td input[type="submit"] { font-size: 85%; padding: 1px; }
                 [% END %]
                 </span>
             </td>
-            <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by | html %]&amp;approved=all">[% tagloo.approved_by_name | html %]</a>[% ELSE %]&nbsp;[% END %]
+            <td>[% IF ( tagloo.approved_by_name ) %]<a href="/cgi-bin/koha/tags/review.pl?approved_by=[% tagloo.approved_by | uri %]&amp;approved=all">[% tagloo.approved_by_name | html %]</a>[% ELSE %]&nbsp;[% END %]
             </td>
             [% ELSE %]
             <td class="actions"><span class="ajax_buttons" style="visibility:hidden">

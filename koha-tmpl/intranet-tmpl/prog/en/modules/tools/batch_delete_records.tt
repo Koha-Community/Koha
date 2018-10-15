@@ -112,9 +112,9 @@
                   <td><input type="checkbox" name="record_id" id="record_id_[% biblio.biblionumber | html %]" value="[% biblio.biblionumber | html %]" data-items="[% biblio.itemnumbers.size | html %]" data-issues="[% biblio.issues_count | html %]" data-reserves="[% biblio.holds_count | html %]" /></td>
                   <td><label for="record_id_[% biblio.biblionumber | html %]">[% biblio.biblionumber | html %]</label></td>
                   <td>[% INCLUDE 'biblio-default-view.inc' biblionumber=biblio.biblionumber %][% biblio.title | html %][% IF ( biblio.subtitle ) %][% FOREACH subtitle IN biblio.subtitle %] [% subtitle.subfield | html %][% END %][% END %]</a></td>
-                  <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.itemnumbers.size | html %]</a></td>
-                  <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.holds_count | html %]</a></td>
-                  <td><a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.issues_count | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.itemnumbers.size | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.holds_count | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/catalogue/issuehistory.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.issues_count | html %]</a></td>
                 </tr>
               [% END %]
             </tbody>
@@ -140,9 +140,9 @@
               [% FOR authority IN records %]
                 <tr>
                   <td><input type="checkbox" name="record_id" value="[% authority.authid | html %]" data-usage="[% authority.count_usage | html %]" /></td>
-                  <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid | html %]">[% authority.authid | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid | uri %]">[% authority.authid | html %]</a></td>
                   <td>[% PROCESS authresult summary=authority.summary %]</td>
-                  <td><a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% authority.authid | html %]">[% authority.count_usage | html %] record(s)</a></td>
+                  <td><a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;idx=an,phr&amp;q=[% authority.authid | uri %]">[% authority.count_usage | html %] record(s)</a></td>
                 </tr>
               [% END %]
             </tbody>

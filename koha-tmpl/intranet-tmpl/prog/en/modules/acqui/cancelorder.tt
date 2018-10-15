@@ -9,8 +9,8 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id | html %]">[% basket.bookseller.name | html %]</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]">Basket [% basket.basketname | html %] ([% basket.basketno | html %]) for [% basket.bookseller.name | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% basket.bookseller.id | uri %]">[% basket.bookseller.name | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]">Basket [% basket.basketname | html %] ([% basket.basketno | html %]) for [% basket.bookseller.name | html %]</a> &rsaquo;
     Cancel order
 </div>
 
@@ -58,7 +58,7 @@
                 <p>The order has been cancelled, although the record has not been deleted.</p>
                 [% END %]
         [% END %]
-                <p><a href="[% referrer | html %]">OK</a></p>
+                <p><a href="[% referrer | uri %]">OK</a></p>
             </div>
       [% END %]
 

@@ -42,7 +42,7 @@
                         <tbody>
                             [% FOREACH c IN courses %]
                                 <tr>
-                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id | html %]">[% c.course_name | html %]</a></td>
+                                    <td><a href="opac-course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %]</a></td>
                                     <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department, 1 ) | html %]</td>
                                     <td>[% c.course_number | html %]</td>
                                     <td>[% c.section | html %]</td>

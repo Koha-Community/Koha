@@ -21,15 +21,15 @@
 &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a>
 &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a>
 [% IF ( add_form ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | html %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END%]</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END%]</a>
 &rsaquo; [% action | html %] [% searchfield | html %]
 [% ELSIF ( else ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | html %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
 [% ELSIF ( delete_confirm ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | html %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
 &rsaquo; Confirm deletion of tag '[% searchfield | html %]'
 [% ELSIF ( delete_confirmed ) %]
-&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | html %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
+&rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% framework.frameworkcode | uri %]">[% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]Default MARC framework[% END %]</a>
 &rsaquo; Data deleted
 [% END %]
 </div>
@@ -207,9 +207,9 @@
                     <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
                         Actions <b class="caret"></b></a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
-                        <li><a href="[% loo.subfield_link | html %]"><i class="fa fa-eye"></i> Subfields</a></li>
-                        <li><a href="[% loo.edit | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                        <li><a href="[% loo.delete | html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li><a href="[% loo.subfield_link | uri %]"><i class="fa fa-eye"></i> Subfields</a></li>
+                        <li><a href="[% loo.edit | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="[% loo.delete | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>
@@ -230,9 +230,9 @@
                 <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
                     Actions <b class="caret"></b></a>
                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
-                    <li><a href="[% loo.subfield_link | html %]"><i class="fa fa-eye"></i> Subfields</a></li>
-                    <li><a href="[% loo.edit | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                    <li><a href="[% loo.delete | html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                    <li><a href="[% loo.subfield_link | uri %]"><i class="fa fa-eye"></i> Subfields</a></li>
+                    <li><a href="[% loo.edit | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                    <li><a href="[% loo.delete | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
                 </ul>
             </div>
         </td>

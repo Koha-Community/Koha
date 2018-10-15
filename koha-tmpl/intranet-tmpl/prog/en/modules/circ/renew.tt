@@ -28,11 +28,11 @@
 
                             [% ELSIF error == "no_checkout" %]
 
-                                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblio.biblionumber | html %]">[% item.biblio.title | html %] [% item.biblioitem.subtitle | html %]</a> ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | html %]&amp;biblionumber=[% item.biblio.biblionumber | html %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | html %]#item[% item.itemnumber | html %]">[% item.barcode | html %]</a> ) is not checked out to a patron.</p>
+                                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblio.biblionumber | uri %]">[% item.biblio.title | html %] [% item.biblioitem.subtitle | html %]</a> ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | html %]&amp;biblionumber=[% item.biblio.biblionumber | html %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | html %]#item[% item.itemnumber | html %]">[% item.barcode | html %]</a> ) is not checked out to a patron.</p>
 
                             [% ELSIF error == "too_many" %]
 
-                                <p>[% item.biblio.title | html %] [% item.biblioitem.subtitle | html %] ( [% item.barcode | html %] ) has been renewed the maximum number of times by [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | html %]"> [% borrower.cardnumber | html %] </a> )</p>
+                                <p>[% item.biblio.title | html %] [% item.biblioitem.subtitle | html %] ( [% item.barcode | html %] ) has been renewed the maximum number of times by [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> )</p>
 
                                 [% IF Koha.Preference('AllowRenewalLimitOverride') %]
                                     <form method="post" action="/cgi-bin/koha/circ/renew.pl">
@@ -115,7 +115,7 @@
 
                             [% ELSIF error == "patron_restricted" %]
 
-                                <p>[% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | html %]"> [% borrower.cardnumber | html %] </a> ) is currently restricted.</p>
+                                <p>[% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> ) is currently restricted.</p>
 
                             [% ELSE %]
 
@@ -133,10 +133,10 @@
                     <div class="dialog message">
                         <h3>Item renewed:</h3>
                         <p>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblio.biblionumber | html %]">[% item.biblio.title | html %] [% item.biblioitem.subtitle | html %]</a>
-                            ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | html %]&amp;biblionumber=[% item.biblio.biblionumber | html %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | html %]#item[% item.itemnumber | html %]">[% item.barcode | html %]</a> )
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblio.biblionumber | uri %]">[% item.biblio.title | html %] [% item.biblioitem.subtitle | html %]</a>
+                            ( <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblio.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a> )
                             renewed for
-                            [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | html %]"> [% borrower.cardnumber | html %] </a> )
+                            [% borrower.firstname | html %] [% borrower.surname | html %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]"> [% borrower.cardnumber | html %] </a> )
                             now due on [% date_due | $KohaDates %]
                         </p>
                     </div>

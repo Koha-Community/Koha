@@ -50,11 +50,11 @@
                         <div class="btn-group">
                             <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#" id="downloadcart"><i class="fa fa-download"></i> Download <span class="caret"></span> </a>
                             <ul class="dropdown-menu">
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&amp;bib_list=[% bib_list | html %]">MARC</a></li>
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=ris&amp;bib_list=[% bib_list | html %]">RIS</a></li>
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&amp;bib_list=[% bib_list | html %]">BibTex</a></li>
+                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=iso2709&amp;bib_list=[% bib_list | uri %]">iso2709</a></li>
+                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=ris&amp;bib_list=[% bib_list | uri %]">RIS</a></li>
+                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=bibtex&amp;bib_list=[% bib_list | uri %]">BibTex</a></li>
                             [% FOREACH csv_profile IN csv_profiles %]
-                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id | html %]&amp;bib_list=[% bib_list | html %]">CSV - [% csv_profile.profile | html %]</a></li>
+                                <li><a href="/cgi-bin/koha/basket/downloadcart.pl?format=[% csv_profile.export_format_id | uri %]&amp;bib_list=[% bib_list | uri %]">CSV - [% csv_profile.profile | html %]</a></li>
                             [% END %]
                             </ul>
                         </div>
@@ -156,7 +156,7 @@
                                                 [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
                                                     <p>
                                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                        - <a href="[% MARCNOTE.marcnote | html %]">[% MARCNOTE.marcnote | html %]</a>
+                                                        - <a href="[% MARCNOTE.marcnote | uri %]">[% MARCNOTE.marcnote | html %]</a>
                                                     [% ELSE %]
                                                         - [% MARCNOTE.marcnote | html %]
                                                     [% END %]
@@ -207,7 +207,7 @@
                                             <td>
                                                [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
                                                     [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
-                                                    <a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+                                                    <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
                                                     [% IF MARCurl.notes %]
                                                         [% FOREACH note IN MARCurl.notes %]
                                                             <p>[% note.note | html %]</p>
@@ -262,7 +262,7 @@
                                             <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
                                         </td>
                                         <td>
-                                            <a href="[% BIBLIO_RESULT.dest | html %]?biblionumber=[% BIBLIO_RESULT.biblionumber | html %]" class="open_title">
+                                            <a href="[% BIBLIO_RESULT.dest | uri %]?biblionumber=[% BIBLIO_RESULT.biblionumber | uri %]" class="open_title">
                                                 [% BIBLIO_RESULT.title |html %]
                                                 [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %]
                                                     [% subtitl.subfield | html %]

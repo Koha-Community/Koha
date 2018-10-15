@@ -45,7 +45,7 @@
                     <tbody>
                         [% FOREACH f IN files %]
                             <tr>
-                                 <td><a href="?borrowernumber=[% patron.borrowernumber | html %]&amp;op=download&amp;file_id=[% f.file_id | html %]">[% f.file_name | html %]</a></td>
+                                 <td><a href="?borrowernumber=[% patron.borrowernumber | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
                                  <td>[% f.file_type | html %]</td>
                                  <td>[% f.file_description | html %]</td>
                                  <td>[% f.date_uploaded | $KohaDates %]</td>

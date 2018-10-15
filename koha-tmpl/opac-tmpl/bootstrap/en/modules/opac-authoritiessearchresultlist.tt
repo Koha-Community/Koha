@@ -7,7 +7,7 @@
         <ul>
             [% IF ( displayprev ) %]
                 <li>
-                    <a href="opac-authorities-home.pl?startfrom=[% startfromprev | html %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | html %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | html %]&amp;orderby=[% orderby | html %]">
+                    <a href="opac-authorities-home.pl?startfrom=[% startfromprev | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]">
                         &laquo;
                     </a>
                 </li>
@@ -16,12 +16,12 @@
                 [% IF ( number.highlight ) %]
                     <li class="active"><a href="#">[% number.number | html %]</a></li>
                 [% ELSE %]
-                    <li><a href="opac-authorities-home.pl?startfrom=[% number.startfrom | html %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term | html %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | html %]&amp;orderby=[% orderby | html %]">[% number.number | html %]</a></li>
+                    <li><a href="opac-authorities-home.pl?startfrom=[% number.startfrom | uri %]&amp;[% FOREACH searchdat IN number.searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]">[% number.number | html %]</a></li>
                 [% END %]
             [% END %]
             [% IF ( displaynext ) %]
                 <li>
-                    <a href="opac-authorities-home.pl?startfrom=[% startfromnext | html %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | html %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage | html %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | html %]&amp;orderby=[% orderby | html %]">&raquo;</a>
+                    <a href="opac-authorities-home.pl?startfrom=[% startfromnext | uri %]&amp;[% FOREACH searchdat IN searchdata %][% searchdat.term | uri %]=[% searchdat.val |url %]&amp;[% END %]&amp;resultsperpage=[% resultsperpage | uri %]&amp;type=opac&amp;op=do_search&amp;authtypecode=[% authtypecode | uri %]&amp;orderby=[% orderby | uri %]">&raquo;</a>
                 </li>
             [% END %]
         </ul>
@@ -88,11 +88,11 @@
                                         [% FOREACH resul IN result %]
                                             <tr>
                                                 <td>[% PROCESS authresult summary=resul.summary %]</td>
-                                                <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid | html %]">Details</a>
+                                                <td><a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% resul.authid | uri %]">Details</a>
                                                 <td>[% resul.authtype | html %]</td>
                                                 [% UNLESS ( resul.isEDITORS ) %]
                                                     <td>
-                                                         [% IF resul.used > 0 %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid | html %]">[% resul.used | html %] biblios</a>[% ELSE %]0 biblios[% END %]
+                                                         [% IF resul.used > 0 %]<a href="/cgi-bin/koha/opac-search.pl?type=opac&amp;op=do_search&amp;q=an=[% resul.authid | uri %]">[% resul.used | html %] biblios</a>[% ELSE %]0 biblios[% END %]
                                                     </td>
                                                 [% END %]
                                             </tr>

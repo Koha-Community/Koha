@@ -118,7 +118,7 @@
                     <input type="submit" value="Save" class="submit" />
 
                     [% IF course_id %]
-                        <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id | html %]" class="cancel">Cancel</a>
+                        <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% course_id | uri %]" class="cancel">Cancel</a>
                     [% ELSE %]
                         <a href="/cgi-bin/koha/course_reserves/course-reserves.pl" class="cancel">Cancel</a>
                     [% END %]

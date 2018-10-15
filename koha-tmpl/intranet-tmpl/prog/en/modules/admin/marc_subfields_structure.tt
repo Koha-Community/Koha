@@ -15,14 +15,14 @@
   <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; <a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC frameworks</a> &rsaquo; <a href="/cgi-bin/koha/admin/marctagstructure.pl?frameworkcode=[% frameworkcode | html %]&amp;searchfield=[% tagfield | uri %]">[% IF ( frameworkcode ) %][% frameworkcode | html %][% ELSE %]Default[% END %] framework structure</a> &rsaquo;
   [% IF ( add_form ) %]
   [% IF ( use_heading_flags_p ) %]
-  [% IF ( heading_edit_subfields_p ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | html %]">Tag [% tagfield | html %] subfield structure</a> &rsaquo; Edit subfields constraints
+  [% IF ( heading_edit_subfields_p ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] subfield structure</a> &rsaquo; Edit subfields constraints
   [% END %]
-  [% ELSE %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | html %]">Tag [% tagfield | html %] Subfield structure</a> &rsaquo; [% action | html %]
+  [% ELSE %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] Subfield structure</a> &rsaquo; [% action | html %]
   [% END %]
   [% END %]
-[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | html %]">Tag [% tagfield | html %] Subfield structure</a> &rsaquo; Confirm deletion of subfield [% tagsubfield | html %]
+[% IF ( delete_confirm ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] Subfield structure</a> &rsaquo; Confirm deletion of subfield [% tagsubfield | html %]
 [% END %]
-[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | html %]">Tag [% tagfield | html %] subfield structure</a> &rsaquo; Subfield deleted
+[% IF ( delete_confirmed ) %] <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]">Tag [% tagfield | html %] subfield structure</a> &rsaquo; Subfield deleted
 [% END %]
 [% IF ( else ) %]Tag [% tagfield | html %] Subfield structure[% END %]
 </div>
@@ -48,9 +48,9 @@
    <ul>
         [% FOREACH loo IN loop %]
             [% IF ( loo.new_subfield ) %]
-                <li><a href="#sub[% loo.urisubfieldcode | html %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
+                <li><a href="#sub[% loo.urisubfieldcode | uri %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
             [% ELSE %]
-                <li><a href="#sub[% loo.urisubfieldcode | html %]field" title="[% loo.liblibrarian | html_entity %]">
+                <li><a href="#sub[% loo.urisubfieldcode | uri %]field" title="[% loo.liblibrarian | html_entity %]">
                     [% loo.subfieldcode | html %]
                </a></li>
             [% END %]
@@ -60,7 +60,7 @@
     [% FOREACH loo IN loop %] 
         <div class="constraints" id="sub[% loo.urisubfieldcode | html %]field">
 
-               <h3><a href="#basic[% loo.urisubfieldcode | html %]">Basic constraints</a></h3>
+               <h3><a href="#basic[% loo.urisubfieldcode | uri %]">Basic constraints</a></h3>
                     <div id="basic[% loo.urisubfieldcode | html %]">
                     <fieldset class="rows">
                 	<ol>
@@ -114,7 +114,7 @@
                     </div>
 
 
-            <h3><a href="#advanced[% loo.urisubfieldcode | html %]">Advanced constraints</a></h3>
+            <h3><a href="#advanced[% loo.urisubfieldcode | uri %]">Advanced constraints</a></h3>
             <div id="advanced[% loo.urisubfieldcode | html %]">
             <fieldset class="rows">
                 <ol><li><label for="defaultvalue[% loo.row | html %]">Default value:</label>
@@ -161,7 +161,7 @@
 			</ol>
             </fieldset>
             </div>
-            <h3><a href="#oth[% loo.urisubfieldcode | html %]">Other options (choose one)</a></h3>
+            <h3><a href="#oth[% loo.urisubfieldcode | uri %]">Other options (choose one)</a></h3>
             <div id="oth[% loo.urisubfieldcode | html %]">
             <fieldset class="rows">
                     	<ol>
@@ -209,7 +209,7 @@
         [% END %]
 		</div><!-- /content -->
     <fieldset class="action">
-        <input type="submit" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield  | uri %]&amp;frameworkcode=[% frameworkcode | html %]" class="cancel">Cancel</a>
+        <input type="submit" value="Save changes" /> <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?tagfield=[% tagfield  | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="cancel">Cancel</a>
     </fieldset>
     </form>
 [% END %]
@@ -265,7 +265,7 @@
 </tr>
 [% FOREACH loo IN loop %]
 <tr>
-    <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | html %]&amp;frameworkcode=[% frameworkcode | html %]#sub[% loo.tagsubfield | html %]field">[% loo.tagsubfield | html %]</a></td>
+    <td><a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field">[% loo.tagsubfield | html %]</a></td>
     <td>
         [% IF ( loo.subfield_ignored ) %]
             <i>[% loo.liblibrarian | html_entity %]</i>
@@ -291,8 +291,8 @@
         [% END %]
     </td>
     <td class="actions">
-        <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | html %]&amp;frameworkcode=[% frameworkcode | html %]#sub[% loo.tagsubfield | html %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-        <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | html %]&amp;tagsubfield=[% loo.tagsubfield | html %]&amp;frameworkcode=[% frameworkcode | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+        <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]#sub[% loo.tagsubfield | uri %]field" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+        <a href="/cgi-bin/koha/admin/marc_subfields_structure.pl?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;frameworkcode=[% frameworkcode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
     </td>
 </tr>
 [% END %]

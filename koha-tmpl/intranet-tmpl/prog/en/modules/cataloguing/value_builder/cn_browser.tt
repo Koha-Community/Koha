@@ -34,7 +34,7 @@
     <tr>
     <td style="background:[% cn_loo.background | html %];">[% cn_loo.itemcallnumber | html %]</td>
     <td style="background:[% cn_loo.background | html %];">
-        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cn_loo.biblionumber | html %]">
+        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cn_loo.biblionumber | uri %]">
             [% cn_loo.title | html %] [% cn_loo.subtitle | html %] [% cn_loo.subtitle2 | html %]
             [% IF ( cn_loo.author ) %]
                 <span>by</span> [% cn_loo.author | html %]

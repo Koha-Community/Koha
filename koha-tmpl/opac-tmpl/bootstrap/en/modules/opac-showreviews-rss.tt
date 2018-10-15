@@ -17,7 +17,7 @@
 [% END %][% END %][% END %]
 
 [% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
-[% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>[% END %]
+[% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>[% END %]
         [% IF ( review.author ) %]<p>By [% review.author | html %].</p> [% END %]
         <p>[% IF ( review.place ) %][% review.place | html %] [% END %][% IF ( review.publishercode ) %][% review.publishercode | html %][% END %][% IF ( review.publicationyear ) %] [% review.publicationyear | html %]
                     [% ELSE %][% IF ( review.copyrightdate ) %] [% review.copyrightdate | html %][% END %][% END %]

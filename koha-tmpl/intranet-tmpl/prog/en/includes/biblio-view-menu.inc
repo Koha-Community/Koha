@@ -31,7 +31,7 @@
 
     [% IF Koha.Preference('ArticleRequests') %]
         [% IF ( article_requests_view ) %]<li class="active">[% ELSE %]<li>[% END %]
-        <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% IF ( object ) %][% object | html %][% ELSE %][% biblionumber | html %][% END %]">Article requests ([% Biblio.ArticleRequestsActiveCount( biblio_object_id ) | html %])</a></li>
+        <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% IF ( object ) %][% object | uri %][% ELSE %][% biblionumber | uri %][% END %]">Article requests ([% Biblio.ArticleRequestsActiveCount( biblio_object_id ) | html %])</a></li>
     [% END %]
 
     [% IF ( subscriptionsnumber ) %]<li><a href="/cgi-bin/koha/serials/serials-search.pl?searched=1&amp;biblionumber=[% biblio_object_id | url  %]">Subscriptions ([% subscriptionsnumber | html %])</a></li>[% END %]

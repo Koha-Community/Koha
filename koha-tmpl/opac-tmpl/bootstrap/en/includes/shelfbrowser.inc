@@ -13,14 +13,14 @@
                     <td rowspan="2">
                       [% IF shelfbrowser_prev_item %]
                         <div id="browser_previous">
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_prev_item.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_item.itemnumber | html %]#shelfbrowser" data-prev-itemnumber="[% shelfbrowser_prev_item.itemnumber | html %]">Previous</a>
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_prev_item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_prev_item.itemnumber | uri %]#shelfbrowser" data-prev-itemnumber="[% shelfbrowser_prev_item.itemnumber | html %]">Previous</a>
                         </div>
                       [% END %]
                     </td>
 
                     [% FOREACH item IN shelfbrowser_items %]
                         <td>
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | html %]#shelfbrowser">
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | uri %]#shelfbrowser">
                                 [% IF ( OPACLocalCoverImages ) %]
                                     <div title="[% item.biblionumber |url %]" class="[% item.biblionumber | html %] thumbnail-shelfbrowser" id="local-thumbnail-shelf-[% item.biblionumber | html %]"></div>
                                 [% END %]
@@ -67,7 +67,7 @@
                     <td rowspan="2">
                         [% IF shelfbrowser_next_item %]
                             <div id="browser_next">
-                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_next_item.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_item.itemnumber | html %]#shelfbrowser" data-next-itemnumber="[% shelfbrowser_next_item.itemnumber | html %]">Next</a>
+                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% shelfbrowser_next_item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% shelfbrowser_next_item.itemnumber | uri %]#shelfbrowser" data-next-itemnumber="[% shelfbrowser_next_item.itemnumber | html %]">Next</a>
                             </div>
                         [% END %]
                     </td>
@@ -77,7 +77,7 @@
                     [% FOREACH item IN shelfbrowser_items %]
                         <td class="top">
                             [% item.itemcallnumber | html %]
-                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | html %]#shelfbrowser">
+                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | uri %]#shelfbrowser">
                                 [% item.title | html %]
                                 [% FOREACH subtitl IN item.subtitle %]
                                     [% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %]

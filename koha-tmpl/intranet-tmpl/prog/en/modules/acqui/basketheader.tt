@@ -21,7 +21,7 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a> &rsaquo;
     [% IF ( add_form ) %]
         [% IF ( basketno ) %]Edit basket '[% basketname | html %]'
         [% ELSE %]Add a basket to [% booksellername | html %]

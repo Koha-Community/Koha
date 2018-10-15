@@ -29,7 +29,7 @@
                     <div class="span12">
                 [% END %]
                    <div id="showreviews" class="searchresults maincontent">
-                        <h3>Recent comments <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to recent comments" title="Subscribe to recent comments" border="0" class="rsssearchicon"/></a></h3>
+                        <h3>Recent comments <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-showreviews.pl?format=rss" class="rsssearchlink"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to recent comments" title="Subscribe to recent comments" border="0" class="rsssearchicon"/></a></h3>
                         <table class="table table-striped">
                             [% FOREACH review IN reviews %]
                                 <tr>
@@ -140,7 +140,7 @@
                                         [% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
                                         [% IF ( BakerTaylorEnabled ) %]
                                             [% IF ( bt_id ) %]
-                                                <a href="https://[% review.BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                                <a href="https://[% review.BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% review.BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                             [% ELSE %]
                                                 <span class="no-image">No cover image available</span>
                                             [% END %]

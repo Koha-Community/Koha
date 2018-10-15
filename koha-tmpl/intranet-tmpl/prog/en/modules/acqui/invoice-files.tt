@@ -20,7 +20,7 @@
             <main>
 
       <h2>Files for invoice: [% invoicenumber | html %]</h2>
-      <p><b>Vendor: </b><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% suppliername | html %]</a></p>
+      <p><b>Vendor: </b><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
       <br />
       [% IF errors %]
         <div class="dialog alert">
@@ -45,7 +45,7 @@
               <tbody>
                 [% FOREACH f IN files %]
                   <tr>
-                      <td><a href="?invoiceid=[% invoiceid | html %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | html %]">[% f.file_name | html %]</a></td>
+                      <td><a href="?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
                       <td>[% f.file_type | html %]</td>
                       <td>[% f.file_description | html %]</td>
                       <td class="title-string">
@@ -53,7 +53,7 @@
                       </td>
                       <td>[% f.file_size | html %]</td>
                       <td><a class="delete_file" href="?invoiceid=[% invoiceid | html %]&amp;op=delete&amp;file_id=[% f.file_id | html %]">Delete</a></td>
-                      <td><a href="?invoiceid=[% invoiceid | html %]&amp;op=download&amp;file_id=[% f.file_id | html %]">Download</a></td>
+                      <td><a href="?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;file_id=[% f.file_id | uri %]">Download</a></td>
                   </tr>
                 [% END %]
               </tbody>

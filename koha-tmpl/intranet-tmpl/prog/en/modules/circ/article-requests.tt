@@ -128,7 +128,7 @@
                                         <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
                                         <td class="ar-title">
                                             <p>
-                                                <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | html %]">
+                                                <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | uri %]">
                                                     <strong>[% ar.biblio.title | html %]</strong>
                                                     [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]
                                                 </a>
@@ -182,7 +182,7 @@
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-patron">
                                             <p>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | html %]">
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
                                                     [% ar.borrower.surname | html %][% IF ar.borrower.firstname %], [% ar.borrower.firstname | html %][% END %] ([% ar.borrower.cardnumber | html %])
                                                 </a>
                                             </p>
@@ -236,7 +236,7 @@
                                         <td><input type="checkbox" reqid="[% ar.id | html %]"/></td>
                                         <td class="ar-title">
                                             <p>
-                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber | html %]">
+                                                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber | uri %]">
                                                     <strong>[% ar.biblio.title | html %]</strong>
                                                     [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]
                                                 </a>
@@ -290,7 +290,7 @@
                                         <td class="ar-barcode">[% ar.item.barcode | html %]</td>
                                         <td class="ar-patron">
                                             <p>
-                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | html %]">
+                                                <a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% ar.borrower.cardnumber | uri %]">
                                                     [% ar.borrower.surname | html %][% IF ar.borrower.firstname %], [% ar.borrower.firstname | html %][% END %] ([% ar.borrower.cardnumber | html %])
                                                 </a>
                                             </p>

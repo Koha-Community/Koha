@@ -10,7 +10,7 @@
 
 <body id="pat_moremember-print" class="pat">
     <div id="main">
-        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber | html %]">Account summary: [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</a></h3>
+        <h3><a href="/cgi-bin/koha/circ/circulation.pl?findborrower=[% patron.cardnumber | uri %]">Account summary: [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</a></h3>
 
         <ul>
             [% IF Koha.Preference( 'AddressFormat' ) %]
@@ -48,7 +48,7 @@
                     [% IF ( issue.overdue ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
                         <td>
                             [% issue.title | html %]
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issue.itemnumber | html %]&amp;biblionumber=[% issue.biblionumber | html %]&amp;bi=[% issue.biblioitemnumber | html %]"></a>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?item=[% issue.itemnumber | uri %]&amp;biblionumber=[% issue.biblionumber | uri %]&amp;bi=[% issue.biblioitemnumber | uri %]"></a>
                         </td>
                         <td>[% issue.author | html %]</td>
                         <td>[% issue.itemcallnumber | html %]</td>
@@ -118,7 +118,7 @@
                       [% END %]
                       &nbsp;
                       [% IF ( account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' ) %]
-                          <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | html %]&amp;itemnumber=[% account.itemnumber | html %]">[% account.item.biblio.title | html %]</a>
+                          <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>
                       [% END %]
                   </td>
                   <td>

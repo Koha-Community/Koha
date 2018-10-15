@@ -91,7 +91,7 @@
         [% IF shelves.count %]
             <span class="results_summary"><span class="label">Lists that include this title: </span>
             [% FOREACH s IN shelves %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]">[% s.shelfname | html %]</a>
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a>
                 [% IF ( loop.last ) %][% ELSE %]|[% END %]
             [% END %]
             </span>
@@ -108,14 +108,14 @@
                     [% END %]
                     </span>
         [% END %]
-        <span id="catalogue_detail_marc_preview" class="results_summary"><span class="label">MARC Preview:</span> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | html %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a></span>
+        <span id="catalogue_detail_marc_preview" class="results_summary"><span class="label">MARC Preview:</span> <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]&amp;viewas=html" title="MARC" class="previewMARC">Show</a></span>
 
         [% IF ( holdcount ) %]
             <span class="results_summary">
                 <span class="label">Holds:</span>
                 <span class="number_box">
                     [% IF CAN_user_reserveforothers_place_holds %]
-                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]">[% holdcount | html %]</a>
+                        <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a>
                     [% ELSE %]
                         <span>[% holdcount | html %]</span>
                     [% END %]
@@ -127,7 +127,7 @@
             <span class="results_summary">
                 <span class="label">Article requests:</span>
                 <span class="number_box">
-                    <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | html %]">[% article_requests_count | html %]</a>
+                    <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | uri %]">[% article_requests_count | html %]</a>
                 </span>
             </span>
         [% END %]
@@ -139,7 +139,7 @@
         [% END %]
         [% IF ( AmazonCoverImages ) %]
             <div id="amazon-bookcoverimg">
-            <a href="http://www.amazon[% AmazonTld | html %]/gp/reader/[% normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link">
+            <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
                 <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="" />
         </a></div>
         [% END %]
@@ -188,7 +188,7 @@
 		<li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]
 			<br />[% END %] 
 		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
-		<a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+		<a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
 			[% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note | html %]</li>[% END %]</ul>[% END %]</li>
             [% END %]</ul>
 </li>
@@ -196,12 +196,12 @@
 
     [% IF ( OPACBaseURL ) %]
         <li><strong>OPAC view:</strong>
-        <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]" target="_blank">Open in new window</a>
+        <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]" target="_blank">Open in new window</a>
         </li>
     [% END %]
         <li id="catalogue_detail_marc_preview">
             <strong>MARC Preview:</strong>
-            <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | html %]" title="MARC" rel="gb_page_center[600,500]">Show</a>
+            <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]" title="MARC" rel="gb_page_center[600,500]">Show</a>
         </li>
         </ul>
         </div>
@@ -213,7 +213,7 @@
         [% END %]
         [% IF ( AmazonCoverImages ) %]
             <div id="amazon-bookcoverimg">
-            <a href="http://www.amazon[% AmazonTld | html %]/gp/reader/[% normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link">
+            <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
             <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="" />
             </a>
         </div>
@@ -260,7 +260,7 @@
         [% IF ( urlS ) %]
             <li><strong>URL:</strong>
                 [% FOREACH url IN urlS %]
-                    <a href="[% url.url | html %]">[% url.url | html %]</a>
+                    <a href="[% url.url | uri %]">[% url.url | html %]</a>
                 [% END %]
             </li>
         [% END %]
@@ -269,7 +269,7 @@
             <li><strong>Lists that include this title: </strong>
             <ul>
             [% FOREACH s IN shelves %]
-                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]">[% s.shelfname | html %]</a></li>
+                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a></li>
             [% END %]
             </ul>
             </li>
@@ -288,7 +288,7 @@
                     [% END %]
                     </ul></li>
         [% END %]
-            [% IF ( holdcount ) %]<li><strong>Holds:</strong> <span class="number_box"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]">[% holdcount | html %]</a></span></li>[% ELSE %][% END %]
+            [% IF ( holdcount ) %]<li><strong>Holds:</strong> <span class="number_box"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a></span></li>[% ELSE %][% END %]
         </ul>
 		[% END %]
 
@@ -478,7 +478,7 @@
                     </td>
                     <td class="datelastseen"><span title="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</span></td>
                     <td class="dateaccessioned"><span title="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</span></td>
-                    <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;biblionumber=[% item.biblionumber | html %]&amp;bi=[% item.biblioitemnumber | html %]#item[% item.itemnumber | html %]">[% item.barcode | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                     [% IF ( volinfo ) %]
                         <td class="enumchron">
                             [% IF ( itemdata_enumchron ) %]
@@ -500,7 +500,7 @@
                         </td>
                     [% END %]
                     [% IF ( itemdata_uri ) %]
-                        <td class="uri"><a href="[% item.uri | html %]">[% item.uri | html %]</a></td>
+                        <td class="uri"><a href="[% item.uri | uri %]">[% item.uri | html %]</a></td>
                     [% END %]
                     [% IF ( itemdata_copynumber ) %]
                         <td class="copynumber">[% item.copynumber | html %]</td>
@@ -518,20 +518,20 @@
                         <td class="nonpublicnote">[% item.itemnotes_nonpublic | html %]</td>
                     [% END %]
                     [% IF ( SpineLabelShowPrintOnBibDetails ) %]
-                        <td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% item.barcode | html %]" >Print label</a></td>
+                        <td><a href="/cgi-bin/koha/labels/spinelabel-print.pl?barcode=[% item.barcode | uri %]" >Print label</a></td>
                     [% END %]
                     [% IF ( hostrecords ) %]
-                        <td>[% IF ( item.hostbiblionumber) %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.hostbiblionumber | html %]" >[% item.hosttitle | html %]</a>[% END %]</td>
+                        <td>[% IF ( item.hostbiblionumber) %]<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.hostbiblionumber | uri %]" >[% item.hosttitle | html %]</a>[% END %]</td>
                     [% END %]
                     [% IF ( analyze ) %]
                         <td>
                             [% IF ( item.countanalytics ) %]
-                                <a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=[% item.itemnumber | html %]">[% item.countanalytics | html %] analytics</a>
+                                <a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=[% item.itemnumber | uri %]">[% item.countanalytics | html %] analytics</a>
                             [% END %]
                         </td>
                     [% END %]
                     [% IF ( analyze ) %]
-                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% item.biblionumber | html %]&amp;hostitemnumber=[% item.itemnumber | html %]">Create analytics</a></td>
+                        <td><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?hostbiblionumber=[% item.biblionumber | uri %]&amp;hostitemnumber=[% item.itemnumber | uri %]">Create analytics</a></td>
                     [% END %]
 
                 [% IF ShowCourseReserves %]
@@ -540,7 +540,7 @@
                             [% FOREACH r IN item.course_reserves %]
                                 [% IF r.course.enabled == 'yes' %]
                                     <p>
-                                      <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% r.course.course_id | html %]">
+                                      <a href="/cgi-bin/koha/course_reserves/course-details.pl?course_id=[% r.course.course_id | uri %]">
                                          [% r.course.course_name | html %]
                                          <!--[% IF r.course.course_number %] [% r.course.course_number | html %] [% END %]-->
                                          [% IF r.course.section %] [% r.course.section | html %] [% END %]
@@ -579,7 +579,7 @@
         [% PROCESS items_table tab="holdings" items=itemloop %]
         [% END %]
                 [% IF ( hiddencount ) %]
-                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
+                   <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items ([% hiddencount | html %] hidden)</a>
                 [% END %] 		
 		[% IF ( debug_display ) %]
 		<br /><br />
@@ -626,7 +626,7 @@
     [% FOREACH MARCNOTE IN MARCNOTES %]
         <p>
         [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-            <a href="[% MARCNOTE.marcnote | html %]">[% MARCNOTE.marcnote | html %]</a>
+            <a href="[% MARCNOTE.marcnote | uri %]">[% MARCNOTE.marcnote | html %]</a>
         [% ELSE %]
             [% MARCNOTE.marcnote FILTER html_line_break | html %]
         [% END %]
@@ -691,7 +691,7 @@
             [% END %]
             </table>
             [% END %]
-            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]">Subscription details</a>
+            <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]">Subscription details</a>
     [% END %]
 </div>
 </div>
@@ -787,9 +787,9 @@
 [% IF ( FRBRizeEditions ) %][% IF ( XISBNS ) %]
 <div id="editions"><h4>Editions</h4>
 <table>
-[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
+[% FOREACH XISBN IN XISBNS %]<tr>[% IF ( AmazonCoverImages ) %]<td><a href="http://www.amazon.com/gp/reader/[% XISBN.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% XISBN.normalized_isbn | html %].01._AA75_PU_PU-5_.jpg" /></a></td>[% END %]
 [% UNLESS ( item_level_itypes ) %]<td>[% IF ( noItemTypeImages ) %][% XISBN.description | html %][% ELSE %]<img src="[% XISBN.imageurl | html %]" alt="[% XISBN.description | html %]" title="[% XISBN.description | html %]">[% END %]</td>[% END %]
-<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | html %]">[% XISBN.title | html %]</a> by [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
+<td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a> by [% XISBN.author | html %] &copy;[% XISBN.copyrightdate | html %]
   [% IF ( XISBN.publishercode ) %]
 [% XISBN.publishercode | html %] [% IF ( XISBN.place ) %]([% XISBN.place | html %])[% END %] [% IF ( XISBN.publicationyear ) %], [% XISBN.publicationyear | html %][% END %] [% IF ( XISBN.editionstatement ) %][% XISBN.editionstatement | html %][% END %] [% IF ( XISBN.editionresponsibility ) %][% XISBN.editionresponsibility | html %][% END %]
     [% END %]

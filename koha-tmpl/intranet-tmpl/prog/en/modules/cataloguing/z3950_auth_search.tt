@@ -94,7 +94,7 @@
                       Actions <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | html %]" class="previewMARC"><i class="fa fa-eye"></i> MARC preview</a></li>
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" class="previewMARC"><i class="fa fa-eye"></i> MARC preview</a></li>
                         <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid | html %]" data-heading_code="[% breeding_loo.heading_code | html %]" data-authid="[% breeding_loo.authid | html %]"><i class="fa fa-download"></i> Import</a></li>
                     </ul>
                 </div>

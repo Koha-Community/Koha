@@ -193,7 +193,7 @@
                 <span class="shelvingloc">[% result.location | html %]</span>
             </td>
             <td>
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% result.biblionumber | html %]" class="openWin">[% result.title | html %]</a>
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% result.biblionumber | uri %]" class="openWin">[% result.title | html %]</a>
                 [% IF ( result.author ) %]
                     by <span class="author">[% result.author | html %]</span>
                 [% END %]

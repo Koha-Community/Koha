@@ -113,7 +113,7 @@
                             [% END %]
                             <ul class="dropdown-menu">
                                 [% FOREACH t IN club_templates %]
-                                    <li><a href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | html %]">[% t.name | html %]</a></li>
+                                    <li><a href="/cgi-bin/koha/clubs/clubs-add-modify.pl?club_template_id=[% t.id | uri %]">[% t.name | html %]</a></li>
                                 [% END %]
                             </ul>
                         </div>
@@ -178,20 +178,20 @@
                                             <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="clubactions[% c.id | html %]">
                                                 [% IF ( c.club_enrollments.count ) %]
                                                     <li>
-                                                        <a href="club-enrollments.pl?id=[% c.id | html %]">
+                                                        <a href="club-enrollments.pl?id=[% c.id | uri %]">
                                                             <i class="fa fa-list-ul"></i> Enrollments
                                                         </a>
                                                     </li>
                                                 [% ELSE %]
                                                     <li class="disabled">
-                                                        <a href="club-enrollments.pl?id=[% c.id | html %]">
+                                                        <a href="club-enrollments.pl?id=[% c.id | uri %]">
                                                             <i class="fa fa-list-ul"></i> Enrollments
                                                         </a>
                                                     </li>
                                                 [% END %]
                                                 [% IF CAN_user_clubs_edit_clubs %]
                                                     <li>
-                                                        <a href="clubs-add-modify.pl?id=[% c.id | html %]">
+                                                        <a href="clubs-add-modify.pl?id=[% c.id | uri %]">
                                                             <i class="fa fa-pencil"></i> Edit
                                                         </a>
                                                     </li>

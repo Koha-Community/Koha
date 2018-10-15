@@ -50,7 +50,7 @@
                                     <p>
                                         <strong>
                                             [% IF ( CAN_user_catalogue ) %]
-                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid | html %]&amp;op=show">[% s.title | html %]</a>
+                                                <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% s.suggestionid | uri %]&amp;op=show">[% s.title | html %]</a>
                                             [% ELSE %]
                                                 [% s.title | html %]
                                             [% END %]

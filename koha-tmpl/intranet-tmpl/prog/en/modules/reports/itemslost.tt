@@ -98,13 +98,13 @@
                             </td>
                         [% END %]
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]" title="[% item.itemnotes | html %]">[% item.biblio.title | html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]" title="[% item.itemnotes | html %]">[% item.biblio.title | html %]</a>
                         </td>
                         <td>[% item.biblio.author | html %]</td>
                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.itemlost', authorised_value => item.itemlost ) | html %]
                         <td><span title="[% item.itemlost_on | html %]">[% item.itemlost_on | $KohaDates %]</span></td>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | html %]" title="[% item.itemnotes | html %]">[% item.barcode | html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]" title="[% item.itemnotes | html %]">[% item.barcode | html %]</a>
                         </td>
                         <td>[% item.itemcallnumber | html %]</td>
                         <td><span title="[% item.datelastseen | html %]">[% item.datelastseen | $KohaDates %]</span></td>

@@ -18,10 +18,10 @@ CAN_user_serials_create_subscription ) %]
             [% END %]
 
             [% IF ( EasyAnalyticalRecords && CAN_user_editcatalogue_edit_catalogue ) %]
-                <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]&amp;analyze=1">Analyze items</a></li>
+                <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;analyze=1">Analyze items</a></li>
             [% END %]
             [% IF CAN_user_editcatalogue_edit_catalogue && ! EasyAnalyticalRecords %]
-                <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?parentbiblionumber=[% biblionumber | html %]">New child record</a></li>
+                <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?parentbiblionumber=[% biblionumber | uri %]">New child record</a></li>
             [% END %]
     </ul>
     </div>
@@ -55,10 +55,10 @@ CAN_user_serials_create_subscription ) %]
                 [% END %]
             [% END %]
 
-            [% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber | html %]">Attach item</a></li>[% END %]
+            [% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/moveitem.pl?biblionumber=[% biblionumber | uri %]">Attach item</a></li>[% END %]
 
-            [% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/linkitem.pl?biblionumber=[% biblionumber | html %]">Link to host item</a>[% END %][% END %]
-            [% IF ( LocalCoverImages || OPACLocalCoverImages) %][% IF ( CAN_user_tools_upload_local_cover_images ) %]<li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | html %]&amp;filetype=image">Upload image</a>[% END %][% END %]
+            [% IF ( EasyAnalyticalRecords ) %][% IF ( CAN_user_editcatalogue_edit_items ) %]<li><a href="/cgi-bin/koha/cataloguing/linkitem.pl?biblionumber=[% biblionumber | uri %]">Link to host item</a>[% END %][% END %]
+            [% IF ( LocalCoverImages || OPACLocalCoverImages) %][% IF ( CAN_user_tools_upload_local_cover_images ) %]<li><a href="/cgi-bin/koha/tools/upload-cover-image.pl?biblionumber=[% biblionumber | uri %]&amp;filetype=image">Upload image</a>[% END %][% END %]
 
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
                 <li><a id="duplicatebiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]&amp;op=duplicate">Edit as new (duplicate)</a></li>
@@ -88,14 +88,14 @@ CAN_user_serials_create_subscription ) %]
     <div class="btn-group">
     <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
     <ul class="dropdown-menu">
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=bibtex&amp;op=export&amp;bib=[% biblionumber | html %]">BIBTEX</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=bibtex&amp;op=export&amp;bib=[% biblionumber | uri %]">BIBTEX</a></li>
         <li><a href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marcxml&amp;op=export&amp;bib=[% biblionumber | html %]">MARCXML</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marc8&amp;op=export&amp;bib=[% biblionumber | html %]">MARC (non-Unicode/MARC-8)</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=utf8&amp;op=export&amp;bib=[% biblionumber | html %]">MARC (Unicode/UTF-8)</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marcstd&amp;op=export&amp;bib=[% biblionumber | html %]">MARC (Unicode/UTF-8, Standard)</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=mods&amp;op=export&amp;bib=[% biblionumber | html %]">MODS (XML)</a></li>
-        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=ris&amp;op=export&amp;bib=[% biblionumber | html %]">RIS</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marcxml&amp;op=export&amp;bib=[% biblionumber | uri %]">MARCXML</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marc8&amp;op=export&amp;bib=[% biblionumber | uri %]">MARC (non-Unicode/MARC-8)</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=utf8&amp;op=export&amp;bib=[% biblionumber | uri %]">MARC (Unicode/UTF-8)</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=marcstd&amp;op=export&amp;bib=[% biblionumber | uri %]">MARC (Unicode/UTF-8, Standard)</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=mods&amp;op=export&amp;bib=[% biblionumber | uri %]">MODS (XML)</a></li>
+        <li><a href="/cgi-bin/koha/catalogue/export.pl?format=ris&amp;op=export&amp;bib=[% biblionumber | uri %]">RIS</a></li>
     </ul>
     </div>
 
@@ -125,8 +125,8 @@ CAN_user_serials_create_subscription ) %]
                     <span class="caret"></span>
                 </button>
                 <ul class="dropdown-menu">
-                    <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]">Place hold</a></li>
-                    <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]&amp;findborrower=[% holdfor_cardnumber | html %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></li>
+                    <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">Place hold</a></li>
+                    <li><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]&amp;findborrower=[% holdfor_cardnumber | uri %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></li>
                 </ul>
             </div>
         [% ELSE %]

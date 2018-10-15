@@ -31,7 +31,7 @@
                 [% IF ( sublanguages_loo.sublanguage_current ) %]
                     <li class="navbar-text"> <span class="currentlanguage disabled">[% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</span></li>
                 [% ELSE %]
-                <li><a href="/cgi-bin/koha/changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | html %]"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a></li>
+                <li><a href="/cgi-bin/koha/changelanguage.pl?language=[% sublanguages_loo.rfc4646_subtag | uri %]"> [% sublanguages_loo.native_description | html %] [% sublanguages_loo.script_description | html %] [% sublanguages_loo.region_description | html %] [% sublanguages_loo.variant_description | html %] ([% sublanguages_loo.rfc4646_subtag | html %])</a></li>
         [% END %]
                 [% END %]
 
@@ -49,7 +49,7 @@
                         [% END %]
                     </li>
                 [% ELSE %]
-                    <li><a href="/cgi-bin/koha/changelanguage.pl?language=[% languages_loo.rfc4646_subtag | html %]">
+                    <li><a href="/cgi-bin/koha/changelanguage.pl?language=[% languages_loo.rfc4646_subtag | uri %]">
                         [% IF ( languages_loo.native_description ) %]
                             [% languages_loo.native_description | html %]
                         [% ELSE %]

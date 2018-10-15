@@ -52,7 +52,7 @@
                         <td>[% loopro.rowtitle_display or "UNKNOWN VALUE" | html %]</td>
                     [% FOREACH loopcel IN loopro.loopcell %]
 						<td align="center">
-						[% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output | html %]&amp;[% loopcel.url_complement | html %]">[% loopcel.value | html %]</a>[% ELSE %][% loopcel.value | html %][% END %]
+						[% IF ( loopcel.url_complement ) %]<a href="reserves_stats.pl?output=[% loopcel.output | uri %]&amp;[% loopcel.url_complement | uri %]">[% loopcel.value | html %]</a>[% ELSE %][% loopcel.value | html %][% END %]
 						</td>
                     [% END %]
 						<td align="center">[% loopro.totalrow | html %]</td>

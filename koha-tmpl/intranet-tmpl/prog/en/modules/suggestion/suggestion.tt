@@ -162,7 +162,7 @@
                 <td>[% suggesteddate | $KohaDates %]</td>
                 <td>
                     [% IF ( suggestedby_borrowernumber ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber | html %]">[% suggestedby_surname | html %], [% suggestedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber | uri %]">[% suggestedby_surname | html %], [% suggestedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
                         [% Branches.GetName( suggestedby_branchcode ) | html %] ([% suggestedby_description | html %])
                     [% END %]
                 </td>
@@ -172,7 +172,7 @@
                 <td>[% manageddate | $KohaDates %]</td>
                 <td>
                         [% IF ( managedby_borrowernumber ) %]
-                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber | html %]">[% managedby_surname | html %], [% managedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
+                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber | uri %]">[% managedby_surname | html %], [% managedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
                             [% Branches.GetName( managedby_branchcode ) | html %] ([% managedby_description | html %])
                         [% END %]
                 </td>
@@ -182,7 +182,7 @@
                 <td>[% accepteddate | $KohaDates %]</td>
                 <td>
                     [% IF ( acceptedby_borrowernumber ) %]
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber | html %]">[% acceptedby_surname | html %], [% acceptedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber | uri %]">[% acceptedby_surname | html %], [% acceptedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>
                         [% Branches.GetName( acceptedby_branchcode ) | html %] ([% acceptedby_description | html %])
                     [% END %]
                 </td>
@@ -347,18 +347,18 @@
             <tr>
                 <th><label for="suggesteddate">Created by:</label> </th>
                 <td><input type="text" id="suggesteddate" name="suggesteddate" class="datepicker" size="10" maxlength="10" value="[% suggesteddate | $KohaDates %]"/>[% INCLUDE 'date-format.inc' %]</td>
-                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby | html %]"/>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber | html %]">[% suggestedby_surname | html %], [% suggestedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>  [% Branches.GetName( suggestedby_branchcode ) | html %] ([% suggestedby_description | html %])[% END %]
+                <td><input type="hidden" id="suggestedby" name="suggestedby" value="[% suggestedby | html %]"/>[% IF ( suggestedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestedby_borrowernumber | uri %]">[% suggestedby_surname | html %], [% suggestedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a>  [% Branches.GetName( suggestedby_branchcode ) | html %] ([% suggestedby_description | html %])[% END %]
                 </td>
             </tr>
             <tr>
                 <th><label for="managedon">Managed by:</label> </th>
                 <td><input type="text" id="managedon" name="manageddate" class="datepicker" size="10" maxlength="10" value="[% manageddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]</td>
-                <td><input type="hidden" id="managedby" name="managedby" value="[% managedby | html %]"/>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber | html %]">[% managedby_surname | html %], [% managedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a> [% Branches.GetName( managedby_branchcode ) | html %] ([% managedby_description | html %])[% END %]</td>
+                <td><input type="hidden" id="managedby" name="managedby" value="[% managedby | html %]"/>[% IF ( managedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% managedby_borrowernumber | uri %]">[% managedby_surname | html %], [% managedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a> [% Branches.GetName( managedby_branchcode ) | html %] ([% managedby_description | html %])[% END %]</td>
             </tr>
             <tr>
                 <th><label for="accepteddate">Accepted on:</label> </th>
                 <td><input type="text" id="accepteddate" name="accepteddate" class="datepicker" size="10" maxlength="10" value="[% accepteddate | $KohaDates %]" />[% INCLUDE 'date-format.inc' %]</td>
-                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber | html %]">[% acceptedby_surname | html %], [% acceptedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a> [% Branches.GetName( acceptedby_branchcode ) | html %] ([% acceptedby_description | html %])[% END %]</td>
+                <td><input type="hidden" id="acceptedby" name="acceptedby" value="[% acceptedby | html %]"/>[% IF ( acceptedby_borrowernumber ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% acceptedby_borrowernumber | uri %]">[% acceptedby_surname | html %], [% acceptedby_firstname | html %] ([% suggestedby_cardnumber | html %])</a> [% Branches.GetName( acceptedby_branchcode ) | html %] ([% acceptedby_description | html %])[% END %]</td>
             </tr>
             </tbody>
         </table></li></ol>
@@ -434,7 +434,7 @@
     <ul class="ui-tabs-nav">
         [% FOREACH suggestion IN suggestions %]
                 <li>
-            <a href="#[% suggestion.suggestiontype | html %]">
+            <a href="#[% suggestion.suggestiontype | uri %]">
             [% IF ( suggestion.suggestiontypelabel ) %]
                 [% IF (suggestion.suggestiontypelabel == "Pending") %]Pending
                 [% ELSIF (suggestion.suggestiontypelabel == "Accepted") %]Accepted
@@ -483,7 +483,7 @@
                     <input type="checkbox" name="edit_field" value="[% suggestions_loo.suggestionid | html %]" />
                 </td>
                 <td>
-                    <a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid | html %]&amp;op=show" title="suggestion" >
+                    <a href="suggestion.pl?suggestionid=[% suggestions_loo.suggestionid | uri %]&amp;op=show" title="suggestion" >
                         [% suggestions_loo.title | html %][% IF ( suggestions_loo.author ) %], by [% suggestions_loo.author | html %][% END %]</a>
                     <br />
                     [% IF ( suggestions_loo.copyrightdate ) %]&copy; [% suggestions_loo.copyrightdate | html %] [% END %]
@@ -491,11 +491,11 @@
                         [% IF ( suggestions_loo.isbn ) %]; ISBN:<i>[% suggestions_loo.isbn | html %]</i> [% END %][% IF ( suggestions_loo.publishercode ) %]; Published by [% suggestions_loo.publishercode | html %] [% END %][% IF ( suggestions_loo.publicationyear ) %] in <i>[% suggestions_loo.publicationyear | html %]</i> [% END %][% IF ( suggestions_loo.place ) %] in <i>[% suggestions_loo.place | html %]</i> [% END %][% IF ( suggestions_loo.collectiontitle ) %]; [% suggestions_loo.collectiontitle | html %] [% END %][% IF ( suggestions_loo.itemtype ) %]; [% AuthorisedValues.GetByCode( 'SUGGEST_FORMAT', suggestions_loo.itemtype, 0 ) | html %] [% END %]<br />[% IF ( suggestions_loo.note ) %]<span class="note">[% suggestions_loo.note | html %]</span>[% END %]
                 </td>
                 <td>
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | html %]">[% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby | html %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby | html %])[% END %]</a>
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamesuggestedby | html %][% IF ( suggestions_loo.firstnamesuggestedby ) %], [% suggestions_loo.firstnamesuggestedby | html %][% END %] [% IF (suggestions_loo.cardnumbersuggestedby ) %]([% suggestions_loo.cardnumbersuggestedby | html %])[% END %]</a>
                     [% IF ( suggestions_loo.suggesteddate ) %] - [% suggestions_loo.suggesteddate | $KohaDates %][% END %]
                 </td>
                 <td>
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | html %]">[% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby | html %][% END %]</a>
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% suggestions_loo.suggestedby | uri %]">[% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %], [% suggestions_loo.firstnamemanagedby | html %][% END %]</a>
                     [% IF ( suggestions_loo.manageddate ) %] - [% suggestions_loo.manageddate | $KohaDates %][% END %]
                 </td>
                 <td>
@@ -578,7 +578,7 @@
 
             <span id="other_reason[% suggestion.suggestiontype | html %]">
                 <input type="text" size="31" id="select-other_reason[% suggestion.suggestiontype | html %]" name="other_reason[% suggestion.suggestiontype | html %]" placeholder="please note your reason here..." />
-                <a href="#back[% suggestion.suggestiontype | html %]">Cancel</a>
+                <a href="#back[% suggestion.suggestiontype | uri %]">Cancel</a>
             </span>
 
             <strong style="padding: 0 1em;">OR:</strong>

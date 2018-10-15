@@ -15,7 +15,7 @@
   [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a> &rsaquo;
   [% END %]
   [% IF ( else ) %]Authority MARC subfield structure for [% tagfield | html %]
-  [% ELSE %]<a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | html %]&amp;authtypecode=[% authtypecode |uri %]">Authority MARC subfield structure for [% tagfield | html %]</a> &rsaquo;
+  [% ELSE %]<a href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;tagsubfield=[% tagsubfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">Authority MARC subfield structure for [% tagfield | html %]</a> &rsaquo;
   [% END %]
   [% IF ( delete_confirm ) %]Confirm deletion of subfield [% tagsubfield | html %]?[% END %]
   [% IF ( delete_confirmed ) %]Data deleted[% END %]
@@ -45,9 +45,9 @@
             <ul>
                 [% FOREACH loo IN loop %]
                     [% IF ( loo.new_subfield ) %]
-                        <li><a href="#sub[% loo.tagsubfield | html %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
+                        <li><a href="#sub[% loo.tagsubfield | uri %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
                     [% ELSE %]
-                        <li><a href="#sub[% loo.tagsubfield | html %]field" title="[% loo.liblibrarian | html_entity %]">
+                        <li><a href="#sub[% loo.tagsubfield | uri %]field" title="[% loo.liblibrarian | html_entity %]">
                             [% loo.tagsubfield | html %]
                     </a></li>
                     [% END %]
@@ -301,7 +301,7 @@
                 [% IF ( loo.value_builder ) %] | <strong>Plugin:</strong>[% loo.value_builder | html %],[% END %]
             [% END %]
         </td>
-        <td><a href="[% loo.delete | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a></td>
+        <td><a href="[% loo.delete | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
     [% END %]
 </table>

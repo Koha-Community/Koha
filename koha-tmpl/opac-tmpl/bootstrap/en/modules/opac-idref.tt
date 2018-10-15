@@ -37,8 +37,8 @@
                 [% FOREACH doc IN role.docs %]
                   <tr>
                     <td>[% doc.citation | html %]</td>
-                    <td><a href="/cgi-bin/koha/opac-search.pl?q=ident:[% doc.ppn | html %]" target="_blank">Koha</a></td>
-                    <td><a href="http://www.sudoc.fr/[% doc.ppn | html %]" target="_blank" rel="noreferrer">Sudoc</a></td>
+                    <td><a href="/cgi-bin/koha/opac-search.pl?q=ident:[% doc.ppn | uri %]" target="_blank">Koha</a></td>
+                    <td><a href="http://www.sudoc.fr/[% doc.ppn | uri %]" target="_blank" rel="noreferrer">Sudoc</a></td>
                   </tr>
                 [% END %]
               </tbody>

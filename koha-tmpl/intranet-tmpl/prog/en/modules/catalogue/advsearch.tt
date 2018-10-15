@@ -38,7 +38,7 @@
         </div>
         [% END %]
         <div class="btn-group">
-            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | html %]" class="btn btn-sm btn-link"><i class="fa fa-trash"></i> Clear fields</a>
+            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-sm btn-link"><i class="fa fa-trash"></i> Clear fields</a>
         </div>
     </fieldset>
 </div>
@@ -103,7 +103,7 @@
       <ul>
       [% FOREACH advsearchloo IN advancedsearchesloop %]
         <li id="advsearch-tab-[% advsearchloo.advanced_search_type | html %]">
-           <a href="#advsearch-[% advsearchloo.advanced_search_type | html %]">
+           <a href="#advsearch-[% advsearchloo.advanced_search_type | uri %]">
            [% IF ( advsearchloo.advanced_search_type == 'itemtypes' ) %]Item type
            [% ELSIF ( advsearchloo.advanced_search_type == 'ccode' ) %]Collection
            [% ELSIF ( advsearchloo.advanced_search_type == 'loc' ) %]Shelving location

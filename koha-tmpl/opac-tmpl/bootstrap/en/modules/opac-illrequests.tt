@@ -62,7 +62,7 @@
                             <p>
                                 [% Koha.Preference('ILLModuleCopyrightClearance') | $raw %]
                             </p>
-                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend | html %]"
+                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend | uri %]"
                                class="btn btn-sm btn-default"><i class="fa fa-check"></i> Yes</a>
                             <a href="/cgi-bin/koha/opac-illrequests.pl"
                                class="btn btn-sm btn-default"><i class="fa fa-times"></i> No</a>
@@ -99,7 +99,7 @@
                                 </button>
                                 <ul id="backend-dropdown-options" class="dropdown-menu nojs" aria-labelledby="ill-backend-dropdown">
                                     [% FOREACH backend IN backends %]
-                                        <li><a href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backend | html %]">[% backend | html %]</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-illrequests.pl?method=create&amp;backend=[% backend | uri %]">[% backend | html %]</a></li>
                                     [% END %]
                                 </ul>
                         [% ELSE %]
@@ -140,7 +140,7 @@
                                     <td><span title="[% request.placed | html %]">[% request.placed | $KohaDates %]</span></td>
                                     <td><span title="[% request.updated | html %]">[% request.updated | $KohaDates %]</span></td>
                                     <td>
-                                        <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id | html %]" class="btn btn-default btn-small pull-right">View</a>
+                                        <a href="/cgi-bin/koha/opac-illrequests.pl?method=view&amp;illrequest_id=[% request.id | uri %]" class="btn btn-default btn-small pull-right">View</a>
                                     </td>
                                 </tr>
                             [% END %]
@@ -165,7 +165,7 @@
                                     [% IF request.biblio_id %]
                                         <li>
                                             <label for="biblio">Requested item:</label>
-                                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% request.biblio_id | html %]">Click here to view</a>
+                                            <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% request.biblio_id | uri %]">Click here to view</a>
                                         </li>
                                     [% END %]
                                     <li>

@@ -38,14 +38,14 @@
                     [% IF item.is_overdue %]</span>[% END %]
                   </td>
                   <td>
-                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber | html %]">[% item.firstname | html %] [% item.surname | html %]</a>
+                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% item.borrowernumber | uri %]">[% item.firstname | html %] [% item.surname | html %]</a>
                   </td>
                   <td>
-                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | html %]"><strong>[% item.title | html %]</strong></a>[% IF ( item.author ) %], by [% item.author | html %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes | html %]</span>[% END %]
+                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item.biblionumber | uri %]"><strong>[% item.title | html %]</strong></a>[% IF ( item.author ) %], by [% item.author | html %][% END %][% IF ( item.itemnotes ) %]- <span class="circ-hlt">[% item.itemnotes | html %]</span>[% END %]
                   </td>
                   <td>[% item.itemcallnumber | html %]</td>
                   <td>
-                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]#item[% item.itemnumber | html %]">[% item.barcode | html %]</a>
+                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a>
                   </td>
                   <td>[% Branches.GetName(item.branchcode) | html %]</td>
                   <td>[% AuthorisedValues.GetByCode( 'LOC', item.location ) | html %]</td>

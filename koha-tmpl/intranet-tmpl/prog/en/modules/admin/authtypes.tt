@@ -155,9 +155,9 @@
                     <a class="btn btn-default btn-xs dropdown-toggle" id="authtypeactions[% authority_type.authtypecode | html %]" role="button" data-toggle="dropdown" href="#">
                       Actions <b class="caret"></b></a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtypeactions[% authority_type.authtypecode | html %]">
-                      <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode | html %]" class="button parameters"><i class="fa fa-eye"></i> MARC structure</a></li>
-                      <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                      [% IF authority_type.authtypecode %]<li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode | html %]"><i class="fa fa-trash"></i> Delete</a></li>[% END %]
+                      <li><a href="auth_tag_structure.pl?authtypecode=[% authority_type.authtypecode | uri %]" class="button parameters"><i class="fa fa-eye"></i> MARC structure</a></li>
+                      <li><a href="/cgi-bin/koha/admin/authtypes.pl?op=add_form&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                      [% IF authority_type.authtypecode %]<li><a href="/cgi-bin/koha/admin/authtypes.pl?op=delete_confirm&amp;authtypecode=[% authority_type.authtypecode | uri %]"><i class="fa fa-trash"></i> Delete</a></li>[% END %]
                     </ul>
                   </div>
                 </td>

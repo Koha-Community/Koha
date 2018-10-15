@@ -92,7 +92,7 @@
                       [% END %]
                   </ul>
             </td>
-            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc | html %] --><a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | html %]&amp;booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc | html %]">[% END %]<b>[% reserveloo.ratiocalc | html %] to order</b>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]</a>[% END %]
+            <td>[% IF ( reserveloo.thisratio_atleast1 ) %]<p>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]<!-- [% reserveloo.ratiocalc | uri %] --><a href="/cgi-bin/koha/acqui/neworderempty.pl?biblionumber=[% reserveloo.biblionumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;rr_quantity_to_order=[% reserveloo.ratiocalc | uri %]">[% END %]<b>[% reserveloo.ratiocalc | html %] to order</b>[% IF ( CAN_user_acquisition && basketno && booksellerid ) %]</a>[% END %]
             [% IF ( reserveloo.pendingorders ) %]<br><b>[% reserveloo.pendingorders | html %] pending</b>[% END %]</p>[% END %]</td>
         </tr>
       [% END %]

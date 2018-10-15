@@ -61,7 +61,7 @@
   <div id="rulestabs" class="toptabs">
     <ul class="ui-tabs-nav">
       [% FOR tab IN tabs %]
-          <li><a href="#[% tab.id | html %]" class="tab [% tab.id | html %]" data-number="[% tab.number | html %]"></a></li>
+          <li><a href="#[% tab.id | uri %]" class="tab [% tab.id | html %]" data-number="[% tab.number | html %]"></a></li>
       [% END %]
     </ul>
     [% FOR tab IN tabs %]

@@ -21,28 +21,28 @@
     [% IF ( add_form ) %]
         [% IF ( use_heading_flags_p ) %]
             [% IF ( heading_modify_tag_p ) %]
-                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | html %]">[% authtypecode | html %] Framework</a>
+                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
                 [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
                 [% END %] &rsaquo; Modify tag
             [% END %]
             [% IF ( heading_add_tag_p ) %]
-                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | html %]">[% authtypecode | html %] framework</a>
+                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
                 [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
                 [% END %] &rsaquo; New tag
             [% END %]
         [% ELSE %]
-            [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | html %]">[% authtypecode | html %] Framework</a>
+            [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] Framework</a>
             [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
             [% END %] &rsaquo; [% action | html %]
         [% END %]
     [% ELSE %]
         [% IF ( delete_confirm ) %]
-            [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | html %]">[% authtypecode | html %] framework</a>
+            [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
             [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
             [% END %] &rsaquo; Confirm deletion
         [% ELSE %]
             [% IF ( delete_confirmed ) %]
-                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | html %]">[% authtypecode | html %] framework</a>
+                [% IF ( authtypecode ) %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]">[% authtypecode | html %] framework</a>
                 [% ELSE %]<a href="/cgi-bin/koha/admin/auth_tag_structure.pl">Default framework</a>
                 [% END %] &rsaquo; Data deleted
             [% ELSE %]
@@ -114,7 +114,7 @@
         </fieldset>
         <fieldset class="action">
             <input type="submit" value="Submit" />
-            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | html %]" class="cancel">Cancel</a>
+            <a href="/cgi-bin/koha/admin/auth_tag_structure.pl?authtypecode=[% authtypecode | uri %]" class="cancel">Cancel</a>
         </fieldset>
     </form>
 [% END %]
@@ -213,9 +213,9 @@
                     <a class="btn btn-default btn-xs dropdown-toggle" id="authtagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
                         Actions <b class="caret"></b></a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="authtagactions[% loo.tagfield | html %]">
-                        <li><a href="[% loo.subfield_link | html %]"><i class="fa fa-eye"></i> Subfields</a></li>
-                        <li><a href="[% loo.edit | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                        <li><a href="[% loo.delete | html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li><a href="[% loo.subfield_link | uri %]"><i class="fa fa-eye"></i> Subfields</a></li>
+                        <li><a href="[% loo.edit | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="[% loo.delete | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>

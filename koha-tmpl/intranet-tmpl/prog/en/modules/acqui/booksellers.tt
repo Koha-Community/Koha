@@ -45,9 +45,9 @@
         </p>
     [% END %]
     [% IF ( allbaskets ) %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | html %]&amp;booksellerid=[% booksellerid | html %]">Show active baskets only</a>
+        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | uri %]&amp;booksellerid=[% booksellerid | uri %]">Show active baskets only</a>
     [% ELSE %]
-        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | html %]&amp;booksellerid=[% booksellerid | html %]&amp;allbaskets=1">Show all baskets</a>
+        <a href="/cgi-bin/koha/acqui/booksellers.pl?supplier=[% supplier | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;allbaskets=1">Show all baskets</a>
     [% END %]
     [% UNLESS booksellerid %]
         | <a href="#" id="show_active_vendors">Show active vendors only</a><a href="#" id="show_all_vendors">Show all vendors</a>
@@ -132,7 +132,7 @@
                                             [% IF basketgroup.closed %]
                                               [% basketgroup.name | html %] (closed)
                                             [% ELSE %]
-                                              <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | html %]&amp;basketgroupid=[% basketgroup.id | html %]">[% basketgroup.name | html %]</a>
+                                              <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% basket.booksellerid | uri %]&amp;basketgroupid=[% basketgroup.id | uri %]">[% basketgroup.name | html %]</a>
                                             [% END %]
                                           [% END %]
                                         </td>

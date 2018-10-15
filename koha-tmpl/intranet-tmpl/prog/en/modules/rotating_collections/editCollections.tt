@@ -19,7 +19,7 @@
     [%- IF ( action == "new" ) %]
         Add a new collection
     [% ELSE %]
-        <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | html %]">Collection <i>[% editColTitle | html %]</i></a> &rsaquo; Edit
+        <a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% editColId | uri %]">Collection <i>[% editColTitle | html %]</i></a> &rsaquo; Edit
     [% END -%]
 </div>
 

@@ -46,7 +46,7 @@ div#result { margin-top: 1em; }
 [% ELSIF ( result ) %]
 
         <script type="text/javascript">window.location.href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | html %]"</script>
-        <p>The merging was successful. <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | html %]">Click here to see the merged record.</a></p>
+        <p>The merging was successful. <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | uri %]">Click here to see the merged record.</a></p>
 
 [% ELSIF ( choosereference ) %]
 
@@ -55,8 +55,8 @@ div#result { margin-top: 1em; }
     <fieldset class="rows">
     <legend>Merge reference</legend>
     <ol>
-    <li class="radio"><input type="radio" value="[% recordid1 | html %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 | html %]')" /><label for="mergereference1">[% title1 | html %] [% FOREACH subtitl1 IN subtitle1 %] [% subtitl1.subfield | html %][% END %] (<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | html %]" title="MARC" class="preview-merge-reference" target="_blank">[% recordid1 | html %][% IF frameworklabel1 %] &mdash; [% frameworklabel1 | html %][% END %]</a>)</label></li>
-    <li class="radio"><input type="radio" value="[% recordid2 | html %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 | html %]')" /><label for="mergereference2">[% title2 | html %] [% FOREACH subtitl2 IN subtitle2 %] [% subtitl2.subfield | html %][% END %] (<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid2 | html %]" title="MARC" class="preview-merge-reference" target="_blank">[% recordid2 | html %][% IF frameworklabel2 %] &mdash; [% frameworklabel2 | html %][% END %]</a>)</label></li>
+    <li class="radio"><input type="radio" value="[% recordid1 | uri %]" checked="checked" id="mergereference1" name="mergereference" onclick="changeFramework('[% frameworkcode1 | html %]')" /><label for="mergereference1">[% title1 | html %] [% FOREACH subtitl1 IN subtitle1 %] [% subtitl1.subfield | html %][% END %] (<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | uri %]" title="MARC" class="preview-merge-reference" target="_blank">[% recordid1 | html %][% IF frameworklabel1 %] &mdash; [% frameworklabel1 | html %][% END %]</a>)</label></li>
+    <li class="radio"><input type="radio" value="[% recordid2 | uri %]" id="mergereference2" name="mergereference" onclick="changeFramework('[% frameworkcode2 | html %]')" /><label for="mergereference2">[% title2 | html %] [% FOREACH subtitl2 IN subtitle2 %] [% subtitl2.subfield | html %][% END %] (<a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid2 | uri %]" title="MARC" class="preview-merge-reference" target="_blank">[% recordid2 | html %][% IF frameworklabel2 %] &mdash; [% frameworklabel2 | html %][% END %]</a>)</label></li>
 
     [% IF frameworkselect %]
           <li><label for="frameworkcode">Using framework:</label>

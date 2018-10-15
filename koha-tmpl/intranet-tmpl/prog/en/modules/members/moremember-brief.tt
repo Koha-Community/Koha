@@ -35,8 +35,8 @@
             [% IF ( phonepro ) %]<li><span class="label">Secondary phone: </span>[% phonepro | html %]</li>[% END %]
             [% IF ( mobile ) %]<li><span class="label">Other phone: </span>[% mobile | html %]</li>[% END %]
             [% IF ( fax ) %]<li><span class="label">Fax: </span>[% fax | html %]</li>[% END %]
-            [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email | html %]">[% email | html %]</a></li>[% END %]
-            [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro | html %]">[% emailpro | html %]</a></li>[% END %]
+            [% IF ( email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email | uri %]">[% email | html %]</a></li>[% END %]
+            [% IF ( emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro | uri %]">[% emailpro | html %]</a></li>[% END %]
             [% UNLESS ( I ) %]
                 [% IF ( inititals ) %]<li><span class="label">Initials: </span>[% initials | html %]</li>[% END %]
                 [% IF ( dateofbirth ) %]<li><span class="label">Date of birth:</span>[% dateofbirth | $KohaDates %]</li>[% END %]
@@ -44,11 +44,11 @@
             [% END %]
     [% IF ( isguarantee ) %]
         [% IF ( guaranteeloop ) %]
-            <li><span class="label">Guarantees:</span><ul>[% FOREACH guaranteeloo IN guaranteeloop %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guaranteeloo.borrowernumber | html %]">[% guaranteeloo.name | html %]  </a></li>[% END %]</ul></li>
+            <li><span class="label">Guarantees:</span><ul>[% FOREACH guaranteeloo IN guaranteeloop %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guaranteeloo.borrowernumber | uri %]">[% guaranteeloo.name | html %]  </a></li>[% END %]</ul></li>
         [% END %]
     [% ELSE %]
         [% IF ( guarantor.borrowernumber ) %]
-            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | html %]">[% guarantor.surname | html %], [% guarantor.firstname | html %]</a></li>
+            <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]">[% guarantor.surname | html %], [% guarantor.firstname | html %]</a></li>
         [% END %]
     [% END %]
 	</ol>

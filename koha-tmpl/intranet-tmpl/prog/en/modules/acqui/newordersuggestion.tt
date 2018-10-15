@@ -55,9 +55,9 @@
                 </td>
                 <td class="actions">
                     [% IF ( suggestions_loo.biblionumber ) %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;suggestionid=[% suggestions_loo.suggestionid | html %]&amp;biblio=[% suggestions_loo.biblionumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Place order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]&amp;biblio=[% suggestions_loo.biblionumber | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
                     [% ELSE %]
-                        <a href="neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;suggestionid=[% suggestions_loo.suggestionid | html %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Place order</a>
+                        <a href="neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;suggestionid=[% suggestions_loo.suggestionid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-plus"></i> Order</a>
                     [% END %]
                 </td>
             </tr>

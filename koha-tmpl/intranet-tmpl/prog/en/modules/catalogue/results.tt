@@ -44,7 +44,7 @@
             <ul style="list-style: none;">
             [% FOREACH SPELL_SUGGES IN SPELL_SUGGEST %]
             <li>
-                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% SPELL_SUGGES.spsuggestion | html %]">[% SPELL_SUGGES.spsuggestion | html %]</a>
+                <a href="/cgi-bin/koha/catalogue/search.pl?q=[% SPELL_SUGGES.spsuggestion | uri %]">[% SPELL_SUGGES.spsuggestion | html %]</a>
             </li>
             [% END %]
             </ul>
@@ -326,7 +326,7 @@
                 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                     <tr>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% scan_index_to_use | html %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title | html %]&quot;">[% SEARCH_RESULT.title | html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=[% scan_index_to_use | uri %]&amp;q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title | uri %]&quot;">[% SEARCH_RESULT.title | html %]</a>
                         </td>
                         <td>
                             [% SEARCH_RESULT.author | html %]
@@ -443,7 +443,7 @@
                             [% ELSE %]
                                 [% IF CAN_user_reserveforothers_place_holds %]
                                     <a id="reserve_[% SEARCH_RESULT.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])</a>
-                                    [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]&amp;findborrower=[% holdfor_cardnumber | html %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></span>[% END %]
+                                    [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]&amp;findborrower=[% holdfor_cardnumber | uri %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></span>[% END %]
                                 [% ELSE %]
                                     Holds ([% Biblio.HoldsCount( SEARCH_RESULT.biblionumber ) | html %])
                                 [% END %]
@@ -462,15 +462,15 @@
                           [% END %]
 
                           [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                          | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Edit record</a>
+                          | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">Edit record</a>
                           [% END %]
                           [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                          | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Edit items</a>
+                          | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">Edit items</a>
                           [% END %]
 
                           [% IF ( OPACBaseURL ) %]
                               <span class="view-in-opac">
-                                | <a href="[% Koha.Preference('OPACBaseURL') | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]" target="_blank">OPAC view</a>
+                                | <a href="[% Koha.Preference('OPACBaseURL') | uri %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" target="_blank">OPAC view</a>
                               </span>
                           [% END %]
 
@@ -594,7 +594,7 @@
     [% IF ( outer_sup_results_loo.inner_sup_results_loop ) %]
         [% outer_sup_results_loo.servername | html %]
         [% FOREACH inner_sup_results_loo IN outer_sup_results_loo.inner_sup_results_loop %]
-        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi | html %][% inner_sup_results_loo.limit_cgi | html %][% inner_sup_results_loo.sort_by | html %][% inner_sup_results_loo.link | html %]">[% inner_sup_results_loo.title | html %]</a></div>
+        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi | uri %][% inner_sup_results_loo.limit_cgi | uri %][% inner_sup_results_loo.sort_by | uri %][% inner_sup_results_loo.link | uri %]">[% inner_sup_results_loo.title | html %]</a></div>
         [% END %]
     [% END %]
 <!-- </div> -->

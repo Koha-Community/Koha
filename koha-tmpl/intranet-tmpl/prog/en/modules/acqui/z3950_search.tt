@@ -116,7 +116,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
         [% IF ( breeding_loo.breedingid ) %]
 
         <tr>
-            <td>[% breeding_loo.server | html %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | html %]" class="previewData">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" class="previewData">Preview card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri  %]&amp;breedingid=[% breeding_loo.breedingid | html %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Place order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
+            <td>[% breeding_loo.server | html %] <div class="linktools"><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" class="previewData">Preview MARC</a> <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" class="previewData">Preview card</a> <a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri  %]&amp;breedingid=[% breeding_loo.breedingid | html %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order</a> <a href="#" id="closemenu" title="Close this menu"> X </a></div></td>
             <td>[% breeding_loo.title | html %]</td>
             <td>[% breeding_loo.author | html %]</td>
             <td>[% breeding_loo.isbn | html %]</td>
@@ -133,8 +133,8 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
                </dl>
             </td>
             [% END %]
-            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | html %]" title="MARC" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" title="Card" class="previewData">Card</a></td>
-            <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | html %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Place order</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData">MARC</a> | <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" title="Card" class="previewData">Card</a></td>
+            <td><a href="/cgi-bin/koha/acqui/neworderempty.pl?frameworkcode=[% frameworkcode | uri %]&amp;breedingid=[% breeding_loo.breedingid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Order</a></td>
 
         </tr>
         [% END %]

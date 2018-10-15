@@ -48,7 +48,7 @@
                             [% FOREACH routinglist IN routinglists %]
                                 [% IF ( titles_loop.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
                                     <td>
-                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% routinglist.subscription.biblio.biblionumber | html %]">
+                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% routinglist.subscription.biblio.biblionumber | uri %]">
                                             [% routinglist.subscription.biblio.title | html %]
                                         </a>
                                     </td>

@@ -393,7 +393,7 @@
                             </fieldset>
                             <fieldset class="action">
                                 <input type="submit" class="btn btn-default" value="Send email"/>
-                                <span><a href="[% ill_url | html %]" title="Return to request details">Cancel</a></span>
+                                <span><a href="[% ill_url | uri %]" title="Return to request details">Cancel</a></span>
                             </fieldset>
                         </form>
                     [% ELSE %]
@@ -401,7 +401,7 @@
                             <legend>Interlibrary loan request details</legend>
                             <p>No partners have been defined yet. Please create appropriate patron records (by default ILLLIBS category).</p>
                             <p>Be sure to provide email addresses for these patrons.</p>
-                            <p><span><a href="[% ill_url | html %]" title="Return to request details">Cancel</a></span></p>
+                            <p><span><a href="[% ill_url | uri %]" title="Return to request details">Cancel</a></span></p>
                         </fieldset>
                     [% END %]
                 <!-- generic_confirm ends here -->
@@ -518,7 +518,7 @@
                                 <div class="borrowernumber">
                                     <span class="label borrowernumber">Patron:</span>
                                     [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
-                                    <a href="[% borrowerlink | html %]" title="View borrower details">
+                                    <a href="[% borrowerlink | uri %]" title="View borrower details">
                                     [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
                                     </a>
                                 </div>
@@ -526,7 +526,7 @@
                                 <div class="biblio_id">
                                     <span class="label biblio_id">Bibliographic record ID:</span>
                                     [% IF request.biblio_id %]
-                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | html %]">[% request.biblio_id | html %]</a>
+                                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% request.biblio_id | uri %]">[% request.biblio_id | html %]</a>
                                     [% ELSE %]
                                         <span>N/A</span>
                                     [% END %]

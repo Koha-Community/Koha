@@ -70,14 +70,14 @@
                         <tbody>
                             [% FOREACH c IN courses %]
                                 <tr>
-                                    <td><a href="course-details.pl?course_id=[% c.course_id | html %]">[% c.course_name | html %]</a></td>
+                                    <td><a href="course-details.pl?course_id=[% c.course_id | uri %]">[% c.course_name | html %]</a></td>
                                     <td>[% AuthorisedValues.GetByCode( 'DEPARTMENT', c.department ) | html %]</td>
                                     <td>[% c.course_number | html %]</td>
                                     <td>[% c.section | html %]</td>
                                     <td>[% AuthorisedValues.GetByCode( 'TERM' c.term ) | html %]</td>
                                     <td>
                                         [% FOREACH i IN c.instructors %]
-                                            <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | html %]">[% i.firstname | html %] [% i.surname | html %]</a></div>
+                                            <div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a></div>
                                         [% END %]
                                     </td>
                                     <td>[% c.staff_note | html %]</td>

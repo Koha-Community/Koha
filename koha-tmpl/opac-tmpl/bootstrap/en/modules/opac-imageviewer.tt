@@ -94,7 +94,7 @@
                                 <div id="thumbnails">
                                     [% FOREACH img IN images %]
                                         [% IF img %]
-                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% img | html %]" onclick="showCover([% img | html %]); return false;">
+                                            <a href="/cgi-bin/koha/opac-imageviewer.pl?biblionumber=[% biblionumber | url %]&amp;imagenumber=[% img | uri %]" onclick="showCover([% img | html %]); return false;">
                                             [% IF ( imagenumber == img ) %]
                                                 <img class="thumbnail selected" id="[% img | html %]" src="/cgi-bin/koha/opac-image.pl?imagenumber=[% img | html %]&amp;thumbnail=1" alt="Thumbnail"/>
                                             [% ELSE %]

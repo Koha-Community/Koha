@@ -40,19 +40,19 @@
 [% FOREACH order IN ordered %]
     <tr>
 	<td class="cell">
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | html %]">
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">
 	    [% order.title | html %]
             </a>
 	</td>
 	<td class="cell">
         [% IF ( CAN_user_acquisition_order_manage ) %]
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber | html %]&amp;booksellerid=[% order.booksellerid | html %]&amp;basketno=[% order.basketno | html %]">[% order.ordernumber | html %]</a>
+            <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber | uri %]&amp;booksellerid=[% order.booksellerid | uri %]&amp;basketno=[% order.basketno | uri %]">[% order.ordernumber | html %]</a>
         [% ELSE %]
             [% order.ordernumber | html %]
         [% END %]
 	</td>
 	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | html %]">[% order.vendorname | html %]</a>
+	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
 	</td>
 	<td class="cell">
         [% ItemTypes.GetDescription( order.itype ) | html %]

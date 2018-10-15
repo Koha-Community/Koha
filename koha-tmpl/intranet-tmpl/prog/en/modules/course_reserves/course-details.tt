@@ -45,7 +45,7 @@
                 <li><span class="label">Department</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) | html %]</li>
                 <li><span class="label">Course number</span> [% course.course_number | html %]</li>
                 <li><span class="label">Section</span> [% course.section | html %]</li>
-                <li><span class="label">Instructors</span> [% FOREACH i IN course.instructors %]<div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | html %]">[% i.firstname | html %] [% i.surname | html %]</a></div>[% END %]</li>
+                <li><span class="label">Instructors</span> [% FOREACH i IN course.instructors %]<div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a></div>[% END %]</li>
                 <li><span class="label">Staff note</span> [% course.staff_note | html %]</li>
                 <li><span class="label">Public note</span> [% course.public_note | html %]</li>
                 <li><span class="label">Student count</span> [% course.students_count | html %]</li>
@@ -79,9 +79,9 @@
                 <tbody>
                     [% FOREACH cr IN course_reserves %]
                         <tr>
-                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.biblio.biblionumber | html %]">[% cr.biblio.title | html %]</a></td>
+                            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% cr.biblio.title | html %]</a></td>
                             <td>[% cr.biblio.author | html %]</td>
-                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber | html %]&amp;biblionumber=[% cr.biblio.biblionumber | html %]&amp;bi=[% cr.biblioitem.biblioitemnumber | html %]">[% cr.item.barcode | html %]</a></td>
+                            <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% cr.item.itemnumber | uri %]&amp;biblionumber=[% cr.biblio.biblionumber | uri %]&amp;bi=[% cr.biblioitem.biblioitemnumber | uri %]">[% cr.item.barcode | html %]</a></td>
                             <td>[% cr.item.itemcallnumber | html %]</td>
                             [% IF item_level_itypes %]
                             <td>
@@ -156,9 +156,9 @@
 
                             <td>
                                 [% IF (cr.item.uri) %]
-                                    <a href="[% cr.item.uri | html %]">Item URI</a>
+                                    <a href="[% cr.item.uri | uri %]">Item URI</a>
                                 [% ELSIF (cr.biblioitem.url) %]
-                                    <a href="[% cr.biblioitem.url | html %]">Record URL</a>
+                                    <a href="[% cr.biblioitem.url | uri %]">Record URL</a>
                                 [% END %]
                             </td>
 
@@ -166,7 +166,7 @@
                                 [% FOREACH c IN cr.courses %]
                                     [% UNLESS cr.course_id == c.course_id %]
                                         <p>
-                                            <a href="course-details.pl?course_id=[% c.course_id | html %]">
+                                            <a href="course-details.pl?course_id=[% c.course_id | uri %]">
                                                 [% c.course_name | html %]
                                                 [% IF c.section %] [% c.section | html %] [% END %]
                                                 [% IF c.term %] [% AuthorisedValues.GetByCode( 'TERM', c.term ) | html %] [% END %]

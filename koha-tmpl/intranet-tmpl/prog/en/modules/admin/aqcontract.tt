@@ -24,25 +24,25 @@
     &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a>
     &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a>
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a>
     &rsaquo;
     [% IF ( add_form ) %]
-        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
         &rsaquo;
         [% IF ( contractnumber ) %]Modify contract '[% contractname | html %]'
         [% ELSE %]New contract
         [% END %]
     [% END %]
     [% IF ( add_validate ) %]
-        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
         &rsaquo; Data recorded
     [% END %]
     [% IF ( delete_confirm ) %]
-        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]">Contracts</a>
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a>
         &rsaquo; Confirm deletion of contract [% contractnumber | html %]
     [% END %]
     [% IF ( delete_confirmed ) %]
-        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | html %]">Contracts</a> &rsaquo; Contract deleted
+        <a href="/cgi-bin/koha/admin/aqcontract.pl?booksellerid=[% booksellerid | uri %]">Contracts</a> &rsaquo; Contract deleted
     [% END %]
     [% IF ( else ) %]Contracts[% END %]
 </div>
@@ -151,14 +151,14 @@
                     [% FOREACH loo IN loop %]
                         <tr>
                         <td>
-                            <a href="[% loo.script_name | html %]?op=add_form&amp;booksellerid=[% loo.booksellerid | html %]&amp;contractnumber=[% loo.contractnumber | html %]">[% loo.contractname | html %]</a>
+                            <a href="[% loo.script_name | uri %]?op=add_form&amp;booksellerid=[% loo.booksellerid | uri %]&amp;contractnumber=[% loo.contractnumber | uri %]">[% loo.contractname | html %]</a>
                         </td>
                         <td>[% loo.contractdescription | html %]</td>
                         <td>[% loo.contractstartdate | html %]</td>
                         <td>[% loo.contractenddate | html %]</td>
                         <td class="actions">
-                            <a href="[% loo.script_name | html %]?op=add_form&amp;contractnumber=[% loo.contractnumber | html %]&amp;booksellerid=[% loo.booksellerid | html %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
-                            <a href="[% loo.script_name | html %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber | html %]&amp;booksellerid=[% loo.booksellerid | html %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
+                            <a href="[% loo.script_name | uri %]?op=add_form&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
+                            <a href="[% loo.script_name | uri %]?op=delete_confirm&amp;contractnumber=[% loo.contractnumber | uri %]&amp;booksellerid=[% loo.booksellerid | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a>
                         </td>
                         </tr>
                     [% END %]
@@ -167,7 +167,7 @@
                     <div class="dialog message">
                         There are no contracts with this vendor.
                         [% IF active %]
-                            <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid | html %]">Add a contract</a>.
+                            <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;booksellerid=[% booksellerid | uri %]">Add a contract</a>.
                         [% END %]
                     </div>
                 [% END %]

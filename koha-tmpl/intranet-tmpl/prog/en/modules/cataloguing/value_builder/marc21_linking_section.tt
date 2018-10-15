@@ -84,9 +84,9 @@
 
                                  <td>
                       [% IF ( resul.biblionumber ) %]
-                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;biblionumber=[% resul.biblionumber | html %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
+                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;biblionumber=[% resul.biblionumber | uri %]&amp;type=intranet&amp;op=fillinput')">Choose</a>
                       [% ELSE %]
-                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | html %]&amp;type=intranet&amp;op=fillinput')">Clear field</a>
+                                             <a href="javascript:jumpfull('/cgi-bin/koha/cataloguing/plugin_launcher.pl?plugin_name=marc21_linking_section.pl&amp;index=[% index | uri %]&amp;type=intranet&amp;op=fillinput')">Clear field</a>
                       [% END %]
                                    </td>
                           </tr>

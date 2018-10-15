@@ -41,8 +41,8 @@
 		<tbody>
 			<tr>
 				[% FOREACH data IN datas %]
-                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% data.aqbooksellerid | html %]">[% data.name | html %]</a></td>
-                    <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% data.subscriptionid | html %]">[% data.title | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% data.aqbooksellerid | uri %]">[% data.name | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% data.subscriptionid | uri %]">[% data.title | html %]</a></td>
 					<td>[% data.subscriptionid | html %]</td>
                     <td>[% Branches.GetName( data.branchcode ) | html %]</td>
 					<td>[% data.callnumber | html %]</td>

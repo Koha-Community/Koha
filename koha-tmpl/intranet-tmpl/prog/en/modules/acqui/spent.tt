@@ -42,7 +42,7 @@
     [% FOREACH order IN spent %]
         <tr>
             <td class="cell">
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | html %]">
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">
                     [% order.title | html %]
                 </a>
             </td>
@@ -50,10 +50,10 @@
                 [% order.ordernumber | html %]
             </td>
             <td class="cell">
-                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | html %]">[% order.vendorname | html %]</a>
+                <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
             </td>
             <td class="cell">
-                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | html %]">[% order.invoicenumber | html %]</a>
+                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]">[% order.invoicenumber | html %]</a>
             </td>
             <td class="cell">
                 [% ItemTypes.GetDescription( order.itype ) | html %]

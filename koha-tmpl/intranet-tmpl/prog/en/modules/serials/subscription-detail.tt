@@ -79,8 +79,8 @@
 		<ol>
 		<li><span class="label">Subscription ID: </span>[% subscriptionid | html %]</li>
         <li><span class="label">Librarian identity:</span> [% librarian | html %]</li>
-        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | html %]">[% aqbooksellername | html %]</a></li>
-        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | html %].pl?biblionumber=[% bibnum | html %]">[% bibliotitle | html %]</a> <i>([% bibnum | html %])</i></li>
+        <li><span class="label">Vendor:</span> <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% aqbooksellerid | uri %]">[% aqbooksellername | html %]</a></li>
+        <li><span class="label">Biblio:</span>  <a href="/cgi-bin/koha/catalogue/[% default_bib_view | uri %].pl?biblionumber=[% bibnum | uri %]">[% bibliotitle | html %]</a> <i>([% bibnum | html %])</i></li>
         [% IF ( OPACBaseURL ) %]
             <li>
                 <span class="label">OPAC view:</span>
@@ -115,7 +115,7 @@
         [% IF ( letter ) %]
             <li>
                 <span class="label">Patron notification:</span> [% letter | html %]
-                (<a href="/cgi-bin/koha/serials/viewalerts.pl?subscriptionid=[% subscriptionid | html %]">subscribers</a>)
+                (<a href="/cgi-bin/koha/serials/viewalerts.pl?subscriptionid=[% subscriptionid | uri %]">subscribers</a>)
             </li>
         [% END %]
         [% IF ( hasRouting ) %]<li><span class="label">Routing:</span> yes</li>[% END %]
@@ -161,7 +161,7 @@
             <li>
               <span class="label">Manual history: </span>
                 [% IF ( manualhistory ) %]
-                    Enabled <a href="/cgi-bin/koha/serials/subscription-history.pl?subscriptionid=[% subscriptionid | html %]">Edit history</a>
+                    Enabled <a href="/cgi-bin/koha/serials/subscription-history.pl?subscriptionid=[% subscriptionid | uri %]">Edit history</a>
                 [% ELSE %]
                     Disabled
                 [% END %]
@@ -376,7 +376,7 @@
                         <td>
                         [% IF order.invoice %]
                             [% IF CAN_user_acquisition %]
-                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | html %]" title="Invoice detail page">
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
                                    [% order.invoice.invoicenumber | html %]</a>
                             [% ELSE %]
                                 [% order.invoice.invoicenumber | html %]

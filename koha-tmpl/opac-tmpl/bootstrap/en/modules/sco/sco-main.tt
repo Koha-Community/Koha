@@ -239,7 +239,7 @@
                                                 <td>[% ISSUE.issuedate | html %]</td>
                                                 <td>
                                                     [% UNLESS ( noitemlinks ) %]
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber | html %]">[% ISSUE.title | html %]</a>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber | uri %]">[% ISSUE.title | html %]</a>
                                                     [% ELSE %]
                                                         <strong>[% ISSUE.title | html %]</strong>
                                                     [% END %]

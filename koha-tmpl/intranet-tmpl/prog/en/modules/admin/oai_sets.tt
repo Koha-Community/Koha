@@ -92,9 +92,9 @@
                                 <a class="btn btn-default btn-xs dropdown-toggle" id="oaisetsactions[% set.id | html %]" role="button" data-toggle="dropdown" href="#">
                                   Actions <b class="caret"></b></a>
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="oaisetsactions[% set.id | html %]">
-                                  <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
+                                  <li><a href="/cgi-bin/koha/admin/oai_sets.pl?op=mod&amp;id=[% set.id | uri %]"><i class="fa fa-fw fa-pencil"></i> Edit</a></li>
                                   <li><a class="delete_oai_set" href="/cgi-bin/koha/admin/oai_sets.pl?op=del&amp;id=[% set.id | html %]"><i class="fa fa-fw fa-trash"></i> Delete</a></li>
-                                  <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id | html %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
+                                  <li><a href="/cgi-bin/koha/admin/oai_set_mappings.pl?id=[% set.id | uri %]"><i class="fa fa-fw fa-info"></i> Define mappings</a></li>
                                 </ul>
                               </div>
                             </td>

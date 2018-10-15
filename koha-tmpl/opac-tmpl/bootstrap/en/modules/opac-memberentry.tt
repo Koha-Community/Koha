@@ -126,7 +126,7 @@
                     </fieldset>
                 [% END %]
                 [% IF ( extended_unique_id_failed_code ) %]
-                    <div class="alert" id="extended_unique_id_failed"><a href="#patron-attr-start-[% extended_unique_id_failed_code | html %]">[% extended_unique_id_failed_description _ ': ' | html %]</a> Value is already in use ([% extended_unique_id_failed_value | html %])</div>
+                    <div class="alert" id="extended_unique_id_failed"><a href="#patron-attr-start-[% extended_unique_id_failed_code | uri %]">[% extended_unique_id_failed_description _ ': ' | html %]</a> Value is already in use ([% extended_unique_id_failed_value | html %])</div>
                 [% END %]
 
                 <form method="post" action="/cgi-bin/koha/opac-memberentry.pl" id="memberentry-form" autocomplete="off">

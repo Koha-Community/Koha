@@ -390,12 +390,12 @@
                       <td>[% entry.id | html %]</td>
                       <td>[% entry.appointment_date | $KohaDates %] ([% entry.day_segment | html %])</td>
                       <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.chooser.borrowernumber | html %]">
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.chooser.borrowernumber | uri %]">
                           [% INCLUDE 'patron-title.inc' patron = entry.chooser invert_name = 0 %]
                         </a>
                       </td>
                       <td>
-                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.deliverer.borrowernumber | html %]">
+                        <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% entry.deliverer.borrowernumber | uri %]">
                           [% INCLUDE 'patron-title.inc' patron = entry.deliverer invert_name = 0 %]
                         </a>
                       </td>
@@ -408,7 +408,7 @@
                 </table>
                 [% END %]
                 <div class="action">
-                  <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% patron.borrowernumber | html %]"
+                  <a href="/cgi-bin/koha/members/housebound.pl?method=visit_update_or_create&borrowernumber=[% patron.borrowernumber | uri %]"
                     class="btn btn-default btn-sm">
                     <i class="fa fa-plus"></i> Add a new delivery
                   </a>

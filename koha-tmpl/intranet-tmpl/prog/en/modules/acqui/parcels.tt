@@ -28,7 +28,7 @@
         <p>An error has occurred. Invoice cannot be created.</p>
     </div>
 [% END %]
-<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% name | html %]</a></h1>
+<h1>Receive shipment from vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% name | html %]</a></h1>
 
     [% IF duplicate_invoices %]
     <div id="parcels_duplicate_invoice" class="dialog alert">
@@ -40,7 +40,7 @@
                     <tr>
                         <td>[% invoice.invoicenumber | html %]</td>
                         <td>[% invoice.shipmentdate | $KohaDates %]</td>
-                        <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoice.invoiceid | html %]">Receive</a></td>
+                        <td><a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoice.invoiceid | uri %]">Receive</a></td>
                     </tr>
                 [% END %]
             </tbody>
@@ -86,7 +86,7 @@
             </td>
             <td>
                 [% IF ( searchresult.code ) %]
-                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid | html %]">[% searchresult.code | html %]</a>
+                    <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% searchresult.invoiceid | uri %]">[% searchresult.code | html %]</a>
                 [% ELSE %]
                     <abbr title="not available">n/a</abbr>
                 [% END %]
@@ -108,17 +108,17 @@
 <div id="resultnumber">
 <!-- Row of numbers corresponding to search result pages -->
 [% IF ( displayprev ) %]
-    <a href="parcels.pl?booksellerid=[% booksellerid | html %]&amp;startfrom=[% prevstartfrom | html %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | html %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | html %][% END %][% IF ( code ) %]&amp;filter=[% code | html %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | html %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | html %][% END %]&amp;type=intra">&lt;&lt; Previous</a>
+    <a href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% prevstartfrom | uri %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | uri %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | uri %][% END %][% IF ( code ) %]&amp;filter=[% code | uri %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | uri %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | uri %][% END %]&amp;type=intra">&lt;&lt; Previous</a>
 [% END %]
 [% FOREACH number IN numbers %]
     [% IF ( number.highlight ) %]
     <span class="current">[% number.number | html %]</span>
     [% ELSE %]
-    <a href="parcels.pl?booksellerid=[% booksellerid | html %]&amp;startfrom=[% number.startfrom | html %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom | html %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto | html %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code | html %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby | html %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage | html %][% END %]&amp;type=intra">[% number.number | html %]</a>
+    <a href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% number.startfrom | uri %][% IF ( number.datefrom ) %]&amp;datefrom=[% number.datefrom | uri %][% END %][% IF ( number.dateto ) %]&amp;dateto=[% number.dateto | uri %][% END %][% IF ( number.code ) %]&amp;filter=[% number.code | uri %][% END %][% IF ( number.orderby ) %]&amp;orderby=[% number.orderby | uri %][% END %][% IF ( number.resultsperpage ) %]&amp;resultsperpage=[% number.resultsperpage | uri %][% END %]&amp;type=intra">[% number.number | html %]</a>
     [% END %]
 [% END %]
 [% IF ( displaynext ) %]
-    <a href="parcels.pl?booksellerid=[% booksellerid | html %]&amp;startfrom=[% nextstartfrom | html %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | html %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | html %][% END %][% IF ( code ) %]&amp;filter=[% code | html %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | html %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | html %][% END %]&amp;type=intra">Next &gt;&gt;</a>
+    <a href="parcels.pl?booksellerid=[% booksellerid | uri %]&amp;startfrom=[% nextstartfrom | uri %][% IF ( datefrom ) %]&amp;datefrom=[% datefrom | uri %][% END %][% IF ( dateto ) %]&amp;dateto=[% dateto | uri %][% END %][% IF ( code ) %]&amp;filter=[% code | uri %][% END %][% IF ( orderby ) %]&amp;orderby=[% orderby | uri %][% END %][% IF ( resultsperpage ) %]&amp;resultsperpage=[% resultsperpage | uri %][% END %]&amp;type=intra">Next &gt;&gt;</a>
 [% END %]
 </div>
 </div>
@@ -202,7 +202,7 @@
                 <option value="100">100</option>
                 </select></li>
         </ol>
-	<fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | html %]">Clear</a></fieldset>
+	<fieldset class="action"><input type="submit" class="button" value="Filter" /> <a href="/cgi-bin/koha/acqui/parcels.pl?booksellerid=[% booksellerid | uri %]">Clear</a></fieldset>
 	</fieldset>
 </form>
 </aside>

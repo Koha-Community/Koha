@@ -45,7 +45,7 @@
                         [% FOREACH sub IN subs_loop %]
                             <tr data-reneweddate="[% sub.reneweddate | html %]" >
                                 <td>[% sub.issn | html %]</td>
-                                <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid | html %]" class="button" title="subscription detail">[% IF (sub.title) %][% sub.title | html %][% ELSE %]
+                                <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% sub.subscriptionid | uri %]" class="button" title="subscription detail">[% IF (sub.title) %][% sub.title | html %][% ELSE %]
                                 ---
                             [% END %][% IF (sub.unititle) %], [% sub.unititle | html %][% END %]</a>
                                 </td>

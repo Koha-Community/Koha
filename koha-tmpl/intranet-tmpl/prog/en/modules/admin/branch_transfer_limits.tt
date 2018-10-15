@@ -34,7 +34,7 @@
 
   <div id="transferlimit_tabs" class="toptabs">
 	<ul class="ui-tabs-nav">
-      [% FOREACH codes_loo IN codes_loop %]<li><a href="#[% codes_loo.code | html %]set">[% codes_loo.code | html %]</a></li>[% END %]
+      [% FOREACH codes_loo IN codes_loop %]<li><a href="#[% codes_loo.code | uri %]set">[% codes_loo.code | html %]</a></li>[% END %]
 	</ul>
 
 		<form method="post" action="branch_transfer_limits.pl">

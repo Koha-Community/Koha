@@ -43,14 +43,14 @@
                         <strong>No results found!</strong>
                         <p>
                             [% IF ( searchdesc ) %]
-                                No results found for that in [% LibraryName | html %] catalog. <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi | html | url %]&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
+                                No results found for that in [% LibraryName | html %] catalog. <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi | html | url %]&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" border="0" class="rsssearchicon"/></a>
                             [% ELSE %]
                                 You did not specify any search criteria.
                             [% END %]
                         </p>
                         [% IF ( ReturnPath ) %]
                            <div class="returntosearch">
-                                <p><a href="[% ReturnPath | html %]">Return to the last advanced search</a></p>
+                                <p><a href="[% ReturnPath | uri %]">Return to the last advanced search</a></p>
                             </div>
                         [% END %]
                         [% IF ( OPACNoResultsFound ) %]
@@ -87,7 +87,7 @@
                                 [% END %]
                             ).
                         [% END %]
-                        <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi |html | url %]&amp;count=[% countrss | html %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
+                        <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi |html | url %]&amp;count=[% countrss | uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" class="rsssearchlink noprint"><img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this search" title="Subscribe to this search" class="rsssearchicon"/></a>
                     [% END # / IF total %]
                     </p>
                 [% END # / IF searchdesc %]
@@ -104,7 +104,7 @@
                         <ul style="list-style: none;">
                             [% FOREACH SPELL_SUGGES IN SPELL_SUGGEST %]
                             <li>
-                                <a href="/cgi-bin/koha/opac-search.pl?q=[% SPELL_SUGGES.spsuggestion | html %]">[% SPELL_SUGGES.spsuggestion | html %]</a>
+                                <a href="/cgi-bin/koha/opac-search.pl?q=[% SPELL_SUGGES.spsuggestion | uri %]">[% SPELL_SUGGES.spsuggestion | html %]</a>
                             </li>
                             [% END %]
                         </ul>
@@ -112,7 +112,7 @@
                     [% IF ( total ) %]
                         [% IF ( ReturnPath ) %]
                             <div class="returntosearch">
-                                <p><a href="[% ReturnPath | html %]">Return to the last advanced search</a></p>
+                                <p><a href="[% ReturnPath | uri %]">Return to the last advanced search</a></p>
                             </div>
                         [% END %]
                     [% END %]
@@ -283,7 +283,7 @@
                                                     [% IF ( BakerTaylorEnabled && BakerTaylorBookstoreURL ) %]
                                                         [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
-                                                            <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]">
+                                                            <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]">
                                                                 <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
                                                             </a>
                                                         [% ELSE %]
@@ -294,9 +294,9 @@
                                                     [% IF ( IDreamBooksResults && SEARCH_RESULT.normalized_isbn ) %]
                                                         <div class="idbresult" style="display: none;">
                                                             [% IF ( IDreamBooksReviews ) %]
-                                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]#idb_critic_reviews">
+                                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]#idb_critic_reviews">
                                                             [% ELSE %]
-                                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">
+                                                                <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">
                                                             [% END %]
                                                             [% SEARCH_RESULT.normalized_isbn | html %]</a>
                                                         </div>
@@ -462,7 +462,7 @@
                                                         <span class="label">Lists:</span>
                                                             <ul>
                                                                 [% FOREACH shelf IN SEARCH_RESULT.shelves %]
-                                                                    <li><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]">[% shelf.shelfname | html %]</a></li>
+                                                                    <li><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]">[% shelf.shelfname | html %]</a></li>
                                                                     [%~ UNLESS loop.last %], [% ELSE %].[% END ~%]
                                                                 [% END %]
                                                             </ul>

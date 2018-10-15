@@ -30,7 +30,7 @@
       [% END %]
       <h1>Invoice: [% invoicenumber | html %]</h1>
 
-      <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% suppliername | html %]</a></p>
+      <p>Vendor: <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% suppliername | html %]</a></p>
         <form action="/cgi-bin/koha/acqui/invoice.pl" method="post" class="validated">
         <fieldset class="rows">
             <ol>
@@ -80,7 +80,7 @@
             <fieldset class="action">
                 <input type="submit" value="Save" />
                 [% UNLESS orders_loop.size %]
-                <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | html %]" id="delete">Delete</a>
+                <a href="invoice.pl?op=delete&invoiceid=[% invoiceid | uri %]" id="delete">Delete</a>
                 [% END %]
             </fieldset>
         </fieldset>
@@ -227,8 +227,8 @@
                   </fieldset>
               </form>
       <p>
-          <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]">Go to receipt page</a>
-          [% IF Koha.Preference('AcqEnableFiles') %]| <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | html %]">Manage invoice files</a>[% END %]
+          <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | uri %]">Go to receipt page</a>
+          [% IF Koha.Preference('AcqEnableFiles') %]| <a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]">Manage invoice files</a>[% END %]
       </p>
       <h2>Invoice details</h2>
       <fieldset>
@@ -258,7 +258,7 @@
                 <tr>
                   <td>
                     [% IF order.biblionumber %]
-                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | html %]">[% order.title | html %]</a>
+                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title | html %]</a>
                       [% IF ( order.author ) %]
                         <br /><em>by</em> [% order.author | html %]
                       [% END %]
@@ -348,7 +348,7 @@
                 <tbody>
                 [% FOREACH f IN files %]
                     <tr>
-                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | html %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | html %]">[% f.file_name | html %]</a></td>
+                         <td><a href="/cgi-bin/koha/acqui/invoice-files.pl?invoiceid=[% invoiceid | uri %]&amp;op=download&amp;view=1&amp;file_id=[% f.file_id | uri %]">[% f.file_name | html %]</a></td>
                          <td>[% f.file_type | html %]</td>
                          <td>[% f.file_description | html %]</td>
                          <td class="title-string">

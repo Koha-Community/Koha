@@ -255,7 +255,7 @@
     <tbody>[% FOREACH loo IN loop %]
         <tr>
 
-        <td><strong><a href="[% loo.edit | html %]">[% loo.variable | html %]</a></strong></td><td> [% loo.explanation | html %]</td>
+        <td><strong><a href="[% loo.edit | uri %]">[% loo.variable | html %]</a></strong></td><td> [% loo.explanation | html %]</td>
         [% IF ( loo.oneline ) %]
         <td class="single-line">
         [% ELSE %]

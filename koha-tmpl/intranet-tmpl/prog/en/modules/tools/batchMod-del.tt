@@ -105,7 +105,7 @@
             </thead>
             <tbody>
             [% FOREACH item_loo IN item_loop %] <tr> [% IF ( show ) %][% IF ( item_loo.nomod ) %] <td class="error">Cannot edit</td>[% ELSE %]<td><input type="checkbox" name="itemnumber" value="[% item_loo.itemnumber | html %]" id="row[% item_loo.itemnumber | html %]" checked="checked" /></td>[% END %][% END %]
-            <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | html %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
+            <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | uri %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
             [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field | html %]</td>
                     [% END %] </tr>
             [% END %]
@@ -118,7 +118,7 @@
     <ul>
     [% FOREACH simple_items_displa IN simple_items_display %]
         <li>
-            <a href="[% simple_items_displa.itemnumber | html %]">[% simple_items_displa.barcode | html %]</a>
+            <a href="[% simple_items_displa.itemnumber | uri %]">[% simple_items_displa.barcode | html %]</a>
         </li>
     [% END %]
     </ul>
@@ -162,9 +162,9 @@
             <p>[% deleted_items | html %] item(s) deleted.</p>
             [% IF delete_records %] <p>[% deleted_records | html %] record(s) deleted.</p> [% END %]
             [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Delete items in a batch%]
-                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">Return to the record</a>
+                <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
             [% ELSIF src %]
-                <a href="[% src | html %]">Return to where you were</a>
+                <a href="[% src | uri %]">Return to where you were</a>
             [% ELSE %]
                 <a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Return to batch item deletion</a>
             [% END %]
@@ -185,7 +185,7 @@
             [% FOREACH not_deleted_loo IN not_deleted_loop %]
             <tr>
                 <td>[% not_deleted_loo.itemnumber | html %]</td>
-                <td>[% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% not_deleted_loo.biblionumber | html %]&amp;itemnumber=[% not_deleted_loo.itemnumber | html %]">[% not_deleted_loo.barcode | html %]</a>[% ELSE %][% not_deleted_loo.barcode | html %][% END %]</td>
+                <td>[% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% not_deleted_loo.biblionumber | uri %]&amp;itemnumber=[% not_deleted_loo.itemnumber | uri %]">[% not_deleted_loo.barcode | html %]</a>[% ELSE %][% not_deleted_loo.barcode | html %][% END %]</td>
                 <td>[% IF ( not_deleted_loo.book_on_loan ) %]Item is checked out[% ELSIF ( not_deleted_loo.book_reserved ) %]Item has a waiting hold[% END %]</td>
             </tr>
             [% END %]

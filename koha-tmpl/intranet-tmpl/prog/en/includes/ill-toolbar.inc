@@ -9,7 +9,7 @@
                 </button>
                 <ul class="dropdown-menu" aria-labelledby="ill-backend-dropdown">
                     [% FOREACH backend IN backends %]
-                        <li><a href="/cgi-bin/koha/ill/ill-requests.pl?method=create&amp;backend=[% backend | html %]">[% backend | html %]</a></li>
+                        <li><a href="/cgi-bin/koha/ill/ill-requests.pl?method=create&amp;backend=[% backend | uri %]">[% backend | html %]</a></li>
                     [% END %]
                 </ul>
             </div>

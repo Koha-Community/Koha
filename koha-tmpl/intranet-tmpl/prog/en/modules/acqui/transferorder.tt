@@ -73,9 +73,9 @@
                 <tbody>
                     [% FOREACH ordersloo IN ordersloop %]
                       <tr>
-                        <td><a href="neworderempty.pl?ordernumber=[% ordersloo.ordernumber | html %]">[% ordersloo.ordernumber | html %]</a></td>
+                        <td><a href="neworderempty.pl?ordernumber=[% ordersloo.ordernumber | uri %]">[% ordersloo.ordernumber | html %]</a></td>
                         <td>
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | html %]">[% ordersloo.title | html %]</a>
+                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | uri %]">[% ordersloo.title | html %]</a>
                             [% IF ( ordersloo.author ) %] by [% ordersloo.author | html %][% END %]
                             [% IF ( ordersloo.isbn ) %] &ndash; [% ordersloo.isbn | html %][% END %]
                             [% IF ( ordersloo.publishercode ) %]

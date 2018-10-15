@@ -36,7 +36,7 @@
 
   <p>
     [% IF ( isfiltered ) %]
-      <a href="overdue.pl?op=csv&amp;[% csv_param_string | html %]">Download file of displayed overdues</a>
+      <a href="overdue.pl?op=csv&amp;[% csv_param_string | uri %]">Download file of displayed overdues</a>
     [% ELSE %]
       <a href="overdue.pl?op=csv">Download file of all overdues</a>
     [% END %]
@@ -65,12 +65,12 @@
           <td>
             [% INCLUDE 'patron-title.inc' patron=overdueloo.patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
             [% IF logged_in_user.can_see_patron_infos( overdueloo.patron ) %]
-                [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | html %]?subject=[% INCLUDE subject %] [% overdueloo.title | html %]">email</a>][% END %]
+                [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>][% END %]
                 [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]</td>
             [% END %]
           <td>[% Branches.GetName( overdueloo.patron.branchcode ) | html %]</td>
           <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% overdueloo.title | html %]  [% overdueloo.subtitle | html %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
-          <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | html %]&amp;itemnumber=[% overdueloo.itemnum | html %]#item[% overdueloo.itemnum | html %]">[% overdueloo.barcode | html %]</a></td>
+          <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | uri %]&amp;itemnumber=[% overdueloo.itemnum | uri %]#item[% overdueloo.itemnum | uri %]">[% overdueloo.barcode | html %]</a></td>
           <td>[% overdueloo.itemcallnumber | html %]</td>
           <td>[% overdueloo.replacementprice | $Price %]</td>
           <td>[% overdueloo.itemnotes_nonpublic | html %]</td>

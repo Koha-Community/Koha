@@ -106,7 +106,7 @@
                         <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = collectionItemsLoo.biblionumber %][% collectionItemsLoo.title | html %]</a></td>
                         <td>[% collectionItemsLoo.itemcallnumber | html %]</td>
                         <td>[% collectionItemsLoo.barcode | html %]</td>
-                        <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | html %]&amp;barcode=[% collectionItemsLoo.barcode | html %]&amp;removeItem=1&amp;action=addItem">Remove</a></td>
+                        <td><a href="/cgi-bin/koha/rotating_collections/addItems.pl?colId=[% colId | uri %]&amp;barcode=[% collectionItemsLoo.barcode | uri %]&amp;removeItem=1&amp;action=addItem">Remove</a></td>
                       </tr>
                     [% END %]
                   </table>

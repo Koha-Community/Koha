@@ -77,9 +77,9 @@ $(document).ready(function(){
                 [% END %]
               <fieldset class="action">
                   [% IF src == 'CATALOGUING' # from catalogue/detail.pl > Edit items in a batch%]
-                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">Return to the record</a>
+                      <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Return to the record</a>
                   [% ELSIF src %]
-                      <a href="[% src | html %]">Return to where you were</a>
+                      <a href="[% src | uri %]">Return to where you were</a>
                   [% ELSE %]
                       <a href="/cgi-bin/koha/tools/batchMod.pl">Return to batch item modification</a>
                   [% END %]
@@ -175,7 +175,7 @@ $(document).ready(function(){
                 [% ELSE %]
                   <td>&nbsp;</td>
                 [% END %]
-                <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | html %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
+                <td><label for="row[% item_loo.itemnumber | html %]"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% item_loo.biblionumber | uri %]">[% item_loo.title | html %]</a>[% IF ( item_loo.author ) %], by [% item_loo.author | html %][% END %]</label></td>
                 [% FOREACH item_valu IN item_loo.item_value %] <td>[% item_valu.field | html %]</td>
         [% END %] </tr>
             [% END %]
@@ -189,7 +189,7 @@ $(document).ready(function(){
     <ul>
     [% FOREACH simple_items_displa IN simple_items_display %]
   <li>
-      [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber | html %]&amp;itemnumber=[% simple_items_displa.itemnumber | html %]">[% simple_items_displa.barcode | html %]</a>[% ELSE %][% simple_items_displa.barcode | html %][% END %]
+      [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber | uri %]&amp;itemnumber=[% simple_items_displa.itemnumber | uri %]">[% simple_items_displa.barcode | html %]</a>[% ELSE %][% simple_items_displa.barcode | html %][% END %]
   </li>
     [% END %]
     </ul>

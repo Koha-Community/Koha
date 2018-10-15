@@ -43,7 +43,7 @@
 [% IF too_many_login_attempts %]
     <div id="login_error"><strong>Error: </strong>This account has been locked!</div>
     [% IF Koha.Preference('OpacResetPassword') && Koha.Preference('OpacBaseURL') %]
-        <a href="[% Koha.Preference('OpacBaseURL') | html %]/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
+        <a href="[% Koha.Preference('OpacBaseURL') | uri %]/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
     [% END %]
 [% ELSIF invalid_username_or_password %]
 <div id="login_error"><strong>Error: </strong>Invalid username or password</div>
@@ -95,14 +95,14 @@
 [% END %]
 
 [% IF ( casServerUrl ) %]
-    <p><a href="[% casServerUrl | html %]">If you have a CAS account, please click here to login</a>.<p>
+    <p><a href="[% casServerUrl | uri %]">If you have a CAS account, please click here to login</a>.<p>
 [% END %]
 
 [% IF ( casServersLoop ) %]
     <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
 <ul>
     [% FOREACH casServer IN casServersLoop %]
-        <li><a href="[% casServer.value | html %]">[% casServer.name | html %]</a></li>
+        <li><a href="[% casServer.value | uri %]">[% casServer.name | html %]</a></li>
     [% END %]
 [% END %]
 [% END %]

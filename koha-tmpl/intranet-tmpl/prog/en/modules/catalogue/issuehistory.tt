@@ -56,7 +56,7 @@
                 [% END %]
                 <td>
                     [% IF checkout.item.barcode %] [%# FIXME This test is not mandatory I think %]
-                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout.item.biblionumber | html %]&amp;itemnumber=[% checkout.item.itemnumber | html %]">[% checkout.item.barcode | html %]</a>
+                        <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout.item.biblionumber | uri %]&amp;itemnumber=[% checkout.item.itemnumber | uri %]">[% checkout.item.barcode | html %]</a>
                     [% ELSE %]
                         &nbsp;
                     [% END %]</td>

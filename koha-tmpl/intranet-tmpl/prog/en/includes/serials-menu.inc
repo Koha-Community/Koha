@@ -1,12 +1,12 @@
 [% IF ( subscriptionid ) %]
 <ul>
-<li><a href="serials-collection.pl?subscriptionid=[% subscriptionid | html %]">Serial collection</a></li>
+<li><a href="serials-collection.pl?subscriptionid=[% subscriptionid | uri %]">Serial collection</a></li>
   [% UNLESS closed %]
     [% IF ( routing && CAN_user_serials_routing ) %]
         [% IF ( hasRouting ) %]
-             <li><a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | html %]">Edit routing list</a></li>
+             <li><a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | uri %]">Edit routing list</a></li>
         [% ELSE %]
-            <li><a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | html %]&amp;op=new">Create routing list</a></li>
+            <li><a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | uri %]&amp;op=new">Create routing list</a></li>
         [% END %]
     [% END %]
   [% END %]

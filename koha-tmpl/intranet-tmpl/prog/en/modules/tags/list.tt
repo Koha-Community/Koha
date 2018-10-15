@@ -41,7 +41,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             [% IF ( title.notes ) %]
             <p>[% title.notes | html %]</p>[% END %]
             [% IF ( title.TagLoop ) %]<p style="font-size:90%"><strong>Tagged with:</strong> [% FOREACH TagLoo IN title.TagLoop %]
-            <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term | html %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
+            <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term | uri %]">[% TagLoo.term | html %]</a> <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]
             [% END %]</p>
             [% END %]
             </td>

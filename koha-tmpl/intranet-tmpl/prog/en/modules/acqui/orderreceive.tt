@@ -48,7 +48,7 @@
         <ol>
           <li>
             <span class="label">Suggested by: </span>
-            [% surnamesuggestedby | html %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid | html %]&amp;op=show">suggestion #[% suggestionid | html %]</a>)
+            [% surnamesuggestedby | html %][% IF ( firstnamesuggestedby ) %], [% firstnamesuggestedby | html %][% END %] (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% suggestionid | uri %]&amp;op=show">suggestion #[% suggestionid | html %]</a>)
           </li>
         </ol>
         </fieldset>

@@ -48,13 +48,13 @@
 
         [% IF shelf and shelf.is_private %]
             [% IF op == 'view' OR op == 'edit_form' %]
-                <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | html %]">Your lists</a></li>
+                <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | uri %]">Your lists</a></li>
             [% ELSE %]
                 <li><span class="divider">&rsaquo;</span> Your lists</li>
             [% END %]
         [% ELSIF shelf AND shelf.is_public %]
             [% IF op == 'view' %]
-                <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | html %]">Public lists</a></li>
+                <li><span class="divider">&rsaquo;</span> <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PUBLIC | uri %]">Public lists</a></li>
             [% ELSE %]
                 <li><span class="divider">&rsaquo;</span> Public lists</li>
             [% END %]
@@ -151,7 +151,7 @@
                     [% IF shelf AND op == 'view' %]
                         <h3>
                             [% shelf.shelfname | html %]
-                            <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]" class="rss-list-link noprint">
+                            <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint">
                                 <img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this list" title="Subscribe to this list" border="0" class="rsssearchicon"/>
                             </a>
                         </h3>
@@ -160,10 +160,10 @@
                              <div id="toolbar" class="toolbar clearfix">
                                  <div class="list-actions">
                                     <a class="newshelf" href="/cgi-bin/koha/opac-shelves.pl?op=add_form">New list</a> <span class="sep">|</span>
-                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | html %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
+                                    <a href="/cgi-bin/koha/opac-downloadshelf.pl?shelfnumber=[% shelf.shelfnumber | uri %]" class="download" data-toggle="modal" data-target="#modalWin">Download list</a>
 
                                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
-                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
+                                        <span class="sendlist"><a href="/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | uri %]" class="send" onclick="open('/cgi-bin/koha/opac-sendshelf.pl?shelfid=[% shelf.shelfnumber | html %]','win_form','scrollbars=no,resizable=no,height=300,width=450,top=50,left=100'); return false; ">Send list</a></span>
                                     [% END %]
 
                                     <a class="print-small" target="_blank" href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&sortfield=[% sortfield | html %]&direction=[% direction |uri %]&print=1">Print list</a>
@@ -186,7 +186,7 @@
                                             <input type="submit" class="deleteshelf" value="Delete list" onclick="return confirmDelete(MSG_CONFIRM_DELETE_LIST);"/>
                                         </form>
                                         [% IF category == PRIVATE && Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | html %]" class="sharelist">Share list</a>
+                                            <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% shelf.shelfnumber | uri %]" class="sharelist">Share list</a>
                                         [% END %]
                                     [% ELSIF category == PRIVATE # not manageshelf and private means shared %]
                                         <form action="/cgi-bin/koha/opac-shelves.pl" method="post" class="form-inline">
@@ -349,7 +349,7 @@
                                                         [% IF ( BakerTaylorEnabled ) %]
                                                             [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
                                                             [% IF ( bt_id ) %]
-                                                                <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                                                <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                                             [% ELSE %]
                                                                 <span class="no-image">No cover image available</span>
                                                             [% END %]
@@ -623,9 +623,9 @@
                             <fieldset class="action">
                                 <input type="submit" value="Save" class="btn" />
                                 [% IF referer == 'view' %]
-                                    <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]" class="cancel">Cancel</a>
+                                    <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel">Cancel</a>
                                 [% ELSE %]
-                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | html %]" class="cancel">Cancel</a>
+                                     <a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=[% PRIVATE | uri %]" class="cancel">Cancel</a>
                                  [% END %]
 
                             </fieldset>
@@ -677,7 +677,7 @@
                                         [% FOREACH s IN shelves %]
                                             [% SET contents = s.get_contents %]
                                             <tr>
-                                                <td><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]">[% s.shelfname | html %]</a></td>
+                                                <td><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a></td>
                                                 <td>[% IF contents.count %][% contents.count | html %] [% IF contents.count == 1 %]item[% ELSE %]items[% END %][% ELSE %]Empty[% END %]</td>
                                                 <td>
                                                     [% IF s.is_private %]
@@ -706,7 +706,7 @@
                                                         </form>
                                                     [% END %]
                                                     [% IF s.is_private AND s.can_be_managed( loggedinusernumber ) AND Koha.Preference('OpacAllowSharingPrivateLists') %]
-                                                        <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber | html %]" class="sharelist">Share</a>
+                                                        <a href="/cgi-bin/koha/opac-shareshelf.pl?op=invite&shelfnumber=[% s.shelfnumber | uri %]" class="sharelist">Share</a>
                                                     [% END %]
                                                     [% IF s.is_shared_with( loggedinusernumber ) %]
                                                         <form action="opac-shelves.pl" method="post" class="form-inline">

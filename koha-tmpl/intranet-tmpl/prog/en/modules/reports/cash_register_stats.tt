@@ -191,7 +191,7 @@
         [% FOREACH loopresul IN loopresult %]
             <tr>
                 <td>[% loopresul.mfirstname | html %] [% loopresul.msurname | html %]</td>
-                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | html %]">[% loopresul.cardnumber | html %]</a></td>
+                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopresul.borrowernumber | uri %]">[% loopresul.cardnumber | html %]</a></td>
                 <td>[% loopresul.bfirstname | html %] [% loopresul.bsurname | html %]</td>
                 <td>[% loopresul.branchname | html %]</td>
                 <td>[% loopresul.date | $KohaDates %]</td>
@@ -228,7 +228,7 @@
                 </td>
                 <td>[% loopresul.note | html %]</td>
                 <td style="text-align:right;">[% loopresul.amount | $Price %]</td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | html %]">[% loopresul.title | html %]</a></td>
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopresul.biblionumber | uri %]">[% loopresul.title | html %]</a></td>
                 <td>[% loopresul.barcode | html %]</td>
                 <td>[% ItemTypes.GetDescription(loopresul.itype) | html %]</td>
             </tr>

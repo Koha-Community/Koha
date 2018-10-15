@@ -45,13 +45,13 @@
     [% END %]
     [% IF shelf AND shelf.is_private %] &rsaquo;
         [% IF op == 'view' OR op == 'edit_form' %]
-            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | html %]">Your lists</a>
+            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | uri %]">Your lists</a>
         [% ELSE %]
             Your lists
         [% END %]
     [% ELSIF shelf AND shelf.is_public %] &rsaquo;
         [% IF op == 'view' %]
-            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | html %]">Public lists</a>
+            <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | uri %]">Public lists</a>
         [% ELSE %]
             Public lists
         [% END %]
@@ -168,7 +168,7 @@
 
                 [% UNLESS ( item_level_itypes ) %]<th>Item type</th>[% END %]
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | html %][% END %]">Title</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=title&amp;direction=[% IF sortfield != 'title' %]asc[% ELSE %][% new_direction | uri %][% END %]">Title</a>
                     [% IF sortfield == 'title' %]
                         <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
                     [% ELSE %]
@@ -176,7 +176,7 @@
                     [% END %]
                 </th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | html %][% END %]">Author</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=author&amp;direction=[% IF sortfield != 'author' %]asc[% ELSE %][% new_direction | uri %][% END %]">Author</a>
                    [% IF sortfield == 'author' %]
                         <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
                    [% ELSE %]
@@ -184,7 +184,7 @@
                    [% END %]
                  </th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | html %][% END %]">Date added</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=dateadded&amp;direction=[% IF sortfield != 'dateadded' %]asc[% ELSE %][% new_direction | uri %][% END %]">Date added</a>
                     [% IF sortfield == 'dateadded' %]
                         <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
                     [% ELSE %]
@@ -192,7 +192,7 @@
                     [% END %]
                 </th>
                 <th>
-                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | html %][% END %]">Call number</a>
+                    <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;sortfield=itemcallnumber&amp;direction=[% IF sortfield != 'itemcallnumber' %]asc[% ELSE %][% new_direction | uri %][% END %]">Call number</a>
                    [% IF sortfield == 'itemcallnumber' %]
                         <img src="[% interface | html %]/[% theme | html %]/img/[% direction | html %].gif" alt="[% direction | html %] sort" />
                    [% ELSE %]
@@ -223,16 +223,16 @@
                         [% ELSE %]
                             [% IF ( itemsloo.ITEM_RESULTS.size ) %]
                                 <a id="reserve_[% itemsloo.biblionumber | html %]" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | html %]">Holds</a>
-                                [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | html %]&amp;findborrower=[% holdfor_cardnumber | html %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></span>[% END %]
+                                [% IF ( holdfor ) %] <span class="holdforlink">| <a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% itemsloo.biblionumber | uri %]&amp;findborrower=[% holdfor_cardnumber | uri %]">Place hold for [% holdfor_firstname | html %] [% holdfor_surname | html %] ([% holdfor_cardnumber | html %])</a></span>[% END %]
                             [% ELSE %]
                                 <span class="noholdstext">No holds allowed</span>
                             [% END %]
                         [% END %]
                         [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
-                            | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% itemsloo.biblionumber | html %]">Edit record</a>
+                            | <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit record</a>
                         [% END %]
                         [% IF ( CAN_user_editcatalogue_edit_items ) %]
-                            | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% itemsloo.biblionumber | html %]">Edit items</a>
+                            | <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% itemsloo.biblionumber | uri %]">Edit items</a>
                         [% END %]
                     </p>
             </td>
@@ -321,12 +321,12 @@
     <fieldset class="action">
         <input type="submit" value="Save" class="submit" />
         [% IF referer == 'view' %]
-           <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | html %]" class="cancel">Cancel</a>
+           <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="cancel">Cancel</a>
        [% ELSE %]
             [% IF category == PUBLIC %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | html %]" class="cancel">Cancel</a>
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PUBLIC | uri %]" class="cancel">Cancel</a>
             [% ELSE %]
-                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | html %]" class="cancel">Cancel</a>
+                <a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=list&amp;category=[% PRIVATE | uri %]" class="cancel">Cancel</a>
             [% END %]
         [% END %]
     </fieldset>

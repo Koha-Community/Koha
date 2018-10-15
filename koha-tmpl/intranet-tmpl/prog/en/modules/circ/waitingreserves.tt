@@ -28,7 +28,7 @@
 
         <h2>Holds awaiting pickup for your library on: [% show_date | $KohaDates %]
             [% IF ( all_branches_link ) %]
-            <span style="margin-left:20px"><a href="[% all_branches_link | html %]">
+            <span style="margin-left:20px"><a href="[% all_branches_link | uri %]">
             View all libraries</a></span>
             [% END %]
         </h2>
@@ -92,9 +92,9 @@
                             [% UNLESS ( item_level_itypes ) %][% IF ( reserveloo.itemtype ) %]&nbsp; (<b>[% reserveloo.itemtype | html %]</b>)[% END %][% END %]
                             <br />Barcode: [% reserveloo.barcode | html %]
                     </td>
-                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.patron.borrowernumber | html %]">[% reserveloo.patron.surname | html %], [% reserveloo.patron.firstname | html %]</a>
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.patron.borrowernumber | uri %]">[% reserveloo.patron.surname | html %], [% reserveloo.patron.firstname | html %]</a>
                         [% IF ( reserveloo.patron.phone ) %]<br />[% reserveloo.patron.phone | html %][% END %]
-                        [% IF ( reserveloo.patron.first_valid_email_address ) %]<br /><a href="mailto:[% reserveloo.patron.first_valid_email_address | html %]?subject=Hold waiting: [% reserveloo.title | html %]">
+                        [% IF ( reserveloo.patron.first_valid_email_address ) %]<br /><a href="mailto:[% reserveloo.patron.first_valid_email_address | uri %]?subject=Hold waiting: [% reserveloo.title | uri %]">
                         [% reserveloo.patron.first_valid_email_address | html %]</a>[% END %]
                     </td>
                     <td>[% Branches.GetName( reserveloo.homebranch ) | html %]</td>
@@ -163,8 +163,8 @@
                             [% UNLESS ( item_level_itypes ) %][% IF ( overloo.itemtype ) %]&nbsp; (<b>[% overloo.itemtype | html %]</b>)[% END %][% END %]
                         <br />Barcode: [% overloo.barcode | html %]
                     </td>
-                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overloo.patron.borrowernumber | html %]">[% overloo.patron.surname | html %], [% overloo.patron.firstname | html %]</a><br />[% overloo.patron.phone | html %]<br />
-                        [% IF ( overloo.patron.first_valid_email_address ) %]<a href="mailto:[% overloo.patron.first_valid_email_address | html %]?subject=Reservation: [% overloo.title |url %]">
+                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% overloo.patron.borrowernumber | uri %]">[% overloo.patron.surname | html %], [% overloo.patron.firstname | html %]</a><br />[% overloo.patron.phone | html %]<br />
+                        [% IF ( overloo.patron.first_valid_email_address ) %]<a href="mailto:[% overloo.patron.first_valid_email_address | uri %]?subject=Reservation: [% overloo.title |url %]">
         [% overloo.patron.first_valid_email_address | html %]</a>[% END %]
                     </td>
                     <td>[% Branches.GetName( overloo.homebranch ) | html %]</td>

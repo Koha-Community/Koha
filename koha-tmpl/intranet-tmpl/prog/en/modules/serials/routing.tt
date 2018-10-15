@@ -72,7 +72,7 @@
     <p style="margin-left:10em;">
         <a href="#" id="add_recipients"><i class="fa fa-plus"></i> Add recipients</a>
         [% IF memberloop %]
-            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | html %]&amp;op=delete"><i class="fa fa-trash"></i> Delete all</a>
+            <a href="/cgi-bin/koha/serials/routing.pl?subscriptionid=[% subscriptionid | uri %]&amp;op=delete"><i class="fa fa-trash"></i> Delete all</a>
         [% END %]
     </p>
 </li>

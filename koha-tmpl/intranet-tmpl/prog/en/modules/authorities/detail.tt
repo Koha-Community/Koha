@@ -44,7 +44,7 @@
 
 <div id="action">
     [% IF count %]
-        Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=[% authid | html %]">[% count | html %] record(s)</a>
+        Used in <a href="/cgi-bin/koha/catalogue/search.pl?type=intranet&amp;op=do_search&amp;q=an=[% authid | uri %]">[% count | html %] record(s)</a>
     [% ELSE %]
         This authority is not used in any records.
     [% END %]
@@ -54,7 +54,7 @@
     <ul>
         [% FOREACH BIG_LOO IN BIG_LOOP %]
             <li>
-                <a href="#tab[% BIG_LOO.number | html %]XX">[% BIG_LOO.number | html %]</a>
+                <a href="#tab[% BIG_LOO.number | uri %]XX">[% BIG_LOO.number | html %]</a>
             </li>
         [% END %]
     </ul>
@@ -81,12 +81,12 @@
                 <span title="[% subfiel.long_desc | html %]" class="desc">[% subfiel.short_desc | html %]</span></label>
                 [% subfiel.marc_value | html %]
                 [% IF ( subfiel.link ) %]
-                    <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link | html %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
+                    <a href="/cgi-bin/koha/catalogue/search.pl?op=do_search&amp;marclist=[% subfiel.link | uri %]&amp;operator==&amp;type=intranet&amp;value=[% subfiel.marc_value |url %]">
                         <img src="[% interface | html %]/[% theme | html %]/images/filefind.png" height="15" title="Search on [% subfiel.marc_value | html %]">
                     </a>
                 [% END %]
                 [% IF ( subfiel.authority ) %]
-                    <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | html %]" class="button">Auth</a>
+                    <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% subfiel.authority | uri %]" class="button">Auth</a>
                 [% END %]
             </p>
         [% END %]

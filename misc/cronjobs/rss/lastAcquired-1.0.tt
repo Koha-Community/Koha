@@ -32,7 +32,7 @@
 <br>[% place | html %] [% i.publishercode | html %] [% i.publicationyear | html %]
 <br>[% pages | html %] [% i.illus | html %] [% i.size | html %]
 [% IF i.notes %]<br><br>[% i.notes | html %][% END %]<br>
-<a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber | html %]">View Details</a> | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber | html %]">Reserve this Item</a>[% IF i.author %] | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author | html %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
+<a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% i.biblionumber | uri %]">View Details</a> | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% i.biblionumber | html %]">Reserve this Item</a>[% IF i.author %] | <a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-search.pl?marclist=biblio.author&amp;and_or=and&amp;excluding=&amp;operator=contains&amp;value=[% i.author | html %]&amp;resultsperpage=20&amp;orderby=biblio.title&amp;op=do_search">More by this Author</a>[% END %]
 ]]></description>
  </item>
 [% END %]

@@ -25,7 +25,7 @@
             <META HTTP-EQUIV=Refresh CONTENT="[% metacontent | html %]">
         [% ELSE %]
         [% IF ( booksellername ) %]
-            <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
+            <h1>Orders with uncertain prices for vendor <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
             <h2>Contact information</h2>
             <p><strong>Address: </strong>
                 [% booksellerpostal | html %]
@@ -33,7 +33,7 @@
                 [% bookselleraddress2 | html %]
                 [% bookselleraddress3 | html %]
                 [% bookselleraddress4 | html %]
-                <a href="[% booksellerurl | html %]">[% booksellerurl | html %]</a>
+                <a href="[% booksellerurl | uri %]">[% booksellerurl | html %]</a>
             </p>
             <p><strong>Phone: </strong>
                 [% booksellerphone | html %] / Fax:
@@ -92,7 +92,7 @@
             [% uncertainpriceorder.basketname | html %]
         </td>
 	    <td>
-            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% uncertainpriceorder.biblionumber | html %]">[% uncertainpriceorder.title | html %]</a>
+            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% uncertainpriceorder.biblionumber | uri %]">[% uncertainpriceorder.title | html %]</a>
             [% IF ( uncertainpriceorder.author ) %] <em>by</em> [% uncertainpriceorder.author | html %][% END %]
             [% IF ( uncertainpriceorder.publishercode ) %]
                 <br /><em>Publisher:</em> [% uncertainpriceorder.publishercode | html %]
@@ -102,7 +102,7 @@
             [% END %]
             [% IF ( uncertainpriceorder.isbn ) %]<br />[% uncertainpriceorder.isbn | html %][% END %]
             <br />
-            <a href="neworderempty.pl?ordernumber=[% uncertainpriceorder.ordernumber | html %]&amp;booksellerid=[% booksellerid | html %]&amp;basketno=[% uncertainpriceorder.basketno | html %]">
+            <a href="neworderempty.pl?ordernumber=[% uncertainpriceorder.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% uncertainpriceorder.basketno | uri %]">
                 Edit
             </a>
         </td>

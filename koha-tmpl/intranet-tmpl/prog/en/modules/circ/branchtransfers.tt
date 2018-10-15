@@ -21,10 +21,10 @@
     <table>
         <caption>
             [% IF ( reserved ) %]
-                Reserve found for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">[% borrowernumber | html %]</a>).
+                Reserve found for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
             [% END %]
             [% IF ( waiting ) %]
-                Item is marked waiting at [% branchname | html %] for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">[% borrowernumber | html %]</a>).
+                Item is marked waiting at [% branchname | html %] for [% name | html %] (<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% borrowernumber | html %]</a>).
             [% END %]
         </caption>
         <tr>
@@ -130,7 +130,7 @@
                                   <li>Item is already at destination library.</li>
                               [% END %]
                               [% IF ( errmsgloo.errwasreturned ) %]
-                                  <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber | html %]">
+                                  <li>Item was on loan to <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% errmsgloo.patron.borrowernumber | uri %]">
                                   [% errmsgloo.patron.firstname | html %] [% errmsgloo.patron.surname | html %]
                                   ([% errmsgloo.patron.cardnumber | html %])</a> and has been returned.</li>
                               [% END %]
@@ -181,9 +181,9 @@
             </tr>
             [% FOREACH trsfitemloo IN trsfitemloop %]
                 <tr>
-                    <td class="tf-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber | html %]">[% trsfitemloo.title | html %]</a></td>
+                    <td class="tf-title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% trsfitemloo.biblionumber | uri %]">[% trsfitemloo.title | html %]</a></td>
                     <td class="tf-author">[% trsfitemloo.author | html %]</td>
-                    <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.biblionumber | html %]&amp;itemnumber=[% trsfitemloo.itemnumber | html %]#item[% trsfitemloo.itemnumber | html %]">[% trsfitemloo.barcode | html %]</a></td>
+                    <td class="tf-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% trsfitemloo.biblionumber | uri %]&amp;itemnumber=[% trsfitemloo.itemnumber | uri %]#item[% trsfitemloo.itemnumber | uri %]">[% trsfitemloo.barcode | html %]</a></td>
                     <td class="tf-location">[% trsfitemloo.location | html %]</td>
                     <td class="tf-itemcallnumber">[% trsfitemloo.itemcallnumber | html %]</td>
                     <td class="tf-itemtype">[% ItemTypes.GetDescription( trsfitemloo.itemtype ) | html %]</td>

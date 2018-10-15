@@ -137,8 +137,8 @@
                       Actions <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="cataloguesearchactions[% breeding_loo.breedingid | html %]">
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | html %]" title="MARC" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
-                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | html %]" title="Card" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?importid=[% breeding_loo.breedingid | uri %]" title="MARC" class="previewData"><i class="fa fa-eye"></i> MARC preview</a></li>
+                        <li><a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;importid=[% breeding_loo.breedingid | uri %]" title="Card" class="previewData"><i class="fa fa-eye"></i> Card preview</a></li>
                         <li><a href="#" class="import_record" data-breedingid="[% breeding_loo.breedingid | html %]" data-biblionumber="[% breeding_loo.biblionumber | html %]" data-frameworkcode="[% frameworkcode | uri %]"><i class="fa fa-download"></i> Import</a></li>
                     </ul>
                 </div>

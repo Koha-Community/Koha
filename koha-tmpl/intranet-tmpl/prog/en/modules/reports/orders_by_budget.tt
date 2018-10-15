@@ -59,10 +59,10 @@
             [% ELSE %] <tr>
             [% END %]
             <td>[% ordersloo.budget_name | html %]</td>
-            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | html %]"> [% ordersloo.basketno | html %]</a></td>
+            <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% ordersloo.basketno | uri %]"> [% ordersloo.basketno | html %]</a></td>
             <td>[% ordersloo.basketname | html %]</td>
             <td>[% ordersloo.authorisedbyname | html %]</td>
-            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | html %]"> [% ordersloo.title | html %]</a></td>
+            <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ordersloo.biblionumber | uri %]"> [% ordersloo.title | html %]</a></td>
             <td>[% ordersloo.currency | html %]</td>
             <td>[% ordersloo.listprice | $Price %]</td>
             <td>[% ordersloo.rrp | $Price %]</td>

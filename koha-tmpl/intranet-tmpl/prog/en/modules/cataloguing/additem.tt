@@ -36,9 +36,9 @@ $(document).ready(function(){
                     var rowid = $(this).parent().attr("id");
                     num_rowid = rowid.replace("row","");
                     $(".linktools").remove();
-                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode | html %]&biblionumber=[% biblionumber | html %]&itemnumber='+num_rowid+'&searchid=[% searchid | html %]#edititem"></a>');
+                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode | uri %]&biblionumber=[% biblionumber | uri %]&itemnumber='+num_rowid+'&searchid=[% searchid | uri %]#edititem"></a>');
                     $(edit_link).text(_("Edit item"));
-                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode | html %]&biblionumber=[% biblionumber | html %]&itemnumber='+num_rowid+'&searchid=[% searchid | html %]"></a>');
+                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode | uri %]&biblionumber=[% biblionumber | uri %]&itemnumber='+num_rowid+'&searchid=[% searchid | uri %]"></a>');
                     $(delete_link).text(_("Delete item"));
                     $(delete_link).on('click', function(e) {
                         return confirm_deletion();
@@ -151,8 +151,8 @@ function confirm_deletion() {
 <div id="breadcrumbs">
           <a href="/cgi-bin/koha/mainpage.pl">Home</a>
  &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a>
- &rsaquo; Edit <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">[% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</a>
- &rsaquo; <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | html %]">Items</a>
+ &rsaquo; Edit <a href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | uri %]">[% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %])</a>
+ &rsaquo; <a href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | uri %]">Items</a>
 </div>
 
 <div id="doc3" class="yui-t7">
@@ -167,7 +167,7 @@ function confirm_deletion() {
 [% IF ( book_on_loan ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item is checked out.</div>[% END %]
 [% IF ( book_reserved ) %]<div class="dialogalert"><strong>Cannot delete</strong>: item has a waiting hold.</div>[% END %]
 [% IF ( not_same_branch ) %]<div class="dialog alert"><strong>Cannot delete</strong>: The items do not belong to your library.</div>[% END %]
-[% IF ( linked_analytics ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]&amp;analyze=1">analytics.</a>.</div>[% END %]
+[% IF ( linked_analytics ) %]<div class="dialog alert"><strong>Cannot delete</strong>: item has linked <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]&amp;analyze=1">analytics.</a>.</div>[% END %]
 
 <div id="cataloguing_additem_itemlist">
     [% IF ( item_loop ) %]
@@ -213,11 +213,11 @@ function confirm_deletion() {
                           <ul class="dropdown-menu" role="menu" aria-labelledby="itemactions[% item_loo.itemnumber | html %]">
 
                         [% IF ( item_loo.hostitemflag ) %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber | html %]&amp;hostitemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
+                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item_loo.hostbiblionumber | uri %]&amp;itemnumber=[% item_loo.itemnumber | uri %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblionumber | html %]&amp;hostitemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
                         [% ELSE %]
-                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]#edititem">Edit</a></li>
-                              <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblionumber | html %]&amp;itemnumber=[% item_loo.itemnumber | html %]&amp;searchid=[% searchid | html %]#additema">Duplicate</a></li>
-                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item_loo.itemnumber | html %]" target="_blank" >Print Label</a></li>
+                              <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% item_loo.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
+                              <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblionumber | uri %]&amp;itemnumber=[% item_loo.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
+                              <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item_loo.itemnumber | uri %]" target="_blank" >Print Label</a></li>
                           [% IF ( item_loo.countanalytics ) %]
                               <li><a href="/cgi-bin/koha/catalogue/search.pl?idx=hi&amp;q=% item_loo.itemnumber %]">View analytics</a></li>
                           [% ELSE %]
@@ -362,7 +362,7 @@ function confirm_deletion() {
     <input type="hidden" name="field_value" value="[% itemnumber | html %]" />
     <input type="submit" value="Save changes" onclick="return Check(this.form)">
     <input type="button" id="addnewitem" value="Add a new item">
-    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | html %]">Cancel</a>
+    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Cancel</a>
     [% END %]</fieldset>
     
     [%# Fields for fast cataloging %]

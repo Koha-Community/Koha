@@ -57,7 +57,7 @@
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                     <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
-                    <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | html %]">[% s.query_desc | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | uri %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
                 [% END %]
@@ -94,7 +94,7 @@
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                     <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
-                    <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | html %]">[% s.query_desc | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | uri %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
                 [% END %]
@@ -137,7 +137,7 @@
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                     <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
-                    <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | html %]">[% s.query_desc | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | uri %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
                 [% END %]
@@ -174,7 +174,7 @@
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
                     <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
-                    <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | html %]">[% s.query_desc | html %]</a></td>
+                    <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | uri %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
                 [% END %]

@@ -190,7 +190,7 @@ function confirmnotdup(redirect){
 [% IF ( duplicateauthid ) %]
         <div class="dialog alert">
                 <h3>Duplicate record suspected</h3>
-                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]" class="popup" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue | html %]</a> ?</p>
+                <p>Is this a duplicate of <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | uri %]" class="popup" onclick="openWindow('/cgi-bin/koha/authorities/detail.pl?authid=[% duplicateauthid | html %]&amp;popup=1', 'DuplicateAuthority','800','600'); return false;" class="button">[% duplicateauthvalue | html %]</a> ?</p>
 
                 <form action="authorities.pl" method="get">
                     <input type="hidden" name="authid" value="[% duplicateauthid | html %]" />
@@ -228,7 +228,7 @@ function confirmnotdup(redirect){
 <div id="authoritytabs" class="toptabs numbered">
     <ul>
         [% FOREACH BIG_LOO IN BIG_LOOP %]
-        <li><a href="#tab[% BIG_LOO.number | html %]XX">[% BIG_LOO.number | html %]</a></li>
+        <li><a href="#tab[% BIG_LOO.number | uri %]XX">[% BIG_LOO.number | html %]</a></li>
         [% END %]
     </ul>
 

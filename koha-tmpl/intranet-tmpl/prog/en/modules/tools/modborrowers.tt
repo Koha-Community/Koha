@@ -159,7 +159,7 @@
                                                     [% IF ( op == 'show' ) %]
                                                         <td><input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber | html %]" checked="checked" /></td>
                                                     [% END %]
-                                                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | html %]">[% borrower.cardnumber | html %]</a></td>
+                                                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]">[% borrower.cardnumber | html %]</a></td>
                                                     <td>[% borrower.surname | html %]</td>
                                                     <td>[% borrower.firstname | html %]</td>
                                                     <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>

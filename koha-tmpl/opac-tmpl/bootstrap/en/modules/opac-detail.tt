@@ -59,9 +59,9 @@
                     [% END %]
                     [% IF ( OPACAmazonCoverImages ) %]
                         [% IF ( OPACURLOpenInNewWindow ) %]
-                            <a href="http://www.amazon[% AmazonTld | html %]/gp/reader/[% normalized_isbn | html %][% AmazonAssocTag | html %]#reader-link" target="_blank" rel="noreferrer">
+                            <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link" target="_blank" rel="noreferrer">
                         [% ELSE %]
-                            <a href="http://www.amazon[% AmazonTld | html %]/dp/[% normalized_isbn | html %][% AmazonAssocTag | html %]">
+                            <a href="http://www.amazon[% AmazonTld | uri %]/dp/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]">
                         [% END %]
                             <img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="Cover image" /></a>
                     [% END %]
@@ -88,9 +88,9 @@
                     [% IF ( BakerTaylorEnabled && bt_id ) %]
                         [% IF BakerTaylorBookstoreURL %]
                             [% IF ( OPACURLOpenInNewWindow ) %]
-                                <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]" target="_blank" rel="noreferrer"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]" target="_blank" rel="noreferrer"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                             [% ELSE %]
-                                <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
+                                <a href="https://[% BakerTaylorBookstoreURL | uri %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                             [% END %]
                         [% ELSE %]
                             <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
@@ -184,7 +184,7 @@
                                         <a class='authlink' href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% MARCAUTHOR.authoritylink | html %]"><img style="vertical-align:middle" height="15" width="15" src="[% interface | html %]/[% theme | html %]/images/filefind.png"></a>
                                     [% END %]
                                     [% IF IDREF and MARCAUTHOR.unimarc3 %]
-                                        <a href="/cgi-bin/koha/opac-idref.pl?unimarc3=[% MARCAUTHOR.unimarc3 | html %]" title="IdRef" rel="gb_page_center[600,500]">IdRef</a>
+                                        <a href="/cgi-bin/koha/opac-idref.pl?unimarc3=[% MARCAUTHOR.unimarc3 | uri %]" title="IdRef" rel="gb_page_center[600,500]">IdRef</a>
                                     [% END %]
                                     [% UNLESS ( loop.last ) %]|[% END %]
                                 [% END # /FOREACH MARCAUTHORS %]
@@ -337,15 +337,15 @@
 
                                         [% IF ( OPACURLOpenInNewWindow ) %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber | html %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
                                             [% ELSE %]
-                                                <a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                                <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
                                             [% END %]
                                         [% ELSE %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber | html %]" title="[% MARCurl.MARCURL | html %]">
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]">
                                             [% ELSE %]
-                                                <a href="[% MARCurl.MARCURL | html %]" title="[% MARCurl.MARCURL | html %]">
+                                                <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">
                                             [% END %]
                                         [% END %]
                                         [% MARCurl.linktext | html %]</a>
@@ -380,7 +380,7 @@
                     [% IF shelves.count %]
                         <span class="results_summary lists"><span class="label">List(s) this item appears in: </span>
                         [% FOREACH s IN shelves %]
-                            <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]">[% s.shelfname | html %]</a>
+                            <a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a>
                             [% IF ( loop.last ) %][% ELSE %]|[% END %]
                         [% END %]
                         </span>
@@ -503,7 +503,7 @@
                     [% IF ( BakerTaylorContentURL ) %]
                         <span class="results_summary">
                         <span class="label">Enhanced content: </span>
-                              [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL | html %]" target="_blank" rel="noreferrer">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL | html %]">Content Cafe</a>[% END %]
+                              [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL | uri %]" target="_blank" rel="noreferrer">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL | html %]">Content Cafe</a>[% END %]
                         </span>
                     [% END # / IF BakerTaylorContentURL %]
 
@@ -555,7 +555,7 @@
                                 [% IF ( LibraryThingForLibrariesID ) %]
                                     <li id="tab_LTFLreviews">
                                         <script src="https://www.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID | html %]"></script>
-                                        <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID | html %]&amp;accessibility=1">here</a>.</noscript>
+                                        <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID | uri %]&amp;accessibility=1">here</a>.</noscript>
                                     </li>
                                 [% END %]
                             [% END %]
@@ -634,7 +634,7 @@
 
                     <div id="holdings">
                         [% IF too_many_items %]
-                            <p>This record has many physical items ([% items_count | html %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | html %]&amp;viewallitems=1">Click here to view them all.</a></p>
+                            <p>This record has many physical items ([% items_count | html %]). <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;viewallitems=1">Click here to view them all.</a></p>
                         [% ELSIF ( itemloop.size ) %]
                             [% INCLUDE items_table items=itemloop tab="holdings" table_id="holdingst" %]
                             [% IF Koha.Preference('OPACAcquisitionDetails') and acquisition_details.total_quantity > 0 %]
@@ -705,7 +705,7 @@
                                 [% FOREACH MARCNOTE IN MARCNOTES %]
                                     <p>
                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                        <a href="[% MARCNOTE.marcnote | html %]">[% MARCNOTE.marcnote | html %]</a>
+                                        <a href="[% MARCNOTE.marcnote | uri %]">[% MARCNOTE.marcnote | html %]</a>
                                     [% ELSE %]
                                         [% MARCNOTE.marcnote FILTER html_line_break | html %]
                                     [% END %]
@@ -863,7 +863,7 @@
                                     </table>
                                 [% END # / IF subscription.latestserials %]
                             [% END # / FOREACH subscriptions %]
-                            <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblio.biblionumber | html %]">More details</a></p>
+                            <p class="subscription_moredetails"><a href="opac-serial-issues.pl?biblionumber=[% biblio.biblionumber | uri %]">More details</a></p>
                         </div> <!-- / #subscriptions -->
                     [% END # IF subscriptionsnumber %]
 
@@ -982,7 +982,7 @@
                                             [% UNLESS ( item_level_itypes ) %]
                                                 <td>[% XISBN.description | html %]</td>
                                             [% END %]
-                                            <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% XISBN.biblionumber | html %]">[% XISBN.title | html %]</a>
+                                            <td><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% XISBN.biblionumber | uri %]">[% XISBN.title | html %]</a>
                                                 [% IF ( XISBN.author ) %]<span> by </span>[% XISBN.author | html %][% END %]
                                                 [% IF ( XISBN.copyrightdate ) %]<span> &copy;</span>[% XISBN.copyrightdate | html %][% END %]
                                                 [% IF ( XISBN.publishercode ) %]
@@ -1075,16 +1075,16 @@
                         <ul class="pg_menu clearfix">
                             <li class="left_results">
                                 [% IF ( previousBiblionumber ) %]
-                                    <a href="opac-detail.pl?biblionumber=[% previousBiblionumber | html %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous biblio[% END %]"><i class="fa fa-angle-double-left"></i> Previous</a>
+                                    <a href="opac-detail.pl?biblionumber=[% previousBiblionumber | uri %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( previousTitle ) %][% previousTitle | html %][% ELSE %]previous biblio[% END %]"><i class="fa fa-angle-double-left"></i> Previous</a>
                                 [% ELSE %]
                                     <span>Previous</span>
                                 [% END %]
                             </li>
                             [%# busc is already URI encoded %]
-                            <li class="back_results"><a href="opac-search.pl?[% busc | html %]" title="Back to the results search list">Back to results</a></li>
+                            <li class="back_results"><a href="opac-search.pl?[% busc | uri %]" title="Back to the results search list">Back to results</a></li>
                             <li class="right_results">
                                 [% IF ( nextBiblionumber ) %]
-                                    <a href="opac-detail.pl?biblionumber=[% nextBiblionumber | html %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END %]">Next <i class="fa fa-angle-double-right"></i></a>
+                                    <a href="opac-detail.pl?biblionumber=[% nextBiblionumber | uri %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END %]">Next <i class="fa fa-angle-double-right"></i></a>
                                 [% ELSE %]
                                     <span>Next</span>
                                 [% END %]
@@ -1100,7 +1100,7 @@
                                         [% ELSE %]
                                             <li class="li_pag_[% loop.count | html %]">
                                         [% END %]
-                                        <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | html %]&amp;query_desc=[% query_desc |uri %]" title="View record &quot;[% listitem.title | html %]&quot;" class="a_pag" id="a_pag_[% loop.count | html %]">[% loop.count + offset | html %]</a></li>
+                                        <a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]" title="View record &quot;[% listitem.title | html %]&quot;" class="a_pag" id="a_pag_[% loop.count | html %]">[% loop.count + offset | html %]</a></li>
                                     [% END %]
                                 </ul>
                             </div>
@@ -1108,9 +1108,9 @@
                                 <ul id="ul_pagination_lists">
                                     [% FOREACH listitem IN listResults %]
                                         [% IF ( listitem.biblionumber == biblionumber ) %]
-                                            <li id="li_pag_[% loop.count | html %]" class="highlight" title="Go to detail"><span class="li_pag_index"><i class="fa fa-arrow-left"></i> [% loop.count  + offset | html %]</span><a href="opac-detail.pl?biblionumber=[% biblionumber | html %]&amp;query_desc=[% query_desc |uri %]">[% title | html %]</a><br> [% IF ( author ) %]by [% author | html %][% END %]</li>
+                                            <li id="li_pag_[% loop.count | html %]" class="highlight" title="Go to detail"><span class="li_pag_index"><i class="fa fa-arrow-left"></i> [% loop.count  + offset | html %]</span><a href="opac-detail.pl?biblionumber=[% biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% title | html %]</a><br> [% IF ( author ) %]by [% author | html %][% END %]</li>
                                         [% ELSE %]
-                                            <li id="li_pag_[% loop.count | html %]" title="Go to detail"><span class="li_pag_index">[% loop.count + offset | html %]</span><a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | html %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title | html %]</a><br> [% IF ( listitem.author ) %]by [% listitem.author | html %][% END %]</li>
+                                            <li id="li_pag_[% loop.count | html %]" title="Go to detail"><span class="li_pag_index">[% loop.count + offset | html %]</span><a href="opac-detail.pl?biblionumber=[% listitem.biblionumber | uri %]&amp;query_desc=[% query_desc |uri %]">[% listitem.title | html %]</a><br> [% IF ( listitem.author ) %]by [% listitem.author | html %][% END %]</li>
                                         [% END %]
                                     [% END %]
                                 </ul>
@@ -1156,7 +1156,7 @@
         [% IF ( LibraryThingForLibrariesID ) %]
             <script src="https://ltfl.librarything.com/forlibraries/widget.js?systype=koha&amp;id=[% LibraryThingForLibrariesID | html %]"></script>
             <noscript>This page contains enriched content visible when JavaScript is enabled or by clicking
-            <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID | html %]&amp;accessibility=1">here</a>.</noscript>
+            <a href="https://www.librarything.com/forlibraries/noscript.php?id=[% LibraryThingForLibrariesID | uri %]&amp;accessibility=1">here</a>.</noscript>
         [% END %]
 
         [% IF ( NovelistSelectProfile && ( normalized_isbn || normalized_upc ) ) %]
@@ -1232,7 +1232,7 @@
                             <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
                             <span class="[% ITEM_RESULT.holding_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
                                 [% IF ( ITEM_RESULT.branchurl ) %]
-                                    <a href="[% ITEM_RESULT.branchurl | html %]">[% ITEM_RESULT.branchname | html %]</a>
+                                    <a href="[% ITEM_RESULT.branchurl | uri %]">[% ITEM_RESULT.branchname | html %]</a>
                                 [% ELSE %]
                                     <span>[% ITEM_RESULT.branchname | html %]</span>
                                 [% END %]
@@ -1254,7 +1254,7 @@
                                 [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                     [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                     [% IF ( home_branch_url ) %]
-                                         <a href="[% home_branch_url | html %]">[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</a>
+                                         <a href="[% home_branch_url | uri %]">[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</a>
                                     [% ELSE %]
                                         <span>[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</span>
                                     [% END %]
@@ -1286,7 +1286,7 @@
                                 [% IF ( ITEM_RESULT.itemnumber == starting_itemnumber ) %]
                                     (<a class="close_shelf" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | html %]#[% tab | html %]">Browse shelf</a>)
                                 [% ELSE %]
-                                    (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | html %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | html %]#[% tab | html %]">Browse shelf</a>)
+                                    (<a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ITEM_RESULT.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% ITEM_RESULT.itemnumber | uri %]#[% tab | uri %]">Browse shelf</a>)
                                 [% END %]
                             [% END %]
                         [% END %]
@@ -1316,14 +1316,14 @@
                                     [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
                                     <a target="_blank" rel="noreferrer" href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                                     [% ELSE %]
-                                    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | html %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
+                                    <a href="/cgi-bin/koha/tracklinks.pl?uri=[% ITEM_RESULT.uri | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% ITEM_RESULT.itemnumber | url %]" property="url"> Link to resource </a>
                                     [% END %]
 
                                 [% ELSE %]
                                     [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
                                     <a target="_blank" rel="noreferrer" href="[% ITEM_RESULT.uri | html %]" property="url">[% ITEM_RESULT.uri | html %]</a>
                                     [% ELSE %]
-                                    <a href="[% ITEM_RESULT.uri | html %]" property="url">[% ITEM_RESULT.uri | html %]</a>
+                                    <a href="[% ITEM_RESULT.uri | uri %]" property="url">[% ITEM_RESULT.uri | html %]</a>
                                     [% END %]
                                 [% END %]
                             [% END %]
@@ -1352,7 +1352,7 @@
                                 [% FOREACH r IN ITEM_RESULT.course_reserves %]
                                     [% IF r.course.enabled == 'yes' %]
                                         <p>
-                                            <a href="opac-course-details.pl?course_id=[% r.course.course_id | html %]">
+                                            <a href="opac-course-details.pl?course_id=[% r.course.course_id | uri %]">
                                             [% r.course.course_name | html %]
                                             <!--[% IF r.course.course_number %] [% r.course.course_number | html %] [% END %]-->
                                             [% IF r.course.section %] [% r.course.section | html %] [% END %]

@@ -49,7 +49,7 @@
 </tr>
 [% FOREACH subscription IN subscriptions %]
     <tr>
-        <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]"># [% subscription.subscriptionid | html %]</a> </td>
+        <td><a href="subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]"># [% subscription.subscriptionid | html %]</a> </td>
         <td>[% subscription.frequency.description | html %]</td>
         <td>[% subscription.numberpattern.label | html %]</td>
         <td>[% IF subscription.branchcode %][% Branches.GetName( subscription.branchcode ) | html %][% END %]</td>
@@ -87,7 +87,7 @@
 [% END %]
 [% IF ( subscr ) %]
 [% IF ( subscriptioncount > 1 ) %]
-<tr ><td colspan="8">  <a href="serials-collection.pl?biblionumber=[% biblionumber | html %]">See any subscription attached to this biblio</a></td>
+<tr ><td colspan="8">  <a href="serials-collection.pl?biblionumber=[% biblionumber | uri %]">See any subscription attached to this biblio</a></td>
 </tr>
 [% END %]
 [% END %]
@@ -103,7 +103,7 @@
             [% IF year.year == 'manage' %]
                 <li><a href="#subscription-year-manage">Manage</a></li>
             [% ELSE %]
-                <li><a href="#subscription-year-[% year.year | html %]">[% year.year | html %]</a></li>
+                <li><a href="#subscription-year-[% year.year | uri %]">[% year.year | html %]</a></li>
             [% END %]
         [% END %]
     [% END %]
@@ -173,7 +173,7 @@
                 </td>
             [% END %]
 [% IF ( subscriptions.size > 1 ) %]
-                 <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid | html %]">[% serial.subscriptionid | html %]</a></td>
+                 <td><a href="serials-collection.pl?subscriptionid=[% serial.subscriptionid | uri %]">[% serial.subscriptionid | html %]</a></td>
 [% END %]
                 <td>
                     <span title="[% serial.publisheddate | html %]">

@@ -130,17 +130,17 @@
         <tbody class="filterclass">
         [% FOREACH loop_order IN loop_orders %]
             <tr>
-                <td class="basketfilterclass">[% loop_order.basketname | html %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno | html %]">[% loop_order.basketno | html %]</a>)</td>
+                <td class="basketfilterclass">[% loop_order.basketname | html %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno | uri %]">[% loop_order.basketno | html %]</a>)</td>
                 <td>
                   [% IF loop_order.basketgroupid %]
-                    [% loop_order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_order.booksellerid | html %]">[% loop_order.basketgroupid | html %]</a>)
+                    [% loop_order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_order.booksellerid | uri %]">[% loop_order.basketgroupid | html %]</a>)
                   [% ELSE %]
                     No basket group
                   [% END %]
                 </td>
-                <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber | html %]&amp;booksellerid=[% loop_order.booksellerid | html %]">[% loop_order.ordernumber | html %]</a></td>
+                <td class="orderfilterclass"><a href="neworderempty.pl?ordernumber=[% loop_order.ordernumber | uri %]&amp;booksellerid=[% loop_order.booksellerid | uri %]">[% loop_order.ordernumber | html %]</a></td>
                 <td class="summaryfilterclass">
-                  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber | html %]">[% loop_order.title | html %]</a>
+                  <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loop_order.biblionumber | uri %]">[% loop_order.title | html %]</a>
                 [% IF ( loop_order.author ) %] by [% loop_order.author | html %][% END %]
                 [% IF ( loop_order.isbn ) %] &ndash; [% loop_order.isbn | html %][% END %]
                 [% IF ( loop_order.publishercode ) %]
@@ -152,24 +152,24 @@
                 [% IF ( loop_order.suggestionid ) %]
                     <br/>
                     Suggested by: [% loop_order.surnamesuggestedby | html %][% IF ( loop_order.firstnamesuggestedby ) %], [% loop_order.firstnamesuggestedby | html %] [% END %]
-                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid | html %]&amp;op=show">suggestion #[% loop_order.suggestionid | html %]</a>)
+                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid | uri %]&amp;op=show">suggestion #[% loop_order.suggestionid | html %]</a>)
                 [% END %]
                 <br />
                 [% IF ( loop_order.order_internalnote ) %]
-                    <p class="ordernote"><strong>Internal note: </strong>[% loop_order.order_internalnote | html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber | html %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | html %]&type=internal">Change internal note</a>]</p>
+                    <p class="ordernote"><strong>Internal note: </strong>[% loop_order.order_internalnote | html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber | uri %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]&type=internal">Change internal note</a>]</p>
                 [% ELSE %]
-                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber | html %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | html %]&type=internal">Add internal note</a>]
+                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber | uri %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]&type=internal">Add internal note</a>]
                 [% END %]
                 [% IF ( loop_order.order_vendornote ) %]
                     <p class="ordernote"><strong>Vendor note: </strong>[% loop_order.order_vendornote | html %]</p>
                 [% ELSE %]
-                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber | html %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | html %]&type=vendor">Add vendor note</a>]
+                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% loop_order.ordernumber | uri %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]&type=vendor">Add vendor note</a>]
                 [% END %]
                 </td>
                 <td>
-                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% loop_order.ordernumber | html %]" class="previewData">Order</a><br>
-                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber | html %]" class="previewData">MARC</a><br>
-                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber | html %]" class="previewData">Card</a>
+                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% loop_order.ordernumber | uri %]" class="previewData">Order</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% loop_order.biblionumber | uri %]" class="previewData">MARC</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% loop_order.biblionumber | uri %]" class="previewData">Card</a>
                 </td>
                 <td>[% loop_order.replacementprice | $Price %]</td>
                 <td>[% loop_order.quantity | html %]</td>
@@ -177,7 +177,7 @@
                 <td>[% loop_order.total | $Price %]</td>
                 <td>[% loop_order.budget_name | html %]</td>
 				<td>
-                              <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber | html %]&amp;invoiceid=[% invoiceid | html %]">Receive</a>
+                              <a href="orderreceive.pl?ordernumber=[% loop_order.ordernumber | uri %]&amp;invoiceid=[% invoiceid | uri %]">Receive</a>
                     <br />
                     <a href="#" onclick="transfer_order_popup([% loop_order.ordernumber | html %]); return false;">Transfer</a>
 				</td>
@@ -185,10 +185,10 @@
                         [% IF ( loop_order.left_holds_on_order ) %]
                         <span class="button" title="Can't cancel order, ([% loop_order.holds_on_order | html %]) holds are linked with this order cancel holds first">Can't cancel order</span><br>
                         [% ELSE %]
-                        <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber | html %]&biblionumber=[% loop_order.biblionumber | html %]&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]">Cancel order</a><br />
+                        <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber | uri %]&biblionumber=[% loop_order.biblionumber | uri %]&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]">Cancel order</a><br />
                         [% END %]
                         [% IF ( loop_order.can_del_bib ) %]
-                        <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber | html %]&biblionumber=[% loop_order.biblionumber | html %]&del_biblio=1&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]">Cancel order and catalog record</a><br />
+                        <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber | uri %]&biblionumber=[% loop_order.biblionumber | uri %]&del_biblio=1&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]">Cancel order and catalog record</a><br />
                         [% ELSE %]
                         <span class="button" title="Can't delete catalog record, see constraints below">Can't cancel order and delete catalog record</span><br>
                         [% END %]
@@ -214,7 +214,7 @@
 [% ELSE %]
     <p>
         Invoice is closed, so you can't receive orders anymore.
-        <a href="/cgi-bin/koha/acqui/invoice.pl?op=reopen&invoiceid=[% invoiceid | html %]&referer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | html %]">Reopen it</a>.
+        <a href="/cgi-bin/koha/acqui/invoice.pl?op=reopen&invoiceid=[% invoiceid | uri %]&referer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]">Reopen it</a>.
     </p>
 [% END %]
 
@@ -277,34 +277,34 @@
     <tbody class="filterclass">
         [% FOREACH order IN loop_received %]
             <tr>
-                <td>[% order.basketname | html %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno | html %]">[% order.basketno | html %]</a>)</td>
+                <td>[% order.basketname | html %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>
                 <td>
                   [% IF order.basketgroupid %]
-                    [% order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% order.booksellerid | html %]">[% order.basketgroupid | html %]</a>)
+                    [% order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% order.booksellerid | uri %]">[% order.basketgroupid | html %]</a>)
                   [% ELSE %]
                     No basket group
                   [% END %]
                 </td>
                 <td>
-                  <a href="neworderempty.pl?ordernumber=[% order.ordernumber | html %]&amp;booksellerid=[% booksellerid | html %]">[% order.ordernumber | html %]</a>
+                  <a href="neworderempty.pl?ordernumber=[% order.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]">[% order.ordernumber | html %]</a>
                   [% IF (order.parent_ordernumber && (order.parent_ordernumber != order.ordernumber)) %]
-                    (<a href="neworderempty.pl?ordernumber=[% order.parent_ordernumber | html %]&amp;booksellerid=[% booksellerid | html %]" title="Original order line">[% order.parent_ordernumber | html %]</a>)
+                    (<a href="neworderempty.pl?ordernumber=[% order.parent_ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Original order line">[% order.parent_ordernumber | html %]</a>)
                   [% END %]
                 </td>
                 <td>
                   [% IF order.total_holds > 0 %]
                     [% IF order.item_holds > 0 %]
-                      <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber | html %]">[% order.item_holds | html %]</a></span>
+                      <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber | uri %]">[% order.item_holds | html %]</a></span>
                     [% ELSE %]
                       0
                     [% END %]
                     /
-                    <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber | html %]">[% order.total_holds | html %]</a></span>
+                    <span class="error"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% order.biblionumber | uri %]">[% order.total_holds | html %]</a></span>
                   [% ELSE %]
                     0
                   [% END %]
                 </td>
-                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | html %]">[% order.title | html %]</a>
+                <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">[% order.title | html %]</a>
                 [% IF ( order.author ) %] / [% order.author | html %][% END %]
                 [% IF ( order.isbn ) %] - [% order.isbn | html %][% END %]
                 [% IF ( order.publishercode ) %]
@@ -316,13 +316,13 @@
                 [% IF ( order.suggestionid ) %]
                     <br/>
                     Suggested by: [% order.surnamesuggestedby | html %][% IF ( order.firstnamesuggestedby ) %], [% order.firstnamesuggestedby | html %] [% END %]
-                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% order.suggestionid | html %]&amp;op=show">suggestion #[% order.suggestionid | html %]</a>)
+                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% order.suggestionid | uri %]&amp;op=show">suggestion #[% order.suggestionid | html %]</a>)
                 [% END %]
                 </td>
                 <td>
-                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% order.ordernumber | html %]" class="previewData">Order</a><br>
-                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber | html %]" class="previewData">MARC</a><br>
-                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber | html %]" class="previewData">Card</a>
+                  <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% order.ordernumber | uri %]" class="previewData">Order</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% order.biblionumber | uri %]" class="previewData">MARC</a><br>
+                  <a href="/cgi-bin/koha/catalogue/showmarc.pl?viewas=card&amp;id=[% order.biblionumber | uri %]" class="previewData">Card</a>
                 </td>
                 <td>[% order.replacementprice | $Price %]</td>
                 <td>[% order.quantityreceived | html %]</td>
@@ -351,7 +351,7 @@
                           Can't cancel receipt
                       </span>
                     [% ELSE %]
-                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]&op=cancelreceipt&ordernumber=[% order.ordernumber | html %]">Cancel receipt</a>
+                        <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | uri %]&op=cancelreceipt&ordernumber=[% order.ordernumber | uri %]">Cancel receipt</a>
                     [% END %]
                 </td>
             </tr>
@@ -381,7 +381,7 @@
 </div>
 
 [% IF (invoiceclosedate) %]
-    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | html %]">View invoice</a>
+    <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% invoiceid | uri %]">View invoice</a>
 [% ELSE %]
     <form action="/cgi-bin/koha/acqui/invoice.pl" method="get">
         <input type="hidden" name="invoiceid" value="[% invoiceid | html %]" />
@@ -430,7 +430,7 @@
       <input type="hidden" value="search" name="op" />
       <input type="hidden" value="[% invoiceid | html %]" name="invoiceid" />
       <input type="submit" value="Filter" />
-      <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | html %]">Clear</a>
+      <a href="/cgi-bin/koha/acqui/parcel.pl?invoiceid=[% invoiceid | uri %]">Clear</a>
     </fieldset>
   </fieldset>
 </form>

@@ -16,10 +16,10 @@
                         <ul class="dropdown-menu">
                             [% IF ( cannotedit ) %] <li class="disabled"> [% ELSE %]
                             <li> [% END %]
-                            <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid | html %]">Edit subscription</a></li>
+                            <a href="/cgi-bin/koha/serials/subscription-add.pl?op=modify&amp;subscriptionid=[% subscriptionid | uri %]">Edit subscription</a></li>
                             [% IF ( cannotedit ) %] <li class="disabled"> [% ELSE %]
                             <li> [% END %]
-                            <a href="/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid | html %]">Edit as new (duplicate)</a></li>
+                            <a href="/cgi-bin/koha/serials/subscription-add.pl?op=dup&amp;subscriptionid=[% subscriptionid | uri %]">Edit as new (duplicate)</a></li>
 
                             [% IF CAN_user_editcatalogue_edit_catalogue %]
                                 <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">Edit record</a></li>

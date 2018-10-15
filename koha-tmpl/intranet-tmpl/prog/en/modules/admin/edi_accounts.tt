@@ -264,7 +264,7 @@
     [% FOREACH account IN ediaccounts %]
     <tr>
       <td>[% account.id | html %]</td>
-      <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% account.vendor_id | html %]">[% account.vendor.name | html %]</a></td>
+      <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% account.vendor_id | uri %]">[% account.vendor.name | html %]</a></td>
       <td>[% account.description | html %]</td>
       <td>[% account.transport | html %]</td>
       <td>[% account.host | html %]</td>

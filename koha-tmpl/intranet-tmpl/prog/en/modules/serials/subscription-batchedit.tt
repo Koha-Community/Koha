@@ -47,8 +47,8 @@
                                 [% FOREACH subscription IN subscriptions %]
                                     <tr>
                                         <td>[% subscription.biblio.biblioitem.issn | html %]</td>
-                                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | html %]">[% subscription.biblio.title | html %] (#[% subscription.subscriptionid | html %])</a></td>
-                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% subscription.vendor.id | html %]">[% subscription.vendor.name | html %]</a></td>
+                                        <td><a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]">[% subscription.biblio.title | html %] (#[% subscription.subscriptionid | html %])</a></td>
+                                        <td><a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% subscription.vendor.id | uri %]">[% subscription.vendor.name | html %]</a></td>
                                         <td>[% AuthorisedValues.GetByCode('LOC', subscription.location) | html %]</td>
                                         <td>[% Branches.GetName(subscription.branchcode) | html %]</td>
                                         <td>[% ItemTypes.GetDescription( subscription.itemtype ) | html %]</td>

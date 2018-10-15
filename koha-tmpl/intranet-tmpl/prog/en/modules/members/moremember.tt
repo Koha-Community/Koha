@@ -92,7 +92,7 @@
                                                 [% patron_message.message_date | $KohaDates %]
                                                 [% Branches.GetName( patron_message.branchcode ) | html %]
                                                 [% IF patron_message.manager_id %]
-                                                    ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id | html %]">[% patron_message.get_column('manager_firstname') | html %] [% patron_message.get_column('manager_surname') | html %]</a> )
+                                                    ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% patron_message.manager_id | uri %]">[% patron_message.get_column('manager_firstname') | html %] [% patron_message.get_column('manager_surname') | html %]</a> )
                                                 [% END %]
                                                 <i>"[% patron_message.message | html %]"</i>
                                             </span>
@@ -173,19 +173,19 @@
                                         [% IF ( patron.phone ) %]
                                             <li>
                                                 <span class="label">Primary phone: </span>
-                                                <a href="tel:[% patron.phone | html %]">[% patron.phone | html %]</a>
+                                                <a href="tel:[% patron.phone | uri %]">[% patron.phone | html %]</a>
                                             </li>
                                         [% END %]
                                         [% IF ( patron.phonepro ) %]
                                             <li>
                                                 <span class="label">Secondary phone: </span>
-                                                <a href="tel:[% patron.phonepro | html %]">[% patron.phonepro | html %]</a>
+                                                <a href="tel:[% patron.phonepro | uri %]">[% patron.phonepro | html %]</a>
                                             </li>
                                         [% END %]
                                         [% IF ( patron.mobile ) %]
                                             <li>
                                                 <span class="label">Other phone: </span>
-                                                <a href="tel:[% patron.mobile | html %]">[% patron.mobile | html %]</a>
+                                                <a href="tel:[% patron.mobile | uri %]">[% patron.mobile | html %]</a>
                                             </li>
                                         [% END %]
                                         [% IF ( patron.fax ) %]
@@ -232,7 +232,7 @@
                                                 <ul>
                                                     [% FOREACH guarantee IN guarantees %]
                                                         [% IF logged_in_user.can_see_patron_infos( guarantee ) %]
-                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | html %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
+                                                            <li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% guarantee.firstname | html %] [% guarantee.surname | html %]</a></li>
                                                         [% ELSE %]
                                                             <li>[% guarantee.firstname | html %] [% guarantee.surname | html %]</li>
                                                         [% END %]
@@ -243,7 +243,7 @@
                                             <li>
                                                 <span class="label">Guarantor:</span>
                                                 [% IF guarantor.borrowernumber AND logged_in_user.can_see_patron_infos( guarantor ) %]
-                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | html %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
+                                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]">[% guarantor.firstname | html %] [% guarantor.surname | html %]</a>
                                                 [% ELSE %]
                                                     [% guarantor.firstname | html %] [% guarantor.surname | html %]
                                                 [% END %]
@@ -382,7 +382,7 @@
                                             <ol>
                                                 <li>
                                                     <span class="label">SMS number:</span>
-                                                    <a href="sms:[% patron.smsalertnumber | html %]">[% patron.smsalertnumber | html %]</a>
+                                                    <a href="sms:[% patron.smsalertnumber | uri %]">[% patron.smsalertnumber | html %]</a>
                                                 </li>
                                             </ol>
                                         </div>
@@ -476,7 +476,7 @@
                                             [% IF ( patron.password ) %]
                                                 *******
                                             [% ELSE %]
-                                                <span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | html %]">Undefined</a></span>
+                                                <span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | uri %]">Undefined</a></span>
                                             [% END %]
                                         </li>
 
@@ -537,7 +537,7 @@
                                             [% IF ( patron.B_phone ) %]
                                                 <li>
                                                     <span class="label">Phone: </span>
-                                                    <a href="tel:[% patron.B_phone | html %]">[% patron.B_phone |html  %]</a>
+                                                    <a href="tel:[% patron.B_phone | uri %]">[% patron.B_phone |html  %]</a>
                                                 </li>
                                             [% END %]
 

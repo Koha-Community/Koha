@@ -72,7 +72,7 @@
                             [% FOREACH note IN notes %]
                                 <tr>
                                     <td><input type="checkbox" name="issue_ids" value="[% note.issue_id | html %]"></td>
-                                    <td>[% note.item.biblio.title | html %] - [% note.item.biblio.author | html %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber | html %]">[% note.item.barcode | html %]</a>)</td>
+                                    <td>[% note.item.biblio.title | html %] - [% note.item.biblio.author | html %] (<a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% note.item.biblionumber | uri %]">[% note.item.barcode | html %]</a>)</td>
                                     <td>[% note.note | html %]</td>
                                     <td><span title="[% note.notedate | html %]">[% note.notedate | $KohaDates %]</span></td>
                                     <td>[% INCLUDE 'patron-title.inc' patron => note.patron hide_patron_infos_if_needed=1 %]</td>

@@ -116,7 +116,7 @@
             [% END %]
             <td>[% checkout_info.barcode | html %]</td>
             <td>
-              <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout_info.biblio.biblionumber | html %]&amp;type=intra"><strong>[% checkout_info.biblio.title | html %][% FOREACH subtitle IN checkout_info.biblio.subtitles %] [% subtitle.subfield | html %][% END %]</strong></a>[% IF checkout_info.biblio.author %], by [% checkout_info.biblio.author | html %][% END %][% IF ( checkout_info.item.itemnotes ) %]- <span class="circ-hlt">[% checkout_info.item.itemnotes | html %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout_info.biblio.biblionumber | html %]&amp;itemnumber=[% checkout_info.item.itemnumber | html %]#item[% checkout_info.item.itemnumber | html %]">[% checkout_info.item.barcode | html %]</a>
+              <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% checkout_info.biblio.biblionumber | uri %]&amp;type=intra"><strong>[% checkout_info.biblio.title | html %][% FOREACH subtitle IN checkout_info.biblio.subtitles %] [% subtitle.subfield | html %][% END %]</strong></a>[% IF checkout_info.biblio.author %], by [% checkout_info.biblio.author | html %][% END %][% IF ( checkout_info.item.itemnotes ) %]- <span class="circ-hlt">[% checkout_info.item.itemnotes | html %]</span>[% END %] <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% checkout_info.biblio.biblionumber | html %]&amp;itemnumber=[% checkout_info.item.itemnumber | html %]#item[% checkout_info.item.itemnumber | html %]">[% checkout_info.item.barcode | html %]</a>
             </td>
             <td>
               [% IF checkout_info.NEEDSCONFIRMATION %]

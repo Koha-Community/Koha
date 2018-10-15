@@ -51,7 +51,7 @@
       [% FOREACH biblio IN resultsloop %]
         <tr>
             <td>
-                <p><span class="title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.title | html %]</a></span>
+                <p><span class="title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a></span>
                 [% FOREACH subtitle IN biblio.subtitles %] <span class="subtitle">[% subtitle.subfield | html %]</span>[% END %]
                 [% IF ( biblio.author ) %]  by <span class="author">[% biblio.author | html %]</span>,[% END %]</p>
                 <p>[% IF ( biblio.isbn ) %] [% biblio.isbn | html %][% END %]
@@ -68,11 +68,11 @@
                 [% biblio.copyrightdate | html %]
             </td>
         <td>
-        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | html %]&amp;viewas=html" class="btn btn-default btn-xs previewMARC">View MARC</a>
+        <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblio.biblionumber | uri %]&amp;viewas=html" class="btn btn-default btn-xs previewMARC">View MARC</a>
         </td>
             <td>
-            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;biblionumber=[% biblio.biblionumber | html %]" class="btn btn-default btn-xs" title="Order this one">
-                Place order
+            <a href="/cgi-bin/koha/acqui/neworderempty.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" class="btn btn-default btn-xs" title="Order this one">
+                Order
             </a>
             </td>
         </tr>

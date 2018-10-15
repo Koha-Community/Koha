@@ -74,7 +74,7 @@
             <td><p><b>[% reserveloo.pullcount | html %]</b></p></td>
             <td>[% reserveloo.count | html %]</td>
             <td>[% reserveloo.rcount | html %]</td>
-            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber | html %]">[% reserveloo.firstname | html %] [% reserveloo.surname | html %]</a></td>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber | uri %]">[% reserveloo.firstname | html %] [% reserveloo.surname | html %]</a></td>
             <td>
             <p>
                 [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]

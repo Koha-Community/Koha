@@ -138,7 +138,7 @@
                                 <input type="hidden" id="borrowernumber_[% p.patron_list_patron_id | html %]" value="[% p.borrowernumber.id | html %]" />
                             </td>
                             <td>
-                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber.borrowernumber | html %]">
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.borrowernumber.borrowernumber | uri %]">
                                     [% p.borrowernumber.cardnumber | html %]
                                 </a>
                             </td>

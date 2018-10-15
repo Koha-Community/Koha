@@ -68,7 +68,7 @@
                         <tbody>
                             [% FOREACH cr IN course_reserves %]
                                 <tr>
-                                    <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | html %]">[% cr.biblio.title | html %]</a></td>
+                                    <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% cr.biblio.title | html %]</a></td>
                                     <td>[% cr.biblio.author | html %]</td>
                                     <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
                                     <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) | html %]</i></td>
@@ -84,9 +84,9 @@
                                         [% END %]
                                     </td>
                                     <td>[% IF (cr.item.uri) %]
-                                            <a href="[% cr.item.uri | html %]">Item URI</a>
+                                            <a href="[% cr.item.uri | uri %]">Item URI</a>
                                         [% ELSIF (cr.biblioitem.url) %]
-                                            <a href="[% cr.biblioitem.url | html %]">Record URL</a>
+                                            <a href="[% cr.biblioitem.url | uri %]">Record URL</a>
                                         [% END %]
                                     </td>
                                 </tr>

@@ -30,7 +30,7 @@
             [% IF ( authid ) %]
             <a href="[% authidurl | url %][% authid | url %]">[% heading | html %]</a>
             [% ELSE %]
-            <a href="[% searchurl | url %][% heading | html %]">[% heading | html %]</a>
+            <a href="[% searchurl | url %][% heading | uri %]">[% heading | html %]</a>
             [% END %]
         [% ELSE %]
             [% heading | html %]

@@ -16,7 +16,7 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a> &rsaquo;
-    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Pay fines for [% patron.firstname | html %] [% patron.surname | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">Pay fines for [% patron.firstname | html %] [% patron.surname | html %]</a> &rsaquo;
     [% IF    ( pay_individual )      %]Pay an individual fine
     [% ELSIF ( writeoff_individual ) %]Write off an individual fine
     [% ELSE %]
@@ -41,16 +41,16 @@
 <div class="statictabs">
 <ul>
     <li>
-    <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | html %]">Account</a>
+    <a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Account</a>
     </li>
     <li class="active">
-    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]" >Pay fines</a>
+    <a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Pay fines</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual invoice</a>
+    <a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a>
     </li>
     <li>
-    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | html %]" >Create manual credit</a>
+    <a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a>
     </li>
 </ul>
 <div class="tabs-container">

@@ -35,7 +35,7 @@
                             [% SET p = e.patron %]
                             <tr>
                                 <td>
-                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.id | html %]">[% p.surname | html %], [% p.firstname | html %]</a>
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% p.id | uri %]">[% p.surname | html %], [% p.firstname | html %]</a>
                                 </td>
                                 <td>
                                     [% p.cardnumber | html %]

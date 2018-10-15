@@ -105,7 +105,7 @@
                     <div class="dialog alert">No valid patrons to merge were found.</div>
                 [% ELSE %]
                     <p>
-                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id | html %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a>
+                        Patron records merged into <a href="moremember.pl?borrowernumber=[% keeper.id | uri %]">[% INCLUDE 'patron-title.inc' patron = keeper %]</a>
                     </p>
 
                     [% FOREACH pair IN results.merged.pairs %]

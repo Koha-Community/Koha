@@ -16,7 +16,7 @@
 <h1>Alert subscribers for <i>[% bibliotitle | html %]</i></h1>
 
 <p>
-    <span class="label">Subscription:</span> <a href="subscription-detail.pl?subscriptionid=[% subscriptionid | html %]">[% bibliotitle | html %] #[% subscriptionid | html %]</a>
+    <span class="label">Subscription:</span> <a href="subscription-detail.pl?subscriptionid=[% subscriptionid | uri %]">[% bibliotitle | html %] #[% subscriptionid | html %]</a>
 </p>
 
 [% IF subscribers.count %]
@@ -27,7 +27,7 @@
         [% FOREACH subscriber IN subscribers %]
         <tr>
             <td>
-                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber | html %]">[% INCLUDE 'patron-title.inc' patron=subscriber %]</a>
+                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% subscriber.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=subscriber %]</a>
             </td>
         </tr>
         [% END %]

@@ -4,7 +4,7 @@
 <div id="search-facets">
 <h4>Refine your search</h4>
 <ul>
-    <li id="availability_facet">Availability<ul><li>[% IF ( available ) %]<strong>Showing only available items</strong></li><li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | html %][% limit_cgi_not_availablity | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Show all items</a>[% ELSE %]<a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | html %][% limit_cgi | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=available">Limit to currently available items</a>[% END %]</li></ul>
+    <li id="availability_facet">Availability<ul><li>[% IF ( available ) %]<strong>Showing only available items</strong></li><li><a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | uri %][% limit_cgi_not_availablity | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]">Show all items</a>[% ELSE %]<a href="/cgi-bin/koha/catalogue/search.pl?[% query_cgi | html %][% limit_cgi | html %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |url %][% END %]&amp;limit=available">Limit to currently available items</a>[% END %]</li></ul>
 	[% IF ( related ) %] <li>(related searches: [% FOREACH relate IN related %][% relate.related_search | html %][% END %])</li>[% END %]
 	</li>
 
@@ -33,10 +33,10 @@
       [% IF facet.active %]
         [% SET local_url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
         <span class="facet-label">[% facet.facet_label_value | html %]</span>
-        [<a href="[% local_url | html %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+        [<a href="[% local_url | uri %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
       [% ELSE %]
         [% SET local_url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
-        <span class="facet-label"><a href="[% local_url | html %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
+        <span class="facet-label"><a href="[% local_url | uri %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
         [% IF ( displayFacetCount ) %]
           <span class="facet-count"> ([% facet.facet_count | html %])</span>
         [% END %]
@@ -45,7 +45,7 @@
   [% END %]
   [% IF ( facets_loo.expandable ) %]
       <li class="showmore">
-          <a href="[% url | html %][% IF offset %]&amp;offset=[% offset |url %][% END %]&amp;expand=[% facets_loo.expand |url %]#[% facets_loo.type_id |url %]">Show more</a>
+          <a href="[% url | uri %][% IF offset %]&amp;offset=[% offset |url %][% END %]&amp;expand=[% facets_loo.expand |url %]#[% facets_loo.type_id |url %]">Show more</a>
       </li>
   [% END %]
 </ul></li>

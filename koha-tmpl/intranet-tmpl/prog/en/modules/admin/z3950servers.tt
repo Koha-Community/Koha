@@ -167,7 +167,7 @@
         <tbody>
         [% FOREACH loo IN loop %]
             <tr>
-            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | html %]">[% loo.servername | html %]</a></td><td>[% loo.host | html %]:[% loo.port | html %]</td><td>[% loo.db | html %]</td><td>[% loo.userid | html %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank | html %]</td>
+            <td><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]">[% loo.servername | html %]</a></td><td>[% loo.host | html %]:[% loo.port | html %]</td><td>[% loo.db | html %]</td><td>[% loo.userid | html %]</td><td>[% IF loo.password %]########[% END %]</td><td>[% IF ( loo.checked ) %]Yes[% ELSE %]No[% END %]</td><td>[% loo.rank | html %]</td>
             <td>[% loo.syntax | html %]</td><td>[% loo.encoding | html %]</td><td>[% loo.timeout | html %]</td>
             <td>[% IF ( loo.recordtype == 'biblio' )  %]
                 <span>Bibliographic</span>
@@ -181,9 +181,9 @@
                         Actions <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="reportactions[% savedreport.id | html %]">
-                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | html %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id | html %]"><i class="fa fa-copy"></i> Copy</a></li>
-                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=delete_confirmed&amp;id=[% loo.id | html %]" class="delete" data-servername="[% loo.servername | html %]"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=edit&amp;id=[% loo.id | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=add&amp;id=[% loo.id | uri %]"><i class="fa fa-copy"></i> Copy</a></li>
+                        <li><a href="/cgi-bin/koha/admin/z3950servers.pl?op=delete_confirmed&amp;id=[% loo.id | uri %]" class="delete" data-servername="[% loo.servername | html %]"><i class="fa fa-trash"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>

@@ -39,7 +39,7 @@
                 <tr><th>Group</th><th>Call number range</th><th>Number of items displayed</th><th>Total items in group</th>
 				</tr>
 			[% FOREACH looptable IN mainloo.looptables %]
-				<tr><td><a href="#table[% looptable.coltitle | html %]">[% looptable.coltitle | html %]</a></td>
+				<tr><td><a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a></td>
 					<td>[% IF ( looptable.looptable_count ) %]
 						[% looptable.looptable_first | html %] to [% looptable.looptable_last | html %]
 						[% END %]
@@ -71,7 +71,7 @@
 						<td>[% loop.count | html %]</td>
                         <td>[% IF ( loopro.itemcallnumber ) %][% loopro.itemcallnumber | html %][% ELSE %]No call number[% END %]</td>
                         <td>[% IF ( loopro.barcode ) %][% loopro.barcode | html %][% ELSE %]No barcode[% END %]</td>
-                        <td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | html %]">[% IF ( loopro.title ) %][% loopro.title | html %][% ELSE %]NO TITLE[% END %]</a> [% IF ( loopro.author ) %] by [% loopro.author | html %][% END %]</p>
+                        <td><p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% loopro.biblionumber | uri %]">[% IF ( loopro.title ) %][% loopro.title | html %][% ELSE %]NO TITLE[% END %]</a> [% IF ( loopro.author ) %] by [% loopro.author | html %][% END %]</p>
                             [% IF ( loopro.branch ) %]at [% Branches.GetName( loopro.branch ) | html %][% END %]
 						</td>
 					</tr>

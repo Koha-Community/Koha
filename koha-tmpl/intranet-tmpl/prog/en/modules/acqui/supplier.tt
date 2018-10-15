@@ -65,7 +65,7 @@
     <p><span class="label">Alternative phone: </span>[% contact.altphone | html %]</p>
     <p><span class="label">Fax: </span>[% contact.fax | html %]</p>
     [% IF ( contact.email ) %]
-        <p><span class="label">Email: </span><a href="mailto:[% contact.email | html %]">[% contact.email | html %]</a></p>
+        <p><span class="label">Email: </span><a href="mailto:[% contact.email | uri %]">[% contact.email | html %]</a></p>
     [% END %]
     [% IF ( contact.notes ) %]
         <p><span class="label">Notes: </span>[% contact.notes | html %]</p>
@@ -264,7 +264,7 @@
                 <p><span class="label">Phone: </span>[% phone | html %]</p>
                 <p><span class="label">Fax: </span>[% fax | html %]</p>
                 [% IF ( url ) %]
-                    <p><span class="label">Website: </span><a href="[% url | html %]">[% url | html %]</a></p>
+                    <p><span class="label">Website: </span><a href="[% url | uri %]">[% url | html %]</a></p>
                 [% END %]
                 [% IF ( accountnumber ) %]
                     <p><span class="label">Account number: </span>[% accountnumber | html %]</p>
@@ -334,7 +334,7 @@
                     [% FOREACH contract IN contracts %]
                         <tr>
                         <td>
-                            <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | html %]&amp;booksellerid=[% contract.booksellerid | html %]">[% contract.contractname | html %]</a>
+                            <a href="/cgi-bin/koha/admin/aqcontract.pl?op=add_form&amp;contractnumber=[% contract.contractnumber | uri %]&amp;booksellerid=[% contract.booksellerid | uri %]">[% contract.contractname | html %]</a>
                         </td>
                         <td>[% contract.contractdescription | html %]</td>
                         <td><span title="[% contract.contractstartdate | html %]">[% contract.contractstartdate | $KohaDates %]</span></td>

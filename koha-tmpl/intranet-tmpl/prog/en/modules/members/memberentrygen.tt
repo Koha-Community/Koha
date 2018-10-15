@@ -26,7 +26,7 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
     [% UNLESS blocking_error %]
-    &rsaquo;[% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">[% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]</a>  &rsaquo;[% END %]
+    &rsaquo;[% IF (firstname || surname ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | uri %]">[% IF (firstname) %][% firstname | html %] [% END %][% IF (surname) %][% surname | html %] [% END %]</a>  &rsaquo;[% END %]
 <strong>[% IF ( opadd ) %]Add[% ELSIF ( opduplicate ) %]Duplicate[% ELSE %] Modify[% END %] patron ([%IF ( categoryname ) %][% categoryname | html %][% ELSE %][% IF ( I ) %]Organization[% END %][% IF ( A ) %]Adult[% END %][% IF ( C ) %]Child[% END %][% IF ( P ) %]Professional[% END %][% IF ( S ) %]Staff[% END %][% END %])</strong>
     [% END %]
 </div>
@@ -326,7 +326,7 @@
 	        [% ELSE %]
 	        <li id="contact-details" style="display: none">
 	        [% END %]
-	            <span class="label">Organization #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | html %]" target="blank">[% guarantorid | html %]</a>[% END %]
+	            <span class="label">Organization #:</span> [% IF ( guarantorid ) %] <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | uri %]" target="blank">[% guarantorid | html %]</a>[% END %]
 	        </li>
 	        <li>
 	            <label for="contactname">Organization name: </label>
@@ -347,7 +347,7 @@
      <span class="label">Patron #:</span>
      [% IF guarantorid %]
         [% IF logged_in_user.can_see_patron_infos( guarantor ) %]
-            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | html %]" target="blank">[% guarantorid | html %]</a>
+            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantorid | uri %]" target="blank">[% guarantorid | html %]</a>
         [% ELSE %]
             [% guarantorid | html %]
         [% END %]

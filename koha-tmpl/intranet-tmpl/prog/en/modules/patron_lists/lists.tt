@@ -42,7 +42,7 @@
                 [% FOREACH l IN lists %]
                     [% SET shared_by_other = l.owner.id != logged_in_user.id %]
                     <tr>
-                        <td><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | html %]">[% l.name | html %]</a></td>
+                        <td><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]">[% l.name | html %]</a></td>
                         <td>[% l.patron_list_patrons_rs.count || 0 | html %]</td>
                         <td>
                             [% IF l.shared %]
@@ -59,9 +59,9 @@
                                    Actions <b class="caret"></b>
                                 </a>
                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="listactions[% l.patron_list_id | html %]">
-                                    <li><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | html %]"><i class="fa fa-user"></i> Add patrons</a></li>
+                                    <li><a href="/cgi-bin/koha/patron_lists/list.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-user"></i> Add patrons</a></li>
                                     [% UNLESS shared_by_other %]
-                                        <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | html %]"><i class="fa fa-pencil"></i> Edit list</a></li>
+                                        <li><a href="/cgi-bin/koha/patron_lists/add-modify.pl?patron_list_id=[% l.patron_list_id | uri %]"><i class="fa fa-pencil"></i> Edit list</a></li>
                                         <li><a class="delete_patron" href="/cgi-bin/koha/patron_lists/delete.pl?patron_list_id=[% l.patron_list_id | html %]" data-list-name="[% l.name | html %]"><i class="fa fa-trash"></i> Delete list</a></li>
                                     [% END %]
                                     [% IF ( l.patron_list_patrons_rs.count ) %]
@@ -71,14 +71,14 @@
                                         </li>
                                         [% IF CAN_user_tools_edit_patrons %]
                                             <li>
-                                                <a href="/cgi-bin/koha/tools/modborrowers.pl?patron_list_id=[% l.patron_list_id | html %]&op=show">
+                                                <a href="/cgi-bin/koha/tools/modborrowers.pl?patron_list_id=[% l.patron_list_id | uri %]&op=show">
                                                     <i class="fa fa-pencil"></i> Batch edit patrons
                                                 </a>
                                             </li>
                                         [% END %]
                                         [% IF CAN_user_tools_delete_anonymize_patrons %]
                                             <li>
-                                                <a href="/cgi-bin/koha/tools/cleanborrowers.pl?step=2&patron_list_id=[% l.patron_list_id | html %]&checkbox=borrower">
+                                                <a href="/cgi-bin/koha/tools/cleanborrowers.pl?step=2&patron_list_id=[% l.patron_list_id | uri %]&checkbox=borrower">
                                                     <i class="fa fa-trash"></i> Batch delete patrons
                                                 </a>
                                             </li>

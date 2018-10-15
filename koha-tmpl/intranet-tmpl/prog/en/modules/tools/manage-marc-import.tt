@@ -21,7 +21,7 @@
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> 
 [% IF ( import_batch_id ) %]
  &rsaquo;
- <a href="[% script_name | html %]">Manage staged MARC records</a>
+ <a href="[% script_name | uri %]">Manage staged MARC records</a>
  &rsaquo; Batch [% import_batch_id | html %]
 [% ELSE %]
  &rsaquo; Manage staged MARC records
@@ -267,7 +267,7 @@
       [% IF ( page.current_page ) %]
       <span class="current">[% page.page_number | html %]</span>
       [% ELSE %]
-      <a href="[% page.script_name | html %]?offset=[% page.offset | html %]">[% page.page_number | html %]</a>
+      <a href="[% page.script_name | uri %]?offset=[% page.offset | uri %]">[% page.page_number | html %]</a>
       [% END %]
     [% END %]
 </div>
@@ -287,7 +287,7 @@
   [% FOREACH batch_lis IN batch_list %]
     <tr>
     <td>[% batch_lis.import_batch_id | html %]</td>
-    <td><a href="[% batch_lis.script_name | html %]?import_batch_id=[% batch_lis.import_batch_id | html %]">[% batch_lis.file_name | html %]</a></td>
+    <td><a href="[% batch_lis.script_name | uri %]?import_batch_id=[% batch_lis.import_batch_id | uri %]">[% batch_lis.file_name | html %]</a></td>
     <td>[% batch_lis.comments | html %]</td>
     <td>[% IF ( batch_lis.record_type == 'auth' ) %]Authority[% ELSE %]Bibliographic[% END %]</td>
     <td>
@@ -309,7 +309,7 @@
     </td>
     <td>[% batch_lis.upload_timestamp | html %]</td>
     <td>[% batch_lis.num_records | html %]</td>
-    <td>[% batch_lis.num_items | html %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name | html %]?import_batch_id=[% batch_lis.import_batch_id | html %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
+    <td>[% batch_lis.num_items | html %][% IF ( batch_lis.num_items ) %] <a href="[% batch_lis.script_name | uri %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;op=create_labels">(Create label batch)</a>[% END %]</td>
     <td class="actions">
         [% IF ( batch_lis.can_clean ) %]
           <form method="post" action="[% batch_lis.script_name | html %]" name="clean_batch_[% batch_lis.import_batch_id | html %]" id="clean_batch_[% batch_lis.import_batch_id | html %]" class="batch_form batch_clean" >
@@ -334,7 +334,7 @@
       [% IF ( page.current_page ) %]
       <span class="current">[% page.page_number | html %]</span>
       [% ELSE %]
-      <a href="[% page.script_name | html %]?offset=[% page.offset | html %]">[% page.page_number | html %]</a>
+      <a href="[% page.script_name | uri %]?offset=[% page.offset | uri %]">[% page.page_number | html %]</a>
       [% END %]
     [% END %]
 </div>

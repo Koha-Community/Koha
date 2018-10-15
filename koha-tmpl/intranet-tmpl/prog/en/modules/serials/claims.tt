@@ -129,7 +129,7 @@
                             <span class="branch-[% missingissue.branchcode | html %]">[% Branches.GetName( missingissue.branchcode ) | html %]</span>
                         </td>
                         <td>
-                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid | html %]">[% missingissue.title | html %]</a>
+                        <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% missingissue.subscriptionid | uri %]">[% missingissue.title | html %]</a>
                         </td>
                         <td>[% missingissue.issn | html %]</td>
                         <td>[% missingissue.serialseq | html %]</td>

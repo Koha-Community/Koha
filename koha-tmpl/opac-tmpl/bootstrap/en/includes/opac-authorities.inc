@@ -11,7 +11,7 @@
             [% IF ( node.current_value ) %]
                 <span class="currentauth">[% node.value | html %]</span>
             [% ELSE %]
-                <a href="opac-authoritiesdetail.pl?authid=[% node.authid | html %]" title="Term">[% node.value | html %]</a>
+                <a href="opac-authoritiesdetail.pl?authid=[% node.authid | uri %]" title="Term">[% node.value | html %]</a>
             [% END %]
             [% IF ( node.children && node.children.size > 0 ) %]
                 [% PROCESS showtree tree = node.children %]
@@ -52,8 +52,8 @@
 [% END %]
 
 [% BLOCK authheadingdisplay %]
-    [% IF authid %]<a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | html %]">[% heading | html %]</a>
-    [% ELSIF search %]<a href="/cgi-bin/koha/opac-authorities-home.pl?op=do_search&amp;type=opac&amp;operator=contains&amp;marclist=mainentry&amp;and_or=and&amp;orderby=HeadingAsc&amp;value=[% search | html %]">[% heading | html %]</a>
+    [% IF authid %]<a href="/cgi-bin/koha/opac-authoritiesdetail.pl?authid=[% authid | uri %]">[% heading | html %]</a>
+    [% ELSIF search %]<a href="/cgi-bin/koha/opac-authorities-home.pl?op=do_search&amp;type=opac&amp;operator=contains&amp;marclist=mainentry&amp;and_or=and&amp;orderby=HeadingAsc&amp;value=[% search | uri %]">[% heading | html %]</a>
     [% ELSE %][% heading | html %]
     [% END %]
 [% END %]

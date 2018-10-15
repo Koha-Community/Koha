@@ -39,7 +39,7 @@ div#result { margin-top: 1em; }
        [% END %]
 
     [% ELSE %]
-        <p>The merge was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% ref_biblionumber | html %]">Click here to see the merged record.</a></p>
+        <p>The merge was successful. <a href="/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber=[% ref_biblionumber | uri %]">Click here to see the merged record.</a></p>
         <h3>Report</h3>
         <table>
             <thead>
@@ -103,7 +103,7 @@ div#result { margin-top: 1em; }
                     [% FOREACH subtitle IN record.subtitles %]
                         [% subtitle.subfield | html %]
                     [% END %]
-                    ([% record.biblionumber | html %]) <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% record.biblionumber | html %]" class="previewData">View MARC</a>
+                    ([% record.biblionumber | uri %]) <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% record.biblionumber | uri %]" class="previewData">View MARC</a>
                 </label>
             </li>
         [% END %]

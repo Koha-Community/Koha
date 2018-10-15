@@ -10,7 +10,7 @@
         </a>
         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id | html %]">
               <li>
-                  <a href="[% script_name | html %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | html %]"><i class="fa fa-pencil"></i> Edit</a>
+                  <a href="[% script_name | uri %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
               </li>
               [% IF block_budget.count %]
                   <li class="disabled">
@@ -18,17 +18,17 @@
                   </li>
               [% ELSE %]
                   <li>
-                      <a href="[% script_name | html %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | html %]"><i class="fa fa-trash"></i> Delete</a>
+                      <a href="[% script_name | uri %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash"></i> Delete</a>
                   </li>
               [% END %]
               <li>
-                  <a href="[% script_name | html %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | html %]"><i class="fa fa-copy"></i> Duplicate</a>
+                  <a href="[% script_name | uri %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
               </li>
               <li>
-                  <a href="[% script_name | html %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | html %]"><i class="fa fa-times-circle"></i> Close</a>
+                  <a href="[% script_name | uri %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
               </li>
               <li>
-                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | html %]"><i class="fa fa-plus"></i> Add fund</a>
+                  <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add fund</a>
               </li>
         </ul>
     </div>
@@ -103,11 +103,11 @@
     [% END %]
     [% IF close_form %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
-        <span>Close budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">[% budget_period_description | html %]</a></span>
+        <span>Close budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a></span>
     [% END %]
     [% IF closed %]
         <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Budgets</a> &rsaquo;
-        <span>Budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">[% budget_period_description | html %]</a> closed</span>
+        <span>Budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a> closed</span>
     [% END %]
     [% IF ( else ) %]
         <span>Budgets administration</span>
@@ -254,7 +254,7 @@
         <!-- ###################################### -->
         <input type="submit" value="Save" />
         [% IF ( budget_period_id ) %]
-            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]" class="cancel">Cancel</a>
+            <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]" class="cancel">Cancel</a>
         [% ELSE %]
             <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl" class="cancel">Cancel</a>
         [% END %]
@@ -309,7 +309,7 @@
     <a href="/cgi-bin/koha/admin/aqbudgetperiods.pl">Back</a>
   [% ELSE %]
     <h3>The unreceived orders from the following funds will be moved</h3>
-      Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | html %]">[% budget_period_description | html %]</a>:
+      Fund list of budget <a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% budget_period_id | uri %]">[% budget_period_description | html %]</a>:
     <table id="budgeth">
       <thead>
         <tr>
@@ -437,7 +437,7 @@
           <tbody>
               [% FOREACH period_active IN period_active_loop %]
                 <tr>
-                <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_active.budget_period_id | html %]" title="View funds for [% period_active.budget_period_description | html %]">[% period_active.budget_period_description | html %]</a></td>
+                <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_active.budget_period_id | uri %]" title="View funds for [% period_active.budget_period_description | html %]">[% period_active.budget_period_description | html %]</a></td>
                 <td><span title="[% period_active.budget_period_startdate | html %]">[% period_active.budget_period_startdate | $KohaDates %]</span></td>
                 <td><span title="[% period_active.budget_period_enddate | html %]">[% period_active.budget_period_enddate | $KohaDates %]</span></td>
                 <td>
@@ -473,7 +473,7 @@
           <tbody>
               [% FOREACH period_loo IN period_inactive_loop %]
                   <tr>
-                  <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id | html %]" title="View funds for [% period_loo.budget_period_description | html %]">[% period_loo.budget_period_description | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/admin/aqbudgets.pl?budget_period_id=[% period_loo.budget_period_id | uri %]" title="View funds for [% period_loo.budget_period_description | html %]">[% period_loo.budget_period_description | html %]</a></td>
                   <td><span title="[% period_loo.budget_period_startdate | html %]">[% period_loo.budget_period_startdate | $KohaDates %]</span></td>
                   <td><span title="[% period_loo.budget_period_enddate | html %]">[% period_loo.budget_period_enddate | $KohaDates %]</span></td>
                   <td> [% IF ( period_loo.budget_period_locked ) %]<span style="color:green;">Locked</span>&nbsp;[% ELSE %][% END %] </td>

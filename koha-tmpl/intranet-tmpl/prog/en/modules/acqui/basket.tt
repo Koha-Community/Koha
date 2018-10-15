@@ -36,7 +36,7 @@
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
     <a href="/cgi-bin/koha/acqui/acqui-home.pl">Acquisitions</a> &rsaquo;
-    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a> &rsaquo;
+    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a> &rsaquo;
     [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname | html %] [% IF ( basketno ) %]([% basketno | html %])[% END %] for [% booksellername | html %]
 </div>
 
@@ -58,25 +58,25 @@
                     [% IF active %]
                         <div class="btn-group"><a href="#addtoBasket" role="button" class="btn btn-default btn-sm" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></div>
                     [% END %]
-                    <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]&amp;op=add_form" class="btn btn-default btn-sm" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
+                    <div class="btn-group"><a href="basketheader.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]&amp;op=add_form" class="btn btn-default btn-sm" id="basketheadbutton"><i class="fa fa-pencil"></i> Edit basket</a></div>
                     [%# FIXME This action should not be available for everyone %]
                     <div class="btn-group"><a href="#deleteBasketModal" role="button" class="btn btn-default btn-sm" data-toggle="modal" id="delbasketbutton"><i class="fa fa-trash"></i> Delete this basket</a></div>
                    [% IF ( unclosable ) %]
                     [% ELSIF ( uncertainprices ) %]
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid | html %]&amp;owner=1" class="btn btn-default btn-sm" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% booksellerid | uri %]&amp;owner=1" class="btn btn-default btn-sm" id="uncertpricesbutton"><i class="fa fa-usd"></i> Uncertain prices</a></div>
                         <div title="Can not close baskets that have items with uncertain prices in them." class="btn-group">
                             <a href="" class="btn btn-default btn-sm disabled" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
                         </div>
                     [% ELSE %]
                         <div class="btn-group">
-                            <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
+                            <a href="/cgi-bin/koha/acqui/basket.pl?op=close&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="closebutton"><i class="fa fa-times-circle"></i> Close this basket</a>
                         </div>
                     [% END %]
 
                     [% PROCESS csv_export %]
 
                         [% IF ediaccount %]
-                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
+                        <div class="btn-group"><a href="/cgi-bin/koha/acqui/edi_ean.pl?op=ediorder&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="ediorderbutton"><i class="fa fa-download"></i> Create EDIFACT order</a></div>
                         [% END %]
 
                         [% IF ( active && books_loop ) %]
@@ -171,7 +171,7 @@
                     <p><strong>The following records could not be deleted:</strong></p>
                     <ul>
                     [% FOREACH cannotdelbiblio IN cannotdelbiblios %]
-                        <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cannotdelbiblio.biblionumber | html %]">[% cannotdelbiblio.title | html %]</a> by [% cannotdelbiblio.author | html %]:
+                        <li><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% cannotdelbiblio.biblionumber | uri %]">[% cannotdelbiblio.title | html %]</a> by [% cannotdelbiblio.author | html %]:
                             <ul>
                             [% IF (cannotdelbiblio.itemcount) %]<li>[% cannotdelbiblio.itemcount | html %] item(s) attached.</li>[% END %]
                             [% IF (cannotdelbiblio.subscriptions) %]<li>[% cannotdelbiblio.subscriptions | html %] subscription(s) attached.</li>[% END %]
@@ -184,7 +184,7 @@
                 </div>
                 <a href="booksellers.pl">Click here to go back to booksellers page</a>
             [% ELSE %]
-                <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid | html %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a> <a href="/cgi-bin/koha/acqui/booksellers.pl" class="btn btn-default btn-sm">Show all active baskets</a>
+                <a href="/cgi-bin/koha/acqui/booksellers.pl?booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm">Show baskets for vendor [% booksellername | html %]</a> <a href="/cgi-bin/koha/acqui/booksellers.pl" class="btn btn-default btn-sm">Show all active baskets</a>
             [% END %]
         [% ELSE %]
 
@@ -204,7 +204,7 @@
                 [% END %]
             </div>
         [% END %]
-        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="supplier.pl?booksellerid=[% booksellerid | html %]">[% booksellername | html %]</a></h1>
+        <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
         [% IF ( basketno ) %]
             <div id="acqui_basket_summary" class="yui-g">
                 <div class="rows">
@@ -213,7 +213,7 @@
                 [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote | html %]</li>[% END %]
                 [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote | html %]</li>[% END %]
                 [% IF ( basketcontractno ) %]
-                    <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | html %]&amp;booksellerid=[% booksellerid | html %]">[% basketcontractname | html %]</a></li>
+                    <li><span class="label">Contract name:</span> <a href="../admin/aqcontract.pl?op=add_form&amp;contractnumber=[% basketcontractno | uri %]&amp;booksellerid=[% booksellerid | uri %]">[% basketcontractname | html %]</a></li>
                 [% END %]
                 [% IF deliveryplace %]<li><span class="label">Delivery place:</span> [% Branches.GetName( deliveryplace ) | html %]</li>[% END %]
                 [% IF billingplace %]<li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) | html %]</li>[% END %]
@@ -294,7 +294,7 @@
                           [% END %]
                           [% IF basketgroup.closed %]
                               [% IF ( CAN_user_acquisition_group_manage ) %]
-                                  <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid | html %]&basketgroupid=[% basketgroup.id | html %]" title="basketgroup">[% basketgroup.name | html %] (closed)</a>
+                                  <a href="basketgroup.pl?op=add&booksellerid=[% booksellerid | uri %]&basketgroupid=[% basketgroup.id | uri %]" title="basketgroup">[% basketgroup.name | html %] (closed)</a>
                               [% ELSE %]
                                   [% basketgroup.name | html %] (closed)
                               [% END %]
@@ -339,7 +339,7 @@
         [% END %]
         [% IF ( duplinbatch ) %]<div class="dialog alert">
         <h4>Duplicate warning</h4>
-        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | html %]&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]" title="Open in new window" target="_blank" class="popup" style="margin-left:10px">Display them</a></p>
+        <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Open in new window" target="_blank" class="popup" style="margin-left:10px">Display them</a></p>
         </div>[% END %]
 
         <div id="acqui_basket_content" class="yui-g">
@@ -436,7 +436,7 @@
                             <p>
                                 [% IF ( books_loo.order_received ) %] (rcvd)[% END %]
                                 [% IF books_loo.title %]
-                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber | html %]">[% books_loo.title | html %]</a>[% IF books_loo.author %] by [% books_loo.author | html %][% END %]
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% books_loo.biblionumber | uri %]">[% books_loo.title | html %]</a>[% IF books_loo.author %] by [% books_loo.author | html %][% END %]
                                 [% ELSE %]
                                     <em>Deleted bibliographic record, can't find title</em><br />
                                 [% END %]
@@ -450,7 +450,7 @@
                                 [% IF ( books_loo.suggestionid ) %]
                                     <br/>
                                     Suggested by: [% books_loo.surnamesuggestedby | html %][% IF ( books_loo.firstnamesuggestedby ) %], [% books_loo.firstnamesuggestedby | html %] [% END %]
-                                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid | html %]&amp;op=show">suggestion #[% books_loo.suggestionid | html %]</a>)
+                                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% books_loo.suggestionid | uri %]&amp;op=show">suggestion #[% books_loo.suggestionid | html %]</a>)
                                 [% END %]
                             </p>
                                 [% IF ( books_loo.order_internalnote ) %]
@@ -468,8 +468,8 @@
                               [% bookseller = books_loo.transferred_from.bookseller %]
                               [% timestamp = books_loo.transferred_from.timestamp %]
                               <p>Transferred from basket:
-                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"> [% basket.basketname | html %]</a>
-                                (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | html %]">[% bookseller.name | html %]</a>)
+                                <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]"> [% basket.basketname | html %]</a>
+                                (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | uri %]">[% bookseller.name | html %]</a>)
                                 on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
                                   [% timestamp | $KohaDates %]
                                 </span>
@@ -493,7 +493,7 @@
                         [% IF ( active ) %]
                             [% UNLESS ( closedate ) %]
                             <td>
-                                <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | html %]&amp;booksellerid=[% booksellerid | html %]&amp;basketno=[% basketno | html %]">Modify</a>
+                                <a href="neworderempty.pl?ordernumber=[% books_loo.ordernumber | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">Modify</a>
                                 [% UNLESS (books_loo.order_received) %]
                                     <br />
                                     <a href="#" class="transfer_order" data-ordernumber="[% books_loo.ordernumber | html %]">Transfer</a>
@@ -503,10 +503,10 @@
                             [% IF ( books_loo.left_holds_on_order ) %]
                             <span class="button" title="Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked with this order cancel holds first">Can't cancel order</span><br>
                             [% ELSE %]
-                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | html %]&biblionumber=[% books_loo.biblionumber | html %]&basketno=[% basketno | html %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | html %]" class="button">Cancel order</a><br>
+                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | uri %]&biblionumber=[% books_loo.biblionumber | uri %]&basketno=[% basketno | uri %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | uri %]" class="button">Cancel order</a><br>
                             [% END %]
                             [% IF ( books_loo.can_del_bib ) %]
-                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | html %]&biblionumber=[% books_loo.biblionumber | html %]&basketno=[% basketno | html %]&del_biblio=1&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | html %]" class="button">Cancel order and delete catalog record</a><br>
+                            <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | uri %]&biblionumber=[% books_loo.biblionumber | uri %]&basketno=[% basketno | uri %]&del_biblio=1&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | uri %]" class="button">Cancel order and delete catalog record</a><br>
                             [% ELSE %]
                             <span class="button" title="Can't delete catalog record, see constraints below">Can't cancel order and delete catalog record</span><br>
                             [% END %]
@@ -586,9 +586,15 @@
                         [% bookseller = order.transferred_to.bookseller %]
                         [% timestamp = order.transferred_to.timestamp %]
                         <p>Transferred to basket:
+<<<<<<< HEAD
                           <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"> [% basket.basketname | html %]</a>
                           (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | html %]">[% bookseller.name | html %]</a>)
                           on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
+=======
+                          <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]"> [% basket.basketname | html %]</a>
+                          (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | uri %]">[% bookseller.name | html %]</a>)
+                          on <span title="[% timestamp | $KohaDates with_hours = 1 | html %]">
+>>>>>>> Bug 21526: uri escape TT variables when used in 'a href'
                             [% timestamp | $KohaDates %]
                           </span>
                         </p>

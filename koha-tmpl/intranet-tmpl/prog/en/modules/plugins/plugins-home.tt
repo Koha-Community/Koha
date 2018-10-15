@@ -99,19 +99,19 @@
                                                 <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="pluginactions[% plugin.class | html %]">
                                                     [% IF ( CAN_user_plugins_report ) %]
                                                         [% IF plugin.can('report') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | html %]&method=report"><i class="fa fa-table"></i> Run report</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=report"><i class="fa fa-table"></i> Run report</a></li>
                                                         [% END %]
                                                     [% END %]
 
                                                     [% IF ( CAN_user_plugins_tool ) %]
                                                         [% IF plugin.can('tool') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | html %]&method=tool"><i class="fa fa-wrench"></i> Run tool</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=tool"><i class="fa fa-wrench"></i> Run tool</a></li>
                                                         [% END %]
                                                     [% END %]
 
                                                     [% IF ( CAN_user_plugins_configure ) %]
                                                         [% IF plugin.can('configure') %]
-                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | html %]&method=configure"><i class="fa fa-cog"></i> Configure</a></li>
+                                                            <li><a href="/cgi-bin/koha/plugins/run.pl?class=[% plugin.class | uri %]&method=configure"><i class="fa fa-cog"></i> Configure</a></li>
                                                         [% END %]
                                                     [% END %]
                                                     [% IF ( CAN_user_plugins_manage ) %]

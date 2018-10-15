@@ -14,7 +14,7 @@
                         <li role="separator" class="divider"></li>
                     [% END %]
                     [% FOREACH authority_type IN authority_types %]
-                        <li><a href="/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authority_type.authtypecode | html %]">[% authority_type.authtypetext | html %]</a></li>
+                        <li><a href="/cgi-bin/koha/authorities/authorities.pl?authtypecode=[% authority_type.authtypecode | uri %]">[% authority_type.authtypetext | html %]</a></li>
                     [% END %]
                 </ul>
             </div>
@@ -44,10 +44,10 @@
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">
-                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=mads&amp;op=export&amp;authid=[% authid | html %]">MADS (XML)</a></li>
-                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=marcxml&amp;op=export&amp;authid=[% authid | html %]">MARCXML</a></li>
-                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=marc8&amp;op=export&amp;authid=[% authid | html %]">MARC (non-Unicode/MARC-8)</a></li>
-                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=utf8&amp;op=export&amp;authid=[% authid | html %]">MARC (Unicode/UTF-8)</a></li>
+                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=mads&amp;op=export&amp;authid=[% authid | uri %]">MADS (XML)</a></li>
+                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=marcxml&amp;op=export&amp;authid=[% authid | uri %]">MARCXML</a></li>
+                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=marc8&amp;op=export&amp;authid=[% authid | uri %]">MARC (non-Unicode/MARC-8)</a></li>
+                    <li><a href="/cgi-bin/koha/authorities/export.pl?format=utf8&amp;op=export&amp;authid=[% authid | uri %]">MARC (Unicode/UTF-8)</a></li>
                 </ul>
             </div>
         [% END %]

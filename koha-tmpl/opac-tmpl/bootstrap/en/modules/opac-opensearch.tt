@@ -44,7 +44,7 @@
 [% END %][% END %][% END %]
 
 [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
-[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |url %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |url %][% bt_id | html %]" /></a>[% END %][% END %]
+[% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |url %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |url %][% bt_id | html %]" /></a>[% END %][% END %]
 	   <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author | html %]. [% END %]
 	   [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place | html %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode | html %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear | html %]
                     [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate | html %][% END %][% END %]
@@ -54,7 +54,7 @@
                         [% IF ( SEARCH_RESULT.isbn ) %] [% SEARCH_RESULT.isbn | html %][% END %]
        </p>
 [% IF Koha.Preference( 'RequestOnOpac' ) == 1 %]
-<p><a href="[% OPACBaseURL | html %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]">Place Hold on <i>[% SEARCH_RESULT.title | html %]</i></a></p>
+<p><a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-reserve.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]">Place Hold on <i>[% SEARCH_RESULT.title | html %]</i></a></p>
 [% END %]
 						]]></description>
        <guid>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %]</guid>

@@ -42,13 +42,13 @@
                 [% ELSIF message.code == 'authority_not_exists' %]
                     Authority record [% message.authid | html %] does not exist in the database.
                 [% ELSIF message.code == 'biblio_not_modified' %]
-                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber | html %]">[% message.biblionumber | html %]</a> has not been modified. An error occurred on modifying it.
+                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber | uri %]">[% message.biblionumber | html %]</a> has not been modified. An error occurred on modifying it.
                 [% ELSIF message.code == 'authority_not_modified' %]
-                    Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | html %]">[% message.authid | html %]</a> has not been modified. An error occurred on modifying it.
+                    Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | uri %]">[% message.authid | html %]</a> has not been modified. An error occurred on modifying it.
                 [% ELSIF message.code == 'biblio_modified' %]
-                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber | html %]">[% message.biblionumber | html %]</a> has successfully been modified.
+                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber | uri %]">[% message.biblionumber | html %]</a> has successfully been modified.
                 [% ELSIF message.code == 'authority_modified' %]
-                    Bibliographic record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | html %]">[% message.authid | html %]</a> has successfully been modified.
+                    Bibliographic record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | uri %]">[% message.authid | html %]</a> has successfully been modified.
                 [% END %]
                 [% IF message.error %]
                     (The error was: [% message.error | html %]. See the Koha logfile for more information).
@@ -152,9 +152,9 @@
                 <tr>
                   <td><input type="checkbox" name="record_id" value="[% biblio.biblionumber | html %]" /></td>
                   <td>[% biblio.biblionumber | html %]</td>
-                  <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | html %]">[% biblio.title | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a></td>
                   <td class="actions">
-                    <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber | html %]&mmtid=[% mmtid | html %]" class="previewMARC btn btn-default btn-xs" data-record_type="biblio" data-record_id="[% biblio.biblionumber | html %]" data-mmtid="[% mmtid | html %]" title="Preview MARC"><i class="fa fa-eye"></i> Show MARC</a>
+                    <a href="/cgi-bin/koha/svc/records/preview?record_type=biblio&record_id=[% biblio.biblionumber | uri %]&mmtid=[% mmtid | uri %]" class="previewMARC btn btn-default btn-xs" data-record_type="biblio" data-record_id="[% biblio.biblionumber | html %]" data-mmtid="[% mmtid | html %]" title="Preview MARC"><i class="fa fa-eye"></i> Show MARC</a>
                   </td>
                 </tr>
               [% END %]
@@ -179,9 +179,9 @@
               [% FOR authority IN records %]
                 <tr>
                   <td><input type="checkbox" name="record_id" value="[% authority.authid | html %]" data-usage="[% authority.count_usage | html %]" /></td>
-                  <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid | html %]">[% authority.authid | html %]</a></td>
+                  <td><a href="/cgi-bin/koha/authorities/detail.pl?authid=[% authority.authid | uri %]">[% authority.authid | html %]</a></td>
                   <td>[% PROCESS authresult summary=authority.summary %]</td>
-                  <td class="actions"><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid | html %]&mmtid=[% mmtid | html %]" data-record_type="authority" data-record_id="[% authority.authid | html %]" data-mmtid="[% mmtid | html %]" class="previewMARC btn btn-default btn-xs"><i class='fa fa-eye'></i> Show MARC</a>
+                  <td class="actions"><a href="/cgi-bin/koha/svc/records/preview?record_type=authority&record_id=[% authority.authid | uri %]&mmtid=[% mmtid | uri %]" data-record_type="authority" data-record_id="[% authority.authid | html %]" data-mmtid="[% mmtid | html %]" class="previewMARC btn btn-default btn-xs"><i class='fa fa-eye'></i> Show MARC</a>
                 </tr>
               [% END %]
             </tbody>
