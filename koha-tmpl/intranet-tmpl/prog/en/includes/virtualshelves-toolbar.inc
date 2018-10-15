@@ -3,6 +3,14 @@
 <div id="toolbar" class="btn-toolbar">
     <div class="btn-group"><a id="newshelf" class="btn btn-default btn-sm" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=add_form&amp;referer=[% op | html %]"><i class="fa fa-plus"></i> New list</a></div>
 
+    [% IF ( can_add_biblios ) %]
+        <div class="btn-group">
+            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#addToList">
+                <i class="fa fa-plus"></i> Add items
+            </button>
+        </div>
+    [% END %]
+
     [% IF shelf AND op == 'view' %]
         [% IF can_manage_shelf %]
         <div class="btn-group">

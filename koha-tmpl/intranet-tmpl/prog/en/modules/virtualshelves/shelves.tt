@@ -59,16 +59,10 @@
 
 [% IF op == 'view' %]&rsaquo; Contents of <i>[% shelf.shelfname | html %]</i>[% END %][% IF op == 'add_form' %] &rsaquo; Create new list[% END %][% IF op == 'edit_form' %] &rsaquo; Edit list <i>[% shelf.shelfname | html %]</i>[% END %]</div>
 
-[% IF ( can_add_biblios ) %]
     <div class="main container-fluid">
         <div class="row">
-            <div class="col-sm-10 col-sm-push-2">
-[% ELSE %]
-    <div class="main container-fluid">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2">
-[% END %]
-            <main>
+            <div class="col-sm-10 col-sm-push-1">
+                <main>
 
                 [% INCLUDE 'virtualshelves-toolbar.inc' %]
 
@@ -393,37 +387,47 @@
 
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
-        [% IF ( can_add_biblios ) %]
-            <div class="col-sm-2 col-sm-pull-10">
-                <aside>
-                        <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
-                            <fieldset class="brief noprint">
-                                <h4>Add items</h4>
-                                <ol>
-                                    <li>
-                                        <label for="barcodes">Barcodes:</label>
-                                        <textarea name="barcodes" id="barcodes" class="focus" autocomplete="off" rows="5"></textarea>
-                                        <input type="hidden" name="op" value="add_biblio" />
-                                        <input type="hidden" name="referer" value="view" />
-                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                    </li>
-                                    <li>
-                                        <label for="biblionumbers">Biblio numbers:</label>
-                                        <textarea name="biblionumbers" id="biblionumbers" class="focus" autocomplete="off" rows="5"></textarea>
-                                        <input type="hidden" name="op" value="add_biblio" />
-                                        <input type="hidden" name="referer" value="view" />
-                                        <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
-                                    </li>
-                                </ol>
-                                <fieldset class="action">
-                                    <input type="submit" value="Add" />
-                                </fieldset>
-                            </fieldset>
-                        </form>
-                </aside>
-            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-        [% END %]
     </div> <!-- /.row -->
+
+[% IF ( can_add_biblios ) %]
+    <!-- Modal -->
+    <div class="modal" id="addToList" tabindex="-1" role="dialog" aria-labelledby="addToListLabel">
+        <div class="modal-dialog" role="document">
+            <form action="/cgi-bin/koha/virtualshelves/shelves.pl" method="post">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="addToListLabel">Add items</h4>
+                    </div>
+                    <div class="modal-body">
+                        <fieldset class="brief">
+                        <ol>
+                            <li>
+                                <label for="barcodes">Barcodes:</label>
+                                <textarea name="barcodes" id="barcodes" rows="5"></textarea>
+                                <input type="hidden" name="op" value="add_biblio" />
+                                <input type="hidden" name="referer" value="view" />
+                                <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                            </li>
+                            <li>
+                                <label for="biblionumbers">Biblio numbers:</label>
+                                <textarea name="biblionumbers" id="biblionumbers" rows="5"></textarea>
+                                <input type="hidden" name="op" value="add_biblio" />
+                                <input type="hidden" name="referer" value="view" />
+                                <input type="hidden" name="shelfnumber" value="[% shelf.shelfnumber | html %]" />
+                            </li>
+                        </ol>
+                        </fieldset>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="submit" class="btn btn-default">Save</button>
+                        <a href="#" data-dismiss="modal" class="cancel">Cancel</a>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+[% END %]
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
@@ -453,8 +457,8 @@
                 [% ELSE %]
                     var type = [% PRIVATE | html %];
                 [% END %]
-                var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
 
+                var dtListResults = $("#listresultst").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "aaSorting": [[ 5, "asc" ]],
                     'bServerSide': true,
                     'sAjaxSource': "/cgi-bin/koha/svc/virtualshelves/search",
@@ -611,6 +615,9 @@
                         alert(MSG_NO_ITEM_SELECTED);
                         e.preventDefault();
                     }
+                });
+                $("#addToList").on("shown.bs.modal", function(e){
+                    $("#barcodes").focus();
                 });
             });
         [% END %]
