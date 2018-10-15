@@ -80,24 +80,19 @@ subtest 'GetDescriptionByKohaField' => sub {
     my $avc = $builder->build_object( { class => 'Koha::AuthorisedValueCategories' } );
 
     # Create a framework mapping
-    Koha::MarcSubfieldStructure->new(
-        {   tagfield         => '988',
-            tagsubfield      => 'a',
-            liblibrarian     => 'Dummy field',
-            libopac          => 'Dummy field',
-            repeatable       => 0,
-            mandatory        => 0,
-            kohafield        => 'dummy.field',
-            tab              => '9',
-            authorised_value => $avc->category_name,
-            authtypecode     => q{},
-            value_builder    => q{},
-            isurl            => 0,
-            hidden           => 0,
-            frameworkcode    => q{},
-            seealso          => q{},
-            link             => q{},
-            defaultvalue     => undef
+    $builder->build_object(
+        {
+            class => 'Koha::MarcSubfieldStructures',
+            value => {
+
+                tagfield         => '988',
+                tagsubfield      => 'a',
+                liblibrarian     => 'Dummy field',
+                libopac          => 'Dummy field',
+                kohafield        => 'dummy.field',
+                authorised_value => $avc->category_name,
+                frameworkcode    => q{},
+            }
         }
     )->store;
 
@@ -107,41 +102,49 @@ subtest 'GetDescriptionByKohaField' => sub {
         {   class => 'Koha::AuthorisedValues',
             value => { category => $avc->category_name, lib_opac => 'lib_opac', lib => 'lib' }
         }
-    );
+    )->store;
     my $av_2 = $builder->build_object(
         {   class => 'Koha::AuthorisedValues',
             value => { category => $avc->category_name, lib_opac => undef, lib => 'lib' }
         }
-    );
+    )->store;
     my $av_3 = $builder->build_object(
         {   class => 'Koha::AuthorisedValues',
             value => { category => $avc->category_name, lib_opac => undef, lib => undef }
         }
-    );
-    my $non_existent_av = $av_3->authorised_value;
-    $av_3->delete;
+    )->store;
 
+    my $non_existent_av = $builder->build_object(
+        {
+            class => 'Koha::AuthorisedValues',
+            value => { category => $avc->category_name, }
+        }
+    )->store->delete;
+
+    # Opac display
     my $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $av_1->authorised_value } );
-    is( $av, 'lib_opac', 'We requested OPAC description.' );
+    is( $av, 'lib_opac', 'The OPAC description should be displayed if exists' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $av_2->authorised_value } );
-    is( $av, 'lib', 'We requested OPAC description, return a regular description.' );
+    is( $av, 'lib', 'The staff description should be displayed if none exists for OPAC' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $av_3->authorised_value } );
-    is( $av, $av_3->authorised_value, 'We requested OPAC or regular description, return the authorised_value.' );
+    is( $av, $av_3->authorised_value, 'If both OPAC and staff descriptions are missing, the code should be displayed');
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $non_existent_av } );
-    is( $av, $av_3->authorised_value, 'We requested a non existing authorised_value for the OPAC, return the authorised_value.' );
+    is( $av, $non_existent_av, 'If both OPAC and staff descriptions are missing, the parameter should be displayed');
+
+    # Staff display
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { kohafield => 'dummy.field', authorised_value => $av_1->authorised_value } );
-    is( $av, 'lib', 'We requested a regular description.' );
+    is( $av, 'lib', 'The staff description should be displayed' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { kohafield => 'dummy.field', authorised_value => $av_3->authorised_value } );
-    is( $av, $av_3->authorised_value, 'We requested a regular description, return the authorised_value.' );
+    is( $av, $av_3->authorised_value, 'If both OPAC and staff descriptions are missing, the code should be displayed');
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { kohafield => 'dummy.field', authorised_value => $non_existent_av } );
-    is( $av, $av_3->authorised_value, 'We requested a non existing authorised_value, return the authorised_value.' );
+    is( $av, $non_existent_av, 'If both OPAC and staff descriptions are missing, the parameter should be displayed');
 
     $schema->storage->txn_rollback;
 };
