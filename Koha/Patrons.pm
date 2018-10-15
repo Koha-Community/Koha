@@ -224,14 +224,16 @@ sub anonymise_issue_history {
 
 sub delete {
     my ( $self, $params ) = @_;
+    my $patrons_deleted;
     $self->_resultset->result_source->schema->txn_do( sub {
         my ( $set, $params ) = @_;
         while( my $patron = $set->next ) {
             $patron->move_to_deleted if $params->{move};
             $patron->delete == 1 || Koha::Exceptions::Patron::Delete->throw;
+            $patrons_deleted++;
         }
     }, $self, $params );
-    return 1;
+    return $patrons_deleted;
 }
 
 =head3 _type

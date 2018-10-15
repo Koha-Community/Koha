@@ -435,7 +435,7 @@ subtest 'Koha::Patrons->delete' => sub {
     my $id1 = $patron1->borrowernumber;
     my $set = Koha::Patrons->search({ borrowernumber => { '>=' => $id1 }});
     is( $set->count, 2, 'Two patrons found as expected' );
-    is( $set->delete({ move => 1 }), 1, 'Two patrons deleted' );
+    is( $set->delete({ move => 1 }), 2, 'Two patrons deleted' );
     is( $moved_to_deleted, 2, 'Patrons moved to deletedborrowers' );
 
     # Add again, test if we can raise an exception
