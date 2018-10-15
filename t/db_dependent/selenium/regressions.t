@@ -31,6 +31,11 @@ my $s = t::lib::Selenium->new;
 my $driver = $s->driver;
 my $opac_base_url = $s->opac_base_url;
 
+# It seems that we do not have enough records indexed with ES
+my $SearchEngine_value = C4::Context->preference('SearchEngine');
+C4::Context->set_preference('SearchEngine', 'Zebra');
+
+
 subtest 'OPAC - Remove from cart' => sub {
     plan tests => 4;
 
@@ -62,4 +67,8 @@ subtest 'OPAC - Remove from cart' => sub {
     $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span');
     is( $basket_count_elt->get_text(),
         2, '1 element should have been removed from the cart' );
+};
+
+END {
+    C4::Context->preference('SearchEngine', $SearchEngine_value);
 };
