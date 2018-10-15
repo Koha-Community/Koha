@@ -374,26 +374,6 @@ sub _strip_item_fields {
     }
 }
 
-=head2 _strip_holdings_fields
-
-  _strip_holdings_fields($record)
-
-Utility routine to remove holdings tags from a
-MARC bib.
-
-=cut
-
-sub _strip_holdings_fields {
-    my $record = shift;
-    my $frameworkcode = shift;
-
-    my ( $holdingstag ) = GetMarcFromKohaField( "holdings.holdingbranch" );
-
-    foreach my $field ( $record->field($holdingstag) ) {
-        $record->delete_field($field);
-    }
-}
-
 =head2 DelBiblio
 
   my $error = &DelBiblio($biblionumber);
@@ -3575,12 +3555,8 @@ sub EmbedItemsInMarcBiblio {
     $itemnumbers = [] unless defined $itemnumbers;
 
     if ( C4::Context->preference('SummaryHoldings') && !@$itemnumbers ) {
-        _strip_holdings_fields($marc);
-
         require C4::Holdings;
-
         my $holdings_fields = C4::Holdings::GetMarcHoldingsFields( $biblionumber );
-
         $marc->append_fields(@$holdings_fields) if ( @$holdings_fields );
     }
 
