@@ -31,8 +31,8 @@ sub fix_filters {
     return _process_tt_content( @_ )->{new_content};
 }
 
-sub search_missing_filters {
-    return _process_tt_content( @_ )->{errors};
+sub missing_filters {
+    return @{_process_tt_content( @_ )->{errors}};
 
 }
 
@@ -217,7 +217,7 @@ t::lib::QA::TemplateFilters - Module used by tests and QA script to catch missin
 
     my $content = read_file($filename);
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($content);
-    my $errors      = t::lib::QA::TemplateFilters::search_missing_filters($content);
+    my $errors      = t::lib::QA::TemplateFilters::missing_filters($content);
 
 =head1 DESCRIPTION
 
@@ -232,7 +232,7 @@ and to not duplicate the code.
     the correct (guessed) filters.
     It will also add the [% USE raw %] statement if it is needed.
 
-=head2 search_missing_filters
+=head2 missing_filters
 
     Take a template content file in parameter and return an arrayref of errors.
 

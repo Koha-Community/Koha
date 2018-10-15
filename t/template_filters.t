@@ -33,9 +33,9 @@ EXPECTED
 
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
     is( $new_content . "\n", $expected, );
-    my $missing_filters = t::lib::QA::TemplateFilters::search_missing_filters($input);
+    my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply(
-        $missing_filters,
+        \@missing_filters,
         [
             {
                 error       => "asset_must_be_raw",
@@ -79,9 +79,9 @@ EXPECTED
 
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
     is( $new_content . "\n", $expected, );
-    my $missing_filters = t::lib::QA::TemplateFilters::search_missing_filters($input);
+    my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply(
-        $missing_filters,
+        \@missing_filters,
         [{
                 error => "missing_filter",
                 line => "        [% just_a_var %]",
@@ -163,9 +163,9 @@ EXPECTED
 
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
     is( $new_content . "\n", $expected, );
-    my $missing_filters = t::lib::QA::TemplateFilters::search_missing_filters($input);
+    my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply(
-        $missing_filters,[],);
+        \@missing_filters,[],);
 };
 
 subtest 'Preserve pre/post chomps' => sub {
@@ -228,9 +228,9 @@ EXPECTED
     $input = <<INPUT;
 <a href="[% wrong_filter | html %]">[% var | html %]</a>
 INPUT
-    my $missing_filters = t::lib::QA::TemplateFilters::search_missing_filters($input);
+    my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply(
-        $missing_filters,
+        \@missing_filters,
         [
             {
                 error => "wrong_html_filter",
@@ -245,6 +245,6 @@ INPUT
     $input = <<INPUT;
 <a href="[% good_raw_filter | \$raw %]">[% var | html %]</a>
 INPUT
-    $missing_filters = t::lib::QA::TemplateFilters::search_missing_filters($input);
-    is_deeply( $missing_filters, [], );
+    @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
+    is_deeply( \@missing_filters, [], );
 };
