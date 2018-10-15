@@ -65,18 +65,24 @@ subtest 'OPAC - Remove from cart' => sub {
     my @basket_count_elts = $driver->find_elements('//span[@id="basketcount"]/span');
     is( scalar(@basket_count_elts), 0, 'Basket should be empty');
 
-    $driver->find_element('//a[@class="addtocart cart1"]')->click;
+    # This will fail if nothing is indexed, but at this point we should have everything setup correctly
+    my @checkboxes = $driver->find_elements('//input[@type="checkbox"][@name="biblionumber"]');
+    my $biblionumber1 = $checkboxes[0]->get_value();
+    my $biblionumber3 = $checkboxes[2]->get_value();
+    my $biblionumber5 = $checkboxes[4]->get_value();
+
+    $driver->find_element('//a[@class="addtocart cart'.$biblionumber1.'"]')->click;
     my $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span');
     is( $basket_count_elt->get_text(),
         1, 'One element should have been added to the cart' );
 
-    $driver->find_element('//a[@class="addtocart cart3"]')->click;
-    $driver->find_element('//a[@class="addtocart cart5"]')->click;
+    $driver->find_element('//a[@class="addtocart cart'.$biblionumber3.'"]')->click;
+    $driver->find_element('//a[@class="addtocart cart'.$biblionumber5.'"]')->click;
     $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span');
     is( $basket_count_elt->get_text(),
         3, '3 elements should have been added to the cart' );
 
-    $driver->find_element('//a[@class="cartRemove cartR3"]')->click;
+    $driver->find_element('//a[@class="cartRemove cartR'.$biblionumber3.'"]')->click;
     $basket_count_elt = $driver->find_element('//span[@id="basketcount"]/span');
     is( $basket_count_elt->get_text(),
         2, '1 element should have been removed from the cart' );
