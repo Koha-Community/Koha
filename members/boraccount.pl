@@ -79,7 +79,9 @@ if($total <= 0){
         $totalcredit = 1;
 }
 
-my $reverse_col = 0; # Flag whether we need to show the reverse column
+my $reverse_col = ( Koha::Account::Lines->search(
+    { borrowernumber => $patron->borrowernumber },
+    { where => { amount => { '<=', 0 } } } )->count > 0 ) ? 1 : 0;
 
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);
