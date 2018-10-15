@@ -114,8 +114,8 @@ available for request.
 
     my $statusalias = $request->statusalias;
 
-Return a request's status alias, if one is defined, otherwise
-return implicit undef
+Returns a request's status alias, as a Koha::AuthorisedValue instance
+or implicit undef
 
 =cut
 
