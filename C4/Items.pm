@@ -51,7 +51,7 @@ BEGIN {
         ItemSafeToDelete
         DelItemCheck
         MoveItemFromBiblio
-        GetLatestAcquisitions
+        GetLastAcquisitions
         CartToShelf
         ShelfToCart
         GetAnalyticsCount
