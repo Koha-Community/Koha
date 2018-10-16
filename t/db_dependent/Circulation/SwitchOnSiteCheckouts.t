@@ -95,6 +95,8 @@ my $issuingrule = $builder->build({
         maxonsiteissueqty  => 1,
         lengthunit         => 'days',
         issuelength        => 5,
+        hardduedate        => undef,
+        hardduedatecompare => 0,
     },
 });
 
