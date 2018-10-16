@@ -3,7 +3,7 @@ use strict;
 use warnings;
 use FindBin qw( $Bin );
 
-use Test::More tests => 34;
+use Test::More tests => 35;
 
 BEGIN { use_ok('Koha::Edifact') }
 
@@ -40,6 +40,7 @@ is( $m->message_reference_number,
     'MQ09791', "Message reference number returned" );
 is( $m->docmsg_number, 'Q741588',  "Message docmsg number returned" );
 is( $m->message_date,  '20140430', "Message date returned" );
+is( $m->buyer_ean, '5030670137480', 'buyer ean returned');
 
 my $lin = $m->lineitems();
 
