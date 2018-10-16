@@ -107,7 +107,7 @@ foreach my $record (@$records) {
           || q{},
         score => $#$match > -1 ? $match->[0]->{'score'} : 0,
         match_id => $match_id,
-        diff_url => $match_id ? "/cgi-bin/koha/tools/showdiffmarc.pl?batchid=$import_batch_id&importid=$record->{import_record_id}&id=$match_id" : undef
+        diff_url => $match_id ? "/cgi-bin/koha/tools/showdiffmarc.pl?batchid=$import_batch_id&importid=$record->{import_record_id}&id=$match_id&type=$record->{record_type}" : undef
       };
 }
 
