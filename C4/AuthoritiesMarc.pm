@@ -164,7 +164,7 @@ sub SearchAuthorities {
                     $attr = " \@attr 1=Subject-heading-thesaurus ";
                 }
                 else {    # Assume any if no index was specified
-                    $attr = " \@attr 1=Any ";
+                    $attr = " \@attr 1=" . @$tags[$i] . " ";
                 }
             }         #if @$tags[$i]
             else {    # Assume any if no index was specified
