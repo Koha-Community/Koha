@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 
 use List::MoreUtils qw( uniq );
@@ -391,3 +391,13 @@ subtest 'deletedbiblio_metadata' => sub {
     is( $moved, $biblionumber, 'Found in deletedbiblio_metadata' );
 };
 
+subtest 'DelBiblio' => sub {
+    plan tests => 2;
+
+    my ($biblionumber, $biblioitemnumber) = C4::Biblio::AddBiblio(MARC::Record->new, '');
+    my $deleted = C4::Biblio::DelBiblio( $biblionumber );
+    is( $deleted, undef, 'DelBiblio returns undef is the biblio has been deleted correctly - Must be 1 instead'); # FIXME We should return 1 instead!
+
+    $deleted = C4::Biblio::DelBiblio( $biblionumber );
+    is( $deleted, undef, 'DelBiblo should return undef is the record did not exist');
+};
