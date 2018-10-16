@@ -361,6 +361,10 @@ C<$error> : undef unless an error occurs
 
 sub DelBiblio {
     my ($biblionumber) = @_;
+
+    my $biblio = Koha::Biblios->find( $biblionumber );
+    return unless $biblio; # Should we throw an exception instead?
+
     my $dbh = C4::Context->dbh;
     my $error;    # for error handling
 
@@ -383,7 +387,6 @@ sub DelBiblio {
     }
 
     # We delete any existing holds
-    my $biblio = Koha::Biblios->find( $biblionumber );
     my $holds = $biblio->holds;
     while ( my $hold = $holds->next ) {
         $hold->cancel;
