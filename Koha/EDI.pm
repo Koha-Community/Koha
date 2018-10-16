@@ -541,7 +541,7 @@ sub process_quote {
         for my $b (@added_baskets) {
             create_edi_order(
                 {
-
+                    ean      => $messages->[0]->buyer_ean,
                     basketno => $b,
                 }
             );
