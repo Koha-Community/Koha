@@ -107,11 +107,14 @@
 
         // Our 'render' function for borrowerlink
         var createPatronLink = function(data, type, row) {
-            return '<a title="' + _("View borrower details") + '" ' +
+            var patronLink = '<a title="' + _("View borrower details") + '" ' +
                 'href="/cgi-bin/koha/members/moremember.pl?' +
-                'borrowernumber='+row.borrowernumber+'">' +
-                row.patron_firstname + ' ' + row.patron_surname +
-                '</a>';
+                'borrowernumber='+row.borrowernumber+'">';
+                if ( row.patron_firstname ) {
+                    patronLink = patronLink + row.patron_firstname + ' ';
+                }
+                patronLink = patronLink + row.patron_surname + '</a>';
+            return patronLink
         };
 
         // Our 'render' function for the library name
