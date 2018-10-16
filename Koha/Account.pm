@@ -535,7 +535,7 @@ sub non_issues_charges {
 our $offset_type = {
     'credit'           => 'Manual Credit',
     'forgiven'         => 'Writeoff',
-    'lost_item_return' => 'Lost Item Return',
+    'lost_item_return' => 'Lost Item',
     'payment'          => 'Payment',
     'writeoff'         => 'Writeoff'
 };
