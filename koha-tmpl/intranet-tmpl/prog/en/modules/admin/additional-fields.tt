@@ -189,11 +189,13 @@
                 return confirm(_("Are you sure you want to delete this field?"));
             });
 
-            $("#add_field").on('submit', function(){
-                if ( $("#marcfield").val().length > 0
-                    && $("select[name='authorised_value_category']" ).val().length > 0 ) {
-                    alert("You cannot select an authorised value category and a marcfield");
-                    return false;
+            $("#add_field").on('submit', function() {
+                if ( $("#marcfield").length && $("select[name='authorised_value_category']").length ) {
+                    if ( $("#marcfield").val().length > 0
+                        && $("select[name='authorised_value_category']" ).val().length > 0 ) {
+                        alert("You cannot select an authorised value category and a marcfield");
+                        return false;
+                    }
                 }
                 return true;
             });
