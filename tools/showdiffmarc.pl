@@ -29,23 +29,25 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Biblio;
+use C4::AuthoritiesMarc;
 use C4::ImportBatch;
 
 use Koha::Biblios;
 
 # Input params
 my $input        = new CGI;
-my $biblionumber = $input->param('id');
+my $recordid = $input->param('id');
 my $importid     = $input->param('importid');
 my $batchid      = $input->param('batchid');
+my $type      = $input->param('type');
 
-if ( not $biblionumber or not $importid ) {
+if ( not $recordid or not $importid ) {
     print $input->redirect("/cgi-bin/koha/errors/404.pl");
     exit;
 }
 
 # Init vars
-my ($recordBiblionumber, $recordImportid, $biblioTitle, $importTitle, $formatted1, $formatted2, $errorFormatted1, $errorFormatted2);
+my ($record, $recordImportid, $recordTitle, $importTitle, $formatted1, $formatted2, $errorFormatted1, $errorFormatted2);
 
 # Prepare template
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -59,14 +61,20 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-$recordBiblionumber = GetMarcBiblio({
-    biblionumber => $biblionumber,
-    embed_items  => 1,
-});
-if( $recordBiblionumber ) {
-    $formatted1 = $recordBiblionumber->as_formatted;
-    my $biblio = Koha::Biblios->find( $biblionumber );
-    $biblioTitle = $biblio->title;
+if ( $type eq 'biblio' ) {
+    $record = GetMarcBiblio({
+        biblionumber => $recordid,
+        embed_items  => 1,
+    });
+    my $biblio = Koha::Biblios->find( $recordid );
+    $recordTitle = $biblio->title;
+}
+elsif ( $type eq 'auth' ) {
+    $record = GetAuthority( $recordid );
+    $recordTitle = "Authority number " . $recordid; #FIXME we should get the main heading
+}
+if( $record ) {
+    $formatted1 = $record->as_formatted;
 } else {
     $errorFormatted1 = 1;
 }
@@ -82,9 +90,9 @@ if( $importid ) {
 
 $template->param(
     SCRIPT_NAME      => '/cgi-bin/koha/tools/showdiffmarc.pl',
-    BIBLIONUMBER     => $biblionumber,
+    RECORDID         => $recordid,
     IMPORTID         => $importid,
-    BIBLIOTITLE      => $biblioTitle,
+    RECORDTITLE      => $recordTitle,
     IMPORTTITLE      => $importTitle,
     MARC_FORMATTED1  => $formatted1,
     MARC_FORMATTED2  => $formatted2,

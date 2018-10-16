@@ -26,10 +26,10 @@
             <h1>Original</h1>
             [% IF ( ERROR_FORMATTED1 ) %]
                 <div class="dialog alert">
-                    <p>The biblionumber <em>[% BIBLIONUMBER | html %]</em> doesn't match any existing record.</p>
+                    <p>The record id <em>[% RECORDID | html %]</em> doesn't match any existing record.</p>
                 </div>
             [% ELSE %]
-                <h2>[% BIBLIOTITLE | html %]</h2>
+                <h2>[% RECORDTITLE | html %]</h2>
                 <pre>[% MARC_FORMATTED1 | html %]</pre>
             [% END %]
         </div>
