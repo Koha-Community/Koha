@@ -1080,7 +1080,7 @@
         });[% END %]
     </script>
     [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
-        [% Asset.js("https://imageserver.ebscohost.com/novelistselect/ns2init.js") | $raw %]
+        <script src="https://imageserver.ebscohost.com/novelistselect/ns2init.js"></script>
     [% END %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
