@@ -626,6 +626,7 @@ sub SendAlerts {
             module => 'members',
             letter_code => $letter_code,
             branchcode => $externalid->{'branchcode'},
+            lang       => $externalid->{lang} || 'default',
             tables => {
                 'branches'    => $library,
                 'borrowers' => $externalid->{'borrowernumber'},
