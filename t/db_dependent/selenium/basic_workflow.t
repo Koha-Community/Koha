@@ -160,7 +160,24 @@ SKIP: {
             my $id = $input->get_attribute('id');
             next unless $id =~ m|^tag_952_subfield|;
 
-            $input->send_keys('t_value_bib'.$biblionumber);
+            my $v;
+
+            # FIXME This is based on default values
+            if (   $id =~ m|^tag_952_subfield_g|   # price
+                or $id =~ m|^tag_952_subfield_v| ) # replacementprice
+            {
+                $v = '42';    # It's a price
+            }
+            elsif (
+                $id =~ m|^tag_952_subfield_f| #tag_952_subfield_g
+            ) {
+                # It's a varchar(10)
+                $v = 't_value_x';
+            }
+            else {
+                $v = 't_value_bib' . $biblionumber;
+            }
+            $input->send_keys( $v );
         }
 
         $driver->find_element('//input[@name="add_submit"]')->click;
