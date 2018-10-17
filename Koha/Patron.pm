@@ -193,9 +193,11 @@ sub store {
             $self->trim_whitespaces;
 
             # We don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00)
-            $self->dateofbirth(undef) unless $self->dateofbirth;
-            $self->debarred(undef)    unless $self->debarred;
+            $self->dateofbirth(undef)  unless $self->dateofbirth;
+            $self->debarred(undef)     unless $self->debarred;
             $self->date_renewed(undef) unless $self->date_renewed;
+            $self->lastseen(undef)     unless $self->lastseen;
+            $self->updated_on(undef)   unless $self->updated_on;
 
             # Set default values if not set
             $self->sms_provider_id(undef) unless $self->sms_provider_id;
@@ -203,6 +205,11 @@ sub store {
 
             # If flags == 0 or flags == '' => no permission
             $self->flags(undef) unless $self->flags;
+
+            # tinyint or int
+            $self->gonenoaddress(0)  unless $self->gonenoaddress;
+            $self->login_attempts(0) unless $self->login_attempts;
+            $self->privacy_guarantor_checkouts(0) unless $self->privacy_guarantor_checkouts;
 
             unless ( $self->in_storage ) {    #AddMember
 
