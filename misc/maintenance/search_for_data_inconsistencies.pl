@@ -18,11 +18,13 @@
 use Modern::Perl;
 
 use Koha::Script;
-use Koha::Items;
-use Koha::Biblios;
-use Koha::Biblioitems;
-use Koha::ItemTypes;
+use Koha::AuthorisedValues;
 use Koha::Authorities;
+use Koha::Biblios;
+use Koha::BiblioFrameworks;
+use Koha::Biblioitems;
+use Koha::Items;
+use Koha::ItemTypes;
 
 {
     my $items = Koha::Items->search({ -or => { homebranch => undef, holdingbranch => undef }});
@@ -118,6 +120,51 @@ use Koha::Authorities;
         new_section("Bibliographic records have invalid MARCXML");
         new_item($_) for @decoding_errors;
         new_hint("The bibliographic records must have a valid MARCXML or you will face encoding issues or wrong displays");
+    }
+}
+
+{
+    my $frameworks = Koha::BiblioFrameworks->search;
+    my $invalid_locations_per_framework;
+    while ( my $framework = $frameworks->next ) {
+        my $avs = Koha::AuthorisedValues->search_by_koha_field(
+            {
+                frameworkcode => $framework->frameworkcode,
+                kohafield     => 'items.location'
+            }
+        );
+        my $items = Koha::Items->search(
+            {
+                location =>
+                  { -not_in => [ $avs->get_column('authorised_value') ] },
+                'biblio.frameworkcode' => $framework->frameworkcode
+            },
+            { join => [ 'biblioitem', 'biblio' ] }
+        );
+        if ( $items->count ) {
+            $invalid_locations_per_framework->{ $framework->frameworkcode } =
+              { items => $items, av_category => $avs->next->category, };
+        }
+    }
+    if (%$invalid_locations_per_framework) {
+        new_section('Wrong value dor items.location');
+        for my $frameworkcode ( keys %$invalid_locations_per_framework ) {
+            my $output;
+            my $items =
+              $invalid_locations_per_framework->{$frameworkcode}->{items};
+            my $av_category =
+              $invalid_locations_per_framework->{$frameworkcode}->{av_category};
+            while ( my $i = $items->next ) {
+                $output .= " {" . $i->itemnumber . " => " . $i->location . "}";
+            }
+            new_item(
+                sprintf(
+                    "The Framework *%s* is using the authorised value's category *%s*, "
+                    . "but the following items.location do not have a value defined ({itemnumber => value }):\n%s",
+                    $frameworkcode, $av_category, $output
+                )
+            );
+        }
     }
 }
 
