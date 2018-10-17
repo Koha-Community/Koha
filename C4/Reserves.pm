@@ -1125,6 +1125,7 @@ sub ModReserve {
     }
     elsif ($rank =~ /^\d+/ and $rank > 0) {
         my $hold = Koha::Holds->find($reserve_id);
+        return if (not defined $hold);
         logaction( 'HOLDS', 'MODIFY', $hold->reserve_id, Dumper($hold->unblessed) )
             if C4::Context->preference('HoldsLog');
 
