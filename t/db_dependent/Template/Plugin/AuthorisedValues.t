@@ -124,16 +124,16 @@ subtest 'GetDescriptionByKohaField' => sub {
     # Opac display
     my $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $av_1->authorised_value } );
-    is( $av, 'lib_opac', 'The OPAC description should be displayed if exists' );
+    is( $av, 'lib_opac', 'For OPAC: The OPAC description should be displayed if exists' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $av_2->authorised_value } );
-    is( $av, 'lib', 'The staff description should be displayed if none exists for OPAC' );
+    is( $av, 'lib', 'For OPAC: The staff description should be displayed if none exists for OPAC' );
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $av_3->authorised_value } );
-    is( $av, $av_3->authorised_value, 'If both OPAC and staff descriptions are missing, the code should be displayed');
+    is( $av, $av_3->authorised_value, 'For OPAC: If both OPAC and staff descriptions are missing, the code should be displayed');
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
         { opac => 1, kohafield => 'dummy.field', authorised_value => $non_existent_av } );
-    is( $av, $non_existent_av, 'If both OPAC and staff descriptions are missing, the parameter should be displayed');
+    is( $av, $non_existent_av, 'For OPAC: If both OPAC and staff descriptions are missing, the parameter should be displayed');
 
     # Staff display
     $av = Koha::Template::Plugin::AuthorisedValues->GetDescriptionByKohaField(
