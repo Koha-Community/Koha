@@ -153,9 +153,9 @@ subtest 'Sharing' => sub {
     is( $number_of_shelves_shared, 2, 'To be sure no shares have been removed' );
 
     # Test double accept (BZ 11943) before removing the accepted share
-    my $third_share = $shelf_to_share->share('valid key number 2');
+    my $third_share = $shelf_to_share->share('valid key3');
     is( Koha::Virtualshelfshares->search->count, 3, 'Three shares' );
-    $is_accepted = $third_share->accept( 'valid key number 2', $share_with_me->{borrowernumber} );
+    $is_accepted = $third_share->accept( 'valid key3', $share_with_me->{borrowernumber} );
     is( $is_accepted->shelfnumber, $shelf_to_share->shelfnumber, 'Accept returned the existing share' );
     is( Koha::Virtualshelfshares->search->count, 2, 'Check that number of shares went down again' );
 
