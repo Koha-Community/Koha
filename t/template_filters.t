@@ -171,7 +171,7 @@ EXPECTED
 subtest 'Preserve pre/post chomps' => sub {
     plan tests => 1;
     my $input = <<INPUT;
-[% USE raw %]
+[%- USE raw -%]
 [%- var -%]
 [% - var - %]
 [%~ var ~%]
@@ -182,7 +182,7 @@ subtest 'Preserve pre/post chomps' => sub {
 [%~ var | uri ~%]
 INPUT
     my $expected = <<EXPECTED;
-[% USE raw %]
+[%- USE raw -%]
 [%- var | html -%]
 [%- var | html -%]
 [%~ var | html ~%]

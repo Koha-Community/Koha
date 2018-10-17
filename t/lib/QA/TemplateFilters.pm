@@ -67,7 +67,7 @@ sub _process_tt_content {
             }
 
             $has_use_raw++
-              if $line =~ m{\[% USE raw %\]};    # Does [% Use raw %] exist?
+              if $line =~ m{\[%(\s|-|~)*USE raw(\s|-|~)*%\]};    # Does [% Use raw %] exist?
 
             my $e;
             if ( $line =~ qr{<a href="([^"]+)} ) {
