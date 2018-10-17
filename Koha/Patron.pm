@@ -210,6 +210,7 @@ sub store {
             $self->gonenoaddress(0)  unless $self->gonenoaddress;
             $self->login_attempts(0) unless $self->login_attempts;
             $self->privacy_guarantor_checkouts(0) unless $self->privacy_guarantor_checkouts;
+            $self->lost(0)           unless $self->lost;
 
             unless ( $self->in_storage ) {    #AddMember
 
