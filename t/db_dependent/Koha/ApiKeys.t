@@ -80,7 +80,7 @@ subtest 'store() tests' => sub {
     $patron_to_delete->delete;
 
     throws_ok
-        { Koha::ApiKey->new({ patron_id => $deleted_id })->store }
+        { Koha::ApiKey->new({ patron_id => $deleted_id, description => 'a description' })->store }
         'Koha::Exceptions::Object::FKConstraint',
         'Invalid patron ID raises exception';
     is( $@->message,   'Broken FK constraint', 'Exception message is correct' );

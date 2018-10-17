@@ -253,7 +253,7 @@ subtest 'store() tests' => sub {
     my $patron_id = $patron->id;
     $patron->delete;
 
-    my $api_key = Koha::ApiKey->new({ patron_id => $patron_id });
+    my $api_key = Koha::ApiKey->new({ patron_id => $patron_id, secret => 'a secret', description => 'a description' });
 
     my $print_error = $schema->storage->dbh->{PrintError};
     $schema->storage->dbh->{PrintError} = 0;
@@ -278,6 +278,7 @@ subtest 'store() tests' => sub {
     my $new_api_key = Koha::ApiKey->new({
         patron_id => $patron_id,
         secret => $api_key->secret,
+        description => 'a description',
     });
 
     throws_ok
