@@ -12,7 +12,7 @@
             [% END %]
         </div>
 	[% ELSE %]
-            <input id="findborrower" name="findborrower" size="40" class="head-searchbox focus" type="text" />
+            <input id="findborrower" name="findborrower" size="40" class="head-searchbox focus" type="text" autocomplete="off" />
             [% IF ( stickyduedate ) %]
             <input type="hidden" name="duedatespec" value="[% duedatespec | html %]" />
             <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
