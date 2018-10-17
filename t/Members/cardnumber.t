@@ -7,7 +7,6 @@ use Test::MockModule;
 
 use t::lib::Mocks;
 
-use Koha::Schema;
 use_ok('C4::Members');
 
 BEGIN {
