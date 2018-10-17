@@ -195,6 +195,7 @@ sub store {
             # We don't want invalid dates in the db (mysql has a bad habit of inserting 0000-00-00)
             $self->dateofbirth(undef) unless $self->dateofbirth;
             $self->debarred(undef)    unless $self->debarred;
+            $self->date_renewed(undef) unless $self->date_renewed;
 
             # Set default values if not set
             $self->sms_provider_id(undef) unless $self->sms_provider_id;

@@ -513,7 +513,7 @@ be formatted to the chosen date format. Populates the correctly formatted date o
 sub format_dates {
     my ($self, $params) = @_;
 
-    foreach my $date_type (qw(dateofbirth dateenrolled dateexpiry)) {
+    foreach my $date_type (qw(dateofbirth dateenrolled dateexpiry date_renewed)) {
         my $tempdate = $params->{borrower}->{$date_type} or next();
         my $formatted_date = eval { output_pref( { dt => dt_from_string( $tempdate ), dateonly => 1, dateformat => 'iso' } ); };
 
