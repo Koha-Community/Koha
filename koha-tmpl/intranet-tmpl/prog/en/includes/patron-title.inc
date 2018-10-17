@@ -1,4 +1,3 @@
-[% USE raw %]
 [%- USE raw -%]
 [%- USE Koha -%]
 [%- USE Branches -%]
