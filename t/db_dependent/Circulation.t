@@ -2327,7 +2327,7 @@ subtest 'CanBookBeIssued | notforloan' => sub {
         );
 
         # for loan at item type and item level
-        $item->notforloan(undef)->store;
+        $item->notforloan(0)->store;
         $item->biblioitem->itemtype($itemtype->{itemtype})->store;
         ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, undef, undef, undef, undef );
         is_deeply( $needsconfirmation, {}, 'Item can be issued to this patron' );
