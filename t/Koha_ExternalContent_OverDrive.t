@@ -8,8 +8,6 @@ use Test::MockModule;
 
 use Module::Load::Conditional qw( can_load check_install );
 
-use Koha::Schema;
-
 BEGIN {
     if ( check_install( module => 'Test::DBIx::Class' ) ) {
         plan tests => 5;

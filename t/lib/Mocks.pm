@@ -3,7 +3,6 @@ package t::lib::Mocks;
 use Modern::Perl;
 use C4::Context;
 
-use Koha::Schema;
 use Test::MockModule;
 
 my %configs;

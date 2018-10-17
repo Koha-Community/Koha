@@ -23,7 +23,6 @@ use File::Path;
 use DateTime;
 use Test::MockModule;
 use Test::More tests => 16;
-use Koha::Schema;
 use Carp qw/croak carp/;
 
 
