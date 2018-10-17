@@ -816,7 +816,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
 
     my $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
     my $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => -5 })->store();
-    my $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment' })->store();
+    my $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment', amount => 0 })->store();
     purge_zero_balance_fees( 1 );
     my $debit_2 = Koha::Account::Lines->find( $debit->id );
     my $credit_2 = Koha::Account::Lines->find( $credit->id );
@@ -826,7 +826,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
 
     $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 5 })->store();
     $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
-    $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment' })->store();
+    $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment', amount => 0 })->store();
     purge_zero_balance_fees( 1 );
     $debit_2 = $credit_2 = undef;
     $debit_2 = Koha::Account::Lines->find( $debit->id );
@@ -837,7 +837,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
 
     $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
     $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
-    $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment' })->store();
+    $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment', amount => 0 })->store();
     purge_zero_balance_fees( 1 );
     $debit_2 = Koha::Account::Lines->find( $debit->id );
     $credit_2 = Koha::Account::Lines->find( $credit->id );
