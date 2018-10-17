@@ -79,7 +79,7 @@ if($total <= 0){
         $totalcredit = 1;
 }
 
-my $reverse_col = ( Koha::Account::Lines->search(
+my $actions_col = ( Koha::Account::Lines->search(
     { borrowernumber => $patron->borrowernumber },
     { where => { amount => { '<=', 0 } } } )->count > 0 ) ? 1 : 0;
 
@@ -96,7 +96,7 @@ $template->param(
     finesview           => 1,
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
-    reverse_col         => $reverse_col,
+    actions_col         => $actions_col,
     accounts            => \@accountlines,
 );
 

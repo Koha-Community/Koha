@@ -47,7 +47,7 @@
           <th>Note</th>
           <th>Amount</th>
           <th>Outstanding</th>
-          [% IF ( reverse_col ) %]
+          [% IF ( actions_col ) %]
               <th>Actions</th>
           [% ELSE %]
               <th>&nbsp;</th>
@@ -76,7 +76,7 @@
           <a target="_blank" href="printinvoice.pl?action=print&amp;accountlines_id=[% account.accountlines_id | html %]&amp;borrowernumber=[% account.borrowernumber | html %]" class="btn btn-default btn-xs"><i class="fa fa-print"></i> Print</a>
         [% END %]
         <a href="accountline-details.pl?accountlines_id=[% account.accountlines_id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a>
-        [% IF ( reverse_col) %]
+        [% IF ( actions_col) %]
           [% IF account.is_credit %]
               <a href="boraccount.pl?action=void&amp;accountlines_id=[% account.accountlines_id | uri %]&amp;borrowernumber=[% account.borrowernumber | uri %]" class="btn btn-default btn-xs void"><i class="fa fa-ban"></i> Void</a>
           [% ELSE %]
