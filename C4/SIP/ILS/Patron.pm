@@ -130,12 +130,13 @@ sub new {
 
     # FIXME: populate fine_items recall_items
     $ilspatron{unavail_holds} = _get_outstanding_holds($kp->{borrowernumber});
+
     my $pending_checkouts = $patron->pending_checkouts;
-    my @items_infos;
+    my @barcodes;
     while ( my $c = $pending_checkouts->next ) {
-        push @items_infos, $c->unblessed_all_relateds;
+        push @barcodes, { barcode => $c->item->barcode };
     }
-    $ilspatron{items} = \@items_infos;
+    $ilspatron{items} = \@barcodes;
 
     $self = \%ilspatron;
     $debug and warn Dumper($self);
