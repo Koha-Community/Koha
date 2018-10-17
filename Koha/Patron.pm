@@ -201,6 +201,9 @@ sub store {
             $self->sms_provider_id(undef) unless $self->sms_provider_id;
             $self->guarantorid(undef)     unless $self->guarantorid;
 
+            # If flags == 0 or flags == '' => no permission
+            $self->flags(undef) unless $self->flags;
+
             unless ( $self->in_storage ) {    #AddMember
 
                 # Generate a valid userid/login if needed
