@@ -225,7 +225,7 @@ my $item3 = $builder->build({
         notforloan   => 0,
         withdrawn    => 0,
         damaged      => 0,
-        onloan       => 0
+        onloan       => undef,
     }
 });
 
