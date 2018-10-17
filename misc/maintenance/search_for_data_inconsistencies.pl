@@ -55,14 +55,21 @@ use C4::Biblio;
 
 {
     if ( C4::Context->preference('item-level_itypes') ) {
-        my $items_without_itype = Koha::Items->search( { itype => undef } );
+        my $items_without_itype = Koha::Items->search( { -or => [itype => undef,itype => ''] } );
         if ( $items_without_itype->count ) {
             new_section("Items do not have itype defined");
             while ( my $item = $items_without_itype->next ) {
-                new_item(
-                    sprintf "Item with itemnumber=%s does not have a itype value, biblio's item type will be used (%s)",
-                    $item->itemnumber, $item->biblioitem->itemtype
-                );
+                if (defined $item->biblioitem->itemtype && $item->biblioitem->itemtype ne '' ) {
+                    new_item(
+                        sprintf "Item with itemnumber=%s does not have a itype value, biblio's item type will be used (%s)",
+                        $item->itemnumber, $item->biblioitem->itemtype
+                    );
+                } else {
+                    new_item(
+                        sprintf "Item with itemnumber=%s does not have a itype value, additionally no item type defined for biblionumber=%s",
+                        $item->itemnumber, $item->biblioitem->biblionumber
+                    );
+               }
             }
             new_hint("The system preference item-level_itypes expects item types to be defined at item level");
         }
@@ -83,7 +90,7 @@ use C4::Biblio;
 
     my @itemtypes = Koha::ItemTypes->search->get_column('itemtype');
     if ( C4::Context->preference('item-level_itypes') ) {
-        my $items_with_invalid_itype = Koha::Items->search( { itype => { not_in => \@itemtypes } } );
+        my $items_with_invalid_itype = Koha::Items->search( { -and => [itype => { not_in => \@itemtypes }, itype => { '!=' => '' }] } );
         if ( $items_with_invalid_itype->count ) {
             new_section("Items have invalid itype defined");
             while ( my $item = $items_with_invalid_itype->next ) {
