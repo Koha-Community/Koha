@@ -2392,8 +2392,10 @@ sub _FixAccountForLostAndReturned {
     my $borrowernumber = @_ ? shift : undef;
     my $item_id        = @_ ? shift : $itemnumber;  # Send the barcode if you want that logged in the description
 
+    my $credit;
+
     # check for charge made for lost book
-    my $accountline = Koha::Account::Lines->search(
+    my $accountlines = Koha::Account::Lines->search(
         {
             itemnumber  => $itemnumber,
             accounttype => { -in => [ 'L', 'Rep', 'W' ] },
@@ -2401,29 +2403,49 @@ sub _FixAccountForLostAndReturned {
         {
             order_by => { -desc => [ 'date', 'accountno' ] }
         }
-    )->next();
-
-    return unless $accountline;
-    return if $accountline->accounttype eq 'W';    # Written off
-
-    $accountline->accounttype('LR');
-    $accountline->store();
-
-    my $account = Koha::Account->new( { patron_id => $accountline->borrowernumber } );
-    my $credit_id = $account->pay(
-        {
-            amount       => $accountline->amount,
-            description  => "Item Returned " . $item_id,
-            account_type => 'CR',
-            offset_type  => 'Lost Item Return',
-            lines        => [$accountline],
-
-        }
     );
 
-    ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
+    return unless $accountlines->count > 0;
+    my $accountline = $accountlines->next;
 
-    return $credit_id;
+    # Use cases
+    if ( $accountline->amount > $accountline->amountoutstanding ) {
+        # some amount has been cancelled. collect the offsets that are not writeoffs
+        # this works because the only way to subtract from a debt is
+        # using the UI buttons 'Pay' and 'Write off'
+        my $credits_offsets = Koha::Account::Offsets->search({
+            debit_id  => $accountline->id,
+            credit_id => { '!=' => undef }, # it is not the debit itself
+            type      => { '!=' => 'Writeoff' },
+            amount    => { '<'  => 0 } # credits are negative on the DB
+        });
+
+        my $total_to_refund = ( $credits_offsets->count > 0 )
+                                ? $credits_offsets->total * -1 # credits are negative on the DB
+                                : 0;
+
+        if ( $total_to_refund > 0 ) {
+            my $account = Koha::Patrons->find( $accountline->borrowernumber )->account;
+            $credit = $account->add_credit(
+                {
+                    amount      => $total_to_refund,
+                    description => 'Item Returned ' . $item_id,
+                    type        => 'lost_item_return'
+                }
+            );
+        }
+
+        ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
+    }
+    # else {
+        # $accountline->amount == $accountline->amountoutstanding
+    #}
+
+    $accountline->accounttype('LR');
+    $accountline->amountoutstanding(0);
+    $accountline->store();
+
+    return ($credit) ? $credit->id : undef;
 }
 
 =head2 _GetCircControlBranch
