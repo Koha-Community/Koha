@@ -76,7 +76,7 @@ sub _new_schema {
         %encoding_attr = ( mysql_enable_utf8 => 1 );
         $encoding_query = "set NAMES 'utf8mb4'";
         $tz_query = qq(SET time_zone = "$tz") if $tz;
-        unless ( C4::Context->config('dev_install') ) {
+        unless ( C4::Context->config('strict_sql_modes') ) {
             $sql_mode_query = q{SET sql_mode = 'IGNORE_SPACE,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'};
         } else {
             $sql_mode_query = q{SET sql_mode = 'ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_ENGINE_SUBSTITUTION'};
