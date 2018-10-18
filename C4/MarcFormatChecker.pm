@@ -115,6 +115,9 @@ sub generate_tag_sequence {
 
     my @fields;
 
+    $tag =~ s/^\s+//;
+    $tag =~ s/\s+$//;
+
     if ($tag =~ /,/) {
 	foreach my $tmp (split(/,/, $tag)) {
 	    push(@fields, generate_tag_sequence($tmp));
