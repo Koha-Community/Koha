@@ -18,6 +18,7 @@ package Koha::Account::Offsets;
 use Modern::Perl;
 
 use Carp;
+use List::Util qw(sum0);
 
 use Koha::Database;
 
@@ -32,6 +33,20 @@ Koha::Account::Offsets - Koha Account Offset Object set class
 Account offsets track the changes made to the balance of account lines
 
 =head1 API
+
+=head2 Class methods
+
+=head3 total
+
+=cut
+
+sub total {
+    my ( $self ) = @_;
+
+    my $total = sum0( $self->get_column('amount') );
+
+    return $total;
+}
 
 =head2 Internal methods
 
