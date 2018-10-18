@@ -20,6 +20,7 @@ use Modern::Perl;
 use Mojo::Base 'Mojolicious::Controller';
 
 use C4::Members qw( AddMember ModMember );
+use Koha::DateUtils;
 use Koha::Patrons;
 
 use Scalar::Util qw(blessed);
@@ -379,6 +380,14 @@ sub _to_model {
 
     if ( exists $patron->{ gonenoaddress} ) {
         $patron->{gonenoaddress} = ($patron->{gonenoaddress}) ? 1 : 0;
+    }
+
+    if ( exists $patron->{lastseen} ) {
+        $patron->{lastseen} = output_pref({ dt => dt_from_string( $patron->{lastseen} ), dateformat => 'sql' });
+    }
+
+    if ( exists $patron->{updated_on} ) {
+        $patron->{updated_on} = output_pref({ dt => dt_from_string( $patron->{updated_on} ), dateformat => 'sql' });
     }
 
     return $patron;
