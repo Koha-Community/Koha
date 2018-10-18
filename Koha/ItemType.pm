@@ -37,6 +37,18 @@ Koha::ItemType - Koha Item type Object class
 
 =cut
 
+sub store {
+    my ($self) = @_;
+
+    $self->rentalcharge(undef)       if $self->rentalcharge eq '';
+    $self->defaultreplacecost(undef) if $self->defaultreplacecost eq '';
+    $self->processfee(undef)         if $self->processfee eq '';
+    $self->notforloan(0) unless $self->notforloan;
+    $self->hideinopac(0) unless $self->hideinopac;
+
+    return $self->SUPER::store;
+}
+
 =head3 image_location
 
 =cut
