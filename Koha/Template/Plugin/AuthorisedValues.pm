@@ -48,7 +48,6 @@ sub GetAuthValueDropbox {
             category => $category,
         },
         {
-            group_by => 'lib',
             order_by => [ 'category', 'lib', 'lib_opac' ],
         }
     );
