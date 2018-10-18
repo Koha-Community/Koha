@@ -290,14 +290,13 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     my $order = Koha::Acquisition::Order->new($orderinfo);
     if ( $orderinfo->{ordernumber} ) {
         ModOrder($orderinfo);
-        my $order_users_ids = $input->param('users_ids');
-        my @order_users = split( /:/, $order_users_ids );
-
-        ModOrderUsers( $orderinfo->{ordernumber}, @order_users );
     }
     else { # else, it's a new line
         $order->store;
     }
+    my $order_users_ids = $input->param('users_ids');
+    my @order_users = split( /:/, $order_users_ids );
+    ModOrderUsers( $order->ordernumber, @order_users );
 
     # now, add items if applicable
     if ($basket->effective_create_items eq 'ordering') {
