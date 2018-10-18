@@ -378,14 +378,14 @@ sub holdings_full {
                     category => 'CCODE',
                     authorised_value => $holding->{ccode}
                 })->next;
-                $holding->{ccode_desc} = $ccode->lib if defined $ccode;
+                $holding->{ccode_description} = $ccode->lib if defined $ccode;
             }
             if ($holding->{location}) {
                 my $loc = Koha::AuthorisedValues->search({
                     category => 'LOC',
                     authorised_value => $holding->{location}
                 })->next;
-                $holding->{location_desc} = $loc->lib if defined $loc;
+                $holding->{location_description} = $loc->lib if defined $loc;
             }
         }
 
