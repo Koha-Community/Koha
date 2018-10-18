@@ -345,7 +345,7 @@ sub check_item_fine {
         $sth = $dbh->prepare("SELECT * FROM accountlines WHERE borrowernumber = ? and itemnumber = ? and accounttype = ? and amountoutstanding = ?");
         $sth->execute($borrowernumber, $itemnumber, $accounttype, $fine);
     }
-
+    
     if (my $overdueprice = $sth->fetchrow_hashref){
         return 1;
     }
@@ -374,9 +374,12 @@ sub check_billing_fine {
 
 sub add_replacement_price {
     my (@accountlines) = @_;
-    foreach my $line (@accountlines) {
-        C4::Accounts::manualinvoice($line->{borrowernumber}, $line->{itemnumber}, $line->{note}, $line->{accounttype}, $line->{replacementprice}, $line->{note});
-        C4::Items::ModItem({ notforloan => '6' }, $line->{biblionumber}, $line->{itemnumber});
+    my $replacementConf = C4::Context->config("billingSetup")->{"replacementPrice"};
+    if (defined $replacementConf && $replacementConf eq "yes") {
+        foreach my $line (@accountlines) {
+            C4::Accounts::manualinvoice($line->{borrowernumber}, $line->{itemnumber}, $line->{note}, $line->{accounttype}, $line->{replacementprice}, $line->{note});
+            C4::Items::ModItem({ notforloan => '6' }, $line->{biblionumber}, $line->{itemnumber});
+        }
     }
 }
 
