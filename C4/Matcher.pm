@@ -331,7 +331,7 @@ sub _store_matchpoint {
     my $matcher_id = $self->{'id'};
     $sth = $dbh->prepare_cached("INSERT INTO matchpoints (matcher_id, search_index, score)
                                  VALUES (?, ?, ?)");
-    $sth->execute($matcher_id, $matchpoint->{'index'}, $matchpoint->{'score'});
+    $sth->execute($matcher_id, $matchpoint->{'index'}, $matchpoint->{'score'}||0);
     my $matchpoint_id = $dbh->{'mysql_insertid'};
     my $seqnum = 0;
     foreach my $component (@{ $matchpoint->{'components'} }) {
@@ -343,7 +343,7 @@ sub _store_matchpoint {
         $sth->bind_param(2, $seqnum);
         $sth->bind_param(3, $component->{'tag'});
         $sth->bind_param(4, join "", sort keys %{ $component->{'subfields'} });
-        $sth->bind_param(5, $component->{'offset'});
+        $sth->bind_param(5, $component->{'offset'}||0);
         $sth->bind_param(6, $component->{'length'});
         $sth->execute();
         my $matchpoint_component_id = $dbh->{'mysql_insertid'};
