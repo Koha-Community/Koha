@@ -242,7 +242,7 @@ subtest "Test update method" => sub {
 
 subtest 'store() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 16;
 
     # Using Koha::ApiKey to test Koha::Object>-store
     # Simple object with foreign keys and unique key
@@ -305,6 +305,45 @@ subtest 'store() tests' => sub {
     $api_key->set({ secret => 'Manuel' });
     my $ret = $api_key->store;
     is( ref($ret), 'Koha::ApiKey', 'store() returns the object on success' );
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron_category = $builder->build_object(
+        {
+            class => 'Koha::Patron::Categories',
+            value => { category_type => 'P', enrolmentfee => 0 }
+        }
+    );
+
+    $patron = eval {
+        Koha::Patron->new(
+            {
+                categorycode    => $patron_category->categorycode,
+                branchcode      => $library->branchcode,
+                dateofbirth     => "", # date will be set to NULL
+                sms_provider_id => "", # Integer will be set to NULL
+                privacy         => "", # privacy cannot be NULL but has a default value
+            }
+        )->store;
+    };
+    is( $@, '', 'No error should be raised by ->store if empty strings are passed' );
+    is( $patron->privacy, 1, 'Default value for privacy should be set to 1' );
+    is( $patron->dateofbirth,     undef, 'dateofbirth must have been set to undef');
+    is( $patron->sms_provider_id, undef, 'sms_provider_id must have been set to undef');
+
+    my $itemtype = eval {
+        Koha::ItemType->new(
+            {
+                itemtype        => 'IT4test',
+                rentalcharge    => "",
+                notforloan      => "",
+                hideinopac      => "",
+            }
+        )->store;
+    };
+    is( $@, '', 'No error should be raised by ->store if empty strings are passed' );
+    is( $itemtype->rentalcharge, undef, 'decimal DEFAULT NULL should default to null');
+    is( $itemtype->notforloan, undef, 'int DEFAULT NULL should default to null');
+    is( $itemtype->hideinopac, 0, 'int NOT NULL DEFAULT 0 should default to 0');
 
     subtest 'Bad value tests' => sub {
 
