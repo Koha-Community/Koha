@@ -28,6 +28,7 @@ use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 
+use Koha::AuthorisedValues;
 use Koha::Items;
 use Koha::Biblioitems;
 use Koha::ArticleRequests;
@@ -368,9 +369,24 @@ sub holdings_full {
             }
         );
 
-        # Nicer name for the metadata array
+        # Nicer name for the metadata array and additional information
         for my $holding (@holdings) {
             $holding->{metadata} = delete $holding->{holdings_metadatas}; 
+
+            if ($holding->{ccode}) {
+                my $ccode = Koha::AuthorisedValues->search({
+                    category => 'CCODE',
+                    authorised_value => $holding->{ccode}
+                })->next;
+                $holding->{ccode_desc} = $ccode->lib if defined $ccode;
+            }
+            if ($holding->{location}) {
+                my $loc = Koha::AuthorisedValues->search({
+                    category => 'LOC',
+                    authorised_value => $holding->{location}
+                })->next;
+                $holding->{location_desc} = $loc->lib if defined $loc;
+            }
         }
 
         $self->{_holdings_full} = \@holdings;
