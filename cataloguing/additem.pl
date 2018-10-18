@@ -220,7 +220,7 @@ sub generate_subfield_form {
                 my $holdings = Koha::Holdings->search({biblionumber => $biblionumber}, { order_by => ['holdingbranch'] })->unblessed;
                 for my $holding ( @$holdings ) {
                     push @authorised_values, $holding->{holding_id};
-                    $authorised_lib{$holding->{holding_id}} = $holding->{holding_id} . ' ' . $holding->{holdingbranch} . ' ' . $holding->{location} . ' ' . $holding->{callnumber};
+                    $authorised_lib{$holding->{holding_id}} = $holding->{holding_id} . ' ' . $holding->{holdingbranch} . ' ' . $holding->{location} . ' ' . $holding->{ccode} . ' ' . $holding->{callnumber};
                 }
 		    my $input = new CGI;
                 $value = $input->param('holding_id') unless ($value);

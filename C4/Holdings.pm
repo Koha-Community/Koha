@@ -486,6 +486,7 @@ sub _koha_add_holding {
             frameworkcode = ?,
             holdingbranch = ?,
             location = ?,
+            ccode = ?
             callnumber = ?,
             suppress = ?,
             datecreated = NOW()
@@ -494,7 +495,7 @@ sub _koha_add_holding {
     my $sth = $dbh->prepare($query);
     $sth->execute(
         $biblionumber, $biblioitemnumber, $frameworkcode,
-        $holding->{holdingbranch}, $holding->{location}, $holding->{callnumber}, $holding->{suppress} ? 1 : 0
+        $holding->{holdingbranch}, $holding->{location}, $holding->{ccode}, $holding->{callnumber}, $holding->{suppress} ? 1 : 0
     );
 
     my $holding_id = $dbh->{'mysql_insertid'};
@@ -525,6 +526,7 @@ sub _koha_modify_holding {
         SET    frameworkcode = ?,
                holdingbranch = ?,
                location = ?,
+               ccode = ?,
                callnumber = ?,
                suppress = ?
         WHERE  holding_id = ?
@@ -533,7 +535,8 @@ sub _koha_modify_holding {
     my $sth = $dbh->prepare($query);
 
     $sth->execute(
-        $frameworkcode, $holding->{holdingbranch}, $holding->{location}, $holding->{callnumber}, $holding->{suppress} ? 1 : 0, $holding_id
+        $frameworkcode, $holding->{holdingbranch}, $holding->{location}, $holding->{ccode}, $holding->{callnumber}, 
+        $holding->{suppress} ? 1 : 0, $holding_id
     ) if $holding_id;
 
     if ( $dbh->errstr || !$holding_id ) {
@@ -773,6 +776,20 @@ sub TransformMarcHoldingToKoha {
         next if !defined $val;
         $result->{$column} = $val;
     }
+
+    # TODO: Remove the following block after bug 10306 has been merged to KohaSuomi.
+    # holdings.callnumber is built from 852$[hklm]. Defining multiple instances of 'holdings.callnumber' to koha.marc_subfield_structure.kohafield doesn't work atm as C4::Biblio::GetMarcSubfieldStructure flattens them.
+    my @parts;
+    foreach my $f852 ($record->field('852')) {
+        my @callno;
+        push(@callno, $f852->subfield('h'));
+        push(@callno, $f852->subfield('k'));
+        push(@callno, $f852->subfield('l'));
+        push(@callno, $f852->subfield('m'));
+        push(@parts, join(' ', @callno));
+    }
+    $result->{'callnumber'} = join(' | ', @parts);
+
     return $result;
 }
 

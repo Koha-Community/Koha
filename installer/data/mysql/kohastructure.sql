@@ -986,6 +986,7 @@ CREATE TABLE `holdings` ( -- table that stores summary holdings information
   `frameworkcode` varchar(4) NOT NULL default '', -- foreign key from the biblio_framework table to identify which framework was used in cataloging this record
   `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that owns this record (MARC21 852$a)
   `location` varchar(80) default NULL, -- authorized value for the shelving location for this record (MARC21 852$b)
+  `ccode` varchar(80) default NULL, -- authorized value for the collection code associated with this item (MARC21 852$g)
   `callnumber` varchar(255) default NULL, -- call number (852$h+$i in MARC21)
   `suppress` tinyint(1) default NULL, -- Boolean indicating whether the record is suppressed in OPAC
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this record was last touched

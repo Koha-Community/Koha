@@ -669,6 +669,7 @@ function verify_images() {
                 <tr>
                     <th>Library</th>
                     <th>Location</th>
+                    <th>Collection</th>
                     <th>Call number</th>
                     <th>Status</th>
                     [% IF ( CAN_user_editcatalogue_edit_items ) %]<th class="NoSort">&nbsp;</th>[% END %]
@@ -677,9 +678,10 @@ function verify_images() {
             <tbody>
                 [% FOREACH holding IN summary_holdings %]
                     <tr>
-                        <td class="branch">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( holding.holdingbranch ) %] [% END %]</td>
-                        <td class="location"><span class="shelvingloc">[% holding.location %][% IF ( holding.sub_location ) %] ([% holding.sub_location %])[% END %]</span>
-                        <td class="itemcallnumber">[% IF ( holding.callnumber ) %] [% holding.callnumber %][% END %]</td>
+                        <td class="branch">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( holding.holdingbranch ) | html %] [% END %]</td>
+                        <td class="location"><span class="shelvingloc">[% holding.location | html %][% IF ( holding.sub_location ) %] ([% holding.sub_location | html %])[% END %]</span>
+                        <td class="collection">[% holding.ccode | html %]</span>
+                        <td class="itemcallnumber">[% IF ( holding.callnumber ) %] [% holding.callnumber | html %][% END %]</td>
                         <td class="status">
                             [% IF ( holding.suppress ) %]
                                 <span class="suppressed">Suppressed in OPAC</span>

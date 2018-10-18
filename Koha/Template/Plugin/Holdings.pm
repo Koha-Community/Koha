@@ -66,6 +66,7 @@ sub GetLocation {
     push @parts, $holding->{'holding_id'};
     push @parts, $holding->{'holdingbranch'} if $holding->{'holdingbranch'};
     push @parts, $holding->{'location'} if $holding->{'location'};
+    push @parts, $holding->{'ccode'} if $holding->{'ccode'};
     push @parts, $holding->{'callnumber'} if $holding->{'callnumber'};
     return join(' ', @parts);
 }
