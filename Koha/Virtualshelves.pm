@@ -55,7 +55,7 @@ sub get_private_shelves {
         },
         {
             join => [ 'virtualshelfshares' ],
-            group_by => 'shelfnumber',
+            distinct => 'shelfnumber',
             order_by => 'shelfname',
             ( ( $page and $rows ) ? ( page => $page, rows => $rows ) : () ),
         }
@@ -73,7 +73,7 @@ sub get_public_shelves {
             category => 2,
         },
         {
-            group_by => 'shelfnumber',
+            distinct => 'shelfnumber',
             order_by => 'shelfname',
             ( ( $page and $rows ) ? ( page => $page, rows => $rows ) : () ),
         }
@@ -116,7 +116,7 @@ sub get_some_shelves {
         },
         {
             join => [ 'virtualshelfshares' ],
-            group_by => 'shelfnumber',
+            distinct => 'shelfnumber',
             order_by => { -desc => 'lastmodified' },
         }
     );
