@@ -966,9 +966,9 @@ sub SearchCourses {
     my $enabled = $params{'enabled'} || '%';
 
     my @params;
-    my $query = "SELECT c.* FROM courses c";
-
-    $query .= "
+    my $query = "
+        SELECT c.course_id, c.department, c.course_number, c.section, c.course_name, c.term, c.staff_note, c.public_note, c.students_count, c.enabled, c.timestamp
+        FROM courses c
         LEFT JOIN course_instructors ci
             ON ( c.course_id = ci.course_id )
         LEFT JOIN borrowers b
@@ -992,7 +992,7 @@ sub SearchCourses {
            )
            AND
            c.enabled LIKE ?
-        GROUP BY c.course_id
+        GROUP BY c.course_id, c.department, c.course_number, c.section, c.course_name, c.term, c.staff_note, c.public_note, c.students_count, c.enabled, c.timestamp
     ";
 
     $term //= '';

@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 26;
+use Test::More tests => 27;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -135,5 +135,8 @@ ok( !defined( $course_reserve->{'cr_id'} ), "DelCourseReserve functions correctl
 DelCourse($course_id);
 $course = GetCourse($course_id);
 ok( !defined( $course->{'course_id'} ), "DelCourse deleted course successfully" );
+
+$courses = SearchCourses(); # FIXME Lack of tests for SearchCourses
+is( ref($courses), 'ARRAY', 'SearchCourses should not crash and return an arrayref' );
 
 $schema->storage->txn_rollback;
