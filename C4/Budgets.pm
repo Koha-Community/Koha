@@ -133,6 +133,7 @@ sub AddBudgetPeriod {
     my ($budgetperiod) = @_;
     return unless($budgetperiod->{budget_period_startdate} && $budgetperiod->{budget_period_enddate});
 
+    undef $budgetperiod->{budget_period_id};
     my $resultset = Koha::Database->new()->schema->resultset('Aqbudgetperiod');
     return $resultset->create($budgetperiod)->id;
 }
@@ -622,6 +623,8 @@ sub AddBudget {
     my ($budget) = @_;
     return unless ($budget);
 
+    undef $budget->{budget_encumb} if $budget->{budget_encumb} eq '';
+    undef $budget->{budget_owner_id} if $budget->{budget_owner_id} eq '';
     my $resultset = Koha::Database->new()->schema->resultset('Aqbudget');
     return $resultset->create($budget)->id;
 }
@@ -632,6 +635,8 @@ sub ModBudget {
     my $result = Koha::Database->new()->schema->resultset('Aqbudget')->find($budget);
     return unless($result);
 
+    undef $budget->{budget_encumb} if $budget->{budget_encumb} eq '';
+    undef $budget->{budget_owner_id} if $budget->{budget_owner_id} eq '';
     $result = $result->update($budget);
     return $result->in_storage;
 }
