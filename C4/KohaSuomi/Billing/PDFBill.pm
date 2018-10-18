@@ -375,11 +375,11 @@ sub check_billing_fine {
 sub add_replacement_price {
     my (@accountlines) = @_;
     my $replacementConf = C4::Context->config("billingSetup")->{"replacementPrice"};
-    if (defined $replacementConf && $replacementConf eq "yes") {
-        foreach my $line (@accountlines) {
+    foreach my $line (@accountlines) {
+        if (defined $replacementConf && $replacementConf eq "yes") {
             C4::Accounts::manualinvoice($line->{borrowernumber}, $line->{itemnumber}, $line->{note}, $line->{accounttype}, $line->{replacementprice}, $line->{note});
-            C4::Items::ModItem({ notforloan => '6' }, $line->{biblionumber}, $line->{itemnumber});
         }
+        C4::Items::ModItem({ notforloan => '6' }, $line->{biblionumber}, $line->{itemnumber});
     }
 }
 
