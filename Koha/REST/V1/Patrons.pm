@@ -367,11 +367,11 @@ sub _to_model {
     }
 
     if ( exists $patron->{lastseen} ) {
-        $patron->{lastseen} = output_pref({ dt => dt_from_string( $patron->{lastseen} ), dateformat => 'sql' });
+        $patron->{lastseen} = output_pref({ str => $patron->{lastseen}, dateformat => 'sql' });
     }
 
     if ( exists $patron->{updated_on} ) {
-        $patron->{updated_on} = output_pref({ dt => dt_from_string( $patron->{updated_on} ), dateformat => 'sql' });
+        $patron->{updated_on} = output_pref({ str => $patron->{updated_on}, dateformat => 'sql' });
     }
 
     return $patron;
