@@ -190,7 +190,7 @@ sub apply {
             Koha::Account::Offset->new(
                 {   credit_id => $self->id,
                     debit_id  => $debit->id,
-                    amount    => $amount_to_cancel,
+                    amount    => $amount_to_cancel * -1,
                     type      => $offset_type,
                 }
             )->store();

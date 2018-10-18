@@ -202,7 +202,7 @@ subtest 'apply() tests' => sub {
     my $offsets = Koha::Account::Offsets->search( { credit_id => $credit->id, debit_id => $debit_1->id } );
     is( $offsets->count, 1, 'Only one offset is generated' );
     my $THE_offset = $offsets->next;
-    is( $THE_offset->amount * 1, 10, 'Amount was calculated correctly (less than the available credit)' );
+    is( $THE_offset->amount * 1, -10, 'Amount was calculated correctly (less than the available credit)' );
     is( $THE_offset->type, 'Manual Credit', 'Passed type stored correctly' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $debit_2->id });
@@ -216,7 +216,7 @@ subtest 'apply() tests' => sub {
     $offsets = Koha::Account::Offsets->search( { credit_id => $credit->id, debit_id => $debit_2->id } );
     is( $offsets->count, 1, 'Only one offset is generated' );
     $THE_offset = $offsets->next;
-    is( $THE_offset->amount * 1, 90, 'Amount was calculated correctly (less than the available credit)' );
+    is( $THE_offset->amount * 1, -90, 'Amount was calculated correctly (less than the available credit)' );
     is( $THE_offset->type, 'Credit Applied', 'Defaults to \'Credit Applied\' offset type' );
 
     $debits = Koha::Account::Lines->search({ accountlines_id => $debit_1->id });
