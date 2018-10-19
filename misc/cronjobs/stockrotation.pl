@@ -216,9 +216,8 @@ sub report_full {
     my $body   = "";
 
     # Summary
-    $header .= sprintf "
-STOCKROTATION REPORT
---------------------\n";
+    $header .= "STOCKROTATION REPORT\n";
+    $header .= "--------------------\n";
     $body .= sprintf "
   Total number of rotas:         %5u
     Inactive rotas:              %5u
@@ -237,25 +236,25 @@ STOCKROTATION REPORT
       $data->{advanceable}, $data->{indemand};
 
     if ( @{ $data->{rotas} } ) {    # Per Rota details
-        $body .= sprintf "ROTAS DETAIL\n------------\n\n";
+        $body .= "ROTAS DETAIL\n";
+        $body .= "------------\n\n";
         foreach my $rota ( @{ $data->{rotas} } ) {
             $body .= sprintf "Details for %s [%s]:\n",
               $rota->{name}, $rota->{id};
-            $body .= sprintf "\n  Items:";    # Rota item details
+            $body .= "\n  Items:";    # Rota item details
             if ( @{ $rota->{items} } ) {
                 $body .=
                   join( "", map { _print_item($_) } @{ $rota->{items} } );
             }
             else {
-                $body .=
-                  sprintf "\n    No items to be processed for this rota.\n";
+                $body .= "\n    No items to be processed for this rota.\n";
             }
-            $body .= sprintf "\n  Log:";      # Rota log details
+            $body .= "\n  Log:";      # Rota log details
             if ( @{ $rota->{log} } ) {
                 $body .= join( "", map { _print_item($_) } @{ $rota->{log} } );
             }
             else {
-                $body .= sprintf "\n    No items in log for this rota.\n\n";
+                $body .= "\n    No items in log for this rota.\n\n";
             }
         }
     }
@@ -298,9 +297,8 @@ sub report_email {
     my $branched = $data->{branched};
     my $flag     = 0;
 
-    $header .= sprintf "
-BRANCH-BASED STOCKROTATION REPORT
----------------------------------\n";
+    $header .= "BRANCH-BASED STOCKROTATION REPORT\n";
+    $header .= "---------------------------------\n";
     push @{$out}, $header;
 
     if ($branch) {    # Branch limited report
@@ -314,8 +312,7 @@ BRANCH-BASED STOCKROTATION REPORT
     }
     else {
         push @{$out}, {
-            body => sprintf "
-No actionable items at any libraries.\n\n",    # The body of the report
+            body => "No actionable items at any libraries.\n\n",    # The body of the report
             no_branch_email => 1,    # We don't expect branch email in report
         };
     }
