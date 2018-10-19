@@ -121,8 +121,7 @@ Returns:
 sub store {
     my ($self) = @_;
 
-    my $columns_info = Koha::Database->new->schema->resultset( $self->_type )
-        ->result_source->{_columns};
+    my $columns_info = $self->_result->result_source->columns_info;
 
     # Handle not null and default values for integers and dates
     foreach my $col ( keys %{$columns_info} ) {
