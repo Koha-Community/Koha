@@ -379,10 +379,10 @@
             <li>
                 [% IF ( close ) %]
                     <span class="label">Vendor price: </span>
-                    <input type="hidden" name="listprice" id="listprice" value="[% listprice %]" />[% listprice %] [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="hidden" name="listprice" id="listprice" value="[% listprice | html %]" />[% listprice | html %] [% IF (listincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]
                 [% ELSE %]
                 <label for="listprice">Vendor price: </label>
-                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice %]" onchange="updateCosts()" /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="text" size="20" name="listprice" id="listprice" value="[% listprice | html %]" onchange="updateCosts()" /> [% IF (listincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]
                 [% END %]
             </li>
             [% UNLESS ( close ) %]
@@ -435,15 +435,15 @@
             <li>
                 [% IF ( close ) %]
                     <span class="label">Replacement cost: </span>
-                    <input type="hidden" name="rrp" id="rrp" value="[% rrp %]" />[% rrp %]  (adjusted for [% cur_active %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
+                    <input type="hidden" name="rrp" id="rrp" value="[% rrp | html %]" />[% rrp | html %]  (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])
                 [% ELSE %]
                     <label for="rrp">Replacement cost: </label>
-                    <input type="text" size="20" name="rrp" id="rrp" value="[% rrp %]" /> (adjusted for [% cur_active %], [% IF (listincgst == 1) %]tax inc.[% ELSE %]tax exc.[% END %])
+                    <input type="text" size="20" name="rrp" id="rrp" value="[% rrp | html %]" /> (adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])
                 [% END %]
             </li>
             <li>
                 <label for="ecost">Budgeted cost: </label>
-                <input type="text" size="20" name="ecost" id="ecost" value="[% ecost %]" readonly="readonly"  /> [% IF (listincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                <input type="text" size="20" name="ecost" id="ecost" value="[% ecost | html %]" readonly="readonly"  /> [% IF (listincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]
             </li>
             <li>
                 <label for="total">Total: </label>
@@ -452,10 +452,10 @@
             <li>
                 [% IF ( close ) %]
                     <label for="unitprice">Actual cost: </label>
-                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" readonly="readonly" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice | html %]" readonly="readonly" /> [% IF (invoiceincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]
                 [% ELSE %]
                     <label for="unitprice">Actual cost: </label>
-                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice %]" /> [% IF (invoiceincgst == 1) %](tax inc.)[% ELSE %](tax exc.)[% END %]
+                    <input type="text" id="unitprice" size="20" name="unitprice" value="[% unitprice | html %]" /> [% IF (invoiceincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]
                 [% END %]
             </li>
             <li>
