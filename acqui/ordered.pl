@@ -74,7 +74,13 @@ WHERE
     (datecancellationprinted IS NULL OR
         datecancellationprinted='0000-00-00') AND
     (quantity > quantityreceived OR quantityreceived IS NULL)
-    GROUP BY aqorders.ordernumber
+    GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
+             tleft,
+             ecost, budgetdate, entrydate,
+             aqbasket.booksellerid,
+             aqbooksellers.name,
+             itype,
+             title
 EOQ
 
 my $sth = $dbh->prepare($query);

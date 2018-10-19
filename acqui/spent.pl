@@ -83,7 +83,19 @@ WHERE
     (datecancellationprinted IS NULL OR
         datecancellationprinted='0000-00-00') AND
     datereceived IS NOT NULL
-    GROUP BY aqorders.ordernumber
+    GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
+             tleft,
+             ecost, budgetdate, entrydate,
+             aqbasket.booksellerid,
+             itype,
+             title,
+             aqorders.invoiceid,
+             aqinvoices.invoicenumber,
+             quantityreceived,
+             unitprice,
+             datereceived,
+             aqbooksellers.name
+
 EOQ
 my $sth = $dbh->prepare($query);
 $sth->execute($bookfund);
