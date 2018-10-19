@@ -141,9 +141,13 @@ sub store {
         }
         elsif ( _date_or_datetime_column_type( $columns_info->{$col}->{data_type} ) ) {
             # Set to null if an empty string (or == 0 but should not happen)
-            # Skip a default value for dates LIKE CURRENT_TIMESTAMP
-            # In DBIx represented as: default_value => \'now()'
-            $self->$col(undef) unless $self->$col || $columns_info->{$col}->{default_value};
+            if ( defined $self->$col and not $self->$col ) {
+                if ( $columns_info->{$col}->{is_nullable} ) {
+                    $self->$col(undef);
+                } else {
+                    $self->$col($columns_info->{$col}->{default_value});
+                }
+            }
         }
     }
 
