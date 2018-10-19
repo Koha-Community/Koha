@@ -377,7 +377,6 @@ sub retrieve_letters {
     }
 
     $sql .= " WHERE ".join(" AND ", @where) if @where;
-    $sql .= " GROUP BY branchcode,module,code";
     $sql .= " ORDER BY module, code, branchcode";
 
     return $dbh->selectall_arrayref($sql, { Slice => {} }, @args);
