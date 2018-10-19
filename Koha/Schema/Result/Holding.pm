@@ -63,6 +63,12 @@ __PACKAGE__->table("holdings");
   is_nullable: 1
   size: 80
 
+=head2 ccode
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 80
+
 =head2 callnumber
 
   data_type: 'varchar'
@@ -117,6 +123,8 @@ __PACKAGE__->add_columns(
   "holdingbranch",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "location",
+  { data_type => "varchar", is_nullable => 1, size => 80 },
+  "ccode",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "callnumber",
   { data_type => "varchar", is_nullable => 1, size => 255 },
@@ -234,8 +242,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-06-27 11:41:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NZ+oAy5PbrzkGnTxDr4nsw
+# Created by DBIx::Class::Schema::Loader v0.07048 @ 2018-10-19 09:31:13
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:m9kgiNs7rtk5KNrXWs7WQQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
