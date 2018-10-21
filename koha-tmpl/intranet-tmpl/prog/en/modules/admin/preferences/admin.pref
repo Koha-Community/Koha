@@ -65,6 +65,23 @@ Administration:
               choices:
                   yes: "The logged-in library"
                   no: "All libraries"
+    Encryption options:
+        -
+            - "Encryption configuration for tasks that encrypt files with gpg or gpg2 -programs."
+            - pref: EncryptionConfiguration
+              type: textarea
+            - "Configurations are given as YAML.<br/>"
+            - "eg.<br/>"
+            - "<code> </br>"
+            - "--- </br>"
+            - "# <em>'passphrase'</em> is mandatory. This is used to secure symmetric encryptions that are <br/>"
+            - "# encrypted and decrypted using this same passphrase. <br/>"
+            - "passphrase: abrakadabra simsalapim<br/>"
+            - "# <em>'cipher-algorithm'</em> defaults to AES-256. Algorithm to be used to make symmetric encryptions.<br/>"
+            - "cipher-algorithm: AES-256 </br>"
+            - "</code><br/>"
+            - "<br/>"
+
     Login options:
         -
             - "Inactivity timeout in seconds to automatically log out users: "
