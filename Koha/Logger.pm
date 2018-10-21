@@ -249,7 +249,7 @@ sub AUTOLOAD {
     my $self = shift;
     my $method = $Koha::Logger::AUTOLOAD =~ s/Koha::Logger:://r;
 
-    if ($self->{lazyLoad}) { #We have created this logger to be lazy loadable
+    if ($self->{lazyLoad} && $method ne 'DESTROY') { #We have created this logger to be lazy loadable
         $self = ref($self)->get( $self->{lazyLoad} ); #Lazy load me!
     }
 
