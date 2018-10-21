@@ -43,7 +43,7 @@ EOF
 }
 
 my $dbh = C4::Context->dbh;
-my $i = 0;
+my ($i, $k) = (0, 0);
 my $starttime = time();
 
 $| = 1; # flushes output
@@ -51,21 +51,25 @@ $starttime = time();
 
 my $sth = $dbh->prepare("SELECT holding_id FROM holdings");
 $sth->execute();
-my @errors;
 while (my ($holding_id) = $sth->fetchrow()) {
     my $record = C4::Holdings::GetMarcHolding($holding_id);
     if (not defined $record) {
-        push @errors, $holding_id;
+        $k++;
+        warn "No Holding record for holding_id '$holding_id'";
         next;
     }
     my $rowData = C4::Holdings::TransformMarcHoldingToKoha($record);
     my $frameworkcode = C4::Holdings::GetHoldingFrameworkCode($holding_id);
-    C4::Holdings::_koha_modify_holding($dbh, $holding_id, $rowData, $frameworkcode) unless $test_parameter;
+    eval {
+        C4::Holdings::_koha_modify_holding($dbh, $holding_id, $rowData, $frameworkcode) unless $test_parameter;
+    };
+    if ($@) {
+        $k++;
+        warn "Modify holdings error for holding_id '$holding_id': ".$@;
+        next;
+    }
     ++$i;
 }
 $sth->finish();
 my $timeneeded = time() - $starttime;
-print "$i MARC records done in $timeneeded seconds\n";
-if (scalar(@errors) > 0) {
-    print 'Records that could not be processed: ', join(' ', @errors);
-}
+print "$i/".($i+$k)." MARC records done in $timeneeded seconds\n";
