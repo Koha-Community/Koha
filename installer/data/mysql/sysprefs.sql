@@ -485,7 +485,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SelfCheckReceiptPrompt','1','NULL','If ON, print receipt dialog pops up when self checkout is finished','YesNo'),
 ('SelfCheckTimeout','120','','Define the number of seconds before the Web-based Self Checkout times out a patron','Integer'),
 ('SerialsDisplayTree','0',NULL,'Use serials display improvements and the hold picker','YesNo'),
-('SSRules','0:PT S ST',NULL,"Self-service access rules, age limit + whitelisted borrower categories, eg. '15:ST S PT'",'text'),
+('SSRules','---\nCardExpired: 1\nCardLost: 1\nDebarred: 1\nMaxFines: 1\nMinimumAge: 15\nOpeningHours: 1\nPermission: 1\n',NULL,"Self-service access rules",'Textarea'),
 ('SeparateHoldings','0',NULL,'Separate current branch holdings from other holdings','YesNo'),
 ('SeparateHoldingsBranch','homebranch','homebranch|holdingbranch','Branch used to separate holdings','Choice'),
 ('SessionRestrictionByIP','1','Check for change in remote IP address for session security. Disable only when remote IP address changes frequently.','','YesNo'),

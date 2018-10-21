@@ -1,6 +1,7 @@
 package C4::SelfService;
 
 # Copyright 2016 KohaSuomi
+# Copyright 2018 The National Library of Finland
 #
 # This file is part of Koha.
 #
@@ -24,9 +25,14 @@ use Try::Tiny;
 use Scalar::Util qw(blessed);
 use Carp;
 
+use Time::Piece ();
+use YAML::XS;
+
 use C4::Context;
 use C4::Log;
 use C4::Members::Attributes;
+use Koha::Patron::Debarments;
+use Koha::Caches;
 
 use Koha::Exception::FeatureUnavailable;
 use Koha::Exception::SelfService;
@@ -37,126 +43,154 @@ use Koha::Exception::SelfService::PermissionRevoked;
 use Koha::Exception::SelfService::OpeningHours;
 
 use Koha::Logger;
-my $logger = Koha::Logger->get({category => __PACKAGE__});
+my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
 
 =head2 CheckSelfServicePermission
+
+ @param {Koha::Patron or something castable}
+ @param {String} Branchcode of the Branch where the user is requesting access
+ @param {String} Action the user is trying to do, eg. access the main doors
 
 =cut
 
 sub CheckSelfServicePermission {
-    my ($ilsPatron, $requestingBranchcode, $action) = @_;
+    my ($borrower, $requestingBranchcode, $action) = @_;
     $requestingBranchcode = C4::Context->userenv->{branch} unless $requestingBranchcode;
     $action = 'accessMainDoor' unless $action;
 
     try {
-        _HasSelfServicePermission($ilsPatron, $requestingBranchcode, $action);
+        _HasSelfServicePermission($borrower, $requestingBranchcode, $action);
     } catch {
         $logger->debug("Caught error. Type:'".ref($_)."', stringified: '$_'") if $logger->is_debug;
         unless (blessed($_) && $_->can('rethrow')) {
             confess $_;
         }
         if ($_->isa('Koha::Exception::SelfService::Underage')) {
-            _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'underage');
+            _WriteAccessLog($action, $borrower->{borrowernumber}, 'underage');
             $_->rethrow();
         }
         elsif ($_->isa('Koha::Exception::SelfService::TACNotAccepted')) {
-            _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'missingT&C');
+            _WriteAccessLog($action, $borrower->{borrowernumber}, 'missingT&C');
             $_->rethrow();
         }
         elsif ($_->isa('Koha::Exception::SelfService::BlockedBorrowerCategory')) {
-            _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'blockBorCat');
+            _WriteAccessLog($action, $borrower->{borrowernumber}, 'blockBorCat');
             $_->rethrow();
         }
         elsif ($_->isa('Koha::Exception::SelfService::PermissionRevoked')) {
-            _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'revoked');
+            _WriteAccessLog($action, $borrower->{borrowernumber}, 'revoked');
             $_->rethrow();
         }
         elsif ($_->isa('Koha::Exception::SelfService::OpeningHours')) {
-            _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'closed');
+            _WriteAccessLog($action, $borrower->{borrowernumber}, 'closed');
             $_->rethrow();
         }
         elsif ($_->isa('Koha::Exception::SelfService')) {
-            _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'denied');
+            _WriteAccessLog($action, $borrower->{borrowernumber}, 'denied');
             $_->rethrow();
         }
         elsif ($_->isa('Koha::Exception::FeatureUnavailable')) {
-            _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'misconfigured');
+            _WriteAccessLog($action, $borrower->{borrowernumber}, 'misconfigured');
             $_->rethrow();
         }
         $_->rethrow;
     };
-    _WriteAccessLog($action, $ilsPatron->{borrowernumber}, 'granted');
+    _WriteAccessLog($action, $borrower->{borrowernumber}, 'granted');
     return 1;
 }
 
 sub _HasSelfServicePermission {
-    my ($ilsPatron, $requestingBranchcode, $action) = @_;
+    my ($borrower, $requestingBranchcode, $action) = @_;
 
-    my ($minimumAge, $whitelistedBorrowerCategories) = GetRules();
-    _CheckTaC($ilsPatron);
-    _CheckPermission($ilsPatron);
-    _CheckBorrowerCategory($ilsPatron, $whitelistedBorrowerCategories);
-    _CheckMinimumAge($ilsPatron, $minimumAge);
-    _CheckLimitation($ilsPatron);
-    _CheckOpeningHours($ilsPatron, $requestingBranchcode);
+    my $rules = GetRules();
+
+    _CheckTaC($borrower, $rules)              if ($rules->{TaC});
+    _CheckPermission($borrower, $rules)       if ($rules->{Permission});
+    _CheckBorrowerCategory($borrower, $rules) if ($rules->{BorrowerCategories});
+    _CheckMinimumAge($borrower, $rules)       if ($rules->{MinimumAge});
+    _CheckCardExpired($borrower, $rules)      if ($rules->{CardExpired});
+    _CheckCardLost($borrower, $rules)         if ($rules->{CardLost});
+    _CheckDebarred($borrower, $rules)         if ($rules->{Debarred});
+    _CheckMaxFines($borrower, $rules)         if ($rules->{MaxFines});
+
+    if ($rules->{OpeningHours}) {
+        $rules->{OpeningHours} = $requestingBranchcode if ($requestingBranchcode);
+        _CheckOpeningHours($borrower, $rules);
+    }
 
     return 1;
 }
 
-sub _CheckLimitation {
-    my ($ilsPatron) = @_;
+sub _CheckCardLost {
+    my ($borrower, $rules) = @_;
+    Koha::Exception::SelfService->throw(error => "Card lost") if ($borrower->{lost});
+}
 
-    if (
-        $ilsPatron->card_lost ||
-        $ilsPatron->expired ||
-        not($ilsPatron->hold_ok) || #debarred
-        $ilsPatron->excessive_fines ||
-        $ilsPatron->excessive_fees) {
+sub _CheckCardExpired {
+    my ($borrower, $rules) = @_;
+    Koha::Exception::SelfService->throw(error => "Card expired") if ($borrower->{dateexpiry} lt Time::Piece::localtime->strftime('%F'));
+}
 
-        Koha::Exception::SelfService->throw();
+sub _CheckDebarred {
+    my ($borrower, $rules) = @_;
+    Koha::Exception::SelfService->throw(error => "Debarred") if ($borrower->{debarred});
+}
+
+sub _CheckMaxFines {
+    my ($borrower, $rules) = @_;
+
+    my $dbh = C4::Context->dbh();
+    my @totalFines = $dbh->selectrow_array('SELECT SUM(amountoutstanding) FROM accountlines WHERE borrowernumber = ?', undef, $borrower->{borrowernumber});
+    return unless $totalFines[0];
+    my $maxFinesBeforeBlock = C4::Context->preference('noissuescharge');
+    if ($totalFines[0] >= $maxFinesBeforeBlock) {
+        Koha::Exception::SelfService->throw(error => "Too many fines '$totalFines[0]'"); #It might be ok to throw something specific about max fines, but then Toveri needs to be retrofitted to handle the new exception type.
     }
 }
 
 sub _CheckMinimumAge {
-    my ($ilsPatron, $minimumAge) = @_;
-    my $dob = DateTime::Format::ISO8601->parse_datetime($ilsPatron->{birthdate_iso});
-    $dob->set_time_zone( C4::Context->tz() );
-    my $minimumDob = DateTime->now(time_zone => C4::Context->tz())->subtract(years => $minimumAge);
-    if (DateTime->compare($dob, $minimumDob) > 0) {
-        Koha::Exception::SelfService::Underage->throw(minimumAge => $minimumAge);
+    my ($borrower, $rules) = @_;
+    if ($borrower->{dateofbirth}) {
+        my $dob = DateTime::Format::ISO8601->parse_datetime($borrower->{dateofbirth});
+        $dob->set_time_zone( C4::Context->tz() );
+        my $minimumDob = DateTime->now(time_zone => C4::Context->tz())->subtract(years => $rules->{MinimumAge});
+        if (DateTime->compare($dob, $minimumDob) < 0) {
+            return 1;
+        }
     }
-    return 1;
+
+    Koha::Exception::SelfService::Underage->throw(minimumAge => $rules->{MinimumAge});
 }
 
 sub _CheckTaC {
-    my ($ilsPatron) = @_;
-    my $agreement = C4::Members::Attributes::GetBorrowerAttributeValue($ilsPatron->{borrowernumber}, 'SST&C');
+    my ($borrower, $rules) = @_;
+    my $agreement = C4::Members::Attributes::GetBorrowerAttributeValue($borrower->{borrowernumber}, 'SST&C');
     unless ($agreement) {
         Koha::Exception::SelfService::TACNotAccepted->throw();
     }
-    return 1;
 }
 
 sub _CheckPermission {
-    my ($ilsPatron) = @_;
-    my $ban = C4::Members::Attributes::GetBorrowerAttributeValue($ilsPatron->{borrowernumber}, 'SSBAN');
+    my ($borrower, $rules) = @_;
+    my $ban = C4::Members::Attributes::GetBorrowerAttributeValue($borrower->{borrowernumber}, 'SSBAN');
     if ($ban) {
         Koha::Exception::SelfService::PermissionRevoked->throw();
     }
-    return 1;
 }
 
 sub _CheckBorrowerCategory {
-    my ($ilsPatron, $whitelistedBorrowerCategories) = @_;
+    my ($borrower, $rules) = @_;
 
-    unless ($ilsPatron->{ptype} && $whitelistedBorrowerCategories =~ /$ilsPatron->{ptype}/) {
-        Koha::Exception::SelfService::BlockedBorrowerCategory->throw(error => "Borrower category '".$ilsPatron->{ptype}."' is not allowed");
+    unless ($borrower->{categorycode} && $rules->{BorrowerCategories} =~ /$borrower->{categorycode}/) {
+        Koha::Exception::SelfService::BlockedBorrowerCategory->throw(error => "Borrower category '".$borrower->{categorycode}."' is not allowed");
     }
-    return 1;
 }
 
 sub _CheckOpeningHours {
-    my ($ilsPatron, $branchcode) = @_;
+    my ($borrower, $rules) = @_;
+    my $branchcode = $rules->{OpeningHours};
+    # If no branchcode to check the opening hours for has been given, let it pass. This is important to allow using the same code from block list generating code, and for realtime checks.
+    return 1 unless ($branchcode);
 
     unless (Koha::Libraries::isOpen($branchcode)) {
         my $openingHours = Koha::Libraries::getOpeningHours($branchcode);
@@ -166,7 +200,6 @@ sub _CheckOpeningHours {
             endTime => $openingHours->[1],
         );
     }
-    return 1;
 }
 
 sub GetAccessLogs {
@@ -201,24 +234,38 @@ sub FlushLogs {
 
 =head2 GetRules
 
-    my ($ageLimit, $whitelistedBorrowerCategories) = GetRules();
+    my $rules = GetRules();
 
-Retrieves the Self-Service rules
+Retrieves the Self-Service rules. This is basically a list of checks triggered, with the corresponding parameters if any.
 
-@RETURNS List of:
-             Integer, age limit for self-service resources
-             String, list of allowed borrower categories
+@RETURNS HASHRef of:
+            'TaC'                => Boolean, Terms and conditions of self-service usage accepted
+            'Permission'         => Boolean, permissions to access the self-service resource. Basically not having SSBAN -borrower attribute.
+            'BorrowerCategories' => String, list of allowed borrower categories
+            'MinimumAge'         => Integer, age limit for self-service resources
+            'CardExpired'        => Boolean, check for expired card
+            'CardLost'           => Boolean, check for a lost card
+            'Debarred'           => Boolean, check if user account is debarred
+            'MaxFines'           => Boolean, checks the syspref 'MaxFine' against the borrowers accumulated fines,
+            'OpeningHours'       => Boolean, use the syspref 'OpeningHours' to check against the current time and branch.
 
 @THROWS Koha::Exception::FeatureUnavailable if SSRules is not properly configured
 
 =cut
 
 sub GetRules {
-    my $r = C4::Context->preference('SSRules');
-    if ($r =~ /^(\d+):(.+)$/) {
-        return ($1, $2);
+    my $cache = Koha::Caches->get_instance();
+    my $rules = $cache->get_from_cache('SSRules');
+    return $rules if $rules;
+
+    my $ssrules = C4::Context->preference('SSRules');
+    $rules = eval { YAML::XS::Load($ssrules) };
+    if ($rules && ref($rules) eq 'HASH') {
+        $cache->set_in_cache('SSRules', $rules, {expiry => 300});
+        return $rules;
     }
-    Koha::Exception::FeatureUnavailable->throw(error => "System preference 'SSRules' is not properly defined");
+
+    Koha::Exception::FeatureUnavailable->throw(error => "System preference 'SSRules' '".($ssrules||'undef')."' is not properly defined: $@");
 }
 
 1;

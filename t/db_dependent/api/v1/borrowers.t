@@ -24,6 +24,7 @@ use t::lib::TestBuilder;
 use t::lib::Mocks;
 
 use Koha::Database;
+use Koha::Caches;
 use Koha::AuthUtils;
 use t::db_dependent::opening_hours_context;
 
@@ -102,7 +103,11 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     my $b = Koha::Patrons->find($user->{borrowernumber});
 
     my $SSRulesPref = C4::Context->preference("SSRules");
-    C4::Context->set_preference("SSRules", "0:PT");
+    C4::Context->set_preference("SSRules",
+                                "---\n".
+                                "TaC: 1\n".
+                                "OpeningHours: 1\n");
+    Koha::Caches->get_instance()->clear_from_cache('SSRules');
 
     my $OpeningHours = C4::Context->preference("OpeningHours");
     my $hours = t::db_dependent::opening_hours_context::createContext;
@@ -178,6 +183,7 @@ subtest '/borrowers/ssstatus 501 get() tests' => sub {
 
     my $SSRulesPref = C4::Context->preference("SSRules");
     C4::Context->set_preference("SSRules", "");
+    Koha::Caches->get_instance()->clear_from_cache('SSRules');
 
     my $OpeningHours = C4::Context->preference("OpeningHours");
     my $hours = t::db_dependent::opening_hours_context::createContext;
