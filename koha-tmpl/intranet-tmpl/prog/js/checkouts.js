@@ -293,7 +293,14 @@ $(document).ready(function() {
                 { "mDataProp": "itemtype_description" },
                 { "mDataProp": "location" },
                 { "mDataProp": "homebranch" },
-                { "mDataProp": "issuedate_formatted" },
+                {
+                    "mDataProp": "issuedate",
+                    "bVisible": false,
+                },
+                { 
+                    "iDataSort": 9, // Sort on hidden unformatted issuedate column
+                    "mDataProp": "issuedate_formatted"
+                },
                 { "mDataProp": "branchname" },
                 { "mDataProp": "itemcallnumber" },
                 {
@@ -537,7 +544,7 @@ $(document).ready(function() {
                         "bVisible": false,
                     },
                     {
-                        "iDataSort": 1, // Sort on hidden unformatted date due column
+                        "iDataSort": 0, // Sort on hidden unformatted date due column
                         "mDataProp": function( oObj ) {
                             var today = new Date();
                             var due = new Date( oObj.date_due );
@@ -608,7 +615,14 @@ $(document).ready(function() {
                     },
                     { "mDataProp": "itemtype" },
                     { "mDataProp": "location" },
-                    { "mDataProp": "issuedate_formatted" },
+                    {
+                        "mDataProp": "issuedate",
+                        "bVisible": false,
+                    },
+                    {
+                        "iDataSort": 7, // Sort on hidden unformatted issuedate column
+                        "mDataProp": "issuedate_formatted",
+                    },
                     { "mDataProp": "branchname" },
                     { "mDataProp": "itemcallnumber" },
                     {
