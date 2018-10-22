@@ -73,6 +73,15 @@ sub new {
     return $self;
 }
 
+=head2 get_elasticsearch
+
+    my $elasticsearch_client = $self->get_elasticsearch();
+
+Returns a C<Search::Elasticsearch> client. The client is cached on a C<Koha::SearchEngine::ElasticSearch>
+instance level and will be reused if method is called multiple times.
+
+=cut
+
 sub get_elasticsearch {
     my $self = shift @_;
     unless (defined $self->{elasticsearch}) {
@@ -145,8 +154,8 @@ sub get_elasticsearch_params {
 
     my $settings = $self->get_elasticsearch_settings();
 
-This provides the settings provided to elasticsearch when an index is created.
-These can do things like define tokenisation methods.
+This provides the settings provided to Elasticsearch when an index is created.
+These can do things like define tokenization methods.
 
 A hashref containing the settings is returned.
 
@@ -170,7 +179,7 @@ sub get_elasticsearch_settings {
 
     my $mappings = $self->get_elasticsearch_mappings();
 
-This provides the mappings that get passed to elasticsearch when an index is
+This provides the mappings that get passed to Elasticsearch when an index is
 created.
 
 =cut
@@ -232,7 +241,7 @@ sub get_elasticsearch_mappings {
 
 =head2 _get_elasticsearch_mapping
 
-Get the ES mappings for the given purpose and data type
+Get the Elasticsearch mappings for the given purpose and data type.
 
 $mapping = _get_elasticsearch_mapping('search', 'text');
 
@@ -301,51 +310,96 @@ sub sort_fields {
     return $self->_sort_fields_accessor();
 }
 
+=head2 _process_mappings($mappings, $data, $record_document)
+
+Process all C<$mappings> targets operating on a specific MARC field C<$data> applied to C<$record_document>
+Since we group all mappings by MARC field targets C<$mappings> will contain all targets for C<$data>
+and thus we need to fetch the MARC field only once.
+
+=over 4
+
+=item C<$mappings>
+
+Arrayref of mappings containing arrayrefs on the format [C<$taget>, C<$options>] where
+C<$target> is the name of the target field and C<$options> is a hashref containing processing
+directives for this particular mapping.
+
+=item C<$data>
+
+The source data from a MARC record field.
+
+=item C<$record_document>
+
+Hashref representing the  Elasticsearch document on which mappings should be applied.
+
+=back
+
+=cut
+
+sub _process_mappings {
+    my ($_self, $mappings, $data, $record_document) = @_;
+    foreach my $mapping (@{$mappings}) {
+        my ($target, $options) = @{$mapping};
+        # Copy (scalar) data since can have multiple targets
+        # with differing options for (possibly) mutating data
+        # so need a different copy for each
+        my $_data = $data;
+        $record_document->{$target} //= [];
+        if (defined $options->{substr}) {
+            my ($start, $length) = @{$options->{substr}};
+            $_data = length($data) > $start ? substr $data, $start, $length : '';
+        }
+        if (defined $options->{value_callbacks}) {
+            $_data = reduce { $b->($a) } ($_data, @{$options->{value_callbacks}});
+        }
+        if (defined $options->{property}) {
+            $_data = {
+                $options->{property} => $_data
+            }
+        }
+        push @{$record_document->{$target}}, $_data;
+    }
+}
+
+=head2 marc_records_to_documents($marc_records)
+
+    my @record_documents = $self->marc_records_to_documents($marc_records);
+
+Using mappings stored in database convert C<$marc_records> to Elasticsearch documents.
+
+Returns array of hash references, representing Elasticsearch documents,
+acceptable as body payload in C<Search::Elasticsearch> requests.
+
+=over 4
+
+=item C<$marc_documents>
+
+Reference to array of C<MARC::Record> objects to be converted to Elasticsearch documents.
+
+=back
+
+=cut
+
 sub marc_records_to_documents {
     my ($self, $records) = @_;
-    my $rules = $self->get_marc_mapping_rules();
+    my $rules = $self->_get_marc_mapping_rules();
     my $control_fields_rules = $rules->{control_fields};
     my $data_fields_rules = $rules->{data_fields};
     my $marcflavour = lc C4::Context->preference('marcflavour');
-    my $serialization_format = C4::Context->preference('ElasticsearchMARCSerializationFormat');
 
     my @record_documents;
 
-    sub _process_mappings {
-        my ($mappings, $data, $record_document) = @_;
-        foreach my $mapping (@{$mappings}) {
-            my ($target, $options) = @{$mapping};
-            # Copy (scalar) data since can have multiple targets
-            # with differing options for (possibly) mutating data
-            # so need a different copy for each
-            my $_data = $data;
-            $record_document->{$target} //= [];
-            if (defined $options->{substr}) {
-                my ($start, $length) = @{$options->{substr}};
-                $_data = length($data) > $start ? substr $data, $start, $length : '';
-            }
-            if (defined $options->{value_callbacks}) {
-                $_data = reduce { $b->($a) } ($_data, @{$options->{value_callbacks}});
-            }
-            if (defined $options->{property}) {
-                $_data = {
-                    $options->{property} => $_data
-                }
-            }
-            push @{$record_document->{$target}}, $_data;
-        }
-    }
     foreach my $record (@{$records}) {
         my $record_document = {};
         my $mappings = $rules->{leader};
         if ($mappings) {
-            _process_mappings($mappings, $record->leader(), $record_document);
+            $self->_process_mappings($mappings, $record->leader(), $record_document);
         }
         foreach my $field ($record->fields()) {
             if($field->is_control_field()) {
                 my $mappings = $control_fields_rules->{$field->tag()};
                 if ($mappings) {
-                    _process_mappings($mappings, $field->data(), $record_document);
+                    $self->_process_mappings($mappings, $field->data(), $record_document);
                 }
             }
             else {
@@ -361,7 +415,7 @@ sub marc_records_to_documents {
                             $mappings = [@{$mappings}, @{$wildcard_mappings}];
                         }
                         if (@{$mappings}) {
-                            _process_mappings($mappings, $data, $record_document);
+                            $self->_process_mappings($mappings, $data, $record_document);
                         }
                     }
 
@@ -377,7 +431,7 @@ sub marc_records_to_documents {
                                 )
                             );
                             if ($data) {
-                                _process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document);
+                                $self->_process_mappings($subfields_join_mappings->{$subfields_group}, $data, $record_document);
                             }
                         }
                     }
@@ -426,63 +480,134 @@ sub marc_records_to_documents {
     return \@record_documents;
 }
 
-# Provides the rules for marc to Elasticsearch JSON document conversion.
-sub get_marc_mapping_rules {
+=head2 _field_mappings($facet, $suggestible, $sort, $target_name, $target_type, $range)
+
+Get mappings, an internal data structure later used by L<_process_mappings($mappings, $data, $record_document)>
+to process MARC target data, for a MARC mapping.
+
+The returned C<$mappings> is to to be confused  with mappings provided by C<_foreach_mapping>, rather this
+sub accepts properties from a mapping as provided by C<_foreach_mapping> and expands it to this internal
+data stucture. In the caller context (C<_get_marc_mapping_rules>) the returned C<@mappings> is then
+applied to each MARC target (leader, control field data, subfield or joined subfields) and
+integrated into the mapping rules data structure used in C<marc_records_to_documents> to
+transform MARC records into Elasticsearch documents.
+
+=over 4
+
+=item C<$facet>
+
+Boolean indicating whether to create a facet field for this mapping.
+
+=item C<$suggestible>
+
+Boolean indicating whether to create a suggestion field for this mapping.
+
+=item C<$sort>
+
+Boolean indicating whether to create a sort field for this mapping.
+
+=item C<$target_name>
+
+Elasticsearch document target field name.
+
+=item C<$target_type>
+
+Elasticsearch document target field type.
+
+=item C<$range>
+
+An optinal range as a string on the format "<START>-<END>" or "<START>",
+where "<START>" and "<END>" are integers specifying a range that will be used
+for extracting a substing from MARC data as Elasticsearch field target value.
+
+The first character position is "1", and the range is inclusive,
+so "1-3" means the first three characters of MARC data.
+
+If only "<START>" is provided only one character as position "<START>" will
+be extracted.
+
+=back
+
+=cut
+
+sub _field_mappings {
+    my ($_self, $facet, $suggestible, $sort, $target_name, $target_type, $range) = @_;
+    my %mapping_defaults = ();
+    my @mappings;
+
+    my $substr_args = undef;
+    if ($range) {
+        # TODO: use value_callback instead?
+        my ($start, $end) = map(int, split /-/, $range, 2);
+        $substr_args = [$start];
+        push @{$substr_args}, (defined $end ? $end - $start + 1 : 1);
+    }
+    my $default_options = {};
+    if ($substr_args) {
+        $default_options->{substr} = $substr_args;
+    }
+
+    # TODO: Should probably have per type value callback/hook
+    # but hard code for now
+    if ($target_type eq 'boolean') {
+        $default_options->{value_callbacks} //= [];
+        push @{$default_options->{value_callbacks}}, sub {
+            my ($value) = @_;
+            # Trim whitespace at both ends
+            $value =~ s/^\s+|\s+$//g;
+            return $value ? 'true' : 'false';
+        };
+    }
+
+    my $mapping = [$target_name, $default_options];
+    push @mappings, $mapping;
+
+    my @suffixes = ();
+    push @suffixes, 'facet' if $facet;
+    push @suffixes, 'suggestion' if $suggestible;
+    push @suffixes, 'sort' if !defined $sort || $sort;
+
+    foreach my $suffix (@suffixes) {
+        my $mapping = ["${target_name}__$suffix"];
+        # TODO: Hack, fix later in less hideous manner
+        if ($suffix eq 'suggestion') {
+            push @{$mapping}, {%{$default_options}, property => 'input'};
+        }
+        else {
+            push @{$mapping}, $default_options;
+        }
+        push @mappings, $mapping;
+    }
+    return @mappings;
+};
+
+=head2 _get_marc_mapping_rules
+
+    my $mapping_rules = $self->_get_marc_mapping_rules()
+
+Generates rules from mappings stored in database for MARC records to Elasticsearch JSON document conversion.
+
+Since field retrieval is slow in C<MARC::Records> (all fields are itereted through for
+each call to C<MARC::Record>->field) we create an optimized structure of mapping
+rules keyed by MARC field tags holding all the mapping rules for that particular tag.
+
+We can then iterate through all MARC fields for each record and apply all relevant
+rules once per fields instead of retreiving fields multiple times for each mapping rule
+wich is terribly slow.
+
+=cut
+
+# TODO: This structure can be used for processing multiple MARC::Records so is currently
+# rebuilt for each batch. Since it is cacheable it could also be stored in an in
+# memory cache which it is currently not. The performance gain of caching
+# would probably be marginal, but to do this could be a further improvement.
+
+sub _get_marc_mapping_rules {
     my ($self) = @_;
 
     my $marcflavour = lc C4::Context->preference('marcflavour');
     my @rules;
 
-    sub _field_mappings {
-        my ($facet, $suggestible, $sort, $target_name, $target_type, $range) = @_;
-        my %mapping_defaults = ();
-        my @mappings;
-
-        my $substr_args = undef;
-        if ($range) {
-            # TODO: use value_callback instead?
-            my ($start, $end) = map(int, split /-/, $range, 2);
-            $substr_args = [$start];
-            push @{$substr_args}, (defined $end ? $end - $start + 1 : 1);
-        }
-        my $default_options = {};
-        if ($substr_args) {
-            $default_options->{substr} = $substr_args;
-        }
-
-        # TODO: Should probably have per type value callback/hook
-        # but hard code for now
-        if ($target_type eq 'boolean') {
-            $default_options->{value_callbacks} //= [];
-            push @{$default_options->{value_callbacks}}, sub {
-                my ($value) = @_;
-                # Trim whitespace at both ends
-                $value =~ s/^\s+|\s+$//g;
-                return $value ? 'true' : 'false';
-            };
-        }
-
-        my $mapping = [$target_name, $default_options];
-        push @mappings, $mapping;
-
-        my @suffixes = ();
-        push @suffixes, 'facet' if $facet;
-        push @suffixes, 'suggestion' if $suggestible;
-        push @suffixes, 'sort' if !defined $sort || $sort;
-
-        foreach my $suffix (@suffixes) {
-            my $mapping = ["${target_name}__$suffix"];
-            # Hack, fix later in less hideous manner
-            if ($suffix eq 'suggestion') {
-                push @{$mapping}, {%{$default_options}, property => 'input'};
-            }
-            else {
-                push @{$mapping}, $default_options;
-            }
-            push @mappings, $mapping;
-        }
-        return @mappings;
-    };
     my $field_spec_regexp = qr/^([0-9]{3})([()0-9a-z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
     my $leader_regexp = qr/^leader(?:_\/(\d+(?:-\d+)?))?$/;
     my $rules = {
@@ -494,7 +619,7 @@ sub get_marc_mapping_rules {
     };
 
     $self->_foreach_mapping(sub {
-        my ( $name, $type, $facet, $suggestible, $sort, $marc_type, $marc_field ) = @_;
+        my ($name, $type, $facet, $suggestible, $sort, $marc_type, $marc_field) = @_;
         return if $marc_type ne $marcflavour;
 
         if ($type eq 'sum') {
@@ -550,7 +675,7 @@ sub get_marc_mapping_rules {
             }
 
             my $range = defined $3 ? $3 : undef;
-            my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
+            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $name, $type, $range);
 
             if ($field_tag < 10) {
                 $rules->{control_fields}->{$field_tag} //= [];
@@ -570,11 +695,11 @@ sub get_marc_mapping_rules {
         }
         elsif ($marc_field =~ $leader_regexp) {
             my $range = defined $1 ? $1 : undef;
-            my @mappings = _field_mappings($facet, $suggestible, $sort, $name, $type, $range);
+            my @mappings = $self->_field_mappings($facet, $suggestible, $sort, $name, $type, $range);
             push @{$rules->{leader}}, @mappings;
         }
         else {
-            die("Invalid marc field: $marc_field");
+            die("Invalid MARC field: $marc_field");
         }
     });
     return $rules;

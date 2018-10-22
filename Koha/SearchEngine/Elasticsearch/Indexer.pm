@@ -44,45 +44,76 @@ Koha::SearchEngine::Elasticsearch::Indexer - handles adding new records to the i
     $indexer->drop_index();
     $indexer->update_index(\@biblionumbers, \@records);
 
-=head1 FUNCTIONS
 
-=head2 $indexer->update_index($biblionums, $records);
+=head1 CONSTANTS
 
-C<$biblionums> is an arrayref containing the biblionumbers for the records.
+=over 4
 
-C<$records> is an arrayref containing the L<MARC::Record>s themselves.
+=item C<Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_OK>
 
-The values in the arrays must match up, and the 999$c value in the MARC record
-will be rewritten using the values in C<$biblionums> to ensure they are correct.
-If C<$biblionums> is C<undef>, this won't happen, but you should be sure that
-999$c is correct on your own then.
+Represents an index state where index is created and in a working state.
 
-Note that this will modify the original record if C<$biblionums> is supplied.
-If that's a problem, clone them first.
+=item C<Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_REINDEX_REQUIRED>
+
+Not currently used, but could be useful later, for example if can detect when new field or mapping added.
+
+=item C<Koha::SearchEngine::Elasticsearch::Indexer::INDEX_STATUS_RECREATE_REQUIRED>
+
+Representings an index state where index needs to be recreated and is not in a working state.
+
+=back
 
 =cut
 
 use constant {
     INDEX_STATUS_OK => 0,
-    INDEX_STATUS_REINDEX_REQUIRED => 1, # Not currently used, but could be useful later, for example if can detect when new field or mapping added
+    INDEX_STATUS_REINDEX_REQUIRED => 1,
     INDEX_STATUS_RECREATE_REQUIRED => 2,
 };
+
+=head1 FUNCTIONS
+
+=head2 update_index($biblionums, $records)
+
+    try {
+        $self->update_index($biblionums, $records);
+    } catch {
+        die("Something whent wrong trying to update index:" .  $_[0]);
+    }
+
+Converts C<MARC::Records> C<$records> to Elasticsearch documents and performs
+an update request for these records on the Elasticsearch index.
+
+The values in the arrays must match up, and the 999$c value in the MARC record
+will be rewritten using the values in C<$biblionums> to ensure they are correct.
+If C<$biblionums> is C<undef>, this won't happen, so in that case you should make
+sure that 999$c is correct.
+
+Note that this will modify the original record if C<$biblionums> is supplied.
+If that's a problem, clone them first.
+
+=over 4
+
+=item C<$biblionums>
+
+Arrayref of biblio numbers for the C<$records>, the order must be the same as
+and match up with C<$records>.
+
+=item C<$records>
+
+Arrayref of C<MARC::Record>s.
+
+=back
+
+=cut
 
 sub update_index {
     my ($self, $biblionums, $records) = @_;
 
-    # TODO should have a separate path for dealing with a large number
-    # of records at once where we use the bulk update functions in ES.
     if ($biblionums) {
         $self->_sanitise_records($biblionums, $records);
     }
 
-    $self->bulk_index($records);
-    return 1;
-}
-
-sub bulk_index {
-    my ($self, $records) = @_;
     my $conf = $self->get_elasticsearch_params();
     my $elasticsearch = $self->get_elasticsearch();
     my $documents = $self->marc_records_to_documents($records);
@@ -108,26 +139,87 @@ sub bulk_index {
     return 1;
 }
 
-sub index_status_ok {
-    my ($self, $set) = @_;
-    return defined $set ?
-        $self->index_status(INDEX_STATUS_OK) :
-        $self->index_status == INDEX_STATUS_OK;
+=head2 set_index_status_ok
+
+Convenience method for setting index status to C<INDEX_STATUS_OK>.
+
+=cut
+
+sub set_index_status_ok {
+    my ($self) = @_;
+    $self->index_status(INDEX_STATUS_OK);
 }
 
-sub index_status_reindex_required {
-    my ($self, $set) = @_;
-    return defined $set ?
-        $self->index_status(INDEX_STATUS_REINDEX_REQUIRED) :
-        $self->index_status == INDEX_STATUS_REINDEX_REQUIRED;
+=head2 is_index_status_ok
+
+Convenience method for checking if index status is C<INDEX_STATUS_OK>.
+
+=cut
+
+sub is_index_status_ok {
+    my ($self) = @_;
+    return $self->index_status == INDEX_STATUS_OK;
 }
 
-sub index_status_recreate_required {
-    my ($self, $set) = @_;
-    return defined $set ?
-        $self->index_status(INDEX_STATUS_RECREATE_REQUIRED) :
-        $self->index_status == INDEX_STATUS_RECREATE_REQUIRED;
+=head2 set_index_status_reindex_required
+
+Convenience method for setting index status to C<INDEX_REINDEX_REQUIRED>.
+
+=cut
+
+sub set_index_status_reindex_required {
+    my ($self) = @_;
+    $self->index_status(INDEX_STATUS_REINDEX_REQUIRED);
 }
+
+=head2 is_index_status_reindex_required
+
+Convenience method for checking if index status is C<INDEX_STATUS_REINDEX_REQUIRED>.
+
+=cut
+
+sub is_index_status_reindex_required {
+    my ($self) = @_;
+    return $self->index_status == INDEX_STATUS_REINDEX_REQUIRED;
+}
+
+=head2 set_index_status_recreate_required
+
+Convenience method for setting index status to C<INDEX_STATUS_RECREATE_REQUIRED>.
+
+=cut
+
+sub set_index_status_recreate_required {
+    my ($self) = @_;
+    $self->index_status(INDEX_STATUS_RECREATE_REQUIRED);
+}
+
+=head2 is_index_status_recreate_required
+
+Convenience method for checking if index status is C<INDEX_STATUS_RECREATE_REQUIRED>.
+
+=cut
+
+sub is_index_status_recreate_required {
+    my ($self) = @_;
+    return $self->index_status == INDEX_STATUS_RECREATE_REQUIRED;
+}
+
+=head2 index_status($status)
+
+Will either set the current index status to C<$status> and return C<$status>,
+or return the current index status if called with no arguments.
+
+=over 4
+
+=item C<$status>
+
+Optional argument. If passed will set current index status to C<$status> if C<$status> is
+a valid status. See L</CONSTANTS>.
+
+=back
+
+=cut
 
 sub index_status {
     my ($self, $status) = @_;
@@ -150,6 +242,15 @@ sub index_status {
     }
 }
 
+=head2 update_mappings
+
+Generate Elasticsearch mappings from mappings stored in database and
+perform a request to update Elasticsearch index mappings. Will throw an
+error and set index status to C<INDEX_STATUS_RECREATE_REQUIRED> if update
+failes.
+
+=cut
+
 sub update_mappings {
     my ($self) = @_;
     my $conf = $self->get_elasticsearch_params();
@@ -166,35 +267,35 @@ sub update_mappings {
                 }
             );
         } catch {
-            $self->index_status_recreate_required(1);
+            $self->set_index_status_recreate_required();
             my $reason = $_[0]->{vars}->{body}->{error}->{reason};
             Koha::Exceptions::Exception->throw(
                 error => "Unable to update mappings for index \"$conf->{index_name}\". Reason was: \"$reason\". Index needs to be recreated and reindexed",
             );
         };
     }
-    $self->index_status_ok(1);
+    $self->set_index_status_ok();
 }
 
-=head2 $indexer->update_index_background($biblionums, $records)
+=head2 update_index_background($biblionums, $records)
 
-This has exactly the same API as C<update_index_background> however it'll
+This has exactly the same API as C<update_index> however it'll
 return immediately. It'll start a background process that does the adding.
 
 If it fails to add to Elasticsearch then it'll add to a queue that will cause
 it to be updated by a regular index cron job in the future.
 
+=cut
+
 # TODO implement in the future - I don't know the best way of doing this yet.
 # If fork: make sure process group is changed so apache doesn't wait for us.
-
-=cut
 
 sub update_index_background {
     my $self = shift;
     $self->update_index(@_);
 }
 
-=head2 $indexer->delete_index($biblionums)
+=head2 delete_index($biblionums)
 
 C<$biblionums> is an arrayref of biblionumbers to delete from the index.
 
@@ -217,23 +318,21 @@ sub delete_index {
     $self->store->bag->commit;
 }
 
-=head2 $indexer->delete_index_background($biblionums)
+=head2 delete_index_background($biblionums)
 
-Identical to L<delete_index>, this will return immediately and start a
-background process to do the actual deleting.
+Identical to L</delete_index($biblionums)>
 
 =cut
 
-# TODO implement in the future
-
+# TODO: Should be made async
 sub delete_index_background {
     my $self = shift;
     $self->delete_index(@_);
 }
 
-=head2 $indexer->drop_index();
+=head2 drop_index
 
-Drops the index from the elasticsearch server.
+Drops the index from the Elasticsearch server.
 
 =cut
 
@@ -243,9 +342,15 @@ sub drop_index {
         my $conf = $self->get_elasticsearch_params();
         my $elasticsearch = $self->get_elasticsearch();
         $elasticsearch->indices->delete(index => $conf->{index_name});
-        $self->index_status_recreate_required(1);
+        $self->set_index_status_recreate_required();
     }
 }
+
+=head2 create_index
+
+Creates the index (including mappings) on the Elasticsearch server.
+
+=cut
 
 sub create_index {
     my ($self) = @_;
@@ -260,6 +365,13 @@ sub create_index {
     );
     $self->update_mappings();
 }
+
+=head2 index_exists
+
+Checks if index has been created on the Elasticsearch server. Returns C<1> or the
+empty string to indicate whether index exists or not.
+
+=cut
 
 sub index_exists {
     my ($self) = @_;

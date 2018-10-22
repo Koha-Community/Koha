@@ -115,7 +115,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 30;
+    plan tests => 32;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -315,6 +315,8 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     ok(defined $docs->[0][1]->{marc_format}, 'First document marc_format field should be set');
 
+    is($docs->[0][1]->{marc_format}, 'base64ISO2709', 'First document marc_format should be set correctly');
+
     is(scalar @{$docs->[0][1]->{type_of_record}}, 1, 'First document type_of_record field should have one value');
     is_deeply(
         $docs->[0][1]->{type_of_record},
@@ -350,5 +352,28 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     # Mappings marc_type:
 
     ok(!(defined $docs->[0][1]->{unimarc_title}), "No mapping when marc_type doesn't match marc flavour");
+
+    # Marc serialization format fallback for records exceeding ISO2709 max record size
+
+    my $large_marc_record = MARC::Record->new();
+    $large_marc_record->leader('     cam  22      a 4500');
+
+    $large_marc_record->append_fields(
+        MARC::Field->new('100', '', '', a => 'Author 1'),
+        MARC::Field->new('110', '', '', a => 'Corp Author'),
+        MARC::Field->new('210', '', '', a => 'Title 1'),
+        MARC::Field->new('245', '', '', a => 'Title:', b => 'large record'),
+        MARC::Field->new('999', '', '', c => '1234567'),
+    );
+
+    my $item_field = MARC::Field->new('952', '', '', o => '123456789123456789123456789', p => '123456789', z => 'test');
+    my $items_count = 1638;
+    while(--$items_count) {
+        $large_marc_record->append_fields($item_field);
+    }
+
+    $docs = $see->marc_records_to_documents([$large_marc_record]);
+
+    is($docs->[0][1]->{marc_format}, 'MARCXML', 'For record exceeding max record size marc_format should be set correctly');
 
 };
