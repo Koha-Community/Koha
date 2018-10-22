@@ -19,7 +19,7 @@
 <body id="batch_print-notices" class="batch">
     [% FOREACH message IN messages %]
     <div class="message">
-        <pre>[% message.content | html %]</pre>
+        <pre>[% message.content | $raw %]</pre>
     </div>
     [% END %]
 </body>
