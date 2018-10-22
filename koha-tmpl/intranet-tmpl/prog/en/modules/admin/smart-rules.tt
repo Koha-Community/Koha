@@ -123,7 +123,7 @@
 
                                                         <td>
                                                             [% IF rule.note %]
-                                                                <a name="viewnote" data-toggle="popover" title="Note" data-content="[% rule.note %]" data-placement="top" data-trigger="hover">View note</a>
+                                                                <a name="viewnote" data-toggle="popover" title="Note" data-content="[% rule.note | html %]" data-placement="top" data-trigger="hover">View note</a>
                                                             [% ELSE %]&nbsp;[% END %]
                                                         </td>
 							<td>[% IF ( rule.unlimited_maxissueqty ) %]
@@ -229,7 +229,6 @@
                                                             [% END %]
                                                         </td>
                                                         <td>[% rule.rentaldiscount | html %]</td>
-                                                        <td>[% rule.note | html %]</td>
                                                         <td class="actions">
                                                           <a href="#" class="editrule btn btn-default btn-xs"><i class="fa fa-pencil"></i> Edit</a>
                                                           <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete&amp;itemtype=[% rule.itemtype | html %]&amp;categorycode=[% rule.categorycode | html %]&amp;branch=[% rule.current_branch | html %]"><i class="fa fa-trash"></i> Delete</a>
