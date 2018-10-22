@@ -57,6 +57,7 @@
             <option value="a">a - AACR 2</option>
             <option value="c">c - ISBD punctuation omitted</option>
             <option value="i">i - ISBD punctuation included</option>
+            <option value="n">n - Non-ISBD punctuation omitted</option>
             <option value="u">u - Unknown</option>
         </select>
         <select name="f19" title="Multipart record resource level">
