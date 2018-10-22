@@ -148,16 +148,16 @@ my @indexes;
 
 for my $index_name (@index_names) {
     my $indexer = Koha::SearchEngine::Elasticsearch::Indexer->new({ index => $index_name });
-    if (!$indexer->index_status_ok) {
+    if (!$indexer->is_index_status_ok) {
         my $conf = $indexer->get_elasticsearch_params();
-        if ($indexer->index_status_reindex_required) {
+        if ($indexer->is_index_status_reindex_required) {
             push @messages, {
                 type => 'error',
                 code => 'reindex_required',
                 index => $conf->{index_name},
             };
         }
-        elsif($indexer->index_status_recreate_required) {
+        elsif($indexer->is_index_status_recreate_required) {
             push @messages, {
                 type => 'error',
                 code => 'recreate_required',
