@@ -242,7 +242,7 @@ if ( $op eq 'view' ) {
                 $page = ( $query->param('page') ? $query->param('page') : 1 );
             }
 
-            my $order_by = $sortfield eq 'itemcallnumber' ? 'items.itemcallnumber' : $sortfield;
+            my $order_by = $sortfield eq 'itemcallnumber' ? 'items.cn_sort' : $sortfield;
             my $contents = $shelf->get_contents->search(
                 {},
                 {
