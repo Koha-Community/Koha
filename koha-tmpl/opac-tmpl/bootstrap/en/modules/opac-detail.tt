@@ -1003,10 +1003,10 @@
                               [% FOREACH HTML5MediaSet IN HTML5MediaSets %]
                                 <p>
                                   [% SET ctrl_preload = ' controls preload=none' #translatability %]
-                                  <[% HTML5MediaParent _ ctrl_preload %] >
-                                    <[% HTML5MediaSet.child _ ' src="' _  HTML5MediaSet.srcblock _'"' _ HTML5MediaSet.typeblock %] />
-                                    <span>[[% HTML5MediaParent %] tag not supported by your browser.]</span>
-                                  </[% HTML5MediaParent %]>
+                                  <[% HTML5MediaParent _ ctrl_preload | html %] >
+                                    <[% HTML5MediaSet.child | html %] src="[% HTML5MediaSet.srcblock | html %]" [% HTML5MediaSet.typeblock | html %] />
+                                    <span>[[% HTML5MediaParent | html %] tag not supported by your browser.]</span>
+                                  </[% HTML5MediaParent | html %]>
                                 </p>
                               [% END %]
                             </div>
