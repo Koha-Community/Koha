@@ -34,6 +34,7 @@ use C4::Members;
 use MARC::File::XML;
 use List::MoreUtils qw/uniq/;
 
+use Koha::AuthorisedValues;
 use Koha::Biblios;
 use Koha::DateUtils;
 use Koha::Items;
@@ -290,12 +291,6 @@ if ($op eq "show"){
 my @loop_data =();
 my $i=0;
 my $branch_limit = C4::Context->userenv ? C4::Context->userenv->{"branch"} : "";
-my $query = qq{SELECT authorised_value, lib FROM authorised_values};
-$query  .= qq{ LEFT JOIN authorised_values_branches ON ( id = av_id ) } if $branch_limit;
-$query  .= qq{ WHERE category = ?};
-$query  .= qq{ AND ( branchcode = ? OR branchcode IS NULL ) } if $branch_limit;
-$query  .= qq{ GROUP BY lib ORDER BY lib, lib_opac};
-my $authorised_values_sth = $dbh->prepare( $query );
 
 my $libraries = Koha::Libraries->search({}, { order_by => ['branchname'] })->unblessed;# build once ahead of time, instead of multiple times later.
 
@@ -393,10 +388,11 @@ foreach my $tag (sort keys %{$tagslib}) {
       }
       else {
           push @authorised_values, ""; # unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
-          $authorised_values_sth->execute( $tagslib->{$tag}->{$subfield}->{authorised_value}, $branch_limit ? $branch_limit : () );
-          while ( my ( $value, $lib ) = $authorised_values_sth->fetchrow_array ) {
-              push @authorised_values, $value;
-              $authorised_lib{$value} = $lib;
+
+          my @avs = Koha::AuthorisedValues->search({ category => $tagslib->{$tag}->{$subfield}->{authorised_value}, branchcode => $branch_limit });
+          for my $av ( @avs ) {
+              push @authorised_values, $av->authorised_value;
+              $authorised_lib{$av->authorised_value} = $av->lib;
           }
           $value="";
       }
@@ -484,7 +480,6 @@ foreach my $tag (sort keys %{$tagslib}) {
     $i++
   }
 } # -- End foreach tag
-$authorised_values_sth->finish;
 
 
 
