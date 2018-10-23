@@ -121,7 +121,7 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             <td>[% breeding_loo.author | html %]</td>
             <td>[% breeding_loo.isbn | html %]</td>
             <td>[% breeding_loo.lccn | html %]</td>
-            [% IF ( Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' %]
+            [% IF ( Koha.Preference('AdditionalFieldsInZ3950ResultSearch') != '' ) %]
             <td>
                 <dl>
                   [% FOREACH addnumberfield IN breeding_loo.addnumberfields %]
