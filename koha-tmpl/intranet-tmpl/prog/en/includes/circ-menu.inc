@@ -95,7 +95,7 @@
         [% END %]
     [% END %]
     [% IF ( CAN_user_tools_view_system_logs ) %]
-        [% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=circulation&amp;object=[% patron.borrowernumber %]&amp;src=circ">Modification log</a></li>
+        [% IF ( logview ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/tools/viewlog.pl?do_it=1&amp;modules=MEMBERS&amp;modules=CIRCULATION&amp;object=[% patron.borrowernumber | uri %]&amp;src=circ">Modification log</a></li>
     [% END %]
     [% IF CAN_user_borrowers_edit_borrowers %]
     [% IF ( sentnotices ) %]<li class="active">[% ELSE %]<li>[% END %]<a href="/cgi-bin/koha/members/notices.pl?borrowernumber=[% patron.borrowernumber %]">Notices</a></li>
