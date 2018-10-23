@@ -829,21 +829,25 @@
             });
 
             $("#set_managing_library").on("click", function(e){
+                e.preventDefault();
                 $(this).hide();
                 $("#managing_library_entry").show();
             });
 
-            $("#library_entry_cancel").on("click", function(){
+            $("#library_entry_cancel").on("click", function(e){
+                e.preventDefault();
                 $("#managing_library_entry").hide();
                 $("#set_managing_library").show();
             });
 
             $("#set_basket_group").on("click", function(e){
+                e.preventDefault();
                 $(this).hide();
                 $("#basket_grouping").show();
             });
 
-            $("#basket_group_cancel").on("click", function(){
+            $("#basket_group_cancel").on("click", function(e){
+                e.preventDefault();
                 $("#basket_grouping").hide();
                 $("#set_basket_group").show();
             });
