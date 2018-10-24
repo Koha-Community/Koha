@@ -779,6 +779,11 @@ if ( $indexing_mode eq 'dom' ) {
         ['沙士北亞威廉姆'], 0, 10, '', '', 1
     );
     is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆"');
+    ($auths, $count) = SearchAuthorities(
+        ['LC-card-number'], ['and'], [''], ['contains'],
+        ['99282477'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on LC-card-number contains "99282477"');
 
     $UseQueryParser = 1;
 
@@ -975,12 +980,12 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + GRS-1' => sub {
-    plan tests => 110;
+    plan tests => 111;
     run_marc21_search_tests('grs1');
 };
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 110;
+    plan tests => 111;
     run_marc21_search_tests('dom');
 };
 
