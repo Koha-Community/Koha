@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 24;
+use Test::More tests => 25;
 use MARC::Record;
 use MARC::Field;
 
@@ -50,6 +50,7 @@ my $branch_code = $sth->fetchrow_hashref()->{'branchcode'};
 diag sprintf('Database returned the following error: %s', $sth->errstr) if $sth->errstr;
 
 my $expected_batch = {
+        description     => '',
         creator         => 'Labels',
         items           => [],
         branch_code     => $branch_code,
