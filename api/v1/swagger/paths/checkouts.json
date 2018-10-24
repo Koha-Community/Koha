@@ -53,6 +53,100 @@
       }
     }
   },
+  "/checkouts/paged": {
+    "get": {
+      "x-mojo-to": ["Checkout#list", {"paging": 1}],
+      "operationId": "listCheckoutsPaged",
+      "tags": ["patrons", "checkouts"],
+      "parameters": [
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" },
+        {
+          "name": "sort",
+          "in": "query",
+          "description": "Sort by column name. E.g. 'date_due'",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "order",
+          "in": "query",
+          "description": "Ascending (asc) or descending (desc) order. Default ascending. E.g. 'desc'",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "offset",
+          "in": "query",
+          "description": "Offset. Default 0.",
+          "required": false,
+          "type": "integer"
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Limit results. By default, returns all results.",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of checkouts",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "description": "Total number of checkouts, excluding all limitations made by limit and offset query parameters. Please note that because of this, the number may not be equal to the array elements returned in 'records' array."
+              },
+              "records": {
+                "type": "array",
+                "items": {
+                  "$ref": "../definitions.json#/checkout"
+                }
+              }
+            }
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
+  },
   "/checkouts/{checkout_id}": {
     "get": {
       "x-mojo-to": "Checkout#get",
@@ -216,6 +310,100 @@
             "type": "array",
             "items": {
               "$ref": "../definitions.json#/checkoutexpanded"
+            }
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "404": {
+          "description": "Patron not found",
+          "schema": { "$ref": "../definitions.json#/error" }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "circulate": "circulate_remaining_permissions"
+        }
+      }
+    }
+  },
+  "/checkouts/expanded/paged": {
+    "get": {
+      "x-mojo-to": ["Checkout#expanded", {"paging": 1}],
+      "operationId": "expandedCheckoutsPaged",
+      "tags": ["patrons", "checkouts"],
+      "parameters": [
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" },
+        {
+          "name": "sort",
+          "in": "query",
+          "description": "Sort by column name. E.g. 'date_due'",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "order",
+          "in": "query",
+          "description": "Ascending (asc) or descending (desc) order. Default ascending. E.g. 'desc'",
+          "required": false,
+          "type": "string"
+        },
+        {
+          "name": "offset",
+          "in": "query",
+          "description": "Offset. Default 0.",
+          "required": false,
+          "type": "integer"
+        },
+        {
+          "name": "limit",
+          "in": "query",
+          "description": "Limit results. By default, returns all results.",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A list of expanded checkouts with paging",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "total": {
+                "type": "integer",
+                "description": "Total number of checkouts, excluding all limitations made by limit and offset query parameters. Please note that because of this, the number may not be equal to the array elements returned in 'records' array."
+              },
+              "records": {
+                "type": "array",
+                "items": {
+                    "$ref": "../definitions.json#/checkoutexpanded"
+                }
+              }
             }
           }
         },

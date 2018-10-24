@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 67;
+use Test::More tests => 122;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -34,6 +34,7 @@ use C4::Items;
 use Koha::Account::Lines;
 use Koha::Database;
 use Koha::Patron;
+use Koha::MarcSubfieldStructure;
 
 # FIXME: sessionStorage defaults to mysql, but it seems to break transaction handling
 # this affects the other REST api tests
@@ -92,17 +93,32 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is([]);
 
-my $biblionumber = create_biblio('RESTful Web APIs');
-my $itemnumber1 = create_item($biblionumber, 'TEST000001');
-my $itemnumber2 = create_item($biblionumber, 'TEST000002');
-my $itemnumber3 = create_item($biblionumber, 'TEST000003');
 
-my $date_due = DateTime->now->add(weeks => 2);
-my $issue1 = C4::Circulation::AddIssue($patron, 'TEST000001', $date_due);
+my $mss = Koha::MarcSubfieldStructures->search( { kohafield => 'biblio.title', frameworkcode => '' } );
+$mss->delete if $mss;
+$mss = Koha::MarcSubfieldStructures->search( { tagfield => 245, tagsubfield => 'a', frameworkcode => '' } );
+$mss->delete if $mss;
+Koha::MarcSubfieldStructure->new( { tagfield => 245, tagsubfield => 'a', frameworkcode => '', kohafield => 'biblio.title' } )->store;
+
+
+my $title1 = 'RESTful Web APIs';
+my $biblionumber1 = create_biblio($title1);
+my $title2 = 'RESTful Web APIs 2';
+my $biblionumber2 = create_biblio($title2);
+my $itemnumber1 = create_item($biblionumber1, 'TEST000001');
+my $itemnumber2 = create_item($biblionumber2, 'TEST000002');
+my $itemnumber3 = create_item($biblionumber2, 'TEST000003');
+
+my $set_date_due1 = DateTime->now->add(weeks => 2);
+my $issue1 = C4::Circulation::AddIssue($patron, 'TEST000001', $set_date_due1);
 my $date_due1 = Koha::DateUtils::dt_from_string( $issue1->date_due );
-my $issue2 = C4::Circulation::AddIssue($patron, 'TEST000002', $date_due);
+
+my $set_date_due2 = DateTime->now->add(weeks => 3);
+my $issue2 = C4::Circulation::AddIssue($patron, 'TEST000002', $set_date_due2);
 my $date_due2 = Koha::DateUtils::dt_from_string( $issue2->date_due );
-my $issue3 = C4::Circulation::AddIssue($loggedinuser, 'TEST000003', $date_due);
+
+my $set_date_due3 = DateTime->now->add(weeks => 4);
+my $issue3 = C4::Circulation::AddIssue($loggedinuser, 'TEST000003', $set_date_due3);
 my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts?borrowernumber=$borrowernumber");
@@ -116,6 +132,76 @@ $t->request_ok($tx)
   ->json_is('/1/itemnumber' => $itemnumber2)
   ->json_like('/1/date_due' => qr/$date_due2\+\d\d:\d\d/)
   ->json_hasnt('/2');
+
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/paged?borrowernumber=$borrowernumber&sort=date_due");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is('/total' => 2)
+  ->json_is('/records/0/borrowernumber' => $borrowernumber)
+  ->json_is('/records/0/itemnumber' => $itemnumber1)
+  ->json_like('/records/0/date_due' => qr/$date_due1\+\d\d:\d\d/)
+  ->json_is('/records/1/borrowernumber' => $borrowernumber)
+  ->json_is('/records/1/itemnumber' => $itemnumber2)
+  ->json_like('/records/1/date_due' => qr/$date_due2\+\d\d:\d\d/)
+  ->json_hasnt('/records/2');
+
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/paged?borrowernumber=$borrowernumber&sort=date_due&order=desc");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is('/total' => 2)
+  ->json_is('/records/0/borrowernumber' => $borrowernumber)
+  ->json_is('/records/0/itemnumber' => $itemnumber2)
+  ->json_like('/records/0/date_due' => qr/$date_due2\+\d\d:\d\d/)
+  ->json_is('/records/1/borrowernumber' => $borrowernumber)
+  ->json_is('/records/1/itemnumber' => $itemnumber1)
+  ->json_like('/records/1/date_due' => qr/$date_due1\+\d\d:\d\d/)
+  ->json_hasnt('/records/2');
+
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/expanded?borrowernumber=$borrowernumber");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->status_is(200)
+  ->json_is('/0/borrowernumber' => $borrowernumber)
+  ->json_is('/0/itemnumber' => $itemnumber1)
+  ->json_like('/0/date_due' => qr/$date_due1\+\d\d:\d\d/)
+  ->json_is('/0/title' => $title1)
+  ->json_is('/1/borrowernumber' => $borrowernumber)
+  ->json_is('/1/itemnumber' => $itemnumber2)
+  ->json_like('/1/date_due' => qr/$date_due2\+\d\d:\d\d/)
+  ->json_is('/1/title' => $title2)
+  ->json_hasnt('/2');
+
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/expanded/paged?borrowernumber=$borrowernumber&sort=title");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->json_is('/total' => 2)
+  ->status_is(200)
+  ->json_is('/records/0/borrowernumber' => $borrowernumber)
+  ->json_is('/records/0/itemnumber' => $itemnumber1)
+  ->json_like('/records/0/date_due' => qr/$date_due1\+\d\d:\d\d/)
+  ->json_is('/records/0/title' => $title1)
+  ->json_is('/records/1/borrowernumber' => $borrowernumber)
+  ->json_is('/records/1/itemnumber' => $itemnumber2)
+  ->json_like('/records/1/date_due' => qr/$date_due2\+\d\d:\d\d/)
+  ->json_is('/records/1/title' => $title2)
+  ->json_hasnt('/records/2');
+
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/expanded/paged?borrowernumber=$borrowernumber&sort=title&order=desc");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
+$t->request_ok($tx)
+  ->json_is('/total' => 2)
+  ->status_is(200)
+  ->json_is('/records/0/borrowernumber' => $borrowernumber)
+  ->json_is('/records/0/itemnumber' => $itemnumber2)
+  ->json_like('/records/0/date_due' => qr/$date_due2\+\d\d:\d\d/)
+  ->json_is('/records/0/title' => $title2)
+  ->json_is('/records/1/borrowernumber' => $borrowernumber)
+  ->json_is('/records/1/itemnumber' => $itemnumber1)
+  ->json_like('/records/1/date_due' => qr/$date_due1\+\d\d:\d\d/)
+  ->json_is('/records/1/title' => $title1)
+  ->json_hasnt('/records/2');
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/".$issue3->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
@@ -178,12 +264,12 @@ Koha::IssuingRule->new({
     renewalsallowed => 1,
 })->store;
 
-my $expected_datedue = DateTime->now->add(days => 14)->set(hour => 23, minute => 59, second => 0);
+my $expected_datedue1 = $set_date_due1->set(hour => 23, minute => 59, second => 0);
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_like('/date_due' => qr/$expected_datedue\+\d\d:\d\d/);
+  ->json_like('/date_due' => qr/$expected_datedue1\+\d\d:\d\d/);
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue3->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
@@ -268,11 +354,12 @@ subtest 'test restricted renewability due to patron restrictions' => sub {
     $accountline->delete;
 };
 
+my $expected_datedue2 = $set_date_due2->set(hour => 23, minute => 59, second => 0);
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_like('/date_due' => qr/$expected_datedue\+\d\d:\d\d/);
+  ->json_like('/date_due' => qr/$expected_datedue2\+\d\d:\d\d/);
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
@@ -293,7 +380,7 @@ sub create_biblio {
 
     my $record = new MARC::Record;
     $record->append_fields(
-        new MARC::Field('200', ' ', ' ', a => $title),
+        new MARC::Field('245', ' ', ' ', a => $title),
     );
 
     my ($biblionumber) = C4::Biblio::AddBiblio($record, '');
