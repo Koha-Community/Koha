@@ -730,6 +730,11 @@ ok(MARC::Record::new_from_xml($results_hashref->{biblioserver}->{RECORDS}->[0],'
         ['沙士北亞威廉姆'], 0, 10, '', '', 1
     );
     is($count, 1, 'MARC21 authorities: one hit on match contains "沙士北亞威廉姆"');
+    ($auths, $count) = SearchAuthorities(
+        ['LC-card-number'], ['and'], [''], ['contains'],
+        ['99282477'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on LC-card-number contains "99282477"');
 
     $UseQueryParser = 1;
 
@@ -929,7 +934,7 @@ sub run_unimarc_search_tests {
 }
 
 subtest 'MARC21 + DOM' => sub {
-    plan tests => 108;
+    plan tests => 109;
     run_marc21_search_tests();
 };
 
