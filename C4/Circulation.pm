@@ -3192,7 +3192,7 @@ sub AddIssuingCharge {
 
     # FIXME What if checkout does not exist?
 
-    my $nextaccntno = getnextacctno($checkout->borrowernumber);
+    my $nextaccntno = C4::Accounts->getnextacctno($checkout->borrowernumber);
 
     my $manager_id  = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
