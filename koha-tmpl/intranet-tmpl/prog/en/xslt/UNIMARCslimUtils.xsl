@@ -33,31 +33,22 @@
       <xsl:for-each select="marc:datafield[@tag=210]">
         <span>
           <xsl:call-template name="addClassRtl" />
-          <xsl:value-of select="marc:subfield[@code='a']"/>
-          <xsl:if test="marc:subfield[@code='b']">
-            <xsl:if test="marc:subfield[@code='a']">, </xsl:if>
-            <xsl:value-of select="marc:subfield[@code='b']"/>
-          </xsl:if>
-          <xsl:if test="marc:subfield[@code='a' or @code='b']">
-            <xsl:if test="marc:subfield[@code='a']"> : </xsl:if>
-            <xsl:value-of select="marc:subfield[@code='c']"/>
-          </xsl:if>
-          <xsl:if test="marc:subfield[@code='d']">
-            <xsl:if test="marc:subfield[@code='a' or @code='c']">, </xsl:if>
-            <xsl:value-of select="marc:subfield[@code='d']"/>
-          </xsl:if>
-          <xsl:if test="marc:subfield[@code='e']">
-            <xsl:if test="marc:subfield[@code='a' or @code='c' or @code='d']"> — </xsl:if>
-            <xsl:value-of select="marc:subfield[@code='e']"/>
-          </xsl:if>
-          <xsl:if test="marc:subfield[@code='g']">
-            <xsl:if test="marc:subfield[@code='e']"> : </xsl:if>
-            <xsl:value-of select="marc:subfield[@code='g']"/>
-          </xsl:if>
-          <xsl:if test="marc:subfield[@code='h']">
-            <xsl:if test="marc:subfield[@code='e' or @code='g']">, </xsl:if>
-            <xsl:value-of select="marc:subfield[@code='h']"/>
-          </xsl:if>
+          <xsl:for-each select="marc:subfield">
+            <xsl:choose>
+              <xsl:when test="@code='c' or @code='g'">
+                <xsl:if test="position()>1">
+                  <xsl:text> : </xsl:text>
+                </xsl:if>
+                <xsl:value-of select="."/>
+              </xsl:when>
+              <xsl:otherwise>
+                <xsl:if test="position()>1">
+                  <xsl:text>, </xsl:text>
+                </xsl:if>
+                <xsl:value-of select="."/>
+              </xsl:otherwise>
+            </xsl:choose>
+          </xsl:for-each>
           <xsl:if test="not (position() = last())">
             <xsl:text> • </xsl:text>
           </xsl:if>
