@@ -355,34 +355,6 @@ CREATE TABLE collections_tracking (
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `default_branch_circ_rules`
---
-
-DROP TABLE IF EXISTS `default_branch_circ_rules`;
-CREATE TABLE `default_branch_circ_rules` (
-  `branchcode` VARCHAR(10) NOT NULL,
-  `holdallowed` tinyint(1) default NULL,
-  hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
-  `returnbranch` varchar(15) default NULL,
-  PRIMARY KEY (`branchcode`),
-  CONSTRAINT `default_branch_circ_rules_ibfk_1` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
-    ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Table structure for table `default_circ_rules`
---
-
-DROP TABLE IF EXISTS `default_circ_rules`;
-CREATE TABLE `default_circ_rules` (
-    `singleton` enum('singleton') NOT NULL default 'singleton',
-    `holdallowed` int(1) default NULL,
-    hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
-    `returnbranch` varchar(15) default NULL,
-    PRIMARY KEY (`singleton`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `cities`
 --
 
@@ -970,21 +942,6 @@ CREATE TABLE `itemtypes` ( -- defines the item types
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Table structure for table `default_branch_item_rules`
---
-
-DROP TABLE IF EXISTS `default_branch_item_rules`;
-CREATE TABLE `default_branch_item_rules` (
-  `itemtype` varchar(10) NOT NULL,
-  `holdallowed` tinyint(1) default NULL,
-  hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
-  `returnbranch` varchar(15) default NULL,
-  PRIMARY KEY  (`itemtype`),
-  CONSTRAINT `default_branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
-    ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
 -- Table structure for table `branchtransfers`
 --
 
@@ -1004,25 +961,6 @@ CREATE TABLE `branchtransfers` ( -- information for items that are in transit be
   CONSTRAINT `branchtransfers_ibfk_1` FOREIGN KEY (`frombranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branchtransfers_ibfk_2` FOREIGN KEY (`tobranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `branchtransfers_ibfk_3` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Table structure for table `branch_item_rules`
---
-
-DROP TABLE IF EXISTS `branch_item_rules`;
-CREATE TABLE `branch_item_rules` ( -- information entered in the circulation and fine rules under 'Holds policy by item type'
-  `branchcode` varchar(10) NOT NULL, -- the branch this rule is for (branches.branchcode)
-  `itemtype` varchar(10) NOT NULL, -- the item type this rule applies to (items.itype)
-  `holdallowed` tinyint(1) default NULL, -- the number of holds allowed
-  hold_fulfillment_policy ENUM('any', 'homebranch', 'holdingbranch') NOT NULL DEFAULT 'any', -- limit trapping of holds by branchcode
-  `returnbranch` varchar(15) default NULL, -- the branch the item returns to (homebranch, holdingbranch, noreturn)
-  PRIMARY KEY  (`itemtype`,`branchcode`),
-  KEY `branch_item_rules_ibfk_2` (`branchcode`),
-  CONSTRAINT `branch_item_rules_ibfk_1` FOREIGN KEY (`itemtype`) REFERENCES `itemtypes` (`itemtype`)
-    ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `branch_item_rules_ibfk_2` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`)
-    ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
