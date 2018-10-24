@@ -4,62 +4,77 @@
 [% USE HtmlTags %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Administration &rsaquo; Library OverDrive Info &rsaquo;</title>
+<title>Koha &rsaquo; Administration &rsaquo; OverDrive library authnames</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
 <body id="admin_overdrive" class="admin">
+
 [% INCLUDE 'header.inc' %]
+[% INCLUDE 'prefs-admin-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/overdrive.pl">Library OverDrive Info</a> &rsaquo;
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;  <a href="/cgi-bin/koha/admin/overdrive.pl">OverDrive library authnames</a>
 </div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-<div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+                <h2>OverDrive library authnames</h2>
 
-<form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
-    <input type="hidden" name="op" value="update" />
-    <fieldset class="rows">
-        <legend>
-            OverDrive
-        </legend>
-        <table id="od_info">
-            <thead>
-                <th>Branch</th>
-                <th>Authname</th>
-            </thead>
-            <tbody>
-                [% FOREACH b IN branches %]
-                <tr>
-                <td>
-                    [% Branches.GetName( b.branchcode ) | html %]
-                    <input type="hidden" name="branchcode" value="[% b.branchcode | html %]" />
-                </td>
-                <td>
-                    <input type="text" name="authname" value="[% b.authname | html %]" />
-                </td>
-                </tr>
-                [% END %]
-            </tbody>
-        </table>
-        <input type="submit" value="Submit">
-</form>
+                <form action="/cgi-bin/koha/admin/overdrive.pl" name="overdrive_form" method="post" class="validated">
+                    <input type="hidden" name="op" value="update" />
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'admin-menu.inc' %]
-</div>
-</div>
+                    <table id="od_info">
+                        <thead>
+                            <tr>
+                                <th>Library</th>
+                                <th>Authname</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            [% FOREACH b IN branches %]
+                            <tr>
+                                <td>
+                                    [% Branches.GetName( b.branchcode ) | html %]
+                                    <input type="hidden" name="branchcode" value="[% b.branchcode | html %]" />
+                                </td>
+                                <td>
+                                    <input type="text" name="authname" value="[% b.authname | html %]" />
+                                </td>
+                            </tr>
+                            [% END %]
+                        </tbody>
+                    </table>
+                    <div class="action">
+                        <input type="submit" value="Submit" />
+                    </div>
+                </form>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
-    [% INCLUDE 'columns_settings.inc' %]
-    <script type="text/javascript">
+    <script>
+        $(document).ready(function() {
+            $("#od_info").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
+                ],
+                "sPaginationType": "four_button"
+            }));
+        });
     </script>
 [% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
