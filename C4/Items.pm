@@ -47,7 +47,6 @@ BEGIN {
         ItemSafeToDelete
         DelItemCheck
         MoveItemFromBiblio
-        GetLastAcquisitions
         CartToShelf
         ShelfToCart
         GetAnalyticsCount
@@ -1175,57 +1174,6 @@ sub GetHostItemsInfo {
         }
     }
     return @returnitemsInfo;
-}
-
-=head2 GetLastAcquisitions
-
-  my $lastacq = GetLastAcquisitions({'branches' => ('branch1','branch2'), 
-                                    'itemtypes' => ('BK','BD')}, 10);
-
-=cut
-
-sub  GetLastAcquisitions {
-	my ($data,$max) = @_;
-
-	my $itemtype = C4::Context->preference('item-level_itypes') ? 'itype' : 'itemtype';
-	
-	my $number_of_branches = @{$data->{branches}};
-	my $number_of_itemtypes   = @{$data->{itemtypes}};
-	
-	
-	my @where = ('WHERE 1 '); 
-	$number_of_branches and push @where
-	   , 'AND holdingbranch IN (' 
-	   , join(',', ('?') x $number_of_branches )
-	   , ')'
-	 ;
-	
-	$number_of_itemtypes and push @where
-	   , "AND $itemtype IN (" 
-	   , join(',', ('?') x $number_of_itemtypes )
-	   , ')'
-	 ;
-
-	my $query = "SELECT biblio.biblionumber as biblionumber, title, dateaccessioned
-				 FROM items RIGHT JOIN biblio ON (items.biblionumber=biblio.biblionumber) 
-			            RIGHT JOIN biblioitems ON (items.biblioitemnumber=biblioitems.biblioitemnumber)
-			            @where
-			            GROUP BY biblio.biblionumber 
-			            ORDER BY dateaccessioned DESC LIMIT $max";
-
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare($query);
-    
-    $sth->execute((@{$data->{branches}}, @{$data->{itemtypes}}));
-	
-	my @results;
-	while( my $row = $sth->fetchrow_hashref){
-		push @results, {date => $row->{dateaccessioned} 
-						, biblionumber => $row->{biblionumber}
-						, title => $row->{title}};
-	}
-	
-	return @results;
 }
 
 =head2 get_hostitemnumbers_of
