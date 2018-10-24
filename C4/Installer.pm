@@ -314,15 +314,19 @@ sub load_sql_in_order {
     $request->execute;
     my ($systempreference) = $request->fetchrow;
     $systempreference = '' unless defined $systempreference; # avoid warning
-    # Make sure subtag_registry.sql is loaded second
-    my $subtag_registry = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory/subtag_registry.sql";
-    unshift(@fnames, $subtag_registry);
-    # Make sure authorised value categories are loaded at the beginning
-    my $av_cat = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory/auth_val_cat.sql";
-    unshift(@fnames, $av_cat);
-    # Make sure the global sysprefs.sql file is loaded first
-    my $globalsysprefs = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/sysprefs.sql";
-    unshift(@fnames, $globalsysprefs);
+
+    my $global_mandatory_dir = C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/mandatory";
+
+    # Make sure some stuffs are loaded first
+    unshift(@fnames, C4::Context->config('intranetdir') . "/installer/data/$self->{dbms}/sysprefs.sql");
+    unshift(@fnames,
+        "$global_mandatory_dir/subtag_registry.sql",
+        "$global_mandatory_dir/auth_val_cat.sql",
+        "$global_mandatory_dir/message_transport_types.sql",
+        "$global_mandatory_dir/sample_notices_message_attributes.sql",
+        "$global_mandatory_dir/sample_notices_message_transports.sql",
+    );
+
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userflags.sql";
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/userpermissions.sql";
     push @fnames, C4::Context->config('intranetdir') . "/installer/data/mysql/audio_alerts.sql";
