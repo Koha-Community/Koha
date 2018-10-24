@@ -295,7 +295,7 @@ sub get_batch_summary {
     my @batches = ();
     $params->{fields} = ['batch_id', 'description', 'count(batch_id) as _item_count'];
     my ( $query, @where_args ) = _build_query( $params, 'creator_batches' );
-    $query .= " GROUP BY batch_id";
+    $query .= " GROUP BY batch_id, description";
     my $sth = C4::Context->dbh->prepare($query);
     $sth->execute( @where_args );
     if ($sth->err) {
