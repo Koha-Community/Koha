@@ -93,7 +93,7 @@ if ( defined $outfile ) {
 } else {
     print "No output file defined; printing to STDOUT\n"
       if ( defined $verbose );
-    open( $OUT, '>', "&STDOUT" ) || die("Couldn't duplicate STDOUT: $!");
+    $OUT = *STDOUT || die "Couldn't duplicate STDOUT: $!";
 }
 
 my $format = 'V';    # format for phone notifications
