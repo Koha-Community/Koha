@@ -1,113 +1,13 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaSpan %]
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library groups</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
-[% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
-<script type="text/javascript">
-//<![CDATA[
-    $(document).ready(function() {
-        $('.library-groups').treetable(
-            {
-                expandable: true,
-                initialState: 'expanded',
-                clickableNodeNames: true,
-            }
-        );
-
-        $('.add-group').on('click', function() {
-            var id = $(this).data('groupId');
-            add_group( id );
-        });
-
-        $('.edit-group').on('click', function() {
-            var id = $(this).data('groupId');
-            var parent_id = $(this).data('groupParentId');
-            var title = $(this).data('groupTitle');
-            var description = $(this).data('groupDescription');
-            var ft_hide_patron_info = $(this).data('groupFt_hide_patron_info');
-            var ft_search_groups_opac = $(this).data('groupFt_search_groups_opac');
-            var ft_search_groups_staff = $(this).data('groupFt_search_groups_staff');
-            edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff );
-        });
-
-        $('.delete-group').on('click', function() {
-            var id = $(this).data('groupId');
-            var title = $(this).data('groupTitle');
-            delete_group( id, title );
-        });
-
-        $('.remove-library').on('click', function() {
-            var id = $(this).data('groupId');
-            var library = $(this).data('groupLibrary');
-            var parent_title = $(this).data('groupParentTitle');
-            remove_library( id, library, parent_title );
-        });
-    });
-
-    function add_group( parent_id ) {
-        $('#add-group-modal-parent-id').val( parent_id );
-
-        $('#add-group-modal-description').val("");
-        $('#add-group-modal-title').val("");
-
-        $('#add-group-modal').on('shown.bs.modal', function() {
-            $('#add-group-modal-title').focus();
-        });
-
-        $('#add-group-modal-ft_hide_patron_info').prop('checked', false);
-        $('#add-group-modal-ft_search_groups_opac').prop('checked', false);
-        $('#add-group-modal-ft_search_groups_staff').prop('checked', false);
-        if ( parent_id ) {
-            $('#root-group-features-add').hide();
-        } else {
-            $('#root-group-features-add').show();
-        }
-        $('#add-group-modal').modal('show');
-    }
-
-    function edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff ) {
-        $('#edit-group-modal-id').val( id );
-        $('#edit-group-modal-title').val( title );
-        $('#edit-group-modal-description').val( description );
-
-        if ( parent_id ) {
-            $('#edit-group-modal-ft_hide_patron_info').prop('checked', false);
-            $('#edit-group-modal-ft_search_groups_opac').prop('checked', false);
-            $('#edit-group-modal-ft_search_groups_staff').prop('checked', false);
-            $('#root-group-features-edit').hide();
-        } else {
-            $('#edit-group-modal-ft_hide_patron_info').prop('checked', ft_hide_patron_info ? true : false );
-            $('#edit-group-modal-ft_search_groups_opac').prop('checked', ft_search_groups_opac ? true : false );
-            $('#edit-group-modal-ft_search_groups_staff').prop('checked', ft_search_groups_staff ? true : false );
-            $('#root-group-features-edit').show();
-        }
-
-        $('#edit-group-modal').on('shown.bs.modal', function() {
-            $('#edit-group-modal-title').focus();
-        });
-
-        $('#edit-group-modal').modal('show');
-    }
-
-    function delete_group( id, title ) {
-        $('#delete-group-modal-title').html(title);
-        $('#delete-group-modal-id').val( id );
-        $('#delete-group-modal').modal('show');
-    }
-
-    function remove_library( id, library, parent_title ) {
-        $('#remove-library-modal-library').html( library );
-        $('#remove-library-modal-group').html(parent_title);
-        $('#remove-library-modal-id').val( id );
-        $('#remove-library-modal').modal('show');
-    }
-
-//]]>
-</script>
 </head>
+
 <body id="admin_library_groups" class="admin">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
@@ -140,11 +40,11 @@
     </div>
 [% END %]
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
-        <div id="yui-main">
-            <div class="yui-b">
-                <div class="yui-g">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
                     <div id="toolbar" class="btn-toolbar">
                         <div class="btn-group">
                             <a id="add-group-root" class="btn btn-default btn-sm add-group" href="#">
@@ -152,7 +52,8 @@
                             </a>
                         </div>
                     </div>
-                </div>
+
+                <h2>Library groups</h2>
 
                 [% FOREACH root_group IN root_groups %]
                     <table class="library-groups">
@@ -165,14 +66,18 @@
                         [% PROCESS tree group=root_group %]
                     </table>
                 [% END %]
-            </div>
-        </div>
 
-    <div class="yui-b">
-        [% INCLUDE 'admin-menu.inc' %]
-    </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-    <div id="add-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'admin-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
+    <div id="add-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="add-group-modal-label" aria-hidden="true">
         <form id="add-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -186,7 +91,7 @@
                         <p>
                             <label for="add-group-modal-title">Title: </label>
                             <input type="text" name="title" id="add-group-modal-title" required="required" />
-                            <i>required</i>
+                            <span class="required">Required</span>
                         </p>
 
                         <p>
@@ -196,33 +101,37 @@
                         <div id="root-group-features-add">
                             <h3>Features</h3>
                             <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" name="ft_hide_patron_info" id="add-group-modal-ft_hide_patron_info" value="1" />
-                                    Limit patron data access by group
-                                </label>
                                 <p>
-                                <label>
-                                    <input type="checkbox" name="ft_search_groups_opac" id="add-group-modal-ft_search_groups_opac" value="1" />
-                                    Use for OPAC search groups
-                                </label>
+                                    <label>
+                                        <input type="checkbox" name="ft_hide_patron_info" id="add-group-modal-ft_hide_patron_info" value="1" />
+                                        Limit patron data access by group
+                                    </label>
+                                </p>
                                 <p>
-                                <label>
-                                    <input type="checkbox" name="ft_search_groups_staff" id="add-group-modal-ft_search_groups_staff" value="1" />
-                                    Use for staff search groups
-                                </label>
+                                    <label>
+                                        <input type="checkbox" name="ft_search_groups_opac" id="add-group-modal-ft_search_groups_opac" value="1" />
+                                        Use for OPAC search groups
+                                    </label>
+                                </p>
+                                <p>
+                                    <label>
+                                        <input type="checkbox" name="ft_search_groups_staff" id="add-group-modal-ft_search_groups_staff" value="1" />
+                                        Use for staff search groups
+                                    </label>
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Save</button>
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-default">Save</button>
+                        <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 
-    <div id="edit-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="edit-library-modal-label" aria-hidden="true">
+    <div id="edit-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="edit-group-modal-label" aria-hidden="true">
         <form id="edit-group-form" action="/cgi-bin/koha/admin/library_groups.pl" class="form-horizontal">
             <div class="modal-dialog">
                 <div class="modal-content">
@@ -236,7 +145,7 @@
                         <p>
                             <label for="edit-group-modal-title">Title: </label>
                             <input type="text" id="edit-group-modal-title" name="title" value="" required="required" />
-                            <i>required</i>
+                            <span class="required">Required</span>
                         </p>
 
                         <p>
@@ -246,34 +155,38 @@
                         <div id="root-group-features-edit">
                             <h3>Features</h3>
                             <div class="checkbox">
-                                <label>
-                                    <input type="checkbox" id="edit-group-modal-ft_hide_patron_info" name="ft_hide_patron_info" value="1" />
-                                    Limit patron data access by group
-                                </label>
                                 <p>
-                                <label>
-                                    <input type="checkbox" id="edit-group-modal-ft_search_groups_opac" name="ft_search_groups_opac" value="1" />
-                                    Use for OPAC search groups
-                                </label>
+                                    <label>
+                                        <input type="checkbox" id="edit-group-modal-ft_hide_patron_info" name="ft_hide_patron_info" value="1" />
+                                        Limit patron data access by group
+                                    </label>
+                                </p>
                                 <p>
-                                <label>
-                                    <input type="checkbox" id="edit-group-modal-ft_search_groups_staff" name="ft_search_groups_staff" value="1" />
-                                    Use for staff search groups
-                                </label>
+                                    <label>
+                                        <input type="checkbox" id="edit-group-modal-ft_search_groups_opac" name="ft_search_groups_opac" value="1" />
+                                        Use for OPAC search groups
+                                    </label>
+                                </p>
+                                <p>
+                                    <label>
+                                        <input type="checkbox" id="edit-group-modal-ft_search_groups_staff" name="ft_search_groups_staff" value="1" />
+                                        Use for staff search groups
+                                    </label>
+                                </p>
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-primary">Update</button>
-                        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
+                        <button type="submit" class="btn btn-default">Update</button>
+                        <a href="#" class="cancel" data-dismiss="modal" aria-hidden="true">Cancel</a>
                     </div>
                 </div>
             </div>
         </form>
     </div>
 
-    <div id="delete-group-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
-        <form action="/cgi-bin/koha/admin/library_groups.pl" />
+    <div id="delete-group-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="delete-group-modal-label" aria-hidden="true">
+        <form action="/cgi-bin/koha/admin/library_groups.pl">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <input id="delete-group-modal-action" type="hidden" name="action" value="delete" />
@@ -293,8 +206,8 @@
         </form>
     </div>
 
-    <div id="remove-library-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
-        <form action="/cgi-bin/koha/admin/library_groups.pl" />
+    <div id="remove-library-modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="remove-library-modal-label" aria-hidden="true">
+        <form action="/cgi-bin/koha/admin/library_groups.pl">
             <div class="modal-dialog">
                 <div class="modal-content">
                     <input id="remove-library-modal-action" type="hidden" name="action" value="delete" />
@@ -303,7 +216,7 @@
                         <h3 id="remove-library-modal-label">Remove library from group</h3>
                     </div>
                     <div class="modal-body">
-                        Are you sure you want to remove <span id="remove-library-modal-library" class="name"></span> from <span id="remove-library-modal-group" class="name"><span>?
+                        Are you sure you want to remove <span id="remove-library-modal-library" class="name"></span> from <span id="remove-library-modal-group" class="name"></span>?
                     </div>
                     <div class="modal-footer">
                         <button type="submit" class="btn btn-danger"><i class="fa fa-trash"></i> Remove</button>
@@ -314,7 +227,107 @@
         </form>
     </div>
 
-</div>
+[% MACRO jsinclude BLOCK %]
+    [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
+    <script>
+        $(document).ready(function() {
+            $('.library-groups').treetable({
+                expandable: true,
+                initialState: 'expanded',
+                clickableNodeNames: true,
+            });
+
+            $('.add-group').on('click', function() {
+                var id = $(this).data('groupId');
+                add_group( id );
+            });
+
+            $('.edit-group').on('click', function() {
+                var id = $(this).data('groupId');
+                var parent_id = $(this).data('groupParentId');
+                var title = $(this).data('groupTitle');
+                var description = $(this).data('groupDescription');
+                var ft_hide_patron_info = $(this).data('groupFt_hide_patron_info');
+                var ft_search_groups_opac = $(this).data('groupFt_search_groups_opac');
+                var ft_search_groups_staff = $(this).data('groupFt_search_groups_staff');
+                edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff );
+            });
+
+            $('.delete-group').on('click', function() {
+                var id = $(this).data('groupId');
+                var title = $(this).data('groupTitle');
+                delete_group( id, title );
+            });
+
+            $('.remove-library').on('click', function() {
+                var id = $(this).data('groupId');
+                var library = $(this).data('groupLibrary');
+                var parent_title = $(this).data('groupParentTitle');
+                remove_library( id, library, parent_title );
+            });
+        });
+
+        function add_group( parent_id ) {
+            $('#add-group-modal-parent-id').val( parent_id );
+
+            $('#add-group-modal-description').val("");
+            $('#add-group-modal-title').val("");
+
+            $('#add-group-modal').on('shown', function() {
+                $('#add-group-modal-title').focus();
+            });
+
+            $('#add-group-modal-ft_hide_patron_info').prop('checked', false);
+            $('#add-group-modal-ft_search_groups_opac').prop('checked', false);
+            $('#add-group-modal-ft_search_groups_staff').prop('checked', false);
+            if ( parent_id ) {
+                $('#root-group-features-add').hide();
+            } else {
+                $('#root-group-features-add').show();
+            }
+            $('#add-group-modal').modal('show');
+        }
+
+        function edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff ) {
+            $('#edit-group-modal-id').val( id );
+            $('#edit-group-modal-title').val( title );
+            $('#edit-group-modal-description').val( description );
+
+            if ( parent_id ) {
+                $('#edit-group-modal-ft_hide_patron_info').prop('checked', false);
+                $('#edit-group-modal-ft_search_groups_opac').prop('checked', false);
+                $('#edit-group-modal-ft_search_groups_staff').prop('checked', false);
+                $('#root-group-features-edit').hide();
+            } else {
+                $('#edit-group-modal-ft_hide_patron_info').prop('checked', ft_hide_patron_info ? true : false );
+                $('#edit-group-modal-ft_search_groups_opac').prop('checked', ft_search_groups_opac ? true : false );
+                $('#edit-group-modal-ft_search_groups_staff').prop('checked', ft_search_groups_staff ? true : false );
+                $('#root-group-features-edit').show();
+            }
+
+            $('#edit-group-modal').on('shown', function() {
+                $('#edit-group-modal-title').focus();
+            });
+
+            $('#edit-group-modal').modal('show');
+        }
+
+        function delete_group( id, title ) {
+            $('#delete-group-modal-title').html(title);
+            $('#delete-group-modal-id').val( id );
+            $('#delete-group-modal').modal('show');
+        }
+
+        function remove_library( id, library, parent_title ) {
+            $('#remove-library-modal-library').html( library );
+            $('#remove-library-modal-group').html(parent_title);
+            $('#remove-library-modal-id').val( id );
+            $('#remove-library-modal').modal('show');
+        }
+
+    </script>
+[% END %]
+
 [% INCLUDE 'intranet-bottom.inc' %]
 
 [% BLOCK tree %]
@@ -350,10 +363,10 @@
         </td>
         <td>
             [% IF group.branchcode %]
-                <button class="btn btn-default btn-sm remove-library" data-group-id="[% group.id | html %]" data-group-library="[% group.library.branchname | html %]" data-group-parent-title="[% group.parent.title | html %]" ><i class="fa fa-trash"></i> Remove from group</button>
+                <button class="btn btn-default btn-xs remove-library" data-group-id="[% group.id | html %]" data-group-library="[% group.library.branchname | html %]" data-group-parent-title="[% group.parent.title | html %]" ><i class="fa fa-trash"></i> Remove from group</button>
             [% ELSE %]
                 <div class="btn-group">
-                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
+                    <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-wrench"></i> Actions <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         <li>
                             <a id="add-group-[% group.id | html %]" href="#" class="add-group" data-group-id="[% group.id | html %]">
@@ -362,13 +375,13 @@
                        </li>
 
                         <li>
-                            <a class="edit-group" id="edit-group-[% group.id | html %]" href="#" class="edit-group" data-group-id="[% group.id | html %]" data-group-parent-id="[% group.parent_id | html %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" >
+                            <a class="edit-group" id="edit-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-parent-id="[% group.parent_id | html %]" data-group-title="[% group.title | html %]" data-group-description="[% group.description | html %]" data-group-ft_hide_patron_info="[% group.ft_hide_patron_info | html %]" data-group-ft_search_groups_opac="[% group.ft_search_groups_opac | html %]" data-group-ft_search_groups_staff="[% group.ft_search_groups_staff | html %]" >
                                 <i class="fa fa-pencil"></i> Edit
                             </a>
                        </li>
 
                         <li>
-                            <a class="delete-group" id="delete-group-[% group.id | html %]" href="#" class="delete-group" data-group-id="[% group.id | html %]" data-group-title="[% group.title | html %]">
+                            <a class="delete-group" id="delete-group-[% group.id | html %]" href="#" data-group-id="[% group.id | html %]" data-group-title="[% group.title | html %]">
                                 <i class="fa fa-trash"></i> Delete
                             </a>
                        </li>
@@ -376,11 +389,11 @@
                 </div>
 
                 <div class="btn-group">
-                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
+                    <button class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> Add library <span class="caret"></span></button>
                     <ul class="dropdown-menu">
                         [% FOREACH library IN group.libraries_not_direct_children %]
                             <li>
-                                <a class="add-library" id="add-library-[% group.id | html %]" href="/cgi-bin/koha/admin/library_groups.pl?action=add&parent_id=[% group.id | html %]&branchcode=[% library.id | html %]">
+                                <a class="add-library" id="add-library[% library.id | html %]-[% group.id | html %]" href="/cgi-bin/koha/admin/library_groups.pl?action=add&parent_id=[% group.id | html %]&branchcode=[% library.id | html %]">
                                     [% library.branchname | html %]
                                 </a>
                            </li>
