@@ -197,7 +197,14 @@ sub store {
             $self->debarred(undef)     unless $self->debarred;
             $self->date_renewed(undef) unless $self->date_renewed;
             $self->lastseen(undef)     unless $self->lastseen;
-            $self->updated_on(undef)   unless $self->updated_on;
+
+            if ( defined $self->updated_on and not $self->updated_on ) {
+                $self->updated_on(undef);
+            } else {
+                # This is bad we should use columns_info instead
+                # But it will avoid unecessary processing
+                $self->updated_on(\"current_timestamp");
+            }
 
             # Set default values if not set
             $self->sms_provider_id(undef) unless $self->sms_provider_id;
