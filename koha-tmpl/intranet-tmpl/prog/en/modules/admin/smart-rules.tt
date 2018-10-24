@@ -729,7 +729,7 @@
                     [% IF holdallowed || hold_fulfillment_policy || returnbranch %]
                         <tr>
                             <td>
-                                [% i.translated_description %]
+                                [% i.translated_description | html %]
                             </td>
                             <td>
                                 [% IF holdallowed == 2 %]
@@ -759,7 +759,7 @@
                                 [% END %]
                             </td>
                             <td class="actions">
-                                <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% i.itemtype %]&amp;branch=[% current_branch %]"><i class="fa fa-trash"></i> Delete</a>
+                                <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/admin/smart-rules.pl?op=delete-branch-item&amp;itemtype=[% i.itemtype | uri %]&amp;branch=[% current_branch | uri %]"><i class="fa fa-trash"></i> Delete</a>
                             </td>
                         </tr>
                     [% END %]
