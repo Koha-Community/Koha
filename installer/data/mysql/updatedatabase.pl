@@ -16678,6 +16678,19 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21617: Make statistics.ccode longer)\n";
 }
 
+$DBversion = "18.06.00.043";
+if ( CheckVersion($DBversion) ) {
+    if ( !column_exists( 'issuingrules', 'holds_per_day' ) ) {
+        $dbh->do(q{
+            ALTER TABLE `issuingrules`
+                ADD COLUMN `holds_per_day` SMALLINT(6) DEFAULT NULL
+                AFTER `holds_per_record`
+        });
+    }
+    print "Upgrade to $DBversion done (Bug 15486: Restrict number of holds placed by day)\n";
+    SetVersion($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
