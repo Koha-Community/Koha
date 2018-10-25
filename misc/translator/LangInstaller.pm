@@ -527,6 +527,10 @@ sub extract_messages_from_templates {
     foreach my $file (@files) {
         say "Extract messages from $file" if $self->{verbose};
         my $template = read_file("$intranetdir/$file");
+
+        # No need to process a file that doesn't use the i18n.inc file.
+        next unless $template =~ /i18n\.inc/;
+
         my $data = $parser->parse($template);
         unless ($data) {
             warn "Error at $file : " . $parser->error();
