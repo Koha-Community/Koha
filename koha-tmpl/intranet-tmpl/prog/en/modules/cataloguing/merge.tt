@@ -46,12 +46,12 @@ div#result { margin-top: 1em; }
                 <tr>
                     <th>Biblionumber</th>
                     [% FOREACH key IN report_header.keys.sort %]
-                        [% tag = key.substr(0, 3) | html %]
-                        [% code = key.substr(3, 1) | html %]
+                        [% tag = key.substr(0, 3) %]
+                        [% code = key.substr(3, 1) %]
                         [% IF code == '@' %]
-                            [% header = tag | html %]
+                            [% header = tag %]
                         [% ELSE %]
-                            [% header = tag _ '$' _ code | html %]
+                            [% header = tag _ '$' _ code %]
                         [% END %]
                         <th>[% header | html %]</th>
                     [% END %]
@@ -68,7 +68,7 @@ div#result { margin-top: 1em; }
                         </td>
                         [% FOREACH key IN report_header.keys.sort %]
                             <td>
-                                [% values = record.fields.$key | html %]
+                                [% values = record.fields.$key %]
                                 [% IF values %]
                                     [% FOREACH value IN record.fields.$key %]
                                         [% value | html %]

@@ -16,7 +16,7 @@
 [% IF ( SyndeticsEnabled ) %][% IF ( SyndeticsCoverImages ) %][% IF ( review.content_identifier_exists ) %]<img src="https://secure.syndetics.com/index.aspx?isbn=[% review.normalized_isbn | html %]/SC.GIF&amp;client=[% SyndeticsClientCode | html %]&amp;type=xw10&amp;upc=[% review.normalized_upc | html %]&amp;oclc=[% review.normalized_oclc | html %]" alt="" />
 [% END %][% END %][% END %]
 
-[% bt_id = ( review.normalized_upc || review.normalized_isbn ) | html %]
+[% bt_id = ( review.normalized_upc || review.normalized_isbn ) %]
 [% IF ( BakerTaylorEnabled && bt_id ) %]<a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>[% END %]
         [% IF ( review.author ) %]<p>By [% review.author | html %].</p> [% END %]
         <p>[% IF ( review.place ) %][% review.place | html %] [% END %][% IF ( review.publishercode ) %][% review.publishercode | html %][% END %][% IF ( review.publicationyear ) %] [% review.publicationyear | html %]

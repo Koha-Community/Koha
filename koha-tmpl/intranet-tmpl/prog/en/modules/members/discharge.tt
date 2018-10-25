@@ -56,8 +56,8 @@
         <tbody>
             [% FOR d IN validated_discharges %]
                 <tr>
-                    <td>[% d.needed | $KohaDates with_hours = 1 | html %]</td>
-                    <td>[% d.validated | $KohaDates with_hours = 1 | html %]</td>
+                    <td>[% d.needed | $KohaDates with_hours = 1 %]</td>
+                    <td>[% d.validated | $KohaDates with_hours = 1 %]</td>
                 </tr>
             [% END %]
         </tbody>

@@ -244,9 +244,9 @@
 	<td>[% IF ( loo.imageurl ) %]<img src="[% loo.imageurl | html %]" alt=""/>[% ELSE %]&nbsp;[% END %]</td>
     <td>
         [% IF loo.branches.size > 0 %]
-            [% branches_str = "" | html %]
+            [% branches_str = "" %]
             [% FOREACH branch IN loo.branches %]
-                [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" | html %]
+                [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
             [% END %]
             <span href="#" title="[% branches_str | html %]">
                 [% IF loo.branches.size > 1 %]

@@ -42,7 +42,7 @@
 [%# PARAMS: selected_norm, id, name %]
 [%    UNLESS valid_norms.grep(selected_norm).size %]
 [%#       Fallback to 'none' %]
-[% selected_norm = 'none' | html %]
+[% selected_norm = 'none' %]
 [%    END %]
     <select id="[% id | html %]" name="[% name | html %]">
 [%    PROCESS norms_options selected_norm=selected_norm %]

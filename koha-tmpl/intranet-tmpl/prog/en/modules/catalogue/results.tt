@@ -399,7 +399,7 @@
                 [% SEARCH_RESULT.XSLTResultsRecord | $raw %]
 			    [% ELSE %]
                                 <p>[% SEARCH_RESULT.result_number | html %].
-                                 [% biblionumber = SEARCH_RESULT.biblionumber | html %]
+                                 [% biblionumber = SEARCH_RESULT.biblionumber %]
 
 				[% INCLUDE 'biblio-default-view.inc' %]
                                             <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title | html %][% ELSE %]No title[% END %]</b>

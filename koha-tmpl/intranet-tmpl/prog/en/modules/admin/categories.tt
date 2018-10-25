@@ -435,9 +435,9 @@
                         <td>
                             [% SET branch_limitations = category.branch_limitations %]
                             [% IF branch_limitations.size > 0 %]
-                                [% branches_str = "" | html %]
+                                [% branches_str = "" %]
                                 [% FOREACH branch IN branch_limitations %]
-                                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" | html %]
+                                    [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
                                 [% END %]
                                 <span title="[% branches_str | html %]">
                                     [% IF branch_limitations.size > 1 %]

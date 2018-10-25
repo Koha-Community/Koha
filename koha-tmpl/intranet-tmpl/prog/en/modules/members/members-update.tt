@@ -99,7 +99,7 @@
                     <div id="pending_updates">
                             [% FOREACH pm IN PendingModifications %]
                                 [% SET borrowernumber = pm.borrowernumber %]
-                                <h3><a href="#panel_modify_[% pm.borrowernumber | html %]">[% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 | html %]</a></h3>
+                                <h3><a href="#panel_modify_[% pm.borrowernumber | html %]">[% borrowers.$borrowernumber.surname | html %][% IF ( borrowers.$borrowernumber.firstname ) %], [% borrowers.$borrowernumber.firstname | html %][% END %] - [% Categories.GetName( borrowers.$borrowernumber.categorycode ) | html %] ([% Branches.GetName( borrowers.$borrowernumber.branchcode ) | html %]) ([% borrowers.$borrowernumber.cardnumber | html %]) - Requested on [% pm.timestamp | $KohaDates with_hours = 1 %]</a></h3>
                                 <div id="panel_modify_[% pm.borrowernumber | html %]">
                                     <div style="background-color:#E6F0F2;padding:.5em;margin:.3em 0;">
                                         <input type="radio" id="approve_modify_[% pm.borrowernumber | html %]" name="modify_[% pm.borrowernumber | html %]" value="approve" />

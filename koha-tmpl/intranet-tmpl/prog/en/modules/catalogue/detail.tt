@@ -8,9 +8,9 @@
 [% USE ColumnsSettings %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
-    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') | html %]
+    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
 [% ELSE %]
-    [% AmazonAssocTag = '' | html %]
+    [% AmazonAssocTag = '' %]
 [% END %]
 
 [% ShowCourseReserves = 0 | html %]

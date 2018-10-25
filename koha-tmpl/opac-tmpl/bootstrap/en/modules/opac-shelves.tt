@@ -328,7 +328,7 @@
                                                             [% END %]
 
                                                             [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
-                                                                [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn | html %]
+                                                                [% coce_id = itemsloo.normalized_ean || itemsloo.normalized_isbn %]
                                                                 [% IF ( coce_id ) %]
                                                                     <span title="[% itemsloo.biblionumber |url %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
                                                                 [% ELSE %]
@@ -347,7 +347,7 @@
 
                                                         </a> <!-- / .p1 -->
                                                         [% IF ( BakerTaylorEnabled ) %]
-                                                            [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) | html %]
+                                                            [% bt_id = ( itemsloo.normalized_upc || itemsloo.normalized_isbn ) %]
                                                             [% IF ( bt_id ) %]
                                                                 <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                                             [% ELSE %]

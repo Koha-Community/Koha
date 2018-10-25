@@ -464,13 +464,13 @@
                                     <a class="edit_note" data-ordernumber="[% books_loo.ordernumber | html %]" data-note_type="vendor" href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% books_loo.ordernumber | html %]&type=vendor" title="Add vendor note"><i class="fa fa-plus"></i> Add vendor note</a>
                                 [% END %]
                             [% IF (books_loo.transferred_from) %]
-                              [% basket = books_loo.transferred_from.basket | html %]
-                              [% bookseller = books_loo.transferred_from.bookseller | html %]
-                              [% timestamp = books_loo.transferred_from.timestamp | html %]
+                              [% basket = books_loo.transferred_from.basket %]
+                              [% bookseller = books_loo.transferred_from.bookseller %]
+                              [% timestamp = books_loo.transferred_from.timestamp %]
                               <p>Transferred from basket:
                                 <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"> [% basket.basketname | html %]</a>
                                 (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | html %]">[% bookseller.name | html %]</a>)
-                                on <span title="[% timestamp | $KohaDates with_hours = 1 | html %]">
+                                on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
                                   [% timestamp | $KohaDates %]
                                 </span>
                               </p>
@@ -582,13 +582,13 @@
                         [% END %]
                       </p>
                       [% IF order.transferred_to %]
-                        [% basket = order.transferred_to.basket | html %]
-                        [% bookseller = order.transferred_to.bookseller | html %]
-                        [% timestamp = order.transferred_to.timestamp | html %]
+                        [% basket = order.transferred_to.basket %]
+                        [% bookseller = order.transferred_to.bookseller %]
+                        [% timestamp = order.transferred_to.timestamp %]
                         <p>Transferred to basket:
                           <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"> [% basket.basketname | html %]</a>
                           (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | html %]">[% bookseller.name | html %]</a>)
-                          on <span title="[% timestamp | $KohaDates with_hours = 1 | html %]">
+                          on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
                             [% timestamp | $KohaDates %]
                           </span>
                         </p>

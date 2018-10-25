@@ -1304,7 +1304,7 @@
             $(document).ready(function () {
 
                 $("#entryform,#saverecord").hide();
-                [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') | html %]
+                [% q_add_f = Koha.Preference('PatronQuickAddFields').split('\|') %]
                 var qaddfields = [[% FOREACH field IN q_add_f.unique %]"[% field | html %]",[% END %]];
                 var skipped_fields = ["contactname","contactfirstname","relationship"]; //Guarantor form is pulled as a whole, ignore individual fields
                 $("#entryform label").each(function () {

@@ -327,17 +327,17 @@
                     <input type="hidden" name="budget_id" id="budget_id" value="[% budget_id | html %]" />[% Budget_name | html %]
                 [% ELSE %]
                 <label class="required" for="budget_id">Fund: </label>
-                [% active_count = 0 | html %]
+                [% active_count = 0 %]
                 [% IF !ordernumber %]
                     [% FOREACH budget_loo IN budget_loop %]
-                        [% active_count= active_count + budget_loo.b_active | html %]
+                        [% active_count= active_count + budget_loo.b_active %]
                     [% END %]
                 [% END %]
                 <select id="budget_id" size="1" name="budget_id">
                     <option value="">Select a fund</option>
                 [% FOREACH budget_loo IN budget_loop %]
                     [% IF ( budget_loo.b_sel ) %]
-                        [% active_count = 0 #select no other fund | html %]
+                        [% active_count = 0 #select no other fund %]
                         <option value="[% budget_loo.b_id | html %]" selected="selected" data-sort1-authcat="[% budget_loo.b_sort1_authcat | html %]" data-sort2-authcat="[% budget_loo.b_sort2_authcat | html %]"
                                 style="padding-left:[% budget_loo.b_level | html %]em;"
                         >

@@ -254,7 +254,7 @@
                                                         [% END %]
 
                                                         [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
-                                                          [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn | html %]
+                                                          [% coce_id = SEARCH_RESULT.normalized_ean || SEARCH_RESULT.normalized_isbn %]
                                                           [% IF ( coce_id ) %]
                                                             <span title="[% SEARCH_RESULT.biblionumber |url %]" class="[% coce_id | html %]" id="coce-thumbnail[% loop.count | html %]"></span>
                                                           [% ELSE %]
@@ -271,7 +271,7 @@
                                                         [% END %]
 
                                                         [% IF ( BakerTaylorEnabled && !BakerTaylorBookstoreURL ) %]
-                                                            [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) | html %]
+                                                            [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
                                                             [% IF ( bt_id ) %]
                                                                 <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
                                                             [% ELSE %]
@@ -281,7 +281,7 @@
                                                     </a>
 
                                                     [% IF ( BakerTaylorEnabled && BakerTaylorBookstoreURL ) %]
-                                                        [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) | html %]
+                                                        [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
                                                         [% IF ( bt_id ) %]
                                                             <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]">
                                                                 <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />

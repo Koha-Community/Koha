@@ -72,9 +72,9 @@
       [% IF items_search_fields.size %]
         <optgroup label="Custom search fields">
           [% FOREACH field IN items_search_fields %]
-            [% marcfield = field.tagfield | html %]
+            [% marcfield = field.tagfield %]
             [% IF field.tagsubfield %]
-              [% marcfield = marcfield _ '$' _ field.tagsubfield | html %]
+              [% marcfield = marcfield _ '$' _ field.tagsubfield %]
             [% END %]
             <option value="marc:[% marcfield | html %]" data-authorised-values-category="[% field.authorised_values_category | html %]">[% field.label | html %] ([% marcfield | html %])</option>
           [% END %]

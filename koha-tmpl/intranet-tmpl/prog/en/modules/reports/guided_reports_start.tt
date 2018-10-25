@@ -743,7 +743,7 @@ canned reports and writing custom SQL reports.</p>
             [% FOREACH result IN results %]
                 <tr>
                     [% FOREACH cells IN result.cells %]
-                        [% place = loop.index | html %]
+                        [% place = loop.index %]
                         [% IF header_row.$place.cell == 'itemnumber' %]
                             <input type="hidden" name="[% header_row.$place.cell | html %]" value="[% cells.cell | html %]" />
                         [% END %]

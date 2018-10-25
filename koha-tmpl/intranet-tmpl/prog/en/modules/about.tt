@@ -117,8 +117,8 @@
               <td>[% current_date_and_time | $KohaDates with_hours => 1 | html %]</td>
             </tr>
             <tr>
-              [% timezone_config_class = (time_zone.config_invalid) ? 'status_warn' : '' | html %]
-              [% timezone_env_class    = (time_zone.env_invalid)    ? 'status_warn' : '' | html %]
+              [% timezone_config_class = (time_zone.config_invalid) ? 'status_warn' : '' %]
+              [% timezone_env_class    = (time_zone.env_invalid)    ? 'status_warn' : '' %]
               <th scope="row">Time zone: </th>
               <td>Used: <span>[% time_zone.actual | html %]</span>
                           [% IF time_zone.actual_bad_tz_fallback %]

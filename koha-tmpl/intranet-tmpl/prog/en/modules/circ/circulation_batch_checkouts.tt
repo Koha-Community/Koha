@@ -152,7 +152,7 @@
                     [% IF checkout_info.itemtype_notforloan %]
                         <li><i class="fa fa-li fa-warning"></i>Item type is normally not for loan.</li>
                     [% ELSIF checkout_info.item_notforloan %]
-                      [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, checkout_info.item_notforloan, 0 ) | html %]
+                      [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, checkout_info.item_notforloan, 0 ) %]
                         <li><i class="fa fa-li fa-warning"></i>Item is normally not for loan [% IF item_notforloan_lib %]([% item_notforloan_lib | html %])[% END %].</li>
                     [% END %]
                   [% END %]
@@ -208,7 +208,7 @@
                     [% IF checkout_info.itemtype_notforloan %]
                        <li><i class="fa fa-li fa-exclamation"></i>Item type not for loan.</li>
                     [% ELSIF checkout_info.item_notforloan %]
-                      [% item_notforloan_lib = AuthorisedValues.GetByCode( checkout_info.authvalcode_notforloan, checkout_info.item_notforloan, 0 ) | html %]
+                      [% item_notforloan_lib = AuthorisedValues.GetByCode( checkout_info.authvalcode_notforloan, checkout_info.item_notforloan, 0 ) %]
                         <li><i class="fa fa-li fa-exclamation"></i>Item not for loan [% IF checkout_info.item_notforloan_lib %]([% checkout_info.item_notforloan_lib | html %])[% END %].</li>
                     [% END %]
                   [% END %]

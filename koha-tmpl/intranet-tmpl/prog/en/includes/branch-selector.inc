@@ -1,8 +1,8 @@
 [%# First check to see if we have anything selected, otherwise we select all %]
-[% selectall = 1 | html %]
+[% selectall = 1 %]
 [% FOREACH branch IN branches %]
     [% IF branch.selected %]
-        [% selectall = 0 | html %]
+        [% selectall = 0 %]
     [% END %]
 [% END %]
 <div class="branchselector">

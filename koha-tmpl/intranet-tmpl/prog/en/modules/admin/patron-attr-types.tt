@@ -260,9 +260,9 @@
             <td>[% item.description | html %]</td>
             <td>
                 [% IF ( item.branches && item.branches.size > 0 ) %]
-                    [% branches_str = "" | html %]
+                    [% branches_str = "" %]
                     [% FOREACH branch IN item.branches %]
-                        [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" | html %]
+                        [% branches_str = branches_str _ " " _ branch.branchname _ "(" _ branch.branchcode _ ")" %]
                     [% END %]
                     <span title="[% branches_str | html %]">
                         [% IF item.branches.size > 1 %]

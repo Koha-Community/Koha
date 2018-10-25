@@ -91,7 +91,7 @@
             </thead>
             <tbody>
               [% FOREACH lette IN letter %]
-                [% can_edit = lette.branchcode || !independant_branch | html %]
+                [% can_edit = lette.branchcode || !independant_branch %]
                 <tr>
                   <td>[% IF lette.branchname %][% lette.branchname | html %][% ELSE %](All libraries)[% END %]</td>
                   <td>

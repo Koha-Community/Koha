@@ -69,7 +69,7 @@
                 [% END %]
 
                 [% IF ( op == 'show') && (!borrowers) && (!notfoundcardnumbers) # Alert if no patrons given%]
-                    [% op = 'noshow' # Change op to prevent display in code below | html %]
+                    [% op = 'noshow' # Change op to prevent display in code below %]
                     <h1>Batch patrons modification</h1>
                     <div class="dialog alert">
                         <p>No patron card numbers given.</p>

@@ -125,7 +125,7 @@
                         </thead>
                         <tbody>
                             [% FOREACH request IN requests %]
-                                [% status = request.status | html %]
+                                [% status = request.status %]
                                 <tr>
                                     <td>[% request.id | html %]</td>
                                     <td>
@@ -149,7 +149,7 @@
                 [% ELSIF method == 'view' %]
                     <h2>View interlibrary loan request</h2>
                     [% INCLUDE messages %]
-                    [% status = request.status | html %]
+                    [% status = request.status %]
                     <form method="post" action="?method=update" id="illrequestupdate-form" novalidate="novalidate">
                             <fieldset class="rows">
                                 <legend id="library_legend">Details from library</legend>

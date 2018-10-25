@@ -9,18 +9,18 @@
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
 [% IF Koha.Preference('AmazonAssocTag') %]
-    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') | html %]
+    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
 [% ELSE %]
-    [% AmazonAssocTag = '' | html %]
+    [% AmazonAssocTag = '' %]
 [% END %]
 
-[% ShowCourseReservesHeader = 0 | html %]
+[% ShowCourseReservesHeader = 0 %]
 [% IF Koha.Preference( 'UseCourseReserves' ) == 1 %]
     [% FOREACH ITEM_RESULT IN itemloop %]
        [% IF ITEM_RESULT.course_reserves %]
            [% FOREACH r IN ITEM_RESULT.course_reserves %]
                [% IF r.course.enabled == 'yes' %]
-                   [% ShowCourseReservesHeader = 1 | html %]
+                   [% ShowCourseReservesHeader = 1 %]
                [% END %]
            [% END %]
         [% END %]
@@ -78,13 +78,13 @@
                         <div title="[% biblio.biblionumber | html %]" class="[% normalized_isbn | html %]" id="gbs-thumbnail-preview"></div>
                     [% END %]
                     [% IF ( Koha.Preference('Coce') && Koha.Preference('CoceProviders') ) %]
-                      [% coce_id = normalized_ean || normalized_isbn | html %]
+                      [% coce_id = normalized_ean || normalized_isbn %]
                       <div title="[% biblio.biblionumber | html %]" class="[% coce_id | html %]" id="coce-thumbnail-preview"></div>
                     [% END %]
                     [% IF OpenLibraryCovers %]
                         <div title="[% biblio.biblionumber | html %]" class="[% normalized_isbn | html %]" id="openlibrary-thumbnail-preview"></div>
                     [% END %]
-                    [% bt_id = ( normalized_upc || normalized_isbn ) | html %]
+                    [% bt_id = ( normalized_upc || normalized_isbn ) %]
                     [% IF ( BakerTaylorEnabled && bt_id ) %]
                         [% IF BakerTaylorBookstoreURL %]
                             [% IF ( OPACURLOpenInNewWindow ) %]
@@ -168,7 +168,7 @@
                                 [% END # /OPACPopupAuthorsSearch %]
 
                                 [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
-                                    [% authorsloop = loop | html %]
+                                    [% authorsloop = loop %]
                                     [% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %]
                                         [% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]
                                         [% IF Koha.Preference( 'OPACPopupAuthorsSearch' ) == 1 %]
@@ -268,7 +268,7 @@
                                                 <b>All</b>
                                             </label>
                                             [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
-                                                [% subjectsloop = loop | html %]
+                                                [% subjectsloop = loop %]
                                                 [% IF MARCSUBJCT.authoritylink %]
                                                     <ul id="subjectsList[% loop.count | html %]" data-authid="[% MARCSUBJCT.authoritylink | html %]">
                                                 [% ELSE %]
@@ -293,7 +293,7 @@
                                 [% END # /OPACPopupAuthorsSearch%]
 
                                 [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
-                                    [% subjectsloop = loop | html %]
+                                    [% subjectsloop = loop %]
                                     [% FOREACH SUBFIELD IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %]
                                         [% SUBFIELD.separator | html %]
                                         [% IF Koha.Preference( 'OPACPopupAuthorsSearch' ) == 1 %]
@@ -1252,7 +1252,7 @@
                             <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
                             <span class="[% ITEM_RESULT.home_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
                                 [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
-                                    [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) | html %]
+                                    [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                     [% IF ( home_branch_url ) %]
                                          <a href="[% home_branch_url | html %]">[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</a>
                                     [% ELSE %]

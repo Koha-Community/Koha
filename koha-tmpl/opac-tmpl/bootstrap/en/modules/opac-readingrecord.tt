@@ -12,9 +12,9 @@
 [% INCLUDE 'masthead.inc' %]
 
 [% IF Koha.Preference('AmazonAssocTag') %]
-    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') | html %]
+    [% AmazonAssocTag = '?tag=' _ Koha.Preference('AmazonAssocTag') %]
 [% ELSE %]
-    [% AmazonAssocTag = '' | html %]
+    [% AmazonAssocTag = '' %]
 [% END %]
 
 <div class="main">
@@ -88,8 +88,8 @@
                                             [% FOREACH issue IN READING_RECORD %]
                                                 <tr>
                                                     <td style="display:none;">
-                                                      [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' | html %]
-                                                      [% ELSE %][% issuetype = 'standard_checkout' | html %]
+                                                      [% IF issue.onsite_checkout %][% issuetype = 'onsite_checkout' %]
+                                                      [% ELSE %][% issuetype = 'standard_checkout' %]
                                                       [% END %]
                                                       [% issuetype | html %]
                                                     </td>
@@ -111,7 +111,7 @@
                                                 [% END %]
 
                                                 [% IF BakerTaylorEnabled %]
-                                                    [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) | html %]
+                                                    [% bt_id = ( issue.normalized_upc || issue.normalized_isbn ) %]
                                                     [% IF ( bt_id ) %]
                                                        <a href="https://[% BakerTaylorBookstoreURL | html %][% bt_id | html %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" /></a>
                                                     [% ELSE %]

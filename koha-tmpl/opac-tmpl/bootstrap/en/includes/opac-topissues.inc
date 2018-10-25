@@ -25,7 +25,7 @@
                             </select></li>
                 [% END %]
 
-                [% AdvancedSearchTypes = Koha.Preference('AdvancedSearchTypes').split('\|') | html %]
+                [% AdvancedSearchTypes = Koha.Preference('AdvancedSearchTypes').split('\|') %]
                 [% IF AdvancedSearchTypes.grep('^itemtypes$').size %]
                     <li>
                         <label for="itemtype">Limit to: </label>

@@ -104,14 +104,14 @@
                              <th>Encumber while invoice open</th>
                              <th>&nbsp</th>
                           </tr>
-                          [% total_adj = 0 | html %]
+                          [% total_adj = 0 %]
                           [% FOREACH adjustment IN adjustments %]
-                              [% total_adj = total_adj + adjustment.adjustment | html %]
+                              [% total_adj = total_adj + adjustment.adjustment %]
                               <tr>
                                   <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id | html %]" />[% adjustment.adjustment_id | html %]</td>
                                   <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price %]" /></td>
                                   <td>
-                                      [% reasons = AuthorisedValues.Get("ADJ_REASON") | html %]
+                                      [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
                                       [% IF reasons.0 %]
                                           <select id="reason_[% adjustment.adjustment_id | html %]" name="reason">
                                               <option value="">No reason</option>
@@ -174,7 +174,7 @@
                                   <label for="adjustment_new">Amount: </label>
                                   <input type="text" name="adjustment" id="adjustment_new" />
                               </li>
-                              [% reasons = AuthorisedValues.Get("ADJ_REASON") | html %]
+                              [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
                               [% IF reasons.0 %]
                                   <li>
                                       <label for="reason_[% adjustment.adjustment_id | html %]">Reason: </label>
