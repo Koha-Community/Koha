@@ -200,7 +200,7 @@ sub store {
 
             if ( defined $self->updated_on and not $self->updated_on ) {
                 $self->updated_on(undef);
-            } else {
+            } elsif ( not $self->updated_on ) {
                 # This is bad we should use columns_info instead
                 # But it will avoid unecessary processing
                 $self->updated_on(\"current_timestamp");
