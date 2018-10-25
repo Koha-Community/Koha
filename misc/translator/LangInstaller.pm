@@ -579,7 +579,12 @@ sub extract_messages_from_templates {
                 my $keyword = $node->content;
                 $keyword =~ s/^'t(.*)'$/__$1/;
 
-                say $fh "$keyword(" . join(', ', @args) . ");";
+                # Only keep required args to have a clean output
+                my @required_args = shift @args;
+                push @required_args, shift @args if $keyword =~ /n/;
+                push @required_args, shift @args if $keyword =~ /p/;
+
+                say $fh "$keyword(" . join(', ', @required_args) . ");";
             }
 
         }

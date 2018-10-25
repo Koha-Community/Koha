@@ -1,0 +1,34 @@
+[% t('hello') %]
+[% tx('hello {name}', { name = 'Bob' }) %]
+[% tn('item', 'items', count) %]
+[% tnx('{count} item', '{count} items', count, { count = count }) %]
+[% tp('context', 'hello') %]
+[% tpx('context', 'hello {name}', { name = 'Bob' }) %]
+[% tnp('context', 'item', 'items', count) %]
+[% tnpx('context', '{count} item', '{count} items', count, { count = count }) %]
+
+[% # it also works on multiple lines
+    tnpx (
+        'context',
+        '{count} item',
+        '{count} items',
+        count,
+        {
+            count = count,
+        }
+    )
+%]
+
+[% # and t* calls can be nested
+    tx('status is {status}', {
+        status = active ? t('active') : t('inactive')
+    })
+%]
+
+[%# but a TT comment won't get picked
+    t('not translatable')
+%]
+
+[% BLOCK %]
+    [% t('Inside block') %]
+[% END %]
