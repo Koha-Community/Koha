@@ -421,19 +421,11 @@ Return the balance (sum of amountoutstanding columns)
 
 sub balance {
     my ($self) = @_;
-    my $fines = Koha::Account::Lines->search(
+    return Koha::Account::Lines->search(
         {
             borrowernumber => $self->{patron_id},
-        },
-        {
-            select => [ { sum => 'amountoutstanding' } ],
-            as => ['total_amountoutstanding'],
         }
-    );
-
-    return ( $fines->count )
-      ? $fines->next->get_column('total_amountoutstanding') + 0
-      : 0;
+    )->total_outstanding;
 }
 
 =head3 outstanding_debits
@@ -509,19 +501,12 @@ sub non_issues_charges {
     }
     @not_fines = map { substr( $_, 0, $ACCOUNT_TYPE_LENGTH ) } uniq(@not_fines);
 
-    my $non_issues_charges = Koha::Account::Lines->search(
+    return Koha::Account::Lines->search(
         {
             borrowernumber => $self->{patron_id},
             accounttype    => { -not_in => \@not_fines }
         },
-        {
-            select => [ { sum => 'amountoutstanding' } ],
-            as     => ['non_issues_charges'],
-        }
-    );
-    return $non_issues_charges->count
-      ? $non_issues_charges->next->get_column('non_issues_charges') + 0
-      : 0;
+    )->total_outstanding;
 }
 
 =head3 lines

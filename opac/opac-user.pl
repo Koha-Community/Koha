@@ -199,9 +199,8 @@ if ( $pending_checkouts->count ) { # Useless test
                 accounttype       => [ 'F', 'FU', 'L' ],
                 itemnumber        => $issue->{itemnumber}
             },
-            { select => [ { sum => 'amountoutstanding' } ], as => ['charges'] }
         );
-        $issue->{charges} = $charges->count ? $charges->next->get_column('charges') : 0;
+        $issue->{charges} = $charges->total_outstanding;
 
         my $rental_fines = Koha::Account::Lines->search(
             {
@@ -209,13 +208,9 @@ if ( $pending_checkouts->count ) { # Useless test
                 amountoutstanding => { '>' => 0 },
                 accounttype       => 'Rent',
                 itemnumber        => $issue->{itemnumber}
-            },
-            {
-                select => [ { sum => 'amountoutstanding' } ],
-                as     => ['rental_fines']
             }
         );
-        $issue->{rentalfines} = $rental_fines->count ? $rental_fines->next->get_column('rental_fines') : 0;
+        $issue->{rentalfines} = $rental_fines->total_outstanding
 
         my $marcrecord = GetMarcBiblio({
             biblionumber => $issue->{'biblionumber'},
