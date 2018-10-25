@@ -237,12 +237,14 @@
                 clickableNodeNames: true,
             });
 
-            $('.add-group').on('click', function() {
+            $('.add-group').on('click', function(e) {
+                e.preventDefault();
                 var id = $(this).data('groupId');
                 add_group( id );
             });
 
-            $('.edit-group').on('click', function() {
+            $('.edit-group').on('click', function(e) {
+                e.preventDefault();
                 var id = $(this).data('groupId');
                 var parent_id = $(this).data('groupParentId');
                 var title = $(this).data('groupTitle');
@@ -253,13 +255,15 @@
                 edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff );
             });
 
-            $('.delete-group').on('click', function() {
+            $('.delete-group').on('click', function(e) {
+                e.preventDefault();
                 var id = $(this).data('groupId');
                 var title = $(this).data('groupTitle');
                 delete_group( id, title );
             });
 
-            $('.remove-library').on('click', function() {
+            $('.remove-library').on('click', function(e) {
+                e.preventDefault();
                 var id = $(this).data('groupId');
                 var library = $(this).data('groupLibrary');
                 var parent_title = $(this).data('groupParentTitle');
