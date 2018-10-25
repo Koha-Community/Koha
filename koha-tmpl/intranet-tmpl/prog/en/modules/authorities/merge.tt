@@ -5,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Merging records</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
+<style>
 div.record ul, div.record li { float:none; display:block; }
 div#result { margin-top: 1em; }
 /* We use this style "against" the li ui-tabs-nav style automatically applied */
@@ -20,6 +20,7 @@ div#result { margin-top: 1em; }
 <div class="main container-fluid">
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
+            <main>
 
 <h1>Merging records</h1>
 
@@ -45,8 +46,8 @@ div#result { margin-top: 1em; }
 
 [% ELSIF ( result ) %]
 
-        <script type="text/javascript">window.location.href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | html %]"</script>
-        <p>The merging was successful. <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | uri %]">Click here to see the merged record.</a></p>
+    <script>window.location.href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | html %]";</script>
+    <p>The merging was successful. <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% recordid1 | uri %]">Click here to see the merged record.</a></p>
 
 [% ELSIF ( choosereference ) %]
 
@@ -84,13 +85,14 @@ div#result { margin-top: 1em; }
 
 <form id="mergeform" action="/cgi-bin/koha/authorities/merge.pl" method="post" onsubmit="return mergeformsubmit()">
 
-<div class="yui-g">
-<div class="yui-u first">
+    <div class="row">
+        <div class="col-sm-6">
 [% PROCESS mergesource sourcerecords=records %]
 </div>
-<div class="yui-u">
+        <div class="col-sm-6">
 [% PROCESS mergetarget %]
-</div> <!-- .yui-u -->
+</div>
+</div>
 
 <input type="hidden" name="recordid1" value="[% recordid1 | html %]" />
 <input type="hidden" name="recordid2" value="[% recordid2 | html %]" />
@@ -98,20 +100,19 @@ div#result { margin-top: 1em; }
 <input type="hidden" name="frameworkcode" value="[% framework | html %]" />
 
 <fieldset class="action"><input type="submit" name="merge" value="Merge" /></fieldset>
-</div>
 </form>
 
 [% END %]
 
-</div>
+        </main>
+    </div> <!-- /.col-md-8 col-md-offset-2 -->
+</div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'merge-record-strings.inc' %]
     [% INCLUDE 'authorities_js.inc' %]
     [% Asset.js("js/merge-record.js") | $raw %]
-    [% INCLUDE 'merge-record-strings.inc' %]
-    <script type="text/javascript">
-    //<![CDATA[
+    <script>
 
         // When submiting the form
         function mergeformsubmit() {
@@ -140,7 +141,6 @@ div#result { margin-top: 1em; }
         $("#Frameworks").val(fw);
     }
 
-    //]]>
     </script>
 [% END %]
 

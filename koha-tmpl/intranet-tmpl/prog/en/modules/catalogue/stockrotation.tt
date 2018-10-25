@@ -14,11 +14,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Stock rotation details for <i>[% biblio.title | html %][% FOREACH subtitle IN biblio.subtitles %][% subtitle.subfield | html %][% END %]</i></div>
 
-<div id="doc3" class="yui-t2">
-
-   <div id="bd">
-    <div id="yui-main">
-    <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 <div id="catalogue_detail_biblio">
 
@@ -157,12 +156,16 @@
 
 </div>
 
-</div>
-</div>
-<div class="yui-b">
-[% INCLUDE 'biblio-view-menu.inc' %]
-</div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'biblio-view-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'browser-strings.inc' %]

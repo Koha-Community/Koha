@@ -23,16 +23,17 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
         <div class="row">
             <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 [% ELSE %]
-    <div id="doc3" class="yui-t2">
-        <div id="bd">
-            <div id="yui-main">
-                <div class="yui-b">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-sm-10 col-sm-push-2">
 [% END %]
+                <main>
 
 [% UNLESS ( add_form ) %]
     [% IF error_message == 'title_missing' %]
         <div class="dialog alert">Error: Required news title missing!</div>
     [% END %]
+<h2>News</h2>
 <div id="toolbar" class="btn-toolbar">
     <a class="btn btn-default btn-sm" id="newentry" href="/cgi-bin/koha/tools/koha-news.pl?op=add_form&amp;lang=[% lang | html %]"><i class="fa fa-plus"></i> New entry</a>
 </div>
@@ -216,21 +217,25 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             <div class="dialog message">There are no news items.</div>
         [% END %]
     [% END %]
-</div>
-</div>
-[% UNLESS ( add_form ) %]
-    <div class="yui-b noprint">
-        [% INCLUDE 'tools-menu.inc' %]
-    </div>
-[% END %]
-</div>
+
+                </main>
+            [% UNLESS ( add_form ) %]
+                </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+                <div class="col-sm-2 col-sm-pull-10">
+                    <aside>
+                        [% INCLUDE 'tools-menu.inc' %]
+                    </aside>
+                </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+            [% END %]
+        </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% IF ( opac_news_count ) %]
         [% INCLUDE 'datatables.inc' %]
-        <script type="text/javascript">
+        <script>
             $(document).ready(function() {
                 $("#newst").dataTable($.extend(true, {}, dataTablesDefaults, {
                     "aoColumnDefs": [
@@ -268,7 +273,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
         </script>
     [% END %]
     [% Asset.js("lib/tiny_mce/tiny_mce.js") | $raw %]
-    <script type="text/javascript">
+    <script>
         tinyMCE.baseURL = "[% interface | html %]/lib/tiny_mce";
         tinyMCE.init({
             mode : "textareas",
