@@ -49,12 +49,15 @@
                                 [% END %]
                             [% END %]
                         [% ELSE %]
+                            [% SET ranker = 1 %]
                             [% FOREACH h IN holds %]
+                                [% NEXT IF h.found %]
                                 [% IF ( h.priority == hold.priority ) %]
-                                    <option value="[% h.priority | html %]" selected="selected">[% loop.index + 1 | html %]</option>
+                                    <option value="[% h.priority | html %]" selected="selected">[% ranker | html %]</option>
                                 [% ELSE %]
-                                    <option value="[% h.priority | html %]">[% loop.index + 1 | html %]</option>
+                                    <option value="[% h.priority | html %]">[% ranker | html %]</option>
                                 [% END %]
+                                [% ranker = ranker + 1 %]
                             [% END %]
                         [% END %]
                     [% ELSIF !hold.found %]
