@@ -24,7 +24,7 @@ use C4::Languages;
 use C4::Context;
 
 use Encode;
-use Locale::Messages qw(:locale_h nl_putenv setlocale LC_MESSAGES);
+use Locale::Messages qw(:locale_h setlocale LC_MESSAGES);
 use Koha::Cache::Memory::Lite;
 
 use parent 'Exporter';
@@ -54,7 +54,7 @@ sub init {
         if (@system_locales) {
             # LANG needs to be set to a valid locale,
             # otherwise LANGUAGE is ignored
-            nl_putenv('LANG=' . $system_locales[0]);
+            $ENV{LANG} = $system_locales[0];
             setlocale(LC_MESSAGES, '');
 
             my $langtag = C4::Languages::getlanguage;
@@ -68,8 +68,8 @@ sub init {
                 $locale .= '_' . $region;
             }
 
-            nl_putenv("LANGUAGE=$locale");
-            nl_putenv('OUTPUT_CHARSET=UTF-8');
+            $ENV{LANGUAGE} = $locale;
+            $ENV{OUTPUT_CHARSET} = 'UTF-8';
 
             my $directory = _base_directory();
             textdomain($textdomain);
