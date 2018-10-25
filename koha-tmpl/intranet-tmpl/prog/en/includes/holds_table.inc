@@ -26,10 +26,10 @@
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
                 <input type="hidden" name="borrowernumber" value="[% hold.borrowernumber | html %]" />
                 <input type="hidden" name="biblionumber" value="[% hold.biblionumber | html %]" />
-                [% IF Koha.Preference('HoldsSplitQueue') == "nothing" %]
+                [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
                     <select name="rank-request">
                 [% ELSE %]
-                    <select name="rank-request" disabled>
+                    <select name="rank-request" disabled="disabled">
                 [% END %]
                     [% IF ( hold.found ) %]
                         [% IF ( hold.intransit ) %]
@@ -191,7 +191,7 @@
                         [% END %]
 
                     [% ELSE %]
-                        <input type="hidden" name="suspend_until" value="" />
+                        <input type="button" value="Revert found status" onclick="window.location.href='request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=0&amp;next_priority=1&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;itemnumber=[% hold.itemnumber %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]'">
                     [% END %]
                 </td>
             [% END # IF SuspendHoldsIntranet %]
