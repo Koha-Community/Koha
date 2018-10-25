@@ -2851,7 +2851,7 @@ sub AddRenewal {
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
     if ( $charge > 0 ) {
-        my $accountno = getnextacctno( $borrowernumber );
+        my $accountno = C4::Accounts->getnextacctno( $borrowernumber );
         my $manager_id = 0;
         $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv; 
         $sth = $dbh->prepare(
