@@ -1988,7 +1988,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
     t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee', 1 );
     t::lib::Mocks::mock_preference( 'WhenLostForgiveFine',          0 );
 
-    my $processfee_amount  = 20.00;
+    my $processfee_amount  = 20;
     my $replacement_amount = 99.00;
     my $item_type          = $builder->build_object(
         {   class => 'Koha::ItemTypes',
@@ -2033,17 +2033,17 @@ subtest '_FixAccountForLostAndReturned' => sub {
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
-        is( $processing_fee_line->amount + 0.00,
+        is( $processing_fee_line->amount + 0,
             $processfee_amount, 'The right PF amount is generated' );
-        is( $processing_fee_line->amountoutstanding + 0.00,
+        is( $processing_fee_line->amountoutstanding + 0,
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'L' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
-        is( $lost_fee_line->amount + 0.00, $replacement_amount, 'The right L amount is generated' );
-        is( $lost_fee_line->amountoutstanding + 0.00,
+        is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
+        is( $lost_fee_line->amountoutstanding + 0,
             $replacement_amount, 'The right L amountountstanding is generated' );
 
         my $account = $patron->account;
@@ -2061,7 +2061,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         is( $credit_return_id, undef, 'No CR account line added' );
 
         $lost_fee_line->discard_changes; # reload from DB
-        is( $lost_fee_line->amountoutstanding + 0.00, 0.00, 'Lost fee has no outstanding amount' );
+        is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
         is( $lost_fee_line->accounttype,
             'LR', 'Lost fee now has account type of LR ( Lost Returned )' );
 
@@ -2095,17 +2095,17 @@ subtest '_FixAccountForLostAndReturned' => sub {
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
-        is( $processing_fee_line->amount + 0.00,
+        is( $processing_fee_line->amount + 0,
             $processfee_amount, 'The right PF amount is generated' );
-        is( $processing_fee_line->amountoutstanding + 0.00,
+        is( $processing_fee_line->amountoutstanding + 0,
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'L' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
-        is( $lost_fee_line->amount + 0.00, $replacement_amount, 'The right L amount is generated' );
-        is( $lost_fee_line->amountoutstanding + 0.00,
+        is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
+        is( $lost_fee_line->amountoutstanding + 0,
             $replacement_amount, 'The right L amountountstanding is generated' );
 
         my $account = $patron->account;
@@ -2123,13 +2123,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
         is( $credit_return->accounttype, 'CR', 'An account line of type CR is added' );
-        is( $credit_return->amount + 0.00,
+        is( $credit_return->amount + 0,
             -99.00, 'The account line of type CR has an amount of -99' );
-        is( $credit_return->amountoutstanding + 0.00,
+        is( $credit_return->amountoutstanding + 0,
             -99.00, 'The account line of type CR has an amountoutstanding of -99' );
 
         $lost_fee_line->discard_changes;
-        is( $lost_fee_line->amountoutstanding + 0.00, 0.00, 'Lost fee has no outstanding amount' );
+        is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
         is( $lost_fee_line->accounttype,
             'LR', 'Lost fee now has account type of LR ( Lost Returned )' );
 
@@ -2164,24 +2164,24 @@ subtest '_FixAccountForLostAndReturned' => sub {
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
-        is( $processing_fee_line->amount + 0.00,
+        is( $processing_fee_line->amount + 0,
             $processfee_amount, 'The right PF amount is generated' );
-        is( $processing_fee_line->amountoutstanding + 0.00,
+        is( $processing_fee_line->amountoutstanding + 0,
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'L' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
-        is( $lost_fee_line->amount + 0.00, $replacement_amount, 'The right L amount is generated' );
-        is( $lost_fee_line->amountoutstanding + 0.00,
+        is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
+        is( $lost_fee_line->amountoutstanding + 0,
             $replacement_amount, 'The right L amountountstanding is generated' );
 
         my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item_id, $patron->id );
         is( $credit_return_id, undef, 'No CR account line added' );
 
         $lost_fee_line->discard_changes;
-        is( $lost_fee_line->amountoutstanding + 0.00, 0.00, 'Lost fee has no outstanding amount' );
+        is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
         is( $lost_fee_line->accounttype, 'LR', 'Lost fee now has account type of LR ( Lost Returned )' );
 
         is( $patron->account->balance, 20, 'The patron balance is 20, still owes the processing fee' );
@@ -2214,17 +2214,17 @@ subtest '_FixAccountForLostAndReturned' => sub {
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'PF' } );
         is( $processing_fee_lines->count, 1, 'Only one processing fee produced' );
         my $processing_fee_line = $processing_fee_lines->next;
-        is( $processing_fee_line->amount + 0.00,
+        is( $processing_fee_line->amount + 0,
             $processfee_amount, 'The right PF amount is generated' );
-        is( $processing_fee_line->amountoutstanding + 0.00,
+        is( $processing_fee_line->amountoutstanding + 0,
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
             { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'L' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
-        is( $lost_fee_line->amount + 0.00, $replacement_amount, 'The right L amount is generated' );
-        is( $lost_fee_line->amountoutstanding + 0.00,
+        is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
+        is( $lost_fee_line->amountoutstanding + 0,
             $replacement_amount, 'The right L amountountstanding is generated' );
 
         my $account = $patron->account;
@@ -2260,17 +2260,17 @@ subtest '_FixAccountForLostAndReturned' => sub {
         is( $account->balance, $processfee_amount - $payment_amount, 'Balance is PF - payment (CR)' );
 
         is( $credit_return->accounttype, 'CR', 'An account line of type CR is added' );
-        is( $credit_return->amount + 0.00,
+        is( $credit_return->amount + 0,
             $payment_amount * -1,
             'The account line of type CR has an amount equal to the payment'
         );
-        is( $credit_return->amountoutstanding + 0.00,
+        is( $credit_return->amountoutstanding + 0,
             $payment_amount * -1,
             'The account line of type CR has an amountoutstanding equal to the payment'
         );
 
         $lost_fee_line->discard_changes;
-        is( $lost_fee_line->amountoutstanding + 0.00, 0.00, 'Lost fee has no outstanding amount' );
+        is( $lost_fee_line->amountoutstanding + 0, 0, 'Lost fee has no outstanding amount' );
         is( $lost_fee_line->accounttype,
             'LR', 'Lost fee now has account type of LR ( Lost Returned )' );
 
@@ -2336,7 +2336,7 @@ subtest '_FixOverduesOnReturn' => sub {
 
     $accountline->_result()->discard_changes();
 
-    is( $accountline->amountoutstanding, '0.000000', 'Fine has been reduced to 0' );
+    is( $accountline->amountoutstanding + 0, 0, 'Fine has been reduced to 0' );
     is( $accountline->accounttype, 'FFOR', 'Open fine ( account type FU ) has been set to fine forgiven ( account type FFOR )');
 
     ## Run again, with dropbox mode enabled
@@ -2351,7 +2351,7 @@ subtest '_FixOverduesOnReturn' => sub {
 
     $accountline->_result()->discard_changes();
 
-    is( $accountline->amountoutstanding, '90.000000', 'Fine has been reduced to 90' );
+    is( $accountline->amountoutstanding + 0, 90, 'Fine has been reduced to 90' );
     is( $accountline->accounttype, 'F', 'Open fine ( account type FU ) has been closed out ( account type F )');
 };
 
