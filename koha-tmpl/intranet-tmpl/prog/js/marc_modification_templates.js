@@ -61,7 +61,7 @@ $(document).ready(function() {
         $("#duplicate_current_template").val(1);
     });
 
-    $('#createTemplate').on('shown', function (e) {
+    $('#createTemplate').on('shown.bs.modal', function (e) {
         e.preventDefault();
         $("#template_name").focus();
     });

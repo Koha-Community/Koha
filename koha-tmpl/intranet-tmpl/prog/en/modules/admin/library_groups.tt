@@ -53,7 +53,7 @@
         $('#add-group-modal-description').val("");
         $('#add-group-modal-title').val("");
 
-        $('#add-group-modal').on('shown', function() {
+        $('#add-group-modal').on('shown.bs.modal', function() {
             $('#add-group-modal-title').focus();
         });
 
@@ -85,7 +85,7 @@
             $('#root-group-features-edit').show();
         }
 
-        $('#edit-group-modal').on('shown', function() {
+        $('#edit-group-modal').on('shown.bs.modal', function() {
             $('#edit-group-modal-title').focus();
         });
 
