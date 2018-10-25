@@ -109,7 +109,7 @@
                             <option value="B">OPAC - [% patron.firstname | html %] [% patron.surname | html %]</option>
                         </select>
                     </div>
-                    [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) | html %]
+                    [% bor_notes = AuthorisedValues.Get( 'BOR_NOTES' ) %]
                     [% IF bor_notes %]
                         <div class="form-group">
                             <label for="select_patron_messages">Predefined notes: </label>
