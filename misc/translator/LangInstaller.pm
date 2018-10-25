@@ -511,7 +511,7 @@ sub update_messages {
 
     if ( -f $po ) {
         say "Update messages ($self->{lang})" if $self->{verbose};
-        system "$self->{msgmerge} -U $po $pot";
+        system "$self->{msgmerge} --quiet -U $po $pot";
     } else {
         $self->create_messages();
     }
