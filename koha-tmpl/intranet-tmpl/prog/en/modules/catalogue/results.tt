@@ -89,7 +89,7 @@
                                         <a href="#" class="addtolist" data-shelfnumber="[% s.shelfnumber | html %]">[% s.shelfname | html %]</a>
                                     </li>
                                     [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                    [% IF number_of_private_shelves == 10 %][% LAST | html %][% END %]
+                                    [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
                                 [% END %]
                             [% END %]
                         [% END %]
@@ -102,7 +102,7 @@
                                         <a href="#" data-shelfnumber="[% s.shelfnumber | html %]" class="addtolist">[% s.shelfname | html %]</a>
                                     </li>
                                     [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                    [% IF number_of_public_shelves == 10 %][% LAST | html %][% END %]
+                                    [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
                                 [% END %]
                             [% END %]
                         [% END %]

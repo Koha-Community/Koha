@@ -221,7 +221,7 @@
                             [% value_manualinv = manualinv.authorised_value|truncate(5, '') | html %]
                             [% IF loopresul.accounttype == value_manualinv %]
                             <span>[% manualinv.authorised_value | html %]</span>
-                            [% LAST | html %]
+                            [% LAST %]
                             [% END %]
                         [% END %]
                     [% END %]

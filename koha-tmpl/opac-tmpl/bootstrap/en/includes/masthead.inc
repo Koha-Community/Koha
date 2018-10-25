@@ -40,7 +40,7 @@
                                     [% FOREACH s IN some_public_shelves %]
                                         <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]&amp;sortfield=[% s.sortfield | html %]" tabindex="-1" role="menuitem">[% s.shelfname | html %]</a></li>
                                         [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                                        [% IF number_of_public_shelves >= 10 %][% LAST | html %][% END %]
+                                        [% IF number_of_public_shelves >= 10 %][% LAST %][% END %]
                                     [% END %]
                                     [% IF some_public_shelves > 10 %]
                                         <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=2" tabindex="-1" role="menuitem" class="listmenulink">View All</a></li>
@@ -57,7 +57,7 @@
                                             [% FOREACH s IN some_private_shelves %]
                                                 <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | html %]&amp;sortfield=[% s.sortfield | html %]" tabindex="-1" role="menuitem">[% s.shelfname | html %]</a></li>
                                                 [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                                                [% IF number_of_private_shelves >= 10 %][% LAST | html %][% END %]
+                                                [% IF number_of_private_shelves >= 10 %][% LAST %][% END %]
                                             [% END %]
                                             [% IF some_private_shelves > 10 %]
                                                 <li role="presentation"><a href="/cgi-bin/koha/opac-shelves.pl?op=list&amp;category=1" tabindex="-1" role="menuitem" class="listmenulink">View All</a></li>

@@ -24,6 +24,7 @@ our @tt_directives = (
     qr{^\s*FILTER},
     qr{^\s*STOP},
     qr{^\s*NEXT},
+    qr{^\s*LAST},
 );
 
 sub missing_filters {

@@ -765,7 +765,7 @@ $(document).ready(function(){
                 [% IF shelfnumber != s.shelfnumber %]
                     param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
                     [% SET number_of_private_shelves = number_of_private_shelves + 1 %]
-                    [% IF number_of_private_shelves == 10 %][% LAST | html %][% END %]
+                    [% IF number_of_private_shelves == 10 %][% LAST %][% END %]
                 [% END %]
             [% END %]
             param1 += "<\/optgroup>";
@@ -777,7 +777,7 @@ $(document).ready(function(){
                 [% IF shelfnumber != s.shelfnumber %]
                     param1 += "<option id=\"s[% s.shelfnumber | html %]\" value=\"addtolist\">[% s.shelfname | html %]<\/option>";
                     [% SET number_of_public_shelves = number_of_public_shelves + 1 %]
-                    [% IF number_of_public_shelves == 10 %][% LAST | html %][% END %]
+                    [% IF number_of_public_shelves == 10 %][% LAST %][% END %]
                 [% END %]
             [% END %]
             param1 += "<\/optgroup>";
