@@ -46,9 +46,9 @@ function Dopop(link) {
     $("#barcode").focus();
 }
 $(document).ready(function () {
-    $(".modal").modal({ backdrop: 'static' }).on('shown', function() {
+    $(".modal").modal({ backdrop: 'static' }).on('shown.bs.modal', function() {
         $("#barcode").prop("disabled", true);
-    }).on('hidden', function() {
+    }).on('hidden.bs.modal', function() {
         $("#barcode").prop("disabled", false).focus();
     });
 
