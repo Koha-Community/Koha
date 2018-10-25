@@ -443,7 +443,7 @@ subtest 'Koha::Patrons->delete' => sub {
     $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
     $id1 = $patron1->borrowernumber;
     $set = Koha::Patrons->search({ borrowernumber => { '>=' => $id1 }});
-    throws_ok { $set->delete } 'Koha::Exceptions::Patron::Delete',
+    throws_ok { $set->delete } 'Koha::Exceptions::Patron::FailedDelete',
         'Exception raised for deleting patron';
 };
 

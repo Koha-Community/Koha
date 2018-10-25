@@ -229,7 +229,7 @@ sub delete {
         my ( $set, $params ) = @_;
         while( my $patron = $set->next ) {
             $patron->move_to_deleted if $params->{move};
-            $patron->delete == 1 || Koha::Exceptions::Patron::Delete->throw;
+            $patron->delete == 1 || Koha::Exceptions::Patron::FailedDelete->throw;
             $patrons_deleted++;
         }
     }, $self, $params );
