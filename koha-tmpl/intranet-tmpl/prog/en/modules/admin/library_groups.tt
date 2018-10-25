@@ -269,6 +269,12 @@
                 var parent_title = $(this).data('groupParentTitle');
                 remove_library( id, library, parent_title );
             });
+            $('#add-group-modal').on('shown.bs.modal', function() {
+                $('#add-group-modal-title').focus();
+            });
+            $('#edit-group-modal').on('shown.bs.modal', function() {
+                $('#edit-group-modal-title').focus();
+            });
         });
 
         function add_group( parent_id ) {
@@ -277,9 +283,6 @@
             $('#add-group-modal-description').val("");
             $('#add-group-modal-title').val("");
 
-            $('#add-group-modal').on('shown', function() {
-                $('#add-group-modal-title').focus();
-            });
 
             $('#add-group-modal-ft_hide_patron_info').prop('checked', false);
             $('#add-group-modal-ft_search_groups_opac').prop('checked', false);
@@ -290,6 +293,7 @@
                 $('#root-group-features-add').show();
             }
             $('#add-group-modal').modal('show');
+
         }
 
         function edit_group( id, parent_id, title, description, ft_hide_patron_info, ft_search_groups_opac, ft_search_groups_staff ) {
@@ -308,10 +312,6 @@
                 $('#edit-group-modal-ft_search_groups_staff').prop('checked', ft_search_groups_staff ? true : false );
                 $('#root-group-features-edit').show();
             }
-
-            $('#edit-group-modal').on('shown', function() {
-                $('#edit-group-modal-title').focus();
-            });
 
             $('#edit-group-modal').modal('show');
         }
