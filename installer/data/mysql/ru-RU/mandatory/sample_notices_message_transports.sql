@@ -1,5 +1,3 @@
-truncate message_transports;
-
 insert into `message_transports`
 (`message_attribute_id`, `message_transport_type`, `is_digest`, `letter_module`, `letter_code`)
 values
