@@ -7,6 +7,7 @@
                     <th scope="col">Due date (unformatted, hidden)</th>
                     <th scope="col">Due date</th>
                     <th scope="col">Title</th>
+                    <th scope="col">Record-level item type</th>
                     <th scope="col">Item type</th>
                     <th scope="col">Collection code</th>
                     <th scope="col">Location</th>

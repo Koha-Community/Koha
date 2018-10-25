@@ -794,7 +794,8 @@
                                         <th class="ci-shelvinglocation">Shelving location</th>
                                         <th class="ci-callnumber">Call number</th>
                                         <th class="ci-dateaccessioned">Date acquired</th>
-                                        <th class="ci-type">Type</th>
+                                        <th class="ci-recordlevelitemtype">Record-level itemtype</th>
+                                        <th class="ci-itemtype">Item type</th>
                                         <th class="ci-patron">Patron</th>
                                         <th class="ci-note">Note</th>
                                     </tr>
@@ -844,7 +845,10 @@
                                         <td class="ci-dateaccessioned">
                                             [% riloo.dateaccessioned | $KohaDates %]
                                         </td>
-                                        <td class="ci-type">
+                                        <td class="ci-recordlevelitemtype">
+                                            [% ItemTypes.GetDescription( riloo.recordtype ) | html %]
+                                        </td>
+                                        <td class="ci-itemtype">
                                             [% ItemTypes.GetDescription( riloo.itemtype ) | html %] [% AuthorisedValues.GetByCode('CCODE', riloo.ccode) | html %]
                                         </td>
                                         <td class="ci-patron">

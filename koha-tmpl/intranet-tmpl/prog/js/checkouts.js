@@ -348,6 +348,11 @@ $(document).ready(function() {
                 },
                 {
                     "mDataProp": function ( oObj ) {
+                        return oObj.recordtype_description.escapeHtml();
+                    }
+                },
+                {
+                    "mDataProp": function ( oObj ) {
                         return oObj.itemtype_description.escapeHtml();
                     }
                 },
@@ -607,7 +612,7 @@ $(document).ready(function() {
 
                 // Build a summary of checkouts grouped by itemtype
                 var checkoutsByItype = json.aaData.reduce(function (obj, row) {
-                    obj[row.itemtype_description] = (obj[row.itemtype_description] || 0) + 1;
+                    obj[row.type_for_stat] = (obj[row.type_for_stat] || 0) + 1;
                     return obj;
                 }, {});
                 var ul = $('<ul>');
@@ -723,6 +728,11 @@ $(document).ready(function() {
                             return title;
                         },
                         "sType": "anti-the"
+                    },
+                    {
+                        "mDataProp": function ( oObj ) {
+                            return oObj.recordtype_description.escapeHtml();
+                        }
                     },
                     {
                         "mDataProp": function ( oObj ) {
