@@ -1,13 +1,6 @@
--- truncate message_transports;
---  message_attribute_id
---  message_transport_type
---  is_digest     (default '0')
---  letter_module (default '')
---  letter_code   (default '')
---  branchcode    (default '')
-SET FOREIGN_KEY_CHECKS=0;
-insert into message_transports
- (message_attribute_id, message_transport_type, is_digest, letter_module, letter_code, branchcode) values
+insert into `message_transports`
+(`message_attribute_id`, `message_transport_type`, `is_digest`, `letter_module`, `letter_code`)
+values
 (1, 'email', 0, 'circulation', 'DUE'),
 (1, 'email', 1, 'circulation', 'DUEDGST'),
 (1, 'sms',   0, 'circulation', 'DUE'),
@@ -25,5 +18,3 @@ insert into message_transports
 (5, 'sms',   0, 'circulation', 'CHECKIN'),
 (6, 'email', 0, 'circulation', 'CHECKOUT'),
 (6, 'sms',   0, 'circulation', 'CHECKOUT');
-SET FOREIGN_KEY_CHECKS=1;
-
