@@ -1,11 +1,11 @@
-[% t('hello') %]
-[% tx('hello {name}', { name = 'Bob' }) %]
-[% tn('item', 'items', count) %]
-[% tnx('{count} item', '{count} items', count, { count = count }) %]
-[% tp('context', 'hello') %]
-[% tpx('context', 'hello {name}', { name = 'Bob' }) %]
-[% tnp('context', 'item', 'items', count) %]
-[% tnpx('context', '{count} item', '{count} items', count, { count = count }) %]
+[% t('hello') | $raw %]
+[% tx('hello {name}', { name = 'Bob' }) | $raw %]
+[% tn('item', 'items', count) | $raw %]
+[% tnx('{count} item', '{count} items', count, { count = count }) | $raw %]
+[% tp('context', 'hello') | $raw %]
+[% tpx('context', 'hello {name}', { name = 'Bob' }) | $raw %]
+[% tnp('context', 'item', 'items', count) | $raw %]
+[% tnpx('context', '{count} item', '{count} items', count, { count = count }) | $raw %]
 
 [% # it also works on multiple lines
     tnpx (
@@ -16,13 +16,13 @@
         {
             count = count,
         }
-    )
+    ) | $raw
 %]
 
 [% # and t* calls can be nested
     tx('status is {status}', {
         status = active ? t('active') : t('inactive')
-    })
+    }) | $raw
 %]
 
 [%# but a TT comment won't get picked
@@ -30,5 +30,5 @@
 %]
 
 [% BLOCK %]
-    [% t('Inside block') %]
+    [% t('Inside block') | $raw %]
 [% END %]
