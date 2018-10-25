@@ -86,13 +86,18 @@ my $action = $input->param('action');
 $action ||= q{};
 
 if ( $action eq 'move' ) {
-  my $where          = $input->param('where');
-  my $reserve_id     = $input->param('reserve_id');
-  my $prev_priority  = $input->param('prev_priority');
-  my $next_priority  = $input->param('next_priority');
-  my $first_priority = $input->param('first_priority');
-  my $last_priority  = $input->param('last_priority');
-  AlterPriority( $where, $reserve_id, $prev_priority, $next_priority, $first_priority, $last_priority );
+  my $where           = $input->param('where');
+  my $reserve_id      = $input->param('reserve_id');
+  my $prev_priority   = $input->param('prev_priority');
+  my $next_priority   = $input->param('next_priority');
+  my $first_priority  = $input->param('first_priority');
+  my $last_priority   = $input->param('last_priority');
+  my $hold_itemnumber = $input->param('itemnumber');
+  if ( $prev_priority == 0 && $next_priority == 1 ){
+      C4::Reserves::RevertWaitingStatus({ itemnumber => $hold_itemnumber });
+  } else {
+      AlterPriority( $where, $reserve_id, $prev_priority, $next_priority, $first_priority, $last_priority );
+  }
 } elsif ( $action eq 'cancel' ) {
   my $reserve_id = $input->param('reserve_id');
   my $hold = Koha::Holds->find( $reserve_id );
