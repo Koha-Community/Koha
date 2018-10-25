@@ -59,7 +59,7 @@
                             [% IF invalid_username_or_password || too_many_login_attempts %]
                                 <!-- This is what is displayed if user doesnt have permission or account is locked. (Do not expose more information than needed.) -->
                                 <div class="alert alert-info">
-                                    <p>You entered an incorrect username or password. Please try again! And remember, passwords are case sensitive. Please contact a library staff member if you continue to have problems.</p>
+                                    <p>You entered an incorrect username or password. Please try again! But note that passwords are case sensitive[% IF Koha.Preference('FailedLoginAttempts') %] and that your account will be locked out after a fixed number of failed login attempts[% END %]. Please contact a library staff member if you continue to have problems.</p>
                                 </div>
                             [% END %]
 
@@ -167,6 +167,7 @@
                             </fieldset>
 
                             <input type="submit" value="Log in" class="btn" />
+                            <p/>
                             [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
                                 <div id="forgotpassword">
                                     <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
