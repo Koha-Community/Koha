@@ -486,7 +486,7 @@ sub _koha_add_holding {
             frameworkcode = ?,
             holdingbranch = ?,
             location = ?,
-            ccode = ?
+            ccode = ?,
             callnumber = ?,
             suppress = ?,
             datecreated = NOW()
