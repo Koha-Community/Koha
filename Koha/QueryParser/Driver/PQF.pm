@@ -836,7 +836,7 @@ sub TEST_SETUP {
     $self->add_bib1_field_map('keyword' => 'arl' => 'biblioserver' => { '1' => '9904 r=r' } );
 
 #Accelerated Reader Point
-    $self->add_bib1_field_map('keyword' => 'arp' => 'biblioserver' => { '1' => '9013 r=r' } );
+    $self->add_bib1_field_map('keyword' => 'arp' => 'biblioserver' => { '1' => '9014 r=r' } );
 
 # Curriculum
     $self->add_bib1_field_map('keyword' => 'curriculum' => 'biblioserver' => { '1' => '9658' } );
