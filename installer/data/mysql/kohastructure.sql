@@ -2673,7 +2673,6 @@ CREATE TABLE `accountlines` (
   `accountlines_id` int(11) NOT NULL AUTO_INCREMENT,
   `issue_id` int(11) NULL DEFAULT NULL,
   `borrowernumber` int(11) DEFAULT NULL,
-  `accountno` smallint(6) NOT NULL default 0,
   `itemnumber` int(11) default NULL,
   `date` date default NULL,
   `amount` decimal(28,6) default NULL,
