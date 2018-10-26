@@ -586,15 +586,9 @@
                         [% bookseller = order.transferred_to.bookseller %]
                         [% timestamp = order.transferred_to.timestamp %]
                         <p>Transferred to basket:
-<<<<<<< HEAD
-                          <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"> [% basket.basketname | html %]</a>
-                          (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | html %]">[% bookseller.name | html %]</a>)
-                          on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
-=======
                           <a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | uri %]"> [% basket.basketname | html %]</a>
                           (<a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% bookseller.id | uri %]">[% bookseller.name | html %]</a>)
-                          on <span title="[% timestamp | $KohaDates with_hours = 1 | html %]">
->>>>>>> Bug 21526: uri escape TT variables when used in 'a href'
+                          on <span title="[% timestamp | $KohaDates with_hours = 1 %]">
                             [% timestamp | $KohaDates %]
                           </span>
                         </p>

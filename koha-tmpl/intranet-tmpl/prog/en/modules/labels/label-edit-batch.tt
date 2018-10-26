@@ -17,9 +17,9 @@
         <a href="/cgi-bin/koha/labels/label-home.pl">Label creator</a> &rsaquo;
         <a href="/cgi-bin/koha/labels/label-manage.pl?label_element=batch">Batches</a> &rsaquo;
         [% IF description %]
-            Edit <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% batch_id | html %]">[% description | html %]</a>
+            Edit <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% batch_id | uri %]">[% description | html %]</a>
         [% ELSIF batch_id %]
-            Edit <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% batch_id | html %]">([% batch_id | html %])</a>
+            Edit <a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=edit&element_id=[% batch_id | uri %]">([% batch_id | html %])</a>
         [% ELSE %]
             New
         [% END %]
