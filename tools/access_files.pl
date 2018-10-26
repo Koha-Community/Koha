@@ -82,7 +82,7 @@ else {
                             );
             push(@files_list, {name => $decoded_filename,
                                access_dir => $dir,
-                               date =>Koha::DateUtils::output_pref($dt),
+                               date =>$dt,
                                size => $st->size,
                                id   => $id});
         }
