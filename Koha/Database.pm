@@ -105,6 +105,7 @@ sub _new_schema {
             PrintError => 1,
             unsafe => !$RaiseError,
             quote_names => 1,
+            auto_savepoint => 1,
             on_connect_do => [
                 $encoding_query || (),
                 $tz_query || (),
