@@ -299,7 +299,7 @@
                     <xsl:value-of select="$BiblioDefaultView"/>
                 </xsl:with-param>
             </xsl:call-template>
-            <xsl:value-of select="$biblionumber"/>
+            <xsl:value-of select="str:encode-uri($biblionumber, true())"/>
         </xsl:attribute>
         <xsl:attribute name="class">title</xsl:attribute>
 
@@ -436,7 +436,7 @@
                     <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>
                 </xsl:when>
                 <xsl:when test="marc:subfield[@code='0']">
-                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:subfield[@code='0']"/></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:subfield[@code='0'], true())"/></xsl:attribute>
                         <xsl:value-of select="$f773"/>
                     </a>
                 </xsl:when>

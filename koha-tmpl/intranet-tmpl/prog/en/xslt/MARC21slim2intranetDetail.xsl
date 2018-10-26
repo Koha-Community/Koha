@@ -261,7 +261,7 @@
             <a>
             <xsl:choose>
             <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="marc:controlfield[@tag=001]"/>+and+(bib-level:a+or+bib-level:b)</xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+and+(bib-level:a+or+bib-level:b)</xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Host-item:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
@@ -278,7 +278,7 @@
             <a>
             <xsl:choose>
             <xsl:when test="$UseControlNumber = '1' and marc:controlfield[@tag=001]">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="marc:controlfield[@tag=001]"/>+not+(bib-level:a+or+bib-level:b)</xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=rcn:<xsl:value-of select="str:encode-uri(marc:controlfield[@tag=001], true())"/>+not+(bib-level:a+or+bib-level:b)</xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/', ''), true())"/></xsl:attribute>
@@ -653,7 +653,7 @@
             <xsl:choose>
             <!-- #1807 Strip unwanted parenthesis from subjects for searching -->
             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
             </xsl:when>
             <xsl:when test="$TraceSubjectSubdivisions='1'">
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:call-template name="subfieldSelectSubject">
@@ -686,7 +686,7 @@
             <xsl:if test="marc:subfield[@code=9]">
                 <xsl:text> </xsl:text>
                 <a class='authlink'>
-                    <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                    <xsl:attribute name="href">/cgi-bin/koha/authorities/detail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                     <xsl:element name="img">
                         <xsl:attribute name="src">/intranet-tmpl/prog/img/filefind.png</xsl:attribute>
                         <xsl:attribute name="alt"></xsl:attribute>
@@ -712,7 +712,7 @@
                     <a>
                         <xsl:choose>
                             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                             </xsl:when>
                             <xsl:when test="$TraceSubjectSubdivisions='1'">
                                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:call-template name="subfieldSelect">
@@ -967,7 +967,7 @@
                             </a>
                         </xsl:when>
                         <xsl:when test="marc:subfield[@code='0']">
-                            <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:subfield[@code='0']"/></xsl:attribute>
+                            <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:subfield[@code='0'], true())"/></xsl:attribute>
                             <xsl:value-of select="$f773"/>
                             </a>
                         </xsl:when>
@@ -1168,7 +1168,7 @@
 
         <xsl:if test="$OPACBaseURL!=''">
         <span class="results_summary"><span class="label">OPAC view: </span>
-            <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
+            <a><xsl:attribute name="href"><xsl:value-of select="$OPACBaseURL"/>/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:datafield[@tag=999]/marc:subfield[@code='c'], true())"/></xsl:attribute><xsl:attribute name="target">_blank</xsl:attribute>Open in new window</a>.
         </span>
         </xsl:if>
 

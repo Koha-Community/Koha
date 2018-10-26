@@ -33,6 +33,7 @@
     <xsl:param name="delimeter"><xsl:text> </xsl:text></xsl:param>
     <xsl:param name="subdivCodes"/>
     <xsl:param name="subdivDelimiter"/>
+    <xsl:param name="urlencode"/>
     <xsl:variable name="str">
       <xsl:for-each select="marc:subfield">
         <xsl:if test="contains($codes, @code)">
@@ -43,7 +44,14 @@
         </xsl:if>
       </xsl:for-each>
     </xsl:variable>
-    <xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
+    <xsl:choose>
+      <xsl:when test="$urlencode=1">
+        <xsl:value-of select="str:encode-uri(substring($str,1,string-length($str)-string-length($delimeter)), true())"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <xsl:template name="buildSpaces">
@@ -265,7 +273,7 @@
             <a>
               <xsl:attribute name="href">
                 <xsl:text>/cgi-bin/koha/opac-search.pl?q=an:</xsl:text>
-                <xsl:value-of select="."/>
+                <xsl:value-of select="str:encode-uri(., true())"/>
               </xsl:attribute>
               <xsl:choose>
                 <xsl:when test="string-length($display) &gt; 0">
@@ -350,7 +358,7 @@
                 <xsl:when test="marc:subfield[@code=9]">
                   <xsl:attribute name="href">
                     <xsl:text>/cgi-bin/koha/opac-search.pl?q=an:</xsl:text>
-                    <xsl:value-of select="marc:subfield[@code=9]"/>
+                    <xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/>
                   </xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
@@ -381,7 +389,7 @@
                 <a>
                   <xsl:attribute name="href">
                     <xsl:text>/cgi-bin/koha/opac-idref.pl?unimarc3=</xsl:text>
-                    <xsl:value-of select="marc:subfield[@code=3]"/>
+                    <xsl:value-of select="str:encode-uri(marc:subfield[@code=3], true())"/>
                   </xsl:attribute>
                   <xsl:attribute name="title">IdRef</xsl:attribute>
                   <xsl:attribute name="rel">gb_page_center[600,500]</xsl:attribute>
