@@ -1,4 +1,3 @@
-[% USE raw %]
 [% USE Asset %]
 [% USE Branches %]
 [% USE HtmlTags %]
@@ -6,7 +5,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Library OverDrive Info &rsaquo;</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css("css/datatables.css") | $raw %]
+[% Asset.css("css/datatables.css") %]
 </head>
 
 <body id="admin_overdrive" class="admin">
@@ -57,7 +56,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("js/admin-menu.js") | $raw %]
+    [% Asset.js("js/admin-menu.js") %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
     <script type="text/javascript">
