@@ -39,44 +39,42 @@ cronlogaction();
 
 =head1 NAME
 
-cancel_unfilled_holds.pl
+cancel_unfilled_holds.pl - script to delete unfilled holds after a given
+number of days.
 
 =head1 SYNOPSIS
 
-cancel_unfilled_holds.pl
-    [-days][-library][-holidays]
+ cancel_unfilled_holds.pl [--days][--library][--holidays][--confirm][--verbose]
 
- Options:
-    -help                       brief help
-    -days                       cancel holds placed this many days ago which have not been filled
-    -library                    [repeatable] limit to specified branch(es)
-    -holidays                   skip holidays when calculating days waiting
-    -v                          verbose
-
-head1 OPTIONS
+=head1 OPTIONS
 
 =over 8
 
-=item B<-help>
+=item B<--help | -h>
 
 Print brief help and exit.
 
-=item B<-man>
-
-Print full documentation and exit.
-
-=item B<-days>
+=item B<--days>
 
 Specify the number of days waiting since a hold that remains unfilled was placed.
 E.g. a value of 730 would cancel holds placed 2 years ago or more that have never been filled
 
-=item B<-library>
+=item B<--library>
 
 Repeatable option to specify which branchcode(s) to cancel holds for.
 
-=item B<-holidays>
+=item B<--holidays>
 
 This switch specifies whether to count holidays as days waiting. Default is no.
+
+=item B<--confirm>
+
+Without this option, the script will run in test mode, and only report what it
+would have done if it were not running in test mode.
+
+=item B<--verbose | -v>
+
+More verbose output.
 
 =back
 
