@@ -3317,7 +3317,8 @@ sub TransformHtmlToMarc {
         }
     }
 
-    $record->insert_fields_ordered(@fields);
+    @fields = sort { $a->tag() cmp $b->tag() } @fields;
+    $record->append_fields(@fields);
     return $record;
 }
 
