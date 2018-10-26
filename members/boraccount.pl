@@ -79,10 +79,6 @@ if($total <= 0){
         $totalcredit = 1;
 }
 
-my $actions_col = ( Koha::Account::Lines->search(
-    { borrowernumber => $patron->borrowernumber },
-    { where => { amount => { '<=', 0 } } } )->count > 0 ) ? 1 : 0;
-
 if (C4::Context->preference('ExtendedPatronAttributes')) {
     my $attributes = GetBorrowerAttributes($borrowernumber);
     $template->param(
@@ -96,7 +92,6 @@ $template->param(
     finesview           => 1,
     total               => sprintf("%.2f",$total),
     totalcredit         => $totalcredit,
-    actions_col         => $actions_col,
     accounts            => \@accountlines,
 );
 
