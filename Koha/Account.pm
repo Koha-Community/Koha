@@ -85,14 +85,9 @@ sub pay {
     my $patron = Koha::Patrons->find( $self->{patron_id} );
 
     # We should remove accountno, it is no longer needed
-    my $last = Koha::Account::Lines->search(
-        {
-            borrowernumber => $self->{patron_id}
-        },
-        {
-            order_by => 'accountno'
-        }
-    )->next();
+    my $last = $self->lines->search(
+        {},
+        { order_by => 'accountno' } )->next();
     my $accountno = $last ? $last->accountno + 1 : 1;
 
     my $manager_id = $userenv ? $userenv->{number} : 0;
@@ -156,9 +151,8 @@ sub pay {
     # than the what was owed on the given line. In that case pay down other
     # lines with remaining balance.
     my @outstanding_fines;
-    @outstanding_fines = Koha::Account::Lines->search(
+    @outstanding_fines = $self->lines->search(
         {
-            borrowernumber    => $self->{patron_id},
             amountoutstanding => { '>' => 0 },
         }
     ) if $balance_remaining > 0;
@@ -350,7 +344,8 @@ sub add_credit {
     $schema->txn_do(
         sub {
             # We should remove accountno, it is no longer needed
-            my $last = Koha::Account::Lines->search( { borrowernumber => $self->{patron_id} },
+            my $last = $self->lines->search(
+                {},
                 { order_by => 'accountno' } )->next();
             my $accountno = $last ? $last->accountno + 1 : 1;
 
@@ -421,11 +416,7 @@ Return the balance (sum of amountoutstanding columns)
 
 sub balance {
     my ($self) = @_;
-    return Koha::Account::Lines->search(
-        {
-            borrowernumber => $self->{patron_id},
-        }
-    )->total_outstanding;
+    return $self->lines->total_outstanding;
 }
 
 =head3 outstanding_debits
@@ -437,9 +428,8 @@ my $lines = Koha::Account->new({ patron_id => $patron_id })->outstanding_debits;
 sub outstanding_debits {
     my ($self) = @_;
 
-    my $lines = Koha::Account::Lines->search(
+    my $lines = $self->lines->search(
         {
-            borrowernumber    => $self->{patron_id},
             amountoutstanding => { '>' => 0 }
         }
     );
@@ -456,9 +446,8 @@ my $lines = Koha::Account->new({ patron_id => $patron_id })->outstanding_credits
 sub outstanding_credits {
     my ($self) = @_;
 
-    my $lines = Koha::Account::Lines->search(
+    my $lines = $self->lines->search(
         {
-            borrowernumber    => $self->{patron_id},
             amountoutstanding => { '<' => 0 }
         }
     );
@@ -501,9 +490,8 @@ sub non_issues_charges {
     }
     @not_fines = map { substr( $_, 0, $ACCOUNT_TYPE_LENGTH ) } uniq(@not_fines);
 
-    return Koha::Account::Lines->search(
+    return $self->lines->search(
         {
-            borrowernumber => $self->{patron_id},
             accounttype    => { -not_in => \@not_fines }
         },
     )->total_outstanding;
