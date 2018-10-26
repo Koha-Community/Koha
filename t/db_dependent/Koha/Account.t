@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Koha::Account;
 use Koha::Account::Lines;
@@ -189,6 +189,39 @@ subtest 'add_credit() tests' => sub {
 
     is( $schema->resultset('ActionLog')->count(), $action_logs + 2, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'No action added to statistics, because of credit type' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'lines() tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $account = $patron->account;
+
+    my @generated_lines;
+
+    # Add Credits
+    push @generated_lines, $account->add_credit({ amount => 1 });
+    push @generated_lines, $account->add_credit({ amount => 2 });
+    push @generated_lines, $account->add_credit({ amount => 3 });
+    push @generated_lines, $account->add_credit({ amount => 4 });
+
+    # Add Debits
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 1 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 2 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 3 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 4 })->store;
+
+    # Paid Off
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 0 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 0 })->store;
+
+    my $lines = $account->lines;
+    is( $lines->_resultset->count, 10, "All accountlines (debits, credits and paid off) were fetched");
 
     $schema->storage->txn_rollback;
 };

@@ -524,6 +524,26 @@ sub non_issues_charges {
       : 0;
 }
 
+=head3 lines
+
+my $lines = $self->lines;
+
+Return all credits and debits for the user, outstanding or otherwise
+
+=cut
+
+sub lines {
+    my ($self) = @_;
+
+    my $lines = Koha::Account::Lines->search(
+        {
+            borrowernumber    => $self->{patron_id},
+        }
+    );
+
+    return $lines;
+}
+
 1;
 
 =head2 Name mappings
