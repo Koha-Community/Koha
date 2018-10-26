@@ -103,7 +103,7 @@ subtest 'AuthenticatePatron test' => sub {
 
 subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes' => sub {
 
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -191,7 +191,7 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
         }
     } );
 
-    $builder->build(
+    my $fine = $builder->build(
         {
             source => 'Accountline',
             value  => {
@@ -208,6 +208,7 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
     $query->param( 'service', 'GetPatronInfo' );
     $query->param( 'patron_id', $brwr->{'borrowernumber'} );
     $query->param( 'show_attributes', '1' );
+    $query->param( 'show_fines', '1' );
 
     my $reply = C4::ILSDI::Services::GetPatronInfo( $query );
 
@@ -224,6 +225,13 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
 
     is( $reply->{'charges'}, '10.00',
         'The \'charges\' attribute should be correctly filled (bug 17836)' );
+
+    is( scalar( @{$reply->{fines}->{fine}}), 1, 'There should be only 1 account line');
+    is(
+        $reply->{fines}->{fine}->[0]->{accountlines_id},
+        $fine->{accountlines_id},
+        "The accountline should be the correct one"
+    );
 
     # Check results:
     is_deeply( $reply->{'attributes'}, [ $cmp ], 'Test GetPatronInfo - show_attributes parameter' );
