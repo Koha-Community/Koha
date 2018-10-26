@@ -4269,9 +4269,9 @@ CREATE TABLE `circulation_rules` (
 --
 
 CREATE TABLE IF NOT EXISTS stockrotationrotas (
-    rota_id int(11) auto_increment,          -- Stockrotation rota ID
+    rota_id int(11) auto_increment,         -- Stockrotation rota ID
     title varchar(100) NOT NULL,            -- Title for this rota
-    description text NOT NULL default '',   -- Description for this rota
+    description text NOT NULL,              -- Description for this rota
     cyclical tinyint(1) NOT NULL default 0, -- Should items on this rota keep cycling?
     active tinyint(1) NOT NULL default 0,   -- Is this rota currently active?
     PRIMARY KEY (`rota_id`)
