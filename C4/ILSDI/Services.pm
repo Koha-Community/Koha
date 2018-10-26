@@ -425,11 +425,11 @@ sub GetPatronInfo {
 
     # Fines management
     if ( $cgi->param('show_fines') && $cgi->param('show_fines') eq "1" ) {
-        my @charges;
-        for ( my $i = 1 ; my @charge = getcharges( $borrowernumber, undef, $i ) ; $i++ ) {
-            push( @charges, @charge );
+
+        my $account_lines = $patron->account->lines;
+        while (my $line = $account_lines->next ) {
+            push @{ $borrower->{fines}{fine} }, $line->unblessed;
         }
-        $borrower->{'fines'}->{'fine'} = \@charges;
     }
 
     # Reserves management
