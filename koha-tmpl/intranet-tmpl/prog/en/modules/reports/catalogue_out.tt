@@ -39,7 +39,7 @@
                 <tr><th>Group</th><th>Call number range</th><th>Number of items displayed</th><th>Total items in group</th>
 				</tr>
 			[% FOREACH looptable IN mainloo.looptables %]
-				<tr><td><a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a></td>
+                <tr><td><a href="#table[% looptable.coltitle | uri %]">[% looptable.coltitle | html %]</a></td>
 					<td>[% IF ( looptable.looptable_count ) %]
 						[% looptable.looptable_first | html %] to [% looptable.looptable_last | html %]
 						[% END %]

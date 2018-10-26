@@ -76,7 +76,7 @@
 					[% loopro.rowtitle | html %]</td>
 					[% FOREACH loopcel IN loopro.loopcell %]
 						[% IF ( loopcel.hilighted ) %]<td>[% ELSE %]<td>[% END %]
-							[% IF ( loopcel.reference ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopcel.reference | uri %]">[% END %]
+                            [% IF ( loopcel.reference ) %]<a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopcel.reference | uri %]">[% END %]
 							[% IF ( loopcel.value ) %][% loopcel.value | html %][% END %]
 							[% IF ( loopcel.reference ) %]</a>[% END %]
 						</td>

@@ -188,7 +188,7 @@
 		<li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]
 			<br />[% END %] 
 		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
-		<a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+        <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
 			[% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note | html %]</li>[% END %]</ul>[% END %]</li>
             [% END %]</ul>
 </li>

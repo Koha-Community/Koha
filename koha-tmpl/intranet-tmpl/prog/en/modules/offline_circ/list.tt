@@ -53,7 +53,7 @@
                             </td>
 			                <td>
                                 [% IF ( operation.biblionumber ) %]
-			                        <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber | uri %]" title="[% operation.bibliotitle | html %]">[% operation.barcode | html %]</a>
+                                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% operation.biblionumber | uri %]" title="[% operation.bibliotitle | html %]">[% operation.barcode | html %]</a>
 			                    [% ELSE %]
 			                        <span class="error">[% operation.barcode | html %]</span>
 			                    [% END %]
@@ -61,7 +61,7 @@
 			                <td>
 			                [% IF ( operation.actionissue || operation.actionpayment) %]
 		                        [% IF ( operation.borrowernumber ) %]
-		                            <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber | uri %]" title="[% operation.borrower | html %]">[% operation.cardnumber | html %]</a>
+                                    <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% operation.borrowernumber | uri %]" title="[% operation.borrower | html %]">[% operation.cardnumber | html %]</a>
 		                        [% ELSE %]
 		                            <span class="error">[% operation.cardnumber | html %]</span>
 		                        [% END %]

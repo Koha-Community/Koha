@@ -52,7 +52,7 @@
         [% END %]
 	</td>
 	<td class="cell">
-	    <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
+        <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
 	</td>
 	<td class="cell">
         [% ItemTypes.GetDescription( order.itype ) | html %]
