@@ -725,7 +725,7 @@
             <a>
             <xsl:choose>
             <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
             </xsl:when>
             <!-- #1807 Strip unwanted parenthesis from subjects for searching -->
             <xsl:when test="$TraceSubjectSubdivisions='1'">
@@ -756,7 +756,7 @@
             </span>
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
-                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                     <xsl:element name="img">
                         <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
                         <xsl:attribute name="style">vertical-align:middle</xsl:attribute>
@@ -781,7 +781,7 @@
                         <a>
                             <xsl:choose>
                                 <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                                 </xsl:when>
                                 <xsl:when test="$TraceSubjectSubdivisions='1'">
                                     <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:call-template name="subfieldSelectSubject">
@@ -839,7 +839,7 @@
                         <xsl:text>/cgi-bin/koha/opac-search.pl?q=control-number:</xsl:text>
                         <xsl:call-template name="extractControlNumber">
                             <xsl:with-param name="subfieldW">
-                                <xsl:value-of select="str:encode-uri(marc:subfield[@code='w'], true())"/>
+                                <xsl:value-of select="marc:subfield[@code='w']"/>
                             </xsl:with-param>
                         </xsl:call-template>
                     </xsl:attribute>
@@ -1055,9 +1055,13 @@
         </xsl:choose>
         </span>
                 <xsl:variable name="f773">
-                    <xsl:call-template name="chopPunctuation"><xsl:with-param name="chopString"><xsl:call-template name="subfieldSelect">
-                        <xsl:with-param name="codes">a_t</xsl:with-param>
-                    </xsl:call-template></xsl:with-param></xsl:call-template>
+                    <xsl:call-template name="chopPunctuation">
+                        <xsl:with-param name="chopString">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">a_t</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:with-param>
+                    </xsl:call-template>
                 </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
@@ -1066,12 +1070,12 @@
                     </a>
                 </xsl:when>
                 <xsl:when test="marc:subfield[@code='0']">
-                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="marc:subfield[@code='0']"/></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-detail.pl?biblionumber=<xsl:value-of select="str:encode-uri(marc:subfield[@code='0'], true())"/></xsl:attribute>
                         <xsl:value-of select="$f773"/>
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="translate($f773, '()', '')"/></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f773, '()', ''), true())"/></xsl:attribute>
                         <xsl:value-of select="$f773"/>
                     </a>
                 </xsl:otherwise>
@@ -1162,7 +1166,7 @@
                 <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
             </xsl:when>
             <xsl:otherwise>
-                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="translate($f775, '()', '')"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f775, '()', ''), true())"/></xsl:attribute>
             </xsl:otherwise>
             </xsl:choose>
             <xsl:call-template name="subfieldSelect">
@@ -1221,7 +1225,7 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="translate($f780, '()', '')"/></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f780, '()', ''), true())"/></xsl:attribute>
                         <xsl:value-of select="translate($f780, '()', '')"/>
                     </a>
                 </xsl:otherwise>
@@ -1284,7 +1288,7 @@
                     </a>
                 </xsl:when>
                 <xsl:otherwise>
-                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="translate($f785, '()', '')"/></xsl:attribute>
+                    <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=ti,phr:<xsl:value-of select="str:encode-uri(translate($f785, '()', ''), true())"/></xsl:attribute>
                         <xsl:value-of select="translate($f785, '()', '')"/>
                     </a>
                 </xsl:otherwise>
@@ -1331,10 +1335,10 @@
             <a>
                 <xsl:choose>
                     <xsl:when test="marc:subfield[@code=9] and $UseAuthoritiesForTracings='1'">
-                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:"<xsl:value-of select="marc:subfield[@code=9]"/>"</xsl:attribute>
+                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=an:"<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/>"</xsl:attribute>
                     </xsl:when>
                     <xsl:otherwise>
-                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="marc:subfield[@code='a']"/>"</xsl:attribute>
+                        <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=au:"<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/>"</xsl:attribute>
                     </xsl:otherwise>
                 </xsl:choose>
                 <span resource="#record"><span>
@@ -1564,7 +1568,7 @@
             </a>
             <xsl:if test="marc:subfield[@code=9]">
                 <a class='authlink'>
-                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                    <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                     <xsl:element name="img">
                         <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
                         <xsl:attribute name="style">vertical-align:middle</xsl:attribute>

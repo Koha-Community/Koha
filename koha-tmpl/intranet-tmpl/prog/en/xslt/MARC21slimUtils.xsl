@@ -44,7 +44,7 @@
 		</xsl:variable>
         <xsl:choose>
             <xsl:when test="$urlencode=1">
-                <xsl:value-of select="str:encode-uri(substring($str,1,string-length($str)-string-length($delimeter))    )"/>
+                <xsl:value-of select="str:encode-uri(substring($str,1,string-length($str)-string-length($delimeter)), true())"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
@@ -125,16 +125,17 @@
 	     Assumes LOC convention: (OrgCode)recordNumber.
 	     If OrgCode is not present, return full string.
 	     Additionally, handle various brackets/parentheses. Chop leading and trailing spaces.
+         Returns the value URI-encoded.
 	-->
 	<xsl:template name="extractControlNumber">
 	    <xsl:param name="subfieldW"/>
 	    <xsl:variable name="tranW" select="translate($subfieldW,']})&gt;','))))')"/>
 	    <xsl:choose>
 	      <xsl:when test="contains($tranW,')')">
-	        <xsl:value-of select="normalize-space(translate(substring-after($tranW,')'),'[]{}()&lt;&gt;',''))"/>
+	        <xsl:value-of select="str:encode-uri(normalize-space(translate(substring-after($tranW,')'),'[]{}()&lt;&gt;','')), true())"/>
 	      </xsl:when>
 	      <xsl:otherwise>
-	        <xsl:value-of select="normalize-space($subfieldW)"/>
+	        <xsl:value-of select="str:encode-uri(normalize-space($subfieldW), true())"/>
 	      </xsl:otherwise>
 	    </xsl:choose>
 	</xsl:template>
@@ -197,13 +198,13 @@
                     <xsl:choose>
                         <xsl:when test="boolean($bibno)">
                             <a>
-                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of  select="$bibno"/></xsl:attribute>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of  select="str:encode-uri($bibno, true())"/></xsl:attribute>
                                 <xsl:value-of select="$str"/>
                             </a>
                         </xsl:when>
                        <xsl:when test="boolean($index) and boolean(marc:subfield[@code=9]) and $UseAuthoritiesForTracings='1'">
                             <a>
-                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of  select="marc:subfield[@code=9]"/></xsl:attribute>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of  select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                                   <xsl:value-of select="$str"/>
                             </a>
                         </xsl:when>

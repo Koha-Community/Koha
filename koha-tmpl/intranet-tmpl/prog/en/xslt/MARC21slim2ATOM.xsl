@@ -23,7 +23,7 @@
 			<xsl:for-each select="marc:controlfield[@tag=001]">
 				<id>
 					<xsl:text>urn:tcn:</xsl:text>
-					<xsl:value-of select="."/>
+					<xsl:value-of select="str:encode-uri(., true())"/>
 				</id>
 			</xsl:for-each>
 

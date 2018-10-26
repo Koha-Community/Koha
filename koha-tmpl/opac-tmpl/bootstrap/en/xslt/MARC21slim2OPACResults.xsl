@@ -413,7 +413,7 @@
                     <xsl:value-of select="$BiblioDefaultView"/>
                 </xsl:with-param>
             </xsl:call-template>
-            <xsl:value-of select="$biblionumber"/>
+            <xsl:value-of select="str:encode-uri($biblionumber, true())"/>
         </xsl:attribute>
         <xsl:attribute name="class">title</xsl:attribute>
 

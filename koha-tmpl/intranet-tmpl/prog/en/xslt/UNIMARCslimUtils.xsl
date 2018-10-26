@@ -115,6 +115,7 @@
 		<xsl:param name="delimeter"><xsl:text> </xsl:text></xsl:param>
 		<xsl:param name="subdivCodes"/>
 		<xsl:param name="subdivDelimiter"/>
+    <xsl:param name="urlencode"/>
 		<xsl:variable name="str">
 			<xsl:for-each select="marc:subfield">
 				<xsl:if test="contains($codes, @code)">
@@ -125,7 +126,14 @@
 				</xsl:if>
 			</xsl:for-each>
 		</xsl:variable>
-		<xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
+    <xsl:choose>
+      <xsl:when test="$urlencode=1">
+        <xsl:value-of select="str:encode-uri(substring($str,1,string-length($str)-string-length($delimeter)), true())"/>
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="substring($str,1,string-length($str)-string-length($delimeter))"/>
+      </xsl:otherwise>
+    </xsl:choose>
 	</xsl:template>
 
 	<xsl:template name="buildSpaces">
@@ -250,7 +258,7 @@
           <a>
             <xsl:choose>
               <xsl:when test="marc:subfield[@code=9]">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
               </xsl:when>
               <xsl:otherwise>
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=su:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/></xsl:attribute>
@@ -287,7 +295,7 @@
             <a>
               <xsl:choose>
                 <xsl:when test="marc:subfield[@code=9]">
-                  <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="marc:subfield[@code=9]"/></xsl:attribute>
+                  <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=an:<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
                 </xsl:when>
                 <xsl:otherwise>
                   <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=au:<xsl:value-of select="str:encode-uri(marc:subfield[@code='a'], true())"/><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='b']"/></xsl:attribute>
