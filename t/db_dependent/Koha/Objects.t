@@ -330,3 +330,100 @@ subtest "TO_JSON() tests" => sub {
 
     $schema->storage->txn_rollback;
 };
+
+# Koha::Object[s] must behave the same as DBIx::Class
+subtest 'Return same values as DBIx::Class' => sub {
+    plan tests => 1;
+
+    subtest 'Delete' => sub {
+        plan tests => 2;
+
+        $schema->storage->txn_begin;
+
+        subtest 'Simple Koha::Objects - Koha::Cities' => sub {
+            plan tests => 3;
+
+            my ( $r_us, $e_us, $r_them, $e_them );
+            {
+                my $c = Koha::City->new({ city_name => 'city4test' });
+                try {$r_us = $c->delete;} catch { $e_us = ref($_) };
+
+
+                $c = $schema->resultset('City')->new({ city_name => 'city4test' });
+                try {$r_them = $c->delete;} catch { $e_them = ref($_) };
+
+                is( $r_us, $r_them );
+                is( $e_us, $e_them ); # FIXME This is need adjustment, we want to throw a Koha::Exception
+            }
+
+            {
+
+                my $city = $builder->build_object({ class => 'Koha::Cities' });
+                try{
+                    $schema->storage->txn_do(sub{
+                        my $c = Koha::Cities->find($city->cityid);
+                        $r_us = $c->delete;
+                        $c->update({force_fail=>'foo'});
+                    });};
+                try{
+                $schema->storage->txn_do(sub{
+                    my $c = $schema->resultset('City')->find($city->cityid);
+                    $r_them = $c->delete;
+                    $c->update({force_fail=>'foo'});
+                });};
+                is( $r_us, $r_them );
+            }
+        };
+
+        subtest 'Overwritten Koha::Objects->delete - Koha::Patrons' => sub {
+            plan tests => 4;
+
+            my ( $r_us, $e_us, $r_them, $e_them );
+
+            my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+            my $patron_data = $patron->unblessed;
+            $patron->delete;
+
+            {
+                my $p = Koha::Patron->new( $patron_data );
+                try {$r_us = $p->delete;} catch { $e_us = ref($_) };
+
+
+                $p = $schema->resultset('Borrower')->new( $patron_data );
+                try {$r_them = $p->delete;} catch { $e_them = ref($_) };
+
+                is( $r_us, $r_them );
+                is( $e_us, $e_them ); # FIXME This is need adjustment, we want to throw a Koha::Exception
+            }
+
+            {
+                try {
+                    $schema->storage->txn_do(
+                        sub {
+                            my $p = Koha::Patrons->find( $patron->borrowernumber );
+                            $r_us = $p->delete;
+                            $p->update( { force_fail => 'foo' } );
+                        }
+                    );
+                };
+                try {
+                    $schema->storage->txn_do(
+                        sub {
+                            my $p = $schema->resultset('City')->find( $patron->borrowernumber );
+                            $r_them = $p->delete;
+                            $p->update( { force_fail => 'foo' } );
+                        }
+                    );
+                };
+                is( $r_us, $r_them );
+            }
+
+            # TODO Test value of Koha::Object->delete when the row cannot be deleted
+
+            # TODO Add tests for Koha::Objects->delete
+        };
+
+        $schema->storage->txn_rollback;
+
+    };
+};
