@@ -55,10 +55,9 @@ my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
 my $borrowernumber = $input->param('borrowernumber');
 my $patron         = Koha::Patrons->find($borrowernumber);
 
-unless ( $patron ) {
-    print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
-    exit;
-}
+output_and_exit_if_error( $input, $cookie, $template,
+    { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
+
 my $add = $input->param('add');
 
 if ($add){
@@ -94,7 +93,6 @@ if ($add){
     print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
 
 } else {
-    output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
         my $attributes = GetBorrowerAttributes($borrowernumber);
