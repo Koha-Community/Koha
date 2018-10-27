@@ -35,6 +35,12 @@ Account offsets track the changes made to the balance of account lines
 
 =head2 Class methods
 
+    my $offsets = Koha::Account::Offsets->search({ ...  });
+    my $total   = $offsets->total;
+
+Returns the sum of the amounts of the account offsets resultset. If the resultset is
+empty it returns 0.
+
 =head3 total
 
 =cut
