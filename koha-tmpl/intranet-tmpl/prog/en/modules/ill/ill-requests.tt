@@ -626,7 +626,7 @@
                                 [% FOREACH comment IN request.illcomments %]
                                     <div class="rows comment_[% comment.patron.categorycode | html %]">
                                     <h5>Comment by:
-                                    <a href="[% borrowerlink | html %]" title="View borrower details">
+                                    <a href="[% borrowerlink | uri %]" title="View borrower details">
                                     [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
                                     [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
                                     <p>[% comment.comment | html %]</p>
