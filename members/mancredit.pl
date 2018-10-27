@@ -33,73 +33,67 @@ use C4::Accounts;
 use C4::Items;
 use C4::Members::Attributes qw(GetBorrowerAttributes);
 
-use Koha::Account;
 use Koha::Items;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Token;
 
 my $input=new CGI;
-my $flagsrequired = { borrowers => 'edit_borrowers', updatecharges => 1 };
 
-my $borrowernumber=$input->param('borrowernumber');
+my ($template, $loggedinuser, $cookie) = get_template_and_user(
+    {
+        template_name   => "members/mancredit.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => { borrowers     => 'edit_borrowers',
+                             updatecharges => 'remaining_permissions' }
+    }
+);
 
-my $patron = Koha::Patrons->find( $borrowernumber );
+my $logged_in_user = Koha::Patrons->find($loggedinuser) or die "Not logged in";
+my $borrowernumber = $input->param('borrowernumber');
+my $patron         = Koha::Patrons->find($borrowernumber);
+
 unless ( $patron ) {
     print $input->redirect("/cgi-bin/koha/circ/circulation.pl?borrowernumber=$borrowernumber");
     exit;
 }
-my $add=$input->param('add');
+my $add = $input->param('add');
 
 if ($add){
 
-    my ( $user_id ) = checkauth( $input, 0, $flagsrequired, 'intranet' );
-
-    if ( $user_id ) {
-
-        die "Wrong CSRF token"
-            unless Koha::Token->new->check_csrf( {
-                session_id => scalar $input->cookie('CGISESSID'),
-                token  => scalar $input->param('csrf_token'),
-            });
-
-        # Note: If the logged in user is not allowed to see this patron an invoice can be forced
-        # Here we are trusting librarians not to hack the system
-        my $barcode = $input->param('barcode');
-        my $item_id;
-        if ($barcode) {
-            my $item = Koha::Items->find({barcode => $barcode});
-            $item_id = $item->itemnumber if $item;
-        }
-        my $description = $input->param('desc');
-        my $note        = $input->param('note');
-        my $amount      = $input->param('amount') || 0;
-        my $type        = $input->param('type');
-
-        Koha::Account->new({ patron_id => $borrowernumber })->add_credit({
-            amount      => $amount,
-            description => $description,
-            item_id     => $item_id,
-            note        => $note,
-            type        => $type,
-            user_id     => $user_id
+    die "Wrong CSRF token"
+        unless Koha::Token->new->check_csrf( {
+            session_id => scalar $input->cookie('CGISESSID'),
+            token  => scalar $input->param('csrf_token'),
         });
 
-        print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+    # Note: If the logged in user is not allowed to see this patron an invoice can be forced
+    # Here we are trusting librarians not to hack the system
+    my $barcode = $input->param('barcode');
+    my $item_id;
+    if ($barcode) {
+        my $item = Koha::Items->find({barcode => $barcode});
+        $item_id = $item->itemnumber if $item;
     }
+    my $description = $input->param('desc');
+    my $note        = $input->param('note');
+    my $amount      = $input->param('amount') || 0;
+    my $type        = $input->param('type');
+
+    $patron->account->add_credit({
+        amount      => $amount,
+        description => $description,
+        item_id     => $item_id,
+        note        => $note,
+        type        => $type,
+        user_id     => $logged_in_user->id
+    });
+
+    print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
+
 } else {
-    my ($template, $loggedinuser, $cookie) = get_template_and_user(
-        {
-            template_name   => "members/mancredit.tt",
-            query           => $input,
-            type            => "intranet",
-            authnotrequired => 0,
-            flagsrequired   => { borrowers     => 'edit_borrowers',
-                                 updatecharges => 'remaining_permissions' },
-            debug           => 1,
-        }
-    );
-    my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in";
     output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
     if (C4::Context->preference('ExtendedPatronAttributes')) {
