@@ -18,7 +18,6 @@ package Koha::Account::Lines;
 use Modern::Perl;
 
 use Carp;
-use List::Util qw( sum0 );
 
 use Koha::Database;
 use Koha::Account::Line;

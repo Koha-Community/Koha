@@ -210,7 +210,7 @@ if ( $pending_checkouts->count ) { # Useless test
                 itemnumber        => $issue->{itemnumber}
             }
         );
-        $issue->{rentalfines} = $rental_fines->total_outstanding
+        $issue->{rentalfines} = $rental_fines->total_outstanding;
 
         my $marcrecord = GetMarcBiblio({
             biblionumber => $issue->{'biblionumber'},
