@@ -223,6 +223,21 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
 );
 
+=head2 illcomments
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Illcomment>
+
+=cut
+
+__PACKAGE__->has_many(
+  "illcomments",
+  "Koha::Schema::Result::Illcomment",
+  { "foreign.illrequest_id" => "self.illrequest_id" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 illrequestattributes
 
 Type: has_many
@@ -239,8 +254,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-01 02:46:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:MMKr4JAAAsNnFcQn9SPTcw
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-27 13:16:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rv6QyhxEah2r/rDcz3aOOw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
