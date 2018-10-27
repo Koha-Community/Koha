@@ -38,7 +38,7 @@ Return this object's type
 =cut
 
 sub _type {
-    return 'Illcomments';
+    return 'Illcomment';
 }
 
 =head3 object_class
