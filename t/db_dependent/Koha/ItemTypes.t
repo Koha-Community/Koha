@@ -171,11 +171,11 @@ subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
 
     t::lib::Mocks::mock_preference('finesCalendar', 'ignoreCalendar');
     my $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 7.00, "Daily rental charge calulated correctly with finesCalendar = ignoreCalendar" );
+    is( $charge, 7.00, "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar" );
 
     t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
     $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 7.00, "Daily rental charge calulated correctly with finesCalendar = noFinesWhenClosed" );
+    is( $charge, 7.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed" );
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
     $calendar->insert_week_day_holiday(
@@ -184,7 +184,7 @@ subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
         description => 'Test holiday'
     );
     $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 6.00, "Daily rental charge calulated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays" );
+    is( $charge, 6.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays" );
 
 };
 
