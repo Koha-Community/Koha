@@ -22,8 +22,8 @@
                 [% ELSE %]
                     [% SET data_url = "/cgi-bin/koha/reserve/request.pl?borrowernumber=" _ borrower.borrowernumber _ "&amp;biblionumber=" _ biblionumber %]
                 [% END %]
-                <tr class="clickable" data-url="[% data_url | html %]">
-                    <td><a href="[% data_url | uri %]">[% borrower.surname | html %], [% borrower.firstname | html %]</a></td>
+                <tr class="clickable" data-url="[% data_url | url %]">
+                    <td><a href="[% data_url | url %]">[% borrower.surname | html %], [% borrower.firstname | html %]</a></td>
             [% END %]
                 <td>[% borrower.cardnumber | html %]</td>
                 <td>[% borrower.dateofbirth | $KohaDates %]</td>
