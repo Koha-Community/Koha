@@ -496,6 +496,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PurgeSuggestionsOlderThan', '', NULL, 'If this script is called without the days parameter', 'Integer'),
 ('QueryAutoTruncate','1',NULL,'If ON, query truncation is enabled by default','YesNo'),
 ('QueryFuzzy','1',NULL,'If ON, enables fuzzy option for searches','YesNo'),
+('QueryRegexEscapeOptions', 'escape', 'dont_escape|escape|unescape_escaped', 'Escape option for regexps delimiters in Elasicsearch queries.', 'Choice'),
 ('QueryStemming','1',NULL,'If ON, enables query stemming','YesNo'),
 ('QueryWeightFields','1',NULL,'If ON, enables field weighting','YesNo'),
 ('QuoteOfTheDay','0',NULL,'Enable or disable display of Quote of the Day on the OPAC home page','YesNo'),
