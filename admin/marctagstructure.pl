@@ -181,7 +181,7 @@ if ($op eq 'add_form') {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
-	$template->param( searchfield => $searchfield );
+    $template->param( searchfield => $searchfield );
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
 # called automatically if an unexisting  frameworkis selected
@@ -197,7 +197,7 @@ if ($op eq 'add_form') {
             };
 		}
 	}
-	$template->param( existingframeworkloop => \@existingframeworkloop );
+    $template->param( existingframeworkloop => \@existingframeworkloop );
 
 ################## DEFAULT ##################################
 } else { # DEFAULT
@@ -294,13 +294,13 @@ if ($op eq 'add_form') {
 		$template->param(isprevpage => $offset,
 						prevpage=> $offset-$pagesize,
 						searchfield => $searchfield,
-						script_name => $script_name
+                        script_name => $script_name
 		);
 	}
 	if ($offset+$pagesize<$cnt) {
 		$template->param(nextpage =>$offset+$pagesize,
 						searchfield => $searchfield,
-						script_name => $script_name
+                        script_name => $script_name
 		);
 	}
 } #---- END $OP eq DEFAULT
