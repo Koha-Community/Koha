@@ -115,10 +115,7 @@ if( CheckVersion( $DBversion ) ) {
     });
     $dbh->do(q{
         INSERT INTO user_permissions (borrowernumber, module_bit, code)
-            SELECT borrowernumber, 3, 'manage_item_search_fields'
-            FROM borrowers
-            WHERE borrowernumber IN
-                (SELECT borrowernumber FROM user_permissions WHERE code = 'catalogue');
+            SELECT borrowernumber, 3, 'manage_item_search_fields' FROM borrowers WHERE flags & (1 << 2);
     });
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 14391: Add granular permissions to the administration module)\n";
