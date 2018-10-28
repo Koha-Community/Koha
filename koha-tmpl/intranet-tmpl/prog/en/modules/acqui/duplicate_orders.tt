@@ -95,7 +95,7 @@ Basket [% basket.basketno | html %] &rsaquo; Duplicate existing orders
         <td>[% order.authorisedbyname | html %]</td>
         <td>
             [% IF ( order.basketgroupid ) %]
-                [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | html %]">[% order.basketgroupid | html %]</a>)
+                [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.basketgroupid | html %]</a>)
             [% ELSE %]
                 &nbsp;
             [% END %]
