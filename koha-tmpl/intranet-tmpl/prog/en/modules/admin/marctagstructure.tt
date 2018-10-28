@@ -41,7 +41,7 @@
 
 [% IF ( else ) %]
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% framework.frameworkcode | html %]"><i class="fa fa-plus"></i> New tag</a>
+    <a class="btn btn-default btn-sm" id="addtag" href="/cgi-bin/koha/admin/marctagstructure.pl?op=add_form&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-plus"></i> New tag</a>
 </div>[% END %]
 
 <h1>MARC Framework for [% IF framework %][% framework.frameworktext | html %] ([% framework.frameworkcode | html %])[% ELSE %]default MARC framework[% END %]</h1>
@@ -184,18 +184,19 @@
         </tr>
     </thead>
     <tbody>
-    [% IF ( select_display ) %]
-        [% FOREACH loo IN loop %]
+    [% FOREACH loo IN loop %]
         <tr>
             <td>[% loo.tagfield | html %]</td>
             <td>
                 [% loo.liblibrarian | html %]
+            [% IF ( select_display ) %]
                 [% FOREACH subfield IN loo.subfields %]
                     <p>
                         Tab:[% subfield.tab | html %] | $[% subfield.tagsubfield | html %]
                         [% subfield.liblibrarian | html %] [% IF ( subfield.kohafield ) %][% subfield.kohafield | html %][% END %][% IF ( subfield.repeatable ) %], repeatable[% END %][% IF ( subfield.mandatory ) %], Mandatory[% END %][% IF ( subfield.seealso ) %], See [% subfield.seealso | html %][% END %][% IF ( subfield.authorised_value ) %], [% subfield.authorised_value | html %][% END %][% IF ( subfield.authtypecode ) %], [% subfield.authtypecode | html %][% END %][% IF ( subfield.value_builder ) %], [% subfield.value_builder | html %][% END %]
                     </p>
                 [% END %]
+            [% END %]
             </td>
             <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
             <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
@@ -207,43 +208,16 @@
                     <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
                         Actions <b class="caret"></b></a>
                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
-                        <li><a href="[% loo.subfield_link | uri %]"><i class="fa fa-eye"></i> Subfields</a></li>
-                        <li><a href="[% loo.edit | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                        <li><a href="[% loo.delete | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
+                        <li><a href="marc_subfields_structure.pl?op=add_form&amp;tagfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-eye"></i> Subfields</a></li>
+                        <li><a href="?op=add_form&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
+                        <li><a href="?op=delete_confirm&amp;searchfield=[% loo.tagfield | uri %]&amp;frameworkcode=[% framework.frameworkcode | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
                     </ul>
                 </div>
             </td>
         </tr>
-        [% END %]
-    [% ELSE %]
-    [% FOREACH loo IN loop %]
-    <tr>
-        <td>[% loo.tagfield | html %]</td>
-        <td>[% loo.liblibrarian | html %]</td>
-        <td>[% IF ( loo.repeatable ) %]Yes[% ELSE %]No[% END %]</td>
-        <td>[% IF ( loo.mandatory ) %]Yes[% ELSE %]No[% END %]</td>
-        <td>[% loo.authorised_value | html %]</td>
-        <td>[% loo.ind1_defaultvalue | html %]</td>
-        <td>[% loo.ind2_defaultvalue | html %]</td>
-        <td>
-            <div class="dropdown">
-                <a class="btn btn-default btn-xs dropdown-toggle" id="marctagactions[% loo.tagfield | html %]" role="button" data-toggle="dropdown" href="#">
-                    Actions <b class="caret"></b></a>
-                <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="marctagactions[% loo.tagfield | html %]">
-                    <li><a href="[% loo.subfield_link | uri %]"><i class="fa fa-eye"></i> Subfields</a></li>
-                    <li><a href="[% loo.edit | uri %]"><i class="fa fa-pencil"></i> Edit</a></li>
-                    <li><a href="[% loo.delete | uri %]"><i class="fa fa-trash"></i> Delete</a></li>
-                </ul>
-            </div>
-        </td>
-    </tr>
-    [% END %]
     [% END %]
     </tbody>
     </table>
-
-
-
 [% END %]
 
             </main>

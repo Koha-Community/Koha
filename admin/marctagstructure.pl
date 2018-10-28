@@ -248,9 +248,6 @@ if ($op eq 'add_form') {
 			$row_data{authorised_value} = $results[$i]->{'mts_authorised_value'};
             $row_data{ind1_defaultvalue} = $results[$i]->{'mts_ind1_defaultvalue'};
             $row_data{ind2_defaultvalue} = $results[$i]->{'mts_ind2_defaultvalue'};
-			$row_data{subfield_link} = "marc_subfields_structure.pl?op=add_form&amp;tagfield=".$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{edit}          = "$script_name?op=add_form&amp;searchfield="            .$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{delete}        = "$script_name?op=delete_confirm&amp;searchfield="      .$results[$i]->{'mts_tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			$j=$i;
 			my @internal_loop = ();
 			while ( ( $j < $cnt ) and ( $results[$i]->{'tagfield'} == $results[$j]->{'tagfield'} ) ) {
@@ -295,9 +292,6 @@ if ($op eq 'add_form') {
 			$row_data{authorised_value} = $results->[$i]{'authorised_value'};
             $row_data{ind1_defaultvalue} = $results->[$i]{'ind1_defaultvalue'};
             $row_data{ind2_defaultvalue} = $results->[$i]{'ind2_defaultvalue'};
-			$row_data{subfield_link}    = "marc_subfields_structure.pl?tagfield="          .$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{edit}             = "$script_name?op=add_form&amp;searchfield="      .$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
-			$row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=".$results->[$i]{'tagfield'}."&amp;frameworkcode=".$frameworkcode;
 			push(@loop_data, \%row_data);
 		}
 		$template->param(loop => \@loop_data);
