@@ -109,8 +109,7 @@ if ($op eq 'add_form') {
             mandatory => $data->{'mandatory'},
             authorised_value => $data->{authorised_value},
             ind1_defaultvalue => $data->{'ind1_defaultvalue'},
-            ind2_defaultvalue => $data->{'ind2_defaultvalue'},
-			frameworkcode => $frameworkcode,
+            ind2_defaultvalue => $data->{'ind2_defaultvalue'}
     );  # FIXME: move checkboxes to presentation layer
 													# END $OP eq ADD_FORM
 ################## ADD_VALIDATE ##################################
@@ -168,8 +167,7 @@ if ($op eq 'add_form') {
     my $data = $sth->fetchrow_hashref;
 	$template->param(
          liblibrarian => $data->{'liblibrarian'},
-          searchfield => $searchfield,
-        frameworkcode => $frameworkcode,
+          searchfield => $searchfield
     );
 													# END $OP eq DELETE_CONFIRM
 ################## DELETE_CONFIRMED ##################################
@@ -183,10 +181,7 @@ if ($op eq 'add_form') {
     $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
     $cache->clear_from_cache("default_value_for_mod_marc-");
     $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
-	$template->param(
-          searchfield => $searchfield,
-        frameworkcode => $frameworkcode,
-    );
+	$template->param( searchfield => $searchfield );
 													# END $OP eq DELETE_CONFIRMED
 ################## ITEMTYPE_CREATE ##################################
 # called automatically if an unexisting  frameworkis selected
@@ -202,9 +197,8 @@ if ($op eq 'add_form') {
             };
 		}
 	}
-	$template->param(existingframeworkloop => \@existingframeworkloop,
-					frameworkcode => $frameworkcode,
-					);
+	$template->param( existingframeworkloop => \@existingframeworkloop );
+
 ################## DEFAULT ##################################
 } else { # DEFAULT
 	# here, $op can be unset or set to "framework_create_confirm".
@@ -300,15 +294,13 @@ if ($op eq 'add_form') {
 		$template->param(isprevpage => $offset,
 						prevpage=> $offset-$pagesize,
 						searchfield => $searchfield,
-						script_name => $script_name,
-						frameworkcode => $frameworkcode,
+						script_name => $script_name
 		);
 	}
 	if ($offset+$pagesize<$cnt) {
 		$template->param(nextpage =>$offset+$pagesize,
 						searchfield => $searchfield,
-						script_name => $script_name,
-						frameworkcode => $frameworkcode,
+						script_name => $script_name
 		);
 	}
 } #---- END $OP eq DEFAULT

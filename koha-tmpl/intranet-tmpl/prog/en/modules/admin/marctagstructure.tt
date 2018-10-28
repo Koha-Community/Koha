@@ -131,7 +131,7 @@
     <form action="[% script_name | html %]" method="post">
         <input type="hidden" name="op" value="framework_create_confirm" />
         <input type="hidden" name="frameworkcode" value="[% framework.frameworkcode | html %]" />
-        Create framework for [% frameworkcode | html %] ([% framework.frameworktext | html %]) using
+        Create framework for [% framework.frameworkcode | html %] ([% framework.frameworktext | html %]) using
         <select name="existingframeworkcode">
             <option value="">Default</option>
         [% FOREACH existingframeworkloo IN existingframeworkloop %]
