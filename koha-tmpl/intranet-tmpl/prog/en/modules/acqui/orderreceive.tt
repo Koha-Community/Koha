@@ -76,7 +76,7 @@
                         <td>
                         [% IF order.invoice %]
                             [% IF CAN_user_acquisition %]
-                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | html %]" title="Invoice detail page">
+                                <a href="/cgi-bin/koha/acqui/invoice.pl?invoiceid=[% order.invoiceid | uri %]" title="Invoice detail page">
                                    [% order.invoice.invoicenumber | html %]</a>
                             [% ELSE %]
                                 [% order.invoice.invoicenumber | html %]

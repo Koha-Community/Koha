@@ -735,7 +735,7 @@ subtest 'ModReceiveOrder and subscription' => sub {
     # We do not want the note from the original note to be modified
     # Keeping it will permit to display it for future receptions
     $order_info->{order_internalnote} = $second_note;
-    my ( undef, my $received_ordernumber ) = ModReceiveOrder(
+    my ( undef, $received_ordernumber ) = ModReceiveOrder(
         {
             biblionumber     => $order->biblionumber,
             order            => $order_info,
