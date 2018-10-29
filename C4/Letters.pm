@@ -483,28 +483,29 @@ sub SendAlerts {
         my $email = Koha::Email->new();
         my %mail = $email->create_message_headers(
             {
-                to      => join( ',', @email),
-                cc      => join( ',', @cc),
-                from    => $library->branchemail || C4::Context->preference('KohaAdminEmailAddress'),
+                to => join( ',', @email ),
+                cc => join( ',', @cc ),
+                (
+                    (
+                        C4::Context->preference("ClaimsBccCopy")
+                          && ( $type eq 'claimacquisition'
+                            || $type eq 'claimissues' )
+                    ) ? ( bcc => $userenv->{emailaddress} )
+                    : ()
+                ),
+                from => $library->branchemail
+                  || C4::Context->preference('KohaAdminEmailAddress'),
                 subject => Encode::encode( "UTF-8", "" . $letter->{title} ),
-                message => $letter->{'is_html'}
-                            ? _wrap_html( Encode::encode( "UTF-8", $letter->{'content'} ),
-                                          Encode::encode( "UTF-8", "" . $letter->{'title'} ))
-                            : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
+                message => $letter->{'is_html'} ? _wrap_html(
+                    Encode::encode( "UTF-8", $letter->{'content'} ),
+                    Encode::encode( "UTF-8", "" . $letter->{'title'} )
+                  )
+                : Encode::encode( "UTF-8", "" . $letter->{'content'} ),
                 contenttype => $letter->{'is_html'}
-                                ? 'text/html; charset="utf-8"'
-                                : 'text/plain; charset="utf-8"',
+                ? 'text/html; charset="utf-8"'
+                : 'text/plain; charset="utf-8"',
             }
         );
-
-        if ($type eq 'claimacquisition' || $type eq 'claimissues' ) {
-            $mail{'Reply-to'} = C4::Context->preference('ReplytoDefault')
-              if C4::Context->preference('ReplytoDefault');
-            $mail{'Sender'} = C4::Context->preference('ReturnpathDefault')
-              if C4::Context->preference('ReturnpathDefault');
-            $mail{'Bcc'} = $userenv->{emailaddress}
-              if C4::Context->preference("ClaimsBccCopy") and not C4::Context->preference("SendAllEmailsTo");
-        }
 
         unless ( Mail::Sendmail::sendmail(%mail) ) {
             carp $Mail::Sendmail::error;
@@ -1306,7 +1307,12 @@ sub _send_message_by_email {
     my $email = Koha::Email->new();
     my %sendmail_params = $email->create_message_headers(
         {
-            to      => $to_address,
+            to => $to_address,
+            (
+                C4::Context->preference('NoticeBcc')
+                ? ( bcc => C4::Context->preference('NoticeBcc') )
+                : ()
+            ),
             from    => $message->{'from_address'} || $branch_email,
             replyto => $branch_replyto,
             sender  => $branch_returnpath,
@@ -1317,9 +1323,6 @@ sub _send_message_by_email {
     );
 
     $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
-    if ( my $bcc = C4::Context->preference('NoticeBcc') ) {
-       $sendmail_params{ Bcc } = C4::Context->preference("SendAllEmailsTo") || $bcc;
-    }
 
     _update_message_to_address($message->{'message_id'},$to_address) unless $message->{to_address}; #if initial message address was empty, coming here means that a to address was found and queue should be updated
 

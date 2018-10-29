@@ -56,6 +56,7 @@ sub create_message_headers {
     }
     else {
         $mail{'Cc'} = $params->{cc};
+        $mail{'Bcc'} = $params->{bcc};
     }
 
     if ( C4::Context->preference('ReplytoDefault') ) {
