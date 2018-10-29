@@ -104,7 +104,7 @@ sub install_default_database {
         $version = C4::Context->preference('Version');
     };
     if ($version) {
-        print "$cc[3]():> INFO: Koha database exists. Skipping install_default_database()" if $verbose;
+        print "$cc[3]():> INFO: Koha database exists. Skipping install_default_database()\n" if $verbose;
         return undef;
     }
     $error = $installer->load_db_schema();
