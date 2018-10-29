@@ -149,7 +149,7 @@
                     <xsl:with-param name="codes">abc</xsl:with-param>
                     <xsl:with-param name="index">au</xsl:with-param>
                     <xsl:with-param name="UseAuthoritiesForTracings" select="$UseAuthoritiesForTracings"/>
-                    <!-- do not use label 'by ' here, it would be repeated for every occurence of 100,110,111,700,710,711 -->
+                    <!-- do not use label 'by ' here, it would be repeated for every occurrence of 100,110,111,700,710,711 -->
                 </xsl:call-template>
             </h5>
         </xsl:if>

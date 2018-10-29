@@ -496,7 +496,7 @@ foreach my $biblioNum (@biblionumbers) {
             $itemInfo->{backgroundcolor} = 'other';
         }
 
-        # Check of the transfered documents
+        # Check of the transferred documents
         my ( $transfertwhen, $transfertfrom, $transfertto ) =
           GetTransfers($itemNum);
         if ( $transfertwhen && ($transfertwhen ne '') ) {

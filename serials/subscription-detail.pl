@@ -45,7 +45,7 @@ if ( $op and $op eq "close" ) {
     C4::Serials::ReopenSubscription( $subscriptionid );
 }
 
-# the subscription must be deletable if there is NO issues for a reason or another (should not happend, but...)
+# the subscription must be deletable if there is NO issues for a reason or another (should not happened, but...)
 
 # Permission needed if it is a deletion (del) : delete_subscription
 # Permission needed otherwise : *

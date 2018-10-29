@@ -32,7 +32,7 @@ use CGI qw ( -utf8 );
 
 This script is a basic implementation of ILS-DI protocol for Koha.
 It acts like a dispatcher, that get the CGI request, check required and 
-optionals arguments, call a function from C4::ILS-DI, and finaly
+optionals arguments, call a function from C4::ILS-DI, and finally
 outputs the returned hashref as XML.
 
 =cut

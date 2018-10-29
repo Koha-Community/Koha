@@ -360,7 +360,7 @@ my $waiting  = 0;
 my $reserved = 0;
 
 # new op dev : we check if the document must be returned to his homebranch directly,
-#  if the document is transfered, we have warning message .
+#  if the document is transferred, we have warning message .
 
 if ( $messages->{'WasTransfered'} ) {
     $template->param(
@@ -385,7 +385,7 @@ if ( $messages->{'Wrongbranch'} ){
     );
 }
 
-# case of wrong transfert, if the document wasn't transfered to the right library (according to branchtransfer (tobranch) BDD)
+# case of wrong transfert, if the document wasn't transferred to the right library (according to branchtransfer (tobranch) BDD)
 
 if ( $messages->{'WrongTransfer'} and not $messages->{'WasTransfered'}) {
     $template->param(

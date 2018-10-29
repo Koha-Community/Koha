@@ -225,7 +225,7 @@ elsif ( $phase eq 'Update SQL'){
         $cache_expiry *= 86400; # 60 * 60 * 24
       }
     }
-    # check $cache_expiry isnt too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
+    # check $cache_expiry isn't too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
     if( $cache_expiry >= 2592000 ){
       push @errors, {cache_expiry => $cache_expiry};
     }
@@ -322,7 +322,7 @@ elsif ( $phase eq 'Report on this Area' ) {
     } elsif( $cache_expiry_units eq "days" ){
       $cache_expiry *= 86400; # 60 * 60 * 24
     }
-    # check $cache_expiry isnt too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
+    # check $cache_expiry isn't too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
     if( $cache_expiry >= 2592000 ){ # oops, over the limit of 30 days
       # report error to user
       $template->param(
@@ -334,7 +334,7 @@ elsif ( $phase eq 'Report on this Area' ) {
         'public' => scalar $input->param('public'),
       );
     } else {
-      # they have choosen a new report and the area to report on
+      # they have chosen a new report and the area to report on
       $template->param(
           'build2' => 1,
           'area'   => scalar $input->param('area'),
@@ -586,7 +586,7 @@ elsif ( $phase eq 'Save Report' ) {
         $cache_expiry *= 86400; # 60 * 60 * 24
       }
     }
-    # check $cache_expiry isnt too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
+    # check $cache_expiry isn't too large, Memcached::set requires it to be less than 30 days or it will be treated as if it were an absolute time stamp
     if( $cache_expiry && $cache_expiry >= 2592000 ){
       push @errors, {cache_expiry => $cache_expiry};
     }

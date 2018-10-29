@@ -102,7 +102,7 @@ foreach my $file (@template_files) {
 
 	# Process..
 	# NB: if you think you're seeing double, you probably are, *some* (read:most) patterns appear twice: once with quotations marks, once without.
-	#     trying to combine them into a single pattern proved troublesome as a regex like ['"]?(.*?)['"]? was causing problems and fixing the problem caused (alot) more complex regex
+    #     trying to combine them into a single pattern proved troublesome as a regex like ['"]?(.*?)['"]? was causing problems and fixing the problem caused (a lot) more complex regex
 
 	# variables
 	$input_tmpl =~ s/<[!-]*\s*TMPL_VAR\s+NAME\s?=\s?['"]?\s*(\w*?)\s*['"]?\s+ESCAPE=['"](\w*?)['"]\s+DEFAULT=['"]?(.*?)['"]?\s*-*>/[% DEFAULT $cur_scope[-1]$1="$3" |$2 %]/ig;

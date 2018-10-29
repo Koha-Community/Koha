@@ -408,7 +408,7 @@ sub draw_label_text {
         else {
             $field->{'data'} = _get_barcode_data($field->{'code'},$item,$record);
         }
-        # Find apropriate font it oblique title selected, except main font is oblique
+        # Find appropriate font it oblique title selected, except main font is oblique
         if ( ( $field->{'code'} eq 'title' ) and ( $self->{'oblique_title'} == 1 ) ) {
             if ( $font =~ /^TB$/ ) {
                 $font .= 'I';

@@ -1181,7 +1181,7 @@ PazPar2 port?);
 
   $msg = q(
 Use memcached to cache the results of some function calls?
-This provides a signficant performance improvement.
+This provides a significant performance improvement.
 You will need a Memcached server running.);
   $msg .= _add_valid_values_disp('USE_MEMCACHED', $valid_values);
   $config{'USE_MEMCACHED'} = _get_value('USE_MEMCACHED', $msg, $defaults->{'USE_MEMCACHED'}, $valid_values, $install_log_values);
@@ -1219,7 +1219,7 @@ Would you like to run the database-dependent test suite?);
 
 THE DATA IN THIS DATABASE WILL BE DESTROYED during the process of
 testing. Please don't do this on your production database. It is not
-reversable.
+reversible.
 
 YOU WILL SUFFER DATA LOSS if you run this test suite on your test
 database. You are better off not running this optional test suite than

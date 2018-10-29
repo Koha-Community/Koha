@@ -30,7 +30,7 @@ if ($version || (!$confirm)) {
 This script cleans unused subfields in the MARC DB.
 If you alter the MARC parameters and remove a subfield (ie : move it to ignore (10) tab), existing subfields are NOT removed.
 It's not a bug, it prevents deleting useful values in case of erroneous move.
-This script definetly remove unused subfields in the MARC DB.
+This script definitely remove unused subfields in the MARC DB.
 syntax :
 \t./cleanmarcdb.pl -h (or without arguments => shows this screen)
 \t./cleanmarcdb.pl -c (c like confirm => cleans the marc DB (may be long)

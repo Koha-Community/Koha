@@ -79,7 +79,7 @@ sub hash_password {
 For general password salting a C<$strength> of C<weak> is recommend,
 For generating a server-salt a C<$strength> of C<strong> is recommended
 
-'strong' uses /dev/random which may block until sufficient entropy is acheived.
+'strong' uses /dev/random which may block until sufficient entropy is achieved.
 'weak' uses /dev/urandom and is non-blocking.
 
 =item length

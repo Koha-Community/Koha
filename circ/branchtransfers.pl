@@ -111,20 +111,20 @@ elsif ( $request eq 'KillReserved' ) {
     } # FIXME else?
 }
 
-# collect the stack of books already transfered so they can printed...
+# collect the stack of books already transferred so they can printed...
 my @trsfitemloop;
-my $transfered;
+my $transferred;
 my $barcode = $query->param('barcode');
 # remove leading/trailing whitespace
 defined $barcode and $barcode =~ s/^\s*|\s*$//g;  # FIXME: barcodeInputFilter
 # warn "barcode : $barcode";
 if ($barcode) {
 
-    ( $transfered, $messages ) =
+    ( $transferred, $messages ) =
       transferbook( $tobranchcd, $barcode, $ignoreRs );
     my $item = Koha::Items->find({ barcode => $barcode });
     $found = $messages->{'ResFound'};
-    if ($transfered) {
+    if ($transferred) {
         my %item;
         my $biblio = $item->biblio;
         my $frbranchcd =  C4::Context->userenv->{'branch'};
