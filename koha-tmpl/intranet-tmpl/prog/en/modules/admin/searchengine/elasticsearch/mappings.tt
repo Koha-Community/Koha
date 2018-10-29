@@ -202,7 +202,7 @@ a.add, a.delete {
                       </td>
                       <td>
                       [% IF search_field.mapped_biblios %]
-                        <input type="number" step="0.01" min="0.01" max="999.99" name="search_field_weight" value="[% search_field.weight %]" />
+                        <input type="number" step="0.01" min="0.01" max="999.99" name="search_field_weight" value="[% search_field.weight | html %]" />
                       [% ELSE %]
                         <input type="hidden" name="search_field_weight" value="">
                       [% END %]
