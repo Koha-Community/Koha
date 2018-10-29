@@ -1,4 +1,4 @@
-INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type('SendAllEmailsTo','',NULL,'All emails will be redirected to this email if it is not empty','free'),` ) VALUES
+INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
 ('AccountAutoReconcile','0',NULL,'If enabled, patron balances will get reconciled automatically on each transaction.','YesNo'),
 ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
 ('AcqEnableFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to invoice records.','YesNo'),
