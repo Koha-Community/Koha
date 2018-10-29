@@ -92,7 +92,7 @@ GetOptions(
     'days=s'     => \$days,
     'library=s'  => \@branchcodes,
     'holidays'   => \$use_calendar,
-    'v|verbosev' => \$verbose,
+    'v|verbose'  => \$verbose,
     'confirm'    => \$confirm,
 ) or pod2usage(1);
 pod2usage(1) if $help;
