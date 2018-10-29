@@ -84,7 +84,7 @@
         [% IF ( OPACBaseURL ) %]
             <li>
                 <span class="label">OPAC view:</span>
-                <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">Open in new window.</a>
+                <a id="view-subscription-in-opac" target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">Open in new window.</a>
             </li>
         [% END %]
 [% IF ( branchcode ) %]<li><span class="label">Library:</span> [% Branches.GetName( branchcode ) | html %]</li>[% END %]

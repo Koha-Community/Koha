@@ -234,7 +234,7 @@ canned reports and writing custom SQL reports.</p>
                         </td>
                         <td class="report_json_url">
                         [% IF (savedreport.public) %]
-                            <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
+                            <a href="[% OPACBaseURL | url %]/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% OPACBaseURL | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% ELSE %]
                             <a href="/cgi-bin/koha/svc/report?id=[% savedreport.id | uri %]">[% Koha.Preference('staffClientBaseURL') | html %]/cgi-bin/koha/svc/report?id=[% savedreport.id | html %]</a>
                         [% END %]

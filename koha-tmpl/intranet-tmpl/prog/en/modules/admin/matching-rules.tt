@@ -433,7 +433,7 @@
 [% IF ( display_list ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | html %]?op=add_matching_rule"><i class="fa fa-plus"></i> New record matching rule</a>
+    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | url %]?op=add_matching_rule"><i class="fa fa-plus"></i> New record matching rule</a>
 </div>
 
 <h2>Record matching rules</h2>
@@ -459,8 +459,8 @@
     <td>[% available_matching_rule.code | html %]</td>
     <td>[% available_matching_rule.description | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | html %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | html %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | html %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | html %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | url %]?op=edit_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-default btn-xs" href="[% available_matching_rule.script_name | url %]?op=delete_matching_rule&amp;matcher_id=[% available_matching_rule.matcher_id | uri %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]

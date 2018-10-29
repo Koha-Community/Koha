@@ -19,13 +19,13 @@
 
 [% SET opaclayoutstylesheet='opac.css' UNLESS opaclayoutstylesheet %]
 [% IF (opaclayoutstylesheet.match('^https?:|^\/')) %]
-    <link rel="stylesheet" type="text/css" href="[% opaclayoutstylesheet | html %]" />
+    <link rel="stylesheet" type="text/css" href="[% opaclayoutstylesheet | url %]" />
 [% ELSE %]
     [% Asset.css("css/" _ opaclayoutstylesheet) | $raw %]
 [% END %]
 [% IF ( OpacAdditionalStylesheet ) %]
     [% IF (OpacAdditionalStylesheet.match('^https?:|^\/')) %]
-        <link rel="stylesheet" type="text/css" href="[% OpacAdditionalStylesheet | html %]" />
+        <link rel="stylesheet" type="text/css" href="[% OpacAdditionalStylesheet | url %]" />
     [% ELSE %]
         <link rel="stylesheet" type="text/css" href="[% interface | html %]/[% theme | html %]/css/[% OpacAdditionalStylesheet | html %]" />
     [% END %]
@@ -44,7 +44,7 @@
         <style>[% SCOUserCSS | $raw %]</style>
     [% END %]
 [% END %]
-<link rel="unapi-server" type="application/xml" title="unAPI" href="[% OPACBaseURL | html %]/cgi-bin/koha/unapi" />
+<link rel="unapi-server" type="application/xml" title="unAPI" href="[% OPACBaseURL | url %]/cgi-bin/koha/unapi" />
 [% PROCESS cssinclude %]
 <!-- Respond.js brings responsive layout behavior to IE < v.9 -->
 <!--[if lt IE 9]>

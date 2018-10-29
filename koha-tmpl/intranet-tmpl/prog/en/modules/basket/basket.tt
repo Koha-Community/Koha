@@ -156,7 +156,7 @@
                                                 [% FOREACH MARCNOTE IN BIBLIO_RESULT.MARCNOTES %]
                                                     <p>
                                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                                        - <a href="[% MARCNOTE.marcnote | uri %]">[% MARCNOTE.marcnote | html %]</a>
+                                                        - <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
                                                     [% ELSE %]
                                                         - [% MARCNOTE.marcnote | html %]
                                                     [% END %]
@@ -207,7 +207,7 @@
                                             <td>
                                                [% FOREACH MARCurl IN BIBLIO_RESULT.MARCURLS %]
                                                     [% IF MARCurl.part %]<p>[% MARCurl.part | html %]</p>[% END %]
-                                                    <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+                                                    <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
                                                     [% IF MARCurl.notes %]
                                                         [% FOREACH note IN MARCurl.notes %]
                                                             <p>[% note.note | html %]</p>
@@ -262,7 +262,7 @@
                                             <input type="checkbox" class="select_record" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
                                         </td>
                                         <td>
-                                            <a href="[% BIBLIO_RESULT.dest | uri %]?biblionumber=[% BIBLIO_RESULT.biblionumber | uri %]" class="open_title">
+                                            <a href="[% BIBLIO_RESULT.dest | url %]?biblionumber=[% BIBLIO_RESULT.biblionumber | uri %]" class="open_title">
                                                 [% BIBLIO_RESULT.title |html %]
                                                 [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %]
                                                     [% subtitl.subfield | html %]

@@ -409,7 +409,7 @@
                             </fieldset>
                             <fieldset class="action">
                                 <input type="submit" class="btn btn-default" value="Send email"/>
-                                <span><a href="[% ill_url | uri %]" title="Return to request details">Cancel</a></span>
+                                <span><a href="[% ill_url | url %]" title="Return to request details">Cancel</a></span>
                             </fieldset>
                         </form>
                     [% ELSE %]
@@ -417,7 +417,7 @@
                             <legend>Interlibrary loan request details</legend>
                             <p>No partners have been defined yet. Please create appropriate patron records (by default ILLLIBS category).</p>
                             <p>Be sure to provide email addresses for these patrons.</p>
-                            <p><span><a href="[% ill_url | uri %]" title="Return to request details">Cancel</a></span></p>
+                            <p><span><a href="[% ill_url | url %]" title="Return to request details">Cancel</a></span></p>
                         </fieldset>
                     [% END %]
                 <!-- generic_confirm ends here -->
@@ -535,7 +535,7 @@
                                 <div class="borrowernumber">
                                     <span class="label borrowernumber">Patron:</span>
                                     [% borrowerlink = "/cgi-bin/koha/members/moremember.pl" _ "?borrowernumber=" _ request.patron.borrowernumber %]
-                                    <a href="[% borrowerlink | uri %]" title="View borrower details">
+                                    <a href="[% borrowerlink | url %]" title="View borrower details">
                                     [% request.patron.firstname _ " " _ request.patron.surname _ " [" _ request.patron.cardnumber _ "]" | html %]
                                     </a>
                                 </div>
@@ -631,7 +631,7 @@
                                 [% FOREACH comment IN request.illcomments %]
                                     <div class="rows comment_[% comment.patron.categorycode | html %]">
                                     <h5>Comment by:
-                                    <a href="[% borrowerlink | uri %]" title="View borrower details">
+                                    <a href="[% borrowerlink | url %]" title="View borrower details">
                                     [% comment.patron.firstname _ " " _ comment.patron.surname _ " [" _ comment.patron.cardnumber _ "]" | html %]</a>
                                     [% comment.timestamp | $KohaDates with_hours => 1 %]</h5>
                                     <p>[% comment.comment | html %]</p>

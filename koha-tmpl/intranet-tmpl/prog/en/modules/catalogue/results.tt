@@ -476,7 +476,7 @@
 
                           [% IF ( OPACBaseURL ) %]
                               <span class="view-in-opac">
-                                | <a href="[% Koha.Preference('OPACBaseURL') | uri %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" target="_blank">OPAC view</a>
+                                | <a href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | uri %]" target="_blank">OPAC view</a>
                               </span>
                           [% END %]
 

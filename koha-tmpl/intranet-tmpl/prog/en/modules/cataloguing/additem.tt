@@ -225,7 +225,7 @@ function confirm_deletion() {
                           [% END %]
                         [% END %]
                             [% IF ( OPACBaseURL ) %]
-                                <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | html %]">OPAC view</a></li>
+                                <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]">OPAC view</a></li>
                             [% END %]
                           </ul>
                           </div>

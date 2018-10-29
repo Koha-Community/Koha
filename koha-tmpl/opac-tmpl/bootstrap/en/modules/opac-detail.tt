@@ -344,15 +344,15 @@
 
                                         [% IF ( OPACURLOpenInNewWindow ) %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
                                             [% ELSE %]
-                                                <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
                                             [% END %]
                                         [% ELSE %]
                                             [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL |url%]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]">
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]">
                                             [% ELSE %]
-                                                <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">
+                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
                                             [% END %]
                                         [% END %]
                                         [% MARCurl.linktext | html %]</a>
@@ -510,7 +510,7 @@
                     [% IF ( BakerTaylorContentURL ) %]
                         <span class="results_summary">
                         <span class="label">Enhanced content: </span>
-                              [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL | uri %]" target="_blank" rel="noreferrer">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL | html %]">Content Cafe</a>[% END %]
+                              [% IF ( OPACURLOpenInNewWindow ) %]<a href="[% BakerTaylorContentURL | url %]" target="_blank" rel="noreferrer">Content Cafe</a>[% ELSE %]<a href="[% BakerTaylorContentURL | url %]">Content Cafe</a>[% END %]
                         </span>
                     [% END # / IF BakerTaylorContentURL %]
 
@@ -712,7 +712,7 @@
                                 [% FOREACH MARCNOTE IN MARCNOTES %]
                                     <p>
                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-                                        <a href="[% MARCNOTE.marcnote | uri %]">[% MARCNOTE.marcnote | html %]</a>
+                                        <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
                                     [% ELSE %]
                                         [% MARCNOTE.marcnote FILTER html_line_break | html %]
                                     [% END %]
@@ -1239,7 +1239,7 @@
                             <link property="businessFunction" href="http://purl.org/goodrelations/v1#LeaseOut">
                             <span class="[% ITEM_RESULT.holding_branch_opac_info ? 'branch-info-tooltip-trigger' : '' %]" title="">
                                 [% IF ( ITEM_RESULT.branchurl ) %]
-                                    <a href="[% ITEM_RESULT.branchurl | uri %]">[% ITEM_RESULT.branchname | html %]</a>
+                                    <a href="[% ITEM_RESULT.branchurl | url %]">[% ITEM_RESULT.branchname | html %]</a>
                                 [% ELSE %]
                                     <span>[% ITEM_RESULT.branchname | html %]</span>
                                 [% END %]
@@ -1261,7 +1261,7 @@
                                 [% IF Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                     [% home_branch_url = Branches.GetURL( ITEM_RESULT.homebranch ) %]
                                     [% IF ( home_branch_url ) %]
-                                         <a href="[% home_branch_url | uri %]">[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</a>
+                                         <a href="[% home_branch_url | url %]">[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</a>
                                     [% ELSE %]
                                         <span>[% Branches.GetName( ITEM_RESULT.homebranch ) | html %]</span>
                                     [% END %]
@@ -1328,9 +1328,9 @@
 
                                 [% ELSE %]
                                     [% IF Koha.Preference("OPACURLOpenInNewWindow") %]
-                                    <a target="_blank" rel="noreferrer" href="[% ITEM_RESULT.uri | html %]" property="url">[% ITEM_RESULT.uri | html %]</a>
+                                    <a target="_blank" rel="noreferrer" href="[% ITEM_RESULT.uri | url %]" property="url">[% ITEM_RESULT.uri | html %]</a>
                                     [% ELSE %]
-                                    <a href="[% ITEM_RESULT.uri | uri %]" property="url">[% ITEM_RESULT.uri | html %]</a>
+                                    <a href="[% ITEM_RESULT.uri | url %]" property="url">[% ITEM_RESULT.uri | html %]</a>
                                     [% END %]
                                 [% END %]
                             [% END %]

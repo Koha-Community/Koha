@@ -82,7 +82,7 @@
                                     </div>
                             [% ELSE %]
                                 <h4>Shibboleth Login</h4>
-                                <p><a href="[% shibbolethLoginUrl | uri %]">If you have a Shibboleth account, please click here to log in.</a></p>
+                                <p><a href="[% shibbolethLoginUrl | url %]">If you have a Shibboleth account, please click here to log in.</a></p>
                             [% END %]
                             [% IF ( casAuthentication ) %]
                                 <h4>CAS login</h4>
@@ -97,14 +97,14 @@
                         [% IF ( casAuthentication ) %]
                             [% IF ( shibbolethAuthentication ) %]
                                 [% IF ( casServerUrl ) %]
-                                    <p><a href="[% casServerUrl | uri %]">Please click here to log in.</a><p>
+                                    <p><a href="[% casServerUrl | url %]">Please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
                                     <p>Please choose against which one you would like to authenticate: </p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                            <li><a href="[% casServer.value | uri %]">[% casServer.name | html %]</a></li>
+                                            <li><a href="[% casServer.value | url %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]
@@ -117,14 +117,14 @@
                                 [% END %]
 
                                 [% IF ( casServerUrl ) %]
-                                   <p><a href="[% casServerUrl | uri %]">If you have a CAS account, please click here to log in.</a><p>
+                                   <p><a href="[% casServerUrl | url %]">If you have a CAS account, please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
                                     <p>If you have a CAS account, please choose against which one you would like to authenticate:</p>
                                     <ul>
                                         [% FOREACH casServer IN casServersLoop %]
-                                        <li><a href="[% casServer.value | uri %]">[% casServer.name | html %]</a></li>
+                                        <li><a href="[% casServer.value | url %]">[% casServer.name | html %]</a></li>
                                         [% END %]
                                     </ul>
                                 [% END %]

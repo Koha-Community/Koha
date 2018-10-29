@@ -2,7 +2,7 @@
 [% USE Asset %]
 [% BLOCK csv_export %]
     <div class="btn-group">
-        <a id="exportbutton" class="btn btn-default btn-sm" href="[% script_name | html %]?op=export&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]"><i class="fa fa-download"></i> Export as CSV</a>
+        <a id="exportbutton" class="btn btn-default btn-sm" href="[% script_name | url %]?op=export&amp;basketno=[% basketno | html %]&amp;booksellerid=[% booksellerid | html %]"><i class="fa fa-download"></i> Export as CSV</a>
       <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>
       <ul class="dropdown-menu" id="export-csv-menu">
           <li><a href="#">Default</a></li>

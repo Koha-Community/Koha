@@ -236,7 +236,7 @@
     [% IF ( else ) %]
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default btn-sm" id="newstopword" href="[% script_name | html %]?op=add_form"><i class="fa fa-plus"></i> New preference</a>
+        <a class="btn btn-default btn-sm" id="newstopword" href="[% script_name | url %]?op=add_form"><i class="fa fa-plus"></i> New preference</a>
     </div>
 
     [% IF ( tab != 'local_use' ) %]
@@ -255,7 +255,7 @@
     <tbody>[% FOREACH loo IN loop %]
         <tr>
 
-        <td><strong><a href="[% loo.edit | uri %]">[% loo.variable | html %]</a></strong></td><td> [% loo.explanation | html %]</td>
+        <td><strong><a href="[% loo.edit | url %]">[% loo.variable | html %]</a></strong></td><td> [% loo.explanation | html %]</td>
         [% IF ( loo.oneline ) %]
         <td class="single-line">
         [% ELSE %]
@@ -364,7 +364,7 @@
             </form>
         </td>
 
-        <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.edit | html %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.delete | html %]"><i class="fa fa-trash"></i> Delete</a></td>
+        <td class="actions"><a class="btn btn-default btn-xs" href="[% loo.edit | url %]"><i class="fa fa-pencil"></i> Edit</a> <a class="btn btn-default btn-xs" href="[% loo.delete | url %]"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
     [% END %]</tbody>
     </table>

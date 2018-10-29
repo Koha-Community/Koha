@@ -153,7 +153,7 @@
                     [% IF shelf AND op == 'view' %]
                         <h3>
                             [% shelf.shelfname | html %]
-                            <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint">
+                            <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-shelves.pl?rss=1&amp;op=view&amp;shelfnumber=[% shelf.shelfnumber | uri %]" class="rss-list-link noprint">
                                 <img src="[% interface | html %]/[% theme | html %]/images/feed-icon-16x16.png" alt="Subscribe to this list" title="Subscribe to this list" border="0" class="rsssearchicon"/>
                             </a>
                         </h3>

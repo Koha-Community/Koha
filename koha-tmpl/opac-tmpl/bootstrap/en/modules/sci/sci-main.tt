@@ -26,7 +26,7 @@
 <meta name="generator" content="Koha [% Version | html %]" /> <!-- leave this for stats -->
 
 [% IF ( Koha.Preference('OpacFavicon') ) %]
-<link rel="shortcut icon" href="[% Koha.Preference('OpacFavicon') | html %]" type="image/x-icon" />
+<link rel="shortcut icon" href="[% Koha.Preference('OpacFavicon') | url %]" type="image/x-icon" />
 [% ELSE %]
 <link rel="shortcut icon" href="[% interface | html %]/[% theme | html %]/images/favicon.ico" type="image/x-icon" />
 [% END %]

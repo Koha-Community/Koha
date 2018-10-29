@@ -413,7 +413,7 @@
                         </td>
                         <td><span title="[% batch_lis.staged_date | html %]">[% batch_lis.staged_date | $KohaDates with_hours => 1 | html %]</span></td>
                         <td>[% batch_lis.num_records | html %]</td>
-                        <td><a href="[% batch_lis.scriptname | uri %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]">Add orders</a></td>
+                        <td><a href="[% batch_lis.scriptname | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]">Add orders</a></td>
                       </tr>
                       [% END %]
                     </tbody>

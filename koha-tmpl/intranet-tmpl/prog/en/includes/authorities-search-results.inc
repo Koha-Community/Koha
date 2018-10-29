@@ -10,7 +10,7 @@
 
     [% IF marcflavour == 'UNIMARC' %]
         [% IF authid %]
-            [% link = BLOCK %]<a href="[% authidurl _ authid | $raw %]">[% heading | html %]</a>[% END %]
+            [% link = BLOCK %]<a href="[% authidurl _ authid | url %]">[% heading | html %]</a>[% END %]
         [% ELSE %]
             [% link = BLOCK %][% heading | html %][% END %]
         [% END %]
@@ -28,7 +28,7 @@
         <span class="heading">
         [% IF ( linkType=='seealso' ) %]
             [% IF ( authid ) %]
-            <a href="[% authidurl | url %][% authid | url %]">[% heading | html %]</a>
+            <a href="[% authidurl | url %][% authid | uri %]">[% heading | html %]</a>
             [% ELSE %]
             <a href="[% searchurl | url %][% heading | uri %]">[% heading | html %]</a>
             [% END %]

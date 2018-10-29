@@ -188,8 +188,8 @@
 [% IF ( display_lists ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newsource" href="[% script_name | html %]?op=add_source"><i class="fa fa-plus"></i> New classification source</a>
-    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | html %]?op=add_sort_rule"><i class="fa fa-plus"></i> New filing rule</a>
+    <a class="btn btn-default btn-sm" id="newsource" href="[% script_name | url %]?op=add_source"><i class="fa fa-plus"></i> New classification source</a>
+    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | url %]?op=add_sort_rule"><i class="fa fa-plus"></i> New filing rule</a>
 </div>
 
 <h2>Classification sources</h2>
@@ -220,8 +220,8 @@
     <td>[% IF ( class_source.used ) %]Yes[% ELSE %]No[% END %]</td>
     <td>[% class_source.sortrule | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% class_source.script_name | html %]?op=edit_source&amp;class_source=[% class_source.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs" href="[% class_source.script_name | html %]?op=delete_source&amp;class_source=[% class_source.code | html %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% class_source.script_name | url %]?op=edit_source&amp;class_source=[% class_source.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-default btn-xs" href="[% class_source.script_name | url %]?op=delete_source&amp;class_source=[% class_source.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]
@@ -253,8 +253,8 @@
     <td>[% class_sort_rule.description | html %]</td>
     <td>[% class_sort_rule.sort_routine | html %]</td>
     <td class="actions">
-      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name | html %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule | html %]"><i class="fa fa-pencil"></i> Edit</a>
-      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name | html %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule | html %]"><i class="fa fa-trash"></i> Delete</a>
+      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name | url %]?op=edit_sort_rule&amp;sort_rule=[% class_sort_rule.rule | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+      <a class="btn btn-default btn-xs" href="[% class_sort_rule.script_name | url %]?op=delete_sort_rule&amp;sort_rule=[% class_sort_rule.rule | uri %]"><i class="fa fa-trash"></i> Delete</a>
     </td>
   </tr>
   [% END %]

@@ -144,11 +144,11 @@ function submitForm(form) {
                 [% IF ( grouping ) %]
                     [% IF (closedbg) %]
                         <div id="toolbar" class="btn-toolbar">
-                            <div class="btn-group"><a href="[% script_name | uri %]?op=reopen&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;mode=singlebg" class="btn btn-default btn-sm" id="reopenbutton"><i class="fa fa-download"></i> Reopen this basket group</a></div>
-                            <div class="btn-group"><a href="[% script_name | uri %]?op=export&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="exportbutton"><i class="fa fa-download"></i> Export this basket group as CSV</a></div>
-                            <div class="btn-group"><a href="[% script_name | uri %]?op=print&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Print this basket group in PDF</a></div>
+                            <div class="btn-group"><a href="[% script_name | url %]?op=reopen&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]&amp;mode=singlebg" class="btn btn-default btn-sm" id="reopenbutton"><i class="fa fa-download"></i> Reopen this basket group</a></div>
+                            <div class="btn-group"><a href="[% script_name | url %]?op=export&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="exportbutton"><i class="fa fa-download"></i> Export this basket group as CSV</a></div>
+                            <div class="btn-group"><a href="[% script_name | url %]?op=print&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Print this basket group in PDF</a></div>
                         [% IF (ediaccount) %]
-                            <div class="btn-group"><a href="[% script_name | uri %]?op=ediprint&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Generate EDIFACT order</a></div>
+                            <div class="btn-group"><a href="[% script_name | url %]?op=ediprint&amp;basketgroupid=[% basketgroupid | uri %]&amp;booksellerid=[% booksellerid | uri %]" class="btn btn-default btn-sm" id="printbutton"><i class="fa fa-download"></i> Generate EDIFACT order</a></div>
                         [% END %]
                         </div>
                     [% END %]

@@ -10,7 +10,7 @@
         </a>
         <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="budgetmenu_[% block_budget.budget_period_id | html %]">
               <li>
-                  <a href="[% script_name | uri %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+                  <a href="[% script_name | url %]?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-pencil"></i> Edit</a>
               </li>
               [% IF block_budget.count %]
                   <li class="disabled">
@@ -18,14 +18,14 @@
                   </li>
               [% ELSE %]
                   <li>
-                      <a href="[% script_name | uri %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash"></i> Delete</a>
+                      <a href="[% script_name | url %]?op=delete_confirm&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-trash"></i> Delete</a>
                   </li>
               [% END %]
               <li>
-                  <a href="[% script_name | uri %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
+                  <a href="[% script_name | url %]?op=duplicate_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-copy"></i> Duplicate</a>
               </li>
               <li>
-                  <a href="[% script_name | uri %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
+                  <a href="[% script_name | url %]?op=close_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-times-circle"></i> Close</a>
               </li>
               <li>
                   <a href="/cgi-bin/koha/admin/aqbudgets.pl?op=add_form&amp;budget_period_id=[% block_budget.budget_period_id | uri %]"><i class="fa fa-plus"></i> Add fund</a>

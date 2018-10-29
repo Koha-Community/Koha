@@ -84,9 +84,9 @@
                                         [% END %]
                                     </td>
                                     <td>[% IF (cr.item.uri) %]
-                                            <a href="[% cr.item.uri | uri %]">Item URI</a>
+                                            <a href="[% cr.item.uri | url %]">Item URI</a>
                                         [% ELSIF (cr.biblioitem.url) %]
-                                            <a href="[% cr.biblioitem.url | uri %]">Record URL</a>
+                                            <a href="[% cr.biblioitem.url | url %]">Record URL</a>
                                         [% END %]
                                     </td>
                                 </tr>

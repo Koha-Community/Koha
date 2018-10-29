@@ -33,10 +33,10 @@
       [% IF facet.active %]
         [% SET local_url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
         <span class="facet-label">[% facet.facet_label_value | html %]</span>
-        [<a href="[% local_url | uri %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+        [<a href="[% local_url | url %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
       [% ELSE %]
         [% SET local_url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
-        <span class="facet-label"><a href="[% local_url | uri %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
+        <span class="facet-label"><a href="[% local_url | url %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
         [% IF ( displayFacetCount ) %]
           <span class="facet-count"> ([% facet.facet_count | html %])</span>
         [% END %]
@@ -45,7 +45,7 @@
   [% END %]
   [% IF ( facets_loo.expandable ) %]
       <li class="showmore">
-          <a href="[% url | uri %][% IF offset %]&amp;offset=[% offset |url %][% END %]&amp;expand=[% facets_loo.expand |url %]#[% facets_loo.type_id |url %]">Show more</a>
+          <a href="[% url | url %][% IF offset %]&amp;offset=[% offset |url %][% END %]&amp;expand=[% facets_loo.expand |url %]#[% facets_loo.type_id |url %]">Show more</a>
       </li>
   [% END %]
 </ul></li>

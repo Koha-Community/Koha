@@ -193,7 +193,7 @@
 		<li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]
 			<br />[% END %] 
 		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
-        <a href="[% MARCurl.MARCURL | uri %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
+        <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
 			[% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note | html %]</li>[% END %]</ul>[% END %]</li>
             [% END %]</ul>
 </li>
@@ -201,7 +201,7 @@
 
     [% IF ( OPACBaseURL ) %]
         <li><strong>OPAC view:</strong>
-        <a href="[% OPACBaseURL | uri %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]" target="_blank">Open in new window</a>
+        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]" target="_blank">Open in new window</a>
         </li>
     [% END %]
         <li id="catalogue_detail_marc_preview">
@@ -265,7 +265,7 @@
         [% IF ( urlS ) %]
             <li><strong>URL:</strong>
                 [% FOREACH url IN urlS %]
-                    <a href="[% url.url | uri %]">[% url.url | html %]</a>
+                    <a href="[% url.url | url %]">[% url.url | html %]</a>
                 [% END %]
             </li>
         [% END %]
@@ -505,7 +505,7 @@
                     <td class="dateaccessioned"><span title="[% item.dateaccessioned | html %]">[% item.dateaccessioned | $KohaDates %]</span></td>
                     <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?type=[% item.type | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;biblionumber=[% item.biblionumber | uri %]&amp;bi=[% item.biblioitemnumber | uri %]#item[% item.itemnumber | uri %]">[% item.barcode | html %]</a></td>
                     [% IF ( itemdata_uri ) %]
-                        <td class="uri"><a href="[% item.uri | uri %]">[% item.uri | html %]</a></td>
+                        <td class="uri"><a href="[% item.uri | url %]">[% item.uri | html %]</a></td>
                     [% END %]
                     [% IF ( itemdata_copynumber ) %]
                         <td class="copynumber">[% item.copynumber | html %]</td>
@@ -631,7 +631,7 @@
     [% FOREACH MARCNOTE IN MARCNOTES %]
         <p>
         [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
-            <a href="[% MARCNOTE.marcnote | uri %]">[% MARCNOTE.marcnote | html %]</a>
+            <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
         [% ELSE %]
             [% MARCNOTE.marcnote FILTER html_line_break | html %]
         [% END %]

@@ -22,7 +22,7 @@
         <span class="heading">
         [% IF ( linkType=='seealso' ) %]
             [% IF ( authid ) %]
-            <a href="[% authidurl | url %][% authid | url %]">[% heading | html %]</a>
+            <a href="[% authidurl | url %][% authid | uri %]">[% heading | html %]</a>
             [% ELSE %]
             <a href="[% searchurl | url %][% heading | uri %]">[% heading | html %]</a>
             [% END %]

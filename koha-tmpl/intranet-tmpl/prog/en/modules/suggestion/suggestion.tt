@@ -405,7 +405,7 @@
 			<input type="text" readonly="readonly" id="total" name="total" size="10" value="[% total | html %]"/>
                 </li></ol>
     </fieldset><input type="hidden" id="returnsuggested" name="returnsuggested" value="[% IF ( returnsuggestedby ) %][% returnsuggestedby | html %][% ELSE %]noone[% END %]"/>
-    <fieldset class="action"><input type="hidden" name="op" value="[% op | html %]" />[% IF ( suggestionid ) %]<input type="submit" value="Save" /> <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby | html %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>[% ELSE %]<input type="submit" value="Submit your suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a>[% END %]
+    <fieldset class="action"><input type="hidden" name="op" value="[% op | html %]" />[% IF ( suggestionid ) %]<input type="submit" value="Save" /> <a class="cancel" href="[% IF ( returnsuggestedby ) %]/cgi-bin/koha/members/moremember.pl?borrowernumber=[% returnsuggestedby | uri %]#suggestions[% ELSE %]suggestion.pl[% END %]">Cancel</a>[% ELSE %]<input type="submit" value="Submit your suggestion" /> <a class="cancel" href="suggestion.pl">Cancel</a>[% END %]
     </fieldset>
     </form>
 [% END %]

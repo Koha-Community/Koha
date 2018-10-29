@@ -218,7 +218,7 @@
 [% IF ( display_list ) %]
 
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | html %]?op=add_attribute_type"><i class="fa fa-plus"></i> New patron attribute type</a>
+    <a class="btn btn-default btn-sm" id="newrule" href="[% script_name | url %]?op=add_attribute_type"><i class="fa fa-plus"></i> New patron attribute type</a>
 </div>
 
 <h2>Patron attribute types</h2>
@@ -276,8 +276,8 @@
                 [% END %]
             </td>
             <td class="actions">
-              <a class="btn btn-default btn-xs" href="[% item.script_name | html %]?op=edit_attribute_type&amp;code=[% item.code | html %]"><i class="fa fa-pencil"></i> Edit</a>
-              <a class="btn btn-default btn-xs" href="[% item.script_name | html %]?op=delete_attribute_type&amp;code=[% item.code | html %]"><i class="fa fa-trash"></i> Delete</a>
+              <a class="btn btn-default btn-xs" href="[% item.script_name | url %]?op=edit_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-pencil"></i> Edit</a>
+              <a class="btn btn-default btn-xs" href="[% item.script_name | url %]?op=delete_attribute_type&amp;code=[% item.code | uri %]"><i class="fa fa-trash"></i> Delete</a>
             </td>
           </tr>
         [% END %]
