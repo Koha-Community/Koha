@@ -5,6 +5,9 @@
 [% USE Branches %]
 [% USE Price %]
 [% SET footerjs = 1 %]
+
+[% PROCESS 'accounts.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Print receipt for [% patron.cardnumber | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -51,7 +54,7 @@
 <tr class="highlight">
       <td>[% account.date | $KohaDates %]</td>
       <td>
-        [% INCLUDE 'accounttype.inc' account => account %]
+        [% PROCESS account_type_description account=account %]
         [%- IF account.description %], [% account.description | html %][% END %]
       </td>
       <td>[% account.note | html %]</td>

@@ -8,6 +8,9 @@
 [% USE Price %]
 [% USE Branches %]
 [% SET footerjs = 1 %]
+
+[% PROCESS 'accounts.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Account for [% INCLUDE 'patron-title.inc' no_html = 1 %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -57,7 +60,7 @@
    <tr>
    <td><span title="[% account.date | html %]">[% account.date |$KohaDates %]</span></td>
       <td>
-        [% INCLUDE 'accounttype.inc' accountline => account %]
+        [% PROCESS account_type_description account=account %]
         [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
         [%- IF account.description %], [% account.description | html %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>[% END %]</td>

@@ -3,6 +3,9 @@
 [% USE KohaDates %]
 [% USE Price %]
 [% SET footerjs = 1 %]
+
+[% PROCESS 'accounts.inc' %]
+
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Summary for [% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])</title>
     [% INCLUDE 'doc-head-close.inc' %]
@@ -109,7 +112,7 @@
                <tr>
                   <td>[% account.date | $KohaDates %]</td>
                   <td>
-                      [% INCLUDE 'accounttype.inc' accountline => account %]
+                      [% PROCESS account_type_description account=account %]
                       [%- IF account.payment_type %]
                           , [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %]
                       [% END %]
