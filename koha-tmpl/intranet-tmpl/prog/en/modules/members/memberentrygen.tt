@@ -1041,11 +1041,11 @@
     <legend id="patron_attributes_lgd">Additional attributes and identifiers</legend>
     <input type="hidden" name="setting_extended_patron_attributes" value="1" />
     [% FOREACH pa_loo IN patron_attributes %]
-        [% IF pa_loo.class %]
-            <fieldset id="aai_[% pa_loo.class | html %]">
-            <legend id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</legend>
-        [% END %]
         <ol class="attributes_table">
+            [% IF pa_loo.class %]
+                <fieldset id="aai_[% pa_loo.class | html %]">
+                <legend id="[% pa_loo.class | html %]_lgd">[% pa_loo.lib | html %]</legend>
+            [% END %]
             [% FOREACH patron_attribute IN pa_loo.items %]
                 <li data-category_code="[% patron_attribute.category_code | html %]">
                     <label for="[% patron_attribute.form_id | html %]">[% patron_attribute.description | html %]: </label>
@@ -1074,8 +1074,8 @@
                         [% END %]
                 </li>
             [% END %]
+            [% IF pa_loo.class %]</fieldset>[% END %]
         </ol>
-        [% IF pa_loo.class %]</fieldset>[% END %]
     [% END %]
   </fieldset>
 [% END %][% END %][% END %]
