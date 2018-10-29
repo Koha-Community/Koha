@@ -301,7 +301,7 @@
                 [% IF ( loo.value_builder ) %] | <strong>Plugin:</strong>[% loo.value_builder | html %],[% END %]
             [% END %]
         </td>
-        <td><a href="[% loo.delete | url %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a></td>
+        <td><a href="?op=delete_confirm&amp;tagfield=[% loo.tagfield | uri %]&amp;tagsubfield=[% loo.tagsubfield | uri %]&amp;authtypecode=[% authtypecode | uri %]" class="btn btn-default btn-xs"><i class="fa fa-trash"></i> Delete</a></td>
     </tr>
     [% END %]
 </table>
@@ -311,7 +311,7 @@
     <input type="hidden" name="tagfield" value="[% edit_tagfield | html %]" />
     <input type="hidden" name="authtypecode" value="[% edit_authtypecode | html %]" />
     <input type="submit" value="Edit subfields" />
-    <a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield | uri%]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
+    <a class="cancel" href="auth_tag_structure.pl?searchfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
     </form>
 
     [% IF ( previous ) %]
