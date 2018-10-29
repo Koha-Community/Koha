@@ -197,9 +197,6 @@ if ($op eq 'add_form') {
         $row_data{repeatable}       = $results->[$i]{'repeatable'};
         $row_data{mandatory}        = $results->[$i]{'mandatory'};
         $row_data{authorised_value} = $results->[$i]{'authorised_value'};
-        $row_data{subfield_link}    = "auth_subfields_structure.pl?tagfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
-        $row_data{edit}             = "$script_name?op=add_form&amp;searchfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
-        $row_data{delete}           = "$script_name?op=delete_confirm&amp;searchfield=" . $results->[$i]{'tagfield'} . "&amp;authtypecode=" . $authtypecode;
         push(@loop_data, \%row_data);
     }
     $template->param(loop => \@loop_data,
