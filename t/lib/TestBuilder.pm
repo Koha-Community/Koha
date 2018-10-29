@@ -417,7 +417,7 @@ sub _gen_real {
     if( defined( $params->{info}->{size} ) ) {
         $max = 10 ** ($params->{info}->{size}->[0] - $params->{info}->{size}->[1]);
     }
-    return sprintf("%.2f", rand($max)+1);
+    return sprintf("%.2f", rand($max-0.1));
 }
 
 sub _gen_date {
