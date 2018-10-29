@@ -428,7 +428,7 @@
 						<genre authority="marc">poetry</genre>
 					</xsl:if>
 					<xsl:if test="contains($controlField008-30-31,'r')">
-						<genre authority="marc">rehersal</genre>
+						<genre authority="marc">rehearsal</genre>
 					</xsl:if>
 					<xsl:if test="contains($controlField008-30-31,'g')">
 						<genre authority="marc">reporting</genre>

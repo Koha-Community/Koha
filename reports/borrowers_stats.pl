@@ -126,7 +126,7 @@ if ($do_it) {
  	$req->execute;
 	$template->param( SORT1_LOOP => $req->fetchall_arrayref({}));
 	$req = $dbh->prepare("SELECT DISTINCTROW sort2 AS value FROM borrowers WHERE sort2 IS NOT NULL AND sort2 <> '' ORDER BY sort2 LIMIT 200");
-		# More than 200 items in a dropdown is not going to be useful anyway, and w/ 50,000 patrons we can destory DB performance.
+    # More than 200 items in a dropdown is not going to be useful anyway, and w/ 50,000 patrons we can destroy DB performance.
 	$req->execute;
 	$template->param( SORT2_LOOP => $req->fetchall_arrayref({}));
 	

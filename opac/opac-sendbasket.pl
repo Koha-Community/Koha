@@ -183,7 +183,7 @@ END_OF_BODY
         $template->param( SENT      => "1" );
     }
     else {
-        # do something if it doesnt work....
+        # do something if it doesn't work....
     carp "Error sending mail: empty basket" if !defined($iso2709);
         carp "Error sending mail: $Mail::Sendmail::error" if $Mail::Sendmail::error;
         $template->param( error => 1 );

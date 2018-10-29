@@ -61,7 +61,7 @@ my $display_columns = { layout =>   [  # db column       => {col label          
                                         {profile_id      => {label => 'Profile ID',     link_field      => 0}},
                                         {printer_name    => {label => 'Printer Name',   link_field      => 0}},
                                         {paper_bin       => {label => 'Paper Bin',      link_field      => 0}},
-                                        {_template_code  => {label => 'Template Name',  link_field      => 0}},     # this display column does not have a corrisponding db column in the profile table, hence the underscore
+                                        {_template_code  => {label => 'Template Name',  link_field      => 0}},     # this display column does not have a corresponding db column in the profile table, hence the underscore
                                         {select          => {label => 'Actions',         value           => 'profile_id'}},
                                     ],
                         batch =>    [
@@ -72,7 +72,7 @@ my $display_columns = { layout =>   [  # db column       => {col label          
                                     ],
 };
 
-my $label_element = $cgi->param('label_element') || 'template';   # default to template managment
+my $label_element = $cgi->param('label_element') || 'template';   # default to template management
 my $op = $cgi->param('op') || 'none';
 my $element_id = $cgi->param('element_id') || undef;
 my $error = $cgi->param('error') || 0;

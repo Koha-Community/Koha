@@ -44,7 +44,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $op = $cgi->param('op') || 'none';
-my $card_element = $cgi->param('card_element') || 'template';   # default to template managment
+my $card_element = $cgi->param('card_element') || 'template';   # default to template management
 my $element_id = $cgi->param('element_id') || 0; # there should never be an element with a id of 0 so this is a safe default
 
 my $db_rows = {};
@@ -64,7 +64,7 @@ my $display_columns = { layout =>   [  # db column       => {col label          
                         profile =>  [   {profile_id      => {label => 'Profile ID',     link_field      => 0}},
                                         {printer_name    => {label => 'Printer Name',   link_field      => 0}},
                                         {paper_bin       => {label => 'Paper Bin',      link_field      => 0}},
-                                        {_template_code  => {label => 'Template Name',  link_field      => 0}},     # this display column does not have a corrisponding db column in the profile table, hence the underscore
+                                        {_template_code  => {label => 'Template Name',  link_field      => 0}},     # this display column does not have a corresponding db column in the profile table, hence the underscore
                                         {_action         => {label => 'Action',         link_field      => 0}},
                                         {select          => {label => 'Select',         value           => 'profile_id'}},
                                     ],

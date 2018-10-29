@@ -325,7 +325,7 @@ if ( $template_type && $template_type eq 'advsearch' ) {
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
     my @search_boxes_array;
-    my $search_boxes_count = 3; # begin whith 3 boxes
+    my $search_boxes_count = 3; # begin with 3 boxes
     $template->param( search_boxes_count => $search_boxes_count );
 
     if ($cgi->cookie("num_paragraph")){

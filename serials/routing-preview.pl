@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 # Routing Preview.pl script used to view a routing list after creation
-# lets one print out routing slip and create (in this instance) the heirarchy
+# lets one print out routing slip and create (in this instance) the hierarchy
 # of reserves for the serial
 use Modern::Perl;
 use CGI qw ( -utf8 );

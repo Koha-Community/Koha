@@ -94,7 +94,7 @@ weighting, koha-specific relevance ranking, and stemming. When I have a chance
 I'll try to flesh out this section to better explain.
 
 This query incorporates query profiles that aren't compatible with most non-Zebra 
-Z39.50 targets to acomplish the field weighting and relevance ranking.
+Z39.50 targets to accomplish the field weighting and relevance ranking.
 
 =item 2 $simple_query - a simple query that doesn't contain the field weighting,
 stemming, etc., suitable to pass off to other search targets
@@ -293,7 +293,7 @@ if ( $template_type eq 'advsearch' ) {
     # shouldn't appear on the first one, scan indexes should, adding a new
     # box should only appear on the last, etc.
     my @search_boxes_array;
-    my $search_boxes_count = 3; # begin whith 3 boxes
+    my $search_boxes_count = 3; # begin with 3 boxes
     # FIXME: all this junk can be done in TMPL using __first__ and __last__
     for (my $i=1;$i<=$search_boxes_count;$i++) {
         # if it's the first one, don't display boolean option, but show scan indexes
@@ -383,7 +383,7 @@ my @indexes = map uri_unescape($_), $cgi->multi_param('idx');
 # if a simple index (only one)  display the index used in the top search box
 if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
     my $idx = "ms_".$indexes[0];
-    $idx =~ s/\,/comma/g;  # template toolkit doesnt like variables with a , in it
+    $idx =~ s/\,/comma/g;  # template toolkit doesn't like variables with a , in it
     $template->param($idx => 1);
 }
 

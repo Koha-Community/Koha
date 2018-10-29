@@ -92,7 +92,7 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
         # Called Empty, Ask for data.
         $template->param( 'Ask_data' => '1' );
         if (!$query->param('Oldkey') && ($query->param('Newkey') || $query->param('Confirm'))){
-            # Old password is empty but one of the others isnt
+            # Old password is empty but one of the others isn't
             $template->param( 'Error_messages' => '1' );
             $template->param( 'WrongPass'      => '1' );
         }

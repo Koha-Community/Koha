@@ -21,7 +21,7 @@ sub check_sys_pref {
     if ( !-d _ ) {
         my $name = $File::Find::name;
         if ( $name =~ /(\.pl|\.pm)$/ ) {
-            open( FILE, "$_" ) || die "cant open $name";
+            open( FILE, "$_" ) || die "can't open $name";
             while ( my $inp = <FILE> ) {
                 if ( $inp =~ /C4::Context->preference\((.*?)\)/ ) {
                     my $variable = $1;

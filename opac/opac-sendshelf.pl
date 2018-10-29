@@ -183,7 +183,7 @@ END_OF_BODY
         $template->param( SENT      => "1" );
     }
     else {
-        # do something if it doesnt work....
+        # do something if it doesn't work....
         carp "Error sending mail: $Mail::Sendmail::error \n";
         $template->param( error => 1 );
     }

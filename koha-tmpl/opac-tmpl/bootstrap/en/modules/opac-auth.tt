@@ -25,7 +25,7 @@
                     <!--CONTENT-->
                     [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
                         [% IF ( nopermission ) %]
-                            <!-- This is what is displayed if user doesnt have permission -->
+                            <!-- This is what is displayed if user doesn't have permission -->
                             <div class="alert">
                                 <h3>Access denied</h3>
                                 <p>Sorry, the system doesn't think you have permission to access this page. </p>
@@ -49,7 +49,7 @@
                             [% END %]
 
                             [% IF ( different_ip ) %]
-                                <!-- This is what is displayed if user doesnt have permission -->
+                                <!-- This is what is displayed if user doesn't have permission -->
                                 <div class="alert alert-info">
                                     <p>You are logging from a different IP address. Please log in again.</p>
                                 </div>
@@ -57,7 +57,7 @@
 
 
                             [% IF invalid_username_or_password || too_many_login_attempts %]
-                                <!-- This is what is displayed if user doesnt have permission or account is locked. (Do not expose more information than needed.) -->
+                                <!-- This is what is displayed if user doesn't have permission or account is locked. (Do not expose more information than needed.) -->
                                 <div class="alert alert-info">
                                     <p>You entered an incorrect username or password. Please try again! But note that passwords are case sensitive[% IF Koha.Preference('FailedLoginAttempts') %] and that your account will be locked out after a fixed number of failed login attempts[% END %]. Please contact a library staff member if you continue to have problems.</p>
                                 </div>
