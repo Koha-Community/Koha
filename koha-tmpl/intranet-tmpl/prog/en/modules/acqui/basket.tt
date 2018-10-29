@@ -887,10 +887,7 @@
         [% END %]
     [% END %]
     <script>
-<<<<<<< HEAD
-=======
-        var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'basket', 'orders', 'json' ) %];
->>>>>>> Bug 20966: Add column configuration to table of orders in a basket
+        var columns_settings = [% ColumnsSettings.GetColumns( 'acqui', 'basket', 'orders', 'json' ) | $raw %];
         $(document).ready(function() {
             KohaTable("orders", {
                 [% IF ( active ) %]
@@ -900,7 +897,8 @@
                     ],
                 [% END %]
                 "sPaginationType": "four_button",
-                "autoWidth": false
+                "autoWidth": false,
+                "exportColumns": [0,1,2,3,4,5,6,7,8,9,10,11,12,13]
             }, columns_settings);
 
             var cancelledorderst = $("#cancelledorderst").dataTable($.extend(true, {}, dataTablesDefaults, {
