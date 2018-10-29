@@ -325,12 +325,12 @@
 
                 [% IF subscription %]
                     <br/>
-                    <span class="hint">
+                    <div class="hint">
                         Frequency: [% subscription.frequency.description | html %] |
                         [% IF subscription.numberlength %]Number of issues: [% subscription.numberlength | html %][% END %]
                         [% IF subscription.weeklength   %]Number of weeks: [% subscription.weeklength | html %][% END %]
                         [% IF subscription.monthlength  %]Number of months: [% subscription.monthlength | html %][% END %]
-                    </span>
+                    </div>
                 [% END %]
             </li>
             <li>
