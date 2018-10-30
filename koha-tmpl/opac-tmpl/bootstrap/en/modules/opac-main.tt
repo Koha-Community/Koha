@@ -16,7 +16,7 @@
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a>
         [% IF news_item %]
             <span class="divider">&rsaquo;</span></li>
-            <li>[% news_item.title %]</li>
+            <li>[% news_item.title | html %]</li>
         [% END %]
         </li>
     </ul>
@@ -77,7 +77,7 @@
                 [% SET newsdisp = ( Koha.Preference('NewsAuthorDisplay') ) %]
                 [% FOREACH koha_new IN koha_news %]
                     <div class="newsitem">
-                        <a name="newsitem[% koha_new.idnew | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.idnew %]"><h4 class="newsheader">[% koha_new.title | html %]</h4></a>
+                        <a name="newsitem[% koha_new.idnew | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.idnew | uri %]"><h4 class="newsheader">[% koha_new.title | html %]</h4></a>
                         <div class="newsbody">[% koha_new.content | $raw %]</div>
                         <div class="newsfooter">(published on [% koha_new.timestamp | $KohaDates with_hours = 1 | html %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %])</div>
                     </div>
