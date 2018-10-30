@@ -8,9 +8,12 @@ BEGIN {
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
+BEGIN {
+    use C4::Context;
+    C4::Context->interface('commandline'); #The interface must be set prior to initializing any loggers.
+}
 
 use CGI qw( utf8 ); # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
-use C4::Context;
 use C4::Debug;
 use C4::Letters;
 use C4::Templates;
@@ -22,7 +25,9 @@ use C4::Log;
 use File::Basename qw( dirname );
 use Koha::DateUtils;
 use MIME::Lite;
+use Data::Printer;
 
+my $verbose = 0;
 my (
     $stylesheet,
     $help,
@@ -39,6 +44,7 @@ my (
 $send = 1;
 GetOptions(
     'h|help'  => \$help,
+    'v|verbose+' => \$verbose,
     's|split' => \$split,
     'html'    => \$html,
     'csv'     => \$csv,
@@ -50,6 +56,10 @@ GetOptions(
 ) || pod2usage(1);
 
 pod2usage(0) if $help;
+
+use Koha::Logger;
+Koha::Logger->setConsoleVerbosity($verbose);
+my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
 
 my $output_directory = $ARGV[0];
 
@@ -83,8 +93,10 @@ cronlogaction();
 
 my $today_iso     = output_pref( { dt => dt_from_string, dateonly => 1, dateformat => 'iso' } ) ;
 my $today_syspref = output_pref( { dt => dt_from_string, dateonly => 1 } );
+$logger->debug("Today is '$today_iso'");
 
 my @all_messages = @{ GetPrintMessages() };
+$logger->debug("Found '".scalar(@all_messages)."' print messages");
 
 # Filter by letter_code
 @all_messages = map {
@@ -93,6 +105,7 @@ my @all_messages = @{ GetPrintMessages() };
         grep { /^$letter_code$/ } @letter_codes
     ) ? $_ : ()
 } @all_messages if @letter_codes;
+$logger->info("'".scalar(@all_messages)."' print messages found with letter codes '".(scalar(@letter_codes) ? scalar(@letter_codes) : 'ANY')."'");
 exit unless @all_messages;
 
 my ( $html_filenames, $csv_filenames, $ods_filenames );
@@ -128,6 +141,7 @@ if ( $html ) {
 }
 
 if ( @emails ) {
+    $logger->info("Emailing files as attachments from '".C4::Context->preference('KohaAdminEmailAddress')."' to '@emails'");
     my $files = {
         html => $html_filenames,
         csv  => $csv_filenames,
@@ -150,9 +164,10 @@ sub print_notices {
     my $split = $params->{split};
     my $output_directory = $params->{output_directory};
     my $format = $params->{format} // 'html';
+    $logger->debug("Printing notices to '$output_directory' as '$format'.".($split ? ' Splitting files by branch.' : '')) if $logger->is_debug();
 
     die "Format $format is not known"
-        unless $format =~ m[^html$|^csv$|^ods$];
+        unless $format =~ m!^html$|^csv$|^ods$!; # =~ m[..] messes up syntax highlighting in VSCode
 
     my ( @filenames, $messages_by_branch );
 
@@ -192,13 +207,14 @@ sub print_notices {
                 C4::Letters::_set_message_status(
                     {
                         message_id => $message->{'message_id'},
-                        status => 'sent'
+                        status => 'sent' #This is not true. The messages have not been delivered at this point. They are written to disk, but nobody can tell what happens afterwards.
                     }
                 );
             }
         }
         push @filenames, $filename;
     }
+    $logger->info("Generated print notice files '@filenames'");
     return \@filenames;
 }
 
@@ -306,7 +322,10 @@ sub send_files {
     my $files = $params->{files};
     my $to = $params->{to};
     my $from = $params->{from};
-    return unless $to and $from;
+    unless ($to and $from) {
+        $logger->error("Trying to send email, but no 'To:' or 'From:' -addresses given?");
+        return ;
+    }
 
     my $mail = MIME::Lite->new(
         From     => $from,
@@ -325,22 +344,28 @@ sub send_files {
                         ? 'application/vnd.oasis.opendocument.spreadsheet'
                         : undef;
 
-            next unless $mimetype;
+            unless ($mimetype) {
+                $logger->error("Trying to attach file '$filename' as type '$type', but no mimetype mapping for that type exists?");
+                next;
+            }
 
             my $filepath = File::Spec->catdir( $directory, $filename );
 
-            next unless $filepath or -f $filepath;
+            unless ($filepath or -f $filepath) {
+                $logger->error("Trying to attach file '$filepath', but the file is missing?");
+                next;
+            }
 
             $mail->attach(
               Type     => $mimetype,
               Path     => $filepath,
               Filename => $filename,
               Encoding => 'base64',
-            );
+            ) or $logger->logdie("Attaching file '$filepath' as '$mimetype' failed!"); #Guessing this 
         }
     }
 
-    $mail->send;
+    $mail->send() or $logger->logdie("you DON'T have mail!"); #Direct quote from https://metacpan.org/pod/MIME::Lite
 }
 
 =head1 NAME
@@ -349,7 +374,7 @@ gather_print_notices - Print waiting print notices
 
 =head1 SYNOPSIS
 
-gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--letter_code=LETTER_CODE] [-e|--email=your_email@example.org] [-h|--help]
+gather_print_notices output_directory [-s|--split] [--html] [--csv] [--ods] [--letter_code=LETTER_CODE] [-e|--email=your_email@example.org] [-h|--help] [-v|--verbose, ...]
 
 Will print all waiting print notices to the output_directory.
 
@@ -408,6 +433,10 @@ E-mail address to send generated files to.
 =item B<-h|--help>
 
 Print a brief help message
+
+=item B<-v|--verbose>
+
+Increase Log4perl verbosity one level for each -v -v -v
 
 =back
 
