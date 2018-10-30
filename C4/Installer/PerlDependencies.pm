@@ -427,6 +427,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '2.121'
     },
+    'Data::Printer' => {
+        'usage'    => 'Core',
+        'required' => '1',
+        'min_ver'  => '0.38'
+    },
     'Lingua::Stem' => {
         'usage'    => 'Core',
         'required' => '1',
