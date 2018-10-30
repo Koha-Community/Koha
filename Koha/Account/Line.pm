@@ -49,7 +49,7 @@ sub TO_JSON {
     $description =~ s/^\s+|\s+$//g if defined $description;
     # If accountline description is an itemnumber, replace it with record title
     if (defined $description && defined $itemnumber &&
-        $description == $itemnumber) {
+        $description eq $itemnumber) {
         my $item = Koha::Items->find($itemnumber);
         if (defined $item) {
             my $biblio = $item->biblio;
