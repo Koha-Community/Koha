@@ -713,7 +713,13 @@ sub GetBasketsInfosByBookseller {
 
     unless ( $allbaskets ) {
         # Don't show the basket if it's NOT CLOSED or is FULLY RECEIVED
-        $query.=" HAVING (closedate IS NULL OR (expected_items > 0))"
+        $query.=" HAVING (closedate IS NULL OR (
+          SUM(
+            IF(aqorders.datereceived IS NULL
+              AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
+            , aqorders.quantity
+            , 0)
+            ) > 0))"
     }
 
     my $sth = $dbh->prepare($query);
