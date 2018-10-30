@@ -189,12 +189,9 @@ sub setConsoleVerbosity {
                         ." digit, or a valid Log::Log4perl log level, eg. FATAL,"
                         ." ERROR, WARN, ...";
         }
-        $ENV{LOG4PERL_TO_CONSOLE} = 1;
-
         $ENV{LOG4PERL_VERBOSITY_CHANGE} = $verbosity if defined($verbosity);
     }
     else {
-        delete $ENV{LOG4PERL_TO_CONSOLE};
         delete $ENV{LOG4PERL_VERBOSITY_CHANGE};
     }
 }
@@ -205,25 +202,11 @@ Checks if there are Environment variables that should overload configured behavi
 
 =cut
 
-# Define a stdout appender. I wonder how can I load a PatternedLayout from
-# log4perl.conf here?
-my $commandlineScreen =  Log::Log4perl::Appender->new(
-                             "Log::Log4perl::Appender::Screen",
-                             name      => "commandlineScreen",
-                             stderr    => 0);
-#I want this to be defined in log4perl.conf instead :(
-my $commandlineLayout = Log::Log4perl::Layout::PatternLayout->new(
-                   "%d %M{2}> %m %n");
-$commandlineScreen->layout($commandlineLayout);
-
 sub _checkLoggerOverloads {
     my ($self) = @_;
     return unless blessed($self->{logger})
         && $self->{logger}->isa('Log::Log4perl::Logger');
 
-    if ($ENV{LOG4PERL_TO_CONSOLE}) {
-        $self->{logger}->add_appender($commandlineScreen);
-    }
     if ($ENV{LOG4PERL_VERBOSITY_CHANGE}) {
         if ($ENV{LOG4PERL_VERBOSITY_CHANGE} =~ /^-?(\d)$/) {
             if ($ENV{LOG4PERL_VERBOSITY_CHANGE} > 0) {
