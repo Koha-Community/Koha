@@ -137,6 +137,9 @@ sub list {
         if ($embed{capabilities}) {
             $to_push->{capabilities} = $to_fetch->{$req->backend};
         }
+        if ($embed{comments}) {
+            $to_push->{comments} = $req->illcomments->count;
+        }
         push @output, $to_push;
     }
 

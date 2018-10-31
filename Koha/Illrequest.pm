@@ -1020,36 +1020,6 @@ sub TO_JSON {
     my $object = $self->SUPER::TO_JSON();
     $object->{id_prefix} = $self->id_prefix;
 
-    if ( scalar (keys %$embed) ) {
-        # Augment the request response with patron details if appropriate
-        if ( $embed->{patron} ) {
-            my $patron = $self->patron;
-            $object->{patron} = {
-                firstname  => $patron->firstname,
-                surname    => $patron->surname,
-                cardnumber => $patron->cardnumber
-            };
-        }
-        # Augment the request response with metadata details if appropriate
-        if ( $embed->{metadata} ) {
-            $object->{metadata} = $self->metadata;
-        }
-        # Augment the request response with status details if appropriate
-        if ( $embed->{capabilities} ) {
-            $object->{capabilities} = $self->capabilities;
-        }
-        # Augment the request response with library details if appropriate
-        if ( $embed->{library} ) {
-            $object->{library} = Koha::Libraries->find(
-                $self->branchcode
-            )->TO_JSON;
-        }
-        # Augment the request response with the number of comments if appropriate
-        if ( $embed->{comments} ) {
-            $object->{comments} = $self->illcomments->count;
-        }
-    }
-
     return $object;
 }
 
