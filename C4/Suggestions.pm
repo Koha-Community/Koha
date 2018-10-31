@@ -504,14 +504,16 @@ sub ModSuggestion {
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
         my $patron = Koha::Patrons->find( $full_suggestion->{suggestedby} );
         my $transport;
-
-        #Set message_transport_type of suggestion notice to email by default, unless the patron has a smsalertnumber set and no email address set
-        if ($patron->smsalertnumber && (!$patron->email)) {
-            $transport="sms";
+        #If FallbackToSMSIfNoEmail syspref is enabled and the patron has a smsalertnumber but no email address then set message_transport_type of suggestion notice to sms
+        if (C4::Context->preference("FallbackToSMSIfNoEmail")) {
+            if (($patron->smsalertnumber) && (!$patron->email)) {
+                $transport="sms";
+            } else {
+                $transport="email";
+            }
         } else {
-            $transport="email";
+            $transport = "email";
         }
-
         if (
             my $letter = C4::Letters::GetPreparedLetter(
                 module      => 'suggestions',

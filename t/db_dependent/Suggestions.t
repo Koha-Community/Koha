@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 103;
+use Test::More tests => 106;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -74,8 +74,19 @@ my $member = {
     surname => 'my surname',
     categorycode => $patron_category->{categorycode},
     branchcode => 'CPL',
+    smsalertnumber => 12345,
 };
+
+my $member2 = {
+    firstname => 'my firstname',
+    surname => 'my surname',
+    categorycode => $patron_category->{categorycode},
+    branchcode => 'CPL',
+    email => 'to@example.com',
+};
+
 my $borrowernumber = Koha::Patron->new($member)->store->borrowernumber;
+my $borrowernumber2 = Koha::Patron->new($member2)->store->borrowernumber;
 
 my $biblionumber1 = 1;
 my $my_suggestion = {
@@ -116,7 +127,18 @@ my $my_suggestion_with_budget = {
     note          => 'my note',
     budgetid      => $budget_id,
 };
-
+my $my_suggestion_with_budget2 = {
+    title         => 'my title 3',
+    author        => 'my author 3',
+    publishercode => 'my publishercode 3',
+    suggestedby   => $borrowernumber2,
+    biblionumber  => $biblionumber1,
+    managedby     => '',
+    manageddate   => '',
+    accepteddate  => dt_from_string,
+    note          => 'my note',
+    budgetid      => $budget_id,
+};
 
 is( CountSuggestion(), 0, 'CountSuggestion without the status returns 0' );
 is( CountSuggestion('ASKED'), 0, 'CountSuggestion returns the correct number of suggestions' );
@@ -184,8 +206,12 @@ my $mod_suggestion3 = {
     STATUS       => 'CHECKED',
     suggestionid => $my_suggestionid,
 };
-$status = ModSuggestion($mod_suggestion3);
 
+#Test the message_transport_type of suggestion notices
+
+#Check the message_transport_type when the 'FallbackToSMSIfNoEmail' syspref is disabled
+t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 0 );
+$status = ModSuggestion($mod_suggestion3);
 is( $status, 1, 'ModSuggestion modifies one entry' );
 $suggestion = GetSuggestion($my_suggestionid);
 is( $suggestion->{STATUS}, $mod_suggestion3->{STATUS}, 'ModSuggestion modifies the status correctly' );
@@ -193,9 +219,31 @@ $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber,
 });
 is( @$messages, 1, 'ModSuggestion sends an email if the status is updated' );
-
+is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEmail syspref is disabled the suggestion message_transport_type is always email');
 is( CountSuggestion('CHECKED'), 1, 'CountSuggestion returns the correct number of suggestions' );
 
+#Check the message_transport_type when the 'FallbackToSMSIfNoEmail' syspref is enabled and the borrower has a smsalertnumber and no email
+t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 1 );
+ModSuggestion($mod_suggestion3);
+$messages = C4::Letters::GetQueuedMessages({
+    borrowernumber => $borrowernumber,
+});
+is ($messages->[1]->{message_transport_type}, 'sms', 'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is sms if the borrower has no email');
+
+#Make a new suggestion for a borrower with defined email and no smsalertnumber
+my $my_suggestion_2_id = NewSuggestion($my_suggestion_with_budget2);
+
+#Check the message_transport_type when the 'FallbackToSMSIfNoEmail' syspref is enabled and the borrower has a defined email and no smsalertnumber
+t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 1 );
+my $mod_suggestion4 = {
+    STATUS       => 'CHECKED',
+    suggestionid => $my_suggestion_2_id,
+};
+ModSuggestion($mod_suggestion4);
+$messages = C4::Letters::GetQueuedMessages({
+    borrowernumber => $borrowernumber2,
+});
+is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is email if the borrower has an email');
 
 is( GetSuggestionInfo(), undef, 'GetSuggestionInfo without the suggestion id returns undef' );
 $suggestion = GetSuggestionInfo($my_suggestionid);
@@ -234,7 +282,7 @@ is( $suggestion->{borrnumsuggestedby}, $my_suggestion->{suggestedby}, 'GetSugges
 my $suggestions = GetSuggestionByStatus();
 is( @$suggestions, 0, 'GetSuggestionByStatus without the status returns an empty array' );
 $suggestions = GetSuggestionByStatus('CHECKED');
-is( @$suggestions, 1, 'GetSuggestionByStatus returns the correct number of suggestions' );
+is( @$suggestions, 2, 'GetSuggestionByStatus returns the correct number of suggestions' );
 is( $suggestions->[0]->{suggestionid}, $my_suggestionid, 'GetSuggestionByStatus returns the suggestion id correctly' );
 is( $suggestions->[0]->{title}, $mod_suggestion1->{title}, 'GetSuggestionByStatus returns the title correctly' );
 is( $suggestions->[0]->{author}, $mod_suggestion1->{author}, 'GetSuggestionByStatus returns the author correctly' );
@@ -257,7 +305,7 @@ $suggestion = GetSuggestion($my_suggestionid);
 is( $suggestion->{biblionumber}, $biblionumber2, 'ConnectSuggestionAndBiblio updates the biblio number correctly' );
 
 my $search_suggestion = SearchSuggestion();
-is( @$search_suggestion, 2, 'SearchSuggestion without arguments returns all suggestions' );
+is( @$search_suggestion, 3, 'SearchSuggestion without arguments returns all suggestions' );
 
 $search_suggestion = SearchSuggestion({
     title => $mod_suggestion1->{title},
@@ -289,7 +337,7 @@ is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of sugg
 $search_suggestion = SearchSuggestion({
     STATUS => $mod_suggestion3->{STATUS},
 });
-is( @$search_suggestion, 1, 'SearchSuggestion returns the correct number of suggestions' );
+is( @$search_suggestion, 2, 'SearchSuggestion returns the correct number of suggestions' );
 
 $search_suggestion = SearchSuggestion({
     STATUS => q||
@@ -303,11 +351,11 @@ is( @$search_suggestion, 0, 'SearchSuggestion returns the correct number of sugg
 $search_suggestion = SearchSuggestion({
     budgetid => '',
 });
-is( @$search_suggestion, 2, 'SearchSuggestion (budgetid = "") returns the correct number of suggestions' );
+is( @$search_suggestion, 3, 'SearchSuggestion (budgetid = "") returns the correct number of suggestions' );
 $search_suggestion = SearchSuggestion({
     budgetid => $budget_id,
 });
-is( @$search_suggestion, 1, 'SearchSuggestion (budgetid = $budgetid) returns the correct number of suggestions' );
+is( @$search_suggestion, 2, 'SearchSuggestion (budgetid = $budgetid) returns the correct number of suggestions' );
 $search_suggestion = SearchSuggestion({
     budgetid => '__NONE__',
 });
@@ -315,7 +363,7 @@ is( @$search_suggestion, 1, 'SearchSuggestion (budgetid = "__NONE__") returns th
 $search_suggestion = SearchSuggestion({
     budgetid => '__ANY__',
 });
-is( @$search_suggestion, 2, 'SearchSuggestion (budgetid = "__ANY__") returns the correct number of suggestions' );
+is( @$search_suggestion, 3, 'SearchSuggestion (budgetid = "__ANY__") returns the correct number of suggestions' );
 
 my $del_suggestion = {
     title => 'my deleted title',
@@ -324,7 +372,7 @@ my $del_suggestion = {
 };
 my $del_suggestionid = NewSuggestion($del_suggestion);
 
-is( CountSuggestion('CHECKED'), 2, 'CountSuggestion returns the correct number of suggestions' );
+is( CountSuggestion('CHECKED'), 3, 'CountSuggestion returns the correct number of suggestions' );
 
 is( DelSuggestion(), '0E0', 'DelSuggestion without arguments returns 0E0' );
 is( DelSuggestion($borrowernumber), '', 'DelSuggestion without the suggestion id returns an empty string' );
@@ -333,8 +381,8 @@ $suggestion = DelSuggestion($borrowernumber, $my_suggestionid);
 is( $suggestion, 1, 'DelSuggestion deletes one suggestion' );
 
 $suggestions = GetSuggestionByStatus('CHECKED');
-is( @$suggestions, 1, 'DelSuggestion deletes one suggestion' );
-is( $suggestions->[0]->{title}, $del_suggestion->{title}, 'DelSuggestion deletes the correct suggestion' );
+is( @$suggestions, 2, 'DelSuggestion deletes one suggestion' );
+is( $suggestions->[1]->{title}, $del_suggestion->{title}, 'DelSuggestion deletes the correct suggestion' );
 
 # Test budgetid fk
 $my_suggestion->{budgetid} = ''; # If budgetid == '', NULL should be set in DB
