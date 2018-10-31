@@ -397,8 +397,8 @@ sub receipt_items {
         @affects = split q{\|},
           C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
         if (@affects) {
-            $biblionumber = $schema->resultset('Aqorder')->find($ordernumber)
-              ->biblionumber->biblionumber;
+            my $order = Koha::Acquisition::Orders->find($ordernumber);
+            $biblionumber = $order->biblionumber;
             my $frameworkcode = GetFrameworkCode($biblionumber);
             ($itemfield) = GetMarcFromKohaField( 'items.itemnumber',
                 $frameworkcode );
