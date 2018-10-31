@@ -51,6 +51,8 @@ Koha::ItemType->new(
         summary        => 'summary',
         checkinmsg     => 'checkinmsg',
         checkinmsgtype => 'checkinmsgtype',
+        processfee         => '0.00',
+        defaultreplacecost => '0.00',
     }
 )->store;
 
@@ -63,6 +65,8 @@ Koha::ItemType->new(
         summary        => 'summary',
         checkinmsg     => 'checkinmsg',
         checkinmsgtype => 'checkinmsgtype',
+        processfee         => '0.00',
+        defaultreplacecost => '0.00',
     }
 )->store;
 
@@ -75,6 +79,8 @@ Koha::ItemType->new(
         summary        => 'summary',
         checkinmsg     => 'checkinmsg',
         checkinmsgtype => 'checkinmsgtype',
+        processfee         => '0.00',
+        defaultreplacecost => '0.00',
     }
 )->store;
 
@@ -161,21 +167,24 @@ subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
             itemtype            => 'type4',
             description         => 'description',
             rental_charge_daily => 1.00,
+            rentalcharge        => '0.00',
+            processfee          => '0.00',
+            defaultreplacecost  => '0.00',
         }
     )->store;
 
     is( $itemtype->rental_charge_daily, 1.00, 'Daily rental charge stored and retreived correctly' );
 
     my $dt_from = dt_from_string();
-    my $dt_to = dt_from_string()->add( days => 7 );
+    my $dt_to = dt_from_string()->add( days => 6 );
 
     t::lib::Mocks::mock_preference('finesCalendar', 'ignoreCalendar');
     my $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 7.00, "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar" );
+    is( $charge, 6.00, "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar" );
 
     t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
     $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 7.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed" );
+    is( $charge, 6.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed" );
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
     $calendar->insert_week_day_holiday(
@@ -184,7 +193,7 @@ subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
         description => 'Test holiday'
     );
     $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 6.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays" );
+    is( $charge, 5.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays" );
 
 };
 
