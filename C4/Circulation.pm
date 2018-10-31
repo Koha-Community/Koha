@@ -3702,6 +3702,12 @@ sub LostItem{
 
         MarkIssueReturned($borrowernumber,$itemnumber,undef,undef,$patron->privacy) if $mark_returned;
     }
+
+    #When item is marked lost automatically cancel its outstanding transfers and set items holdingbranch to the transfer source branch (frombranch)
+    if (my ( $datesent,$frombranch,$tobranch ) = GetTransfers($itemnumber)) {
+        ModItem({holdingbranch => $frombranch}, undef, $itemnumber);
+    }
+    my $transferdeleted = DeleteTransfer($itemnumber);
 }
 
 sub GetOfflineOperations {
