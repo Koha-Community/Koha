@@ -1961,7 +1961,8 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 notforloan         => undef,
                 rentalcharge       => 0,
                 defaultreplacecost => undef,
-                processfee         => $processfee_amount
+                processfee         => $processfee_amount,
+                rental_charge_daily => 0,
             }
         }
     );
