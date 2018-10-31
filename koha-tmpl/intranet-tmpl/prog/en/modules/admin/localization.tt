@@ -64,29 +64,29 @@
             var message;
             if ( type == 'success_on_update' ) {
                 message = $('<div class="dialog message"></div>');
-                message.text("Entity %s (code %s) for lang %s has correctly been updated with '%s'".format(data.entity, data.code, data.lang, data.translation));
+                message.text(_("Entity %s (code %s) for lang %s has correctly been updated with '%s'").format(data.entity, data.code, data.lang, data.translation));
             } else if ( type == 'error_on_update' ) {
                 message = $('<div class="dialog alert"></div>');
                 if ( data.error_code == 'already_exists' ) {
-                    message.text("A translation already exists for this language.");
+                    message.text(_("A translation already exists for this language."));
                 } else {
-                    message.text("An error occurred when updating this translation.");
+                    message.text(_("An error occurred when updating this translation."));
                 }
             } else if ( type == 'success_on_delete' ) {
                 message = $('<div class="dialog message"></div>');
-                message.text("The translation (id %s) has been removed successfully".format(data.id));
+                message.text(_("The translation (id %s) has been removed successfully").format(data.id));
             } else if ( type == 'error_on_delete' ) {
                 message = $('<div class="dialog alert"></div>');
-                message.text("An error occurred when deleting this translation");
+                message.text(_("An error occurred when deleting this translation"));
             } else if ( type == 'success_on_insert' ) {
                 message = $('<div class="dialog message"></div>');
-                message.text("Translation (id %s) has been added successfully".format(data.id));
+                message.text(_("Translation (id %s) has been added successfully").format(data.id));
             } else if ( type == 'error_on_insert' ) {
                 message = $('<div class="dialog alert"></div>');
                 if ( data.error_code == 'already_exists' ) {
-                    message.text("A translation already exists for this language.");
+                    message.text(_("A translation already exists for this language."));
                 } else {
-                    message.text("An error occurred when adding this translation");
+                    message.text(_("An error occurred when adding this translation"));
                 }
             }
 
