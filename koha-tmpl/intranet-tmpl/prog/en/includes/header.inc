@@ -148,6 +148,6 @@
             [% END %]
         </ul>
     </div>
-    [% INCLUDE 'last-borrower.inc' %]
+    [% IF Koha.Preference('showLastPatron') %][% INCLUDE 'last-borrower.inc' %][% END %]
     [% IF ( intranetbookbag ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
 </div>
