@@ -40,14 +40,14 @@
         <input type="hidden" name="op" value="add_validate" />
         <input type="hidden" name="tagfield" value="[% tagfield | html %]" />
         <input type="hidden" name="authtypecode" value="[% authtypecode | html %]" />
-        <fieldset class="action"><input type="submit" class="submit" value="Save changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode |uri %]">Cancel</a></fieldset>
+        <fieldset class="action"><input type="submit" class="submit" value="Save changes" /> <a class="cancel" href="/cgi-bin/koha/admin/auth_subfields_structure.pl?tagfield=[% tagfield | uri %]&amp;authtypecode=[% authtypecode | uri %]">Cancel</a></fieldset>
         <div id="subfieldtabs" class="toptabs numbered">
             <ul>
                 [% FOREACH loo IN loop %]
                     [% IF ( loo.new_subfield ) %]
-                        <li><a href="#sub[% loo.tagsubfield | uri %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
+                        <li><a href="#sub[% loo.tagsubfield | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
                     [% ELSE %]
-                        <li><a href="#sub[% loo.tagsubfield | uri %]field" title="[% loo.liblibrarian | html_entity %]">
+                        <li><a href="#sub[% loo.tagsubfield | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">
                             [% loo.tagsubfield | html %]
                     </a></li>
                     [% END %]
