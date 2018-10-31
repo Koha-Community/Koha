@@ -48,10 +48,10 @@
    <ul>
         [% FOREACH loo IN loop %]
             [% IF ( loo.new_subfield ) %]
-                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
+                <li><a href="#sub[% loo.urisubfieldcode | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">New</a></li>
             [% ELSE %]
-                <li><a href="#sub[% loo.urisubfieldcode %]field" title="[% loo.liblibrarian | html_entity %]">
-                    [% loo.subfieldcode %]
+                <li><a href="#sub[% loo.urisubfieldcode | html_entity %]field" title="[% loo.liblibrarian | html_entity %]">
+                    [% loo.subfieldcode | html %]
                </a></li>
             [% END %]
         [% END %]
