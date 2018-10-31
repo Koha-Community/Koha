@@ -15,6 +15,7 @@ INSERT IGNORE INTO authorised_value_categories( category_name )
     ('DEPARTMENT'),
     ('TERM'),
     ('ITEMTYPECAT'),
+    ('PA_CLASS'),
     ('ROADTYPE');
 
 INSERT IGNORE INTO authorised_value_categories( category_name )
