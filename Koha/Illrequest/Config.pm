@@ -117,7 +117,7 @@ sub available_backends {
     return \@backends;
 }
 
-=head has_branch
+=head3 has_branch
 
 Return whether a 'branch' block is defined
 
