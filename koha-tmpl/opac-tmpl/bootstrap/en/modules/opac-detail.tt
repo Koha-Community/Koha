@@ -1088,7 +1088,7 @@
                                 [% END %]
                             </li>
                             [%# busc is already URI encoded %]
-                            <li class="back_results"><a href="opac-search.pl?[% busc | uri %]" title="Back to the results search list">Back to results</a></li>
+                            <li class="back_results"><a href="opac-search.pl?[% busc | $raw %]" title="Back to the results search list">Back to results</a></li>
                             <li class="right_results">
                                 [% IF ( nextBiblionumber ) %]
                                     <a href="opac-detail.pl?biblionumber=[% nextBiblionumber | uri %][% IF ( query_desc && OpacHighlightedWords ) %]&query_desc=[% query_desc |uri %][% END %]" title="See: [% IF ( nextTitle ) %][% nextTitle | html %][% ELSE %]next biblio[% END %]">Next <i class="fa fa-angle-double-right"></i></a>

@@ -600,7 +600,7 @@
     [% IF ( outer_sup_results_loo.inner_sup_results_loop ) %]
         [% outer_sup_results_loo.servername | html %]
         [% FOREACH inner_sup_results_loo IN outer_sup_results_loo.inner_sup_results_loop %]
-        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi | uri %][% inner_sup_results_loo.limit_cgi | uri %][% inner_sup_results_loo.sort_by | uri %][% inner_sup_results_loo.link | uri %]">[% inner_sup_results_loo.title | html %]</a></div>
+        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi | $raw %][% inner_sup_results_loo.limit_cgi | uri %][% inner_sup_results_loo.sort_by | uri %][% inner_sup_results_loo.link | uri %]">[% inner_sup_results_loo.title | html %]</a></div>
         [% END %]
     [% END %]
 <!-- </div> -->

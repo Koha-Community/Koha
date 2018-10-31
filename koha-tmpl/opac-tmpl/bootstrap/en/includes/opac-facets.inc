@@ -35,18 +35,18 @@
                         <ul>
                             [% SET url = "/cgi-bin/koha/opac-search.pl?" _ query_cgi _ limit_cgi %]
                             [% IF ( sort_by ) %]
-                              [% url = BLOCK %][% url | html %][% "&amp;sort_by=" _ sort_by |url %][% END %]
+                              [% url = BLOCK %][% url | $raw %][% "&amp;sort_by=" _ sort_by | url %][% END %]
                             [% END %]
                             [% FOREACH facet IN facets_loo.facets %]
                             [% IF facets_loo.type_label_CollectionCodes %][% SET facet.facet_label_value = AuthorisedValues.GetByCode('CCODE',facet.facet_label_value,1) || facet.facet_label_value %][% END %]
                                 <li>
                                   [% IF facet.active %]
-                                    [% SET local_url = url _ "&amp;nolimit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
+                                    [% local_url = BLOCK %][% url | $raw %][% "&nolimit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
                                     <span class="facet-label">[% facet.facet_label_value | html %]</span>
-                                    [<a href="[% local_url | url %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
+                                    [<a href="[% local_url | $raw %]" title="Remove facet [% facet.facet_link_value | html %]">x</a>]
                                   [% ELSE %]
-                                    [% SET local_url = url _ "&amp;limit=" _ facet.type_link_value _ ":" _ facet.facet_link_value %]
-                                    <span class="facet-label"><a href="[% local_url | url %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
+                                    [% local_url = BLOCK %][% url | $raw %][% "&limit=" _  facet.type_link_value _ ":" _ facet.facet_link_value | url %][% END %]
+                                    <span class="facet-label"><a href="[% local_url | $raw %]" title="[% facet.facet_title_value | html %]">[% facet.facet_label_value | html %]</a></span>
                                     [% IF ( displayFacetCount ) %]
                                       <span class="facet-count"> ([% facet.facet_count | html %])</span>
                                     [% END %]
@@ -55,7 +55,7 @@
                             [% END %]
                             [% IF ( facets_loo.expandable ) %]
                                 <li class="showmore">
-                                    <a href="[% url | url %][% IF offset %]&amp;offset=[% offset |uri %][% END %]&amp;expand=[% facets_loo.expand |uri %]#[% facets_loo.type_id |uri %]">Show more</a>
+                                    <a href="[% url | $raw %][% IF offset %]&amp;offset=[% offset | uri %][% END %]&amp;expand=[% facets_loo.expand | uri %]#[% facets_loo.type_id | uri %]">Show more</a>
                                 </li>
                             [% END %]
                         </ul>

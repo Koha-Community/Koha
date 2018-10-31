@@ -12,8 +12,7 @@
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %][% END %]
-<link rel="alternate" type="application/rss+xml" title="Koha - RSS"
-href="/cgi-bin/koha/opac-rss.pl?[% query_cgi | html %][% limit_cgi | html %]" />
+<link rel="alternate" type="application/rss+xml" title="Koha - RSS" href="/cgi-bin/koha/opac-rss.pl?[% query_cgi | $raw %][% limit_cgi | url %]" />
 
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='results-grouped' %]
