@@ -50,8 +50,8 @@ sub gethtml5media {
     my @HTML5MediaExtensions = split( /\|/, C4::Context->preference("HTML5MediaExtensions") );
     my $HTML5MediaYouTube    = C4::Context->preference("HTML5MediaYouTube");
     my $marcflavour          = C4::Context->preference("marcflavour");
-    my $isyoutube            = 0;
     foreach my $HTML5Media_field (@HTML5Media_fields) {
+    my $isyoutube            = 0;
         my %HTML5Media;
         # protocol
         if ( $HTML5Media_field->indicator(1) eq '1' ) {
