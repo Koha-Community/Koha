@@ -24,7 +24,8 @@ use C4::Languages;
 use C4::Context;
 
 use Encode;
-use Locale::Messages qw(:locale_h setlocale LC_MESSAGES);
+use Locale::Messages qw(:locale_h LC_MESSAGES);
+use POSIX qw( setlocale );
 use Koha::Cache::Memory::Lite;
 
 use parent 'Exporter';
@@ -55,7 +56,7 @@ sub init {
             # LANG needs to be set to a valid locale,
             # otherwise LANGUAGE is ignored
             $ENV{LANG} = $system_locales[0];
-            setlocale(LC_MESSAGES, '');
+            POSIX::setlocale(LC_MESSAGES, '');
 
             my $langtag = C4::Languages::getlanguage;
             my @subtags = split /-/, $langtag;
