@@ -172,7 +172,7 @@ if ( $op eq 'add_form' ) {
         $row_data{maxlength}         = $data->{maxlength};
         $row_data{tab}               = $data->{tab};
         $row_data{tagsubfield}       = $data->{tagsubfield};
-        $row_data{subfieldcode}      = $data->{'tagsubfield'} eq '@' ? '_' : $data->{'tagsubfield'};
+        $row_data{subfieldcode}      = $data->{'tagsubfield'};
         $row_data{urisubfieldcode}   = $row_data{subfieldcode} eq '%' ? 'pct' : $row_data{subfieldcode};
         $row_data{liblibrarian}      = $data->{'liblibrarian'};
         $row_data{libopac}           = $data->{'libopac'};
@@ -263,7 +263,6 @@ elsif ( $op eq 'add_validate' ) {
         my $tagfield    = $input->param('tagfield');
         my $tagsubfield = $tagsubfield[$i];
         $tagsubfield = "@" unless $tagsubfield ne '';
-        $tagsubfield = "@" if $tagsubfield eq '_';
         my $liblibrarian     = $liblibrarian[$i];
         my $libopac          = $libopac[$i];
         my $repeatable       = $input->param("repeatable$i") ? 1 : 0;
