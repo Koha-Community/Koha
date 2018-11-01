@@ -685,7 +685,7 @@ function Changefwk() {
                     <input type="text" id="[%- mv.id -%]" name="[%- mv.name -%]" value="[%- mv.value -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size -%]" maxlength="[%- mv.maxlength -%]" />
                     <span class="subfield_controls">
                         [% IF mv.noclick %]
-                            <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup"></a>
+                            <span class="buttonDot tag_editor disabled" tabindex="-1" title="Field autofilled by plugin"></span>
                         [% ELSE %]
                             <a href="#" id="buttonDot_[% mv.id %]" class="buttonDot tag_editor framework_plugin" tabindex="1" title="Tag editor">Tag editor</a>
                         [% END %]
