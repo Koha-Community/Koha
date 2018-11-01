@@ -384,8 +384,8 @@ sub redirect_add_subscription {
 
     my @additional_fields;
     my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
-    my $basket_fields = Koha::AdditionalFields->search({ tablename => 'aqbasket' });
-    while ( my $field = $basket_fields->next ) {
+    my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
+    while ( my $field = $subscription_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);
         if ($field->marcfield) {
             my ($field, $subfield) = split /\$/, $field->marcfield;
@@ -503,8 +503,8 @@ sub redirect_mod_subscription {
 
     my @additional_fields;
     my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
-    my $basket_fields = Koha::AdditionalFields->search({ tablename => 'aqbasket' });
-    while ( my $field = $basket_fields->next ) {
+    my $subscription_fields = Koha::AdditionalFields->search({ tablename => 'subscription' });
+    while ( my $field = $subscription_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);
         if ($field->marcfield) {
             my ($field, $subfield) = split /\$/, $field->marcfield;
