@@ -235,7 +235,7 @@
             [% INCLUDE 'patron-title.inc' patron = creator %]
         </span>
        </li>
-       <li><label for="quantity_to_receive">Quantity to receive: </label><span class="label">
+       <li><label for="quantity_to_receive">Quantity ordered: </label><span class="label">
            [% IF edit or subscriptionid %]
                <input type="text" id="quantity_to_receive" name="quantity" value="[% quantity | html %]" />
            [% ELSE%]
