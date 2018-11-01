@@ -1,4 +1,43 @@
 
+function getCookie(name) {
+    var nameEQ = name + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0;i < ca.length;i++) {
+	var c = ca[i];
+	while (c.charAt(0)==' ') c = c.substring(1,c.length);
+	if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    }
+    return null;
+}
+
+function setCookie(name,value,days)
+{
+    var expires = "";
+    if (days) {
+       var date = new Date();
+       date.setTime(date.getTime() + (days*24*60*60*1000));
+       expires = "; expires=" + date.toUTCString();
+    }
+    document.cookie = name + "=" + (value || "")  + expires + "; path=/";
+}
+
+function autofill_change(e)
+{
+    var elem = document.getElementById("autofill_values");
+    if (elem) {
+       setCookie("autofill_values", elem.checked ? "yes" : "no", 365);
+    }
+}
+
+function autofill_set()
+{
+    var elem = document.getElementById("autofill_values");
+    var cookie = getCookie("autofill_values");
+    if (elem && cookie && cookie == "yes") {
+        elem.checked = true;
+    }
+}
+
 
 // Add an option to a select form field
 function add_option(select, text, value, selected)
@@ -142,6 +181,12 @@ function renderResult(tr_result, result)
                     for (var j=0; j < obj.options.length && !found; j++)
                         if (obj.options[j].value == value) found = true;
                     if (!found) {
+			var elem = document.getElementById("f" + pos);
+			var autofill = document.getElementById("autofill_values");
+			if (elem && autofill && autofill.checked) {
+			    elem.getElementsByTagName('option')[0].selected = 'selected';
+			    elem.focus();
+			}
                         td.style.backgroundColor = "yellow";
                         td.title = "Pos " + i + ". Incorrect Value: \"" + value + "\"";
                     }
