@@ -205,6 +205,95 @@ sub apply {
     return $available_credit;
 }
 
+=head3 adjust
+
+This method allows updating a debit or credit on a patron's account
+
+    $account_line->adjust(
+        {
+            amount => $amount,
+            type   => $update_type,
+        }
+    );
+
+$update_type can be any of:
+  - fine_increment
+
+=cut
+
+sub adjust {
+    my ( $self, $params ) = @_;
+
+    my $amount       = $params->{amount};
+    my $update_type  = $params->{type};
+
+    unless ( exists($Koha::Account::Line::offset_type->{$update_type}) ) {
+        Koha::Exceptions::Account::UnrecognisedType->throw(
+            error => 'Update type not recognised'
+        );
+    }
+
+    my $account_type = $self->accounttype;
+    unless ( $Koha::Account::Line::allowed_update->{$update_type} eq $account_type ) {
+        Koha::Exceptions::Account::UnrecognisedType->throw(
+            error => 'Update type not allowed on this accounttype'
+        );
+    }
+
+    my $schema = Koha::Database->new->schema;
+
+    $schema->txn_do(
+        sub {
+
+            my $amount_before             = $self->amount;
+            my $amount_outstanding_before = $self->amountoutstanding;
+            my $difference                = $amount - $amount_before;
+            my $new_outstanding           = $amount_outstanding_before + $difference;
+
+            # Update the account line
+            $self->set(
+                {
+                    date              => \'NOW()',
+                    amount            => $amount,
+                    amountoutstanding => $new_outstanding,
+                    ( $update_type eq 'fine_increment' ? ( lastincrement => $difference ) : ()),
+                }
+            )->store();
+
+            # Record the account offset
+            my $account_offset = Koha::Account::Offset->new(
+                {
+                    debit_id => $self->id,
+                    type     => $Koha::Account::Line::offset_type->{$update_type},
+                    amount   => $difference
+                }
+            )->store();
+
+            if ( C4::Context->preference("FinesLog") ) {
+                logaction(
+                    "FINES", 'UPDATE', #undef becomes UPDATE in UpdateFine
+                    $self->borrowernumber,
+                    Dumper(
+                        {   action            => $update_type,
+                            borrowernumber    => $self->borrowernumber,
+                            accountno         => $self->accountno,
+                            amount            => $amount,
+                            description       => undef,
+                            amountoutstanding => $new_outstanding,
+                            accounttype       => $self->accounttype,
+                            note              => undef,
+                            itemnumber        => $self->itemnumber,
+                            manager_id        => undef,
+                        }
+                    )
+                ) if ( $update_type eq 'fine_increment' );
+            }
+        }
+    );
+
+    return $self;
+}
+
 =head3 is_credit
 
     my $bool = $line->is_credit;
@@ -242,3 +331,25 @@ sub _type {
 }
 
 1;
+
+=head2 Name mappings
+
+=head3 $offset_type
+
+=cut
+
+our $offset_type = { 'fine_increment' => 'Fine Update', };
+
+=head3 $allowed_update
+
+=cut
+
+our $allowed_update = { 'fine_increment' => 'FU', };
+
+=head1 AUTHORS
+
+Kyle M Hall <kyle@bywatersolutions.com >
+Tomás Cohen Arazi <tomascohen@theke.io>
+Martin Renvoize <martin.renvoize@ptfs-europe.com>
+
+=cut
