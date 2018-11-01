@@ -415,12 +415,12 @@ if ( $messages->{'ResFound'}) {
     my $reserve    = $messages->{'ResFound'};
     my $patron = Koha::Patrons->find( $reserve->{borrowernumber} );
     my $holdmsgpreferences =  C4::Members::Messaging::GetMessagingPreferences( { borrowernumber => $reserve->{'borrowernumber'}, message_name   => 'Hold_Filled' } );
-
+    my $branchCheck = ( $userenv_branch eq $reserve->{branchcode} );
     if ( $reserve->{'ResFound'} eq "Reserved" && C4::Context->preference('HoldsAutoFill') ) {
         my $item = Koha::Items->find( $itemnumber );
         my $biblio = $item->biblio;
 
-        my $diffBranchSend = ($userenv_branch ne $reserve->{branchcode}) ? $reserve->{branchcode} : undef;
+        my $diffBranchSend = !$branchCheck ? $reserve->{branchcode} : undef;
         ModReserveAffect( $reserve->{itemnumber}, $reserve->{borrowernumber}, $diffBranchSend, $reserve->{reserve_id} );
         my ( $messages, $nextreservinfo ) = GetOtherReserves($reserve->{itemnumber});
 
@@ -447,12 +447,12 @@ if ( $messages->{'ResFound'}) {
     elsif ( $reserve->{'ResFound'} eq "Waiting" or $reserve->{'ResFound'} eq "Reserved" ) {
         if ( $reserve->{'ResFound'} eq "Waiting" ) {
             $template->param(
-                waiting      => ($userenv_branch eq $reserve->{'branchcode'} ? 1 : 0 ),
+                waiting      => $branchCheck ? 1 : undef,
             );
         } elsif ( $reserve->{'ResFound'} eq "Reserved" ) {
             $template->param(
-                intransit    => ($userenv_branch eq $reserve->{'branchcode'} ? 0 : 1 ),
-                transfertodo => ($userenv_branch eq $reserve->{'branchcode'} ? 0 : 1 ),
+                intransit    => $branchCheck ? undef : 1,
+                transfertodo => $branchCheck ? undef : 1,
                 reserve_id   => $reserve->{reserve_id},
                 reserved     => 1,
             );
