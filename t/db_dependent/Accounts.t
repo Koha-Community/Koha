@@ -639,6 +639,9 @@ subtest "Koha::Account::chargelostitem tests" => sub {
     is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and default set");
     is( $procfee->amount, "2.040000",  "Processing fee if processing fee");
     is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
+
+    # Cleanup - this must be replaced with a transaction per subtest
+    Koha::Patrons->find($cli_borrowernumber)->checkouts->delete;
 };
 
 subtest "Koha::Account::non_issues_charges tests" => sub {
