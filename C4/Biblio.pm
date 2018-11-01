@@ -4567,6 +4567,29 @@ sub getComponentBiblionumbers {
     return \@componentNumbers;
 }
 
+=head2 getComponentBiblionumber
+
+$biblionumber = C4::Biblio::getComponentBiblionumber( $componentpart );
+Get biblionumber for component part.
+
+=cut
+
+sub getComponentBiblionumber {
+    my ($componentRecordXML) = @_;
+
+    my ( $tagid, $subfieldid ) = GetMarcFromKohaField( "biblio.biblionumber" );
+    my $componentBiblionumber;
+    if ($componentRecordXML =~ /<(data|control)field tag="$tagid".*?>(.*?)<\/(data|control)field>/s) {
+        my $fieldStr = $2;
+        if ($fieldStr =~ /<subfield code="$subfieldid">(.*?)<\/subfield>/) {
+            my $biblionumber = $1;
+            $componentBiblionumber = $biblionumber;
+        }
+    }
+
+    return $componentBiblionumber;
+}
+
 sub _getComponentParts {
     my ($parentsField001, $parentsField003) = @_;
     my $parentrecord;
