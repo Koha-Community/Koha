@@ -3219,36 +3219,19 @@ sub AddIssuingCharge {
 
     # FIXME What if checkout does not exist?
 
-    my $nextaccntno = C4::Accounts::getnextacctno( $checkout->borrowernumber );
-
-    my $manager_id  = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
-
-    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-
-    my $accountline = Koha::Account::Line->new(
+    my $account = Koha::Account->new({ patron_id => $checkout->borrowernumber });
+    my $accountline = $account->add_debit(
         {
-            borrowernumber    => $checkout->borrowernumber,
-            itemnumber        => $checkout->itemnumber,
-            issue_id          => $checkout->issue_id,
-            accountno         => $nextaccntno,
-            amount            => $charge,
-            amountoutstanding => $charge,
-            manager_id        => $manager_id,
-            branchcode        => $branchcode,
-            description       => 'Rental',
-            accounttype       => 'Rent',
-            date              => \'NOW()',
+            amount      => $charge,
+            description => 'Rental',
+            note        => undef,
+            user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+            library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+            type        => 'rent',
+            item_id     => $checkout->itemnumber,
+            issue_id    => $checkout->issue_id,
         }
-    )->store();
-
-    Koha::Account::Offset->new(
-        {
-            debit_id => $accountline->id,
-            type     => 'Rental Fee',
-            amount   => $charge,
-        }
-    )->store();
+    );
 }
 
 =head2 GetTransfers
