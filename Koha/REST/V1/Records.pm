@@ -136,12 +136,16 @@ sub get_record {
     }
 
     my $componentPartBiblios = C4::Biblio::getComponentRecords( $record->field('001')->data(), $record->field('003')->data());
+    my @componentPartRecordXML;
+    for my $cb ( @{$componentPartBiblios} ) {
+        push @componentPartRecordXML, decode('utf8', $cb);
+    }
 
     ##Phew, we survived.
     return $c->render( status => 200, openapi => {
         biblionumber => 0+$biblionumber,
         marcxml => $xmlRecord,
-        componentparts => $componentPartBiblios
+        componentparts => \@componentPartRecordXML
     } );
 }
 
