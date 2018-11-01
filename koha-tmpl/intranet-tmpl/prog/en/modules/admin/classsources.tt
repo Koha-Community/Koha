@@ -49,7 +49,7 @@
             <main>
 
 [% FOR m IN messages %]
-    <div class="dialog [% m.type %]">
+    <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update_source' %]
             An error occurred when updating this classification source.
@@ -88,7 +88,7 @@
         [% CASE 'success_on_delete_split_rule' %]
             Splitting rule deleted successfully.
         [% CASE %]
-            [% m.code %]
+            [% m.code | html %]
         [% END %]
     </div>
 [% END %]
@@ -189,7 +189,7 @@
              [% IF routine_name == sort_rule.sort_routine %]
                  <option value="[% routine_name | html %]" selected="selected">[% routine_name | html %]</option>
              [% ELSE %]
-                 <option value="[% routine_name | html %]">[% routine_name %]</option>
+                 <option value="[% routine_name | html %]">[% routine_name | html %]</option>
              [% END %]
            [% END %]
            </select>
