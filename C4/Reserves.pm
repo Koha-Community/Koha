@@ -570,24 +570,20 @@ sub GetOtherReserves {
 
 sub ChargeReserveFee {
     my ( $borrowernumber, $fee, $title ) = @_;
-
     return if !$fee || $fee == 0;    # the last test is needed to include 0.00
-
-    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-    my $nextacctno = C4::Accounts::getnextacctno($borrowernumber);
-
-    Koha::Account::Line->new(
+    Koha::Account->new( { patron_id => $borrowernumber } )->add_debit(
         {
-            borrowernumber    => $borrowernumber,
-            accountno         => $nextacctno,
-            date              => dt_from_string(),
-            amount            => $fee,
-            description       => "Reserve Charge - $title",
-            accounttype       => 'Res',
-            amountoutstanding => $fee,
-            branchcode        => $branchcode
+            amount       => $fee,
+            description  => "Reserve Charge - " . $title,
+            note         => undef,
+            user_id      => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+            library_id   => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+            sip          => undef,
+            invoice_type => undef,
+            type         => 'reserve',
+            item_id      => undef
         }
-    )->store();
+    );
 }
 
 =head2 GetReserveFee
