@@ -274,11 +274,6 @@ sub GetSubscription {
 
     $subscription->{cannotedit} = not can_edit_subscription( $subscription );
 
-    # Add additional fields to the subscription into a new key "additional_fields"
-    my $subscription_object = Koha::Subscriptions->find($subscriptionid);
-    $subscription->{additional_fields} = { map { $_->field->name => $_->value }
-        $subscription_object->additional_field_values->as_list };
-
     if ( my $mana_id = $subscription->{mana_id} ) {
         my $mana_subscription = Koha::SharedContent::get_entity_by_id(
             'subscription', $mana_id, {usecomments => 1});
