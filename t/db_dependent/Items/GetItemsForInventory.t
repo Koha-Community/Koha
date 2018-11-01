@@ -143,7 +143,6 @@ subtest 'Use cn_sort rather than callnumber to determine correct location' => su
     plan tests => 1;
 
     my $builder = t::lib::TestBuilder->new;
-    Koha::Items->delete;
 
     my $class_rule = $builder->build({
         source => 'ClassSortRule',
@@ -155,6 +154,14 @@ subtest 'Use cn_sort rather than callnumber to determine correct location' => su
             class_sort_rule => $class_rule->{class_sort_rule},
         }
     });
+
+    #Find if we have any items in our test range before we start
+    my( undef, $pre_item_count) = GetItemsForInventory({
+        maxlocation => 'GT100',
+        minlocation => 'GT90',
+        class_source => $class_source->{cn_source},
+    });
+
     my $item_1 = $builder->build({
             source => 'Item',
             value  => {
@@ -168,7 +175,7 @@ subtest 'Use cn_sort rather than callnumber to determine correct location' => su
         minlocation => 'GT90',
         class_source => $class_source->{cn_source},
     });
-    is($item_count,1,"We should return GT95 as between GT90 and GT100");
+    is($item_count,$pre_item_count + 1,"We should return GT95 as between GT90 and GT100");
     $schema->storage->txn_rollback;
 
 };
