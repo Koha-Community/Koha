@@ -220,7 +220,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         }
     });
 
-    my $see = Koha::SearchEngine::Elasticsearch->new({ index => 'biblios' });
+    my $see = Koha::SearchEngine::Elasticsearch->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
 
     my $marc_record_1 = MARC::Record->new();
     $marc_record_1->leader('     cam  22      a 4500');
