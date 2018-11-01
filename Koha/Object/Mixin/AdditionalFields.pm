@@ -44,7 +44,7 @@ Koha::Object::Mixin::AdditionalFields
 sub set_additional_fields {
     my ($self, $additional_fields) = @_;
 
-    my @additional_field_values = $self->additional_field_values->delete;
+    $self->additional_field_values->delete;
 
     foreach my $additional_field (@$additional_fields) {
         my $value = $additional_field->{value};
