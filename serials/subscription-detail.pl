@@ -30,6 +30,7 @@ use Koha::AdditionalFields;
 use Koha::AuthorisedValues;
 use Koha::DateUtils;
 use Koha::Acquisition::Bookseller;
+use Koha::Subscriptions;
 
 use Date::Calc qw/Today Day_of_Year Week_of_Year Add_Delta_Days/;
 use Carp;
@@ -129,8 +130,14 @@ my $numberpattern = C4::Serials::Numberpattern::GetSubscriptionNumberpattern($su
 
 my $default_bib_view = get_default_view();
 
-my $additional_fields = Koha::AdditionalFields->search( { tablename => 'subscription' } );
-$template->param( additional_fields_for_subscription => $additional_fields );
+my $subscription_object = Koha::Subscriptions->find( $subscriptionid );
+$template->param(
+    available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'subscription' } ) ],
+    additional_field_values => {
+        map { $_->field->name => $_->value }
+          $subscription_object->additional_field_values->as_list
+    },
+);
 
 # FIXME Do we want to hide canceled orders?
 my $orders = Koha::Acquisition::Orders->search( { subscriptionid => $subscriptionid }, { order_by => [ { -desc => 'timestamp' }, \[ "field(orderstatus, 'ordered', 'partial', 'complete')" ] ] } );

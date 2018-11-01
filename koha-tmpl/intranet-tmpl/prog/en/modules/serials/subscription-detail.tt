@@ -131,23 +131,14 @@
      </div>
      </div>
 
-    [% IF additional_fields_for_subscription %]
+    [% IF available_additional_fields %]
     <hr>
     <div class="row">
       <div class="col-sm-6">
         <h3>Additional fields:</h3>
         <div class="rows">
           <ol>
-            [% FOR field IN additional_fields_for_subscription %]
-              <li>
-                <span class="label">[% field.name | html %]:</span>
-                [% IF field.authorised_value_category %]
-                  [% AuthorisedValues.GetByCode( field.authorised_value_category, additional_fields.${field.name} ) | html %]
-                [% ELSE %]
-                  [% additional_fields.${field.name} | html %]
-                [% END %]
-              </li>
-            [% END %]
+            [% INCLUDE 'additional-fields-display.inc' available=available_additional_fields values=additional_field_values %]
           </ol>
         </div>
       </div>
