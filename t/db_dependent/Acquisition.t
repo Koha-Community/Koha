@@ -728,6 +728,8 @@ subtest 'ModReceiveOrder and subscription' => sub {
                 order_internalnote => $first_note,
                 quantity           => 5,
                 quantityreceived   => 0,
+                ecost_tax_excluded => 42,
+                unitprice_tax_excluded => 42,
             }
         }
     );
