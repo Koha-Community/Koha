@@ -3663,9 +3663,7 @@ sub LostItem{
             defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $itemnumber...) failed!";  # zero is OK, check defined
         }
         if (C4::Context->preference('WhenLostChargeReplacementFee')){
-            my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
-            my $checkout_id = $checkout ? $checkout->id : undef;
-            C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $checkout_id, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}");
+            C4::Accounts::chargelostitem($borrowernumber, $itemnumber, $issues->{'replacementprice'}, "Lost Item $issues->{'title'} $issues->{'barcode'}");
             #FIXME : Should probably have a way to distinguish this from an item that really was returned.
             #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
         }
