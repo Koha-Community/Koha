@@ -16749,6 +16749,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19263 - Advanced Editor - Rancor - Add auto control number (001) widget)\n";
 }
 
+$DBversion = '18.06.00.048';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE stockrotationrotas CHANGE COLUMN description description text" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21682 - Remove default on stockrotationrotas.description)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
