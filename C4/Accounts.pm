@@ -108,14 +108,12 @@ sub chargelostitem{
         $replacementprice = $defaultreplacecost;
     }
 
-    my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-
+    my $account = Koha::Account->new({ patron_id => $borrowernumber });
     # first make sure the borrower hasn't already been charged for this item
     # FIXME this should be more exact
     #       there is no reason a user can't lose an item, find and return it, and lost it again
-    my $existing_charges = Koha::Account::Lines->search(
+    my $existing_charges = $account->lines->search(
         {
-            borrowernumber => $borrowernumber,
             itemnumber     => $itemnumber,
             accounttype    => 'L',
         }
@@ -127,86 +125,33 @@ sub chargelostitem{
         my $issue_id = $checkout ? $checkout->issue_id : undef;
         #add processing fee
         if ($processfee && $processfee > 0){
-            my $accountline = Koha::Account::Line->new(
+            my $accountline = $account->add_debit(
                 {
-                    borrowernumber    => $borrowernumber,
-                    issue_id          => $issue_id,
-                    accountno         => getnextacctno($borrowernumber),
-                    date              => \'NOW()',
-                    amount            => $processfee,
-                    description       => $description,
-                    accounttype       => 'PF',
-                    amountoutstanding => $processfee,
-                    itemnumber        => $itemnumber,
-                    note              => $processingfeenote,
-                    manager_id        => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
-                    branchcode        => $branchcode,
+                    amount      => $processfee,
+                    description => $description,
+                    note        => $processingfeenote,
+                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                    library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+                    type        => 'processing',
+                    item_id     => $itemnumber,
+                    issue_id    => $issue_id,
                 }
-            )->store();
-
-            my $account_offset = Koha::Account::Offset->new(
-                {
-                    debit_id => $accountline->id,
-                    type     => 'Processing Fee',
-                    amount   => $accountline->amount,
-                }
-            )->store();
-
-            if ( C4::Context->preference("FinesLog") ) {
-                logaction("FINES", 'CREATE',$borrowernumber,Dumper({
-                    action            => 'create_fee',
-                    borrowernumber    => $accountline->borrowernumber,,
-                    accountno         => $accountline->accountno,
-                    amount            => $accountline->amount,
-                    description       => $accountline->description,
-                    accounttype       => $accountline->accounttype,
-                    amountoutstanding => $accountline->amountoutstanding,
-                    note              => $accountline->note,
-                    itemnumber        => $accountline->itemnumber,
-                    manager_id        => $accountline->manager_id,
-                }));
-            }
+            );
         }
         #add replace cost
         if ($replacementprice > 0){
-            my $accountline = Koha::Account::Line->new(
+            my $accountline = $account->add_debit(
                 {
-                    borrowernumber    => $borrowernumber,
-                    issue_id          => $issue_id,
-                    accountno         => getnextacctno($borrowernumber),
-                    date              => \'NOW()',
-                    amount            => $replacementprice,
-                    description       => $description,
-                    accounttype       => 'L',
-                    amountoutstanding => $replacementprice,
-                    itemnumber        => $itemnumber,
-                    manager_id        => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
-                    branchcode        => $branchcode,
+                    amount      => $replacementprice,
+                    description => $description,
+                    note        => undef,
+                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                    library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+                    type        => 'lost_item',
+                    item_id     => $itemnumber,
+                    issue_id    => $issue_id,
                 }
-            )->store();
-
-            my $account_offset = Koha::Account::Offset->new(
-                {
-                    debit_id => $accountline->id,
-                    type     => 'Lost Item',
-                    amount   => $accountline->amount,
-                }
-            )->store();
-
-            if ( C4::Context->preference("FinesLog") ) {
-                logaction("FINES", 'CREATE',$borrowernumber,Dumper({
-                    action            => 'create_fee',
-                    borrowernumber    => $accountline->borrowernumber,,
-                    accountno         => $accountline->accountno,
-                    amount            => $accountline->amount,
-                    description       => $accountline->description,
-                    accounttype       => $accountline->accounttype,
-                    amountoutstanding => $accountline->amountoutstanding,
-                    note              => $accountline->note,
-                    itemnumber        => $accountline->itemnumber,
-                    manager_id        => $accountline->manager_id,
-                }));
-            }
+            );
         }
     }
 }
