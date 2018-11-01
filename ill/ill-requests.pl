@@ -93,10 +93,26 @@ if ( $backends_available ) {
         if ( $params->{backend} ) {
             my $new_request = Koha::Illrequest->new->load_backend( $params->{backend} );
             $backend_result = $new_request->backend_migrate($params);
-            $template->param(
-                whole   => $backend_result,
-                request => $new_request
-            );
+            if ($backend_result) {
+                $template->param(
+                    whole   => $backend_result,
+                    request => $new_request
+                );
+            } else {
+                # backend failure
+                $backend_result = {
+                    stage => 'commit',
+                    next  => 'illview',
+                    error => {
+                        message => 'Migrating to backedn does not support migrate',
+                        status => 'Migrating to backedn does not support migrate'
+                    }
+                };
+                $template->param(
+                    whole   => $backend_result,
+                    request => $request
+                );
+            }
         }
         else {
             $request = Koha::Illrequests->find( $params->{illrequest_id} );

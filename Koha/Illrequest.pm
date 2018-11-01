@@ -536,11 +536,12 @@ Migrate a request from one backend to another.
 sub backend_migrate {
     my ( $self, $params ) = @_;
 
-    my $response = $self->_backend->migrate({
+    my $response = $self->_backend_capability('migrate',{
             request    => $self,
             other      => $params,
         });
-    return $self->expandTemplate($response);
+    return $self->expandTemplate($response) if $response;
+    return $response;
 }
 
 =head2 backend_confirm
