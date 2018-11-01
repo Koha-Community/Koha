@@ -578,28 +578,7 @@ sub UpdateFine {
         # (i.e. , of accounttype 'FU').  Doing so will break accrual.
         if ( $data->{'amount'} != $amount ) {
             my $accountline = Koha::Account::Lines->find( $data->{accountlines_id} );
-            my $diff = $amount - $data->{'amount'};
-
-            #3341: diff could be positive or negative!
-            my $out   = $data->{'amountoutstanding'} + $diff;
-
-            $accountline->set(
-                {
-                    date          => dt_from_string(),
-                    amount        => $amount,
-                    amountoutstanding   => $out,
-                    lastincrement => $diff,
-                    accounttype   => 'FU',
-                }
-            )->store();
-
-            Koha::Account::Offset->new(
-                {
-                    debit_id => $accountline->id,
-                    type     => 'Fine Update',
-                    amount   => $diff,
-                }
-            )->store();
+            $accountline->adjust({ amount => $amount, type => 'fine_increment' });
         }
     } else {
         if ( $amount ) { # Don't add new fines with an amount of 0
@@ -608,42 +587,23 @@ sub UpdateFine {
             );
             $sth4->execute($itemnum);
             my $title = $sth4->fetchrow;
-
-            my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
-
             my $desc = "$title $due";
 
-            my $accountline = Koha::Account::Line->new(
+            my $account = Koha::Account->new({ patron_id => $borrowernumber });
+            my $accountline = $account->add_debit(
                 {
-                    borrowernumber    => $borrowernumber,
-                    itemnumber        => $itemnum,
-                    date              => dt_from_string(),
-                    amount            => $amount,
-                    description       => $desc,
-                    accounttype       => 'FU',
-                    amountoutstanding => $amount,
-                    lastincrement     => $amount,
-                    accountno         => $nextaccntno,
-                    issue_id          => $issue_id,
+                    amount      => $amount,
+                    description => $desc,
+                    note        => undef,
+                    user_id     => undef,
+                    library_id  => undef,
+                    type        => 'fine',
+                    item_id     => $itemnum,
+                    issue_id    => $issue_id,
                 }
-            )->store();
-
-            Koha::Account::Offset->new(
-                {
-                    debit_id => $accountline->id,
-                    type     => 'Fine',
-                    amount   => $amount,
-                }
-            )->store();
+            );
         }
     }
-    # logging action
-    &logaction(
-        "FINES",
-        undef,
-        $borrowernumber,
-        "due=".$due."  amount=".$amount." itemnumber=".$itemnum
-        ) if C4::Context->preference("FinesLog");
 }
 
 =head2 BorType
