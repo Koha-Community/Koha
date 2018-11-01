@@ -115,17 +115,19 @@ sub add_record {
 
 sub get_record {
     my $c = shift->openapi->valid_input or return;
-    my ($xmlRecord);
+    my ($record, $xmlRecord);
 
     my $biblionumber = $c->validation->param('biblionumber');
     ##Can we get the XML?
-    eval { $xmlRecord = C4::Biblio::GetXmlBiblio($biblionumber); };
+    eval { $record = C4::Biblio::GetMarcBiblio($biblionumber); };
     if ($@) {
         return $c->render( status => 500, openapi => {
-            error => "Couldn't get the given marcxml from the database??:".
+            error => "Couldn't get the given record from the database??:".
                      "\n$biblionumber\nError: '$@'"
         });
     }
+    my $encoding = C4::Context->preference("marcflavour");
+    $xmlRecord = $record->as_xml_record($encoding);
     if (not($xmlRecord)) {
         return $c->render( status => 404, openapi => {
             error => "No such MARC record in our database for ".
@@ -133,10 +135,13 @@ sub get_record {
         });
     }
 
+    my $componentPartBiblios = C4::Biblio::getComponentRecords( $record->field('001')->data(), $record->field('003')->data());
+
     ##Phew, we survived.
     return $c->render( status => 200, openapi => {
         biblionumber => 0+$biblionumber,
-        marcxml => $xmlRecord
+        marcxml => $xmlRecord,
+        componentparts => $componentPartBiblios
     } );
 }
 
