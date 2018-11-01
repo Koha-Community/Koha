@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 12;
 
 use Koha::Acquisition::Baskets; # Koha::Acquisition::Baskets uses the mixin
 use Koha::AdditionalFields;
@@ -42,16 +42,47 @@ Koha::AdditionalFieldValue->new({
     record_id => $basket1->basketno,
     value => 'bar value for basket1',
 })->store;
-Koha::AdditionalFieldValue->new({
-    field_id => $foo->id,
-    record_id => $basket2->basketno,
-    value => 'foo value for basket2',
-})->store;
-Koha::AdditionalFieldValue->new({
-    field_id => $bar->id,
-    record_id => $basket2->basketno,
-    value => 'bar value for basket2',
-})->store;
+
+my $additional_fields_for_basket2 = [
+    {
+        id    => $foo->id,
+        value => 'foo value for basket2',
+    },
+    {
+        id    => $bar->id,
+        value => 'bar value for basket2',
+    },
+];
+$basket2->set_additional_fields($additional_fields_for_basket2);
+
+my $additional_fields = $basket2->additional_field_values;
+is( ref($additional_fields), 'Koha::AdditionalFieldValues', '->additional_field_values should return a Koha::AdditionalFieldValues object' );
+is_deeply(
+    [
+        map {
+            {
+                # We are bascially removing the 'id' field here
+                field_id  => $_->{field_id},
+                record_id => $_->{record_id},
+                value     => $_->{value},
+            }
+        } @{ $additional_fields->unblessed }
+    ],
+    [
+        {
+            field_id  => $additional_fields_for_basket2->[0]->{id},
+            record_id => $basket2->basketno,
+            value     => $additional_fields_for_basket2->[0]->{value},
+        },
+        {
+            field_id  => $additional_fields_for_basket2->[1]->{id},
+            record_id => $basket2->basketno,
+            value     => $additional_fields_for_basket2->[1]->{value},
+        }
+
+    ],
+    '->additional_field_values should return the correct values'
+);
 
 my @baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
     {
