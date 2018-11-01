@@ -1433,7 +1433,8 @@ sub AddIssue {
            # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item->itemnumber, $borrower->{'borrowernumber'} );
             if ( $charge > 0 ) {
-                AddIssuingCharge( $issue, $charge );
+                my $description = "Rental";
+                AddIssuingCharge( $issue, $charge, $description );
             }
 
             # Record the fact that this book was issued.
@@ -2861,26 +2862,8 @@ sub AddRenewal {
     # Charge a new rental fee, if applicable?
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
     if ( $charge > 0 ) {
-        my $accountno = C4::Accounts::getnextacctno( $borrowernumber );
-        my $manager_id = 0;
-        $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
-        my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
-        Koha::Account::Line->new(
-            {
-                date              => dt_from_string(),
-                borrowernumber    => $borrowernumber,
-                accountno         => $accountno,
-                amount            => $charge,
-                manager_id        => $manager_id,
-                accounttype       => 'Rent',
-                amountoutstanding => $charge,
-                itemnumber        => $itemnumber,
-                branchcode        => $branchcode,
-                description       => 'Renewal of Rental Item '
-                  . $biblio->title
-                  . " " . $item->barcode,
-            }
-        )->store();
+        my $description = "Renewal of Rental Item " . $biblio->title . " " .$item->barcode;
+        AddIssuingCharge($issue, $charge, $description);
     }
 
     # Send a renewal slip according to checkout alert preferencei
@@ -3205,7 +3188,7 @@ sub _get_discount_from_rule {
 =cut
 
 sub AddIssuingCharge {
-    my ( $checkout, $charge ) = @_;
+    my ( $checkout, $charge, $description ) = @_;
 
     # FIXME What if checkout does not exist?
 
@@ -3213,7 +3196,7 @@ sub AddIssuingCharge {
     my $accountline = $account->add_debit(
         {
             amount      => $charge,
-            description => 'Rental',
+            description => $description,
             note        => undef,
             user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
             library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
