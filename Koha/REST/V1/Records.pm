@@ -127,7 +127,7 @@ sub get_record {
         });
     }
     my $encoding = C4::Context->preference("marcflavour");
-    $xmlRecord = $record->as_xml_record($encoding);
+    $xmlRecord = $record->as_xml_record($encoding) if (defined $record);
     if (not($xmlRecord)) {
         return $c->render( status => 404, openapi => {
             error => "No such MARC record in our database for ".
