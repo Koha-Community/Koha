@@ -275,10 +275,9 @@ sub GetSubscription {
     $subscription->{cannotedit} = not can_edit_subscription( $subscription );
 
     # Add additional fields to the subscription into a new key "additional_fields"
-    my %additional_field_values = map {
-        $_->field->name => $_->value
-    } Koha::Subscriptions->find($subscriptionid)->additional_field_values;
-    $subscription->{additional_fields} = \%additional_field_values;
+    my $subscription_object = Koha::Subscriptions->find($subscriptionid);
+    $subscription->{additional_fields} = { map { $_->field->name => $_->value }
+        $subscription_object->additional_field_values->as_list };
 
     if ( my $mana_id = $subscription->{mana_id} ) {
         my $mana_subscription = Koha::SharedContent::get_entity_by_id(
@@ -631,10 +630,10 @@ sub SearchSubscriptions {
         $subscription->{cannotedit} = not can_edit_subscription( $subscription );
         $subscription->{cannotdisplay} = not can_show_subscription( $subscription );
 
-        my %additional_field_values = map {
-            $_->field->name => $_->value
-        } Koha::Subscriptions->find($subscription->{subscriptionid})->additional_field_values;
-        $subscription->{additional_fields} = \%additional_field_values;
+        my $subscription_object = Koha::Subscriptions->find($subscription->{subscriptionid});
+        $subscription->{additional_fields} = { map { $_->field->name => $_->value }
+            $subscription_object->additional_field_values->as_list };
+
     }
 
     return @$results;
@@ -1832,11 +1831,9 @@ sub GetLateOrMissingIssues {
         }
         $line->{"status".$line->{status}}   = 1;
 
-        my $subscription = Koha::Subscriptions->find($line->{subscriptionid});
-        my %additional_field_values = map {
-            $_->field->name => $_->value
-        } $subscription->additional_field_values;
-        %$line = ( %$line, additional_fields => \%additional_field_values );
+        my $subscription_object = Koha::Subscriptions->find($line->{subscriptionid});
+        $line->{additional_fields} = { map { $_->field->name => $_->value }
+            $subscription_object->additional_field_values->as_list };
 
         push @issuelist, $line;
     }
