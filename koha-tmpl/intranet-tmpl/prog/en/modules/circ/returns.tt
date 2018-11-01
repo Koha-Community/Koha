@@ -175,7 +175,7 @@
 [% END %]
 
 <!-- case of a mistake in transfer loop -->
-[% IF ( WrongTransfer ) %]
+[% IF ( WrongTransfer && !transfertodo ) %]
     <div id="return2" class="dialog message">
         <!-- WrongTransfer -->
         <h3>Please return item to: [% Branches.GetName( TransferWaitingAt ) | html %]</h3>
