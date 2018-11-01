@@ -487,7 +487,7 @@ if ( $patron ) {
     my $account = $patron->account;
     if( ( my $owing = $account->non_issues_charges ) > 0 ) {
         my $noissuescharge = C4::Context->preference("noissuescharge") || 5; # FIXME If noissuescharge == 0 then 5, why??
-        $noissues = ( not C4::Context->preference("AllowFineOverride") and ( $owing > $noissuescharge ) );
+        $noissues ||= ( not C4::Context->preference("AllowFineOverride") and ( $owing > $noissuescharge ) );
         $template->param(
             charges => 1,
             chargesamount => $owing,
