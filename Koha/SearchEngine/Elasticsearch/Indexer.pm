@@ -78,7 +78,7 @@ use constant {
     try {
         $self->update_index($biblionums, $records);
     } catch {
-        die("Something whent wrong trying to update index:" .  $_[0]);
+        die("Something went wrong trying to update index:" .  $_[0]);
     }
 
 Converts C<MARC::Records> C<$records> to Elasticsearch documents and performs

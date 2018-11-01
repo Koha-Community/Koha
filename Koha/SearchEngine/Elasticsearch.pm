@@ -35,7 +35,6 @@ use Try::Tiny;
 use YAML::Syck;
 
 use List::Util qw( sum0 reduce );
-use Search::Elasticsearch;
 use MARC::File::XML;
 use MIME::Base64;
 use Encode qw(encode);
@@ -69,7 +68,7 @@ sub new {
     my $class = shift @_;
     my $self = $class->SUPER::new(@_);
     # Check for a valid index
-    croak('No index name provided') unless $self->index;
+    Koha::Exceptions::MissingParameter->throw('No index name provided') unless $self->index;
     return $self;
 }
 
@@ -315,17 +314,22 @@ sub sort_fields {
 
 =head2 _process_mappings($mappings, $data, $record_document)
 
-Process all C<$mappings> targets operating on a specific MARC field C<$data> applied to C<$record_document>
-Since we group all mappings by MARC field targets C<$mappings> will contain all targets for C<$data>
-and thus we need to fetch the MARC field only once.
+    $self->_process_mappings($mappings, $marc_field_data, $record_document)
+
+Process all C<$mappings> targets operating on a specific MARC field C<$data>.
+Since we group all mappings by MARC field targets C<$mappings> will contain
+all targets for C<$data> and thus we need to fetch the MARC field only once.
+C<$mappings> will be applied to C<$record_document> and new field values added.
+The method has no return value.
 
 =over 4
 
 =item C<$mappings>
 
-Arrayref of mappings containing arrayrefs on the format [C<$taget>, C<$options>] where
-C<$target> is the name of the target field and C<$options> is a hashref containing processing
-directives for this particular mapping.
+Arrayref of mappings containing arrayrefs in the format
+[C<$taget>, C<$options>] where C<$target> is the name of the target field and
+C<$options> is a hashref containing processing directives for this particular
+mapping.
 
 =item C<$data>
 
@@ -333,7 +337,8 @@ The source data from a MARC record field.
 
 =item C<$record_document>
 
-Hashref representing the  Elasticsearch document on which mappings should be applied.
+Hashref representing the Elasticsearch document on which mappings should be
+applied.
 
 =back
 
@@ -468,7 +473,7 @@ sub marc_records_to_documents {
             # Suppress warnings if record length exceeded
             unless (substr($record->leader(), 0, 5) eq '99999') {
                 foreach my $warning (@warnings) {
-                    carp($warning);
+                    carp $warning;
                 }
             }
             $record_document->{'marc_data'} = $record->as_xml_record($marcflavour);
@@ -485,15 +490,20 @@ sub marc_records_to_documents {
 
 =head2 _field_mappings($facet, $suggestible, $sort, $target_name, $target_type, $range)
 
-Get mappings, an internal data structure later used by L<_process_mappings($mappings, $data, $record_document)>
-to process MARC target data, for a MARC mapping.
+    my @mappings = _field_mappings($facet, $suggestible, $sort, $target_name, $target_type, $range)
 
-The returned C<$mappings> is to to be confused  with mappings provided by C<_foreach_mapping>, rather this
-sub accepts properties from a mapping as provided by C<_foreach_mapping> and expands it to this internal
-data stucture. In the caller context (C<_get_marc_mapping_rules>) the returned C<@mappings> is then
-applied to each MARC target (leader, control field data, subfield or joined subfields) and
-integrated into the mapping rules data structure used in C<marc_records_to_documents> to
-transform MARC records into Elasticsearch documents.
+Get mappings, an internal data structure later used by
+L<_process_mappings($mappings, $data, $record_document)> to process MARC target
+data for a MARC mapping.
+
+The returned C<$mappings> is not to to be confused with mappings provided by
+C<_foreach_mapping>, rather this sub accepts properties from a mapping as
+provided by C<_foreach_mapping> and expands it to this internal data stucture.
+In the caller context (C<_get_marc_mapping_rules>) the returned C<@mappings>
+is then applied to each MARC target (leader, control field data, subfield or
+joined subfields) and integrated into the mapping rules data structure used in
+C<marc_records_to_documents> to transform MARC records into Elasticsearch
+documents.
 
 =over 4
 
@@ -519,14 +529,14 @@ Elasticsearch document target field type.
 
 =item C<$range>
 
-An optinal range as a string on the format "<START>-<END>" or "<START>",
+An optional range as a string in the format "<START>-<END>" or "<START>",
 where "<START>" and "<END>" are integers specifying a range that will be used
-for extracting a substing from MARC data as Elasticsearch field target value.
+for extracting a substring from MARC data as Elasticsearch field target value.
 
 The first character position is "1", and the range is inclusive,
 so "1-3" means the first three characters of MARC data.
 
-If only "<START>" is provided only one character as position "<START>" will
+If only "<START>" is provided only one character at position "<START>" will
 be extracted.
 
 =back
@@ -596,7 +606,7 @@ rules keyed by MARC field tags holding all the mapping rules for that particular
 
 We can then iterate through all MARC fields for each record and apply all relevant
 rules once per fields instead of retreiving fields multiple times for each mapping rule
-wich is terribly slow.
+which is terribly slow.
 
 =cut
 
@@ -607,10 +617,7 @@ wich is terribly slow.
 
 sub _get_marc_mapping_rules {
     my ($self) = @_;
-
     my $marcflavour = lc C4::Context->preference('marcflavour');
-    my @rules;
-
     my $field_spec_regexp = qr/^([0-9]{3})([()0-9a-z]+)?(?:_\/(\d+(?:-\d+)?))?$/;
     my $leader_regexp = qr/^leader(?:_\/(\d+(?:-\d+)?))?$/;
     my $rules = {
@@ -628,7 +635,7 @@ sub _get_marc_mapping_rules {
         if ($type eq 'sum') {
             push @{$rules->{sum}}, $name;
         }
-        elsif($type eq 'boolean') {
+        elsif ($type eq 'boolean') {
             # boolean gets special handling, if value doesn't exist for a field,
             # it is set to false
             $rules->{defaults}->{$name} = 'false';
@@ -647,7 +654,9 @@ sub _get_marc_mapping_rules {
                 foreach my $token (split //, $2) {
                     if ($token eq "(") {
                         if ($open_group) {
-                            die("Unmatched opening parenthesis for $marc_field");
+                            Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
+                                "Unmatched opening parenthesis for $marc_field"
+                            );
                         }
                         else {
                             $open_group = 1;
@@ -662,7 +671,9 @@ sub _get_marc_mapping_rules {
                             $open_group = 0;
                         }
                         else {
-                            die("Unmatched closing parenthesis for $marc_field");
+                            Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
+                                "Unmatched closing parenthesis for $marc_field"
+                            );
                         }
                     }
                     elsif ($open_group) {
@@ -702,7 +713,9 @@ sub _get_marc_mapping_rules {
             push @{$rules->{leader}}, @mappings;
         }
         else {
-            die("Invalid MARC field: $marc_field");
+            Koha::Exceptions::Elasticsearch::MARCFieldExprParseError->throw(
+                "Invalid MARC field expression: $marc_field"
+            );
         }
     });
     return $rules;

@@ -48,7 +48,7 @@ my $schema   = $database->schema;
 
 my $marc_type = lc C4::Context->preference('marcflavour');
 
-my @index_names = ('biblios', 'authorities');
+my @index_names = ($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX);
 
 my $update_mappings = sub {
     for my $index_name (@index_names) {
