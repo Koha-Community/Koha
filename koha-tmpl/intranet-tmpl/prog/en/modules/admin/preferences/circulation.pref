@@ -213,14 +213,14 @@ Circulation:
                   yes: Move
                   no: "Don't move"
             - items that have the location PROC to the location CART when they are checked in.
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: ReturnToShelvingCart
               choices:
                   yes: Move
                   no: "Don't move"
             - all items to the location CART when they are checked in.
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: AutomaticItemReturn
               choices:
@@ -400,14 +400,14 @@ Circulation:
             - <br>WARNING — These preferences will activate the automatic item loss process. Leave these fields empty if you don't want to activate this feature.
             - "<br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
             - <br>(Used when the longoverdue.pl script is called without the --lost parameter)
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - "Charge a lost item to the borrower's account when the LOST value of the item changes to :"
             - pref: DefaultLongOverdueChargeValue
               class: integer
             - <br>Leave this field empty if you don't want to charge the user for lost items.
             - <br>(Used when the longoverdue.pl script is called without the --charge parameter)
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - "When issuing an item that has been marked as lost, "
             - pref: IssueLostItem
@@ -615,7 +615,7 @@ Circulation:
               choices:
                   yes: Allow
                   no: "Don't allow"
-            - "holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of
             - pref: ExpireReservesMaxPickUpDelayCharge
@@ -634,7 +634,7 @@ Circulation:
               choices:
                   yes: in random order.
                   no: in that order.
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask your system administrator to schedule it."
             -
         -
             - pref: canreservefromotherbranches
@@ -683,7 +683,7 @@ Circulation:
                   yes: Allow
                   no: "Don't allow"
             - "suspended holds to be automatically resumed by a set date."
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - pref: SuspendHoldsIntranet
               choices:
@@ -806,7 +806,7 @@ Circulation:
                   production: Calculate and charge
             - fines (when <code>misc/cronjobs/fines.pl</code> is being run).
             - "<br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
-            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask you system administrator to schedule it."
+            - "<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask your system administrator to schedule it."
         -
             - If a lost item is returned, apply the refunding rules defined in the
             - pref: RefundLostOnReturnControl
