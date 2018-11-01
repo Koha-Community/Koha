@@ -148,7 +148,7 @@ my @additional_fields = Koha::AdditionalFields->search({ tablename => 'subscript
 my %additional_field_values;
 if ($subscriptionid) {
     my $subscription = Koha::Subscriptions->find($subscriptionid);
-    foreach my $value ($subscription->additional_field_values) {
+    foreach my $value ($subscription->additional_field_values->as_list) {
         $additional_field_values{$value->field_id} = $value->value;
     }
 }
@@ -384,7 +384,8 @@ sub redirect_add_subscription {
 
     my @additional_fields;
     my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
-    for my $field (Koha::AdditionalFields->search({ tablename => 'subscription' })) {
+    my $basket_fields = Koha::AdditionalFields->search({ tablename => 'aqbasket' });
+    while ( my $field = $basket_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);
         if ($field->marcfield) {
             my ($field, $subfield) = split /\$/, $field->marcfield;
@@ -502,7 +503,8 @@ sub redirect_mod_subscription {
 
     my @additional_fields;
     my $record = GetMarcBiblio({ biblionumber => $biblionumber, embed_items => 1 });
-    for my $field (Koha::AdditionalFields->search({ tablename => 'subscription' })) {
+    my $basket_fields = Koha::AdditionalFields->search({ tablename => 'aqbasket' });
+    while ( my $field = $basket_fields->next ) {
         my $value = $query->param('additional_field_' . $field->id);
         if ($field->marcfield) {
             my ($field, $subfield) = split /\$/, $field->marcfield;

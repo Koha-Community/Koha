@@ -101,7 +101,7 @@ if ( $op eq 'add_form' ) {
         $template->param(
             additional_field_values => { map {
                 $_->field->id => $_->value
-            } Koha::Acquisition::Baskets->find($basketno)->additional_field_values },
+            } Koha::Acquisition::Baskets->find($basketno)->additional_field_values->as_list },
         );
     } else {
     #new basket
@@ -171,7 +171,8 @@ if ( $op eq 'add_form' ) {
     }
 
     my @additional_fields;
-    for my $field (Koha::AdditionalFields->search({ tablename => 'aqbasket' })) {
+    my $basket_fields = Koha::AdditionalFields->search({ tablename => 'aqbasket' });
+    while ( my $field = $basket_fields->next ) {
         my $value = $input->param('additional_field_' . $field->id);
         push @additional_fields, {
             id => $field->id,

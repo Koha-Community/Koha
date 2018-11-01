@@ -528,7 +528,7 @@ sub SearchSubscriptions {
     my $additional_fields = $args->{additional_fields} // [];
     my $matching_record_ids_for_additional_fields = [];
     if ( @$additional_fields ) {
-        my @subscriptions = Koha::Subscriptions->search_additional_fields($additional_fields);
+        my @subscriptions = Koha::Subscriptions->filter_by_additional_fields($additional_fields);
 
         return () unless @subscriptions;
 

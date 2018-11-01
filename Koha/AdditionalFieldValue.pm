@@ -1,5 +1,9 @@
 package Koha::AdditionalFieldValue;
 
+use Modern::Perl;
+
+use base 'Koha::Object';
+
 =head1 NAME
 
 Koha::AdditionalFieldValue - Koha::Object derived class for additional field
@@ -7,9 +11,27 @@ values
 
 =cut
 
-use Modern::Perl;
+=head2 Class methods
 
-use base 'Koha::Object';
+=cut
+
+=head3 field
+
+Return the Koha:AdditionalField object for this AdditionalFeidlValue
+
+=cut
+
+sub field {
+    my ( $self ) = @_;
+
+    return Koha::AdditionalField->_new_from_dbic( $self->_result()->field() );
+}
+
+=head2 Internal methods
+
+=head3 _type
+
+=cut
 
 sub _type { 'AdditionalFieldValue' }
 

@@ -1,6 +1,7 @@
 package Koha::Object::Mixin::AdditionalFields;
 
 use Modern::Perl;
+use Koha::AdditionalFieldValues;
 
 =head1 NAME
 
@@ -43,18 +44,16 @@ Koha::Object::Mixin::AdditionalFields
 sub set_additional_fields {
     my ($self, $additional_fields) = @_;
 
-    my $rs = Koha::Database->new->schema->resultset('AdditionalFieldValue');
+    my @additional_field_values = $self->additional_field_values->delete;
 
     foreach my $additional_field (@$additional_fields) {
-        my $field_value = $rs->find_or_new({
-            field_id => $additional_field->{id},
-            record_id => $self->id,
-        });
         my $value = $additional_field->{value};
         if (defined $value) {
-            $field_value->set_columns({ value => $value })->update_or_insert;
-        } elsif ($field_value->in_storage) {
-            $field_value->delete;
+            my $field_value = Koha::AdditionalFieldValue->new({
+                field_id => $additional_field->{id},
+                record_id => $self->id,
+                value => $value,
+            })->store;
         }
     }
 }
@@ -70,7 +69,8 @@ Returns additional field values
 sub additional_field_values {
     my ($self) = @_;
 
-    return $self->_result->additional_field_values;
+    my $afv_rs = $self->_result->additional_field_values;
+    return Koha::AdditionalFieldValues->_new_from_dbic( $afv_rs );
 }
 
 =head1 AUTHOR

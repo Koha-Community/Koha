@@ -20,15 +20,15 @@ Koha::Objects::Mixin::AdditionalFields
 
     use Koha::Foos;
 
-    Koha::Foos->search_additional_fields(...)
+    Koha::Foos->filter_by_additional_fields(...)
 
 =head1 API
 
 =head2 Public methods
 
-=head3 search_additional_fields
+=head3 filter_by_additional_fields
 
-    my @objects = Koha::Foos->search_additional_fields([
+    my @objects = Koha::Foos->filter_by_additional_fields([
         {
             id => 1,
             value => 'foo',
@@ -41,7 +41,7 @@ Koha::Objects::Mixin::AdditionalFields
 
 =cut
 
-sub search_additional_fields {
+sub filter_by_additional_fields {
     my ($class, $additional_fields) = @_;
 
     my %conditions;

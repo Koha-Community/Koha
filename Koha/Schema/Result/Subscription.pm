@@ -464,7 +464,6 @@ __PACKAGE__->has_many(
     return {
         "$args->{foreign_alias}.record_id" => { -ident => "$args->{self_alias}.subscriptionid" },
 
-        # TODO Add column additional_field_values.tablename to avoid subquery ?
         "$args->{foreign_alias}.field_id" =>
             { -in => \'(SELECT id FROM additional_fields WHERE tablename = "subscription")' },
     };

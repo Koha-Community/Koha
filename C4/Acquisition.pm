@@ -2445,8 +2445,9 @@ sub GetHistory {
     if ( @$ordernumbers ) {
         $query .= ' AND (aqorders.ordernumber IN ( ' . join (',', ('?') x @$ordernumbers ) . '))';
         push @query_params, @$ordernumbers;
+    }
     if ( @$additional_fields ) {
-        my @baskets = Koha::Acquisition::Baskets->search_additional_fields($additional_fields);
+        my @baskets = Koha::Acquisition::Baskets->filter_by_additional_fields($additional_fields);
 
         return [] unless @baskets;
 

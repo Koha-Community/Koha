@@ -53,7 +53,7 @@ Koha::AdditionalFieldValue->new({
     value => 'bar value for basket2',
 })->store;
 
-my @baskets = Koha::Acquisition::Baskets->search_additional_fields([
+my @baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
     {
         id => $foo->id,
         value => 'foo value for basket1',
@@ -63,7 +63,7 @@ my @baskets = Koha::Acquisition::Baskets->search_additional_fields([
 is(scalar @baskets, 1, 'search returns only one result');
 is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
 
-@baskets = Koha::Acquisition::Baskets->search_additional_fields([
+@baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
     {
         id => $foo->id,
         value => 'foo value for basket2',
@@ -73,7 +73,7 @@ is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
 is(scalar @baskets, 1, 'search returns only one result');
 is($baskets[0]->basketno, $basket2->basketno, 'result is basket2');
 
-@baskets = Koha::Acquisition::Baskets->search_additional_fields([
+@baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
     {
         id => $foo->id,
         value => 'foo value for basket1',
@@ -87,7 +87,7 @@ is($baskets[0]->basketno, $basket2->basketno, 'result is basket2');
 is(scalar @baskets, 1, 'search returns only one result');
 is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
 
-@baskets = Koha::Acquisition::Baskets->search_additional_fields([
+@baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
     {
         id => $foo->id,
         value => 'foo value for basket1',
@@ -100,7 +100,7 @@ is($baskets[0]->basketno, $basket1->basketno, 'result is basket1');
 
 is(scalar @baskets, 0, 'search returns no result');
 
-@baskets = Koha::Acquisition::Baskets->search_additional_fields([
+@baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
     {
         id => $foo->id,
         value => 'foo',
@@ -109,7 +109,7 @@ is(scalar @baskets, 0, 'search returns no result');
 
 is(scalar @baskets, 2, 'search returns two results');
 
-@baskets = Koha::Acquisition::Baskets->search_additional_fields([
+@baskets = Koha::Acquisition::Baskets->filter_by_additional_fields([
     {
         id => $foo->id,
         value => 'foo',

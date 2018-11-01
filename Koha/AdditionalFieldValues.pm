@@ -8,6 +8,7 @@ values
 =cut
 
 use Modern::Perl;
+use Koha::AdditionalFieldValue;
 
 use base 'Koha::Objects';
 

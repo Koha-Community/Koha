@@ -436,7 +436,7 @@ if ( $op eq 'list' ) {
         available_additional_fields => [ Koha::AdditionalFields->search( { tablename => 'aqbasket' } ) ],
         additional_field_values => { map {
             $_->field->name => $_->value
-        } Koha::Acquisition::Baskets->find($basketno)->additional_field_values },
+        } Koha::Acquisition::Baskets->find($basketno)->additional_field_values->as_list },
     );
 }
 
