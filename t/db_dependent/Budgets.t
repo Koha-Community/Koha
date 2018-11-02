@@ -60,6 +60,7 @@ my $my_budgetperiod = {
     budget_period_enddate     => '2008-12-31',
     budget_period_description => 'MAPERI',
     budget_period_active      => 0,
+    budget_period_id          => '', # Bug 21604
 };
 $bpid = AddBudgetPeriod($my_budgetperiod);
 isnt( $bpid, undef, 'AddBugetPeriod does not returns undef' );
@@ -128,6 +129,7 @@ my $my_budget = {
     budget_name      => 'Periodiques',
     budget_notes     => 'This is a note',
     budget_period_id => $bpid,
+    budget_encumb    => '', # Bug 21604
 };
 my $budget_id = AddBudget($my_budget);
 isnt( $budget_id, undef, 'AddBudget does not returns undef' );
