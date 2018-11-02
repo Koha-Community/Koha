@@ -140,7 +140,7 @@ CAN_user_serials_create_subscription ) %]
 [% END %]
 
 [% FOREACH p IN plugins %]
-    [% p.intranet_catalog_biblio_enhancements_toolbar_button %]
+    [% p.intranet_catalog_biblio_enhancements_toolbar_button | html %]
 [% END %]
 
 </div>
