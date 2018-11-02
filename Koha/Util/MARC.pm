@@ -211,6 +211,10 @@ sub set_marc_field {
 
     if ($marcField) {
         my ($fieldTag, $subfieldCode) = split /\$/, $marcField;
+        if( !$subfieldCode ) {
+            warn "set_marc_field: Invalid marcField format: $marcField\n";
+            return;
+        }
         my $field = $record->field($fieldTag);
         if ($field) {
             $field->update($subfieldCode => $value);

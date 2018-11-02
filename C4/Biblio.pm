@@ -3325,10 +3325,8 @@ sub ModBiblioMarc {
     };
     $record->as_usmarc; # Bug 20126/10455 This triggers field length calculation
 
-    my $m_rs = Koha::Biblio::Metadatas->find($metadata);
-    unless ($m_rs) {
-        $m_rs = Koha::Biblio::Metadata->new($metadata);
-    }
+    my $m_rs = Koha::Biblio::Metadatas->find($metadata) //
+        Koha::Biblio::Metadata->new($metadata);
 
     my $userenv = C4::Context->userenv;
     if ($userenv) {
