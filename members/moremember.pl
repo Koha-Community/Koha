@@ -122,7 +122,6 @@ if ( !$patron->is_valid_age ) {
     $template->param( age_low => $patron->category->dateofbirthrequired );
     $template->param( age_high => $patron->category->upperagelimit );
 }
-$template->param( age => $patron->get_age );
 
 # Generate CSRF token for upload and delete image buttons
 $template->param(

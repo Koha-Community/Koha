@@ -51,6 +51,12 @@
                 <li class="email"> <a href="mailto:[% patron.emailpro | url %]" title="[% patron.emailpro | html %]">[% patron.emailpro | html %]</a></li>
             [% END %]
         [% END %]
+        [% IF ( patron.dateofbirth ) %]
+            <li>
+                <span class="label">Date of birth:</span>
+                [% INCLUDE 'patron-age.inc' %]
+            </li>
+        [% END %]
 
         [% UNLESS ( patron.address or patron.address2 ) %]
             <li><span class="empty" id="noaddressstored">No address stored.</span></li>
@@ -64,6 +70,10 @@
         [% UNLESS ( patron.email or patron.emailpro) %]
             <li> <span class="empty">No email stored.</span></li>
         [% END %]
+        [% UNLESS ( patron.dateofbirth ) %]
+            <li> <span class="empty">No date of birth stored.</span></li>
+        [% END %]
+
     [% END %]
 
     [% IF Koha.Preference('ExtendedPatronAttributes') %]

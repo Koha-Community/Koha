@@ -249,7 +249,7 @@
                                             [% IF ( patron.dateofbirth ) %]
                                                 <li>
                                                     <span class="label">Date of birth:</span>
-                                                    [% patron.dateofbirth | $KohaDates %] ([% patron.get_age | html %] years)
+                                                    [% INCLUDE 'patron-age.inc' %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.sex ) %]
