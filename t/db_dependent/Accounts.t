@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 41;
+use Test::More tests => 36;
 use Test::MockModule;
 use Test::Warn;
 
@@ -103,18 +103,6 @@ ok( $accountline->description =~ /^$description/, 'Accountline description set c
 is( $accountline->note, $note, 'Accountline note set correctly for manualinvoice' );
 is( $accountline->branchcode, $branchcode, 'Accountline branchcode set correctly for manualinvoice' );
 
-# Test _FixAccountForLostAndReturned, use the accountline from the manualinvoice to test
-C4::Circulation::_FixAccountForLostAndReturned( $item->{itemnumber} );
-my ( $accountline_fee, $accountline_payment ) = Koha::Account::Lines->search(
-    {
-        borrowernumber => $patron->{borrowernumber}
-    }
-);
-is( $accountline_fee->accounttype, 'LR', 'Lost item fee account type updated to LR' );
-is( $accountline_fee->amountoutstanding, '0.000000', 'Lost item fee amount outstanding updated to 0' );
-is( $accountline_payment->accounttype, 'CR', 'Lost item fee account type is CR' );
-is( $accountline_payment->amount, "-$amount", 'Lost item refund amount is correct' );
-is( $accountline_payment->branchcode, $branchcode, 'Lost item refund branchcode is set correctly' );
 $dbh->do(q|DELETE FROM accountlines|);
 
 # Testing purge_zero_balance_fees
