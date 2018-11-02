@@ -1293,7 +1293,7 @@ sub GetHiddenItemnumbers {
     if (my $exceptions = C4::Context->preference('OpacHiddenItemsExceptions') and $params->{'borcat'}){
         foreach my $except (split(/\|/, $exceptions)){
             if ($params->{'borcat'} eq $except){
-                return; # we dont hide anything for this borrower category
+                return; # we don't hide anything for this borrower category
             }
         }
     }

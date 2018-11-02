@@ -16766,6 +16766,15 @@ if( CheckVersion( $DBversion ) ) {
     SetVersion( $DBversion );
 }
 
+$DBversion = '18.06.00.050';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (`variable`, `value`, `options`, `explanation`, `type`) VALUES ('OpacHiddenItemsExceptions','',NULL,'List of borrower categories, separated by |, that can see items otherwise hidden by OpacHiddenItems','Textarea');
+    });
+    print "Upgrade to $DBversion done (Bug 14385 - Add OpacHiddenItemExceptions)\n";
+    SetVersion( $DBversion );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
