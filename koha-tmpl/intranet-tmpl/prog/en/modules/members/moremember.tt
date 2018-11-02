@@ -5,6 +5,7 @@
 [% USE KohaDates %]
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo;
@@ -96,7 +97,7 @@
                                                 [% END %]
                                                 <i>"[% patron_message.message | html %]"</i>
                                             </span>
-                                            [% IF patron_message.branchcode == branchcode OR Koha.Preference('AllowAllMessageDeletion') %]
+                                            [% IF patron_message.branchcode == patron.branchcode OR Koha.Preference('AllowAllMessageDeletion') %]
                                                 <a class="btn btn-link" href="/cgi-bin/koha/circ/del_message.pl?message_id=[% patron_message.message_id | html %]&amp;borrowernumber=[% patron_message.borrowernumber | html %]&amp;from=moremember" onclick="return confirm(MSG_CONFIRM_DELETE_MESSAGE);"><i class="fa fa-trash"></i> Delete</a>
                                             [% END %]
                                         </li>
@@ -109,18 +110,18 @@
                         [% IF ( flagged ) %]
                             <div id="circmessages" class="circmessage attention">
                                 <ul>
-                                    [% IF ( userdebarred ) %]
+                                    [% IF ( patron.is_debarred ) %]
                                         <li class="blocker">Patron's account is restricted
                                             [% IF ( userdebarreddate ) %]
-                                                until [% userdebarreddate | html %]
+                                                until [% userdebarreddate | $KohaDates %]
                                             [% END %]
 
-                                            [% IF ( debarredcomment ) %]
+                                            [% IF ( patron.debarredcomment ) %]
                                                 with the explanation: <i>
-                                                [% IF debarredcomment.search('OVERDUES_PROCESS') %]
-                                                    Restriction added by overdues process [% debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
+                                                [% IF patron.debarredcomment.search('OVERDUES_PROCESS') %]
+                                                    Restriction added by overdues process [% patron.debarredcomment.remove('OVERDUES_PROCESS ') | html_line_break %]
                                                 [% ELSE %]
-                                                    [% debarredcomment | html_line_break %]
+                                                    [% patron.debarredcomment | html_line_break %]
                                                 [% END %]
                                                 </i>
                                             [% END %]
@@ -130,7 +131,7 @@
                                     [% IF ( patron.gonenoaddress ) %]
                                         <li class="blocker">Patron's address is in doubt.</li>
                                     [% END %]
-                                    [% IF ( lost ) %]
+                                    [% IF ( patron.lost ) %]
                                         <li class="blocker">Patron's card has been reported lost.</li>
                                     [% END %]
                                     [% IF ( patron.is_expired ) %]
@@ -233,7 +234,7 @@
                                             [% IF ( patron.dateofbirth ) %]
                                                 <li>
                                                     <span class="label">Date of birth:</span>
-                                                    [% patron.dateofbirth | $KohaDates %] ([% age | html %] years)
+                                                    [% patron.dateofbirth | $KohaDates %] ([% patron.get_age | html %] years)
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.sex ) %]
@@ -394,7 +395,7 @@
                                         <a class="btn btn-default btn-xs" href="memberentry.pl?op=modify&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;step=5"><i class="fa fa-pencil"></i> Edit</a>
                                     </div>
                                     [% INCLUDE 'messaging-preference-form.inc' %]
-                                    [% IF ( SMSSendDriver ) %]
+                                    [% IF Koha.Preference('SMSSendDriver') %]
                                         <div class="rows">
                                             <ol>
                                                 <li>
@@ -461,15 +462,15 @@
                                         </li>
                                         <li id="patron-branchname">
                                             <span class="label">Library: </span>
-                                            [% branchname | html %]
+                                            [% Branches.GetName( patron.branchcode ) | html %]
                                         </li>
 
-                                        [% IF ( OPACPrivacy ) %]
+                                        [% IF Koha.Preference( 'OPACPrivacy') %]
                                             <li id="patron-privacypref">
                                                 <span class="label">Privacy Pref:</span>
-                                                    [% IF ( privacy0 ) %]Forever[% END %]
-                                                    [% IF ( privacy1 ) %]Default[% END %]
-                                                    [% IF ( privacy2 ) %]Never[% END %]
+                                                    [% IF ( patron.privacy == 0 ) %]Forever[% END %]
+                                                    [% IF ( patron.privacy == 1 ) %]Default[% END %]
+                                                    [% IF ( patron.privacy == 2 ) %]Never[% END %]
                                             </li>
                                         [% END %]
 
@@ -673,7 +674,7 @@
                             </li>
                             [% IF relatives_issues_count %]
                                 <li>
-                                    <a href="#relatives-issues" id="relatives-issues-tab">Relatives' checkouts</a>
+                                    <a href="#relatives-issues" id="relatives-issues-tab">[% relatives_issues_count | html %] Relatives' checkouts</a>
                                 </li>
                             [% END %]
                             <li>
@@ -733,8 +734,8 @@
                         [% END %]
 
                         <div id="finesandcharges">
-                            [% IF ( totaldue_raw ) %]
-                                <p>Total due: [% totaldue | html %]</p>
+                            [% IF ( fines ) %]
+                                <p>Total due: [% fines | $Price %]</p>
                             [% ELSE %]
                                 <p>No outstanding charges</p>
                             [% END %]
