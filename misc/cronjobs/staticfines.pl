@@ -188,7 +188,7 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     ( $datedue_days <= $today_days ) or next;    # or it's not overdue, right?
 
     $overdueItemsCounted++;
-    my ( $amount, $type, $unitcounttotal, $unitcount ) = CalcFine(
+    my ( $amount, $unitcounttotal, $unitcount ) = CalcFine(
         $data->[$i],
         $borrower->{'categorycode'},
         $branchcode,
@@ -205,9 +205,6 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
         $debug and warn "There is already a fine for borrower " . $data->[$i]->{'borrowernumber'} . ". Nothing to do here. Skipping this borrower";
         next;
     }
-
-    # FIXME: $type NEVER gets populated by anything.
-    ( defined $type ) or $type = '';
 
     # Don't update the fine if today is a holiday.
     # This ensures that dropbox mode will remove the correct amount of fine.

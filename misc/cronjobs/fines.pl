@@ -76,7 +76,7 @@ cronlogaction();
 my @borrower_fields =
   qw(cardnumber categorycode surname firstname email phone address citystate);
 my @item_fields  = qw(itemnumber barcode date_due);
-my @other_fields = qw(type days_overdue fine);
+my @other_fields = qw(days_overdue fine);
 my $libname      = C4::Context->preference('LibraryName');
 my $control      = C4::Context->preference('CircControl');
 my $mode         = C4::Context->preference('finesMode');
@@ -122,10 +122,9 @@ for my $overdue ( @{$overdues} ) {
     }
     ++$counted;
 
-    my ( $amount, $type, $unitcounttotal ) =
+    my ( $amount, $unitcounttotal, $unitcount ) =
       CalcFine( $overdue, $borrower->{categorycode},
         $branchcode, $datedue, $today );
-    $type ||= q{};
 
     # Don't update the fine if today is a holiday.
     # This ensures that dropbox mode will remove the correct amount of fine.
@@ -137,7 +136,6 @@ for my $overdue ( @{$overdues} ) {
                     itemnumber     => $overdue->{itemnumber},
                     borrowernumber => $overdue->{borrowernumber},
                     amount         => $amount,
-                    type           => $type,
                     due            => output_pref($datedue),
                 }
             );
@@ -149,7 +147,7 @@ for my $overdue ( @{$overdues} ) {
           map { defined $borrower->{$_} ? $borrower->{$_} : q{} }
           @borrower_fields;
         push @cells, map { $overdue->{$_} } @item_fields;
-        push @cells, $type, $unitcounttotal, $amount;
+        push @cells, $unitcounttotal, $amount;
         say {$fh} join $delim, @cells;
     }
 }

@@ -114,7 +114,6 @@ my $default = {
 #Test GetIssuingRule
 my $sampleissuingrule1 = {
     reservecharge      => '0.000000',
-    chargename         => undef,
     restrictedtype     => 0,
     accountsent        => 0,
     maxissueqty        => 5,
@@ -173,7 +172,6 @@ my $sampleissuingrule2 = {
     overduefinescap    => undef,
     accountsent        => undef,
     reservecharge      => undef,
-    chargename         => undef,
     restrictedtype     => undef,
     maxsuspensiondays  => 0,
     onshelfholds       => 1,
@@ -206,7 +204,6 @@ my $sampleissuingrule3 = {
     overduefinescap    => undef,
     accountsent        => undef,
     reservecharge      => undef,
-    chargename         => undef,
     restrictedtype     => undef,
     maxsuspensiondays  => 0,
     onshelfholds       => 1,
@@ -240,14 +237,13 @@ $query = 'INSERT INTO issuingrules (
                 overduefinescap,
                 accountsent,
                 reservecharge,
-                chargename,
                 restrictedtype,
                 maxsuspensiondays,
                 onshelfholds,
                 opacitemholds,
                 cap_fine_to_replacement_price,
                 article_requests
-                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
+                ) VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)';
 my $sth = $dbh->prepare($query);
 $sth->execute(
     $sampleissuingrule1->{branchcode},
@@ -273,7 +269,6 @@ $sth->execute(
     $sampleissuingrule1->{overduefinescap},
     $sampleissuingrule1->{accountsent},
     $sampleissuingrule1->{reservecharge},
-    $sampleissuingrule1->{chargename},
     $sampleissuingrule1->{restrictedtype},
     $sampleissuingrule1->{maxsuspensiondays},
     $sampleissuingrule1->{onshelfholds},
@@ -305,7 +300,6 @@ $sth->execute(
     $sampleissuingrule2->{overduefinescap},
     $sampleissuingrule2->{accountsent},
     $sampleissuingrule2->{reservecharge},
-    $sampleissuingrule2->{chargename},
     $sampleissuingrule2->{restrictedtype},
     $sampleissuingrule2->{maxsuspensiondays},
     $sampleissuingrule2->{onshelfholds},
@@ -337,7 +331,6 @@ $sth->execute(
     $sampleissuingrule3->{overduefinescap},
     $sampleissuingrule3->{accountsent},
     $sampleissuingrule3->{reservecharge},
-    $sampleissuingrule3->{chargename},
     $sampleissuingrule3->{restrictedtype},
     $sampleissuingrule3->{maxsuspensiondays},
     $sampleissuingrule3->{onshelfholds},

@@ -476,7 +476,6 @@ $dbh->do(
             itemnumber     => $itemnumber7,
             borrowernumber => $renewing_borrower->{borrowernumber},
             amount         => $fine,
-            type           => 'FU',
             due            => Koha::DateUtils::output_pref($five_weeks_ago)
         }
     );

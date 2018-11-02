@@ -191,7 +191,7 @@ sub checkoverdues {
 
 =head2 CalcFine
 
-    ($amount, $chargename,  $units_minus_grace, $chargeable_units) = &CalcFine($item,
+    ($amount, $units_minus_grace, $chargeable_units) = &CalcFine($item,
                                   $categorycode, $branch,
                                   $start_dt, $end_dt );
 
@@ -216,12 +216,9 @@ defining the date range over which to determine the fine.
 
 Fines scripts should just supply the date range over which to calculate the fine.
 
-C<&CalcFine> returns four values:
+C<&CalcFine> returns three values:
 
 C<$amount> is the fine owed by the patron (see above).
-
-C<$chargename> is the chargename field from the applicable record in
-the categoryitem table, whatever that is.
 
 C<$units_minus_grace> is the number of chargeable units minus the grace period
 
@@ -268,9 +265,8 @@ sub CalcFine {
 
     $amount = $item->{replacementprice} if ( $issuing_rule->cap_fine_to_replacement_price && $item->{replacementprice} && $amount > $item->{replacementprice} );
 
-    $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $issuing_rule->chargename, $units_minus_grace, $chargeable_units);
-    return ($amount, $issuing_rule->chargename, $units_minus_grace, $chargeable_units);
-    # FIXME: chargename is NEVER populated anywhere.
+    $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $units_minus_grace, $chargeable_units);
+    return ($amount, $units_minus_grace, $chargeable_units);
 }
 
 
@@ -470,7 +466,15 @@ sub GetIssuesIteminfo {
 
 =head2 UpdateFine
 
-    &UpdateFine({ issue_id => $issue_id, itemnumber => $itemnumber, borrwernumber => $borrowernumber, amount => $amount, type => $type, $due => $date_due });
+    &UpdateFine(
+        {
+            issue_id       => $issue_id,
+            itemnumber     => $itemnumber,
+            borrowernumber => $borrowernumber,
+            amount         => $amount,
+            due            => $date_due
+        }
+    );
 
 (Note: the following is mostly conjecture and guesswork.)
 
@@ -482,8 +486,6 @@ C<$borrowernumber> is the borrower number of the patron who currently
 has the book on loan.
 
 C<$amount> is the current amount owed by the patron.
-
-C<$type> will be used in the description of the fine.
 
 C<$due> is the due date formatted to the currently specified date format
 
@@ -508,10 +510,9 @@ sub UpdateFine {
     my $itemnum        = $params->{itemnumber};
     my $borrowernumber = $params->{borrowernumber};
     my $amount         = $params->{amount};
-    my $type           = $params->{type};
     my $due            = $params->{due};
 
-    $debug and warn "UpdateFine({ itemnumber => $itemnum, borrowernumber => $borrowernumber, type => $type, due => $due, issue_id => $issue_id})";
+    $debug and warn "UpdateFine({ itemnumber => $itemnum, borrowernumber => $borrowernumber, due => $due, issue_id => $issue_id})";
 
     unless ( $issue_id ) {
         carp("No issue_id passed in!");
@@ -610,7 +611,7 @@ sub UpdateFine {
 
             my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
 
-            my $desc = ( $type ? "$type " : '' ) . "$title $due";    # FIXEDME, avoid whitespace prefix on empty $type
+            my $desc = "$title $due";
 
             my $accountline = Koha::Account::Line->new(
                 {
@@ -639,7 +640,7 @@ sub UpdateFine {
     # logging action
     &logaction(
         "FINES",
-        $type,
+        undef,
         $borrowernumber,
         "due=".$due."  amount=".$amount." itemnumber=".$itemnum
         ) if C4::Context->preference("FinesLog");
