@@ -872,7 +872,6 @@ CREATE TABLE `issuingrules` ( -- circulation and fine rules
   `chargeperiod` int(11) default NULL, -- how often the fine amount is charged
   `chargeperiod_charge_at` tinyint(1) NOT NULL DEFAULT '0', -- Should fine be given at the start ( 1 ) or the end ( 0 ) of the period
   `accountsent` int(11) default NULL, -- not used? always NULL
-  `chargename` varchar(100) default NULL, -- not used? always NULL
   `maxissueqty` int(4) default NULL, -- total number of checkouts allowed
   `maxonsiteissueqty` int(4) default NULL, -- total number of on-site checkouts allowed
   `issuelength` int(4) default NULL, -- length of checkout in the unit set in issuingrules.lengthunit
