@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE KohaDates %]
 [% IF ( patron.borrowernumber ) %]
 <div class="patroninfo"><h5>[% INCLUDE 'patron-title.inc' %]</h5>
 <!--[if IE 6]>
@@ -69,6 +70,7 @@
     <li class="patroncategory">Category: [% patron.category.description | html %] ([% patron.categorycode | html %])</li>
     <li class="patronlibrary">Home library: [% Branches.GetName( patron.branchcode ) | html %]</li>
     <li class="patronborrowernumber">Borrowernumber: [% patron.borrowernumber | html %]</li>
+    <li><span class="patronupdatedon">Updated on [% patron.updated_on | $KohaDates with_hours => 1 %]</span></li>
   </ul></div>
 <div id="menu">
 <ul>
