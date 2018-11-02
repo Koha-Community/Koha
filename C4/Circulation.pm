@@ -2429,10 +2429,12 @@ sub _FixAccountForLostAndReturned {
     my $credit_total = $accountline->amountoutstanding + $total_to_refund;
 
     if ( $credit_total > 0 ) {
+        my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
         $credit = $account->add_credit(
             {   amount      => $credit_total,
                 description => 'Item Returned ' . $item_id,
-                type        => 'lost_item_return'
+                type        => 'lost_item_return',
+                library_id  => $branchcode
             }
         );
 

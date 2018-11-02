@@ -352,6 +352,7 @@ sub add_credit {
             # Insert the account line
             $line = Koha::Account::Line->new(
                 {   borrowernumber    => $self->{patron_id},
+                    accountno         => $accountno,
                     date              => \'NOW()',
                     amount            => $amount,
                     description       => $description,
@@ -360,7 +361,9 @@ sub add_credit {
                     payment_type      => $payment_type,
                     note              => $note,
                     manager_id        => $user_id,
-                    itemnumber        => $item_id
+                    branchcode        => $library_id,
+                    itemnumber        => $item_id,
+                    lastincrement     => undef,
                 }
             )->store();
 
@@ -396,6 +399,7 @@ sub add_credit {
                             note              => $note,
                             itemnumber        => $item_id,
                             manager_id        => $user_id,
+                            branchcode        => $library_id,
                         }
                     )
                 );
