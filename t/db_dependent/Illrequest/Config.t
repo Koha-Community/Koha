@@ -410,7 +410,7 @@ subtest '_load_configuration' => sub {
 
 subtest 'Final tests' => sub {
 
-    plan tests => 10;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -419,11 +419,10 @@ subtest 'Final tests' => sub {
     my $config = Koha::Illrequest::Config->new;
 
     # getPrefixes (error & undef):
-    dies_ok( sub { $config->getPrefixes("FOO") }, "getPrefixes: die if not correct type.");
-    is_deeply($config->getPrefixes("brw_cat"), { default => undef},
-              "getPrefixes: Undefined brw_cat prefix is undefined.");
-    is_deeply($config->getPrefixes("branch"), { default => undef},
+    is($config->getPrefixes(), undef,
               "getPrefixes: Undefined branch prefix is undefined.");
+
+    is($config->has_branch(), undef, "Config does not have branch when no config loaded");
 
     # getDigitalRecipients (error & undef):
     dies_ok( sub { $config->getDigitalRecipients("FOO") },
@@ -449,11 +448,8 @@ subtest 'Final tests' => sub {
     );
 
     # getPrefixes (values):
-    is_deeply($config->getPrefixes("brw_cat"),
-              { B => '2-prefix', default => 'DEFAULT-prefix' },
-              "getPrefixes: return configuration brw_cat prefixes.");
-    is_deeply($config->getPrefixes("branch"),
-              { 1 => 'T-prefix', default => 'DEFAULT-prefix' },
+    is_deeply($config->getPrefixes(),
+              { '1' => 'T-prefix' },
               "getPrefixes: return configuration branch prefixes.");
 
     # getDigitalRecipients (values):
@@ -463,6 +459,9 @@ subtest 'Final tests' => sub {
     is_deeply($config->getDigitalRecipients("branch"),
               { 2 => 'borrower', default => 'branch' },
               "getDigitalRecipients: return branch digital_recipients.");
+
+    # has_branch test
+    ok($config->has_branch(), "has_branch returns true if branch defined in configuration");
 
     $schema->storage->txn_rollback;
 };
