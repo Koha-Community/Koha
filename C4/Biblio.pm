@@ -2781,6 +2781,10 @@ sub _koha_add_biblio {
         SET frameworkcode = ?,
             author = ?,
             title = ?,
+            subtitle = ?,
+            medium = ?,
+            part_number = ?,
+            part_name = ?,
             unititle =?,
             notes = ?,
             serial = ?,
@@ -2791,8 +2795,10 @@ sub _koha_add_biblio {
         ";
     my $sth = $dbh->prepare($query);
     $sth->execute(
-        $frameworkcode, $biblio->{'author'},      $biblio->{'title'},         $biblio->{'unititle'}, $biblio->{'notes'},
-        $biblio->{'serial'},        $biblio->{'seriestitle'}, $biblio->{'copyrightdate'}, $biblio->{'abstract'}
+        $frameworkcode,        $biblio->{'author'},      $biblio->{'title'},       $biblio->{'subtitle'},
+        $biblio->{'medium'},   $biblio->{'part_number'}, $biblio->{'part_name'},   $biblio->{'unititle'},
+        $biblio->{'notes'},    $biblio->{'serial'},      $biblio->{'seriestitle'}, $biblio->{'copyrightdate'},
+        $biblio->{'abstract'}
     );
 
     my $biblionumber = $dbh->{'mysql_insertid'};
@@ -2824,6 +2830,10 @@ sub _koha_modify_biblio {
         SET    frameworkcode = ?,
                author = ?,
                title = ?,
+               subtitle = ?,
+               medium = ?,
+               part_number = ?,
+               part_name = ?,
                unititle = ?,
                notes = ?,
                serial = ?,
@@ -2836,8 +2846,10 @@ sub _koha_modify_biblio {
     my $sth = $dbh->prepare($query);
 
     $sth->execute(
-        $frameworkcode,      $biblio->{'author'},      $biblio->{'title'},         $biblio->{'unititle'}, $biblio->{'notes'},
-        $biblio->{'serial'}, $biblio->{'seriestitle'}, $biblio->{'copyrightdate'} ? int($biblio->{'copyrightdate'}) : undef, $biblio->{'abstract'}, $biblio->{'biblionumber'}
+        $frameworkcode,        $biblio->{'author'},      $biblio->{'title'},       $biblio->{'subtitle'},
+        $biblio->{'medium'},   $biblio->{'part_number'}, $biblio->{'part_name'},   $biblio->{'unititle'},
+        $biblio->{'notes'},    $biblio->{'serial'},      $biblio->{'seriestitle'}, $biblio->{'copyrightdate'} ? int($biblio->{'copyrightdate'}) : undef,
+        $biblio->{'abstract'}, $biblio->{'biblionumber'}
     ) if $biblio->{'biblionumber'};
 
     if ( $dbh->errstr || !$biblio->{'biblionumber'} ) {

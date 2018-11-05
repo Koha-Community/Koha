@@ -130,6 +130,10 @@ $biblio_module->mock(
         my ($self) = shift;
 
         my ( $title_field,            $title_subfield )            = get_title_field();
+        my ( $subtitle_field,         $subtitle_subfield )         = get_subtitle_field();
+        my ( $medium_field,           $medium_subfield )           = get_medium_field();
+        my ( $part_number_field,      $part_number_subfield )      = get_part_number_field();
+        my ( $part_name_field,        $part_name_subfield )        = get_part_name_field();
         my ( $isbn_field,             $isbn_subfield )             = get_isbn_field();
         my ( $issn_field,             $issn_subfield )             = get_issn_field();
         my ( $biblionumber_field,     $biblionumber_subfield )     = ( '999', 'c' );
@@ -138,6 +142,10 @@ $biblio_module->mock(
 
         return {
             'biblio.title'                 => [ { tagfield => $title_field,            tagsubfield => $title_subfield } ],
+            'biblio.subtitle'              => [ { tagfield => $subtitle_field,         tagsubfield => $subtitle_subfield } ],
+            'biblio.medium'                => [ { tagfield => $medium_field,           tagsubfield => $medium_subfield } ],
+            'biblio.part_number'           => [ { tagfield => $part_number_field,      tagsubfield => $part_number_subfield } ],
+            'biblio.part_name'             => [ { tagfield => $part_name_field,        tagsubfield => $part_name_subfield } ],
             'biblio.biblionumber'          => [ { tagfield => $biblionumber_field,     tagsubfield => $biblionumber_subfield } ],
             'biblioitems.isbn'             => [ { tagfield => $isbn_field,             tagsubfield => $isbn_subfield } ],
             'biblioitems.issn'             => [ { tagfield => $issn_field,             tagsubfield => $issn_subfield } ],
@@ -168,6 +176,11 @@ sub run_tests {
 
     my $isbn = '0590353403';
     my $title = 'Foundation';
+    my $subtitle1 = 'Research';
+    my $subtitle2 = 'Conclusions';
+    my $medium = 'Medium';
+    my $part_number = '123';
+    my $part_name = 'First years';
 
     # Generate a record with just the ISBN
     my $marc_record = MARC::Record->new;
@@ -196,6 +209,23 @@ sub run_tests {
     $marc = GetMarcBiblio({ biblionumber => $biblionumber });
     my ( $title_field, $title_subfield ) = get_title_field();
     is( $marc->subfield( $title_field, $title_subfield ), $title, );
+
+    # Add other fields
+    $marc_record->append_fields( create_field( $subtitle1, $marcflavour, get_subtitle_field() ) );
+    $marc_record->append_fields( create_field( $subtitle2, $marcflavour, get_subtitle_field() ) );
+    $marc_record->append_fields( create_field( $medium, $marcflavour, get_medium_field() ) );
+    $marc_record->append_fields( create_field( $part_number, $marcflavour, get_part_number_field() ) );
+    $marc_record->append_fields( create_field( $part_name, $marcflavour, get_part_name_field() ) );
+
+    ModBiblio( $marc_record, $biblionumber ,'' );
+    $data = GetBiblioData( $biblionumber );
+    is( $data->{ title }, $title, '(ModBiblio) still there after adding other fields.' );
+    is( $data->{ isbn }, $isbn, '(ModBiblio) ISBN is still there after adding other fields.' );
+
+    is( $data->{ subtitle }, "$subtitle1 | $subtitle2", '(ModBiblio) subtitles correctly added and returned in GetBiblioData.' );
+    is( $data->{ medium }, $medium, '(ModBiblio) medium correctly added and returned in GetBiblioData.' );
+    is( $data->{ part_number }, $part_number, '(ModBiblio) part_number correctly added and returned in GetBiblioData.' );
+    is( $data->{ part_name }, $part_name, '(ModBiblio) part_name correctly added and returned in GetBiblioData.' );
 
     my $biblioitem = Koha::Biblioitems->find( $biblioitemnumber );
     is( $biblioitem->_result->biblio->title, $title, # Should be $biblioitem->biblio instead, but not needed elsewhere for now
@@ -352,14 +382,15 @@ sub run_tests {
     # Automatic authority creation
     t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', 1);
-    my $authorities_mod = Test::MockModule->new( 'C4::AuthoritiesMarc' );
+    my $authorities_mod = Test::MockModule->new( 'C4::Heading' );
     $authorities_mod->mock(
-        'SearchAuthorities',
+        'authorities',
         sub {
             my @results;
-            return \@results, 0;
+            return \@results;
         }
     );
+
     $success = 0;
     $field = create_author_field('Author Name');
     eval {
@@ -403,6 +434,26 @@ sub get_title_field {
     return ( $marc_flavour eq 'UNIMARC' ) ? ( '200', 'a' ) : ( '245', 'a' );
 }
 
+sub get_medium_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '200', 'b' ) : ( '245', 'h' );
+}
+
+sub get_subtitle_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '200', 'e' ) : ( '245', 'b' );
+}
+
+sub get_part_number_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '200', 'h' ) : ( '245', 'n' );
+}
+
+sub get_part_name_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '200', 'i' ) : ( '245', 'p' );
+}
+
 sub get_isbn_field {
     my $marc_flavour = C4::Context->preference('marcflavour');
     return ( $marc_flavour eq 'UNIMARC' ) ? ( '010', 'a' ) : ( '020', 'a' );
@@ -435,6 +486,12 @@ sub create_title_field {
     my $field = MARC::Field->new( $title_field, '', '', $title_subfield => $title );
 
     return $field;
+}
+
+sub create_field {
+    my ( $content, $marcflavour, $field, $subfield ) = @_;
+
+    return MARC::Field->new( $field, '', '', $subfield => $content );
 }
 
 sub create_isbn_field {
@@ -473,14 +530,14 @@ sub create_author_field {
 }
 
 subtest 'MARC21' => sub {
-    plan tests => 42;
+    plan tests => 48;
     run_tests('MARC21');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 42;
+    plan tests => 48;
 
     # Mock the auth type data for UNIMARC
     $dbh->do("UPDATE auth_types SET auth_tag_to_report = '106' WHERE auth_tag_to_report = '100'") or die $dbh->errstr;
@@ -491,7 +548,7 @@ subtest 'UNIMARC' => sub {
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 42;
+    plan tests => 48;
     run_tests('NORMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;

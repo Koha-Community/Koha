@@ -132,6 +132,10 @@ CREATE TABLE `biblio` ( -- table that stores bibliographic information
   `frameworkcode` varchar(4) NOT NULL default '', -- foreign key from the biblio_framework table to identify which framework was used in cataloging this record
   `author` LONGTEXT, -- statement of responsibility from MARC record (100$a in MARC21)
   `title` LONGTEXT, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `medium` LONGTEXT, -- medium from the MARC record (245$h in MARC21)
+  `subtitle` LONGTEXT, -- remainder of the title from the MARC record (245$b in MARC21)
+  `part_number` LONGTEXT, -- part number from the MARC record (245$n in MARC21)
+  `part_name` LONGTEXT, -- part name from the MARC record (245$p in MARC21)
   `unititle` LONGTEXT, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
   `notes` LONGTEXT, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- Boolean indicating whether biblio is for a serial
@@ -441,6 +445,10 @@ CREATE TABLE `deletedbiblio` ( -- stores information about bibliographic records
   `frameworkcode` varchar(4) NOT NULL default '', -- foriegn key from the biblio_framework table to identify which framework was used in cataloging this record
   `author` LONGTEXT, -- statement of responsibility from MARC record (100$a in MARC21)
   `title` LONGTEXT, -- title (without the subtitle) from the MARC record (245$a in MARC21)
+  `medium` LONGTEXT, -- medium from the MARC record (245$h in MARC21)
+  `subtitle` LONGTEXT, -- remainder of the title from the MARC record (245$b in MARC21)
+  `part_number` LONGTEXT, -- part number from the MARC record (245$n in MARC21)
+  `part_name` LONGTEXT, -- part name from the MARC record (245$p in MARC21)
   `unititle` LONGTEXT, -- uniform title (without the subtitle) from the MARC record (240$a in MARC21)
   `notes` LONGTEXT, -- values from the general notes field in the MARC record (500$a in MARC21) split by bar (|)
   `serial` tinyint(1) default NULL, -- Boolean indicating whether biblio is for a serial

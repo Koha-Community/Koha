@@ -849,7 +849,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 ("245","6","Liaison","Liaison","0","0","","2","","","","0","-6","","","","","9999"),
 ("245","8","Numéro de liaison de zone et de séquence","Numéro de liaison de zone et de séquence","1","0","","2","","","","0","-6","","","","","9999"),
 ("245","a","Titre","Titre","0","1","biblio.title","2","","","","0","0","","'245b','245f','245g','245k','245n','245p','245s','245h','246i','246a','246b','246f','246g','246n','246p','246h','242a','242b','242n','242p','242h','505t'","","","9999"),
-("245","b","Reste du titre","Reste du titre","0","0","bibliosubtitle.subtitle","2","","","","0","0","","","","","9999"),
+("245","b","Reste du titre","Reste du titre","0","0","biblio.subtitle","2","","","","0","0","","","","","9999"),
 ("245","c","Mention de responsabilité, etc.","Mention de responsabilité, etc.","0","0","","2","","","","0","0","","","","","9999"),
 ("245","f","Dates extrêmes","Dates extrêmes","0","0","","2","","","","0","-6","","","","","9999"),
 ("245","g","Dates générales","Dates générales","0","0","","2","","","","0","-6","","","","","9999"),

@@ -833,7 +833,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '245', '6', 0, 0, 'Елемент зв’язку', '',                      2, -6, '', '', '', 0, NULL, '', ''),
  ('', '', '245', '8', 0, 1, 'Зв’язок поля та його порядковий номер', '', 2, -6, '', '', '', 0, NULL, '', ''),
  ('', '', '245', 'a', 0, 0, 'Назва', '',                                2, 0, 'biblio.title', '', '', 0, NULL, '', ''),
- ('', '', '245', 'b', 0, 0, 'Продовж. назви', '',                       2, 0, '', '', '', 0, NULL, '', ''),
+ ('', '', '245', 'b', 0, 0, 'Продовж. назви', '',                       2, 0, 'biblio.subtitle', '', '', 0, NULL, '', ''),
  ('', '', '245', 'c', 0, 0, 'Відповідальність', '',                     2, 0, '', '', '', 0, NULL, '', ''),
  ('', '', '245', 'd', 0, 0, 'Designation of section/part/series (SE) [OBSOLETE]', 'Designation of section section/part/series: (SE) [OBSOLETE]', 2, -6, '', '', '', 0, NULL, '', ''),
  ('', '', '245', 'e', 0, 0, 'Name of part/section/series (SE) [OBSOLETE]', 'Name of part/section/series (SE) [OBSOLETE]', 2, -6, '', '', '', 0, NULL, '', ''),
@@ -841,8 +841,8 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('', '', '245', 'g', 0, 0, 'Дати створення осн. частини твору', '',    2, -6, '', '', '', 0, NULL, '', ''),
  ('', '', '245', 'h', 0, 0, 'Фізичний носій', '',                       2, 0, '', '', '', 0, NULL, '', ''),
  ('', '', '245', 'k', 0, 1, 'Форма, вид, жанр', '',                     2, -6, '', '', '', 0, NULL, '', ''),
- ('', '', '245', 'n', 0, 1, 'Номер частини/розділу', '',                2, -6, '', '', '', 0, NULL, '', ''),
- ('', '', '245', 'p', 0, 1, 'Назва частини/розділу', '',                2, -6, '', '', '', 0, NULL, '', ''),
+ ('', '', '245', 'n', 0, 1, 'Номер частини/розділу', '',                2, -6, 'biblio.part_number', '', '', 0, NULL, '', ''),
+ ('', '', '245', 'p', 0, 1, 'Назва частини/розділу', '',                2, -6, 'biblio.part_name', '', '', 0, NULL, '', ''),
  ('', '', '245', 's', 0, 0, 'Версія', '',                               2, -6, '', '', '', 0, NULL, '', '');
 
 INSERT INTO marc_tag_structure  (frameworkcode, tagfield, mandatory, repeatable, liblibrarian, libopac, authorised_value) VALUES
