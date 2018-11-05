@@ -140,7 +140,7 @@
             <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
         [% END %]
         [% IF ( AdlibrisEnabled && normalized_isbn ) %]
-            <a href="[% AdlibrisURL | html %]?isbn=[% normalized_isbn | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% normalized_isbn | html %]" class="adlibris-cover-big" alt="Adlibris cover image" /></a>
+            <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" class="adlibris-cover-big" alt="Adlibris cover image" /></a>
         [% END %]
         [% IF ( AmazonCoverImages ) %]
             <div id="amazon-bookcoverimg">

@@ -363,7 +363,7 @@
                         <!-- Actual Search Results -->
                         [% SET MaxSearchResultsItemsPerRecordStatusCheck = Koha.Preference('MaxSearchResultsItemsPerRecordStatusCheck') %]
                         [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
-                         [% IF ( loop.odd ) %]<tr>[% ELSE %]<tr class="highlight">[% END %]
+                         <tr>
                             [% IF ( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled ) %]
                                 <td>
                                     [% IF ( LocalCoverImages) %]
@@ -372,7 +372,7 @@
                                         </a>
                                     [% END %]
                                     [% IF ( AdlibrisEnabled && SEARCH_RESULT.normalized_isbn ) %]
-                                        <a href="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% SEARCH_RESULT.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                                        <a href="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% SEARCH_RESULT.normalized_isbn | uri %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
                                     [% END %]
                                     [% IF ( AmazonCoverImages ) %]
                                         [% IF ( SEARCH_RESULT.normalized_isbn ) %]

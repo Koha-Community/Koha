@@ -213,7 +213,7 @@
                                                 [% IF ( ISSUE.overdue ) %]<tr class="overdue">[% ELSE %]<tr>[% END %]
                                                 [% IF ( JacketImages || AdlibrisEnabled ) %]<td class="jacketcell">
                                                     [% IF ( AdlibrisEnabled && ISSUE.normalized_isbn ) %]
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% ISSUE.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% ISSUE.normalized_isbn | uri %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
                                                     [% END %]
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( ISSUE.normalized_isbn ) %]
@@ -491,7 +491,7 @@
                                                 [% IF ( JacketImages || AdlibrisEnabled ) %]
                                                     <td class="jacketcell">
                                                     [% IF ( AdlibrisEnabled && OVERDUE.normalized_isbn ) %]
-                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% OVERDUE.biblionumber | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% OVERDUE.normalized_isbn | html %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
+                                                        <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% OVERDUE.biblionumber | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% OVERDUE.normalized_isbn | uri %]" class="adlibris-cover" alt="Adlibris cover image" /></a>
                                                     [% END %]
                                                     [% IF ( OPACAmazonCoverImages ) %]
                                                         [% IF ( OVERDUE.normalized_isbn ) %]

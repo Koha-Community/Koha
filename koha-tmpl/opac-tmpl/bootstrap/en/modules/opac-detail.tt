@@ -61,7 +61,7 @@
                     [% END %]
 
                     [% IF ( AdlibrisEnabled && normalized_isbn ) %]
-                        <a href="[% AdlibrisURL | html %]?isbn=[% normalized_isbn | html %]"><img src="[% AdlibrisURL | html %]?isbn=[% normalized_isbn | html %]" alt="Cover image" class="adlibris-cover-big" /></a>
+                        <a href="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]"><img src="[% AdlibrisURL | url %]?isbn=[% normalized_isbn | uri %]" alt="Cover image" class="adlibris-cover-big" /></a>
                     [% END %]
 
                     [% IF ( OPACAmazonCoverImages ) %]
