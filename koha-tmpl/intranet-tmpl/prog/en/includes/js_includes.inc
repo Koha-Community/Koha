@@ -67,7 +67,7 @@
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
     <script type="text/javascript">
         //<![CDATA[
-            var AUDIO_ALERT_PATH = '[% interface | uri %]/[% theme | uri %]/sound/';
+            var AUDIO_ALERT_PATH = '[% interface | url %]/[% theme | uri %]/sound/';
             var AUDIO_ALERTS = JSON.parse( '[% To.json(AudioAlerts.AudioAlerts) %]' );
         //]]>
 
