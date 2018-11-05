@@ -855,6 +855,9 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 
     LostItem( $itemnumber, 'test', 1 );
 
+    $line = Koha::Account::Lines->find($line->id);
+    is( $line->accounttype, 'F', 'Account type correctly changed from FU to F' );
+
     my $item = Koha::Database->new()->schema()->resultset('Item')->find($itemnumber);
     ok( !$item->onloan(), "Lost item marked as returned has false onloan value" );
     my $checkout = Koha::Checkouts->find({ itemnumber => $itemnumber });
