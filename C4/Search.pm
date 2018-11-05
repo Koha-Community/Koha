@@ -850,7 +850,8 @@ sub _get_facet_from_result_set {
     # configure zebra results for retrieving the desired facet
     $rs->option( elementSetName => $facet_element );
     # get the facet record from result set
-    my $facet = $rs->record( 0 )->raw;
+    my $facet;
+    $facet = $rs->record( 0 )->raw if ($rs->record( 0 ));
     # if the facet has no restuls...
     return if !defined $facet;
     # TODO: benchmark DOM vs. SAX performance
