@@ -47,6 +47,7 @@ use Koha::ItemTypes;
 use Koha::AuthorisedValues;
 use Koha::SearchEngine::QueryBuilder;
 use Koha::SearchEngine::Search;
+use Koha::Exceptions::Elasticsearch;
 use MARC::Record;
 use Catmandu::Store::ElasticSearch;
 use MARC::File::XML;
@@ -376,7 +377,7 @@ sub decode_record_from_result {
         return MARC::Record->new_from_xml($result->{marc_data}, 'UTF-8', uc C4::Context->preference('marcflavour'));
     }
     else {
-        die("Missing marc_format field in Elasticsearch result");
+        Koha::Exceptions::Elasticsearch->throw("Missing marc_format field in Elasticsearch result");
     }
 }
 
