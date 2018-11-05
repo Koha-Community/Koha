@@ -16775,6 +16775,17 @@ if( CheckVersion( $DBversion ) ) {
     SetVersion( $DBversion );
 }
 
+$DBversion = '18.06.00.051';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `systempreferences` (`variable`, `value`, `options`, `explanation`, `type`) VALUES
+        ('AdlibrisCoversEnabled', '0', NULL, 'Display cover images in OPAC results and detail listing from Swedish retailer Adlibris.','YesNo'),
+        ('AdlibrisCoversURL', 'http://www.adlibris.com/se/organisationer/showimagesafe.aspx', NULL, 'Base URL for Adlibris cover image web service.', 'Free');
+    });
+    print "Upgrade to $DBversion done (Bug 8630 - Add covers from AdLibris to the OPAC and Intranet)\n";
+    SetVersion( $DBversion );
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
