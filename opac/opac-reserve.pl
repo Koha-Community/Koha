@@ -400,7 +400,6 @@ $template->param('item_level_itypes' => $itemLevelTypes);
 
 foreach my $biblioNum (@biblionumbers) {
 
-    my $record = GetMarcBiblio({ biblionumber => $biblioNum });
     # Init the bib item with the choices for branch pickup
     my %biblioLoopIter;
 
@@ -420,7 +419,10 @@ foreach my $biblioNum (@biblionumbers) {
     my $frameworkcode = GetFrameworkCode( $biblioData->{biblionumber} );
     $biblioLoopIter{biblionumber} = $biblioData->{biblionumber};
     $biblioLoopIter{title} = $biblioData->{title};
-    $biblioLoopIter{subtitle} = GetRecordValue('subtitle', $record, $frameworkcode);
+    $biblioLoopIter{subtitle} = C4::Biblio::SplitSubtitle($biblioData->{'subtitle'});
+    $biblioLoopIter{medium} = $biblioData->{medium};
+    $biblioLoopIter{part_number} = $biblioData->{part_number};
+    $biblioLoopIter{part_name} = $biblioData->{part_name};
     $biblioLoopIter{author} = $biblioData->{author};
     $biblioLoopIter{rank} = $biblioData->{rank};
     $biblioLoopIter{reservecount} = $biblioData->{reservecount};

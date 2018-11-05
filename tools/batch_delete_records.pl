@@ -94,7 +94,7 @@ if ( $op eq 'form' ) {
             my $holds_count = $biblio->holds->count;
             $biblio = $biblio->unblessed;
             my $record = &GetMarcBiblio({ biblionumber => $record_id });
-            $biblio->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $record_id ) );
+            $biblio->{subtitle} = C4::Biblio::SplitSubtitle( $biblio->{subtitle} );
             $biblio->{itemnumbers} = [Koha::Items->search({ biblionumber => $record_id })->get_column('itemnumber')];
             $biblio->{holds_count} = $holds_count;
             $biblio->{issues_count} = C4::Biblio::CountItemsIssued( $record_id );

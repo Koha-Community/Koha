@@ -256,8 +256,11 @@ if ($loggedinuser) {
             $hidden_items = \@hidden_itemnumbers;
         }
         next if ( $should_hide && scalar @all_items == scalar @hidden_itemnumbers );
-        $tag->{subtitle} = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $tag->{biblionumber} ) );
         $tag->{title} = $biblio->title;
+        $tag->{subtitle} = C4::Biblio::SplitSubtitle($biblio->subtitle);
+        $tag->{medium} = $biblio->medium;
+        $tag->{part_number} = $biblio->part_number;
+        $tag->{part_name} = $biblio->part_name;
         $tag->{author} = $biblio->author;
 
         my $xslfile = C4::Context->preference('OPACXSLTResultsDisplay');

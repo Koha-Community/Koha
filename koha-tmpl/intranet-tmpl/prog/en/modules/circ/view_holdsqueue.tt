@@ -123,7 +123,11 @@
      <tbody>[% FOREACH itemsloo IN itemsloop %]
         <tr>
             <td class="hq-title">
-                <p><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber | uri %]"><strong>[% itemsloo.title | html %]</strong> [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]</a></p>
+                <p>
+                    <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% itemsloo.biblionumber | uri %]">
+                        <strong>[% itemsloo.title | html %]</strong> [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %] [% itemsloo.part_number | html %] [% itemsloo.part_name | html %]
+                    </a>
+                </p>
                 <p>
                     <div class="hq-biblionumber content_hidden">[% itemsloo.biblionumber | html %]</div>
                     <div class="hq-author">[% itemsloo.author | html %]</div>

@@ -223,12 +223,15 @@ sub GetShelfInfo {
         my $this_biblio = GetBibData($item->{biblionumber});
         next unless defined $this_biblio;
         $item->{'title'} = $this_biblio->{'title'};
+        $item->{'subtitle'} = C4::Biblio::SplitSubtitle($this_biblio->{'subtitle'}),
+        $item->{'medium'} = $this_biblio->{'medium'};
+        $item->{'part_number'} = $this_biblio->{'part_number'};
+        $item->{'part_name'} = $this_biblio->{'part_name'};
         my $this_record = GetMarcBiblio({ biblionumber => $this_biblio->{'biblionumber'} });
         $item->{'browser_normalized_upc'} = GetNormalizedUPC($this_record,$marcflavour);
         $item->{'browser_normalized_oclc'} = GetNormalizedOCLCNumber($this_record,$marcflavour);
         $item->{'browser_normalized_isbn'} = GetNormalizedISBN(undef,$this_record,$marcflavour);
         $item->{'browser_normalized_ean'} = GetNormalizedEAN($this_record,$marcflavour);
-        $item->{'subtitle'} = GetRecordValue('subtitle', $this_record, GetFrameworkCode( $item->{biblionumber} ));
         push @valid_items, $item;
     }
     return @valid_items;
@@ -239,7 +242,7 @@ sub GetBibData {
 	my ($bibnum) = @_;
 
     my $dbh         = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT biblionumber, title FROM biblio WHERE biblionumber=?");
+    my $sth = $dbh->prepare("SELECT biblionumber, title, subtitle, medium, part_number, part_name FROM biblio WHERE biblionumber=?");
     $sth->execute($bibnum);
     my $bib = $sth->fetchrow_hashref();
     return $bib;

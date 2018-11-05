@@ -110,7 +110,7 @@ if (@hostitems){
         push (@items,@hostitems);
 }
 
-my $subtitle = GetRecordValue('subtitle', $record, $fw);
+my $subtitle = GetRecordValue('subtitle', $record);
 
 my $totalcount=@all_items;
 my $showncount=@items;

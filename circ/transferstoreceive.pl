@@ -99,6 +99,10 @@ while ( my $library = $libraries->next ) {
             %getransf = (
                 %getransf,
                 title          => $biblio->title,
+                subtitle       => C4::Biblio::SplitSubtitle($biblio->{'subtitle'}),
+                medium         => $biblio->medium,
+                part_number    => $biblio->part_number,
+                part_name      => $biblio->part_name,
                 author         => $biblio->author,
                 biblionumber   => $biblio->biblionumber,
                 itemnumber     => $item->itemnumber,
@@ -107,9 +111,6 @@ while ( my $library = $libraries->next ) {
                 holdingbranch  => $item->holdingbranch,
                 itemcallnumber => $item->itemcallnumber,
             );
-
-            my $record = GetMarcBiblio({ biblionumber => $biblio->biblionumber });
-            $getransf{'subtitle'} = GetRecordValue('subtitle', $record, $biblio->frameworkcode);
 
             # we check if we have a reserv for this transfer
             my $holds = $item->current_holds;

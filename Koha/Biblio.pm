@@ -84,20 +84,15 @@ sub metadata {
 
 my @subtitles = $biblio->subtitles();
 
-Returns list of subtitles for a record.
-
-Keyword to MARC mapping for subtitle must be set for this method to return any possible values.
+Returns list of subtitles for a record according to the framework.
 
 =cut
 
 sub subtitles {
     my ( $self ) = @_;
 
-    return map { $_->{subfield} } @{
-        C4::Biblio::GetRecordValue(
-            'subtitle',
-            C4::Biblio::GetMarcBiblio({ biblionumber => $self->id }),
-            $self->frameworkcode ) };
+    my @subtitles = split( / \| /, $self->subtitle // '' );
+    return @subtitles;
 }
 
 =head3 can_article_request

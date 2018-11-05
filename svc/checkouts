@@ -23,7 +23,7 @@ use CGI;
 use JSON qw(to_json);
 
 use C4::Auth qw(check_cookie_auth haspermission get_session);
-use C4::Biblio qw(GetMarcBiblio GetFrameworkCode GetRecordValue );
+use C4::Biblio qw(SplitSubtitle);
 use C4::Circulation qw(GetIssuingCharges CanBookBeRenewed GetRenewCount GetSoonestRenewDate);
 use C4::Overdues qw(GetFine);
 use C4::Context;
@@ -74,6 +74,10 @@ my $sql = '
 
         biblionumber,
         biblio.title,
+        biblio.subtitle,
+        biblio.medium,
+        biblio.part_number,
+        biblio.part_name,
         author,
 
         itemnumber,
@@ -174,6 +178,10 @@ while ( my $c = $sth->fetchrow_hashref() ) {
     my $checkout = {
         DT_RowId             => $c->{itemnumber} . '-' . $c->{borrowernumber},
         title                => $c->{title},
+        subtitle             => C4::Biblio::SplitSubtitle($c->{'subtitle'}),
+        medium               => $c->{medium} // '',
+        part_number          => $c->{part_number} // '',
+        part_name            => $c->{part_name} // '',
         author               => $c->{author},
         barcode              => $c->{barcode},
         itemtype             => $item_level_itypes ? $c->{itype} : $c->{itemtype},
@@ -216,10 +224,6 @@ while ( my $c = $sth->fetchrow_hashref() ) {
                 as_due_date => 1
             }
         ),
-        subtitle => GetRecordValue(
-            'subtitle',
-            GetMarcBiblio({ biblionumber => $c->{biblionumber} }),
-            GetFrameworkCode( $c->{biblionumber} ) ),
         lost    => $lost,
         damaged => $damaged,
         borrower => {

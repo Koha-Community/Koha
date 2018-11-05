@@ -108,7 +108,7 @@ foreach my $biblionumber ( @bibs ) {
         }
     }
 
-    my $subtitle         = GetRecordValue('subtitle', $record, GetFrameworkCode($biblionumber));
+    my $subtitle         = GetRecordValue('subtitle', $record);
 
     my $hasauthors = 0;
     if($dat->{'author'} || @$marcauthorsarray) {

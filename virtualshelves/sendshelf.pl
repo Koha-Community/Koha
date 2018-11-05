@@ -77,14 +77,13 @@ if ($email) {
 
     while ( my $content = $contents->next ) {
         my $biblionumber     = $content->biblionumber;
-        my $fw               = GetFrameworkCode($biblionumber);
         my $dat              = GetBiblioData($biblionumber);
         my $record           = GetMarcBiblio({
             biblionumber => $biblionumber,
             embed_items  => 1 });
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-        my $subtitle         = GetRecordValue( 'subtitle', $record, $fw );
+        my $subtitle         = GetRecordValue( 'subtitle', $record );
 
         my @items = GetItemsInfo($biblionumber);
 

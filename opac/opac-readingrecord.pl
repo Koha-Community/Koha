@@ -98,8 +98,7 @@ foreach my $issue ( @{$issues} ) {
         my $marc_rec =
           MARC::Record::new_from_xml( $marcxml, 'utf8',
             C4::Context->preference('marcflavour') );
-        $issue->{subtitle} =
-          GetRecordValue( 'subtitle', $marc_rec, $issue->{frameworkcode} );
+        $issue->{subtitle} = GetRecordValue( 'subtitle', $marc_rec );
         $issue->{normalized_upc} = GetNormalizedUPC( $marc_rec, C4::Context->preference('marcflavour') );
     }
     # My Summary HTML

@@ -22,7 +22,7 @@
                 <td><span title="[% reserveloo.waitingdate | html %]">[% reserveloo.waitingdate | $KohaDates %]</span></td>
                 <td><span title="[% reserveloo.reservedate | html %]">[% reserveloo.reservedate | $KohaDates %]</span></td>
                 <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                    [% reserveloo.biblio.title | html %] [% FOREACH subtitl IN reserveloo.biblio.subtitles %] [% subtitl.subfield | html %][% END %]
+                    [% reserveloo.biblio.title | html %] [% FOREACH subtitl IN reserveloo.biblio.subtitles %] [% subtitl | html %] [% reserveloo.biblio.part_number | html %] [% reserveloo.biblio.part_name | html %][% END %]
                     </a>
                         [% UNLESS ( item_level_itypes ) %]
                             [% IF ( ItemTypes.GetDescription(reserveloo.item.effective_itemtype) ) %]&nbsp; (<b>[% ItemTypes.GetDescription(reserveloo.item.effective_itemtype) | html %]</b>)

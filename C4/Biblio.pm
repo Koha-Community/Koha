@@ -67,6 +67,7 @@ BEGIN {
         TransformHtmlToMarc
         TransformHtmlToXml
         prepare_host_field
+        SplitSubtitle
     );
 
     # Internal functions
@@ -644,39 +645,33 @@ sub _check_valid_auth_link {
 
 =head2 GetRecordValue
 
-  my $values = GetRecordValue($field, $record, $frameworkcode);
+  my $values = GetRecordValue($field, $record);
 
-Get MARC fields from a keyword defined in fieldmapping table.
+Get MARC fields from the record using the framework mappings for biblio fields.
 
 =cut
 
 sub GetRecordValue {
-    my ( $field, $record, $frameworkcode ) = @_;
+    my ( $field, $record ) = @_;
 
     if (!$record) {
         carp 'GetRecordValue called with undefined record';
         return;
     }
-    my $dbh = C4::Context->dbh;
 
-    my $sth = $dbh->prepare('SELECT fieldcode, subfieldcode FROM fieldmapping WHERE frameworkcode = ? AND field = ?');
-    $sth->execute( $frameworkcode, $field );
-
-    my @result = ();
-
-    while ( my $row = $sth->fetchrow_hashref ) {
-        foreach my $field ( $record->field( $row->{fieldcode} ) ) {
-            if ( ( $row->{subfieldcode} ne "" && $field->subfield( $row->{subfieldcode} ) ) ) {
-                foreach my $subfield ( $field->subfield( $row->{subfieldcode} ) ) {
-                    push @result, { 'subfield' => $subfield };
-                }
-
-            } elsif ( $row->{subfieldcode} eq "" ) {
-                push @result, { 'subfield' => $field->as_string() };
+    my @result;
+    my @mss = GetMarcSubfieldStructureFromKohaField("biblio.$field");
+    foreach my $fldhash ( @mss ) {
+        my $tag = $fldhash->{tagfield};
+        my $sub = $fldhash->{tagsubfield};
+        foreach my $fld ( $record->field($tag) ) {
+            if( $sub eq '@' || $fld->is_control_field ) {
+                push @result, $fld->data if $fld->data;
+            } else {
+                push @result, grep { $_ } $fld->subfield($sub);
             }
         }
     }
-
     return \@result;
 }
 
@@ -3456,6 +3451,22 @@ sub RemoveAllNsb {
     }
 
     return $record;
+}
+
+=head2 SplitSubtitle
+
+    $subtitles = SplitSubtitle($subtitle);
+
+Splits a subtitle field to an array of hashes like the one GetRecordValue returns
+
+=cut
+
+sub SplitSubtitle {
+    my $subtitle = shift;
+
+    my @subtitles = map( { 'subfield' => $_ }, split(/ \| /, $subtitle // '' ) );
+
+    return \@subtitles;
 }
 
 1;

@@ -91,13 +91,15 @@ for my $result (@$reviews){
     my $biblio = Koha::Biblios->find( $biblionumber );
     my $biblioitem = $biblio->biblioitem;
     my $record = GetMarcBiblio({ biblionumber => $biblionumber });
-    my $frameworkcode = GetFrameworkCode($biblionumber);
 	$result->{normalized_upc} = GetNormalizedUPC($record,$marcflavour);
 	$result->{normalized_ean} = GetNormalizedEAN($record,$marcflavour);
 	$result->{normalized_oclc} = GetNormalizedOCLCNumber($record,$marcflavour);
 	$result->{normalized_isbn} = GetNormalizedISBN(undef,$record,$marcflavour);
     $result->{title} = $biblio->title;
-	$result->{subtitle} = GetRecordValue('subtitle', $record, $frameworkcode);
+    $result->{subtitle} = GetRecordValue('subtitle', $record );
+    $result->{medium} = $biblio->medium;
+    $result->{part_number} = $biblio->part_number;
+    $result->{part_name} = $biblio->part_name;
     $result->{author} = $biblio->author;
     $result->{place} = $biblioitem->place;
     $result->{publishercode} = $biblioitem->publishercode;

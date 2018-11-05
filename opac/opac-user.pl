@@ -201,12 +201,8 @@ if ( $pending_checkouts->count ) { # Useless test
         );
         $issue->{rentalfines} = $rental_fines->total_outstanding;
 
-        my $marcrecord = GetMarcBiblio({
-            biblionumber => $issue->{'biblionumber'},
-            embed_items  => 1,
-            opac         => 1,
-            borcat       => $borcat });
-        $issue->{'subtitle'} = GetRecordValue('subtitle', $marcrecord, GetFrameworkCode($issue->{'biblionumber'}));
+        $issue->{'subtitle'} = C4::Biblio::SplitSubtitle($issue->{'subtitle'});
+
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
         ($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
@@ -258,6 +254,11 @@ if ( $pending_checkouts->count ) { # Useless test
 
         my $isbn = GetNormalizedISBN($issue->{'isbn'});
         $issue->{normalized_isbn} = $isbn;
+        my $marcrecord = GetMarcBiblio({
+            biblionumber => $issue->{'biblionumber'},
+            embed_items  => 1,
+            opac         => 1,
+            borcat       => $borcat });
         $issue->{normalized_upc} = GetNormalizedUPC( $marcrecord, C4::Context->preference('marcflavour') );
 
                 # My Summary HTML

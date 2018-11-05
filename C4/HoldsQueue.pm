@@ -132,7 +132,12 @@ sub GetHoldsQueueItems {
     my $dbh   = C4::Context->dbh;
 
     my @bind_params = ();
-    my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.itype, biblioitems.itemtype, items.location, items.enumchron, items.cn_sort, biblioitems.publishercode,biblio.copyrightdate,biblioitems.publicationyear,biblioitems.pages,biblioitems.size,biblioitems.publicationyear,biblioitems.isbn,items.copynumber
+    my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.itype, biblioitems.itemtype, items.location,
+                         items.enumchron, items.cn_sort, biblioitems.publishercode,
+                         biblio.copyrightdate, biblio.subtitle, biblio.part_number,
+                         biblio.part_name,
+                         biblioitems.publicationyear, biblioitems.pages, biblioitems.size, biblioitems.publicationyear,
+                         biblioitems.isbn, items.copynumber
                   FROM tmp_holdsqueue
                        JOIN biblio      USING (biblionumber)
                   LEFT JOIN biblioitems USING (biblionumber)
@@ -147,18 +152,14 @@ sub GetHoldsQueueItems {
     $sth->execute(@bind_params);
     my $items = [];
     while ( my $row = $sth->fetchrow_hashref ){
-        my $record = GetMarcBiblio({ biblionumber => $row->{biblionumber} });
-        if ($record){
-            $row->{subtitle} = [ map { $_->{subfield} } @{ GetRecordValue( 'subtitle', $record, '' ) } ];
-            $row->{parts} = GetRecordValue('parts',$record,'')->[0]->{subfield};
-            $row->{numbers} = GetRecordValue('numbers',$record,'')->[0]->{subfield};
-        }
-
         # return the bib-level or item-level itype per syspref
         if (!C4::Context->preference('item-level_itypes')) {
             $row->{itype} = $row->{itemtype};
         }
         delete $row->{itemtype};
+
+        my @subtitles = split(/ \| /, $row->{'subtitle'} // '' );
+        $row->{'subtitle'} = \@subtitles;
 
         push @$items, $row;
     }

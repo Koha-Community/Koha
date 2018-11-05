@@ -1938,7 +1938,7 @@ sub searchResults {
 
         SetUTF8Flag($marcrecord);
         my $oldbiblio = TransformMarcToKoha( $marcrecord, $fw );
-        $oldbiblio->{subtitle} = GetRecordValue('subtitle', $marcrecord, $fw);
+        $oldbiblio->{subtitle} = GetRecordValue('subtitle', $marcrecord);
         $oldbiblio->{result_number} = $i + 1;
 
         # add imageurl to itemtype if there is one

@@ -27,7 +27,6 @@ use C4::Context;
 use C4::Output;
 use C4::Auth;
 use C4::Debug;
-use C4::Biblio qw/GetMarcBiblio GetRecordValue GetFrameworkCode/;
 use C4::Acquisition qw/GetOrdersByBiblionumber/;
 use Koha::DateUtils;
 use Koha::Acquisition::Baskets;
@@ -125,6 +124,10 @@ my $strsth =
 
         reserves.found,
         biblio.title,
+        biblio.subtitle,
+        biblio.medium,
+        biblio.part_number,
+        biblio.part_name,
         biblio.author,
         count(DISTINCT reserves.borrowernumber) as reservecount, 
         count(DISTINCT items.itemnumber) $include_aqorders_qty as itemcount
@@ -154,8 +157,6 @@ while ( my $data = $sth->fetchrow_hashref ) {
     my $thisratio = $data->{reservecount} / $data->{itemcount};
     my $ratiocalc = ($thisratio / $ratio);
     ($thisratio / $ratio) >= 1 or next;  # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
-    my $record = GetMarcBiblio({ biblionumber => $data->{biblionumber} });
-    $data->{subtitle} = GetRecordValue('subtitle', $record, GetFrameworkCode($data->{biblionumber}));
     push(
         @reservedata,
         {
@@ -163,7 +164,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             priority           => $data->{priority},
             name               => $data->{borrower},
             title              => $data->{title},
-            subtitle           => $data->{subtitle},
+            subtitle           => C4::Biblio::SplitSubtitle($data->{'subtitle'});
             author             => $data->{author},
             itemnum            => $data->{itemnumber},
             biblionumber       => $data->{biblionumber},

@@ -142,7 +142,7 @@ my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
 my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
 my $marchostsarray  = GetMarcHosts($record,$marcflavour);
-my $subtitle         = GetRecordValue('subtitle', $record, $fw);
+my $subtitle         = GetRecordValue('subtitle', $record);
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
 

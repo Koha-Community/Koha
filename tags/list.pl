@@ -61,10 +61,7 @@ else {
         my $taglist = get_tag_rows( { term => $tag } );
         for ( @{$taglist} ) {
             my $dat    = &GetBiblioData( $_->{biblionumber} );
-            my $record = &GetMarcBiblio({ biblionumber => $_->{biblionumber} });
-            $dat->{'subtitle'} =
-              GetRecordValue( 'subtitle', $record,
-                GetFrameworkCode( $_->{biblionumber} ) );
+            $dat->{'subtitle'} = C4::Biblio::SplitSubtitles($dat->{'subtitle'}),
             my @items = GetItemsInfo( $_->{biblionumber} );
             $dat->{biblionumber} = $_->{biblionumber};
             $dat->{tag_id}       = $_->{tag_id};

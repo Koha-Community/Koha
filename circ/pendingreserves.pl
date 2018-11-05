@@ -198,6 +198,10 @@ my $strsth =
             GROUP_CONCAT(DISTINCT items.copynumber
                     ORDER BY items.itemnumber SEPARATOR '|') l_copynumber,
             biblio.title,
+            biblio.subtitle,
+            biblio.medium,
+            biblio.part_number,
+            biblio.part_name,
             biblio.author,
             count(DISTINCT items.itemnumber) as icount,
             count(DISTINCT reserves.borrowernumber) as rcount,
@@ -237,10 +241,6 @@ my $sth = $dbh->prepare($strsth);
 $sth->execute(@query_params);
 
 while ( my $data = $sth->fetchrow_hashref ) {
-    my $record = Koha::Biblios->find($data->{biblionumber});
-    if ($record){
-        $data->{subtitle} = [ $record->subtitles ];
-    }
     push(
         @reservedata, {
             reservedate     => $data->{l_reservedate},
@@ -248,6 +248,9 @@ while ( my $data = $sth->fetchrow_hashref ) {
             surname         => $data->{surname},
             title           => $data->{title},
             subtitle        => $data->{subtitle},
+            medium          => $data->{medium},
+            part_number     => $data->{part_number},
+            part_name       => $data->{part_name},
             author          => $data->{author},
             borrowernumber  => $data->{borrowernumber},
             biblionumber    => $data->{biblionumber},

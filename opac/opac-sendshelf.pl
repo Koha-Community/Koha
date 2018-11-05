@@ -101,7 +101,7 @@ if ( $email ) {
 
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-        my $subtitle         = GetRecordValue('subtitle', $record, $fw);
+        my $subtitle         = GetRecordValue('subtitle', $record);
 
         my @items = GetItemsInfo( $biblionumber );
 
