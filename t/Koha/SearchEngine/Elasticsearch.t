@@ -25,8 +25,10 @@ use t::lib::Mocks;
 use Test::MockModule;
 
 use MARC::Record;
+use Try::Tiny;
 
 use Koha::SearchEngine::Elasticsearch;
+use Koha::SearchEngine::Elasticsearch::Search;
 
 subtest '_read_configuration() tests' => sub {
 
@@ -115,11 +117,20 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 32;
+    plan tests => 45;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
     my @mappings = (
+        {
+            name => 'control_number',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            sort => undef,
+            marc_type => 'marc21',
+            marc_field => '001',
+        },
         {
             name => 'author',
             type => 'string',
@@ -164,6 +175,15 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             sort => 0,
             marc_type => 'marc21',
             marc_field => '220',
+        },
+        {
+            name => 'title_wildcard',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            sort => undef,
+            marc_type => 'marc21',
+            marc_field => '245',
         },
         {
             name => 'sum_item_price',
@@ -220,11 +240,12 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         }
     });
 
-    my $see = Koha::SearchEngine::Elasticsearch->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
+    my $see = Koha::SearchEngine::Elasticsearch::Search->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
 
     my $marc_record_1 = MARC::Record->new();
     $marc_record_1->leader('     cam  22      a 4500');
     $marc_record_1->append_fields(
+        MARC::Field->new('001', '123'),
         MARC::Field->new('100', '', '', a => 'Author 1'),
         MARC::Field->new('110', '', '', a => 'Corp Author'),
         MARC::Field->new('210', '', '', a => 'Title 1'),
@@ -255,6 +276,8 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     is($docs->[0][0], '1234567', 'First document biblionumber should be set as first element in document touple');
 
+    is_deeply($docs->[0][1]->{control_number}, ['123'], 'First record control number should be set correctly');
+
     is(scalar @{$docs->[0][1]->{author}}, 2, 'First document author field should contain two values');
     is_deeply($docs->[0][1]->{author}, ['Author 1', 'Corp Author'], 'First document author field should be set correctly');
 
@@ -263,6 +286,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     is(scalar @{$docs->[0][1]->{title__sort}}, 3, 'First document title__sort field should have three values');
     is_deeply($docs->[0][1]->{title__sort}, ['Title:', 'first record', 'Title: first record'], 'First document title__sort field should be set correctly');
+
+    is(scalar @{$docs->[0][1]->{title_wildcard}}, 2, 'First document title_wildcard field should have two values');
+    is_deeply($docs->[0][1]->{title_wildcard}, ['Title:', 'first record'], 'First document title_wildcard field should be set correctly');
 
     is(scalar @{$docs->[0][1]->{author__suggestion}}, 2, 'First document author__suggestion field should contain two values');
     is_deeply(
@@ -312,10 +338,13 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     );
 
     ok(defined $docs->[0][1]->{marc_data}, 'First document marc_data field should be set');
-
     ok(defined $docs->[0][1]->{marc_format}, 'First document marc_format field should be set');
-
     is($docs->[0][1]->{marc_format}, 'base64ISO2709', 'First document marc_format should be set correctly');
+
+    my $decoded_marc_record = $see->decode_record_from_result($docs->[0][1]);
+
+    ok($decoded_marc_record->isa('MARC::Record'), "base64ISO2709 record successfully decoded from result");
+    is($decoded_marc_record->as_usmarc(), $marc_record_1->as_usmarc(), "Decoded base64ISO2709 record has same data as original record");
 
     is(scalar @{$docs->[0][1]->{type_of_record}}, 1, 'First document type_of_record field should have one value');
     is_deeply(
@@ -376,4 +405,51 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     is($docs->[0][1]->{marc_format}, 'MARCXML', 'For record exceeding max record size marc_format should be set correctly');
 
+    $decoded_marc_record = $see->decode_record_from_result($docs->[0][1]);
+
+    ok($decoded_marc_record->isa('MARC::Record'), "MARCXML record successfully decoded from result");
+    is($decoded_marc_record->as_xml_record(), $large_marc_record->as_xml_record(), "Decoded MARCXML record has same data as original record");
+
+    push @mappings, {
+        name => 'title',
+        type => 'string',
+        facet => 0,
+        suggestible => 1,
+        sort => 1,
+        marc_type => 'marc21',
+        marc_field => '245((ab)ab',
+    };
+
+    my $exception = try {
+        $see->marc_records_to_documents($records);
+    }
+    catch {
+        return $_;
+    };
+
+    ok(defined $exception, "Exception has been thrown when processing mapping with unmatched opening parenthesis");
+    ok($exception->isa("Koha::Exceptions::Elasticsearch::MARCFieldExprParseError"), "Exception is of correct class");
+    ok($exception->message =~ /Unmatched opening parenthesis/, "Exception has the correct message");
+
+    pop @mappings;
+    push @mappings, {
+        name => 'title',
+        type => 'string',
+        facet => 0,
+        suggestible => 1,
+        sort => 1,
+        marc_type => 'marc21',
+        marc_field => '245(ab))ab',
+    };
+
+    $exception = try {
+        $see->marc_records_to_documents($records);
+    }
+    catch {
+        return $_;
+    };
+
+    ok(defined $exception, "Exception has been thrown when processing mapping with unmatched closing parenthesis");
+    ok($exception->isa("Koha::Exceptions::Elasticsearch::MARCFieldExprParseError"), "Exception is of correct class");
+    ok($exception->message =~ /Unmatched closing parenthesis/, "Exception has the correct message");
 };
