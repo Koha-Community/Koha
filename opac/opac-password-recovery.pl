@@ -76,7 +76,8 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
     elsif ( $borrower = $search_results->next() ) {    # One matching borrower
         my @emails = grep { $_ } ( $borrower->email, $borrower->emailpro, $borrower->B_email );
 
-        my $firstNonEmptyEmail = shift @emails;
+        my $firstNonEmptyEmail;
+        $firstNonEmptyEmail = $emails[0] if @emails;
 
         # Is the given email one of the borrower's ?
         if ( $email && !( grep /^$email$/i, @emails ) ) {
