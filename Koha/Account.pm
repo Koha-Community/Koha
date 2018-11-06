@@ -23,7 +23,6 @@ use Carp;
 use Data::Dumper;
 use List::MoreUtils qw(uniq);
 
-use C4::Circulation qw( ReturnLostItem );
 use C4::Log qw( logaction );
 use C4::Stats qw( UpdateStats );
 
