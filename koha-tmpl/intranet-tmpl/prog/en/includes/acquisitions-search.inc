@@ -9,7 +9,7 @@
 </div>
     <div id="orders_search" class="residentsearch">
 	<p class="tip">Search orders:</p>
-	
+
 		<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
         <label for="title">Title: </label> <input type="text" id="title" name="title" size="15" value="[% title %]" />
         <label for="searchsupplier">Vendor:</label> <input type="text" id="searchsupplier" name="name" size="15" value="[% name|html %]" />
@@ -22,11 +22,11 @@
       <label for="booksellerinvoicenumber">Invoice no.: </label><input type="text" name="booksellerinvoicenumber" id="booksellerinvoicenumber" />
     </p>
 	</form>
-	</div>	
+    </div>
 			<ul id="tabtriggers">
             <li><a href="#supplier_search">Vendor search</a></li>
             <li><a href="#orders_search">Orders search</a></li>
-			</ul>	
+            </ul>
 </div><!-- /header_search -->
 </div><!-- /gradient -->
 <!-- End Acquisitions Resident Search Box -->
