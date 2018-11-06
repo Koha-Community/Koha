@@ -19,9 +19,10 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use t::lib::Selenium;
+use t::lib::TestBuilder;
 
 eval { require Selenium::Remote::Driver; };
 skip "Selenium::Remote::Driver is needed for selenium tests.", 1 if $@;
@@ -30,11 +31,16 @@ my $s = t::lib::Selenium->new;
 
 my $driver = $s->driver;
 my $opac_base_url = $s->opac_base_url;
+my $base_url = $s->base_url;
 
 # It seems that we do not have enough records indexed with ES
 my $SearchEngine_value = C4::Context->preference('SearchEngine');
 C4::Context->set_preference('SearchEngine', 'Zebra');
 
+my $AudioAlerts_value = C4::Context->preference('AudioAlerts');
+C4::Context->set_preference('AudioAlerts', '1');
+
+my @data_to_cleanup;
 
 subtest 'OPAC - Remove from cart' => sub {
     plan tests => 4;
@@ -69,6 +75,26 @@ subtest 'OPAC - Remove from cart' => sub {
         2, '1 element should have been removed from the cart' );
 };
 
+subtest 'Play sound on the circulation page' => sub {
+    plan tests => 1;
+
+    my $builder  = t::lib::TestBuilder->new;
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
+
+    my $mainpage = $s->base_url . q|mainpage.pl|;
+    $driver->get($mainpage);
+    like( $driver->get_title(), qr(Log in to Koha), );
+    $s->auth;
+
+    $driver->get( $base_url . "/circ/circulation.pl?borrowernumber=" . $patron->borrowernumber );
+
+    my $audio_node = $driver->find_element('//span[@id="audio-alert"]/audio[@src="/intranet-tmpl/prog/sound/beep.ogg"]');
+
+    push @data_to_cleanup, $patron, $patron->category, $patron->library;
+};
+
 END {
     C4::Context->preference('SearchEngine', $SearchEngine_value);
+    C4::Context->preference('AudioAlerts', $AudioAlerts_value);
+    $_->delete for @data_to_cleanup;
 };
