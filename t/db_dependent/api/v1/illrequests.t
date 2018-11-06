@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 use Test::MockModule;
+use Test::MockObject;
 use Test::Mojo;
 use Test::Warn;
 
@@ -40,11 +41,27 @@ subtest 'list() tests' => sub {
 
     plan tests => 18;
 
+    # Mock ILLBackend (as object)
+    my $backend = Test::MockObject->new;
+    $backend->set_isa('Koha::Illbackends::Mock');
+    $backend->set_always('name', 'Mock');
+    $backend->set_always('capabilities', sub { return 'bar'; } );
+    $backend->mock(
+        'metadata',
+        sub {
+            my ( $self, $rq ) = @_;
+            return {
+                ID => $rq->illrequest_id,
+                Title => $rq->patron->borrowernumber
+            }
+        }
+    );
+
+    # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
     my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
-    # Mock ->capabilities
-    $illreqmodule->mock( 'capabilities', sub { return 'capable'; } );
-    # Mock ->metadata
-    $illreqmodule->mock( 'metadata', sub { return 'metawhat?'; } );
+    $illreqmodule->mock( 'load_backend',
+        sub { my $self = shift; $self->{_my_backend} = $backend; return $self }
+    );
 
     $schema->storage->txn_begin;
 
@@ -67,7 +84,7 @@ subtest 'list() tests' => sub {
         {
             class => 'Koha::Illrequests',
             value => {
-                backend        => 'FreeForm',
+                backend        => 'Mock',
                 branchcode     => $library->branchcode,
                 borrowernumber => $patron->borrowernumber
             }
@@ -86,16 +103,17 @@ subtest 'list() tests' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
-        ->json_has( '/0/patron', $patron->unblessed )
-        ->json_has( '/0/capabilities', 'capable' )
-        ->json_has( '/0/library', $library->unblessed  )
-        ->json_has( '/0/metadata', 'metawhat?'  );
+        ->json_has( '/0/patron', 'patron embedded' )
+        ->json_has( '/0/capabilities', 'capabilities embedded' )
+        ->json_has( '/0/library', 'library embedded'  )
+        ->json_has( '/0/metadata', 'metadata embedded'  );
 
     # Create another ILL request
     my $illrequest2 = $builder->build_object(
         {
             class => 'Koha::Illrequests',
             value => {
+                backend        => 'Mock',
                 branchcode     => $library->branchcode,
                 borrowernumber => $patron->borrowernumber
             }
