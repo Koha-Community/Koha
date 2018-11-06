@@ -172,7 +172,7 @@ sub process_tt_block {
         $filter ne 'html'
             and (
                     $tt_block !~ m{\|}
-                or  $tt_block =~ m{\|\s?html}
+                or ($tt_block =~ m{\|\s?html} and not $tt_block =~ m{\|\s?html_entity})
                 or $tt_block !~ m{\s*|\s*(uri|url)}
       )
     ) {
