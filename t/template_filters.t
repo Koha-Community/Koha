@@ -198,7 +198,7 @@ EXPECTED
 };
 
 subtest 'Use uri filter if needed' => sub {
-    plan tests => 3;
+    plan tests => 4;
     my $input = <<INPUT;
 <a href="tel:[% patron.phone %]">[% patron.phone %]</a>
 <a href="mailto:[% patron.emailpro %]" title="[% patron.emailpro %]">[% patron.emailpro %]</a>
@@ -208,6 +208,7 @@ subtest 'Use uri filter if needed' => sub {
 <a href="[% myuri | uri %]" title="[% myuri %]">[% myuri %]</a>
 <a href="[% myurl | html %]" title="[% myurl %]">[% myurl %]</a>
 <a href="[% myurl | url %]" title="[% myurl %]">[% myurl %]</a>
+<a href="[% myurl | html_entity %]" title="[% myurl %]">[% myurl %]</a>
 <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno %]">[% another_var %]</a>
 <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid %]&amp;basketno=[% basketno | html %]" title="[% a_title %]>[% another_var %]</a>
 INPUT
@@ -222,6 +223,7 @@ INPUT
 <a href="[% myuri | uri %]" title="[% myuri | html %]">[% myuri | html %]</a>
 <a href="[% myurl | uri %]" title="[% myurl | html %]">[% myurl | html %]</a>
 <a href="[% myurl | url %]" title="[% myurl | html %]">[% myurl | html %]</a>
+<a href="[% myurl | html_entity %]" title="[% myurl | html %]">[% myurl | html %]</a>
 <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]">[% another_var | html %]</a>
 <a href="/cgi-bin/koha/acqui/newordersuggestion.pl?booksellerid=[% booksellerid | uri %]&amp;basketno=[% basketno | uri %]" title="[% a_title | html %]>[% another_var | html %]</a>
 EXPECTED
@@ -251,4 +253,10 @@ INPUT
 INPUT
     @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply( \@missing_filters, [], );
+
+    $input = <<INPUT;
+<a href="[% good_filter | html_entity %]">[% var | html %]</a>
+INPUT
+    @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
+    is_deeply( \@missing_filters, [], 'html_entity is a valid filter for href' );
 };
