@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use C4::Context;
 use Koha::AuthUtils;
@@ -33,11 +33,15 @@ my $s = t::lib::Selenium->new;
 
 my $driver = $s->driver;
 my $opac_base_url = $s->opac_base_url;
+my $base_url = $s->base_url;
 my $builder = t::lib::TestBuilder->new;
 
 # It seems that we do not have enough records indexed with ES
 my $SearchEngine_value = C4::Context->preference('SearchEngine');
 C4::Context->set_preference('SearchEngine', 'Zebra');
+
+my $AudioAlerts_value = C4::Context->preference('AudioAlerts');
+C4::Context->set_preference('AudioAlerts', '1');
 
 our @cleanup;
 subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
@@ -55,9 +59,7 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
     is( $elt->get_attribute('data-borrowernumber'), $patron->borrowernumber,
 "Since bug 20921 span.loggedinusername should contain data-borrowernumber"
     );
-    push @cleanup, $patron;
-    push @cleanup, $patron->category;
-    push @cleanup, $patron->library;
+    push @cleanup, $patron, $patron->category, $patron->library;
 };
 
 subtest 'OPAC - Remove from cart' => sub {
@@ -93,7 +95,26 @@ subtest 'OPAC - Remove from cart' => sub {
         2, '1 element should have been removed from the cart' );
 };
 
+subtest 'Play sound on the circulation page' => sub {
+    plan tests => 1;
+
+    my $builder  = t::lib::TestBuilder->new;
+    my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
+
+    my $mainpage = $s->base_url . q|mainpage.pl|;
+    $driver->get($mainpage);
+    like( $driver->get_title(), qr(Log in to Koha), );
+    $s->auth;
+
+    $driver->get( $base_url . "/circ/circulation.pl?borrowernumber=" . $patron->borrowernumber );
+
+    my $audio_node = $driver->find_element('//span[@id="audio-alert"]/audio[@src="/intranet-tmpl/prog/sound/beep.ogg"]');
+
+    push @cleanup, $patron, $patron->category, $patron->library;
+};
+
 END {
     C4::Context->preference('SearchEngine', $SearchEngine_value);
+    C4::Context->preference('AudioAlerts', $AudioAlerts_value);
     $_->delete for @cleanup;
 };
