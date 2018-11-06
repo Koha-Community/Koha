@@ -56,6 +56,9 @@ subtest 'list() tests' => sub {
             }
         }
     );
+    $backend->mock(
+        'status_graph', sub {},
+    );
 
     # Mock Koha::Illrequest::load_backend (to load Mocked Backend)
     my $illreqmodule = Test::MockModule->new('Koha::Illrequest');
