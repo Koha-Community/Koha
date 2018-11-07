@@ -92,7 +92,7 @@
             </div>
 
             <div class="col-md-6 sysprefs">
-            [% IF ( CAN_user_parameters_manage_keywords2koha_mappings || CAN_user_parameters_manage_marc_frameworks || CAN_user_parameters_manage_classifications || CAN_user_parameters_manage_matching_rules || CAN_user_parameters_manage_oai_sets || CAN_user_parameters_manage_item_search_fields || (Koha.Preference('SearchEngine') == 'Elasticsearch' && CAN_user_parameters_search_engine_config) ) %]
+            [% IF ( CAN_user_parameters_manage_keywords2koha_mappings || CAN_user_parameters_manage_marc_frameworks || CAN_user_parameters_manage_classifications || CAN_user_parameters_manage_matching_rules || CAN_user_parameters_manage_oai_sets || CAN_user_parameters_manage_item_search_fields || (Koha.Preference('SearchEngine') == 'Elasticsearch' && CAN_user_parameters_manage_search_engine_config) ) %]
                 <h3>Catalog</h3>
                 <dl>
                     [% IF ( CAN_user_parameters_manage_marc_frameworks ) %]
@@ -127,7 +127,7 @@
                         <dt><a href="/cgi-bin/koha/admin/items_search_fields.pl">Item search fields</a></dt>
                         <dd>Manage custom fields for item search.</dd>
                     [% END %]
-                    [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' && CAN_user_parameters_search_engine_config ) %]
+                    [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' && CAN_user_parameters_manage_search_engine_config ) %]
                         <dt><a href="/cgi-bin/koha/admin/searchengine/elasticsearch/mappings.pl">Search engine configuration</a></dt>
                         <dd>Manage indexes, facets, and their mappings to MARC fields and subfields.</dd>
                     [% END %]
