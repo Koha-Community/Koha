@@ -3,88 +3,94 @@
 [% SET footerjs = 1 %]
 [% SET panel_id = 0 %]
 [% BLOCK pagelist %]
-<div class="pagelist">
-  <form method="post" action="/cgi-bin/koha/admin/columns_settings.pl">
-    <input type="hidden" name="action" value="save" />
-    <input type="hidden" name="module" value="[% modulename | html %]" />
-    <input type="hidden" name="panel" value="[% panel_id | html %]" />
-    [% SET panel_id = panel_id + 1 %]
-    [% IF module.keys and module.keys.size > 0 %]
-      [% FOR pagename IN module.keys %]
-        <h5>[% pagename | html %]</h5>
-        [% SET tables = module %]
-        [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
-          [% FOR tablename IN tables.$pagename.keys.sort %]
-            [% IF pagename == 'additem' AND tablename == 'itemst' %]
-              <div class="alert">Changes made below will only apply to item subfields that are mapped to the 'items' table. <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">Go to Koha to MARC mapping</a></div>
-            [% END %]
-            <table>
-              <caption>
-                [% IF tablename == 'currencies-table' %]
-                  Currency
-                [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
-                  Items Editor
+    <div class="pagelist">
+        <form method="post" action="/cgi-bin/koha/admin/columns_settings.pl">
+            <input type="hidden" name="action" value="save" />
+            <input type="hidden" name="module" value="[% modulename | html %]" />
+            <input type="hidden" name="panel" value="[% panel_id | html %]" />
+            [% SET panel_id = panel_id + 1 %]
+            [% IF module.keys and module.keys.size > 0 %]
+                [% FOR pagename IN module.keys %]
+                    <h5>[% pagename | html %]</h5>
+                    [% SET tables = module %]
+                    [% IF tables.$pagename.keys and tables.$pagename.keys.size > 0 %]
+                        [% FOR tablename IN tables.$pagename.keys.sort %]
+                            [% IF pagename == 'additem' AND tablename == 'itemst' %]
+                                <div class="alert">Changes made below will only apply to item subfields that are mapped to the 'items' table. <a href="/cgi-bin/koha/admin/koha2marclinks.pl?tablename=items">Go to Koha to MARC mapping</a></div>
+                            [% END %]
+                            <table>
+                                <caption>
+                                    [% IF tablename == 'currencies-table' %]
+                                        Currency
+                                    [% ELSIF pagename == 'additem' AND tablename == 'itemst' %]
+                                        Items Editor
+                                    [% END %]
+                                    (id=[% tablename | html %])
+                                </caption>
+                                <thead>
+                                    <tr>
+                                        <th>Column name</th>
+                                        <th>Is hidden by default</th>
+                                        <th>Cannot be toggled</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    [% FOR column IN tables.$pagename.$tablename %]
+                                        [% SET value = pagename _ '#' _ tablename _ '#' _ column.columnname %]
+                                        <tr>
+                                            <td>
+                                                [% column.columnname | html %]
+                                                <input type="hidden" name="columnid" value="[% value | html %]" />
+                                            </td>
+                                            <td>
+                                                [% IF column.is_hidden %]
+                                                    [% IF column.cannot_be_modified %]
+                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" disabled="disabled" />
+                                                        <input type="hidden" name="[% value | html %]_hidden" value="1" />
+                                                    [% ELSE %]
+                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" />
+                                                    [% END %]
+                                                [% ELSE %]
+                                                    [% IF column.cannot_be_modified %]
+                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" disabled="disabled" />
+                                                        <input type="hidden" name="[% value | html %]_hidden" value="0" />
+                                                    [% ELSE %]
+                                                        <input type="checkbox" name="[% value | html %]_hidden" value="1" />
+                                                    [% END %]
+                                                [% END %]
+                                            </td>
+                                            <td>
+                                                [% IF column.cannot_be_toggled %]
+                                                    [% IF column.cannot_be_modified %]
+                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
+                                                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="1" />
+                                                    [% ELSE %]
+                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" />
+                                                    [% END %]
+                                                [% ELSE %]
+                                                    [% IF column.cannot_be_modified %]
+                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" disabled="disabled" />
+                                                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="0" />
+                                                    [% ELSE %]
+                                                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" />
+                                                    [% END %]
+                                                [% END %]
+                                            </td>
+                                        </tr>
+                                    [% END %]
+                                </tbody>
+                            </table>
+                        [% END %]
+                        <input type="submit" value="Save" />
+                    [% ELSE %]
+                        There is no table to configure for this module.
+                    [% END %]
                 [% END %]
-                (id=[% tablename | html %])
-              </caption>
-              <thead><tr><th>Column name</th><th>Is hidden by default</th><th>Cannot be toggled</th></tr></thead>
-              <tbody>
-              [% FOR column IN tables.$pagename.$tablename %]
-                [% SET value = pagename _ '#' _ tablename _ '#' _ column.columnname %]
-                <tr>
-                  <td>
-                    [% column.columnname | html %]
-                    <input type="hidden" name="columnid" value="[% value | html %]" />
-                  </td>
-                  <td>
-                    [% IF column.is_hidden %]
-                      [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" disabled="disabled" />
-                        <input type="hidden" name="[% value | html %]_hidden" value="1" />
-                      [% ELSE %]
-                        <input type="checkbox" name="[% value | html %]_hidden" value="1" checked="checked" />
-                      [% END %]
-                    [% ELSE %]
-                      [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value | html %]_hidden" value="1" disabled="disabled" />
-                        <input type="hidden" name="[% value | html %]_hidden" value="0" />
-                      [% ELSE %]
-                        <input type="checkbox" name="[% value | html %]_hidden" value="1" />
-                      [% END %]
-                    [% END %]
-                  </td>
-                  <td>
-                    [% IF column.cannot_be_toggled %]
-                      [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" disabled="disabled" />
-                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="1" />
-                      [% ELSE %]
-                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" checked="checked" />
-                      [% END %]
-                    [% ELSE %]
-                      [% IF column.cannot_be_modified %]
-                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" disabled="disabled" />
-                        <input type="hidden" name="[% value | html %]_cannot_be_toggled" value="0" />
-                      [% ELSE %]
-                        <input type="checkbox" name="[% value | html %]_cannot_be_toggled" value="1" />
-                      [% END %]
-                    [% END %]
-                  </td>
-                </tr>
-              [% END %]
-              </tbody>
-            </table>
-          [% END %]
-          <input type="submit" value="Save" />
-        [% ELSE %]
-          There is no table to configure for this module.
-        [% END %]
-      [% END %]
-    [% ELSE %]
-        There is no page using the table configuration in this module.
-    [% END %]
-  </form>
-</div>
+            [% ELSE %]
+                There is no page using the table configuration in this module.
+            [% END %]
+        </form>
+    </div>
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
@@ -93,120 +99,121 @@
 </head>
 
 <body id="admin_tables" class="admin">
-[% INCLUDE 'header.inc' %]
-[% INCLUDE 'prefs-admin-search.inc' %]
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Columns settings</div>
 
-<div class="main container-fluid">
-    <div class="row">
-        <div class="col-sm-10 col-sm-push-2">
-            <main>
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'prefs-admin-search.inc' %]
+    <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo; Columns settings</div>
 
-        <h2>Columns settings</h2>
-        <div id="modules">
-          <h3><a href="#acqui">Acquisition</a></h3>
-          <div id="acqui">
-            <h4>Acquisition tables</h4>
-            [% PROCESS pagelist module=modules.acqui modulename="acqui" %]
-          </div>
+    <div class="main container-fluid">
+        <div class="row">
+                <div class="col-sm-10 col-sm-push-2">
+                        <main>
 
-          <h3><a href="#admin">Administration</a></h3>
-          <div id="admin">
-            <h4>Administration tables</h4>
-            [% PROCESS pagelist module=modules.admin modulename="admin" %]
-          </div>
+                            <h2>Columns settings</h2>
+                            <div id="modules">
+                                <h3><a href="#acqui">Acquisition</a></h3>
+                                <div id="acqui">
+                                    <h4>Acquisition tables</h4>
+                                    [% PROCESS pagelist module=modules.acqui modulename="acqui" %]
+                                </div>
 
-          <h3><a href="#authorities">Authorities</a></h3>
-          <div id="authorities">
-            <h4>Authorities tables</h4>
-            [% PROCESS pagelist module=modules.authorities modulename="authorities" %]
-          </div>
+                                <h3><a href="#admin">Administration</a></h3>
+                                <div id="admin">
+                                    <h4>Administration tables</h4>
+                                    [% PROCESS pagelist module=modules.admin modulename="admin" %]
+                                </div>
 
-          <h3><a href="#catalog">Catalog</a></h3>
-          <div id="catalogue">
-            <h4>Catalogue tables</h4>
-            [% PROCESS pagelist module=modules.catalogue modulename="catalogue" %]
-          </div>
+                                <h3><a href="#authorities">Authorities</a></h3>
+                                <div id="authorities">
+                                    <h4>Authorities tables</h4>
+                                    [% PROCESS pagelist module=modules.authorities modulename="authorities" %]
+                                </div>
 
-          <h3><a href="#cataloguing">Cataloging</a></h3>
-          <div id="cataloguing">
-            <h4>Cataloguing tables</h4>
-            [% PROCESS pagelist module=modules.cataloguing modulename="cataloguing" %]
-          </div>
+                                <h3><a href="#catalog">Catalog</a></h3>
+                                <div id="catalogue">
+                                    <h4>Catalogue tables</h4>
+                                    [% PROCESS pagelist module=modules.catalogue modulename="catalogue" %]
+                                </div>
 
-          <h3><a href="#circulation">Circulation</a></h3>
-          <div id="circulation">
-            <h4>Circulation tables</h4>
-            [% PROCESS pagelist module=modules.circ modulename="circ" %]
-          </div>
+                                <h3><a href="#cataloguing">Cataloging</a></h3>
+                                <div id="cataloguing">
+                                    <h4>Cataloguing tables</h4>
+                                    [% PROCESS pagelist module=modules.cataloguing modulename="cataloguing" %]
+                                </div>
 
-          <h3><a href="#coursereserves">Course reserves</a></h3>
-          <div id="coursereserves">
-            <h4>Course reserves tables</h4>
-            [% PROCESS pagelist module=modules.coursereserves modulename="coursereserves" %]
-          </div>
+                                <h3><a href="#circulation">Circulation</a></h3>
+                                <div id="circulation">
+                                    <h4>Circulation tables</h4>
+                                    [% PROCESS pagelist module=modules.circ modulename="circ" %]
+                                </div>
 
-          <h3><a href="#ill">Interlibrary loans</a></h3>
-          <div id="ill">
-            <h4>Interlibrary loans tables</h4>
-            [% PROCESS pagelist module=modules.illrequests modulename="illrequests" %]
-          </div>
+                                <h3><a href="#coursereserves">Course reserves</a></h3>
+                                <div id="coursereserves">
+                                    <h4>Course reserves tables</h4>
+                                    [% PROCESS pagelist module=modules.coursereserves modulename="coursereserves" %]
+                                </div>
 
-          <h3><a href="#members">Patrons</a></h3>
-          <div id="members">
-            <h4>Patrons tables</h4>
-            [% PROCESS pagelist module=modules.members modulename="members" %]
-          </div>
+                                <h3><a href="#ill">Interlibrary loans</a></h3>
+                                <div id="ill">
+                                    <h4>Interlibrary loans tables</h4>
+                                    [% PROCESS pagelist module=modules.illrequests modulename="illrequests" %]
+                                </div>
 
-            <h3><a href="#tools">Tools</a></h3>
-            <div id="tools">
-                <h4>Tools tables</h4>
-                [% PROCESS pagelist module=modules.tools modulename="tools" %]
-            </div>
+                                <h3><a href="#members">Patrons</a></h3>
+                                <div id="members">
+                                    <h4>Patrons tables</h4>
+                                    [% PROCESS pagelist module=modules.members modulename="members" %]
+                                </div>
 
-          <h3><a href="#opac">OPAC</a></h3>
-          <div id="opac">
-            <h4>OPAC tables</h4>
-            [% PROCESS pagelist module=modules.opac modulename="opac" %]
-          </div>
+                                <h3><a href="#tools">Tools</a></h3>
+                                <div id="tools">
+                                    <h4>Tools tables</h4>
+                                    [% PROCESS pagelist module=modules.tools modulename="tools" %]
+                                </div>
 
-          <h3><a href="#reports">Reports</a></h3>
-          <div id="reports">
-            <h4>Reports tables</h4>
-            [% PROCESS pagelist module=modules.reports modulename="reports" %]
-          </div>
+                                <h3><a href="#opac">OPAC</a></h3>
+                                <div id="opac">
+                                    <h4>OPAC tables</h4>
+                                    [% PROCESS pagelist module=modules.opac modulename="opac" %]
+                                </div>
 
-          <h3><a href="#serials">Serials</a></h3>
-          <div id="serials">
-            <h4>Serials tables</h4>
-            [% PROCESS pagelist module=modules.serials modulename="serials" %]
-          </div>
+                                <h3><a href="#reports">Reports</a></h3>
+                                <div id="reports">
+                                    <h4>Reports tables</h4>
+                                    [% PROCESS pagelist module=modules.reports modulename="reports" %]
+                                </div>
 
-        </div>
-            </main>
-        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                                <h3><a href="#serials">Serials</a></h3>
+                                <div id="serials">
+                                    <h4>Serials tables</h4>
+                                    [% PROCESS pagelist module=modules.serials modulename="serials" %]
+                                </div>
 
-        <div class="col-sm-2 col-sm-pull-10">
-            <aside>
-                [% INCLUDE 'admin-menu.inc' %]
-            </aside>
-        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
-     </div> <!-- /.row -->
+                            </div>
+                        </main>
+                </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+                <div class="col-sm-2 col-sm-pull-10">
+                        <aside>
+                                [% INCLUDE 'admin-menu.inc' %]
+                        </aside>
+                </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
     <script>
         $(document).ready( function() {
             var accordion = $( "#modules" ).accordion({
-                collapsible: true,
-                autoHeight: false,
-                header: "h3",
-              [%- IF panel -%]
-                [%# we were asked to show a specific panel, usually on update %]
-                active: [%- panel | html -%]
-              [%- ELSE -%]
-                active: false
-              [%- END -%]
+                    collapsible: true,
+                    autoHeight: false,
+                    header: "h3",
+                [%- IF panel -%]
+                    [%# we were asked to show a specific panel, usually on update %]
+                    active: [%- panel | html -%]
+                [%- ELSE -%]
+                    active: false
+                [%- END -%]
             });
         });
     </script>
