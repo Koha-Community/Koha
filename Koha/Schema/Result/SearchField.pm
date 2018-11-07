@@ -53,6 +53,12 @@ the human readable name of the field, for display
 
 what type of data this holds, relevant when storing it in the search engine
 
+=head2 weight
+
+  data_type: 'decimal'
+  is_nullable: 1
+  size: [5,2]
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -70,6 +76,8 @@ __PACKAGE__->add_columns(
     },
     is_nullable => 0,
   },
+  "weight",
+  { data_type => "decimal", is_nullable => 1, size => [5, 2] },
 );
 
 =head1 PRIMARY KEY
@@ -116,8 +124,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-06-27 04:12:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:axyQNupqtw+5gMh1rsIHAg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-11-07 22:22:22
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4Q+IXwF0hViF8+kpR96eLA
 
 __PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
 
