@@ -16909,6 +16909,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 14391: Add granular permissions to the administration module)\n";
 }
 
+$DBversion = '18.06.00.053';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES ('ItemsDeniedRenewal','','','This syspref allows to define custom rules for denying renewal of specific items.','Textarea')" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 15494 - Block renewals by arbitrary item values)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
