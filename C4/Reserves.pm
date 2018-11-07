@@ -582,6 +582,7 @@ sub ChargeReserveFee {
             description       => "Reserve Charge - $title",
             accounttype       => 'Res',
             amountoutstanding => $fee,
+            branchcode        => $branchcode
         }
     )->store();
 }
