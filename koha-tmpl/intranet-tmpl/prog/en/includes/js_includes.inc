@@ -4,7 +4,7 @@
 [% USE To %]
 [%# Prevent XFS attacks -%]
 [% UNLESS popup %]
-    <script type="text/javascript">
+    <script>
        if (self === top) {
            var antiClickjack = document.getElementById("antiClickjack");
            antiClickjack.parentNode.removeChild(antiClickjack);
@@ -28,16 +28,13 @@
 
 [% INCLUDE 'validator-strings.inc' %]
 [% IF ( IntranetUserJS ) %]
-    <script type="text/javascript">
-    //<![CDATA[
+    <script>
     [% IntranetUserJS | $raw %]
-    //]]>
     </script>
 [% END %]
 
 [% IF ( virtualshelves || intranetbookbag ) %]
-<script type="text/javascript">
-    //<![CDATA[
+    <script>
         var MSG_BASKET_EMPTY = _("Your cart is currently empty");
         var MSG_RECORD_IN_BASKET = _("This item is already in your cart");
         var MSG_RECORD_ADDED = _("This item has been added to your cart");
@@ -52,7 +49,6 @@
         var MSG_ITEM_NOT_IN_CART = _("Add to cart");
         var MSG_ITEM_IN_CART = _("In your cart");
         var MSG_RECORD_REMOVED = _("The item has been removed from your cart");
-    //]]>
     </script>
 
     [% Asset.js("js/basket.js") | $raw %]
@@ -60,19 +56,15 @@
 
 [% IF LocalCoverImages %]
     [% Asset.js("js/localcovers.js") | $raw %]
-    <script type="text/javascript">
-        //<![CDATA[
-            var NO_LOCAL_JACKET = _("No cover image available");
-        //]]>
+    <script>
+        var NO_LOCAL_JACKET = _("No cover image available");
     </script>
 [% END %]
 
 [% IF Koha.Preference('AudioAlerts') || AudioAlertsPage %]
-    <script type="text/javascript">
-        //<![CDATA[
-            var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
-            var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
-        //]]>
+    <script>
+        var AUDIO_ALERT_PATH = '[% interface | html %]/[% theme | html %]/sound/';
+        var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
 
         $( document ).ready(function() {
             if ( AUDIO_ALERTS ) {
@@ -90,7 +82,7 @@
 
 [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]
     [% IF ( CircAutocompl ) %]
-        <script type="text/javascript">
+        <script>
             $(document).ready(function(){
                 var obj = $( "#findborrower" ).autocomplete({
                     source: "/cgi-bin/koha/circ/ysearch.pl",
