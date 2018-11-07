@@ -4,6 +4,7 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE ItemTypes %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Hold ratios</title>
@@ -12,7 +13,8 @@
 <style>
     .sql { display: none; }
     .ulined { text-decoration: underline; }
-    .ratiolimit { color: blue; cursor: pointer; }
+    .ratiolimit:link { color: blue; cursor: pointer; }
+    .ratiolimit:hover { color: blue; text-decoration: underline; }
     #holdst ul li {  list-style: outside url("[% interface | html %]/[% theme | html %]/img/item-bullet.gif") disc; }
 </style>
 </head>
@@ -55,7 +57,7 @@
         <tr>
             <td><p>[% reserveloo.reservecount | html %]</p></td>
             <td><p>[% reserveloo.itemcount | html %]</p></td>
-            <td><p class="ratiolimit">[% reserveloo.thisratio | html %]</p></td>
+            <td><a href="#" class="ratiolimit">[% reserveloo.thisratio | html %]</a></td>
             <td> [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %][% reserveloo.title | html %] [% IF ( reserveloo.subtitle ) %][% FOREACH subtitl IN reserveloo.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>[% IF ( reserveloo.author ) %] by [% reserveloo.author | html %][% END %]
             </td>
             <td>
@@ -164,25 +166,25 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-  [% INCLUDE 'calendar.inc' %]
-  [% INCLUDE 'datatables.inc' %]
-  <script>
-       $(document).ready(function() {
-          $(".ratiolimit").click(function () {
-              $("#ratio").val($(this).html());
-          });
-          $(".ratiolimit").hover(
-              function () { $(this).toggleClass("ulined") },
-              function () { $(this).toggleClass("ulined") }
-          );
-          $("#holdst").dataTable($.extend(true, {}, dataTablesDefaults, {
-              "aaSorting": [ [2,'desc'], [3,'asc'] ],
-              "aoColumnDefs": [
-                  { "aTargets": [ 0,1,2,8 ], "sType": "natural" },
-                  { "aTargets": [ 3 ], "sType": "anti-the" },
-              ],
-              "sPaginationType": "four_button"
-          }));
+    [% INCLUDE 'calendar.inc' %]
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script>
+        var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'holdsratios', 'holds-ratios', 'json' ) | $raw %];
+        $(document).ready(function() {
+            $(".ratiolimit").on("click", function(e) {
+                e.preventDefault();
+                $("#ratio").val($(this).html());
+            });
+            KohaTable("holdst", {
+                "aaSorting": [ [2,'desc'], [3,'asc'] ],
+                  "aoColumnDefs": [
+                      { "aTargets": [ 0,1,2,8 ], "sType": "natural" },
+                      { "aTargets": [ 3 ], "sType": "anti-the" },
+                    ],
+                "sPaginationType": "four_button",
+                "autoWidth": false
+            }, columns_settings);
        });
   </script>
 [% END %]
