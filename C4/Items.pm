@@ -878,7 +878,7 @@ sub GetItemsForInventory {
 
     if ( $ignore_waiting_holds ) {
         $query .= "LEFT JOIN reserves ON items.itemnumber = reserves.itemnumber ";
-        push( @where_strings, q{reserves.found != 'W' OR reserves.found IS NULL} );
+        push( @where_strings, q{(reserves.found != 'W' OR reserves.found IS NULL)} );
     }
 
     if ( @where_strings ) {

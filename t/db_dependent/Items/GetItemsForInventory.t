@@ -87,6 +87,7 @@ subtest 'Skip items with waiting holds' => sub {
                 homebranch       => $library->id,
                 holdingbranch    => $library->id,
                 itype            => $itemtype->itemtype,
+                reserves         => undef
             }
         }
     );
@@ -99,6 +100,7 @@ subtest 'Skip items with waiting holds' => sub {
                 homebranch       => $library->id,
                 holdingbranch    => $library->id,
                 itype            => $itemtype->itemtype,
+                reserves         => undef
             }
         }
     );
