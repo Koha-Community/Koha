@@ -246,7 +246,7 @@ $(document).ready(function() {
         },
         'bFilter': false,
         'bAutoWidth': false,
-        [% IF CAN_user_tools_manage_patron_lists %]
+        [% IF CAN_user_borrowers_edit_borrowers || CAN_user_tools_manage_patron_lists %]
             'aaSorting': [[2, 'asc']],
         [% ELSE %]
             'aaSorting': [[1, 'asc']],
