@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 57;
+use Test::More tests => 58;
 use Test::MockModule;
 use Test::Warn;
 
@@ -715,6 +715,31 @@ subtest 'ReservesNeedReturns' => sub {
     $hold = Koha::Holds->find($hold_id);
     is( $hold->priority, $priority, 'If ReservesNeedReturns is 1, priority must not have been set to changed' );
     is( $hold->found, undef, 'If ReservesNeedReturns is 1, found must not have been set waiting' );
+};
+
+subtest 'ChargeReserveFee tests' => sub {
+
+    plan tests => 8;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+
+    my $fee   = 20;
+    my $title = 'A title';
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( userenv => { branch => $library->id } );
+
+    my $line = C4::Reserves::ChargeReserveFee( $patron->id, $fee, $title );
+
+    is( ref($line), 'Koha::Account::Line' , 'Returns a Koha::Account::Line object');
+    ok( $line->is_debit, 'Generates a debit line' );
+    is( $line->accounttype, 'Res' , 'generates Res accounttype');
+    is( $line->borrowernumber, $patron->id , 'generated line belongs to the passed patron');
+    is( $line->amount, $fee , 'amount set correctly');
+    is( $line->amountoutstanding, $fee , 'amountoutstanding set correctly');
+    is( $line->description, "Reserve Charge - $title" , 'Hardcoded description is generated');
+    is( $line->branchcode, $library->id , "Library id is picked from userenv and stored correctly" );
 };
 
 sub count_hold_print_messages {

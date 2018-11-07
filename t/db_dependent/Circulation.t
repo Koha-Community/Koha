@@ -19,6 +19,7 @@ use Modern::Perl;
 use utf8;
 
 use Test::More tests => 123;
+use Test::MockModule;
 
 use Data::Dumper;
 use DateTime;
@@ -2821,6 +2822,93 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
 $schema->storage->txn_rollback;
 C4::Context->clear_syspref_cache();
 $cache->clear_from_cache('single_holidays');
+
+subtest 'AddRenewal and AddIssuingCharge tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    my $issuing_charges = 15;
+    my $title   = 'A title';
+    my $author  = 'Author, An';
+    my $barcode = 'WHATARETHEODDS';
+
+    my $circ = Test::MockModule->new('C4::Circulation');
+    $circ->mock(
+        'GetIssuingCharges',
+        sub {
+            return $issuing_charges;
+        }
+    );
+
+    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $patron   = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => { branchcode => $library->id }
+    });
+
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio( $title, $author );
+    my ( undef, undef, $item_id ) = AddItem(
+        {
+            homebranch       => $library->id,
+            holdingbranch    => $library->id,
+            barcode          => $barcode,
+            replacementprice => 23.00,
+            itype            => $itemtype->id
+        },
+        $biblionumber
+    );
+    my $item = Koha::Items->find( $item_id );
+
+    my $items = Test::MockModule->new('C4::Items');
+    $items->mock( GetItem => $item->unblessed );
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( userenv => { branch => $library->id } );
+
+    # Check the item out
+    AddIssue( $patron->unblessed, $item->barcode );
+
+    t::lib::Mocks::mock_preference( 'RenewalLog', 0 );
+    my $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
+    my $old_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    AddRenewal( $patron->id, $item->id, $library->id );
+    my $new_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    is( $new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog' );
+
+    t::lib::Mocks::mock_preference( 'RenewalLog', 1 );
+    $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
+    $old_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    AddRenewal( $patron->id, $item->id, $library->id );
+    $new_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    is( $new_log_size, $old_log_size + 1, 'renew log successfully added' );
+
+    my $lines = Koha::Account::Lines->search({
+        borrowernumber => $patron->id,
+        itemnumber     => $item->id
+    });
+
+    is( $lines->count, 3 );
+
+    my $line = $lines->next;
+    is( $line->accounttype, 'Rent',       'The issuing charge generates an accountline' );
+    is( $line->branchcode,  $library->id, 'AddIssuingCharge correctly sets branchcode' );
+    is( $line->description, 'Rental',     'AddIssuingCharge set a hardcoded description for the accountline' );
+
+    $line = $lines->next;
+    is( $line->accounttype, 'Rent', 'Fine on renewed item is closed out properly' );
+    is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
+    is( $line->description, "Renewal of Rental Item $title $barcode", 'AddRenewal set a hardcoded description for the accountline' );
+
+    $line = $lines->next;
+    is( $line->accounttype, 'Rent', 'Fine on renewed item is closed out properly' );
+    is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
+    is( $line->description, "Renewal of Rental Item $title $barcode", 'AddRenewal set a hardcoded description for the accountline' );
+
+    $schema->storage->txn_rollback;
+};
+
 
 sub set_userenv {
     my ( $library ) = @_;
