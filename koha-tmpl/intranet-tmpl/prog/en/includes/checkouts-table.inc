@@ -18,6 +18,7 @@
                         <th scope="col">Item type</th>
                         <th scope="col">Location</th>
                         <th scope="col">Home library</th>
+                        <th scope="col">&nbsp;</th>
                         <th scope="col">Checked out on</th>
                         <th scope="col">Checked out from</th>
                         <th scope="col">Call no</th>
