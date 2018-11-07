@@ -91,7 +91,7 @@ if ($has_permission) {
     my @patrons_with_permission;
     for my $patron ( @{ $results->{patrons} } ) {
         my $perms = haspermission( $patron->{userid} );
-        if (   $perms->{superlibrarian} == 1
+        if ( defined($perms->{superlibrarian})
             or $perms->{$permission} == 1 )
         {
             push @patrons_with_permission, $patron;
