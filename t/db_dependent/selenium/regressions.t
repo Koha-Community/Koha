@@ -19,8 +19,13 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
+use Test::MockModule;
 
+use C4::Context;
+use C4::Biblio qw( AddBiblio );
+use C4::Circulation;
+use Koha::AuthUtils;
 use t::lib::Selenium;
 use t::lib::TestBuilder;
 
@@ -93,8 +98,96 @@ subtest 'Play sound on the circulation page' => sub {
     push @data_to_cleanup, $patron, $patron->category, $patron->library;
 };
 
+subtest 'Display circulation table correctly' => sub {
+    plan tests => 1;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { branchcode => $library->branchcode, flags => 0 }
+        }
+    );
+
+    my ( $biblionumber, $biblioitemnumber ) = add_biblio();
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value => {
+                biblionumber  => $biblionumber,
+                homebranch    => $library->branchcode,
+                holdingbranch => $library->branchcode,
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+            }
+        }
+    );
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock(
+        'userenv',
+        sub {
+            return { branch => $library->branchcode };
+        }
+    );
+
+    C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
+
+    my $mainpage = $s->base_url . q|mainpage.pl|;
+    $driver->get($mainpage . q|?logout.x=1|);
+    $s->auth;
+
+    $driver->get( $base_url
+          . "/circ/circulation.pl?borrowernumber="
+          . $patron->borrowernumber );
+
+    # Display the table clicking on the "Show checkouts" button
+    $driver->find_element('//a[@id="issues-table-load-now-button"]')->click;
+
+    my @thead_th = $driver->find_elements('//table[@id="issues-table"]/thead/tr/th');
+    my $thead_length = 0;
+    $thead_length += $_->get_attribute('colspan') || 0 for @thead_th;
+
+    my @tfoot_td = $driver->find_elements('//table[@id="issues-table"]/tfoot/tr/td');
+    my $tfoot_length = 0;
+    $tfoot_length += $_->get_attribute('colspan') || 0 for @tfoot_td;
+
+    my @tbody_td = $driver->find_elements('//table[@id="issues-table"]/tbody/tr/td');
+    my $tbody_length = 0;
+    $tbody_length += $_->get_attribute('colspan') || 0 for @tbody_td;
+
+    is( $thead_length == $tfoot_length && $tfoot_length == $tbody_length,
+        1, "Checkouts table must be correctly aligned" )
+      or diag(
+        "thead: $thead_length ; tfoot: $tfoot_length ; tbody: $tbody_length");
+
+    push @cleanup, $patron->checkouts, $item->biblio, $item, $patron,
+      $patron->category, $library;
+};
+
 END {
     C4::Context->preference('SearchEngine', $SearchEngine_value);
     C4::Context->preference('AudioAlerts', $AudioAlerts_value);
     $_->delete for @data_to_cleanup;
 };
+
+sub add_biblio {
+    my ($title, $author) = @_;
+
+    my $marcflavour = C4::Context->preference('marcflavour');
+
+    my $biblio = MARC::Record->new();
+    my ( $tag, $code );
+    $tag = $marcflavour eq 'UNIMARC' ? '200' : '245';
+    $biblio->append_fields(
+        MARC::Field->new($tag, ' ', ' ', a => $title || 'a title'),
+    );
+
+    ($tag, $code) = $marcflavour eq 'UNIMARC' ? (200, 'f') : (100, 'a');
+    $biblio->append_fields(
+        MARC::Field->new($tag, ' ', ' ', $code => $author || 'an author'),
+    );
+
+    return C4::Biblio::AddBiblio($biblio, '');
+}
