@@ -26,10 +26,10 @@
         </ul>
     [% END %]
 
-    [% IF ( CAN_user_parameters_patron_categories || CAN_user_parameters_manage_circ_rules || CAN_user_parameters_manage_patron_attributes || CAN_user_parameters_manage_transfers || CAN_user_parameters_manage_item_circ_alerts || CAN_user_parameters_manage_cities ) %]
+    [% IF ( CAN_user_parameters_manage_patron_categories || CAN_user_parameters_manage_circ_rules || CAN_user_parameters_manage_patron_attributes || CAN_user_parameters_manage_transfers || CAN_user_parameters_manage_item_circ_alerts || CAN_user_parameters_manage_cities ) %]
         <h5>Patrons and circulation</h5>
         <ul>
-            [% IF ( CAN_user_parameters_patron_categories ) %]
+            [% IF ( CAN_user_parameters_manage_patron_categories ) %]
                 <li><a href="/cgi-bin/koha/admin/categories.pl">Patron categories</a></li>
             [% END %]
             [% IF ( CAN_user_parameters_manage_circ_rules ) %]
