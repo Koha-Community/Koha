@@ -125,6 +125,22 @@ sub build {
     });
 }
 
+sub gimme_a_biblio {
+    my ( $self, $args ) = @_;
+
+    my $itemtype = $args->{itemtype} || $self->build_object({ class => 'Koha::ItemTypes' })->itemtype;
+    my $title    = $args->{title}    || 'Some boring read';
+
+    my $record = MARC::Record->new();
+    $record->append_fields(
+        MARC::Field->new( '245', ' ', ' ', a => $title ),
+        MARC::Field->new( '942', ' ', ' ', c => $itemtype )
+    );
+
+    my ($biblio_id) = AddBiblio( $record, '' );
+    return Koha::Biblios->find($biblio_id);
+}
+
 # ------------------------------------------------------------------------------
 # Internal helper routines
 
