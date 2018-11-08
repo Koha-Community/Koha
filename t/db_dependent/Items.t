@@ -33,7 +33,7 @@ use Koha::Caches;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
-use Test::More tests => 12;
+use Test::More tests => 13;
 
 use Test::Warn;
 
@@ -836,6 +836,28 @@ subtest 'Test logging for ModItem' => sub {
     $schema->resultset('ActionLog')->search()->delete();
     ModItem({ location => $location }, $bibnum, $itemnumber);
     is( $schema->resultset('ActionLog')->count(), 1, 'Undefined value defaults to true, triggers logging' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Split subfields in Item2Marc (Bug 21774)' => sub {
+    plan tests => 3;
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $biblio = $builder->build({ source => 'Biblio', value => { frameworkcode => q{} } });
+    my $item = $builder->build({ source => 'Item', value => { biblionumber => $biblio->{biblionumber}, ccode => 'A|B' } });
+
+    Koha::MarcSubfieldStructures->search({ tagfield => '952', tagsubfield => '8' })->delete; # theoretical precaution
+    Koha::MarcSubfieldStructures->search({ kohafield => 'items.ccode' })->delete;
+    my $mapping = Koha::MarcSubfieldStructure->new({ frameworkcode => q{}, tagfield => '952', tagsubfield => '8', kohafield => 'items.ccode' })->store;
+
+    # Start testing
+    my $marc = C4::Items::Item2Marc( $item, $biblio->{biblionumber} );
+    my @subs = $marc->subfield( $mapping->tagfield, $mapping->tagsubfield );
+    is( @subs, 2, 'Expect two subfields' );
+    is( $subs[0], 'A', 'First subfield matches' );
+    is( $subs[1], 'B', 'Second subfield matches' );
 
     $schema->storage->txn_rollback;
 };
