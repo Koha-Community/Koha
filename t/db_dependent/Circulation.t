@@ -208,23 +208,6 @@ $dbh->do(
     .10, 1
 );
 
-# Test C4::Circulation::ProcessOfflinePayment
-my $sth = C4::Context->dbh->prepare("SELECT COUNT(*) FROM accountlines WHERE amount = '-123.45' AND accounttype = 'Pay'");
-$sth->execute();
-my ( $original_count ) = $sth->fetchrow_array();
-
-C4::Context->dbh->do("INSERT INTO borrowers ( cardnumber, surname, firstname, categorycode, branchcode ) VALUES ( '99999999999', 'Hall', 'Kyle', ?, ? )", undef, $patron_category->{categorycode}, $library2->{branchcode} );
-
-C4::Circulation::ProcessOfflinePayment({ cardnumber => '99999999999', amount => '123.45' });
-
-$sth->execute();
-my ( $new_count ) = $sth->fetchrow_array();
-
-ok( $new_count == $original_count  + 1, 'ProcessOfflinePayment makes payment correctly' );
-
-C4::Context->dbh->do("DELETE FROM accountlines WHERE borrowernumber IN ( SELECT borrowernumber FROM borrowers WHERE cardnumber = '99999999999' )");
-C4::Context->dbh->do("DELETE FROM borrowers WHERE cardnumber = '99999999999'");
-C4::Context->dbh->do("DELETE FROM accountlines");
 {
 # CanBookBeRenewed tests
     C4::Context->set_preference('ItemsDeniedRenewal','');
@@ -2908,6 +2891,31 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'ProcessOfflinePayment() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $amount = 123;
+
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $result  = C4::Circulation::ProcessOfflinePayment({ cardnumber => $patron->cardnumber, amount => $amount, branchcode => $library->id });
+
+    is( $result, 'Success.', 'The right string is returned' );
+
+    my $lines = $patron->account->lines;
+    is( $lines->count, 1, 'line created correctly');
+
+    my $line = $lines->next;
+    is( $line->amount+0, $amount * -1, 'amount picked from params' );
+    is( $line->branchcode, $library->id, 'branchcode set correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
 
 
 sub set_userenv {
