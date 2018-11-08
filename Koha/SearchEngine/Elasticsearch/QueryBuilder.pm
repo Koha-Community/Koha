@@ -92,7 +92,7 @@ sub build_query {
             default_operator => 'AND',
             default_field    => '_all',
             lenient          => JSON::true,
-            fields           => $options{fields},
+            fields           => $options{fields} || [],
         }
     };
 

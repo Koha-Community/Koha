@@ -250,7 +250,7 @@ sub test_search{
     $intra_text = $agent->text();
 
     like( $intra_text, qr|Publisher: $publisher|, );
-    my $expected_base = q|search.pl\?idx=kw&q=| . uri_escape_utf8( $publisher );
+    my $expected_base = q|search.pl\?advsearch=1&idx=kw&q=| . uri_escape_utf8( $publisher );
     $agent->base_like(qr|$expected_base|, );
 
     ok ( ( length(Encode::encode('UTF-8', $intra_text)) != length($intra_text) ) , 'UTF-8 are multi-byte. Good') ;
