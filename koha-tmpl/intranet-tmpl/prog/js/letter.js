@@ -162,7 +162,7 @@ $(document).ready(function() {
         page += '&content='+encodeURIComponent(content);
         page += '&data_preview='+encodeURIComponent(data_preview);
         page += '&is_html='+encodeURIComponent(is_html);
-        $("#preview_template .modal-body").load(page + " #main");
+        $("#preview_template .modal-body").load(page + " .main");
         $('#preview_template').modal('show');
         $("#preview_template_button").attr("href", "/cgi-bin/koha/svc/letters/convert?module="+module+"&code="+code+"&mtt="+mtt+"&lang="+lang);
     });

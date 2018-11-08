@@ -3,7 +3,7 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     </head>
     <body id="preview_letter" class="catalog">
-        <div id="main">
+        <div class="main container-fluid">
             [% FOR m IN messages %]
                 [%# FIXME The message block does not appear at the top of the modal! %]
                 <div class="dialog [% m.type | html %]">
@@ -29,8 +29,8 @@
             [% END %]
 
             [% IF rendered_message %]
-                <div class="yui-g">
-                    <div class="yui-u first">
+                <div class="row">
+                    <div class="col-xs-6">
                         <h3>Original version</h3>
                         <span style="font-family:monospace">
                             [% FILTER html_line_break %]
@@ -38,7 +38,7 @@
                             [% END %]
                         </span>
                     </div>
-                    <div class="yui-u">
+                    <div class="col-xs-6">
                         <h3>Original message, rendered:</h3>
                         <span style="font-family:monospace">
                             [% FILTER html_line_break %]
@@ -52,8 +52,8 @@
 
             [% IF rendered_tt_message %]
             <hr />
-                <div class="yui-g">
-                    <div class="yui-u first">
+                <div class="row">
+                    <div class="col-xs-6">
                         <h3>Converted version</h3>
                         <span style="font-family:monospace">
                             [% FILTER html_line_break %]
@@ -61,7 +61,7 @@
                             [% END %]
                         </span>
                     </div>
-                    <div class="yui-u">
+                    <div class="col-xs-6">
                         <h3>Converted message, rendered:</h3>
                         <span style="font-family:monospace">
                             [% FILTER html_line_break %]
@@ -71,7 +71,7 @@
                     </div>
                 </div>
             [% END %]
-        </div>
+        </div> <!-- /.main -->
 
     </body>
 </html>
