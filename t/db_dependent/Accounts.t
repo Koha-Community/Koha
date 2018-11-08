@@ -292,7 +292,7 @@ subtest "Koha::Account::pay tests" => sub {
     is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
     $line3 = Koha::Account::Lines->find( $line3->id );
     is( $line3->amountoutstanding, '0.000000', "Specified fine is paid" );
-    is( $payment->branchcode, $userenv_branchcode, 'Branchcode set correctly' );
+    is( $payment->branchcode, undef, 'branchcode passed, then undef' );
 };
 
 subtest "Koha::Account::pay particular line tests" => sub {

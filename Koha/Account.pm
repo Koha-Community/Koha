@@ -81,7 +81,6 @@ sub pay {
     my $offset_type  = $params->{offset_type} || $type eq 'writeoff' ? 'Writeoff' : 'Payment';
 
     my $userenv = C4::Context->userenv;
-    $library_id ||= $userenv ? $userenv->{branch} : undef;
 
     my $patron = Koha::Patrons->find( $self->{patron_id} );
 

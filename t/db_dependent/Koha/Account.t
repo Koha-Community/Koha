@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::MockModule;
 
 use Koha::Account;
 use Koha::Account::Lines;
@@ -403,4 +404,30 @@ subtest 'reconcile_balance' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'pay() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $account = $patron->account;
+
+    my $context = Test::MockModule->new('C4::Context');
+    $context->mock( 'userenv', { branch => $library->id } );
+
+    my $credit_1_id = $account->pay({ amount => 200 });
+    my $credit_1    = Koha::Account::Lines->find( $credit_1_id );
+
+    is( $credit_1->branchcode, undef, 'No branchcode is set if library_id was not passed' );
+
+    my $credit_2_id = $account->pay({ amount => 150, library_id => $library->id });
+    my $credit_2    = Koha::Account::Lines->find( $credit_2_id );
+
+    is( $credit_2->branchcode, $library->id, 'branchcode set because library_id was passed' );
+
+    $schema->storage->txn_rollback;
 };
