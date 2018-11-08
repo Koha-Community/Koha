@@ -893,3 +893,10 @@ OPAC:
             - "The patron should see the charge description as "
             - pref: PayPalChargeDescription
               class: long
+        -
+            - "After payment or cancellation, PayPal should return to the "
+            - pref: PayPalReturnURL
+              default: BaseURL
+              choices:
+                  BaseURL: "OPACBaseURL"
+                  OPACAlias: "OPAC's alias"

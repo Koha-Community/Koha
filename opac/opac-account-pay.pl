@@ -79,7 +79,10 @@ if ( $payment_method eq 'paypal' ) {
       ? 'https://api-3t.sandbox.paypal.com/nvp'
       : 'https://api-3t.paypal.com/nvp';
 
-    my $opac_base_url = C4::Context->preference('OPACBaseURL');
+    my $opac_base_url =
+      C4::Context->preference('PayPalReturnURL') eq 'BaseURL'
+      ? C4::Context->preference('OPACBaseURL')
+      : $cgi->url(-base=>1);
 
     my $return_url = URI->new( $opac_base_url . "/cgi-bin/koha/opac-account-pay-paypal-return.pl" );
     $return_url->query_form( { amount => $amount_to_pay, accountlines => \@accountlines } );

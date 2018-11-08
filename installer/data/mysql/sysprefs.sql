@@ -482,6 +482,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('PatronQuickAddFields',  '', NULL ,  'A list of fields separated by "|" to be displayed along with mandatory fields in the patron quick add form if chosen at patron entry',  'Free' ),
 ('PayPalChargeDescription',  'Koha fee payment', NULL ,  'This preference defines what the user will see the charge listed as in PayPal',  'Free'),
 ('PayPalPwd',  '', NULL ,  'Your PayPal API password',  'Free'),
+('PayPalReturnURL','BaseURL','BaseURL|OPACAlias','Specify whether PayPal will return to the url specified in the OPACBaseURL option or to the OPAC\'s alias url.','Choice'),
 ('PayPalSandboxMode',  '1', NULL ,  'If enabled, the system will use PayPal''s sandbox server for testing, rather than the production server.',  'YesNo'),
 ('PayPalSignature',  '', NULL ,  'Your PayPal API signature',  'Free'),
 ('PayPalUser',  '', NULL ,  'Your PayPal API username ( email address )',  'Free'),
