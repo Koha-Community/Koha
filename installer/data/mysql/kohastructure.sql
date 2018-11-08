@@ -438,8 +438,6 @@ CREATE TABLE `class_sort_rules` (
   `class_sort_rule` varchar(10) NOT NULL default '',
   `description` LONGTEXT,
   `sort_routine` varchar(30) NOT NULL default '',
-  `split_routine` varchar(30) NOT NULL default '',
-  `split_regex` varchar(255) NOT NULL default '',
   PRIMARY KEY (`class_sort_rule`),
   UNIQUE KEY `class_sort_rule_idx` (`class_sort_rule`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
