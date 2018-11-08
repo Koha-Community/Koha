@@ -16925,6 +16925,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18316 - Add column search_field.weight)\n";
 }
 
+$DBversion = '18.06.00.055';
+if( CheckVersion( $DBversion ) ) {
+    unless( column_exists( 'issuingrules', 'note' ) ) {
+        $dbh->do(q|ALTER TABLE `issuingrules` ADD `note` varchar(100) default NULL AFTER `article_requests`|);
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 12365: Add column issuingrules.note)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
