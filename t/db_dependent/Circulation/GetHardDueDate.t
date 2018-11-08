@@ -7,7 +7,7 @@ use Koha::DateUtils;
 use Koha::IssuingRules;
 use Koha::Library;
 
-use Test::More tests => 10;
+use Test::More tests => 9;
 
 BEGIN {
     use_ok('C4::Circulation');
@@ -148,7 +148,6 @@ my $sampleissuingrule1 = {
     no_auto_renewal_after_hard_limit => undef,
     suspension_chargeperiod => 1,
     holds_per_day => undef,
-    note => undef,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
@@ -345,12 +344,6 @@ $sth->execute(
     $sampleissuingrule3->{opacitemholds},
     $sampleissuingrule3->{cap_fine_to_replacement_price},
     $sampleissuingrule3->{article_requests},
-);
-
-is_deeply(
-    Koha::IssuingRules->find({ categorycode => $samplecat->{categorycode}, itemtype => 'Book', branchcode => $samplebranch1->{branchcode} })->unblessed,
-    $sampleissuingrule1,
-    "GetIssuingCharge returns issuingrule1's informations"
 );
 
 #Test GetLoanLength
