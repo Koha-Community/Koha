@@ -3841,14 +3841,12 @@ sub ProcessOfflineIssue {
 sub ProcessOfflinePayment {
     my $operation = shift;
 
-    my $patron = Koha::Patrons->find( { cardnumber => $operation->{cardnumber} });
-    my $amount = $operation->{amount};
+    my $patron = Koha::Patrons->find({ cardnumber => $operation->{cardnumber} });
 
-    Koha::Account->new( { patron_id => $patron->id } )->pay( { amount => $amount } );
+    $patron->account->pay({ amount => $operation->{amount}, library_id => $operation->{branchcode} });
 
-    return "Success."
+    return "Success.";
 }
-
 
 =head2 TransferSlip
 
