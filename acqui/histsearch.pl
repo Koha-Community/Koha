@@ -87,7 +87,7 @@ my $filters = {
     orderstatus             => scalar $input->param('orderstatus'),
     ordernumber             => scalar $input->param('ordernumber'),
     search_children_too     => scalar $input->param('search_children_too'),
-    created_by              => scalar $input->multi_param('created_by'),
+    created_by              => [ $input->multi_param('created_by') ],
 };
 my $from_placed_on = eval { dt_from_string( scalar $input->param('from') ) } || dt_from_string;
 my $to_placed_on   = eval { dt_from_string( scalar $input->param('to')   ) } || dt_from_string;
