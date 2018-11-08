@@ -148,6 +148,7 @@ my $sampleissuingrule1 = {
     no_auto_renewal_after_hard_limit => undef,
     suspension_chargeperiod => 1,
     holds_per_day => undef,
+    note => undef,
 };
 my $sampleissuingrule2 = {
     branchcode         => $samplebranch2->{branchcode},
