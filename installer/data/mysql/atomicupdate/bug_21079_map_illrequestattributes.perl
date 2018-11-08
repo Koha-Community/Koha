@@ -1,4 +1,3 @@
-use Try::Tiny;
 $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
@@ -58,9 +57,10 @@ if( CheckVersion( $DBversion ) ) {
     my $changed_str = join(',', @changed);
 
     if (scalar @changed > 0) {
+        my ($raise_error) = $dbh->{RaiseError};
         $dbh->{AutoCommit} = 0;
         $dbh->{RaiseError} = 1;
-        try {
+        eval {
             my $del = $dbh->do(
                 "DELETE FROM illrequestattributes ".
                 "WHERE illrequest_id IN ($changed_str)"
@@ -82,12 +82,18 @@ if( CheckVersion( $DBversion ) ) {
                 }
             }
             $dbh->commit;
-        } catch {
-            warn "Upgrade to $DBversion failed: $_";
-            eval { $dbh->rollback };
         };
+
+        if ($@) {
+            warn "Upgrade to $DBversion failed: $@\n";
+            eval { $dbh->rollback };
+        } else {
+            SetVersion( $DBversion );
+            print "Upgrade to $DBversion done (Bug 21079 - Unify metadata schema across backends)\n";
+        }
+
+        $dbh->{AutoCommit} = 1;
+        $dbh->{RaiseError} = $raise_error;
     }
 
-    SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug 21079 - Unify metadata schema across backends)\n";
 }
