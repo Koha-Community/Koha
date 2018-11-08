@@ -9,11 +9,10 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; Error [% errno | html %]</div>
 
-<div id="doc" class="yui-t7">
+    <div class="main container-fluid">
+        <div class="row">
+            <div class="col-md-8 col-md-offset-2">
 
-   <div id="bd">
-        <div id="yui-main">
-        <div class="yui-b"><div class="yui-g">
     <h1>An error has occurred!</h1>
     <h2><em>Error [% errno | html %]</em></h2>
         <h3>This message may have been caused by any of the following reasons:</h3>
@@ -27,10 +26,9 @@
         <ul style="margin-bottom: 1em; padding-bottom: 1em; border-bottom: 1px solid #CCC;">
             <li>Use top menu bar to navigate to another part of Koha.</li>
             <li>To report a broken link or any other issue, please contact the Koha Administrator. <a href="mailto:[% admin | uri %]">Send email</a></li>
-    </ul>
-</div>
+        </ul>
 
-</div>
-</div>
+            </div> <!-- /.col-md-8 -->
+        </div> <!-- /.row -->
 
 [% INCLUDE 'intranet-bottom.inc' %]
