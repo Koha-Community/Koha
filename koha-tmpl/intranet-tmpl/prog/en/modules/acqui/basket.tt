@@ -41,16 +41,15 @@
     [% UNLESS ( basketno ) %][% IF ( delete_confirmed ) %]Deleted [% ELSE %]New [% END %][% END %]Basket [% basketname | html %] [% IF ( basketno ) %]([% basketno | html %])[% END %] for [% booksellername | html %]
 </div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-<div id="bd">
-    <div id="yui-main">
     [% IF (cannot_manage_basket) %]
-        <div class="yui-b">
-            <p class="error">You are not authorised to manage this basket.</p>
-        </div>
+        <div class="dialog alert">You are not authorised to manage this basket.</div>
     [% ELSE %]
-    <div class="yui-b">
+
         [% IF !confirm_close && !edi_confirm %]
         [% UNLESS ( selectbasketg ) %]
             [% UNLESS ( closedate ) %]
@@ -207,9 +206,9 @@
         [% END %]
         <h1>[% UNLESS ( basketno ) %]New [% END %]Basket [% basketname | html %] ([% basketno | html %]) for <a href="supplier.pl?booksellerid=[% booksellerid | uri %]">[% booksellername | html %]</a></h1>
         [% IF ( basketno ) %]
-            <div id="acqui_basket_summary" class="yui-g">
+            <div id="acqui_basket_summary" class="row">
                 <div class="rows">
-                <div class="yui-u first">
+                <div class="col-sm-6">
                 <ol>
                 [% IF ( basketnote ) %]<li><span class="label">Internal note:</span> [% basketnote | html %]</li>[% END %]
                 [% IF ( basketbooksellernote ) %]<li><span class="label">Vendor note:</span> [% basketbooksellernote | html %]</li>[% END %]
@@ -220,7 +219,7 @@
                 [% IF billingplace %]<li><span class="label">Billing place:</span> [% Branches.GetName( billingplace ) | html %]</li>[% END %]
                 [% IF ( authorisedbyname ) %]<li><span class="label">Created by:</span>  [% authorisedbyname | html %]</li>[% END %]
                 <li id="managedby">
-                    <form action="" method="post">
+                    <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                         <span class="label">Managed by:</span>
                         <div style="float:left">
                             <ul id="users_names" style="padding-left:0">
@@ -258,7 +257,7 @@
                     <li id="managing_library_entry" style="display:none;">
                         <span class="label">&nbsp;</span>
                         <div style="float:left">
-                            <form action="" method="post">
+                            <form action="/cgi-bin/koha/acqui/basket.pl" method="post">
                                 <select id="select_managing_library" name="branch">
                                     <option value="">(no library)</option>
                                     [% FOREACH branch IN branches_loop %]
@@ -278,9 +277,9 @@
                 [% END %]
 
                 </ol>
-                </div>
+                </div> <!-- /.col-sm-6 -->
 
-                <div class="yui-u">
+                <div class="col-sm-6">
                     <ol>
                         [% IF ( creationdate ) %]
                             <li><span class="label">Opened on:</span>  [% creationdate | $KohaDates %]</li>
@@ -377,16 +376,16 @@
                             [% END %]
                         </ol>
                     [% END # /IF closeddate %]
-                </div>
-            </div>
-            </div>
+                    </div> <!-- /.rows -->
+                </div> <!-- /.col-sm-6 -->
+            </div> <!-- /#acqui_basket_summary.row -->
         [% END %]
         [% IF ( duplinbatch ) %]<div class="dialog alert">
         <h4>Duplicate warning</h4>
         <p>Some records have not been automatically added because they match an existing record in your catalog:<a href="/cgi-bin/koha/acqui/addorderiso2709.pl?import_batch_id=[% duplinbatch | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]" title="Open in new window" target="_blank" class="popup" style="margin-left:10px">Display them</a></p>
         </div>[% END %]
 
-        <div id="acqui_basket_content" class="yui-g">
+        <div id="acqui_basket_content">
         [% IF ( books_loop ) %]
             <h2>Orders</h2>
             <table id="orders">
@@ -572,7 +571,7 @@
         [% END %]
         [% IF ( listincgst ) %]<small class="highlight">** Vendor's listings already include tax.</small>
         [% END %]
-        </div>
+        </div> <!-- /#acqui_basket_content -->
         [% IF (cancelledorders_loop) %]
           <div id="cancelledorders">
             <h2>Cancelled orders</h2>
@@ -649,7 +648,7 @@
                 [% END %]
               </tbody>
             </table>
-          </div>
+          </div> <!-- /#cancelledorders -->
         [% END %]
         <br />
         [% UNLESS ( closedate ) %]
@@ -724,14 +723,19 @@
         </form>
         </div>
     [% END %]
-</div>
 [% END %][%# IF (cannot_manage_basket) %]
-</div>
-<div class="yui-b">
-    [% INCLUDE 'vendor-menu.inc' %]
-    [% INCLUDE 'acquisitions-menu.inc' %]
-</div>
-</div>
+
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'vendor-menu.inc' %]
+                [% INCLUDE 'acquisitions-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
 
 <!-- Modal for editing vendor and internal notes -->
 <div class="modal" id="noteEditor" tabindex="-1" role="dialog" aria-labelledby="noteEditorLabel">
@@ -752,9 +756,9 @@
                 <button type="submit" class="btn btn-default">Save</button>
                 <button type="button" class="btn btn-link cancel" data-dismiss="modal">Cancel</button>
             </div>
+            </div>
         </form>
     </div>
-</div>
 </div>
 
 [% MACRO jsinclude BLOCK %]
