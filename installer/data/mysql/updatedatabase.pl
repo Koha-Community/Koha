@@ -17034,6 +17034,17 @@ if( CheckVersion( $DBversion ) ) {
 
 }
 
+$DBversion = '18.06.00.057';
+if( CheckVersion( $DBversion ) ) {
+    # System preferences
+    $dbh->do(q{
+        INSERT IGNORE INTO `systempreferences` (`variable`,`value`,`explanation`,`options`,`type`)
+        VALUES ('showLastPatron','0','','If ON, enables the last patron feature in the intranet','YesNo');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20312 - Add showLastPatron systempreference)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
