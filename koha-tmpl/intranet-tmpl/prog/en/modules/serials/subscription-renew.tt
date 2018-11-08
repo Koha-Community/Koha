@@ -24,7 +24,7 @@
         <a class="btn btn-default btn-default close" href="#">Close</a>
     </div>
 [% ELSE %]
-      <div id="bd">
+
 <form name="f" action="/cgi-bin/koha/serials/subscription-renew.pl" method="post">
 		<input type="hidden" name="op" value="renew" />
 		<input type="hidden" name="subscriptionid" value="[% subscription.subscriptionid | html %]" />

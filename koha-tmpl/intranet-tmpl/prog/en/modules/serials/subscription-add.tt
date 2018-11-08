@@ -7,11 +7,8 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle | html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-<style type="text/css">
+<style>
 fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
-.yui-u li p label.widelabel {
-width: 300px;  /* not enough for IE7 apparently */
-}
 </style>
 </head>
 
@@ -519,7 +516,7 @@ width: 300px;  /* not enough for IE7 apparently */
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    <script>
         var subscriptionid = "[% subscriptionid | html %]";
         var irregularity = "[% irregularity | html %]";
         var more_than_one_serial = "[% more_than_one_serial | html %]";
