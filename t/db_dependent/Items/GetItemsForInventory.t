@@ -252,7 +252,7 @@ sub create_helper_biblio {
         MARC::Field->new( '942', ' ', ' ', c => $itemtype ),
     );
 
-    my $biblio_id = AddBiblio( $record, '' );
+    my ($biblio_id) = AddBiblio( $record, '' );
 
     return Koha::Biblios->find($biblio_id);
 }
