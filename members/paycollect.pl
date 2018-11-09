@@ -157,6 +157,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     {
                         type         => $type,
                         amount       => $total_paid,
+                        library_id   => $branch,
                         lines        => \@lines,
                         note         => $note,
                         interface    => C4::Context->interface,
@@ -169,6 +170,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                 Koha::Account->new( { patron_id => $borrowernumber } )->pay(
                     {
                         amount       => $total_paid,
+                        library_id   => $branch,
                         note         => $note,
                         payment_type => $payment_type,
                         interface    => C4::Context->interface
