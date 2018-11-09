@@ -74,13 +74,14 @@ if ($add){
         my $amount      = $input->param('amount') || 0;
         my $type        = $input->param('type');
 
+        my $logged_in_user = Koha::Patrons->find( { userid => $userid } ) or die "Not logged in";
         Koha::Account->new({ patron_id => $borrowernumber })->add_credit({
             amount      => $amount,
             description => $description,
             item_id     => $item_id,
             note        => $note,
             type        => $type,
-            user_id     => $user_id
+            user_id     => $logged_in_user->id
         });
 
         print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
