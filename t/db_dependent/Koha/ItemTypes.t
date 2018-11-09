@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Data::Dumper;
-use Test::More tests => 25;
+use Test::More tests => 24;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -154,47 +154,5 @@ is ( $item_type->can_be_deleted, 0, 'An item type that is used by an item and a 
 $biblioitem->delete;
 
 is ( $item_type->can_be_deleted, 1, 'The item type that was being used by the removed item and biblioitem can now be deleted' );
-
-subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
-    plan tests => 4;
-
-    my $library = Koha::Libraries->search()->next();
-    my $module = new Test::MockModule('C4::Context');
-    $module->mock('userenv', sub { { branch => $library->id } });
-
-    my $itemtype = Koha::ItemType->new(
-        {
-            itemtype            => 'type4',
-            description         => 'description',
-            rental_charge_daily => 1.00,
-            rentalcharge        => '0.00',
-            processfee          => '0.00',
-            defaultreplacecost  => '0.00',
-        }
-    )->store;
-
-    is( $itemtype->rental_charge_daily, 1.00, 'Daily rental charge stored and retreived correctly' );
-
-    my $dt_from = dt_from_string();
-    my $dt_to = dt_from_string()->add( days => 6 );
-
-    t::lib::Mocks::mock_preference('finesCalendar', 'ignoreCalendar');
-    my $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 6.00, "Daily rental charge calculated correctly with finesCalendar = ignoreCalendar" );
-
-    t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
-    $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 6.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed" );
-
-    my $calendar = C4::Calendar->new( branchcode => $library->id );
-    $calendar->insert_week_day_holiday(
-        weekday     => 3,
-        title       => 'Test holiday',
-        description => 'Test holiday'
-    );
-    $charge = $itemtype->calc_rental_charge_daily( { from => $dt_from, to => $dt_to } );
-    is( $charge, 5.00, "Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays" );
-
-};
 
 $schema->txn_rollback;

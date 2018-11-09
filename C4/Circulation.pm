@@ -59,6 +59,7 @@ use Koha::RefundLostItemFeeRules;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Config::SysPrefs;
+use Koha::Fees;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -681,8 +682,9 @@ sub CanBookBeIssued {
     my $override_high_holds = $params->{override_high_holds} || 0;
 
     my $item = Koha::Items->find({barcode => $barcode });
+
     # MANDATORY CHECKS - unless item exists, nothing else matters
-    unless ( $item ) {
+    unless ( $item_object ) {
         $issuingimpossible{UNKNOWN_BARCODE} = 1;
     }
     return ( \%issuingimpossible, \%needsconfirmation ) if %issuingimpossible;
@@ -690,11 +692,13 @@ sub CanBookBeIssued {
     my $item_unblessed = $item->unblessed; # Transition...
     my $issue = $item->checkout;
     my $biblio = $item->biblio;
+
     my $biblioitem = $biblio->biblioitem;
     my $effective_itemtype = $item->effective_itemtype;
     my $dbh             = C4::Context->dbh;
     my $patron_unblessed = $patron->unblessed;
 
+    my $library = Koha::Libraries->find( _GetCircControlBranch($item, $patron_unblessed) );
     #
     # DUE DATE is OK ? -- should already have checked.
     #
@@ -711,6 +715,16 @@ sub CanBookBeIssued {
         # Offline circ calls AddIssue directly, doesn't run through here
         #  So issuingimpossible should be ok.
     }
+
+    my $fees = Koha::Fees->new(
+        {
+            patron    => $patron,
+            library   => $library,
+            item      => $item_object,
+            to_date   => $duedate,
+        }
+    );
+
     if ($duedate) {
         my $today = $now->clone();
         $today->truncate( to => 'minute');
@@ -1324,6 +1338,24 @@ sub AddIssue {
             );
         }
         else {
+            unless ($datedue) {
+                my $itype = $item_object->effective_itemtype;
+                $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower );
+
+            }
+            $datedue->truncate( to => 'minute' );
+
+            my $patron = Koha::Patrons->find( $borrower );
+            my $library = Koha::Libraries->find( $branch );
+            my $fees = Koha::Fees->new(
+                {
+                    patron    => $patron,
+                    library   => $library,
+                    item      => $item_object,
+                    to_date   => $datedue,
+                }
+            );
+
             # it's NOT a renewal
             if ( $actualissue and not $switch_onsite_checkout ) {
                 # This book is currently on loan, but not to the person
@@ -1441,7 +1473,7 @@ sub AddIssue {
 
             my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
             if ( $itemtype ) {
-                my $daily_charge = $itemtype->calc_rental_charge_daily( { from => $issuedate, to => $datedue } );
+                my $daily_charge = $fees->rental_charge_daily();
                 if ( $daily_charge > 0 ) {
                     AddIssuingCharge( $issue, $daily_charge, 'Daily rental' ) if $daily_charge > 0;
                     $charge += $daily_charge;
@@ -2840,6 +2872,9 @@ sub AddRenewal {
     my $patron = Koha::Patrons->find( $borrowernumber ) or return; # FIXME Should do more than just return
     my $patron_unblessed = $patron->unblessed;
 
+    my $library = Koha::Libraries->find( $branch );
+
+
     if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
         _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
     }
@@ -2856,6 +2891,16 @@ sub AddRenewal {
                                         DateTime->now( time_zone => C4::Context->tz());
         $datedue =  CalcDateDue($datedue, $itemtype, _GetCircControlBranch($item_unblessed, $patron_unblessed), $patron_unblessed, 'is a renewal');
     }
+
+
+    my $fees = Koha::Fees->new(
+        {
+            patron    => $patron,
+            library   => $library,
+            item      => $item_object,
+            to_date   => dt_from_string( $datedue ),
+        }
+    );
 
     # Update the issues record to have the new due date, and a new count
     # of how many times it has been renewed.
@@ -2881,7 +2926,7 @@ sub AddRenewal {
     # Charge a new daily rental fee, if applicable
     my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
     if ( $itemtype ) {
-        my $daily_charge = $itemtype->calc_rental_charge_daily( { from => dt_from_string($lastreneweddate), to => $datedue } );
+        my $daily_charge = $fees->rental_charge_daily();
         if ( $daily_charge > 0 ) {
             my $type_desc = "Renewal of Daily Rental Item " . $biblio->title . " $item->{'barcode'}";
             AddIssuingCharge( $issue, $daily_charge, $type_desc )
