@@ -28,6 +28,7 @@ use t::lib::Mocks;
 
 use C4::Auth;
 use Koha::Illrequests;
+use Koha::DateUtils qw( format_sqldatetime );
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -98,11 +99,13 @@ subtest 'list() tests' => sub {
     my $response = $illrequest->unblessed;
     $response->{id_prefix} = $illrequest->id_prefix;
 
+    my $req_formatted = add_formatted($illrequest);
+
     # One illrequest created, should get returned
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [$response] );
+    $t->request_ok($tx)->status_is(200)->json_is( [ $req_formatted ] );
 
     # One illrequest created, returned with augmented data
     $tx = $t->ua->build_tx( GET =>
@@ -131,12 +134,14 @@ subtest 'list() tests' => sub {
     my $response2 = $illrequest2->unblessed;
     $response2->{id_prefix} = $illrequest2->id_prefix;
 
+    my $req2_formatted = add_formatted($illrequest2);
+
     # Two illrequest created, should get returned
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
-      ->json_is( [ $response, $response2 ] );
+      ->json_is( [ $req_formatted, $req2_formatted ] );
 
     # Warn on unsupported query parameter
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests?request_blah=blah' );
@@ -148,6 +153,27 @@ subtest 'list() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+sub add_formatted {
+    my $req = shift;
+    my @format_dates = ( 'placed', 'updated' );
+    # We need to embellish the request with properties that the API
+    # controller calculates on the fly
+    my $req_unblessed = $req->unblessed;
+    # Create new "formatted" columns for each date column
+    # that needs formatting
+    foreach my $field(@format_dates) {
+        if (defined $req_unblessed->{$field}) {
+            $req_unblessed->{$field . "_formatted"} = format_sqldatetime(
+                $req_unblessed->{$field},
+                undef,
+                undef,
+                1
+            );
+        }
+    }
+    return $req_unblessed;
+}
 
 sub create_user_and_session {
 
