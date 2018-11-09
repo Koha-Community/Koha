@@ -81,7 +81,7 @@ if ($add){
             item_id     => $item_id,
             note        => $note,
             type        => $type,
-            user_id     => $logged_in_user->id
+            user_id     => $logged_in_user->borrowernumber
         });
 
         print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
