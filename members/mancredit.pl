@@ -74,7 +74,7 @@ if ($add){
         my $amount      = $input->param('amount') || 0;
         my $type        = $input->param('type');
 
-        my $logged_in_user = Koha::Patrons->find( { userid => $userid } ) or die "Not logged in";
+        my $logged_in_user = Koha::Patrons->find( { userid => $user_id } ) or die "Not logged in";
         Koha::Account->new({ patron_id => $borrowernumber })->add_credit({
             amount      => $amount,
             description => $description,
