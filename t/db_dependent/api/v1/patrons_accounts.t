@@ -46,8 +46,9 @@ subtest 'get_balance() tests' => sub {
     $schema->storage->txn_begin;
 
     my ( $patron, $session_id ) = create_user_and_session({ authorized => 0 });
-    my $patron_id  = $patron->id;
-    my $account = $patron->account;
+    my $library   = $builder->build_object({ class => 'Koha::Libraries' });
+    my $patron_id = $patron->id;
+    my $account   = $patron->account;
 
     my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/$patron_id/account");
     $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
@@ -68,6 +69,7 @@ subtest 'get_balance() tests' => sub {
             accounttype       => "N", # New card
             amountoutstanding => 50,
             manager_id        => $patron->borrowernumber,
+            branchcode        => $library->id
         }
     )->store();
     $account_line_1->discard_changes;
@@ -81,6 +83,7 @@ subtest 'get_balance() tests' => sub {
             accounttype       => "N", # New card
             amountoutstanding => 50.01,
             manager_id        => $patron->borrowernumber,
+            branchcode        => $library->id
         }
     )->store();
     $account_line_2->discard_changes;
@@ -125,7 +128,8 @@ subtest 'get_balance() tests' => sub {
     );
 
     # add a credit
-    my $credit_line = $account->add_credit({ amount => 10, user_id => $patron->id });
+    my $credit_line = $account->add_credit(
+        { amount => 10, user_id => $patron->id, library_id => $library->id } );
     # re-read from the DB
     $credit_line->discard_changes;
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons/$patron_id/account" );
@@ -149,11 +153,12 @@ subtest 'get_balance() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 17;
+    plan tests => 18;
 
     $schema->storage->txn_begin;
 
     my ( $patron, $session_id ) = create_user_and_session( { authorized => 1 } );
+    my $library   = $builder->build_object({ class => 'Koha::Libraries' });
     my $patron_id = $patron->id;
     my $account   = $patron->account;
 
@@ -194,11 +199,16 @@ subtest 'add_credit() tests' => sub {
     )->store();
 
     is( $account->outstanding_debits->total_outstanding, 25 );
+    $credit->{library_id} = $library->id;
     $tx = $t->ua->build_tx(
         POST => "/api/v1/patrons/$patron_id/account/credits" => json => $credit );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
     $t->request_ok($tx)->status_is(200)->json_has('/account_line_id');
+
+    my $account_line_id = $tx->res->json->{account_line_id};
+    is( Koha::Account::Lines->find($account_line_id)->branchcode,
+        $library->id, 'Library id is sored correctly' );
 
     is( $account->outstanding_debits->total_outstanding,
         0, "Debits have been cancelled automatically" );
