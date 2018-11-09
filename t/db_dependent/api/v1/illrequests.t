@@ -109,12 +109,13 @@ subtest 'list() tests' => sub {
 
     # One illrequest created, returned with augmented data
     $tx = $t->ua->build_tx( GET =>
-          '/api/v1/illrequests?embed=patron,library,capabilities,metadata' );
+          '/api/v1/illrequests?embed=patron,library,capabilities,metadata,requested_partners' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
         ->json_has( '/0/patron', 'patron embedded' )
         ->json_is( '/0/patron/patron_id', $patron->borrowernumber, 'The right patron is embeded')
+        ->json_has( '/0/requested_partners', 'requested_partners embedded' )
         ->json_has( '/0/capabilities', 'capabilities embedded' )
         ->json_has( '/0/library', 'library embedded'  )
         ->json_has( '/0/metadata', 'metadata embedded'  )
