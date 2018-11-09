@@ -105,6 +105,7 @@ sub add_credit {
         my $payment_type = $body->{payment_type};
         my $description  = $body->{description};
         my $note         = $body->{note};
+        my $library_id   = $body->{library_id};
 
         my $credit = $account->add_credit(
             {   amount       => $amount,
@@ -112,7 +113,8 @@ sub add_credit {
                 payment_type => $payment_type,
                 description  => $description,
                 note         => $note,
-                user_id      => $user->id
+                user_id      => $user->id,
+                library_id   => $library_id
             }
         );
         $credit->discard_changes;
@@ -228,6 +230,7 @@ our $to_api_mapping = {
     accounttype       => 'account_type',
     amountoutstanding => 'amount_outstanding',
     borrowernumber    => 'patron_id',
+    branchcode        => 'library_id',
     issue_id          => 'checkout_id',
     itemnumber        => 'item_id',
     manager_id        => 'user_id',
@@ -245,6 +248,7 @@ our $to_model_mapping = {
     checkout_id        => 'issue_id',
     internal_note      => 'note',
     item_id            => 'itemnumber',
+    library_id         => 'branchcode',
     patron_id          => 'borrowernumber',
     user_id            => 'manager_id'
 };
