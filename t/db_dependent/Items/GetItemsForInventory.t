@@ -22,6 +22,8 @@ use Modern::Perl;
 use Test::More tests => 7;
 use t::lib::TestBuilder;
 
+use List::MoreUtils qw( any none );
+
 use C4::Biblio qw(AddBiblio);
 use C4::Reserves;
 use Koha::AuthorisedValues;
@@ -59,7 +61,7 @@ subtest 'Old version is unchanged' => sub {
 
 subtest 'Skip items with waiting holds' => sub {
 
-    plan tests => 5;
+    plan tests => 6;
 
     $schema->storage->txn_begin;
 
@@ -69,8 +71,8 @@ subtest 'Skip items with waiting holds' => sub {
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { branchcode => $library->id } } );
 
-    my $title_1 = 'Title 1';
-    my $title_2 = 'Title 2';
+    my $title_1 = 'Title 1, ';
+    my $title_2 = 'Title 2, bizzarre one so doesn\'t already exist';
 
     my $biblio_1 = create_helper_biblio( $itemtype->itemtype, $title_1 );
     my $biblio_2 = create_helper_biblio( $itemtype->itemtype, $title_2 );
@@ -117,8 +119,10 @@ subtest 'Skip items with waiting holds' => sub {
 
     my ( $new_items, $new_items_count ) = GetItemsForInventory( { ignore_waiting_holds => 1 } );
     is( $new_items_count, $first_items_count + 1, 'Item on hold skipped, count makes sense' );
-    is( $new_items->[ scalar @{$new_items} - 1 ]->{title},
-        $title_2, 'Item on hold skipped, last item is the correct one' );
+    ok( (any { $_->{title} eq $title_2 } @{$new_items}),
+        'Item on hold skipped, the other one we added is present' );
+    ok( (none { $_->{title} eq $title_1 } @{$new_items}),
+        'Item on hold skipped, no one matches' );
 
     $schema->storage->txn_rollback;
 };
