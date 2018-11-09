@@ -278,23 +278,6 @@ sub manualinvoice {
     return 0;
 }
 
-sub getcharges {
-    my ( $borrowerno, $timestamp, $accountno ) = @_;
-    my $dbh        = C4::Context->dbh;
-    my $timestamp2 = $timestamp - 1;
-    my $query      = "";
-    my $sth = $dbh->prepare(
-            "SELECT * FROM accountlines WHERE borrowernumber=? AND accountno = ?"
-          );
-    $sth->execute( $borrowerno, $accountno );
-
-    my @results;
-    while ( my $data = $sth->fetchrow_hashref ) {
-        push @results,$data;
-    }
-    return (@results);
-}
-
 =head2 purge_zero_balance_fees
 
   purge_zero_balance_fees( $days );

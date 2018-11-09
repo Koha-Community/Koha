@@ -44,7 +44,6 @@ can_ok( 'C4::Accounts',
         getnextacctno
         chargelostitem
         manualinvoice
-        getcharges
         purge_zero_balance_fees )
 );
 
