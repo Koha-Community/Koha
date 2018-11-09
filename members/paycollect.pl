@@ -57,11 +57,12 @@ my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
 my $borrower       = $patron->unblessed;
+my $account        = $patron->account;
 my $category       = $patron->category;
 my $user           = $input->remote_user;
 
-my $branch    = C4::Context->userenv->{'branch'};
-my $total_due = $patron->account->outstanding_debits->total_outstanding;
+my $library_id = C4::Context->userenv->{'branch'};
+my $total_due  = $account->outstanding_debits->total_outstanding;
 
 my $total_paid = $input->param('paid');
 
@@ -120,11 +121,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
 
         if ($pay_individual) {
             my $line = Koha::Account::Lines->find($accountlines_id);
-            Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+            $account->pay(
                 {
                     lines        => [$line],
                     amount       => $total_paid,
-                    library_id   => $branch,
+                    library_id   => $library_id,
                     note         => $payment_note,
                     interface    => C4::Context->interface,
                     payment_type => $payment_type,
@@ -149,15 +150,11 @@ if ( $total_paid and $total_paid ne '0.00' ) {
                     { order_by => 'date' }
                 );
 
-                Koha::Account->new(
-                    {
-                        patron_id => $borrowernumber,
-                    }
-                  )->pay(
+                $account->pay(
                     {
                         type         => $type,
                         amount       => $total_paid,
-                        library_id   => $branch,
+                        library_id   => $library_id,
                         lines        => \@lines,
                         note         => $note,
                         interface    => C4::Context->interface,
@@ -167,10 +164,10 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             }
             else {
                 my $note = $input->param('selected_accts_notes');
-                Koha::Account->new( { patron_id => $borrowernumber } )->pay(
+                $account->pay(
                     {
                         amount       => $total_paid,
-                        library_id   => $branch,
+                        library_id   => $library_id,
                         note         => $note,
                         payment_type => $payment_type,
                         interface    => C4::Context->interface
