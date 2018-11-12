@@ -1437,7 +1437,7 @@
 
     <!-- add relator code too between brackets-->
     <!-- #13383 include relator code j for field 111 -->
-            <xsl:if test="marc:subfield[@code='4' or @code='e'][not(parent::*[@tag=111])] or (self::*[@tag=111] and marc:subfield[@code='4' or @code='j'][. != ''])">
+            <xsl:if test="(@tag!=111 and @tag!=711 and marc:subfield[@code='4' or @code='e']) or ((@tag=111 or @tag=711) and marc:subfield[@code='4' or @code='j'])">
                 <span class="relatorcode">
                     <xsl:text> [</xsl:text>
                     <xsl:choose>
