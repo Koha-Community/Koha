@@ -4,11 +4,11 @@ use Modern::Perl;
 use Test::More tests => 134;
 
 use C4::Budgets;
+use t::lib::Mocks;
 
 # Avoid "redefined subroutine" warnings
 local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
 *C4::Budgets::GetBudgetUsers = \&Mock_GetBudgetUsers;
-*C4::Context::userenv = \&Mock_userenv;
 
 my %budgetusers = (
     1 => [],
@@ -133,8 +133,6 @@ my $budget16 = {
     budget_branchcode => 'B1',
 };
 
-my $userenv = {};
-
 ok( !CanUserModifyBudget( 0, undef, {} ), "CanUserModifyBudget evaluates to false if DB user is passed" );
 
 ok (CanUserModifyBudget($borrower1, $budget1, {superlibrarian => 1}));
@@ -150,7 +148,7 @@ ok (!CanUserModifyBudget($borrower1, $budget1, {acquisition => 0}));
 
 my $flags = {acquisition => {budget_modify => 1}};
 
-$userenv->{branch} = 'B1';
+t::lib::Mocks::mock_userenv({ branchcode => 'B1' });
 
 # Restriction is 'none'
 ok (CanUserModifyBudget($borrower1, $budget1, $flags));
@@ -192,8 +190,7 @@ ok (!CanUserModifyBudget($borrower2, $budget14, $flags)); # No owner and user li
 ok (CanUserModifyBudget($borrower2, $budget15, $flags));
 ok (!CanUserModifyBudget($borrower2, $budget16, $flags));
 
-
-$userenv->{branch} = 'B2';
+t::lib::Mocks::mock_userenv({ branchcode => 'B2' });
 
 # Restriction is 'none'
 ok (CanUserModifyBudget($borrower1, $budget1, $flags));
@@ -240,7 +237,7 @@ ok (!CanUserModifyBudget($borrower2, $budget16, $flags));
 # All tests should failed
 $flags = {acquisition => {order_manage => 1}};
 
-$userenv->{branch} = 'B1';
+t::lib::Mocks::mock_userenv({ branchcode => 'B1' });
 
 # Restriction is 'none'
 ok (!CanUserModifyBudget($borrower1, $budget1, $flags));
@@ -283,7 +280,7 @@ ok (!CanUserModifyBudget($borrower2, $budget15, $flags));
 ok (!CanUserModifyBudget($borrower2, $budget16, $flags));
 
 
-$userenv->{branch} = 'B2';
+t::lib::Mocks::mock_userenv({ branchcode => 'B2' });
 
 # Restriction is 'none'
 ok (!CanUserModifyBudget($borrower1, $budget1, $flags));
@@ -333,9 +330,4 @@ sub Mock_GetBudgetUsers {
     my ($budget_id) = @_;
 
     return @{ $budgetusers{$budget_id} };
-}
-
-# C4::Context->userenv
-sub Mock_userenv {
-    return $userenv;
 }

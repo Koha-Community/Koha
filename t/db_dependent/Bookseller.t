@@ -639,9 +639,7 @@ ok( exists( $suppliers{$id_supplier1} ),
     "Supplier1 has late orders and $daysago10==$daysago10 " )
   ;
 
-C4::Context->_new_userenv('DUMMY SESSION');
-C4::Context->set_userenv(0,0,0,'firstname','surname', 'BRANCH1', 'Library 1', 0, '', '');
-my $userenv = C4::Context->userenv;
+t::lib::Mocks::mock_userenv({ flags => 0 });
 
 my $module = Test::MockModule->new('C4::Auth');
 $module->mock(
@@ -672,7 +670,7 @@ is(
 );
 
 # don the cape and turn into Superlibrarian!
-C4::Context->set_userenv(0,0,0,'firstname','surname', 'BRANCH1', 'Library 1', 1, '', '');
+t::lib::Mocks::mock_userenv({ flags => 1 });
 @subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
 is(
     scalar(grep { !$_->{cannotdisplay} } @subscriptions ),

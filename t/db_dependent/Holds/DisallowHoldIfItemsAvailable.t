@@ -30,9 +30,7 @@ my $library2 = $builder->build({
 });
 
 
-# Now, set a userenv
-C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(0,0,0,'firstname','surname', $library1->{branchcode}, 'Midway Public Library', '', '', '');
+t::lib::Mocks::mock_userenv({ branchcode => $library1->{branchcode} });
 
 my $bib_title = "Test Title";
 

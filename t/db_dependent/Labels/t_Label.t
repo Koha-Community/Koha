@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use MARC::Record;
 use MARC::Field;
@@ -56,7 +57,7 @@ my $itemtype =
   $builder->build( { source => 'Itemtype', value => { notforloan => undef } } )
   ->{itemtype};
 
-C4::Context->set_userenv( undef, undef, undef, undef, undef, undef, $branch_1 );
+t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
 
 # Create a helper biblio
 my $bib   = MARC::Record->new();

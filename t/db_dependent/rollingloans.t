@@ -20,9 +20,7 @@ my $builder = t::lib::TestBuilder->new;
 $builder->build({ source => 'Branch', value => { branchcode => 'CPL' } })
     unless Koha::Libraries->find('CPL');
 
-C4::Context->_new_userenv(1234567);
-C4::Context->set_userenv(91, 'CLIstaff', '23529001223661', 'CPL',
-                         'CPL', 'CPL', '', 'cc@cscnet.co.uk');
+t::lib::Mocks::mock_userenv({ branchcode => 'CPL' });
 
 t::lib::Mocks::mock_preference('BlockReturnOfWithdrawnItems',0);
 my $test_patron = '23529001223651';

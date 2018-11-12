@@ -29,6 +29,7 @@ use Koha::Patron::Discharge;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -51,7 +52,7 @@ my $patron = $builder->build({
     }
 });
 my $p = Koha::Patrons->find( $patron->{borrowernumber} );
-set_logged_in_user( $p );
+t::lib::Mocks::mock_userenv({ patron => $p });
 
 my $patron2 = $builder->build({
     source => 'Borrower',
@@ -138,7 +139,7 @@ subtest 'search_limited' => sub {
     my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
     # $patron and $patron2 are from the same library, $patron3 from another one
     # Logged in user is $patron, superlibrarian
-    set_logged_in_user( $p );
+    t::lib::Mocks::mock_userenv({ patron => $p });
     Koha::Library::Group->new({ parent_id => $group_1->id,  branchcode => $patron->{branchcode} })->store();
     Koha::Library::Group->new({ parent_id => $group_2->id,  branchcode => $patron3->{branchcode} })->store();
     Koha::Patron::Discharge::request({ borrowernumber => $patron->{borrowernumber} });
@@ -148,20 +149,9 @@ subtest 'search_limited' => sub {
     is( Koha::Patron::Discharge::count({pending => 1}), 3, 'With permission, all discharges are visible' );
 
     # With patron 3 logged in, only discharges from their group are visible
-    set_logged_in_user( $p3 );
+    t::lib::Mocks::mock_userenv({ patron => $p3 });
     is( scalar( Koha::Patron::Discharge::get_pendings), 1, 'Without permission, only discharge from our group are visible' );
     is( Koha::Patron::Discharge::count({pending => 1}), 1, 'Without permission, only discharge from our group are visible' );
 };
 
 $schema->storage->txn_rollback;
-
-sub set_logged_in_user {
-    my ($patron) = @_;
-    C4::Context->set_userenv(
-        $patron->borrowernumber, $patron->userid,
-        $patron->cardnumber,     'firstname',
-        'surname',               $patron->library->branchcode,
-        'Midway Public Library', $patron->flags,
-        '',                      ''
-    );
-}

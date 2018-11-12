@@ -63,24 +63,7 @@ my $PHONE             = "555-12123";
 # XXX should be randomised and checked against the database
 my $IMPOSSIBLE_CARDNUMBER = "XYZZZ999";
 
-#my ($usernum, $userid, $usercnum, $userfirstname, $usersurname, $userbranch, $branchname, $userflags, $emailaddress, $branchprinter)= @_;
-my @USERENV = (
-    1,
-    'test',
-    'MASTERTEST',
-    'Test',
-    'Test',
-    't',
-    'Test',
-    0,
-);
-my $BRANCH_IDX = 5;
-
-C4::Context->_new_userenv ('DUMMY_SESSION_ID');
-C4::Context->set_userenv ( @USERENV );
-
-my $userenv = C4::Context->userenv
-  or BAIL_OUT("No userenv");
+t::lib::Mocks::mock_userenv();
 
 # Make a borrower for testing
 my %data = (

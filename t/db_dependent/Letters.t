@@ -199,12 +199,7 @@ subtest 'getletter' => sub {
     is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
     is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
 
-    my $context = Test::MockModule->new('C4::Context');
-    $context->mock( 'userenv', sub {
-        return {
-            flags  => 1,
-            branch => "anotherlib" }
-    });
+    t::lib::Mocks::mock_userenv({ branchcode => "anotherlib", flags => 1 });
 
     t::lib::Mocks::mock_preference('IndependentBranches', 1);
     $letter = C4::Letters::getletter('my module', 'my code', $library->{branchcode}, 'email');
@@ -216,8 +211,6 @@ subtest 'getletter' => sub {
     is( $letter->{title}, $title, 'GetLetters gets the title correctly' );
     is( $letter->{content}, $content, 'GetLetters gets the content correctly' );
     is( $letter->{message_transport_type}, 'email', 'GetLetters gets the message type correctly' );
-
-    $context->unmock('userenv');
 };
 
 
@@ -392,6 +385,9 @@ if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
     );
 }
 
+my $logged_in_user = $builder->build_object({ class => 'Koha::Patrons', value => { branchcode => $library->{branchcode} }});
+t::lib::Mocks::mock_userenv({ patron => $logged_in_user });
+
 ($biblionumber, $biblioitemnumber) = AddBiblio($bib, '');
 my $order = Koha::Acquisition::Order->new(
     {
@@ -418,8 +414,6 @@ $bookseller->contacts->next->email('testemail@mydomain.com')->store;
 t::lib::Mocks::mock_preference( 'LetterLog', 'on' );
 
 # SendAlerts needs branchemail or KohaAdminEmailAddress as sender
-C4::Context->_new_userenv('DUMMY');
-C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'My Library', 0, '', '');
 t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
 
 {
@@ -550,8 +544,8 @@ subtest 'SendAlerts - claimissue' => sub {
     t::lib::Mocks::mock_preference( 'LetterLog', 'on' );
 
     # SendAlerts needs branchemail or KohaAdminEmailAddress as sender
-    C4::Context->_new_userenv('DUMMY');
-    C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'My Library', 0, '', '');
+    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
+
     t::lib::Mocks::mock_preference( 'KohaAdminEmailAddress', 'library@domain.com' );
 
     {

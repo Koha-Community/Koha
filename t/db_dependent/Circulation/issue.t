@@ -148,31 +148,18 @@ my $borrower_id1 = Koha::Patron->new({
     categorycode => $categorycode,
     branchcode   => $branchcode_1
 })->store->borrowernumber;
-my $borrower_1 = Koha::Patrons->find( $borrower_id1 )->unblessed;
+my $patron_1 = Koha::Patrons->find( $borrower_id1 );
+my $borrower_1 = $patron_1->unblessed;
 my $borrower_id2 = Koha::Patron->new({
     firstname    => 'firstname2',
     surname      => 'surname2 ',
     categorycode => $categorycode,
     branchcode   => $branchcode_2,
 })->store->borrowernumber;
-my $borrower_2 = Koha::Patrons->find( $borrower_id2 )->unblessed;
+my $patron_2 = Koha::Patrons->find( $borrower_id2 );
+my $borrower_2 = $patron_2->unblessed;
 
-my @USERENV = (
-    $borrower_id1, 'test', 'MASTERTEST', 'firstname', $branchcode_1,
-    $branchcode_1, 'email@example.org'
-);
-
-my @USERENV_DIFFERENT_LIBRARY = (
-    $borrower_id1, 'test', 'MASTERTEST', 'firstname', $branchcode_3,
-    $branchcode_3, 'email@example.org'
-);
-
-
-C4::Context->_new_userenv('DUMMY_SESSION_ID');
-C4::Context->set_userenv(@USERENV);
-
-my $userenv = C4::Context->userenv
-  or BAIL_OUT("No userenv");
+t::lib::Mocks::mock_userenv({ patron => $patron_1 });
 
 #Begin Tests
 
@@ -222,9 +209,13 @@ my $se = Test::MockModule->new( 'C4::Context' );
 $se->mock( 'interface', sub {return 'intranet'});
 
 # Let's renew this one at a different library for statistical purposes to test Bug 17781
-C4::Context->set_userenv(@USERENV_DIFFERENT_LIBRARY);
+# Mocking userenv with a different branchcode
+t::lib::Mocks::mock_userenv({ patron => $patron_2, branchcode => $branchcode_3 });
+
 my $datedue3 = AddRenewal( $borrower_id1, $item_id1, $branchcode_1, $datedue1, $daysago10 );
-C4::Context->set_userenv(@USERENV);
+
+# Restoring the userenv with the original branchcode
+t::lib::Mocks::mock_userenv({ patron => $patron_1});
 
 like(
     $datedue3,

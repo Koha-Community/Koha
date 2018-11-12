@@ -134,8 +134,7 @@ is(
 );
 
 # Now, set a userenv
-C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(0,0,0,'firstname','surname', $library2->{branchcode}, 'Midway Public Library', '', '', '');
+t::lib::Mocks::mock_userenv({ branchcode => $library2->{branchcode} });
 is(C4::Context->userenv->{branch}, $library2->{branchcode}, 'userenv set');
 
 # Userenv set, PickupLibrary
@@ -2825,7 +2824,7 @@ $cache->clear_from_cache('single_holidays');
 
 sub set_userenv {
     my ( $library ) = @_;
-    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, $library->{branchname}, '', '', '');
+    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 }
 
 sub str {

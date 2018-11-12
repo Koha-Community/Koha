@@ -20,11 +20,11 @@ use Modern::Perl;
 use Test::More tests => 26;
 
 use C4::Context;
+use t::lib::Mocks;
 
 use_ok( 'C4::Circulation' );
 
-C4::Context->_new_userenv(123456);
-C4::Context->set_userenv(1,'kmkale' , 1, 'km', 'kale' , 'IMS', 'IMS Branch DEscription', 0, 'kmkale@anantcorp.com');
+t::lib::Mocks::mock_userenv({ branchcode => 'IMS' });
 
 our %inputs = (
     cuecat     => ["26002315", '.C3nZC3nZC3nYD3b6ENnZCNnY.fHmc.C3D1Dxr2C3nZE3n7.', ".C3nZC3nZC3nYD3b6ENnZCNnY.fHmc.C3D1Dxr2C3nZE3n7.\r\n",

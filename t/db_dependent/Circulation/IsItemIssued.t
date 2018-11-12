@@ -28,6 +28,7 @@ use Koha::DateUtils;
 use Koha::Patrons;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use MARC::Record;
 
@@ -39,14 +40,7 @@ my $library = $builder->build({ source => 'Branch' });
 my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 my $patron_category = $builder->build({ source => 'Category' });
 
-C4::Context->_new_userenv('DUMMY SESSION');
-C4::Context->set_userenv(
-    undef, undef, undef, undef, undef,
-    $library->{branchcode},
-    $library->{branchname}
-);
-
-
+t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
 my $borrowernumber = Koha::Patron->new({
     firstname =>  'my firstname',

@@ -23,6 +23,7 @@ use Test::More tests => 6;
 use Test::Exception;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Digest::MD5 qw( md5_base64 md5_hex );
 use Try::Tiny;
@@ -347,8 +348,7 @@ subtest 'pending_count() and pending() tests' => sub {
     is( $p2_pm_attribute_2->attribute, 'ciao', 'patron modification has the right attribute change' );
 
 
-    C4::Context->_new_userenv('xxx');
-    set_logged_in_user( $patron_1 );
+    t::lib::Mocks::mock_userenv({ patron => $patron_1 });
     is( Koha::Patron::Modifications->pending_count($library_1),
         1, 'pending_count() correctly returns 1 if filtered by library' );
 
@@ -372,14 +372,3 @@ subtest 'pending_count() and pending() tests' => sub {
 
     $schema->storage->txn_rollback;
 };
-
-sub set_logged_in_user {
-    my ($patron) = @_;
-    C4::Context->set_userenv(
-        $patron->borrowernumber, $patron->userid,
-        $patron->cardnumber,     'firstname',
-        'surname',               $patron->library->branchcode,
-        'Midway Public Library', $patron->flags,
-        '',                      ''
-    );
-}

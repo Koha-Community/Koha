@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 9;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Koha::Database;
 use Koha::List::Patron
@@ -29,8 +30,7 @@ $schema->storage->txn_begin;
 
 my $builder = t::lib::TestBuilder->new;
 
-C4::Context->_new_userenv('DUMMY SESSION');
-C4::Context->set_userenv( 0 ); # Koha::List::Patron only needs a number
+t::lib::Mocks::mock_userenv();
 
 # Create 10 sample borrowers
 my @borrowers = ();

@@ -14,6 +14,7 @@ use Koha::Patron::Debarments qw( GetDebarments DelDebarment );
 use Koha::Patrons;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -25,9 +26,7 @@ my $branchcode = $builder->build({ source => 'Branch' })->{branchcode};
 my $itemtype   = $builder->build({ source => 'Itemtype' })->{itemtype};
 my $patron_category = $builder->build({ source => 'Category' });
 
-local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
-my $userenv->{branch} = $branchcode;
-*C4::Context::userenv = \&Mock_userenv;
+t::lib::Mocks::mock_userenv({ branchcode => $branchcode });
 
 # Test without maxsuspensiondays set
 Koha::IssuingRules->search->delete;
@@ -103,8 +102,3 @@ is(
 DelDebarment( $debarments->[0]->{borrower_debarment_id} );
 
 $schema->storage->txn_rollback;
-
-# C4::Context->userenv
-sub Mock_userenv {
-    return $userenv;
-}

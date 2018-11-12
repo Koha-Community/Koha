@@ -36,6 +36,7 @@ use Scalar::Util qw( isvstring );
 use Try::Tiny;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('Koha::Object');
@@ -315,8 +316,8 @@ subtest 'unblessed_all_relateds' => sub {
 
     # FIXME It's very painful to create an issue in tests!
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    C4::Context->_new_userenv('xxx');
-    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->branchcode, 'Midway Public Library', '', '', '');
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+
     my $patron_category = $builder->build(
         {
             source => 'Category',

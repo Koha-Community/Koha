@@ -5,6 +5,8 @@ use Test::More tests => 115;
 use Koha::Database;
 use Koha::SimpleMARC;
 
+use t::lib::Mocks;
+
 use_ok("MARC::Field");
 use_ok("MARC::Record");
 use_ok("C4::MarcModificationTemplates");
@@ -159,18 +161,7 @@ is( GetModificationTemplateAction( $actions[3]->{mmta_id} ), undef, "fourth acti
 is( GetModificationTemplateActions( $template_id ), 0, "There is no action for deleted template" );
 
 # ModifyRecordWithTemplate
-my @USERENV = (
-    1,
-    'test',
-    'MASTERTEST',
-    'Test',
-    'Test',
-    't',
-    'Test',
-    0,
-);
-C4::Context->_new_userenv ('DUMMY_SESSION_ID');
-C4::Context->set_userenv ( @USERENV );
+t::lib::Mocks::mock_userenv();
 
 $template_id = AddModificationTemplate("new_template_test");
 like( $template_id, qr|^\d+$|, "new template returns an id" );
@@ -554,9 +545,4 @@ sub expected_record_2 {
     );
     $record->append_fields(@fields);
     return $record;
-}
-
-# C4::Context->userenv
-sub Mock_userenv {
-    return { branchcode => 'CPL' };
 }

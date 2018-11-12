@@ -83,8 +83,8 @@ my $item = $builder->build({
     },
 });
 
-C4::Context->_new_userenv ('DUMMY_SESSION_ID');
-C4::Context->set_userenv($patron->{borrowernumber}, $patron->{userid}, 'usercnum', 'First name', 'Surname', $branch->{branchcode}, 'My Library', 0);
+my $patron_object = Koha::Patrons->find( $patron->{borrowernumber} );
+t::lib::Mocks::mock_userenv( { patron => $patron_object });
 
 # TooMany return ($current_loan_count, $max_loans_allowed) or undef
 # CO = Checkout

@@ -51,9 +51,7 @@ my $library  = $builder->build( { source => 'Branch' } );
 my $category = $builder->build( { source => 'Category' } );
 my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 
-# Set userenv
-C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv( 0, 0, 0, 'firstname', 'surname', $library->{branchcode}, 'Midway Public Library', '', '', '' );
+t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 is( C4::Context->userenv->{branch}, $library->{branchcode}, 'userenv set' );
 
 my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'P', enrolmentfee => 0 } });

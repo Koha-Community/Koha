@@ -15,6 +15,7 @@ use Koha::Acquisition::Funds;
 use Koha::Patrons;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 use Koha::DateUtils;
 
 use YAML;
@@ -30,11 +31,13 @@ my $library = $builder->build({
     source => 'Branch',
 });
 
-# Mock userenv
-local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
-my $userenv;
-*C4::Context::userenv = \&Mock_userenv;
-$userenv = { flags => 1, id => 'my_userid', branch => $library->{branchcode} };
+t::lib::Mocks::mock_userenv(
+    {
+        flags => 1,
+        userid => 'my_userid',
+        branch => $library->{branchcode},
+    }
+);
 
 #
 # Budget Periods :
@@ -952,9 +955,4 @@ sub _get_budgetname_by_id {
       map { ( $_->{budget_id} eq $budget_id ) ? $_->{budget_name} : () }
       @$budgets;
     return $budget_name;
-}
-
-# C4::Context->userenv
-sub Mock_userenv {
-    return $userenv;
 }

@@ -26,6 +26,7 @@ use Test::Warn;
 use MARC::Record;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use C4::Circulation;
 use C4::Letters;
@@ -333,8 +334,7 @@ subtest 'regression tests' => sub {
         }
     )->store->unblessed;
 
-    C4::Context->_new_userenv('xxx');
-    C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Midway Public Library', '', '', '');
+    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
     subtest 'ACQ_NOTIF_ON_RECEIV ' => sub {
         plan tests => 1;

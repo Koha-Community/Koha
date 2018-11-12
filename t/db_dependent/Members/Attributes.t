@@ -24,6 +24,7 @@ use C4::Members;
 use C4::Members::AttributeTypes;
 use Koha::Database;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 use Test::More tests => 48;
 
@@ -52,8 +53,7 @@ my $patron = $builder->build(
         }
     }
 );
-C4::Context->_new_userenv('DUMMY SESSION');
-C4::Context->set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', $library->{branchcode}, 'My Library', 0);
+t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 my $borrowernumber = $patron->{borrowernumber};
 
 my $attribute_type1 = C4::Members::AttributeTypes->new('my code1', 'my description1');
@@ -209,7 +209,7 @@ $borrower_attributes = C4::Members::Attributes::GetBorrowerAttributes($borrowern
 is( @$borrower_attributes, 1, 'DeleteBorrowerAttribute deletes a borrower attribute' );
 
 # Regression tests for bug 16504
-C4::Context->set_userenv(123, 'userid', 'usercnum', 'First name', 'Surname', $new_library->{branchcode}, 'My Library', 0);
+t::lib::Mocks::mock_userenv({ branchcode => $new_library->{branchcode} });
 my $another_patron = $builder->build(
     {   source => 'Borrower',
         value  => {

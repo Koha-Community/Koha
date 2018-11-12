@@ -100,8 +100,7 @@ my $issuingrule = $builder->build({
     },
 });
 
-C4::Context->_new_userenv ('DUMMY_SESSION_ID');
-C4::Context->set_userenv($patron->borrowernumber, $patron->userid, 'usercnum', 'First name', 'Surname', $branch->{branchcode}, 'My Library', 0);
+t::lib::Mocks::mock_userenv({ patron => $patron });
 
 t::lib::Mocks::mock_preference('AllowTooManyOverride', 0);
 
