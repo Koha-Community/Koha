@@ -102,7 +102,7 @@ subtest 'Play sound on the circulation page' => sub {
     my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
 
     my $mainpage = $s->base_url . q|mainpage.pl|;
-    $driver->get($mainpage);
+    $driver->get($mainpage . q|?logout.x=1|);
     like( $driver->get_title(), qr(Log in to Koha), );
     $s->auth;
 
