@@ -977,40 +977,31 @@ sub _import_table_csv
                     seek($dom, $pos, 0);
                     return 1;
                 }
-                if (scalar(@$fields) == scalar(@arrData)) {
-                    if (!$fieldsNameRead) {
-                        # New table, we read the field names
-                        $fieldsNameRead = 1;
-                        for (my $i=0; $i < @arrData; $i++) {
-                            if ($arrData[$i] ne $fields->[$i]) {
-                                $fieldsNameRead = 0;
-                                last;
-                            }
+                if (!$fieldsNameRead) {
+                    # New table, we read the field names
+                    $fieldsNameRead = 1;
+                    $fields = [@arrData];
+                    $fieldsStr = join(',', @$fields);
+                    $dataStr = '';
+                    map { $dataStr .= '?,';} @$fields;
+                    chop($dataStr) if ($dataStr);
+                    $updateStr = '';
+                    map { $updateStr .= $_ . '=?,';} @$fields;
+                    chop($updateStr) if ($updateStr);
+                } else {
+                    # Read data
+                    my $j = 0;
+                    my %dataFields = ();
+                    for (@arrData) {
+                        if ($fields->[$j] eq 'frameworkcode' && $_ ne $frameworkcode) {
+                            $dataFields{$fields->[$j]} = $frameworkcode;
+                            $arrData[$j] = $frameworkcode;
+                        } else {
+                            $dataFields{$fields->[$j]} = $_;
                         }
-                        if ($fieldsNameRead) {
-                            $fieldsStr = join(',', @$fields);
-                            $dataStr = '';
-                            map { $dataStr .= '?,';} @$fields;
-                            chop($dataStr) if ($dataStr);
-                            $updateStr = '';
-                            map { $updateStr .= $_ . '=?,';} @$fields;
-                            chop($updateStr) if ($updateStr);
-                        }
-                    } else {
-                        # Read data
-                        my $j = 0;
-                        my %dataFields = ();
-                        for (@arrData) {
-                            if ($fields->[$j] eq 'frameworkcode' && $_ ne $frameworkcode) {
-                                $dataFields{$fields->[$j]} = $frameworkcode;
-                                $arrData[$j] = $frameworkcode;
-                            } else {
-                                $dataFields{$fields->[$j]} = $_;
-                            }
-                            $j++
-                        }
-                        $ok = _processRow_DB($dbh, $db_scheme, $table, $fieldsStr, $dataStr, $updateStr, \@arrData, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
+                        $j++
                     }
+                    $ok = _processRow_DB($dbh, $db_scheme, $table, $fieldsStr, $dataStr, $updateStr, \@arrData, \%dataFields, $PKArray, \@fieldsPK, $fields2Delete);
                 }
                 $pos = tell($dom);
             }
