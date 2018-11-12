@@ -147,7 +147,7 @@ subtest 'approve tests' => sub {
         { source => 'BorrowerAttributeType', value => { code => 'CODE_1' } }
     );
     $builder->build(
-        { source => 'BorrowerAttributeType', value => { code => 'CODE_2' } }
+        { source => 'BorrowerAttributeType', value => { code => 'CODE_2', repeatable => 1 } }
     );
     my $verification_token = md5_hex( time().{}.rand().{}.$$ );
     my $valid_json_text
