@@ -1083,52 +1083,9 @@
 [% IF ( step_5 ) %][% IF ( EnhancedMessagingPreferences ) %]
   <fieldset class="rows" id="memberentry_messaging_prefs">
     <legend id="patron_messaging_prefs_lgd">Patron messaging preferences</legend>
-    [% IF ( opadd ) %]
-    <!-- handle changing prefs if creating new patron and changing
-         the patron category
-    -->
-    <script type="text/javascript">//<![CDATA[
-       $(document).ready(function(){
-            var message_prefs_dirty = false;
-            $('#memberentry_messaging_prefs > *').change(function() {
-                message_prefs_dirty = true;
-            });
-            $('#categorycode_entry').change(function() {
-                var categorycode = $(this).val();
-                if (message_prefs_dirty) {
-                    if (!confirm(_("Change messaging preferences to default for this category?"))) {
-                        return;
-                    }
-                }
-                $.getJSON('/cgi-bin/koha/members/default_messageprefs.pl?categorycode=' + categorycode,
-                    function(data) {
-                        $.each(data.messaging_preferences, function(i, item) {
-                            var attrid = item.message_attribute_id;
-                            var transports = ['email', 'rss', 'sms'];
-                            $.each(transports, function(j, transport) {
-                                if (item['transports_' + transport] == 1) {
-                                    $('#' + transport + attrid).prop('checked', true);
-                                } else {
-                                    $('#' + transport + attrid).prop('checked', false);
-                                }
-                            });
-                            if (item.digest && item.digest != ' ') {
-                                $('#digest' + attrid).prop('checked', true);
-                            } else {
-                                $('#digest' + attrid).prop('checked', false);
-                            }
-                            if (item.takes_days == '1') {
-                                $('[name=' + attrid + '-DAYS]').val('' + item.days_in_advance);
-                            }
-                        });
-                        message_prefs_dirty = false;
-                    }
-                );
-            });
-        });
-    //]]>
-    </script>
-    [% END %]
+    <div id="messaging_prefs_loading" class="form-message" style="display:none">
+        <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading new messaging defaults
+    </div>
     <input type="hidden" name="setting_messaging_prefs" value="1" />
     [% INCLUDE 'messaging-preference-form.inc' %]
     [% IF ( SMSSendDriver ) %]
@@ -1299,6 +1256,7 @@
         var LABEL_CHANGE = _("Change");
         var LABEL_SET_TO_PATRON = _("Set to patron");
         var LABEL_AGE = _("Age");
+        var MSG_MESSAGING_DFEAULTS = _("Change messaging preferences to default for this category?");
 
         [% IF quickadd && opadd  && !check_member %]
             $(document).ready(function () {
