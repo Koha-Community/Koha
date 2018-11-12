@@ -26,6 +26,7 @@ use Koha::Reviews;
 use Koha::Database;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -74,7 +75,7 @@ subtest 'search_limited' => sub {
     my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
     Koha::Library::Group->new({ parent_id => $group_1->id,  branchcode => $patron_1->branchcode })->store();
     Koha::Library::Group->new({ parent_id => $group_2->id,  branchcode => $patron_2->branchcode })->store();
-    set_logged_in_user( $patron_1 );
+    t::lib::Mocks::mock_userenv( { patron => $patron_1 } );
     is( Koha::Reviews->search->count, $nb_of_approved_reviews + 3, 'Koha::Reviews->search should return all reviews' );
     is( Koha::Reviews->search_limited->count, $nb_of_approved_reviews + 2, 'Koha::Reviews->search_limited should return reviews depending on patron permissions' );
 };
@@ -83,14 +84,3 @@ $retrieved_review_1_1->delete;
 is( Koha::Reviews->search->count, $nb_of_reviews + 2, 'Delete should have deleted the review' );
 
 $schema->storage->txn_rollback;
-
-sub set_logged_in_user {
-    my ($patron) = @_;
-    C4::Context->set_userenv(
-        $patron->borrowernumber, $patron->userid,
-        $patron->cardnumber,     'firstname',
-        'surname',               $patron->library->branchcode,
-        'Midway Public Library', $patron->flags,
-        '',                      ''
-    );
-}

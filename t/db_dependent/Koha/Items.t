@@ -57,8 +57,7 @@ my $new_item_2 = Koha::Item->new(
     }
 )->store;
 
-C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(0,0,0,'firstname','surname', $library->{branchcode}, 'Midway Public Library', '', '', '');
+t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
 like( $new_item_1->itemnumber, qr|^\d+$|, 'Adding a new item should have set the itemnumber' );
 is( Koha::Items->search->count, $nb_of_items + 2, 'The 2 items should have been added' );

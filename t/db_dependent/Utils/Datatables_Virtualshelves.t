@@ -27,6 +27,8 @@ use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::Virtualshelves;
 
+use t::lib::Mocks;
+
 use_ok( "C4::Utils::DataTables::VirtualShelves" );
 
 my $schema = Koha::Database->new->schema;
@@ -77,7 +79,8 @@ my %john_smith = (
     userid       => 'john.smith',
 );
 
-$john_doe{borrowernumber} = Koha::Patron->new( \%john_doe )->store->borrowernumber;
+my $john_doe_patron = Koha::Patron->new( \%john_doe )->store;
+$john_doe{borrowernumber} = $john_doe_patron->borrowernumber;
 $jane_doe{borrowernumber} = Koha::Patron->new( \%jane_doe )->store->borrowernumber;
 $john_smith{borrowernumber} = Koha::Patron->new( \%john_smith )->store->borrowernumber;
 
@@ -179,8 +182,7 @@ my %dt_params = (
 );
 my $search_results;
 
-C4::Context->_new_userenv ('DUMMY_SESSION_ID');
-C4::Context->set_userenv($john_doe{borrowernumber}, $john_doe{userid}, 'usercnum', 'First name', 'Surname', 'MYLIBRARY', 'My Library', 0);
+t::lib::Mocks::mock_userenv({ patron => $john_doe_patron });
 
 # Search private lists by title
 $search_results = C4::Utils::DataTables::VirtualShelves::search({

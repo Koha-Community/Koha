@@ -11,15 +11,14 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
+use t::lib::Mocks;
 
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
 
-C4::Context->_new_userenv('xxx');
-C4::Context->set_userenv(42, 'ordercreator', '0042', 'Order', 'Creator', 'CPL',
-    0, 'ordercreator@example.com');
+t::lib::Mocks::mock_userenv({ branchcode => 'CPL' });
 
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {

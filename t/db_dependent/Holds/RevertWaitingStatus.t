@@ -42,13 +42,7 @@ my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
 my $itemtype = $builder->build(
     { source => 'Itemtype', value => { notforloan => undef } } )->{itemtype};
 
-local $SIG{__WARN__} = sub { warn $_[0] unless $_[0] =~ /redefined/ };
-*C4::Context::userenv = \&Mock_userenv;
-
-sub Mock_userenv {
-    my $userenv = { flags => 1, id => '1', branch => $branchcode };
-    return $userenv;
-}
+t::lib::Mocks::mock_userenv({ flags => 1, userid => '1', branchcode => $branchcode });
 
 my $borrowers_count = 3;
 

@@ -68,8 +68,7 @@ my $new_patron_2  = Koha::Patron->new(
     }
 )->store;
 
-C4::Context->_new_userenv('xxx');
-set_logged_in_user( $new_patron_1 );
+t::lib::Mocks::mock_userenv({ patron => $new_patron_1 });
 
 is( Koha::Patrons->search->count, $nb_of_patrons + 2, 'The 2 patrons should have been added' );
 
@@ -561,8 +560,7 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
     # Not sure how this is useful, but AddIssue pass this variable to different other subroutines
     $patron = Koha::Patrons->find( $patron->borrowernumber )->unblessed;
 
-    my $module = new Test::MockModule('C4::Context');
-    $module->mock( 'userenv', sub { { branch => $library->{branchcode} } } );
+    t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
     AddIssue( $patron, $item_1->{barcode}, DateTime->now->subtract( days => 1 ) );
     AddIssue( $patron, $item_2->{barcode}, DateTime->now->subtract( days => 5 ) );
@@ -595,7 +593,6 @@ subtest 'checkouts + pending_checkouts + get_overdues + old_checkouts' => sub {
     # Clean stuffs
     Koha::Checkouts->search( { borrowernumber => $patron->borrowernumber } )->delete;
     $patron->delete;
-    $module->unmock('userenv');
 };
 
 subtest 'get_routing_lists' => sub {
@@ -844,19 +841,12 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
 
     # TODO create a subroutine in t::lib::Mocks
     my $branch = $builder->build({ source => 'Branch' });
-    my $userenv_patron = $builder->build({
-        source => 'Borrower',
-        value  => { branchcode => $branch->{branchcode} },
+    my $userenv_patron = $builder->build_object({
+        class  => 'Koha::Patrons',
+        value  => { branchcode => $branch->{branchcode}, flags => 0 },
     });
-    C4::Context->_new_userenv('DUMMY SESSION');
-    C4::Context->set_userenv(
-        $userenv_patron->{borrowernumber},
-        $userenv_patron->{userid},
-        'usercnum', 'First name', 'Surname',
-        $branch->{branchcode},
-        $branch->{branchname},
-        0,
-    );
+    t::lib::Mocks::mock_userenv({ patron => $userenv_patron });
+
     my $anonymous = $builder->build( { source => 'Borrower', }, );
 
     t::lib::Mocks::mock_preference( 'AnonymousPatron', $anonymous->{borrowernumber} );
@@ -1052,7 +1042,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
     };
 
     Koha::Patrons->find( $anonymous->{borrowernumber})->delete;
-    Koha::Patrons->find( $userenv_patron->{borrowernumber})->delete;
+    $userenv_patron->delete;
 
     # Reset IndependentBranches for further tests
     t::lib::Mocks::mock_preference('IndependentBranches', 0);
@@ -1108,27 +1098,27 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
 
         my @branchcodes;
 
-        set_logged_in_user( $patron_11_1 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_11_1 });
         @branchcodes = $patron_11_1->libraries_where_can_see_patrons;
         is_deeply( \@branchcodes, [], q|patron_11_1 has view_borrower_infos_from_any_libraries => No restriction| );
 
-        set_logged_in_user( $patron_11_2 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_11_2 });
         @branchcodes = $patron_11_2->libraries_where_can_see_patrons;
         is_deeply( \@branchcodes, [ sort ( $library_11->branchcode, $library_12->branchcode ) ], q|patron_11_2 has not view_borrower_infos_from_any_libraries => Can only see patron's from its group| );
 
-        set_logged_in_user( $patron_21 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_21 });
         @branchcodes = $patron_21->libraries_where_can_see_patrons;
         is_deeply( \@branchcodes, [$library_21->branchcode], q|patron_21 has not view_borrower_infos_from_any_libraries => Can only see patron's from its group| );
     };
     subtest 'can_see_patron_infos' => sub {
         plan tests => 6;
 
-        set_logged_in_user( $patron_11_1 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_11_1 });
         is( $patron_11_1->can_see_patron_infos( $patron_11_2 ), 1, q|patron_11_1 can see patron_11_2, from its library| );
         is( $patron_11_1->can_see_patron_infos( $patron_12 ),   1, q|patron_11_1 can see patron_12, from its group| );
         is( $patron_11_1->can_see_patron_infos( $patron_21 ),   1, q|patron_11_1 can see patron_11_2, from another group| );
 
-        set_logged_in_user( $patron_11_2 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_11_2 });
         is( $patron_11_2->can_see_patron_infos( $patron_11_1 ), 1, q|patron_11_2 can see patron_11_1, from its library| );
         is( $patron_11_2->can_see_patron_infos( $patron_12 ),   1, q|patron_11_2 can see patron_12, from its group| );
         is( $patron_11_2->can_see_patron_infos( $patron_21 ),   0, q|patron_11_2 can NOT see patron_21, from another group| );
@@ -1136,16 +1126,16 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
     subtest 'search_limited' => sub {
         plan tests => 6;
 
-        set_logged_in_user( $patron_11_1 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_11_1 });
         my $total_number_of_patrons = $nb_of_patrons + 4; #we added four in these tests
         is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons' );
         is( Koha::Patrons->search_limited->count, $total_number_of_patrons, 'patron_11_1 is allowed to see all patrons' );
 
-        set_logged_in_user( $patron_11_2 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_11_2 });
         is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons');
         is( Koha::Patrons->search_limited->count, 3, 'patron_12_1 is not allowed to see patrons from other groups, only patron_11_1, patron_11_2 and patron_12' );
 
-        set_logged_in_user( $patron_21 );
+        t::lib::Mocks::mock_userenv({ patron => $patron_21 });
         is( Koha::Patrons->search->count, $total_number_of_patrons, 'Non-limited search should return all patrons');
         is( Koha::Patrons->search_limited->count, 1, 'patron_21 is not allowed to see patrons from other groups, only himself' );
     };
@@ -1285,8 +1275,7 @@ subtest 'get_overdues' => sub {
         }
     );
 
-    my $module = new Test::MockModule('C4::Context');
-    $module->mock( 'userenv', sub { { branch => $library->{branchcode} } } );
+    t::lib::Mocks::mock_preference({ branchcode => $library->{branchcode} });
 
     AddIssue( $patron, $item_1->{barcode}, DateTime->now->subtract( days => 1 ) );
     AddIssue( $patron, $item_2->{barcode}, DateTime->now->subtract( days => 5 ) );
@@ -1597,17 +1586,3 @@ subtest '->set_password' => sub {
 
     $schema->storage->txn_rollback;
 };
-
-
-
-# TODO Move to t::lib::Mocks and reuse it!
-sub set_logged_in_user {
-    my ($patron) = @_;
-    C4::Context->set_userenv(
-        $patron->borrowernumber, $patron->userid,
-        $patron->cardnumber,     'firstname',
-        'surname',               $patron->library->branchcode,
-        'Midway Public Library', $patron->flags,
-        '',                      ''
-    );
-}

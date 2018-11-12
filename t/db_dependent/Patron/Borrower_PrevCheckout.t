@@ -44,14 +44,8 @@ my $inheritCatCode = $builder->build({
 # Create context for some tests late on in the file.
 my $library = $builder->build({ source => 'Branch' });
 my $staff = $builder->build({source => 'Borrower'});
-my @USERENV = (
-    $staff->{borrowernumber}, 'test', 'MASTERTEST', 'firstname', $library->{branchcode},
-    $library->{branchcode}, 'email@example.org'
-);
-C4::Context->_new_userenv('DUMMY_SESSION_ID');
-C4::Context->set_userenv(@USERENV);
-BAIL_OUT("No userenv") unless C4::Context->userenv;
 
+t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 
 # wants_check_for_previous_checkout
 

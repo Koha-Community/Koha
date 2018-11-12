@@ -45,7 +45,7 @@ my $library = $builder->build({
 });
 
 my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 1 } });
-set_logged_in_user( $patron );
+t::lib::Mocks::mock_userenv({ patron => $patron });
 
 my $branchcode=$library->{branchcode};
 
@@ -463,15 +463,3 @@ subtest 'ExtendedPatronAttributes' => sub {
 
 # End
 $schema->storage->txn_rollback;
-
-sub set_logged_in_user {
-    my ($patron) = @_;
-    C4::Context->_new_userenv('xxx');
-    C4::Context->set_userenv(
-        $patron->borrowernumber, $patron->userid,
-        $patron->cardnumber,     'firstname',
-        'surname',               $patron->library->branchcode,
-        'Midway Public Library', $patron->flags,
-        '',                      ''
-    );
-}

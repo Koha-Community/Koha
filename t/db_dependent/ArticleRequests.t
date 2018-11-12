@@ -207,16 +207,15 @@ $rule->delete();
 
 subtest 'search_limited' => sub {
     plan tests => 2;
-    C4::Context->_new_userenv('xxx');
     my $nb_article_requests = Koha::ArticleRequests->count;
 
     my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1' } )->store;
     my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2' } )->store;
     Koha::Library::Group->new({ parent_id => $group_1->id,  branchcode => $patron->branchcode })->store();
     Koha::Library::Group->new({ parent_id => $group_2->id,  branchcode => $patron_2->branchcode })->store();
-    set_logged_in_user( $patron ); # Is superlibrarian
+    t::lib::Mocks::mock_userenv( { patron => $patron } ); # Is superlibrarian
     is( Koha::ArticleRequests->search_limited->count, $nb_article_requests, 'Koha::ArticleRequests->search_limited should return all article requests for superlibrarian' );
-    set_logged_in_user( $patron_2 ); # Is restricted
+    t::lib::Mocks::mock_userenv( { patron => $patron_2 } ); # Is restricted
     is( Koha::ArticleRequests->search_limited->count, 0, 'Koha::ArticleRequests->search_limited should not return all article requests for restricted patron' );
 };
 
@@ -244,14 +243,3 @@ subtest 'may_article_request' => sub {
 };
 
 $schema->storage->txn_rollback();
-
-sub set_logged_in_user {
-    my ($patron) = @_;
-    C4::Context->set_userenv(
-        $patron->borrowernumber, $patron->userid,
-        $patron->cardnumber,     'firstname',
-        'surname',               $patron->library->branchcode,
-        'Midway Public Library', $patron->flags,
-        '',                      ''
-    );
-}
