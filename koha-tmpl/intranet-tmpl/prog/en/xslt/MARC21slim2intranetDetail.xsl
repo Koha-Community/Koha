@@ -491,6 +491,7 @@
                 <xsl:with-param name="class">results_summary description</xsl:with-param>
                 <xsl:with-param name="label">Description: </xsl:with-param>
             </xsl:call-template>
+	    <xsl:call-template name="maybe-show-f347b"/>
         </xsl:if>
         
         <xsl:if test="marc:datafield[@tag=300]">
@@ -505,6 +506,7 @@
                </xsl:call-template>
                     <xsl:choose><xsl:when test="position()=last()"><xsl:text>.</xsl:text></xsl:when><xsl:otherwise><xsl:text>; </xsl:text></xsl:otherwise></xsl:choose>
             </xsl:for-each>
+	    <xsl:call-template name="maybe-show-f347b"/>
         </span>
        </xsl:if>
 

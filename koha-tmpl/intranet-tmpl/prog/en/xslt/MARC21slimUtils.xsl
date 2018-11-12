@@ -459,6 +459,17 @@
     </xsl:template>
     <!-- /koha-suomi: ilmestymistiheys -->
 
+    <xsl:template name="maybe-show-f347b">
+      <xsl:if test="marc:datafield[@tag=347]/marc:subfield[@code='b']">
+	<xsl:text> </xsl:text>
+        <xsl:for-each select="marc:datafield[@tag=347]">
+	  <xsl:call-template name="subfieldSelect">
+            <xsl:with-param name="codes">b</xsl:with-param>
+	  </xsl:call-template>
+        </xsl:for-each>
+      </xsl:if>
+    </xsl:template>
+
 </xsl:stylesheet>
 
 <!-- Stylus Studio meta-information - (c)1998-2002 eXcelon Corp.
