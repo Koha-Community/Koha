@@ -57,7 +57,7 @@
     </div>
   [% END %]
   [% IF op == 'form' %]
-    <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_delete_records.pl">
+    <form method="post" enctype="multipart/form-data" action="/cgi-bin/koha/tools/batch_delete_records.pl" id="record_ids_selection">
       <fieldset class="rows">
         <legend>Record type</legend>
         <ol>
@@ -70,12 +70,12 @@
 
       <div id="batch_del_form" class="toptabs">
         <ul>
-          <li><a href="#uploadfile">Upload a file</a></li>
-          [% IF lists.count %]<li id="show_list_option"><a href="#shelves">Select a list of records</a></li>[% END %]
-          <li><a href="#enterlist">Enter a list of record numbers</a></li>
+          <li><a href="#uploadfile_tab">Upload a file</a></li>
+          [% IF lists.count %]<li id="show_list_option"><a href="#shelves_tab">Select a list of records</a></li>[% END %]
+          <li><a href="#enterlist_tab">Enter a list of record numbers</a></li>
         </ul>
 
-        <div id="uploadfile">
+        <div id="uploadfile_tab">
           <fieldset class="rows">
             <legend>Use a file</legend>
             <ol>
@@ -85,26 +85,28 @@
           &nbsp;
         </div>
 
-        <div id="shelves">
-          <fieldset class="rows">
-            <legend>Or select a list of records</legend>
-            <ol>
-              <li>
-                <label for="shelf_number">Use records from the following list: </label>
-                <select name="shelf_number" id="shelf_number">
-                  <option value="">Select a list</option>
-                    [% FOREACH list IN lists %]
-                      <option value="[% list.shelfnumber %]">[% list.shelfname %]</option>
-                    [% END %]
-                  </option>
-                </select>
-              </li>
-            </ol>
-          </fieldset>
-          &nbsp;
-        </div>
+        [% IF lists.count %]
+            <div id="shelves_tab">
+              <fieldset class="rows">
+                <legend>Or select a list of records</legend>
+                <ol>
+                  <li>
+                    <label for="shelf_number">Use records from the following list: </label>
+                    <select name="shelf_number" id="shelf_number">
+                      <option value="">Select a list</option>
+                        [% FOREACH list IN lists %]
+                          <option value="[% list.shelfnumber %]">[% list.shelfname %]</option>
+                        [% END %]
+                      </option>
+                    </select>
+                  </li>
+                </ol>
+              </fieldset>
+              &nbsp;
+            </div>
+        [% END %]
 
-        <div id="enterlist">
+        <div id="enterlist_tab">
           <fieldset class="rows">
             <legend>Or enter a list of record numbers</legend>
             <ol>
@@ -306,6 +308,21 @@
               return false;
             }
           });
+
+          $("#record_ids_selection").on("submit", function(e){
+            var tab = $(this).find('.ui-tabs-active:first a').attr('href');
+            if ( tab == '#uploadfile_tab' ) {
+                $("#shelf_number").empty('');
+                $("#recordnumber_list").val('');
+            } else if ( tab == '#shelves_tab' ) {
+                $("#uploadfile").val('')
+                $("#recordnumber_list").val('');
+            } else { // enterlist
+                $("#uploadfile").val('')
+                $("#shelf_number").empty('');
+            }
+          });
+
         });
     </script>
 [% END %]
