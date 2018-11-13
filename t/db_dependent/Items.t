@@ -106,7 +106,7 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->{itype}, $itemtype->{itemtype}, "Itemtype set correctly when using item-level_itypes" );
     t::lib::Mocks::mock_preference('item-level_itypes', '0');
     $getitem = GetItem($itemnumber);
-    is( $getitem->{itype}, undef, "Itemtype set correctly when not using item-level_itypes" );
+    is( $getitem->{itype}, $biblio->biblioitem->itemtype, "Itemtype set correctly when not using item-level_itypes" );
 
     $schema->storage->txn_rollback;
 };
