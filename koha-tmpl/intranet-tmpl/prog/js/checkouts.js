@@ -413,7 +413,6 @@ $(document).ready(function() {
                                     + "</span>";
 
                             span_style = AllowRenewalLimitOverride ? "" : "display: none";
-                            span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "too_many" ) {
                             msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE
