@@ -37,4 +37,9 @@ sub filter {
         output_pref({ dt => $dt, dateonly => !$config->{with_hours}, dateformat => $config->{dateformat} });
 }
 
+sub output_preference {
+    my ( $self, @params ) = @_;
+    return output_pref( @params );
+}
+
 1;

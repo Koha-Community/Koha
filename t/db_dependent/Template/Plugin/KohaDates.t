@@ -1,10 +1,12 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+
 use C4::Context;
 use Koha::DateUtils;
-use Test::More tests => 8;
+
 use Test::MockModule;
+use Test::More tests => 9;
 use t::lib::Mocks;
 
 BEGIN {
@@ -50,6 +52,8 @@ is( $filtered_date, '01/04/1979', 'us: dt_from_string should return the valid da
 
 $filtered_date = $filter->filter('1979-04-01', undef, { dateformat => 'iso' } );
 is( $filtered_date, '1979-04-01', 'date should be returned in ISO if dateformat is passed with a value of iso' );
+
+is( Koha::DateUtils::output_pref( dt_from_string ), $filter->output_preference( dt_from_string ), 'Filter output_preference method output matches output_pref' );
 
 $module_context->mock(
     'tz',
