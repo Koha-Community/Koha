@@ -213,8 +213,7 @@ $dbh->do(
 # CanBookBeRenewed tests
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
-    my $title = 'Silence in the library';
-    my ($biblionumber, $biblioitemnumber) = add_biblio($title, 'Moffat, Steven');
+    my $biblio = $builder->gimme_a_biblio();
 
     my $barcode = 'R00000342';
     my $branch = $library2->{branchcode};
@@ -227,7 +226,7 @@ $dbh->do(
             replacementprice => 12.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $barcode2 = 'R00000343';
@@ -239,7 +238,7 @@ $dbh->do(
             replacementprice => 23.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $barcode3 = 'R00000346';
@@ -251,7 +250,7 @@ $dbh->do(
             replacementprice => 23.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     # Create borrowers
@@ -328,9 +327,9 @@ $dbh->do(
 
     # Biblio-level hold, renewal test
     AddReserve(
-        $branch, $reserving_borrowernumber, $biblionumber,
+        $branch, $reserving_borrowernumber, $biblio->biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,
-        $title, $checkitem, $found
+        'a title', $checkitem, $found
     );
 
     # Testing of feature to allow the renewal of reserved items if other items on the record can fill all needed holds
@@ -345,7 +344,7 @@ $dbh->do(
     my $hold = Koha::Database->new()->schema()->resultset('Reserve')->create(
         {
             borrowernumber => $hold_waiting_borrowernumber,
-            biblionumber   => $biblionumber,
+            biblionumber   => $biblio->biblionumber,
             itemnumber     => $itemnumber,
             branchcode     => $branch,
             priority       => 3,
@@ -360,7 +359,7 @@ $dbh->do(
     $hold = Koha::Database->new()->schema()->resultset('Reserve')->create(
         {
             borrowernumber => $hold_waiting_borrowernumber,
-            biblionumber   => $biblionumber,
+            biblionumber   => $biblio->biblionumber,
             itemnumber     => $itemnumber3,
             branchcode     => $branch,
             priority       => 0,
@@ -381,7 +380,7 @@ $dbh->do(
     is( $renewokay, 0, '(Bug 10663) Cannot renew, reserved');
     is( $error, 'on_reserve', '(Bug 10663) Cannot renew, reserved (returned error is on_reserve)');
 
-    my $reserveid = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber })->next->reserve_id;
+    my $reserveid = Koha::Holds->search({ biblionumber => $biblio->biblionumber, borrowernumber => $reserving_borrowernumber })->next->reserve_id;
     my $reserving_borrower = Koha::Patrons->find( $reserving_borrowernumber )->unblessed;
     AddIssue($reserving_borrower, $barcode3);
     my $reserve = $dbh->selectrow_hashref(
@@ -393,9 +392,9 @@ $dbh->do(
 
     # Item-level hold, renewal test
     AddReserve(
-        $branch, $reserving_borrowernumber, $biblionumber,
+        $branch, $reserving_borrowernumber, $biblio->biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,
-        $title, $itemnumber, $found
+        'a title', $itemnumber, $found
     );
 
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
@@ -406,10 +405,10 @@ $dbh->do(
     is( $renewokay, 1, 'Can renew item 2, item-level hold is on item 1');
 
     # Items can't fill hold for reasons
-    ModItem({ notforloan => 1 }, $biblionumber, $itemnumber);
+    ModItem({ notforloan => 1 }, $biblio->biblionumber, $itemnumber);
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $itemnumber, 1);
     is( $renewokay, 1, 'Can renew, item is marked not for loan, hold does not block');
-    ModItem({ notforloan => 0, itype => $itemtype }, $biblionumber, $itemnumber);
+    ModItem({ notforloan => 0, itype => $itemtype }, $biblio->biblionumber, $itemnumber);
 
     # FIXME: Add more for itemtype not for loan etc.
 
@@ -423,7 +422,7 @@ $dbh->do(
             replacementprice => 23.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
     my $datedue5 = AddIssue($restricted_borrower, $barcode5);
     is (defined $datedue5, 1, "Item with date due checked out, due date: $datedue5");
@@ -444,7 +443,7 @@ $dbh->do(
             replacementprice => 23.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $barcode7 = 'R00000349';
@@ -456,7 +455,7 @@ $dbh->do(
             replacementprice => 23.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
     my $datedue6 = AddIssue( $renewing_borrower, $barcode6);
     is (defined $datedue6, 1, "Item 2 checked out, due date: ".$datedue6->date_due);
@@ -519,7 +518,7 @@ $dbh->do(
     is( $renewokay, 0, '(Bug 8236), Cannot renew, this item is overdue');
 
 
-    $hold = Koha::Holds->search({ biblionumber => $biblionumber, borrowernumber => $reserving_borrowernumber })->next;
+    $hold = Koha::Holds->search({ biblionumber => $biblio->biblionumber, borrowernumber => $reserving_borrowernumber })->next;
     $hold->cancel;
 
     # Bug 14101
@@ -534,7 +533,7 @@ $dbh->do(
             replacementprice => 16.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     $issue = AddIssue( $renewing_borrower, $barcode4, undef, undef, undef, undef, { auto_renew => 1 } );
@@ -604,7 +603,7 @@ $dbh->do(
         my $item_to_auto_renew = $builder->build(
             {   source => 'Item',
                 value  => {
-                    biblionumber  => $biblionumber,
+                    biblionumber  => $biblio->biblionumber,
                     homebranch    => $branch,
                     holdingbranch => $branch,
                 }
@@ -663,7 +662,7 @@ $dbh->do(
         my $item_to_auto_renew = $builder->build({
             source => 'Item',
             value => {
-                biblionumber => $biblionumber,
+                biblionumber => $biblio->biblionumber,
                 homebranch       => $branch,
                 holdingbranch    => $branch,
             }
@@ -703,7 +702,7 @@ $dbh->do(
         my $item_to_auto_renew = $builder->build({
             source => 'Item',
             value => {
-                biblionumber => $biblionumber,
+                biblionumber => $biblio->biblionumber,
                 homebranch       => $branch,
                 holdingbranch    => $branch,
             }
@@ -755,7 +754,7 @@ $dbh->do(
         my $item_to_auto_renew = $builder->build(
             {   source => 'Item',
                 value  => {
-                    biblionumber  => $biblionumber,
+                    biblionumber  => $biblio->biblionumber,
                     homebranch    => $branch,
                     holdingbranch => $branch,
                 }
@@ -907,8 +906,7 @@ $dbh->do(
     my $branch   = $library2->{branchcode};
 
     #Create another record
-    my $title2 = 'Something is worng here';
-    my ($biblionumber2, $biblioitemnumber2) = add_biblio($title2, 'Anonymous');
+    my $biblio2 = $builder->gimme_a_biblio();
 
     #Create third item
     AddItem(
@@ -918,7 +916,7 @@ $dbh->do(
             barcode          => $barcode3,
             itype            => $itemtype
         },
-        $biblionumber2
+        $biblio2->biblionumber
     );
 
     # Create a borrower
@@ -987,7 +985,7 @@ $dbh->do(
     my $barcode  = '1234567890';
     my $branch   = $library2->{branchcode};
 
-    my ($biblionumber, $biblioitemnumber) = add_biblio();
+    my $biblio = $builder->gimme_a_biblio();
 
     #Create third item
     my ( undef, undef, $itemnumber ) = AddItem(
@@ -997,7 +995,7 @@ $dbh->do(
             barcode          => $barcode,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     # Create a borrower
@@ -1044,7 +1042,7 @@ $dbh->do(
         undef,  0,
         .10, 1
     );
-    my ( $biblionumber, $biblioitemnumber ) = add_biblio();
+    my $biblio = $builder->gimme_a_biblio();
 
     my $barcode1 = '1234';
     my ( undef, undef, $itemnumber1 ) = AddItem(
@@ -1054,7 +1052,7 @@ $dbh->do(
             barcode       => $barcode1,
             itype         => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
     my $barcode2 = '4321';
     my ( undef, undef, $itemnumber2 ) = AddItem(
@@ -1064,7 +1062,7 @@ $dbh->do(
             barcode       => $barcode2,
             itype         => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $borrowernumber1 = Koha::Patron->new({
@@ -1089,7 +1087,7 @@ $dbh->do(
     is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with no hold on the record' );
 
     AddReserve(
-        $library2->{branchcode}, $borrowernumber2, $biblionumber,
+        $library2->{branchcode}, $borrowernumber2, $biblio->biblionumber,
         '',  1, undef, undef, '',
         undef, undef, undef
     );
@@ -1115,7 +1113,7 @@ $dbh->do(
     is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled' );
 
     # Setting item not checked out to be not for loan but holdable
-    ModItem({ notforloan => -1 }, $biblionumber, $itemnumber2);
+    ModItem({ notforloan => -1 }, $biblio->biblionumber, $itemnumber2);
 
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $itemnumber1 );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower can not renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled but the only available item is notforloan' );
@@ -1127,7 +1125,7 @@ $dbh->do(
     my $branch   = $library->{branchcode};
 
     #Create another record
-    my ($biblionumber, $biblioitemnumber) = add_biblio('A title', 'Anonymous');
+    my $biblio = $builder->gimme_a_biblio();
 
     my (undef, undef, $itemnumber) = AddItem(
         {
@@ -1136,7 +1134,7 @@ $dbh->do(
             barcode          => $barcode,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $borrowernumber = Koha::Patron->new({
@@ -1157,7 +1155,7 @@ $dbh->do(
 {
     my $library = $builder->build({ source => 'Branch' });
 
-    my ($biblionumber, $biblioitemnumber) = add_biblio();
+    my $biblio = $builder->gimme_a_biblio();
 
     my $barcode = 'just a barcode';
     my ( undef, undef, $itemnumber ) = AddItem(
@@ -1167,7 +1165,7 @@ $dbh->do(
             barcode          => $barcode,
             itype            => $itemtype
         },
-        $biblionumber,
+        $biblio->biblionumber,
     );
 
     my $patron = $builder->build({ source => 'Borrower', value => { branchcode => $library->{branchcode}, categorycode => $patron_category->{categorycode} } } );
@@ -1457,8 +1455,7 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
 subtest 'MultipleReserves' => sub {
     plan tests => 3;
 
-    my $title = 'Silence in the library';
-    my ($biblionumber, $biblioitemnumber) = add_biblio($title, 'Moffat, Steven');
+    my $biblio = $builder->gimme_a_biblio();
 
     my $branch = $library2->{branchcode};
 
@@ -1471,7 +1468,7 @@ subtest 'MultipleReserves' => sub {
             replacementprice => 12.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $barcode2 = 'R00110002';
@@ -1483,7 +1480,7 @@ subtest 'MultipleReserves' => sub {
             replacementprice => 12.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $bibitems       = '';
@@ -1515,9 +1512,9 @@ subtest 'MultipleReserves' => sub {
     );
     my $reserving_borrowernumber1 = Koha::Patron->new(\%reserving_borrower_data1)->store->borrowernumber;
     AddReserve(
-        $branch, $reserving_borrowernumber1, $biblionumber,
+        $branch, $reserving_borrowernumber1, $biblio->biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,
-        $title, $checkitem, $found
+        'a title', $checkitem, $found
     );
 
     my %reserving_borrower_data2 = (
@@ -1528,9 +1525,9 @@ subtest 'MultipleReserves' => sub {
     );
     my $reserving_borrowernumber2 = Koha::Patron->new(\%reserving_borrower_data2)->store->borrowernumber;
     AddReserve(
-        $branch, $reserving_borrowernumber2, $biblionumber,
+        $branch, $reserving_borrowernumber2, $biblio->biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,
-        $title, $checkitem, $found
+        'a title', $checkitem, $found
     );
 
     {
@@ -1547,7 +1544,7 @@ subtest 'MultipleReserves' => sub {
             replacementprice => 12.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     {
@@ -1995,9 +1992,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
     );
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    # Generate test biblio
-    my $title = 'Koha for Dummies';
-    my ( $biblionumber, $biblioitemnumber ) = add_biblio( $title, 'Hall, Daria' );
+    my $biblio = $builder->gimme_a_biblio({ author => 'Hall, Daria' });
 
     subtest 'Full write-off tests' => sub {
 
@@ -2013,13 +2008,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 replacementprice => $replacement_amount,
                 itype            => $item_type->itemtype
             },
-            $biblionumber
+            $biblio->biblionumber
         );
 
         AddIssue( $patron->unblessed, $barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 3 }, $biblionumber, $item_id );
+        ModItem( { itemlost => 3 }, $biblio->biblionumber, $item_id );
         LostItem( $item_id, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2075,13 +2070,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 replacementprice => $replacement_amount,
                 itype            => $item_type->itemtype
             },
-            $biblionumber
+            $biblio->biblionumber
         );
 
         AddIssue( $patron->unblessed, $barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 1 }, $biblionumber, $item_id );
+        ModItem( { itemlost => 1 }, $biblio->biblionumber, $item_id );
         LostItem( $item_id, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2144,13 +2139,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 replacementprice => $replacement_amount,
                 itype            => $item_type->itemtype
             },
-            $biblionumber
+            $biblio->biblionumber
         );
 
         AddIssue( $patron->unblessed, $barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 3 }, $biblionumber, $item_id );
+        ModItem( { itemlost => 3 }, $biblio->biblionumber, $item_id );
         LostItem( $item_id, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2198,13 +2193,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 replacementprice => $replacement_amount,
                 itype            => $item_type->itemtype
             },
-            $biblionumber
+            $biblio->biblionumber
         );
 
         AddIssue( $patron->unblessed, $barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 1 }, $biblionumber, $item_id );
+        ModItem( { itemlost => 1 }, $biblio->biblionumber, $item_id );
         LostItem( $item_id, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2362,9 +2357,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 subtest '_FixOverduesOnReturn' => sub {
     plan tests => 10;
 
-    # Generate test biblio
-    my $title  = 'Koha for Dummies';
-    my ( $biblionumber, $biblioitemnumber ) = add_biblio($title, 'Hall, Kylie');
+    my $biblio = $builder->gimme_a_biblio({ author => 'Hall, Kylie' });
 
     my $barcode = 'KD987654321';
     my $branchcode  = $library2->{branchcode};
@@ -2377,7 +2370,7 @@ subtest '_FixOverduesOnReturn' => sub {
             replacementprice => 99.00,
             itype            => $itemtype
         },
-        $biblionumber
+        $biblio->biblionumber
     );
 
     my $patron = $builder->build( { source => 'Borrower' } );
@@ -3007,29 +3000,6 @@ sub str {
     $s .= %$question ? ' (question: ' . join( ' ', keys %$question ) . ')' : '';
     $s .= %$alert    ? ' (alert: '    . join( ' ', keys %$alert    ) . ')' : '';
     return $s;
-}
-
-sub add_biblio {
-    my ($title, $author) = @_;
-
-    my $marcflavour = C4::Context->preference('marcflavour');
-
-    my $biblio = MARC::Record->new();
-    if ($title) {
-        my $tag = $marcflavour eq 'UNIMARC' ? '200' : '245';
-        $biblio->append_fields(
-            MARC::Field->new($tag, ' ', ' ', a => $title),
-        );
-    }
-
-    if ($author) {
-        my ($tag, $code) = $marcflavour eq 'UNIMARC' ? (200, 'f') : (100, 'a');
-        $biblio->append_fields(
-            MARC::Field->new($tag, ' ', ' ', $code => $author),
-        );
-    }
-
-    return AddBiblio($biblio, '');
 }
 
 sub test_debarment_on_checkout {

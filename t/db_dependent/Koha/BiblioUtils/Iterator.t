@@ -47,30 +47,17 @@ my $itemtype = $builder->build({
 
 # Create a biblio instance for testing
 t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-my ($bibnum, $bibitemnum) = get_biblio();
+my $biblio = $builder->gimme_a_biblio();
 
 # Add an item.
-my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $bibnum);
+my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $biblio->biblionumber);
 
 my $rs = $schema->resultset('Biblioitem')->search({});
 my $iterator = Koha::BiblioUtils::Iterator->new($rs, items => 1 );
 my $record = $iterator->next();
-my $expected_tags = [ 100, 245, 952, 999 ];
+my $expected_tags = [ 100, 245, 942, 952, 999 ];
 my @result_tags = map { $_->tag() } $record->field('...');
 my @sorted_tags = sort @result_tags;
 is_deeply(\@sorted_tags,$expected_tags, "Got the same tags as expected");
 
 $schema->storage->txn_rollback();
-
-# Helper method to set up a Biblio.
-sub get_biblio {
-    my ( $frameworkcode ) = @_;
-    $frameworkcode //= '';
-    my $bib = MARC::Record->new();
-    $bib->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
-    );
-    my ($bibnum, $bibitemnum) = AddBiblio($bib, $frameworkcode);
-    return ($bibnum, $bibitemnum);
-}

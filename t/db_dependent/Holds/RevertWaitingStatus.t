@@ -46,10 +46,7 @@ t::lib::Mocks::mock_userenv({ flags => 1, userid => '1', branchcode => $branchco
 
 my $borrowers_count = 3;
 
-# Create a biblio instance
-my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
-
-# Create an item
+my $biblio = $builder->gimme_a_biblio();
 my $item_barcode = 'my_barcode';
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
     {   homebranch    => $branchcode,
@@ -57,7 +54,7 @@ my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
         barcode       => $item_barcode,
         itype         => $itemtype
     },
-    $bibnum
+    $biblio->biblionumber,
 );
 
 # Create some borrowers
@@ -73,20 +70,18 @@ foreach my $i ( 1 .. $borrowers_count ) {
     push @borrowernumbers, $borrowernumber;
 }
 
-my $biblionumber = $bibnum;
-
 # Create five item level holds
 foreach my $borrowernumber (@borrowernumbers) {
     AddReserve(
         $branchcode,
         $borrowernumber,
-        $biblionumber,
+        $biblio->biblionumber,
         my $bibitems   = q{},
         my $priority,
         my $resdate,
         my $expdate,
         my $notes = q{},
-        $title,
+        'a title',
         my $checkitem,
         my $found,
     );
@@ -104,14 +99,3 @@ ok( $priorities->[0]->[0] == 1, 'First hold has a priority of 1' );
 ok( $priorities->[1]->[0] == 2, 'Second hold has a priority of 2' );
 
 $schema->storage->txn_rollback;
-
-# Helper method to set up a Biblio.
-sub create_helper_biblio {
-    my $bib   = MARC::Record->new();
-    my $title = 'Silence in the library';
-    $bib->append_fields(
-        MARC::Field->new( '100', ' ', ' ', a => 'Moffat, Steven' ),
-        MARC::Field->new( '245', ' ', ' ', a => $title ),
-    );
-    return ( $bibnum, $title, $bibitemnum ) = AddBiblio( $bib, '' );
-}

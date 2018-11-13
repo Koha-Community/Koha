@@ -40,15 +40,13 @@ my $itemtype = $builder->build(
 
 my $borrowers_count = 5;
 
-# Create a helper biblio
-my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio();
-# Create a helper item for the biblio.
+my $biblio = $builder->gimme_a_biblio();
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
     {   homebranch    => $library4->{branchcode},
         holdingbranch => $library3->{branchcode},
         itype         => $itemtype
     },
-    $bibnum
+    $biblio->biblionumber,
 );
 
 
@@ -67,21 +65,19 @@ foreach ( 1 .. $borrowers_count ) {
     push @borrowernumbers, $borrowernumber;
 }
 
-my $biblionumber = $bibnum;
-
 # Create five item level holds
 my $i = 1;
 foreach my $borrowernumber (@borrowernumbers) {
     AddReserve(
         $branchcodes[$i],
         $borrowernumber,
-        $biblionumber,
+        $biblio->biblionumber,
         my $bibitems   = q{},
         my $priority = $i,
         my $resdate,
         my $expdate,
         my $notes = q{},
-        $title,
+        'a title',
         my $checkitem,
         my $found,
     );
@@ -116,14 +112,3 @@ t::lib::Mocks::mock_preference( 'LocalHoldsPriorityPatronControl', 'HomeLibrary'
 t::lib::Mocks::mock_preference( 'LocalHoldsPriorityItemControl', 'homebranch' );
 ($status, $reserve, $all_reserves) = CheckReserves($itemnumber);
 ok( $reserve->{borrowernumber} eq $borrowernumbers[2], "Received expected results with HomeLibrary/homebranch" );
-
-# Helper method to set up a Biblio.
-sub create_helper_biblio {
-    my $bib   = MARC::Record->new();
-    my $title = 'Silence in the library';
-    $bib->append_fields(
-        MARC::Field->new( '100', ' ', ' ', a => 'Moffat, Steven' ),
-        MARC::Field->new( '245', ' ', ' ', a => $title ),
-    );
-    return ( $bibnum, $title, $bibitemnum ) = AddBiblio( $bib, '' );
-}

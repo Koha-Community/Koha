@@ -143,7 +143,8 @@ subtest 'Values should not be erased on editing' => sub {
 
     plan tests => 1;
 
-    ( $biblionumber, $biblioitemnumber ) = get_biblio();
+    my $biblio = $builder->gimme_a_biblio();
+    my $biblionumber = $biblio->biblionumber;
     my ( $icn_tag, $icn_sf ) = GetMarcFromKohaField( 'items.itemcallnumber', '' );
     my ( $it_tag, $it_sf )   = GetMarcFromKohaField( 'items.itype', '' );
 
@@ -346,13 +347,3 @@ subtest "Do not generate an expected if one already exists" => sub {
     @serialsByStatus = C4::Serials::findSerialsByStatus( 1, $subscriptionid );
     is( @serialsByStatus, 1, "ModSerialStatus delete corectly serial expected and not create another if exists" );
 };
-
-sub get_biblio {
-    my $bib = MARC::Record->new();
-    $bib->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
-    );
-    my ($bibnum, $bibitemnum) = AddBiblio($bib, '');
-    return ($bibnum, $bibitemnum);
-}

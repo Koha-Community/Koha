@@ -27,6 +27,8 @@ use Koha::Database;
 use C4::Biblio;
 use C4::OAI::Sets;
 
+use t::lib::TestBuilder;
+
 my $schema  = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
@@ -36,7 +38,7 @@ $dbh->do('DELETE FROM oai_sets_descriptions');
 $dbh->do('DELETE FROM oai_sets_mappings');
 $dbh->do('DELETE FROM oai_sets_biblios');
 
-
+my $builder = t::lib::TestBuilder->new;
 # ---------- Testing AddOAISet ------------------
 ok (!defined(AddOAISet), 'AddOAISet without argument is undef');
 
@@ -353,9 +355,11 @@ ok (!defined(AddOAISetsBiblios(my $arg=[])), 'AddOAISetsBiblios with a no HASH a
 ok (defined(AddOAISetsBiblios($arg={})), 'AddOAISetsBiblios with a HASH argument is def');
 
 # Create a biblio instance for testing
-my $biblionumber1 = create_helper_biblio('Moffat, Steven');
+my $biblio_1 = $builder->gimme_a_biblio({ author => 'Moffat, Steven' });
+my $biblionumber1 = $biblio_1->biblionumber;
 isa_ok(\$biblionumber1, 'SCALAR', '$biblionumber1 is a SCALAR');
-my $biblionumber2 = create_helper_biblio('Moffat, Steven');
+my $biblio_2 = $builder->gimme_a_biblio({ author => 'Moffat, Steven' });
+my $biblionumber2 = $biblio_2->biblionumber;
 isa_ok(\$biblionumber2, 'SCALAR', '$biblionumber2 is a SCALAR');
 
 my $oai_sets_biblios = {
@@ -517,7 +521,8 @@ ModOAISetMappings($setVH_id, $mappingsVH);
 
 
 #Create a biblio notice corresponding at one of mappings
-my $biblionumberVH = create_helper_biblio('Victor Hugo');
+my $biblio_VH = $builder->gimme_a_biblio({ author => 'Victor Hugo' });
+my $biblionumberVH = $biblio_VH->biblionumber;
 
 #Update
 my $record = GetMarcBiblio({ biblionumber => $biblionumberVH });
@@ -572,7 +577,8 @@ ModOAISetMappings($setNotVH_id, $mappingsNotVH);
 
 
 #Create a biblio notice corresponding at one of mappings
-my $biblionumberNotVH = create_helper_biblio('Sponge, Bob');
+my $biblio_NotVH = $builder->gimme_a_biblio({ author => 'Sponge, Bob' });
+my $biblionumberNotVH = $biblio_NotVH->biblionumber;
 
 #Update
 $record = GetMarcBiblio({ biblionumber => $biblionumberNotVH });
@@ -580,36 +586,5 @@ UpdateOAISetsBiblio($biblionumberNotVH, $record);
 
 my @setsNotEq = CalcOAISetsBiblio($record);
 is_deeply(@setsNotEq, $setNotVH_id, 'The $record only belongs to $setNotVH');
-
-
-
-# ---------- Subs --------------------------------
-
-
-# Helper method to set up a Biblio.
-sub create_helper_biblio {
-    my $author = shift;
-
-    return unless (defined($author));
-
-    my $marcflavour = C4::Context->preference('marcflavour');
-    my $bib = MARC::Record->new();
-    my $title = 'Silence in the library';
-
-    if ($marcflavour eq 'UNIMARC' ){
-        $bib->append_fields(
-            MARC::Field->new('200', ' ', ' ', f => $author),
-            MARC::Field->new('200', ' ', ' ', a => $title),
-        );
-    }
-    else{
-        $bib->append_fields(
-            MARC::Field->new('100', ' ', ' ', a => $author),
-            MARC::Field->new('245', ' ', ' ', a => $title),
-        );
-    }
-    my ($biblionumber)= AddBiblio($bib, '');
-    return $biblionumber;
-}
 
 $schema->storage->txn_rollback;

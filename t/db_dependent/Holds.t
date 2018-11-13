@@ -54,12 +54,11 @@ $insert_sth->execute('DUMMY');
 $insert_sth->execute('ONLY1');
 
 # Setup Test------------------------
-# Create a biblio instance for testing
-my ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
+my $biblio = $builder->gimme_a_biblio({ itemtype => 'DUMMY' });
 
 # Create item instance for testing.
 my ($item_bibnum, $item_bibitemnum, $itemnumber)
-    = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
+    = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
 
 # Create some borrowers
 my @borrowernumbers;
@@ -73,26 +72,23 @@ foreach (1..$borrowers_count) {
     push @borrowernumbers, $borrowernumber;
 }
 
-my $biblionumber = $bibnum;
-
 # Create five item level holds
 foreach my $borrowernumber ( @borrowernumbers ) {
     AddReserve(
         $branch_1,
         $borrowernumber,
-        $biblionumber,
+        $biblio->biblionumber,
         my $bibitems = q{},
-        my $priority = C4::Reserves::CalculatePriority( $biblionumber ),
+        my $priority = C4::Reserves::CalculatePriority( $biblio->biblionumber ),
         my $resdate,
         my $expdate,
         my $notes = q{},
-        $title,
+        'a title',
         my $checkitem = $itemnumber,
         my $found,
     );
 }
 
-my $biblio = Koha::Biblios->find( $biblionumber );
 my $holds = $biblio->holds;
 is( $holds->count, $borrowers_count, 'Test GetReserves()' );
 is( $holds->next->priority, 1, "Reserve 1 has a priority of 1" );
@@ -176,7 +172,7 @@ ok( ! $hold->suspend, "Test AutoUnsuspendReserves()" );
 
 SuspendAll(
     borrowernumber => $borrowernumber,
-    biblionumber   => $biblionumber,
+    biblionumber   => $biblio->biblionumber,
     suspend => 1,
     suspend_until => '2012-01-01',
 );
@@ -186,7 +182,7 @@ is( $hold->suspend_until, '2012-01-01 00:00:00', "Test SuspendAll(), with date" 
 
 SuspendAll(
     borrowernumber => $borrowernumber,
-    biblionumber   => $biblionumber,
+    biblionumber   => $biblio->biblionumber,
     suspend => 0,
 );
 $hold = Koha::Holds->find( $reserve_id );
@@ -197,19 +193,19 @@ is( $hold->suspend_until, undef, "Test resuming with SuspendAll(), should have n
 AddReserve(
     $branch_1,
     $borrowernumbers[0],
-    $biblionumber,
+    $biblio->biblionumber,
     my $bibitems = q{},
     my $priority,
     my $resdate,
     my $expdate,
     my $notes = q{},
-    $title,
+    'a title',
     my $checkitem,
     my $found,
 );
 $patron = Koha::Patrons->find( $borrowernumber );
 $holds = $patron->holds;
-my $reserveid = Koha::Holds->search({ biblionumber => $bibnum, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
+my $reserveid = Koha::Holds->search({ biblionumber => $biblio->biblionumber, borrowernumber => $borrowernumbers[0] })->next->reserve_id;
 ModReserveMinusPriority( $itemnumber, $reserveid );
 $holds = $patron->holds;
 is( $holds->next->itemnumber, $itemnumber, "Test ModReserveMinusPriority()" );
@@ -243,9 +239,9 @@ is( $hold->priority, '6', "Test AlterPriority(), move to bottom" );
 # Note that canreservefromotherbranches has no effect if
 # IndependentBranches is OFF.
 
-my ($foreign_bibnum, $foreign_title, $foreign_bibitemnum) = create_helper_biblio('DUMMY');
+my $foreign_biblio = $builder->gimme_a_biblio({ itemtype => 'DUMMY' });
 my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
-  = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_bibnum);
+  = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_biblio->biblionumber);
 $dbh->do('DELETE FROM issuingrules');
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
@@ -288,14 +284,14 @@ ok(
 
 {
     # Regression test for bug 11336 # Test if ModReserve correctly recalculate the priorities
-    ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-    my $reserveid1 = AddReserve($branch_1, $borrowernumbers[0], $bibnum, '', 1);
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-    my $reserveid2 = AddReserve($branch_1, $borrowernumbers[1], $bibnum, '', 2);
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $bibnum);
-    my $reserveid3 = AddReserve($branch_1, $borrowernumbers[2], $bibnum, '', 3);
-    my $hhh = Koha::Holds->search({ biblionumber => $bibnum });
+    $biblio = $builder->gimme_a_biblio({ itemtype => 'DUMMY' });
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
+    my $reserveid1 = AddReserve($branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1);
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
+    my $reserveid2 = AddReserve($branch_1, $borrowernumbers[1], $biblio->biblionumber, '', 2);
+    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
+    my $reserveid3 = AddReserve($branch_1, $borrowernumbers[2], $biblio->biblionumber, '', 3);
+    my $hhh = Koha::Holds->search({ biblionumber => $biblio->biblionumber });
     my $hold3 = Koha::Holds->find( $reserveid3 );
     is( $hold3->priority, 3, "The 3rd hold should have a priority set to 3" );
     ModReserve({ reserve_id => $reserveid1, rank => 'del' });
@@ -325,12 +321,12 @@ ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'damaged',
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
 # Regression test for bug 9532
-($bibnum, $title, $bibitemnum) = create_helper_biblio('CANNOT');
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $bibnum);
+$biblio = $builder->gimme_a_biblio({ itemtype => 'CANNOT' });
+($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);
 AddReserve(
     $branch_1,
     $borrowernumbers[0],
-    $bibnum,
+    $biblio->biblionumber,
     '',
     1,
 );
@@ -373,20 +369,20 @@ $dbh->do(q{
     INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
     VALUES (?, ?, ?, ?)
 }, {}, $branch_1, 'CAN', 1, 'homebranch');
-($bibnum, $title, $bibitemnum) = create_helper_biblio('CANNOT');
+$biblio = $builder->gimme_a_biblio({ itemtype => 'CANNOT' });
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $bibnum);
+    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'notReservable',
     "CanItemBeReserved should return 'notReservable'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => $branch_2, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
+    { homebranch => $branch_2, holdingbranch => $branch_1, itype => 'CAN' } , $biblio->biblionumber);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status},
     'cannotReserveFromOtherBranches',
     "CanItemBeReserved should return 'cannotReserveFromOtherBranches'");
 
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $bibnum);
+    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $biblio->biblionumber);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'OK',
     "CanItemBeReserved should return 'OK'");
 
@@ -399,9 +395,9 @@ $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM biblio');
 
-( $bibnum, $title, $bibitemnum ) = create_helper_biblio('ONLY1');
+$biblio = $builder->gimme_a_biblio({ itemtype => 'ONLY1' });
 ( $item_bibnum, $item_bibitemnum, $itemnumber )
-    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $bibnum );
+    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
 
 $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
@@ -412,7 +408,7 @@ $dbh->do(
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'OK', 'Patron can reserve item with hold limit of 1, no holds placed' );
 
-my $res_id = AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
+my $res_id = AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
 
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
@@ -424,10 +420,10 @@ subtest 'Test max_holds per library/patron category' => sub {
     $dbh->do('DELETE FROM issuingrules');
     $dbh->do('DELETE FROM circulation_rules');
 
-    ( $bibnum, $title, $bibitemnum ) = create_helper_biblio('TEST');
+    $biblio = $builder->gimme_a_biblio({ itemtype => 'TEST' });
     ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
       AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 },
-        $bibnum );
+        $biblio->biblionumber );
     $dbh->do(
         q{
             INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
@@ -436,9 +432,9 @@ subtest 'Test max_holds per library/patron category' => sub {
         {},
         '*', '*', 'TEST', 99, 99
     );
-    AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
-    AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
-    AddReserve( $branch_1, $borrowernumbers[0], $bibnum, '', 1, );
+    AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
+    AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
+    AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1, );
 
     my $count =
       Koha::Holds->search( { borrowernumber => $borrowernumbers[0] } )->count();
@@ -494,9 +490,9 @@ subtest 'Test max_holds per library/patron category' => sub {
 subtest 'Pickup location availability tests' => sub {
     plan tests => 4;
 
-    my ( $bibnum, $title, $bibitemnum ) = create_helper_biblio('ONLY1');
+    $biblio = $builder->gimme_a_biblio({ itemtype => 'ONLY1' });
     my ( $item_bibnum, $item_bibitemnum, $itemnumber )
-    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $bibnum );
+    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
     #Add a default rule to allow some holds
     $dbh->do(
         q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed, holds_per_record)
@@ -551,26 +547,26 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
 
     # Create 3 biblios with items
-    my ($bibnum_1) = create_helper_biblio( $itemtype->itemtype );
+    my $biblio_1 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype });
     my ( undef, undef, $itemnumber_1 ) = AddItem(
         {   homebranch    => $library->branchcode,
             holdingbranch => $library->branchcode
         },
-        $bibnum
+        $biblio_1->biblionumber
     );
-    my ($bibnum_2) = create_helper_biblio( $itemtype->itemtype );
+    my $biblio_2 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype });
     my ( undef, undef, $itemnumber_2 ) = AddItem(
         {   homebranch    => $library->branchcode,
             holdingbranch => $library->branchcode
         },
-        $bibnum_2
+        $biblio_2->biblionumber
     );
-    my ($bibnum_3) = create_helper_biblio( $itemtype->itemtype );
+    my $biblio_3 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype });
     my ( undef, undef, $itemnumber_3 ) = AddItem(
         {   homebranch    => $library->branchcode,
             holdingbranch => $library->branchcode
         },
-        $bibnum_3
+        $biblio_3->biblionumber
     );
 
     Koha::IssuingRules->search->delete;
@@ -590,7 +586,7 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         'Patron can reserve item with hold limit of 1, no holds placed'
     );
 
-    AddReserve( $library->branchcode, $patron->borrowernumber, $bibnum_1, '', 1, );
+    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_1->biblionumber, '', 1, );
 
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_1 ),
@@ -608,7 +604,7 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     );
 
     # Add a second reserve
-    my $res_id = AddReserve( $library->branchcode, $patron->borrowernumber, $bibnum_2, '', 1, );
+    my $res_id = AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_2->biblionumber, '', 1, );
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_2 ),
         { status => 'tooManyReservesToday', limit => 2 },
@@ -644,14 +640,14 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         { status => 'OK' },
         'Patron can reserve if holds_per_day is undef (i.e. undef is unlimited daily cap)'
     );
-    AddReserve( $library->branchcode, $patron->borrowernumber, $bibnum_1, '', 1, );
-    AddReserve( $library->branchcode, $patron->borrowernumber, $bibnum_2, '', 1, );
+    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_1->biblionumber, '', 1, );
+    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_2->biblionumber, '', 1, );
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_3 ),
         { status => 'OK' },
         'Patron can reserve if holds_per_day is undef (i.e. undef is unlimited daily cap)'
     );
-    AddReserve( $library->branchcode, $patron->borrowernumber, $bibnum_3, '', 1, );
+    AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_3->biblionumber, '', 1, );
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_3 ),
         { status => 'tooManyReserves', limit => 3 },
@@ -660,16 +656,3 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
 
     $schema->storage->txn_rollback;
 };
-
-# Helper method to set up a Biblio.
-sub create_helper_biblio {
-    my $itemtype = shift;
-    my $bib = MARC::Record->new();
-    my $title = 'Silence in the library';
-    $bib->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => $title),
-        MARC::Field->new('942', ' ', ' ', c => $itemtype),
-    );
-    return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
-}

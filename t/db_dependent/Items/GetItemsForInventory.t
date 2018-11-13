@@ -74,8 +74,8 @@ subtest 'Skip items with waiting holds' => sub {
     my $title_1 = 'Title 1, ';
     my $title_2 = 'Title 2, bizzarre one so doesn\'t already exist';
 
-    my $biblio_1 = create_helper_biblio( $itemtype->itemtype, $title_1 );
-    my $biblio_2 = create_helper_biblio( $itemtype->itemtype, $title_2 );
+    my $biblio_1 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype, title => $title_1 });
+    my $biblio_2 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype, title => $title_2 });
 
     my ( $items_1, $first_items_count ) = GetItemsForInventory();
     is( scalar @{$items_1}, $first_items_count, 'Results and count match' );
@@ -243,20 +243,4 @@ sub OldWay {
     }
 
     return (\@results, $iTotalRecords);
-}
-
-# Helper method to set up a Biblio.
-sub create_helper_biblio {
-    my $itemtype = shift;
-    my $title    = shift;
-    my $record   = MARC::Record->new();
-
-    $record->append_fields(
-        MARC::Field->new( '245', ' ', ' ', a => $title ),
-        MARC::Field->new( '942', ' ', ' ', c => $itemtype ),
-    );
-
-    my ($biblio_id) = AddBiblio( $record, '' );
-
-    return Koha::Biblios->find($biblio_id);
 }
