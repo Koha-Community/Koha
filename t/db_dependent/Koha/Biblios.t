@@ -143,11 +143,10 @@ subtest 'can_be_transferred' => sub {
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my ($bibnum, $title, $bibitemnum) = create_helper_biblio('ONLY1');
+    my $biblio = $builder->gimme_a_biblio({ itemtype => 'ONLY1' });
     my ($item_bibnum, $item_bibitemnum, $itemnumber)
-        = AddItem({ homebranch => $library1->branchcode, holdingbranch => $library1->branchcode }, $bibnum);
+        = AddItem({ homebranch => $library1->branchcode, holdingbranch => $library1->branchcode }, $biblio->biblionumber);
     my $item  = Koha::Items->find($itemnumber);
-    my $biblio = Koha::Biblios->find($bibnum);
 
     is(Koha::Item::Transfer::Limits->search({
         fromBranch => $library1->branchcode,
@@ -188,17 +187,3 @@ subtest 'can_be_transferred' => sub {
 };
 
 $schema->storage->txn_rollback;
-
-# Helper method to set up a Biblio.
-sub create_helper_biblio {
-    my $itemtype = shift;
-    my ($bibnum, $title, $bibitemnum);
-    my $bib = MARC::Record->new();
-    $title = 'Silence in the library';
-    $bib->append_fields(
-        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-        MARC::Field->new('245', ' ', ' ', a => $title),
-        MARC::Field->new('942', ' ', ' ', c => $itemtype),
-    );
-    return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
-}
