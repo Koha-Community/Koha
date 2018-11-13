@@ -11,7 +11,6 @@ sub get_split_callnumbers {
     my $regexs = from_json( $query->param('regexs') );
     my $c = $query->param('callnumbers');
     my @callnumbers = split "\n", $c;
-    use Data::Printer colored => 1; warn p $c;
     my @callnumbers_split;
     for my $callnumber ( @callnumbers ) {
         my @lines = C4::ClassSplitRoutine::RegEx::split_callnumber($callnumber, $regexs);
