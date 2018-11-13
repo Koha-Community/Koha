@@ -17059,6 +17059,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19349 - Add system preferences MarcFieldForCreatorId, MarcFieldForCreatorName, MarcFieldForModifierId, MarcFieldForModifierName)\n";
 }
 
+$DBversion = '18.06.00.059';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type`) VALUES  ('EmailSMSSendDriverFromAddress', '', '', 'Email SMS send driver from address override', 'Free');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20356 - Add EmailSMSSendDriverFromAddress system preference)\n";
+}
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
