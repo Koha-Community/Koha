@@ -49,12 +49,10 @@ sources and sorting rules.
 @EXPORT = qw(
     &GetClassSources
     &GetClassSource
-    &GetClassSortRules
     &GetClassSortRule
 
-    &GetSourcesForSortRule
     &GetClassSort
-    
+
 );
 
 =head2 GetClassSources
@@ -95,31 +93,6 @@ sub GetClassSources {
 
 }
 
-=head2 AddClassSource
-
-  DEPRECATED
-
-  AddClassSource($cn_source, $description, $used, $class_sort_rule);
-
-  Adds a class_sources row.
-
-=cut
-
-sub AddClassSource {
-
-    my ($cn_source, $description, $used, $class_sort_rule) = @_;
-    my $exists = GetClassSource($cn_source);
-    if ($exists) {
-        return 0;
-    }
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO `class_sources`
-                                           (`cn_source`, `description`, `used`, `class_sort_rule`)
-                                           VALUES (?, ?, ?, ?)");
-    $sth->execute($cn_source, $description, $used, $class_sort_rule);
-    return 1;
-}
-
 =head2 GetClassSource
 
   my $hashref = GetClassSource($cn_source);
@@ -138,110 +111,6 @@ sub GetClassSource {
     return $row;
 }
 
-=head2 ModClassSource 
-
-  DEPRECATED
-
-  ModClassSource($cn_source, $description, $used, $class_sort_rule);
-
-  Updates a class_sources row.
-
-=cut
-
-sub ModClassSource {
-
-    my ($cn_source, $description, $used, $class_sort_rule) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("UPDATE `class_sources`
-                                    SET  `description` = ?,
-                                         `used` = ?,
-                                         `class_sort_rule` = ?
-                                    WHERE `cn_source` = ?");
-    $sth->execute($description, $used, $class_sort_rule, $cn_source);
-
-}
-
-=head2 DelClassSource 
-
-  DEPRECATED
-
-  DelClassSource($cn_source);
-
-  Deletes class_sources row.
-
-=cut
-
-sub DelClassSource {
-
-    my ($cn_source) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("DELETE FROM `class_sources` WHERE `cn_source` = ?");
-    $sth->execute($cn_source);
-
-}
-
-=head2 GetClassSortRules
-
-  my $sort_rules = GetClassSortRules();
-
-Returns reference to hash of references to
-the class sorting rules, keyed on class_sort_rule
-
-=head3 Example
-
-  my $sort_rules = GetClassSortRules();
-  my @sort_rules = ();
-  foreach my $sort_rule (sort keys %$sort_rules) {
-      my $sort_rule = $sort_rules->{$sort_rule};
-      push @sort_rules,
-          {
-          rule        => $sort_rule->{'class_sort_rule'},
-          description => $sort_rule->{'description'},
-          sort_routine    => $sort_rule->{'sort_routine'}
-      }
-   }
-
-=cut
-
-sub GetClassSortRules {
-
-    my %class_sort_rules = ();
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT * FROM `class_sort_rules`");
-    $sth->execute();
-    while (my $sort_rule = $sth->fetchrow_hashref) {
-        $class_sort_rules{ $sort_rule->{'class_sort_rule'} } = $sort_rule;
-    }
-
-    return \%class_sort_rules;
-
-}
-
-=head2 AddClassSortRule
-
-  DEPRECATED
-
-  AddClassSortRule($class_sort_rule, $description, $sort_routine);
-
-  Adds a class_sort_rules row.
-
-=cut
-
-sub AddClassSortRule {
-
-    my ($class_sort_rule, $description, $sort_routine) = @_;
-    my $exists = GetClassSortRule($class_sort_rule);
-    if ($exists) {
-        return 0;
-    }
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("INSERT INTO `class_sort_rules`
-                                           (`class_sort_rule`, `description`, `sort_routine`)
-                                           VALUES (?, ?, ?)");
-    $sth->execute($class_sort_rule, $description, $sort_routine);
-    return 1;
-}
-
 =head2 GetClassSortRule
 
   my $hashref = GetClassSortRule($class_sort_rule);
@@ -258,71 +127,6 @@ sub GetClassSortRule {
     $sth->execute($class_sort_rule);
     my $row = $sth->fetchrow_hashref();
     return $row;
-}
-
-=head2 ModClassSortRule 
-
-  DEPRECATED
-
-  ModClassSortRule($class_sort_rule, $description, $sort_routine);
-
-  Updates a class_sort_rules row.
-
-=cut
-
-sub ModClassSortRule {
-
-    my ($class_sort_rule, $description, $sort_routine) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("UPDATE `class_sort_rules`
-                                    SET  `description` = ?,
-                                         `sort_routine` = ?
-                                    WHERE `class_sort_rule` = ?");
-    $sth->execute($description, $sort_routine, $class_sort_rule);
-
-}
-
-=head2 DelClassSortRule 
-
-  DEPRECATED
-
-  DelClassSortRule($class_sort_rule);
-
-  Deletes class_sort_rules row.
-
-=cut
-
-sub DelClassSortRule {
-
-    my ($class_sort_rule) = @_;
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("DELETE FROM `class_sort_rules` WHERE `class_sort_rule` = ?");
-    $sth->execute($class_sort_rule);
-
-}
-
-=head2 GetSourcesForSortRule
-
-  my @source = GetSourcesForSortRule($class_sort_rule);
-
-  Retrieves an array class_source.cn_rule for each source
-  that uses the supplied $class_sort_rule.
-
-=cut
-
-sub GetSourcesForSortRule {
-
-    my ($class_sort_rule) = @_;
-
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare("SELECT cn_source FROM class_sources WHERE class_sort_rule = ?");
-    $sth->execute($class_sort_rule);
-    my @sources = ();
-    while (my ($source) = $sth->fetchrow_array()) {
-        push @sources, $source;
-    }
-    return @sources;
-
 }
 
 =head2 GetClassSort
