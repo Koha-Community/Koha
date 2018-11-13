@@ -49,6 +49,14 @@ __PACKAGE__->table("class_sources");
   is_nullable: 0
   size: 10
 
+=head2 class_split_rule
+
+  data_type: 'varchar'
+  default_value: (empty string)
+  is_foreign_key: 1
+  is_nullable: 0
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -59,6 +67,14 @@ __PACKAGE__->add_columns(
   "used",
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "class_sort_rule",
+  {
+    data_type => "varchar",
+    default_value => "",
+    is_foreign_key => 1,
+    is_nullable => 0,
+    size => 10,
+  },
+  "class_split_rule",
   {
     data_type => "varchar",
     default_value => "",
@@ -97,9 +113,24 @@ __PACKAGE__->belongs_to(
   { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
 );
 
+=head2 class_split_rule
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:tu9NZrk0s8VBgtc1kNpXgg
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::ClassSplitRule>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "class_split_rule",
+  "Koha::Schema::Result::ClassSplitRule",
+  { class_split_rule => "class_split_rule" },
+  { is_deferrable => 1, on_delete => "RESTRICT", on_update => "RESTRICT" },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-11-13 15:24:28
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bD/Why2Bt7rmnA9cCLIPsA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
