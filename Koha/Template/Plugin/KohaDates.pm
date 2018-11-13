@@ -33,8 +33,8 @@ sub filter {
     my $dt = dt_from_string( $text, 'iso' );
 
     return $config->{as_due_date} ?
-        output_pref({ dt => $dt, as_due_date => 1 }) :
-        output_pref({ dt => $dt, dateonly => !$config->{with_hours} });
+        output_pref({ dt => $dt, as_due_date => 1, dateformat => $config->{dateformat} }) :
+        output_pref({ dt => $dt, dateonly => !$config->{with_hours}, dateformat => $config->{dateformat} });
 }
 
 1;

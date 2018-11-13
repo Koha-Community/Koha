@@ -3,7 +3,7 @@
 use Modern::Perl;
 use C4::Context;
 use Koha::DateUtils;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::MockModule;
 use t::lib::Mocks;
 
@@ -46,7 +46,10 @@ $module_context->mock(
 );
 
 $filtered_date = $filter->filter('1979-04-01');
-is( $filtered_date, '01/04/1979', 'us: dt_from_string should return the valid date if a DST is given' );
+is( $filtered_date, '01/04/1979', 'us: dt_from_string should return the valid date if a dst is given' );
+
+$filtered_date = $filter->filter('1979-04-01', undef, { dateformat => 'iso' } );
+is( $filtered_date, '1979-04-01', 'date should be returned in ISO if dateformat is passed with a value of iso' );
 
 $module_context->mock(
     'tz',
