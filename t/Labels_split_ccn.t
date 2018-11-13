@@ -51,7 +51,7 @@ foreach my $ccn (sort keys %$ccns) {
     my (@parts, @expected);
     ok($ccn, "ddcn: $ccn");
     ok(@expected = @{$ccns->{$ccn}}, "split expected to produce " . scalar(@expected) . " pieces");
-    ok(@parts = C4::Labels::Label::_split_ccn($ccn), "C4::Labels::Label::_split_ccn($ccn)");
+    ok(@parts = C4::ClassSplitRoutine::Generic::split_callnumber($ccn), "split LCC ($ccn)");
     ok(scalar(@expected) == scalar(@parts), sprintf("%d of %d pieces produced", scalar(@parts), scalar(@expected)));
     my $i = 0;
     foreach my $unit (@expected) {
