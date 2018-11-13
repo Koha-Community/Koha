@@ -636,7 +636,7 @@ sub extract_messages {
     $self->extract_messages_from_templates($tempdir, @tt_files);
     push @files_to_scan, @tt_files;
 
-    my $xgettext_cmd = "$self->{xgettext} -L Perl --from-code=UTF-8 "
+    my $xgettext_cmd = "$self->{xgettext} --force-po -L Perl --from-code=UTF-8 "
         . "--package-name=Koha --package-version='' "
         . "-k -k__ -k__x -k__n:1,2 -k__nx:1,2 -k__xn:1,2 -k__p:1c,2 "
         . "-k__px:1c,2 -k__np:1c,2,3 -k__npx:1c,2,3 -kN__ -kN__n:1,2 "
