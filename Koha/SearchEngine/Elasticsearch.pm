@@ -498,7 +498,7 @@ data for a MARC mapping.
 
 The returned C<$mappings> is not to to be confused with mappings provided by
 C<_foreach_mapping>, rather this sub accepts properties from a mapping as
-provided by C<_foreach_mapping> and expands it to this internal data stucture.
+provided by C<_foreach_mapping> and expands it to this internal data structure.
 In the caller context (C<_get_marc_mapping_rules>) the returned C<@mappings>
 is then applied to each MARC target (leader, control field data, subfield or
 joined subfields) and integrated into the mapping rules data structure used in
