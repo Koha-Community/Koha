@@ -17,6 +17,8 @@ package C4::Heading;
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+use Modern::Perl;
+
 use strict;
 use warnings;
 use 5.010;
@@ -170,6 +172,22 @@ sub preferred_authorities {
     my $skipmetadata = shift || undef;
     my ( $results, $total ) = _search( 'see-from', $skipmetadata );
     return $results;
+}
+
+=head2 valid_bib_heading_subfield
+
+    if (C4::Heading::valid_bib_heading_subfield('100', 'e', '')) ...
+
+=cut
+
+sub valid_bib_heading_subfield {
+    my $tag           = shift;
+    my $subfield      = shift;
+    my $marcflavour   = @_ ? shift : C4::Context->preference('marcflavour');
+
+    my $marc_handler = _marc_format_handler($marcflavour);
+
+    return $marc_handler->valid_bib_heading_subfield( $tag, $subfield );
 }
 
 =head1 INTERNAL METHODS

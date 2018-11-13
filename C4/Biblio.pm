@@ -539,7 +539,10 @@ sub LinkBibHeadingsToAuthorities {
                         '', '', "a" => "" . $field->subfield('a') );
                     map {
                         $authfield->add_subfields( $_->[0] => $_->[1] )
-                          if ( $_->[0] =~ /[A-z]/ && $_->[0] ne "a" )
+                          if ( $_->[0] =~ /[A-z]/ && $_->[0] ne "a"
+                            && C4::Heading::valid_bib_heading_subfield(
+                                $authority_type->auth_tag_to_report, $_->[0] )
+                            );
                     } $field->subfields();
                     $marcrecordauth->insert_fields_ordered($authfield);
 
@@ -2989,7 +2992,7 @@ sub _koha_modify_biblio {
 
     $sth->execute(
         $frameworkcode,      $biblio->{'author'},      $biblio->{'title'},         $biblio->{'unititle'}, $biblio->{'notes'},
-        $biblio->{'serial'}, $biblio->{'seriestitle'}, $biblio->{'copyrightdate'}, $biblio->{'abstract'}, $biblio->{'biblionumber'}
+        $biblio->{'serial'}, $biblio->{'seriestitle'}, $biblio->{'copyrightdate'} ? int($biblio->{'copyrightdate'}) : undef, $biblio->{'abstract'}, $biblio->{'biblionumber'}
     ) if $biblio->{'biblionumber'};
 
     if ( $dbh->errstr || !$biblio->{'biblionumber'} ) {
