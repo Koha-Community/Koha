@@ -357,7 +357,8 @@ subtest 'SearchItems test' => sub {
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my $cpl_items_before = SearchItemsByField( 'homebranch', $library1->{branchcode});
 
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->gimme_a_biblio({ title => 'Silence in the library' });
+    $builder->gimme_a_biblio({ title => 'Silence in the shadow' });
 
     my (undef, $initial_items_count) = SearchItems(undef, {rows => 1});
 
