@@ -660,6 +660,18 @@ sub HoldTitle {
     my $biblio = Koha::Biblios->find( $biblionumber );
     return { code => 'RecordNotFound' } unless $biblio;
 
+    my @hostitems = get_hostitemnumbers_of($biblionumber);
+    my @itemnumbers;
+    if (@hostitems){
+        push(@itemnumbers, @hostitems);
+    }
+
+    my $items = Koha::Items->search({ -or => { biblionumber => $biblionumber, itemnumber => { in => \@itemnumbers } } });
+
+    unless ( $items->count ) {
+        return { code => 'NoItems' };
+    }
+
     my $title = $biblio ? $biblio->title : '';
 
     # Check if the biblio can be reserved
