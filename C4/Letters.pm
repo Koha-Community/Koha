@@ -880,7 +880,7 @@ sub _parseletter {
     my $values = $values_in ? { %$values_in } : {};
 
     if ( $table eq 'borrowers' && $values->{'dateexpiry'} ){
-        $values->{'dateexpiry'} = format_sqldatetime( $values->{'dateexpiry'} );
+        $values->{'dateexpiry'} = output_pref({ dt => dt_from_string( $values->{'dateexpiry'} ), dateonly => 1 });
     }
 
     if ( $table eq 'reserves' && $values->{'waitingdate'} ) {
