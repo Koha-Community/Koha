@@ -535,7 +535,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('SpecifyReturnDate',1,'','Define whether to display \"Specify Return Date\" form in Circulation','YesNo'),
 ('SpineLabelAutoPrint','0','','If this setting is turned on, a print dialog will automatically pop up for the quick spine label printer.','YesNo'),
 ('SpineLabelFormat','<itemcallnumber><copynumber>','30|10','This preference defines the format for the quick spine label printer. Just list the fields you would like to see in the order you would like to see them, surrounded by <>, for example <itemcallnumber>.','Textarea'),
-('SpineLabelShowPrintOnBibDetails','0','','If turned on, a \"Print Label\" link will appear for each item on the bib details page in the staff interface.','YesNo'),
+('SpineLabelShowPrintOnBibDetails','0','','If turned on, a \"Print label\" link will appear for each item on the bib details page in the staff interface.','YesNo'),
 ('staffClientBaseURL','',NULL,'Specify the base URL of the staff client starting with http:// or https://. Do not include a trailing slash in the URL. (This must be filled in correctly for CAS, svc, and load_testing to work.)','free'),
 ('StaffDetailItemSelection', '1', NULL, 'Enable item selection in record detail page', 'YesNo'),
 ('StaffLangSelectorMode','footer','top|both|footer','Select the location to display the language selector in staff client','Choice'),
