@@ -107,6 +107,7 @@ sub list {
     my @output = ();
     foreach my $req(@requests) {
         my $to_push = $req->unblessed;
+        $to_push->{id_prefix} = $req->id_prefix;
         foreach my $p(@{$patron_arr}) {
             if ($p->{borrowernumber} == $req->borrowernumber) {
                 $to_push->{patron} = {

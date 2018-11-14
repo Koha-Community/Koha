@@ -1018,7 +1018,6 @@ sub TO_JSON {
     my ( $self, $embed ) = @_;
 
     my $object = $self->SUPER::TO_JSON();
-    $object->{id_prefix} = $self->id_prefix;
 
     return $object;
 }
