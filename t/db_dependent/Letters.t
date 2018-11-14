@@ -354,6 +354,21 @@ $dbh->do(q{INSERT INTO letter (module, code, name, title, content) VALUES ('orde
     is( $values->{dateexpiry}, '2015-12-13', "_parseletter doesn't modify its parameters" );
 }
 
+# Correctly format dateexpiry
+{
+    my $values = { dateexpiry => '2015-12-13', };
+
+    t::lib::Mocks::mock_preference('dateformat', 'metric');
+    t::lib::Mocks::mock_preference('timeformat', '24hr');
+    my $letter = C4::Letters::_parseletter({ content => "expiry on <<borrowers.dateexpiry>>"}, 'borrowers', $values);
+    is( $letter->{content}, 'expiry on 13/12/2015' );
+
+    t::lib::Mocks::mock_preference('dateformat', 'metric');
+    t::lib::Mocks::mock_preference('timeformat', '12hr');
+    $letter = C4::Letters::_parseletter({ content => "expiry on <<borrowers.dateexpiry>>"}, 'borrowers', $values);
+    is( $letter->{content}, 'expiry on 13/12/2015' );
+}
+
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {
         name => "my vendor",
