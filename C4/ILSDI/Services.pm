@@ -480,6 +480,9 @@ sub GetPatronInfo {
         $borrower->{'attributes'} = $attrs;
     }
 
+    # Add is expired information
+    $borrower->{'is_expired'} = $patron->is_expired ? 1 : 0;
+
     return $borrower;
 }
 
