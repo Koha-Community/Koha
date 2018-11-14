@@ -181,7 +181,7 @@ $template->param(
     patron_attr_header_loop => [ map { { header => $_->{description} } } grep { ! $_->{isclone} } @patron_attr_filter_loop ],
     branchfilter => $branchfilter,
     homebranchfilter => $homebranchfilter,
-    holdingbranchfilter => $homebranchfilter,
+    holdingbranchfilter => $holdingbranchfilter,
     borcatloop=> \@borcatloop,
     itemtypeloop => \@itemtypeloop,
     patron_attr_filter_loop => \@patron_attr_filter_loop,
