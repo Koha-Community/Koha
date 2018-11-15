@@ -2,6 +2,14 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Course reserves &rsaquo; [% IF course_name %] Edit [% course_name | html %] [% ELSE %] New course [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+<style>
+    #course_instructors {
+        float: left;
+    }
+    .instructor_line {
+        padding: .3em;
+    }
+</style>
 </head>
 
 <body id="courses_course" class="course">
@@ -78,16 +86,20 @@
                         <li>
                             <span class="label">Instructors:</span>
 
-                            <fieldset id="course_instructors">
-                                 <div id="instructors">[% FOREACH i IN instructors %]<div id="borrower_[% i.borrowernumber | html %]">[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"> Remove </a> )
-                                             <input type='hidden' name='instructors' value='[% i.borrowernumber | html %]' /></div>[% END %]</div>
-                            </fieldset>
-
-                            <fieldset>
-                                <label for="find_instructor">Instructor search:</label>
-                                <input autocomplete="off" id="find_instructor" type="text" style="width:150px" class="noEnterSubmit"/>
+                            <div id="course_instructors">
+                                 <div id="instructors">
+                                    [% FOREACH i IN instructors %]
+                                        <div class="instructor_line" id="borrower_[% i.borrowernumber | html %]">[% i.surname | html %], [% i.firstname | html %] ( <a href="#" class="removeInstructor"><i class="fa fa-trash"></i> Remove </a> )
+                                             <input type='hidden' name='instructors' value='[% i.borrowernumber | html %]' />
+                                         </div>
+                                     [% END %]
+                                 </div>
+                                <p>
+                                    <label for="find_instructor">Instructor search:</label>
+                                    <input autocomplete="off" id="find_instructor" type="text" style="width:150px" class="noEnterSubmit"/>
+                                </p>
                                 <div id="find_instructor_container"></div>
-                            </fieldset>
+                            </div>
                         <li>
                             <label for="staff_note">Staff note:</label>
                             <textarea name="staff_note" id="staff_note">[% staff_note | html %]</textarea>
@@ -174,7 +186,7 @@
             });
 
             function AddInstructor( name, borrowernumber ) {
-                div = "<div id='borrower_" + borrowernumber + "'>" + name + " ( <a href='#' class='removeInstructor'> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
+                div = "<div class='instructor_line' id='borrower_" + borrowernumber + "'>" + name + " ( <a href='#' class='removeInstructor'><i class='fa fa-trash'></i> " + _("Remove")+ " </a> ) <input type='hidden' name='instructors' value='" + borrowernumber + "' /></div>";
                 $('#instructors').append( div );
 
                 $('#find_instructor').val('').focus();

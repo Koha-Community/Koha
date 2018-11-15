@@ -10,6 +10,14 @@
 [% INCLUDE 'doc-head-close.inc' %]
 
 [% Asset.css("css/datatables.css") | $raw %]
+<style>
+    #instructors {
+        float: left;
+    }
+    .instructor_line {
+        padding: 0 .1em;
+    }
+</style>
 </head>
 
 <body id="courses_course_details" class="course">
@@ -45,7 +53,16 @@
                 <li><span class="label">Department</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) | html %]</li>
                 <li><span class="label">Course number</span> [% course.course_number | html %]</li>
                 <li><span class="label">Section</span> [% course.section | html %]</li>
-                <li><span class="label">Instructors</span> [% FOREACH i IN course.instructors %]<div class="instructor"><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a></div>[% END %]</li>
+                <li>
+                    <span class="label">Instructors</span>
+                    <div id="instructors">
+                        [% FOREACH i IN course.instructors %]
+                            <div class="instructor_line">
+                                <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% i.borrowernumber | uri %]">[% i.firstname | html %] [% i.surname | html %]</a>
+                            </div>
+                        [% END %]
+                    </div>
+                </li>
                 <li><span class="label">Staff note</span> [% course.staff_note | html %]</li>
                 <li><span class="label">Public note</span> [% course.public_note | html %]</li>
                 <li><span class="label">Student count</span> [% course.students_count | html %]</li>
