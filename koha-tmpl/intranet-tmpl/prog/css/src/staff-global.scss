@@ -2,6 +2,7 @@
 
 $font-main: Arial, Verdana, Helvetica, sans-serif;
 $font-monospace: "Courier New", Courier, monospace;
+$language-footer-min-height: 20px;
 
 @mixin default-button {
     background: linear-gradient(to bottom, #FFFFFF 0%, #F7F7F7 35%, #E0E0E0 100%);
@@ -582,8 +583,8 @@ label,
 }
 
 .main {
+    margin-bottom: $language-footer-min-height * 1.5;
     margin-top: 1em;
-    margin-bottom: 3em;
 }
 
 #login_controls {
@@ -3311,6 +3312,8 @@ button,
 }
 
 #changelanguage {
+    min-height: $language-footer-min-height;
+
     .dropdown-menu {
         > li {
             > a,
