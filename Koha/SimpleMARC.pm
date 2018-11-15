@@ -190,7 +190,7 @@ sub _update_field {
         if ( $fieldName < 10 ) {
             foreach my $value ( @values ) {
                 my $field = MARC::Field->new( $fieldName, $value );
-                $record->append_fields( $field );
+                $record->insert_fields_ordered( $field );
             }
         } else {
             warn "Invalid operation, trying to add a new field without subfield";
@@ -233,7 +233,7 @@ sub _update_subfield {
         ## Field does not exist, create it.
         foreach my $value ( @values ) {
             my $field = MARC::Field->new( $fieldName, '', '', "$subfieldName" => $values[$i++] );
-            $record->append_fields( $field );
+            $record->insert_fields_ordered( $field );
         }
     }
 }
@@ -544,7 +544,9 @@ sub _copy_move_field {
         }
         push @new_fields, $new_field;
     }
-    $record->append_fields( @new_fields );
+    # workaround for MARC::Record->insert_fields_ordered bug:
+    # if consecutive array elements have same tags, reverses their order
+    $record->insert_fields_ordered( reverse(@new_fields) );
 }
 
 sub _copy_move_subfield {
