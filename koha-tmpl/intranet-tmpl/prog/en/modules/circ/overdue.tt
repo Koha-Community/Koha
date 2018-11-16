@@ -3,6 +3,9 @@
 [% USE KohaDates %]
 [%- USE Branches -%]
 [%- USE Price -%]
+[%- USE ItemTypes -%]
+[%- USE Categories -%]
+[%- USE ColumnsSettings -%]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Circulation &rsaquo; Items overdue as of [% todaysdate | html %]</title>
@@ -51,10 +54,14 @@
         <tr>
           <th class="title-string">Due date</th>
           <th>Patron</th>
-          <th>Library</th>
-          <th>Title</th>
+          <th>Patron category</th>
+          <th>Patron library</th>
+          <th class="anti-the">Title</th>
+          <th>Home library</th>
+          <th>Holding library</th>
           <th>Barcode</th>
           <th>Call number</th>
+          <th>Item type</th>
           <th>Price</th>
           <th>Non-public note</th>
         </tr>
@@ -70,10 +77,14 @@
                 [% IF ( overdueloo.email ) %][<a href="mailto:[% overdueloo.email | uri %]?subject=[% INCLUDE subject %] [% overdueloo.title | uri %]">email</a>][% END %]
                 [% IF ( overdueloo.phone ) %]([% overdueloo.phone | html %])[% ELSIF ( overdueloo.mobile ) %]([% overdueloo.mobile | html %])[% ELSIF ( overdueloo.phonepro ) %]([% overdueloo.phonepro | html %])[% END %]</td>
             [% END %]
-          <td>[% Branches.GetName( overdueloo.patron.branchcode ) | html %]</td>
+            <td>[% Categories.GetName( overdueloo.patron.categorycode ) | html %]</td>
+            <td>[% Branches.GetName( overdueloo.homebranchcode ) | html %]</td>
           <td>[% INCLUDE 'biblio-default-view.inc' biblionumber = overdueloo.biblionumber %][% INCLUDE 'biblio-title.inc' biblio=overdueloo %]</a> [% IF ( overdueloo.author ) %], by [% overdueloo.author | html %][% END %][% IF ( overdueloo.enumchron ) %], [% overdueloo.enumchron | html %][% END %]</td>
+            <td>[% Branches.GetName( overdueloo.holdingbranchcode ) | html %]</td>
+            <td>[% Branches.GetName( overdueloo.patron.branchcode ) | html %]</td>
           <td><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% overdueloo.biblionumber | uri %]&amp;itemnumber=[% overdueloo.itemnum | uri %]#item[% overdueloo.itemnum | uri %]">[% overdueloo.barcode | html %]</a></td>
           <td>[% overdueloo.itemcallnumber | html %]</td>
+            <td>[% ItemTypes.GetDescription( overdueloo.itemtype ) | html %]</td>
           <td>[% overdueloo.replacementprice | $Price %]</td>
           <td>[% overdueloo.itemnotes_nonpublic | html %]</td>
         </tr>
@@ -213,7 +224,8 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
-    <script type="text/javascript">
+    [% INCLUDE 'columns_settings.inc' %]
+    <script>
         function clone_parent(node) {
             var parent = node.parentNode;
             var clone = parent.cloneNode(true);
@@ -266,13 +278,17 @@
         }
 
         $(document).ready(function(){
-            $("#overduest").dataTable($.extend(true, {}, dataTablesDefaults, {
+            var columns_settings = [% ColumnsSettings.GetColumns( 'circ', 'overdues', 'circ-overdues', 'json' ) | $raw %];
+            KohaTable("overduest", {
                 "sPaginationType": "full",
                 "aaSorting": [[0, 'asc']],
                 "aoColumnDefs": [
-                    { "sType": "title-string", "aTargets": [ "title-string" ] }
-                ]
-            }));
+                    { "sType": "title-string", "aTargets": [ "title-string" ] },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] }
+                ],
+                "autoWidth": false,
+                "stateSave": true
+            }, columns_settings);
         });
   </script>
 [% END %]

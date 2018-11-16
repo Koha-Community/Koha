@@ -920,6 +920,37 @@ modules:
         -
           columnname: items_needed
 
+    overdues:
+      circ-overdues:
+        -
+          columnname: due_date
+        -
+          columnname: patron
+        -
+          columnname: patron_category
+          is_hidden: 1
+        -
+          columnname: patron_library
+        -
+          columnname: title
+        -
+          columnname: home_library
+          is_hidden: 1
+        -
+          columnname: holding_library
+          is_hidden: 1
+        -
+          columnname: barcode
+        -
+          columnname: call_number
+        -
+          columnname: item_type
+          is_hidden: 1
+        -
+          columnname: price
+        -
+          columnname: non-public_note
+
   opac:
     biblio-detail:
       holdingst:

@@ -248,7 +248,8 @@ if ($noreport) {
         items.itemcallnumber,
         items.replacementprice,
         items.enumchron,
-        items.itemnotes_nonpublic
+        items.itemnotes_nonpublic,
+        items.itype
       FROM issues
     LEFT JOIN borrowers   ON (issues.borrowernumber=borrowers.borrowernumber )
     LEFT JOIN items       ON (issues.itemnumber=items.itemnumber)
@@ -331,12 +332,13 @@ if ($noreport) {
             biblionumber           => $data->{biblionumber},
             title                  => $data->{title},
             author                 => $data->{author},
-            homebranchcode         => $data->{homebranchcode},
-            holdingbranchcode      => $data->{holdingbranchcode},
+            homebranchcode         => $data->{homebranch},
+            holdingbranchcode      => $data->{holdingbranch},
             itemcallnumber         => $data->{itemcallnumber},
             replacementprice       => $data->{replacementprice},
             itemnotes_nonpublic    => $data->{itemnotes_nonpublic},
             enumchron              => $data->{enumchron},
+            itemtype               => $data->{itype},
             patron_attr_value_loop => \@patron_attr_value_loop,
         };
     }
