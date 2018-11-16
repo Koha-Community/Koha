@@ -17111,6 +17111,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 15836 - Add class_sort_rules.split_routine and split_regex)\n";
 }
 
+$DBversion = '18.06.00.061';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO `systempreferences` (`variable`,`value`,`explanation`,`options`,`type`) VALUES
+        ('ElasticsearchIndexStatus_biblios', '0', 'Biblios index status', NULL, NULL),
+        ('ElasticsearchIndexStatus_authorities', '0', 'Authorities index status', NULL, NULL)
+    });
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 19893 - Add elasticsearch index status preferences)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
