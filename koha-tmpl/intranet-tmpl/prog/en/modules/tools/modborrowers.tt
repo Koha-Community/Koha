@@ -2,6 +2,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE Categories %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
@@ -158,19 +159,19 @@
                                                     [% IF ( op == 'show' ) %]
                                                         <td><input type="checkbox" name="borrowernumber" value="[% borrower.borrowernumber %]" checked="checked" /></td>
                                                     [% END %]
-                                                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]">[% borrower.cardnumber %]</a></td>
-                                                    <td>[% borrower.surname %]</td>
-                                                    <td>[% borrower.firstname %]</td>
-                                                    <td>[% Branches.GetName( borrower.branchcode ) %]</td>
-                                                    <td>[% borrower.category_description %]</td>
-                                                    <td>[% borrower.city %]</td>
-                                                    <td>[% borrower.state %]</td>
-                                                    <td>[% borrower.zipcode %]</td>
-                                                    <td>[% borrower.country %]</td>
-                                                    <td><span title="[% borrower.dateenrolled %]">[% borrower.dateenrolled | $KohaDates %]</span></td>
-                                                    <td><span title="[% borrower.dateexpiry %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
-                                                    <td>[% borrower.borrowernotes %]</td>
-                                                    <td>[% borrower.opacnote %]</td>
+                                                    <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber | uri %]">[% borrower.cardnumber | html %]</a></td>
+                                                    <td>[% borrower.surname | html %]</td>
+                                                    <td>[% borrower.firstname | html %]</td>
+                                                    <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
+                                                    <td>[% Categories.GetName(borrower.categorycode) | html %]</td>
+                                                    <td>[% borrower.city | html %]</td>
+                                                    <td>[% borrower.state | html %]</td>
+                                                    <td>[% borrower.zipcode | html %]</td>
+                                                    <td>[% borrower.country | html %]</td>
+                                                    <td><span title="[% borrower.dateenrolled | html %]">[% borrower.dateenrolled | $KohaDates %]</span></td>
+                                                    <td><span title="[% borrower.dateexpiry | html %]">[% borrower.dateexpiry | $KohaDates %]</span></td>
+                                                    <td>[% borrower.borrowernotes | html %]</td>
+                                                    <td>[% borrower.opacnote | html %]</td>
                                                     [% FOREACH pa IN borrower.patron_attributes %]
                                                         [% IF ( pa.code ) %]
                                                             <td>[% pa.code %]=[% pa.value %]</td>
