@@ -94,11 +94,15 @@ subtest 'list() tests' => sub {
         }
     );
 
+    # The api response is always augmented with the id_prefix
+    my $response = $illrequest->unblessed;
+    $response->{id_prefix} = $illrequest->id_prefix;
+
     # One illrequest created, should get returned
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)->status_is(200)->json_is( [ $illrequest->unblessed ] );
+    $t->request_ok($tx)->status_is(200)->json_is( [$response] );
 
     # One illrequest created, returned with augmented data
     $tx = $t->ua->build_tx( GET =>
@@ -123,12 +127,16 @@ subtest 'list() tests' => sub {
         }
     );
 
+    # The api response is always augmented with the id_prefix
+    my $response2 = $illrequest2->unblessed;
+    $response2->{id_prefix} = $illrequest2->id_prefix;
+
     # Two illrequest created, should get returned
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
-      ->json_is( [ $illrequest->unblessed, $illrequest2->unblessed ] );
+      ->json_is( [ $response, $response2 ] );
 
     # Warn on unsupported query parameter
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests?request_blah=blah' );
