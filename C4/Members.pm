@@ -39,7 +39,6 @@ use C4::NewsChannels; #get slip news
 use DateTime;
 use Koha::Database;
 use Koha::DateUtils;
-use Text::Unaccent qw( unac_string );
 use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
 use Koha::Holds;
