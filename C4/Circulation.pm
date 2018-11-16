@@ -2302,22 +2302,20 @@ C<$itm> itemnumber
 C<$exemptfine> BOOL -- remove overdue charge associated with this issue. 
 C<$dropboxmode> BOOL -- remove lastincrement on overdue charge associated with this issue.
 
-Internal function, called only by AddReturn
+Internal function
 
 =cut
 
 sub _FixOverduesOnReturn {
-    my ($borrowernumber, $item);
-    unless ($borrowernumber = shift) {
+    my ($borrowernumber, $item, $exemptfine, $dropbox ) = @_;
+    unless( $borrowernumber ) {
         warn "_FixOverduesOnReturn() not supplied valid borrowernumber";
         return;
     }
-    unless ($item = shift) {
+    unless( $item ) {
         warn "_FixOverduesOnReturn() not supplied valid itemnumber";
         return;
     }
-    my ($exemptfine, $dropbox) = @_;
-    my $dbh = C4::Context->dbh;
 
     # check for overdue fine
     my $accountline = Koha::Account::Lines->search(
@@ -2332,7 +2330,6 @@ sub _FixOverduesOnReturn {
     )->next();
     return 0 unless $accountline;    # no warning, there's just nothing to fix
 
-    my $uquery;
     if ($exemptfine) {
         my $amountoutstanding = $accountline->amountoutstanding;
 
