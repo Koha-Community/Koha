@@ -2338,7 +2338,7 @@ sub _FixOverduesOnReturn {
                 type => 'Forgiven',
                 amount => $amountoutstanding * -1,
             }
-        );
+        )->store();
 
         if (C4::Context->preference("FinesLog")) {
             &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
@@ -2353,7 +2353,7 @@ sub _FixOverduesOnReturn {
                 type => 'Dropbox',
                 amount => $accountline->lastincrement * -1,
             }
-        );
+        )->store();
 
         if ( C4::Context->preference("FinesLog") ) {
             &logaction( "FINES", 'MODIFY', $borrowernumber,
