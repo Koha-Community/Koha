@@ -325,7 +325,7 @@ The method has no return value.
 =item C<$mappings>
 
 Arrayref of mappings containing arrayrefs in the format
-[C<$taget>, C<$options>] where C<$target> is the name of the target field and
+[C<$target>, C<$options>] where C<$target> is the name of the target field and
 C<$options> is a hashref containing processing directives for this particular
 mapping.
 
@@ -546,7 +546,7 @@ sub marc_records_to_documents {
     my @mappings = _field_mappings($facet, $suggestible, $sort, $target_name, $target_type, $range)
 
 Get mappings, an internal data structure later used by
-L<_process_mappings($mappings, $data, $record_document)> to process MARC target
+L<_process_mappings($mappings, $data, $record_document, $altscript)> to process MARC target
 data for a MARC mapping.
 
 The returned C<$mappings> is not to to be confused with mappings provided by
