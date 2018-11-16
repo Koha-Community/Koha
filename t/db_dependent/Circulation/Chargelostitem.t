@@ -68,8 +68,8 @@ C4::Accounts::chargelostitem( $borrowernumber, $issue->{itemnumber}, '1.00');
 
 my $accountline = Koha::Account::Lines->search( { borrowernumber => $borrowernumber, accounttype => 'PF' } )->next();
 
-is( int($accountline->amount), int($itemtype->{processfee}), "The accountline amount should be precessfee value " );
-is( $accountline->itemnumber, $itemnumber1, "The accountline itemnumber should the linked with barcode '0101'" );
+is( int($accountline->amount), int($itemtype->{processfee}), "The accountline amount should be processfee value " );
+is( $accountline->itemnumber, $itemnumber1, "The accountline itemnumber should be linked with barcode '0101'" );
 is( $accountline->note, C4::Context->preference("ProcessingFeeNote"), "The accountline description should be 'test'" );
 
 my $lost_ao = Koha::Account::Offsets->search( { type => 'Lost Item' } );
@@ -77,3 +77,5 @@ is( $lost_ao->count, 1, 'Account offset of type "Lost Item" created' );
 
 my $processing_fee_ao = Koha::Account::Offsets->search( { type => 'Processing Fee' } );
 is( $processing_fee_ao->count, 1, 'Account offset of type "Processing Fee" created' );
+
+$schema->storage->txn_rollback;
