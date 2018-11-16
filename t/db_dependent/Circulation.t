@@ -2043,7 +2043,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 };
 
 subtest '_FixOverduesOnReturn' => sub {
-    plan tests => 6;
+    plan tests => 10;
 
     # Generate test biblio
     my $title  = 'Koha for Dummies';
@@ -2096,9 +2096,12 @@ subtest '_FixOverduesOnReturn' => sub {
     C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $itemnumber, 1 );
 
     $accountline->_result()->discard_changes();
+    my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'Forgiven' })->next();
 
     is( $accountline->amountoutstanding, '0.000000', 'Fine has been reduced to 0' );
     is( $accountline->accounttype, 'FFOR', 'Open fine ( account type FU ) has been set to fine forgiven ( account type FFOR )');
+    is( ref $offset, "Koha::Account::Offset", "Found matching offset for fine reduction via forgiveness" );
+    is( $offset->amount, '-99.000000', "Amount of offset is correct" );
 
     ## Run again, with dropbox mode enabled
     $accountline->set(
@@ -2111,9 +2114,12 @@ subtest '_FixOverduesOnReturn' => sub {
     C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $itemnumber, 0, 1 );
 
     $accountline->_result()->discard_changes();
+    $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'Dropbox' })->next();
 
     is( $accountline->amountoutstanding, '90.000000', 'Fine has been reduced to 90' );
     is( $accountline->accounttype, 'F', 'Open fine ( account type FU ) has been closed out ( account type F )');
+    is( ref $offset, "Koha::Account::Offset", "Found matching offset for fine reduction via dropbox" );
+    is( $offset->amount, '-9.000000', "Amount of offset is correct" );
 };
 
 subtest 'Set waiting flag' => sub {
