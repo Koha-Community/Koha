@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 114;
+use Test::More tests => 115;
 
 use DateTime;
 
