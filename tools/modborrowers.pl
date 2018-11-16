@@ -336,9 +336,7 @@ if ( $op eq 'do' ) {
     for my $borrowernumber ( @borrowernumbers ) {
         my $patron = Koha::Patrons->find( $borrowernumber );
         if ( $patron ) {
-            my $category_description = $patron->category->description;
             $patron = $patron->unblessed;
-            $patron->{category_description} = $category_description;
             $patron->{patron_attributes} = C4::Members::Attributes::GetBorrowerAttributes( $patron->{borrowernumber} );
             $max_nb_attr = scalar( @{ $patron->{patron_attributes} } )
                 if scalar( @{ $patron->{patron_attributes} } ) > $max_nb_attr;
@@ -360,7 +358,6 @@ if ( $op eq 'do' ) {
     $template->param( borrowers => \@borrowers );
     $template->param( attributes_header => \@attributes_header );
 
-    $template->param( borrowers => \@borrowers );
     $template->param( errors => \@errors );
 } else {
 

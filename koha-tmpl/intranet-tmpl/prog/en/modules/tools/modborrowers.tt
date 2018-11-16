@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE Branches %]
+[% USE Categories %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Batch patron modification</title>
@@ -164,7 +165,7 @@
                                                     <td>[% borrower.surname | html %]</td>
                                                     <td>[% borrower.firstname | html %]</td>
                                                     <td>[% Branches.GetName( borrower.branchcode ) | html %]</td>
-                                                    <td>[% borrower.category_description | html %]</td>
+                                                    <td>[% Categories.GetName(borrower.categorycode) | html %]</td>
                                                     <td>[% borrower.city | html %]</td>
                                                     <td>[% borrower.state | html %]</td>
                                                     <td>[% borrower.zipcode | html %]</td>
