@@ -348,7 +348,6 @@ if ( $op eq 'do' ) {
     $template->param( borrowers => \@borrowers );
     $template->param( attributes_header => \@attributes_header );
 
-    $template->param( borrowers => \@borrowers );
     $template->param( errors => \@errors );
 } else {
 
