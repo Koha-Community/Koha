@@ -157,9 +157,7 @@
                                                 [% IF ( ActionsLoo.conditional_comparison_equals ) %] matches [% END %]
                                                 [% IF ( ActionsLoo.conditional_comparison_not_equals ) %] does not match [% END %]
 
-                                                [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]
-                                                <strong>[% ActionsLoo.conditional_value | html %]</strong>
-                                                [% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
+                                                [% IF ( ActionsLoo.conditional_regex ) %] RegEx m/[% END %]<strong>[% ActionsLoo.conditional_value | html %]</strong>[% IF ( ActionsLoo.conditional_regex ) %]/[% END %]
                                             [% END %]
                                         </td>
                                         <td>[% ActionsLoo.description | html %]</td>
@@ -356,6 +354,10 @@
         var MSG_MMT_CONFIRM_DEL_TEMPLATE_ACTION = _("Are you sure you wish to delete this template action?");
         var MSG_MMT_EDIT_ACTION = _("Edit action %s");
         var MSG_MMT_UPDATE_ACTION = _("Update action");
+        var MSG_MMT_CONDITIONAL_FIELD_REQUIRED = _("The conditional field should be filled.");
+        var MSG_MMT_CONDITIONAL_COMPARISON_REQUIRED = _("The conditional comparison operator should be filled.");
+        var MSG_MMT_CONDITIONAL_VALUE_REQUIRED = _("The conditional value should be filled.");
+        var MSG_MMT_CONDITIONAL_VALUE_REGEX_REQUIRED = _("The conditional regular expression should be filled.");
     </script>
     [% Asset.js("js/marc_modification_templates.js") | $raw %]
 [% END %]
