@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+package Koha::pdfformat::layout2pagesde;
 
 #example script to print a basketgroup
 #written 07/11/08 by john.soros@biblibre.com and paul.poulain@biblibre.com
@@ -21,7 +21,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
-package pdfformat::layout2pagesde;
 use vars qw(@ISA @EXPORT);
 use MIME::Base64;
 use Modern::Perl;
