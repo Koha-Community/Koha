@@ -41,6 +41,26 @@ $(document).ready(function() {
             alert( MSG_MMT_SOURCE_FIELD );
             return false;
         }
+        if ( $("#conditional").val() == 'if' || $("#conditional").val() == 'unless' ) {
+            if ( $("#conditional_field").val() == '' ) {
+                alert( MSG_MMT_CONDITIONAL_FIELD_REQUIRED );
+                return false;
+            }
+            if ( $("#conditional_comparison").val() == '' ) {
+                alert( MSG_MMT_CONDITIONAL_COMPARISON_REQUIRED );
+                return false
+            }
+            if ( $("#conditional_value").val() == '' &&
+                 ( $("#conditional_comparison").val() == 'equals' || $("#conditional_comparison").val() == 'not_equals' ) ) {
+                if ( document.getElementById('conditional_regex').checked == true ) {
+                    alert( MSG_MMT_CONDITIONAL_VALUE_REGEX_REQUIRED );
+                    return false;
+                } else {
+                    alert( MSG_MMT_CONDITIONAL_VALUE_REQUIRED );
+                    return false;
+                }
+            }
+        }
     });
 
     $("#conditional_field,#from_field").change(function(){
@@ -270,6 +290,7 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('conditional_value').value = conditional_value;
 
     document.getElementById('conditional_regex').checked = parseInt( conditional_regex );
+    document.getElementById('conditional_regex').onchange();
 
     document.getElementById('description').value = description;
 
