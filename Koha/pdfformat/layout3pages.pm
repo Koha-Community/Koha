@@ -1,26 +1,26 @@
-#!/usr/bin/perl
+package Koha::pdfformat::layout3pages;
 
 #example script to print a basketgroup
 #written 07/11/08 by john.soros@biblibre.com and paul.poulain@biblibre.com
 
-# Copyright 2008-2009, 2013 BibLibre SARL
+# Copyright 2008-2009 BibLibre SARL
 #
 # This file is part of Koha.
 #
-# Koha is free software; you can redistribute it and/or modify it under the
-# terms of the GNU General Public License as published by the Free Software
-# Foundation; either version 3 of the License, or (at your option) any later
-# version.
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
 #
-# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
-# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
-# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
 #
-# You should have received a copy of the GNU General Public License along
-# with Koha; if not, see <http://www.gnu.org/licenses>.
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 #you can use any PDF::API2 module, all you need to do is return the stringifyed pdf object from the printpdf sub.
-package pdfformat::layout3pagesfr;
 use vars qw(@ISA @EXPORT);
 use MIME::Base64;
 use List::MoreUtils qw/uniq/;
@@ -35,8 +35,8 @@ use Koha::Libraries;
 BEGIN {
          use Exporter   ();
          our (@ISA, @EXPORT, @EXPORT_OK, %EXPORT_TAGS);
-         @ISA    = qw(Exporter);
-         @EXPORT = qw(printpdf);
+	@ISA    = qw(Exporter);
+	@EXPORT = qw(printpdf);
 }
 
 
@@ -53,7 +53,7 @@ use PDF::Table;
 
 sub printorders {
     my ($pdf, $basketgroup, $baskets, $orders) = @_;
-
+    
     my $cur_format = C4::Context->preference("CurrencyFormat");
 
     $pdf->mediabox($height/mm, $width/mm);
@@ -68,24 +68,24 @@ sub printorders {
         $box->rectxy(($width - 10)/mm, ($height - 5)/mm, 10/mm, ($height - 25)/mm);
         $box->stroke;
 #         $box->restore();
-
+        
         # create a text
         my $text = $page->text;
         # add basketgroup number
         $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
         $text->translate(20/mm,  ($height-15)/mm);
-        $text->text("Commande N°".$basketgroup->{'id'}.". Panier N° ".$basket->{basketno}.". ".$basket->{booksellernote});
+        $text->text("Order no. ".$basketgroup->{'id'}.". Basket no. ".$basket->{basketno}.". ".$basket->{booksellernote});
         $text->translate(20/mm,  ($height-20)/mm);
         $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
-        $text->text( ( $billing_library ? "Facturation à " . $billing_library->branchname : "" )
-            . ( $billing_library and $delivery_library ? " et " : "" )
-            . ( $delivery_library ? "livraison à " . $delivery_library->branchname : "" )
+        $text->text( ( $billing_library ? "Billing at " . $billing_library->branchname : "" )
+            . ( $billing_library and $delivery_library ? " and " : "" )
+            . ( $delivery_library ? "delivery at " . $delivery_library->branchname : "" )
         );
 
         my $pdftable = new PDF::Table();
         my $abaskets;
         my $arrbasket;
-        my @keys = ('Document', 'Qté', 'Prix', 'Prix net', '% Remise', 'Remise', 'Taux TVA', 'Total HT', 'Total TTC');
+        my @keys = ('Document', 'Qty', 'RRP tax exc.', 'RRP tax inc.', 'Discount', 'Discount price', 'GST rate', 'Total tax exc.', 'Total tax inc.');
         for my $bkey (@keys) {
             push(@$arrbasket, $bkey);
         }
@@ -97,33 +97,32 @@ sub printorders {
             $titleinfo = "";
             if ( C4::Context->preference("marcflavour") eq 'UNIMARC' ) {
                 $titleinfo =  $line->{title} . " / " . $line->{author} .
-                    ( $line->{isbn} ? " ISBN : " . $line->{isbn} : '' ) .
-                    ( $line->{en} ? " EN : " . $line->{en} : '' ) .
+                    ( $line->{isbn} ? " ISBN: " . $line->{isbn} : '' ) .
+                    ( $line->{en} ? " EN: " . $line->{en} : '' ) .
                     ( $line->{itemtype} ? ", " . $line->{itemtype} : '' ) .
                     ( $line->{edition} ? ", " . $line->{edition} : '' ) .
-                    ( $line->{publishercode} ? ' publié par '. $line->{publishercode} : '') .
+                    ( $line->{publishercode} ? ' published by '. $line->{publishercode} : '') .
                     ( $line->{publicationyear} ? ', '. $line->{publicationyear} : '');
             }
             else { # MARC21, NORMARC
                 $titleinfo =  $line->{title} . " " . $line->{author} .
-                    ( $line->{isbn} ? " ISBN : " . $line->{isbn} : '' ) .
-                    ( $line->{en} ? " EN : " . $line->{en} : '' ) .
+                    ( $line->{isbn} ? " ISBN: " . $line->{isbn} : '' ) .
+                    ( $line->{en} ? " EN: " . $line->{en} : '' ) .
                     ( $line->{itemtype} ? " " . $line->{itemtype} : '' ) .
                     ( $line->{edition} ? ", " . $line->{edition} : '' ) .
-                    ( $line->{publishercode} ? '  publié par '. $line->{publishercode} : '') .
+                    ( $line->{publishercode} ? ' published by '. $line->{publishercode} : '') .
                     ( $line->{copyrightdate} ? ' '. $line->{copyrightdate} : '');
             }
-
             push( @$arrbasket,
-                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote pour le fournisseur : ". $line->{order_vendornote} : '' ),
+                $titleinfo. ($line->{order_vendornote} ? "\n----------------\nNote for vendor : " . $line->{order_vendornote} : '' ),
                 $line->{quantity},
-                Koha::Number::Price->new( $line->{rrp_tax_excluded})->format,
-                Koha::Number::Price->new( $line->{rrp_tax_included})->format,
-                Koha::Number::Price->new( $line->{discount})->format.'%',
+                Koha::Number::Price->new( $line->{rrp_tax_excluded} )->format,
+                Koha::Number::Price->new( $line->{rrp_tax_included} )->format,
+                Koha::Number::Price->new( $line->{discount} )->format . '%',
                 Koha::Number::Price->new( $line->{rrp_tax_excluded} - $line->{ecost_tax_excluded})->format,
-                Koha::Number::Price->new( $line->{tax_rate} * 100)->format.'%',
-                Koha::Number::Price->new( $line->{total_tax_excluded})->format,
-                Koha::Number::Price->new( $line->{total_tax_included})->format,
+                Koha::Number::Price->new( $line->{tax_rate} * 100 )->format . '%',
+                Koha::Number::Price->new( $line->{total_tax_excluded} )->format,
+                Koha::Number::Price->new( $line->{total_tax_included} )->format,
             );
             push(@$abaskets, $arrbasket);
         }
@@ -182,17 +181,17 @@ sub printorders {
 
 sub printbaskets {
     my ($pdf, $basketgroup, $hbaskets, $bookseller, $GSTrate, $orders) = @_;
-
+    
     # get library name
     my $libraryname = C4::Context->preference("LibraryName");
-
+    
     my $cur_format = C4::Context->preference("CurrencyFormat");
 
     $pdf->mediabox($width/mm, $height/mm);
     my $page = $pdf->openpage(2);
     # create a text
     my $text = $page->text;
-
+    
     # add basketgroup number
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
     $text->translate(($width-40)/mm,  ($height-53)/mm);
@@ -205,7 +204,7 @@ sub printbaskets {
     my $abaskets;
     my $arrbasket;
     # header of the table
-    my @keys = ('Lot', 'Panier', 'Prix', 'Prix net', 'Taux TVA', 'TVA', 'Remise', 'Total HT', 'Total TTC');
+    my @keys = ('Lot',  'Basket (No.)','Total RRP tax exc.', 'Total RRP tax inc.', 'GST rate', 'GST', 'Total discount', 'Total tax exc.', 'Total tax inc.');
     for my $bkey (@keys) {
         push(@$arrbasket, $bkey);
     }
@@ -318,10 +317,10 @@ sub printhead {
 
     # open 1st page (with the header)
     my $page = $pdf->openpage(1);
-
+    
     # create a text
     my $text = $page->text;
-
+    
     # print the libraryname in the header
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 6/mm );
     $text->translate(30/mm,  ($height-28.5)/mm);
@@ -331,14 +330,14 @@ sub printhead {
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 8/mm );
     $text->translate(100/mm,  ($height-5-48)/mm);
     $text->text($basketgroup->{'id'});
-
+    
     # print the date
     my $today = output_pref({ dt => dt_from_string, dateonly => 1 });
     $text->translate(130/mm,  ($height-5-48)/mm);
     $text->text($today);
-
+    
     $text->font( $pdf->corefont("Times", -encoding => "utf8"), 4/mm );
-
+    
     # print billing infos
     $text->translate(100/mm,  ($height-86)/mm);
     $text->text($libraryname);
@@ -358,11 +357,11 @@ sub printhead {
     $text->text(join(' ', $billing_library->branchzip, $billing_library->branchcity, $billing_library->branchcountry));
     $text->translate(100/mm,  ($height-147.5)/mm);
     $text->text($billing_library->branchemail);
-
+    
     # print subject
     $text->translate(100/mm,  ($height-145.5)/mm);
     $text->text($subject);
-
+    
     # print bookseller infos
     $text->translate(100/mm,  ($height-180)/mm);
     $text->text($bookseller->name);
@@ -376,7 +375,7 @@ sub printhead {
     $text->text($bookseller->address3);
     $text->translate(100/mm, ($height-205)/mm);
     $text->text($bookseller->accountnumber);
-
+    
     # print delivery infos
     $text->font( $pdf->corefont("Times-Bold", -encoding => "utf8"), 4/mm );
     $text->translate(50/mm,  ($height-237)/mm);
@@ -415,7 +414,7 @@ sub printfooters {
 sub printpdf {
     my ($basketgroup, $bookseller, $baskets, $orders, $GST) = @_;
     # open the default PDF that will be used for base (1st page already filled)
-    my $pdf_template = C4::Context->config('intrahtdocs') . '/' . C4::Context->preference('template') . '/pdf/layout3pagesfr.pdf';
+    my $pdf_template = C4::Context->config('intrahtdocs') . '/' . C4::Context->preference('template') . '/pdf/layout3pages.pdf';
     my $pdf = PDF::API2->open($pdf_template);
     $pdf->pageLabel( 0, {
         -style => 'roman',
