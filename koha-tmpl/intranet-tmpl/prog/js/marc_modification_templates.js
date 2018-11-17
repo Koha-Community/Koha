@@ -249,12 +249,16 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('field_value').value = field_value;
     document.getElementById('to_field').value = to_field;
     document.getElementById('to_subfield').value = to_subfield;
-    $("#to_regex_search").val(to_regex_search);
-    $("#to_regex_replace").val(to_regex_replace);
-    $("#to_regex_modifiers").val(to_regex_modifiers);
-
-    document.getElementById('to_field_regex').checked = conditional_regex.length;
-    document.getElementById('to_field_regex').onchange();
+    if ( to_regex_search == '' && to_regex_replace == '' && to_regex_modifiers == '' ) {
+        document.getElementById('to_field_regex').checked = false;
+        document.getElementById('to_field_regex').onchange();
+    } else {
+        document.getElementById('to_field_regex').checked = true;
+        document.getElementById('to_field_regex').onchange();
+        $("#to_regex_search").val(to_regex_search);
+        $("#to_regex_replace").val(to_regex_replace);
+        $("#to_regex_modifiers").val(to_regex_modifiers);
+    }
 
     setSelectByValue( 'conditional', conditional );
     document.getElementById('conditional').onchange();
