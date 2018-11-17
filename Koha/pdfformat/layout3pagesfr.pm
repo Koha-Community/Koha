@@ -1,4 +1,4 @@
-#!/usr/bin/perl
+package Koha::pdfformat::layout3pagesfr;
 
 #example script to print a basketgroup
 #written 07/11/08 by john.soros@biblibre.com and paul.poulain@biblibre.com

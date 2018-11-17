@@ -49,6 +49,7 @@ use Carp;
 use C4::Auth;
 use C4::Output;
 use CGI qw ( -utf8 );
+use File::Spec;
 
 use C4::Acquisition qw/CloseBasketgroup ReOpenBasketgroup GetOrders GetBasketsByBasketgroup GetBasketsByBookseller ModBasketgroup NewBasketgroup DelBasketgroup GetBasketgroups ModBasket GetBasketgroup GetBasket GetBasketGroupAsCSV/;
 use Koha::EDI qw/create_edi_order get_edifact_ean/;
@@ -123,29 +124,27 @@ sub displaybasketgroups {
 
 sub printbasketgrouppdf{
     my ($basketgroupid) = @_;
-    
+
     my $pdfformat = C4::Context->preference("OrderPdfFormat");
-    if ($pdfformat eq 'pdfformat::layout3pages' || $pdfformat eq 'pdfformat::layout2pages' || $pdfformat eq 'pdfformat::layout3pagesfr'
-        || $pdfformat eq 'pdfformat::layout2pagesde'){
-	eval {
-        eval "require $pdfformat";
-	    import $pdfformat;
-	};
-	if ($@){
-	}
+    my @valid_pdfformats = qw(pdfformat::layout3pages pdfformat::layout2pages pdfformat::layout3pagesfr pdfformat::layout2pagesde);
+    if (grep {$_ eq $pdfformat} @valid_pdfformats) {
+        $pdfformat = "Koha::$pdfformat";
+        my $pdfformat_filepath = File::Spec->catfile(split /::/, $pdfformat) . '.pm';
+        require $pdfformat_filepath;
+        import $pdfformat;
     }
     else {
-	print $input->header;  
-	print $input->start_html;  # FIXME Should do a nicer page
-	print "<h1>Invalid PDF Format set</h1>";
-	print "Please go to the systempreferences and set a valid pdfformat";
-	exit;
+        print $input->header;
+        print $input->start_html;  # FIXME Should do a nicer page
+        print "<h1>Invalid PDF Format set</h1>";
+        print "Please go to the systempreferences and set a valid pdfformat";
+        exit;
     }
-    
+
     my $basketgroup = GetBasketgroup($basketgroupid);
     my $bookseller = Koha::Acquisition::Booksellers->find( $basketgroup->{booksellerid} );
     my $baskets = GetBasketsByBasketgroup($basketgroupid);
-    
+
     my %orders;
     for my $basket (@$baskets) {
         my @ba_orders;
