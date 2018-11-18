@@ -131,7 +131,7 @@ sub printbasketgrouppdf{
         $pdfformat = "Koha::$pdfformat";
         my $pdfformat_filepath = File::Spec->catfile(split /::/, $pdfformat) . '.pm';
         require $pdfformat_filepath;
-        import $pdfformat;
+        import $pdfformat qw(printpdf);
     }
     else {
         print $input->header;
