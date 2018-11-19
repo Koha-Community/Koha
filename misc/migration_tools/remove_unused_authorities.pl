@@ -30,15 +30,15 @@ use Getopt::Long;
 use Koha::SearchEngine::Search;
 
 my @authtypes;
-my $want_help = 0;
-my $test = 0;
+my ($confirm, $test, $want_help);
 GetOptions(
     'aut|authtypecode:s' => \@authtypes,
+    'c|confirm'          => \$confirm,
     't|test'             => \$test,
-    'h|help'             => \$want_help
+    'h|help'             => \$want_help,
 );
 
-if ($want_help) {
+if ( $want_help || !$confirm ) {
     print_usage();
     exit 0;
 }
@@ -129,11 +129,14 @@ particular type will be checked for usage.  --aut can be repeated.
 
 If --aut is not supplied, all authority records will be checked.
 
+Use --confirm Confirms you want to really run this script, otherwise prints this help.
+
 Use --test to perform a test run.  This script does not ask the
 operator to confirm the deletion of each authority record.
 
 parameters
     --aut|authtypecode TYPE       the list of authtypes to check
+    --confirm or -c               confirm running of script
     --test or -t                  test mode, don't delete really, just count
     --help or -h                  show this message.
 
