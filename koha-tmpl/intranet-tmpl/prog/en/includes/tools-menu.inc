@@ -40,9 +40,6 @@
     [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
 	<li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></li>
     [% END %]
-    [% IF ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) %]
-    <li><a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a></li>
-    [% END %]
 </ul>
 <h5>Catalog</h5>
 <ul>
@@ -73,6 +70,9 @@
     [% END %]
     [% IF ( CAN_user_tools_rotating_collections ) %]
     <li><a href="/cgi-bin/koha/rotating_collections/rotatingCollections.pl">Rotating collections</a></li>
+    [% END %]
+    [% IF ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') ) %]
+    <li><a href="/cgi-bin/koha/tools/stockrotation.pl">Stock rotation</a></li>
     [% END %]
     [% IF ( CAN_user_tools_marc_modification_templates ) %]
         <li><a href="/cgi-bin/koha/tools/marc_modification_templates.pl">Manage MARC modification templates</a></li>
