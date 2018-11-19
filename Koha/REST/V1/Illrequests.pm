@@ -56,22 +56,6 @@ sub list {
     # Get all requests
     my @requests = Koha::Illrequests->as_list;
 
-    # Create new "formatted" columns for each date column
-    # that needs formatting
-    foreach $req(@requests) {
-        foreach my $field(@format_dates) {
-            if (defined $req->{$field}) {
-                $req->{$field . "_formatted"} = format_sqldatetime(
-                    $req->{$field},
-                    undef,
-                    undef,
-                    1
-                );
-            }
-        }
-
-    }
-
     # Identify patrons & branches that
     # we're going to need and get them
     my $to_fetch = {
@@ -126,6 +110,19 @@ sub list {
     foreach my $req(@requests) {
         my $to_push = $req->unblessed;
         $to_push->{id_prefix} = $req->id_prefix;
+        # Create new "formatted" columns for each date column
+        # that needs formatting
+        foreach my $field(@format_dates) {
+            if (defined $to_push->{$field}) {
+                $to_push->{$field . "_formatted"} = format_sqldatetime(
+                    $to_push->{$field},
+                    undef,
+                    undef,
+                    1
+                );
+            }
+        }
+
         foreach my $p(@{$patron_arr}) {
             if ($p->{borrowernumber} == $req->borrowernumber) {
                 $to_push->{patron} = {
