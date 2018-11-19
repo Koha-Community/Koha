@@ -20,8 +20,7 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Koha::Script;
 use C4::Context;
@@ -43,55 +42,67 @@ if ($want_help) {
     print_usage();
     exit 0;
 }
-
 if ($test) {
-    print "testing only, authorities will not be deleted.\n";
+    print "*** Testing only, authorities will not be deleted. ***\n";
+}
+if (@authtypes) {
+    print "Restricted to authority type(s) : ".join(',', @authtypes).".\n";
 }
 
 my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
 if ( $errZebraConnection == 10000 ) {
-    die "Zebra server seems not to be available. This script needs Zebra runs."
+    die "Zebra server seems not to be available. This script needs Zebra runs.";
 } elsif ( $errZebraConnection ) {
     die "Error from Zebra: $errZebraConnection";
 }
 
 my $dbh=C4::Context->dbh;
-my $thresholdmin=0;
-my $thresholdmax=0;
 my @results;
 # prepare the request to retrieve all authorities of the requested types
-my $rqsql = "SELECT * from auth_header where 1";
-$rqsql .= " AND authtypecode IN (".join(",",map{$dbh->quote($_)}@authtypes).")" if @authtypes;
+my $rqsql = q{ SELECT authid,authtypecode FROM auth_header };
+$rqsql .= q{ WHERE authtypecode IN (}.join(',',map{ '?' }@authtypes).')' if @authtypes;
 my $rqselect = $dbh->prepare($rqsql);
 $|=1;
 
-$rqselect->execute;
+$rqselect->execute(@authtypes);
 my $counter=0;
 my $totdeleted=0;
 my $totundeleted=0;
 my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
 while (my $data=$rqselect->fetchrow_hashref){
-    my $query;
-    $query= "an=".$data->{'authid'};
+    $counter++;
+    print 'authid='.$data->{'authid'};
+    print ' type='.$data->{'authtypecode'};
+    my $bibliosearch = 'an:'.$data->{'authid'};
     # search for biblios mapped
-    my ($err,$res,$used) = $searcher->simple_search_compat($query,0,10);
+    my ($err,$res,$used) = $searcher->simple_search_compat($bibliosearch,0,10);
     if (defined $err) {
-        warn "error: $err on search $query\n";
+        print "\n";
+        warn "Error: $err on search for biblios $bibliosearch\n";
         next;
     }
-    print ".";
-    print "$counter\n" unless $counter++ % 100;
-    # if found, delete, otherwise, just count
-    if ($used>=$thresholdmin and $used<=$thresholdmax){
-        DelAuthority({ authid => $data->{'authid'} }) unless $test;
+    unless ($used > 0){
+        unless ($test) {
+            DelAuthority({ authid => $data->{'authid'} });
+            print " : deleted";
+        } else {
+            print " : can be deleted";
+        }
         $totdeleted++;
     } else {
         $totundeleted++;
+        print " : used $used time(s)";
     }
+    print "\n";
 }
 
-print "$counter authorities parsed, $totdeleted deleted and $totundeleted unchanged because used\n";
-
+print "$counter authorities parsed\n";
+unless ($test) {
+    print "$totdeleted deleted because unused\n";
+} else {
+    print "$totdeleted can be deleted because unused\n";
+}
+print "$totundeleted unchanged because used\n";
 
 sub print_usage {
     print <<_USAGE_;
