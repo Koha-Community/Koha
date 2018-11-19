@@ -111,7 +111,7 @@
                                                     </td>
                                                     <td>
                                                         [% FOREACH subtitl IN SEARCH_RESULT.subtitle %]
-                                                            [% subtitl.subfield | html %]
+                                                            [% subtitl | html %]
                                                         [% END %]
                                                     </td>
                                                 </tr>
@@ -185,7 +185,7 @@
                                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% GROUP_RESULT.biblionumber |url %]" title="View details for this title">[% GROUP_RESULT.title | html %]
                                                                 [% END %]
                                                                 [% FOREACH subtitl IN GROUP_RESULT.subtitle %]
-                                                                    [% subtitl.subfield | html %]
+                                                                    [% subtitl | html %]
                                                                 [% END %]
                                                                 </a>
                                                             [% END # / IF GROUP_RESULT.BiblioDefaultViewmarc %]

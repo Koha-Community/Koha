@@ -201,7 +201,7 @@ if ( $pending_checkouts->count ) { # Useless test
         );
         $issue->{rentalfines} = $rental_fines->total_outstanding;
 
-        $issue->{'subtitle'} = C4::Biblio::SplitSubtitle($issue->{'subtitle'});
+        $issue->{'subtitle'} = C4::Biblio::SplitKohaField($issue->{'subtitle'});
 
         # check if item is renewable
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );

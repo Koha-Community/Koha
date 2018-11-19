@@ -223,7 +223,7 @@ sub GetShelfInfo {
         my $this_biblio = GetBibData($item->{biblionumber});
         next unless defined $this_biblio;
         $item->{'title'} = $this_biblio->{'title'};
-        $item->{'subtitle'} = C4::Biblio::SplitSubtitle($this_biblio->{'subtitle'}),
+        $item->{'subtitle'} = C4::Biblio::SplitKohaField($this_biblio->{'subtitle'}),
         $item->{'medium'} = $this_biblio->{'medium'};
         $item->{'part_number'} = $this_biblio->{'part_number'};
         $item->{'part_name'} = $this_biblio->{'part_name'};

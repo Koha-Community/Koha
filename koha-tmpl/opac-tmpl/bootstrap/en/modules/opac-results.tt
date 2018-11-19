@@ -358,7 +358,7 @@
                                                     [% END %]
 
                                                     [% FOREACH subtitl IN SEARCH_RESULT.subtitle %]
-                                                        , [% subtitl.subfield | html %]
+                                                        , [% subtitl | html %]
                                                     [% END %]</a>
 
                                                     [% IF ( SEARCH_RESULT.author ) %]

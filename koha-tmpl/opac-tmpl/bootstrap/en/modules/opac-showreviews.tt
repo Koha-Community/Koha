@@ -47,7 +47,7 @@
                                                 [% END %]
                                             [% END %]
                                             [% IF ( review.title ) %][% review.title | html %][% ELSE %]No title[% END %]
-                                            [% FOREACH subtitl IN review.subtitle %] [% subtitl.subfield | html %][% END %]
+                                            [% FOREACH subtitl IN review.subtitle %] [% subtitl | html %][% END %]
                                             </a>
                                             [% IF ( review.author ) %]
                                                 by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author | html %]</a>

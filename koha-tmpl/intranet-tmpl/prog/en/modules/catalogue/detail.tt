@@ -34,7 +34,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for [% title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]
+    Details for [% title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl | html %][% END %]
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -49,7 +49,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for <i>[% title | html %]  [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</i>
+    Details for <i>[% title | html %]  [% FOREACH subtitl IN subtitle %] [% subtitl | html %][% END %]</i>
   [% END %]
 </div>
 

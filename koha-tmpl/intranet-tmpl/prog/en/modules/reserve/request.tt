@@ -58,7 +58,7 @@
   [% END %]
 
   [% UNLESS ( multi_hold ) %]
-    <h1>Place a hold on [% INCLUDE 'biblio-default-view.inc' %][% title | html %]</a></h1>
+    <h1>Place a hold on [% INCLUDE 'biblio-default-view.inc' %][% title | html %]</a> [% subtitle | html %] [% part_number | html %] [% part_name | html %]</h1>
   [% ELSE %]
     <h1>Confirm holds</h1>
   [% END %]

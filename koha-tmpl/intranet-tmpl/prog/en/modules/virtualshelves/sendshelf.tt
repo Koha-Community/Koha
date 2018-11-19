@@ -33,7 +33,7 @@ Your list: [% shelfname | $raw %]
                 [% BIBLIO_RESULT.title | $raw %]
                 [% IF ( BIBLIO_RESULT.subtitle.size ) %]
                   [% FOREACH subtitle IN BIBLIO_RESULT.subtitle %]
-                    [% subtitle.subfield | $raw %]
+                    [% subtitle | $raw %]
                   [% END %]
                 [% END %]
             </span>

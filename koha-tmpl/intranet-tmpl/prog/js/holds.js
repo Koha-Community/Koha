@@ -25,8 +25,10 @@ $(document).ready(function() {
                                   + oObj.title.escapeHtml();
 
                             $.each(oObj.subtitle, function( index, value ) {
-                                      title += " " + value.subfield.escapeHtml();
+                                      title += " " + value.escapeHtml();
                             });
+
+                            title += " " + oObj.part_number + " " + oObj.part_name;
 
                             title += "</a>";
 

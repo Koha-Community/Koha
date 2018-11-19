@@ -257,7 +257,7 @@ if ($loggedinuser) {
         }
         next if ( $should_hide && scalar @all_items == scalar @hidden_itemnumbers );
         $tag->{title} = $biblio->title;
-        $tag->{subtitle} = C4::Biblio::SplitSubtitle($biblio->subtitle);
+        $tag->{subtitle} = C4::Biblio::SplitKohaField($biblio->subtitle);
         $tag->{medium} = $biblio->medium;
         $tag->{part_number} = $biblio->part_number;
         $tag->{part_name} = $biblio->part_name;

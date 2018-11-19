@@ -81,7 +81,7 @@
                                 [% item.title | html %]
                                 [% FOREACH subtitl IN item.subtitle %]
                                     [% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %]
-                                    [% subtitl.subfield | html %]
+                                    [% subtitl | html %]
                                 [% END %]
                             </a>
                         </td>

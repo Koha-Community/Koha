@@ -67,7 +67,7 @@ BEGIN {
         TransformHtmlToMarc
         TransformHtmlToXml
         prepare_host_field
-        SplitSubtitle
+        SplitKohaField
     );
 
     # Internal functions
@@ -3453,20 +3453,23 @@ sub RemoveAllNsb {
     return $record;
 }
 
-=head2 SplitSubtitle
+=head2 SplitKohaField
 
-    $subtitles = SplitSubtitle($subtitle);
+    $subtitles = SplitKohaField($biblio->subtitle());
 
-Splits a subtitle field to an array of hashes like the one GetRecordValue returns
+Splits a Koha field with multiple values to an array. Multiple matches for a
+Koha field (according to the bibliographic framework) are concatenated with
+' | ', but in many cases it's not optimal for display and an array is
+preferred.
 
 =cut
 
-sub SplitSubtitle {
-    my $subtitle = shift;
+sub SplitKohaField {
+    my $field = shift;
 
-    my @subtitles = map( { 'subfield' => $_ }, split(/ \| /, $subtitle // '' ) );
+    my @parts = split(/ \| /, $field // '' );
 
-    return \@subtitles;
+    return \@parts;
 }
 
 1;

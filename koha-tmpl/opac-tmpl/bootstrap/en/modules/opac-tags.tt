@@ -152,7 +152,7 @@
                                                         [% MY_TAG.title | html %]
                                                         [% IF ( MY_TAG.subtitle ) %]
                                                             [% FOREACH subtitle IN MY_TAG.subtitle %]
-                                                                [% subtitle.subfield | html %]
+                                                                [% subtitle | html %]
                                                             [% END %]
                                                         [% END %]
                                                     </a>

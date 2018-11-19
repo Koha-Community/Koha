@@ -248,7 +248,7 @@
                                                 </td>[% END # / IF JacketImages %]
 
                                                 <td class="title">
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% ISSUE.title | html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl.subfield | html %][% END %]</a>
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% ISSUE.title | html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl | html %][% END %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron | html %][% END %]
                                                 </td>
 
@@ -520,7 +520,7 @@
                                                 [% END # /IF jacketcell %]
 
                                                 <td>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber | html %]">[% OVERDUE.title | html %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl.subfield | html %][% END %]
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber | html %]">[% OVERDUE.title | html %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl | html %][% END %]
                                                     </a>
                                                     <span class="item-details">[% OVERDUE.author | html %]</span></td>
 

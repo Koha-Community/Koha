@@ -68,7 +68,7 @@
                                     <h3>
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
                                                 [% BIBLIO_RESULT.title | html %]
-                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %] [% END %][% END %]
+                                                [% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl | html %] [% END %][% END %]
                                                 [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author | html %][% END %]
                                     </h3>
                                     <!-- COinS / Openurl -->
@@ -257,7 +257,7 @@
                                                 <input type="checkbox" class="cb" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]">
                                                 </td>
                                             <td>
-                                                <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest | html %]',[% BIBLIO_RESULT.biblionumber | html %])">[% BIBLIO_RESULT.title | html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>
+                                                <a href="#" onclick="openBiblio('[% BIBLIO_RESULT.dest | html %]',[% BIBLIO_RESULT.biblionumber | html %])">[% BIBLIO_RESULT.title | html %][% IF ( BIBLIO_RESULT.subtitle ) %] [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %][% subtitl | html %][% END %][% END %]</a>
                                                 <!-- COinS / Openurl -->
                                                 <span class="Z3988" title="ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.au=[% BIBLIO_RESULT.author | html %]&amp;rft.btitle=[% BIBLIO_RESULT.title |url %]&amp;rft.date=[% BIBLIO_RESULT.publicationyear | html %]&amp;rft.tpages=[% BIBLIO_RESULT.item('size') | html %]&amp;rft.isbn=[% BIBLIO_RESULT.isbn |url %]&amp;rft.aucorp=&amp;rft.place=[% BIBLIO_RESULT.place | html %]&amp;rft.pub=[% BIBLIO_RESULT.publisher |url %]&amp;rft.edition=[% BIBLIO_RESULT.edition | html %]&amp;rft.series=[% BIBLIO_RESULT.series | html %]&amp;rft.genre="></span>
                                                 [% IF ( TagsInputEnabled && loggedinusername ) %]

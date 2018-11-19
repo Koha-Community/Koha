@@ -71,7 +71,7 @@
                                 <h3>
                                     <input type="checkbox" class="select_record noprint" value="[% BIBLIO_RESULT.biblionumber | html %]" name="bib[% BIBLIO_RESULT.biblionumber | html %]" id="bib[% BIBLIO_RESULT.biblionumber | html %]" />
                                     [% BIBLIO_RESULT.title |html %]
-                                    [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl.subfield | html %][% END %]
+                                    [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %] [% subtitl | html %][% END %]
                                     [% IF ( BIBLIO_RESULT.author ) %] [% BIBLIO_RESULT.author | html %][% END %]
                                 </h3>
                                 <!-- COinS / Openurl -->
@@ -266,7 +266,7 @@
                                             <a href="[% BIBLIO_RESULT.dest | url %]?biblionumber=[% BIBLIO_RESULT.biblionumber | uri %]" class="open_title">
                                                 [% BIBLIO_RESULT.title |html %]
                                                 [% FOREACH subtitl IN BIBLIO_RESULT.subtitle %]
-                                                    [% subtitl.subfield | html %]
+                                                    [% subtitl | html %]
                                                 [% END %]
                                             </a>
                                             [% BIBLIO_RESULT.author | html %]

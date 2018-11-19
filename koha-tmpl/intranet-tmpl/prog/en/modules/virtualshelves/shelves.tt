@@ -212,7 +212,7 @@
                     [% itemsloo.XSLTBloc | $raw %]
                 [% ELSE %]
                     [% INCLUDE 'biblio-default-view.inc' biblionumber = itemsloo.biblionumber %]
-                    [% itemsloo.title | html %][% FOREACH subtitl IN itemsloo.subtitle %] [% subtitl.subfield | html %][% END %]</a>
+                    [% itemsloo.title | html %][% FOREACH subtitl IN itemsloo.subtitle %] [% subtitl | html %][% END %]</a>
                 [% END %]
                     <p class="hold">
                         [% IF ( itemsloo.notforloan ) %]

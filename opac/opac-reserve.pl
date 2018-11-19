@@ -419,7 +419,7 @@ foreach my $biblioNum (@biblionumbers) {
     my $frameworkcode = GetFrameworkCode( $biblioData->{biblionumber} );
     $biblioLoopIter{biblionumber} = $biblioData->{biblionumber};
     $biblioLoopIter{title} = $biblioData->{title};
-    $biblioLoopIter{subtitle} = C4::Biblio::SplitSubtitle($biblioData->{'subtitle'});
+    $biblioLoopIter{subtitle} = C4::Biblio::SplitKohaField($biblioData->{'subtitle'});
     $biblioLoopIter{medium} = $biblioData->{medium};
     $biblioLoopIter{part_number} = $biblioData->{part_number};
     $biblioLoopIter{part_name} = $biblioData->{part_name};

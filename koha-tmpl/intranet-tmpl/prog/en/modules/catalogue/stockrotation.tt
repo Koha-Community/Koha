@@ -12,7 +12,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Stock rotation details for <i>[% biblio.title | html %][% FOREACH subtitle IN biblio.subtitles %][% subtitle.subfield | html %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Stock rotation details for <i>[% biblio.title | html %][% FOREACH subtitle IN biblio.subtitles %][% subtitle | html %][% END %]</i></div>
 
 <div class="main container-fluid">
     <div class="row">
