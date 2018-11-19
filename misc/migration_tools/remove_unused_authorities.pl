@@ -49,11 +49,25 @@ if (@authtypes) {
     print "Restricted to authority type(s) : ".join(',', @authtypes).".\n";
 }
 
-my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
-if ( $errZebraConnection == 10000 ) {
-    die "Zebra server seems not to be available. This script needs Zebra runs.";
-} elsif ( $errZebraConnection ) {
-    die "Error from Zebra: $errZebraConnection";
+my $searcher = Koha::SearchEngine::Search->new( { index => 'biblios' } );
+my $checksearch;
+if ( C4::Context->preference("SearchEngine") eq 'Zebra' ) {
+    # Check server state
+    my $errZebraConnection = C4::Context->Zconn("biblioserver",0)->errcode();
+    if ( $errZebraConnection == 10000 ) {
+        die "Zebra server seems not to be available. This script needs Zebra runs.";
+    } elsif ( $errZebraConnection ) {
+        die "Error from Zebra: $errZebraConnection";
+    }
+    $checksearch = q{an,alwaysmatches=''};
+}
+else {
+    $checksearch = q{an:*};
+}
+# Check search on authority number as at least one result
+my ($err,$res,$nb) = $searcher->simple_search_compat($checksearch,0,10);
+unless ($nb > 0) {
+    die "Searching authority number in biblio records seems not to be available : $checksearch";
 }
 
 my $dbh=C4::Context->dbh;
@@ -68,7 +82,6 @@ $rqselect->execute(@authtypes);
 my $counter=0;
 my $totdeleted=0;
 my $totundeleted=0;
-my $searcher = Koha::SearchEngine::Search->new({index => 'biblios'});
 while (my $data=$rqselect->fetchrow_hashref){
     $counter++;
     print 'authid='.$data->{'authid'};
