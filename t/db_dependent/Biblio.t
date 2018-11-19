@@ -348,6 +348,54 @@ sub run_tests {
     like( $marcurl->[0]->{MARCURL}, qr/^https/, 'GetMarcUrls did not stumble over a preceding space' );
     ok( $marcflavour ne 'MARC21' || $marcurl->[1]->{MARCURL} =~ /^http:\/\//,
         'GetMarcUrls prefixed a MARC21 URL with http://' );
+
+    # Automatic authority creation
+    t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
+    t::lib::Mocks::mock_preference('AutoCreateAuthorities', 1);
+    my $authorities_mod = Test::MockModule->new( 'C4::AuthoritiesMarc' );
+    $authorities_mod->mock(
+        'SearchAuthorities',
+        sub {
+            my @results;
+            return \@results, 0;
+        }
+    );
+    $success = 0;
+    $field = create_author_field('Author Name');
+    eval {
+        $marc_record->append_fields($field);
+        $success = ModBiblio($marc_record,$biblionumber,'');
+    } or do {
+        diag($@);
+        $success = 0;
+    };
+    ok($success, "ModBiblio handles authority addition for author");
+
+    my ($author_field, $author_subfield, $author_relator_subfield) = get_author_field();
+    $field = $marc_record->field($author_field);
+    ok($field->subfield($author_subfield), "ModBiblio keeps $author_field$author_subfield intact");
+
+    my $authid = $field->subfield('9');
+    ok($authid, 'ModBiblio adds authority id');
+
+    use_ok('C4::AuthoritiesMarc');
+    my $auth_record = C4::AuthoritiesMarc::GetAuthority($authid);
+    ok($auth_record, 'Authority record successfully retrieved');
+
+
+    my ($auth_author_field, $auth_author_subfield) = get_auth_author_field();
+    $field = $auth_record->field($auth_author_field);
+    ok($field, "Authority record contains field $auth_author_field");
+    is(
+        $field->subfield($auth_author_subfield),
+        'Author Name',
+        'Authority $auth_author_field$auth_author_subfield contains author name'
+    );
+    is($field->subfield($author_relator_subfield), undef, 'Authority does not contain relator subfield');
+
+    # Reset settings
+    t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 0);
+    t::lib::Mocks::mock_preference('AutoCreateAuthorities', 0);
 }
 
 sub get_title_field {
@@ -368,6 +416,16 @@ sub get_issn_field {
 sub get_itemnumber_field {
     my $marc_flavour = C4::Context->preference('marcflavour');
     return ( $marc_flavour eq 'UNIMARC' ) ? ( '995', '9' ) : ( '952', '9' );
+}
+
+sub get_author_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '700', 'a', '4' ) : ( '100', 'a', 'e' );
+}
+
+sub get_auth_author_field {
+    my $marc_flavour = C4::Context->preference('marcflavour');
+    return ( $marc_flavour eq 'UNIMARC' ) ? ( '106', 'a' ) : ( '100', 'a' );
 }
 
 sub create_title_field {
@@ -401,22 +459,39 @@ sub create_issn_field {
     return $field;
 }
 
+sub create_author_field {
+    my ( $author ) = @_;
+
+    my ( $author_field, $author_subfield, $author_relator_subfield ) = get_author_field();
+    my $field = MARC::Field->new(
+        $author_field, '', '',
+        $author_subfield => $author,
+        $author_relator_subfield => 'aut'
+    );
+
+    return $field;
+}
+
 subtest 'MARC21' => sub {
-    plan tests => 34;
+    plan tests => 42;
     run_tests('MARC21');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'UNIMARC' => sub {
-    plan tests => 34;
+    plan tests => 42;
+
+    # Mock the auth type data for UNIMARC
+    $dbh->do("UPDATE auth_types SET auth_tag_to_report = '106' WHERE auth_tag_to_report = '100'") or die $dbh->errstr;
+
     run_tests('UNIMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
 };
 
 subtest 'NORMARC' => sub {
-    plan tests => 34;
+    plan tests => 42;
     run_tests('NORMARC');
     $schema->storage->txn_rollback;
     $schema->storage->txn_begin;
