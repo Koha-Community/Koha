@@ -34,6 +34,11 @@ our $PERL_DEPS = {
         'required' => '1',
         'min_ver'  => '0.03'
     },
+    'Plack::Middleware::Rewrite' => {
+        'usage'    => 'Plack',
+        'required' => '1',
+        'min_ver'  => '2.000',
+    },
     'XML::LibXSLT' => {
         'usage'    => 'Core',
         'required' => '1',

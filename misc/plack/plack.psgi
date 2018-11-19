@@ -40,6 +40,7 @@ use Koha::Caches;
 use Koha::Cache::Memory::Lite;
 use Koha::Database;
 use Koha::DateUtils;
+my $CACHE_VERSION = C4::Context->preference('Version');
 
 #BZ 16520, add timestamps to warnings
 
@@ -107,11 +108,16 @@ builder {
         header => 'X-Forwarded-For',
         trusted_proxy => defined $proxies ? [split /[ ,]+/, $proxies] : [];
 
+    #Intranet and OPAC still use the old cgi-bin -paths, which Apache2 reroutes.
+    enable "Plack::Middleware::Rewrite", request => sub {
+        s{^/cgi-bin/koha/opac}{/opac} or s{^/cgi-bin/koha}{/intranet};
+        s{_\Q$CACHE_VERSION\E\.js$}{\.js};
+    };
     #Plack can do static content delivery as well when debugging without Apache2
     enable "Plack::Middleware::Static",
-        path => qr{^/intranet-tmpl/}, root => "koha-tmpl/";
+        path => qr{^/intranet-tmpl/}, root => "$ENV{PERL_MODULE_DIR}/koha-tmpl/";
     enable "Plack::Middleware::Static",
-        path => qr{^/opac-tmpl/}, root => "koha-tmpl/";
+        path => qr{^/opac-tmpl/}, root => "$ENV{PERL_MODULE_DIR}/koha-tmpl/";
 
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";
