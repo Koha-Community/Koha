@@ -256,11 +256,9 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('to_field').value = to_field;
     document.getElementById('to_subfield').value = to_subfield;
     if ( to_regex_search == '' && to_regex_replace == '' && to_regex_modifiers == '' ) {
-        document.getElementById('to_field_regex').checked = false;
-        document.getElementById('to_field_regex').onchange();
+        $('#to_field_regex').prop('checked', false).change();
     } else {
-        document.getElementById('to_field_regex').checked = true;
-        document.getElementById('to_field_regex').onchange();
+        $('#to_field_regex').prop('checked', true).change();
         $("#to_regex_search").val(to_regex_search);
         $("#to_regex_replace").val(to_regex_replace);
         $("#to_regex_modifiers").val(to_regex_modifiers);
