@@ -407,7 +407,7 @@ sub max_result_window {
     my $index_name = $self->store->index_name;
     my $settings = $self->store->es->indices->get_settings(
         index  => $index_name,
-        params => { include_defaults => 1, flat_settings => 1 },
+        params => { include_defaults => 'true', flat_settings => 'true' },
     );
 
     my $max_result_window = $settings->{$index_name}->{settings}->{'index.max_result_window'};
