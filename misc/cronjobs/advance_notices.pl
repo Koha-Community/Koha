@@ -125,6 +125,16 @@ Enabling this flag ensures that the issuing library is the sender of
 the digested message.  It has no effect unless the borrower has
 chosen 'Digests only' on the advance messages.
 
+=item B<-library>
+
+select notices for one specific library. Use the value in the
+branches.branchcode table. This option can be repeated in order
+to select notices for a group of libraries.
+
+=item B<--owning>
+
+Use the address information from the item homebranch library instead of the issuing library.
+
 =back
 
 =head1 DESCRIPTION
@@ -191,6 +201,8 @@ my $mindays     = 0;                                                # -m: Maximu
 my $maxdays     = 30;                                               # -e: the End of the time period
 my $verbose     = 0;                                                # -v: verbose
 my $digest_per_branch = 0;                                          # -digest-per-branch: Prepare and send digests per branch
+my @branchcodes; # Branch(es) passed as parameter
+my $owning_library = 0;
 my $itemscontent = join(',',qw( date_due title author barcode ));
 
 my $help    = 0;
@@ -199,6 +211,8 @@ my $man     = 0;
 GetOptions(
             'help|?'         => \$help,
             'man'            => \$man,
+            'library=s'      => \@branchcodes,
+            'owning'         => \$owning_library,
             'c'              => \$confirm,
             'n'              => \$nomail,
             'm:i'            => \$maxdays,
@@ -226,11 +240,16 @@ unless ($confirm) {
 }
 cronlogaction();
 
+my %branches = map { $_ => 1 } @branchcodes if @branchcodes;
+
 # The fields that will be substituted into <<items.content>>
 my @item_content_fields = split(/,/,$itemscontent);
 
 warn 'getting upcoming due issues' if $verbose;
-my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( { days_in_advance => $maxdays } );
+my $upcoming_dues = C4::Circulation::GetUpcomingDueIssues( {
+    days_in_advance => $maxdays,
+    owning_library => $owning_library
+ } );
 warn 'found ' . scalar( @$upcoming_dues ) . ' issues' if $verbose;
 
 # hash of borrowernumber to number of items upcoming
@@ -275,6 +294,15 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 $due_digest->{ $upcoming->{borrowernumber} }->{count}++;
             }
         } else {
+	    my $branchcode;
+	    if($owning_library) {
+		$branchcode = $upcoming->{'homebranch'};
+	    } else {
+		$branchcode = $upcoming->{'branchcode'};
+	    }
+	    # Skip this DUE if we specify list of libraries and this one is not part of it
+	    next if (@branchcodes && !$branches{$branchcode});
+
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'DUE';
             $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},'0');
@@ -287,7 +315,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
                 my $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
-                                      branchcode     => $upcoming->{'branchcode'},
+                                      branchcode     => $branchcode,
                                       biblionumber   => $item->biblionumber,
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => { 'items.content' => $titles },
@@ -313,6 +341,15 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
                 $upcoming_digest->{ $upcoming->{borrowernumber} }->{count}++;
             }
         } else {
+	    my $branchcode;
+	    if($owning_library) {
+		$branchcode = $upcoming->{'homebranch'};
+	    } else {
+		$branchcode = $upcoming->{'branchcode'};
+	    }
+	    # Skip this PREDUE if we specify list of libraries and this one is not part of it
+	    next if (@branchcodes && !$branches{$branchcode});
+
             my $item = Koha::Items->find( $upcoming->{itemnumber} );
             my $letter_type = 'PREDUE';
             $sth->execute($upcoming->{'borrowernumber'},$upcoming->{'itemnumber'},$borrower_preferences->{'days_in_advance'});
@@ -325,7 +362,7 @@ UPCOMINGITEM: foreach my $upcoming ( @$upcoming_dues ) {
             foreach my $transport ( keys %{$borrower_preferences->{'transports'}} ) {
                 my $letter = parse_letter( { letter_code    => $letter_type,
                                       borrowernumber => $upcoming->{'borrowernumber'},
-                                      branchcode     => $upcoming->{'branchcode'},
+                                      branchcode     => $branchcode,
                                       biblionumber   => $item->biblionumber,
                                       itemnumber     => $upcoming->{'itemnumber'},
                                       substitute     => { 'items.content' => $titles },

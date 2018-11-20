@@ -2699,8 +2699,21 @@ sub GetUpcomingDueIssues {
 
     $params->{'days_in_advance'} = 7 unless exists $params->{'days_in_advance'};
     my $dbh = C4::Context->dbh;
-
-    my $statement = <<END_SQL;
+    my $statement;
+    if($params->{'owning_library'}) {
+	$statement = <<"END_SQL";
+SELECT *
+FROM (
+    SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( NOW() ) as days_until_due, branches.branchemail
+    FROM issues
+    LEFT JOIN items USING (itemnumber)
+    LEFT OUTER JOIN branches ON (branches.branchcode = items.homebranch)
+    WHERE returndate is NULL
+) tmp
+WHERE days_until_due >= 0 AND days_until_due <= ?
+END_SQL
+    } else {
+	$statement = <<"END_SQL";
 SELECT *
 FROM (
     SELECT issues.*, items.itype as itemtype, items.homebranch, TO_DAYS( date_due )-TO_DAYS( NOW() ) as days_until_due, branches.branchemail
@@ -2711,7 +2724,7 @@ FROM (
 ) tmp
 WHERE days_until_due >= 0 AND days_until_due <= ?
 END_SQL
-
+    }
     my @bind_parameters = ( $params->{'days_in_advance'} );
     
     my $sth = $dbh->prepare( $statement );

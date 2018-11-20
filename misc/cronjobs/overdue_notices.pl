@@ -77,6 +77,7 @@ overdue_notices.pl
    -date         <yyyy-mm-dd>     Emulate overdues run for this date.
    -email        <email_type>     Type of email that will be used.
                                   Can be 'email', 'emailpro' or 'B_email'. Repeatable.
+   --owning                       Send notices from item homebranch library instead of issuing library
 
 =head1 OPTIONS
 
@@ -184,6 +185,10 @@ use it in order to send overdues on a specific date and not Now. Format: YYYY-MM
 =item B<-email>
 
 Allows to specify which type of email will be used. Can be email, emailpro or B_email. Repeatable.
+
+=item B<--owning>
+
+Use the address information from the item homebranch library instead of the issuing library.
 
 =back
 
@@ -294,6 +299,7 @@ my $verbose = 0;
 my $nomail  = 0;
 my $MAX     = 90;
 my $test_mode = 0;
+my $owning_library = 0;
 my @branchcodes; # Branch(es) passed as parameter
 my @emails_to_use;    # Emails to use for messaging
 my @emails;           # Emails given in command-line parameters
@@ -325,6 +331,7 @@ GetOptions(
     'borcat=s'       => \@myborcat,
     'borcatout=s'    => \@myborcatout,
     'email=s'        => \@emails,
+    'owning'         => \$owning_library,
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
@@ -463,7 +470,7 @@ foreach my $branchcode (@branches) {
 
     $verbose and warn sprintf "branchcode : '%s' using %s\n", $branchcode, $branch_email_address;
 
-    my $sth2 = $dbh->prepare( <<"END_SQL" );
+    my $sql2 = <<"END_SQL";
 SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
   FROM issues,items,biblio, biblioitems, branches b
   WHERE items.itemnumber=issues.itemnumber
@@ -471,10 +478,16 @@ SELECT biblio.*, items.*, issues.*, biblioitems.itemtype, branchname
     AND b.branchcode = items.homebranch
     AND biblio.biblionumber   = biblioitems.biblionumber
     AND issues.borrowernumber = ?
-    AND issues.branchcode = ?
     AND items.itemlost = 0
     AND TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
+
+    if($owning_library) {
+      $sql2 .= ' AND items.homebranch = ? ';
+    } else {
+      $sql2 .= ' AND issues.branchcode = ? ';
+    }
+    my $sth2 = $dbh->prepare($sql2);
 
     my $query = "SELECT * FROM overduerules WHERE delay1 IS NOT NULL AND branchcode = ? ";
     $query .= " AND categorycode IN (".join( ',' , ('?') x @myborcat ).") " if (@myborcat);
@@ -530,7 +543,11 @@ AND    TO_DAYS($date)-TO_DAYS(issues.date_due) >= 0
 END_SQL
             my @borrower_parameters;
             if ($branchcode) {
-                $borrower_sql .= ' AND issues.branchcode=? ';
+		if($owning_library) {
+		    $borrower_sql .= ' AND items.homebranch=? ';
+		} else {
+		    $borrower_sql .= ' AND issues.branchcode=? ';
+		}
                 push @borrower_parameters, $branchcode;
             }
             if ( $overdue_rules->{categorycode} ) {
