@@ -246,7 +246,7 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('mmta_id').value = mmta_id;
 
     setSelectByValue( 'action', action );
-    document.getElementById('action').onchange();
+    $('#action').change();
 
     setSelectByValue( 'field_number', field_number );
 
@@ -265,13 +265,13 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     }
 
     setSelectByValue( 'conditional', conditional );
-    document.getElementById('conditional').onchange();
+    $('#conditional').change();
 
     document.getElementById('conditional_field').value = conditional_field;
     document.getElementById('conditional_subfield').value = conditional_subfield;
 
     setSelectByValue( 'conditional_comparison', conditional_comparison );
-    document.getElementById('conditional_comparison').onchange();
+    $('#conditional_comparison').change();
 
     document.getElementById('conditional_value').value = conditional_value;
 
@@ -290,7 +290,7 @@ function cancelEditAction() {
     document.getElementById('mmta_id').value = '';
 
     setSelectByValue( 'action', 'delete_field' );
-    document.getElementById('action').onchange();
+    $('#action').change();
 
     document.getElementById('from_field').value = '';
     document.getElementById('from_subfield').value = '';
@@ -302,17 +302,16 @@ function cancelEditAction() {
     $("#to_regex_modifiers").val("");
     $("#description").val("");
 
-    document.getElementById('to_field_regex').checked = false;
-    document.getElementById('to_field_regex').onchange();
+    $('#to_field_regex').prop('checked', false).change();
 
     setSelectByValue( 'conditional', '' );
-    document.getElementById('conditional').onchange();
+    $('#conditional').change();
 
     document.getElementById('conditional_field').value = '';
     document.getElementById('conditional_subfield').value = '';
 
     setSelectByValue( 'conditional_comparison', '' );
-    document.getElementById('conditional_comparison').onchange();
+    $('#conditional_comparison').change();
 
     document.getElementById('conditional_value').value = '';
 
