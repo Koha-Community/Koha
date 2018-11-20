@@ -46,10 +46,6 @@ $biblio->append_fields(
 );
 my ( $biblionumber, $biblioitemnumber ) = AddBiblio( $biblio, '' );
 
-my $field_mappings = Koha::Database->new()->schema()->resultset('Fieldmapping');
-$field_mappings->delete();
-$field_mappings->create( { field => 'subtitle', fieldcode => '245', subfieldcode => 'b' } );
-
 $biblio = Koha::Biblios->find( $biblionumber );
 my @subtitles = $biblio->subtitles();
 is( $subtitles[0], 'Test Record Subtitle', 'Got first subtitle correctly' );

@@ -117,10 +117,6 @@
                         <dt><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></dt>
                         <dd>Define the mapping between the Koha transactional database (SQL) and the MARC Bibliographic records.</dd>
                     [% END %]
-                    [% IF ( CAN_user_parameters_manage_keywords2koha_mappings ) %]
-                        <dt><a href="/cgi-bin/koha/admin/fieldmapping.pl">Keywords to MARC mapping</a></dt>
-                        <dd>Define the mapping between keywords and MARC fields. The keywords are used to find some data independently of the framework.</dd>
-                    [% END %]
                     [% IF ( CAN_user_parameters_manage_marc_frameworks ) %]
                         <dt><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC Bibliographic framework test</a></dt>
                         <dd>Checks the MARC structure. If you change your MARC Bibliographic framework it's recommended that you run this tool to test for errors in your definition.</dd>

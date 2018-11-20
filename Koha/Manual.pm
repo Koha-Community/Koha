@@ -79,7 +79,6 @@ our $mapping = {
     'admin/didyoumean'                         => '/administration.html#did-you-mean?',
     'admin/edi_accounts'                       => '/administration.html#edi-accounts',
     'admin/edi_ean_accounts'                   => '/administration.html#library-eans',
-    'admin/fieldmapping'                       => '/administration.html#keywords-to-marc-mapping',
     'admin/item_circulation_alerts'            => '/administration.html#item-circulation-alerts',
     'admin/items_search_fields'                => '/administration.html#item-search-fields',
     'admin/itemtypes'                          => '/administration.html#item-types',

@@ -28,6 +28,8 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.part_name' WHERE frameworkcode='' AND tagfield='245' AND tagsubfield='p'" );
     }
 
+    $dbh->do( "DROP TABLE IF EXISTS fieldmapping" );
+
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 11529 - Add medium, subtitle and part information to biblio table)\n";

@@ -58,9 +58,6 @@
                 <li><a href="/cgi-bin/koha/admin/biblio_framework.pl">MARC bibliographic framework</a></li>
                 <li><a href="/cgi-bin/koha/admin/koha2marclinks.pl">Koha to MARC mapping</a></li>
             [% END %]
-            [% IF ( CAN_user_parameters_manage_keywords2koha_mappings ) %]
-                <li><a href="/cgi-bin/koha/admin/fieldmapping.pl">Keywords to MARC mapping</a></li>
-            [% END %]
             [% IF ( CAN_user_parameters_manage_marc_frameworks ) %]
                 <li><a href="/cgi-bin/koha/admin/checkmarc.pl">MARC bibliographic framework test</a></li>
                 <li><a href="/cgi-bin/koha/admin/authtypes.pl">Authority types</a></li>
