@@ -109,6 +109,40 @@
                             </div>
                         [% END %]
 
+                        [% IF ( MARCURLS ) %]
+                            <div class="authstanza online_resources">
+                                <span class="label">Online resources:</span>
+                                <ul>
+                                    [% FOREACH MARCurl IN MARCURLS %]
+                                        <li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
+
+                                        [% IF ( OPACURLOpenInNewWindow ) %]
+                                            [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                            [% ELSE %]
+                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
+                                            [% END %]
+                                        [% ELSE %]
+                                            [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
+                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]">
+                                            [% ELSE %]
+                                                <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
+                                            [% END %]
+                                        [% END %]
+                                        [% MARCurl.linktext | html %]</a>
+                                            [% IF ( MARCurl.notes ) %]
+                                                <ul>
+                                                    [% FOREACH note IN MARCurl.notes %]
+                                                        <li>[% note.note | html %]</li>
+                                                    [% END %]
+                                                </ul>
+                                            [% END %]
+                                        </li>
+                                    [% END # /FOREACH MARCURLS %]
+                                </ul>
+                            </div>
+                        [% END # / IF MARCURLS %]
+
                         <div id="authdescriptions" class="toptabs">
                             <ul>
                                 <li id="tab_descriptions"><a href="#descriptions">Notes</a></li>
