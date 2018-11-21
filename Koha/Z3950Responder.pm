@@ -32,7 +32,7 @@ use Net::Z3950::SimpleServer;
 sub new {
     my ( $class, $config ) = @_;
 
-    my ($item_tag, $itemnumber_subfield) = GetMarcFromKohaField( "items.itemnumber", '' );
+    my ($item_tag, $itemnumber_subfield) = GetMarcFromKohaField( "items.itemnumber" );
 
     # We hardcode the strings for English so SOMETHING will work if the authorized value doesn't exist.
     my $status_strings = {
@@ -57,13 +57,13 @@ sub new {
         status_strings => $status_strings,
     };
 
-    # Turn off Yaz's built-in logging (can be turned back on if desired).
-    unshift @{ $self->{yaz_options} }, '-v', 'none';
-
     # If requested, turn on debugging.
     if ( $self->{debug} ) {
         # Turn on single-process mode.
         unshift @{ $self->{yaz_options} }, '-S';
+    } else {
+        # Turn off Yaz's built-in logging apart from fatal errors (can be turned back on if desired).
+        unshift @{ $self->{yaz_options} }, '-v', 'none,fatal';
     }
 
     $self->{server} = Net::Z3950::SimpleServer->new(

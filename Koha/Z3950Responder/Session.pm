@@ -80,6 +80,7 @@ sub _log_error {
 
 sub _set_error {
     my ( $self, $args, $code, $msg ) = @_;
+
     ( $args->{ERR_CODE}, $args->{ERR_STR} ) = ( $code, $msg );
 
     $self->_log_error("    returning error $code: $msg");
@@ -140,8 +141,8 @@ sub _check_fetch {
         return 0;
     }
 
-    if ( $offset + $num_records > $resultset->{hits} )  {
-        $self->_set_error( $args, ERR_PRESENT_OUT_OF_RANGE, 'Fetch request out of range' );
+    if ( $offset < 0 || $offset + $num_records > $resultset->{hits} )  {
+        $self->_set_error( $args, ERR_PRESENT_OUT_OF_RANGE, 'Present request out of range' );
         return 0;
     }
 
@@ -155,7 +156,7 @@ sub _fetch_record {
 
     eval {
         if ( !$resultset->{results}->record_immediate( $index ) ) {
-            my $start = int( $index / $num_to_prefetch ) * $num_to_prefetch;
+            my $start = $num_to_prefetch ? int( $index / $num_to_prefetch ) * $num_to_prefetch : $index;
 
             if ( $start + $num_to_prefetch >= $resultset->{results}->size() ) {
                 $num_to_prefetch = $resultset->{results}->size() - $start;
@@ -184,7 +185,7 @@ sub search_handler {
     my $database = $args->{DATABASES}->[0];
 
     if ( $database !~ /^(biblios|authorities)$/ ) {
-        $self->_set_error( ERR_DB_DOES_NOT_EXIST, 'No such database' );
+        $self->_set_error( $args, ERR_DB_DOES_NOT_EXIST, 'No such database' );
         return;
     }
 

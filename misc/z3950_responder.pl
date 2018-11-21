@@ -36,6 +36,9 @@ use Koha::Z3950Responder;
 
 =head1 OPTIONS
 
+See https://software.indexdata.com/yaz/doc/server.invocation.html for more information about YAZ options
+not described below.
+
 =over 8
 
 =item B<--help>
@@ -102,7 +105,6 @@ my @yaz_options;
 
 sub add_yaz_option {
     my ( $opt_name, $opt_value ) = @_;
-    warn "name: $opt_name and value: $opt_value";
 
     push @yaz_options, "-$opt_name", "$opt_value";
 }
@@ -144,6 +146,11 @@ GetOptions(
 
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
+
+if (!@ARGV || $ARGV[-1] =~ /^-/) {
+    # No bind address specified. Use @:2100 by default.
+    push(@ARGV, '@:2100');
+}
 
 # Create and start the server.
 
