@@ -53,6 +53,7 @@
                     <li><a id="csv" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=csv&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Comma separated text</a></li>
                     <li><a id="tab" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=tab&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Tab separated text</a></li>
                     <li><a id="ods" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=ods&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Open Document Spreadsheet</a></li>
+                    <li><a id="Finna" href="/cgi-bin/koha/reports/guided_reports.pl?reports=1&phase=Export&amp;format=Finna&amp;sql=[% sql |uri %]&amp;reportname=[% name |uri %]">Finna</a></li>
                 </ul>
             </div>
             <div class="btn-group">

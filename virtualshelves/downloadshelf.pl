@@ -28,6 +28,7 @@ use C4::Items;
 use C4::Output;
 use C4::Record;
 use C4::Ris;
+use C4::Shelfconv;
 
 use Koha::CsvProfiles;
 use Koha::Virtualshelves;
@@ -67,6 +68,12 @@ if ($shelfid && $format) {
                     push @biblios, $content->biblionumber;
                 }
                 $output = marc2csv(\@biblios, $format);
+            } elsif ($format eq 'Finna') {
+                my @biblios;
+                while ( my $content = $contents->next ) {
+                    push @biblios, $content->biblionumber;
+                }
+                $output = finnajson(\@biblios, $shelf->shelfname);
             }
             else { #Other formats
                 while ( my $content = $contents->next ) {
@@ -87,6 +94,16 @@ if ($shelfid && $format) {
             # If it was a CSV export we change the format after the export so the file extension is fine
             $format = "csv" if ($format =~ m/^\d+$/);
 
+            ##if format is Finna, file name will be "shelf"+shelf number+".json"
+            if($format eq "Finna") {
+                my $filename="shelf".$shelfid.".json";
+                print $query->header(
+                    -type => 'application/json',
+                    -attachment => "$filename"
+                    );
+                print $output;
+                exit;
+            }
             print $query->header(
             -type => 'application/octet-stream',
             -'Content-Transfer-Encoding' => 'binary',

@@ -37,6 +37,7 @@ use Koha::AuthorisedValues;
 use Koha::BiblioFrameworks;
 use Koha::Libraries;
 use Koha::Patron::Categories;
+use C4::Shelfconv;
 
 =head1 NAME
 
@@ -855,6 +856,14 @@ elsif ($phase eq 'Export'){
             while (my $row = $sth->fetchrow_arrayref()) {
                 $content .= join("\t", @$row) . "\n";
             }
+        } elsif ($format eq 'Finna') {
+            $type = 'application/json';
+            my @biblios;
+            while (my $row = $sth->fetchrow_hashref()) {
+                push(@biblios, $row->{'biblionumber'}) if ($row->{'biblionumber'});
+            }
+            $reportfilename =~ s/\.Finna$/-Finna.json/;
+            $content = finnajson(\@biblios, $reportname);
         } else {
             my $delimiter = C4::Context->preference('delimiter') || ',';
             if ( $format eq 'csv' ) {
