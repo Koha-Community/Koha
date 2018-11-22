@@ -24,7 +24,7 @@ sub  finnajson {
        }
        
        $json_string.="{\n\"id\":\"".$finnaprefix.$biblios_ref->[$i]."\",\n";
-       $json_string.="\"notes\":null,\n\"order\":null,\n\"source\":\"Solr\",\n\"tags\":[]\n}";
+       $json_string.="\"notes\":null,\n\"order\":$i,\n\"source\":\"Solr\",\n\"tags\":[]\n}";
        $i++;
      }
      $json_string.="\n],\n\"title\":\"".$shelfname."\"\n\}\n],\"searches\":[]\n}";
