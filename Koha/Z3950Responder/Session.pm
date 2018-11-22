@@ -28,7 +28,28 @@ use C4::Reserves qw( GetReserveStatus );
 use C4::Search qw();
 use Koha::Logger;
 
-use ZOOM;
+=head1 NAME
+
+Koha::Z3950Responder::Session
+
+=head1 SYNOPSIS
+
+An abstract class where backend-specific session modules are derived from.
+Z3950Responder creates one of the child classes depending on the SearchEngine
+preference.
+
+=head1 DESCRIPTION
+
+This class contains common functions for handling searching for and fetching
+of records. It can optionally add item status information to the returned
+records. The backend-specific abstract methods need to be implemented in a
+child class.
+
+=head2 CONSTANTS
+
+OIDs and diagnostic codes used in Z39.50
+
+=cut
 
 use constant {
     UNIMARC_OID => '1.2.840.10003.5.1',
@@ -41,9 +62,25 @@ use constant {
     ERR_PRESENT_OUT_OF_RANGE => 13,
     ERR_RECORD_TOO_LARGE => 16,
     ERR_NO_SUCH_RESULTSET => 30,
-    ERR_SYNTAX_UNSUPPORTED => 230,
+    ERR_SEARCH_FAILED => 125,
+    ERR_SYNTAX_UNSUPPORTED => 239,
     ERR_DB_DOES_NOT_EXIST => 235,
 };
+
+=head1 FUNCTIONS
+
+=head2 INSTANCE METHODS
+
+=head3 new
+
+    my $session = $self->new({
+        server => $z3950responder,
+        peer => 'PEER NAME'
+    });
+
+Instantiate a Session
+
+=cut
 
 sub new {
     my ( $class, $args ) = @_;
@@ -58,189 +95,70 @@ sub new {
         $self->{logger}->debug_to_screen();
     }
 
-    $self->_log_info("connected");
+    $self->log_info('connected');
 
     return $self;
 }
 
-sub _log_debug {
-    my ( $self, $msg ) = @_;
-    $self->{logger}->debug("[$self->{peer}] $msg");
-}
+=head3 search_handler
 
-sub _log_info {
-    my ( $self, $msg ) = @_;
-    $self->{logger}->info("[$self->{peer}] $msg");
-}
+    Callback that is called when a new search is performed
 
-sub _log_error {
-    my ( $self, $msg ) = @_;
-    $self->{logger}->error("[$self->{peer}] $msg");
-}
+Calls C<start_search> for backend-specific retrieval logic
 
-sub _set_error {
-    my ( $self, $args, $code, $msg ) = @_;
-
-    ( $args->{ERR_CODE}, $args->{ERR_STR} ) = ( $code, $msg );
-
-    $self->_log_error("    returning error $code: $msg");
-}
-
-sub _set_error_from_zoom {
-    my ( $self, $args, $exception ) = @_;
-
-    $self->_set_error( $args, ERR_TEMPORARY_ERROR, 'Cannot connect to upstream server' );
-    $self->_log_error(
-        "Zebra upstream error: " .
-        $exception->message() . " (" .
-        $exception->code() . ") " .
-        ( $exception->addinfo() // '' ) . " " .
-        $exception->diagset()
-    );
-}
-
-# This code originally went through C4::Search::getRecords, but had to use so many escape hatches
-# that it was easier to directly connect to Zebra.
-sub _start_search {
-    my ( $self, $args, $in_retry ) = @_;
-
-    my $database = $args->{DATABASES}->[0];
-    my ( $connection, $results );
-
-    eval {
-        $connection = C4::Context->Zconn(
-            # We're depending on the caller to have done some validation.
-            $database eq 'biblios' ? 'biblioserver' : 'authorityserver',
-            0 # No, no async, doesn't really help much for single-server searching
-        );
-
-        $results = $connection->search_pqf( $args->{QUERY} );
-
-        $self->_log_debug('    retry successful') if ($in_retry);
-    };
-    if ($@) {
-        die $@ if ( ref($@) ne 'ZOOM::Exception' );
-
-        if ( $@->diagset() eq 'ZOOM' && $@->code() == 10004 && !$in_retry ) {
-            $self->_log_debug('    upstream server lost connection, retrying');
-            return $self->_start_search( $args, 1 );
-        }
-
-        $self->_set_error_from_zoom( $args, $@ );
-        $connection = undef;
-    }
-
-    return ( $connection, $results, $results ? $results->size() : -1 );
-}
-
-sub _check_fetch {
-    my ( $self, $resultset, $args, $offset, $num_records ) = @_;
-
-    if ( !defined( $resultset ) ) {
-        $self->_set_error( $args, ERR_NO_SUCH_RESULTSET, 'No such resultset' );
-        return 0;
-    }
-
-    if ( $offset < 0 || $offset + $num_records > $resultset->{hits} )  {
-        $self->_set_error( $args, ERR_PRESENT_OUT_OF_RANGE, 'Present request out of range' );
-        return 0;
-    }
-
-    return 1;
-}
-
-sub _fetch_record {
-    my ( $self, $resultset, $args, $index, $num_to_prefetch ) = @_;
-
-    my $record;
-
-    eval {
-        if ( !$resultset->{results}->record_immediate( $index ) ) {
-            my $start = $num_to_prefetch ? int( $index / $num_to_prefetch ) * $num_to_prefetch : $index;
-
-            if ( $start + $num_to_prefetch >= $resultset->{results}->size() ) {
-                $num_to_prefetch = $resultset->{results}->size() - $start;
-            }
-
-            $self->_log_debug("    fetch uncached, fetching $num_to_prefetch records starting at $start");
-
-            $resultset->{results}->records( $start, $num_to_prefetch, 0 );
-        }
-
-        $record = $resultset->{results}->record_immediate( $index )->raw();
-    };
-    if ($@) {
-        die $@ if ( ref($@) ne 'ZOOM::Exception' );
-        $self->_set_error_from_zoom( $args, $@ );
-        return;
-    } else {
-        return $record;
-    }
-}
+=cut
 
 sub search_handler {
-    # Called when search is first sent.
     my ( $self, $args ) = @_;
 
     my $database = $args->{DATABASES}->[0];
 
-    if ( $database !~ /^(biblios|authorities)$/ ) {
-        $self->_set_error( $args, ERR_DB_DOES_NOT_EXIST, 'No such database' );
+    if ( $database ne $Koha::SearchEngine::BIBLIOS_INDEX && $database ne $Koha::SearchEngine::AUTHORITIES_INDEX ) {
+        $self->set_error( $args, $self->ERR_DB_DOES_NOT_EXIST, 'No such database' );
         return;
     }
 
     my $query = $args->{QUERY};
-    $self->_log_info("received search for '$query', (RS $args->{SETNAME})");
+    $self->log_info("received search for '$query', (RS $args->{SETNAME})");
 
-    my ( $connection, $results, $num_hits ) = $self->_start_search( $args );
-    return unless $connection;
+    my ($resultset, $hits) = $self->start_search( $args, $self->{server}->{num_to_prefetch} );
+    return unless $resultset;
 
-    $args->{HITS} = $num_hits;
-    my $resultset = $self->{resultsets}->{ $args->{SETNAME} } = {
-        database => $database,
-        connection => $connection,
-        results => $results,
-        query => $args->{QUERY},
-        hits => $args->{HITS},
-    };
+    $args->{HITS} = $hits;
+    $self->{resultsets}->{ $args->{SETNAME} } = $resultset;
 }
 
-sub present_handler {
-    # Called when a set of records is requested.
+=head3 fetch_handler
+
+    Callback that is called when records are requested
+
+Calls C<fetch_record> for backend-specific retrieval logic
+
+=cut
+
+sub fetch_handler {
     my ( $self, $args ) = @_;
 
-    $self->_log_debug("received present for $args->{SETNAME}, $args->{START}+$args->{NUMBER}");
+    $self->log_debug("received fetch for RS $args->{SETNAME}, record $args->{OFFSET}");
+
+    my $server = $self->{server};
+
+    my $form_oid = $args->{REQ_FORM} // '';
+    my $composition = $args->{COMP} // '';
+    $self->log_debug("    form OID '$form_oid', composition '$composition'");
 
     my $resultset = $self->{resultsets}->{ $args->{SETNAME} };
     # The offset comes across 1-indexed.
-    my $offset = $args->{START} - 1;
-
-    return unless $self->_check_fetch( $resultset, $args, $offset, $args->{NUMBER} );
-
-}
-
-sub fetch_handler {
-    # Called when a given record is requested.
-    my ( $self, $args ) = @_;
-    my $session = $args->{HANDLE};
-    my $server = $self->{server};
-
-    $self->_log_debug("received fetch for $args->{SETNAME}, record $args->{OFFSET}");
-    my $form_oid = $args->{REQ_FORM} // '';
-    my $composition = $args->{COMP} // '';
-    $self->_log_debug("    form OID $form_oid, composition $composition");
-
-    my $resultset = $session->{resultsets}->{ $args->{SETNAME} };
-    # The offset comes across 1-indexed.
     my $offset = $args->{OFFSET} - 1;
 
-    return unless $self->_check_fetch( $resultset, $args, $offset, 1 );
+    return unless $self->check_fetch( $resultset, $args, $offset, 1 );
 
     $args->{LAST} = 1 if ( $offset == $resultset->{hits} - 1 );
 
-    my $record = $self->_fetch_record( $resultset, $args, $offset, $server->{num_to_prefetch} );
+    my $record = $self->fetch_record( $resultset, $args, $offset, $server->{num_to_prefetch} );
     return unless $record;
 
+    # Note that new_record_from_zebra is badly named and works also with Elasticsearch
     $record = C4::Search::new_record_from_zebra(
         $resultset->{database} eq 'biblios' ? 'biblioserver' : 'authorityserver',
         $record
@@ -254,15 +172,83 @@ sub fetch_handler {
         }
     }
 
-    if ( $form_oid eq MARCXML_OID && $composition eq 'marcxml' ) {
+    if ( $form_oid eq $self->MARCXML_OID && $composition eq 'marcxml' ) {
         $args->{RECORD} = $record->as_xml_record();
-    } elsif ( ( $form_oid eq USMARC_OID || $form_oid eq UNIMARC_OID ) && ( !$composition || $composition eq 'F' ) ) {
+    } elsif ( ( $form_oid eq $self->USMARC_OID || $form_oid eq $self->UNIMARC_OID ) && ( !$composition || $composition eq 'F' ) ) {
         $args->{RECORD} = $record->as_usmarc();
     } else {
-        $self->_set_error( $args, ERR_SYNTAX_UNSUPPORTED, "Unsupported syntax/composition $form_oid/$composition" );
+        $self->set_error( $args, $self->ERR_SYNTAX_UNSUPPORTED, "Unsupported syntax/composition $form_oid/$composition" );
         return;
     }
 }
+
+=head3 close_handler
+
+Callback that is called when a session is terminated
+
+=cut
+
+sub close_handler {
+    my ( $self, $args ) = @_;
+
+    # Override in a child class to add functionality
+}
+
+=head3 start_search
+
+    my ($resultset, $hits) = $self->_start_search( $args, $self->{server}->{num_to_prefetch} );
+
+A backend-specific method for starting a new search
+
+=cut
+
+sub start_search {
+    die('Abstract method');
+}
+
+=head3 check_fetch
+
+    $self->check_fetch($resultset, $args, $offset, $num_records);
+
+Check that the fetch request parameters are within bounds of the result set.
+
+=cut
+
+sub check_fetch {
+    my ( $self, $resultset, $args, $offset, $num_records ) = @_;
+
+    if ( !defined( $resultset ) ) {
+        $self->set_error( $args, ERR_NO_SUCH_RESULTSET, 'No such resultset' );
+        return 0;
+    }
+
+    if ( $offset < 0 || $offset + $num_records > $resultset->{hits} )  {
+        $self->set_error( $args, ERR_PRESENT_OUT_OF_RANGE, 'Present request out of range' );
+        return 0;
+    }
+
+    return 1;
+}
+
+=head3 fetch_record
+
+    my $record = $self->_fetch_record( $resultset, $args, $offset, $server->{num_to_prefetch} );
+
+A backend-specific method for fetching a record
+
+=cut
+
+sub fetch_record {
+    die('Abstract method');
+}
+
+=head3 add_item_statuses
+
+    $self->add_item_status( $field );
+
+Add item status to the given field
+
+=cut
 
 sub add_item_status {
     my ( $self, $field ) = @_;
@@ -318,12 +304,60 @@ sub add_item_status {
     }
 }
 
-sub close_handler {
-    my ( $self, $args ) = @_;
 
-    foreach my $resultset ( values %{ $self->{resultsets} } ) {
-        $resultset->{results}->destroy();
-    }
+=head3 log_debug
+
+    $self->log_debug('Message');
+
+Output a debug message
+
+=cut
+
+sub log_debug {
+    my ( $self, $msg ) = @_;
+    $self->{logger}->debug("[$self->{peer}] $msg");
+}
+
+=head3 log_info
+
+    $self->log_info('Message');
+
+Output an info message
+
+=cut
+
+sub log_info {
+    my ( $self, $msg ) = @_;
+    $self->{logger}->info("[$self->{peer}] $msg");
+}
+
+=head3 log_error
+
+    $self->log_error('Message');
+
+Output an error message
+
+=cut
+
+sub log_error {
+    my ( $self, $msg ) = @_;
+    $self->{logger}->error("[$self->{peer}] $msg");
+}
+
+=head3 set_error
+
+    $self->set_error($args, $self->ERR_SEARCH_FAILED, 'Backend connection failed' );
+
+Set and log an error code and diagnostic message to be returned to the client
+
+=cut
+
+sub set_error {
+    my ( $self, $args, $code, $msg ) = @_;
+
+    ( $args->{ERR_CODE}, $args->{ERR_STR} ) = ( $code, $msg );
+
+    $self->log_error("    returning error $code: $msg");
 }
 
 1;

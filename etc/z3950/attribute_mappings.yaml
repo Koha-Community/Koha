@@ -1,0 +1,46 @@
+---
+# Mappings from Z39.50 USE attributes to Koha search fields
+authorities:
+    # BIB-1 use attributes to index fields
+    use:
+        1: Personal-name
+        2: Heading
+        3: Heading
+        9: LC-card-number
+        12: Local-number
+        default: _all
+biblios:
+    # BIB-1 use attributes to index fields
+    use:
+        1: author
+        2: author
+        3: author
+        4: title
+        5: se
+        7: isbn
+        8: issn
+        9: LC-card-number
+        10: bnb-card-number
+        11: bgf-number
+        12: Local-number
+        20: local-classification
+        21: subject
+        30:
+            - acqdate
+            - copydate
+            - pubdate
+        31: pubdate
+        32: acqdate
+        52: control-number
+        1003: author
+        1007: identifier-standard
+        1011: date-entered-on-file
+        1012: date-time-last-modified
+        1018: publisher
+        1019: record-source
+        1021: bib-level
+        1028: barcode
+        1031: itype
+        1033: Host-Item-Number
+        1045: control-number
+        default: _all

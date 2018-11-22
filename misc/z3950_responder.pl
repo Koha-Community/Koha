@@ -20,10 +20,11 @@
 use Modern::Perl;
 
 use Carp;
+use File::Basename;
 use Getopt::Long qw(:config no_ignore_case);
 use Pod::Usage;
 
-use C4::Context;
+use Koha::Config;
 use Koha::Z3950Responder;
 
 =head1 SYNOPSIS
@@ -31,7 +32,7 @@ use Koha::Z3950Responder;
    z3950_responder.pl [-h|--help] [--man] [-a <pdufile>] [-v <loglevel>] [-l <logfile>] [-u <user>]
                       [-c <config>] [-t <minutes>] [-k <kilobytes>] [-d <daemon>] [-p <pidfile>]
                       [-C certfile] [-zKiDST1] [-m <time-format>] [-w <directory>] [--debug]
-                      [--add-item-status=SUBFIELD] [--prefetch=NUM_RECORDS]
+                      [--add-item-status=SUBFIELD] [--prefetch=NUM_RECORDS] [--config-dir=<directory>]
                       [<listener-addr>... ]
 
 =head1 OPTIONS
@@ -51,7 +52,7 @@ Displays manual page and exits.
 
 =item B<--debug>
 
-Turns on debug logging to the screen, and turns on single-process mode.
+Turns on debug logging to the screen and the single-process mode.
 
 =item B<--add-item-status=SUBFIELD>
 
@@ -64,7 +65,12 @@ status string.
 
 =item B<--prefetch=NUM_RECORDS>
 
-Number of records to prefetch from Zebra. Defaults to 20.
+Number of records to prefetch. Defaults to 20.
+
+=item B<--config-dir=directory>
+
+Directory where to find configuration files required for proper operation. Defaults to z3950 under
+the Koha config directory.
 
 =back
 
@@ -101,6 +107,8 @@ my $debug = 0;
 my $help;
 my $man;
 my $prefetch = 20;
+my $config_dir = '';
+
 my @yaz_options;
 
 sub add_yaz_option {
@@ -122,6 +130,7 @@ GetOptions(
     '--add-item-status=s' => \$add_item_status_subfield,
     '--add-status-multi-subfield' => \$add_status_multi_subfield,
     '--prefetch=i' => \$prefetch,
+    '--config-dir=s' => \$config_dir,
     # Pass through YAZ options.
     'a=s' => \&add_yaz_option,
     'v=s' => \&add_yaz_option,
@@ -152,15 +161,22 @@ if (!@ARGV || $ARGV[-1] =~ /^-/) {
     push(@ARGV, '@:2100');
 }
 
-# Create and start the server.
+# If config_dir is not defined, default to z3950 under the Koha config directory
+if (!$config_dir) {
+    (undef, $config_dir) = fileparse(Koha::Config->guess_koha_conf);
+    $config_dir .= 'z3950/';
+} else {
+    $config_dir .= '/' if ($config_dir !~ /\/$/);
+}
 
-die "This tool only works with Zebra" if C4::Context->preference('SearchEngine') ne 'Zebra';
+# Create and start the server.
 
 my $z = Koha::Z3950Responder->new( {
     add_item_status_subfield => $add_item_status_subfield,
     add_status_multi_subfield => $add_status_multi_subfield,
     debug => $debug,
     num_to_prefetch => $prefetch,
+    config_dir => $config_dir,
     yaz_options => [ @yaz_options, @ARGV ],
 } );
 
