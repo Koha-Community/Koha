@@ -290,7 +290,7 @@ function editAction( mmta_id, ordering, action, field_number, from_field, from_s
     document.getElementById('conditional_value').value = conditional_value;
 
     document.getElementById('conditional_regex').checked = parseInt( conditional_regex );
-    document.getElementById('conditional_regex').onchange();
+    $('#conditional_regex').change();
 
     document.getElementById('description').value = description;
 
