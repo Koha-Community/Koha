@@ -151,20 +151,54 @@ sub authorized_heading {
 
 =head2 get_all_authorities_iterator
 
-    my $it = Koha::MetadataRecord::Authority->get_all_authorities_iterator();
+    my $it = Koha::MetadataRecord::Authority->get_all_authorities_iterator(%options);
 
 This will provide an iterator object that will, one by one, provide the
 Koha::MetadataRecord::Authority of each authority.
 
 The iterator is a Koha::MetadataIterator object.
 
+Possible options are:
+
+=over 4
+
+=item C<slice>
+
+slice may be defined as a hash of two values: index and count. index
+is the slice number to process and count is total number of slices.
+With this information the iterator returns just the given slice of
+records instead of all.
+
+=back
+
 =cut
 
 sub get_all_authorities_iterator {
+    my ($self, %options) = @_;
+
+    my $search_terms = {
+        marcxml => { '!=', undef }
+    };
+    my ($slice_modulo, $slice_count);
+    if ($options{slice}) {
+        $slice_count = $options{slice}->{count};
+        $slice_modulo = $options{slice}->{index};
+        $slice_modulo = 0 if ($slice_modulo == $slice_count);
+
+        $search_terms->{authid} = \[ ' mod ? = ?', $slice_count, $slice_modulo];
+        $search_terms = {
+            '-and' => [
+                $search_terms,
+                \[ ' mod(authid, ?) = ?', $slice_count, $slice_modulo]
+            ]
+        };
+    }
+
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
     my $rs =
-      $schema->resultset('AuthHeader')->search( { marcxml => { '!=', undef } },
+      $schema->resultset('AuthHeader')->search(
+        $search_terms,
         { columns => [qw/ authid authtypecode marcxml /] } );
     my $next_func = sub {
         my $row = $rs->next();
