@@ -101,20 +101,46 @@ sub get_from_biblionumber {
 
 =head2 get_all_biblios_iterator
 
-    my $it = Koha::BiblioUtils->get_all_biblios_iterator();
+    my $it = Koha::BiblioUtils->get_all_biblios_iterator(%options);
 
 This will provide an iterator object that will, one by one, provide the
 Koha::BiblioUtils of each biblio. This will include the item data.
 
 The iterator is a Koha::MetadataIterator object.
 
+Possible options are:
+
+=over 4
+
+=item C<slice>
+
+slice may be defined as a hash of two values: index and count. index
+is the slice number to process and count is total number of slices.
+With this information the iterator returns just the given slice of
+records instead of all.
+
+=back
+
 =cut
 
 sub get_all_biblios_iterator {
+    my ($self, %options) = @_;
+
+    my $search_terms = {};
+    my ($slice_modulo, $slice_count);
+    if ($options{slice}) {
+        $slice_count = $options{slice}->{count};
+        $slice_modulo = $options{slice}->{index};
+        $slice_modulo = 0 if ($slice_modulo == $slice_count);
+
+        $search_terms = \[ ' mod(biblionumber, ?) = ?', $slice_count, $slice_modulo];
+    }
+
     my $database = Koha::Database->new();
     my $schema   = $database->schema();
     my $rs =
-      $schema->resultset('Biblio')->search( {},
+      $schema->resultset('Biblio')->search(
+        $search_terms,
         { columns => [qw/ biblionumber /] } );
     my $next_func = sub {
         # Warn and skip bad records, otherwise we break the loop
