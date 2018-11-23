@@ -82,7 +82,7 @@ sub extract {
         }
         catch {
             if (blessed($_) && $_->isa('Koha::Exception::SelfService')) {
-                $logger->warn($_);
+                $logger->debug($_); #As we are making a batch run over all borrowers, don't unnecessarily warn over all possible issues.
                 $val = 0;
             }
             else {

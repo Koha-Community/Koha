@@ -1,3 +1,4 @@
+#!/usr/bin/perl
 use Modern::Perl;
 use utf8;
 use English;
