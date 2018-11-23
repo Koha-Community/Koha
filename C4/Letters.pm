@@ -1284,9 +1284,10 @@ sub _send_message_by_email {
         }
     }
 
-    my $utf8   = decode('MIME-Header', $message->{'subject'} );
-    $message->{subject}= encode('MIME-Header', $utf8);
-    my $subject = encode('UTF-8', $message->{'subject'});
+    # Encode subject line separately
+    $message->{subject} = encode('MIME-Header', $message->{'subject'} );
+    my $subject = $message->{'subject'};
+
     my $content = encode('UTF-8', $message->{'content'});
     my $content_type = $message->{'content_type'} || 'text/plain; charset="UTF-8"';
     my $is_html = $content_type =~ m/html/io;
