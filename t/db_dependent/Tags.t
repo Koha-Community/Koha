@@ -1,16 +1,149 @@
 #!/usr/bin/perl
+
+# This file is part of Koha.
 #
-# This Koha test module is a stub!  
-# Add more tests here!!!
+# Koha is free software; you can redistribute it and/or modify it
+# under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# Koha is distributed in the hope that it will be useful, but
+# WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with Koha; if not, see <http://www.gnu.org/licenses>.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
-use Test::More tests => 32;
+use utf8;
 
-BEGIN {
-        use_ok('C4::Tags');
-}
+use Test::More tests => 34;
+
+use t::lib::TestBuilder;
+
+use List::MoreUtils qw(any);
+
+use Koha::Database;
+use Koha::Tags;
+use Koha::Tags::Approvals;
+use Koha::Tags::Indexes;
+
+use C4::Tags;
+
+# So any output is readable :-D
+binmode STDOUT, ':encoding(utf8)';
+
+my $schema = Koha::Database->schema;
+my $builder = t::lib::TestBuilder->new;
+
+subtest 'add_tag_approval() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    # Make sure there's no pollution on the DB
+    Koha::Tags::Approvals->search->delete;
+
+    my $terms = {
+      # term => count
+        '🐋a' => 3, # added an ASCII char to make it differ from just emojis
+        '🌮'  => 2,
+        '👍'  => 1,
+    };
+
+    for my $term ( keys %{ $terms } ) {
+        for (my $i=1; $i <= $terms->{$term}; $i++) {
+            C4::Tags::add_tag_approval( $term );
+        }
+    }
+
+    my $approvals = Koha::Tags::Approvals->search;
+    is( $approvals->count, scalar keys %{ $terms }, 'All terms got their approval row' );
+
+    while ( my $approval = $approvals->next ) {
+        ok( exists $terms->{$approval->term}, 'The returned term is in our list' );
+        is( $approval->weight_total, $terms->{$approval->term} );
+    }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_tag_index() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    # Make sure there's no pollution on the DB
+    Koha::Tags::Indexes->search->delete;
+
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+
+    my $terms = {
+      # term => count
+        '🐋a' => 3, # added an ASCII char to make it differ from just emojis
+        '🌮'  => 2,
+        '👍'  => 1,
+    };
+
+    for my $term ( keys %{ $terms } ) {
+        for (my $i=1; $i <= $terms->{$term}; $i++) {
+            C4::Tags::add_tag_approval( $term );
+            C4::Tags::add_tag_index( $term, $biblio->biblionumber );
+        }
+    }
+
+    my $indexes = Koha::Tags::Indexes->search({ biblionumber => $biblio->biblionumber });
+    is( $indexes->count, scalar keys %{ $terms }, 'All terms got their index row' );
+
+    while ( my $index = $indexes->next ) {
+        ok( exists $terms->{$index->term}, 'The returned term is in our list' );
+        is( $index->weight, $terms->{$index->term}  );
+    }
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'get_tag_rows() tests' => sub {
+
+    plan tests => 7;
+
+    $schema->storage->txn_begin;
+
+    # Make sure there's no pollution on the DB
+    Koha::Tags->search->delete;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $biblio = $builder->build_object({ class => 'Koha::Biblios' });
+
+    my @terms = ( '🐋a', '🌮', '👍' );
+
+    for my $term ( @terms ) {
+        $builder->build_object({ class => 'Koha::Tags', value => {
+            borrowernumber => $patron->id,
+            biblionumber   => $biblio->id,
+            term           => $term,
+        } });
+    }
+
+    my $tags = Koha::Tags->search({ borrowernumber => $patron->id });
+    is( $tags->count, scalar @terms, 'All terms got their row' );
+
+    while ( my $tag = $tags->next ) {
+        ok( any { $_ eq $tag->term } @terms , 'The returned term is in our list' );
+    }
+
+    for my $term ( @terms ) {
+        my @result = @{ C4::Tags::get_tag_rows({ term => $term }) };
+
+        is( scalar @result, 1, 'Only one row matches each' );
+    }
+
+    $schema->storage->txn_rollback;
+};
 
 # Check no tags case.
 my @tagsarray;
