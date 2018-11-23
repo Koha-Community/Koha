@@ -114,7 +114,7 @@ if ($email) {
 
     # Analysing information and getting mail properties
     if ( $template_res =~ /<SUBJECT>(.*)<END_SUBJECT>/s ) {
-        $mail{'subject'} = Encode::encode("UTF-8", $1);
+        $mail{'subject'} = encode('MIME-Header', $1);
         $mail{subject} =~ s|\n?(.*)\n?|$1|;
     }
     else { $mail{'subject'} = "no subject"; }
