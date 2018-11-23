@@ -136,7 +136,7 @@ if ( $email ) {
         $mail{subject} =~ s|\n?(.*)\n?|$1|;
     }
     else { $mail{'subject'} = "no subject"; }
-    $mail{subject} = Encode::encode("UTF-8", $mail{subject});
+    $mail{subject} = encode('MIME-Header', $mail{subject});
 
     my $email_header = "";
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
