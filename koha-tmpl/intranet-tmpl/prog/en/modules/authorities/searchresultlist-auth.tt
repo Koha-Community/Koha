@@ -14,7 +14,7 @@
     	[% INCLUDE 'auth-finder-search.inc' %]
         [% IF ( total ) %]<div class="resultnumber">
             [% IF ( displayprev ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromprev | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]">
+                    <a href="auth_finder.pl?startfrom=[% startfromprev | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source %]">
                         &lt;&lt;
                     </a>
                 [% END %]
@@ -22,12 +22,12 @@
                     [% IF ( number.highlight ) %]
                         [% number.number | html %]
                     [% ELSE %]
-                        <a href="auth_finder.pl?startfrom=[% number.startfrom | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]">
+                        <a href="auth_finder.pl?startfrom=[% number.startfrom | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source %]">
                             [% number.number | html %]</a>
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromnext | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]">
+                    <a href="auth_finder.pl?startfrom=[% startfromnext | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source %]">
                         &gt;&gt;</a>
                 [% END %]
             <div>
@@ -67,7 +67,7 @@
         </div>
         <div class="resultnumber">
             [% IF ( displayprev ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromprev | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranetamp;&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]">
+                    <a href="auth_finder.pl?startfrom=[% startfromprev | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranetamp;&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source %]">
                         &lt;&lt;
                     </a>
                 [% END %]
@@ -75,12 +75,12 @@
                     [% IF ( number.highlight ) %]
                         [% number.number | html %]
                     [% ELSE %]
-                        <a href="auth_finder.pl?startfrom=[% number.startfrom | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]">
+                        <a href="auth_finder.pl?startfrom=[% number.startfrom | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN number.searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source %]">
                             [% number.number | html %]</a>
                     [% END %]
                 [% END %]
                 [% IF ( displaynext ) %]
-                    <a href="auth_finder.pl?startfrom=[% startfromnext | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]">
+                    <a href="auth_finder.pl?startfrom=[% startfromnext | uri %]&amp;authtypecode=[% authtypecode | uri %][% FOREACH searchdat IN searchdata %]&amp;[% searchdat.term | uri %]=[% searchdat.val | uri %][% END %]&amp;op=do_search&amp;type=intranet&amp;index=[% index | uri %]&amp;tagid=[% tagid | uri %]&amp;orderby=[% orderby | uri %]&amp;source=[% source %]">
                         &gt;&gt;</a>
                 [% END %]
         </div>[% END %]
