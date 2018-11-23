@@ -114,10 +114,11 @@ if ($email) {
 
     # Analysing information and getting mail properties
     if ( $template_res =~ /<SUBJECT>(.*)<END_SUBJECT>/s ) {
-        $mail{'subject'} = encode('MIME-Header', $1);
+        $mail{subject} = $1;
         $mail{subject} =~ s|\n?(.*)\n?|$1|;
     }
     else { $mail{'subject'} = "no subject"; }
+    $mail{subject} = encode( 'MIME-Header', $mail{subject} );
 
     my $email_header = "";
     if ( $template_res =~ /<HEADER>(.*)<END_HEADER>/s ) {
