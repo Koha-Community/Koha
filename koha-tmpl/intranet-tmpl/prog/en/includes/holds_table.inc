@@ -29,6 +29,7 @@
                 [% IF Koha.Preference('HoldsSplitQueue') == "nothing" && !hold.found %]
                     <select name="rank-request">
                 [% ELSE %]
+                    <input type="hidden" name="rank-request" value="[% hold.priority | html %]">
                     <select name="rank-request" disabled="disabled">
                 [% END %]
                     [% IF ( hold.found ) %]
