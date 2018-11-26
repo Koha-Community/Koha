@@ -5,7 +5,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 17.11\n"
-"POT-Creation-Date: 2018-10-20 01:27-0300\n"
+"POT-Creation-Date: 2018-11-19 20:21-0300\n"
 "PO-Revision-Date: 2018-03-05 07:32+0000\n"
 "Last-Translator: tp6ru8jo6 <tp6ru8jo6@gmail.com>\n"
 "Language-Team: koha_TW <kohataiwan@googlegroups.com>\n"
@@ -4315,11 +4315,12 @@ msgid "%s Other phone: "
 msgstr "%s 其它电话："
 
 #. %1$s:  IF (sub.alreadyOnOrder) 
-#. %2$s:  ELSIF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid
+#. %2$s:  END 
+#. %3$s:  IF not sub.aqbooksellerid || booksellerid == sub.aqbooksellerid
 #: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:97
-#, c-format
-msgid "%s Outstanding order (only one order per subscription is allowed) %s "
-msgstr "%s 订购中(每笔订单祗允许一笔订购) %s "
+#, fuzzy, c-format
+msgid "%s Outstanding order %s %s "
+msgstr "%s没有待决的订单。%s "
 
 #. %1$s:  END 
 #: intranet-tmpl/prog/en/modules/admin/aqbudgets.tt:568
@@ -5028,7 +5029,7 @@ msgid "%s after %s "
 msgstr "%s 在 %s 之后 "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "%s already in your cart"
 msgstr "%s 已在您的采购单"
 
@@ -5319,7 +5320,7 @@ msgid "%s item records found and staged"
 msgstr "%s 找到馆藏纪录并等待输入"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "%s item(s) added to your cart"
 msgstr "%s 馆藏新增至您的采购清单"
 
@@ -10421,7 +10422,7 @@ msgstr "若找不到映射书目时，则："
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:473
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:184
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:68
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:138
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:232
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:300
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:211
@@ -11041,7 +11042,7 @@ msgstr "新增至采购单"
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 #: intranet-tmpl/prog/en/includes/cat-toolbar.inc:112
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:321
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:701
@@ -11742,6 +11743,8 @@ msgstr "所有馆藏类型"
 #: intranet-tmpl/prog/en/modules/catalogue/itemsearch.tt:17
 #: intranet-tmpl/prog/en/modules/catalogue/advsearch.tt:240
 #: intranet-tmpl/prog/en/modules/circ/article-requests.tt:126
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:71
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:145
 #: intranet-tmpl/prog/en/modules/admin/authorised_values.tt:109
 #: intranet-tmpl/prog/en/modules/reports/acquisitions_stats.tt:189
 #, c-format
@@ -12953,7 +12956,7 @@ msgid "Are you sure you want to edit another rule?"
 msgstr "您确定要编辑另个规则吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "Are you sure you want to empty your cart?"
 msgstr "确定清空您的采购单吗？"
 
@@ -12981,7 +12984,7 @@ msgid "Are you sure you want to remove label number(s): %s from this batch?"
 msgstr "确定删除选定的读者吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "Are you sure you want to remove the selected items?"
 msgstr "确定删除指定的馆藏吗？"
 
@@ -15462,6 +15465,8 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:279
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:295
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:339
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:221
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:223
 #: intranet-tmpl/prog/en/modules/patroncards/print.tt:115
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:165
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:560
@@ -15539,7 +15544,7 @@ msgstr "不能存储此纪录，因为以下字段尚未填入数据："
 #: intranet-tmpl/prog/en/modules/admin/koha2marclinks.tt:78
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:134
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:102
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:109
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:110
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:112
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:200
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:385
@@ -15794,7 +15799,7 @@ msgstr "不能删除"
 msgid "Cannot add patron"
 msgstr "不能新增读者"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:105
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:106
 #, c-format
 msgid "Cannot be ordered"
 msgstr "不能订购"
@@ -17869,7 +17874,7 @@ msgid "Click to Edit"
 msgstr "勾选以编辑"
 
 #. A
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:297
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:304
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:620
 msgid "Click to Expand this Tag"
 msgstr "勾选以扩充此标签"
@@ -17907,7 +17912,7 @@ msgstr "勾选填入随机产生的推荐。"
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:264
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:388
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:328
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:709
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:254
@@ -17923,7 +17928,7 @@ msgstr "复制此规则给："
 
 #. IMG
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:264
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:388
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:395
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:328
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:709
 #: intranet-tmpl/prog/en/modules/serials/serials-edit.tt:254
@@ -18471,11 +18476,6 @@ msgstr ""
 msgid "Confirm"
 msgstr "确认"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:347
-#, fuzzy, c-format
-msgid "Confirm "
-msgstr "确认"
-
 #: intranet-tmpl/prog/en/modules/ill/ill-requests.tt:333
 #, fuzzy, c-format
 msgid "Confirm ILL request"
@@ -18555,6 +18555,7 @@ msgstr "确认删除标签 "
 msgid "Confirm deletion of this vendor ?"
 msgstr "确认删除代理商吗？"
 
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:347
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:564
 #, fuzzy, c-format
 msgid "Confirm hold "
@@ -20586,7 +20587,7 @@ msgstr "延迟是逾期后天数，届时才启发逾期通知。"
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:203
 #: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:220
 #: intranet-tmpl/prog/en/modules/authorities/searchresultlist.tt:100
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:391
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
 #: intranet-tmpl/prog/en/modules/patroncards/edit-batch.tt:246
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:131
 #: intranet-tmpl/prog/en/modules/patroncards/image-manage.tt:142
@@ -20637,7 +20638,7 @@ msgstr "延迟是逾期后天数，届时才启发逾期通知。"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:784
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:196
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:81
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:153
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:158
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:279
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:311
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:221
@@ -20696,7 +20697,7 @@ msgstr "选择 CSV 配置文件："
 
 #. %1$s:  ean.ean 
 #. %2$s:  ean.branch.branchname 
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:116
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:117
 #, fuzzy, c-format
 msgid "Delete EAN %s for %s?"
 msgstr "删除基金%s 吗？"
@@ -20974,8 +20975,8 @@ msgid "Delete the single holidays on a range"
 msgstr "删除此范围的单一假日"
 
 #. A
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:305
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:306
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:312
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:313
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:628
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:629
 msgid "Delete this Tag"
@@ -21018,7 +21019,7 @@ msgid "Delete this saved report"
 msgstr "删除此存储的报表"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:391
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:398
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:712
 msgid "Delete this subfield"
 msgstr "删除此分栏"
@@ -21220,7 +21221,7 @@ msgstr "系所"
 #: intranet-tmpl/prog/en/modules/plugins/plugins-home.tt:70
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:153
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:181
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:134
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:135
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:299
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:208
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:243
@@ -21300,7 +21301,7 @@ msgstr "说明："
 #: intranet-tmpl/prog/en/modules/admin/categories.tt:274
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:96
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:120
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:81
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:82
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:357
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:71
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:121
@@ -22061,7 +22062,7 @@ msgstr ""
 msgid "E-mail order"
 msgstr "催缺订单"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:135
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:136
 #, fuzzy, c-format
 msgid "EAN"
 msgstr "EAN："
@@ -22082,7 +22083,7 @@ msgstr "EAN："
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:369
 #: intranet-tmpl/prog/en/modules/acqui/neworderempty.tt:372
 #: intranet-tmpl/prog/en/modules/acqui/histsearch.tt:58
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:85
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:86
 #, c-format
 msgid "EAN: "
 msgstr "EAN："
@@ -22228,7 +22229,7 @@ msgstr "Ed Summers (Some code and Perl packages like MARC::Record)"
 #: intranet-tmpl/prog/en/modules/admin/smart-rules.tt:318
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:195
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:80
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:152
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:157
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:275
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:310
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:122
@@ -27366,7 +27367,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 #: intranet-tmpl/prog/en/modules/catalogue/results.tt:699
 #, fuzzy, c-format
 msgid "In your cart"
@@ -28535,7 +28536,7 @@ msgid "Items in batch number %s"
 msgstr "批次号码 %s 的馆藏"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "Items in your cart: %s"
 msgstr "采购单里的馆藏：%s"
 
@@ -32120,7 +32121,7 @@ msgstr "图书馆限制："
 #: intranet-tmpl/prog/en/modules/circ/bookcount.tt:38
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:133
 #: intranet-tmpl/prog/en/modules/circ/on-site_checkouts.tt:50
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:133
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:134
 #: intranet-tmpl/prog/en/modules/admin/branch_transfer_limits.tt:85
 #: intranet-tmpl/prog/en/modules/reports/cat_issues_top.tt:173
 #: intranet-tmpl/prog/en/modules/reports/catalogue_out.tt:127
@@ -32153,7 +32154,7 @@ msgstr "图书馆 %s - %s 还入与转移政策"
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:25
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:27
 #: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:30
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:130
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:131
 #: intranet-tmpl/prog/en/modules/admin/admin-home.tt:107
 #, fuzzy, c-format
 msgid "Library EANs"
@@ -34531,8 +34532,8 @@ msgid "Move"
 msgstr "移动"
 
 #. IMG
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:325
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:327
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:332
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:334
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:647
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:649
 msgid "Move Up"
@@ -35761,7 +35762,7 @@ msgid "No comments to moderate."
 msgstr "无待审核的评论。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:59
+#: intranet-tmpl/prog/en/includes/js_includes.inc:60
 msgid "No cover image available"
 msgstr "无可用的封面"
 
@@ -35878,13 +35879,13 @@ msgid "No item matches this barcode"
 msgstr "此条码没有映射的馆藏"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 #, fuzzy
 msgid "No item was added to your cart (already in your cart)!"
 msgstr "无馆藏加入您的采购单 (已经在您的采购单)！"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "No item was selected"
 msgstr "未选定馆藏"
 
@@ -36131,7 +36132,7 @@ msgstr "未安装可用的外挂程序"
 
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:240
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:370
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:377
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:303
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:684
 msgid "No popup"
@@ -36297,7 +36298,7 @@ msgstr "不，不要删除"
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:136
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:298
 #: intranet-tmpl/prog/en/modules/admin/aqcontract.tt:164
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:123
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:124
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:215
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:399
 #: intranet-tmpl/prog/en/modules/admin/classsources.tt:155
@@ -37588,7 +37589,7 @@ msgid "One or more selected items cannot be placed on hold."
 msgstr "不能预约点选的馆藏。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "One or more selected items cannot be reserved."
 msgstr "不能回复点选的馆藏。"
 
@@ -37801,12 +37802,7 @@ msgstr "或一个接一个列出馆藏"
 msgid "Or use a patron list"
 msgstr "或使用读者清单"
 
-#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:104
 #: intranet-tmpl/prog/en/modules/acqui/transferorder.tt:93
-#: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:77
-#: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:79
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:143
-#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:149
 #: intranet-tmpl/prog/en/modules/acqui/spent.tt:41
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:516
 #: intranet-tmpl/prog/en/modules/acqui/basket.tt:699
@@ -37816,8 +37812,6 @@ msgid "Order"
 msgstr "订单"
 
 #: intranet-tmpl/prog/en/modules/acqui/ordered.tt:41
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:101
-#: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:97
 #, c-format
 msgid "Order "
 msgstr "订单 "
@@ -37898,7 +37892,7 @@ msgid "Order status: "
 msgstr "订单状态："
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:101
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:102
 #: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:97
 msgid "Order this one"
 msgstr "订阅此"
@@ -39750,6 +39744,20 @@ msgstr "放置读者的预约"
 msgid "Place of publication"
 msgstr "出版地"
 
+#: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:77
+#: intranet-tmpl/prog/en/modules/acqui/newordersuggestion.tt:79
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:143
+#: intranet-tmpl/prog/en/modules/acqui/z3950_search.tt:149
+#, fuzzy, c-format
+msgid "Place order"
+msgstr "取消订单"
+
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:102
+#: intranet-tmpl/prog/en/modules/acqui/neworderbiblio.tt:97
+#, fuzzy, c-format
+msgid "Place order "
+msgstr "预约 "
+
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/circ/request-article.tt:292
 #, fuzzy
@@ -40838,11 +40846,6 @@ msgstr "给 %s 的印本通知"
 msgid "Print Receipt for %s"
 msgstr "%s 的印本收条"
 
-#: intranet-tmpl/prog/en/modules/circ/returns.tt:352
-#, fuzzy, c-format
-msgid "Print and confirm "
-msgstr "打印与确认"
-
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:385
 #, c-format
 msgid "Print card number as barcode: "
@@ -40904,6 +40907,7 @@ msgstr "打印收条"
 msgid "Print slip and confirm"
 msgstr "打印收条与确认"
 
+#: intranet-tmpl/prog/en/modules/circ/returns.tt:352
 #: intranet-tmpl/prog/en/modules/circ/returns.tt:567
 #, fuzzy, c-format
 msgid "Print slip and confirm "
@@ -41465,7 +41469,7 @@ msgstr "新书推荐"
 msgid "Qty."
 msgstr "数量"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:136
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:137
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:252
 #, c-format
 msgid "Qualifier"
@@ -41476,7 +41480,7 @@ msgstr ""
 msgid "Qualifier:"
 msgstr ""
 
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:89
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:90
 #, fuzzy, c-format
 msgid "Qualifier: "
 msgstr "区隔符号："
@@ -41650,6 +41654,7 @@ msgstr ""
 msgid "Rafal Kopaczka"
 msgstr "Rafal Kopaczka"
 
+#: intranet-tmpl/prog/en/modules/tools/marc_modification_templates.tt:104
 #: intranet-tmpl/prog/en/modules/serials/routing.tt:71
 #: intranet-tmpl/prog/en/modules/admin/z3950servers.tt:231
 #: intranet-tmpl/prog/en/modules/reports/bor_issues_top.tt:102
@@ -42445,8 +42450,8 @@ msgid "Rep.price"
 msgstr "Rep.price"
 
 #. A
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:301
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:302
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:308
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:309
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:624
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:625
 msgid "Repeat this Tag"
@@ -43676,7 +43681,6 @@ msgstr "星期六"
 #: intranet-tmpl/prog/en/modules/tools/letter.tt:291
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:278
 #: intranet-tmpl/prog/en/modules/authorities/authorities.tt:215
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:430
 #: intranet-tmpl/prog/en/modules/patroncards/edit-template.tt:164
 #: intranet-tmpl/prog/en/modules/patroncards/edit-layout.tt:559
 #: intranet-tmpl/prog/en/modules/patroncards/edit-profile.tt:127
@@ -46112,7 +46116,7 @@ msgstr "抱歉，您的寻找没有结果。"
 msgid "Sorry, the CAS login failed."
 msgstr "抱歉，CAS 登录失败。"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:113
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:114
 #, c-format
 msgid "Sorry, there is no result for your search."
 msgstr "抱歉，您的寻找没有结果。"
@@ -47214,7 +47218,7 @@ msgstr "主题："
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:116
 #: intranet-tmpl/prog/en/modules/admin/fieldmapping.tt:56
 #: intranet-tmpl/prog/en/modules/admin/items_search_fields.tt:101
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:108
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:109
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:199
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:384
 #: intranet-tmpl/prog/en/modules/admin/audio_alerts.tt:72
@@ -47991,8 +47995,8 @@ msgstr "栏号被删除"
 #. A
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:236
 #: intranet-tmpl/prog/en/modules/tools/batchMod-edit.tt:242
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:366
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:372
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:373
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:379
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:295
 #: intranet-tmpl/prog/en/modules/cataloguing/additem.tt:305
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:678
@@ -48528,11 +48532,6 @@ msgstr ""
 "biblio.biblionumber 与 biblioitems.biblioitemnumber 字段映射至一个 MARC 分"
 "栏，"
 
-#: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:34
-#, c-format
-msgid "The biblionumber "
-msgstr "书目号码 "
-
 #. %1$s:  email_add |html 
 #: intranet-tmpl/prog/en/modules/basket/sendbasketform.tt:10
 #, c-format
@@ -48801,7 +48800,7 @@ msgid "The item has been removed from the list."
 msgstr "此馆藏已从虚拟书架删除。"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 #, fuzzy
 msgid "The item has been removed from your cart"
 msgstr "此馆藏已从虚拟书架删除。"
@@ -49042,6 +49041,11 @@ msgid ""
 "The record (%s) has not been added to the list. Please verify it is not "
 "already in the list."
 msgstr "此馆藏未加入此虚拟书架。请确认还不在此虚拟书架。"
+
+#: intranet-tmpl/prog/en/modules/tools/showdiffmarc.tt:34
+#, fuzzy, c-format
+msgid "The record id "
+msgstr "此纪录已使用 "
 
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:550
 #, fuzzy, c-format
@@ -49301,7 +49305,7 @@ msgstr "没有迟到的订单。"
 msgid "There are no libraries defined. "
 msgstr "没有定义图书馆。"
 
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:159
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:164
 #, fuzzy, c-format
 msgid "There are no library EANs. "
 msgstr "没有定义图书馆。"
@@ -49586,7 +49590,7 @@ msgstr "此馆藏已在此课程内。"
 
 #. INPUT type=checkbox name=disable_input
 #: intranet-tmpl/prog/en/modules/tools/modborrowers.tt:379
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:348
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:355
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:665
 msgid "This field is mandatory"
 msgstr "此字段是必备"
@@ -49685,7 +49689,7 @@ msgid "This item cannot be removed. It is lost"
 msgstr "此馆藏不能续借，已被馆内借出"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "This item has been added to your cart"
 msgstr "此馆藏新增至您的采购单"
 
@@ -49718,7 +49722,7 @@ msgid "This item has previously been checked out to this patron."
 msgstr "(%s) 被此读者借出中。续借吗？"
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "This item is already in your cart"
 msgstr "此馆藏已经在您的采购单"
 
@@ -49978,7 +49982,7 @@ msgid "This subfield will be deleted"
 msgstr "此分栏将被删除"
 
 #. A
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:105
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:106
 msgid "This subscription depends on another supplier"
 msgstr "此订阅视另个供应商而定"
 
@@ -52097,7 +52101,7 @@ msgstr "使用报表字典定义使用于您报表的客制化范围"
 msgid "Use the search form on the left to find invoices."
 msgstr "使用左方的寻找表单找寻发票。"
 
-#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:116
+#: intranet-tmpl/prog/en/modules/acqui/newordersubscription.tt:117
 #, c-format
 msgid "Use the search form on the left to find subscriptions."
 msgstr "使用左方的寻找表单检索订阅。"
@@ -53499,7 +53503,7 @@ msgstr "是的，关闭(Y)"
 #: intranet-tmpl/prog/en/modules/members/deletemem.tt:39
 #: intranet-tmpl/prog/en/modules/admin/authtypes.tt:133
 #: intranet-tmpl/prog/en/modules/admin/systempreferences.tt:297
-#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:120
+#: intranet-tmpl/prog/en/modules/admin/edi_ean_accounts.tt:121
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:212
 #: intranet-tmpl/prog/en/modules/admin/branches.tt:396
 #: intranet-tmpl/prog/en/modules/admin/edi_accounts.tt:230
@@ -54226,7 +54230,7 @@ msgid "Your cart "
 msgstr "您的采购单 "
 
 #. SCRIPT
-#: intranet-tmpl/prog/en/includes/js_includes.inc:35
+#: intranet-tmpl/prog/en/includes/js_includes.inc:36
 msgid "Your cart is currently empty"
 msgstr "您的采购单是空的"
 
@@ -54511,7 +54515,7 @@ msgid "[% firstname | html %] [% surname | html %] ([% cardnumber | html %])"
 msgstr "[% firstname %] [% surname %] ([% cardnumber %])"
 
 #. A
-#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:237
+#: intranet-tmpl/prog/en/modules/authorities/authorities.tt:244
 #: intranet-tmpl/prog/en/modules/cataloguing/addbiblio.tt:580
 msgid "[% innerloo.tag_lib %] - Click to Expand this Tag"
 msgstr "[% innerloo.tag_lib %] - 按下可展开此栏号"
