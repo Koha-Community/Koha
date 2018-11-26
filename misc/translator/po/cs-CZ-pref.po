@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-23 08:15+0200\n"
-"PO-Revision-Date: 2018-10-01 12:28+0000\n"
+"PO-Revision-Date: 2018-11-06 13:44+0000\n"
 "Last-Translator: m23 <black23@gmail.com>\n"
 "Language-Team: Czech <http://hosted.weblate.org/projects/koha/staff-prog/cs/>\n"
 "Language: cs\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8-bit\n"
 "Plural-Forms: nplurals=3; plural=(n==1) ? 0 : (n>=2 && n<=4) ? 1 : 2;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1538396930.121261\n"
+"X-POOTLE-MTIME: 1541511864.327738\n"
 "X-Pootle-Path: /cs/18.05/cs-CZ-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -185,15 +185,11 @@ msgid "acquisitions.pref#OrderPdfFormat# layout when printing basket groups."
 msgstr "."
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br>(Used when the cronjob purge_suggestions.pl is active and called without a specific number of days)"
+msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/purge_suggestions.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br>Example: [30] Sets purgation of suggestions for those older than 30 days."
-msgstr ""
-
-# Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br>WARNING - Leave this field empty if you don't want to activate this automatic feature."
+msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>WARNING:</strong> Leave this field empty if you don't want to activate this automatic feature."
 msgstr ""
 
 # Acquisitions > Policy
@@ -201,8 +197,8 @@ msgid "acquisitions.pref#PurgeSuggestionsOlderThan# Keep accepted or rejected pu
 msgstr ""
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# days."
-msgstr "dny."
+msgid "acquisitions.pref#PurgeSuggestionsOlderThan# days. Example: [30] Sets purgation of suggestions for those older than 30 days."
+msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# (separated by a space)"
@@ -218,11 +214,11 @@ msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UseACQFrameworkForBiblioRecords# Don't use"
-msgstr ""
+msgstr "Nepoužít"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UseACQFrameworkForBiblioRecords# Use"
-msgstr ""
+msgstr "Použít"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#gist# . Enter in numeric form, 0.12 for 12%. The first item in the list will be selected by default. For more than one value, separate with | (pipe)."
@@ -497,6 +493,18 @@ msgid "admin.pref#SessionStorage# Temporary files"
 msgstr "Dočasné soubory na disku"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# . Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
 msgstr "Ne"
 
@@ -509,12 +517,12 @@ msgid "admin.pref#UsageStats# Yes"
 msgstr "Ano"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStats# You have to run misc/cronjobs/share_usage_with_koha_community.pl in a cronjob. Note that the other \"UsageStats\" preferences have no effect if this preference is set to \"No\". Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr "Musíte spustit cron misc/cronjobs/share_usage_with_koha_community.pl jeho zařazením do seznamu cronjob. Uvědomte si, že nemá smysl vyplňovat související nástavení \"UsageStats\", pokud se rozhodnete data o používání nesdílet vybráním varianty \"Ne\". Statistiky jsou přístupné na: <a href=\"http://hea.koha-community.org\">části webu komunity Koha věnované projektu Hea</a>."
-
-# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# "
 msgstr "  "
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1037,10 +1045,6 @@ msgid "admin.pref#UsageStatsCountry# Norway"
 msgstr "Norsko"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsCountry# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "Poznámka:  nemá smysl vyplňovat tuto hodnotu, pokud se rozhodnete data o používání nesdílet vybráním výše umístěné volby \"Ne\""
-
-# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Oman"
 msgstr "Omán"
 
@@ -1305,20 +1309,20 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "Zimbabwe"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "Geolokační údaje hlavní budovy knihovny: "
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsGeolocation# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "Poznámka: Vyplnění hodnoty nemá smysl, pokud jste výše rozhodli, že data o využítí nechcete sdílet."
+msgid "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Do not Share"
 msgstr "Nesdílet"
-
-# Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibrariesInfo# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "Poznámka: Vyplnění hodnoty nemá smysl, pokud jste výše rozhodli, že data o využítí nechcete sdílet."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Share"
@@ -1329,12 +1333,12 @@ msgid "admin.pref#UsageStatsLibrariesInfo# libraries information (name, url, cou
 msgstr "informace o knihovně (název, URL, stát)"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
-msgstr "Pokud ponecháte prázdné, budou se data odesílat anonymně."
+msgid "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryName# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "Poznámka:  nemá smysl vyplňovat tuto hodnotu, pokud se rozhodnete data o používání nesdílet vybráním výše umístěné volby \"Ne\""
+msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
+msgstr "Pokud ponecháte prázdné, budou se data odesílat anonymně."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# Use the following library name to be shown on the Hea Community website: "
@@ -1345,8 +1349,8 @@ msgid "admin.pref#UsageStatsLibraryType# "
 msgstr "  "
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryType# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "Poznámka:  nemá smysl vyplňovat tuto hodnotu, pokud se rozhodnete data o používání nesdílet vybráním výše umístěné volby \"Ne\""
+msgid "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# The library type to be shown on the Hea Community website: "
@@ -1393,8 +1397,8 @@ msgid "admin.pref#UsageStatsLibraryType# subscription"
 msgstr "předplatitelská / nezávislá knihovna"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryUrl# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "Poznámka:  nemá smysl vyplňovat tuto hodnotu, pokud se rozhodnete data o používání nesdílet vybráním výše umístěné volby \"Ne\""
+msgid "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryUrl# The library URL to be shown on the Hea Community website: "
@@ -1526,6 +1530,10 @@ msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to edit how authority records control indicators of attached biblio fields (and possibly subfield $2).<br>"
+msgstr ""
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
 # Authorities > General
@@ -1832,15 +1840,15 @@ msgstr ""
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EnableAdvancedCatalogingEditor# Don't enable"
-msgstr ""
+msgstr "Nepovolit"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EnableAdvancedCatalogingEditor# Enable"
-msgstr ""
+msgstr "Povolit"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EnableAdvancedCatalogingEditor# the advanced cataloging editor."
-msgstr ""
+msgstr "rozšířený katalogizační editor."
 
 # Cataloging > Display
 msgid "cataloguing.pref#ISBD# Use the following as the staff ISBD template:"
@@ -1900,7 +1908,7 @@ msgstr ""
 
 # Cataloging > Display
 msgid "cataloguing.pref#MarcFieldDocURL# Use"
-msgstr ""
+msgstr "Použít"
 
 # Cataloging > Display
 msgid "cataloguing.pref#MarcFieldDocURL# as the URL for MARC field documentation."
@@ -1937,6 +1945,10 @@ msgstr "pole, která se mají zobrazit pro záznamy odstraněné po sloučení"
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "(vyplňte kód lokace, nebo ponechte prázdné pro zakázání této funkce)."
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -2485,7 +2497,7 @@ msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Don't allow"
 msgstr "Nepovolit"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record.  (NOTE: This will only affect records without a subscription attached.)"
+msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record.  (<strong>NOTE:</strong> This will only affect records without a subscription attached.)"
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -2509,8 +2521,8 @@ msgid "circulation.pref#AllowOfflineCirculation# Enable"
 msgstr "Povolit"
 
 # Circulation > Interface
-msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular circulation computers. (NOTE: This system preference does not affect the Firefox plugin or the desktop application)"
-msgstr "offline výpůjčky přímo v rozhraní systému Koha. (Toto nastavení nemá vliv na funkci rozšíření pro Firefox ani na desktopovou aplikaci pro offline výpůjčky)"
+msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular circulation computers. (<strong>NOTE:</strong> This system preference does not affect the Firefox plugin or the desktop application)"
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -2617,6 +2629,10 @@ msgid "circulation.pref#AutoRemoveOverduesRestrictions# allow OVERDUES restricti
 msgstr "automatické rušení omezení služeb knihovny, pokud čtenář vrátí všechny upomínané jednotky."
 
 # Circulation > Holds Policy
+msgid "circulation.pref#AutoResumeSuspendedHolds# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# Allow"
 msgstr "Povolit"
 
@@ -2721,8 +2737,8 @@ msgid "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that hav
 msgstr "vrácení materiálů, které byly vyřazeny."
 
 # Circulation > Checkin Policy
-msgid "circulation.pref#CalculateFinesOnReturn# <br /><b>NOTE If you are doing hourly loans then you should have this on.</b>"
-msgstr "<br /><b>Vezměte na vědomí, že pokud již provádíte výpůjčky s přesností na hodiny, pak by tento parametr by měl být zapnutý.</b>"
+msgid "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
+msgstr ""
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -2861,6 +2877,10 @@ msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longov
 msgstr "<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru --charge)"
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
 msgstr " <br>Nechte pole prázdné pokud nechcete vybírat náhradu za ztrátu dokumentů."
 
@@ -2871,6 +2891,10 @@ msgstr "Naúčtovat čtenáři poplatek, pokud se hodnota LOST změní na :"
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
 msgstr "<br>(Používá se, pokud je skript longoverdue.pl spouštěn bez parametru --lost)"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
@@ -2937,8 +2961,8 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "Nepovolit"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay"
-msgstr "aby rezervace automaticky vypršely, pokud nebyly vyzvednuty v termínu definovaném parametrem ReservesMaxPickUpDelay"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
@@ -2973,8 +2997,8 @@ msgid "circulation.pref#ExportRemoveFields# (separate fields with space, e.g. 10
 msgstr "(oddělit pole mezerou, např. 100a 200b 300c)"
 
 # Circulation > Interface
-msgid "circulation.pref#ExportRemoveFields# The following fields should be excluded from the patron checkout history CSV or iso2709 export"
-msgstr "Následující pole vypustit z historie výpůjček čtenáře při exportu ve formátu CSV nebo ISO2709"
+msgid "circulation.pref#ExportRemoveFields# The following fields should be excluded from the patron checkout history CSV or MARC (ISO 2709) export"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#FilterBeforeOverdueReport# Don't require"
@@ -3074,7 +3098,7 @@ msgstr "modul donáškové služby"
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModule# Disable"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModule# Enable"
@@ -3086,6 +3110,10 @@ msgstr "modul pro správu MVS."
 
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
+msgstr ""
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#InProcessingToShelvingCart# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
 # Circulation > Checkout Policy
@@ -3502,6 +3530,10 @@ msgid "circulation.pref#ReturnBeforeExpiry# patrons to return books before their
 msgstr "čtenáři vrátit knihy, dříve než vyprší jeho registrace (omezením výpůjční doby na datum vypršení registrace čtenáře)."
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#ReturnToShelvingCart# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#ReturnToShelvingCart# Don't move"
 msgstr "Neposílat"
 
@@ -3535,11 +3567,11 @@ msgstr ""
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInModule# Don't enable"
-msgstr ""
+msgstr "Nepovolit"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInModule# Enable"
-msgstr ""
+msgstr "Povolit"
 
 # Circulation > Self check-in module
 msgid "circulation.pref#SelfCheckInModule# the standalone self check-in module (available at: /cgi-bin/koha/sci/sci-main.pl)"
@@ -3656,6 +3688,10 @@ msgstr "aktuální knihovnu."
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# (as branchcodes, separated by commas; if empty, uses all libraries)"
 msgstr "(kódy poboček oddělené čárkami; není-li vyplněno, platí pro všechny knihovny/pobočky)"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#StaticHoldsQueueWeight# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# Satisfy holds using items from the libraries"
@@ -3938,8 +3974,12 @@ msgid "circulation.pref#finesCalendar# not including days the library is closed.
 msgstr "nezahrnovat zavírací dny knihovny."
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
-msgstr "<br><b>Poznámka:</b> Poplatky za upomínky mohou být účtovány také pomocí  nastavení CalculateFinesOnReturn."
+msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
+msgstr ""
+
+# Circulation > Fines Policy
+msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
@@ -4148,6 +4188,10 @@ msgstr "OverDrive"
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref Plugins"
 msgstr "Rozšiřující moduly (pluginy)"
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref RecordedBooks"
+msgstr ""
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref Syndetics"
@@ -4598,6 +4642,18 @@ msgid "enhanced_content.pref#OpenLibrarySearch# search results from Open Library
 msgstr "výsledky hledání z Open Library v on.line katalogu."
 
 # Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveAuthName# (will be used as fallback if individual branch authname not set <a href=\"/cgi-bin/koha/admin/overdrive.pl\">here</a>)."
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveAuthName# Authenticate using OverDrive Authname"
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveCirculation# A password is"
+msgstr ""
+
+# Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# Don't enable"
 msgstr "Neumožnit"
 
@@ -4606,20 +4662,28 @@ msgid "enhanced_content.pref#OverDriveCirculation# Enable"
 msgstr "Umožnit"
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# If you enable access, you must register auth return url of"
-msgstr "Pokud aktivujete přístup musíte registrovat ověřovací URL"
+msgid "enhanced_content.pref#OverDriveCirculation# If you enable access you must have a SIP connection registered with"
+msgstr ""
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# http(s)://my.opac.hostname/cgi-bin/koha/external/overdrive/auth.pl"
-msgstr "http(s)://muj.opac.jmenoserveru/cgi-bin/koha/external/overdrive/auth.pl"
+msgid "enhanced_content.pref#OverDriveCirculation# Not required"
+msgstr ""
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive circulation history, and circulate items."
-msgstr ", aby uživatelé měli přístup k historii svých  výpůjček v systému OverDrive a mohli si další jednotky půjčovat."
+msgid "enhanced_content.pref#OverDriveCirculation# OverDrive for patron authentication against Koha"
+msgstr ""
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# with OverDrive."
-msgstr "v účtu OverDrive."
+msgid "enhanced_content.pref#OverDriveCirculation# Required"
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveCirculation# for user access to OverDrive. <br />"
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive circulation history, and circulate items.<br />"
+msgstr ""
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# ."
@@ -4640,6 +4704,34 @@ msgstr "."
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveLibraryID# Show items from the OverDrive catalog of library #"
 msgstr "Identifikátor knihovny v systému OverDrive:"
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveWebsiteID# ."
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveWebsiteID# Authenticate using OverDrive website id #"
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks availability information with the client secret"
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksLibraryID# Show items from the RecordedBooks catalog of library ID"
+msgstr ""
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -5850,6 +5942,10 @@ msgid "opac.pref#OpacBrowseResults# browsing and paging search results from the 
 msgstr "procházení a listování výsledků vyhledání z detailní stránky OPACu."
 
 # OPAC > Features
+msgid "opac.pref#OpacBrowser# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
 msgstr "Povolit"
 
@@ -5858,8 +5954,12 @@ msgid "opac.pref#OpacBrowser# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Features
-msgid "opac.pref#OpacBrowser# patrons to browse subject authorities on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to create the browser list)"
-msgstr "čtenářům prohlížení seznamu předmětových autorit na OPACu (spustit program isc/cronjobs/build_browser_and_cloud.pl na vytvoření takového seznamu)"
+msgid "opac.pref#OpacBrowser# patrons to browse subject authorities on OPAC"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacCloud# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# Don't show"
@@ -5870,8 +5970,8 @@ msgid "opac.pref#OpacCloud# Show"
 msgstr "Zobrazovat"
 
 # OPAC > Features
-msgid "opac.pref#OpacCloud# a subject cloud on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to build)"
-msgstr "tématické mraky na OPACu. (spustit program misc/cronjobs/build_browser_and_cloud.pl na vytvoření takových mraků)"
+msgid "opac.pref#OpacCloud# a subject cloud on OPAC"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacCustomSearch# Replace the search box at the top of OPAC pages with the following HTML:"
@@ -6242,6 +6342,10 @@ msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a h
 msgstr ""
 
 # OPAC > Self Registration
+msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+msgstr ""
+
+# OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "Povolit"
 
@@ -6250,7 +6354,7 @@ msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "Nepovolit"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC. Note: This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
 msgstr ""
 
 # OPAC > Self Registration
@@ -6294,6 +6398,10 @@ msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrow
 msgstr ""
 
 # OPAC > Self Registration
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_expired_opac_registrations.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
 msgstr "Vymazat čtenáře registrované pomocí OPACu, ale dosud nezkontrolované po"
 
@@ -6324,6 +6432,10 @@ msgstr "Nezobrazovat ani nepředvyplňovat"
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "heslo a přihlašovací formulář po samoobslužné registraci čtenáře."
+
+# OPAC > Self Registration
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_unverified_opac_registrations.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
@@ -6645,6 +6757,10 @@ msgstr "Základní"
 msgid "patrons.pref Norwegian patron database"
 msgstr "Norská databáze uživatelů knihoven"
 
+# Patrons > Privacy
+msgid "patrons.pref Privacy"
+msgstr ""
+
 # Patrons > General
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
 msgstr "Povolit"
@@ -6702,7 +6818,7 @@ msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr "(oddělit sloupce svislítkem |)"
 
 # Patrons > General
-msgid "patrons.pref#BorrowerMandatoryField# NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+msgid "patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
 msgstr ""
 
 # Patrons > General
@@ -6719,7 +6835,7 @@ msgstr "aktuálního data."
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# current membership expiry date."
-msgstr "původního datumu platnosti."
+msgstr "původního data platnosti."
 
 # Patrons > General
 msgid "patrons.pref#BorrowerRenewalPeriodBase# the latter of the current and expiry date."
@@ -6790,6 +6906,14 @@ msgid "patrons.pref#EnableBorrowerFiles# enable the ability to upload and attach
 msgstr "přiložit libovolné soubory k záznamu čtenáře."
 
 # Patrons > General
+msgid "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
+msgstr ""
+
+# Patrons > General
+msgid "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask your system administrator to schedule them."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
 msgstr "Povolit"
 
@@ -6798,7 +6922,11 @@ msgid "patrons.pref#EnhancedMessagingPreferences# Don't allow"
 msgstr "Nepovolit"
 
 # Patrons > General
-msgid "patrons.pref#EnhancedMessagingPreferences# Staff to manage which notices patrons will receive and when they will receive them. Note: this only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
+msgid "patrons.pref#EnhancedMessagingPreferences# Staff to manage which notices patrons will receive and when they will receive them."
+msgstr ""
+
+# Patrons > General
+msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
 msgstr ""
 
 # Patrons > General
@@ -6810,8 +6938,8 @@ msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Show"
 msgstr "Zobrazit"
 
 # Patrons > General
-msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# patron messaging setting on the OPAC (note: EnhancedMessagingPreferences must be enabled)."
-msgstr "čtenářům nastavení upozorňování v katalogu (EnhancedMessagingPreferences musí být aktivní)."
+msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# patron messaging setting on the OPAC."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
@@ -6858,6 +6986,10 @@ msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "[% local_currency %]."
 
 # Patrons > General
+msgid "patrons.pref#MembershipExpiryDaysNotice# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/membership_expiry.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
 msgstr "Odeslat čtenářům upozornění, že jejich registrace vyprší"
 
@@ -6881,27 +7013,27 @@ msgstr "server."
 msgid "patrons.pref#NorwegianPatronDBEnable# the ability to communicate with the Norwegian national patron database via the"
 msgstr "možnost komunikovat s Norskou národní databází uživatelů knihoven přes"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Do"
 msgstr "Provádět"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Don't"
 msgstr "Neprovádět"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
 msgstr "hledání v Norské národní databázi uživatelů knihoven, pokud hledání ve vlastní bázi nepřineslo výsledky."
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
 msgstr ". Tyto údaje získáte z \"Base Bibliotek\", kterou spravuje Norská národní knihovna."
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
 msgstr "Komunikace s Norskou národní databízí uživatelů knihovne s použitím uživatelského jména"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
 msgstr "a hesla"
 
@@ -6930,6 +7062,10 @@ msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "výsledků vyhledání na stránku v intranetu."
 
 # Patrons > General
+msgid "patrons.pref#ProtectSuperlibrarianPrivileges# <br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow all permitted users"
 msgstr ""
 
@@ -6938,7 +7074,7 @@ msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow only superlibrarians"
 msgstr ""
 
 # Patrons > General
-msgid "patrons.pref#ProtectSuperlibrarianPrivileges# to access/change superlibrarian privileges. Note: A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
+msgid "patrons.pref#ProtectSuperlibrarianPrivileges# to access/change superlibrarian privileges."
 msgstr ""
 
 # Patrons > General
@@ -6958,7 +7094,7 @@ msgid "patrons.pref#RequireStrongPassword# a strong password for staff and patro
 msgstr ""
 
 # Patrons > General
-msgid "patrons.pref#SMSSendDriver# <br>If you would prefer to receive SMS via E-mail, set SMSendDriver to: Email"
+msgid "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, set SMSSendDriver to: Email"
 msgstr ""
 
 # Patrons > General
@@ -7006,12 +7142,16 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "Nezaznamenávat"
 
 # Patrons > General
-msgid "patrons.pref#TrackLastPatronActivity# Everytime a patron will connect, the borrowers.lastseen will be updated with the current time."
-msgstr "kdykoli se čtenář připojí, bude hodnota borrowers.lastseen aktualizována s použitím aktuálního času."
+msgid "patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the borrowers.lastseen will be updated with the current time."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
 msgstr "poslední aktivitu čtenáře."
+
+# Patrons > General
+msgid "patrons.pref#autoMemberNum# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
@@ -7020,10 +7160,6 @@ msgstr "Použít"
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# Don't"
 msgstr "Nepoužít"
-
-# Patrons > General
-msgid "patrons.pref#autoMemberNum# NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
@@ -7142,7 +7278,7 @@ msgid "searching.pref#BrowseResultSelection# Enable"
 msgstr ""
 
 # Searching > Features
-msgid "searching.pref#BrowseResultSelection# browsing search results fromt the bibliographic record detail page in staff client."
+msgid "searching.pref#BrowseResultSelection# browsing search results from the bibliographic record detail page in staff client."
 msgstr ""
 
 # Searching > Results Display

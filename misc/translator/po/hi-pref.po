@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:25+0200\n"
-"PO-Revision-Date: 2018-05-11 04:19+0000\n"
+"PO-Revision-Date: 2018-11-13 01:13+0000\n"
 "Last-Translator: Nikunj Tyagi <nikunj1@gmail.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: hi\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1526012340.302589\n"
+"X-POOTLE-MTIME: 1542071594.021480\n"
 "X-Pootle-Path: /hi/18.05/hi-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -185,24 +185,20 @@ msgid "acquisitions.pref#OrderPdfFormat# layout when printing basket groups."
 msgstr "acquisitions.pref # OrderPdfFormat # लेआउट जब टोकरी समूहों का मुद्रण।"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br>(Used when the cronjob purge_suggestions.pl is active and called without a specific number of days)"
-msgstr "acquisitions.pref#PurgeSuggestionsOlderThan# <br>(जब इस्तेमाल किया cronjob purge_suggestions.pl सक्रिय है और बिना किसी विशिष्ट संख्या के दिन बुलाया जाता है)"
+msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/purge_suggestions.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br>Example: [30] Sets purgation of suggestions for those older than 30 days."
-msgstr "acquisitions.pref#PurgeSuggestionsOlderThan# <br>उदाहरण: [30] उन 30 दिनों से पुराने के लिए सुझावों की विरेचन सेट."
-
-# Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br>WARNING - Leave this field empty if you don't want to activate this automatic feature."
-msgstr "acquisitions.pref#PurgeSuggestionsOlderThan# <br>चेतावनी - यदि आप इस स्वचालित सुविधा को सक्रिय नहीं करना चाहते हैं तो यह फ़ील्ड खाली छोड़ें।"
+msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>WARNING:</strong> Leave this field empty if you don't want to activate this automatic feature."
+msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#PurgeSuggestionsOlderThan# Keep accepted or rejected purchase suggestions for a period of"
 msgstr "acquisitions.pref#PurgeSuggestionsOlderThan# की अवधि के लिए खरीद सुझाव स्वीकार या अस्वीकार करें"
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# days."
-msgstr "acquisitions.pref#PurgeSuggestionsOlderThan# दिनों."
+msgid "acquisitions.pref#PurgeSuggestionsOlderThan# days. Example: [30] Sets purgation of suggestions for those older than 30 days."
+msgstr ""
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# (separated by a space)"
@@ -497,6 +493,18 @@ msgid "admin.pref#SessionStorage# Temporary files"
 msgstr "admin.pref#SessionStorage# अस्थायी फ़ाइलें"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# . Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
 msgstr "admin.pref#UsageStats# नही"
 
@@ -509,12 +517,12 @@ msgid "admin.pref#UsageStats# Yes"
 msgstr "admin.pref#UsageStats# हाँ"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStats# You have to run misc/cronjobs/share_usage_with_koha_community.pl in a cronjob. Note that the other \"UsageStats\" preferences have no effect if this preference is set to \"No\". Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
-msgstr "admin.pref#UsageStats# आप एक cronjob में misc/cronjobs/share_usage_with_koha_community.pl चलाने के लिए है। ध्यान दें कि अन्य \"UsageStats\" वरीयताओं कोई प्रभाव नहीं है इस प्राथमिकता को \"नहीं\" सेट कर दिया जाता है। वेबसाइट जहां उपयोग के आंकड़े प्रकाशित कर रहे हैं: <a href=\"http://hea.koha-community.org\"> Hea कोहा समुदाय वेबसाइट </a>."
-
-# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# "
 msgstr "admin.pref#UsageStatsCountry# "
+
+# Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1037,10 +1045,6 @@ msgid "admin.pref#UsageStatsCountry# Norway"
 msgstr "admin.pref#UsageStatsCountry# नार्वे"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsCountry# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "admin.pref#UsageStatsCountry# नोट इस मूल्य में कोई प्रभाव नहीं यदि UsageStats प्रणाली वरीयता लिए सेट कर दिया जाता है \"साझा न करे\""
-
-# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Oman"
 msgstr "admin.pref#UsageStatsCountry# ओमान"
 
@@ -1305,20 +1309,20 @@ msgid "admin.pref#UsageStatsCountry# Zimbabwe"
 msgstr "admin.pref#UsageStatsCountry# जिम्बाब्वे"
 
 # Administration > Share anonymous usage statistics
+msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
+
+# Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
 msgstr "admin.pref#UsageStatsGeolocation# मुख्य पुस्तकालय के जियोलोकेशन:"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsGeolocation# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "admin.pref#UsageStatsGeolocation# ध्यान दें कि इस मान का कोई प्रभाव नहीं है यदि UsageStats सिस्टम प्राथमिकता \"साझा न करें\""
+msgid "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Do not Share"
 msgstr "admin.pref#UsageStatsLibrariesInfo# साझा न करें"
-
-# Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibrariesInfo# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "admin.pref#UsageStatsLibrariesInfo# ध्यान दें कि इस मान का कोई प्रभाव नहीं है यदि UsageStats सिस्टम प्राथमिकता \"साझा न करें\""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Share"
@@ -1329,12 +1333,12 @@ msgid "admin.pref#UsageStatsLibrariesInfo# libraries information (name, url, cou
 msgstr "admin.pref#UsageStatsLibrariesInfo# पुस्तकालयों की जानकारी (नाम, यूआरएल, देश)"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
-msgstr "admin.pref#UsageStatsLibraryName# अगर इस क्षेत्र का डेटा खाली है तो गुमनाम रूप से भेजा जाएगा।"
+msgid "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryName# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "admin.pref#UsageStatsLibraryName# नोट इस मूल्य में कोई प्रभाव नहीं यदि UsageStats प्रणाली वरीयता का हिस्सा है सेट कर दिया जाता है, तो है कि \"शेयर न करें \""
+msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
+msgstr "admin.pref#UsageStatsLibraryName# अगर इस क्षेत्र का डेटा खाली है तो गुमनाम रूप से भेजा जाएगा।"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# Use the following library name to be shown on the Hea Community website: "
@@ -1345,8 +1349,8 @@ msgid "admin.pref#UsageStatsLibraryType# "
 msgstr "admin.pref#UsageStatsLibraryType# "
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryType# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "admin.pref #UsageStatsLibraryType# ध्यान दें कि यह मूल्य कोई प्रभाव नहीं है कि UsageStats प्रणाली वरीयता करने के लिए सेट कर दिया जाता है, तो \"का हिस्सा नही है\""
+msgid "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# The library type to be shown on the Hea Community website: "
@@ -1393,8 +1397,8 @@ msgid "admin.pref#UsageStatsLibraryType# subscription"
 msgstr "admin.pref # UsageStatsLibraryType # सदस्यता"
 
 # Administration > Share anonymous usage statistics
-msgid "admin.pref#UsageStatsLibraryUrl# Note that this value has no effect if the UsageStats system preference is set to \"Don't share\""
-msgstr "admin.pref#UsageStatsLibraryUrl# नोट इस मूल्य में कोई प्रभाव नहीं UsageStats प्रणाली वरीयता लिए सेट कर दिया जाता है, तो है कि \"का हिस्सा है \""
+msgid "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
+msgstr ""
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryUrl# The library URL to be shown on the Hea Community website: "
@@ -1527,6 +1531,10 @@ msgstr "authorities.pref#AuthorityControlledIndicators# मार्क 21 व�
 # Authorities > General
 msgid "authorities.pref#AuthorityControlledIndicators# Use the following text to edit how authority records control indicators of attached biblio fields (and possibly subfield $2).<br>"
 msgstr "authorities.pref#AuthorityControlledIndicators# एडिटिंग रिकॉर्ड को बिब्लियों क्षेत्र संलग्न करने वाले प्राधिकरण के नियंत्रण संकेतक को संपादित करने के लिए निम्न पाठ का उपयोग करें (और संभावित रूप से उप-फ़ील्ड $2).<br>"
+
+# Authorities > General
+msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached biblio records if the number exceeds"
@@ -1937,6 +1945,10 @@ msgstr "cataloguing.pref # MergeReportFields # मर्ज फ़ील्ड �
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# (should be a location code, or blank to disable)."
 msgstr "cataloguing.pref # NewItemsDefaultLocation # (निष्क्रिय करने के लिए खाली एक स्थान कोड होना चाहिए, या)।"
+
+# Cataloging > Record Structure
+msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -2485,8 +2497,8 @@ msgid "circulation.pref#AllowMultipleIssuesOnABiblio# Don't allow"
 msgstr "circulation.pref # AllowMultipleIssuesOnABiblio # अनुमति न दें"
 
 # Circulation > Checkout Policy
-msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record.  (NOTE: This will only affect records without a subscription attached.)"
-msgstr "circulation.pref#AllowMultipleIssuesOnABiblio# संरक्षक ही रिकॉर्ड से एकाधिक आइटम्स की जाँच करें। (नोट: यह केवल एक सदस्यता संलग्न बिना रिकॉर्ड को प्रभावित करेगा.)"
+msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record.  (<strong>NOTE:</strong> This will only affect records without a subscription attached.)"
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -2509,8 +2521,8 @@ msgid "circulation.pref#AllowOfflineCirculation# Enable"
 msgstr "circulation.pref # AllowOfflineCirculation # सक्षम करें"
 
 # Circulation > Interface
-msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular circulation computers. (NOTE: This system preference does not affect the Firefox plugin or the desktop application)"
-msgstr "circulation.pref # AllowOfflineCirculation नियमित रूप से प्रचलन कंप्यूटर पर # ऑफ़लाइन परिसंचरण। (नोट: इस प्रणाली वरीयता Firefox प्लगइन या डेस्कटॉप आवेदन को प्रभावित नहीं करता है)"
+msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular circulation computers. (<strong>NOTE:</strong> This system preference does not affect the Firefox plugin or the desktop application)"
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -2617,6 +2629,10 @@ msgid "circulation.pref#AutoRemoveOverduesRestrictions# allow OVERDUES restricti
 msgstr "circulation.pref # AutoRemoveOverduesRestrictions # भेजा नोटिस से शुरू हो रहा अतिदेय प्रतिबंध स्वचालित रूप से साफ किया जा सकता है जब सभी अतिदेय आइटम एक संरक्षक द्वारा दिए गए हैं अनुमति देते हैं।"
 
 # Circulation > Holds Policy
+msgid "circulation.pref#AutoResumeSuspendedHolds# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# Allow"
 msgstr "circulation.pref # AutoResumeSuspendedHolds # अनुमति दें"
 
@@ -2721,8 +2737,8 @@ msgid "circulation.pref#BlockReturnOfWithdrawnItems# returning of items that hav
 msgstr "circulation.pref # BlockReturnOfWithdrawnItems आइटम है कि वापस ले लिया गया है के लौटने #।"
 
 # Circulation > Checkin Policy
-msgid "circulation.pref#CalculateFinesOnReturn# <br /><b>NOTE If you are doing hourly loans then you should have this on.</b>"
-msgstr "circulation.pref#CalculateFinesOnReturn # <br/> <b> नोट आप प्रति घंटा ऋण कर रहे हैं तो आप इस पर होनी चाहिए।</b>"
+msgid "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
+msgstr ""
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -2861,6 +2877,10 @@ msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>(Used when the longov
 msgstr "circulation.pref # DefaultLongOverdueChargeValue # <br> (जब longoverdue.pl स्क्रिप्ट --charge पैरामीटर बिना कहा जाता है प्रयुक्त)"
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueChargeValue# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
 msgstr "circulation.pref # DefaultLongOverdueChargeValue # <br> इस क्षेत्र को रिक्त छोड़ दें, तो आप खो मदों के लिए उपयोगकर्ता चार्ज करने के लिए नहीं करना चाहती।"
 
@@ -2871,6 +2891,10 @@ msgstr "circulation.pref # DefaultLongOverdueChargeValue # उधारकर्
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>(Used when the longoverdue.pl script is called without the --lost parameter)"
 msgstr "circulation.pref # DefaultLongOverdueLostValue # <br> (जब longoverdue.pl स्क्रिप्ट --lost पैरामीटर बिना कहा जाता है प्रयुक्त)"
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#DefaultLongOverdueLostValue# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
@@ -2937,8 +2961,8 @@ msgid "circulation.pref#ExpireReservesMaxPickUpDelay# Don't allow"
 msgstr "circulation.pref # ExpireReservesMaxPickUpDelay # अनुमति न दें"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay"
-msgstr "circulation.pref # ExpireReservesMaxPickUpDelay # स्वचालित रूप से समाप्त करने के लिए रखती है वे द्वारा ReservesMaxPickUpDelay में निर्दिष्ट समय अवधि के भीतर नहीं उठाया गया है अगर"
+msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
@@ -2973,8 +2997,8 @@ msgid "circulation.pref#ExportRemoveFields# (separate fields with space, e.g. 10
 msgstr "circulation.pref # ExportRemoveFields # (अलग अलग क्षेत्रों के साथ स्पेश, जैसे. 100a 200b 300c)"
 
 # Circulation > Interface
-msgid "circulation.pref#ExportRemoveFields# The following fields should be excluded from the patron checkout history CSV or iso2709 export"
-msgstr "circulation.pref # ExportRemoveFields # निम्नलिखित क्षेत्रों संरक्षक चेकआउट इतिहास सीएसवी या iso2709 निर्यात से बाहर रखा जाना चाहिए"
+msgid "circulation.pref#ExportRemoveFields# The following fields should be excluded from the patron checkout history CSV or MARC (ISO 2709) export"
+msgstr ""
 
 # Circulation > Interface
 msgid "circulation.pref#FilterBeforeOverdueReport# Don't require"
@@ -3087,6 +3111,10 @@ msgstr "circulation.pref#ILLModule# अंत: पुस्तकालय ऋ�
 # Circulation > Interlibrary Loans
 msgid "circulation.pref#ILLModuleCopyrightClearance# Adding text will enable the copyright clearance stage in request creation. The text you enter will be the text displayed."
 msgstr "circulation.pref#ILLModuleCopyrightClearance# पाठ जोड़ने से अनुरोध निर्माण में कॉपीराइट स्वीकृति चरण सक्षम होगा। आपके द्वारा दर्ज किया हुआ टेक्स्ट टेक्स्ट प्रदर्शित होगा."
+
+# Circulation > Checkout Policy
+msgid "circulation.pref#InProcessingToShelvingCart# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#InProcessingToShelvingCart# Don't move"
@@ -3502,6 +3530,10 @@ msgid "circulation.pref#ReturnBeforeExpiry# patrons to return books before their
 msgstr "circulation.pref # ReturnBeforeExpiry # संरक्षक किताबें वापस करने के लिए पहले उनके खातों (संरक्षक की समाप्ति की तारीख से पहले करने के लिए नियत दिनांक सीमित द्वारा) समाप्त हो।"
 
 # Circulation > Checkout Policy
+msgid "circulation.pref#ReturnToShelvingCart# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Circulation > Checkout Policy
 msgid "circulation.pref#ReturnToShelvingCart# Don't move"
 msgstr "circulation.pref # ReturnToShelvingCart # हिलना मत"
 
@@ -3656,6 +3688,10 @@ msgstr "circulation.pref # StaffSearchResultsDisplayBranch # पुस्तक�
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# (as branchcodes, separated by commas; if empty, uses all libraries)"
 msgstr "circulation.pref # StaticHoldsQueueWeight # (branchcodes, अल्पविराम के द्वारा अलग रूप में, खाली हैं, सभी पुस्तकालयों का उपयोग करता है)"
+
+# Circulation > Holds Policy
+msgid "circulation.pref#StaticHoldsQueueWeight# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# Satisfy holds using items from the libraries"
@@ -3938,8 +3974,12 @@ msgid "circulation.pref#finesCalendar# not including days the library is closed.
 msgstr "दिन पुस्तकालय बंद कर दिया है सहित नहीं circulation.pref # finesCalendar #।"
 
 # Circulation > Fines Policy
-msgid "circulation.pref#finesMode# <br><b>Note:</b> Fines can also be charged by the CalculateFinesOnReturn system preference."
-msgstr "circulation.pref#finesMode# <br> <b> नोट:</b> जुर्माना भी CalculateFinesOnReturn प्रणाली वरीयता ने आरोप लगाया जा सकता है।"
+msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
+msgstr ""
+
+# Circulation > Fines Policy
+msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
@@ -4148,6 +4188,10 @@ msgstr "enhanced_content.pref ओवरड्राइव"
 # Enhanced Content > Plugins
 msgid "enhanced_content.pref Plugins"
 msgstr "enhanced_content.pref प्लगइन्स"
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref RecordedBooks"
+msgstr ""
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref Syndetics"
@@ -4598,6 +4642,18 @@ msgid "enhanced_content.pref#OpenLibrarySearch# search results from Open Library
 msgstr "enhanced_content.pref # OpenLibrarySearch ओपेक पर ओपन लाइब्रेरी से # खोज का परिणाम है।"
 
 # Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveAuthName# (will be used as fallback if individual branch authname not set <a href=\"/cgi-bin/koha/admin/overdrive.pl\">here</a>)."
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveAuthName# Authenticate using OverDrive Authname"
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveCirculation# A password is"
+msgstr ""
+
+# Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# Don't enable"
 msgstr "enhanced_content.pref#OverDriveCirculation# सक्षम न करें"
 
@@ -4606,20 +4662,28 @@ msgid "enhanced_content.pref#OverDriveCirculation# Enable"
 msgstr "enhanced_content.pref#OverDriveCirculation# सक्षम"
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# If you enable access, you must register auth return url of"
-msgstr "enhanced_content.pref#OverDriveCirculation#यदि आप एक्सेस सक्षम करते हैं, तो आपको auth return यूआरएल का पंजीकरण करना होगा"
+msgid "enhanced_content.pref#OverDriveCirculation# If you enable access you must have a SIP connection registered with"
+msgstr ""
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# http(s)://my.opac.hostname/cgi-bin/koha/external/overdrive/auth.pl"
-msgstr "enhanced_content.pref#OverDriveCirculation# http(s)://my.opac.hostname/cgi-bin/koha/external/overdrive/auth.pl"
+msgid "enhanced_content.pref#OverDriveCirculation# Not required"
+msgstr ""
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive circulation history, and circulate items."
-msgstr "enhanced_content.pref#OverDriveCirculation# उपयोगकर्ताओं को अपने ओवरड्राइव परिसंचरण इतिहास तक पहुंचने, और वस्तुओं को प्रसारित करने के लिए।"
+msgid "enhanced_content.pref#OverDriveCirculation# OverDrive for patron authentication against Koha"
+msgstr ""
 
 # Enhanced Content > OverDrive
-msgid "enhanced_content.pref#OverDriveCirculation# with OverDrive."
-msgstr "enhanced_content.pref#OverDriveCirculation# ओवरड्राइव के साथ"
+msgid "enhanced_content.pref#OverDriveCirculation# Required"
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveCirculation# for user access to OverDrive. <br />"
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive circulation history, and circulate items.<br />"
+msgstr ""
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveClientKey# ."
@@ -4640,6 +4704,34 @@ msgstr "enhanced_content.pref # OverDriveLibraryID #।"
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveLibraryID# Show items from the OverDrive catalog of library #"
 msgstr "enhanced_content.pref # OverDriveLibraryID # पुस्तकालय # के ओवरड्राइव सूची से आइटम दिखाएँ"
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveWebsiteID# ."
+msgstr ""
+
+# Enhanced Content > OverDrive
+msgid "enhanced_content.pref#OverDriveWebsiteID# Authenticate using OverDrive website id #"
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksClientSecret# ."
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksClientSecret# Include RecordedBooks availability information with the client secret"
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksDomain# RecordedBooks domain"
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksLibraryID# ."
+msgstr ""
+
+# Enhanced Content > RecordedBooks
+msgid "enhanced_content.pref#RecordedBooksLibraryID# Show items from the RecordedBooks catalog of library ID"
+msgstr ""
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref#SyndeticsAuthorNotes# Don't show"
@@ -5850,6 +5942,10 @@ msgid "opac.pref#OpacBrowseResults# browsing and paging search results from the 
 msgstr "opac.pref # OpacBrowseResults # ब्राउज़िंग और ओपेक विस्तार पृष्ठ से पेजिंग खोज का परिणाम है।"
 
 # OPAC > Features
+msgid "opac.pref#OpacBrowser# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# OPAC > Features
 msgid "opac.pref#OpacBrowser# Allow"
 msgstr "opac.pref # OpacBrowser # अनुमति दें"
 
@@ -5858,8 +5954,12 @@ msgid "opac.pref#OpacBrowser# Don't allow"
 msgstr "opac.pref # OpacBrowser # अनुमति न दें"
 
 # OPAC > Features
-msgid "opac.pref#OpacBrowser# patrons to browse subject authorities on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to create the browser list)"
-msgstr "opac.pref # OpacBrowser # संरक्षक ओपेक पर विषय अधिकारियों ब्राउज़ करने के लिए (चलाने के विविध / cronjobs / build_browser_and_cloud.pl ब्राउज़र की सूची बनाने के लिए)"
+msgid "opac.pref#OpacBrowser# patrons to browse subject authorities on OPAC"
+msgstr ""
+
+# OPAC > Features
+msgid "opac.pref#OpacCloud# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/build_browser_and_cloud.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # OPAC > Features
 msgid "opac.pref#OpacCloud# Don't show"
@@ -5870,8 +5970,8 @@ msgid "opac.pref#OpacCloud# Show"
 msgstr "opac.pref # OpacCloud # दिखाएँ"
 
 # OPAC > Features
-msgid "opac.pref#OpacCloud# a subject cloud on OPAC (run misc/cronjobs/build_browser_and_cloud.pl to build)"
-msgstr "opac.pref # OpacCloud # ओपेक पर एक विषय के बादल (चलाने के विविध / cronjobs / build_browser_and_cloud.pl का निर्माण करने के लिए)"
+msgid "opac.pref#OpacCloud# a subject cloud on OPAC"
+msgstr ""
 
 # OPAC > Appearance
 msgid "opac.pref#OpacCustomSearch# Replace the search box at the top of OPAC pages with the following HTML:"
@@ -6242,6 +6342,10 @@ msgid "opac.pref#PatronSelfModificationBorrowerUnwantedField# The following <a h
 msgstr "opac.pref#PatronSelfModificationBorrowerUnwantedField# निम्नलिखित <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'> डेटाबेस कॉलम </a> संरक्षक स्वयं-संशोधन स्क्रीन पर प्रकट नहीं होंगे:"
 
 # OPAC > Self Registration
+msgid "opac.pref#PatronSelfRegistration# <br><strong>NOTE:</strong> This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
+msgstr ""
+
+# OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistration# Allow"
 msgstr "opac.pref # PatronSelfRegistration # अनुमति दें"
 
@@ -6250,8 +6354,8 @@ msgid "opac.pref#PatronSelfRegistration# Don't allow"
 msgstr "opac.pref # PatronSelfRegistration # अनुमति न दें"
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC. Note: This needs PatronSelfRegistrationDefaultCategory to be set to a valid patron category code."
-msgstr "opac.pref#PatronSelfRegistration# पुस्तकालय संरक्षक रजिस्टर या ओपेक के माध्यम से अपने खाते को संशोधित करने के लिए। नोट: यह जरूरत संरक्षक स्व पंजीकरण डिफ़ॉल्ट श्रेणी एक वैध संरक्षक श्रेणी कोड के लिए स्थापित किया जाना है."
+msgid "opac.pref#PatronSelfRegistration# library patrons to register or modify their account via the OPAC."
+msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationAdditionalInstructions# Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
@@ -6294,6 +6398,10 @@ msgid "opac.pref#PatronSelfRegistrationEmailMustBeUnique# patron's email (borrow
 msgstr "opac.pref#PatronSelfRegistrationEmailMustBeUnique# संरक्षक के ई-मेल (borrowers.email) स्व पंजीकरण के रूप में अद्वितीय। अगर यह पहले से ही डेटाबेस में मौजूद एक ईमेल स्वीकार नहीं किया जाएगा."
 
 # OPAC > Self Registration
+msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_expired_opac_registrations.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationExpireTemporaryAccountsDelay# Delete patrons registered via the OPAC, but not yet verified after"
 msgstr "opac.pref # PatronSelfRegistrationExpireTemporaryAccountsDelay # ओपेक के माध्यम से पंजीकृत संरक्षक हटाएँ, लेकिन अभी तक के बाद सत्यापित नहीं"
 
@@ -6324,6 +6432,10 @@ msgstr "opac.pref#PatronSelfRegistrationPrefillForm# प्रदर्शन �
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form after a patron has self registered."
 msgstr "opac.pref#PatronSelfRegistrationPrefillForm# पासवर्ड और प्रवेश फार्म एक संरक्षक के बाद आत्म दर्ज की गई है।"
+
+# OPAC > Self Registration
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_unverified_opac_registrations.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
@@ -6645,6 +6757,10 @@ msgstr "patrons.pref जनरल"
 msgid "patrons.pref Norwegian patron database"
 msgstr "patrons.pref नार्वे संरक्षक डेटाबेस"
 
+# Patrons > Privacy
+msgid "patrons.pref Privacy"
+msgstr ""
+
 # Patrons > General
 msgid "patrons.pref#AllowStaffToSetCheckoutsVisibilityForGuarantor# Allow"
 msgstr "patrons.pref # AllowStaffToSetCheckoutsVisibilityForGuarantor # अनुमति दें"
@@ -6702,8 +6818,8 @@ msgid "patrons.pref#BorrowerMandatoryField# (separate columns with |)"
 msgstr "patrons.pref # BorrowerMandatoryField # (के साथ अलग-अलग कॉलम |)"
 
 # Patrons > General
-msgid "patrons.pref#BorrowerMandatoryField# NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-msgstr "patrons.pref#BorrowerMandatoryField# नोट: यदि ऑटोमेलन सक्षम है, तो सिस्टम वरीयता BorrowerMandatoryField में फ़ील्ड कार्डनंबर नहीं होना चाहिए."
+msgid "patrons.pref#BorrowerMandatoryField# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#BorrowerMandatoryField# The following <a href='http://schema.koha-community.org/__VERSION__/tables/borrowers.html' target='blank'>database columns</a> must be filled in on the patron entry screen:"
@@ -6790,6 +6906,14 @@ msgid "patrons.pref#EnableBorrowerFiles# enable the ability to upload and attach
 msgstr "patrons.pref # EnableBorrowerFiles # अपलोड करें और एक ऋण लेने के रिकॉर्ड करने के लिए मनमाने ढंग से फ़ाइलों को संलग्न करने की क्षमता को सक्रिय करें।"
 
 # Patrons > General
+msgid "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
+msgstr ""
+
+# Patrons > General
+msgid "patrons.pref#EnhancedMessagingPreferences# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/process_message_queue.pl</code> and the <code>misc/cronjobs/advance_notices.pl</code> cronjob. Ask your system administrator to schedule them."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferences# Allow"
 msgstr "patrons.pref # EnhancedMessagingPreferences # अनुमति दें"
 
@@ -6798,8 +6922,12 @@ msgid "patrons.pref#EnhancedMessagingPreferences# Don't allow"
 msgstr "patrons.pref # EnhancedMessagingPreferences # अनुमति न दें"
 
 # Patrons > General
-msgid "patrons.pref#EnhancedMessagingPreferences# Staff to manage which notices patrons will receive and when they will receive them. Note: this only applies to courtesy notices. To manage if patrons have also access to these settings, use EnhancedMessagingPreferencesOPAC."
-msgstr "patrons.pref # EnhancedMessagingPreferences # स्टाफ जो नोटिस संरक्षक प्राप्त होगा और जब वे उन्हें प्राप्त होगा प्रबंधन करने के लिए। नोट: यह केवल शिष्टाचार नोटिस पर लागू होता है। यदि संरक्षक भी इन सेटिंग्स के लिए उपयोग का प्रबंधन करने के लिए, EnhancedMessagingPreferencesOPAC का उपयोग करें।"
+msgid "patrons.pref#EnhancedMessagingPreferences# Staff to manage which notices patrons will receive and when they will receive them."
+msgstr ""
+
+# Patrons > General
+msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# <br><strong>NOTE:</strong> EnhancedMessagingPreferences must be enabled."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Don't show"
@@ -6810,8 +6938,8 @@ msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# Show"
 msgstr "patrons.pref # EnhancedMessagingPreferencesOPAC # दिखाएँ"
 
 # Patrons > General
-msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# patron messaging setting on the OPAC (note: EnhancedMessagingPreferences must be enabled)."
-msgstr "patrons.pref # EnhancedMessagingPreferencesOPAC ओपेक पर # संरक्षक मैसेजिंग सेटिंग (नोट: EnhancedMessagingPreferences सक्रिय किया जाना चाहिए)।"
+msgid "patrons.pref#EnhancedMessagingPreferencesOPAC# patron messaging setting on the OPAC."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#ExtendedPatronAttributes# Don't enable"
@@ -6858,6 +6986,10 @@ msgid "patrons.pref#MaxFine# [% local_currency %]."
 msgstr "patrons.pref # Maxfine # [% LOCAL_CURRENCY%]।"
 
 # Patrons > General
+msgid "patrons.pref#MembershipExpiryDaysNotice# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/membership_expiry.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#MembershipExpiryDaysNotice# Send an account expiration notice when a patron's card will expire in"
 msgstr "patrons.pref # MembershipExpiryDaysNotice # एक खाता समाप्ति नोटिस भेजें, जब एक संरक्षक के कार्ड में समाप्त हो जाएगा"
 
@@ -6881,27 +7013,27 @@ msgstr "patrons.pref # NorwegianPatronDBEnable # समापन बिंदु
 msgid "patrons.pref#NorwegianPatronDBEnable# the ability to communicate with the Norwegian national patron database via the"
 msgstr "patrons.pref # NorwegianPatronDBEnable # के माध्यम से नार्वे के राष्ट्रीय संरक्षक डाटाबेस के साथ संवाद करने की क्षमता"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Do"
 msgstr "patrons.pref # NorwegianPatronDBSearchNLAfterLocalHit # Do"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# Don't"
 msgstr "patrons.pref # NorwegianPatronDBSearchNLAfterLocalHit # मत करो"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBSearchNLAfterLocalHit# search the Norwegian national patron database after a local search result was found."
 msgstr "patrons.pref # NorwegianPatronDBSearchNLAfterLocalHit # खोज नार्वे राष्ट्रीय संरक्षक डेटाबेस के बाद एक स्थानीय खोज परिणाम मिला था।"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBUsername# . You can get these from \"Base Bibliotek\", which is maintained by the Norwegian National Library."
 msgstr "patrons.pref#NorwegianPatronDBUsername# . आप \"बेस Bibliotek\", जिसके द्वारा बनाए रखा है इन से प्राप्त कर सकते हैं Norwegian National Library."
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBUsername# Communicate with the Norwegian national patron database using the username"
 msgstr "patrons.pref # NorwegianPatronDBUsername # उपयोगकर्ता नाम का उपयोग नार्वे राष्ट्रीय संरक्षक डाटाबेस के साथ संवाद"
 
-# Patrons > Norwegian patron database
+# Patrons > Privacy
 msgid "patrons.pref#NorwegianPatronDBUsername# and the password"
 msgstr "patrons.pref # NorwegianPatronDBUsername # और पासवर्ड"
 
@@ -6930,6 +7062,10 @@ msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "patrons.pref # PatronsPerPage # स्टाफ ग्राहक में प्रति पृष्ठ परिणाम है।"
 
 # Patrons > General
+msgid "patrons.pref#ProtectSuperlibrarianPrivileges# <br><strong>NOTE:</strong> A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
+msgstr ""
+
+# Patrons > General
 msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow all permitted users"
 msgstr "patrons.pref#ProtectSuperlibrarianPrivileges# सभी अनुमत उपयोगकर्ताओं को अनुमति दें"
 
@@ -6938,8 +7074,8 @@ msgid "patrons.pref#ProtectSuperlibrarianPrivileges# Allow only superlibrarians"
 msgstr "patrons.pref#ProtectSuperlibrarianPrivileges# केवल superlibrarians की अनुमति दें"
 
 # Patrons > General
-msgid "patrons.pref#ProtectSuperlibrarianPrivileges# to access/change superlibrarian privileges. Note: A permitted user needs to have the 'permissions' flag (if no superlibrarian)."
-msgstr "patrons.pref#ProtectSuperlibrarianPrivileges# superlibrarian विशेषाधिकारों को एक्सेस / बदलने के लिए। नोट: किसी अनुमत उपयोगकर्ता को 'अनुमतियां' ध्वज (यदि कोई superlibrarian) होना आवश्यक है।"
+msgid "patrons.pref#ProtectSuperlibrarianPrivileges# to access/change superlibrarian privileges."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#RequireStrongPassword# (Must contain at least one digit, one lowercase and one uppercase)."
@@ -6958,7 +7094,7 @@ msgid "patrons.pref#RequireStrongPassword# a strong password for staff and patro
 msgstr "patrons.pref#RequireStrongPassword# स्टाफ और संरक्षक के लिए एक मजबूत पासवर्ड"
 
 # Patrons > General
-msgid "patrons.pref#SMSSendDriver# <br>If you would prefer to receive SMS via E-mail, set SMSendDriver to: Email"
+msgid "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, set SMSSendDriver to: Email"
 msgstr ""
 
 # Patrons > General
@@ -6971,11 +7107,11 @@ msgstr "patrons.pref # SMSSendDriver # चालक एसएमएस संद
 
 # Patrons > General
 msgid "patrons.pref#SMSSendUsername# Define a username/login"
-msgstr ""
+msgstr "patrons.pref#SMSSendUsername# उपयोगकर्ता नाम / लॉगिन परिभाषित करें"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendUsername# and a password"
-msgstr ""
+msgstr "patrons.pref#SMSSendUsername# और एक पासवर्ड"
 
 # Patrons > General
 msgid "patrons.pref#StatisticsFields# (separate fields with |, without trailing |). Default if empty: location|itype|ccode"
@@ -7006,12 +7142,16 @@ msgid "patrons.pref#TrackLastPatronActivity# Don't"
 msgstr "patrons.pref#TrackLastPatronActivity# नही करें"
 
 # Patrons > General
-msgid "patrons.pref#TrackLastPatronActivity# Everytime a patron will connect, the borrowers.lastseen will be updated with the current time."
-msgstr "patrons.pref#TrackLastPatronActivity# हर एक संरक्षक कनेक्ट करेगा, borrowers.last वर्तमान समय के साथ अद्यतन किया जाएगा देखा।"
+msgid "patrons.pref#TrackLastPatronActivity# Every time a patron will connect, the borrowers.lastseen will be updated with the current time."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#TrackLastPatronActivity# track last patron activity."
 msgstr "patrons.pref#TrackLastPatronActivity#पिछले संरक्षक गतिविधि ट्रैक।"
+
+# Patrons > General
+msgid "patrons.pref#autoMemberNum# <strong>NOTE:</strong> If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# Do"
@@ -7020,10 +7160,6 @@ msgstr "patrons.pref # autoMemberNum # Do"
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# Don't"
 msgstr "patrons.pref # autoMemberNum # मत करो"
-
-# Patrons > General
-msgid "patrons.pref#autoMemberNum# NOTE: If autoMemberNum is enabled, the system preference BorrowerMandatoryField must not contain the field cardnumber."
-msgstr "patrons.pref#autoMemberNum# NOTE: यदि autoMemberNum सक्षम है, तो सिस्टम प्राथमिकता BorrowerMandatoryField में फ़ील्ड कार्डनम्बर नहीं होना चाहिए."
 
 # Patrons > General
 msgid "patrons.pref#autoMemberNum# default the card number field on the patron addition screen to the next available card number (for example, if the largest currently used card number is 26345000012941, then this field will default to 26345000012942)."
@@ -7142,8 +7278,8 @@ msgid "searching.pref#BrowseResultSelection# Enable"
 msgstr "searching.pref#BrowseResultSelection# सक्षम"
 
 # Searching > Features
-msgid "searching.pref#BrowseResultSelection# browsing search results fromt the bibliographic record detail page in staff client."
-msgstr "searching.pref#BrowseResultSelection# स्टाफ क्लाइंट में ग्रंथ सूची रिकॉर्ड विवरण पृष्ठ से ब्राउज़िंग खोज परिणाम."
+msgid "searching.pref#BrowseResultSelection# browsing search results from the bibliographic record detail page in staff client."
+msgstr ""
 
 # Searching > Results Display
 msgid "searching.pref#DisplayLibraryFacets# Show facets for"

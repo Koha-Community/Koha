@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-10-20 00:40-0300\n"
+"POT-Creation-Date: 2018-11-19 19:41-0300\n"
 "PO-Revision-Date: 2018-09-17 10:49+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
@@ -292,8 +292,8 @@ msgstr "%s %s çevrimiçi kataloğumuzdan size bir sepet gönderildi."
 #. %2$s:  surname 
 #. %3$s:  shelfname 
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelf.tt:11
-#, c-format
-msgid "%s %s sent you from our online catalog, the virtual shelf called : %s."
+#, fuzzy, c-format
+msgid "%s %s sent you from our online catalog, the list called : %s."
 msgstr "%s %s size %s. sanal raf adlı, çevrimiçi katalogdan gönderdi:"
 
 #. %1$s:  SWITCH type 
@@ -442,6 +442,16 @@ msgstr "%s (Kayıt no. %s)"
 #, c-format
 msgid "%s (related searches: %s %s %s ). %s "
 msgstr "%s (ilgili aramalar: %s%s%s). %s "
+
+#. %1$s:  SET ctrl_preload = ' controls preload=none' #translatability 
+#. %2$s:  HTML5MediaParent _ ctrl_preload | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | html 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1004
+#, fuzzy, c-format
+msgid "%s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s %s yazar %s %s"
 
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
@@ -1639,16 +1649,6 @@ msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Güncellemeler gönderildi"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:4
-#, c-format
-msgid "%s%s%sKoha online%s catalog &rsaquo; Your Interlibrary loan requests"
-msgstr ""
-"%s%s%sKoha çevrimiçi%s katalog &rsaquo; Kütüphaneler arası ödünç talepleriniz"
-
-#. %1$s:  IF ( LibraryNameTitle ) 
-#. %2$s:  LibraryNameTitle 
-#. %3$s:  ELSE 
-#. %4$s:  END 
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:7
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your cart"
@@ -1672,6 +1672,16 @@ msgstr "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Ödünç alma geçmişiniz"
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your fines and charges"
 msgstr ""
 "%s%s%sKoha çevrimiçi%s katalog &rsaquo; Para cezalarınız ve ödemeleriniz"
+
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle | html 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:5
+#, fuzzy, c-format
+msgid "%s%s%sKoha online%s catalog &rsaquo; Your interlibrary loan requests"
+msgstr ""
+"%s%s%sKoha çevrimiçi%s katalog &rsaquo; Kütüphaneler arası ödünç talepleriniz"
 
 #. For the first occurrence,
 #. %1$s:  IF ( LibraryNameTitle ) 
@@ -2885,13 +2895,6 @@ msgstr "-- Format seçin --"
 msgid "-- none -- "
 msgstr "-- hiçbiri -- "
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:63
-#, c-format
-msgid ". %s Please contact a library staff member. %s "
-msgstr ". %s Lütfen bir kütüphane personeli ile iletişime geçin. %s"
-
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:98
 #, c-format
 msgid ". Once you've confirmed the deletion, no one can retrieve the list!"
@@ -3390,12 +3393,12 @@ msgid "April"
 msgstr "Nisan"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Are you sure you want to cancel this article request?"
 msgstr "Bu makale isteğini iptal etmek istediğinizden emin misiniz?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Are you sure you want to cancel this hold?"
 msgstr "Bu ayırmayı iptal etmek istediğinizden emin misiniz?"
 
@@ -3446,14 +3449,14 @@ msgid "Are you sure you want to remove this share?"
 msgstr "Bu paylaşımı silmek istediğinizden emin misiniz?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Are you sure you want to resume all suspended holds?"
 msgstr ""
 "Tüm askıya alınmış ayırma işlemlerini devam ettirmek istediğinizden emin "
 "misiniz?"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Are you sure you want to suspend all holds?"
 msgstr "Tüm ayırma işlemlerini askıya almak istediğinizden emin misiniz?"
 
@@ -3552,7 +3555,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:174
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:14
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:54
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:113
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:114
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:244
@@ -3813,8 +3816,8 @@ msgstr "Sonuçlara gözat"
 msgid "Browse shelf"
 msgstr "Rafa gözat"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:87
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:111
 #, c-format
 msgid "CAS login"
 msgstr "CAS oturumu aç"
@@ -3903,10 +3906,11 @@ msgstr "Yer numarası:"
 msgid "Call number: %s"
 msgstr "Yer numarası: %s"
 
+#: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:15
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:340
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:16
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:115
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:207
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:208
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:161
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:56
 #: opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:32
@@ -4222,7 +4226,7 @@ msgstr "Eğer %s %s değilseniz buraya tıklayın"
 msgid "Click here to login."
 msgstr "Oturum açmak için buraya tıklayın."
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:157
 #, c-format
 msgid "Click here to view"
 msgstr "Görmek için buraya tıklayın"
@@ -4331,7 +4335,7 @@ msgstr "İlgilendiğiniz materyalleri derleyin"
 msgid "Collection"
 msgstr "Koleksiyon"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:160
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:161
 #, c-format
 msgid "Collection library:"
 msgstr "Koleksiyon kütüphanesi:"
@@ -4556,8 +4560,8 @@ msgstr "Kapak resmi"
 msgid "Create a new list"
 msgstr "Yeni bir liste oluştur"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:96
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:105
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:97
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:106
 #, c-format
 msgid "Create a new request "
 msgstr "Yeni bir talep oluştur"
@@ -4831,12 +4835,12 @@ msgid "Details for: "
 msgstr "Ayrıntılar:"
 
 #. %1$s:  request.backend 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:191
 #, c-format
 msgid "Details from %s"
 msgstr "%s detayları"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:148
 #, c-format
 msgid "Details from library"
 msgstr "Kütüphane detayları"
@@ -4903,12 +4907,12 @@ msgid ""
 msgstr ""
 "Bu derginin yeni bir sayısı geldiğinde e-posta gönderilmesini ister misiniz?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:182
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Kütüphane kartınız yok mu?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:188
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:180
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Henüz parolanız yok mu?"
@@ -5037,7 +5041,7 @@ msgstr "Baskı bildirimi:"
 msgid "Editions"
 msgstr "Baskılar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1126
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:41
 #, c-format
@@ -5455,7 +5459,7 @@ msgstr ""
 "olduğunu izlemek isteyen kullanıcılar içindir."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:133
 #, c-format
 msgid "Forgot your password?"
@@ -5646,7 +5650,7 @@ msgstr "Hesap sayfanıza gidin"
 msgid "GoToBibliographicRequestPage "
 msgstr "BibliyografikİstekSayfasınaGit "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
 msgid "Google login"
 msgstr "Google oturum açma"
@@ -5805,7 +5809,7 @@ msgstr "Ayırtılanlar (%s)"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:28
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:40
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:18
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:12
@@ -5877,7 +5881,7 @@ msgstr "Ana kütüphane:"
 msgid "How PayPal Works"
 msgstr "PayPal nasıl çalışır"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:53
 #, c-format
 msgid "ILL module configuration problem. Contact your administrator."
 msgstr "ILL modülü yapılandırma problemi. Yöneticinize başvurun."
@@ -6027,7 +6031,7 @@ msgid ""
 msgstr ""
 "Eğer bir parola girmezseniz sistem tarafından bir parola oluşturulacaktır."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:145
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:136
 #, c-format
 msgid ""
 "If you do not have a CAS account, but do have a local account, you can still "
@@ -6036,7 +6040,7 @@ msgstr ""
 "Bir CAS hesabınız yoksa, ancak yerel bir hesabınız varsa, bu hesabınızla "
 "oturum açabilirsiniz:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:158
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:149
 #, c-format
 msgid ""
 "If you do not have a Google account, but do have a local account, you can "
@@ -6045,7 +6049,7 @@ msgstr ""
 "Bir Google hesabınız yoksa, ancak yerel bir hesabınız varsa, bu hesabınızla "
 "oturum açabilirsiniz:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:97
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
 #, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a CAS account, you "
@@ -6054,7 +6058,7 @@ msgstr ""
 "Bir Shibboleth hesabınız yoksa, ancak bir CAS hesabınız varsa, CAS "
 "hesabınızı kullanabilirsiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:91
 #, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
@@ -6063,7 +6067,7 @@ msgstr ""
 "Bir Shibboleth hesabınız yoksa, ancak yerel bir oturumunuz varsa, aşağıdan "
 "oturum açabilirsiniz:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:183
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
@@ -6071,7 +6075,7 @@ msgstr ""
 "Eğer bir kütüphane kartınız yoksa, kaydolmak için kütüphanenize "
 "başvurabilirsiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:181
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -6080,7 +6084,7 @@ msgstr ""
 "Henüz şifrenizi almadıysanız, kütüphane ödünç verme servisinden "
 "alabilirsiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:132
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:123
 #, c-format
 msgid ""
 "If you have a CAS account, please choose against which one you would like to "
@@ -6089,12 +6093,12 @@ msgstr ""
 "Bir CAS hesabınız varsa, lütfen hangisi için kimlik doğrulaması yapmak "
 "istediğinizi seçiniz:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:128
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:119
 #, c-format
 msgid "If you have a CAS account, please click here to log in."
 msgstr "Bir CAS hesabınız varsa, oturum açmak için lütfen buraya tıklayın."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:76
 #, c-format
 msgid "If you have a CAS account, you may use that below."
 msgstr "Bir CAS hesabınız varsa, bunu aşağıda kullanabilirsiniz."
@@ -6104,18 +6108,18 @@ msgstr "Bir CAS hesabınız varsa, bunu aşağıda kullanabilirsiniz."
 msgid "If you have a Shibboleth account, please "
 msgstr "Bir Shibboleth hesabınız varsa, lütfen"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:93
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:84
 #, c-format
 msgid "If you have a Shibboleth account, please click here to log in."
 msgstr ""
 "Bir Shibboleth hesabınız varsa, oturum açmak için lütfen buraya tıklayın."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:79
 #, c-format
 msgid "If you have a local account, you may use that below."
 msgstr "Bir yerel hesabınız varsa, bunu aşağıda kullanabilirsiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:146
 #, c-format
 msgid "If you want to, you can try to "
 msgstr "Eğer isterseniz, deneyebilirsiniz"
@@ -6203,9 +6207,9 @@ msgstr "Eğitmenler:"
 msgid "Interlibrary loan request"
 msgstr "Kütüphanelerarası ödünç talebi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:24
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:31
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:25
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:91
 #, c-format
 msgid "Interlibrary loan requests"
 msgstr "Kütüphanelerarası ödünç talepleri"
@@ -6460,12 +6464,12 @@ msgstr "Son"
 msgid "Last location"
 msgstr "Son yeri"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:120
 #, c-format
 msgid "Last updated"
 msgstr "Son güncelleme"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:176
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:177
 #, c-format
 msgid "Last updated:"
 msgstr "Son güncelleme:"
@@ -6662,7 +6666,7 @@ msgstr "Yükleniyor"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:3
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:65
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Loading..."
 msgstr "Yükleniyor..."
 
@@ -6676,8 +6680,8 @@ msgstr "Yükleniyor..."
 msgid "Local Login"
 msgstr "Yerel Oturum Açma"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:99
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:144
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:135
 #, c-format
 msgid "Local login"
 msgstr "Yerel oturum açma"
@@ -6710,7 +6714,7 @@ msgstr "Konumlar"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:339
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:169
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:124
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:652
@@ -6757,7 +6761,7 @@ msgstr "Hesabınız ile oturum açın"
 msgid "Log in to your account:"
 msgstr "Hesabınız ile oturum açın:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:157
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:148
 #, c-format
 msgid "Log in with Google"
 msgstr "Google ile oturum açın"
@@ -6773,13 +6777,15 @@ msgstr "Çıkış yap"
 msgid "Log out and try again with a different user."
 msgstr "Oturumu sonlandırın ve farklı bir kullanıcıyla tekrar deneyin."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:201
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:193
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr ""
 "Katalog modülüne oturum açma işlemini kütüphane henüz etkinleştirmemiştir."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:173
+#: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:4
+#: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:14
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:164
 #, c-format
 msgid "Login"
 msgstr "Oturum aç"
@@ -7069,12 +7075,6 @@ msgstr ""
 msgid "New"
 msgstr "Yeni"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:26
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:56
-#, c-format
-msgid "New Interlibrary loan request"
-msgstr "Yeni kütüphanelerarası ödünç talebi"
-
 #. %1$s:  review.title |html 
 #. %2$s:  FOREACH subtitl IN review.subtitle 
 #. %3$s:  subtitl.subfield |html 
@@ -7083,6 +7083,12 @@ msgstr "Yeni kütüphanelerarası ödünç talebi"
 #, c-format
 msgid "New comment on %s %s, %s%s"
 msgstr "%s %s, %s%s hakkındaki yeni yorum"
+
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:27
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:57
+#, fuzzy, c-format
+msgid "New interlibrary loan request"
+msgstr "Yeni kütüphanelerarası ödünç talebi"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:72
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:161
@@ -7135,7 +7141,7 @@ msgstr "Kütüphaneden %s%s%shaberler%s"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:3
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:82
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1087
 #, c-format
@@ -7158,7 +7164,7 @@ msgstr "Sonraki &raquo;"
 msgid "Next available item"
 msgstr "Sonraki kullanılabilir materyal"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:66
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:82
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:32
@@ -7529,20 +7535,20 @@ msgid "Notes/Comments"
 msgstr "Notlar/Yorumlar"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:45
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:180
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:181
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:99
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:79
 #, c-format
 msgid "Notes:"
 msgstr "Notlar:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:133
 #, c-format
 msgid "Nothing"
 msgstr "Hiçbir şey"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid ""
 "Nothing has been selected. Check the box for each item you want to renew"
 msgstr ""
@@ -7801,7 +7807,7 @@ msgstr "Sayfalar:"
 msgid "Parameters"
 msgstr "Paremetreler"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:175
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:166
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:809
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:819
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:830
@@ -7854,6 +7860,7 @@ msgstr "Şifre başta veya sonda beyaz boşluk içermemelidir."
 msgid "Password updated"
 msgstr "Şifre güncellendi"
 
+#: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:9
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:320
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:122
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:44
@@ -8014,7 +8021,7 @@ msgstr ""
 msgid "Please choose a download format"
 msgstr "Lütfen bir indirme biçimi seçin"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:112
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:103
 #, c-format
 msgid "Please choose against which one you would like to authenticate: "
 msgstr "Lütfen hangisi için kimlik doğrulaması yapmak istediğinizi seçiniz:"
@@ -8024,7 +8031,7 @@ msgstr "Lütfen hangisi için kimlik doğrulaması yapmak istediğinizi seçiniz
 msgid "Please choose your privacy rule:"
 msgstr "Gizlilik kuralınızı seçin:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:99
 #, c-format
 msgid "Please click here to log in."
 msgstr "Oturum açmak için lütfen buraya tıklayın."
@@ -8146,7 +8153,7 @@ msgstr ""
 "kitapların bilgilerinin kütüphane tarafından saklanacağını lütfen "
 "unutmayınız."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:154
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:145
 #, c-format
 msgid ""
 "Please note that the Google login will only work if you are using the e-mail "
@@ -8380,7 +8387,7 @@ msgstr "İşleniyor..."
 msgid "Programmed texts"
 msgstr "Programlanmış metinler"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:73
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:74
 #, c-format
 msgid "Provider:"
 msgstr "Sağlayıcı:"
@@ -8688,7 +8695,7 @@ msgstr "Süresini uzat"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:351
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Renew all"
 msgstr "Tümünün süresini uzat"
 
@@ -8702,7 +8709,7 @@ msgstr "Materyalin süresini uzat"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:340
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Renew selected"
 msgstr "Seçilenlerin süresini uzat"
 
@@ -8730,18 +8737,18 @@ msgstr "Sorunları ve çalışmayan bağlantıları rapor edin."
 msgid "Request article"
 msgstr "Makale isteğinde bulunun"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:204
 #, c-format
 msgid "Request cancellation"
 msgstr "İstek iptali"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:118
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:119
 #, c-format
 msgid "Request placed"
 msgstr "İstek yapıldı"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:172
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:173
 #, c-format
 msgid "Request placed:"
 msgstr "İstek yapıldı:"
@@ -8751,32 +8758,32 @@ msgstr "İstek yapıldı:"
 msgid "Request specific item type:"
 msgstr "Belirli bir materyal türünü talep edin:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:116
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:117
 #, c-format
 msgid "Request type"
 msgstr "İstek türü"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:168
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:169
 #, c-format
 msgid "Request type:"
 msgstr "İstek türü:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:10
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:11
 #, c-format
 msgid "Request updated"
 msgstr "İstek güncellendi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:115
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:116
 #, c-format
 msgid "Requested from"
 msgstr "İstek yapılan yer"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:151
 #, c-format
 msgid "Requested from:"
 msgstr "İstek yapılan yer:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:156
 #, c-format
 msgid "Requested item:"
 msgstr "İstenilen materyal:"
@@ -9472,7 +9479,7 @@ msgstr "Linkedln üzerinde paylaş"
 msgid "Shelving location"
 msgstr "Raftaki konumu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:83
 #, c-format
 msgid "Shibboleth Login"
 msgstr "Shibboleth Oturum Açma"
@@ -9592,7 +9599,7 @@ msgstr ""
 
 #. For the first occurrence,
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Something went wrong. The note has not been saved"
 msgstr "Bir şeyler yanlış gitti. Not kaydedilmedi"
 
@@ -9645,7 +9652,7 @@ msgstr "Üzgünüz, düz görünüm geçici olarak kullanılamıyor"
 msgid "Sorry, tags are not enabled on this system."
 msgstr "Üzgünüz, bu sistemde tag'ler etkin değildir."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:74
 #, c-format
 msgid ""
 "Sorry, the CAS login also failed. If you have a local login you may use that "
@@ -9654,7 +9661,7 @@ msgstr ""
 "Üzgünüz, CAS oturum açma işlemi de başarısız oldu, yerel bir hesabınız varsa "
 "bunu aşağıda kullanabilirsiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:124
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:115
 #, c-format
 msgid "Sorry, the CAS login failed."
 msgstr "Üzgünüz, CAS oturum açma başarısız oldu."
@@ -9710,12 +9717,12 @@ msgstr "Üzgünüz, daha fazla ayırtma işlemi yapamazsınız."
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "Üzgünüz,%s adetten fazla materyal ayıramazsınız. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:144
 #, c-format
 msgid "Sorry, your Google login failed. "
 msgstr "Üzgünüz, Google oturum açma işleminiz başarısız oldu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:79
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:70
 #, c-format
 msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity."
@@ -9788,7 +9795,7 @@ msgid "Statistics"
 msgstr "İstatistikler"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:117
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:118
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:108
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:595
@@ -9800,7 +9807,7 @@ msgstr "İstatistikler"
 msgid "Status"
 msgstr "Durum"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:164
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:165
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:663
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:232
 #, c-format
@@ -9898,20 +9905,20 @@ msgstr "Gönder ve bu pencereyi kapat"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:160
 msgid "Submit changes"
 msgstr "Değişiklikleri gönderin"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:205
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:206
 msgid "Submit modifications"
 msgstr "Değişiklikleri gönderin"
 
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:331
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 #, c-format
 msgid "Submit note"
 msgstr "Notu gönder"
@@ -10588,12 +10595,6 @@ msgstr ""
 "Koleksiyonumuzda yer alan materyalleri görmek için aşağıdaki  konu "
 "başlıklarından herhangi birine tıklayın."
 
-#. %1$s:  IF Koha.Preference('OpacResetPassword') 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:60
-#, c-format
-msgid "This account has been locked! %s "
-msgstr "Bu hesap kilitlendi! %s"
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10723,7 +10724,7 @@ msgstr "Yazdırma onay bekleme süresi aşıldı"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:169
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:114
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:115
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:77
@@ -10799,7 +10800,7 @@ msgstr "Bilgilerinizle ilgili değişiklik yapmak için kütüphaneye başvurunu
 msgid "To report this error, please contact the Koha Administrator. "
 msgstr "Bu hatayı bildirmek için, lütfen Koha Yöneticisi ile irtibata geçiniz."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:203
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:195
 #, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr "Bu hatayı bildirmek için, Koha Yöneticisine e-posta gönderebilirsiniz."
@@ -10994,7 +10995,7 @@ msgstr "Güncelle"
 msgid "Updates to your record"
 msgstr "Kaydınıza yapılacak güncellemeler"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:204
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:196
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Koha'nın başka bir bölümüne geçmek için üst menü çubuğunu kullanın."
@@ -11050,7 +11051,7 @@ msgstr "Değer zaten kullanılıyor (%s)"
 msgid "Verification:"
 msgstr "Doğrulama:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:135
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:136
 #, c-format
 msgid "View"
 msgstr "Görüntüle"
@@ -11060,12 +11061,6 @@ msgstr "Görüntüle"
 #, c-format
 msgid "View All"
 msgstr "Hepsini gör"
-
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:142
-#, c-format
-msgid "View Interlibrary loan request"
-msgstr "Kütüphanelerarası ödünç isteğini görüntüleyin"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-showreviews.tt:39
@@ -11088,6 +11083,12 @@ msgstr "Kütüphanelerarası ödünç isteğini görüntüleyin"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:361
 msgid "View details for this title"
 msgstr "Bu eserle ilgili ayrıntıları göster"
+
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:29
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:143
+#, fuzzy, c-format
+msgid "View interlibrary loan request"
+msgstr "Kütüphanelerarası ödünç isteğini görüntüleyin"
 
 #. A
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:211
@@ -11234,7 +11235,7 @@ msgstr "Yıl"
 msgid "Year: "
 msgstr "Yıl: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:64
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:65
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:83
 #: opac-tmpl/bootstrap/en/modules/opac-alert-subscribe.tt:31
@@ -11440,14 +11441,16 @@ msgstr "Bu listeyi güncelleme izniniz yok."
 msgid "You do not have permission to view this list."
 msgstr "Bu listeyi görme izniniz yok."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:71
+#. %1$s:  IF Koha.Preference('FailedLoginAttempts') 
+#. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:62
 #, c-format
 msgid ""
-"You entered an incorrect username or password. Please try again! And "
-"remember, passwords are case sensitive."
+"You entered an incorrect username or password. Please try again! But note "
+"that passwords are case sensitive%s and that your account will be locked out "
+"after a fixed number of failed login attempts%s. Please contact a library "
+"staff member if you continue to have problems."
 msgstr ""
-"Yanlış kullanıcı adı veya parola girdiniz. Lütfen tekrar deneyin! Unutmayın, "
-"parolalar büyük/küçük harfe duyarlıdır."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:50
 #, c-format
@@ -11542,7 +11545,7 @@ msgid ""
 msgstr ""
 "Artık mevcut olmayan bir katalog materyaline bir harici bağlantı kullandınız."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:194
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:186
 #, c-format
 msgid "You may register here."
 msgstr "Burada kayıt olabilirsiniz."
@@ -11576,11 +11579,6 @@ msgid ""
 msgstr ""
 "Yeni sayılar için eposta bildirimlerine abone olmak istiyorsanız sistemde "
 "oturum açmalısınız"
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:63
-#, c-format
-msgid "You must reset your password"
-msgstr "Şifrenizi sıfırlamanız gerekir"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:91
 #, c-format
@@ -11825,17 +11823,17 @@ msgid "Your messaging settings"
 msgstr "Mesajlaşma ayarlarınız"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Your note about %s could not be saved."
 msgstr "%s hakkındaki notunuz kaydedilemedi."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Your note about %s has been saved and sent to the library."
 msgstr "%s hakkındaki notunuz kaydedildi ve kütüphaneye gönderildi."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-user.tt:899
+#: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 msgid "Your note about %s was removed."
 msgstr "%s hakkındaki notunuz kaldırıldı."
 
@@ -11994,7 +11992,7 @@ msgstr "[% LibraryName |html %] RSS bildirimi ara"
 msgid "[% limit or"
 msgstr "[% sınırla"
 
-#. %1$s:  HTML5MediaParent 
+#. %1$s:  HTML5MediaParent | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1008
 #, c-format
 msgid "[%s tag not supported by your browser.]"
@@ -12356,7 +12354,7 @@ msgstr "materyal tanımlayıcıları veya diğer bibliyografik liste"
 msgid "list of system record identifiers"
 msgstr "kayıt tanımlayıcıları sistem listesi"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:146
 #, c-format
 msgid "log in using a different account"
 msgstr "farklı bir hesap kullanarak oturum açın"
@@ -12869,6 +12867,7 @@ msgstr "Hesabınız"
 msgid "your tags"
 msgstr "etiketleriniz"
 
+#: opac-tmpl/bootstrap/en/includes/overdrive-login.inc:3
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:300
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:3
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:180
