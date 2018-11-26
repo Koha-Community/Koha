@@ -17122,6 +17122,13 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 19893 - Add elasticsearch index status preferences)\n";
 }
 
+$DBversion = '18.06.00.062';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('PA_CLASS');");
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21730: Add new authorised value category PA_CLASS)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
