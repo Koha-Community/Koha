@@ -15924,7 +15924,7 @@ if( CheckVersion( $DBversion ) ) {
         INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('UpdateItemWhenLostFromHoldList','',NULL,'This is a list of values to update an item when it is marked as lost from the holds to pull screen','Free');
     } );
     $dbh->do( q{
-        UPDATE systempreferences SET options="batchmod|moredetail|cronjob|additem|pendingreserves", value="batchmod|moredetail|cronjob|additem|pendingreserves" WHERE variable="MarkLostItemsAsReturned";
+        UPDATE systempreferences SET options="batchmod|moredetail|cronjob|additem|pendingreserves" WHERE variable="MarkLostItemsAsReturned";
     } );
 
     SetVersion( $DBversion );
