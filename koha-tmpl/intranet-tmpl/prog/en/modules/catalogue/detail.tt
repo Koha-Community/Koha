@@ -689,9 +689,10 @@ function verify_images() {
                         </td>
                     [% IF CAN_user_editcatalogue_edit_items %]
                         <td class="actions">
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/addholding.pl?op=edit&biblionumber=[% holding.biblionumber %]&holding_id=[% holding.holding_id %]#editholding"><i class="fa fa-pencil"></i> Edit</a>
-                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/cataloguing/addholding.pl?op=delete&biblionumber=[% holding.biblionumber %]&holding_id=[% holding.holding_id %]"><i class="fa fa-eraser"></i> Delete</a>
-                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% holding.biblionumber %]&holding_id=[% holding.holding_id %]#additema"><i class="fa fa-plus"></i> Add item</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/addholding.pl?op=edit&biblionumber=[% holding.biblionumber | url %]&holding_id=[% holding.holding_id | url %]#editholding"><i class="fa fa-pencil"></i> Edit</a>
+                            <a class="btn btn-default btn-xs delete" href="/cgi-bin/koha/cataloguing/addholding.pl?op=delete&biblionumber=[% holding.biblionumber | url %]&holding_id=[% holding.holding_id | url %]"><i class="fa fa-eraser"></i> Delete</a>
+                            <a class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% holding.biblionumber %]&holding_id=[% holding.holding_id | url%]#additema"><i class="fa fa-plus"></i> Add item</a>
+                            <a class="btn btn-default btn-xs previewMARC" href="/cgi-bin/koha/catalogue/showmarc.pl?holding_id=[% holding.holding_id | url %]&amp;viewas=html" title="MARC" class="">Show MARC</a>
                         </td>
                     [% END %]
                     </tr>
