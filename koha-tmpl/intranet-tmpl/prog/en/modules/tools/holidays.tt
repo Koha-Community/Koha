@@ -516,7 +516,19 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
             $("a.helptext").click(function(){
                 $(this).parent().find(".hint").toggle(); return false;
             });
-            $("#dateofrange").datepicker();
+            $("#dateofrange").datepicker({
+              beforeShow: function() {
+                var startdate = $("#jcalendar-container").datepicker("getDate");
+                if (startdate !== null) {
+                   var sd = new Date(startdate);
+                   var ed = new Date($(this).datepicker("getDate"));
+                   if (ed < sd) {
+                     $(this).datepicker("setDate", startdate);
+                     $(this).datepicker("option", "defaultDate", startdate);
+                   }
+                }
+              }
+            });
             $("#datecancelrange").datepicker();
             $("#dateofrange").each(function () { this.value = "" });
             $("#datecancelrange").each(function () { this.value = "" });
@@ -530,6 +542,16 @@ td.repeatableyearly a.ui-state-default {  background:  #FFCC66 none; color :  Bl
                 },
             onSelect: function(dateText, inst) {
                 dateChanged($(this).datepicker("getDate"));
+                var enddate = $("#dateofrange").datepicker("getDate");
+                $("#dateofrange").datepicker("option", "defaultDate", $(this).datepicker("getDate"));
+                if (enddate !== null) {
+                   var ed = new Date(enddate);
+                   var sd = new Date($(this).datepicker("getDate"));
+                   if (ed < sd) {
+                     $("#dateofrange").datepicker("setDate", $(this).datepicker("getDate"));
+                     $("#dateofrange").datepicker("option", "defaultDate", enddate);
+                   }
+                }
             },
             defaultDate: new Date("[% keydate | html %]")
             });
