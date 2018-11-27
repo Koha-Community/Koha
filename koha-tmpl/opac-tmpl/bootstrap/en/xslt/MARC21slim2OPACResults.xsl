@@ -1080,7 +1080,22 @@
                       <xsl:attribute name="href">/cgi-bin/koha/tracklinks.pl?uri=<xsl:value-of select="str:encode-uri(marc:subfield[@code='u'], true())"/>&amp;biblionumber=<xsl:value-of select="$biblionumber"/></xsl:attribute>
 				</xsl:when>
 				<xsl:otherwise>
-				  <xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
+                    <xsl:attribute name="href">
+                        <xsl:if test="not(contains(marc:subfield[@code='u'],'://'))">
+                            <xsl:choose>
+                                <xsl:when test="@ind1=7">
+                                    <xsl:value-of select="marc:subfield[@code='2']"/><xsl:text>://</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="@ind1=1">
+                                    <xsl:text>ftp://</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>http://</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:if>
+                        <xsl:value-of select="marc:subfield[@code='u']"/>
+                    </xsl:attribute>
 				</xsl:otherwise>
 			      </xsl:choose>
                                     <xsl:choose>
