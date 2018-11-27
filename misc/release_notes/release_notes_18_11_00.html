@@ -1,0 +1,2003 @@
+<h1 id="releasenotesforkoha18.11.00">RELEASE NOTES FOR KOHA 18.11.00</h1>
+
+<p>27 Nov 2018</p>
+
+<p>Koha is the first free and open source software library automation
+package (ILS). Development is sponsored by libraries of varying types
+and sizes, volunteers, and support companies from around the world. The
+website for the Koha project is:</p>
+
+<ul>
+<li><a href="http://koha-community.org">Koha Community</a></li>
+</ul>
+
+<p>Koha 18.11.00 can be downloaded from:</p>
+
+<ul>
+<li><a href="http://download.koha-community.org/koha-18.11-latest.tar.gz">Download</a></li>
+</ul>
+
+<p>Installation instructions can be found at:</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Installation_Documentation">Koha Wiki</a></li>
+<li>OR in the INSTALL files that come in the tarball</li>
+</ul>
+
+<p>Koha 18.11.00 is a major release, that comes with many new features.</p>
+
+<p>It includes 16 new features, 219 enhancements, 419 bugfixes.</p>
+
+<h2 id="newfeatures">New features</h2>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15184">[15184]</a> Ability to duplicate existing order lines to a given basket</li>
+</ul>
+
+<blockquote>
+  <p>This enhancements adds the ability to add an order to a basket (duplicate) from existing order lines. It will help serials acquisitions or other workflows where the same publication is ordered frequently.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19166">[19166]</a> Add the ability to add adjustments to an invoice</li>
+</ul>
+
+<blockquote>
+  <p>This enhancement to acquisitions allows libraries to record adjustments to invoices.  These may be based on feedback from a vendor, for example, a credit for returned books or damaged books, or a debit for extra service charges etc.</p>
+</blockquote>
+
+<h3 id="authentication">Authentication</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12027">[12027]</a> Shibboleth authentication for staff client</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by PTFS Europe <br />
+  Shibboleth authentication has long been available for the OPAC, this patch adds support for the staff client.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18507">[18507]</a> Shibboleth auto-provisioning - Sync</li>
+</ul>
+
+<blockquote>
+  <p>Shibboleth authentication has the ability to send an arbitrary number of attributes to koha; These attributes can be used to dynamically create (bug 12026) and, now with this patchset, update user records in koha.</p>
+</blockquote>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18586">[18586]</a> Create module to mint RDF subject URIs</li>
+</ul>
+
+<blockquote>
+  <p>The Koha::RDF module presents a method for minting RDF subject URIs in the format of {{ OpacBaseURL }}/bib/{{ biblionumber }}. <br />
+  This functionality isn't directly used yet in Koha, but is a precursor to RDF support.</p>
+</blockquote>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11897">[11897]</a> Stock Rotation for Koha</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by PTFS Europe and North West England Public Libraries <br />
+  This is a batch process to automate the rotation of stock. <br />
+  It includes a staff client page, under tools, to manage rotas (ordered lists of locations for items to rotate to with associated durations for the items stay) and assign them to items. <br />
+  Once at least one rota is configured, and your staff user has the permission to add a rota to an item, then an additional tab will appear on each biblio record page allowing the management of which rota, if any, individual items are assigned.</p>
+</blockquote>
+
+<h3 id="documentation">Documentation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19817">[19817]</a> Merge local and online documentations</li>
+</ul>
+
+<blockquote>
+  <p>Great strides have been taken to improve Koha's online documentation. This enhancement removes the outdated local help system from the software, opting instead to contextually link to the well maintained online manual.</p>
+</blockquote>
+
+<h3 id="finesandfees">Fines and fees</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19191">[19191]</a> Add ability to email receipts for account payments and write-offs</li>
+</ul>
+
+<blockquote>
+  <p>Let your library go paperless. This enhancement enables the ability to send payment and write-off receipts by email.</p>
+</blockquote>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17602">[17602]</a> Integrate support for RecordedBooks (formerly OneClickDigital) API</li>
+</ul>
+
+<blockquote>
+  <p>This feature integrates RecordedBooks functionality into the catalog, following the model of OverDrive. <br />
+  Searches on the OPAC will return a link to results in the RecordedBooks catalog if they are found. From that results page a user that is signed in and has a valid email matching a RecordedBooks account will be able to checkout the books directly from the results, and download them via their account page on the OPAC. Users will also be able to place holds on unavailable items.</p>
+</blockquote>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20312">[20312]</a> Add a link towards the last consulted patron</li>
+</ul>
+
+<blockquote>
+  <p>A first pass at adding a handy feature to allow quickly navigating back to the last searched user in the staff client.</p>
+</blockquote>
+
+<h3 id="restapi">REST api</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20942">[20942]</a> Add route to get patron's account balance</li>
+</ul>
+
+<blockquote>
+  <p>Introduces API endpoints for dealing with patron accounts, a highly requested feature for third-party integrations.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20944">[20944]</a> Add routes to add credits to a patron's account</li>
+</ul>
+
+<blockquote>
+  <p>Introduces the API endpoint for dealing with patron account credits, a highly requested feature for third-party integrations.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21116">[21116]</a> Add API routes through plugins</li>
+</ul>
+
+<blockquote>
+  <p>Allows the extension of the Koha API via plugins. This can allow for custom vendor integrations and prototyping of new routes.</p>
+</blockquote>
+
+<h3 id="reports">Reports</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17282">[17282]</a> Ability to create charts for SQL reports</li>
+</ul>
+
+<blockquote>
+  <p>Adds a form under report's result that allows to configure and draw a <br />
+  chart (pie, bar, line and combination).</p>
+</blockquote>
+
+<h3 id="serials">Serials</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21467">[21467]</a> Allow several receipts for a given subscription</li>
+</ul>
+
+<blockquote>
+  <p>Allows the user to set a quantity for a serial order, useful in the case where payments are made per receipt of individual issues. This development also allows for altering the total expected quantity for a serial in the case of a periodicity change.</p>
+</blockquote>
+
+<h3 id="z39.50sruopensearchservers">Z39.50 / SRU / OpenSearch Servers</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19436">[19436]</a> Add SRU support for authorities</li>
+</ul>
+
+<blockquote>
+  <p>Some record sources only offer SRU connections (and not Z39.50) this update allows Koha to utilize these resources for authority records as we can for bibliographic records</p>
+</blockquote>
+
+<h2 id="enhancements">Enhancements</h2>
+
+<h3 id="about">About</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21317">[21317]</a> Format long lists under Koha Team tab as columns</li>
+</ul>
+
+<blockquote>
+  <p>Koha's team of developers is always growing ☺. This patch changes the display from a long list to a nicely formatted four column layout.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21319">[21319]</a> Remove highlight and tooltip on Koha Team version</li>
+</ul>
+
+<blockquote>
+  <p>Two years ago we switched the version numbering system from 3.x to YY.MM format. At that time we added a tooltip and highlighted the version in red on the Koha Team tab of the about page.  This patch removes that now that a sufficient period of time has passed.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21782">[21782]</a> Release team 18.11</li>
+</ul>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7651">[7651]</a> Add separate permission for managing currencies and exchange rates</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12395">[12395]</a> Save order line's creator</li>
+</ul>
+
+<blockquote>
+  <p>Allow finer grained auditing of acquisition orders.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18480">[18480]</a> Use modal for displaying patron details on add_user_search.pl to avoid redirect</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18639">[18639]</a> Separate replacement cost and retail price fields in acquisitions</li>
+</ul>
+
+<blockquote>
+  <p>This patch attempts to remove some confusion as the 'Replacement price/rrp' field was being used as retail price during ordering process, but for item replacement price when receiving. <br />
+  This patch splits these fields so that each may be set independently. RRP will be used to determine costs while ordering, and replacement price will populate the items replacement price upon receiving.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20366">[20366]</a> More information about orders linked to subscriptions on "Acquisition details" tab</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20966">[20966]</a> Add column configuration to table of orders in a basket</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20969">[20969]</a> Use modal to add and edit notes from basket</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20970">[20970]</a> Reformat basket information on acquisitions basket page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21333">[21333]</a> Add ability to add to basket from a file</li>
+</ul>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14302">[14302]</a> Remove GRS1 indexing related code</li>
+</ul>
+
+<blockquote>
+  <p>Final removal of the GRS1 indexing mode code after the two year deprecation period.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18072">[18072]</a> Add Koha objects for Branch Transfer Limits</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18887">[18887]</a> Introduce new table 'circulation_rules', use for 'max_holds' rules</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19490">[19490]</a> Add a 'holds' column to the Batch Item Modification Tool</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19620">[19620]</a> Allow skipping of patrons with valid emails for Talking Tech</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19633">[19633]</a> Use alphanumeric error codes in upload</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19820">[19820]</a> Add unsafe param to GetMarcSubfieldStructure</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20079">[20079]</a> Display stack trace for development installations</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20226">[20226]</a> Get rid of CATCODE_MULTI param decision in patron perl scripts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20272">[20272]</a> XSLT_Handler should use alphanumeric error codes</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20287">[20287]</a> Move AddMember and ModMember to Koha::Patron</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20456">[20456]</a> Remove the C4::Serials::GetSubscriptionsFromBorrower</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20509">[20509]</a> Data consistency - authority types</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20521">[20521]</a> dev installations should run with problematic SQL modes</li>
+</ul>
+
+<blockquote>
+  <p>To aid in catching possible SQL issue's early in development, this patch allows enabling the strictest of SQL modes for development (and makes it the default for continuous integration) environments.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20661">[20661]</a> Implement blocking errors for circulation scripts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20669">[20669]</a> Add upgrade method to plugins</li>
+</ul>
+
+<blockquote>
+  <p>This enhancement standardises the methods used by plugin authors to maintain their plugin data across plugin versions.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20727">[20727]</a> Replace usage of File::Spec->tmpdir with C4::Context->temporary_directory</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20968">[20968]</a> Plugins: Add hooks to enable plugin integration into catalogue</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by PTFS Europe</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20978">[20978]</a> Add Koha::Account::add_credit</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20990">[20990]</a> Add Koha::Account::outstanding_credits</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20997">[20997]</a> Add Koha::Account::Line::apply</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21178">[21178]</a> Add Koha::Patron::set_password method</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21183">[21183]</a> C4::Items - Remove GetItemnumberFromBarcode</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21184">[21184]</a> C4::Items - Remove GetBarcodeFromItemnumber</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21201">[21201]</a> C4::Items - Remove GetItemnumbersForBiblio</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21202">[21202]</a> C4::Items - Remove GetItemsByBiblioitemnumber</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21205">[21205]</a> C4::Acquisition - Remove GetOrderFromItemnumber</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21221">[21221]</a> Implement blocking errors for members/memberentry.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21233">[21233]</a> Add Koha::Exceptions::Password class</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21299">[21299]</a> Move referer code from changelanguage to module in opac and staff</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21352">[21352]</a> Allow plugins to add CSS and Javascript to Staff interface</li>
+</ul>
+
+<blockquote>
+  <p>This enhancement allows plugin authors to make adaptations to the staff client using css and javascript.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21474">[21474]</a> Add the Koha::Subscription->frequency method</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21501">[21501]</a> Remove dead code from course reserves module</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21650">[21650]</a> C4::Items::GetLastAcquisitions has never been used and should be removed</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21681">[21681]</a> Remove C4::Accounts::getcharges</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21694">[21694]</a> Add the Koha::Account->lines method</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21696">[21696]</a> Use Koha::Account->lines from Koha::Account</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21719">[21719]</a> Fix typos in codebase</li>
+</ul>
+
+<h3 id="authentication">Authentication</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17776">[17776]</a> Shibboleth Authentication is broken in plack</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by PTFS Europe <br />
+  This enhancement adds support for using Shibboleth in a Plack environment. Caution should, however, be taken before enabling it as there are security implications to be aware of regarding header spoofing attacks that can be mitigated with additional care whilst configuring the native service provider and Apache: Please see https://wiki.shibboleth.net/confluence/display/SHIB2/NativeSPSpoofChecking for further details.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19625">[19625]</a> Shibboleth auto-provisioning is broken in plack</li>
+</ul>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12747">[12747]</a> Add configurable extra column in Z3950 search result</li>
+</ul>
+
+<blockquote>
+  <p>This allows to display MARC fields and subfields from the record in an extra column on the Z30.50 result list. The content of the column can be configured via the AdditionalFieldsInZ3950ResultSearch system preference.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19263">[19263]</a> Advanced Editor - Rancor - Add auto control number (001) widget</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19349">[19349]</a> Allow to store biblio record's creator and last modifier in MARC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20435">[20435]</a> Allow lowercase prefix in inventory value builder</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21318">[21318]</a> Add control number to authority Z39.50 search form</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15139">[15139]</a> Show non-public item note in overdues report</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15494">[15494]</a> Block renewals by arbitrary item values</li>
+</ul>
+
+<blockquote>
+  <p>This enhancement offers the possibility to prevent renewals given certain item values. Using a yaml syntax the library can specify certain item field values that, when matched, will prevent renewals for affected items. <br />
+  If using automatic renewal notices your notice should be updated to account for the new reason that renewals may be denied "item_denied_renewal"</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15524">[15524]</a> Set limit on maximum possible holds per patron by category</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19383">[19383]</a> Print hold slips without confirmation</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19719">[19719]</a> Add a new column for collection in the patron checkouts data table</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20450">[20450]</a> Add collection to list of items when placing hold on specific copy</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20468">[20468]</a> Multiselect on staff article requests form</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21121">[21121]</a> New syspref to allow hiding of private patron data in circulation page</li>
+</ul>
+
+<blockquote>
+  <p>Sponsored by: Toi Ohomai Institute of Technology in New Zealand and Catalyst IT.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21380">[21380]</a> Circulation history UI improvements - make barcode clickable</li>
+</ul>
+
+<h3 id="command-lineutilities">Command-line Utilities</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20393">[20393]</a> Remove redundant 'koha.psgi' and 'plackup.sh' files</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20486">[20486]</a> Add --marc_conditions option to export_records.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20795">[20795]</a> koha-rebuild-zebra should pass through increased verbosity</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20915">[20915]</a> Use date --iso-8601 instead of date +%Y-%m-%d to be more readable and crontab friendly</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21011">[21011]</a> Data inconsistencies - items.holdingbranch | items.homebranch</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21150">[21150]</a> Data inconsistencies - item types</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21576">[21576]</a> Add a developer script to automatically fix missing filters</li>
+</ul>
+
+<h3 id="coursereserves">Course reserves</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20467">[20467]</a> Add ability to batch add items to a course</li>
+</ul>
+
+<h3 id="finesandfees">Fines and fees</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19617">[19617]</a> Allow 'writeoff of selected'</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20629">[20629]</a> Remove ability to 'reverse' payments</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20703">[20703]</a> Add ability to void any credit</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21673">[21673]</a> Koha::Account::Lines->total_outstanding must be used when needed</li>
+</ul>
+
+<h3 id="holdrequests">Hold requests</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7534">[7534]</a> New OPACAllowUserToChooseBranch setting for only showing libraries allowing holds</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15486">[15486]</a> Restrict number of holds placed by day</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19469">[19469]</a> Add ability to split view of holds view on record by pickup library and/or itemtype</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21628">[21628]</a> Simplify holds awaiting pickup report</li>
+</ul>
+
+<h3 id="i18nl10n">I18N/L10N</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15395">[15395]</a> Internationalization: plural forms, context, and more</li>
+</ul>
+
+<h3 id="ill">ILL</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18591">[18591]</a> Allow an arbitrary number of comments on ILLs</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20651">[20651]</a> Improve display of "Toggle full supplier metadata"</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20772">[20772]</a> Make request metadata editable and add price_paid field</li>
+</ul>
+
+<blockquote>
+  <p>Added the new price_paid field to ILL requests</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20797">[20797]</a> If an Ill request has an associated bib record, the detail view should contain a link to the record</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20995">[20995]</a> Add request ID to OPAC ILL requests display table</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21079">[21079]</a> Unify metadata schema across backends</li>
+</ul>
+
+<h3 id="installationandupgradeweb-basedinstaller">Installation and upgrade (web-based installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20683">[20683]</a> Update German web installer for 18.05</li>
+</ul>
+
+<h3 id="labelpatroncardprinting">Label/patron card printing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15766">[15766]</a> Give label and patron card batches a description</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15836">[15836]</a> Labels: Offer configuration option for splitting call numbers</li>
+</ul>
+
+<h3 id="lists">Lists</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19039">[19039]</a> Results of virtual shelves (lists) not sortable by date added</li>
+</ul>
+
+<h3 id="marcbibliographicdatasupport">MARC Bibliographic data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19835">[19835]</a> Update MARC frameworks to Updates 23+24+25 (Nov 2016, May and Dec 2017)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20709">[20709]</a> Update German MARC frameworks to Updates 23-26 (Nov 2016, May and Apr 2018)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20710">[20710]</a> Update MARC21 frameworks to Update 26 (April 2018)</li>
+</ul>
+
+<h3 id="notices">Notices</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15280">[15280]</a> Switch default CHECKOUT notice to Template Toolkit</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15282">[15282]</a> Switch default CHECKIN notice to Template Toolkit</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19743">[19743]</a> Header and Footer should be updated on each item for checkin / checkout / renewal notices</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20356">[20356]</a> Add EmailSMSSendDriverFromAddress system preference for overriding Email SMS send driver from address</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=8630">[8630]</a> Add covers from AdLibris to the OPAC and Intranet</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14222">[14222]</a> Sort holds in OPAC by priority</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14385">[14385]</a> Extend OpacHiddenItems to allow specifying exempt borrower categories</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15287">[15287]</a> Use font-awesome on the OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17153">[17153]</a> Logging in during a search navigates to account page instead of back to search results</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17530">[17530]</a> Don't show 'article request' link when no article requests are permitted</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18236">[18236]</a> MARC21: Add classes to material type icons on intranet result lists and detail pages</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20427">[20427]</a> Convert OPAC LESS to SCSS</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20554">[20554]</a> New OPAC CSS</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20876">[20876]</a> The form_serialized_itype cookie is not used and should be removed</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20898">[20898]</a> Replace OPAC detail's results browser with non-JavaScript version</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20921">[20921]</a> Expose borrowernumber and branch when user is logged in to OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21157">[21157]</a> Improve style of OPAC login modal</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21174">[21174]</a> Change default behavior to open OPAC cart in one click</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21340">[21340]</a> Add spans with classes around callnumbers in OPAC for additional styling</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21568">[21568]</a> Add more spans with classes around callnumbers in OPAC for additional styling</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11911">[11911]</a> Add separate permission for managing suggestions</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12258">[12258]</a> Datatable in Patrons Account Fines</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14391">[14391]</a> Granular permissions for the administration module</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15136">[15136]</a> Display item's homebranch in patron's fines list</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18635">[18635]</a> Koha::Patron->guarantees() should return results alphabetically</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19524">[19524]</a> Share patron lists between staff</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20819">[20819]</a> GDPR: Add a consent field for processing personal data in account menu and self-registration</li>
+</ul>
+
+<blockquote>
+  <p>This report adds a new table patron_consent in order to save user consent for processing personal data (GDPR), but allows for future extension. <br />
+  It adds two preferences: GDPR_Policy and PrivacyPolicyURL. The first pref allows you to enforce giving consent before using the OPAC as a specific user. In permissive mode, we only show a warning on the consent page. The second pref allows you to add a URL to a privacy policy page. <br />
+  On the self registration page we also add asking for consent if the pref is enabled.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20867">[20867]</a> Ability to show membership renewal date on moremember.pl page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21337">[21337]</a> Add Koha::Patrons->delete</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21755">[21755]</a> Show patron updated date in circ menu</li>
+</ul>
+
+<h3 id="restapi">REST api</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21334">[21334]</a> Add bibliographic content type definitions</li>
+</ul>
+
+<h3 id="reports">Reports</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9188">[9188]</a> Remove 'debug' information from patron statistics</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20260">[20260]</a> Use CodeMirror for the SQL reports editor</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20495">[20495]</a> Refactor C4::Reports.Guided - remove get_saved_report</li>
+</ul>
+
+<h3 id="searching">Searching</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18322">[18322]</a> Add facets for ccode to zebra</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20758">[20758]</a> Typo in BrowseResultSelection syspref description</li>
+</ul>
+
+<h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18316">[18316]</a> Add weighting/relevancy options to ElasticSearch</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19604">[19604]</a> Elasticsearch Fixes for build_authorities_query for auth searching</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19893">[19893]</a> Alternative optimized indexing for Elasticsearch</li>
+</ul>
+
+<blockquote>
+  <p>This patch significantly improves the performance of the ElasticSearch indexing process and also improves the maintainability of this area of the codebase.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20073">[20073]</a> Move Elasticsearch settings to configuration files</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20244">[20244]</a> Elasticsearch - Indexing improvements</li>
+</ul>
+
+<blockquote>
+  <ul>
+  <li>Index both ISBN10 and ISBN13 where possible.  </li>
+  <li>Add handling for alternative scripts.  </li>
+  <li>Improve sort field handling</li>
+  </ul>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20248">[20248]</a> Elasticsearch - Improvements to mappings UI and indexing script</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20602">[20602]</a> Use search fields weight/relevancy on OPAC simple search</li>
+</ul>
+
+<h3 id="searching-zebra">Searching - Zebra</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20078">[20078]</a> Indexes 'arl' (Accelerated reading level) and 'arp' (Accelerated reading point) not usable in search menus</li>
+</ul>
+
+<h3 id="serials">Serials</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17877">[17877]</a> Show internal and vendor note in acquisition info on subscription detail page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20365">[20365]</a> Allow several open orders on subscription</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20726">[20726]</a> Display acquisition details on the subscription detail page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21511">[21511]</a> Don't show acquisition details on subscription detail when there is no acq data</li>
+</ul>
+
+<h3 id="staffclient">Staff Client</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13406">[13406]</a> Add classes to MARC Authority display to enable CSS styling</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16280">[16280]</a> purge_suggestions.pl: Cron job log should tell number of days used</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17698">[17698]</a> Make patron notes show up on staff dashboard</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19550">[19550]</a> Add links to related authorities for UNIMARC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19902">[19902]</a> Add column configuration to bibliographic record checkouts history table</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20339">[20339]</a> Unify MARC21 ISBN/ISSN handling in XSL</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20896">[20896]</a> Move serial enumeration to the right of callnumber on staff detail page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21158">[21158]</a> Add cronjob references to the system preference descriptions if a cronjob is required</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21376">[21376]</a> Catalogue detail date handling improvements</li>
+</ul>
+
+<h3 id="systemadministration">System Administration</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12365">[12365]</a> Allow descriptive notes to be added to circulation and fine rules</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15520">[15520]</a> Add more granular permission for only editing own library's circ rules</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21403">[21403]</a> Add Indian Amazon Affiliate option to AmazonLocale setting</li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7547">[7547]</a> Printing a sorted cart</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=10348">[10348]</a> Show number of items on tab headings in the staff client</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13618">[13618]</a> Add additional template filter methods and a filter presence test to Koha</li>
+</ul>
+
+<blockquote>
+  <p>This important improvement to Koha's security policy greatly decreases the likelihood of XSS vulnerabilities being introduced into the Koha codebase moving forward. We have introduced the requirement for all variables inside templates to be passed through a filter and added a test to check this requirement is being upheld.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19474">[19474]</a> Convert staff client CSS to SCSS</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19709">[19709]</a> Move template JavaScript to the footer: Labels</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19833">[19833]</a> Disambiguation of "biblio", "biblio record" and "bibliographic record"</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20044">[20044]</a> Switch single-column templates to Bootstrap grid: Cataloging</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20217">[20217]</a> Make header's catalog search menu into a split button</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20220">[20220]</a> Move template JavaScript to the footer: Holds</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20520">[20520]</a> Re-indent moremember.tt</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20534">[20534]</a> Floating toolbar when editing vendors</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20585">[20585]</a> Label surname as name for organisation type patrons</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20641">[20641]</a> Switch single-column templates to Bootstrap grid: Various, part 2</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20650">[20650]</a> Switch single-column templates to Bootstrap grid: Various, part 3</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20667">[20667]</a> Update two-column templates with Bootstrap grid: Acquisitions part 1</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20668">[20668]</a> Update two-column templates with Bootstrap grid: Acquisitions part 2</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20672">[20672]</a> Update two-column templates with Bootstrap grid: Acquisitions part 3</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20690">[20690]</a> Update two-column templates with Bootstrap grid: Acquisitions part 4</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20731">[20731]</a> Move template JavaScript to the footer: Call number browser MARC plugin</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20736">[20736]</a> Update two-column templates with Bootstrap grid: Administration part 1</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20738">[20738]</a> Update two-column templates with Bootstrap grid: Administration part 2</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20739">[20739]</a> Update two-column templates with Bootstrap grid: Administration part 3</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20740">[20740]</a> Update two-column templates with Bootstrap grid: Administration part 4</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20741">[20741]</a> Update two-column templates with Bootstrap grid: Administration part 5</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20742">[20742]</a> Update two-column templates with Bootstrap grid: Administration part 6</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20743">[20743]</a> Update two-column templates with Bootstrap grid: Administration part 7</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20744">[20744]</a> Replace staff client header Koha logo gif with transparent png</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20779">[20779]</a> Style refresh for patron detail page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20807">[20807]</a> Lost items report: Improve the display of CSV profile errors</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20984">[20984]</a> MARC21 subfield 300f - Type of Unit  does not display</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21112">[21112]</a> Re-indent staff client cart template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21125">[21125]</a> Shortcut moredetail.pl on nonexistent biblionumber</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21132">[21132]</a> Highlight active filters on saved report page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21137">[21137]</a> Replace BORROWER_INFO and USER_INFO with logged_in_user</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21166">[21166]</a> Add columns settings to the acquisition details table (record detail view)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21237">[21237]</a> Clean up staff client SCSS</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21305">[21305]</a> Update two-column templates with Bootstrap grid: Patron clubs</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21306">[21306]</a> Update two-column templates with Bootstrap grid: Tags</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21341">[21341]</a> Style button on acquisitions existing record search with Bootstrap</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21409">[21409]</a> Add column configuration to course reserves</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21428">[21428]</a> Switch two-column templates to Bootstrap grid: Reports part 1</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21429">[21429]</a> Switch two-column templates to Bootstrap grid: Reports part 2</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21430">[21430]</a> Switch two-column templates to Bootstrap grid: Reports part 3</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21433">[21433]</a> Switch two-column templates to Bootstrap grid: Tools part 1</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21434">[21434]</a> Switch two-column templates to Bootstrap grid: Tools part 2</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21435">[21435]</a> Switch two-column templates to Bootstrap grid: Tools part 3</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21437">[21437]</a> Switch two-column templates to Bootstrap grid: Patron lists</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21439">[21439]</a> Switch two-column templates to Bootstrap grid: Rotating collections</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21492">[21492]</a> Show subscriptions count in the sidebar menu</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21519">[21519]</a> Switch two-column templates to Bootstrap grid: Serials part 1</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21523">[21523]</a> Switch two-column templates to Bootstrap grid: Serials part 2</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21570">[21570]</a> Switch two-column templates to Bootstrap grid: Various</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21645">[21645]</a> Clean up library groups template</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21647">[21647]</a> Clean up SRU fields mapping templates</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21715">[21715]</a> Ease translation of account and account offset type descriptions</li>
+</ul>
+
+<h3 id="testsuite">Test Suite</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20757">[20757]</a> Capture a screenshot on selenium errors</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21393">[21393]</a> Make template filter checks code reusable</li>
+</ul>
+
+<h3 id="tools">Tools</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13560">[13560]</a> MARC modification templates - Add an 'Add' option</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21216">[21216]</a> Notices - Add filter/search options to table</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21408">[21408]</a> Inventory - Warn of items possibly scanned out of order</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21413">[21413]</a> Inventory - Allow skipping items with waiting holds</li>
+</ul>
+
+<h3 id="webservices">Web services</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20676">[20676]</a> svc/barcode should allow barcode to be printed without text</li>
+</ul>
+
+<blockquote>
+  <p>Extends Koha /svc/barcode HTTP API. Adds a notext=1 parameter to the entry point in order to prevent the display of barcode text under the barcode's image.</p>
+</blockquote>
+
+<h3 id="z39.50sruopensearchservers">Z39.50 / SRU / OpenSearch Servers</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18973">[18973]</a> Auto focus the ISBN field</li>
+</ul>
+
+<h2 id="criticalbugsfixed">Critical bugs fixed</h2>
+
+<p>(This list includes all bugfixes since the previous major version. Most of them
+have already been fixed in maintainance releases)</p>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20014">[20014]</a> When adding to basket from a staged file item budgets are selected by matching on code, not id</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20798">[20798]</a> Client side validation for for fund selection prevents adding only some records to a basket</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20827">[20827]</a> Can't add owner to a fund</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20861">[20861]</a> Correct EDI permissions on some pages</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20972">[20972]</a> If ISBN has 10 numbers only the first 9 numbers are used</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20979">[20979]</a> Error message when deleting bib attached to order</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21282">[21282]</a> Ordered/spent lists should use prices including tax for calculations</li>
+</ul>
+
+<blockquote>
+  <p>Corrects the prices shown on the ordered/spent lists for each fund in acquisitions to show the price with taxes included. This will make the total shown on these pages match the total shown in the table on the acq start and fund pages.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21347">[21347]</a> bad code for input field in item information tab of addorderiso2709 page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21385">[21385]</a> Vendor search: Item count is incorrectly updated on partial receive</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21587">[21587]</a> Patrons to notify on receiving doesn't work on new order creation, only on modification</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21758">[21758]</a> Navigation in Z39.50 result pages not working in Acquisitions</li>
+</ul>
+
+<blockquote>
+  <p>The next page, previous page, and go buttons now work when navigating the search results when adding a record to a basket from an external source.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21853">[21853]</a> Internal software error when exporting basket group as PDF with Perl > 5.24.1</li>
+</ul>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18821">[18821]</a> TrackLastPatronActivity is a performance killer</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20918">[20918]</a> left-side navigation broken on the checkout history page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20922">[20922]</a> Koha::Number::Price must not be used in updatedatabase.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21087">[21087]</a> Patron's password is hashed twice when the object is saved</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21133">[21133]</a> Missing use C4::Accounts statement in Koha/Patron.pm</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21195">[21195]</a> Makefile.t is failing due to new files for SCSS</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21222">[21222]</a> Patron's creation is broken</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21432">[21432]</a> Internal Server Error in Checkout History</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21481">[21481]</a> Translation tool still references to help templates</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21526">[21526]</a> TT variables used to build a link should be uri filtered</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21593">[21593]</a> Remove Group by clause in GetAuthValueDropbox</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21598">[21598]</a> budget_parent_id isn't in GROUP BY - GetBudgetHierarchy</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21599">[21599]</a> Incorrect decimal value: '' for column 'defaultreplacecost' - Cannot create item type</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21604">[21604]</a> Cannot add/edit funds, cannot add budgets</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21607">[21607]</a> Koha::Account::Line->apply should store credit offsets as negative amounts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21612">[21612]</a> Incorrect GROUP BY in Koha::Virtualshelves</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21635">[21635]</a> Incorrect GROUP BY clause in batchMod.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21669">[21669]</a> TT assignment statements must not be html filtered</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21869">[21869]</a> Bad update statement loses values for MarkLostItemsAsReturned</li>
+</ul>
+
+<h3 id="authentication">Authentication</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18947">[18947]</a> Unexpected Active Directory LDAP authentication failure mode</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20879">[20879]</a> Shibboleth in combination with LDAP as an alternative no longer works</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21311">[21311]</a> Remove locked message from opac-auth.tt</li>
+</ul>
+
+<blockquote>
+  <p>It is good security practice to not provide details which could confirm or deny the existence of an account. Previously, the simple "This account has been locked!" confirmed its existence which would only encourage more attacks by hackers. <br />
+  To prevent aiding malicious attacks, the message has been changed to something that does not expressly state the account has been locked. It only mentions that accounts will be locked after a number of failed attempts, instead of saying whether it is locked or not. <br />
+  So while a successful attempt will seem to have an invalid username or password suggestion after the account is locked, users should be reminded that they can always reset their password or contact library staff for help.</p>
+</blockquote>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14662">[14662]</a> Allow blank values in pull downs in cataloguing forms when subfield is mandatory</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20761">[20761]</a> Advanced Cataloging Editor - Rancor - Some js files are not fetched using Asset</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20928">[20928]</a> Checkout status not showing patron</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21448">[21448]</a> Field 606 doesn't add multiple x subfields</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21742">[21742]</a> Incorrect count of youtube videos</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21774">[21774]</a> Cloned item subfields disappear when editing an item</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=10382">[10382]</a> collection and location not returning to null when removed from course reserves</li>
+</ul>
+
+<blockquote>
+  <p>These patches ensure that unset values for items added to course reserves are unset when the course is disabled.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20825">[20825]</a> Cannot checkout if item types at biblio level</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20889">[20889]</a> Items marked as not for loan can be checked out</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20934">[20934]</a> Biblio checkout history shows only current checkout</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21176">[21176]</a> decreaseLoanHighHolds does not properly calculate date when  TimeFormat set to 12 hour</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21231">[21231]</a> BlockReturnofLostItems does not prevent lost items being found</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21257">[21257]</a> Patrons checkout table throws JS error when location/collection not defined</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21293">[21293]</a> Display of housebound delivery information broken by Bug 13618</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21464">[21464]</a> Overdues export is missing lot of fields</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21620">[21620]</a> Errors when using email from stockrotation.pl cronjob</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21641">[21641]</a> Software error when checking out an item with a charge associated with it</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21777">[21777]</a> Checkouts table in circulation is out of alignment</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21796">[21796]</a> Patron Restriction do not restrict checkouts if patron also has a fee/fine on their account</li>
+</ul>
+
+<h3 id="command-lineutilities">Command-line Utilities</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20811">[20811]</a> Fix wrong usage of ModBiblio in bulkmarcimport.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21122">[21122]</a> Make check-url-quick.pl handle utf8 characters in urls gracefuly</li>
+</ul>
+
+<h3 id="coursereserves">Course reserves</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21603">[21603]</a> Incorrect GROUP BY clause in SearchCourses</li>
+</ul>
+
+<h3 id="database">Database</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20773">[20773]</a> bug 20724 follow-up - Database cleanup</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21129">[21129]</a> New ALTER IGNORE TABLE entries need correction in updatedatabase.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21617">[21617]</a> statistics.ccode is not long enough (see also dbrev 18.06.00.032)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21682">[21682]</a> Stock Rotation: Update DB is failing with strict_sql_modes ON</li>
+</ul>
+
+<h3 id="finesandfees">Fines and fees</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13098">[13098]</a> Item lost multiple times by the same patron will create only be charged once</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20840">[20840]</a> Internal Server Error when clicking on "Details" button</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20946">[20946]</a> Cannot pay fines for patrons with credits</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21702">[21702]</a> mancredit.pl incorrectly passes user_id instead of the patron id</li>
+</ul>
+
+<h3 id="holdrequests">Hold requests</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20822">[20822]</a> Can't find HOLD_SLIP template when printing</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21611">[21611]</a> Priority in request.pl shows 1 instead of Waiting</li>
+</ul>
+
+<h3 id="i18nl10n">I18N/L10N</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21823">[21823]</a> Cannot update or create translations</li>
+</ul>
+
+<h3 id="ill">ILL</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21377">[21377]</a> Variable declarations erroneously filtered</li>
+</ul>
+
+<h3 id="installationandupgradecommand-lineinstaller">Installation and upgrade (command-line installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16690">[16690]</a> Improve security of remote database installations</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21440">[21440]</a> koha-create expects the file passed by $DEFAULTSQL to be in gzip format</li>
+</ul>
+
+<blockquote>
+  <p>Add support to koha-create to allow it to accept both compressed and uncompressed files for DEFAULTSQL</p>
+</blockquote>
+
+<h3 id="installationandupgradeweb-basedinstaller">Installation and upgrade (web-based installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21149">[21149]</a> Administrator creation in onboarding always fails</li>
+</ul>
+
+<h3 id="labelpatroncardprinting">Label/patron card printing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=8604">[8604]</a> Patron cards made for patrons which don't have patron images use preceding card's image</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21281">[21281]</a> Label Template - Creation not working</li>
+</ul>
+
+<h3 id="marcbibliographicdatasupport">MARC Bibliographic data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21749">[21749]</a> Importing MARC frameworks from pre-9701 fails</li>
+</ul>
+
+<h3 id="notices">Notices</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21529">[21529]</a> Fix display of HTML tags in print notices</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20763">[20763]</a> AllowPurchaseSuggestionBranchChoice triggers error opac-suggestions.pl is visited without logging in</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20832">[20832]</a> Opac user page crash when there is an overdue fine and not any rental charge for a patron</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20875">[20875]</a> OpacAddMastheadLibraryPulldown displays an empty list</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21018">[21018]</a> OPAC Resource URL Broken if Tracklinks is enabled</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21374">[21374]</a> Self registration e-mail verification does not work</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21475">[21475]</a> Error in the OPAC when viewing a record which has no biblio-level itemtype</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21476">[21476]</a> Incorrect filter prevents HTML5 media from playing in the OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21479">[21479]</a> Removing from cart removes 2 items</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21771">[21771]</a> Password recovery is broken (see 20023)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21878">[21878]</a> Fix few links for opac pagination and facets (no uri filter)</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13655">[13655]</a> Can't save organisation type patron without entering userid/password</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20903">[20903]</a> Print payment receipt on child patron could end with server error</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20951">[20951]</a> Koha::Patron::Discharge is missing use Koha::Patron::Debarments</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20981">[20981]</a> Organization name missing from patron search results</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21068">[21068]</a> Remove NorwegianPatronDB related code</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21085">[21085]</a> Can't edit patrons with housebound module active</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21136">[21136]</a> Error "No property select_city for Koha::Patron" when saving patron record</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21208">[21208]</a> Housebound deliverer/chooser have wrong name when creating a visit</li>
+</ul>
+
+<h3 id="sip2">SIP2</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21020">[21020]</a> Return branch not set for transfer when using SIP</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21471">[21471]</a> Misspelled variable name in <em>get</em>outstanding_holds</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21486">[21486]</a> SIP does not return  checked out (charged) items on patron_information request</li>
+</ul>
+
+<h3 id="searching">Searching</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20838">[20838]</a> Search by group of libraries is broken</li>
+</ul>
+
+<h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19365">[19365]</a> link_bibs_to_authorities.pl doesn't work with Elasticsearch</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21032">[21032]</a> Refining a search made on a specific index fail</li>
+</ul>
+
+<h3 id="selfcheckout">Self checkout</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21054">[21054]</a> Extra closing body tag in sco-main.tt prevents slip printing</li>
+</ul>
+
+<h3 id="serials">Serials</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21554">[21554]</a> Using Subscription Batch Edit produces Software Error</li>
+</ul>
+
+<h3 id="staffclient">Staff Client</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20652">[20652]</a> Sort after item type search fails</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20899">[20899]</a> Patron name not showing on issuehistory.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20998">[20998]</a> Non superlibrarians cannot search for patrons using the quicksearch at the top</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21418">[21418]</a> Incorrectly filtered markup in staff client lists</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21703">[21703]</a> Placing holds in staff is broken (TT filter)</li>
+</ul>
+
+<h3 id="systemadministration">System Administration</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21151">[21151]</a> SRU search fields mapping pop-up comes up empty</li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13692">[13692]</a> Series link is only using 800a instead of 800t</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20977">[20977]</a> Javascript vars used in confirm_deletion in catalog.js do not match strings in catalog-strings.inc</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21163">[21163]</a> Basket group detail page layout is broken</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21663">[21663]</a> Incorrect filter prevents predefined notes from being added to patron acccounts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21704">[21704]</a> Editing subfields in bibliographic frameworks is broken (TT filter)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21706">[21706]</a> Editing subfields in authority frameworks is broken (TT filter)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21805">[21805]</a> Duplicate include file in search results template causes JS error</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21814">[21814]</a> System preferences save button can be hidden by language menu</li>
+</ul>
+
+<h3 id="testsuite">Test Suite</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20906">[20906]</a> Fix Debian 9 Test Failures</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21567">[21567]</a> WebService:ILS related tests fail during package build</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21597">[21597]</a> Test suite is still failing with new default SQL modes</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21600">[21600]</a> t/db_dependent/api/v1/patrons.t is failing with new SQL modes</li>
+</ul>
+
+<h3 id="tools">Tools</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20084">[20084]</a> Patron card creator: layouts Industrial2of5 and COOP2of5 broken with error "Invalid Characters"</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21656">[21656]</a> Syntax Error in Stock Rotation Default Notice Template</li>
+</ul>
+
+<h3 id="webservices">Web services</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21046">[21046]</a> ILSDI - AuthenticatePatron returns a wrong borrowernumber if cardnumber is empty</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21199">[21199]</a> Patron's attributes are displayed on GetPatronInfo's ILSDI output regardless opac_display</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21203">[21203]</a> ILS-DI - GetRecords crashes on non-existent records</li>
+</ul>
+
+<h3 id="translate.koha-community.org">translate.koha-community.org</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21480">[21480]</a> misc/translator/translate does not work with perl 5.26</li>
+</ul>
+
+<h2 id="otherbugsfixed">Other bugs fixed</h2>
+
+<p>(This list includes all bugfixes since the previous major version. Most of them
+have already been fixed in maintainance releases)</p>
+
+<h3 id="about">About</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7143">[7143]</a> Bug for tracking changes to the about page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17597">[17597]</a> Outdated translation credits</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20720">[20720]</a> Add libraries (sponsors) to the about page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20818">[20818]</a> Missing QA manager entry in 18.05 release notes</li>
+</ul>
+
+<h3 id="acquisitions">Acquisitions</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=3849">[3849]</a> Descriptions of acquisition permissions are unclear</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9775">[9775]</a> unitprice should be hidden when creating an order</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15408">[15408]</a> Timestamp on funds not updated when you duplicate a budget</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16739">[16739]</a> Generate EDIFACT on basket groups falsely showing when configuration is incomplete</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16754">[16754]</a> Use validation plugin in budgets, planning, and contracts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19271">[19271]</a> Ordered/Spent lists should display vendor name, not vendor code</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20892">[20892]</a> Wrong basketgroup link in histsearch.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21033">[21033]</a> Remove few warns in acqui/basket.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21048">[21048]</a> suggest_status not behaving properly</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21097">[21097]</a> Missing optgroup closing tag in orderreceive.tt</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21288">[21288]</a> Slowness in acquisition caused by GetInvoices</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21324">[21324]</a> Missing aoColumns definition in acqui/parcel receivedt table</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21356">[21356]</a> Missing space in parcel.tt</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21387">[21387]</a> Receive items from - form should include tax hints the same as the ordering form</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21398">[21398]</a> Search term when adding an order from an existing record should be required</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21417">[21417]</a> EDI ordering fails when basket and EAN libraries do not match</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21425">[21425]</a> basketno not being interpolated into error message</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21537">[21537]</a> Template error when creating a new order from a suggestion</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21619">[21619]</a> Tax hints should not be abbreviated</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21725">[21725]</a> Incorrect HAVING in group by in Acquisitions.pm</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21799">[21799]</a> Change wording for quantity input field on order receive page</li>
+</ul>
+
+<h3 id="architectureinternalsandplumbing">Architecture, internals, and plumbing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15734">[15734]</a> Audio Alerts broken</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18584">[18584]</a> Our legacy code contains trailing-spaces</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18720">[18720]</a> Get rid of "die" in favor of exceptions in C4::Acquisition::GetBasketAsCsv</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19687">[19687]</a> Recent upgrade to 17.05.04.000 bulkmarcimport started to fail</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19991">[19991]</a> use Modern::Perl in OPAC perl scripts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20259">[20259]</a> Shorter JS and CSS rewrite rule</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20631">[20631]</a> C4::Acounts claims to use ReturnLostItem but doesn't</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20696">[20696]</a> Remove a few ugly "eq undef" comparisons</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20702">[20702]</a> Bind results of GetHostItemsInfo to the EasyAnalyticalRecords pref</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20767">[20767]</a> "The method is not covered by tests!" should give more information</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20851">[20851]</a> Missing module in circ/article-request-slip.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20886">[20886]</a> Koha::Object::TO_JSON indiscriminately casting to integer</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20911">[20911]</a> Search history page forms use 'GET' and this limits the number of entries that can be submitted</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20980">[20980]</a> Manual credit offsets are stored as debits</li>
+</ul>
+
+<blockquote>
+  <p>This change may affect existing reports. Credits will no longer be recorded as 'debits' but rather get their own 'Manual Credit' type.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21008">[21008]</a> pay.pl and paycollect.pl raise warning</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21022">[21022]</a> Exceptions should skip stringifying if message manually passed</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21056">[21056]</a> Changing the logged in library can fail sporadically</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21082">[21082]</a> OverDrive authentication method no longer supported</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21115">[21115]</a> Add multi_param call and add divider in cache key in svc/report and opac counterpart</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21154">[21154]</a> Remove unused subs from C4::Serials</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21182">[21182]</a> acqui/check_duplicate_barcode_ajax.pl is not longer in use</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21207">[21207]</a> C4::Overdues::GetItems is not used</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21238">[21238]</a> TemplateToolkit.t is failing on slow server</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21396">[21396]</a> Missing use statements in Koha::Account</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21404">[21404]</a> Remove unused variables in C4::Breeding-><em>auth</em>build_query</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21500">[21500]</a> Warnings in rotating collections</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21584">[21584]</a> Wrong offset type for Lost Item</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21621">[21621]</a> Incorrect GROUP BY in tools/letter.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21639">[21639]</a> Phone notice transports do not exist for new installs</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21680">[21680]</a> Remove dead code C4::Accounts::fixaccounts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21804">[21804]</a> Bad rebase reintroduced C4::Accounts::getcharges</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21867">[21867]</a> Replace remaining document.element.onchange calls in marc_modification_templates.js</li>
+</ul>
+
+<h3 id="authentication">Authentication</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13779">[13779]</a> sessionID declared twice in C4::Auth::checkauth()</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20023">[20023]</a> Password recovery should be case insensitive</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21323">[21323]</a> Redirect page after login missing multiple params</li>
+</ul>
+
+<h3 id="cataloging">Cataloging</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15360">[15360]</a> Incorrect or mislabeled behavior on Authorities "New from Z39.50" Button</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16424">[16424]</a> Advanced editor reverts records back to Default framework</li>
+</ul>
+
+<blockquote>
+  <p>After this patch, frameworks will be handled correctly by the advanced cataloguing editor.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18655">[18655]</a> Unimarc field 210c fails on importing fields with a simple quote</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18822">[18822]</a> Advanced editor - Rancor - searching broken under Elasticsearch</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19970">[19970]</a> Revise change of bug 19413 to work better for translations</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20592">[20592]</a> updateitem.pl causes database errors when empty non-public item notes updated</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20760">[20760]</a> Advanced Cataloging Editor - Rancor - AuthorisedValues are incorrectly fetched</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20785">[20785]</a> Advanced Editor does not honor MarcFieldDocURL</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20829">[20829]</a> 'Link to host item' gives internal server error</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21009">[21009]</a> Max length of inputs on editing/adding items is broken</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21053">[21053]</a> Editing 008 field with a hash overwrites data</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21064">[21064]</a> Advanced cataloging editor - rancor - check for changes should return 'undefined' instead of 'undef'</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21362">[21362]</a> Advanced MARC Editor - Rancor - Tab navigation not working in fixed fields</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21365">[21365]</a> BiblioAddsAuthorities does not work with the Advanced MARC Editor - Rancor</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21407">[21407]</a> Can't enter new macros in the advanced cataloging editor (rancor)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21556">[21556]</a> Deleting same record twice leads to fatal software error</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21666">[21666]</a> Advanced editor search- error is given for 'Unsupported Use attribute' when searching on title + author</li>
+</ul>
+
+<h3 id="circulation">Circulation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16420">[16420]</a> Buttons inconsistent between "Hold found" and "Hold found (waiting)" dialogs in checkin</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17561">[17561]</a> ReserveSlip needs itemnumber for item level holds on same biblio</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18677">[18677]</a> issue_id is not added to accountlines for lost item fees</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20120">[20120]</a> Prevent writeoffs of more than the amount owed for a fee</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20487">[20487]</a> AddReturn should clear items.onloan for unissued items</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20598">[20598]</a> Accruing fines not closed out by longoverdue.pl if WhenLostForgiveFine is not enabled</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20660">[20660]</a> AddReturn should use return date override for debarments</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20793">[20793]</a> Don't show holds link in result list when staff user doesn't have place_holds permission</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20794">[20794]</a> Don't show holds tab when user doesn't have circulate_remaining_permissions</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21168">[21168]</a> Error on circ/returns.pl after deleting checked-in item</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21463">[21463]</a> Library is no longer displayed in the overdue list</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21553">[21553]</a> Javascript error on rota page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21562">[21562]</a> Sorting on checkout date is broken</li>
+</ul>
+
+<h3 id="command-lineutilities">Command-line Utilities</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20893">[20893]</a> batchRebuildItemsTables.pl has incorrect parameter</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21035">[21035]</a> runreport.pl prints only a newline when printing a row that has a field that contains an embedded newline</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21322">[21322]</a> process_message_queue.pl --type should take an argument</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21640">[21640]</a> Itivia outbound script doesn't print to STDOUT</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21698">[21698]</a> FIX POD of cancel_unfilled_holds.pl</li>
+</ul>
+
+<h3 id="coursereserves">Course reserves</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21349">[21349]</a> Instructors with special characters (e.g. $, ., :) in their cardnumber cannot be removed from course reserves</li>
+</ul>
+
+<h3 id="database">Database</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=5458">[5458]</a> length of items.ccode disagrees with authorised_values.authorised_value</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20777">[20777]</a> Remove unused field accountlines.dispute</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21015">[21015]</a> Members.pm slow because it loads twice Koha::Schema</li>
+</ul>
+
+<h3 id="developerdocumentation">Developer documentation</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21077">[21077]</a> Fix comment for statistics.type in installer/data/mysql/kohastructure.sql</li>
+</ul>
+
+<h3 id="finesandfees">Fines and fees</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20285">[20285]</a> Lost item refund won't always pay down lost item fee first</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21167">[21167]</a> Price should be correctly formatted on printed fee receipt and invoice</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21196">[21196]</a> C4::Overdues::CalcFine should consider default item type replacement cost</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21462">[21462]</a> "Filter paid transactions" stopped working after html-table was changed</li>
+</ul>
+
+<h3 id="holdrequests">Hold requests</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21075">[21075]</a> AutoUnsuspendHolds should unsuspend holds &lt;= today</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21076">[21076]</a> Javascript error on article requests page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21320">[21320]</a> Holds to pull should honor syspref AllowHoldsOnDamagedItems</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21389">[21389]</a> Javascript error on article requests page</li>
+</ul>
+
+<h3 id="i18nl10n">I18N/L10N</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19500">[19500]</a> Make module names on letters overview page translatable</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20332">[20332]</a> Untranslatable strings in grouped OPAC results</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21029">[21029]</a> "Suspend until" in modal in staff patron account is not translatable</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21351">[21351]</a> Traditional Chinese Language pack should have file name "zh-Hant-TW" not "zh-Hans-TW"</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21490">[21490]</a> Disambiguation of "Order"</li>
+</ul>
+
+<h3 id="ill">ILL</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20548">[20548]</a> Remove copyright clearance workflow from staff created ILL requests</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20941">[20941]</a> Displaying requests does not display request material type</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20996">[20996]</a> Fix API response time on ILL request endpoint</li>
+</ul>
+
+<blockquote>
+  <p>This patch makes the <branch> configuration section compulsory in the <interlibrary_loans> section of your Koha configuration file. The <branch> section allows you define per-branch Interlibrary loan options for each branch. In it's most basic form, the branch section can be: <br />
+  <branch><code>code_for_your_branch</code></branch></p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21289">[21289]</a> Error when sending emails to partner libraries</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21497">[21497]</a> Dates should be correctly formatted for ILL requests in OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21516">[21516]</a> Request notes CSS bug makes them unreadable</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21585">[21585]</a> Missing firstnames should be gracefully ignored in ILL requests table</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21835">[21835]</a> Request ID is displayed as NaN</li>
+</ul>
+
+<h3 id="installationandupgradecommand-lineinstaller">Installation and upgrade (command-line installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21426">[21426]</a> setting USE_MEMCACHED to "no" in koha-sites.conf does not have any effect</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21654">[21654]</a> Installer is loading a non-existent file</li>
+</ul>
+
+<h3 id="installationandupgradeweb-basedinstaller">Installation and upgrade (web-based installer)</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15717">[15717]</a> Installer: Step 3 has HTML tag br showing</li>
+</ul>
+
+<h3 id="labelpatroncardprinting">Label/patron card printing</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=6647">[6647]</a> Label item search should use standard pagination routine</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20765">[20765]</a> Search for items by acqdate does not work in label batch</li>
+</ul>
+
+<h3 id="lists">Lists</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17886">[17886]</a> Don't show option to add to existing list if there are no lists in staff</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21297">[21297]</a> "More lists" screen missing "Select an Existing list" fieldset when all lists are public</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21629">[21629]</a> List sort on call number does not use cn_sort</li>
+</ul>
+
+<blockquote>
+  <p>With this patch lists sorted on call number will now use the machine sortable form of the callnumber from items.cn_sort for better results.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21874">[21874]</a> Encoding broken in list and cart email subjects</li>
+</ul>
+
+<h3 id="marcauthoritydatasupport">MARC Authority data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21581">[21581]</a> Matching rules for authorities do not respect 'Search index' setting</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21644">[21644]</a> UNIMARC XSLT display of 210 in intranet</li>
+</ul>
+
+<h3 id="marcbibliographicdatasupport">MARC Bibliographic data support</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20700">[20700]</a> Update MARC21 leader/007/008 codes</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20910">[20910]</a> 773$g not displayed if $0 is present</li>
+</ul>
+
+<h3 id="notices">Notices</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15971">[15971]</a> Serial claim letters should allow the use of all biblio and biblioitems fields (like issn)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21277">[21277]</a> fr-CA translation for notices in sample_notices.sql</li>
+</ul>
+
+<h3 id="opac">OPAC</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16575">[16575]</a> Irregular behaviour using window.print() followed by window.location.href=</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17869">[17869]</a> Don't show pick-up library for list of holds in OPAC account when there is only one branch</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19291">[19291]</a> Make breadcrumbs for OPAC search history consistent with other patron account pages</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19849">[19849]</a> Rebase of bug 16621 partially reverted bug 12509</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20053">[20053]</a> Drop type attribute "text/javascript" for <code>&lt;script&gt;</code> elements used in OPAC templates</li>
+</ul>
+
+<blockquote>
+  <p>Prevents warnings about type attribute being generated for <code>&lt;script&gt;</code> elements when testing the OPAC pages using W3C Validator for HTML5.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20090">[20090]</a> Missing Script Statement for Novelist Select on Some Record Displays in OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20507">[20507]</a> Shelf browser does not update image sources when paging</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20756">[20756]</a> OPAC "Share list" button should be styled with an icon</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20953">[20953]</a> Discharge can be requested several times on OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20994">[20994]</a> Fix capitalization on OPAC result list "Save to Lists"</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21078">[21078]</a> Overdrive JS breaks when window opened from another site</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21094">[21094]</a> Syndetics: always use https instead of http</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21127">[21127]</a> Remove jqTransform jQuery plugin from the OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21493">[21493]</a> Remove incomplete icon style from serial issues tabs</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21590">[21590]</a> "send list" email uses the term "virtual shelf", this should be "list".</li>
+</ul>
+
+<h3 id="packaging">Packaging</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17084">[17084]</a> Automatic debian/control updates (master)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17237">[17237]</a> Stop koha-create from creating MySQL users without host restriction</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18250">[18250]</a> koha-common should start after memcached</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20920">[20920]</a> Plack timeout because of missing CGI::Compile Perl dependency</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20949">[20949]</a> Koha depends on Clone</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21267">[21267]</a> X_FORWARDED_PROTO header should be set in apache</li>
+</ul>
+
+<h3 id="patrons">Patrons</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2426">[2426]</a> Management permissions is deprecated</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=3886">[3886]</a> Can't print receipt w/out allowing "Add or modify borrowers" permission</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7996">[7996]</a> Patron modification log requires parameters permission</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20656">[20656]</a> Print summary for patron shows paid fines and formats payments badly</li>
+</ul>
+
+<blockquote>
+  <p>Print summary for patron will now show only outstanding fines/payments. To print all fines/payments you can use the 'print' option for the table in the accounts page for the patron.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20806">[20806]</a> Item type in holds history table should be written as description, not code</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20991">[20991]</a> Error will reset category when editing a patron</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21025">[21025]</a> Koha::Patron::Discharge is missing use C4::Letters</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21041">[21041]</a> "Merge patrons" button remains disabled with "Select all" option</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21080">[21080]</a> patron attribute classes break patron's edit view</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21096">[21096]</a> Garbled username on intranet login page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21209">[21209]</a> When trying to edit housebound roles, the edit button goes to patron attributes</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21353">[21353]</a> Merge patrons option only available with manage_patron_lists</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21596">[21596]</a> Handle default values when storing Koha::Patron</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21634">[21634]</a> "Circulation" option is lost when viewing patron's logs</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21649">[21649]</a> Add child button in the staff client is no longer automatically populating the parent address</li>
+</ul>
+
+<h3 id="restapi">REST api</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21031">[21031]</a> Apache Rewrite rules don't work for API when using anything but Debian package Plack configuration</li>
+</ul>
+
+<h3 id="reports">Reports</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16653">[16653]</a> reports/cat_issues_top.pl does not export "Count of checkouts" column as CSV</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20945">[20945]</a> Report params not escaped when downloading</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21005">[21005]</a> Missing row/column defaults cause unexpected results in report wizards</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21541">[21541]</a> HTML filter breaks HTML rendering of SQL output</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21837">[21837]</a> Overdues report shoudln't set homebranchfilter as holdingbranchfilter</li>
+</ul>
+
+<h3 id="searching">Searching</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9968">[9968]</a> Incorrect index used for 'Standard number' in advanced search</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14716">[14716]</a> Correctly URI-encode URLs in XSLT result lists and detail pages</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19390">[19390]</a> OPAC view link in staff results should open in a new tab</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20151">[20151]</a> Search is broken when stemming has no language</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20864">[20864]</a> Only set bibs_selected cookie when BrowseResultSelection is activated</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21455">[21455]</a> Authority search options get shuffled around when you click on 'Search'</li>
+</ul>
+
+<h3 id="searching-elasticsearch">Searching - Elasticsearch</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19502">[19502]</a> Result sets limited to 10000</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20273">[20273]</a> Elasticsearch: Auth-finder.pl autocomplete must use search_auth_compat</li>
+</ul>
+
+<h3 id="searching-zebra">Searching - Zebra</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20697">[20697]</a> Remove some Host-Item-Number noise from zebra-output.log when EasyAnalyticalRecords is not used</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21416">[21416]</a> 'gr' option missing from ZEBRA_LANGUAGE options in koha-sites.conf</li>
+</ul>
+
+<h3 id="serials">Serials</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7136">[7136]</a> Correct description of Grace period for subscriptions</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20241">[20241]</a> Fix display of publication year in subscription record search for MARC21</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20351">[20351]</a> Implement blocking errors for serials scripts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20778">[20778]</a> Unable to delete a subscription</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21505">[21505]</a> Box around 'Additional fields' does not contain the fields</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21552">[21552]</a> RoutingListNote should use raw filter and display HTML unescaped</li>
+</ul>
+
+<h3 id="staffclient">Staff Client</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17625">[17625]</a> 245f and 245g are not displayed in XSLT</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18521">[18521]</a> Renew and search hotkeys are swapped on returns page.</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20504">[20504]</a> Language attribute in html tag is empty in system preference editor</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20647">[20647]</a> When ILL is enabled the hover effect on the ILL requests button is wrong.</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20781">[20781]</a> 0 months is not a valid enrollment period and causes errors</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20919">[20919]</a> A Zebra query is done for each item when opening a record detail page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21248">[21248]</a> Fix COinS carp in MARC details page on unknown record</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21291">[21291]</a> Article requests page doesn't show MARC, LabeledMARC and ISBD in sidebar</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21456">[21456]</a> The 'New authority' button lists authority types inconsistently</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21470">[21470]</a> Due date no longer shown in red when viewing checkouts for a patron</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21583">[21583]</a> Novelist Select staff client not working in staff client - ns2init.js not loading</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21606">[21606]</a> Issues with matching rules</li>
+</ul>
+
+<h3 id="systemadministration">System Administration</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14446">[14446]</a> Resolve "Use of uninitialized value in goto" in admin/preferences.pl</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19179">[19179]</a> Email option for SMSSendDriver is not documented as a valid setting</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21131">[21131]</a> Changing and restoring a WYSIWYG preference can result in unexpected behaviour</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21144">[21144]</a> ROADTYPE missing from authorised value categories list</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21279">[21279]</a> Transport cost matrix shows html entity in all empty cells</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21625">[21625]</a> Fix wording and typo in SMSSendDriver system preference description</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21730">[21730]</a> PA_CLASS missing from list of authorized values categories</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21815">[21815]</a> Rephrase HidePersonalPatronDetailOnCirculation a little bit</li>
+</ul>
+
+<h3 id="templates">Templates</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=10442">[10442]</a> Remove references to non-standard "error" class</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13272">[13272]</a> Many inputs lack a type attribute</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14786">[14786]</a> Use text "MARC file" instead of "ISO2709" everywhere</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19511">[19511]</a> Local cover images not centered in table column in staff client search results</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20223">[20223]</a> Merge members-menu and circ-menu inc files</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20559">[20559]</a> Occurrences of loading-small.gif still exist</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20698">[20698]</a> Remove obsolete template: transfer-slip.tt</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20752">[20752]</a> Files tab in patron account is not properly capitalized</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20774">[20774]</a> Trivial HTML error in itemslost.tt</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20791">[20791]</a> Correct capitalization on 'Notices and slips' page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20805">[20805]</a> Update child to adult patron process broken on several patron-related pages</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20814">[20814]</a> Display issue with 'Saved reports' tabs when memcached is off</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20828">[20828]</a> Step 4 of moremember is used for Housebound and additional attributes</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20831">[20831]</a> (Bug 9573 follow-up) Pass id as first parameter instead of selector</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20881">[20881]</a> Order receiving: Price filter missing on_editing</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20931">[20931]</a> JS error "ReferenceError: $ is not defined" when CircSidebar is turned on</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20974">[20974]</a> Remove files left behind after removing Solr</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20999">[20999]</a> Remove invalid 'style="block"' from OPAC templates</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21038">[21038]</a> Reserves should be holds</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21050">[21050]</a> Datepickers on LabelItemSearch broken</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21099">[21099]</a> Floating toolbars reposition too late</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21139">[21139]</a> The floating toolbars have some issues</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21145">[21145]</a> The "Column visibility" button should not be displayed at the OPAC</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21148">[21148]</a> Dropdowns styled by the Select2 plugin do not highlight missing required fields</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21164">[21164]</a> Fix alignment on new basket form in acquisitions</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21185">[21185]</a> Incorrect title tag on tags review page</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21186">[21186]</a> Incorrect Bootstrap modal event name in multiple templates</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21223">[21223]</a> Some floating values are wrong</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21229">[21229]</a> Correct nesting and specificity for some button styles</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21234">[21234]</a> Remove our .clearfix class in favor of Bootstrap's</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21239">[21239]</a> CSS regressions caused by SCSS move</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21243">[21243]</a> Regression: SRU mapping popup for bibliographic records is unstyled</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21285">[21285]</a> Select2 broken on high dpi screens</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21350">[21350]</a> Add Font Awesome icon for pending onsite checkouts link</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21397">[21397]</a> Routing list tab not marked as active</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21506">[21506]</a> DataTables four button pagination uses the wrong icon for First and Last buttons</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21513">[21513]</a> Add a 'Cancel' button to the authority editor and remove duplicate 'Save' button</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21531">[21531]</a> Subscription "New fields" button should read "New field"</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21550">[21550]</a> DataTables four button pagination uses the wrong icon for disabled buttons</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21740">[21740]</a> Fixed-length fields show _ instead of @ when editing subfields</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21838">[21838]</a> Wrong alignment of instructors in course reserves</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21839">[21839]</a> Fix capitalization for "Print Label"</li>
+</ul>
+
+<h3 id="testsuite">Test Suite</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18959">[18959]</a> Text_CSV_Various.t must skip if Text::CSV::Unicode is not installed</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20177">[20177]</a> Remove GROUP BY clause in GetCourses</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20776">[20776]</a> Add Selenium::Remote::Driver to dependencies</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20866">[20866]</a> ArticleRequests.t fails on existing requests</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20900">[20900]</a> Yet another test assumes that CPL is present</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21023">[21023]</a> Remove warning in t/db_dependent/Circulation/Chargelostitem.t</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21086">[21086]</a> Wrong mock of DateTime->now in tests</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21095">[21095]</a> Tests should expect ccodes facets now (since we have ccode facets)</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21134">[21134]</a> Wrong error handling in Koha/Patron/Modification.pm hides a bug</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21155">[21155]</a> SwitchOnSiteCheckouts.t is failing randomly</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21188">[21188]</a> t/db_dependent/Circulation/issue.t is failing</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21213">[21213]</a> Circulation.t needs diagnostics</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21230">[21230]</a> Reserves.t is failing randomly</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21262">[21262]</a> Do not format numbers for editing if too big</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21295">[21295]</a> Update selenium tests for Admin pages bootstrap updates</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21355">[21355]</a> GetDailyQuotes.t is fragile</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21360">[21360]</a> IssueSlip.t is failing if run at 23:59</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21454">[21454]</a> Price filtered variables should not need to be html filtered</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21536">[21536]</a> t/Koha_ExternalContent_RecordedBooks.t skips more tests than scheduled</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21613">[21613]</a> Turn strict SQL modes on for tests</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21717">[21717]</a> TestBuilder.t is failing randomly</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21770">[21770]</a> t::lib::QA::TemplateFilters should allow html_entity in href</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21775">[21775]</a> Lack of tests for audio alerts</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21787">[21787]</a> GetHardDueDate.t has a silly test</li>
+</ul>
+
+<h3 id="tools">Tools</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20131">[20131]</a> Inventory optional filters always shows "For loan" for value 0</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20564">[20564]</a> Error 500 displays when uploading patron images with a zipped file</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21113">[21113]</a> Hint Messages are misleading at "Merge Selected Patrons" in Patron Lists</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21141">[21141]</a> Batch item modification tool throws error 500 when an itemnumber is invalid</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21142">[21142]</a> Batch item/record modification/deletion tools does not open uploaded files in utf-8</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21242">[21242]</a> Modification log redirects you to circulation with no borrower if 'Object' field is not populated with borrowernumber</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21579">[21579]</a> showdiffmarc tool during manage staged batches always looks for biblios even when matching authorities</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21614">[21614]</a> Search bar on Stock rotation page displays both [-] and [+] simultaneously</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21615">[21615]</a> "Stock rotation" is at the wrong place in the Tools left side menu</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21819">[21819]</a> Marc modification templates action always checks Regexp checkbox</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21854">[21854]</a> Patron category is not showing during batch modification</li>
+</ul>
+
+<h3 id="webservices">Web services</h3>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21226">[21226]</a> Remove use of retired OCLC xISBN service</li>
+</ul>
+
+<blockquote>
+  <p>OCLC has now discontinued support for the xisbn service.  One can continue to use the functionality that this service provided to Koha by switching on the ThingISBN preferences as an alternative.</p>
+</blockquote>
+
+<ul>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21235">[21235]</a> Remove services_throttle if not required for ThingISBN</li>
+<li><a href="http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21542">[21542]</a> OverDrive password submission should use a password field to mask input</li>
+</ul>
+
+<h2 id="newsysprefs">New sysprefs</h2>
+
+<ul>
+<li>AdditionalFieldsInZ3950ResultSearch</li>
+<li>AdlibrisCoversEnabled</li>
+<li>AdlibrisCoversURL</li>
+<li>ArticleRequestsLinkControl</li>
+<li>ElasticsearchIndexStatus_authorities</li>
+<li>ElasticsearchIndexStatus_biblios</li>
+<li>GDPR_Policy</li>
+<li>HoldsAutoFill</li>
+<li>HoldsAutoFillPrintSlip</li>
+<li>HoldsSplitQueue</li>
+<li>ItemsDeniedRenewal</li>
+<li>KohaManualBaseURL</li>
+<li>KohaManualLanguage</li>
+<li>MarcFieldForCreatorId</li>
+<li>MarcFieldForCreatorName</li>
+<li>MarcFieldForModifierId</li>
+<li>MarcFieldForModifierName</li>
+<li>OpacHiddenItemsExceptions</li>
+<li>OverDrivePasswordRequired</li>
+<li>PrivacyPolicyURL</li>
+<li>RecordedBooksClientSecret</li>
+<li>RecordedBooksDomain</li>
+<li>RecordedBooksLibraryID</li>
+<li>RotationPreventTransfers</li>
+<li>StockRotation</li>
+<li>UseEmailReceipts</li>
+<li>showLastPatron</li>
+</ul>
+
+<h2 id="systemrequirements">System requirements</h2>
+
+<p>Important notes:</p>
+
+<ul>
+<li>Perl 5.10 is required</li>
+<li>Zebra is required</li>
+</ul>
+
+<h2 id="documentation">Documentation</h2>
+
+<p>The Koha manual is maintained in DocBook. The home page for Koha 
+documentation is </p>
+
+<ul>
+<li><a href="http://koha-community.org/documentation/">Koha Documentation</a></li>
+</ul>
+
+<p>As of the date of these release notes, only the English version of the
+Koha manual is available:</p>
+
+<ul>
+<li><a href="http://koha-community.org/manual/18.11/en/html/">Koha Manual</a></li>
+</ul>
+
+<p>The Git repository for the Koha manual can be found at</p>
+
+<ul>
+<li><a href="http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary">Koha Git Repository</a></li>
+</ul>
+
+<h2 id="translations">Translations</h2>
+
+<p>Complete or near-complete translations of the OPAC and staff
+interface are available in this release for the following languages:</p>
+
+<ul>
+<li>Arabic (94%)</li>
+<li>Armenian (94%)</li>
+<li>Basque (64.4%)</li>
+<li>Chinese (China) (65.1%)</li>
+<li>Chinese (Taiwan) (96.1%)</li>
+<li>Czech (89.8%)</li>
+<li>Danish (56.5%)</li>
+<li>English (New Zealand) (89.9%)</li>
+<li>English (USA)</li>
+<li>Finnish (85.3%)</li>
+<li>French (94.4%)</li>
+<li>French (Canada) (94.1%)</li>
+<li>German (100%)</li>
+<li>German (Switzerland) (93.6%)</li>
+<li>Greek (76.5%)</li>
+<li>Hindi (95.5%)</li>
+<li>Italian (92.2%)</li>
+<li>Norwegian BokmÃ¥l (94.8%)</li>
+<li>Occitan (post 1500) (60.6%)</li>
+<li>Polish (86.8%)</li>
+<li>Portuguese (100%)</li>
+<li>Portuguese (Brazil) (78.2%)</li>
+<li>Slovak (87.5%)</li>
+<li>Spanish (94%)</li>
+<li>Swedish (92.3%)</li>
+<li>Turkish (95.5%)</li>
+<li>Ukrainian (58%)</li>
+<li>Vietnamese (54.4%)</li>
+</ul>
+
+<p>Partial translations are available for various other languages.</p>
+
+<p>The Koha team welcomes additional translations; please see</p>
+
+<ul>
+<li><a href="http://wiki.koha-community.org/wiki/Translating_Koha">Koha Translation Info</a></li>
+</ul>
+
+<p>For information about translating Koha, and join the koha-translate 
+list to volunteer:</p>
+
+<ul>
+<li><a href="http://lists.koha-community.org/cgi-bin/mailman/listinfo/koha-translate">Koha Translate List</a></li>
+</ul>
+
+<p>The most up-to-date translations can be found at:</p>
+
+<ul>
+<li><a href="http://translate.koha-community.org/">Koha Translation</a></li>
+</ul>
+
+<h2 id="releaseteam">Release Team</h2>
+
+<p>The release team for Koha 18.11.00 is</p>
+
+<ul>
+<li>Release Manager: <a href="mailto:jonathan.druart@bugs.koha-community.org">Jonathan Druart</a></li>
+<li>Release Manager assistant: <a href="mailto:nick@bywatersolutions.com">Nick Clemens</a></li>
+<li><p>QA Manager: </p></li>
+<li><p>QA Team:</p>
+
+<ul>
+<li><a href="mailto:tomascohen@gmail.com">TomÃ¡s Cohen Arazi</a></li>
+<li><a href="mailto:alex.arnaud@biblibre.com">Alex Arnaud</a></li>
+<li><a href="mailto:brendan@bywatersolutions.com">Brendan Gallagher</a></li>
+<li><a href="mailto:kyle@bywatersolutions.com">Kyle Hall</a></li>
+<li><a href="mailto:julian.maurice@biblibre.com">Julian Maurice</a></li>
+<li>Josef Moravec</li>
+<li><a href="mailto:m.de.rooy@rijksmuseum.nl">Marcel de Rooy</a></li>
+</ul></li>
+<li>Bug Wranglers:
+<ul>
+<li>Claire Gravely</li>
+<li>Jon Knight</li>
+<li><a href="mailto:veron@veron.ch">Marc VÃ©ron</a></li>
+</ul></li>
+<li>Packaging Manager: <a href="mailto:mirko@abunchofthings.net">Mirko Tietgen</a></li>
+<li>Documentation Team:
+<ul>
+<li>Lee Jamison</li>
+<li>David Nind</li>
+<li>Caroline Cyr La Rose</li>
+</ul></li>
+<li>Translation Manager: <a href="mailto:bgkriegel@gmail.com">Bernardo Gonzalez Kriegel</a></li>
+<li>Release Maintainers:
+<ul>
+<li>17.11 -- <a href="mailto:nick@bywatersolutions.com">Nick Clemens</a></li>
+<li>17.05 -- <a href="mailto:fridolin.somers@biblibre.com">Fridolin Somers</a></li>
+<li>16.11 -- <a href="mailto:chrisc@catalyst.net.nz">Chris Cormack</a></li>
+</ul></li>
+</ul>
+
+<h2 id="credits">Credits</h2>
+
+<p>We thank the following libraries who are known to have sponsored
+new features in Koha 18.11.00:</p>
+
+<ul>
+<li>BULAC - http://www.bulac.fr/</li>
+<li>Catalyst IT</li>
+<li>CCSR (https://ccsr.qc.ca)</li>
+<li>Escuela de Orientacion Lacaniana</li>
+<li>Goethe-Institut</li>
+<li>Gothenburg University Library</li>
+<li>National Library of Finland</li>
+<li>Stockholm University Library</li>
+<li>Theke Solutions</li>
+</ul>
+
+<p>We thank the following individuals who contributed patches to Koha 18.11.00.</p>
+
+<ul>
+<li>Alberto (1)</li>
+<li>fv@spots.school (1)</li>
+<li>xljoha (1)</li>
+<li>Blou (4)</li>
+<li>Aleisha Amohia (16)</li>
+<li>Dimitris Antonakis (1)</li>
+<li>Alex Arnaud (14)</li>
+<li>Zoe Bennett (3)</li>
+<li>David Bourgault (3)</li>
+<li>Christopher Brannon (1)</li>
+<li>Alex Buckley (5)</li>
+<li>Nightly Build Bot (2)</li>
+<li>Colin Campbell (4)</li>
+<li>Barry Cannon (1)</li>
+<li>NazlÄ± Ãetin (1)</li>
+<li>JÃ©rÃ´me Charaoui (1)</li>
+<li>Barton Chittenden (2)</li>
+<li>Nick Clemens (247)</li>
+<li>TomÃ¡s Cohen Arazi (110)</li>
+<li>David Cook (8)</li>
+<li>Charlotte Cordwell (4)</li>
+<li>Chris Cormack (2)</li>
+<li>Caroline Cyr La Rose (6)</li>
+<li>Marcel de Rooy (82)</li>
+<li>Jonathan Druart (400)</li>
+<li>Magnus Enger (5)</li>
+<li>Charles Farmer (2)</li>
+<li>Katrin Fischer (78)</li>
+<li>Bernardo GonzÃ¡lez Kriegel (5)</li>
+<li>Caitlin Goodger (1)</li>
+<li>Isobel Graham (2)</li>
+<li>Claire Gravely (2)</li>
+<li>Victor Grousset (5)</li>
+<li>Amit Gupta (1)</li>
+<li>David Gustafsson (16)</li>
+<li>Margaret Hade (1)</li>
+<li>Koha instance kohadev-koha (2)</li>
+<li>Andrew Isherwood (41)</li>
+<li>Mason James (1)</li>
+<li>Lee Jamison (1)</li>
+<li>Srdjan Jankovic (7)</li>
+<li>Pasi Kallinen (6)</li>
+<li>Vassilis Kanellopoulos (1)</li>
+<li>Olli-Antti Kivilahti (1)</li>
+<li>Jon Knight (1)</li>
+<li>David Kuhn (1)</li>
+<li>Joonas KylmÃ¤lÃ¤ (1)</li>
+<li>Pierre-Luc Lapointe (1)</li>
+<li>Johan Larsson (1)</li>
+<li>Owen Leonard (146)</li>
+<li>Thatcher Leonard (1)</li>
+<li>Cori Lynn Arnold (4)</li>
+<li>Ere Maijala (19)</li>
+<li>Jesse Maseto (1)</li>
+<li>Julian Maurice (24)</li>
+<li>Matthias Meusburger (3)</li>
+<li>Kyle M Hall (79)</li>
+<li>Josef Moravec (44)</li>
+<li>Joy Nelson (2)</li>
+<li>Chris Nighswonger (1)</li>
+<li>Dobrica Pavlinusic (1)</li>
+<li>Martin Persson (4)</li>
+<li>Liz Rea (1)</li>
+<li>Martin Renvoize (44)</li>
+<li>Benjamin Rokseth (1)</li>
+<li>Andreas Roussos (7)</li>
+<li>Jane Sandberg (2)</li>
+<li>Alex Sassmannshausen (2)</li>
+<li>Maryse Simard (2)</li>
+<li>Grace Smyth (1)</li>
+<li>Fridolin Somers (13)</li>
+<li>Lari Taskula (13)</li>
+<li>Mirko Tietgen (7)</li>
+<li>Mark Tompsett (15)</li>
+<li>Koha translators (1)</li>
+<li>Marc VÃ©ron (1)</li>
+<li>Jenny Way (1)</li>
+<li>Jesse Weaver (3)</li>
+<li>Baptiste Wojtkowski (2)</li>
+</ul>
+
+<p>We thank the following libraries, companies, and other institutions who contributed
+patches to Koha 18.11.00</p>
+
+<ul>
+<li>abunchofthings.net (9)</li>
+<li>ACPL (146)</li>
+<li>BibLibre (59)</li>
+<li>BigBallOfWax (1)</li>
+<li>BSZ BW (80)</li>
+<li>bugs.koha-community.org (398)</li>
+<li>ByWater-Solutions (332)</li>
+<li>Catalyst (14)</li>
+<li>cdalibrary.org (1)</li>
+<li>cmaisonneuve.qc.ca (1)</li>
+<li>debian.diman (1)</li>
+<li>deichman.no (1)</li>
+<li>Devinim (1)</li>
+<li>dgiinc.com (4)</li>
+<li>Foundations (1)</li>
+<li>GÃ¶teborgs universitet (18)</li>
+<li>helsinki.fi (20)</li>
+<li>icloud.com (1)</li>
+<li>iki.fi (1)</li>
+<li>informaticsglobal.com (1)</li>
+<li>inLibro.com (3)</li>
+<li>interleaf.ie (1)</li>
+<li>jns.fi (13)</li>
+<li>joensuu.fi (6)</li>
+<li>kanellov.com (1)</li>
+<li>KohaAloha (1)</li>
+<li>kohadevbox (2)</li>
+<li>kylehall.info (1)</li>
+<li>Libriotech (5)</li>
+<li>linnbenton.edu (2)</li>
+<li>Loughborough University (1)</li>
+<li>Marc VÃ©ron AG (1)</li>
+<li>Marywood University (1)</li>
+<li>Prosentient Systems (8)</li>
+<li>PTFS-Europe (91)</li>
+<li>Rijksmuseum (82)</li>
+<li>rot13.org (1)</li>
+<li>Solutions inLibro inc (12)</li>
+<li>spots.school (1)</li>
+<li>Theke Solutions (110)</li>
+<li>unidentified (108)</li>
+<li>Universidad Nacional de CÃ³rdoba (5)</li>
+<li>wegc.school.nz (1)</li>
+</ul>
+
+<p>We also especially thank the following individuals who tested patches
+for Koha.</p>
+
+<ul>
+<li>andrew.isherwood@ptfs-europe.com (2)</li>
+<li>Blou (1)</li>
+<li>claude (1)</li>
+<li>Claudio (1)</li>
+<li>delaye (1)</li>
+<li>Devinim (4)</li>
+<li>DEVINIM (1)</li>
+<li>George (1)</li>
+<li>mmg@interleaf.ie (1)</li>
+<li>Niamh.Walker-Headon@it-tallaght.ie (1)</li>
+<li>Petter (1)</li>
+<li>pierre-marc (1)</li>
+<li>Sonia (2)</li>
+<li>Spencer (1)</li>
+<li>Srdjan (1)</li>
+<li>Todd (1)</li>
+<li>Brendan A Gallagher (2)</li>
+<li>Hugo Agud (1)</li>
+<li>Sandy Allgood (3)</li>
+<li>Aleisha Amohia (6)</li>
+<li>JosÃ© Anjos (1)</li>
+<li>Alex Arnaud (7)</li>
+<li>David Bourgault (1)</li>
+<li>Christopher Brannon (2)</li>
+<li>Alex Buckley (16)</li>
+<li>Colin Campbell (4)</li>
+<li>Barry Cannon (9)</li>
+<li>Nick Clemens (1517)</li>
+<li>Tomas Cohen Arazi (230)</li>
+<li>David Cook (1)</li>
+<li>Chris Cormack (73)</li>
+<li>Caroline Cyr La rose (2)</li>
+<li>Caroline Cyr La Rose (12)</li>
+<li>FrÃ©dÃ©ric Demians (1)</li>
+<li>Michal Denar (3)</li>
+<li>Michal Denar (58)</li>
+<li>Marcel de Rooy (222)</li>
+<li>John Doe (6)</li>
+<li>Jonathan Druart (325)</li>
+<li>Magnus Enger (9)</li>
+<li>Charles Farmer (15)</li>
+<li>Bouzid Fergani (1)</li>
+<li>Katrin Fischer (407)</li>
+<li>Martha Fuerst (1)</li>
+<li>Brendan Gallagher (16)</li>
+<li>âLucas Gassâ (1)</li>
+<li>Bernardo Gonzalez Kriegel (2)</li>
+<li>Stephen Graham (6)</li>
+<li>Claire Gravely (43)</li>
+<li>Victor Grousset (6)</li>
+<li>Amit Gupta (2)</li>
+<li>Andreas HedstrÃ¶m Mace (1)</li>
+<li>Andrew Isherwood (16)</li>
+<li>Dilan JohnpullÃ© (9)</li>
+<li>Pasi Kallinen (6)</li>
+<li>Myka Kennedy Stephens (1)</li>
+<li>Ulrich Kleiber (1)</li>
+<li>Jon Knight (1)</li>
+<li>Pierre-Luc Lapointe (11)</li>
+<li>macon  lauren KohaCon17 (1)</li>
+<li>Nicolas Legrand (2)</li>
+<li>Owen Leonard (126)</li>
+<li>Cori Lynn Arnold (5)</li>
+<li>Ere Maijala (19)</li>
+<li>Jesse Maseto (14)</li>
+<li>Julian Maurice (47)</li>
+<li>Matthias Meusburger (1)</li>
+<li>Kyle M Hall (69)</li>
+<li>Kathleen Milne (3)</li>
+<li>Josef Moravec (234)</li>
+<li>Joy Nelson (1)</li>
+<li>Chris Nighswonger (1)</li>
+<li>David Nind (11)</li>
+<li>FranÃ§ois Pichenot (1)</li>
+<li>Simon Pouchol (1)</li>
+<li>Severine QUEUNE (1)</li>
+<li>SÃ©verine QUEUNE (94)</li>
+<li>Te Rauhina Jackson (2)</li>
+<li>Martin Renvoize (244)</li>
+<li>Benjamin Rokseth (3)</li>
+<li>Paola Rossi (2)</li>
+<li>Andreas Roussos (10)</li>
+<li>Jane Sandberg (2)</li>
+<li>BWS Sandboxes (1)</li>
+<li>Lisette Scheer (12)</li>
+<li>Maksim Sen (4)</li>
+<li>Margie Sheppard - Central Kansas Library System CKLS (2)</li>
+<li>Maryse Simard (26)</li>
+<li>Fridolin Somers (2)</li>
+<li>Christian StelzenmÃ¼ller (10)</li>
+<li>John Sterbenz (1)</li>
+<li>Koha Team AMU (8)</li>
+<li>Pierre-Marc Thibault (17)</li>
+<li>Mirko Tietgen (13)</li>
+<li>Mark Tompsett (52)</li>
+<li>Ed Veal (1)</li>
+<li>George Veranis (1)</li>
+<li>Marc VÃ©ron (4)</li>
+<li>Marjorie Vila (1)</li>
+<li>Cab Vinton (5)</li>
+<li>George Williams (6)</li>
+</ul>
+
+<p>We regret any omissions.  If a contributor has been inadvertently missed,
+please send a patch against these release notes to 
+koha-patches@lists.koha-community.org.</p>
+
+<h2 id="revisioncontrolnotes">Revision control notes</h2>
+
+<p>The Koha project uses Git for version control.  The current development 
+version of Koha can be retrieved by checking out the master branch of:</p>
+
+<ul>
+<li><a href="git://git.koha-community.org/koha.git">Koha Git Repository</a></li>
+</ul>
+
+<p>The branch for this version of Koha and future bugfixes in this release
+line is master.</p>
+
+<h2 id="bugsandfeaturerequests">Bugs and feature requests</h2>
+
+<p>Bug reports and feature requests can be filed at the Koha bug
+tracker at:</p>
+
+<ul>
+<li><a href="http://bugs.koha-community.org">Koha Bugzilla</a></li>
+</ul>
+
+<p>He rau ringa e oti ai.
+(Many hands finish the work)</p>
+
+<p>Autogenerated release notes updated last on 27 Nov 2018 01:41:47.</p>
