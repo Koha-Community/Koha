@@ -15,15 +15,16 @@ use_ok('LangInstaller');
 my $installer = LangInstaller->new();
 
 my $tempdir = tempdir(CLEANUP => 0);
-t::lib::Mocks::mock_config('intranetdir', "$Bin/LangInstaller/templates");
+t::lib::Mocks::mock_config('intrahtdocs', "$Bin/LangInstaller/templates");
 my @files = ('simple.tt');
-$installer->extract_messages_from_templates($tempdir, @files);
+$installer->extract_messages_from_templates($tempdir, 'intranet', @files);
 
-ok(-e "$tempdir/simple.tt", 'it has created a temporary file simple.tt');
+my $tempfile = "$tempdir/koha-tmpl/intranet-tmpl/simple.tt";
+ok(-e $tempfile, 'it has created a temporary file simple.tt');
 SKIP: {
-    skip "simple.tt does not exist", 37 unless -e "$tempdir/simple.tt";
+    skip "simple.tt does not exist", 37 unless -e $tempfile;
 
-    my $output = read_file("$tempdir/simple.tt");
+    my $output = read_file($tempfile);
     my $expected_output = <<'EOF';
 __('hello');
 __x('hello {name}');
@@ -46,7 +47,7 @@ EOF
         . "--package-name=Koha --package-version='' "
         . "-k -k__ -k__x -k__n:1,2 -k__nx:1,2 -k__xn:1,2 -k__p:1c,2 "
         . "-k__px:1c,2 -k__np:1c,2,3 -k__npx:1c,2,3 "
-        . "-o $tempdir/Koha.pot -D $tempdir simple.tt";
+        . "-o $tempdir/Koha.pot -D $tempdir koha-tmpl/intranet-tmpl/simple.tt";
 
     system($xgettext_cmd);
     my $pot = Locale::PO->load_file_asarray("$tempdir/Koha.pot");
