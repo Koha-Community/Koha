@@ -193,7 +193,8 @@ $( document ).ready(function() {
     $("#finestable").dataTable($.extend(true, {}, dataTablesDefaults, {
         "columnDefs": [
              { "type": "title-string", "targets" : [ "title-string" ] }
-         ]
+         ],
+         "order": [[ 0, "desc" ]]
     } ));
 
     $(".paypal").on("click", function() {
