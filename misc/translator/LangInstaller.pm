@@ -29,6 +29,7 @@ use File::Basename;
 use File::Find;
 use File::Path qw( make_path );
 use File::Slurp;
+use File::Spec;
 use File::Temp qw( tempdir );
 use Template::Parser;
 use PPI;
@@ -518,15 +519,16 @@ sub update_messages {
 }
 
 sub extract_messages_from_templates {
-    my ($self, $tempdir, @files) = @_;
+    my ($self, $tempdir, $type, @files) = @_;
 
-    my $intranetdir = $self->{context}->config('intranetdir');
+    my $htdocs = $type eq 'intranet' ? 'intrahtdocs' : 'opachtdocs';
+    my $dir = $self->{context}->config($htdocs);
     my @keywords = qw(t tx tn txn tnx tp tpx tnp tnpx);
     my $parser = Template::Parser->new();
 
     foreach my $file (@files) {
         say "Extract messages from $file" if $self->{verbose};
-        my $template = read_file("$intranetdir/$file");
+        my $template = read_file(File::Spec->catfile($dir, $file));
 
         # No need to process a file that doesn't use the i18n.inc file.
         next unless $template =~ /i18n\.inc/;
@@ -537,8 +539,12 @@ sub extract_messages_from_templates {
             next;
         }
 
-        make_path(dirname("$tempdir/$file"));
-        open my $fh, '>', "$tempdir/$file";
+        my $destfile = $type eq 'intranet' ?
+            File::Spec->catfile($tempdir, 'koha-tmpl', 'intranet-tmpl', $file) :
+            File::Spec->catfile($tempdir, 'koha-tmpl', 'opac-tmpl', $file);
+
+        make_path(dirname($destfile));
+        open my $fh, '>', $destfile;
 
         my @blocks = ($data->{BLOCK}, values %{ $data->{DEFBLOCKS} });
         foreach my $block (@blocks) {
@@ -605,35 +611,66 @@ sub extract_messages {
     say "Extract messages into POT file" if $self->{verbose};
 
     my $intranetdir = $self->{context}->config('intranetdir');
+    my $opacdir = $self->{context}->config('opacdir');
+
+    # Find common ancestor directory
+    my @intranetdirs = File::Spec->splitdir($intranetdir);
+    my @opacdirs = File::Spec->splitdir($opacdir);
+    my @basedirs;
+    while (@intranetdirs and @opacdirs) {
+        my ($dir1, $dir2) = (shift @intranetdirs, shift @opacdirs);
+        last if $dir1 ne $dir2;
+        push @basedirs, $dir1;
+    }
+    my $basedir = File::Spec->catdir(@basedirs);
+
     my @files_to_scan;
     my @directories_to_scan = ('.');
-    my @blacklist = qw(blib koha-tmpl skel tmp t);
+    my @blacklist = map { File::Spec->catdir(@intranetdirs, $_) } qw(blib koha-tmpl skel tmp t);
     while (@directories_to_scan) {
         my $dir = shift @directories_to_scan;
-        opendir DIR, "$intranetdir/$dir" or die "Unable to open $dir: $!";
+        opendir DIR, File::Spec->catdir($basedir, $dir) or die "Unable to open $dir: $!";
         foreach my $entry (readdir DIR) {
             next if $entry =~ /^\./;
-            my $relentry = "$dir/$entry";
-            $relentry =~ s|^\./||;
-            if (-d "$intranetdir/$relentry" and not grep /^$relentry$/, @blacklist) {
-                push @directories_to_scan, "$relentry";
-            } elsif (-f "$intranetdir/$relentry" and $relentry =~ /(pl|pm)$/) {
-                push @files_to_scan, "$relentry";
+            my $relentry = File::Spec->catfile($dir, $entry);
+            my $abspath = File::Spec->catfile($basedir, $relentry);
+            if (-d $abspath and not grep /^$relentry$/, @blacklist) {
+                push @directories_to_scan, $relentry;
+            } elsif (-f $abspath and $relentry =~ /\.(pl|pm)$/) {
+                push @files_to_scan, $relentry;
             }
         }
     }
 
-    my @tt_files;
+    my $intrahtdocs = $self->{context}->config('intrahtdocs');
+    my $opachtdocs = $self->{context}->config('opachtdocs');
+
+    my @intranet_tt_files;
     find(sub {
         if ($File::Find::dir =~ m|/en/| && $_ =~ m/\.(tt|inc)$/) {
             my $filename = $File::Find::name;
-            $filename =~ s|^$intranetdir/||;
-            push @tt_files, $filename;
+            $filename =~ s|^$intrahtdocs/||;
+            push @intranet_tt_files, $filename;
         }
-    }, "$intranetdir/koha-tmpl");
+    }, $intrahtdocs);
+
+    my @opac_tt_files;
+    find(sub {
+        if ($File::Find::dir =~ m|/en/| && $_ =~ m/\.(tt|inc)$/) {
+            my $filename = $File::Find::name;
+            $filename =~ s|^$opachtdocs/||;
+            push @opac_tt_files, $filename;
+        }
+    }, $opachtdocs);
 
     my $tempdir = tempdir('Koha-translate-XXXX', TMPDIR => 1, CLEANUP => 1);
-    $self->extract_messages_from_templates($tempdir, @tt_files);
+    $self->extract_messages_from_templates($tempdir, 'intranet', @intranet_tt_files);
+    $self->extract_messages_from_templates($tempdir, 'opac', @opac_tt_files);
+
+    @intranet_tt_files = map { File::Spec->catfile('koha-tmpl', 'intranet-tmpl', $_) } @intranet_tt_files;
+    @opac_tt_files = map { File::Spec->catfile('koha-tmpl', 'opac-tmpl', $_) } @opac_tt_files;
+    my @tt_files = grep { -e File::Spec->catfile($tempdir, $_) } @intranet_tt_files, @opac_tt_files;
+
     push @files_to_scan, @tt_files;
 
     my $xgettext_cmd = "$self->{xgettext} --force-po -L Perl --from-code=UTF-8 "
@@ -641,7 +678,7 @@ sub extract_messages {
         . "-k -k__ -k__x -k__n:1,2 -k__nx:1,2 -k__xn:1,2 -k__p:1c,2 "
         . "-k__px:1c,2 -k__np:1c,2,3 -k__npx:1c,2,3 -kN__ -kN__n:1,2 "
         . "-kN__p:1c,2 -kN__np:1c,2,3 "
-        . "-o $Bin/$self->{domain}.pot -D $tempdir -D $intranetdir";
+        . "-o $Bin/$self->{domain}.pot -D $tempdir -D $basedir";
     $xgettext_cmd .= " $_" foreach (@files_to_scan);
 
     if (system($xgettext_cmd) != 0) {
