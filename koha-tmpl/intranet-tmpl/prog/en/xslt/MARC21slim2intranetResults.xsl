@@ -944,40 +944,56 @@
 	</span>
     </xsl:if>
     <xsl:if test="marc:datafield[@tag=856]">
-         <span class="results_summary online_access">
-			   <span class="label">Online access: </span>
-                            <xsl:for-each select="marc:datafield[@tag=856]">
-                            <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
-				   <a><xsl:attribute name="href"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute>
-                                    <xsl:choose>
-                                     <xsl:when test="($Show856uAsImage='Results' or $Show856uAsImage='Both') and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
-                                        <xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute><xsl:attribute name="alt"><xsl:value-of select="marc:subfield[@code='y']"/></xsl:attribute><xsl:attribute name="height">100</xsl:attribute></xsl:element><xsl:text></xsl:text>
-                                    </xsl:when>
-                                    <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
-                                        <xsl:call-template name="subfieldSelect">
-                                        <xsl:with-param name="codes">y3z</xsl:with-param>
-                                        </xsl:call-template>
-                                    </xsl:when>
-                                    <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
-					<xsl:choose>
-					<xsl:when test="$URLLinkText!=''">
-						<xsl:value-of select="$URLLinkText"/>
-					</xsl:when>
-					<xsl:otherwise>
-						<xsl:text>Click here to access online</xsl:text>
-					</xsl:otherwise>
-					</xsl:choose>
-                                    </xsl:when>
-                                    </xsl:choose>
-                                    </a>
-                                    <xsl:choose>
-                                    <xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when>
-                                    <xsl:otherwise> | </xsl:otherwise>
-                                    </xsl:choose>
-                            </xsl:for-each>
-                            </span>
+        <span class="results_summary online_access">
+            <span class="label">Online access: </span>
+            <xsl:for-each select="marc:datafield[@tag=856]">
+                <xsl:variable name="SubqText"><xsl:value-of select="marc:subfield[@code='q']"/></xsl:variable>
+                <a>
+                    <xsl:attribute name="href">
+                        <xsl:if test="not(contains(marc:subfield[@code='u'],'://'))">
+                            <xsl:choose>
+                                <xsl:when test="@ind1=7">
+                                    <xsl:value-of select="marc:subfield[@code='2']"/><xsl:text>://</xsl:text>
+                                </xsl:when>
+                                <xsl:when test="@ind1=1">
+                                    <xsl:text>ftp://</xsl:text>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>http://</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
                         </xsl:if>
-    </xsl:template>
+                        <xsl:value-of select="marc:subfield[@code='u']"/>
+                    </xsl:attribute>
+                    <xsl:choose>
+                        <xsl:when test="($Show856uAsImage='Results' or $Show856uAsImage='Both') and (substring($SubqText,1,6)='image/' or $SubqText='img' or $SubqText='bmp' or $SubqText='cod' or $SubqText='gif' or $SubqText='ief' or $SubqText='jpe' or $SubqText='jpeg' or $SubqText='jpg' or $SubqText='jfif' or $SubqText='png' or $SubqText='svg' or $SubqText='tif' or $SubqText='tiff' or $SubqText='ras' or $SubqText='cmx' or $SubqText='ico' or $SubqText='pnm' or $SubqText='pbm' or $SubqText='pgm' or $SubqText='ppm' or $SubqText='rgb' or $SubqText='xbm' or $SubqText='xpm' or $SubqText='xwd')">
+                            <xsl:element name="img"><xsl:attribute name="src"><xsl:value-of select="marc:subfield[@code='u']"/></xsl:attribute><xsl:attribute name="alt"><xsl:value-of select="marc:subfield[@code='y']"/></xsl:attribute><xsl:attribute name="height">100</xsl:attribute></xsl:element><xsl:text></xsl:text>
+                        </xsl:when>
+                        <xsl:when test="marc:subfield[@code='y' or @code='3' or @code='z']">
+                            <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">y3z</xsl:with-param>
+                            </xsl:call-template>
+                        </xsl:when>
+                        <xsl:when test="not(marc:subfield[@code='y']) and not(marc:subfield[@code='3']) and not(marc:subfield[@code='z'])">
+                            <xsl:choose>
+                                <xsl:when test="$URLLinkText!=''">
+                                    <xsl:value-of select="$URLLinkText"/>
+                                </xsl:when>
+                                <xsl:otherwise>
+                                    <xsl:text>Click here to access online</xsl:text>
+                                </xsl:otherwise>
+                            </xsl:choose>
+                        </xsl:when>
+                    </xsl:choose>
+                </a>
+                <xsl:choose>
+                    <xsl:when test="position()=last()"><xsl:text> </xsl:text></xsl:when>
+                    <xsl:otherwise> | </xsl:otherwise>
+                </xsl:choose>
+            </xsl:for-each>
+        </span>
+    </xsl:if>
+</xsl:template>
 
     <xsl:template name="nameABCQ">
             <xsl:call-template name="chopPunctuation">
