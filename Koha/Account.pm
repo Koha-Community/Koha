@@ -515,6 +515,33 @@ sub lines {
     );
 }
 
+=head3 normalize_balance
+
+$account->normalize_balance();
+
+Find outstanding credits and use them to pay outstanding debits
+
+=cut
+
+sub normalize_balance {
+    my ($self) = @_;
+
+    my $outstanding_debits  = $self->outstanding_debits;
+    my $outstanding_credits = $self->outstanding_credits;
+
+    while (     $outstanding_debits->total_outstanding > 0
+            and my $credit = $outstanding_credits->next )
+    {
+        # there's both outstanding debits and credits
+        $credit->apply( { debits => $outstanding_debits } );    # applying credit, no special offset
+
+        $outstanding_debits = $self->outstanding_debits;
+
+    }
+
+    return $self;
+}
+
 1;
 
 =head2 Name mappings
