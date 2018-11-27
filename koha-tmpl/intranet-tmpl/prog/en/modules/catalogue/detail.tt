@@ -69,24 +69,13 @@
     [% END %]
 
     [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled ) %]
-        [% IF ( XSLTDetailsDisplay ) %]
-            <div class="yui-gc">
+        <div class="yui-gc">
             <div id="catalogue_detail_biblio" class="yui-u first">
-        [% ELSE %]
-            <div class="yui-gb">
-            <div id="catalogue_detail_biblio" class="yui-u first">
-        [% END %]
     [% ELSE %]
-        [% IF ( XSLTDetailsDisplay ) %]
-            <div class="yui-g">
+        <div class="yui-g">
             <div id="catalogue_detail_biblio">
-        [% ELSE %]
-            <div class="yui-g">
-            <div id="catalogue_detail_biblio" class="yui-u first">
-        [% END %]
     [% END %]
 
-    [% IF ( XSLTDetailsDisplay ) %]
         [% XSLTBloc | $raw %]
 
         [% IF shelves.count %]
@@ -148,153 +137,6 @@
         </a></div>
         [% END %]
         [% END %]
-    [% ELSE %]
-
-    <h3>[% title | html %]</h3>
-    [% FOREACH subtitl IN subtitle %]
-    	<h4>[% subtitl.subfield | html %]</h4>
-    [% END %]
-            [% UNLESS ( item_level_itypes ) %]<img src="[% imageurl | html %]" alt="[% translated_description | html %]" title="[% translated_description | html %]">[% END %]
-            [% IF ( unititle ) %]<p>[% unititle | html %]</p>[% END %]
-            [% IF ( author ) %]<p>By <a href="/cgi-bin/koha/catalogue/search.pl?q=au:[% author |url %]">[% author | html %]</a></p>[% END %]
-        <ul>
-        [% IF ( MARCAUTHORS ) %]
-            <li><strong>Additional authors:</strong><ul>
-            [% FOREACH MARCAUTHOR IN MARCAUTHORS %]
-                <li>[% FOREACH MARCAUTHOR_SUBFIELDS_LOO IN MARCAUTHOR.MARCAUTHOR_SUBFIELDS_LOOP %][% MARCAUTHOR_SUBFIELDS_LOO.separator | html %]<a title="‡[% MARCAUTHOR_SUBFIELDS_LOO.code | html %] [% MARCAUTHOR_SUBFIELDS_LOO.value |url %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCAUTHOR_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit | html %]:[% link_loo.link |url %][% END %]">[% MARCAUTHOR_SUBFIELDS_LOO.value | html %]</a>[% END %]</li>
-                [% END %]
-
-        </ul>
-            </li>
-        [% END %]
-[% IF ( MARCSERIES ) %]
-		<li><strong>Series: </strong><ul>[% FOREACH MARCSERIE IN MARCSERIES %]
-		<li>[% FOREACH MARCSERIES_SUBFIELDS_LOO IN MARCSERIE.MARCSERIES_SUBFIELDS_LOOP %] [% IF ( MARCSERIES_SUBFIELDS_LOO.value ) %]<a href="/cgi-bin/koha/catalogue/search.pl?q=se:[% MARCSERIES_SUBFIELDS_LOO.value |url %]">[% MARCSERIES_SUBFIELDS_LOO.value | html %]</a>[% END %][% IF ( MARCSERIES_SUBFIELDS_LOO.volumenum ) %]. [% MARCSERIES_SUBFIELDS_LOO.volumenum | html %][% END %][% END %]</li> 
-		[% END %]
-		</ul>
-		</li>
-[% END %]
-        [% IF ( publishercode ) %]
-    <li><strong>Published by:</strong>
-        <a href="/cgi-bin/koha/catalogue/search.pl?q=pb:[% publishercode |url %]">
-            [% publishercode | html %]
-        </a> [% IF ( place ) %]([% place | html %])[% END %] [% IF ( publicationyear ) %], [% publicationyear | html %][% END %] [% IF ( editionstatement ) %][% editionstatement | html %][% END %] [% IF ( editionresponsibility ) %][% editionresponsibility | html %][% END %]
-    </li>
-    [% END %]
-        <li><strong>Description:</strong>
-                [% IF ( pages ) %] [% END %][% pages | html %] [% IF ( illus ) %][% illus | html %][% END %]
-                [% IF ( size ) %][% size | html %][% END %]
-        </li>
-[% IF ( MARCURLS ) %]<li>
-    
-    <strong>Online resources:</strong>
-    <ul>    [% FOREACH MARCurl IN MARCURLS %]
-		<li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]
-			<br />[% END %] 
-		<!-- here you might do a tmpl_if name="toc" and use greybox or equivalent for table of contents -->
-        <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">[% MARCurl.linktext | html %]</a>
-			[% IF ( MARCurl.notes ) %]<ul>[% FOREACH note IN MARCurl.notes %]<li>[% note.note | html %]</li>[% END %]</ul>[% END %]</li>
-            [% END %]</ul>
-</li>
-    [% END %]
-
-    [% IF ( OPACBaseURL ) %]
-        <li><strong>OPAC view:</strong>
-        <a href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber | uri %]" target="_blank">Open in new window</a>
-        </li>
-    [% END %]
-        <li id="catalogue_detail_marc_preview">
-            <strong>MARC Preview:</strong>
-            <a href="/cgi-bin/koha/catalogue/showmarc.pl?id=[% biblionumber | uri %]" title="MARC" rel="gb_page_center[600,500]">Show</a>
-        </li>
-        </ul>
-        </div>
-       
-    [% IF ( AmazonCoverImages  || LocalCoverImages ) %]
-        <div class="yui-u" id="bookcoverimg">
-        [% IF ( LocalCoverImages ) %]
-            <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
-        [% END %]
-        [% IF ( AmazonCoverImages ) %]
-            <div id="amazon-bookcoverimg">
-            <a href="http://www.amazon[% AmazonTld | uri %]/gp/reader/[% normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link">
-            <img src="https://images-na.ssl-images-amazon.com/images/P/[% normalized_isbn | html %].01.MZZZZZZZ.jpg" alt="" />
-            </a>
-        </div>
-        [% END %]
-        </div>
-    [% END %]
-        
-        <div class="yui-u" style="margin-top: 1em;">
-        <ul>
-        [% IF ( MARCISBNS ) %]
-            <li><strong>ISBN:</strong><ul>[% FOREACH MARCISBN IN MARCISBNS %]<li>[% MARCISBN | html %]</li>[% END %]</ul></li>
-        [% ELSE %]
-            [% IF ( normalized_isbn ) %]
-                <li><strong>ISBN:</strong> [% normalized_isbn | html %]</li>
-            [% END %]
-        [% END %]
-        [% IF ( issn ) %]
-            <li><strong>ISSN:</strong>[% issn | html %]</li>
-        [% END %]
-        [% IF ( collectiontitle ) %]
-            <li><strong>Collection: </strong>
-                [% collectiontitle | html %] [% IF ( collectionvolume ) %], [% collectionvolume | html %][% END %][% IF ( collectionissn ) %] (<strong>ISSN:</strong> [% collectionissn | html %])[% END %]
-            </li>
-        [% END %]
-        [% IF ( MARCSUBJCTS ) %]
-            <li><strong>Subjects:</strong> 
-            <ul>
-                [% FOREACH MARCSUBJCT IN MARCSUBJCTS %]
-                <li>[% FOREACH MARCSUBJECT_SUBFIELDS_LOO IN MARCSUBJCT.MARCSUBJECT_SUBFIELDS_LOOP %] [% MARCSUBJECT_SUBFIELDS_LOO.separator | html %] <a title="‡[% MARCSUBJECT_SUBFIELDS_LOO.code | html %] [% MARCSUBJECT_SUBFIELDS_LOO.value | html %]" href="/cgi-bin/koha/catalogue/search.pl?q=[% FOREACH link_loo IN MARCSUBJECT_SUBFIELDS_LOO.link_loop %][% link_loo.operator |url %][% link_loo.limit | html %]:[% link_loo.link |url %][% END %]">[% MARCSUBJECT_SUBFIELDS_LOO.value | html %]</a>[% END %]</li>
-                [% END %]
-                </ul>
-            </li>
-        [% END %]
-        [% IF ( copyrightdate ) %]
-            <li><strong>Copyright:</strong> [% copyrightdate | html %]</li>
-        [% END %]
-     
-        [% IF ( classification ) %]
-            <li><strong>Classification:</strong> [% subclass | html %][% classification | html %]</li>
-        [% END %]
-        [% IF ( dewey ) %]
-            <li><strong>Dewey:</strong> [% dewey | html %]</li>
-        [% END %]
-        [% IF ( urlS ) %]
-            <li><strong>URL:</strong>
-                [% FOREACH url IN urlS %]
-                    <a href="[% url.url | url %]">[% url.url | html %]</a>
-                [% END %]
-            </li>
-        [% END %]
-        <!--This grabs all of the lists a bib record appears in -->
-        [% IF shelves.count %]
-            <li><strong>Lists that include this title: </strong>
-            <ul>
-            [% FOREACH s IN shelves %]
-                <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=view&amp;shelfnumber=[% s.shelfnumber | uri %]">[% s.shelfname | html %]</a></li>
-            [% END %]
-            </ul>
-            </li>
-        [% END %]
-        [% IF ( TagsEnabled &&  TagsShowOnDetail &&  TagLoop ) %]
-                <li><strong>Tags:</strong>
-                    <ul id="tagslist">
-                    [% FOREACH TagLoo IN TagLoop %]
-                        <li>
-                        [% IF ( CAN_user_tools_moderate_tags ) %]
-                        <a href="/cgi-bin/koha/tags/list.pl?tag=[% TagLoo.term |url %]">[% TagLoo.term | html %]</a>
-                        [% ELSE %]
-                        [% TagLoo.term | html %]
-                        [% END %]
-                        <span class="weight">([% TagLoo.weight_total | html %])</span>[% IF ( loop.last ) %][% ELSE %], [% END %]</li>
-                    [% END %]
-                    </ul></li>
-        [% END %]
-            [% IF ( holdcount ) %]<li><strong>Holds:</strong> <span class="number_box"><a href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | uri %]">[% holdcount | html %]</a></span></li>[% ELSE %][% END %]
-        </ul>
-		[% END %]
 
 </div>
 </div>
