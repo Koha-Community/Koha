@@ -19,7 +19,7 @@ Installation instructions can be found at:
 
 Koha 18.11.00 is a major release, that comes with many new features.
 
-It includes 16 new features, 219 enhancements, 419 bugfixes.
+It includes 16 new features, 235 enhancements, 432 bugfixes.
 
 
 
@@ -29,7 +29,10 @@ It includes 16 new features, 219 enhancements, 419 bugfixes.
 
 - [[15184]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15184) Ability to duplicate existing order lines to a given basket
 
->   This enhancements adds the ability to add an order to a basket (duplicate) from existing order lines. It will help serials acquisitions or other workflows where the same publication is ordered frequently.
+> Sponsored by BULAC - http://www.bulac.fr/
+
+
+> This enhancements adds the ability to add an order to a basket (duplicate) from existing order lines. It will help serials acquisitions or other workflows where the same publication is ordered frequently.
 
 
 - [[19166]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19166) Add the ability to add adjustments to an invoice
@@ -136,7 +139,10 @@ chart (pie, bar, line and combination).
 
 - [[21467]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21467) Allow several receipts for a given subscription
 
-> Allows the user to set a quantity for a serial order, useful in the case where payments are made per receipt of individual issues. This development also allows for altering the total expected quantity for a serial in the case of a periodicity change.
+> Sponsored by BULAC - http://www.bulac.fr/
+
+
+> Allows the user to set a quantity for a serial order, useful in the case where payments are made per receipt to find individual issues. This development also allows for altering the total expected quantity for a serial in the case of a periodicity change.
 
 
 
@@ -180,12 +186,20 @@ This patch splits these fields so that each may be set independently. RRP will b
 
 
 - [[20366]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20366) More information about orders linked to subscriptions on "Acquisition details" tab
+
+> Sponsored by BULAC - http://www.bulac.fr/
+
 - [[20966]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20966) Add column configuration to table of orders in a basket
 - [[20969]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20969) Use modal to add and edit notes from basket
 - [[20970]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20970) Reformat basket information on acquisitions basket page
 - [[21333]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21333) Add ability to add to basket from a file
 
 ### Architecture, internals, and plumbing
+
+- [[10306]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=10306) Koha to MARC mappings (Part 1): Allow multiple mappings per kohafield (for say 260/RDA 264)
+
+> This patchset adds the ability to map several MARC fields to a single Koha field. The first existing mapped field will be saved into the database. This allows for flexibility in a system using RDA and AACR2 records where some store the publication data in the 260 fields and others in the 264.
+
 
 - [[14302]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14302) Remove GRS1 indexing related code
 
@@ -198,6 +212,10 @@ This patch splits these fields so that each may be set independently. RRP will b
 - [[19620]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19620) Allow skipping of patrons with valid emails for Talking Tech
 - [[19633]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19633) Use alphanumeric error codes in upload
 - [[19820]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19820) Add unsafe param to GetMarcSubfieldStructure
+
+> Sponsored by Gothenburg University Library
+
+- [[19933]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19933) Move C4::Members::patronflags to the Koha namespace - part 1
 - [[20079]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20079) Display stack trace for development installations
 - [[20226]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20226) Get rid of CATCODE_MULTI param decision in patron perl scripts
 - [[20272]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20272) XSLT_Handler should use alphanumeric error codes
@@ -209,6 +227,7 @@ This patch splits these fields so that each may be set independently. RRP will b
 > To aid in catching possible SQL issue's early in development, this patch allows enabling the strictest of SQL modes for development (and makes it the default for continuous integration) environments.
 
 
+- [[20622]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20622) Add some color to bootstrap modal headers and footers
 - [[20661]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20661) Implement blocking errors for circulation scripts
 - [[20669]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20669) Add upgrade method to plugins
 
@@ -248,6 +267,7 @@ This patch splits these fields so that each may be set independently. RRP will b
 
 ### Authentication
 
+- [[3511]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=3511) Integration with Moodle
 - [[17776]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17776) Shibboleth Authentication is broken in plack
 
 > Sponsored by PTFS Europe  
@@ -258,7 +278,16 @@ This enhancement adds support for using Shibboleth in a Plack environment. Cauti
 
 ### Cataloging
 
+- [[3509]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=3509) Batch item edit
+- [[9701]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9701) Configure default indicators
+
+> This adds default indicators to bibliographic frameworks. The table marc_tag_structure is adjusted. In order to make effective use of this enhancement, you may want to add values in your MARC frameworks administration.
+
+
 - [[12747]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12747) Add configurable extra column in Z3950 search result
+
+> Sponsored by CCSR (https://ccsr.qc.ca)
+
 
 > This allows to display MARC fields and subfields from the record in an extra column on the Z30.50 result list. The content of the column can be configured via the AdditionalFieldsInZ3950ResultSearch system preference.
 
@@ -270,6 +299,7 @@ This enhancement adds support for using Shibboleth in a Plack environment. Cauti
 
 ### Circulation
 
+- [[3510]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=3510) Allow staff to change checkin date and time
 - [[15139]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15139) Show non-public item note in overdues report
 - [[15494]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15494) Block renewals by arbitrary item values
 
@@ -280,6 +310,12 @@ If using automatic renewal notices your notice should be updated to account for 
 - [[15524]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15524) Set limit on maximum possible holds per patron by category
 - [[19383]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19383) Print hold slips without confirmation
 - [[19719]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19719) Add a new column for collection in the patron checkouts data table
+- [[20322]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20322) Circulation page layout and design update
+
+> These patches give a facelift to the circulation homepage. All functionality remains the same, however, things have been moved to make the interface little friendlier and more responsive on different screens.
+
+
+- [[20343]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20343) Show number of checkouts by itemtype in circulation.pl
 - [[20450]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20450) Add collection to list of items when placing hold on specific copy
 - [[20468]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20468) Multiselect on staff article requests form
 - [[21121]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21121) New syspref to allow hiding of private patron data in circulation page
@@ -293,6 +329,9 @@ If using automatic renewal notices your notice should be updated to account for 
 
 - [[20393]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20393) Remove redundant 'koha.psgi' and 'plackup.sh' files
 - [[20486]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20486) Add --marc_conditions option to export_records.pl
+
+> Sponsored by Gothenburg University Library
+
 - [[20795]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20795) koha-rebuild-zebra should pass through increased verbosity
 - [[20915]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20915) Use date --iso-8601 instead of date +%Y-%m-%d to be more readable and crontab friendly
 - [[21011]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21011) Data inconsistencies - items.holdingbranch | items.homebranch
@@ -315,6 +354,9 @@ If using automatic renewal notices your notice should be updated to account for 
 - [[7534]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=7534) New OPACAllowUserToChooseBranch setting for only showing libraries allowing holds
 - [[15486]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15486) Restrict number of holds placed by day
 - [[19469]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19469) Add ability to split view of holds view on record by pickup library and/or itemtype
+
+> Sponsored by Stockholm University Library
+
 - [[21628]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21628) Simplify holds awaiting pickup report
 
 ### I18N/L10N
@@ -341,7 +383,13 @@ If using automatic renewal notices your notice should be updated to account for 
 ### Label/patron card printing
 
 - [[15766]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15766) Give label and patron card batches a description
+
+> Sponsored by Catalyst IT
+
 - [[15836]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15836) Labels: Offer configuration option for splitting call numbers
+
+> Sponsored by Goethe-Institut
+
 
 ### Lists
 
@@ -360,15 +408,26 @@ If using automatic renewal notices your notice should be updated to account for 
 - [[19743]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19743) Header and Footer should be updated on each item for checkin / checkout / renewal notices
 - [[20356]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20356) Add EmailSMSSendDriverFromAddress system preference for overriding Email SMS send driver from address
 
+> Sponsored by Gothenburg University Library
+
+
 ### OPAC
 
 - [[8630]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=8630) Add covers from AdLibris to the OPAC and Intranet
 - [[14222]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14222) Sort holds in OPAC by priority
 - [[14385]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14385) Extend OpacHiddenItems to allow specifying exempt borrower categories
+
+> Sponsored by Catalyst IT
+
 - [[15287]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15287) Use font-awesome on the OPAC
 - [[17153]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17153) Logging in during a search navigates to account page instead of back to search results
 - [[17530]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17530) Don't show 'article request' link when no article requests are permitted
 - [[18236]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18236) MARC21: Add classes to material type icons on intranet result lists and detail pages
+- [[20400]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20400) Add routing list tab to the patron account in OPAC
+
+> Adds a routing list tab to the patron account in the OPAC that will be visible if RoutingSerials is turned on and the user is at least on one routing list.
+
+
 - [[20427]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20427) Convert OPAC LESS to SCSS
 - [[20554]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20554) New OPAC CSS
 - [[20876]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20876) The form_serialized_itype cookie is not used and should be removed
@@ -381,6 +440,7 @@ If using automatic renewal notices your notice should be updated to account for 
 
 ### Patrons
 
+- [[11401]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11401) Add support for Norwegian national library card
 - [[11911]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=11911) Add separate permission for managing suggestions
 - [[12258]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12258) Datatable in Patrons Account Fines
 - [[14391]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14391) Granular permissions for the administration module
@@ -419,6 +479,9 @@ On the self registration page we also add asking for consent if the pref is enab
 - [[19604]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19604) Elasticsearch Fixes for build_authorities_query for auth searching
 - [[19893]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19893) Alternative optimized indexing for Elasticsearch
 
+> Sponsored by Gothenburg University Library
+
+
 > This patch significantly improves the performance of the ElasticSearch indexing process and also improves the maintainability of this area of the codebase.
 
 
@@ -439,9 +502,17 @@ On the self registration page we also add asking for consent if the pref is enab
 
 ### Serials
 
+- [[3355]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=3355) Pagination in bib search for subscriptions
 - [[17877]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17877) Show internal and vendor note in acquisition info on subscription detail page
+- [[18327]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18327) Add the ability to set the received date to today on multi receiving serials
 - [[20365]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20365) Allow several open orders on subscription
+
+> Sponsored by BULAC - http://www.bulac.fr/
+
 - [[20726]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20726) Display acquisition details on the subscription detail page
+
+> Sponsored by BULAC - http://www.bulac.fr/
+
 - [[21511]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21511) Don't show acquisition details on subscription detail when there is no acq data
 
 ### Staff Client
@@ -449,6 +520,9 @@ On the self registration page we also add asking for consent if the pref is enab
 - [[13406]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=13406) Add classes to MARC Authority display to enable CSS styling
 - [[16280]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16280) purge_suggestions.pl: Cron job log should tell number of days used
 - [[17698]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17698) Make patron notes show up on staff dashboard
+
+> Sponsored by Catalyst IT
+
 - [[19550]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19550) Add links to related authorities for UNIMARC
 - [[19902]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19902) Add column configuration to bibliographic record checkouts history table
 - [[20339]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20339) Unify MARC21 ISBN/ISSN handling in XSL
@@ -459,6 +533,9 @@ On the self registration page we also add asking for consent if the pref is enab
 ### System Administration
 
 - [[12365]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=12365) Allow descriptive notes to be added to circulation and fine rules
+
+> Sponsored by Catalyst IT
+
 - [[15520]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=15520) Add more granular permission for only editing own library's circ rules
 - [[21403]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21403) Add Indian Amazon Affiliate option to AmazonLocale setting
 
@@ -472,9 +549,12 @@ On the self registration page we also add asking for consent if the pref is enab
 
 
 - [[19474]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19474) Convert staff client CSS to SCSS
+- [[19608]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19608) Move admin templates JavaScript to the footer: The rest
 - [[19709]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19709) Move template JavaScript to the footer: Labels
 - [[19833]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19833) Disambiguation of "biblio", "biblio record" and "bibliographic record"
+- [[19946]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19946) Update popup window templates to use Bootstrap grid: Authority Z39.50 search
 - [[20044]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20044) Switch single-column templates to Bootstrap grid: Cataloging
+- [[20045]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20045) Switch single-column templates to Bootstrap grid: Various
 - [[20217]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20217) Make header's catalog search menu into a split button
 - [[20220]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20220) Move template JavaScript to the footer: Holds
 - [[20520]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20520) Re-indent moremember.tt
@@ -503,6 +583,9 @@ On the self registration page we also add asking for consent if the pref is enab
 - [[21132]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21132) Highlight active filters on saved report page
 - [[21137]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21137) Replace BORROWER_INFO and USER_INFO with logged_in_user
 - [[21166]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21166) Add columns settings to the acquisition details table (record detail view)
+
+> Sponsored by BULAC - http://www.bulac.fr/
+
 - [[21237]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21237) Clean up staff client SCSS
 - [[21305]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21305) Update two-column templates with Bootstrap grid: Patron clubs
 - [[21306]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21306) Update two-column templates with Bootstrap grid: Tags
@@ -561,6 +644,9 @@ have already been fixed in maintainance releases)
 - [[20827]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20827) Can't add owner to a fund
 - [[20861]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20861) Correct EDI permissions on some pages
 - [[20972]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20972) If ISBN has 10 numbers only the first 9 numbers are used
+
+> Sponsored by Gothenburg University Library
+
 - [[20979]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20979) Error message when deleting bib attached to order
 - [[21282]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21282) Ordered/spent lists should use prices including tax for calculations
 
@@ -622,6 +708,11 @@ So while a successful attempt will seem to have an invalid username or password 
 
 ### Circulation
 
+- [[2696]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=2696) Fine payments should show what was paid for
+
+> This adds a details view for every fine and payment in a patron account that will show detailed information about the payments made forward a fine and how a payment has been split up to pay towards several fines.
+
+
 - [[10382]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=10382) collection and location not returning to null when removed from course reserves
 
 > These patches ensure that unset values for items added to course reserves are unset when the course is disabled.
@@ -679,6 +770,7 @@ So while a successful attempt will seem to have an invalid username or password 
 ### Installation and upgrade (command-line installer)
 
 - [[16690]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16690) Improve security of remote database installations
+- [[17234]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17234) ALTER IGNORE TABLE is invalid in mysql 5.7.  This breaks updatedatabase.pl
 - [[21440]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21440) koha-create expects the file passed by $DEFAULTSQL to be in gzip format
 
 > Add support to koha-create to allow it to accept both compressed and uncompressed files for DEFAULTSQL
@@ -739,6 +831,9 @@ So while a successful attempt will seem to have an invalid username or password 
 ### Searching - Elasticsearch
 
 - [[19365]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19365) link_bibs_to_authorities.pl doesn't work with Elasticsearch
+
+> Sponsored by National Library of Finland
+
 - [[21032]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21032) Refining a search made on a specific index fail
 
 ### Self checkout
@@ -768,6 +863,9 @@ So while a successful attempt will seem to have an invalid username or password 
 - [[21163]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21163) Basket group detail page layout is broken
 - [[21663]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21663) Incorrect filter prevents predefined notes from being added to patron acccounts
 - [[21704]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21704) Editing subfields in bibliographic frameworks is broken (TT filter)
+
+> Sponsored by Theke Solutions
+
 - [[21706]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21706) Editing subfields in authority frameworks is broken (TT filter)
 - [[21805]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21805) Duplicate include file in search results template causes JS error
 - [[21814]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21814) System preferences save button can be hidden by language menu
@@ -815,6 +913,7 @@ have already been fixed in maintainance releases)
 - [[16739]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16739) Generate EDIFACT on basket groups falsely showing when configuration is incomplete
 - [[16754]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16754) Use validation plugin in budgets, planning, and contracts
 - [[19271]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19271) Ordered/Spent lists should display vendor name, not vendor code
+- [[19453]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19453) Client side validation broken for "Fund" select
 - [[20892]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20892) Wrong basketgroup link in histsearch.pl
 - [[21033]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21033) Remove few warns in acqui/basket.pl
 - [[21048]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21048) suggest_status not behaving properly
@@ -837,7 +936,11 @@ have already been fixed in maintainance releases)
 - [[18584]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18584) Our legacy code contains trailing-spaces
 - [[18720]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18720) Get rid of "die" in favor of exceptions in C4::Acquisition::GetBasketAsCsv
 - [[19687]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19687) Recent upgrade to 17.05.04.000 bulkmarcimport started to fail
+
+> Sponsored by Gothenburg University Library
+
 - [[19991]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19991) use Modern::Perl in OPAC perl scripts
+- [[20187]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20187) New rewrite rules can break custom css
 - [[20259]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20259) Shorter JS and CSS rewrite rule
 - [[20631]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20631) C4::Acounts claims to use ReturnLostItem but doesn't
 - [[20696]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20696) Remove a few ugly "eq undef" comparisons
@@ -954,6 +1057,12 @@ have already been fixed in maintainance releases)
 
 ### I18N/L10N
 
+- [[16621]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=16621) Translatability: Issues in opac-user.tt (sentence splitting)
+
+> Fix translatability issues due to sentence splitting in  
+koha-tmpl/opac-tmpl/bootstrap/en/modules/opac-user.tt
+
+
 - [[19500]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19500) Make module names on letters overview page translatable
 - [[20332]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20332) Untranslatable strings in grouped OPAC results
 - [[21029]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21029) "Suspend until" in modal in staff patron account is not translatable
@@ -978,6 +1087,8 @@ have already been fixed in maintainance releases)
 
 ### Installation and upgrade (command-line installer)
 
+- [[8]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=8) TransferLog ErrorLog apache parameters
+- [[490]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=490) Poor display
 - [[21426]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21426) setting USE_MEMCACHED to "no" in koha-sites.conf does not have any effect
 - [[21654]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21654) Installer is loading a non-existent file
 
@@ -1010,6 +1121,9 @@ have already been fixed in maintainance releases)
 
 - [[20700]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20700) Update MARC21 leader/007/008 codes
 - [[20910]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20910) 773$g not displayed if $0 is present
+
+> Sponsored by Escuela de Orientacion Lacaniana
+
 
 ### Notices
 
@@ -1085,6 +1199,7 @@ have already been fixed in maintainance releases)
 
 - [[9968]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=9968) Incorrect index used for 'Standard number' in advanced search
 - [[14716]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14716) Correctly URI-encode URLs in XSLT result lists and detail pages
+- [[18799]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18799) XSLTresultsdisplay hides the icons
 - [[19390]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19390) OPAC view link in staff results should open in a new tab
 - [[20151]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20151) Search is broken when stemming has no language
 - [[20864]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20864) Only set bibs_selected cookie when BrowseResultSelection is activated
@@ -1111,8 +1226,10 @@ have already been fixed in maintainance releases)
 
 ### Staff Client
 
+- [[28]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=28) testing to see if this posts to the list
 - [[17625]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=17625) 245f and 245g are not displayed in XSLT
 - [[18521]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=18521) Renew and search hotkeys are swapped on returns page.
+- [[20329]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20329) Text input fields are wider than the fieldset class they are inside of
 - [[20504]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20504) Language attribute in html tag is empty in system preference editor
 - [[20647]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20647) When ILL is enabled the hover effect on the ILL requests button is wrong.
 - [[20781]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20781) 0 months is not a valid enrollment period and causes errors
@@ -1126,6 +1243,9 @@ have already been fixed in maintainance releases)
 
 ### System Administration
 
+- [[221]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=221) Add itemtypesearchgroups page mistitled
+- [[255]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=255) Form fields too small for text
+- [[834]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=834) Add Category Fields Need Descriptions
 - [[14446]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=14446) Resolve "Use of uninitialized value in goto" in admin/preferences.pl
 - [[19179]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=19179) Email option for SMSSendDriver is not documented as a valid setting
 - [[21131]](http://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=21131) Changing and restoring a WYSIWYG preference can result in unexpected behaviour
@@ -1270,7 +1390,7 @@ Important notes:
 
 ## Documentation
 
-The Koha manual is maintained in DocBook. The home page for Koha 
+The Koha manual is maintained in Sphinx. The home page for Koha 
 documentation is 
 
 - [Koha Documentation](http://koha-community.org/documentation/)
@@ -1283,7 +1403,7 @@ Koha manual is available:
 
 The Git repository for the Koha manual can be found at
 
-- [Koha Git Repository](http://git.koha-community.org/gitweb/?p=kohadocs.git;a=summary)
+- [Koha Git Repository](https://gitlab.com/koha-community/koha-manual)
 
 ## Translations
 
@@ -1304,10 +1424,10 @@ interface are available in this release for the following languages:
 - French (Canada) (94.1%)
 - German (100%)
 - German (Switzerland) (93.6%)
-- Greek (76.5%)
+- Greek (76.7%)
 - Hindi (95.5%)
 - Italian (92.2%)
-- Norwegian BokmÃ¥l (94.8%)
+- Norwegian Bokmål (94.8%)
 - Occitan (post 1500) (60.6%)
 - Polish (86.8%)
 - Portuguese (100%)
@@ -1315,7 +1435,7 @@ interface are available in this release for the following languages:
 - Slovak (87.5%)
 - Spanish (94%)
 - Swedish (92.3%)
-- Turkish (95.5%)
+- Turkish (95.7%)
 - Ukrainian (58%)
 - Vietnamese (54.4%)
 
@@ -1338,22 +1458,33 @@ The most up-to-date translations can be found at:
 
 The release team for Koha 18.11.00 is
 
-- Release Manager: [Jonathan Druart](mailto:jonathan.druart@bugs.koha-community.org)
-- Release Manager assistant: [Nick Clemens](mailto:nick@bywatersolutions.com)
-- QA Manager: 
+- Release Manager: [Nick Clemens](mailto:nick@bywatersolutions.com)
+- Release Manager assistants:
+  - [Brendan Gallagher](mailto:brendan@bywatersolutions.com)
+  - [Jonathan Druart](mailto:jonathan.druart@bugs.koha-community.org)
+  - [Kyle Hall](mailto:kyle@bywatersolutions.com)
+  - [Tomás Cohen Arazi](mailto:tomascohen@gmail.com)
+
+- Module Maintainers:
+  - REST API -- [Tomás Cohen Arazi](mailto:tomascohen@gmail.com)
+  - Elasticsearch -- [Nick Clemens](mailto:nick@bywatersolutions.com)
+- QA Manager: [Katrin Fischer](mailto:Katrin.Fischer@bsz-bw.de)
 
 - QA Team:
-  - [TomÃ¡s Cohen Arazi](mailto:tomascohen@gmail.com)
-  - [Alex Arnaud](mailto:alex.arnaud@biblibre.com)
-  - [Brendan Gallagher](mailto:brendan@bywatersolutions.com)
-  - [Kyle Hall](mailto:kyle@bywatersolutions.com)
   - [Julian Maurice](mailto:julian.maurice@biblibre.com)
-  - Josef Moravec
   - [Marcel de Rooy](mailto:m.de.rooy@rijksmuseum.nl)
+  - Josef Moravec
+  - [Alex Arnaud](mailto:alex.arnaud@biblibre.com)
+  - [Martin Renvoize](mailto:martin.renvoize@ptfs-europe.com)
+  - [Tomás Cohen Arazi](mailto:tomascohen@gmail.com)
+  - [Kyle Hall](mailto:kyle@bywatersolutions.com)
+  - [Jonathan Druart](mailto:jonathan.druart@bugs.koha-community.org)
+  - [Chris Cormack](mailto:chrisc@catalyst.net.nz)
 - Bug Wranglers:
   - Claire Gravely
   - Jon Knight
-  - [Marc VÃ©ron](mailto:veron@veron.ch)
+  - [Indranil Das Gupta](mailto:indradg@l2c2.co.inc)
+  - [Amit Gupta](mailto:amitddng135@gmail.com)
 - Packaging Manager: [Mirko Tietgen](mailto:mirko@abunchofthings.net)
 - Documentation Team:
   - Lee Jamison
@@ -1361,17 +1492,17 @@ The release team for Koha 18.11.00 is
   - Caroline Cyr La Rose
 - Translation Manager: [Bernardo Gonzalez Kriegel](mailto:bgkriegel@gmail.com)
 - Release Maintainers:
-  - 17.11 -- [Nick Clemens](mailto:nick@bywatersolutions.com)
+  - 18.05 -- [Martin Renvoize](mailto:martin.renvoize@ptfs-europe.com)
+  - 17.11 -- [Fridolin Somers](mailto:fridolin.somers@biblibre.com)
   - 17.05 -- [Fridolin Somers](mailto:fridolin.somers@biblibre.com)
-  - 16.11 -- [Chris Cormack](mailto:chrisc@catalyst.net.nz)
 
 ## Credits
 We thank the following libraries who are known to have sponsored
 new features in Koha 18.11.00:
 
 - BULAC - http://www.bulac.fr/
-- Catalyst IT
 - CCSR (https://ccsr.qc.ca)
+- Catalyst IT
 - Escuela de Orientacion Lacaniana
 - Goethe-Institut
 - Gothenburg University Library
@@ -1381,35 +1512,29 @@ new features in Koha 18.11.00:
 
 We thank the following individuals who contributed patches to Koha 18.11.00.
 
-- Alberto (1)
-- fv@spots.school (1)
-- xljoha (1)
-- Blou (4)
 - Aleisha Amohia (16)
+- Anonymous (3)
 - Dimitris Antonakis (1)
+- Tomás Cohen Arazi (110)
 - Alex Arnaud (14)
+- Cori Lynn Arnold (4)
 - Zoe Bennett (3)
+- Philippe Blouin (4)
 - David Bourgault (3)
 - Christopher Brannon (1)
 - Alex Buckley (5)
-- Nightly Build Bot (2)
 - Colin Campbell (4)
 - Barry Cannon (1)
-- NazlÄ± Ãetin (1)
-- JÃ©rÃ´me Charaoui (1)
+- Jérôme Charaoui (1)
 - Barton Chittenden (2)
-- Nick Clemens (247)
-- TomÃ¡s Cohen Arazi (110)
+- Nick Clemens (249)
 - David Cook (8)
 - Charlotte Cordwell (4)
 - Chris Cormack (2)
-- Caroline Cyr La Rose (6)
-- Marcel de Rooy (82)
 - Jonathan Druart (400)
 - Magnus Enger (5)
 - Charles Farmer (2)
 - Katrin Fischer (78)
-- Bernardo GonzÃ¡lez Kriegel (5)
 - Caitlin Goodger (1)
 - Isobel Graham (2)
 - Claire Gravely (2)
@@ -1417,27 +1542,27 @@ We thank the following individuals who contributed patches to Koha 18.11.00.
 - Amit Gupta (1)
 - David Gustafsson (16)
 - Margaret Hade (1)
-- Koha instance kohadev-koha (2)
+- Kyle Hall (79)
 - Andrew Isherwood (41)
 - Mason James (1)
 - Lee Jamison (1)
-- Srdjan Jankovic (7)
+- Srdjan Janković (7)
 - Pasi Kallinen (6)
 - Vassilis Kanellopoulos (1)
 - Olli-Antti Kivilahti (1)
 - Jon Knight (1)
+- Bernardo Gonzalez Kriegel (5)
 - David Kuhn (1)
-- Joonas KylmÃ¤lÃ¤ (1)
+- Joonas Kylmälä (1)
 - Pierre-Luc Lapointe (1)
-- Johan Larsson (1)
+- Johan Larsson (2)
 - Owen Leonard (146)
 - Thatcher Leonard (1)
-- Cori Lynn Arnold (4)
 - Ere Maijala (19)
+- Alberto Martinez (1)
 - Jesse Maseto (1)
 - Julian Maurice (24)
 - Matthias Meusburger (3)
-- Kyle M Hall (79)
 - Josef Moravec (44)
 - Joy Nelson (2)
 - Chris Nighswonger (1)
@@ -1446,6 +1571,8 @@ We thank the following individuals who contributed patches to Koha 18.11.00.
 - Liz Rea (1)
 - Martin Renvoize (44)
 - Benjamin Rokseth (1)
+- Marcel de Rooy (82)
+- Caroline Cyr La Rose (6)
 - Andreas Roussos (7)
 - Jane Sandberg (2)
 - Alex Sassmannshausen (2)
@@ -1453,13 +1580,14 @@ We thank the following individuals who contributed patches to Koha 18.11.00.
 - Grace Smyth (1)
 - Fridolin Somers (13)
 - Lari Taskula (13)
-- Mirko Tietgen (7)
+- Mirko Tietgen (9)
 - Mark Tompsett (15)
 - Koha translators (1)
-- Marc VÃ©ron (1)
+- Marc Véron (1)
 - Jenny Way (1)
 - Jesse Weaver (3)
 - Baptiste Wojtkowski (2)
+- Nazlı Çetin (1)
 
 We thank the following libraries, companies, and other institutions who contributed
 patches to Koha 18.11.00
@@ -1470,148 +1598,138 @@ patches to Koha 18.11.00
 - BigBallOfWax (1)
 - BSZ BW (80)
 - bugs.koha-community.org (398)
-- ByWater-Solutions (332)
+- ByWater-Solutions (334)
 - Catalyst (14)
-- cdalibrary.org (1)
-- cmaisonneuve.qc.ca (1)
+- Coeur D'Alene Public Library (1)
+- Collège de Maisonneuve (1)
 - debian.diman (1)
-- deichman.no (1)
+- Deichman Public Library (1)
 - Devinim (1)
-- dgiinc.com (4)
 - Foundations (1)
-- GÃ¶teborgs universitet (18)
-- helsinki.fi (20)
-- icloud.com (1)
-- iki.fi (1)
-- informaticsglobal.com (1)
-- inLibro.com (3)
-- interleaf.ie (1)
+- Göteborgs Universitet (18)
+- Informatics Publishing Ltd (1)
+- Interleaf Technology (1)
 - jns.fi (13)
-- joensuu.fi (6)
-- kanellov.com (1)
 - KohaAloha (1)
-- kohadevbox (2)
 - kylehall.info (1)
 - Libriotech (5)
-- linnbenton.edu (2)
+- Linn-Benton Community College (2)
 - Loughborough University (1)
-- Marc VÃ©ron AG (1)
+- Marc Véron AG (1)
 - Marywood University (1)
 - Prosentient Systems (8)
 - PTFS-Europe (91)
-- Rijksmuseum (82)
+- Rijks Museum (82)
 - rot13.org (1)
-- Solutions inLibro inc (12)
-- spots.school (1)
+- Solutions inLibro inc (15)
+- St. Photios Orthodox Theological Seminary (1)
+- The City of Joensuu (6)
+- The Donohue Group (4)
 - Theke Solutions (110)
-- unidentified (108)
-- Universidad Nacional de CÃ³rdoba (5)
-- wegc.school.nz (1)
+- unidentified (113)
+- Universidad Nacional de Córdoba (5)
+- University of Helsinki (20)
+- Wellington East Girls' College (1)
 
 We also especially thank the following individuals who tested patches
 for Koha.
 
-- andrew.isherwood@ptfs-europe.com (2)
-- Blou (1)
-- claude (1)
-- Claudio (1)
-- delaye (1)
-- Devinim (4)
-- DEVINIM (1)
-- George (1)
-- mmg@interleaf.ie (1)
-- Niamh.Walker-Headon@it-tallaght.ie (1)
-- Petter (1)
-- pierre-marc (1)
-- Sonia (2)
-- Spencer (1)
-- Srdjan (1)
-- Todd (1)
-- Brendan A Gallagher (2)
 - Hugo Agud (1)
 - Sandy Allgood (3)
 - Aleisha Amohia (6)
-- JosÃ© Anjos (1)
+- José Anjos (1)
+- Tomás Cohen Arazi (230)
 - Alex Arnaud (7)
+- Cori Lynn Arnold (5)
+- Marjorie Barry-Vila (1)
+- Philippe Blouin (1)
+- Sonia Bouis (2)
 - David Bourgault (1)
 - Christopher Brannon (2)
+- Claude Brayer (1)
 - Alex Buckley (16)
 - Colin Campbell (4)
 - Barry Cannon (9)
-- Nick Clemens (1517)
-- Tomas Cohen Arazi (230)
+- Axelle Clarisse (8)
+- Claudio (1)
+- Nick Clemens (1515)
 - David Cook (1)
 - Chris Cormack (73)
-- Caroline Cyr La rose (2)
-- Caroline Cyr La Rose (12)
-- FrÃ©dÃ©ric Demians (1)
-- Michal Denar (3)
-- Michal Denar (58)
-- Marcel de Rooy (222)
+- Stephane Delaye (1)
+- Frédéric Demians (1)
+- Michal Denar (61)
+- Devinim (5)
 - John Doe (6)
 - Jonathan Druart (325)
 - Magnus Enger (9)
 - Charles Farmer (15)
 - Bouzid Fergani (1)
-- Katrin Fischer (407)
+- Katrin Fischer (406)
 - Martha Fuerst (1)
-- Brendan Gallagher (16)
-- âLucas Gassâ (1)
-- Bernardo Gonzalez Kriegel (2)
+- Brendan Gallagher (18)
+- Lucas Gass (1)
+- Todd Goatley (1)
 - Stephen Graham (6)
 - Claire Gravely (43)
 - Victor Grousset (6)
 - Amit Gupta (2)
-- Andreas HedstrÃ¶m Mace (1)
+- Kyle Hall (69)
 - Andrew Isherwood (16)
-- Dilan JohnpullÃ© (9)
+- Te Rauhina Jackson (2)
+- Srdjan Janković (1)
+- Dilan Johnpullé (9)
 - Pasi Kallinen (6)
-- Myka Kennedy Stephens (1)
 - Ulrich Kleiber (1)
 - Jon Knight (1)
+- Bernardo Gonzalez Kriegel (2)
+- Petter von Krogh (1)
 - Pierre-Luc Lapointe (11)
-- macon  lauren KohaCon17 (1)
 - Nicolas Legrand (2)
 - Owen Leonard (126)
-- Cori Lynn Arnold (5)
+- Andreas Hedström Mace (1)
+- Lauren Macon (1)
 - Ere Maijala (19)
 - Jesse Maseto (14)
 - Julian Maurice (47)
 - Matthias Meusburger (1)
-- Kyle M Hall (69)
 - Kathleen Milne (3)
 - Josef Moravec (234)
 - Joy Nelson (1)
 - Chris Nighswonger (1)
 - David Nind (11)
-- FranÃ§ois Pichenot (1)
+- François Pichenot (1)
 - Simon Pouchol (1)
-- Severine QUEUNE (1)
-- SÃ©verine QUEUNE (94)
-- Te Rauhina Jackson (2)
+- Séverine Queune (95)
 - Martin Renvoize (244)
 - Benjamin Rokseth (3)
+- Marcel de Rooy (221)
+- Caroline Cyr La Rose (14)
 - Paola Rossi (2)
 - Andreas Roussos (10)
 - Jane Sandberg (2)
 - BWS Sandboxes (1)
 - Lisette Scheer (12)
 - Maksim Sen (4)
-- Margie Sheppard - Central Kansas Library System CKLS (2)
+- Margie Sheppard (2)
 - Maryse Simard (26)
+- Spencer Smith (1)
 - Fridolin Somers (2)
-- Christian StelzenmÃ¼ller (10)
+- Christian Stelzenmüller (10)
+- Myka Kennedy Stephens (1)
 - John Sterbenz (1)
-- Koha Team AMU (8)
-- Pierre-Marc Thibault (17)
+- Pierre-Marc Thibault (18)
 - Mirko Tietgen (13)
 - Mark Tompsett (52)
 - Ed Veal (1)
 - George Veranis (1)
-- Marc VÃ©ron (4)
-- Marjorie Vila (1)
 - Cab Vinton (5)
-- George Williams (6)
+- Marc Véron (4)
+- George Williams (7)
+
+We thank the following individuals who mentored new contributors to the Koha project.
+
+- Owen Leonard
+- Martin Renvoize
 
 
 We regret any omissions.  If a contributor has been inadvertently missed,
@@ -1626,7 +1744,7 @@ version of Koha can be retrieved by checking out the master branch of:
 - [Koha Git Repository](git://git.koha-community.org/koha.git)
 
 The branch for this version of Koha and future bugfixes in this release
-line is master.
+line is 18.11.x.
 
 ## Bugs and feature requests
 
@@ -1638,4 +1756,4 @@ tracker at:
 He rau ringa e oti ai.
 (Many hands finish the work)
 
-Autogenerated release notes updated last on 27 Nov 2018 01:41:47.
+Autogenerated release notes updated last on 27 Nov 2018 11:44:43.
