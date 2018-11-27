@@ -52,7 +52,11 @@
 <tfoot>
 <tr>
     <td class="total" colspan="6">Total due:</td>
+[% IF outstanding_credits.total_outstanding < 0 %]
+    <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
+[% ELSE %]
     <td style="text-align: right;">[% total | $Price %]</td>
+[% END %]
 </tr>
 </tfoot>
 <tbody>
@@ -107,6 +111,12 @@
     <td>[% line.accounttype | html %]</td>
     <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
     <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>
+</tr>
+[% END %]
+[% IF outstanding_credits.total_outstanding < 0 %]
+<tr>
+    <td class="total" colspan="6">Outstanding credits could be applied <input type="submit" id="apply_credits" name="apply_credits"  value="Apply credits" class="submit" /></td>
+    <td class="credit" style="text-align: right;">[% outstanding_credits.total_outstanding | $Price %]</td>
 </tr>
 [% END %]
 [% IF ( account_grp.total ) %]
