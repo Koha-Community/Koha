@@ -9,45 +9,51 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2018-05-10 01:16-0300\n"
-"PO-Revision-Date: 2017-09-16 17:44+0000\n"
-"Last-Translator: Serhij <dubyk@ukr.net>\n"
+"POT-Creation-Date: 2018-11-09 11:50-0300\n"
+"PO-Revision-Date: 2018-11-16 14:11+0000\n"
+"Last-Translator: Serhij Dubyk <dubyk@ukr.net>\n"
 "Language-Team: Ukrainian Linux Team <translation@linux.org.ua>\n"
 "Language: uk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Pootle 2.5.1.1\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1505583877.000000\n"
+"X-POOTLE-MTIME: 1542377475.138861\n"
 "X-Pootle-Path: /uk/18.05/uk-UA-marc-UNIMARC.po\n"
 "X-Pootle-Revision: 1\n"
 
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:368
+#, c-format
+msgid "%%20"
+msgstr "%%20"
+
 #. %1$s:  ELSE 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:50
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:51
 #, c-format
 msgid "%s &nbsp; No results found"
 msgstr "%s &nbsp; Нічого не знайдено"
 
-#. %1$s:  resul.used 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:66
+#. %1$s:  resul.used | html 
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:67
 #, c-format
 msgid "%s times"
 msgstr "%s раз(и/ів)"
 
 #. %1$s:  IF ( total ) 
-#. %2$s:  from 
-#. %3$s:  to 
-#. %4$s:  total 
+#. %2$s:  from | html 
+#. %3$s:  to | html 
+#. %4$s:  total | html 
 #. %5$s:  ELSE 
 #. %6$s:  END 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:52
 #, c-format
 msgid "%sResults %s to %s of %s %sNo results found %s"
-msgstr "%s Результати від %s по %s з %s %s Нічого не знайдено %s "
+msgstr "%s Результати від %s до %s з %s %s Нічого не знайдено %s "
 
+# тут йдеться про результати пошуку (попередні чи наступні)
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:43
 #, c-format
 msgid "&lt;&lt; Previous"
@@ -82,7 +88,7 @@ msgstr "(авто-заповнення)"
 msgid ", adapter"
 msgstr ", автор адаптації"
 
-# 020 (Annotator) Автор анотації до рукопису в друкованому виданні. Для автора коментарів або пояснень до тексту див. Коментатор друкованого тексту (212).
+# термінологія узгоджена з Укрмарком / Додаток C: Коди відношення
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2RDFDC.xsl:45
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2OAIDC.xsl:52
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2SRWDC.xsl:60
@@ -112,7 +118,7 @@ msgstr ", бібліографічний попередник"
 msgid ", collaborator"
 msgstr ", співробітник"
 
-# 212 (Commentator for written text) Особа, що написала коментарі чи пояснення до тексту. Для автора анотації до рукопису в друкованому виданні використовується Аннотатор (020)
+# лише „Коментатор“ неправильно, див.  Додаток C: Коди відношення
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2RDFDC.xsl:50
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2OAIDC.xsl:57
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2SRWDC.xsl:65
@@ -229,9 +235,7 @@ msgstr ", фотограф"
 msgid ", prefacer"
 msgstr ", автор передмови і т.п."
 
-# ... вільний переклад ...
-# ісп. - диктор, коментатор (радіо, телебачення)
-# фр. - демонстратор, стендист
+# термінологія узгоджена з: Додаток C: Коди відношення
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2RDFDC.xsl:63
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2OAIDC.xsl:70
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2SRWDC.xsl:78
@@ -309,76 +313,76 @@ msgstr " — Ієрархічний зв'язок не визначено"
 msgid "- In full ISBD form"
 msgstr "# — Повністю відповідає формату ISBD"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:149
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:158
 #, c-format
 msgid "/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber="
 msgstr "/cgi-bin/koha/catalogue/ISBDdetail.pl?biblionumber="
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:155
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:164
 #, c-format
 msgid "/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber="
 msgstr "/cgi-bin/koha/catalogue/MARCdetail.pl?biblionumber="
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:146
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:158
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:155
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:167
 #, c-format
 msgid "/cgi-bin/koha/catalogue/detail.pl?biblionumber="
 msgstr "/cgi-bin/koha/catalogue/detail.pl?biblionumber="
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:152
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:161
 #, c-format
 msgid "/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber="
 msgstr "/cgi-bin/koha/catalogue/labeledMARCdetail.pl?biblionumber="
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:252
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:289
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:261
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:298
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=an:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=an:"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:292
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:301
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=au:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=au:"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:255
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:264
 #, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=su:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=su:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:67
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:76
 #, c-format
 msgid "/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber="
 msgstr "/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber="
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:70
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:79
 #, c-format
 msgid "/cgi-bin/koha/opac-MARCdetail.pl?biblionumber="
 msgstr "/cgi-bin/koha/opac-MARCdetail.pl?biblionumber="
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:64
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:73
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:82
 #, c-format
 msgid "/cgi-bin/koha/opac-detail.pl?biblionumber="
 msgstr "/cgi-bin/koha/opac-detail.pl?biblionumber="
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:382
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:391
 #, c-format
 msgid "/cgi-bin/koha/opac-idref.pl?unimarc3="
 msgstr "/cgi-bin/koha/opac-idref.pl?unimarc3="
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:266
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:351
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:275
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:360
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=an:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=an:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:357
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:366
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=au:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=au:"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:293
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:302
 #, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=su:"
 msgstr "/cgi-bin/koha/opac-search.pl?q=su:"
@@ -561,7 +565,7 @@ msgstr "1 — покажчик наявний"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_100_authorities.tt:345
 #, c-format
 msgid "1 - right to left"
-msgstr "1 — зправа наліво"
+msgstr "1 —  справа наліво"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:123
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:125
@@ -592,6 +596,7 @@ msgstr "1 — модифікований запис"
 msgid "1-4 Record length"
 msgstr "1-4 — Довжина запису"
 
+# узгоджено з http://unimarc.org.ua/wiki/index.php?title=126_%D0%9F%D0%BE%D0%BB%D0%B5_%D0%BA%D0%BE%D0%B4%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%85_%D0%B4%D0%B0%D0%BD%D0%B8%D1%85:_%D0%B7%D0%B2%D1%83%D0%BA%D0%BE%D0%B7%D0%B0%D0%BF%D0%B8%D1%81%D0%B8_%E2%80%94_%D1%84%D1%96%D0%B7%D0%B8%D1%87%D0%BD%D1%96_%D1%85%D0%B0%D1%80%D0%B0%D0%BA%D1%82%D0%B5%D1%80%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8&mobileaction=toggle_view_desktop#.24a.2F1.09.D0.A8.D0.B2.D0.B8.D0.B4.D0.BA.D1.96.D1.81.D1.82.D1.8C
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:108
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:110
 #, c-format
@@ -616,6 +621,7 @@ msgstr "⅓ дюйми (8 мм)"
 msgid "1/4 in."
 msgstr "¼ дюйма (6,35 мм)"
 
+# узгоджено з http://unimarc.org.ua/wiki/121_%D0%9F%D0%BE%D0%BB%D0%B5_%D0%BA%D0%BE%D0%B4%D0%BE%D0%B2%D0%B0%D0%BD%D0%B8%D1%85_%D0%B4%D0%B0%D0%BD%D0%B8%D1%85:_%D0%BA%D0%B0%D1%80%D1%82%D0%BE%D0%B3%D1%80%D0%B0%D1%84%D1%96%D1%87%D0%BD%D1%96_%D0%BC%D0%B0%D1%82%D0%B5%D1%80%D1%96%D0%B0%D0%BB%D0%B8_%E2%80%94_%D1%84%D1%96%D0%B7%D0%B8%D1%87%D0%BD%D1%96_%D1%85%D0%B0%D1%80%D0%B0%D0%BA%D1%82%D0%B5%D1%80%D0%B8%D1%81%D1%82%D0%B8%D0%BA%D0%B8#.24b.09.D0.9A.D0.BE.D0.B4.D0.BE.D0.B2.D0.B0.D0.BD.D1.96_.D0.B4.D0.B0.D0.BD.D1.96_.D0.B0.D0.B5.D1.80.D0.BE.D1.84.D0.BE.D1.82.D0.BE.D0.B3.D1.80.D0.B0.D1.84.D1.96.D1.87.D0.BD.D0.BE.D1.97_.D1.82.D0.B0_.D0.BA.D0.BE.D1.81.D0.BC.D1.96.D1.87.D0.BD.D0.BE.D1.97_.D0.B7.D0.B9.D0.BE.D0.BC.D0.BA.D0.B8:_.D0.A4.D1.96.D0.B7.D0.B8.D1.87.D0.BD.D1.96_.D1.85.D0.B0.D1.80.D0.B0.D0.BA.D1.82.D0.B5.D1.80.D0.B8.D1.81.D1.82.D0.B8.D0.BA.D0.B8
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:88
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_121b.tt:90
 #, c-format
@@ -676,6 +682,7 @@ msgstr "4¾ дюйми чи 12 см (компакт-диск)"
 msgid "12.7 cm or 5 in."
 msgstr "12,7 см чи 5 дюймів"
 
+# узгоджено з 126 Поле кодованих даних: звукозаписи — фізичні характеристики
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:113
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:115
 #, c-format
@@ -700,6 +707,7 @@ msgstr "15 дюймів за секунду (38 см/с)"
 msgid "15/16 in. per second"
 msgstr "15/16 дюймів за секунду "
 
+# узгоджено з 126 Поле кодованих даних: звукозаписи — фізичні характеристики
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:83
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:85
 #, c-format
@@ -712,6 +720,7 @@ msgstr "16⅔ обертів за хвилину"
 msgid "16 mm (microfilm)"
 msgstr "16 мм (мікрофільм) "
 
+# узгоджено з 126 Поле кодованих даних: звукозаписи — фізичні характеристики
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:118
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:120
 #, c-format
@@ -723,6 +732,7 @@ msgstr "160 обертів за хвилину"
 msgid "17- Encoding level"
 msgstr "17 — рівень кодування"
 
+# узгоджено з 126 Поле кодованих даних: звукозаписи — фізичні характеристики
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:241
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_126a.tt:243
 #, c-format
@@ -753,6 +763,7 @@ msgid ""
 "record"
 msgstr "2 — Підрівень 2. Допублікаційний запис (каталогізація у виданні)"
 
+# узгоджено з 115 Поле кодованих даних: візуально-проекційні матеріали, відеозаписи та кінофільми
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:154
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_115b.tt:156
 #, c-format
@@ -1237,9 +1248,9 @@ msgstr "Аудиторія"
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:340
 #, c-format
 msgid "Audience: "
-msgstr "Примітка про читацьке призначення:"
+msgstr "Примітка про читацьке призначення: "
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:44
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:45
 #, c-format
 msgid "Authority search results"
 msgstr "Результати пошуку серед авторитетних джерел"
@@ -1615,9 +1626,10 @@ msgid "Children's chorus"
 msgstr "дитячий хор"
 
 #. INPUT type=submit
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a_bis.tt:26
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a_bis.tt:17
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c_bis.tt:20
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:91
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:70
 #, c-format
 msgid "Choose"
 msgstr "Вибрати"
@@ -1918,8 +1930,8 @@ msgstr "дециметри"
 msgid "Degree (complete with 0):"
 msgstr "Градуси (3 цифрових символи, що вирівнюються праворуч нулями): "
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:72
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:214
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:73
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:223
 #, c-format
 msgid "Description: "
 msgstr "Опис: "
@@ -2271,7 +2283,7 @@ msgstr "Статус екземпляру плівки: "
 msgid "Geodetic adjustment"
 msgstr "Геодезична прив’язка"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:61
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:62
 #, c-format
 msgid "Get it!"
 msgstr "Отримати це!"
@@ -2330,12 +2342,12 @@ msgstr "арфа"
 msgid "Harpsichord"
 msgstr "клавесин"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:27
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:28
 #, c-format
 msgid "Heading A-Z"
 msgstr "заголовки за алфавітом"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:28
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:29
 #, c-format
 msgid "Heading Z-A"
 msgstr "заголовки зворотньо за алфавітом"
@@ -2411,12 +2423,12 @@ msgstr "50 — ISO 10646 Рівень 3 (Unicode, UTF-8)"
 msgid "ISSN: "
 msgstr "ISSN: "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:385
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:394
 #, c-format
 msgid "IdRef"
 msgstr "IdRef"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:387
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:396
 #, c-format
 msgid "Idref"
 msgstr "Idref"
@@ -2715,7 +2727,7 @@ msgstr "лазерний оптичний (відбиваючий) відеод�
 msgid "Length"
 msgstr "Тривалість/кількість: "
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:92
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:93
 #, c-format
 msgid "Linked with: "
 msgstr "Зв’язано з: "
@@ -3120,7 +3132,7 @@ msgid "Non required value"
 msgstr "значення не обов’язкове"
 
 # Нічого (?)
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:26
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:27
 #, c-format
 msgid "None"
 msgstr "немає"
@@ -3514,8 +3526,8 @@ msgstr "Дата публікації 2"
 msgid "Publication date 1"
 msgstr "Дата публікації 1"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:32
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:183
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:33
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:192
 #, c-format
 msgid "Publication: "
 msgstr "Публікація: "
@@ -3611,10 +3623,10 @@ msgstr "Коди рельєфу 3: "
 msgid "Relief codes 4:"
 msgstr "Коди рельєфу 4: "
 
-#. %1$s:  from 
-#. %2$s:  to 
-#. %3$s:  total 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:50
+#. %1$s:  from | html 
+#. %2$s:  to | html 
+#. %3$s:  total | html 
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:51
 #, c-format
 msgid "Results %s to %s of %s"
 msgstr "Результати пошуку з %s до %s зі %s"
@@ -3677,11 +3689,11 @@ msgstr "Графіка назви"
 
 #. INPUT type=submit
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:67
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:40
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:41
 msgid "Search"
 msgstr "Пошук"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:10
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:11
 #, c-format
 msgid "Search for authority type: EDITORS"
 msgstr "Пошук за типом авторитетного джерела: РЕДАКТОРИ"
@@ -3992,7 +4004,7 @@ msgid "Subject Category"
 msgstr "Предметна категорія вищого рівня (тимчасове)"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_4XX.tt:59
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:59
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:60
 #, c-format
 msgid "Summary"
 msgstr "Зведення"
@@ -4557,13 +4569,13 @@ msgid "UNIMARC field 141 builder"
 msgstr "Компонувальник UNIMARC-поля 141"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c_bis.tt:13
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:4
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:9
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:5
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:10
 #, c-format
 msgid "UNIMARC field 210c builder"
 msgstr "Компонувальник UNIMARC-підполя 210^c"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a_bis.tt:19
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a_bis.tt:10
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a.tt:3
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_225a.tt:8
 #, c-format
@@ -4725,7 +4737,7 @@ msgstr "оновлюване листове видання з відривним
 msgid "Updating website"
 msgstr "оновлюваний веб-сайт"
 
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:60
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:61
 #, c-format
 msgid "Used"
 msgstr "Використано"
@@ -5046,12 +5058,12 @@ msgstr "ab — обкладинки"
 msgid "abcd"
 msgstr "abcd"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:299
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:308
 #, c-format
 msgid "abcdfijkmnpvxyz"
 msgstr "abcdfijkmnpvxyz"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:261
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:270
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:234
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:282
 #, c-format
@@ -6152,11 +6164,6 @@ msgstr "для дітей середнього шкільного віку, пі
 msgid "choir-book"
 msgstr "хорова книга"
 
-#. IMG
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:69
-msgid "choose"
-msgstr "вибрати"
-
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:71
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_128a.tt:73
 #, c-format
@@ -6482,7 +6489,7 @@ msgstr "контейнери, тара, посудини"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:29
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:41
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:53
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:31
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:32
 #, c-format
 msgid "contains"
 msgstr "містить"
@@ -7648,7 +7655,7 @@ msgstr "ga — грецька"
 msgid "games and recreation"
 msgstr "ігри та об’єкти дозвілля "
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:386
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:395
 #, c-format
 msgid "gb_page_center[600,500]"
 msgstr "gb_page_center[600,500]"
@@ -8077,7 +8084,7 @@ msgstr "i — гравюра"
 msgid "ia- Thai"
 msgstr "ia — тайська"
 
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:300
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:309
 #, c-format
 msgid "ijknpxyz"
 msgstr "ijknpxyz"
@@ -8354,7 +8361,7 @@ msgstr "нерегулярно"
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:31
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:43
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:55
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:33
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:34
 #, c-format
 msgid "is exactly"
 msgstr "є точно"
@@ -8443,7 +8450,7 @@ msgstr "ювелірні вироби"
 msgid "jigsaws"
 msgstr "складова картинка-пазл"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:262
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:271
 #: intranet-tmpl/prog/en/xslt/UNIMARCslim2intranetDetail.xsl:235
 #: opac-tmpl/bootstrap/en/xslt/UNIMARCslim2OPACDetail.xsl:283
 #, c-format
@@ -11687,8 +11694,8 @@ msgstr "романс"
 msgid "rondo"
 msgstr "рондо"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:190
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:98
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:199
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:107
 #, c-format
 msgid "rtl"
 msgstr "rtl"
@@ -12235,7 +12242,7 @@ msgstr "стандартна звукова апертура (вузькофор
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:30
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:42
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_686a.tt:54
-#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:32
+#: intranet-tmpl/prog/en/modules/cataloguing/value_builder/unimarc_field_210c.tt:33
 #, c-format
 msgid "starts with"
 msgstr "починається з"
@@ -13732,15 +13739,15 @@ msgstr "|| — символ заповнення"
 msgid "||- Filling characters"
 msgstr "|| — символи заповнення"
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:50
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:51
 #, c-format
 msgid "— "
 msgstr "— "
 
-#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:62
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:150
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:174
-#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:204
+#: intranet-tmpl/prog/en/xslt/UNIMARCslimUtils.xsl:63
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:159
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:183
+#: opac-tmpl/bootstrap/en/xslt/UNIMARCslimUtils.xsl:213
 #, c-format
 msgid "• "
 msgstr "• "
