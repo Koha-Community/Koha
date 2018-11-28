@@ -2,144 +2,21 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE ColumnsSettings %]
-
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% title | html %] [% IF ( author ) %] by [% author | html %][% END %] (Record #[% biblionumber | html %]) &rsaquo; Items</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/datatables.css") | $raw %]
+[% Asset.css("css/addbiblio.css") | $raw %]
 [% INCLUDE 'datatables.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
 [% INCLUDE 'columns_settings.inc' %]
 [% INCLUDE 'browser-strings.inc' %]
 [% Asset.js("js/browser.js") | $raw %]
-<script type="text/javascript">
-//<![CDATA[
-    var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
-    browser.show();
-
-$(document).ready(function(){
-
-    // Remove the onclick event defined in browser.js,
-    // otherwise the deletion confirmation will not work correctly
-    $('a[href*="biblionumber="]').off('click');
-
-    [% IF (popup) %]
-        [% IF (opisadd) %]
-            window.close();
-        [% END %]
-    [% END %]
-            $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
-            /* Inline edit/delete links */
-            var biblionumber = $("input[name='biblionumber']").attr("value");
-            $("tr.editable").each(function(){
-                $(this).find("td:not(:first)").on('click', function(){
-                    var rowid = $(this).parent().attr("id");
-                    num_rowid = rowid.replace("row","");
-                    $(".linktools").remove();
-                    var edit_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&frameworkcode=[% frameworkcode | uri %]&biblionumber=[% biblionumber | uri %]&itemnumber='+num_rowid+'&searchid=[% searchid | uri %]#edititem"></a>');
-                    $(edit_link).text(_("Edit item"));
-                    var delete_link = $('<a href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&frameworkcode=[% frameworkcode | uri %]&biblionumber=[% biblionumber | uri %]&itemnumber='+num_rowid+'&searchid=[% searchid | uri %]"></a>');
-                    $(delete_link).text(_("Delete item"));
-                    $(delete_link).on('click', function(e) {
-                        return confirm_deletion();
-                    });
-                    var tools_node = $('<span class="linktools"></span>');
-                    $(tools_node).append(edit_link);
-                    $(tools_node).append(delete_link);
-                    $(this).append(tools_node);
-                });
-            });
-
-    $("#addnewitem").click(function(){
-        if ( confirm(_("Are you sure you want to add a new item? Any changes made on this page will be lost.")) ){
-            window.location.href = "/cgi-bin/koha/cataloguing/additem.pl?biblionumber=[% biblionumber | html %]";
-        }
-    });
-
-    var columns_settings = [% ColumnsSettings.GetColumns( 'cataloguing', 'additem', 'itemst', 'json' ) | $raw %]
-    // Skip the first column
-    columns_settings.unshift( { cannot_be_toggled: "1" } );
-
-    var itemst = KohaTable("itemst", {
-        "aoColumnDefs": [
-          { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
-        ],
-        'bPaginate': false,
-        'bInfo': false,
-        "bAutoWidth": false,
-        "bKohaColumnsUseNames": true
-    }, columns_settings);
-
-    var multiCopyControl = $("#add_multiple_copies_span");
-    var addMultipleBlock = $("#addmultiple");
-    var addSingleBlock = $("#addsingle");
-    multiCopyControl.hide();
-    $("#add_multiple_copies").on("click",function(e){
-        e.preventDefault;
-        addMultipleBlock.toggle();
-        addSingleBlock.toggle();
-        multiCopyControl.toggle();
-        $('body,html').animate({ scrollTop: $('body').height() }, 100);
-    });
-    $("#cancel_add_multiple").on("click",function(e){
-        e.preventDefault();
-        addMultipleBlock.toggle();
-        addSingleBlock.toggle();
-        multiCopyControl.toggle();
-    });
-});
-
-function Check(f) {
-    var total_errors = CheckMandatorySubfields(f);
-    if (total_errors==0) {
-        // Explanation about this line:
-        // In case of limited edition permission, we have to prevent user from modifying some fields.
-        // But there is no such thing as readonly attribute for select elements.
-        // So we use disabled instead. But disabled prevent values from being passed through the form at submit.
-        // So we "un-disable" the elements just before submitting.
-        // That's a bit clumsy, and if someone comes up with a better solution, feel free to improve that.
-        $("select[name=field_value]").prop('disabled', false);
-        return true;
-    } else {
-        var alertString2 = _("Form not submitted because of the following problem(s)");
-        alertString2 += "\n------------------------------------------------------------------------------------\n";
-        alertString2 += "\n- " + _("%s mandatory fields empty (highlighted)").format(total_errors);
-        alert(alertString2);
-        return false;
-    }
-    return true;
-}
-function CheckMultipleAdd(f) {
-
-    if (!f || isNaN(f) || !parseInt(f) == f || f <= 0) {
-        alert(_("Please enter a number of items to create."));
-        return false;
-    }
-    <!-- Add a soft-limit of 99 with a reminder about potential data entry error -->
-    if (f>99) {
-        return confirm(_("You are about to add %s items. Continue?").format(f));
-    }
-}
-function Dopop(link,i) {
-    defaultvalue=document.forms[0].field_value[i].value;
-    newin=window.open(link+"&result="+defaultvalue,"valuebuilder",'width=500,height=400,toolbar=false,scrollbars=yes');
-}
-
-function confirm_deletion() {
-    return confirm(_("Are you sure you want to delete this item?"));
-}
-
-//]]>
-</script>
-[% Asset.css("css/addbiblio.css") | $raw %]
-
 [% INCLUDE 'select2.inc' %]
-<script type="text/javascript">
-  $(document).ready(function() {
-    $('.subfield_line select').select2();
-  });
-</script>
-
+[% INCLUDE 'str/cataloging_additem.inc' %]
+[% Asset.js("js/cataloging_additem.js") | $raw %]
 </head>
+
 <body id="cat_additem" class="cat">
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cataloging-search.inc' %]
@@ -360,7 +237,7 @@ function confirm_deletion() {
     <input type="button" id="addnewitem" value="Add a new item">
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblionumber | uri %]">Cancel</a>
     [% END %]</fieldset>
-    
+
     [%# Fields for fast cataloging %]
     <input type="hidden" name="circborrowernumber" value="[% circborrowernumber | html %]" />
     <input type="hidden" name="stickyduedate" value="[% stickyduedate | html %]" />
@@ -376,4 +253,5 @@ function confirm_deletion() {
 
 </div>
 </div>
+
 [% INCLUDE 'intranet-bottom.inc' %]
