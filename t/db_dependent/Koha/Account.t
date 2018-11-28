@@ -226,7 +226,7 @@ subtest 'lines() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'normalize_balance' => sub {
+subtest 'reconcile_balance' => sub {
 
     plan tests => 3;
 
@@ -260,7 +260,7 @@ subtest 'normalize_balance' => sub {
         is( $account->outstanding_debits->total_outstanding, 10, 'Outstanding debits sum 10' );
         is( $account->outstanding_credits->total_outstanding, -15, 'Outstanding credits sum -15' );
 
-        $account->normalize_balance();
+        $account->reconcile_balance();
 
         is( $account->balance(), -5, "Account balance is -5" );
         is( $account->outstanding_debits->total_outstanding, 0, 'No outstanding debits' );
@@ -298,7 +298,7 @@ subtest 'normalize_balance' => sub {
         is( $account->outstanding_debits->total_outstanding, 10, 'Outstanding debits sum 10' );
         is( $account->outstanding_credits->total_outstanding, -10, 'Outstanding credits sum -10' );
 
-        $account->normalize_balance();
+        $account->reconcile_balance();
 
         is( $account->balance(), 0, "Account balance is 0" );
         is( $account->outstanding_debits->total_outstanding, 0, 'No outstanding debits' );
@@ -337,7 +337,7 @@ subtest 'normalize_balance' => sub {
         is( $account->outstanding_debits->total_outstanding, 15, 'Outstanding debits sum 15' );
         is( $account->outstanding_credits->total_outstanding, -10, 'Outstanding credits sum -10' );
 
-        $account->normalize_balance();
+        $account->reconcile_balance();
 
         is( $account->balance(), 5, "Account balance is 5" );
         is( $account->outstanding_debits->total_outstanding, 5, 'Outstanding debits sum 5' );
