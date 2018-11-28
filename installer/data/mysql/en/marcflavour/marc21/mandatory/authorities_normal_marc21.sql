@@ -1,7 +1,7 @@
 -- *******************************************************
 --   KOHA  MARC 21 STANDARD DEFAULT AUTHORITY FRAMEWORKS
 --
---        Revised to Update No. 26 (April 2018)
+--        Revised to Update No. 27 (November 2018)
 -- *******************************************************
 
 -- ******************************************************
@@ -425,6 +425,7 @@ INSERT INTO `auth_subfield_structure` (`authtypecode`, `tagfield`, `tagsubfield`
 		('', '055', 'd', 'Volumes/dates to which call number applies', 'Volumes/dates to which call number applies', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '0', 'Authority record control number or standard number', 'Authority record control number or standard number', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '1', 'Real World Object URI', 'Real World Object URI', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
+        ('', '055', '2', 'Number source', 'Number source', 0, 0, 0, NULL, NULL, NULL, 0, 0, '', '', ''),
 		('', '055', '5', 'Institution to which field applies', 'Institution to which field applies', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '6', 'Linkage', 'Linkage', 0, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
 		('', '055', '8', 'Field link and sequence number', 'Field link and sequence number', 1, 0, 0, NULL, NULL, NULL, 0, 0, 0, '', ''),
