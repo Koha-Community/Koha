@@ -515,15 +515,15 @@ sub lines {
     );
 }
 
-=head3 normalize_balance
+=head3 reconcile_balance
 
-$account->normalize_balance();
+$account->reconcile_balance();
 
 Find outstanding credits and use them to pay outstanding debits
 
 =cut
 
-sub normalize_balance {
+sub reconcile_balance {
     my ($self) = @_;
 
     my $outstanding_debits  = $self->outstanding_debits;
