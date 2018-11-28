@@ -484,7 +484,7 @@ sub locale_name {
 sub create_messages {
     my $self = shift;
 
-    my $pot = "$self->{domain}.pot";
+    my $pot = "$Bin/$self->{domain}.pot";
     my $po = "$self->{path_po}/$self->{lang}-messages.po";
 
     unless ( -f $pot ) {
@@ -503,7 +503,7 @@ sub create_messages {
 sub update_messages {
     my $self = shift;
 
-    my $pot = "$self->{domain}.pot";
+    my $pot = "$Bin/$self->{domain}.pot";
     my $po = "$self->{path_po}/$self->{lang}-messages.po";
 
     unless ( -f $pot ) {
