@@ -18,15 +18,10 @@
     You did not specify any search criteria.
 [% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( OpacStarRatings == 'all' || Koha.Preference('Babeltheque') ) %]
-    [% BLOCK cssinclude %]
-        [% Asset.css("css/jquery.rating.css") | $raw %]
-    [% END %]
-[% END %]
 
 <link rel="alternate" type="application/rss+xml" title="[% LibraryName | html %] Search RSS feed" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %]&amp;count=[% countrss |uri %]&amp;sort_by=acqdate_dsc&amp;format=rss2" />
 </head>
-
+[% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='results' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
@@ -503,15 +498,21 @@
 
                                                 [% IF ( OpacStarRatings == 'all' ) %]
                                                     <div class="results_summary ratings">
-                                                      [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
-                                                      [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
-                                                        [% FOREACH i  IN [ 1 2 3 4 5  ] %]
-                                                            [% IF rating_avg_int == i %]
-                                                                <input class="star" type="radio"  name="rating-[% SEARCH_RESULT.biblionumber | html %]" value="[% i | html %]" checked="checked" disabled="disabled"   />
-                                                            [% ELSE %]
-                                                                <input class="star" type="radio"  name="rating-[% SEARCH_RESULT.biblionumber | html %]" value="[% i | html %]" disabled="disabled"   />
-                                                            [% END %]
-                                                        [% END %]
+                                                        [% SET rating_avg = SEARCH_RESULT.ratings.get_avg_rating() %]
+                                                        [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
+                                                        <div class="br-wrapper br-theme-fontawesome-stars">
+                                                            <div class="br-widget br-readonly">
+                                                                [% FOREACH i IN [ 1 2 3 4 5  ] %]
+                                                                    [% IF rating_avg_int == i %]
+                                                                        <a href="#" class="br-selected br-current"></a>
+                                                                    [% ELSIF rating_avg_int > i %]
+                                                                        <a href="#" class="br-selected"></a>
+                                                                    [% ELSE %]
+                                                                        <a href="#"></a>
+                                                                    [% END %]
+                                                                [% END %]
+                                                            </div>
+                                                        </div>
 
                                                         [% IF SEARCH_RESULT.ratings.count > 0  %]
                                                             <span id="rating_total_[% SEARCH_RESULT.biblionumber | html %]">&nbsp;&nbsp;([% SEARCH_RESULT.ratings.count | html %] votes)</span>

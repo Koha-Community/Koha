@@ -32,15 +32,9 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title | html %][% FOREACH subtitl IN subtitle %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %] [% subtitl.subfield | html %][% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( bidi ) %]
-  [% BLOCK cssinclude %][% Asset.css("css/right-to-left.css") | $raw %][% END %]
-[% END %]
-[% IF ( OpacStarRatings != 'disable' ) %]
-    [% BLOCK cssinclude %][% Asset.css("css/jquery.rating.css") | $raw %][% END %]
-[% END %]
-[% INCLUDE greybox.inc %]
     [% Asset.css("lib/emoji-picker/css/emoji.css") | $raw %]
 </head>
+[% BLOCK cssinclude %][% END %]
 [% INCLUDE 'bodytag.inc' bodyid='opac-detail' bodyclass='scrollto' %]
 [% INCLUDE 'masthead.inc' %]
 
@@ -477,17 +471,21 @@
 
                                 [% SET rating_avg = ratings.get_avg_rating() %]
                                 [% rating_avg_int = BLOCK %][% rating_avg | format("%.0f") %][% END %]
-                                [% FOREACH i  IN [ 1 2 3 4 5  ] %]
-                                    [% IF rating_avg_int == i && borrowernumber %]
-                                        <input class="auto-submit-star" type="radio" name="rating"  value="[% i | html %]"  checked="checked" />
-                                    [% ELSIF rating_avg_int == i %]
-                                        <input class="auto-submit-star" type="radio" name="rating" value="[% i | html %]" checked="checked" disabled="disabled" />
-                                    [% ELSIF borrowernumber  %]
-                                        <input class="auto-submit-star" type="radio" name="rating" value="[% i | html %]" />
-                                    [% ELSE   %]
-                                        <input class="auto-submit-star" type="radio" name="rating" value="[% i | html %]" disabled="disabled" />
-                                    [% END %]
+
+                                [% IF ( borrowernumber ) %]
+                                    <select id="star_rating" name="rating" data-rating-enabled="1" autocomplete="off">
+                                [% ELSE %]
+                                    <select id="star_rating" name="rating" data-rating-enabled="0" disabled="disabled" autocomplete="off">
                                 [% END %]
+                                    [% FOREACH i IN [ 1 2 3 4 5  ] %]
+                                        [% IF rating_avg_int == i %]
+                                            <option value="[% i | html %]" selected="selected">[% i | html %]</option>
+                                        [% ELSE %]
+                                            <option value"[% i | html %]">[% i | html %]</option>
+                                        [% END %]
+                                    [% END %]
+                                </select>
+                                <img id="rating-loading" style="display:none" src="[% interface | html %]/[% theme | html %]/images/spinner-small.gif" alt="" />
 
                                 <!-- define some hidden vars for ratings -->
 
@@ -497,12 +495,14 @@
                                 [% UNLESS ( rating_readonly ) %]&nbsp;  <input name="rate_button" type="submit" value="Rate me" />[% END %]&nbsp;
 
                                 [% IF my_rating %]
-                                    <span id="rating_value_text">your rating: [% my_rating.rating_value | html %], </span>
+                                    <span id="rating_value_text">Your rating: [% my_rating.rating_value | html %].</span>
+                                    <span id="cancel_rating_text"><a href="#"><i class="fa fa-remove"></i> Cancel rating</a>.</span>
                                 [% ELSE %]
                                     <span id="rating_value_text"></span>
+                                    <span id="cancel_rating_text" style="display:none;"><a href="#"><i class="fa fa-remove"></i> Cancel rating</a>.</span>
                                 [% END %]
 
-                                <span id="rating_text">average rating: [% rating_avg | html %] ([% ratings.count | html %] votes)</span>
+                                <span id="rating_text">Average rating: [% rating_avg | html %] ([% ratings.count | html %] votes)</span>
                             </div>
                         </form>
                     [% END # / IF OpacStarRatings != 'disable' %]
@@ -1379,6 +1379,7 @@
 [% BLOCK jsinclude %]
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
+[% INCLUDE greybox.inc %]
 [% IF ( SocialNetworks ) %]
     //<![CDATA[
       {lang: '[% lang | html %]'}
@@ -1386,7 +1387,7 @@
     </script>
     <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
 [% END %]
-[% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %][% END %]
+[% IF ( OpacStarRatings != 'disable' ) %][% Asset.js("lib/jquery/plugins/jquery.barrating.min.js") | $raw %][% END %]
 
 [% IF ( OpacHighlightedWords ) %][% Asset.js("lib/jquery/plugins/jquery.highlight-3.js") | $raw %][% END %]
 
@@ -1618,46 +1619,41 @@
 
     $('input[name="rate_button"]').remove();
 
-    $(function () {
-      $(".auto-submit-star").rating({
-        cancel: _("Cancel rating"),
-        callback: function (value, link) {
-
-          // if the new value equals the old value, dont execute callback...
-          // just do nothing!
-          if ($("#rating_value").attr("value") != value) {
-
-            $(function () {
-
-              $.post("/cgi-bin/koha/opac-ratings-ajax.pl", {
+    var rating_enabled = ( $("#star_rating").data("rating-enabled") == "1" ) ? false : true;
+    $('#star_rating').barrating({
+        theme: 'fontawesome-stars',
+        showSelectedRating: false,
+        allowEmpty: true,
+        deselectable: false,
+        readonly: rating_enabled,
+        onSelect: function(value, text) {
+            $("#rating-loading").show();
+            $.post("/cgi-bin/koha/opac-ratings-ajax.pl", {
                 rating_old_value: $("#rating_value").attr("value"),
                 borrowernumber: "[% borrowernumber | html %]",
                 biblionumber: "[% biblio.biblionumber | html %]",
                 rating_value: value,
                 auth_error: value
-              }, function (data) {
-
-                if (data.auth_status != 'ok') {
-                  window.alert(_("Your CGI session cookie is not current. Please refresh the page and try again."));
-                } else {
-                  $("#rating_value").val(data.rating_value);
-
-                  if (data.rating_value) {
-                    $("#rating_value_text").text(_("your rating: %s, ").format(data.rating_value));
-                  } else {
-                    $("#rating_value_text").text('');
-                  }
-
-                  $("#rating_text").text(_("average rating: %s (%s votes)").format(data.rating_avg, data.rating_total));
-
-                }
-              }, "json");
-            });
-          };
+            }, function (data) {
+                    $("#rating_value").val(data.rating_value);
+                    if (data.rating_value) {
+                        $("#rating_value_text").text(_("Your rating: %s, ").format(data.rating_value));
+                        $("#cancel_rating_text").show();
+                    } else {
+                        $("#rating_value_text").text('');
+                        $("#cancel_rating_text").hide();
+                    }
+                    $("#rating_text").text(_("Average rating: %s (%s votes)").format(data.rating_avg, data.rating_total));
+                    $("#rating-loading").hide();
+            }, "json");
         }
-      });
     });
-    // -----------------------------------------------------
+
+    $("#cancel_rating_text a").on("click", function(e){
+        e.preventDefault();
+        $("#star_rating").barrating("set", "");
+    });
+
 [% END # / IF ( OpacStarRatings != 'disable' )%]
 
 [% IF ( IDreamBooksReviews || IDreamBooksReadometer ) %]

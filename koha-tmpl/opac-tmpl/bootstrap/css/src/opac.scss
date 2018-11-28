@@ -3252,4 +3252,90 @@ button.closebtn {
     max-height: 200px;
 }
 
+/* jQuery Bar Rating plugin for star ratings */
+
+$star-default: #D2D2D2;
+$star-active: #C24A4A;
+$star-selected: #EDB867;
+
+.br-wrapper {
+    display: inline-block;
+}
+
+.br-theme-fontawesome-stars {
+
+    .br-widget {
+        height: 28px;
+        white-space: nowrap;
+
+        a {
+            -webkit-font-smoothing: antialiased;
+            font: normal normal normal 20px/1 FontAwesome;
+            margin-right: 2px;
+            text-decoration: none;
+            text-rendering: auto;
+
+            &::after {
+                color: $star-default;
+                content: "\f005";
+            }
+
+            &.br-active {
+                &::after {
+                    color: $star-active;
+                }
+            }
+
+            &.br-selected {
+                &::after {
+                    color: $star-selected;
+                }
+            }
+        }
+
+
+        .br-current-rating {
+            display: none;
+        }
+    }
+
+    .br-readonly {
+        a {
+            cursor: default;
+        }
+    }
+
+}
+
+#cancel_rating_text {
+    a {
+        color: #C24A4A;
+    }
+}
+
+@media print {
+    .br-theme-fontawesome-stars {
+
+        .br-widget {
+            a {
+                &::after {
+                    color: #000000;
+                    content: "\f006";
+                }
+
+                &.br-active::after,
+                &.br-selected::after {
+                    color: #000000;
+                    content: "\f005";
+                }
+            }
+
+        }
+
+    }
+}
+
+/* END jQuery Bar Rating plugin for star ratings */
+
+
 @import "responsive";
