@@ -228,7 +228,7 @@ subtest 'lines() tests' => sub {
 
 subtest 'reconcile_balance' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     subtest 'more credit than debit' => sub {
 
@@ -342,6 +342,44 @@ subtest 'reconcile_balance' => sub {
         is( $account->balance(), 5, "Account balance is 5" );
         is( $account->outstanding_debits->total_outstanding, 5, 'Outstanding debits sum 5' );
         is( $account->outstanding_credits->total_outstanding, 0, 'Outstanding credits sum 0' );
+
+        $schema->storage->txn_rollback;
+    };
+
+    subtest 'credits are applied to older debits first' => sub {
+
+        plan tests => 9;
+
+        $schema->storage->txn_begin;
+
+        my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+        my $account = $patron->account;
+
+        # Add Credits
+        $account->add_credit({ amount => 1 });
+        $account->add_credit({ amount => 3 });
+
+        # Add Debits TODO: replace for calls to add_debit when time comes
+        my $debit_1 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
+        my $debit_2 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2 })->store;
+        my $debit_3 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
+
+        is( $account->balance(), 2, "Account balance is 2" );
+        is( $account->outstanding_debits->total_outstanding, 6, 'Outstanding debits sum 6' );
+        is( $account->outstanding_credits->total_outstanding, -4, 'Outstanding credits sum -4' );
+
+        $account->reconcile_balance();
+
+        is( $account->balance(), 2, "Account balance is 2" );
+        is( $account->outstanding_debits->total_outstanding, 2, 'Outstanding debits sum 2' );
+        is( $account->outstanding_credits->total_outstanding, 0, 'Outstanding credits sum 0' );
+
+        $debit_1->discard_changes;
+        is( $debit_1->amountoutstanding + 0, 0, 'Old debit payed' );
+        $debit_2->discard_changes;
+        is( $debit_2->amountoutstanding + 0, 0, 'Old debit payed' );
+        $debit_3->discard_changes;
+        is( $debit_3->amountoutstanding + 0, 2, 'Newest debit only partially payed' );
 
         $schema->storage->txn_rollback;
     };
