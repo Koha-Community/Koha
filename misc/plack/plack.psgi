@@ -78,7 +78,13 @@ sub watch_for_size {
 };
 
 
-
+if ($ENV{PERL5_DEBUG_HOST}) { #Dynamically load the remote debugging middleware if needed.
+    require Plack::Middleware::Camelcadedb;
+    Plack::Middleware::Camelcadedb->import(
+        remote_host => "$ENV{PERL5_DEBUG_HOST}:$ENV{PERL5_DEBUG_PORT}",
+    #    enbugger => 1,
+    );
+}
 
 
 my $intranet = Plack::App::CGIBin->new(
@@ -102,6 +108,7 @@ builder {
     enable "+Koha::Middleware::Logger";
     enable "LogWarn";
     enable "LogErrors";
+    enable "Camelcadedb" if $ENV{PERL5_DEBUG_HOST};
 
     enable "ReverseProxy";
     enable_if { $proxies } "Plack::Middleware::RealIP",

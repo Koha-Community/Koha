@@ -91,6 +91,14 @@ $scriptname -h|--help
     listen              Port or socket to listen on, defaults to $LISTEN
     --help|-h           Display this help message
 
+ENVIRONMENT
+
+    ## Configure remote debugging using the Camelcadedb-modules
+    #  ip and port of the remote debugging server listening for DBGP-connections
+    PERL5_DEBUG_HOST=192.168.100.1
+    PERL5_DEBUG_PORT=54321
+    # see. https://github.com/Camelcade/Perl5-IDEA/wiki/Perl-Debugger
+
 EXAMPLE
 
 bash -x /etc/init.d/koha-plack-daemon start development debug debugger listen :8000
