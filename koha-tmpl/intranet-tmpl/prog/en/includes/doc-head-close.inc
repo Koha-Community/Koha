@@ -24,7 +24,7 @@
 [% IF ( login ) %]
     [% Asset.css("css/login.css") | $raw %]
 [% END %]
-[% IF ( IntranetUserCSS ) %]<style type="text/css">[% IntranetUserCSS | $raw %]</style>[% END %]
+[% IF ( IntranetUserCSS ) %]<style>[% IntranetUserCSS | $raw %]</style>[% END %]
 
 [% KohaPlugins.get_plugins_intranet_head | $raw %]
 

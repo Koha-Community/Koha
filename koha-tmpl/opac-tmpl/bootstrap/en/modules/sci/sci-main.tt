@@ -34,8 +34,8 @@
 [% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
 [% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% Asset.css("css/sci.css") | $raw %]
-[% IF ( Koha.Preference('OPACUserCSS') ) %]<style type="text/css">[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
-[% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style type="text/css">[% Koha.Preference('SelfCheckInUserCSS') | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
+[% IF ( Koha.Preference('SelfCheckInUserCSS') ) %]<style>[% Koha.Preference('SelfCheckInUserCSS') | $raw %]</style>[% END %]
 <!--[if lt IE 9]>
     <script src="[% interface | html %]/[% theme | html %]/lib/respond.min.js"></script>
 <![endif]-->
