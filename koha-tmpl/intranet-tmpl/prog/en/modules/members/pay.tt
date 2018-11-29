@@ -4,10 +4,13 @@
 [% USE AuthorisedValues %]
 [% USE Branches %]
 [% USE Price %]
+[% USE ColumnsSettings %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Make a payment for  [% patron.firstname | html %] [% patron.surname | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="pat_pay" class="pat">
@@ -40,25 +43,17 @@
 <table id="finest">
 <thead>
 <tr>
-    <th>&nbsp;</th>
-    <th>Fines &amp; charges</th>
+    <th class="NoSort">&nbsp;</th>
+    <th class="NoSort">Actions</th>
     <th>Description</th>
-    <th>Payment note</th>
+    <th class="title-string">Date</th>
+    <th class="NoSort">Payment note</th>
     <th>Account type</th>
     <th>Amount</th>
     <th>Amount outstanding</th>
 </tr>
 </thead>
-<tfoot>
-<tr>
-    <td class="total" colspan="6">Total due:</td>
-[% IF outstanding_credits.total_outstanding < 0 %]
-    <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
-[% ELSE %]
-    <td style="text-align: right;">[% total | $Price %]</td>
-[% END %]
-</tr>
-</tfoot>
+
 <tbody>
 [% FOREACH line IN accounts %]
 <tr>
@@ -67,10 +62,12 @@
         <input class="cb" type="checkbox" checked="checked" name="incl_par_[% line.accountlines_id | html %]" />
     [% END %]
     </td>
-    <td>
+    <td class="actions">
     [% IF ( line.amountoutstanding > 0 ) %]
-        <input type="submit" name="pay_indiv_[% line.accountlines_id | html %]" value="Pay" />
-        [% IF CAN_user_updatecharges_writeoff %]<input type="submit" name="wo_indiv_[% line.accountlines_id | html %]" value="Write off" />[% END %]
+        <button type="submit" class="btn btn-default btn-xs" name="pay_indiv_[% line.accountlines_id | html %]" value="Pay">Pay</button>
+        [% IF CAN_user_updatecharges_writeoff %]
+            <button type="submit" class="btn btn-default btn-xs" name="wo_indiv_[% line.accountlines_id | html %]" value="Write off">Write off</button>
+        [% END %]
     [% END %]
     <input type="hidden" name="itemnumber[% line.accountlines_id | html %]" value="[% line.itemnumber | html %]" />
     <input type="hidden" name="description[% line.accountlines_id | html %]" value="[% line.description | html %]" />
@@ -107,26 +104,43 @@
         [%- IF line.description %], [% line.description | html %][% END %]
         [% IF line.title %]([% line.title | html %])[% END %]
     </td>
-    <td><input type="text" name="payment_note_[% line.accountlines_id | html %]" /></td>
+    <td>
+        <span title="[% line.date | html %]">[% line.date | $KohaDates %]</span>
+    </td>
+    <td class="actions">
+        <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
+        <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-remove"></i></a></span>
+    </td>
     <td>[% line.accounttype | html %]</td>
     <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
     <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>
 </tr>
 [% END %]
-[% IF outstanding_credits.total_outstanding < 0 %]
-<tr>
-    <td class="total" colspan="6">Outstanding credits could be applied <input type="submit" id="apply_credits" name="apply_credits"  value="Apply credits" class="submit" /></td>
-    <td class="credit" style="text-align: right;">[% outstanding_credits.total_outstanding | $Price %]</td>
-</tr>
-[% END %]
-[% IF ( account_grp.total ) %]
-<tr>
-
-    <td class="total" colspan="8" style="text-align: right;">Sub total:</td>
-    <td style="text-align: right;">[% account_grp.total | $Price %]</td>
-</tr>
-[% END %]
 </tbody>
+
+<tfoot>
+    [% IF outstanding_credits.total_outstanding < 0 %]
+        <tr>
+            <td class="total" colspan="7">Outstanding credits could be applied: </td>
+            <td class="credit" style="text-align: right;"><button type="submit" id="apply_credits" name="apply_credits" value="apply_credits" class="btn btn-default btn-sm">Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button></td>
+        </tr>
+    [% END %]
+    [% IF ( account_grp.total ) %]
+        <tr>
+            <td class="total" colspan="7" style="text-align: right;">Sub total:</td>
+            <td style="text-align: right;">[% account_grp.total | $Price %]</td>
+        </tr>
+    [% END %]
+    <tr>
+        <td class="total" colspan="7">Total due:</td>
+        [% IF outstanding_credits.total_outstanding < 0 %]
+            <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
+        [% ELSE %]
+            <td style="text-align: right;">[% total | $Price %]</td>
+        [% END %]
+    </tr>
+</tfoot>
+
 </table>
 <fieldset class="action">
 <input type="submit" id="paycollect" name="paycollect"  value="Pay amount" class="submit" />
@@ -155,14 +169,16 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-    <script type= "text/javascript">
+    [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
+    <script>
         function enableCheckboxActions(){
             // Enable/disable controls if checkboxes are checked
             var checkedBoxes = $("input.cb:checked");
             if ($(checkedBoxes).size()) {
-              $("#payselected").prop("disabled",false);
+              $("#payselected, #writeoff-selected").prop("disabled",false);
             } else {
-              $("#payselected").prop("disabled",true);
+              $("#payselected, #writeoff-selected").prop("disabled",true);
             }
         }
         $(document).ready(function(){
@@ -174,12 +190,14 @@
                         event.preventDefault();
                     }
             });
-            $('#CheckAll').click(function(){
+            $('#CheckAll').click(function(e){
+                e.preventDefault();
                 $("#finest").checkCheckboxes();
                 enableCheckboxActions();
                 return false;
             });
-            $('#CheckNone').click(function(){
+            $('#CheckNone').click(function(e){
+                e.preventDefault();
                 $("#finest").unCheckCheckboxes();
                 enableCheckboxActions();
                 return false;
@@ -188,8 +206,30 @@
                 enableCheckboxActions();
             });
             enableCheckboxActions();
-        });
+            $(".add-note").on("click", function(e){
+                e.preventDefault();
+                $(this).hide();
+                var accountlines_id = $(this).data("accountlines_id");
+                $("#payment_note_" + accountlines_id ).show().find("input").focus();
+            });
+            $(".cancel-note").on("click", function(e){
+                e.preventDefault();
+                $(".payment_note").hide().find("input").val("");
+                $(".add-note").show();
+            });
 
+            var columns_settings = [% ColumnsSettings.GetColumns('members', 'pay', 'pay-fines-table', 'json') | $raw %];
+            KohaTable("finest", {
+                "columnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] }
+                ],
+                "paging": false,
+                'sorting': [[ 3, "asc" ]],
+                "autoWidth": false
+            }, columns_settings );
+        });
     </script>
 [% END %]
 
