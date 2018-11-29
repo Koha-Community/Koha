@@ -265,7 +265,7 @@ sub CalcFine {
 
     $amount = $item->{replacementprice} if ( $issuing_rule->cap_fine_to_replacement_price && $item->{replacementprice} && $amount > $item->{replacementprice} );
 
-    $debug and warn sprintf("CalcFine returning (%s, %s, %s, %s)", $amount, $units_minus_grace, $chargeable_units);
+    $debug and warn sprintf("CalcFine returning (%s, %s, %s)", $amount, $units_minus_grace, $chargeable_units);
     return ($amount, $units_minus_grace, $chargeable_units);
 }
 
