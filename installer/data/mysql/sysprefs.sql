@@ -1,4 +1,5 @@
 INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+('AccountAutoReconcile','0',NULL,'If enabled, patron balances will get reconciled automatically on each transaction.','YesNo'),
 ('AcqCreateItem','ordering','ordering|receiving|cataloguing','Define when the item is created : when ordering, when receiving, or in cataloguing module','Choice'),
 ('AcqEnableFiles','0',NULL,'If enabled, allows librarians to upload and attach arbitrary files to invoice records.','YesNo'),
 ('AcqItemSetSubfieldsWhenReceiptIsCancelled','', '','Upon cancelling a receipt, update the items subfields if they were created when placing an order (e.g. o=5|a="bar foo")', 'Free'),

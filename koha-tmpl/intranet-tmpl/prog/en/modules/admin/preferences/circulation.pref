@@ -158,6 +158,14 @@ Circulation:
                   no: "Don't allow"
             - patrons to submit notes about checked out items.
 
+    Accounts:
+        -
+            - pref: AccountAutoReconcile
+              choices:
+                  yes: "Do"
+                  no: "Do not"
+            - reconcile patron balances automatically on each transaction adding debits or credits.
+
     Checkout Policy:
         -
             - pref: AllowTooManyOverride
