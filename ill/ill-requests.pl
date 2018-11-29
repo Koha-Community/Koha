@@ -247,10 +247,10 @@ if ( $backends_available ) {
         }
         catch {
             my $error;
-            if ( $_->isa( 'Koha::Exceptions::Ill::NoTargetEmail' ) ) {
+            if ( ref($_) eq 'Koha::Exceptions::Ill::NoTargetEmail' ) {
                 $error = 'no_target_email';
             }
-            elsif ( $_->isa( 'Koha::Exceptions::Ill::NoLibraryEmail' ) ) {
+            elsif ( ref($_) eq 'Koha::Exceptions::Ill::NoLibraryEmail' ) {
                 $error = 'no_library_email';
             }
             else {
