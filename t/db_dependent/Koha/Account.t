@@ -33,11 +33,12 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'outstanding_debits() tests' => sub {
 
-    plan tests => 13;
+    plan tests => 22;
 
     $schema->storage->txn_begin;
 
-    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $account = $patron->account;
 
     my @generated_lines;
     push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
@@ -45,15 +46,18 @@ subtest 'outstanding_debits() tests' => sub {
     push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
     push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4 })->store;
 
-    my $account = $patron->account;
-    my $lines   = $account->outstanding_debits();
+    my $lines     = $account->outstanding_debits();
+    my @lines_arr = $account->outstanding_debits();
 
+    is( ref($lines), 'Koha::Account::Lines', 'Called in scalar context, outstanding_debits returns a Koha::Account::Lines object' );
     is( $lines->total_outstanding, 10, 'Outstandig debits total is correctly calculated' );
 
     my $i = 0;
     foreach my $line ( @{ $lines->as_list } ) {
         my $fetched_line = Koha::Account::Lines->find( $generated_lines[$i]->id );
         is_deeply( $line->unblessed, $fetched_line->unblessed, "Fetched line matches the generated one ($i)" );
+        is_deeply( $lines_arr[$i]->unblessed, $fetched_line->unblessed, "Fetched line matches the generated one ($i)" );
+        is( ref($lines_arr[$i]), 'Koha::Account::Line', 'outstanding_debits returns a list of Koha::Account::Line objects in list context' );
         $i++;
     }
 
@@ -91,7 +95,7 @@ subtest 'outstanding_debits() tests' => sub {
 
 subtest 'outstanding_credits() tests' => sub {
 
-    plan tests => 8;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -104,14 +108,18 @@ subtest 'outstanding_credits() tests' => sub {
     push @generated_lines, $account->add_credit({ amount => 3 });
     push @generated_lines, $account->add_credit({ amount => 4 });
 
-    my $lines = $account->outstanding_credits();
+    my $lines     = $account->outstanding_credits();
+    my @lines_arr = $account->outstanding_credits();
 
+    is( ref($lines), 'Koha::Account::Lines', 'Called in scalar context, outstanding_credits returns a Koha::Account::Lines object' );
     is( $lines->total_outstanding, -10, 'Outstandig credits total is correctly calculated' );
 
     my $i = 0;
     foreach my $line ( @{ $lines->as_list } ) {
         my $fetched_line = Koha::Account::Lines->find( $generated_lines[$i]->id );
         is_deeply( $line->unblessed, $fetched_line->unblessed, "Fetched line matches the generated one ($i)" );
+        is_deeply( $lines_arr[$i]->unblessed, $fetched_line->unblessed, "Fetched line matches the generated one ($i)" );
+        is( ref($lines_arr[$i]), 'Koha::Account::Line', 'outstanding_debits returns a list of Koha::Account::Line objects in list context' );
         $i++;
     }
 
