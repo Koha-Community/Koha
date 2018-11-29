@@ -144,7 +144,7 @@ if (not $biblios and not $authorities) {
     die $msg;
 }
 
-our @tables_allowed_for_select = ( 'biblioitems', 'items', 'biblio' );
+our @tables_allowed_for_select = ( 'biblioitems', 'items', 'biblio', 'biblio_metadata' );
 unless ( grep { /^$table$/ } @tables_allowed_for_select ) {
     die "Cannot specify -t|--table with value '$table'. Only "
       . ( join ', ', @tables_allowed_for_select )
@@ -917,7 +917,7 @@ Parameters:
                             to wait for the lock to free and then continue
                             processing the rebuild request,
 
-    --table                 specify a table (can be items, biblioitems or biblio) to retrieve biblionumber to index.
+    --table                 specify a table (can be items, biblioitems, biblio, biblio_metadata) to retrieve biblionumber to index.
                             biblioitems is the default value.
 
     --help or -h            show this message.
