@@ -62,13 +62,9 @@ sub get_search_groups {
 
     my $field = $interface eq 'staff' ? 'ft_search_groups_staff' : 'ft_search_groups_opac';
 
-    my @search_groups = $self->search( { $field => 1 } );
+    my $search_groups = $self->search( { $field => 1 } );
 
-    return unless @search_groups;
-
-    my @children = map { $_->children() } @search_groups;
-
-    return @children;
+    return wantarray ? $search_groups->as_list : $search_groups;
 }
 
 =head3 type
