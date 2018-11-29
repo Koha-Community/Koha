@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 14;
+use Test::More tests => 15;
 use Test::Warn;
 
 use Koha::Authority::Types;
@@ -252,4 +252,30 @@ subtest '->is_paged and ->pager tests' => sub {
        'Koha::Objects->pager returns a valid DBIx::Class object' );
 
     $schema->storage->txn_rollback;
-}
+};
+
+subtest '->search() tests' => sub {
+
+    plan tests => 12;
+
+    $schema->storage->txn_begin;
+
+    Koha::Patrons->delete;
+
+    # Create 10 patrons
+    foreach (1..10) {
+        $builder->build_object({ class => 'Koha::Patrons' });
+    }
+
+    my $patrons = Koha::Patrons->search();
+    is( ref($patrons), 'Koha::Patrons', 'search in scalar context returns the Koha::Object-based type' );
+    my @patrons = Koha::Patrons->search();
+    is( scalar @patrons, 10, 'search in list context returns a list of objects' );
+    my $i = 0;
+    foreach (1..10) {
+        is( ref($patrons[$i]), 'Koha::Patron', 'Objects in the list have the singular type' );
+        $i++;
+    }
+
+    $schema->storage->txn_rollback;
+};
