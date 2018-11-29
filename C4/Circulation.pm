@@ -2445,6 +2445,10 @@ sub _FixAccountForLostAndReturned {
 
     ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
 
+    if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {
+        $account->reconcile_balance;
+    }
+
     return ($credit) ? $credit->id : undef;
 }
 
