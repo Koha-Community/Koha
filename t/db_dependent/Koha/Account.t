@@ -269,7 +269,7 @@ subtest 'reconcile_balance' => sub {
         $schema->storage->txn_rollback;
     };
 
-    subtest 'same debit than credit' => sub {
+    subtest 'same debit as credit' => sub {
 
         plan tests => 6;
 

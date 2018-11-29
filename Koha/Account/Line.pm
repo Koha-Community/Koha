@@ -241,4 +241,12 @@ sub _type {
     return 'Accountline';
 }
 
+=head3 object_class (internal)
+
+=cut
+
+sub object_class {
+    return 'Koha::Account::Line';
+}
+
 1;
