@@ -151,12 +151,11 @@ $template->param(sql => $strsth);
 my $sth = $dbh->prepare($strsth);
 $sth->execute(@query_params);
 
-my $ratio_atleast1 = ($ratio >= 1) ? 1 : 0;
 my @reservedata;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $thisratio = $data->{reservecount} / $data->{itemcount};
-    my $ratiocalc = ($thisratio / $ratio);
-    ($thisratio / $ratio) >= 1 or next;  # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
+    my $ratiocalc = $data->{reservecount}/$ratio - $data->{itemcount};
+    $ratiocalc >= 1 or next;  # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
     push(
         @reservedata,
         {
@@ -180,7 +179,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
             itype              => [split('\|', $data->{l_itype})],
             reservecount       => $data->{reservecount},
             itemcount          => $data->{itemcount},
-            ratiocalc          => sprintf( "%.0d", $ratio_atleast1 ? ( $thisratio / $ratio ) : $thisratio ),
+            ratiocalc          => sprintf( "%.0d", $ratiocalc ),
             thisratio => sprintf( "%.2f", $thisratio ),
             thisratio_atleast1 => ( $thisratio >= 1 ) ? 1 : 0,
             listcall           => [split('\|', $data->{listcall})]
@@ -194,7 +193,6 @@ for my $rd ( @reservedata ) {
 }
 
 $template->param(
-    ratio_atleast1  => $ratio_atleast1,
     todaysdate      => $todaysdate,
     from            => $startdate,
     to              => $enddate,
