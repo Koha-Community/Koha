@@ -519,7 +519,9 @@ sub lines {
 
 $account->reconcile_balance();
 
-Find outstanding credits and use them to pay outstanding debits
+Find outstanding credits and use them to pay outstanding debits.
+Currently, this implicitly uses the 'First In First Out' rule for
+applying credits against debits.
 
 =cut
 
