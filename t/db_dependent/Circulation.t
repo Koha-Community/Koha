@@ -27,6 +27,7 @@ use POSIX qw( floor );
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
+use C4::Accounts;
 use C4::Calendar;
 use C4::Circulation;
 use C4::Biblio;
@@ -1976,7 +1977,7 @@ subtest 'AddReturn | is_overdue' => sub {
 
 subtest '_FixAccountForLostAndReturned' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     t::lib::Mocks::mock_preference( 'WhenLostChargeReplacementFee', 1 );
     t::lib::Mocks::mock_preference( 'WhenLostForgiveFine',          0 );
@@ -2279,6 +2280,83 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount - $payment_amount,
             'The patron balance is the difference between the PF and the credit'
         );
+    };
+
+    subtest 'Partial payement, existing debits and AccountAutoReconcile' => sub {
+
+        plan tests => 8;
+
+        my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        my $barcode = 'KD123456793';
+        my $replacement_amount = 100;
+        my $processfee_amount  = 20;
+
+        my $item_type          = $builder->build_object(
+            {   class => 'Koha::ItemTypes',
+                value => {
+                    notforloan         => undef,
+                    rentalcharge       => 0,
+                    defaultreplacecost => undef,
+                    processfee         => 0
+                }
+            }
+        );
+        my ( undef, undef, $item_id ) = AddItem(
+            {   homebranch       => $library->branchcode,
+                holdingbranch    => $library->branchcode,
+                barcode          => $barcode,
+                replacementprice => $replacement_amount,
+                itype            => $item_type->itemtype
+            },
+            $biblionumber
+        );
+
+        AddIssue( $patron->unblessed, $barcode );
+
+        # Simulate item marked as lost
+        ModItem( { itemlost => 1 }, $biblionumber, $item_id );
+        LostItem( $item_id, 1 );
+
+        my $lost_fee_lines = Koha::Account::Lines->search(
+            { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'L' } );
+        is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
+        my $lost_fee_line = $lost_fee_lines->next;
+        is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
+        is( $lost_fee_line->amountoutstanding + 0,
+            $replacement_amount, 'The right L amountountstanding is generated' );
+
+        my $account = $patron->account;
+        is( $account->balance, $replacement_amount, 'Balance is L' );
+
+        # Partially pay fee
+        my $payment_amount = 27;
+        my $payment        = $account->add_credit(
+            {   amount => $payment_amount,
+                type   => 'payment'
+            }
+        );
+        $payment->apply({ debits => $lost_fee_lines->reset, offset_type => 'Payment' });
+
+        is( $account->balance,
+            $replacement_amount - $payment_amount,
+            'Payment applied'
+        );
+
+        # TODO use add_debit when time comes
+        my $manual_debit_amount = 80;
+        C4::Accounts::manualinvoice( $patron->id, undef, undef, 'FU', $manual_debit_amount );
+
+        is( $account->balance, $manual_debit_amount + $replacement_amount - $payment_amount, 'Manual debit applied' );
+
+        t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 1 );
+
+        my $credit_return_id = C4::Circulation::_FixAccountForLostAndReturned( $item_id, $patron->id );
+        my $credit_return = Koha::Account::Lines->find($credit_return_id);
+
+        is( $account->balance, $manual_debit_amount - $payment_amount, 'Balance is PF - payment (CR)' );
+
+        my $manual_debit = Koha::Account::Lines->search({ borrowernumber => $patron->id, accounttype => 'FU' })->next;
+        is( $manual_debit->amountoutstanding + 0, $manual_debit_amount - $payment_amount, 'reconcile_balance was called' );
     };
 };
 
