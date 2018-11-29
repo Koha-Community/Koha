@@ -246,7 +246,11 @@
                                 [% ELSE %]
                                     [% IF ( opac_limit_override ) %]
                                         [% IF ( opac_search_limit ) %]
-                                            <input name="limit" value="[% opac_search_limit | html %]" type="hidden" />
+                                            [% IF ( multibranchlimit = opac_search_limit.match( 'branch:(multibranchlimit-\d+)' ) ) %]
+                                                <input name="branch_group_limit" value="[% multibranchlimit.0 | html %]" type="hidden" />
+                                            [% ELSE %]
+                                                <input name="limit" value="[% opac_search_limit | html %]" type="hidden" />
+                                            [% END %]
                                         [% END %]
                                     [% ELSE %]
                                         [% IF ( mylibraryfirst ) %]
