@@ -428,14 +428,12 @@ my $lines = Koha::Account->new({ patron_id => $patron_id })->outstanding_debits;
 sub outstanding_debits {
     my ($self) = @_;
 
-    my $lines = $self->lines->search(
+    return $self->lines->search(
         {
             amount            => { '>' => 0 },
             amountoutstanding => { '>' => 0 }
         }
     );
-
-    return $lines;
 }
 
 =head3 outstanding_credits
@@ -447,14 +445,12 @@ my $lines = Koha::Account->new({ patron_id => $patron_id })->outstanding_credits
 sub outstanding_credits {
     my ($self) = @_;
 
-    my $lines = $self->lines->search(
+    return $self->lines->search(
         {
             amount            => { '<' => 0 },
             amountoutstanding => { '<' => 0 }
         }
     );
-
-    return $lines;
 }
 
 =head3 non_issues_charges
