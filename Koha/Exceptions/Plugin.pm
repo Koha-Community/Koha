@@ -17,12 +17,7 @@ package Koha::Exceptions::Plugin;
 
 use Modern::Perl;
 
-use Koha::Exceptions::Exception;
-
 use Exception::Class (
-    'Koha::Exceptions::Plugin' => {
-        isa         => 'Koha::Exceptions::Exception',
-    },
     'Koha::Exceptions::Plugin::ForbiddenAction' => {
         isa         => 'Koha::Exceptions::Plugin',
         description => 'The plugin is trying to do something it is not allowed to'
