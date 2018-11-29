@@ -4193,7 +4193,7 @@ CREATE TABLE illrequests (
     CONSTRAINT `illrequests_bcfk_2`
       FOREIGN KEY (`branchcode`)
       REFERENCES `branches` (`branchcode`)
-      ON UPDATE CASCADE ON DELETE CASCADE
+      ON UPDATE CASCADE ON DELETE CASCADE,
     CONSTRAINT `illrequests_safk`
       FOREIGN KEY (`status_alias`)
       REFERENCES `authorised_values` (`id`)
