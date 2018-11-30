@@ -12,6 +12,7 @@ use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
 use Socket qw(:crlf);
 use IO::Handle;
+use List::Util qw(first);
 
 use C4::SIP::Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
 use C4::SIP::Sip::Checksum qw(checksum);
@@ -57,7 +58,13 @@ sub timestamp {
 #    return constructed field value
 #
 sub add_field {
-    my ($field_id, $value) = @_;
+    my ($field_id, $value, $server) = @_;
+
+    if ( my $hide_fields = $server->{account}->{hide_fields} ) {
+        my @fields = split( ',', $hide_fields );
+        return q{} if first { $_ eq $field_id } @fields;
+    }
+
     my ($i, $ent);
 
     if (!defined($value)) {
@@ -86,6 +93,11 @@ sub add_field {
 #
 sub maybe_add {
     my ($fid, $value, $server) = @_;
+
+    if ( my $hide_fields = $server->{account}->{hide_fields} ) {
+        my @fields = split( ',', $hide_fields );
+        return q{} if first { $_ eq $fid } @fields;
+    }
 
     if ( $fid eq FID_SCREEN_MSG && $server->{account}->{screen_msg_regex} ) {
         foreach my $regex (

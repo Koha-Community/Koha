@@ -248,7 +248,7 @@ sub fee_amount {
     if ( $self->{fines} ) {
         return $self->{fines};
     }
-    return;
+    return 0;
 }
 
 sub fines_amount {

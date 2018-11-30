@@ -422,28 +422,28 @@ sub build_patron_status {
 
         $resp .= patron_status_string($patron);
         $resp .= $lang . timestamp();
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ) );
+        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ), $server );
 
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
-        $resp .= add_field( FID_PATRON_ID, $patron->id );
+        $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
 
         if ( $protocol_version >= 2 ) {
-            $resp .= add_field( FID_VALID_PATRON, 'Y' );
+            $resp .= add_field( FID_VALID_PATRON, 'Y', $server );
 
             # Patron password is a required field.
-            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool($password_rc) );
-            $resp .= maybe_add( FID_CURRENCY, $patron->currency );
-            $resp .= maybe_add( FID_FEE_AMT,  $patron->fee_amount );
+            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool($password_rc), $server );
+            $resp .= maybe_add( FID_CURRENCY, $patron->currency, $server );
+            $resp .= maybe_add( FID_FEE_AMT,  $patron->fee_amount, $server );
         }
 
         my $msg = $patron->screen_msg;
         $msg .= ' -- '. INVALID_PW if $patron_pwd && !$password_rc;
-        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server, $server );
 
         $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server )
           if ( $server->{account}->{send_patron_home_library_in_af} );
-        $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
+        $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line, $server );
 
         $resp .= $patron->build_patron_attributes_string( $server );
 
@@ -453,19 +453,19 @@ sub build_patron_status {
 
         # no personal name, and is invalid (if we're using 2.00)
         $resp .= 'YYYY' . ( ' ' x 10 ) . $lang . timestamp();
-        $resp .= add_field( FID_PERSONAL_NAME, '' );
+        $resp .= add_field( FID_PERSONAL_NAME, '', $server );
 
         # the patron ID is invalid, but it's a required field, so
         # just echo it back
-        $resp .= add_field( FID_PATRON_ID, $fields->{ (FID_PATRON_ID) } );
+        $resp .= add_field( FID_PATRON_ID, $fields->{ (FID_PATRON_ID) }, $server );
 
         ( $protocol_version >= 2 )
-          and $resp .= add_field( FID_VALID_PATRON, 'N' );
+          and $resp .= add_field( FID_VALID_PATRON, 'N', $server );
 
-        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server, $server );
     }
 
-    $resp .= add_field( FID_INST_ID, $fields->{ (FID_INST_ID) } );
+    $resp .= add_field( FID_INST_ID, $fields->{ (FID_INST_ID) }, $server );
     return $resp;
 }
 
@@ -537,25 +537,25 @@ sub handle_checkout {
         $resp .= timestamp;
 
         # Now for the variable fields
-        $resp .= add_field( FID_INST_ID,   $inst );
-        $resp .= add_field( FID_PATRON_ID, $patron_id );
-        $resp .= add_field( FID_ITEM_ID,   $item_id );
-        $resp .= add_field( FID_TITLE_ID,  $item->title_id );
+        $resp .= add_field( FID_INST_ID,   $inst, $server );
+        $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
+        $resp .= add_field( FID_ITEM_ID,   $item_id, $server );
+        $resp .= add_field( FID_TITLE_ID,  $item->title_id, $server );
         if ( $item->due_date ) {
-            $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ) );
+            $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ), $server );
         } else {
-            $resp .= add_field( FID_DUE_DATE, q{} );
+            $resp .= add_field( FID_DUE_DATE, q{}, $server );
         }
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
-        $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
+        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
         if ( $protocol_version >= 2 ) {
             if ( $ils->supports('security inhibit') ) {
-                $resp .= add_field( FID_SECURITY_INHIBIT, $status->security_inhibit );
+                $resp .= add_field( FID_SECURITY_INHIBIT, $status->security_inhibit, $server );
             }
-            $resp .= maybe_add( FID_MEDIA_TYPE, $item->sip_media_type );
-            $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties );
+            $resp .= maybe_add( FID_MEDIA_TYPE, $item->sip_media_type, $server );
+            $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties, $server );
 
         }
     }
@@ -566,30 +566,30 @@ sub handle_checkout {
         # Checkout Response: not ok, no renewal, don't know mag. media,
         # no desensitize
         $resp = sprintf( "120NUN%s", timestamp );
-        $resp .= add_field( FID_INST_ID,   $inst );
-        $resp .= add_field( FID_PATRON_ID, $patron_id );
-        $resp .= add_field( FID_ITEM_ID,   $item_id );
+        $resp .= add_field( FID_INST_ID,   $inst, $server );
+        $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
+        $resp .= add_field( FID_ITEM_ID,   $item_id, $server );
 
         # If the item is valid, provide the title, otherwise
         # leave it blank
-        $resp .= add_field( FID_TITLE_ID, $item ? $item->title_id : '' );
+        $resp .= add_field( FID_TITLE_ID, $item ? $item->title_id : '', $server );
 
         # Due date is required.  Since it didn't get checked out,
         # it's not due, so leave the date blank
-        $resp .= add_field( FID_DUE_DATE, '' );
+        $resp .= add_field( FID_DUE_DATE, '', $server );
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
-        $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
+        $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
         if ( $protocol_version >= 2 ) {
 
             # Is the patron ID valid?
-            $resp .= add_field( FID_VALID_PATRON, sipbool($patron) );
+            $resp .= add_field( FID_VALID_PATRON, sipbool($patron), $server );
 
             if ( $patron && exists( $fields->{FID_PATRON_PWD} ) ) {
 
                 # Password provided, so we can tell if it was valid or not
-                $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password( $fields->{ (FID_PATRON_PWD) } ) ) );
+                $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password( $fields->{ (FID_PATRON_PWD) } ) ), $server );
             }
         }
     }
@@ -598,10 +598,10 @@ sub handle_checkout {
 
         # Financials : return irrespective of ok status
         if ( $status->fee_amount ) {
-            $resp .= add_field( FID_FEE_AMT, $status->fee_amount );
-            $resp .= maybe_add( FID_CURRENCY,       $status->sip_currency );
-            $resp .= maybe_add( FID_FEE_TYPE,       $status->sip_fee_type );
-            $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id );
+            $resp .= add_field( FID_FEE_AMT, $status->fee_amount, $server );
+            $resp .= maybe_add( FID_CURRENCY,       $status->sip_currency, $server );
+            $resp .= maybe_add( FID_FEE_TYPE,       $status->sip_fee_type, $server );
+            $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id, $server );
         }
     }
 
@@ -655,27 +655,28 @@ sub handle_checkin {
 
     $resp .= $status->alert ? 'Y' : 'N';
     $resp .= timestamp;
-    $resp .= add_field( FID_INST_ID, $inst_id );
-    $resp .= add_field( FID_ITEM_ID, $item_id );
+    $resp .= add_field( FID_INST_ID, $inst_id, $server );
+    $resp .= add_field( FID_ITEM_ID, $item_id, $server );
 
     if ($item) {
-        $resp .= add_field( FID_PERM_LOCN, $item->permanent_location );
-        $resp .= maybe_add( FID_TITLE_ID, $item->title_id );
+        $resp .= add_field( FID_PERM_LOCN, $item->permanent_location, $server );
+        $resp .= maybe_add( FID_TITLE_ID, $item->title_id, $server );
     }
 
     if ( $protocol_version >= 2 ) {
-        $resp .= maybe_add( FID_SORT_BIN, $status->sort_bin );
+        $resp .= maybe_add( FID_SORT_BIN, $status->sort_bin, $server );
         if ($patron) {
-            $resp .= add_field( FID_PATRON_ID, $patron->id );
+            $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
         }
         if ($item) {
-            $resp .= maybe_add( FID_MEDIA_TYPE,           $item->sip_media_type );
-            $resp .= maybe_add( FID_ITEM_PROPS,           $item->sip_item_properties );
-            $resp .= maybe_add( FID_COLLECTION_CODE,      $item->collection_code );
-            $resp .= maybe_add( FID_CALL_NUMBER,          $item->call_number );
-            $resp .= add_field( FID_DESTINATION_LOCATION, $item->destination_loc ) if ( $item->destination_loc || $server->{account}->{ct_always_send} );
-            $resp .= maybe_add( FID_HOLD_PATRON_ID,       $item->hold_patron_bcode );
-            $resp .= maybe_add( FID_HOLD_PATRON_NAME,     $item->hold_patron_name( $server->{account}->{da_field_template} ) );
+$resp .= maybe_add( FID_MEDIA_TYPE,           $item->sip_media_type,      $server );
+$resp .= maybe_add( FID_ITEM_PROPS,           $item->sip_item_properties, $server );
+$resp .= maybe_add( FID_COLLECTION_CODE,      $item->collection_code,     $server );
+$resp .= maybe_add( FID_CALL_NUMBER,          $item->call_number,         $server );
+$resp .= maybe_add( FID_HOLD_PATRON_ID,       $item->hold_patron_bcode,   $server );
+$resp .= add_field( FID_DESTINATION_LOCATION, $item->destination_loc,     $server ) if ( $item->destination_loc || $server->{account}->{ct_always_send} );
+$resp .= maybe_add( FID_HOLD_PATRON_NAME,     $item->hold_patron_name( $server->{account}->{da_field_template} ), $server );
+
             if ( $status->hold and $status->hold->{branchcode} ne $item->destination_loc ) {
                 warn 'SIP hold mismatch: $status->hold->{branchcode}=' . $status->hold->{branchcode} . '; $item->destination_loc=' . $item->destination_loc;
 
@@ -685,12 +686,12 @@ sub handle_checkin {
     }
 
     if ( $status->alert && $status->alert_type ) {
-        $resp .= maybe_add( FID_ALERT_TYPE, $status->alert_type );
+        $resp .= maybe_add( FID_ALERT_TYPE, $status->alert_type, $server );
     } elsif ( $server->{account}->{cv_send_00_on_success} ) {
-        $resp .= add_field( FID_ALERT_TYPE, '00' );
+        $resp .= add_field( FID_ALERT_TYPE, '00', $server );
     }
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
-    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
+    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -915,7 +916,7 @@ sub summary_info {
 
     syslog( "LOG_DEBUG", "summary_info: list = (%s)", join( ", ", @{$itemlist} ) );
     foreach my $i ( @{$itemlist} ) {
-        $resp .= add_field( $fid, $i->{barcode} );
+        $resp .= add_field( $fid, $i->{barcode}, $server );
     }
 
     return $resp;
@@ -952,19 +953,19 @@ sub handle_patron_info {
         $resp .= add_count( 'patron_info/recall_items',  scalar @{ $patron->recall_items } );
         $resp .= add_count( 'patron_info/unavail_holds', scalar @{ $patron->unavail_holds } );
 
-        $resp .= add_field( FID_INST_ID, ( $ils->institution_id || 'SIP2' ) );
+        $resp .= add_field( FID_INST_ID, ( $ils->institution_id || 'SIP2' ), $server );
 
         # while the patron ID we got from the SC is valid, let's
         # use the one returned from the ILS, just in case...
-        $resp .= add_field( FID_PATRON_ID,     $patron->id );
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ) );
+        $resp .= add_field( FID_PATRON_ID,     $patron->id, $server );
+        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ), $server );
 
         # TODO: add code for the fields
         #   hold items limit
         #   overdue items limit
         #   charged items limit
 
-        $resp .= add_field( FID_VALID_PATRON, 'Y' );
+        $resp .= add_field( FID_VALID_PATRON, 'Y', $server );
         my $password_rc;
         if ( defined($patron_pwd) ) {
 
@@ -974,12 +975,12 @@ sub handle_patron_info {
             } else {
                 $password_rc = $patron->check_password($patron_pwd);
             }
-            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $password_rc ) );
+            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $password_rc ), $server );
         }
 
-        $resp .= maybe_add( FID_CURRENCY, $patron->currency );
-        $resp .= maybe_add( FID_FEE_AMT,  $patron->fee_amount );
-        $resp .= add_field( FID_FEE_LMT, $patron->fee_limit );
+        $resp .= maybe_add( FID_CURRENCY, $patron->currency, $server );
+        $resp .= maybe_add( FID_FEE_AMT,  $patron->fee_amount, $server );
+        $resp .= add_field( FID_FEE_LMT, $patron->fee_limit, $server );
 
         # TODO: zero or more item details for 2.0 can go here:
         #          hold_items
@@ -990,27 +991,27 @@ sub handle_patron_info {
 
         $resp .= summary_info( $ils, $patron, $summary, $start, $end, $server );
 
-        $resp .= maybe_add( FID_HOME_ADDR,  $patron->address );
-        $resp .= maybe_add( FID_EMAIL,      $patron->email_addr );
-        $resp .= maybe_add( FID_HOME_PHONE, $patron->home_phone );
+        $resp .= maybe_add( FID_HOME_ADDR,  $patron->address, $server );
+        $resp .= maybe_add( FID_EMAIL,      $patron->email_addr, $server );
+        $resp .= maybe_add( FID_HOME_PHONE, $patron->home_phone, $server );
 
         # SIP 2.0 extensions used by Envisionware
         # Other terminals will ignore unrecognized fields (unrecognized field identifiers)
-        $resp .= maybe_add( FID_PATRON_BIRTHDATE, $patron->birthdate );
-        $resp .= maybe_add( FID_PATRON_CLASS,     $patron->ptype );
+        $resp .= maybe_add( FID_PATRON_BIRTHDATE, $patron->birthdate, $server );
+        $resp .= maybe_add( FID_PATRON_CLASS,     $patron->ptype, $server );
 
         # Custom protocol extension to report patron internet privileges
-        $resp .= maybe_add( FID_INET_PROFILE, $patron->inet_privileges );
+        $resp .= maybe_add( FID_INET_PROFILE, $patron->inet_privileges, $server );
 
         my $msg = $patron->screen_msg;
         if( defined( $patron_pwd ) && !$password_rc ) {
             $msg .= ' -- ' . INVALID_PW;
         }
-        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $msg, $server, $server );
         if ( $server->{account}->{send_patron_home_library_in_af} ) {
             $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server);
         }
-        $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
+        $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line, $server );
 
         $resp .= $patron->build_patron_attributes_string( $server );
     } else {
@@ -1021,16 +1022,16 @@ sub handle_patron_info {
         $resp .= 'YYYY' . ( ' ' x 10 ) . $lang . timestamp();
         $resp .= '0000' x 6;
 
-        $resp .= add_field( FID_INST_ID, ( $ils->institution_id || 'SIP2' ) );
+        $resp .= add_field( FID_INST_ID, ( $ils->institution_id || 'SIP2' ), $server );
 
         # patron ID is invalid, but field is required, so just echo it back
-        $resp .= add_field( FID_PATRON_ID, $fields->{ (FID_PATRON_ID) } );
-        $resp .= add_field( FID_PERSONAL_NAME, '' );
+        $resp .= add_field( FID_PATRON_ID, $fields->{ (FID_PATRON_ID) }, $server );
+        $resp .= add_field( FID_PERSONAL_NAME, '', $server );
 
         if ( $protocol_version >= 2 ) {
-            $resp .= add_field( FID_VALID_PATRON, 'N' );
+            $resp .= add_field( FID_VALID_PATRON, 'N', $server );
         }
-        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, INVALID_CARD, $server, $server );
     }
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1054,11 +1055,11 @@ sub handle_end_patron_session {
     $resp .= $status ? 'Y' : 'N';
     $resp .= timestamp();
 
-    $resp .= add_field( FID_INST_ID, $server->{ils}->institution );
-    $resp .= add_field( FID_PATRON_ID, $fields->{ (FID_PATRON_ID) } );
+    $resp .= add_field( FID_INST_ID, $server->{ils}->institution, $server );
+    $resp .= add_field( FID_PATRON_ID, $fields->{ (FID_PATRON_ID) }, $server );
 
-    $resp .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server );
-    $resp .= maybe_add( FID_PRINT_LINE, $print_line );
+    $resp .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server, $server );
+    $resp .= maybe_add( FID_PRINT_LINE, $print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -1092,11 +1093,11 @@ sub handle_fee_paid {
     $status = $ils->pay_fee( $patron_id, $patron_pwd, $fee_amt, $fee_type, $pay_type, $fee_id, $trans_id, $currency, $is_writeoff, $disallow_overpayment );
 
     $resp .= ( $status->ok ? 'Y' : 'N' ) . timestamp;
-    $resp .= add_field( FID_INST_ID,   $inst_id );
-    $resp .= add_field( FID_PATRON_ID, $patron_id );
-    $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id );
-    $resp .= maybe_add( FID_SCREEN_MSG,     $status->screen_msg, $server );
-    $resp .= maybe_add( FID_PRINT_LINE,     $status->print_line );
+    $resp .= add_field( FID_INST_ID,   $inst_id, $server );
+    $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
+    $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG,     $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_PRINT_LINE,     $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -1126,10 +1127,10 @@ sub handle_item_information {
         $resp .= timestamp;
 
         # Just echo back the invalid item id
-        $resp .= add_field( FID_ITEM_ID, $fields->{ (FID_ITEM_ID) } );
+        $resp .= add_field( FID_ITEM_ID, $fields->{ (FID_ITEM_ID) }, $server );
 
         # title id is required, but we don't have one
-        $resp .= add_field( FID_TITLE_ID, '' );
+        $resp .= add_field( FID_TITLE_ID, '', $server );
     } else {
 
         # Valid Item ID, send the good stuff
@@ -1138,35 +1139,35 @@ sub handle_item_information {
         $resp .= $item->sip_fee_type;
         $resp .= timestamp;
 
-        $resp .= add_field( FID_ITEM_ID,  $item->id );
-        $resp .= add_field( FID_TITLE_ID, $item->title_id );
+        $resp .= add_field( FID_ITEM_ID,  $item->id, $server );
+        $resp .= add_field( FID_TITLE_ID, $item->title_id, $server );
 
-        $resp .= maybe_add( FID_MEDIA_TYPE,   $item->sip_media_type );
-        $resp .= maybe_add( FID_PERM_LOCN,    $item->permanent_location );
-        $resp .= maybe_add( FID_CURRENT_LOCN, $item->current_location );
-        $resp .= maybe_add( FID_ITEM_PROPS,   $item->sip_item_properties );
+        $resp .= maybe_add( FID_MEDIA_TYPE,   $item->sip_media_type, $server );
+        $resp .= maybe_add( FID_PERM_LOCN,    $item->permanent_location, $server );
+        $resp .= maybe_add( FID_CURRENT_LOCN, $item->current_location, $server );
+        $resp .= maybe_add( FID_ITEM_PROPS,   $item->sip_item_properties, $server );
 
         if ( ( $i = $item->fee ) != 0 ) {
-            $resp .= add_field( FID_CURRENCY, $item->fee_currency );
-            $resp .= add_field( FID_FEE_AMT,  $i );
+            $resp .= add_field( FID_CURRENCY, $item->fee_currency, $server );
+            $resp .= add_field( FID_FEE_AMT,  $i, $server );
         }
-        $resp .= maybe_add( FID_OWNER, $item->owner );
+        $resp .= maybe_add( FID_OWNER, $item->owner, $server );
 
         if ( ( $i = scalar @{ $item->hold_queue } ) > 0 ) {
-            $resp .= add_field( FID_HOLD_QUEUE_LEN, $i );
+            $resp .= add_field( FID_HOLD_QUEUE_LEN, $i, $server );
         }
         if ( $item->due_date ) {
-            $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ) );
+            $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ), $server );
         }
         if ( ( $i = $item->recall_date ) != 0 ) {
-            $resp .= add_field( FID_RECALL_DATE, timestamp($i) );
+            $resp .= add_field( FID_RECALL_DATE, timestamp($i), $server );
         }
         if ( ( $i = $item->hold_pickup_date ) != 0 ) {
-            $resp .= add_field( FID_HOLD_PICKUP_DATE, timestamp($i) );
+            $resp .= add_field( FID_HOLD_PICKUP_DATE, timestamp($i), $server );
         }
 
-        $resp .= maybe_add( FID_SCREEN_MSG, $item->screen_msg, $server );
-        $resp .= maybe_add( FID_PRINT_LINE, $item->print_line );
+        $resp .= maybe_add( FID_SCREEN_MSG, $item->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_PRINT_LINE, $item->print_line, $server );
     }
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
@@ -1201,7 +1202,7 @@ sub handle_item_status_update {
         # Invalid Item ID
         $resp .= '0';
         $resp .= timestamp;
-        $resp .= add_field( FID_ITEM_ID, $item_id );
+        $resp .= add_field( FID_ITEM_ID, $item_id, $server );
     } else {
 
         # Valid Item ID
@@ -1211,13 +1212,13 @@ sub handle_item_status_update {
         $resp .= $status->ok ? '1' : '0';
         $resp .= timestamp;
 
-        $resp .= add_field( FID_ITEM_ID,  $item->id );
-        $resp .= add_field( FID_TITLE_ID, $item->title_id );
-        $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties );
+        $resp .= add_field( FID_ITEM_ID,  $item->id, $server );
+        $resp .= add_field( FID_TITLE_ID, $item->title_id, $server );
+        $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties, $server );
     }
 
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
-    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -1244,10 +1245,10 @@ sub handle_patron_enable {
 
         # Invalid patron ID
         $resp .= 'YYYY' . ( ' ' x 10 ) . '000' . timestamp();
-        $resp .= add_field( FID_PATRON_ID,        $patron_id );
-        $resp .= add_field( FID_PERSONAL_NAME,    '' );
-        $resp .= add_field( FID_VALID_PATRON,     'N' );
-        $resp .= add_field( FID_VALID_PATRON_PWD, 'N' );
+        $resp .= add_field( FID_PATRON_ID,        $patron_id, $server );
+        $resp .= add_field( FID_PERSONAL_NAME,    '', $server );
+        $resp .= add_field( FID_VALID_PATRON,     'N', $server );
+        $resp .= add_field( FID_VALID_PATRON_PWD, 'N', $server );
     } else {
 
         # valid patron
@@ -1259,17 +1260,17 @@ sub handle_patron_enable {
         $resp .= patron_status_string($patron);
         $resp .= $patron->language . timestamp();
 
-        $resp .= add_field( FID_PATRON_ID,     $patron->id );
-        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ) );
+        $resp .= add_field( FID_PATRON_ID,     $patron->id, $server );
+        $resp .= add_field( FID_PERSONAL_NAME, $patron->name( $server->{account}->{ae_field_template} ), $server );
         if ( defined($patron_pwd) ) {
-            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ) );
+            $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $patron->check_password($patron_pwd) ), $server );
         }
-        $resp .= add_field( FID_VALID_PATRON, 'Y' );
-        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg, $server );
-        $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
+        $resp .= add_field( FID_VALID_PATRON, 'Y', $server );
+        $resp .= maybe_add( FID_SCREEN_MSG, $patron->screen_msg, $server, $server );
+        $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line, $server );
     }
 
-    $resp .= add_field( FID_INST_ID, $ils->institution );
+    $resp .= add_field( FID_INST_ID, $ils->institution, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -1316,23 +1317,23 @@ sub handle_hold {
     $resp .= timestamp;
 
     if ( $status->ok ) {
-        $resp .= add_field( FID_PATRON_ID, $status->patron->id );
+        $resp .= add_field( FID_PATRON_ID, $status->patron->id, $server );
 
         ( $status->expiration_date )
-          and $resp .= maybe_add( FID_EXPIRATION, timestamp( $status->expiration_date ) );
-        $resp .= maybe_add( FID_QUEUE_POS,   $status->queue_position );
-        $resp .= maybe_add( FID_PICKUP_LOCN, $status->pickup_location );
-        $resp .= maybe_add( FID_ITEM_ID,     $status->item->id );
-        $resp .= maybe_add( FID_TITLE_ID,    $status->item->title_id );
+          and $resp .= maybe_add( FID_EXPIRATION, timestamp( $status->expiration_date ), $server );
+        $resp .= maybe_add( FID_QUEUE_POS,   $status->queue_position, $server );
+        $resp .= maybe_add( FID_PICKUP_LOCN, $status->pickup_location, $server );
+        $resp .= maybe_add( FID_ITEM_ID,     $status->item->id, $server );
+        $resp .= maybe_add( FID_TITLE_ID,    $status->item->title_id, $server );
     } else {
 
         # Not ok.  still need required fields
-        $resp .= add_field( FID_PATRON_ID, $patron_id );
+        $resp .= add_field( FID_PATRON_ID, $patron_id, $server );
     }
 
-    $resp .= add_field( FID_INST_ID, $ils->institution );
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
-    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
+    $resp .= add_field( FID_INST_ID, $ils->institution, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -1379,19 +1380,19 @@ sub handle_renew {
         }
         $resp .= sipbool( $status->desensitize );
         $resp .= timestamp;
-        $resp .= add_field( FID_PATRON_ID, $patron->id );
-        $resp .= add_field( FID_ITEM_ID, $item->id );
-        $resp .= add_field( FID_TITLE_ID, $item->title_id );
+        $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
+        $resp .= add_field( FID_ITEM_ID, $item->id, $server );
+        $resp .= add_field( FID_TITLE_ID, $item->title_id, $server );
         if ( $item->due_date ) {
-            $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ) );
+            $resp .= add_field( FID_DUE_DATE, timestamp( $item->due_date ), $server );
         } else {
-            $resp .= add_field( FID_DUE_DATE, q{} );
+            $resp .= add_field( FID_DUE_DATE, q{}, $server );
         }
         if ( $ils->supports('security inhibit') ) {
-            $resp .= add_field( FID_SECURITY_INHIBIT, $status->security_inhibit );
+            $resp .= add_field( FID_SECURITY_INHIBIT, $status->security_inhibit, $server );
         }
-        $resp .= add_field( FID_MEDIA_TYPE, $item->sip_media_type );
-        $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties );
+        $resp .= add_field( FID_MEDIA_TYPE, $item->sip_media_type, $server );
+        $resp .= maybe_add( FID_ITEM_PROPS, $item->sip_item_properties, $server );
     } else {
 
         # renew failed for some reason
@@ -1402,22 +1403,22 @@ sub handle_renew {
         # If we found the patron or the item, the return the ILS
         # information, otherwise echo back the information we received
         # from the terminal
-        $resp .= add_field( FID_PATRON_ID, $patron ? $patron->id     : $patron_id );
-        $resp .= add_field( FID_ITEM_ID,   $item   ? $item->id       : $item_id );
-        $resp .= add_field( FID_TITLE_ID,  $item   ? $item->title_id : $title_id );
-        $resp .= add_field( FID_DUE_DATE,  '' );
+        $resp .= add_field( FID_PATRON_ID, $patron ? $patron->id     : $patron_id, $server );
+        $resp .= add_field( FID_ITEM_ID,   $item   ? $item->id       : $item_id, $server );
+        $resp .= add_field( FID_TITLE_ID,  $item   ? $item->title_id : $title_id, $server );
+        $resp .= add_field( FID_DUE_DATE,  '', $server );
     }
 
     if ( $status->fee_amount ) {
-        $resp .= add_field( FID_FEE_AMT, $status->fee_amount );
-        $resp .= maybe_add( FID_CURRENCY,       $status->sip_currency );
-        $resp .= maybe_add( FID_FEE_TYPE,       $status->sip_fee_type );
-        $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id );
+        $resp .= add_field( FID_FEE_AMT, $status->fee_amount, $server );
+        $resp .= maybe_add( FID_CURRENCY,       $status->sip_currency, $server );
+        $resp .= maybe_add( FID_FEE_TYPE,       $status->sip_fee_type, $server );
+        $resp .= maybe_add( FID_TRANSACTION_ID, $status->transaction_id, $server );
     }
 
-    $resp .= add_field( FID_INST_ID, $ils->institution );
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
-    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
+    $resp .= add_field( FID_INST_ID, $ils->institution, $server );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -1462,13 +1463,13 @@ sub handle_renew_all {
     }
 
     $resp .= timestamp;
-    $resp .= add_field( FID_INST_ID, $ils->institution );
+    $resp .= add_field( FID_INST_ID, $ils->institution, $server );
 
-    $resp .= join( '', map( add_field( FID_RENEWED_ITEMS,   $_ ), @renewed ) );
-    $resp .= join( '', map( add_field( FID_UNRENEWED_ITEMS, $_ ), @unrenewed ) );
+    $resp .= join( '', map( add_field( FID_RENEWED_ITEMS,   $_ ), @renewed ), $server );
+    $resp .= join( '', map( add_field( FID_UNRENEWED_ITEMS, $_ ), @unrenewed ), $server );
 
-    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
-    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
+    $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server, $server );
+    $resp .= maybe_add( FID_PRINT_LINE, $status->print_line, $server );
 
     $self->write_msg( $resp, undef, $server->{account}->{terminator}, $server->{account}->{encoding} );
 
@@ -1539,7 +1540,7 @@ sub send_acs_status {
     }
 
     # Institution ID
-    $msg .= add_field( FID_INST_ID, $account->{institution} );
+    $msg .= add_field( FID_INST_ID, $account->{institution}, $server );
 
     if ( $protocol_version >= 2 ) {
 
@@ -1556,10 +1557,10 @@ sub send_acs_status {
         if ( length($supported_msgs) < 16 ) {
             syslog( "LOG_ERR", 'send_acs_status: supported messages "%s" too short', $supported_msgs );
         }
-        $msg .= add_field( FID_SUPPORTED_MSGS, $supported_msgs );
+        $msg .= add_field( FID_SUPPORTED_MSGS, $supported_msgs, $server );
     }
 
-    $msg .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server );
+    $msg .= maybe_add( FID_SCREEN_MSG, $screen_msg, $server, $server );
 
     if (   defined( $account->{print_width} )
         && defined($print_line)
@@ -1568,7 +1569,7 @@ sub send_acs_status {
         $print_line = substr( $print_line, 0, $account->{print_width} );
     }
 
-    $msg .= maybe_add( FID_PRINT_LINE, $print_line );
+    $msg .= maybe_add( FID_PRINT_LINE, $print_line, $server );
 
     # Do we want to tell the terminal its location?
 
