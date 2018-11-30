@@ -42,6 +42,7 @@ my $dewey         = $input->param('dewey');
 my $controlnumber = $input->param('controlnumber');
 my $stdid         = $input->param('stdid');
 my $srchany       = $input->param('srchany');
+my $publicationyear = $input->param('publicationyear');
 my $op            = $input->param('op')||'';
 
 my $page            = $input->param('current_page') || 1;
@@ -68,6 +69,7 @@ $template->param(
     biblionumber => $biblionumber,
     dewey        => $dewey,
     subject      => $subject,
+    publicationyear => $publicationyear,
 );
 
 if ( $op ne "do_search" ) {
@@ -111,6 +113,7 @@ my $pars= {
         controlnumber => $controlnumber,
         stdid => $stdid,
         srchany => $srchany,
+        publicationyear => $publicationyear,
 };
 Z3950Search($pars, $template);
 output_html_with_http_headers $input, $cookie, $template->output;
