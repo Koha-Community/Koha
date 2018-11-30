@@ -10,7 +10,7 @@ use CGI qw ( -utf8 );
 use Test::MockObject;
 use Test::MockModule;
 use List::MoreUtils qw/all any none/;
-use Test::More tests => 22;
+use Test::More tests => 26;
 use Test::Warn;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -253,6 +253,34 @@ my $hash2 = hash_password('password');
     );
     my $file_exists = ( -f $template->{filename} ) ? 1 : 0;
     is ( $file_exists, 1, 'The file errors/errorpage.tt should be accessible (contains integers)' );
+
+    # Regression test for env opac search limit override
+    $ENV{"OPAC_SEARCH_LIMIT"} = "branch:CPL";
+    $ENV{"OPAC_LIMIT_OVERRIDE"} = 1;
+
+    ( $template, $loggedinuser, $cookies) = get_template_and_user(
+        {
+            template_name => 'opac-main.tt',
+            query => $query,
+            type => 'opac',
+            authnotrequired => 1,
+        }
+    );
+    is($template->{VARS}->{'opac_name'}, "CPL", "Opac name was set correctly");
+    is($template->{VARS}->{'opac_search_limit'}, "branch:CPL", "Search limit was set correctly");
+
+    $ENV{"OPAC_SEARCH_LIMIT"} = "branch:multibranch-19";
+
+    ( $template, $loggedinuser, $cookies) = get_template_and_user(
+        {
+            template_name => 'opac-main.tt',
+            query => $query,
+            type => 'opac',
+            authnotrequired => 1,
+        }
+    );
+    is($template->{VARS}->{'opac_name'}, "multibranch-19", "Opac name was set correctly");
+    is($template->{VARS}->{'opac_search_limit'}, "branch:multibranch-19", "Search limit was set correctly");
 }
 
 # Check that there is always an OPACBaseURL set.
