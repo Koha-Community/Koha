@@ -90,6 +90,10 @@ if ($add){
         user_id     => $logged_in_user->id
     });
 
+    if ( C4::Context->preference('AccountAutoReconcile') ) {
+        $patron->account->reconcile_balance;
+    }
+
     print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
 
 } else {
