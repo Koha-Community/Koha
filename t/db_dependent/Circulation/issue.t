@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 32;
+use Test::More tests => 33;
 use DateTime::Duration;
 
 use t::lib::Mocks;
@@ -192,16 +192,16 @@ is ($countissue,1,"1 issues have been added");
 $query = " SELECT count(*) FROM accountlines";
 $sth = $dbh->prepare($query);
 $sth->execute;
-my $countaccount = $sth -> fetchrow_array;
+my $countaccount = $sth->fetchrow_array;
 is ($countaccount,0,"0 accountline exists");
 my $checkout = Koha::Checkouts->find( $issue_id1 );
-my $offset = C4::Circulation::AddIssuingCharge( $checkout, 10 );
-is( ref( $offset ), 'Koha::Account::Offset', "An issuing charge has been added" );
-my $charge = Koha::Account::Lines->find( $offset->debit_id );
+my $charge = C4::Circulation::AddIssuingCharge( $checkout, 10 );
+is( ref( $charge ), 'Koha::Account::Line', "An issuing charge has been added" );
 is( $charge->issue_id, $issue_id1, 'Issue id is set correctly for issuing charge' );
-my $account_id = $dbh->last_insert_id( undef, undef, 'accountlines', undef );
+my $offset = Koha::Account::Offsets->find( { debit_id => $charge->id } );
+is( $offset->credit_id, undef, 'Offset was created');
 $sth->execute;
-$countaccount = $sth -> fetchrow_array;
+$countaccount = $sth->fetchrow_array;
 is ($countaccount,1,"1 accountline has been added");
 
 # Test AddRenewal
