@@ -87,6 +87,11 @@ if ($add){
             $template->param( 'ERROR' => $error );
             output_html_with_http_headers $input, $cookie, $template->output;
         } else {
+
+            if ( C4::Context->preference('AccountAutoReconcile') ) {
+                $patron->account->reconcile_balance;
+            }
+
             print $input->redirect("/cgi-bin/koha/members/boraccount.pl?borrowernumber=$borrowernumber");
             exit;
         }
