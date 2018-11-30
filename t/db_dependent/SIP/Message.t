@@ -58,7 +58,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 subtest 'Testing Patron Info Request V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 20;
+    plan tests => 24;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
@@ -251,6 +251,16 @@ sub test_request_patron_info_v2 {
     $msg->handle_patron_info( $server );
     $respcode = substr( $response, 0, 2 );
     check_field( $respcode, $response, FID_PERSONAL_NAME, 'X' . $patron2->{surname} . 'Y', 'Check customized patron name' );
+
+    undef $response;
+    $server->{account}->{hide_fields} = "BD,BE,BF,PB";
+    $msg->handle_patron_info( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_HOME_ADDR, undef, 'Home address successfully stripped from response' );
+    check_field( $respcode, $response, FID_EMAIL, undef, 'Email address successfully stripped from response' );
+    check_field( $respcode, $response, FID_HOME_PHONE, undef, 'Home phone successfully stripped from response' );
+    check_field( $respcode, $response, FID_PATRON_BIRTHDATE, undef, 'Date of birth successfully stripped from response' );
+    $server->{account}->{hide_fields} = "";
 
     # Check empty password and verify CQ again
     $siprequest = PATRON_INFO. 'engYYYYMMDDZZZZHHMMSS'.'Y         '.
