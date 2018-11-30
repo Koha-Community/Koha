@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::Exception;
 
 use Koha::Account;
@@ -27,6 +27,7 @@ use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Items;
 
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -295,3 +296,86 @@ subtest 'Keep account info when a patron is deleted' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'adjust() tests' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    # count logs before any actions
+    my $action_logs = $schema->resultset('ActionLog')->search()->count;
+
+    # Disable logs
+    t::lib::Mocks::mock_preference( 'FinesLog', 0 );
+
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account = $patron->account;
+
+    my $debit_1 = Koha::Account::Line->new(
+        {   borrowernumber    => $patron->id,
+            accounttype       => "F",
+            amount            => 10,
+            amountoutstanding => 10
+        }
+    )->store;
+
+    my $debit_2 = Koha::Account::Line->new(
+        {   borrowernumber    => $patron->id,
+            accounttype       => "FU",
+            amount            => 100,
+            amountoutstanding => 100
+        }
+    )->store;
+
+    my $credit = $account->add_credit( { amount => 40, user_id => $patron->id } );
+
+    throws_ok { $debit_1->adjust( { amount => 50, type => 'bad' } ) }
+    qr/Update type not recognised/, 'Exception thrown for unrecognised type';
+
+    throws_ok { $debit_1->adjust( { amount => 50, type => 'fine_increment' } ) }
+    qr/Update type not allowed on this accounttype/,
+      'Exception thrown for type conflict';
+
+    # Increment an unpaid fine
+    $debit_2->adjust( { amount => 150, type => 'fine_increment' } );
+
+    is( $debit_2->discard_changes->amount * 1, 150, 'Fine amount was updated in full' );
+    is( $debit_2->discard_changes->amountoutstanding * 1, 150, 'Fine amountoutstanding was update in full' );
+
+    my $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
+    is( $offsets->count, 1, 'An offset is generated for the increment' );
+    my $THIS_offset = $offsets->next;
+    is( $THIS_offset->amount * 1, 50, 'Amount was calculated correctly (increment by 50)' );
+    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+
+    is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No log was added' );
+
+    # Update fine to partially paid
+    my $debits = Koha::Account::Lines->search({ accountlines_id => $debit_2->id });
+    $credit->apply( { debits => $debits, offset_type => 'Manual Credit' } );
+
+    is( $debit_2->discard_changes->amount * 1, 150, 'Fine amount unaffected by partial payment' );
+    is( $debit_2->discard_changes->amountoutstanding * 1, 110, 'Fine amountoutstanding updated by partial payment' );
+
+    # Enable logs
+    t::lib::Mocks::mock_preference( 'FinesLog', 1 );
+
+    # Increment the partially paid fine
+    $debit_2->adjust( { amount => 160, type => 'fine_increment' } );
+
+    is( $debit_2->discard_changes->amount * 1, 160, 'Fine amount was updated in full' );
+    is( $debit_2->discard_changes->amountoutstanding * 1, 120, 'Fine amountoutstanding was updated by difference' );
+
+    $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
+    is( $offsets->count, 3, 'An offset is generated for the increment' );
+    $THIS_offset = $offsets->last;
+    is( $THIS_offset->amount * 1, 10, 'Amount was calculated correctly (increment by 10)' );
+    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+
+    is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
+
+    $schema->storage->txn_rollback;
+};
+
+1;
