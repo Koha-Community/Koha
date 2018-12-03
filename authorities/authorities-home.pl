@@ -22,7 +22,7 @@ use warnings;
 
 use CGI qw ( -utf8 );
 use URI::Escape;
-use C4::Auth;
+use POSIX qw( ceil );
 
 use C4::Context;
 use C4::Auth;
@@ -86,6 +86,7 @@ if ( $op eq "do_search" ) {
 
     my $startfrom      = $query->param('startfrom')      || 1;
     my $resultsperpage = $query->param('resultsperpage') || 20;
+    my $offset = ( $startfrom - 1 ) * $resultsperpage + 1;
 
     my $builder = Koha::SearchEngine::QueryBuilder->new(
         { index => $Koha::SearchEngine::AUTHORITIES_INDEX } );
@@ -96,7 +97,7 @@ if ( $op eq "do_search" ) {
         [$value], $authtypecode, $orderby
     );
     my ( $results, $total ) = $searcher->search_auth_compat(
-        $search_query, $startfrom, $resultsperpage
+        $search_query, $offset, $resultsperpage
     );
 
     ( $template, $loggedinuser, $cookie ) = get_template_and_user(
@@ -180,15 +181,19 @@ if ( $op eq "do_search" ) {
 
     $template->param( result => $results ) if $results;
 
+    my $max_result_window = $searcher->max_result_window;
+    my $hits_to_paginate = ($max_result_window && $max_result_window < $total) ? $max_result_window : $total;
+
     $template->param(
         pagination_bar => pagination_bar(
-            $base_url,  int( $total / $resultsperpage ) + 1,
+            $base_url,  ceil( $hits_to_paginate / $resultsperpage ),
             $startfrom, 'startfrom'
         ),
-        total     => $total,
-        from      => $from,
-        to        => $to,
-        isEDITORS => $authtypecode eq 'EDITORS',
+        total            => $total,
+        hits_to_paginate => $hits_to_paginate,
+        from             => $from,
+        to               => $to,
+        isEDITORS        => $authtypecode eq 'EDITORS',
     );
 
 }
