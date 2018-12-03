@@ -49,6 +49,12 @@ my $item_2 = $builder->build({
 my $item_3 = $builder->build({
     source => 'Item',
     value => {
+        barcode => '201200345'
+    }
+});
+my $item_4 = $builder->build({
+    source => 'Item',
+    value => {
         barcode => '2012-0034'
     }
 });
