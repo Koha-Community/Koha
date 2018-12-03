@@ -89,7 +89,7 @@ sub get_barcode {
     my $nextnum;
     my $query = "select max(cast( substring_index(barcode, '-',-1) as signed)) from items where barcode like ?";
     my $sth=C4::Context->dbh->prepare($query);
-    $sth->execute("$args->{year}%");
+    $sth->execute($args->{year} . '-%');
     while (my ($count)= $sth->fetchrow_array) {
         warn "Examining Record: $count" if $DEBUG;
         $nextnum = $count if $count;
