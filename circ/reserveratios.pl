@@ -22,6 +22,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use Date::Calc qw/Today Add_Delta_YM/;
+use POSIX qw( ceil );
 
 use C4::Context;
 use C4::Output;
@@ -154,7 +155,7 @@ $sth->execute(@query_params);
 my @reservedata;
 while ( my $data = $sth->fetchrow_hashref ) {
     my $thisratio = $data->{reservecount} / $data->{itemcount};
-    my $ratiocalc = $data->{reservecount}/$ratio - $data->{itemcount};
+    my $ratiocalc = ceil($data->{reservecount}/$ratio - $data->{itemcount});
     $ratiocalc >= 1 or next;  # TODO: tighter targeting -- get ratio limit into SQL using HAVING clause
     push(
         @reservedata,
