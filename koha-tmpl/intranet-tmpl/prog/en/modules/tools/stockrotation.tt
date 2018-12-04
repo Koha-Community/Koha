@@ -42,10 +42,12 @@
 
 </div>
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
-        <div id="yui-main">
-            <div id="stockrotation" class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
+            <div id="stockrotation">
 
                 [% IF no_op_set %]
 
@@ -56,12 +58,14 @@
                     [% IF existing_rotas.size > 0 %]
                         <table class="rotas_table" role="grid">
                             <thead>
+                                <tr>
                                 <th>Name</th>
                                 <th>Cyclical</th>
                                 <th>Active</th>
                                 <th>Description</th>
                                 <th>Number of items</th>
                                 <th>&nbsp;</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 [% FOREACH rota IN existing_rotas %]
@@ -362,6 +366,7 @@
                         <h3>Manage items assigned to &quot;[% rota.title | html %]&quot;</h3>
                         <table id="sr_manage_items" class="items_table" role="grid">
                             <thead>
+                                <tr>
                                 <th>Barcode</th>
                                 <th>Title</th>
                                 <th>Author</th>
@@ -369,6 +374,7 @@
                                 <th class="NoSearch">In transit</th>
                                 <th class="NoSort">Stages &amp; duration in days<br>(current stage highlighted)</th>
                                 <th class="NoSort">&nbsp;</th>
+                                </tr>
                             </thead>
                             <tbody>
                                 [% FOREACH item IN items %]
@@ -492,28 +498,32 @@
 
                 [% END %]
             </div>
-        </div>
-        <div class="yui-b">
-            [% INCLUDE 'tools-menu.inc' %]
-        </div>
-    </div>
-</div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'tools-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("js/pages/stockrotation.js") | $raw %]
-    <script type="text/javascript">
-    $(document).ready(function() {
-        $('#sr_manage_items').dataTable($.extend(true, {}, dataTablesDefaults, {
-            "autoWidth": false,
-            "aoColumnDefs": [
-                { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                { "bSortable": true, "bSearchable": false, 'aTargets': [ 'NoSearch' ] }
-            ],
-            "sPaginationType": "four_button"
-        }));
-    });
+    <script>
+        $(document).ready(function() {
+            $('#sr_manage_items').dataTable($.extend(true, {}, dataTablesDefaults, {
+                "autoWidth": false,
+                "aoColumnDefs": [
+                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "bSortable": true, "bSearchable": false, 'aTargets': [ 'NoSearch' ] }
+                ],
+                "sPaginationType": "four_button"
+            }));
+        });
     </script>
 [% END %]
 
