@@ -1453,7 +1453,7 @@ sub AddIssue {
                 SendCirculationAlert(
                     {
                         type     => 'CHECKOUT',
-                        item     => $item,
+                        item     => $item->unblessed,
                         borrower => $borrower,
                         branch   => $branch,
                     }
@@ -1823,14 +1823,14 @@ sub AddReturn {
     my $itemnumber = $item->itemnumber;
     my $itemtype = $item->effective_itemtype;
 
-    my $issue  = Koha::Checkouts->find( { itemnumber => $itemnumber } );
+    my $issue  = $item->checkout;
     if ( $issue ) {
-        $patron = Koha::Patrons->find( $issue->borrowernumber )
+        $patron = $issue->patron
             or die "Data inconsistency: barcode $barcode (itemnumber:$itemnumber) claims to be issued to non-existent borrowernumber '" . $issue->borrowernumber . "'\n"
                 . Dumper($issue->unblessed) . "\n";
     } else {
         $messages->{'NotIssued'} = $barcode;
-        ModItem({ onloan => undef }, $item->{biblionumber}, $item->{itemnumber}) if defined $item->{onloan};
+        ModItem({ onloan => undef }, $item->biblionumber, $item->itemnumber) if defined $item->onloan;
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
         $doreturn = 0;
         # No issue, no borrowernumber.  ONLY if $doreturn, *might* you have a $borrower later.
@@ -2616,14 +2616,11 @@ sub CanBookBeRenewed {
     my $renews = 1;
 
     my $item      = Koha::Items->find($itemnumber)      or return ( 0, 'no_item' );
-    my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return ( 0, 'no_checkout' );
+    my $issue = $item->checkout or return ( 0, 'no_checkout' );
     return ( 0, 'onsite_checkout' ) if $issue->onsite_checkout;
     return ( 0, 'item_denied_renewal') if _item_denied_renewal({ item => $item });
 
-
-    $borrowernumber ||= $issue->borrowernumber;
-    my $patron = Koha::Patrons->find( $borrowernumber )
-      or return;
+    my $patron = $issue->patron or return;
 
     my ( $resfound, $resrec, undef ) = C4::Reserves::CheckReserves($itemnumber);
 
@@ -4144,7 +4141,7 @@ sub _item_denied_renewal {
     my $denyingrules = Koha::Config::SysPrefs->find('ItemsDeniedRenewal')->get_yaml_pref_hash();
     return unless $denyingrules;
     foreach my $field (keys %$denyingrules) {
-        my $val = $item->{$field};
+        my $val = $item->$field;
         if( !defined $val) {
             if ( any { !defined $_ }  @{$denyingrules->{$field}} ){
                 return 1;
