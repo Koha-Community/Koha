@@ -714,7 +714,7 @@
                                     [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
                                         <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
                                     [% ELSE %]
-                                        [% MARCNOTE.marcnote FILTER html_line_break | html %]
+                                        [% MARCNOTE.marcnote | html | html_line_break %]
                                     [% END %]
                                     </p>
                                 [% END %]
