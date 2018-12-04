@@ -33,7 +33,7 @@ my $input = new CGI;
 
 my ( $auth_status, $sessionID ) =
   check_cookie_auth( $input->cookie('CGISESSID'),
-    { tools => 'manage_patron_lists' } );
+    { privacy => 'patron_data' } );
 
 if ( $auth_status ne "ok" ) {
     exit 0;
