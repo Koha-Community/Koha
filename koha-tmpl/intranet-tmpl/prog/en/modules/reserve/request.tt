@@ -27,11 +27,15 @@
     <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a> &rsaquo; Confirm holds</div>
 [% END %]
 
- <div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        [% IF ( multi_hold ) # No sidebar menu when placing multiple holds %]
+            <div class="col-md-10 col-md-offset-1">
+        [% ELSE %]
+            <div class="col-sm-10 col-sm-push-2">
+        [% END %]
+            <main>
 
-   <div id="bd">
-	<div id="yui-main">
-	<div class="yui-b">
 [% IF ( noitems ) %]
     <div class="dialog alert">
     [%IF (multi_hold) %]
@@ -312,17 +316,17 @@
                     <td>
                 [% IF itemloo.force_hold_level == 'record' # Patron has placed a record level hold previously for this record %]
                     <span class="error">
-                        <i class="fa fa-times fa-lg" alt="Cannot be put on hold"></i>
+                        <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
                         Hold must be record level
                     </span>
                 [% ELSIF ( itemloo.available ) %]
                     <input type="radio" name="checkitem" value="[% itemloo.itemnumber | html %]" />
                 [% ELSIF ( itemloo.override ) %]
                     <input type="radio" name="checkitem" class="needsoverride" value="[% itemloo.itemnumber | html %]" />
-                    <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" alt="Requires override of hold policy"/></i>
+                    <i class="fa fa-exclamation-triangle fa-lg" style="color:gold" title="Requires override of hold policy"/></i>
                 [% ELSE %]
                     <span class="error">
-                        <i class="fa fa-times fa-lg" alt="Cannot be put on hold"></i>
+                        <i class="fa fa-times fa-lg" title="Cannot be put on hold"></i>
                         [% IF itemloo.not_holdable %]
                             [% IF itemloo.not_holdable == 'damaged' %]
                                 Item damaged
@@ -646,16 +650,21 @@
         </form>
     [% END %]
 [% END %]
-</div>
-</div>
 
-<div class="yui-b">
-[% UNLESS ( multi_hold ) %]
-  [% INCLUDE 'biblio-view-menu.inc' %]
-[% END %]
+            </main>
 
-</div>
-</div>
+        [% IF ( multi_hold ) # No sidebar menu when placing multiple holds %]
+            </div> <!-- /.col-md-10.col-md-offset-1 -->
+        [% ELSE %]
+            </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                <div class="col-sm-2 col-sm-pull-10">
+                    <aside>
+                            [% INCLUDE 'biblio-view-menu.inc' %]
+                    </aside>
+                </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        [% END %]
+    </div> <!-- /.row -->
+
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
