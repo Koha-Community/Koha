@@ -46,8 +46,10 @@
   "/borrowers/ssstatus": {
     "get": {
       "x-mojo-to": "Borrower#get_self_service_status",
-      "x-koha-permission": {
-        "borrowers": "get_self_service_status"
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "get_self_service_status"
+        }
       },
       "operationId": "getSelfServiceStatus",
       "tags": ["borrowers"],
