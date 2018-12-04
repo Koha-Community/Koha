@@ -2073,9 +2073,16 @@ sub AddReturn {
     }
 
     # find reserves.....
-    # if we don't have a reserve with the status W, we launch the Checkreserves routine
+    # launch the Checkreserves routine to find any holds
     my ($resfound, $resrec);
     my $lookahead= C4::Context->preference('ConfirmFutureHolds'); #number of days to look for future holds
+    ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->itemnumber, undef, $lookahead ) unless ( $item->withdrawn );
+    # if a hold is found and is waiting at another branch, change the priority back to 1 and trigger the hold (this will trigger a transfer and update the hold status properly)
+    if ( $resfound eq "Waiting" and $branch ne $resrec->{branchcode} ) {
+        C4::Reserves::RevertWaitingStatus( { itemnumber => $item->itemnumber } );
+        #If the hold is reverted we need to refetch for the return values
+        ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->itemnumber, undef, $lookahead ) unless ( $item->withdrawn );
+    }
     ($resfound, $resrec, undef) = C4::Reserves::CheckReserves( $item->itemnumber, undef, $lookahead ) unless ( $item->withdrawn );
     if ($resfound) {
           $resrec->{'ResFound'} = $resfound;
