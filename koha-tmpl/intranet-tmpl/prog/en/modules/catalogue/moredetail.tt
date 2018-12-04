@@ -28,6 +28,7 @@
     <h2>[% title | html %]</h2>
     [% IF ( subtitle ) %]<h4>[% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</h4>[% END %]
     [% IF ( author ) %]<h4>by [% author | html %]</h4>[% END %]
+    <div class="rows">
     <ol class="bibliodetails">
         <li><span class="label">Biblionumber:</span> [% biblionumber | html %]&nbsp;</li>
         [% UNLESS ( item_level_itypes ) %]
@@ -42,6 +43,7 @@
         <li><span class="label">No. of items:</span> [% count | html %]&nbsp;[% IF ( hiddencount ) %]total ([% showncount | html %] shown / [% hiddencount | html %] hidden) 
 <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;showallitems=1">Show all items</a>[% END %]</li>
     </ol>
+    </div>
 
     <br clear="all" />
     [% IF ( ONLY_ONE ) %]
@@ -52,9 +54,10 @@
         <h3 id="item[% ITEM_DAT.itemnumber | html %]">Barcode [% ITEM_DAT.barcode | html %]  [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]</h3>
         <div class="listgroup"><h4>Item information [% IF ( CAN_user_editcatalogue_edit_catalogue ) %][% UNLESS ( ITEM_DAT.nomod ) %]
          [% IF ( CAN_user_editcatalogue_edit_items ) %]
-         <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itemnumber=[% ITEM_DAT.itemnumber | uri %]">[Edit Item]</a>
+            <a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% ITEM_DAT.biblionumber | uri %]&amp;itemnumber=[% ITEM_DAT.itemnumber | uri %]"><i class="fa fa-pencil"></i> Edit item</a>
          [% END %]
          [% END %][% END %]</h4>
+            <div class="rows">
             <ol class="bibliodetails">
             <li><span class="label">Home library:</span> [% Branches.GetName( ITEM_DAT.homebranch ) | html %]&nbsp;</li>
 	    [% IF ( item_level_itypes ) %]
@@ -65,7 +68,7 @@
             [% IF ( ITEM_DAT.displaycopy ) %]<li><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li> [% END %]
             [% IF ( ITEM_DAT.replacementprice ) %]<li><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li> [% END %]
 	    [% IF ITEM_DAT.materials %]<li><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %] </li> [% END %]
-            </ol></div>
+            </ol></div></div>
            <div class="listgroup"><h4>Statuses [% IF ( ITEM_DAT.status_advisory ) %](
                 [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]
                 [% IF ( ITEM_DAT.itemlost ) %]Lost[% END %]
@@ -73,6 +76,7 @@
                 [% IF ( ITEM_DAT.withdrawn ) %]Withdrawn[% END %]
             )[% END %]</h4>
 
+            <div class="rows">
             <ol class="bibliodetails">
             <li><span class="label">Current location:</span> [% Branches.GetName( ITEM_DAT.holdingbranch ) | html %]&nbsp;</li>
             <li><span class="label">Checkout status:</span>
@@ -190,8 +194,9 @@
                 [% END %]
             [% END %]
 
-            </ol></div>
+            </ol></div></div>
             <div class="listgroup"><h4>History</h4>
+            <div class="rows">
             <ol class="bibliodetails">
 
             [% IF ITEM_DAT.basketno %]
@@ -263,6 +268,7 @@
                 </li>
             </ol>
             </div>
+        </div>
 </div>
 [% END %]
 
