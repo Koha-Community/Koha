@@ -305,9 +305,7 @@ sub validate_query_parameters {
 sub _cookie_auth {
     my ($c, $authorization) = @_;
 
-    my $json = $c->req->json;
-    my $cookie = exists $json->{sessionid} ? $json->{sessionid} : undef;
-    $cookie = $c->cookie('CGISESSID') unless $cookie;
+    my $cookie = $c->cookie('CGISESSID');
     my $user;
     # Mojo doesn't use %ENV the way CGI apps do
     # Manually pass the remote_address to check_auth_cookie
