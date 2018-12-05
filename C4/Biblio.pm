@@ -241,7 +241,7 @@ sub AddBiblio {
 
 =head2 ModBiblio
 
-  ModBiblio( $record,$biblionumber,$frameworkcode);
+  ModBiblio( $record,$biblionumber,$frameworkcode, $disable_autolink);
 
 Replace an existing bib record identified by C<$biblionumber>
 with one supplied by the MARC::Record object C<$record>.  The embedded
@@ -257,12 +257,16 @@ in the C<biblio> and C<biblioitems> tables, as well as
 which fields are used to store embedded item, biblioitem,
 and biblionumber data for indexing.
 
+Unless C<$disable_autolink> is passed ModBiblio will relink record headings
+to authorities based on settings in the system preferences. This flag allows
+us to not relink records when the authority linker is saving modifications.
+
 Returns 1 on success 0 on failure
 
 =cut
 
 sub ModBiblio {
-    my ( $record, $biblionumber, $frameworkcode ) = @_;
+    my ( $record, $biblionumber, $frameworkcode, $disable_autolink ) = @_;
     if (!$record) {
         carp 'No record passed to ModBiblio';
         return 0;
@@ -273,7 +277,7 @@ sub ModBiblio {
         logaction( "CATALOGUING", "MODIFY", $biblionumber, "biblio BEFORE=>" . $newrecord->as_formatted );
     }
 
-    if (C4::Context->preference('BiblioAddsAuthorities')) {
+    if ( !$disable_autolink && C4::Context->preference('BiblioAddsAuthorities') ) {
         BiblioAutoLink( $record, $frameworkcode );
     }
 
@@ -622,12 +626,10 @@ safest place.
 
 sub _check_valid_auth_link {
     my ( $authid, $field ) = @_;
-
     require C4::AuthoritiesMarc;
 
     my $authorized_heading =
       C4::AuthoritiesMarc::GetAuthorizedHeading( { 'authid' => $authid } ) || '';
-
    return ($field->as_string('abcdefghijklmnopqrstuvwxyz') eq $authorized_heading);
 }
 
