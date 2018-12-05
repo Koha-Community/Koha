@@ -21,7 +21,7 @@ use utf8;
 use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON;
 
-use C4::SIP::ILS::Patron;
+use C4::Members;
 
 use Koha::Auth::Challenge::Password;
 
@@ -205,7 +205,22 @@ sub status {
                 $username,
                 $password
         );
-        my $ilsBorrower = C4::SIP::ILS::Patron->new($borrower->userid);
+
+        my $kp = GetMember(userid=>$borrower->userid);
+        my $flags = C4::Members::patronflags( $kp );
+        my $fines_amount = $flags->{CHARGES}->{amount};
+        my $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
+        my $fee_limit = C4::Context->preference('noissuescharge') || 5;
+        my $fine_blocked = $fines_amount > $fee_limit;
+        my $card_lost = $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST};
+        my $basic_privileges_ok = !$borrower->is_debarred && !$borrower->is_expired && !$fine_blocked;
+
+        for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
+                ($flags->{$_}) or next;
+                if ($flags->{$_}->{noissues}) {
+                        my $basic_privileges_ok = 0;
+                }
+        }
 
         my $payload = {
             borrowernumber => 0+$borrower->borrowernumber,
@@ -214,21 +229,21 @@ sub status {
             firstname      => $borrower->firstname || '',
             homebranch     => $borrower->branchcode || '',
             age            => $borrower->get_age || '',
-            fines          => $ilsBorrower->fines_amount ? $ilsBorrower->fines_amount+0 : 0,
+            fines          => $fines_amount+0,
             language       => 'fin' || '',
-            charge_privileges_denied    => _bool(!$ilsBorrower->charge_ok),
-            renewal_privileges_denied   => _bool(!$ilsBorrower->renew_ok),
-            recall_privileges_denied    => _bool(!$ilsBorrower->recall_ok),
-            hold_privileges_denied      => _bool(!$ilsBorrower->hold_ok),
-            card_reported_lost          => _bool($ilsBorrower->card_lost),
-            too_many_items_charged      => _bool($ilsBorrower->too_many_charged),
-            too_many_items_overdue      => _bool($ilsBorrower->too_many_overdue),
-            too_many_renewals           => _bool($ilsBorrower->too_many_renewal),
-            too_many_claims_of_items_returned => _bool($ilsBorrower->too_many_claim_return),
-            too_many_items_lost         => _bool($ilsBorrower->too_many_lost),
-            excessive_outstanding_fines => _bool($ilsBorrower->excessive_fines),
-            recall_overdue              => _bool($ilsBorrower->recall_overdue),
-            too_many_items_billed       => _bool($ilsBorrower->too_many_billed),
+            charge_privileges_denied    => _bool(!$basic_privileges_ok),
+            renewal_privileges_denied   => _bool(!$basic_privileges_ok),
+            recall_privileges_denied    => _bool(!$basic_privileges_ok),
+            hold_privileges_denied      => _bool(!$basic_privileges_ok),
+            card_reported_lost          => _bool($card_lost),
+            too_many_items_charged      => _bool(0),
+            too_many_items_overdue      => _bool(0),
+            too_many_renewals           => _bool(0),
+            too_many_claims_of_items_returned => _bool(0),
+            too_many_items_lost         => _bool(0),
+            excessive_outstanding_fines => _bool($fine_blocked),
+            recall_overdue              => _bool(0),
+            too_many_items_billed       => _bool(0),
         };
         return $c->render( status => 200, openapi => $payload );
     } catch {
@@ -248,8 +263,7 @@ sub get_self_service_status {
     try {
         my $patron = Koha::Patrons->cast($c->validation->param('cardnumber'));
         my $branchcode = $c->validation->param('branchcode');
-        my $ilsPatron = C4::SIP::ILS::Patron->new($patron->cardnumber);
-        C4::SelfService::CheckSelfServicePermission($ilsPatron, $branchcode, 'accessMainDoor');
+        C4::SelfService::CheckSelfServicePermission($patron, $branchcode, 'accessMainDoor');
         #If we didn't get any exceptions, we succeeded
         $payload = {permission => Mojo::JSON->true};
         return $c->render(status => 200, openapi => $payload);
