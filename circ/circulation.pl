@@ -238,6 +238,7 @@ if ( $print eq 'yes' && $borrowernumber ne '' ) {
     }
     $query->param( 'borrowernumber', '' );
     $borrowernumber = '';
+    undef $patron;
 }
 
 #
