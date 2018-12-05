@@ -103,15 +103,6 @@ sub new {
         $self->{'cache'} = $self->{'fastmmap_cache'};
     }
 
-    # Unless memcache or fastmmap has already been picked, use memory_cache
-    unless ( defined( $self->{'cache'} ) ) {
-        if ( can_load( modules => { 'Cache::Memory' => undef } )
-            && _initialize_memory($self) )
-        {
-                $self->{'cache'} = $self->{'memory_cache'};
-        }
-    }
-
     $ENV{DEBUG} && carp "Selected caching system: " . ($self->{'cache'} // 'none');
 
     return
@@ -170,33 +161,6 @@ sub _initialize_fastmmap {
     }
     return unless defined $cache;
     $self->{'fastmmap_cache'} = $cache;
-    return $self;
-}
-
-sub _initialize_memory {
-    my ($self) = @_;
-
-    # Default cache time for memory is _always_ short unless it's specially
-    # defined, to allow it to work reliably in a persistent environment.
-    my $cache = Cache::Memory->new(
-        'namespace'       => $self->{'namespace'},
-        'default_expires' => "$self->{'timeout'} sec" || "10 sec",
-    );
-    $self->{'memory_cache'} = $cache;
-    # Memory cache can't handle complex types for some reason, so we use its
-    # freeze and thaw functions.
-    $self->{ref($cache) . '_set'} = sub {
-        my ($key, $val, $exp) = @_;
-        # Refer to set_expiry in Cache::Entry for why we do this 'sec' thing.
-        $exp = "$exp sec" if defined $exp;
-        # Because we need to use freeze, it must be a reference type.
-        $cache->freeze($key, [$val], $exp);
-    };
-    $self->{ref($cache) . '_get'} = sub {
-        my $res = $cache->thaw(shift);
-        return unless defined $res;
-        return $res->[0];
-    };
     return $self;
 }
 

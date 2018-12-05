@@ -267,11 +267,6 @@ our $PERL_DEPS = {
         'required' => '0',
         'min_ver'  => '1.34'
     },
-    'Cache::Memory' => {
-        'usage'    => 'Caching',
-        'required' => '0',
-        'min_ver'  => '2.04'
-    },
     'Net::LDAP::Filter' => {
         'usage'    => 'LDAP Interface Feature',
         'required' => '0',
