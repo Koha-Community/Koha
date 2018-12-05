@@ -115,7 +115,7 @@
                                     <h4>[% subscription_LOO.branchname | html %]</h4>
 
                                     [% IF ( subscription_LOO.notes ) %]
-                                        <p>[% subscription_LOO.notes FILTER html_line_break | html %]</p>
+                                        <p>[% subscription_LOO.notes | html | html_line_break %]</p>
                                     [% END %]
 
                                     [% IF ( subscription_LOO.recievedlist ) %]
@@ -131,7 +131,7 @@
                                     [% IF ( subscription_LOO.opacnote ) %]
                                         <h5>Issues summary</h5>
                                         <p>
-                                            [% subscription_LOO.opacnote FILTER html_line_break | html %]
+                                            [% subscription_LOO.opacnote | html | html_line_break %]
                                         </p>
                                     [% END %]
                                     [% IF ( subscription_LOO.letter ) %]

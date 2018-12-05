@@ -633,7 +633,7 @@
         [% IF MARCNOTE.marcnote.match('^https?://\S+$') %]
             <a href="[% MARCNOTE.marcnote | url %]">[% MARCNOTE.marcnote | html %]</a>
         [% ELSE %]
-            [% MARCNOTE.marcnote FILTER html_line_break | html %]
+            [% MARCNOTE.marcnote | html | html_line_break %]
         [% END %]
         </p>
     [% END %]
@@ -659,7 +659,7 @@
             [% END %]
             [% IF ( subscription.closed ) %]<p>This subscription is closed.</p>[% END %]
             [% IF ( subscription.callnumber ) %]<p>Callnumber: [% subscription.callnumber | html %] </p>[% END %]
-            [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes FILTER html_line_break | html %] </p>[% END %]
+            [% IF ( subscription.subscriptionnotes ) %]<p>[% subscription.subscriptionnotes | html | html_line_break %] </p>[% END %]
             [% IF ( subscription.missinglist ) %]<p>Missing issues: [% subscription.missinglist | html %] </p>[% END %]
             [% IF ( subscription.librariannote ) %]<p>([% subscription.librariannote | html %])</p>[% END %]
             [% IF ( subscription.latestserials ) %]
