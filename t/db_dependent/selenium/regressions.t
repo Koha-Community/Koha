@@ -185,8 +185,8 @@ subtest 'Display circulation table correctly' => sub {
 };
 
 END {
-    C4::Context->preference('SearchEngine', $SearchEngine_value);
-    C4::Context->preference('AudioAlerts', $AudioAlerts_value);
+    C4::Context->set_preference('SearchEngine', $SearchEngine_value);
+    C4::Context->set_preference('AudioAlerts', $AudioAlerts_value);
     $_->delete for @cleanup;
 };
 
