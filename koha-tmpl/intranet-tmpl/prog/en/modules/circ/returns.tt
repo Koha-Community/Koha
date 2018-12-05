@@ -139,7 +139,7 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"  onclick="$('#barcode').focus(); return false;"></i> OK</button>
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                     </div>
                 </form>
             </div>
@@ -166,9 +166,9 @@
                         </p>
                     </div>
                     <div class="modal-footer">
-                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"  onclick="$('#barcode').focus(); return false;"></i> OK</button>
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                         <button type="submit" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode=[% TransferWaitingAt | html %]&amp;op=slip"><i class="fa fa-print"></i> Print transfer slip</button>
-                        <button class="btn btn-default deny" type="submit" onclick="window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber | html %]&amp;canceltransfer=1'"><i class="fa fa-times"></i> Cancel transfer</button>
+                        <button class="btn btn-default deny cancel-transfer" type="submit"><i class="fa fa-times"></i> Cancel transfer</button>
                     </div>
                 </form>
             </div>
@@ -254,11 +254,11 @@
                     </button>
 
                     <input type="hidden" name="print_slip" value="0" />
-                    <button type="submit" class="btn btn-default print" onclick="this.form.print_slip.value = 1; this.form.submit();">
+                    <button type="submit" class="btn btn-default print">
                         <i class="fa fa-print"></i> Print slip and confirm
                     </button>
 
-                    <button type="submit" class="btn btn-default deny" onclick="this.form.cancel_reserve.value = 1; this.form.submit();">
+                    <button type="submit" class="btn btn-default deny cancel-hold">
                         <i class="fa fa-times"></i> Cancel hold
                     </button>
                 </div>
@@ -291,9 +291,9 @@
         <form method="post" action="returns.pl" class="confirm">
             <button type="submit" class="approve"><i class="fa fa-check"></i> Confirm</button>
             <input type="hidden" name="print_slip" value="0" />
-            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber %]" />
-            <input type="hidden" name="biblionumber" value="[% itembiblionumber %]" />
-            <button type="submit" class="print" onclick="this.form.print_slip.value = 1; this.form.submit();"><i class="fa fa-print"></i> Print slip and continue</button>
+            <input type="hidden" name="borrowernumber" value="[% patron.borrowernumber | html %]" />
+            <input type="hidden" name="biblionumber" value="[% itembiblionumber | html %]" />
+            <button type="submit" class="print"><i class="fa fa-print"></i> Print slip and continue</button>
             [% FOREACH inputloo IN inputloop %]
                 <input type="hidden" name="ri-[% inputloo.counter %]" value="[% inputloo.barcode %]" />
                 <input type="hidden" name="dd-[% inputloo.counter %]" value="[% inputloo.duedate %]" />
@@ -349,9 +349,9 @@
                     <div class="modal-footer">
                         [% IF !transfer %]
                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default approve"><i class="fa fa-check"></i> Yes</button>
-                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button><button type="submit" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"  onclick="$('#barcode').focus(); return false;"></i> No</button>
+                        <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Yes, print slip</button><button type="submit" class="btn btn-default deny" name="notransfer" value="No"><i class="fa fa-times"></i> No</button>
                         [% ELSE %]
-                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check" onclick="$('#barcode').focus(); return false;"></i> OK</button>
+                        <button type="submit" class="btn btn-default approve"><i class="fa fa-check"></i> OK</button>
                         <button type="submit" name="dotransfer" value="Yes" class="btn btn-default print openWin" data-url="transfer-slip.pl?transferitem=[% itemnumber | html %]&amp;&amp;branchcode[% returnbranch | html %]&amp;op=slip"><i class="fa fa-print"></i> Print slip</button>
                         [% END %]
                     </div>
@@ -359,7 +359,6 @@
             </div>
         </div>
     </div>
->>>>>>> f3b362120f... Bug 21346: Convert dialogs to modals.
     [% END %]
 
     [% IF ( diffbranch ) %]
@@ -475,19 +474,19 @@
                         <button type="submit" class="btn btn-default approve">
                             <i class="fa fa-check"></i> Confirm hold and transfer
                         </button>
-                        <button type="submit" class="btn btn-default print" onclick="this.form.print_slip.value = 1; this.form.submit()">
+                        <button type="submit" class="btn btn-default print">
                             <i class="fa fa-print"></i> Print slip, transfer, and confirm
                         </button>
                     [% ELSE %]
                         <button type="submit" class="btn btn-default approve">
                             <i class="fa fa-check"></i> Confirm hold
                         </button>
-                        <button type="submit" class="btn btn-default print" onclick="this.form.print_slip.value = 1; this.form.submit();">
+                        <button type="submit" class="btn btn-default print">
                             <i class="fa fa-print"></i> Print slip and confirm
                         </button>
                     [% END %]
 
-                    <button data-dismiss="modal" aria-hidden="true" type="submit" class="btn btn-default deny" onclick="$('#barcode').focus(); return false;">
+                    <button data-dismiss="modal" aria-hidden="true" type="submit" class="btn btn-default deny">
                         <i class="fa fa-times"></i> Ignore
                     </button>
                 </div>
@@ -617,12 +616,12 @@
 
                     <label for="return_date_override_remember"> Remember for next check in:</label>
                     [% IF ( return_date_override_remember ) %]
-                        <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();" name="return_date_override_remember" checked="checked" />
+                        <input type="checkbox" id="return_date_override_remember" name="return_date_override_remember" checked="checked" />
                     [% ELSE %]
-                        <input type="checkbox" id="return_date_override_remember" onclick="this.form.barcode.focus();" name="return_date_override_remember" />
+                        <input type="checkbox" id="return_date_override_remember" name="return_date_override_remember" />
                     [% END %]
 
-                    <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.return_date_override.value = ''; this.form.return_date_override_remember.checked = false; this.form.barcode.focus(); return false;" />
+                    <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" />
             </div>
         [% END %]
             [% FOREACH inputloo IN inputloop %]
@@ -855,6 +854,28 @@
 
             $('.openWin').on("click",function(e){
                 Dopop( $(this).data("url") );
+            });
+
+            $('.print').on("click",function(e){
+                this.form.print_slip.value = 1;
+                this.form.submit();
+            });
+
+            $('.cancel-hold').on("click",function(e){
+                this.form.cancel_reserve.value = 1;
+                this.form.submit();
+            });
+
+            $('.cancel-transfer').on("click",function(e){
+                window.location.href='/cgi-bin/koha/circ/returns.pl?itemnumber=[% itemnumber | html %]&amp;canceltransfer=1'
+            });
+
+            $('.action').on("click",function(e){
+                this.checked = false;
+                this.form.return_date_override.value = '';
+                this.form.return_date_override_remember.checked = false;
+                this.form.barcode.focus();
+                return false;
             });
         });
     </script>
