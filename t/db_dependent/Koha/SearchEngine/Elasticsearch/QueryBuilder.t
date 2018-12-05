@@ -82,7 +82,7 @@ $se->mock( 'get_elasticsearch_mappings', sub {
 });
 
 subtest 'build_authorities_query_compat() tests' => sub {
-    plan tests => 44;
+    plan tests => 36;
 
     my $qb;
 
@@ -96,11 +96,11 @@ subtest 'build_authorities_query_compat() tests' => sub {
     foreach my $koha_name ( keys %{ $koha_to_index_name } ) {
         my $query = $qb->build_authorities_query_compat( [ $koha_name ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
         if ( $koha_name eq 'all' || $koha_name eq 'any' ) {
-            is( $query->{query}->{bool}->{must}[0]->{wildcard}->{"_all.phrase"},
-                "*a*");
+            is( $query->{query}->{bool}->{must}[0]->{query_string}->{query},
+                "a*");
         } else {
-            is( $query->{query}->{bool}->{must}[0]->{wildcard}->{$koha_to_index_name->{$koha_name}.".phrase"},
-                "*a*");
+            is( $query->{query}->{bool}->{must}[0]->{query_string}->{query},
+                "a*");
         }
     }
 
@@ -108,15 +108,11 @@ subtest 'build_authorities_query_compat() tests' => sub {
     foreach my $koha_name ( keys %{ $koha_to_index_name } ) {
         my $query = $qb->build_authorities_query_compat( [ $koha_name ],  undef, undef, ['contains'], [$search_term], 'AUTH_TYPE', 'asc' );
         if ( $koha_name eq 'all' || $koha_name eq 'any' ) {
-            is( $query->{query}->{bool}->{must}[0]->{wildcard}->{"_all.phrase"},
-                "*donald*");
-            is( $query->{query}->{bool}->{must}[1]->{wildcard}->{"_all.phrase"},
-                "*duck*");
+            is( $query->{query}->{bool}->{must}[0]->{query_string}->{query},
+                "(Donald*) AND (Duck*)");
         } else {
-            is( $query->{query}->{bool}->{must}[0]->{wildcard}->{$koha_to_index_name->{$koha_name}.".phrase"},
-                "*donald*");
-            is( $query->{query}->{bool}->{must}[1]->{wildcard}->{$koha_to_index_name->{$koha_name}.".phrase"},
-                "*duck*");
+            is( $query->{query}->{bool}->{must}[0]->{query_string}->{query},
+                "(Donald*) AND (Duck*)");
         }
     }
 
@@ -360,14 +356,14 @@ subtest 'build query from form subtests' => sub {
 
     my $query = $qb->build_authorities_query_compat( \@marclist, undef,
                     undef, \@operator , \@values, 'AUTH_TYPE', 'asc' );
-    is($query->{query}->{bool}->{must}[0]->{wildcard}->{'Heading.phrase'}, "*hamilton*","Expected search is populated");
+    is($query->{query}->{bool}->{must}[0]->{query_string}->{query}, "Hamilton*","Expected search is populated");
     is( scalar @{ $query->{query}->{bool}->{must} }, 1,"Only defined search is populated");
 
     @values[2] = 'Jefferson';
     $query = $qb->build_authorities_query_compat( \@marclist, undef,
                     undef, \@operator , \@values, 'AUTH_TYPE', 'asc' );
-    is($query->{query}->{bool}->{must}[0]->{wildcard}->{'Heading.phrase'}, "*hamilton*","First index searched as expected");
-    is($query->{query}->{bool}->{must}[1]->{wildcard}->{'Match.phrase'}, "*jefferson*","Second index searched when populated");
+    is($query->{query}->{bool}->{must}[0]->{query_string}->{query}, "Hamilton*","First index searched as expected");
+    is($query->{query}->{bool}->{must}[1]->{query_string}->{query}, "Jefferson*","Second index searched when populated");
     is( scalar @{ $query->{query}->{bool}->{must} }, 2,"Only defined searches are populated");
 
 
