@@ -811,7 +811,7 @@
                                   <p class="subscription_callnumber">Call number: [% subscription.callnumber | html %]</p>
                                 [% END %]
                                 [% IF ( subscription.subscriptionnotes ) %]
-                                    <p class="subscription_notes">[% subscription.subscriptionnotes FILTER html_line_break | html %] </p>
+                                    <p class="subscription_notes">[% subscription.subscriptionnotes | html | html_line_break %] </p>
                                 [% END %]
                                 <p class="subscription_dates">Subscription from: [% subscription.histstartdate | $KohaDates %] to:[% IF ( subscription.histenddate ) %] [% subscription.histenddate | $KohaDates %] [% ELSE %] now (current)[% END %]</p>
                                 [% IF ( subscription.letter ) %]<span class="email_notifications">
@@ -829,7 +829,7 @@
                                     <p class="subscription_missing">Missing issues: [% subscription.missinglist | html %] </p>
                                 [% END %]
                                 [% IF ( subscription.opacnote ) %]
-                                    <p class="subscription_opacnote">[% subscription.opacnote FILTER html_line_break | html %]</p>
+                                    <p class="subscription_opacnote">[% subscription.opacnote | html | html_line_break %]</p>
                                 [% END %]
                                 [% IF ( subscription.latestserials ) %]
                                     <p class="subscription_latestissues"> The [% subscription.opacdisplaycount | html %] latest issues for this subscription:</p>

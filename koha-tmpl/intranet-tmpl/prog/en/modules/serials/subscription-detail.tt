@@ -336,10 +336,10 @@
             <li><span class="label">History end date:</span> [% histenddate | html %]</li>
             <li><span class="label">Received issues:</span>[% recievedlist | html %]</li>
             <li><span class="label">Missing issues:</span>[% missinglist | html %]</li>
-            <li><span class="label">Nonpublic note:</span>[% internalnotes FILTER html_line_break | html %]</li>
-            <li><span class="label">Public note:</span>[% notes FILTER html_line_break | html %]</li>
-            <li><span class="label">History staff note:</span>[% librariannote FILTER html_line_break | html %]</li>
-            <li><span class="label">History OPAC note:</span>[% opacnote FILTER html_line_break | html %]</li>
+            <li><span class="label">Nonpublic note:</span>[% internalnotes | html | html_line_break %]</li>
+            <li><span class="label">Public note:</span>[% notes | html | html_line_break %]</li>
+            <li><span class="label">History staff note:</span>[% librariannote | html | html_line_break %]</li>
+            <li><span class="label">History OPAC note:</span>[% opacnote | html | html_line_break %]</li>
         </ol>
     </div>
     </div>
