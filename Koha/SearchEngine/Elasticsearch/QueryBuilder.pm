@@ -209,11 +209,14 @@ sub build_query_compat {
     # each search thing is a handy unit.
     unshift @$operators, undef;    # The first one can't have an op
     my @search_params;
+    my $truncate = C4::Context->preference("QueryAutoTruncate") || 0;
     my $ea = each_array( @$operands, @$operators, @index_params );
     while ( my ( $oand, $otor, $index ) = $ea->() ) {
         next if ( !defined($oand) || $oand eq '' );
+        $oand = $self->_clean_search_term($oand);
+        $oand = $self->_truncate_terms($oand) if ($truncate);
         push @search_params, {
-            operand => $self->_clean_search_term($oand),      # the search terms
+            operand => $oand,      # the search terms
             operator => defined($otor) ? uc $otor : undef,    # AND and so on
             $index ? %$index : (),
         };
@@ -314,11 +317,14 @@ sub build_authorities_query {
         }
         else {
             # regular wordlist stuff
-#            push @query_parts, { match => {$wh => { query => $val, operator => 'and' }} };
-            my @values = split(' ',$val);
-            foreach my $v (@values) {
-                push @query_parts, { wildcard => { "$wh.phrase" => "*" . lc $v . "*" } };
+            my @tokens = $self->_split_query( $val );
+            foreach my $token ( @tokens ) {
+                $token = $self->_truncate_terms(
+                    $self->_clean_search_term( $token )
+                );
             }
+            my $query = $self->_join_queries( @tokens );
+            push @query_parts, { query_string => { default_field => $wh, query => $query } };
         }
     }
 
@@ -714,14 +720,11 @@ to ensure those parts are correct.
 sub _clean_search_term {
     my ( $self, $term ) = @_;
 
-    my $auto_truncation = C4::Context->preference("QueryAutoTruncate") || 0;
-
     # Some hardcoded searches (like with authorities) produce things like
     # 'an=123', when it ought to be 'an:123' for our purposes.
     $term =~ s/=/:/g;
     $term = $self->_convert_index_strings_freeform($term);
     $term =~ s/[{}]/"/g;
-    $term = $self->_truncate_terms($term) if ($auto_truncation);
     return $term;
 }
 
@@ -805,21 +808,40 @@ operands and double quoted strings.
 sub _truncate_terms {
     my ( $self, $query ) = @_;
 
-    # '"donald duck" title:"the mouse" and peter" get split into
-    # ['', '"donald duck"', '', ' ', '', 'title:"the mouse"', '', ' ', 'and', ' ', 'pete']
-    my @tokens = split /((?:[\w\-.]+:)?"[^"]+"|\s+)/, $query;
+    my @tokens = $self->_split_query( $query );
 
     # Filter out empty tokens
     my @words = grep { $_ !~ /^\s*$/ } @tokens;
 
-    # Append '*' to words if needed, ie. if it's not surrounded by quotes, not
-    # terminated by '*' and not a keyword
+    # Append '*' to words if needed, ie. if it ends in a word character and is not a keyword
     my @terms = map {
         my $w = $_;
-        (/"$/ or /\*$/ or grep {lc($w) eq $_} qw/and or not/) ? $_ : "$_*";
+        (/\W$/ or grep {lc($w) eq $_} qw/and or not/) ? $_ : "$_*";
     } @words;
 
     return join ' ', @terms;
+}
+
+=head2 _split_query
+
+    my @token = $self->_split_query($query_str);
+
+Given a string query this function splits it to tokens taking into account
+any field prefixes and quoted strings.
+
+=cut
+
+sub _split_query {
+    my ( $self, $query ) = @_;
+
+    # '"donald duck" title:"the mouse" and peter" get split into
+    # ['', '"donald duck"', '', ' ', '', 'title:"the mouse"', '', ' ', 'and', ' ', 'pete']
+    my @tokens = split /((?:[\w\-.]+:)?"[^"]+"|\s+)/, $query;
+
+    # Filter out empty values
+    @tokens = grep( /\S/, @tokens );
+
+    return @tokens;
 }
 
 1;
