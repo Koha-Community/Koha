@@ -163,6 +163,9 @@ sub SearchAuthorities {
                 elsif ( @$tags[$i] eq "thesaurus" ) {
                     $attr = " \@attr 1=Subject-heading-thesaurus ";
                 }
+                elsif ( @$tags[$i] eq "all" ) {
+                    $attr = " \@attr 1=Any ";
+                }
                 else {    # Use the index passed in params
                     $attr = " \@attr 1=" . @$tags[$i] . " ";
                 }
