@@ -72,7 +72,7 @@ my $op = $input->param('op') || q{};
 my $language = C4::Languages::getlanguage();
 
 my $cache = Koha::Caches->get_instance;
-$cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
+$cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
 
 if ($op eq 'delete') {
     my $itemtype     = $input->param('itemtype');

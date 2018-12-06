@@ -252,7 +252,7 @@ subtest 'may_article_request' => sub {
     # mocking
     t::lib::Mocks::mock_preference('ArticleRequests', 1);
     t::lib::Mocks::mock_preference('ArticleRequestsLinkControl', 'calc');
-    $cache->set_in_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY, {
+    $cache->set_in_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY, {
         '*'  => { 'CR' => 1 },
         'S'  => { '*'  => 1 },
         'PT' => { 'BK' => 1 },
@@ -266,7 +266,7 @@ subtest 'may_article_request' => sub {
     is( $itemtype->may_article_request({ categorycode => 'PT' }), '1', 'Result should be true when LinkControl is set to always' );
 
     # Cleanup
-    $cache->clear_from_cache( Koha::IssuingRules::GUESSED_ITEMTYPES_KEY );
+    $cache->clear_from_cache( Koha::CirculationRules::GUESSED_ITEMTYPES_KEY );
 };
 
 $schema->storage->txn_rollback();

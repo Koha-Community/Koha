@@ -22,7 +22,7 @@ use Carp;
 use C4::Koha;
 use C4::Languages;
 use Koha::Database;
-use Koha::IssuingRules;
+use Koha::CirculationRules;
 use Koha::Localizations;
 
 use base qw(Koha::Object Koha::Object::Limit::Library);
@@ -119,7 +119,7 @@ sub may_article_request {
     my $itemtype = $self->itemtype;
     my $category = $params->{categorycode};
 
-    my $guess = Koha::IssuingRules->guess_article_requestable_itemtypes({
+    my $guess = Koha::CirculationRules->guess_article_requestable_itemtypes({
         $category ? ( categorycode => $category ) : (),
     });
     return ( $guess->{ $itemtype // q{} } || $guess->{ '*' } ) ? 1 : q{};

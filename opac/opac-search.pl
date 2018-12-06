@@ -52,6 +52,7 @@ use C4::Tags qw(get_tags);
 use C4::SocialData;
 use C4::External::OverDrive;
 
+use Koha::CirculationRules;
 use Koha::Libraries;
 use Koha::ItemTypes;
 use Koha::Ratings;
@@ -676,7 +677,7 @@ for (my $i=0;$i<@servers;$i++) {
 
         my $art_req_itypes;
         if( C4::Context->preference('ArticleRequests') ) {
-            $art_req_itypes = Koha::IssuingRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
+            $art_req_itypes = Koha::CirculationRules->guess_article_requestable_itemtypes({ $patron ? ( categorycode => $patron->categorycode ) : () });
         }
 
         foreach my $res (@newresults) {
