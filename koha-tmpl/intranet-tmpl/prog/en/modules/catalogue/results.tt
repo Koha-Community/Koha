@@ -599,7 +599,7 @@
     [% IF ( outer_sup_results_loo.inner_sup_results_loop ) %]
         [% outer_sup_results_loo.servername | html %]
         [% FOREACH inner_sup_results_loo IN outer_sup_results_loo.inner_sup_results_loop %]
-        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi | $raw %][% inner_sup_results_loo.limit_cgi | uri %][% inner_sup_results_loo.sort_by | uri %][% inner_sup_results_loo.link | uri %]">[% inner_sup_results_loo.title | html %]</a></div>
+        <div><a href="/cgi-bin/koha/catalogue/search.pl?[% inner_sup_results_loo.query_cgi | $raw %][% inner_sup_results_loo.limit_cgi | $raw %][% inner_sup_results_loo.sort_by | uri %][% inner_sup_results_loo.link | uri %]">[% inner_sup_results_loo.title | html %]</a></div>
         [% END %]
     [% END %]
 <!-- </div> -->
@@ -742,7 +742,7 @@
                     [%- END -%]
                 ];
                 var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
-                browser.create([% SEARCH_RESULTS.first.result_number | html %], '[% query_cgi | html %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]',
+                browser.create([% SEARCH_RESULTS.first.result_number | html %], '[% query_cgi | html %]', '[% limit_cgi | html %]','[% sort_cgi | html %]',
                        newresults, '[% total | html %]');
             [% END %]
 
@@ -875,7 +875,7 @@
             var bibnums = getContextBiblioNumbers();
             if ( bibnums && bibnums.length > 0 ) {
                 var browser = KOHA.browser('', parseInt('[% biblionumber | html %]', 10));
-                browser.create(1, '[% query_cgi | html %]', '[% limit_cgi | uri %]','[% sort_cgi | uri %]', bibnums, bibnums.length);
+                browser.create(1, '[% query_cgi | html %]', '[% limit_cgi | html %]','[% sort_cgi | html %]', bibnums, bibnums.length);
                 window.location = '/cgi-bin/koha/catalogue/detail.pl?biblionumber=' + bibnums[0] + '&searchid='+browser.searchid;
             } else {
                 alert(MSG_NO_ITEM_SELECTED);
