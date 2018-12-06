@@ -105,6 +105,9 @@ if ($op eq "action") {
     my @tags      = $input->multi_param('tag');
     my @subfields = $input->multi_param('subfield');
     my @values    = $input->multi_param('field_value');
+    my @searches  = $input->multi_param('regex_search');
+    my @replaces  = $input->multi_param('regex_replace');
+    my @modifiers = $input->multi_param('regex_modifiers');
     my @disabled  = $input->multi_param('disable_input');
     # build indicator hash.
     my @ind_tag   = $input->multi_param('ind_tag');
@@ -112,8 +115,9 @@ if ($op eq "action") {
 
     # Is there something to modify ?
     # TODO : We shall use this var to warn the user in case no modification was done to the items
-    my $values_to_modify = scalar(grep {!/^$/} @values);
+    my $values_to_modify = scalar(grep {!/^$/} @values) || scalar(grep {!/^$/} @searches);
     my $values_to_blank  = scalar(@disabled);
+
     my $marcitem;
 
     # Once the job is done
@@ -217,8 +221,32 @@ if ($op eq "action") {
 		} else {
             if ($values_to_modify || $values_to_blank) {
                 my $localmarcitem = Item2Marc($itemdata);
+                my $modified = 0;
 
-                my $modified = UpdateMarcWith( $marcitem, $localmarcitem );
+                for ( my $i = 0 ; $i < @tags ; $i++ ) {
+                    my $search = $searches[$i];
+                    next unless $search;
+
+                    my $tag = $tags[$i];
+                    my $subfield = $subfields[$i];
+                    my $replace = $replaces[$i];
+                    my $mod = $modifiers[$i];
+
+                    my $value = $localmarcitem->field( $tag )->subfield( $subfield );
+                    my $old_value = $value;
+                    ## no critic (StringyEval)
+                    eval "\$value =~ s/$search/$replace/$mod";
+
+                    my @fields_to = $localmarcitem->field($tag);
+                    foreach my $field_to_update ( @fields_to ) {
+                        unless ( $old_value eq $value ) {
+                            $modified++;
+                            $field_to_update->update( $subfield => $value );
+                        }
+                    }
+                }
+
+                $modified += UpdateMarcWith( $marcitem, $localmarcitem );
                 if ( $modified ) {
                     eval {
                         if ( my $item = ModItemFromMarc( $localmarcitem, $itemdata->{biblionumber}, $itemnumber ) ) {
@@ -634,6 +662,9 @@ sub UpdateMarcWith {
     my $fieldfrom=$marcfrom->field($itemtag);
     my @fields_to=$marcto->field($itemtag);
     my $modified = 0;
+
+    return $modified unless $fieldfrom;
+
     foreach my $subfield ( $fieldfrom->subfields() ) {
         foreach my $field_to_update ( @fields_to ) {
             if ( $subfield->[1] ) {
