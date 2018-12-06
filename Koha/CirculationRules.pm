@@ -344,6 +344,36 @@ sub delete {
     }
 }
 
+=head3 get_opacitemholds_policy
+
+my $can_place_a_hold_at_item_level = Koha::CirculationRules->get_opacitemholds_policy( { patron => $patron, item => $item } );
+
+Return 'Y' or 'F' if the patron can place a hold on this item according to the issuing rules
+and the "Item level holds" (opacitemholds).
+Can be 'N' - Don't allow, 'Y' - Allow, and 'F' - Force
+
+=cut
+
+sub get_opacitemholds_policy {
+    my ( $class, $params ) = @_;
+
+    my $item   = $params->{item};
+    my $patron = $params->{patron};
+
+    return unless $item or $patron;
+
+    my $rule = Koha::CirculationRules->get_effective_issuing_rule(
+        {
+            categorycode => $patron->categorycode,
+            itemtype     => $item->effective_itemtype,
+            branchcode   => $item->homebranch,
+            rule_name    => 'opacitemholds',
+        }
+    );
+
+    return $rule ? $rule->rule_value : undef;
+}
+
 =head3 get_onshelfholds_policy
 
     my $on_shelf_holds = Koha::CirculationRules->get_onshelfholds_policy({ item => $item, patron => $patron });
