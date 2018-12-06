@@ -8,9 +8,9 @@
                 <ul>
                     <li>
                         [% IF ( available ) %]
-                            <strong>Showing only available items</strong></li><li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi_not_availablity | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]">Show all items</a>
+                            <strong>Showing only available items</strong></li><li><a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi_not_availablity | uri %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]">Show all items</a>
                         [% ELSE %]
-                            <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | url %][% limit_cgi |url %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]&amp;limit=available">Limit to currently available items.</a>
+                            <a href="/cgi-bin/koha/opac-search.pl?[% query_cgi | $raw %][% limit_cgi | $raw %][% IF ( sort_by ) %]&amp;sort_by=[% sort_by |uri %][% END %]&amp;limit=available">Limit to currently available items.</a>
                         [% END %]
                     </li>
                 </ul>
