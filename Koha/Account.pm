@@ -430,6 +430,7 @@ sub outstanding_debits {
 
     my $lines = $self->lines->search(
         {
+            amount            => { '>' => 0 },
             amountoutstanding => { '>' => 0 }
         }
     );
@@ -448,6 +449,7 @@ sub outstanding_credits {
 
     my $lines = $self->lines->search(
         {
+            amount            => { '<' => 0 },
             amountoutstanding => { '<' => 0 }
         }
     );
