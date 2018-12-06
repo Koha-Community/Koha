@@ -786,6 +786,16 @@ if ( $indexing_mode eq 'dom' ) {
         );
         is($count, 1, 'MARC21 authorities: one hit on LC-card-number contains "99282477"');
     }
+    ($auths, $count) = SearchAuthorities(
+        ['LC-card-number'], ['and'], [''], ['contains'],
+        ['99282477'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on LC-card-number contains "99282477"');
+    ($auths, $count) = SearchAuthorities(
+        ['all'], ['and'], [''], ['contains'],
+        ['professional wrestler'], 0, 10, '', '', 1
+    );
+    is($count, 1, 'MARC21 authorities: one hit on "all" (entire record) contains "professional wrestler"');
 
     $UseQueryParser = 1;
 
@@ -994,6 +1004,8 @@ subtest 'MARC21 + DOM' => sub {
 subtest 'UNIMARC + GRS-1' => sub {
     plan tests => 14;
     run_unimarc_search_tests('grs1');
+    plan tests => 112;
+    run_marc21_search_tests();
 };
 
 subtest 'UNIMARC + DOM' => sub {
