@@ -6,7 +6,7 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Patrons &rsaquo; Pay Fines for  [% patron.firstname | html %] [% patron.surname | html %]</title>
+<title>Koha &rsaquo; Patrons &rsaquo; Make a payment for  [% patron.firstname | html %] [% patron.surname | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 
@@ -14,7 +14,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'patron-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Pay fines for [% patron.firstname | html %] [% patron.surname | html %]</div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>  &rsaquo; Make a payment for [% patron.firstname | html %] [% patron.surname | html %]</div>
 
 <div id="doc3" class="yui-t2">
    
@@ -26,8 +26,8 @@
 <!-- The manual invoice and credit buttons -->
 <div class="statictabs">
 <ul>
-    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Account</a></li>
-    <li class="active"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Pay fines</a></li>
+    <li><a href="/cgi-bin/koha/members/boraccount.pl?borrowernumber=[% patron.borrowernumber | uri %]">Transactions</a></li>
+    <li class="active"><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Make a payment</a></li>
     <li><a href="/cgi-bin/koha/members/maninvoice.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual invoice</a></li>
     <li><a href="/cgi-bin/koha/members/mancredit.pl?borrowernumber=[% patron.borrowernumber | uri %]" >Create manual credit</a></li>
 </ul>
