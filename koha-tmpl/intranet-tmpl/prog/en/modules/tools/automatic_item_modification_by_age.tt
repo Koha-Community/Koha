@@ -229,13 +229,18 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("js/automatic_item_modification_by_age.js") | $raw %]
     [% IF op == 'edit_form' %]
         <script>
+            var Sticky;
             $(document).ready(function() {
                   [% IF ( op == 'edit_form' ) %]
-                      $('#toolbar').fixFloat();
+                Sticky = $("#toolbar");
+                Sticky.hcSticky({
+                    stickTo: "main",
+                    stickyClass: "floating"
+                });
                   [% END %]
                   [% IF rules.size > 0 %]
                       $("#norules").hide();

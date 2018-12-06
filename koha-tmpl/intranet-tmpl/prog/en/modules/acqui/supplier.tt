@@ -388,7 +388,7 @@
 </div> <!-- /.row -->
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     <script>
         function confirm_deletion() {
@@ -421,6 +421,8 @@
             $(this).parents('.supplier-contact').remove();
             ev.preventDefault();
         }
+
+        var Sticky;
 
          $(document).ready(function() {
             var contractst = $("#contractst").dataTable($.extend(true, {}, dataTablesDefaults, {
@@ -459,7 +461,12 @@
             $('body').on('click', '.contact_claimissues', null, function () {
                 $(this).next('.contact_claimissues_hidden').val($(this).is(':checked') ? '1' : '0');
             });
-            $('#toolbar').fixFloat();
+
+            Sticky = $("#toolbar");
+            Sticky.hcSticky({
+                stickTo: "main",
+                stickyClass: "floating"
+            });
         });
     </script>
 [% END %]

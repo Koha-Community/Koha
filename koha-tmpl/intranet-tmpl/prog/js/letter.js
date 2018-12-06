@@ -30,9 +30,15 @@ function checkCodes( new_lettercode, new_branchcode ){
     });
 }
 
+var Sticky;
+
 $(document).ready(function() {
     if( add_form || copy_form ){
-        $('#toolbar').fixFloat();
+        Sticky = $("#toolbar");
+        Sticky.hcSticky({
+            stickTo: ".main",
+            stickyClass: "floating"
+        });
     }
 
     var ntable = KohaTable("lettert", {

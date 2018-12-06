@@ -4,7 +4,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; [% IF ( biblionumber ) %]Editing [% title | html %] (Record number [% biblionumber | html %])[% ELSE %]Add MARC record[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+[% Asset.js("lib/hc-sticky.js") | $raw %]
 [% Asset.js("js/cataloging.js") | $raw %]
 [% INCLUDE 'browser-strings.inc' %]
 [% Asset.js("js/browser.js") | $raw %]
@@ -16,6 +16,7 @@
     $(window).load(function(){
         $("#loading").hide();
     });
+    var Sticky;
 	 $(document).ready(function() {
 
         [% IF bib_doesnt_exist %]
@@ -31,7 +32,11 @@
           $('#addbibliotabs').selectTabByID("#[% tab | html %]");
         [% END %]
 
-        $('#toolbar').fixFloat();
+        Sticky = $("#toolbar");
+        Sticky.hcSticky({
+            stickTo: ".main",
+            stickyClass: "floating"
+        });
 
         /* check cookie to hide/show marcdocs*/
         if($.cookie("marcdocs_[% borrowernumber | html %]") == 'hide'){

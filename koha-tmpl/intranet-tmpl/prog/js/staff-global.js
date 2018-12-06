@@ -1,4 +1,4 @@
-// staff-global.js
+/* global shortcut delCookie delBasket Sticky */
 if ( KOHA === undefined ) var KOHA = {};
 
 function _(s) { return s; } // dummy function for gettext
@@ -71,6 +71,9 @@ $.fn.selectTabByID = function (tabID) {
     $(".toggle_element").on("click",function(e){
         e.preventDefault();
         $( $(this).data("element") ).toggle();
+        if (typeof Sticky !== "undefined" && typeof hcSticky === "function") {
+            Sticky.hcSticky('update');
+        }
     });
 
     var navmenulist = $("#navmenulist");

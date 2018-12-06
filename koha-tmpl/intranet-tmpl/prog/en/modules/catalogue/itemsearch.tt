@@ -218,7 +218,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     <script type="text/javascript">
         var authorised_values = [% authorised_values_json | html %];
 
@@ -410,9 +410,13 @@
                 ]
             });
         }
-
+        var Sticky;
         $(document).ready(function () {
-            $('#toolbar').fixFloat();
+            Sticky = $("#toolbar");
+            Sticky.hcSticky({
+                stickTo: "#item-search-block",
+                stickyClass: "floating"
+            });
             // Add the "New field" link.
             var form_field = $('div.form-field-select-text').last()
             var NEW_FIELD = _("New field");

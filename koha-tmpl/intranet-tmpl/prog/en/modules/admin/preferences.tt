@@ -159,14 +159,18 @@
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'datatables.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/multiple-select/jquery.multiple.select.js") | $raw %]
     <script>
-        [% UNLESS ( searchfield ) %]$(document).ready(function(){
-                $('#toolbar').fixFloat();
-            });[% END %]
-
+        var Sticky;
         $(document).ready(function(){
+            [% UNLESS ( searchfield ) %]
+                Sticky = $("#toolbar");
+                Sticky.hcSticky({
+                    stickTo: "main",
+                    stickyClass: "floating"
+                });
+            [% END %]
             $("select[multiple='multiple']").multipleSelect( {
                 placeholder: _("Please select ..."),
                 selectAllText: _("Select all"),

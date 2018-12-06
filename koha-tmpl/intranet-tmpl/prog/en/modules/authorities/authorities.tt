@@ -3,7 +3,7 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Authorities &rsaquo; [% IF ( authid ) %]Modify authority #[% authid | html %] ([% authtypetext | html %])[% ELSE %]Adding authority ([% authtypetext | html %])[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+[% Asset.js("lib/hc-sticky.js") | $raw %]
 [% Asset.js("js/cataloging.js") | $raw %]
 
 <script type="text/javascript">
@@ -11,9 +11,14 @@
     $(window).load(function(){
         $("#loading").hide();
     });
+    var Sticky;
 	 $(document).ready(function() {
         $('#authoritytabs').tabs();
-        $('#toolbar').fixFloat();
+        Sticky = $("#toolbar");
+        Sticky.hcSticky({
+            stickTo: ".main",
+            stickyClass: "floating"
+        });
         $("#addauth").click(function(){
             if(Check()){
                 $("#f").submit();

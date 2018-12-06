@@ -1141,27 +1141,29 @@
      </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
+        function update_cardnumber_warning(size){
+            var max_len = [% maxlength_cardnumber | html %];
+            if ( size >= max_len ) {
+                $("#cn_max").show();
+            } else {
+                $("#cn_max").hide();
+            }
+        }
+        var Sticky;
         $(document).ready(function() {
 
                 $("#saverecord").css({ 'margin-left': 0 });
-                var original_offset = $("#toolbar").position().top;
-                var additional_height = $("#filters").height();
-                $('#toolbar').fixFloat({ 'originalOffset': original_offset });
-                $("#filteraction_on").on("click", function(){
-                    $(window).off('scroll');
-                    $("#toolbar").css({ top: original_offset + additional_height });
-                    $('#toolbar').fixFloat({ 'originalOffset': original_offset + additional_height });
-                });
-                $("#filteraction_off").on("click", function(){
-                    $(window).off('scroll');
-                    $("#toolbar").css({ top: original_offset });
-                    $('#toolbar').fixFloat({ 'originalOffset': original_offset });
-                })
+
+            Sticky = $("#toolbar");
+            Sticky.hcSticky({
+                stickTo: "#yui-main",
+                stickyClass: "floating"
+            });
 
             [% IF categorycode %]
                 update_category_code( "[% categorycode | html %]" );
@@ -1171,18 +1173,7 @@
                     update_category_code( category_code );
                 }
             [% END %]
-        });
 
-        function update_cardnumber_warning(size){
-            var max_len = [% maxlength_cardnumber | html %];
-            if ( size >= max_len ) {
-                $("#cn_max").show();
-            } else {
-                $("#cn_max").hide();
-            }
-        }
-
-        $(document).ready(function() {
             $("#cn_max").hide();
             var content;
             $("#cardnumber").on("keydown", function(e){

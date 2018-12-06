@@ -765,7 +765,7 @@
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'columns_settings.inc' %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     <script>
         function updateColumnsVisibility(visible) {
             if ( visible ) {
@@ -779,8 +779,17 @@
             }
         }
 
+        var Sticky;
+
         $(document).ready(function() {
-            if ( $('#toolbar').length ) {$('#toolbar').fixFloat();}
+            if ( $('#toolbar').length ) {
+                Sticky = $("#toolbar");
+                Sticky.hcSticky({
+                    stickTo: "#yui-main",
+                    stickyClass: "floating"
+                });
+            }
+
             [% UNLESS ( closedate ) %]
                 $('#addtoBasket').on('show', function () {
                    $(this).find(".modal-body").html($(".acqui_basket_add")[0].outerHTML);

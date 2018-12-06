@@ -52,7 +52,7 @@ gulp.task('build', function() {
     return gulp.src( css_base + "/src/**/*.scss" )
       .pipe(sass( sassOptions ).on('error', sass.logError))
       .pipe(autoprefixer())
-      .pipe(cssnano())
+      .pipe(cssnano({ zindex: false }))
       .pipe(gulp.dest( css_base ));
 });
 

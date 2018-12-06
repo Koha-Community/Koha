@@ -279,7 +279,7 @@
 </div>
 
 [% MACRO jsinclude BLOCK %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     <script type="text/JavaScript">
         /**
          *  Function add_field();
@@ -292,10 +292,15 @@
             dad.appendChild(line.cloneNode(true));
             line.removeChild(ButtonPlus);
         }
+        var Sticky;
         $(document).ready(function() {
             $("input[name=q]:eq(0)").focus();
             $('#advsearches').tabs();
-            $('#toolbar').fixFloat();
+            Sticky = $("#toolbar");
+            Sticky.hcSticky({
+                stickTo: ".main",
+                stickyClass: "floating"
+            });
             $("#branchloop").on("change",function(){
                 if( this.value != ""){
                     document.getElementById("categoryloop").disabled=true;

@@ -1651,6 +1651,16 @@ dd {
     border-radius: 5px 5px 0 0;
     margin: 0;
     padding: 5px;
+
+    .dropdown-menu {
+        border-top-width: 1px;
+        font-size: 13px;
+    }
+
+    &.floating {
+        border-radius: 0;
+        margin-top: 0;
+    }
 }
 
 #disabled {
@@ -3283,18 +3293,6 @@ button,
     padding: 3px 5px;
 }
 
-#toolbar {
-    .dropdown-menu {
-        border-top-width: 1px;
-        font-size: 13px;
-    }
-
-    &.floating {
-        border-radius: 0;
-        margin-top: 0;
-    }
-}
-
 .dropdown-menu {
     border-color: rgba(0, 0, 0, .2);
     border-top: 0;
@@ -3643,6 +3641,7 @@ progress {
 
 .floating {
     box-shadow: 0 3px 2px 0 rgba(0, 0, 0, .5);
+    z-index: 100;
 }
 
 .inline {

@@ -632,7 +632,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'browser-strings.inc' %]
     [% Asset.js("js/browser.js") | $raw %]
-    [% Asset.js("lib/jquery/plugins/jquery.fixFloat.js") | $raw %]
+    [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script type="text/javascript">
         var MSG_NO_ITEM_SELECTED = _("Nothing is selected.");
@@ -658,10 +658,13 @@
                 verify_images();
             });
         [% END %]
-
+        var Sticky;
         $(document).ready(function() {
-
-            $("#searchheader").fixFloat();
+            Sticky = $("#searchheader");
+            Sticky.hcSticky({
+                stickTo: "#yui-main",
+                stickyClass: "floating"
+            });
 
             $("#cartsubmit").click(function(e){
                 e.preventDefault();

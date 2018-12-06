@@ -5,6 +5,9 @@ $(document).ready(function(){
         e.preventDefault();
         $('#filters').toggle();
         $('.filteraction').toggle();
+        if (typeof Sticky !== "undefined" && typeof hcSticky === "function") {
+            Sticky.hcSticky('update');
+        }
     });
     if( advsearch ){
         $("#filteraction_on").toggle();
