@@ -4,12 +4,18 @@ use Modern::Perl;
 
 use Koha::Database;
 use C4::Biblio;
+use C4::Items;
 use Koha::Biblios;
+use Koha::Items;
 
 use Bytes::Random::Secure;
 use Carp;
 use Module::Load;
 use String::Random;
+
+use constant {
+    SIZE_BARCODE => 20, # Not perfect but avoid to fetch the value when creating a new item
+};
 
 sub new {
     my ($class) = @_;
@@ -156,6 +162,30 @@ sub build_sample_biblio {
 
     my ($biblio_id) = C4::Biblio::AddBiblio( $record, $frameworkcode );
     return Koha::Biblios->find($biblio_id);
+}
+
+sub build_sample_item {
+    my ( $self, $args ) = @_;
+
+    my $biblionumber =
+      delete $args->{biblionumber} || $self->build_sample_biblio->biblionumber;
+    my $library = delete $args->{library}
+      || $self->build_object( { class => 'Koha::Libraries' } )->branchcode;
+
+    my $itype = delete $args->{itype}
+      || $self->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
+
+    my ( undef, undef, $itemnumber ) = C4::Items::AddItem(
+        {
+            homebranch    => $library,
+            holdingbranch => $library,
+            barcode       => $self->_gen_text( { info => { size => SIZE_BARCODE } } ),
+            itype         => $itype,
+            %$args,
+        },
+        $biblionumber
+    );
+    return Koha::Items->find($itemnumber);
 }
 
 # ------------------------------------------------------------------------------
