@@ -25,7 +25,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_item_search_fields', 'Manage item search fields'),
    ( 3, 'manage_search_engine_config', 'Manage search engine configuration'),
    ( 3, 'manage_search_targets', 'Manage Z39.50 and SRU server configuration'),
-   ( 3, 'manage_didyouean', 'Manage Did you mean? configuration'),
+   ( 3, 'manage_didyoumean', 'Manage Did you mean? configuration'),
    ( 3, 'manage_column_config', 'Manage column configuration'),
    ( 3, 'manage_sms_providers', 'Manage SMS cellular providers'),
    ( 3, 'manage_audio_alerts', 'Manage audio alerts'),
