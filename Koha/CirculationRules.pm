@@ -18,6 +18,7 @@ package Koha::CirculationRules;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+use Carp qw(croak);
 
 use Koha::Exceptions;
 use Koha::CirculationRule;
@@ -239,10 +240,11 @@ sub get_effective_rules {
 sub set_rule {
     my ( $self, $params ) = @_;
 
-    for my $mandatory_parameter (qw( branchcode categorycode itemtype rule_name rule_value ) ){
+    for my $mandatory_parameter (qw( branchcode categorycode itemtype rule_name rule_value ) ) {
         Koha::Exceptions::MissingParameter->throw(
             "Required parameter 'branchcode' missing")
           unless exists $params->{$mandatory_parameter};
+    }
 
     my $kind_info = $RULE_KINDS->{ $params->{rule_name} };
     croak "set_rule given unknown rule '$params->{rule_name}'!"
