@@ -122,14 +122,6 @@ subtest 'Koha::Library::Group->get_search_groups' => sub {
     is_deeply( $groups[0]->unblessed, $groupA->unblessed, 'Get search groups opac should return enabled group' );
     @groups = Koha::Library::Groups->get_search_groups({ interface => 'staff' });
     is_deeply( $groups[0]->unblessed, $groupB->unblessed, 'Get search groups staff should return enabled group' );
-
-    # TODO This is not implemented because not used yet
-    # ->has_child only works with libraries
-    #is( $groupA->has_child( $groupA1 ), 1, 'groupA1 should be condidered as a child of groupA' );
-
-    # FIXME At the time of writing this test fails because the ->children methods does not return more than 1 level of depth
-    # See Bug 15707 comments 166-170+
-    #is( $groupA->has_child( $groupA1_library2->branchcode ), 1, 'groupA1_library2 should be considered as a child of groupA (it is a grandchild)' );
 };
 
 my $groupX = Koha::Library::Group->new( { title => "Group X" } )->store();
