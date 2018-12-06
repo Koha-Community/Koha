@@ -2033,20 +2033,21 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     )->unblessed;
 
     # And the issuing rule
-    Koha::IssuingRules->search->delete;
-    my $rule = Koha::IssuingRule->new(
+    Koha::CirculationRules->search->delete;
+    Koha::CirculationRules->set_rules(
         {
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
-            issuelength  => 1,
-            firstremind  => 0,        # 0 day of grace
-            finedays     => 2,        # 2 days of fine per day of overdue
-            suspension_chargeperiod => 1,
-            lengthunit   => 'days',
+            rules        => {
+                issuelength => 1,
+                firstremind => 0,    # 0 day of grace
+                finedays    => 2,    # 2 days of fine per day of overdue
+                suspension_chargeperiod => 1,
+                lengthunit              => 'days',
+            }
         }
     );
-    $rule->store();
 
     my $five_days_ago = dt_from_string->subtract( days => 5 );
     # We want to charge 2 days every day, without grace

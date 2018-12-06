@@ -20,7 +20,6 @@ use Koha::CirculationRules;
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string output_pref );
 use Koha::Holds;
-use Koha::IssuingRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
@@ -613,16 +612,19 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         $biblio_3->biblionumber
     );
 
-    Koha::IssuingRules->search->delete;
-    my $issuingrule = Koha::IssuingRule->new(
-        {   categorycode     => '*',
-            branchcode       => '*',
-            itemtype         => $itemtype->itemtype,
-            reservesallowed  => 1,
-            holds_per_record => 99,
-            holds_per_day    => 2
+    Koha::CirculationRules->search->delete;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            branchcode   => '*',
+            itemtype     => $itemtype->itemtype,
+            rules        => {
+                reservesallowed  => 1,
+                holds_per_record => 99,
+                holds_per_day    => 2
+            }
         }
-    )->store;
+    );
 
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_1 ),
