@@ -59,22 +59,7 @@ my $itemtype =
 
 t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
 
-# Create a helper biblio
-my $bib   = MARC::Record->new();
-my $title = 'Silence in the library';
-if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-    $bib->append_fields(
-        MARC::Field->new( '600', q{}, '1', a => 'Moffat, Steven' ),
-        MARC::Field->new( '200', q{}, q{}, a => $title ),
-    );
-}
-else {
-    $bib->append_fields(
-        MARC::Field->new( '100', q{}, q{}, a => 'Moffat, Steven' ),
-        MARC::Field->new( '245', q{}, q{}, a => $title ),
-    );
-}
-my ($bibnum) = AddBiblio( $bib, $frameworkcode );
+my $bibnum = $builder->gimme_a_biblio({ frameworkcode => $frameworkcode })->biblionumber;
 
 # Create a helper item instance for testing
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(

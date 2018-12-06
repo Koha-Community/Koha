@@ -79,22 +79,7 @@ my $itemtype = $builder->build(
 
 t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
 
-# Create a helper biblio
-my $bib = MARC::Record->new();
-my $title = 'Silence in the library';
-if( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
-    $bib->append_fields(
-        MARC::Field->new('600', '', '1', a => 'Moffat, Steven'),
-        MARC::Field->new('200', '', '', a => $title),
-    );
-}
-else {
-    $bib->append_fields(
-        MARC::Field->new('100', '', '', a => 'Moffat, Steven'),
-        MARC::Field->new('245', '', '', a => $title),
-    );
-}
-my ( $bibnum ) = AddBiblio($bib, $frameworkcode);
+my $bibnum = $builder->gimme_a_biblio({frameworkcode => $frameworkcode})->biblionumber;
 
 # Create a helper item instance for testing
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
@@ -135,7 +120,7 @@ my $branchcode = Koha::Libraries->search->next->branchcode;
 
 AddReserve($branchcode,    $borrowernumber, $biblionumber,
         $bibitems,  $priority, $resdate, $expdate, $notes,
-        $title,      $checkitem, $found);
+        'a title',      $checkitem, $found);
 
 my ($status, $reserve, $all_reserves) = CheckReserves($itemnumber, $barcode);
 
@@ -227,15 +212,8 @@ $dbh->do(
     $branch_2, 10, 2, 'homebranch',
 );
 
-# helper biblio for the bug 10272 regression test
-my $bib2 = MARC::Record->new();
-$bib2->append_fields(
-    MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
-    MARC::Field->new('245', ' ', ' ', a => $title),
-);
+my $bibnum2 = $builder->gimme_a_biblio({frameworkcode => $frameworkcode})->biblionumber;
 
-# create one item belonging to FPL and one belonging to CPL
-my ( $bibnum2 ) = AddBiblio($bib, $frameworkcode);
 my ($itemnum_cpl, $itemnum_fpl);
 ( undef, undef, $itemnum_cpl ) = AddItem(
     {   homebranch    => $branch_1,
@@ -260,13 +238,13 @@ my ($itemnum_cpl, $itemnum_fpl);
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
 AddReserve($branch_3,  $requesters{$branch_3}, $bibnum2,
            $bibitems,  1, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 AddReserve($branch_2,  $requesters{$branch_2}, $bibnum2,
            $bibitems,  2, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum2,
            $bibitems,  3, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 ModReserveAffect($itemnum_cpl, $requesters{$branch_3}, 0);
 
 # Now it should have different priorities.
@@ -284,13 +262,13 @@ is( $reserves[0]->borrowernumber(), $requesters{$branch_3}, 'GetWaiting got the 
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum2));
 AddReserve($branch_3,  $requesters{$branch_3}, $bibnum2,
            $bibitems,  1, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 AddReserve($branch_2,  $requesters{$branch_2}, $bibnum2,
            $bibitems,  2, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum2,
            $bibitems,  3, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 
 # Ensure that the item's home library controls hold policy lookup
 t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
@@ -329,7 +307,7 @@ $expdate= undef; #no expdate
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  1, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 ($status)=CheckReserves($itemnumber,undef,undef);
 is( $status, 'Reserved', 'CheckReserves returns reserve without lookahead');
 ($status)=CheckReserves($itemnumber,undef,7);
@@ -344,7 +322,7 @@ $resdate=output_pref($resdate);
 $expdate= undef; #no expdate
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  1, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 ($status)=CheckReserves($itemnumber,undef,undef);
 is( $status, '', 'CheckReserves returns no future reserve without lookahead');
 
@@ -401,7 +379,7 @@ $resdate->add_duration(DateTime::Duration->new(days => 2));
 $resdate=output_pref($resdate);
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  1, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 my $item = Koha::Items->find( $itemnumber );
 $holds = $item->current_holds;
 my $dtf = Koha::Database->new->schema->storage->datetime_parser;
@@ -411,7 +389,7 @@ is( $future_holds->count, 0, 'current_holds does not return a future next availa
 $dbh->do("DELETE FROM reserves WHERE biblionumber=?",undef,($bibnum));
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  1, $resdate, $expdate, $notes,
-           $title,      $itemnumber, $found); #item level hold
+           'a title',      $itemnumber, $found); #item level hold
 $future_holds = $holds->search({ reservedate => { '>' => $dtf->format_date( dt_from_string ) } } );
 is( $future_holds->count, 0, 'current_holds does not return a future item level hold' );
 # 9788c: current_holds returns future wait (confirmed future hold)
@@ -427,7 +405,7 @@ is($p, 4, 'CalculatePriority should now return priority 4');
 $resdate=undef;
 AddReserve($branch_1,  $requesters{'CPL2'}, $bibnum2,
            $bibitems,  $p, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum2);
 is($p, 5, 'CalculatePriority should now return priority 5');
 #some tests on bibnum
@@ -437,7 +415,7 @@ is($p, 1, 'CalculatePriority should now return priority 1');
 #add a new reserve and confirm it to waiting
 AddReserve($branch_1,  $requesters{$branch_1}, $bibnum,
            $bibitems,  $p, $resdate, $expdate, $notes,
-           $title,      $itemnumber, $found);
+           'a title',      $itemnumber, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now return priority 2');
 ModReserveAffect( $itemnumber,  $requesters{$branch_1} , 0);
@@ -446,7 +424,7 @@ is($p, 1, 'CalculatePriority should now return priority 1');
 #add another biblio hold, no resdate
 AddReserve($branch_1,  $requesters{'CPL2'}, $bibnum,
            $bibitems,  $p, $resdate, $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now return priority 2');
 #add another future hold
@@ -455,7 +433,7 @@ $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 1));
 AddReserve($branch_1,  $requesters{'CPL3'}, $bibnum,
            $bibitems,  $p, output_pref($resdate), $expdate, $notes,
-           $title,      $checkitem, $found);
+           'a title',      $checkitem, $found);
 $p = C4::Reserves::CalculatePriority($bibnum);
 is($p, 2, 'CalculatePriority should now still return priority 2');
 #calc priority with future resdate
@@ -467,7 +445,7 @@ is($p, 3, 'CalculatePriority should now return priority 3');
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 AddReserve($branch_1,  $requesters{$branch_1}, $item_bibnum,
            $bibitems,  1, undef, $expdate, $notes,
-           $title,      $checkitem, '');
+           'a title',      $checkitem, '');
 my (undef, $canres, undef) = CheckReserves($itemnumber);
 
 is( CanReserveBeCanceledFromOpac(), undef,
@@ -497,7 +475,7 @@ is($cancancel, 0, 'Reserve in transfer status cant be canceled');
 $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 AddReserve($branch_1,  $requesters{$branch_1}, $item_bibnum,
            $bibitems,  1, undef, $expdate, $notes,
-           $title,      $checkitem, '');
+           'a title',      $checkitem, '');
 (undef, $canres, undef) = CheckReserves($itemnumber);
 
 ModReserveAffect($itemnumber, $requesters{$branch_1}, 0);
@@ -547,13 +525,13 @@ $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 t::lib::Mocks::mock_preference('ConfirmFutureHolds', 0);
 t::lib::Mocks::mock_preference('AllowHoldDateInFuture', 1);
 AddReserve($branch_1,  $borrowernumber, $item_bibnum,
-    $bibitems,  1, undef, $expdate, $notes, $title, $checkitem, '');
+    $bibitems,  1, undef, $expdate, $notes, 'a title', $checkitem, '');
 MoveReserve( $itemnumber, $borrowernumber );
 ($status)=CheckReserves( $itemnumber );
 is( $status, '', 'MoveReserve filled hold');
 #   hold from A waiting, today, no fut holds: MoveReserve should fill it
 AddReserve($branch_1,  $borrowernumber, $item_bibnum,
-   $bibitems,  1, undef, $expdate, $notes, $title, $checkitem, 'W');
+   $bibitems,  1, undef, $expdate, $notes, 'a title', $checkitem, 'W');
 MoveReserve( $itemnumber, $borrowernumber );
 ($status)=CheckReserves( $itemnumber );
 is( $status, '', 'MoveReserve filled waiting hold');
@@ -562,7 +540,7 @@ $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 1));
 $resdate=output_pref($resdate);
 AddReserve($branch_1,  $borrowernumber, $item_bibnum,
-    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, '');
+    $bibitems,  1, $resdate, $expdate, $notes, 'a title', $checkitem, '');
 MoveReserve( $itemnumber, $borrowernumber );
 ($status)=CheckReserves( $itemnumber, undef, 1 );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold');
@@ -570,13 +548,13 @@ $dbh->do('DELETE FROM reserves', undef, ($bibnum));
 #   hold from A pos 1, tomorrow, fut holds=2: MoveReserve should fill it
 t::lib::Mocks::mock_preference('ConfirmFutureHolds', 2);
 AddReserve($branch_1,  $borrowernumber, $item_bibnum,
-    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, '');
+    $bibitems,  1, $resdate, $expdate, $notes, 'a title', $checkitem, '');
 MoveReserve( $itemnumber, $borrowernumber );
 ($status)=CheckReserves( $itemnumber, undef, 2 );
 is( $status, '', 'MoveReserve filled future hold now');
 #   hold from A waiting, tomorrow, fut holds=2: MoveReserve should fill it
 AddReserve($branch_1,  $borrowernumber, $item_bibnum,
-    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, 'W');
+    $bibitems,  1, $resdate, $expdate, $notes, 'a title', $checkitem, 'W');
 MoveReserve( $itemnumber, $borrowernumber );
 ($status)=CheckReserves( $itemnumber, undef, 2 );
 is( $status, '', 'MoveReserve filled future waiting hold now');
@@ -585,7 +563,7 @@ $resdate= dt_from_string();
 $resdate->add_duration(DateTime::Duration->new(days => 3));
 $resdate=output_pref($resdate);
 AddReserve($branch_1,  $borrowernumber, $item_bibnum,
-    $bibitems,  1, $resdate, $expdate, $notes, $title, $checkitem, '');
+    $bibitems,  1, $resdate, $expdate, $notes, 'a title', $checkitem, '');
 MoveReserve( $itemnumber, $borrowernumber );
 ($status)=CheckReserves( $itemnumber, undef, 3 );
 is( $status, 'Reserved', 'MoveReserve did not fill future hold of 3 days');
