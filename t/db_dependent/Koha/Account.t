@@ -33,17 +33,17 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'outstanding_debits() tests' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
     my @generated_lines;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 1 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 2 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 3 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 4 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4 })->store;
 
     my $account = $patron->account;
     my $lines   = $account->outstanding_debits();
@@ -59,8 +59,8 @@ subtest 'outstanding_debits() tests' => sub {
 
     my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
     Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -2 })->store;
-    my $just_one = Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding =>  3 })->store;
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -6 })->store;
+    my $just_one = Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 3, amountoutstanding =>  3 })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -6, amountoutstanding => -6 })->store;
     $lines = $patron_2->account->outstanding_debits();
     is( $lines->total_outstanding, 3, "Total if some outstanding debits and some credits is only debits" );
     is( $lines->count, 1, "With 1 outstanding debits, we get back a Lines object with 1 lines" );
@@ -68,24 +68,30 @@ subtest 'outstanding_debits() tests' => sub {
     is_deeply( $the_line->unblessed, $lines->next->unblessed, "We get back the one correct line");
 
     my $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -2 })->store;
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -20 })->store;
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -200 })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -2,   amountoutstanding => -2 })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -20,  amountoutstanding => -20 })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -200, amountoutstanding => -200 })->store;
     $lines = $patron_3->account->outstanding_debits();
     is( $lines->total_outstanding, 0, "Total if no outstanding debits total is 0" );
     is( $lines->count, 0, "With 0 outstanding debits, we get back a Lines object with 0 lines" );
 
-    my $patron_4 = $builder->build_object({ class => 'Koha::Patrons' });
-    $lines = $patron_4->account->outstanding_debits();
+    my $patron_4  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $account_4 = $patron_4->account;
+    $lines = $account_4->outstanding_debits();
     is( $lines->total_outstanding, 0, "Total if no outstanding debits is 0" );
     is( $lines->count, 0, "With no outstanding debits, we get back a Lines object with 0 lines" );
+
+    # create a pathological credit with amountoutstanding > 0 (BZ 14591)
+    Koha::Account::Line->new({ borrowernumber => $patron_4->id, amount => -3, amountoutstanding => 3 })->store();
+    $lines = $account_4->outstanding_debits();
+    is( $lines->count, 0, 'No credits are confused with debits because of the amountoutstanding value' );
 
     $schema->storage->txn_rollback;
 };
 
 subtest 'outstanding_credits() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     $schema->storage->txn_begin;
 
@@ -110,9 +116,15 @@ subtest 'outstanding_credits() tests' => sub {
     }
 
     my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
-    $lines       = $patron_2->account->outstanding_credits();
+    $account  = $patron_2->account;
+    $lines       = $account->outstanding_credits();
     is( $lines->total_outstanding, 0, "Total if no outstanding credits is 0" );
     is( $lines->count, 0, "With no outstanding credits, we get back a Lines object with 0 lines" );
+
+    # create a pathological debit with amountoutstanding < 0 (BZ 14591)
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 2, amountoutstanding => -3 })->store();
+    $lines = $account->outstanding_credits();
+    is( $lines->count, 0, 'No debits are confused with credits because of the amountoutstanding value' );
 
     $schema->storage->txn_rollback;
 };
