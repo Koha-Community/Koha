@@ -238,7 +238,8 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     $plan_date,
                     $pub_date,
                     $publisheddatetexts[$i],
-                    $notes[$i]
+                    $notes[$i],
+                    $serialdatalist[0]->{'routingnotes'}
                 );
             }
         }
