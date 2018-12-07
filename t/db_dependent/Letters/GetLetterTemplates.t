@@ -3,10 +3,11 @@ use Test::More tests => 7;
 
 use C4::Context;
 use C4::Letters qw( GetLetterTemplates );
+use Koha::Database;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 $dbh->do(q|DELETE FROM letter|);
 

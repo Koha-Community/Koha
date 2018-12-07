@@ -22,6 +22,7 @@ use CGI;
 
 use t::lib::Mocks;
 use C4::Context;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Auth_with_cas');
@@ -34,10 +35,9 @@ BEGIN {
             /);
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-# Start transaction
-$dbh->{ AutoCommit } = 0;
-$dbh->{ RaiseError } = 1;
 
 C4::Context->disable_syspref_cache();
 t::lib::Mocks::mock_preference('OPACBaseURL','http://localhost');
@@ -63,8 +63,3 @@ $ENV{SCRIPT_NAME} = '/cgi-bin/koha/circ/circulation-home.pl';
 is(C4::Auth_with_cas::_url_with_get_params($cgi, 'intranet'),
     "$staff_base_url/cgi-bin/koha/circ/circulation-home.pl?bar=baz",
    "Intranet URL should be returned when using intranet login (Bug 13507)");
-
-
-
-$dbh->rollback;
-

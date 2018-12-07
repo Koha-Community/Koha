@@ -5,15 +5,16 @@
 
 use Modern::Perl;
 use C4::Context;
+use Koha::Database;
 use Test::More tests => 30;
 
 BEGIN {
     use_ok('Koha::Misc::Files');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 ## new() parameter handling check
 is(Koha::Misc::Files->new(), undef, "new() param check test/0");
@@ -84,6 +85,3 @@ is(scalar @$files_a_123_infos, 0, "GetFilesInfo() result count after DelAllFiles
 my $number_of_deleted_files_b_221 = $mf_b_221->DelAllFiles();
 is( $number_of_deleted_files_b_221, 1, "DelAllFiles returns the number of deleted files/2" );
 is(scalar @{$mf_b_221->GetFilesInfo()}, 0, "GetFilesInfo() result count after DelAllFiles()/2");
-
-$dbh->rollback;
-

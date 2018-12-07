@@ -7,10 +7,10 @@ use MARC::Field;
 
 use C4::Context;
 use C4::Acquisition qw( FillWithDefaultValues );
+use Koha::Database;
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $biblio_module  = Test::MockModule->new('C4::Biblio');
 my $default_author = 'default author';

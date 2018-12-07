@@ -1,20 +1,18 @@
 #!/usr/bin/perl
 
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Biblio;
+use Koha::Database;
 use Koha::Acquisition::Currencies;
 use Test::More;
-use utf8;
 
 # work around wide character warnings
 binmode Test::More->builder->output, ":encoding(UTF-8)";
 binmode Test::More->builder->failure_output, ":encoding(UTF-8)";
 
-# start transaction
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 # set some test price strings and expected output
 my @prices2test=( { string => '25,5 £, $34,55, $LD35',       expected => '34.55' },
@@ -69,6 +67,3 @@ foreach my $price (@prices2test) {
         "got expected price from $price->{'string'} (using ISO code as currency name)",
     );
 }
-
-# Cleanup
-$dbh->rollback;

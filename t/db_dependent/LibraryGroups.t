@@ -7,6 +7,7 @@ use List::MoreUtils 'any';
 use Test::More tests => 20;
 
 use t::lib::TestBuilder;
+use Koha::Database;
 
 BEGIN {
     use FindBin;
@@ -15,9 +16,9 @@ BEGIN {
     use_ok('Koha::Library::Groups');
 }
 
-our $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
+my $dbh = C4::Context->dbh;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM library_groups|);

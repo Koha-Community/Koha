@@ -5,10 +5,11 @@ use Test::More tests => 40;
 
 use C4::Context;
 use Koha::AdditionalField;
+use Koha::Database;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do( q|DELETE FROM additional_fields| );
 $dbh->do( q|DELETE FROM additional_field_values| );
@@ -290,6 +291,3 @@ is_deeply ( $af1->values, {$subscriptionid2 => qq|value_for_af1_$subscriptionid2
 $af1->delete_values;
 $af1->fetch_values;
 is_deeply ( $af1->values, {}, "fetch_values: no values" );
-
-
-$dbh->rollback;
