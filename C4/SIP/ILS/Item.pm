@@ -89,6 +89,8 @@ sub new {
     $self->{permanent_location} = $item->homebranch;
     $self->{collection_code}    = $item->ccode;
     $self->{call_number}        = $item->itemcallnumber;
+    $self->{'shelving_location'}           = $item->location;
+    $self->{'permanent_shelving_location'} = $item->permanent_location;
 
     $self->{object} = $item;
 
@@ -135,6 +137,8 @@ my %fields = (
     barcode             => 0,
     onloan              => 0,
     collection_code     => 0,
+    shelving_location   => 0,
+    permanent_shelving_location   => 0,
     call_number         => 0,
     enumchron           => 0,
     location            => 0,

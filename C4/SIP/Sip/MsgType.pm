@@ -691,13 +691,18 @@ sub handle_checkin {
             $resp .= add_field( FID_PATRON_ID, $patron->id, $server );
         }
         if ($item) {
-$resp .= maybe_add( FID_MEDIA_TYPE,           $item->sip_media_type,      $server );
-$resp .= maybe_add( FID_ITEM_PROPS,           $item->sip_item_properties, $server );
-$resp .= maybe_add( FID_COLLECTION_CODE,      $item->collection_code,     $server );
-$resp .= maybe_add( FID_CALL_NUMBER,          $item->call_number,         $server );
-$resp .= maybe_add( FID_HOLD_PATRON_ID,       $item->hold_patron_bcode,   $server );
-$resp .= add_field( FID_DESTINATION_LOCATION, $item->destination_loc,     $server ) if ( $item->destination_loc || $server->{account}->{ct_always_send} );
-$resp .= maybe_add( FID_HOLD_PATRON_NAME,     $item->hold_patron_name( $server->{account}->{da_field_template} ), $server );
+            $resp .= maybe_add( FID_MEDIA_TYPE,           $item->sip_media_type,      $server );
+            $resp .= maybe_add( FID_ITEM_PROPS,           $item->sip_item_properties, $server );
+            $resp .= maybe_add( FID_CALL_NUMBER,          $item->call_number,         $server );
+            $resp .= maybe_add( FID_HOLD_PATRON_ID,       $item->hold_patron_bcode,   $server );
+            $resp .= add_field( FID_DESTINATION_LOCATION, $item->destination_loc,     $server ) if ( $item->destination_loc || $server->{account}->{ct_always_send} );
+            $resp .= maybe_add( FID_HOLD_PATRON_NAME,     $item->hold_patron_name( $server->{account}->{da_field_template} ), $server );
+
+            if ( my $CR = $server->{account}->{cr_item_field} ) {
+                $resp .= maybe_add( FID_COLLECTION_CODE, $item->{$CR}, $server );
+            } else {
+                $resp .= maybe_add( FID_COLLECTION_CODE, $item->collection_code, $server );
+            }
 
             if ( $status->hold and $status->hold->{branchcode} ne $item->destination_loc ) {
                 warn 'SIP hold mismatch: $status->hold->{branchcode}=' . $status->hold->{branchcode} . '; $item->destination_loc=' . $item->destination_loc;
@@ -1213,6 +1218,12 @@ sub handle_item_information {
         $resp .= maybe_add( FID_PERM_LOCN,    $item->permanent_location, $server );
         $resp .= maybe_add( FID_CURRENT_LOCN, $item->current_location, $server );
         $resp .= maybe_add( FID_ITEM_PROPS,   $item->sip_item_properties, $server );
+
+        if ( my $CR = $server->{account}->{cr_item_field} ) {
+                $resp .= maybe_add( FID_COLLECTION_CODE, $item->$CR, $server );
+        } else {
+          $resp .= maybe_add( FID_COLLECTION_CODE, $item->collection_code, $server );
+        }
 
         if ( ( $i = $item->fee ) != 0 ) {
             $resp .= add_field( FID_CURRENCY, $item->fee_currency, $server );
