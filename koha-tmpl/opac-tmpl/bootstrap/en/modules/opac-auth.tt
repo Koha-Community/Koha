@@ -97,7 +97,7 @@
                         [% IF ( casAuthentication ) %]
                             [% IF ( shibbolethAuthentication ) %]
                                 [% IF ( casServerUrl ) %]
-                                    <p><a href="[% casServerUrl | url %]">Please click here to log in.</a><p>
+                                    <p><a href="[% casServerUrl | $raw %]">Please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
@@ -117,7 +117,7 @@
                                 [% END %]
 
                                 [% IF ( casServerUrl ) %]
-                                   <p><a href="[% casServerUrl | url %]">If you have a CAS account, please click here to log in.</a><p>
+                                   <p><a href="[% casServerUrl | $raw %]">If you have a CAS account, please click here to log in.</a><p>
                                 [% END %]
 
                                 [% IF ( casServersLoop ) %]
