@@ -254,18 +254,16 @@ sub generate_ods {
     my $messages = $params->{messages};
     my $filepath = $params->{filepath};
 
+    # Create document
     use OpenOffice::OODoc;
     my $tmpdir = dirname $filepath;
     odfWorkingDirectory( $tmpdir );
-    my $container = odfContainer( $filepath, create => 'spreadsheet' );
-    my $doc = odfDocument (
-        container => $container,
-        part      => 'content'
-    );
-    my $table = $doc->getTable(0);
+    my $doc = odfDocument( file => $filepath, create => 'spreadsheet' );
 
+    # Prepare sheet
     my @headers;
-    my ( $nb_rows, $nb_cols, $i ) = ( scalar(@$messages), 0, 0 );
+    my @rows;
+    my $i = 0;
     foreach my $message ( @$messages ) {
         my @lines = split /\n/, $message->{content};
         chomp for @lines;
@@ -273,10 +271,13 @@ sub generate_ods {
         # We don't have headers, get them
         unless ( @headers ) {
             @headers = split $delimiter, $lines[0];
+            my $nb_cols = scalar @headers;
+            my $nb_rows = scalar @$messages;
+            my $sheet = $doc->expandTable( 0, $nb_rows + 1, $nb_cols );
+            @rows = $doc->getTableRows($sheet);
 
-            $nb_cols = @headers;
-            $doc->expandTable( $table, $nb_rows + 1, $nb_cols );
-            my $row = $doc->getRow( $table, 0 );
+            # Write headers row
+            my $row = $rows[0];
             my $j = 0;
             for my $header ( @headers ) {
                 $doc->cellValue( $row, $j, Encode::encode( 'UTF8', $header ) );
@@ -285,10 +286,11 @@ sub generate_ods {
             $i = 1;
         }
 
+        # Write all rows
         shift @lines; # remove headers
         for my $line ( @lines ) {
             my @row_data = split $delimiter, $line;
-            my $row = $doc->getRow( $table, $i );
+            my $row = $rows[$i];
             # Note scalar(@$row_data) should be equal to $nb_cols
             for ( my $j = 0 ; $j < scalar(@row_data) ; $j++ ) {
                 my $value = Encode::encode( 'UTF8', $row_data[$j] );
