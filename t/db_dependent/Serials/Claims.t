@@ -3,14 +3,15 @@ use Test::More tests => 17;
 
 use C4::Acquisition;
 use C4::Budgets;
+use Koha::Database;
 use Koha::Acquisition::Booksellers;
 use_ok('C4::Serials');
 
 use Koha::DateUtils qw( dt_from_string output_pref );
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM subscription|);

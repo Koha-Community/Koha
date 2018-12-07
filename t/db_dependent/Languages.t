@@ -3,22 +3,22 @@
 # This Koha test module is a stub!  
 # Add more tests here!!!
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use Test::More tests => 17;
 use List::Util qw(first);
 use Data::Dumper;
 use Test::Warn;
 use t::lib::Mocks;
+use Koha::Database;
 
 BEGIN {
     use_ok('C4::Languages');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 isnt(C4::Languages::_get_themes(), undef, 'testing _get_themes doesnt return undef');
 
@@ -94,5 +94,3 @@ $sth->execute();
 my $LangRfc4646 = $sth->fetchall_arrayref({});
 
 is(scalar(@$LangRfc4646),scalar(@$DistinctLangRfc4646),"No unexpected language_rfc4646_to_iso639 duplicates.");
-
-$dbh->rollback;

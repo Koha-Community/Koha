@@ -5,15 +5,15 @@ use C4::Auth;
 use CGI qw ( -utf8 );
 use Test::More tests => 18;
 
+use Koha::Database;
+
 BEGIN {
     use_ok('C4::BackgroundJob');
 }
 my $query = new CGI;
 
-# Generate a session id
-my $dbh     = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $session = C4::Auth::get_session;
 $session->flush;

@@ -6,9 +6,11 @@ use Test::MockModule;
 
 use C4::Context;
 use C4::Utils::DataTables::ColumnsSettings;
+use Koha::Database;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM columns_settings|);
 
@@ -180,5 +182,3 @@ for my $m ( keys %$modules ) {
         }
     }
 }
-
-$dbh->rollback;

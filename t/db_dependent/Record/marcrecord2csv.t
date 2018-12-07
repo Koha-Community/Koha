@@ -10,12 +10,13 @@ use Text::CSV::Encoded;
 use C4::Biblio qw( AddBiblio );
 use C4::Context;
 use C4::Record;
+use Koha::Database;
 
 use t::lib::TestBuilder;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 my $builder = t::lib::TestBuilder->new;
 my $module_biblio = Test::MockModule->new('C4::Biblio');

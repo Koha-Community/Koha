@@ -4,13 +4,14 @@ use Modern::Perl;
 use Test::More tests => 11;
 
 use C4::Context;
+use Koha::Database;
 
 use_ok('Koha::Item::Search::Field');
 import Koha::Item::Search::Field qw(AddItemSearchField ModItemSearchField
     DelItemSearchField GetItemSearchField GetItemSearchFields);
 
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 # Start with empty table.
 foreach my $field (GetItemSearchFields()) {
@@ -35,5 +36,3 @@ is_deeply($field, {name => 'foo', label => 'Foo', tagfield => '001', tagsubfield
 ok((defined ModItemSearchField({name => 'foo', label => 'Foobar', tagfield => '100', 'tagsubfield' => 'a'})), "successful mod");
 $field = GetItemSearchField('foo');
 is_deeply($field, {name => 'foo', label => 'Foobar', tagfield => '100', tagsubfield => 'a', authorised_values_category => undef});
-
-$dbh->rollback;

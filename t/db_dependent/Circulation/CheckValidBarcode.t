@@ -22,6 +22,7 @@ use Test::More tests => 10;
 use C4::Circulation;
 use C4::Biblio;
 use C4::Items;
+use Koha::Database;
 use Koha::Library;
 
 
@@ -29,9 +30,9 @@ BEGIN {
     use_ok('C4::Circulation');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
@@ -81,6 +82,3 @@ $check_valid_barcode = C4::Circulation::CheckValidBarcode($barcode3);
 is( $check_valid_barcode, 1, 'CheckValidBarcode returns true' );
 $check_valid_barcode = C4::Circulation::CheckValidBarcode('wrong barcode');
 is( $check_valid_barcode, 0, 'CheckValidBarcode with an invalid barcode returns false' );
-
-$dbh->rollback();
-

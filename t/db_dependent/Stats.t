@@ -2,6 +2,7 @@
 
 use Modern::Perl;
 use C4::Stats;
+use Koha::Database;
 
 use Test::More tests => 20;
 
@@ -15,10 +16,9 @@ can_ok(
       )
 );
 
-#Start transaction
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 #
 # Test UpdateStats
@@ -170,6 +170,3 @@ is( $line->{location}, undef,
 
 is (TotalPaid (),undef,"TotalPaid returns undef if no params are given");
 # More tests to write!
-
-#End transaction
-$dbh->rollback;

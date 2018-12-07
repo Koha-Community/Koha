@@ -6,7 +6,6 @@
 use Modern::Perl;
 use YAML;
 
-use CGI qw ( -utf8 );
 use C4::Serials;
 use C4::Serials::Frequency;
 use C4::Serials::Numberpattern;
@@ -14,6 +13,7 @@ use C4::Debug;
 use C4::Biblio;
 use C4::Budgets;
 use C4::Items;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use t::lib::Mocks;
@@ -24,11 +24,9 @@ BEGIN {
     use_ok('C4::Serials');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 my $builder = t::lib::TestBuilder->new();
 
@@ -350,8 +348,6 @@ subtest "Do not generate an expected if one already exists" => sub {
     @serialsByStatus = C4::Serials::findSerialsByStatus( 1, $subscriptionid );
     is( @serialsByStatus, 1, "ModSerialStatus delete corectly serial expected and not create another if exists" );
 };
-
-$dbh->rollback;
 
 sub get_biblio {
     my $bib = MARC::Record->new();

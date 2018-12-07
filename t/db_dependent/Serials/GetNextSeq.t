@@ -3,10 +3,11 @@
 use C4::Context;
 use Test::More tests => 32;
 use Modern::Perl;
+use Koha::Database;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 use C4::Serials::Frequency;
 use C4::Serials;
@@ -263,9 +264,6 @@ is($seq, 'Z: 4, Y: 4, X: 4');
 $publisheddate = GetNextDate($subscription, $publisheddate);
 $seq = _next_seq($subscription, $pattern, $publisheddate);
 is($seq, 'Z: 4, Y: 5, X: 1');
-
-
-$dbh->rollback;
 
 sub _next_seq {
     my ($subscription, $pattern, $publisheddate) = @_;

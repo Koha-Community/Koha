@@ -9,12 +9,9 @@ use Koha::DateUtils;
 
 use Test::More tests => 5;
 
-#Start transaction
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-my $schema = Koha::Database->new()->schema();
-
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 $dbh->do(q|DELETE FROM issuingrules|);
 

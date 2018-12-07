@@ -3,6 +3,7 @@
 use Modern::Perl;
 use C4::Context;
 use DateTime;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::IssuingRules;
 use Koha::Library;
@@ -20,10 +21,9 @@ can_ok(
       )
 );
 
-#Start transaction
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
@@ -395,6 +395,3 @@ is_deeply(
     ],
     "GetHardDueDate returns the duedate and the duedatecompare"
 );
-
-#End transaction
-$dbh->rollback;
