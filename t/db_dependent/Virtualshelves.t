@@ -5,6 +5,7 @@ use Test::More tests => 6;
 use DateTime::Duration;
 
 use C4::Context;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Virtualshelves;
 use Koha::Virtualshelfshares;
@@ -15,8 +16,9 @@ use t::lib::TestBuilder;
 
 my $builder = t::lib::TestBuilder->new;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
 teardown();
 
 subtest 'CRUD' => sub {

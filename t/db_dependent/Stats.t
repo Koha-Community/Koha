@@ -2,6 +2,7 @@
 
 use Modern::Perl;
 use C4::Stats;
+use Koha::Database;
 
 use Test::More tests => 19;
 
@@ -13,10 +14,9 @@ can_ok(
     qw(UpdateStats)
 );
 
-#Start transaction
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 #
 # Test UpdateStats
@@ -163,6 +163,3 @@ is( $line->{location}, undef,
     "UpdateStats sets location to NULL if undef is passed in." );
 
 # More tests to write!
-
-#End transaction
-$dbh->rollback;

@@ -21,11 +21,11 @@
 use Modern::Perl;
 use Test::More tests => 8;
 use C4::Context;
+use Koha::Database;
 
-# Start transaction
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 my $opacheader    = C4::Context->preference('opacheader');
 my $newopacheader = "newopacheader";
@@ -59,5 +59,3 @@ $dbh->do("DELETE FROM systempreferences WHERE variable='testpreference'");
 is(C4::Context->preference('testpreference'), 'def', 'caching preferences');
 C4::Context->clear_syspref_cache();
 is(C4::Context->preference('testpreference'), undef, 'clearing preference cache');
-
-$dbh->rollback;

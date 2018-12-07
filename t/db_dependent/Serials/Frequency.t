@@ -1,12 +1,13 @@
 #!/usr/bin/perl
 
 use C4::Context;
+use Koha::Database;
 use Test::More tests => 27;
 use Modern::Perl;
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 use C4::Serials::Frequency;
 
@@ -86,5 +87,3 @@ is(scalar @frequencies, 1, "There is one frequency");
 DelSubscriptionFrequency($id2);
 @frequencies = GetSubscriptionFrequencies();
 is(scalar @frequencies, 0, "There is no frequency");
-
-$dbh->rollback;

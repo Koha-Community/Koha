@@ -1,12 +1,14 @@
 #!/usr/bin/perl
 
-use C4::Context;
-use Test::More tests => 95;
 use Modern::Perl;
+use Test::More tests => 95;
 
+use C4::Context;
+use Koha::Database;
+
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 use C4::Serials::Numberpattern;
 
@@ -99,5 +101,3 @@ is(scalar @numberpatterns, 1, "There is one numberpattern");
 DelSubscriptionNumberpattern($id2);
 @numberpatterns = GetSubscriptionNumberpatterns();
 is(scalar @numberpatterns, 0, "There is no numberpattern");
-
-$dbh->rollback;

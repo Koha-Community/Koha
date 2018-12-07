@@ -7,15 +7,14 @@ use MARC::Record;
 
 use t::lib::Mocks;
 use C4::Context;
+use Koha::Database;
 
 BEGIN {
         use_ok('C4::Record');
 }
 
-my $dbh = C4::Context->dbh;
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 t::lib::Mocks::mock_preference( "BibtexExportAdditionalFields", q{} );
 
