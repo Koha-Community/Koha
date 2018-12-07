@@ -59,7 +59,7 @@ if($op eq 'gennext' && @subscriptionid){
     my $subscriptionid = $subscriptionid[0];
     my $sth = $dbh->prepare("
         SELECT publisheddate, publisheddatetext, serialid, serialseq,
-            planneddate
+            planneddate, notes, routingnotes
         FROM serial
         WHERE status = 1 AND subscriptionid = ?
     ");
@@ -90,7 +90,8 @@ if($op eq 'gennext' && @subscriptionid){
              my $planneddate = $date_received_today ? dt_from_string : $nextpublisheddate;
              ## Creating the new issue
              NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
-                     1, $planneddate, $nextpublisheddate );
+                     1, $planneddate, $nextpublisheddate, $issue->{publisheddatetext},
+                     $issue->{notes}, $issue->{routingnotes} );
 
              ## Updating the subscription seq status
              my $squery = "UPDATE subscription SET lastvalue1=?, lastvalue2=?, lastvalue3=?, innerloop1=?, innerloop2=?, innerloop3=?

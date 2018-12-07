@@ -163,7 +163,7 @@ subtest 'Values should not be erased on editing' => sub {
     );
     my ( undef, undef, $itemnumber ) = C4::Items::AddItemFromMarc( $item_record, $biblionumber );
     my $serialid = C4::Serials::NewIssue( "serialseq", $subscriptionid, $biblionumber,
-                                          1, undef, undef, "publisheddatetext", "notes" );
+                                          1, undef, undef, "publisheddatetext", "notes", "routingnotes" );
     C4::Serials::AddItem2Serial( $serialid, $itemnumber );
     my $serial_info = C4::Serials::GetSerialInformation($serialid);
     my ($itemcallnumber_info) = grep { $_->{kohafield} eq 'items.itemcallnumber' }
