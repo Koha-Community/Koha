@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 16;
+use Test::More tests => 17;
 use MARC::Record;
 use MARC::Field;
 use DateTime;
@@ -12,6 +12,7 @@ use C4::Biblio;
 use C4::Context;
 use Koha::DateUtils;
 use Koha::Items;
+use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 my $schema = Koha::Database->new->schema;
@@ -297,9 +298,16 @@ C4::Items::ToggleNewStatus( { rules => \@rules } );
 $modified_item = Koha::Items->find( $itemnumber );
 is( $modified_item->new_status, 'another_new_updated_value', q|ToggleNewStatus: conditions on biblioitems|);
 
-# Clear cache
+# Run twice
+t::lib::Mocks::mock_preference('CataloguingLog', 1);
+my $actions_nb = $schema->resultset('ActionLog')->count();
+C4::Items::ToggleNewStatus( { rules => \@rules } );
+is( $schema->resultset('ActionLog')->count(), $actions_nb, q|ToggleNewStatus: no substitution does not generate action logs|);
+
+# Cleanup
 $cache = Koha::Caches->get_instance();
 $cache->clear_from_cache("MarcStructure-0-$frameworkcode");
 $cache->clear_from_cache("MarcStructure-1-$frameworkcode");
 $cache->clear_from_cache("default_value_for_mod_marc-");
 $cache->clear_from_cache("MarcSubfieldStructure-$frameworkcode");
+$schema->storage->txn_rollback;
