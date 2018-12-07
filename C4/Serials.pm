@@ -1086,13 +1086,13 @@ sub ModSerialStatus {
     #It is a usual serial
     # 1st, get previous status :
     my $dbh   = C4::Context->dbh;
-    my $query = "SELECT serial.subscriptionid,serial.status,subscription.periodicity
+    my $query = "SELECT serial.subscriptionid,serial.status,subscription.periodicity,serial.routingnotes
         FROM serial, subscription
         WHERE serial.subscriptionid=subscription.subscriptionid
             AND serialid=?";
     my $sth   = $dbh->prepare($query);
     $sth->execute($serialid);
-    my ( $subscriptionid, $oldstatus, $periodicity ) = $sth->fetchrow;
+    my ( $subscriptionid, $oldstatus, $periodicity, $routingnotes ) = $sth->fetchrow;
     my $frequency = GetSubscriptionFrequency($periodicity);
 
     # change status & update subscriptionhistory
@@ -1100,16 +1100,15 @@ sub ModSerialStatus {
     if ( $status == DELETED ) {
         DelIssue( { 'serialid' => $serialid, 'subscriptionid' => $subscriptionid, 'serialseq' => $serialseq } );
     } else {
-
         my $query = '
             UPDATE serial
             SET serialseq = ?, publisheddate = ?, publisheddatetext = ?,
-                planneddate = ?, status = ?, notes = ?
+                planneddate = ?, status = ?, notes = ?, routingnotes = ?
             WHERE  serialid = ?
         ';
         $sth = $dbh->prepare($query);
         $sth->execute( $serialseq, $publisheddate, $publisheddatetext,
-            $planneddate, $status, $notes, $serialid );
+            $planneddate, $status, $notes, $routingnotes, $serialid );
         $query = "SELECT * FROM   subscription WHERE  subscriptionid = ?";
         $sth   = $dbh->prepare($query);
         $sth->execute($subscriptionid);
@@ -1164,9 +1163,7 @@ sub ModSerialStatus {
                     WHERE  subscriptionid = ?";
         $sth = $dbh->prepare($query);
         $sth->execute( $newlastvalue1, $newlastvalue2, $newlastvalue3, $newinnerloop1, $newinnerloop2, $newinnerloop3, $subscriptionid );
-
-        NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'}, 1, $nextpubdate, $nextpubdate );
-
+        NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'}, 1, $nextpubdate, $nextpubdate, $publisheddatetext, $notes, $routingnotes );
         # check if an alert must be sent... (= a letter is defined & status became "arrived"
         if ( $subscription->{letter} && $status == ARRIVED && $oldstatus != ARRIVED ) {
             require C4::Letters;
@@ -1533,7 +1530,7 @@ sub ReNewSubscription {
 
 =head2 NewIssue
 
-NewIssue($serialseq,$subscriptionid,$biblionumber,$status, $planneddate, $publisheddate,  $notes)
+NewIssue($serialseq,$subscriptionid,$biblionumber,$status, $planneddate, $publisheddate, $notes, $routingnotes)
 
 Create a new issue stored on the database.
 Note : we have to update the recievedlist and missinglist on subscriptionhistory for this subscription.
@@ -1543,7 +1540,7 @@ returns the serial id
 
 sub NewIssue {
     my ( $serialseq, $subscriptionid, $biblionumber, $status, $planneddate,
-        $publisheddate, $publisheddatetext, $notes ) = @_;
+        $publisheddate, $publisheddatetext, $notes, $routingnotes ) = @_;
     ### FIXME biblionumber CAN be provided by subscriptionid. So Do we STILL NEED IT ?
 
     return unless ($subscriptionid);
@@ -1565,6 +1562,7 @@ sub NewIssue {
             publisheddate     => $publisheddate,
             publisheddatetext => $publisheddatetext,
             notes             => $notes,
+            routingnotes      => $routingnotes
         }
     )->store();
 
