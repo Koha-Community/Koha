@@ -2660,6 +2660,9 @@ sub ToggleNewStatus {
         my $age = $rule->{age};
         my $conditions = $rule->{conditions};
         my $substitutions = $rule->{substitutions};
+        foreach ( @$substitutions ) {
+            ( $_->{item_field} ) = ( $_->{field} =~ /items\.(.*)/ );
+        }
         my @params;
 
         my $query = q|
@@ -2697,7 +2700,7 @@ sub ToggleNewStatus {
             my $item = C4::Items::GetItem( $itemnumber );
             for my $substitution ( @$substitutions ) {
                 next unless $substitution->{field};
-                C4::Items::ModItem( {$substitution->{field} => $substitution->{value}}, $biblionumber, $itemnumber )
+                C4::Items::ModItem( { $substitution->{item_field} => $substitution->{value} }, $biblionumber, $itemnumber )
                     unless $report_only;
                 push @{ $report->{$itemnumber} }, $substitution;
             }
