@@ -476,7 +476,7 @@ sub select_all_authorities {
 sub select_all_biblios {
     $table = 'biblioitems'
       unless grep { /^$table$/ } @tables_allowed_for_select;
-    my $strsth = qq{ SELECT DISTINCT(biblionumber) FROM $table };
+    my $strsth = qq{ SELECT DISTINCT biblionumber FROM $table };
     $strsth.=qq{ WHERE $where } if ($where);
     $strsth.=qq{ LIMIT $length } if ($length && !$offset);
     $strsth.=qq{ LIMIT $offset,$length } if ($offset);
