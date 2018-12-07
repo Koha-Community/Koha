@@ -240,14 +240,15 @@ sub get_effective_rules {
 sub set_rule {
     my ( $self, $params ) = @_;
 
-    for my $mandatory_parameter (qw( branchcode categorycode itemtype rule_name rule_value ) ) {
+    for my $mandatory_parameter (qw( rule_name rule_value ) ) {
         Koha::Exceptions::MissingParameter->throw(
-            "Required parameter 'branchcode' missing")
+            "Required parameter '$mandatory_parameter' missing")
           unless exists $params->{$mandatory_parameter};
     }
 
     my $kind_info = $RULE_KINDS->{ $params->{rule_name} };
-    croak "set_rule given unknown rule '$params->{rule_name}'!"
+    Koha::Exceptions::MissingParameter->throw(
+        "set_rule given unknown rule '$params->{rule_name}'!")
         unless defined $kind_info;
 
     # Enforce scope; a rule should be set for its defined scope, no more, no less.
