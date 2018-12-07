@@ -608,9 +608,6 @@ sub ModifyRecordWithTemplate {
                 if ( $field_number == 1 ) {
                     # We want to process the first field
                     $field_numbers = [ 1 ];
-                } elsif ( $to_field and $from_field ne $to_field ) {
-                    # If the from and to fields are not the same, we only process the first field.
-                    $field_numbers = [ 1 ];
                 }
             }
 
