@@ -31,12 +31,9 @@ use MARC::Record;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
+my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new;
-
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM issues|);
 $dbh->do(q|DELETE FROM items|);
@@ -125,6 +122,3 @@ $check_if_issued = C4::Circulation::CheckIfIssuedToPatron($borrowernumber2, $bib
 is( $check_if_issued, undef, 'CheckIfIssuedToPatron returns undef' );
 $check_if_issued = C4::Circulation::CheckIfIssuedToPatron($borrowernumber2, $biblionumber2);
 is( $check_if_issued, 1, 'CheckIfIssuedToPatron returns true' );
-
-$dbh->rollback();
-

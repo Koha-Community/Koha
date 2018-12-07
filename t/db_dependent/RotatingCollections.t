@@ -21,6 +21,7 @@ use Test::More tests => 51;
 use C4::Context;
 use C4::RotatingCollections;
 use C4::Biblio;
+use Koha::Database;
 use Koha::Library;
 
 BEGIN {
@@ -44,10 +45,9 @@ can_ok(
       )
 );
 
-#Start transaction
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
 
 #Start Tests
 $dbh->do(q|DELETE FROM issues |);
@@ -330,7 +330,3 @@ is(
     $countcollection + 1,
     "Two Collections have been deleted"
 );
-
-#End transaction
-$dbh->rollback;
-

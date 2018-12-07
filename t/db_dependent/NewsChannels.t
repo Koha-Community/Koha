@@ -1,6 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Libraries;
 
@@ -10,11 +11,9 @@ BEGIN {
     use_ok('C4::NewsChannels');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 # Add LIB1, if it doesn't exist.
 my $addbra = 'LIB1';
@@ -226,5 +225,3 @@ subtest 'Regression tests on author title, firstname, and surname.', sub {
     ok($check==3,'Both with and without author data tested');
     done_testing();
 };
-
-$dbh->rollback;

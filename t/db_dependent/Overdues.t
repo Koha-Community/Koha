@@ -4,14 +4,15 @@ use Modern::Perl;
 use Test::More tests => 16;
 
 use C4::Context;
+use Koha::Database;
 use Koha::Libraries;
 use_ok('C4::Overdues');
 can_ok('C4::Overdues', 'GetOverdueMessageTransportTypes');
 can_ok('C4::Overdues', 'GetBranchcodesWithOverdueRules');
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);

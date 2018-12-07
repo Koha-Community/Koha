@@ -21,6 +21,7 @@ use Test::More tests => 12;
 
 use C4::Koha qw( GetDailyQuote );
 use DateTime::Format::MySQL;
+use Koha::Database;
 use Koha::DateUtils qw(dt_from_string);
 
 BEGIN {
@@ -29,11 +30,9 @@ BEGIN {
 
 can_ok('C4::Koha', qw( GetDailyQuote ));
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-
-# Start transaction
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 # Setup stage
 $dbh->do("DELETE FROM quotes");
@@ -83,5 +82,3 @@ $dbh->do(q|INSERT INTO `quotes` VALUES
 
 $quote = GetDailyQuote();
 is( $quote->{id}, 6, ' GetDailyQuote returns the only existing quote' );
-
-$dbh->rollback;

@@ -20,6 +20,7 @@
 use Modern::Perl;
 
 use C4::Context;
+use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 
@@ -31,9 +32,9 @@ BEGIN {
     use_ok('C4::Contract');
 }
 
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q|DELETE FROM aqbasket|);
 $dbh->do(q|DELETE FROM aqcontract|);
@@ -148,5 +149,3 @@ $del_status = DelContract( { contractnumber => $my_contract_id2 } );
 is( $del_status, 1, 'DelContract returns true' );
 $contracts = GetContracts();
 is( @$contracts, 0, 'DelContract deletes a contract' );
-
-$dbh->rollback;

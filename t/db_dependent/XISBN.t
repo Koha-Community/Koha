@@ -11,6 +11,7 @@ use C4::Biblio;
 use C4::XISBN;
 use C4::Context;
 use C4::Search;
+use Koha::Database;
 use t::lib::Mocks;
 use Test::MockModule;
 
@@ -18,9 +19,8 @@ BEGIN {
     use_ok('C4::XISBN');
 }
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-$dbh->{AutoCommit} = 0;
+my $schema = Koha::Database->new->schema;
+$schema->storage->txn_begin;
 
 my $search_module = new Test::MockModule('C4::Search');
 
@@ -61,8 +61,6 @@ SKIP: {
         $biblionumber3,
         "Gets correct biblionumber from a book with a similar isbn using ThingISBN." );
 }
-
-$dbh->rollback;
 
 # Util subs
 
