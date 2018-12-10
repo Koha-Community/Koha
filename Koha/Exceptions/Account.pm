@@ -23,17 +23,26 @@ use Exception::Class (
         description => 'Something went wrong!',
     },
     'Koha::Exceptions::Account::IsNotCredit' => {
-        isa => 'Koha::Exceptions::Account',
+        isa         => 'Koha::Exceptions::Account',
         description => 'Account line is not a credit'
     },
     'Koha::Exceptions::Account::IsNotDebit' => {
-        isa => 'Koha::Exceptions::Account',
+        isa         => 'Koha::Exceptions::Account',
         description => 'Account line is not a credit'
     },
     'Koha::Exceptions::Account::NoAvailableCredit' => {
-        isa => 'Koha::Exceptions::Account',
+        isa         => 'Koha::Exceptions::Account',
         description => 'No outstanding credit'
+    },
+    'Koha::Exceptions::Account::AmountNotPositive' => {
+        isa         => 'Koha::Exceptions::Account',
+        description => 'Amount should be a positive decimal'
+    },
+    'Koha::Exceptions::Account::UnrecognisedType' => {
+        isa         => 'Koha::Exceptions::Account',
+        description => 'Account type was not recognised'
     }
+
 );
 
 =head1 NAME
@@ -60,6 +69,15 @@ debit and it isn't.
 
 Exception to be used when a credit has no amount outstanding and is required
 to be applied to outstanding debits.
+
+=head2 Koha::Exceptions::Account::AmountNotPositive
+
+Exception to be used when a passed credit or debit amount is not a positive
+decimal value.
+
+=head2 Koha::Exceptions::Account::UnrecognisedType
+
+Exception to be used when a passed credit or debit is not of a recognised type.
 
 =cut
 
