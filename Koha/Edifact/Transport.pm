@@ -50,9 +50,9 @@ sub new {
 sub working_directory {
     my ( $self, $new_value ) = @_;
     if ($new_value) {
-        $self->{working_directory} = $new_value;
+        $self->{working_dir} = $new_value;
     }
-    return $self->{working_directory};
+    return $self->{working_dir};
 }
 
 sub download_messages {
