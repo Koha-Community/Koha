@@ -2404,12 +2404,14 @@ sub _FixAccountForLostAndReturned {
     );
 
     return unless $accountlines->count > 0;
-    my $accountline = $accountlines->next;
+    my $accountline     = $accountlines->next;
+    my $total_to_refund = 0;
+    my $account = Koha::Patrons->find( $accountline->borrowernumber )->account;
 
     # Use cases
     if ( $accountline->amount > $accountline->amountoutstanding ) {
         # some amount has been cancelled. collect the offsets that are not writeoffs
-        # this works because the only way to subtract from a debt is
+        # this works because the only way to subtract from this kind of a debt is
         # using the UI buttons 'Pay' and 'Write off'
         my $credits_offsets = Koha::Account::Offsets->search({
             debit_id  => $accountline->id,
@@ -2418,30 +2420,30 @@ sub _FixAccountForLostAndReturned {
             amount    => { '<'  => 0 } # credits are negative on the DB
         });
 
-        my $total_to_refund = ( $credits_offsets->count > 0 )
-                                ? $credits_offsets->total * -1 # credits are negative on the DB
-                                : 0;
-
-        if ( $total_to_refund > 0 ) {
-            my $account = Koha::Patrons->find( $accountline->borrowernumber )->account;
-            $credit = $account->add_credit(
-                {
-                    amount      => $total_to_refund,
-                    description => 'Item Returned ' . $item_id,
-                    type        => 'lost_item_return'
-                }
-            );
-        }
-
-        ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
+        $total_to_refund = ( $credits_offsets->count > 0 )
+                            ? $credits_offsets->total * -1 # credits are negative on the DB
+                            : 0;
     }
-    # else {
-        # $accountline->amount == $accountline->amountoutstanding
-    #}
 
-    $accountline->accounttype('LR');
-    $accountline->amountoutstanding(0);
-    $accountline->store();
+    my $credit_total = $accountline->amountoutstanding + $total_to_refund;
+
+    if ( $credit_total > 0 ) {
+        $credit = $account->add_credit(
+            {   amount      => $credit_total,
+                description => 'Item Returned ' . $item_id,
+                type        => 'lost_item_return'
+            }
+        );
+
+        # TODO: ->apply should just accept the accountline
+        $credit->apply( { debits => $accountlines->reset } );
+    }
+
+    # Manually set the accounttype
+    $accountline->discard_changes->accounttype('LR');
+    $accountline->store;
+
+    ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
 
     return ($credit) ? $credit->id : undef;
 }
