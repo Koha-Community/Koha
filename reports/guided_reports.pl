@@ -829,9 +829,13 @@ elsif ($phase eq 'Run this report'){
 
             my $totpages = int($total/$limit) + (($total % $limit) > 0 ? 1 : 0);
             my $url = "/cgi-bin/koha/reports/guided_reports.pl?reports=$report_id&amp;phase=Run%20this%20report&amp;limit=$limit";
+            if (@param_names) {
+                $url = join('&amp;param_name=', $url, map { URI::Escape::uri_escape_utf8($_) } @param_names);
+            }
             if (@sql_params) {
                 $url = join('&amp;sql_params=', $url, map { URI::Escape::uri_escape_utf8($_) } @sql_params);
             }
+
             $template->param(
                 'results' => \@rows,
                 'allresults' => \@allrows,
