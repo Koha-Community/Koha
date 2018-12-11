@@ -487,6 +487,7 @@ sub _convert_sort_fields {
         relevance   => undef,       # default
         title       => 'title',
         pubdate     => 'pubdate',
+        id          => 'Local-number'
     );
     my %sort_order_convert =
       ( qw( desc desc ), qw( dsc desc ), qw( asc asc ), qw( az asc ), qw( za desc ) );
@@ -530,6 +531,9 @@ our %index_field_convert = (
     'mus'     => 'rtype',
     'aud'     => 'ta',
     'hi'      => 'Host-Item-Number',
+    'rcn'     => 'record-control-number',
+    'cni'     => 'control-number-identifier',
+    'Control-number' => 'control-number'
 );
 
 sub _convert_index_fields {

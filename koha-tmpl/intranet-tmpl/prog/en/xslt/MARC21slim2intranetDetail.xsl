@@ -8,7 +8,8 @@
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="marc items">
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="marc items str">
     <xsl:import href="MARC21slimUtils.xsl"/>
     <xsl:output method = "html" indent="yes" omit-xml-declaration = "yes" encoding="UTF-8"/>
     <xsl:template match="/">
@@ -114,61 +115,71 @@
         <!-- Component part records: Displaying title and author of component part records -->
         <xsl:if test="marc:componentPartRecords">
             <span class="results_summary componentPartRecordsContainer">
-                <h5>Component part records:</h5>
+                <h5>Component part records (<a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri(marc:componentPartSearchQuery, true())"/></xsl:attribute>view all <xsl:value-of select="marc:componentPartRecordCount"/></a>):</h5>
+                <xsl:variable name="componentPartDisplayCount"><xsl:value-of select="count(marc:componentPartRecords/marc:record)"/></xsl:variable>
                 <ol class="componentParts">
                     <xsl:for-each select="marc:componentPartRecords/marc:record">
                         <li>
-                            <span class="componentPartRecord">
-                                <span class="componentPartRecordTitle">
-                                    <a>
-                                    <xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']" /></xsl:attribute>
-                                    <xsl:choose>
-                                        <xsl:when test="marc:datafield[@tag=245]/marc:subfield[@code='a']">
-                                            <xsl:value-of select="substring-before( concat(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/'), '/')" />
+                            <xsl:choose>
+                                <xsl:when test="position() &lt; $componentPartDisplayCount or $componentPartDisplayCount = //marc:componentPartRecordCount">
+                                    <span class="componentPartRecord">
+                                        <span class="componentPartRecordTitle">
+                                            <a>
+                                            <xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:datafield[@tag=999]/marc:subfield[@code='c']" /></xsl:attribute>
+                                            <xsl:choose>
+                                                <xsl:when test="marc:datafield[@tag=245]/marc:subfield[@code='a']">
+                                                    <xsl:value-of select="substring-before( concat(marc:datafield[@tag=245]/marc:subfield[@code='a'], '/'), '/')" />
+                                                </xsl:when>
+                                                <xsl:when test="marc:datafield[@tag=240]/marc:subfield[@code='a']">
+                            <xsl:for-each select="marc:datafield[@tag=240]">
+                                <xsl:call-template name="chopPunctuation">
+                                <xsl:with-param name="chopString">
+                                <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">amnp</xsl:with-param>
+                                </xsl:call-template>
+                                </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:for-each>
+                                                </xsl:when>
+                                                <xsl:when test="marc:datafield[@tag=130]/marc:subfield[@code='a']">
+                            <xsl:for-each select="marc:datafield[@tag=130]">
+                                <xsl:call-template name="chopPunctuation">
+                                <xsl:with-param name="chopString">
+                                <xsl:call-template name="subfieldSelect">
+                                <xsl:with-param name="codes">amnp</xsl:with-param>
+                                </xsl:call-template>
+                                </xsl:with-param>
+                                </xsl:call-template>
+                            </xsl:for-each>
+                                                </xsl:when>
+                                                <xsl:otherwise>
+                                                    <xsl:text>[Record with no title statement]</xsl:text>
+                                                </xsl:otherwise>
+                                            </xsl:choose>
+                                            </a>
+                                        </span>
+                        <xsl:choose>
+                                        <xsl:when test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
+                                            -
+                                            <span class="componentPartRecordAuthor">
+                                                <xsl:value-of select="marc:datafield[@tag=100]/marc:subfield[@code='a']" />
+                                            </span>
                                         </xsl:when>
-                                        <xsl:when test="marc:datafield[@tag=240]/marc:subfield[@code='a']">
-					  <xsl:for-each select="marc:datafield[@tag=240]">
-					    <xsl:call-template name="chopPunctuation">
-					      <xsl:with-param name="chopString">
-						<xsl:call-template name="subfieldSelect">
-						  <xsl:with-param name="codes">amnp</xsl:with-param>
-						</xsl:call-template>
-					      </xsl:with-param>
-					    </xsl:call-template>
-					  </xsl:for-each>
+                                        <xsl:when test="marc:datafield[@tag=110]/marc:subfield[@code='a']">
+                                            -
+                                            <span class="componentPartRecordAuthor">
+                                                <xsl:value-of select="marc:datafield[@tag=110]/marc:subfield[@code='a']" />
+                                            </span>
                                         </xsl:when>
-                                        <xsl:when test="marc:datafield[@tag=130]/marc:subfield[@code='a']">
-					  <xsl:for-each select="marc:datafield[@tag=130]">
-					    <xsl:call-template name="chopPunctuation">
-					      <xsl:with-param name="chopString">
-						<xsl:call-template name="subfieldSelect">
-						  <xsl:with-param name="codes">amnp</xsl:with-param>
-						</xsl:call-template>
-					      </xsl:with-param>
-					    </xsl:call-template>
-					  </xsl:for-each>
-                                        </xsl:when>
-                                        <xsl:otherwise>
-                                            <xsl:text>[Record with no title statement]</xsl:text>
-                                        </xsl:otherwise>
-                                    </xsl:choose>
-                                    </a>
-                                </span>
-				<xsl:choose>
-                                  <xsl:when test="marc:datafield[@tag=100]/marc:subfield[@code='a']">
-                                    -
-                                    <span class="componentPartRecordAuthor">
-                                        <xsl:value-of select="marc:datafield[@tag=100]/marc:subfield[@code='a']" />
+                        </xsl:choose>
                                     </span>
-                                  </xsl:when>
-                                  <xsl:when test="marc:datafield[@tag=110]/marc:subfield[@code='a']">
-                                    -
-                                    <span class="componentPartRecordAuthor">
-                                        <xsl:value-of select="marc:datafield[@tag=110]/marc:subfield[@code='a']" />
+                                </xsl:when>
+                                <xsl:when test="position() = $componentPartDisplayCount">
+                                    <span class="componentPartRecordTitle">
+                                        [list truncated - <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=<xsl:value-of select="str:encode-uri(//marc:componentPartSearchQuery, true())"/></xsl:attribute>view all</a>]
                                     </span>
-                                  </xsl:when>
-				</xsl:choose>
-                            </span>
+                                </xsl:when>
+                            </xsl:choose>
                         </li>
                     </xsl:for-each>
                 </ol>
@@ -393,7 +404,26 @@
             <a>
             <xsl:choose>
             <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
-                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template></xsl:attribute>
+                <xsl:variable name="f773cn">
+                    <xsl:call-template name="extractControlNumber">
+                        <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="f773cni">
+                    <xsl:call-template name="extractControlNumberIdentifier">
+                        <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:choose>
+                    <!-- N.B. The query format has been carefully crafted to work with both Zebra and Elasticsearch... -->
+                    <xsl:when test="$f773cni != ''">
+                        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($f773cni, true())"/>"</xsl:attribute>
+                    </xsl:when>
+                    <xsl:otherwise>
+                        <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($controlField003, true())"/>"</xsl:attribute>
+                    </xsl:otherwise>
+                </xsl:choose>
+                <xsl:value-of select="translate($f773, '()', '')"/>
             </xsl:when>
             <xsl:otherwise>
                 <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=ti,phr:<xsl:value-of select="translate(//marc:datafield[@tag=245]/marc:subfield[@code='a'], '.', '')"/></xsl:attribute>
@@ -1028,7 +1058,26 @@
                 </xsl:variable>
             <xsl:choose>
                 <xsl:when test="$UseControlNumber = '1' and marc:subfield[@code='w']">
-                    <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number:<xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template> and cni:<xsl:value-of select="$controlField003"/></xsl:attribute>
+                    <xsl:variable name="f773cn">
+                        <xsl:call-template name="extractControlNumber">
+                            <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:variable name="f773cni">
+                        <xsl:call-template name="extractControlNumberIdentifier">
+                            <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <a>
+                        <xsl:choose>
+                            <!-- N.B. The query format has been carefully crafted to work with both Zebra and Elasticsearch... -->
+                            <xsl:when test="$f773cni != ''">
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($f773cni, true())"/>"</xsl:attribute>
+                            </xsl:when>
+                            <xsl:otherwise>
+                                <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($controlField003, true())"/>"</xsl:attribute>
+                            </xsl:otherwise>
+                        </xsl:choose>
                         <xsl:value-of select="translate($f773, '()', '')"/>
                     </a>
                     <xsl:if test="marc:subfield[@code='g']"><xsl:text> </xsl:text><xsl:value-of select="marc:subfield[@code='g']"/></xsl:if>

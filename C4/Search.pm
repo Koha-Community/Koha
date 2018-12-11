@@ -441,6 +441,9 @@ sub getRecords {
             elsif ( $sort eq "title_za" || $sort eq "title_dsc" ) {
                 $sort_by .= "1=4 >i ";
             }
+            elsif ( $sort eq "id_asc") {
+                $sort_by .= "1=12 <i ";
+            }
             else {
                 warn "Ignoring unrecognized sort '$sort' requested" if $sort_by;
             }

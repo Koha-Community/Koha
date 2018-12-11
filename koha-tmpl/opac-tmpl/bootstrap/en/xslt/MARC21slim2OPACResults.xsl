@@ -633,13 +633,27 @@
     <span class="label">Source: </span>
         <xsl:choose>
         <!-- Add a link to the parent record -->
-            <xsl:when test="marc:subfield[@code='w'] and $controlField003">
-                <a>
-                    <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Control-number:
-                        <xsl:call-template name="extractControlNumber">
+            <xsl:when test="marc:subfield[@code='w']">
+                <xsl:variable name="f773cn">
+                    <xsl:call-template name="extractControlNumber">
                         <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
-                        </xsl:call-template> and cni:<xsl:value-of select="$controlField003"/>
-                    </xsl:attribute>
+                    </xsl:call-template>
+                </xsl:variable>
+                <xsl:variable name="f773cni">
+                    <xsl:call-template name="extractControlNumberIdentifier">
+                        <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
+                    </xsl:call-template>
+                </xsl:variable>
+                <a>
+                    <xsl:choose>
+                        <!-- N.B. The query format has been carefully crafted to work with both Zebra and Elasticsearch... -->
+                        <xsl:when test="$f773cni != ''">
+                            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($f773cni, true())"/>"</xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($controlField003, true())"/>"</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:value-of select="marc:subfield[@code='t']"/>
                 </a>
             </xsl:when>

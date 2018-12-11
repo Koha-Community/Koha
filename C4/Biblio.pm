@@ -22,7 +22,7 @@ package C4::Biblio;
 use Modern::Perl;
 use Carp;
 
-use Encode qw( decode is_utf8 );
+use Encode qw( decode encode is_utf8 );
 use MARC::Record;
 use MARC::File::USMARC;
 use MARC::File::XML;
@@ -4538,9 +4538,9 @@ sub getHostRecord {
 #OR
 #@Param1  the parent MARC::Record
 sub getComponentRecords {
-    my ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize) = _getComponentParts(@_);
+    my ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize, $query) = _getComponentParts(@_);
 
-    return \@$componentPartRecordXMLs;
+    return (\@$componentPartRecordXMLs, $resultSetSize, $query);
 }
 
 #Get biblionumbers the fast way.
@@ -4592,6 +4592,7 @@ sub getComponentBiblionumber {
 
 sub _getComponentParts {
     my ($parentsField001, $parentsField003) = @_;
+
     my $parentrecord;
 
     if (ref $parentsField001 eq 'MARC::Record') {
@@ -4603,20 +4604,43 @@ sub _getComponentParts {
         $parentsField001 = $parentsField001->data() if $parentsField001;
     }
 
-    my ($error, $componentPartRecordXMLs, $resultSetSize);
+    # N.B. The query format has been carefully crafted to work with both Zebra and Elasticsearch...
+    my $query;
     if ($parentsField001 && $parentsField003) {
-        require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
-        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn='$parentsField001' and cni='$parentsField003'");
+        $query = "(rcn,ext:\"$parentsField001\" AND cni,ext:\"$parentsField003\") OR rcn,ext:\"\\($parentsField003\\)$parentsField001\"";
     }
     elsif ($parentsField001) {
-        require C4::Search; #For some reason importing this to C4::Biblio's namespace makes other modules unable to import these functions into their namespace.
-        ($error, $componentPartRecordXMLs, $resultSetSize) = C4::Search::SimpleSearch("rcn='$parentsField001'");
+        $query = "rcn,ext:\"$parentsField001\"";
     }
     else {
-        warn "Record with no field 001 or 003 found! This is an outrage!" unless $parentrecord;
+        warn "Record with no field 001 encountered!" unless $parentrecord;
     }
 
-    return ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize);
+    my @componentXMLs;
+    my $resultSetSize = 0;
+    my $error;
+    if ($query) {
+        require Koha::SearchEngine::QueryBuilder;
+        require Koha::SearchEngine::Search;
+        my $builder  = Koha::SearchEngine::QueryBuilder->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+        my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
+        my @operands = $query;
+        my @sortBy = 'id_asc';
+        my (undef, $builtQuery, $simpleQuery) = $builder->build_query_compat(undef, \@operands, undef, undef, \@sortBy);
+        my $results;
+        my @servers = 'biblioserver';
+
+        ($error, $results) = $searcher->search_compat($builtQuery, $simpleQuery, \@sortBy, \@servers, 1000, 0, undef, undef, undef, 'ccl');
+        if (!$error && $results->{biblioserver}->{hits}) {
+            my $marcflavour = C4::Context->preference('marcflavour');
+            foreach my $component (@{$results->{biblioserver}->{RECORDS}}) {
+                push @componentXMLs, ref($component) eq 'MARC::Record' ? encode('utf-8', $component->as_xml_record($marcflavour)) : $component;
+            }
+            $resultSetSize = $results->{biblioserver}->{hits};
+        }
+    }
+
+    return ($parentsField001, $parentsField003, $parentrecord, $error, \@componentXMLs, $resultSetSize, $query);
 }
 
 1;

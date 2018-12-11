@@ -5,7 +5,8 @@
   xmlns:marc="http://www.loc.gov/MARC21/slim"
   xmlns:items="http://www.koha-community.org/items"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  exclude-result-prefixes="marc items">
+  xmlns:str="http://exslt.org/strings"
+  exclude-result-prefixes="marc items str">
     <xsl:import href="MARC21slimUtils.xsl"/>
     <xsl:output method = "html" indent="yes" omit-xml-declaration = "yes" encoding="UTF-8"/>
     <xsl:key name="item-by-status" match="items:item" use="items:status"/>
@@ -997,13 +998,27 @@
     <span class="label">Source: </span>
         <xsl:choose>
         <!-- Add a link to the parent record -->
-            <xsl:when test="marc:subfield[@code='w'] and $controlField003">
+            <xsl:when test="marc:subfield[@code='w']">
                 <a>
-                    <xsl:attribute name="href">
-                        /cgi-bin/koha/catalogue/search.pl?q=Control-number:
-                        <xsl:call-template name="extractControlNumber"><xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/></xsl:call-template>
-                        and cni:<xsl:value-of select="$controlField003"/>
-                    </xsl:attribute>
+                    <xsl:variable name="f773cn">
+                        <xsl:call-template name="extractControlNumber">
+                            <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:variable name="f773cni">
+                        <xsl:call-template name="extractControlNumberIdentifier">
+                            <xsl:with-param name="subfieldW" select="marc:subfield[@code='w']"/>
+                        </xsl:call-template>
+                    </xsl:variable>
+                    <xsl:choose>
+                        <!-- N.B. The query format has been carefully crafted to work with both Zebra and Elasticsearch... -->
+                        <xsl:when test="$f773cni != ''">
+                            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($f773cni, true())"/>"</xsl:attribute>
+                        </xsl:when>
+                        <xsl:otherwise>
+                            <xsl:attribute name="href">/cgi-bin/koha/catalogue/search.pl?q=Control-number,ext:"<xsl:value-of select="str:encode-uri($f773cn, true())"/>" AND cni,ext:"<xsl:value-of select="str:encode-uri($controlField003, true())"/>"</xsl:attribute>
+                        </xsl:otherwise>
+                    </xsl:choose>
                     <xsl:value-of select="marc:subfield[@code='t']"/>
                 </a>
             </xsl:when>

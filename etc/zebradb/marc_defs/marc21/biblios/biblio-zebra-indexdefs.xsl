@@ -61,12 +61,12 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='001']">
-    <z:index name="Control-number:w">
+    <z:index name="Control-number:w Control-number:p">
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
   <xslo:template match="marc:controlfield[@tag='003']">
-    <z:index name="Control-number-identifier:w">
+    <z:index name="Control-number-identifier:w Control-number-identifier:p">
       <xslo:value-of select="."/>
     </z:index>
   </xslo:template>
@@ -990,7 +990,7 @@ definition file (probably something like {biblio,authority}-koha-indexdefs.xml) 
     </xslo:for-each>
     <xslo:for-each select="marc:subfield">
       <xslo:if test="contains('w', @code)">
-        <z:index name="Record-control-number:w">
+        <z:index name="Record-control-number:w Record-control-number:p">
           <xslo:value-of select="."/>
         </z:index>
       </xslo:if>

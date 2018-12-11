@@ -430,7 +430,7 @@ sub engine {
 sub _prepareComponentPartRecords {
 
     my ($f001Data, $f003Data) = @_;
-    my $componentPartBiblios = C4::Biblio::getComponentRecords( $f001Data, $f003Data );
+    my ($componentPartBiblios, $totalCount, $query) = C4::Biblio::getComponentRecords( $f001Data, $f003Data );
 
     if (@$componentPartBiblios) {
 
@@ -442,7 +442,8 @@ sub _prepareComponentPartRecords {
             push @componentPartRecordXML, decode('utf8', $cb);
         }
         push @componentPartRecordXML, '</componentPartRecords>';
-
+        push @componentPartRecordXML, '<componentPartRecordCount>' . C4::Koha::xml_escape($totalCount) . "</componentPartRecordCount>\n";
+        push @componentPartRecordXML, '<componentPartSearchQuery>' . C4::Koha::xml_escape($query) . "</componentPartSearchQuery>\n";
         #Build the real XML string.
         return join "\n", @componentPartRecordXML;
     }

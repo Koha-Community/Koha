@@ -123,10 +123,13 @@
 		<!--Component part records: Displaying title and author of component part records if available. These are floated to right by css. -->
 		<xsl:if test="marc:componentPartRecords/marc:componentPart">
 		 <span class="componentPartRecordsContainer results_summary">
-			   <h5>Component part records:</h5>
+               <h5>Component part records (<a><xsl:attribute name="href">/cgi-bin/koha/opac-search.plq=<xsl:value-of select="str:encode-uri(marc:componentPartSearchQuery, true())"/></xsl:attribute>view all <xsl:value-of select="marc:componentPartRecordCount"/></a>):</h5>
+               <xsl:variable name="componentPartDisplayCount"><xsl:value-of select="count(marc:componentPartRecords/marc:record)"/></xsl:variable>
 			   <xsl:for-each select="marc:componentPartRecords/marc:componentPart">
 				 <span class="componentPartRecord">
-						 <span class="componentPartRecordTitle">
+                    <xsl:choose>
+                        <xsl:when test="position() &lt; $componentPartDisplayCount or $componentPartDisplayCount = //marc:componentPartRecordCount">
+							 <span class="componentPartRecordTitle">
 							   <a><xsl:attribute name="href">/cgi-bin/koha/catalogue/detail.pl?biblionumber=<xsl:value-of select="marc:biblionumber" /></xsl:attribute>
 								  <xsl:choose>
 									<xsl:when test="marc:title">
@@ -144,6 +147,13 @@
 							   <xsl:value-of select="marc:author" />
 						 </span>
 					   </xsl:if>
+                    </xsl:when>
+                    <xsl:when test="position() = $componentPartDisplayCount">
+                        <span class="componentPartRecordTitle">
+                            [list truncated - <a><xsl:attribute name="href">/cgi-bin/koha/opac-search.pl?q=<xsl:value-of select="str:encode-uri(//marc:componentPartSearchQuery, true())"/></xsl:attribute>view all</a>]
+                        </span>
+                    </xsl:when>
+                </xsl:choose>
 				 </span>
 				 <br />
 			   </xsl:for-each>
