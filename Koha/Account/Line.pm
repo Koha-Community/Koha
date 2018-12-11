@@ -219,6 +219,12 @@ This method allows updating a debit or credit on a patron's account
 $update_type can be any of:
   - fine_increment
 
+Authors Note: The intention here is that this method is only used
+to adjust accountlines where the final amount is not yet known/fixed.
+Incrementing fines are the only existing case at the time of writing,
+all other forms of 'adjustment' should be recorded as distinct credits
+or debits and applied, via an offset, to the corresponding debit or credit.
+
 =cut
 
 sub adjust {
