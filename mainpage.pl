@@ -71,7 +71,7 @@ my $pending_discharge_requests = Koha::Patron::Discharge::count({ pending => 1 }
 my $pending_article_requests = Koha::ArticleRequests->search_limited(
     {
         status => Koha::ArticleRequest::Status::Pending,
-        $branch ? ( branchcode => $branch ) : (),
+        $branch ? ( 'me.branchcode' => $branch ) : (),
     }
 )->count;
 
