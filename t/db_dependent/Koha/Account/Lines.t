@@ -299,7 +299,7 @@ subtest 'Keep account info when a patron is deleted' => sub {
 
 subtest 'adjust() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -338,10 +338,12 @@ subtest 'adjust() tests' => sub {
       'Exception thrown for type conflict';
 
     # Increment an unpaid fine
-    $debit_2->adjust( { amount => 150, type => 'fine_increment' } );
+    $debit_2->adjust( { amount => 150, type => 'fine_increment' } )->discard_changes;
 
-    is( $debit_2->discard_changes->amount * 1, 150, 'Fine amount was updated in full' );
-    is( $debit_2->discard_changes->amountoutstanding * 1, 150, 'Fine amountoutstanding was update in full' );
+    is( $debit_2->amount * 1, 150, 'Fine amount was updated in full' );
+    is( $debit_2->amountoutstanding * 1, 150, 'Fine amountoutstanding was update in full' );
+    isnt( $debit_2->date, undef, 'Date has been set' );
+    is( $debit_2->lastincrement * 1, 50, 'lastincrement is the to the right value' );
 
     my $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
     is( $offsets->count, 1, 'An offset is generated for the increment' );
@@ -355,17 +357,19 @@ subtest 'adjust() tests' => sub {
     my $debits = Koha::Account::Lines->search({ accountlines_id => $debit_2->id });
     $credit->apply( { debits => $debits, offset_type => 'Manual Credit' } );
 
-    is( $debit_2->discard_changes->amount * 1, 150, 'Fine amount unaffected by partial payment' );
-    is( $debit_2->discard_changes->amountoutstanding * 1, 110, 'Fine amountoutstanding updated by partial payment' );
+    $debit_2->discard_changes;
+    is( $debit_2->amount * 1, 150, 'Fine amount unaffected by partial payment' );
+    is( $debit_2->amountoutstanding * 1, 110, 'Fine amountoutstanding updated by partial payment' );
 
     # Enable logs
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
 
     # Increment the partially paid fine
-    $debit_2->adjust( { amount => 160, type => 'fine_increment' } );
+    $debit_2->adjust( { amount => 160, type => 'fine_increment' } )->discard_changes;
 
-    is( $debit_2->discard_changes->amount * 1, 160, 'Fine amount was updated in full' );
-    is( $debit_2->discard_changes->amountoutstanding * 1, 120, 'Fine amountoutstanding was updated by difference' );
+    is( $debit_2->amount * 1, 160, 'Fine amount was updated in full' );
+    is( $debit_2->amountoutstanding * 1, 120, 'Fine amountoutstanding was updated by difference' );
+    is( $debit_2->lastincrement * 1, 10, 'lastincrement is the to the right value' );
 
     $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
     is( $offsets->count, 3, 'An offset is generated for the increment' );
