@@ -17135,6 +17135,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (18.11.00 release)\n";
 }
 
+$DBversion = '18.11.00.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        UPDATE permissions SET code = 'manage_didyoumean' WHERE code = 'manage_didyouean';
+    });
+    $dbh->do(q{
+        UPDATE user_permissions SET code = 'manage_didyoumean' WHERE code = 'manage_didyouean';
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion (Bug 21961 - Fix typo in manage_didyoumean permission)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
