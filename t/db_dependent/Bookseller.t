@@ -639,7 +639,7 @@ ok( exists( $suppliers{$id_supplier1} ),
     "Supplier1 has late orders and $daysago10==$daysago10 " )
   ;
 
-t::lib::Mocks::mock_userenv({ flags => 0 });
+t::lib::Mocks::mock_userenv({ flags => 0, branchcode => 'BRANCH1' });
 
 my $module = Test::MockModule->new('C4::Auth');
 $module->mock(
@@ -670,7 +670,7 @@ is(
 );
 
 # don the cape and turn into Superlibrarian!
-t::lib::Mocks::mock_userenv({ flags => 1 });
+t::lib::Mocks::mock_userenv({ flags => 1, branchcode => 'BRANCH1' });
 @subscriptions = SearchSubscriptions({expiration_date => '2013-12-31'});
 is(
     scalar(grep { !$_->{cannotdisplay} } @subscriptions ),
