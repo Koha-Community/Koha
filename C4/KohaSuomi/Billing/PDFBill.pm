@@ -28,6 +28,7 @@ use Koha::Logger;
 use HTML::Template;
 use C4::Templates;
 use Koha::Patron::Message;
+use Koha::Patron::Debarments;
 use File::Spec;
 use Getopt::Long;
 use Encode;
@@ -66,7 +67,7 @@ sub create_pdf {
         }
         for (my $i=$number; $i <= $lettercount; $i++) {
             my $output_directory = $fileplace.'/koha-tmpl/static_content/claiming/';
-            my ($letter, $borrowernumber, $branchdetail) = set_message($letterdata->{"letter".$i});
+            my ($letter, $borrowernumber, $issuebornumber, $branchdetail) = set_message($letterdata->{"letter".$i});
             if ($letter) {
                 if ($borrowernumber || $borrowernumber ne '0') {
                     my $message_id = C4::Letters::EnqueueLetter(
@@ -102,14 +103,22 @@ sub create_pdf {
                                     message        => 'Asiakkaalla on laskutettua aineistoa',
                                 }
                             )->store;
+                            my $debarmentConf = C4::Context->config("billingSetup")->{"debarment"};
+                            if (defined $debarmentConf && $debarmentConf eq "yes") {
+                                Koha::Patron::Debarments::AddUniqueDebarment({
+                                    borrowernumber => $issuebornumber,
+                                    type           => 'OVERDUES',
+                                    comment        => "Lainauskielto laskutetusta aineistosta",
+                                });
+                            }
                         }
-                        C4::Letters::_set_message_status(
-                            { message_id => $message->{'message_id'},
-                            status => 'sent',
-                            delivery_note => $pdfPath } );
+                       C4::Letters::_set_message_status(
+                           { message_id => $message->{'message_id'},
+                           status => 'sent',
+                           delivery_note => $pdfPath } );
                     } else {
-                        $error = "PDF could not be created";
-                        $logger->error("Something went wrong while creating the PDF!") if $logger->is_error();
+                       $error = "PDF could not be created";
+                       $logger->error("Something went wrong while creating the PDF!") if $logger->is_error();
                     }
 
 
@@ -184,6 +193,7 @@ sub set_message {
             message_transport_type => 'print',
         ),
         $borrowernumber,
+        $patron->borrowernumber,
         $branchdetail
     }
 }
