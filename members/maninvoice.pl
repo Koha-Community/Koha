@@ -40,6 +40,15 @@ use Koha::Patron::Categories;
 
 my $input=new CGI;
 my $flagsrequired = { borrowers => 'edit_borrowers' };
+my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
+    {   template_name   => "members/maninvoice.tt",
+        query           => $input,
+        type            => "intranet",
+        authnotrequired => 0,
+        flagsrequired   => $flagsrequired,
+        debug           => 1,
+    }
+);
 
 my $borrowernumber=$input->param('borrowernumber');
 
@@ -52,7 +61,7 @@ unless ( $patron ) {
 my $add=$input->param('add');
 if ($add){
     if ( checkauth( $input, 0, $flagsrequired, 'intranet' ) ) {
-        die "Wrong CSRF token"
+        output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
             unless Koha::Token->new->check_csrf( {
                 session_id => scalar $input->cookie('CGISESSID'),
                 token => scalar $input->param('csrf_token'),
@@ -71,15 +80,6 @@ if ($add){
         my $note    = $input->param('note');
         my $error   = manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
         if ($error) {
-            my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
-                {   template_name   => "members/maninvoice.tt",
-                    query           => $input,
-                    type            => "intranet",
-                    authnotrequired => 0,
-                    flagsrequired   => $flagsrequired,
-                    debug           => 1,
-                }
-            );
             if ( $error =~ /FOREIGN KEY/ && $error =~ /itemnumber/ ) {
                 $template->param( 'ITEMNUMBER' => 1 );
             }

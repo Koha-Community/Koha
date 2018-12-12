@@ -83,7 +83,7 @@ our %errors = ();
 # Case is important in these operational values as the template must use case to be visually pleasing!
 if ( ( $op eq 'Upload' ) && $uploadfile ) {
 
-    die "Wrong CSRF token"
+    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf({
             session_id => scalar $input->cookie('CGISESSID'),
             token  => scalar $input->param('csrf_token'),
@@ -172,7 +172,7 @@ elsif ( ( $op eq 'Upload' ) && !$uploadfile ) {
     $template->param( filetype   => $filetype );
 }
 elsif ( $op eq 'Delete' ) {
-    die "Wrong CSRF token"
+    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf({
             session_id => scalar $input->cookie('CGISESSID'),
             token  => scalar $input->param('csrf_token'),

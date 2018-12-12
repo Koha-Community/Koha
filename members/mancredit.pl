@@ -62,7 +62,7 @@ my $add = $input->param('add');
 
 if ($add){
 
-    die "Wrong CSRF token"
+    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf( {
             session_id => scalar $input->cookie('CGISESSID'),
             token  => scalar $input->param('csrf_token'),

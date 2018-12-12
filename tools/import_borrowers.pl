@@ -111,7 +111,7 @@ my $patronlistname = $uploadborrowers . ' (' . $timestamp .')';
 $template->param( SCRIPT_NAME => '/cgi-bin/koha/tools/import_borrowers.pl' );
 
 if ( $uploadborrowers && length($uploadborrowers) > 0 ) {
-    die "Wrong CSRF token"
+    output_and_exit( $input, $cookie, $template, 'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf({
             session_id => scalar $input->cookie('CGISESSID'),
             token  => scalar $input->param('csrf_token'),
