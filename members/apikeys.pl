@@ -60,11 +60,11 @@ if ( $op eq 'generate' or
      $op eq 'revoke' or
      $op eq 'activate' ) {
 
-    die "Wrong CSRF token"
-    unless Koha::Token->new->check_csrf({
-        session_id => scalar $cgi->cookie('CGISESSID'),
-        token      => scalar $cgi->param('csrf_token'),
-    });
+    output_and_exit( $cgi, $cookie, $template, 'wrong_csrf_token' )
+        unless Koha::Token->new->check_csrf({
+            session_id => scalar $cgi->cookie('CGISESSID'),
+            token      => scalar $cgi->param('csrf_token'),
+        });
 }
 
 if ($op) {

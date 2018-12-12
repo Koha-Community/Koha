@@ -306,7 +306,7 @@ $debug and warn join "\t", map {"$_: $newdata{$_}"} qw(dateofbirth dateenrolled 
 my $extended_patron_attributes = ();
 if ($op eq 'save' || $op eq 'insert'){
 
-    die "Wrong CSRF token"
+    output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
         unless Koha::Token->new->check_csrf({
             session_id => scalar $input->cookie('CGISESSID'),
             token  => scalar $input->param('csrf_token'),

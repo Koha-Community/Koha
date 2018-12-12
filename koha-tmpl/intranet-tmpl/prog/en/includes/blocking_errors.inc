@@ -11,6 +11,8 @@
         <div class="dialog message">This subscription does not exist.</div>
     [% CASE 'unknown_basket' %]
         <div class="dialog message">This basket does not exist.</div>
+    [% CASE 'wrong_csrf_token' %]
+        <div class="dialog message">The form submission failed (Wrong CSRF token). Try to come back, refresh the page, then try again.</div>
     [% CASE %][% blocking_error | html %]
     [% END %]
 

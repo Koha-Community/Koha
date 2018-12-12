@@ -112,7 +112,7 @@ if ( $total_paid and $total_paid ne '0.00' ) {
             total_due => $total_due
         );
     } else {
-        die "Wrong CSRF token"
+        output_and_exit( $input, $cookie, $template,  'wrong_csrf_token' )
             unless Koha::Token->new->check_csrf( {
                 session_id => $input->cookie('CGISESSID'),
                 token  => scalar $input->param('csrf_token'),
