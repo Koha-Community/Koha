@@ -32,6 +32,7 @@ use Koha::Patrons;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Exceptions::Account;
 
 =head1 NAME
 
@@ -333,7 +334,7 @@ sub add_credit {
 
     my $schema = Koha::Database->new->schema;
 
-    my $account_type = $Koha::Account::account_type->{$type};
+    my $account_type = $Koha::Account::account_type_credit->{$type};
     $account_type .= $sip
         if defined $sip &&
            $type eq 'payment';
@@ -399,6 +400,128 @@ sub add_credit {
                             itemnumber        => $item_id,
                             manager_id        => $user_id,
                             branchcode        => $library_id,
+                        }
+                    )
+                );
+            }
+        }
+    );
+
+    return $line;
+}
+
+=head3 add_debit
+
+This method allows adding debits to a patron's account
+
+my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
+    {
+        amount       => $amount,
+        description  => $description,
+        note         => $note,
+        user_id      => $user_id,
+        library_id   => $library_id,
+        type         => $debit_type,
+        item_id      => $item_id,
+        issue_id     => $issue_id
+    }
+);
+
+$debit_type can be any of:
+  - fine
+  - lost_item
+  - new_card
+  - account
+  - sundry
+  - processing
+  - rent
+  - reserve
+  - overdue
+  - manual
+
+=cut
+
+sub add_debit {
+
+    my ( $self, $params ) = @_;
+
+    # amount should always be a positive value
+    my $amount       = $params->{amount};
+
+    unless ( $amount > 0 ) {
+        Koha::Exceptions::Account::AmountNotPositive->throw(
+            error => 'Debit amount passed is not positive'
+        );
+    }
+
+    my $description  = $params->{description} // q{};
+    my $note         = $params->{note} // q{};
+    my $user_id      = $params->{user_id};
+    my $library_id   = $params->{library_id};
+    my $type         = $params->{type};
+    my $item_id      = $params->{item_id};
+    my $issue_id     = $params->{issue_id};
+
+    my $schema = Koha::Database->new->schema;
+
+    unless ( exists($Koha::Account::account_type_debit->{$type}) ) {
+        Koha::Exceptions::Account::UnrecognisedType->throw(
+            error => 'Type of debit not recognised'
+        );
+    }
+
+    my $account_type = $Koha::Account::account_type_debit->{$type};
+
+    my $line;
+
+    $schema->txn_do(
+        sub {
+            # We should remove accountno, it is no longer needed
+            my $last = Koha::Account::Lines->search( { borrowernumber => $self->{patron_id} },
+                { order_by => 'accountno' } )->next();
+            my $accountno = $last ? $last->accountno + 1 : 1;
+
+            # Insert the account line
+            $line = Koha::Account::Line->new(
+                {   borrowernumber    => $self->{patron_id},
+                    date              => \'NOW()',
+                    amount            => $amount,
+                    description       => $description,
+                    accounttype       => $account_type,
+                    amountoutstanding => $amount,
+                    payment_type      => undef,
+                    note              => $note,
+                    manager_id        => $user_id,
+                    itemnumber        => $item_id,
+                    issue_id          => $issue_id,
+                    branchcode        => $library_id,
+                    ( $type eq 'fine' ? ( lastincrement => $amount ) : ()),
+                }
+            )->store();
+
+            # Record the account offset
+            my $account_offset = Koha::Account::Offset->new(
+                {   debit_id => $line->id,
+                    type      => $Koha::Account::offset_type->{$type},
+                    amount    => $amount
+                }
+            )->store();
+
+            if ( C4::Context->preference("FinesLog") ) {
+                logaction(
+                    "FINES", 'CREATE',
+                    $self->{patron_id},
+                    Dumper(
+                        {   action            => "create_$type",
+                            borrowernumber    => $self->{patron_id},
+                            accountno         => $accountno,
+                            amount            => $amount,
+                            description       => $description,
+                            amountoutstanding => $amount,
+                            accounttype       => $account_type,
+                            note              => $note,
+                            itemnumber        => $item_id,
+                            manager_id        => $user_id,
                         }
                     )
                 );
@@ -568,14 +691,21 @@ our $offset_type = {
     'forgiven'         => 'Writeoff',
     'lost_item_return' => 'Lost Item',
     'payment'          => 'Payment',
-    'writeoff'         => 'Writeoff'
+    'writeoff'         => 'Writeoff',
+    'reserve'          => 'Reserve Fee',
+    'processing'       => 'Processing Fee',
+    'lost_item'        => 'Lost Item',
+    'rent'             => 'Rental Fee',
+    'fine'             => 'Fine',
+    'manual_debit'     => 'Manual Debit',
+    'hold_expired'     => 'Hold Expired'
 };
 
-=head3 $account_type
+=head3 $account_type_credit
 
 =cut
 
-our $account_type = {
+our $account_type_credit = {
     'credit'           => 'C',
     'forgiven'         => 'FOR',
     'lost_item_return' => 'CR',
@@ -583,8 +713,30 @@ our $account_type = {
     'writeoff'         => 'W'
 };
 
-=head1 AUTHOR
+=head3 $account_type_debit
+
+=cut
+
+our $account_type_debit = {
+    'fine'          => 'FU',
+    'lost_item'     => 'L',
+    'new_card'      => 'N',
+    'account'       => 'A',
+    'sundry'        => 'M',
+    'processing'    => 'PF',
+    'rent'          => 'Rent',
+    'reserve'       => 'Res',
+    'overdue'       => 'O',
+    'manual_debit'  => 'M',
+    'hold_expired'  => 'HE'
+};
+
+=head1 AUTHORS
+
+=encoding utf8
 
 Kyle M Hall <kyle.m.hall@gmail.com>
+Tomás Cohen Arazi <tomascohen@gmail.com>
+Martin Renvoize <martin.renvoize@ptfs-europe.com>
 
 =cut
