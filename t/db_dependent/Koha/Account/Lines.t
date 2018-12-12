@@ -299,7 +299,7 @@ subtest 'Keep account info when a patron is deleted' => sub {
 
 subtest 'adjust() tests' => sub {
 
-    plan tests => 19;
+    plan tests => 33;
 
     $schema->storage->txn_begin;
 
@@ -378,6 +378,35 @@ subtest 'adjust() tests' => sub {
     is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
 
     is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
+
+    # Decrement the partially paid fine, less than what was paid
+    $debit_2->adjust( { amount => 50, type => 'fine_increment' } )->discard_changes;
+
+    is( $debit_2->amount * 1, 50, 'Fine amount was updated in full' );
+    is( $debit_2->amountoutstanding * 1, 10, 'Fine amountoutstanding was updated by difference' );
+    is( $debit_2->lastincrement * 1, -110, 'lastincrement is the to the right value' );
+
+    $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
+    is( $offsets->count, 4, 'An offset is generated for the decrement' );
+    $THIS_offset = $offsets->last;
+    is( $THIS_offset->amount * 1, -110, 'Amount was calculated correctly (decrement by 110)' );
+    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+
+    # Decrement the partially paid fine, more than what was paid
+    $debit_2->adjust( { amount => 30, type => 'fine_increment' } )->discard_changes;
+    is( $debit_2->amount * 1, 30, 'Fine amount was updated in full' );
+    is( $debit_2->amountoutstanding * 1, 0, 'Fine amountoutstanding was zeroed (payment was 40)' );
+    is( $debit_2->lastincrement * 1, -20, 'lastincrement is the to the right value' );
+
+    $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
+    is( $offsets->count, 5, 'An offset is generated for the decrement' );
+    $THIS_offset = $offsets->last;
+    is( $THIS_offset->amount * 1, -20, 'Amount was calculated correctly (decrement by 20)' );
+    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+
+    my $overpayment_refund = $account->lines->last;
+    is( $overpayment_refund->amount * 1, -10, 'A new credit has been added' );
+    is( $overpayment_refund->description, 'Overpayment refund', 'Credit generated with the expected description' );
 
     $schema->storage->txn_rollback;
 };
