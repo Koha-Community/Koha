@@ -1502,7 +1502,9 @@ sub Item2Marc {
         } keys %{ $itemrecord } 
     };
     my $framework = C4::Biblio::GetFrameworkCode( $biblionumber );
-    my $itemmarc = C4::Biblio::TransformKohaToMarc( $mungeditem ); # Bug 21774: no_split parameter removed to allow cloned subfields
+    my $itemmarc = C4::Biblio::TransformKohaToMarc(
+        $mungeditem, { no_split => 1},
+    );
     my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField(
         "items.itemnumber", $framework,
     );
