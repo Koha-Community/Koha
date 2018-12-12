@@ -256,6 +256,21 @@ sub adjust {
             my $difference                = $amount - $amount_before;
             my $new_outstanding           = $amount_outstanding_before + $difference;
 
+            # Catch cases that require patron refunds
+            if ( $new_outstanding < 0 ) {
+                my $account =
+                  Koha::Patrons->find( $self->borrowernumber )->account;
+                my $credit = $account->add_credit(
+                    {
+                        amount      => $new_outstanding * -1,
+                        description => 'Overpayment refund',
+                        type        => 'credit',
+                        ( $update_type eq 'fine_increment' ? ( item_id => $self->itemnumber ) : ()),
+                    }
+                );
+                $new_outstanding = 0;
+            }
+
             # Update the account line
             $self->set(
                 {
