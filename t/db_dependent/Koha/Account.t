@@ -19,8 +19,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::MockModule;
+use Test::Exception;
 
 use Koha::Account;
 use Koha::Account::Lines;
@@ -169,7 +170,7 @@ subtest 'add_credit() tests' => sub {
     is( $account->balance, -25, 'Patron has a balance of -25' );
     is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 1, 'Action added to statistics' );
-    is( $line_1->accounttype, $Koha::Account::account_type->{'payment'}, 'Account type is correctly set' );
+    is( $line_1->accounttype, $Koha::Account::account_type_credit->{'payment'}, 'Account type is correctly set' );
 
     # Enable logs
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
@@ -188,7 +189,7 @@ subtest 'add_credit() tests' => sub {
     is( $account->balance, -62, 'Patron has a balance of -25' );
     is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'Action added to statistics' );
-    is( $line_2->accounttype, $Koha::Account::account_type->{'payment'} . $sip_code, 'Account type is correctly set' );
+    is( $line_2->accounttype, $Koha::Account::account_type_credit->{'payment'} . $sip_code, 'Account type is correctly set' );
 
     # offsets have the credit_id set to accountlines_id, and debit_id is undef
     my $offset_1 = Koha::Account::Offsets->search({ credit_id => $line_1->id })->next;
@@ -210,6 +211,113 @@ subtest 'add_credit() tests' => sub {
 
     is( $schema->resultset('ActionLog')->count(), $action_logs + 2, 'Log was added' );
     is( $schema->resultset('Statistic')->count(), $statistics + 2, 'No action added to statistics, because of credit type' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'add_debit() tests' => sub {
+
+    plan tests => 13;
+
+    $schema->storage->txn_begin;
+
+    # delete logs and statistics
+    my $action_logs = $schema->resultset('ActionLog')->search()->count;
+    my $statistics  = $schema->resultset('Statistic')->search()->count;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account =
+      Koha::Account->new( { patron_id => $patron->borrowernumber } );
+
+    is( $account->balance, 0, 'Patron has no balance' );
+
+    throws_ok {
+    $account->add_debit(
+        {
+            amount      => -5,
+            description => 'amount validation failure',
+            library_id  => $patron->branchcode,
+            note        => 'this should fail anyway',
+            type        => 'rent',
+            user_id     => $patron->id
+        }
+    ); } 'Koha::Exceptions::Account::AmountNotPositive', 'Expected validation exception thrown (amount)';
+
+    throws_ok {
+    $account->add_debit(
+        {
+            amount      => 5,
+            description => 'type validation failure',
+            library_id  => $patron->branchcode,
+            note        => 'this should fail anyway',
+            type        => 'failure',
+            user_id     => $patron->id
+        }
+    ); } 'Koha::Exceptions::Account::UnrecognisedType', 'Expected validation exception thrown (type)';
+
+    # Disable logs
+    t::lib::Mocks::mock_preference( 'FinesLog', 0 );
+
+    my $line_1 = $account->add_debit(
+        {
+            amount      => 25,
+            description => 'Rental charge of 25',
+            library_id  => $patron->branchcode,
+            note        => 'not really important',
+            type        => 'rent',
+            user_id     => $patron->id
+        }
+    );
+
+    is( $account->balance, 25, 'Patron has a balance of 25' );
+    is(
+        $schema->resultset('ActionLog')->count(),
+        $action_logs + 0,
+        'No log was added'
+    );
+    is(
+        $line_1->accounttype,
+        $Koha::Account::account_type_debit->{'rent'},
+        'Account type is correctly set'
+    );
+
+    # Enable logs
+    t::lib::Mocks::mock_preference( 'FinesLog', 1 );
+
+    my $sip_code = "1";
+    my $line_2   = $account->add_debit(
+        {
+            amount      => 37,
+            description => 'Rental charge of 37',
+            library_id  => $patron->branchcode,
+            note        => 'not really important',
+            type        => 'rent',
+            user_id     => $patron->id,
+        }
+    );
+
+    is( $account->balance, 62, 'Patron has a balance of 62' );
+    is(
+        $schema->resultset('ActionLog')->count(),
+        $action_logs + 1,
+        'Log was added'
+    );
+    is(
+        $line_2->accounttype,
+        $Koha::Account::account_type_debit->{'rent'},
+        'Account type is correctly set'
+    );
+
+    # offsets have the debit_id set to accountlines_id, and credit_id is undef
+    my $offset_1 =
+      Koha::Account::Offsets->search( { debit_id => $line_1->id } )->next;
+    my $offset_2 =
+      Koha::Account::Offsets->search( { debit_id => $line_2->id } )->next;
+
+    is( $offset_1->debit_id,  $line_1->id, 'debit_id is set for debit 1' );
+    is( $offset_1->credit_id, undef,       'credit_id is not set for debit 1' );
+    is( $offset_2->debit_id,  $line_2->id, 'debit_id is set for debit 2' );
+    is( $offset_2->credit_id, undef,       'credit_id is not set for debit 2' );
 
     $schema->storage->txn_rollback;
 };
