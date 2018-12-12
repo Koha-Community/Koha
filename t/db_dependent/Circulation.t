@@ -229,7 +229,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 # CanBookBeRenewed tests
     C4::Context->set_preference('ItemsDeniedRenewal','');
     # Generate test biblio
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     my $barcode = 'R00000342';
     my $branch = $library2->{branchcode};
@@ -923,7 +923,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $branch   = $library2->{branchcode};
 
     #Create another record
-    my $biblio2 = $builder->gimme_a_biblio();
+    my $biblio2 = $builder->build_sample_biblio();
 
     #Create third item
     AddItem(
@@ -1002,7 +1002,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $barcode  = '1234567890';
     my $branch   = $library2->{branchcode};
 
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     #Create third item
     my ( undef, undef, $itemnumber ) = AddItem(
@@ -1059,7 +1059,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
         undef,  0,
         .10, 1
     );
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     my $barcode1 = '1234';
     my ( undef, undef, $itemnumber1 ) = AddItem(
@@ -1142,7 +1142,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
     my $branch   = $library->{branchcode};
 
     #Create another record
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     my (undef, undef, $itemnumber) = AddItem(
         {
@@ -1172,7 +1172,7 @@ C4::Context->dbh->do("DELETE FROM accountlines");
 {
     my $library = $builder->build({ source => 'Branch' });
 
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     my $barcode = 'just a barcode';
     my ( undef, undef, $itemnumber ) = AddItem(
@@ -1472,7 +1472,7 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
 subtest 'MultipleReserves' => sub {
     plan tests => 3;
 
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     my $branch = $library2->{branchcode};
 
@@ -2009,7 +2009,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
     );
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
 
-    my $biblio = $builder->gimme_a_biblio({ author => 'Hall, Daria' });
+    my $biblio = $builder->build_sample_biblio({ author => 'Hall, Daria' });
 
     subtest 'Full write-off tests' => sub {
 
@@ -2374,7 +2374,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 subtest '_FixOverduesOnReturn' => sub {
     plan tests => 10;
 
-    my $biblio = $builder->gimme_a_biblio({ author => 'Hall, Kylie' });
+    my $biblio = $builder->build_sample_biblio({ author => 'Hall, Kylie' });
 
     my $barcode = 'KD987654321';
     my $branchcode  = $library2->{branchcode};

@@ -57,7 +57,7 @@ subtest 'General Add, Get and Del tests' => sub {
 
     # Create a biblio instance for testing
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     # Add an item.
     my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $biblio->biblionumber);
@@ -169,7 +169,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
 
     # Create a new biblio
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     # Add two items
     my ( $item1_bibnum, $item1_bibitemnum, $item1_itemnumber ) = AddItem(
@@ -277,7 +277,7 @@ subtest 'GetItemsInfo tests' => sub {
     )->store();
 
     # Add a biblio
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
     # Add an item
     my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
         {
@@ -376,8 +376,8 @@ subtest 'SearchItems test' => sub {
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
     my $cpl_items_before = SearchItemsByField( 'homebranch', $library1->{branchcode});
 
-    my $biblio = $builder->gimme_a_biblio({ title => 'Silence in the library' });
-    $builder->gimme_a_biblio({ title => 'Silence in the shadow' });
+    my $biblio = $builder->build_sample_biblio({ title => 'Silence in the library' });
+    $builder->build_sample_biblio({ title => 'Silence in the shadow' });
 
     my (undef, $initial_items_count) = SearchItems(undef, {rows => 1});
 
@@ -554,7 +554,7 @@ subtest 'Koha::Item(s) tests' => sub {
 
     # Create a biblio and item for testing
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
     my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
         {
             homebranch    => $library1->{branchcode},
@@ -595,7 +595,7 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
         source => 'Itemtype',
     });
 
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
     my $item_infos = [
         { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
         { homebranch => $library1->{branchcode}, holdingbranch => $library1->{branchcode} },
@@ -722,7 +722,7 @@ subtest 'C4::Items::_build_default_values_for_mod_marc' => sub {
     my $itemtype = $builder->build({ source => 'Itemtype' })->{itemtype};
 
     # Create a record with a barcode
-    my $biblio = $builder->gimme_a_biblio({ frameworkcode => $framework->{frameworkcode} });
+    my $biblio = $builder->build_sample_biblio({ frameworkcode => $framework->{frameworkcode} });
     my $item_record = new MARC::Record;
     my $a_barcode = 'a barcode';
     my $barcode_field = MARC::Field->new(
@@ -888,7 +888,7 @@ subtest 'Test logging for ModItem' => sub {
 
     # Create a biblio instance for testing
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
 
     # Add an item.
     my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $biblio->biblionumber);

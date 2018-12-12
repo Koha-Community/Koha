@@ -16,7 +16,7 @@ my $library = $builder->build({
     source => 'Branch',
 });
 
-my $biblio = $builder->gimme_a_biblio();
+my $biblio = $builder->build_sample_biblio();
 
 my ( $item_bibnum, $item_bibitemnum, $itemnumber );
 ( $item_bibnum, $item_bibitemnum, $itemnumber ) =

@@ -127,7 +127,7 @@ sub build {
     });
 }
 
-sub gimme_a_biblio {
+sub build_sample_biblio {
     my ( $self, $args ) = @_;
 
     my $title  = $args->{title}  || 'Some boring read';

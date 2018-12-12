@@ -46,7 +46,7 @@ t::lib::Mocks::mock_userenv({ flags => 1, userid => '1', branchcode => $branchco
 
 my $borrowers_count = 3;
 
-my $biblio = $builder->gimme_a_biblio();
+my $biblio = $builder->build_sample_biblio();
 my $item_barcode = 'my_barcode';
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
     {   homebranch    => $branchcode,

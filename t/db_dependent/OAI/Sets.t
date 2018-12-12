@@ -355,10 +355,10 @@ ok (!defined(AddOAISetsBiblios(my $arg=[])), 'AddOAISetsBiblios with a no HASH a
 ok (defined(AddOAISetsBiblios($arg={})), 'AddOAISetsBiblios with a HASH argument is def');
 
 # Create a biblio instance for testing
-my $biblio_1 = $builder->gimme_a_biblio({ author => 'Moffat, Steven' });
+my $biblio_1 = $builder->build_sample_biblio({ author => 'Moffat, Steven' });
 my $biblionumber1 = $biblio_1->biblionumber;
 isa_ok(\$biblionumber1, 'SCALAR', '$biblionumber1 is a SCALAR');
-my $biblio_2 = $builder->gimme_a_biblio({ author => 'Moffat, Steven' });
+my $biblio_2 = $builder->build_sample_biblio({ author => 'Moffat, Steven' });
 my $biblionumber2 = $biblio_2->biblionumber;
 isa_ok(\$biblionumber2, 'SCALAR', '$biblionumber2 is a SCALAR');
 
@@ -521,7 +521,7 @@ ModOAISetMappings($setVH_id, $mappingsVH);
 
 
 #Create a biblio notice corresponding at one of mappings
-my $biblio_VH = $builder->gimme_a_biblio({ author => 'Victor Hugo' });
+my $biblio_VH = $builder->build_sample_biblio({ author => 'Victor Hugo' });
 my $biblionumberVH = $biblio_VH->biblionumber;
 
 #Update
@@ -577,7 +577,7 @@ ModOAISetMappings($setNotVH_id, $mappingsNotVH);
 
 
 #Create a biblio notice corresponding at one of mappings
-my $biblio_NotVH = $builder->gimme_a_biblio({ author => 'Sponge, Bob' });
+my $biblio_NotVH = $builder->build_sample_biblio({ author => 'Sponge, Bob' });
 my $biblionumberNotVH = $biblio_NotVH->biblionumber;
 
 #Update
