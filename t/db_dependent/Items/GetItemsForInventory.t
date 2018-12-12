@@ -74,8 +74,8 @@ subtest 'Skip items with waiting holds' => sub {
     my $title_1 = 'Title 1, ';
     my $title_2 = 'Title 2, bizzarre one so doesn\'t already exist';
 
-    my $biblio_1 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype, title => $title_1 });
-    my $biblio_2 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype, title => $title_2 });
+    my $biblio_1 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype, title => $title_1 });
+    my $biblio_2 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype, title => $title_2 });
 
     my ( $items_1, $first_items_count ) = GetItemsForInventory();
     is( scalar @{$items_1}, $first_items_count, 'Results and count match' );

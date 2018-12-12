@@ -40,7 +40,7 @@ my $itemtype = $builder->build(
 
 my $borrowers_count = 5;
 
-my $biblio = $builder->gimme_a_biblio();
+my $biblio = $builder->build_sample_biblio();
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
     {   homebranch    => $library4->{branchcode},
         holdingbranch => $library3->{branchcode},

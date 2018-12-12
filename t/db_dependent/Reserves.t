@@ -79,7 +79,7 @@ my $itemtype = $builder->build(
 
 t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
 
-my $bibnum = $builder->gimme_a_biblio({frameworkcode => $frameworkcode})->biblionumber;
+my $bibnum = $builder->build_sample_biblio({frameworkcode => $frameworkcode})->biblionumber;
 
 # Create a helper item instance for testing
 my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
@@ -212,7 +212,7 @@ $dbh->do(
     $branch_2, 10, 2, 'homebranch',
 );
 
-my $bibnum2 = $builder->gimme_a_biblio({frameworkcode => $frameworkcode})->biblionumber;
+my $bibnum2 = $builder->build_sample_biblio({frameworkcode => $frameworkcode})->biblionumber;
 
 my ($itemnum_cpl, $itemnum_fpl);
 ( undef, undef, $itemnum_cpl ) = AddItem(

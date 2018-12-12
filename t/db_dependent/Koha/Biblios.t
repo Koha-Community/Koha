@@ -143,7 +143,7 @@ subtest 'can_be_transferred' => sub {
     my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
     my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $biblio = $builder->gimme_a_biblio({ itemtype => 'ONLY1' });
+    my $biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
     my ($item_bibnum, $item_bibitemnum, $itemnumber)
         = AddItem({ homebranch => $library1->branchcode, holdingbranch => $library1->branchcode }, $biblio->biblionumber);
     my $item  = Koha::Items->find($itemnumber);

@@ -54,7 +54,7 @@ $insert_sth->execute('DUMMY');
 $insert_sth->execute('ONLY1');
 
 # Setup Test------------------------
-my $biblio = $builder->gimme_a_biblio({ itemtype => 'DUMMY' });
+my $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
 
 # Create item instance for testing.
 my ($item_bibnum, $item_bibitemnum, $itemnumber)
@@ -239,7 +239,7 @@ is( $hold->priority, '6', "Test AlterPriority(), move to bottom" );
 # Note that canreservefromotherbranches has no effect if
 # IndependentBranches is OFF.
 
-my $foreign_biblio = $builder->gimme_a_biblio({ itemtype => 'DUMMY' });
+my $foreign_biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
 my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
   = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_biblio->biblionumber);
 $dbh->do('DELETE FROM issuingrules');
@@ -284,7 +284,7 @@ ok(
 
 {
     # Regression test for bug 11336 # Test if ModReserve correctly recalculate the priorities
-    $biblio = $builder->gimme_a_biblio({ itemtype => 'DUMMY' });
+    $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
     ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
     my $reserveid1 = AddReserve($branch_1, $borrowernumbers[0], $biblio->biblionumber, '', 1);
     ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
@@ -321,7 +321,7 @@ ok( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'damaged',
 ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for damaged item with AllowHoldsOnDamagedItems disabled" );
 
 # Regression test for bug 9532
-$biblio = $builder->gimme_a_biblio({ itemtype => 'CANNOT' });
+$biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);
 AddReserve(
     $branch_1,
@@ -369,7 +369,7 @@ $dbh->do(q{
     INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, returnbranch)
     VALUES (?, ?, ?, ?)
 }, {}, $branch_1, 'CAN', 1, 'homebranch');
-$biblio = $builder->gimme_a_biblio({ itemtype => 'CANNOT' });
+$biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
 ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
     { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'notReservable',
@@ -395,7 +395,7 @@ $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM biblio');
 
-$biblio = $builder->gimme_a_biblio({ itemtype => 'ONLY1' });
+$biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
 ( $item_bibnum, $item_bibitemnum, $itemnumber )
     = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
 
@@ -420,7 +420,7 @@ subtest 'Test max_holds per library/patron category' => sub {
     $dbh->do('DELETE FROM issuingrules');
     $dbh->do('DELETE FROM circulation_rules');
 
-    $biblio = $builder->gimme_a_biblio({ itemtype => 'TEST' });
+    $biblio = $builder->build_sample_biblio({ itemtype => 'TEST' });
     ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
       AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 },
         $biblio->biblionumber );
@@ -490,7 +490,7 @@ subtest 'Test max_holds per library/patron category' => sub {
 subtest 'Pickup location availability tests' => sub {
     plan tests => 4;
 
-    $biblio = $builder->gimme_a_biblio({ itemtype => 'ONLY1' });
+    $biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
     my ( $item_bibnum, $item_bibitemnum, $itemnumber )
     = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
     #Add a default rule to allow some holds
@@ -547,21 +547,21 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
     my $patron   = $builder->build_object( { class => 'Koha::Patrons' } );
 
     # Create 3 biblios with items
-    my $biblio_1 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype });
+    my $biblio_1 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype });
     my ( undef, undef, $itemnumber_1 ) = AddItem(
         {   homebranch    => $library->branchcode,
             holdingbranch => $library->branchcode
         },
         $biblio_1->biblionumber
     );
-    my $biblio_2 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype });
+    my $biblio_2 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype });
     my ( undef, undef, $itemnumber_2 ) = AddItem(
         {   homebranch    => $library->branchcode,
             holdingbranch => $library->branchcode
         },
         $biblio_2->biblionumber
     );
-    my $biblio_3 = $builder->gimme_a_biblio({ itemtype => $itemtype->itemtype });
+    my $biblio_3 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype });
     my ( undef, undef, $itemnumber_3 ) = AddItem(
         {   homebranch    => $library->branchcode,
             holdingbranch => $library->branchcode

@@ -47,7 +47,7 @@ my $itemtype = $builder->build({
 
 # Create a biblio instance for testing
 t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-my $biblio = $builder->gimme_a_biblio();
+my $biblio = $builder->build_sample_biblio();
 
 # Add an item.
 my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $biblio->biblionumber);

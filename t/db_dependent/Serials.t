@@ -143,7 +143,7 @@ subtest 'Values should not be erased on editing' => sub {
 
     plan tests => 1;
 
-    my $biblio = $builder->gimme_a_biblio();
+    my $biblio = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
     my ( $icn_tag, $icn_sf ) = GetMarcFromKohaField( 'items.itemcallnumber', '' );
     my ( $it_tag, $it_sf )   = GetMarcFromKohaField( 'items.itype', '' );
