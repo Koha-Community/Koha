@@ -64,7 +64,7 @@
     [% END %]
 
     [% IF (error_cancelling_receipt) %]
-      <div class="dialog error">
+      <div class="dialog alert">
       Cannot cancel receipt. Possible reasons :
       <ul>
         <li>
@@ -82,7 +82,7 @@
     [% END %]
 
     [% IF error_invoice_not_known %]
-        <div class="dialog error">
+        <div class="dialog alert">
             The invoice referenced by this invoiceid does not exist.
         </div>
     [% END %]
