@@ -331,8 +331,7 @@ foreach my $tag (sort keys %{$tagslib}) {
 	$subfield_data{mandatory}  = $tagslib->{$tag}->{$subfield}->{mandatory};
 	$subfield_data{repeatable} = $tagslib->{$tag}->{$subfield}->{repeatable};
 	my ($x,$value);
-	$value =~ s/"/&quot;/g;
-   if ( !$value && $use_default_values) {
+   if ( $use_default_values) {
 	    $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};
 	    # get today date & replace YYYY, MM, DD if provided in the default value
             my $today = dt_from_string;
