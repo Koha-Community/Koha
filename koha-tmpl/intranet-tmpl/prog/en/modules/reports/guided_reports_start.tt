@@ -708,6 +708,9 @@ canned reports and writing custom SQL reports.</p>
     [% FOREACH p IN sql_params %]
         <input type="hidden" name="sql_params" value="[% p %]"/>
     [% END %]
+    [% FOREACH n IN param_names %]
+        <input type="hidden" name="param_name" value="[% n | html %]"/>
+    [% END %]
 
     <label for="limit">Rows per page: </label>
     <select name="limit" id="limit">
