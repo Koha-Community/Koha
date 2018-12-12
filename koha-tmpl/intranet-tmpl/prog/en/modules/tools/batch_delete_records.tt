@@ -101,7 +101,7 @@ $(document).ready(function() {
     [% ELSIF message.type == 'warning' %]
       <div class="dialog alert">
     [% ELSIF message.type == 'error' %]
-      <div class="dialog error" style="margin:auto;">
+      <div class="dialog alert" style="margin:auto;">
     [% END %]
     [% IF message.code == 'biblio_not_exists' %]
       The biblionumber [% message.biblionumber |html %] does not exist in the database.
