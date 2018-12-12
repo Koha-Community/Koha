@@ -186,7 +186,7 @@ if ( $step == 3 ) {
 
             eval {
                 my $patron = Koha::Patron->new($patron_data)->store;
-                $patron->update_password($patron->userid, $firstpassword);
+                $patron->set_password({ password =>  $firstpassword });
             };
 
             #Error handling checking if the patron was created successfully
