@@ -143,12 +143,10 @@ sub generate_subfield_form {
                 my $username=(C4::Context->userenv?C4::Context->userenv->{'surname'}:"superlibrarian");
                 $value=~s/<<USER>>/$username/g;
             }
-        } else {
-            $value =~ s/"/&quot;/g;
         }
-        
+
         $subfield_data{visibility} = "display:none;" if (($subfieldlib->{hidden} > 4) || ($subfieldlib->{hidden} <= -4));
-        
+
         my $pref_itemcallnumber = C4::Context->preference('itemcallnumber');
         if (!$value && $subfieldlib->{kohafield} eq 'items.itemcallnumber' && $pref_itemcallnumber) {
             my $CNtag       = substr($pref_itemcallnumber, 0, 3);

@@ -71,9 +71,6 @@ if( !@errors && defined $review ) {
 			if ($clean ne $review) {
 				push @errors, {scrubbed=>$clean};
 			}
-			my $js_ok_review = $clean;
-			$js_ok_review =~ s/"/&quot;/g;	# probably redundant w/ TMPL ESCAPE=JS
-			$template->param(clean_review=>$js_ok_review);
             if ($savedreview) {
                 $savedreview->set(
                     {
