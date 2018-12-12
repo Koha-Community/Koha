@@ -136,8 +136,6 @@ sub create_input {
     
     my $index_subfield = CreateKey(); # create a specifique key for each subfield
 
-    $value =~ s/"/&quot;/g;
-
     # determine maximum length; 9999 bytes per ISO 2709 except for leader and MARC21 008
     my $max_length = 9999;
     if ($tag eq '000') {
