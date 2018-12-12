@@ -281,8 +281,6 @@ sub create_input {
     
     my $index_subfield = CreateKey(); # create a specifique key for each subfield
 
-    $value =~ s/"/&quot;/g;
-
     # if there is no value provided but a default value in parameters, get it
     if ( $value eq '' ) {
         $value = $tagslib->{$tag}->{$subfield}->{defaultvalue};

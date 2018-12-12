@@ -128,7 +128,6 @@ sub generate_subfield_form {
         $subfield_data{repeatable} = $subfieldlib->{repeatable};
         $subfield_data{maxlength}  = $subfieldlib->{maxlength};
         
-        $value =~ s/"/&quot;/g;
         if ( ! defined( $value ) || $value eq '')  {
             $value = $subfieldlib->{defaultvalue};
             # get today date & replace <<YYYY>>, <<MM>>, <<DD>> if provided in the default value
