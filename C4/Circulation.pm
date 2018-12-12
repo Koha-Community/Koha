@@ -60,6 +60,7 @@ use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Config::SysPrefs;
 use Koha::Charges::Fees;
+use Koha::Util::SystemPreferences;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -1885,32 +1886,25 @@ sub AddReturn {
     my $borrowernumber = $patron ? $patron->borrowernumber : undef;    # we don't know if we had a borrower or not
     my $patron_unblessed = $patron ? $patron->unblessed : {};
 
-    my $yaml_loc = C4::Context->preference('UpdateItemLocationOnCheckin');
-    if ($yaml_loc) {
-        $yaml_loc = "$yaml_loc\n\n";  # YAML is strict on ending \n. Surplus does not hurt
-        my $rules;
-        eval { $rules = YAML::Load($yaml_loc); };
-        if ($@) {
-            warn "Unable to parse UpdateItemLocationOnCheckin syspref : $@";
+    my $update_loc_rules = get_yaml_pref_hash('UpdateItemLocationOnCheckin');
+    map { $update_loc_rules->{$_} = $update_loc_rules->{$_}[0] } keys %$update_loc_rules; #We can only move to one location so we flatten the arrays
+    if ($update_loc_rules) {
+        if (defined $update_loc_rules->{_ALL_}) {
+            if ($update_loc_rules->{_ALL_} eq '_PERM_') { $update_loc_rules->{_ALL_} = $item->{permanent_location}; }
+            if ($update_loc_rules->{_ALL_} eq '_BLANK_') { $update_loc_rules->{_ALL_} = ''; }
+            if ( $item->{location} ne $update_loc_rules->{_ALL_}) {
+                $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $update_loc_rules->{_ALL_} };
+                ModItem( { location => $update_loc_rules->{_ALL_} }, undef, $itemnumber );
+            }
         }
         else {
-            if (defined $rules->{_ALL_}) {
-                if ($rules->{_ALL_} eq '_PERM_') { $rules->{_ALL_} = $item->{permanent_location}; }
-                if ($rules->{_ALL_} eq '_BLANK_') { $rules->{_ALL_} = ''; }
-                if ( $item->{location} ne $rules->{_ALL_}) {
-                    $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $rules->{_ALL_} };
-                    ModItem( { location => $rules->{_ALL_} }, undef, $itemnumber );
-                }
-            }
-            else {
-                foreach my $key ( keys %$rules ) {
-                    if ( $rules->{$key} eq '_PERM_' ) { $rules->{$key} = $item->{permanent_location}; }
-                    if ( $rules->{$key} eq '_BLANK_') { $rules->{$key} = '' ;}
-                    if ( ($item->{location} eq $key && $item->{location} ne $rules->{$key}) || ($key eq '_BLANK_' && $item->{location} eq '' && $rules->{$key} ne '') ) {
-                        $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $rules->{$key} };
-                        ModItem( { location => $rules->{$key} }, undef, $itemnumber );
-                        last;
-                    }
+            foreach my $key ( keys %$update_loc_rules ) {
+                if ( $update_loc_rules->{$key} eq '_PERM_' ) { $update_loc_rules->{$key} = $item->{permanent_location}; }
+                if ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
+                if ( ($item->{location} eq $key && $item->{location} ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->{location} eq '' && $update_loc_rules->{$key} ne '') ) {
+                    $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $update_loc_rules->{$key} };
+                    ModItem( { location => $update_loc_rules->{$key} }, undef, $itemnumber );
+                    last;
                 }
             }
         }
