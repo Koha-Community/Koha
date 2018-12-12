@@ -46,6 +46,26 @@ __PACKAGE__->table("biblio");
   data_type: 'longtext'
   is_nullable: 1
 
+=head2 medium
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+=head2 subtitle
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+=head2 part_number
+
+  data_type: 'longtext'
+  is_nullable: 1
+
+=head2 part_name
+
+  data_type: 'longtext'
+  is_nullable: 1
+
 =head2 unititle
 
   data_type: 'longtext'
@@ -75,7 +95,7 @@ __PACKAGE__->table("biblio");
 
   data_type: 'timestamp'
   datetime_undef_if_invalid: 1
-  default_value: current_timestamp
+  default_value: 'current_timestamp()'
   is_nullable: 0
 
 =head2 datecreated
@@ -100,6 +120,14 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "title",
   { data_type => "longtext", is_nullable => 1 },
+  "medium",
+  { data_type => "longtext", is_nullable => 1 },
+  "subtitle",
+  { data_type => "longtext", is_nullable => 1 },
+  "part_number",
+  { data_type => "longtext", is_nullable => 1 },
+  "part_name",
+  { data_type => "longtext", is_nullable => 1 },
   "unititle",
   { data_type => "longtext", is_nullable => 1 },
   "notes",
@@ -114,7 +142,7 @@ __PACKAGE__->add_columns(
   {
     data_type => "timestamp",
     datetime_undef_if_invalid => 1,
-    default_value => \"current_timestamp",
+    default_value => "current_timestamp()",
     is_nullable => 0,
   },
   "datecreated",
@@ -363,8 +391,9 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ebn7Szfm8/HbrdAc7ekTnA
+# Created by DBIx::Class::Schema::Loader v0.07049 @ 2019-03-15 16:45:45
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:61+Di/Fke60nCaASGeXbvw
+
 
 __PACKAGE__->has_one(
   "metadata",
