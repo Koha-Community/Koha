@@ -19,7 +19,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 18;
+use Test::More tests => 19;
 use Test::MockModule;
 use Test::Warn;
 
@@ -1060,6 +1060,56 @@ subtest 'add_tt_filters' => sub {
     is( $letter->{content}, $expected_letter, "Pre-processing should call TT plugin to remove punctuation if table is biblio or biblioitems");
 };
 
+subtest 'Dates formatting' => sub {
+    plan tests => 1;
+    my $code = 'TEST_DATE';
+    t::lib::Mocks::mock_preference('dateformat', 'metric'); # MM/DD/YYYY
+    my $biblio = $builder->build_object(
+        {
+            class => 'Koha::Biblios',
+            value => {
+                timestamp   => '2018-12-13 20:21:22',
+                datecreated => '2018-12-13'
+            }
+        }
+    );
+    my $template = <<EOF;
+[%- USE KohaDates -%]
+[% biblio.timestamp %]
+[% biblio.timestamp | \$KohaDates %]
+[% biblio.timestamp | \$KohaDates with_hours => 1 %]
+
+[% biblio.datecreated %]
+[% biblio.datecreated | \$KohaDates %]
+[% biblio.datecreated | \$KohaDates with_hours => 1 %]
+
+[% biblio.timestamp | \$KohaDates dateformat => 'iso' %]
+[% KohaDates.output_preference( str => biblio.timestamp, dateformat => 'iso' ) %]
+[% KohaDates.output_preference( str => biblio.timestamp, dateformat => 'iso', dateonly => 1 ) %]
+EOF
+    reset_template({ template => $template, code => $code, module => 'test' });
+    my $letter = GetPreparedLetter(
+        module => 'test',
+        letter_code => $code,
+        tables => {
+            biblio => $biblio->biblionumber,
+        }
+    );
+    my $expected_content = sprintf("%s\n%s\n%s\n\n%s\n%s\n%s\n\n%s\n%s\n%s\n",
+        '2018-12-13 20:21:22',
+        '13/12/2018',
+        '13/12/2018 20:21',
+
+        '2018-12-13',
+        '13/12/2018',
+        '13/12/2018 00:00',
+
+        '2018-12-13',
+        '2018-12-13 20:21',
+        '2018-12-13',
+    );
+    is( $letter->{content}, $expected_content );
+};
 
 sub reset_template {
     my ( $params ) = @_;
