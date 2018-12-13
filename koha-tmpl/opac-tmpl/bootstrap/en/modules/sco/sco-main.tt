@@ -195,6 +195,7 @@
                                         </div>
                                         <input type="hidden" name="op" value="checkout" />
                                         <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                        <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     </fieldset>
                                 </form>
 
@@ -238,6 +239,9 @@
                                             <tr>
                                                 <td>[% ISSUE.issuedate | html %]</td>
                                                 <td>
+                                                    [% IF ( newissues.match(ISSUE.barcode)) %]
+                                                        <span class="label label-info">NEW</span>
+                                                    [% END %]
                                                     [% UNLESS ( noitemlinks ) %]
                                                         <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber | uri %]">[% ISSUE.title | html %]</a>
                                                     [% ELSE %]

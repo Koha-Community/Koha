@@ -93,15 +93,16 @@ if (defined C4::Context->preference('AllowSelfCheckReturns')) {
 }
 
 my $issuerid = $loggedinuser;
-my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed) = (
+my ($op, $patronid, $patronlogin, $patronpw, $barcode, $confirmed, $newissues) = (
     $query->param("op")         || '',
     $query->param("patronid")   || '',
     $query->param("patronlogin")|| '',
     $query->param("patronpw")   || '',
     $query->param("barcode")    || '',
     $query->param("confirmed")  || '',
+    $query->param("newissues")  || '',
 );
-
+my @newissueslist = split /,/, $newissues;
 my $issuenoconfirm = 1; #don't need to confirm on issue.
 my $issuer   = Koha::Patrons->find( $issuerid )->unblessed;
 my $item     = GetItem(undef,$barcode);
@@ -215,7 +216,9 @@ elsif ( $patron and $op eq "checkout" ) {
                 )->count;
             }
             AddIssue( $borrower, $barcode );
-
+            push @newissueslist, $barcode;
+            print 'Issues \n';
+            print join(',', @newissueslist);
             if ( $hold_existed ) {
                 my $dtf = Koha::Database->new->schema->storage->datetime_parser;
                 $template->param(
@@ -245,6 +248,7 @@ elsif ( $patron and $op eq "checkout" ) {
 } # $op
 
 if ($borrower) {
+    print 'borrower \n';
 #   warn "issuer's  branchcode: " .   $issuer->{branchcode};
 #   warn   "user's  branchcode: " . $borrower->{branchcode};
     my $borrowername = sprintf "%s %s", ($borrower->{firstname} || ''), ($borrower->{surname} || '');
@@ -267,6 +271,7 @@ if ($borrower) {
         borrowername => $borrowername,
         issues_count => scalar(@checkouts),
         ISSUES => \@checkouts,
+        newissues => join(',',@newissueslist),
         patronid => $patronid,
         patronlogin => $patronlogin,
         patronpw => $patronpw,
