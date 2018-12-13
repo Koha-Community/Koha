@@ -175,7 +175,7 @@ subtest 'can_be_transferred' => sub {
          .'items is already located at to-library, then the transfer is possible.');
     $item->holdingbranch($library1->branchcode)->store;
     my ($item_bibnum2, $item_bibitemnum2, $itemnumber2)
-        = AddItem({ homebranch => $library1->branchcode, holdingbranch => $library3->branchcode }, $bibnum);
+        = AddItem({ homebranch => $library1->branchcode, holdingbranch => $library3->branchcode }, $biblio->biblionumber);
     my $item2  = Koha::Items->find($itemnumber2);
     is($biblio->can_be_transferred({ to => $library2 }), 1, 'Given we added '
         .'another item that should have no transfer limits applying on, then '
