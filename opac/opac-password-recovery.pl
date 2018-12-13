@@ -146,19 +146,26 @@ elsif ( $query->param('passwordReset') ) {
     } elsif ( $password ne $repeatPassword ) {
         $error = 'errPassNotMatch';
     } else {
-        my ( $is_valid, $err) = Koha::AuthUtils::is_password_valid( $password );
-        unless ( $is_valid ) {
-            $error = 'password_too_short' if $err eq 'too_short';
-            $error = 'password_too_weak' if $err eq 'too_weak';
-            $error = 'password_has_whitespaces' if $err eq 'has_whitespaces';
-        } else {
-            Koha::Patrons->find($borrower_number)->update_password( $username, $password );
+        try {
+            Koha::Patrons->find($borrower_number)->set_password({ password => $password });
+
             CompletePasswordRecovery($uniqueKey);
             $template->param(
                 password_reset_done => 1,
                 username            => $username
             );
         }
+        catch {
+            if ( $_->isa('Koha::Exceptions::Password::TooShort') ) {
+                $error = 'password_too_short';
+            }
+            elsif ( $_->isa('Koha::Exceptions::Password::WhitespaceCharacters') ) {
+                $error = 'password_has_whitespaces';
+            }
+            elsif ( $_->isa('Koha::Exceptions::Password::TooWeak') ) {
+                $error = 'password_too_weak';
+            }
+        };
     }
     if ( $error ) {
         $template->param(
