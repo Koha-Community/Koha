@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 36;
+use Test::More tests => 33;
 use Test::MockModule;
 use Test::Warn;
 
@@ -71,28 +71,16 @@ $context->mock( 'userenv', sub {
 });
 my $userenv_branchcode = $branchcode;
 
-# Test chargelostitem
+# Test manualinvoice
 my $itemtype = $builder->build( { source => 'Itemtype' } );
 my $item   = $builder->build( { source => 'Item', value => { itype => $itemtype->{itemtype} } } );
 my $patron = $builder->build( { source => 'Borrower' } );
 my $amount = '5.000000';
 my $description = "Test fee!";
-chargelostitem( $patron->{borrowernumber}, $item->{itemnumber}, $amount, $description );
-my ($accountline) = Koha::Account::Lines->search(
-    {
-        borrowernumber => $patron->{borrowernumber}
-    }
-);
-is( $accountline->amount, $amount, 'Accountline amount set correctly for chargelostitem' );
-is( $accountline->description, $description, 'Accountline description set correctly for chargelostitem' );
-is( $accountline->branchcode, $branchcode, 'Accountline branchcode set correctly for chargelostitem' );
-$dbh->do(q|DELETE FROM accountlines|);
-
-# Test manualinvoice, reuse some of the vars from testing chargelostitem
 my $type = 'L';
 my $note = 'Test note!';
 manualinvoice( $patron->{borrowernumber}, $item->{itemnumber}, $description, $type, $amount, $note );
-($accountline) = Koha::Account::Lines->search(
+my ($accountline) = Koha::Account::Lines->search(
     {
         borrowernumber => $patron->{borrowernumber}
     }
@@ -524,11 +512,26 @@ subtest 'balance' => sub {
     $patron->delete;
 };
 
-subtest "Koha::Account::chargelostitem tests" => sub {
-    plan tests => 40;
+subtest "C4::Accounts::chargelostitem tests" => sub {
+    plan tests => 3;
 
-    my $lostfine;
-    my $procfee;
+    my $branch = $builder->build( { source => 'Branch' } );
+    my $branchcode = $branch->{branchcode};
+
+    my $staff = $builder->build( { source => 'Borrower' } );
+    my $staff_id = $staff->{borrowernumber};
+
+    my $module = Test::MockModule->new('C4::Context');
+    $module->mock(
+        'userenv',
+        sub {
+            return {
+                flags  => 1,
+                number => $staff_id,
+                branch => $branchcode,
+            };
+        }
+    );
 
     my $itype_no_replace_no_fee = $builder->build({ source => 'Itemtype', value => {
             rentalcharge => 0,
@@ -561,120 +564,176 @@ subtest "Koha::Account::chargelostitem tests" => sub {
     my $cli_issue_id_3 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3 } })->{issue_id};
     my $cli_issue_id_4 = $builder->build({ source => 'Issue', value => { borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4 } })->{issue_id};
 
-    my $duck = Koha::Items->find({itemnumber=>$cli_itemnumber1});
+    my $lostfine;
+    my $procfee;
 
-    t::lib::Mocks::mock_preference('item-level_itypes', '1');
-    t::lib::Mocks::mock_preference('useDefaultReplacementCost', '0');
+    subtest "fee application tests" => sub {
+        plan tests => 40;
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
-    ok( !$lostfine, "No lost fine if no replacementcost or default when pref off");
-    ok( !$procfee,  "No processing fee if no processing fee");
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
-    ok( $lostfine->amount == 6.12, "Lost fine equals replacementcost when pref off and no default set");
-    ok( !$procfee,  "No processing fee if no processing fee");
-    $lostfine->delete();
+        t::lib::Mocks::mock_preference('item-level_itypes', '1');
+        t::lib::Mocks::mock_preference('useDefaultReplacementCost', '0');
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
-    ok( !$lostfine, "No lost fine if no replacementcost but default set when pref off");
-    ok( !$procfee,  "No processing fee if no processing fee");
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
-    ok( $lostfine->amount == 6.12 , "Lost fine equals replacementcost when pref off and default set");
-    ok( !$procfee,  "No processing fee if no processing fee");
-    $lostfine->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
+        ok( !$lostfine, "No lost fine if no replacementcost or default when pref off");
+        ok( !$procfee,  "No processing fee if no processing fee");
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
+        ok( $lostfine->amount == 6.12, "Lost fine equals replacementcost when pref off and no default set");
+        ok( !$procfee,  "No processing fee if no processing fee");
+        $lostfine->delete();
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
-    ok( !$lostfine, "No lost fine if no replacementcost and no default set when pref off");
-    ok( $procfee->amount == 8.16,  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
-    $procfee->delete();
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
-    ok( $lostfine->amount == 6.12 , "Lost fine equals replacementcost when pref off and no default set");
-    ok( $procfee->amount == 8.16,  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
-    $lostfine->delete();
-    $procfee->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
+        ok( !$lostfine, "No lost fine if no replacementcost but default set when pref off");
+        ok( !$procfee,  "No processing fee if no processing fee");
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
+        ok( $lostfine->amount == 6.12 , "Lost fine equals replacementcost when pref off and default set");
+        ok( !$procfee,  "No processing fee if no processing fee");
+        $lostfine->delete();
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
-    ok( !$lostfine, "No lost fine if no replacementcost but default set when pref off");
-    ok( $procfee->amount == 2.04,  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
-    $procfee->delete();
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
-    ok( $lostfine->amount == 6.12 , "Lost fine equals replacementcost when pref off and default set");
-    ok( $procfee->amount == 2.04,  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
-    $lostfine->delete();
-    $procfee->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
+        ok( !$lostfine, "No lost fine if no replacementcost and no default set when pref off");
+        ok( $procfee->amount == 8.16,  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
+        $procfee->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
+        ok( $lostfine->amount == 6.12 , "Lost fine equals replacementcost when pref off and no default set");
+        ok( $procfee->amount == 8.16,  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
+        $lostfine->delete();
+        $procfee->delete();
 
-    t::lib::Mocks::mock_preference('useDefaultReplacementCost', '1');
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        ok( !$lostfine, "No lost fine if no replacementcost but default set when pref off");
+        ok( $procfee->amount == 2.04,  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
+        $procfee->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        ok( $lostfine->amount == 6.12 , "Lost fine equals replacementcost when pref off and default set");
+        ok( $procfee->amount == 2.04,  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
+        $lostfine->delete();
+        $procfee->delete();
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
-    ok( !$lostfine, "No lost fine if no replacementcost or default when pref on");
-    ok( !$procfee,  "No processing fee if no processing fee");
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
-    is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and no default set");
-    ok( !$procfee,  "No processing fee if no processing fee");
+        t::lib::Mocks::mock_preference('useDefaultReplacementCost', '1');
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
-    is( $lostfine->amount(), "16.320000", "Lost fine is default if no replacementcost but default set when pref on");
-    ok( !$procfee,  "No processing fee if no processing fee");
-    $lostfine->delete();
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
-    is( $lostfine->amount, "6.120000" , "Lost fine equals replacementcost when pref on and default set");
-    ok( !$procfee,  "No processing fee if no processing fee");
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
+        ok( !$lostfine, "No lost fine if no replacementcost or default when pref on");
+        ok( !$procfee,  "No processing fee if no processing fee");
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber1, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber1, accounttype => 'PF' });
+        is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and no default set");
+        ok( !$procfee,  "No processing fee if no processing fee");
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
-    ok( !$lostfine, "No lost fine if no replacementcost and default not set when pref on");
-    is( $procfee->amount, "8.160000",  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
-    $procfee->delete();
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
-    is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and no default set");
-    is( $procfee->amount, "8.160000",  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
+        is( $lostfine->amount(), "16.320000", "Lost fine is default if no replacementcost but default set when pref on");
+        ok( !$procfee,  "No processing fee if no processing fee");
+        $lostfine->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber2, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber2, accounttype => 'PF' });
+        is( $lostfine->amount, "6.120000" , "Lost fine equals replacementcost when pref on and default set");
+        ok( !$procfee,  "No processing fee if no processing fee");
 
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 0, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
-    is( $lostfine->amount, "4.080000", "Lost fine is default if no replacementcost but default set when pref on");
-    is( $procfee->amount, "2.040000",  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
-    $lostfine->delete();
-    $procfee->delete();
-    C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 6.12, "Perdedor");
-    $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
-    $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
-    is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and default set");
-    is( $procfee->amount, "2.040000",  "Processing fee if processing fee");
-    is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
+        ok( !$lostfine, "No lost fine if no replacementcost and default not set when pref on");
+        is( $procfee->amount, "8.160000",  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
+        $procfee->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber3, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber3, accounttype => 'PF' });
+        is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and no default set");
+        is( $procfee->amount, "8.160000",  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_3, "Processing fee issue id is correct" );
+
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        is( $lostfine->amount, "4.080000", "Lost fine is default if no replacementcost but default set when pref on");
+        is( $procfee->amount, "2.040000",  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
+        $lostfine->delete();
+        $procfee->delete();
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 6.12, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        is( $lostfine->amount, "6.120000", "Lost fine equals replacementcost when pref on and default set");
+        is( $procfee->amount, "2.040000",  "Processing fee if processing fee");
+        is( $procfee->issue_id, $cli_issue_id_4, "Processing fee issue id is correct" );
+        $lostfine->delete();
+        $procfee->delete();
+    };
+
+    subtest "basic fields tests" => sub {
+        plan tests => 12;
+
+        t::lib::Mocks::mock_preference('ProcessingFeeNote', 'Test Note');
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, '1.99', "Perdedor");
+
+        # Lost Item Fee
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
+        ok($lostfine, "Lost fine created");
+        is($lostfine->manager_id, $staff_id, "Lost fine manager_id set correctly");
+        is($lostfine->issue_id, $cli_issue_id_4, "Lost fine issue_id set correctly");
+        is($lostfine->description, "Perdedor", "Lost fine issue_id set correctly");
+        is($lostfine->note, '', "Lost fine does not contain a note");
+        is($lostfine->branchcode, $branchcode, "Lost fine branchcode set correctly");
+
+        # Processing Fee
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        ok($procfee, "Processing fee created");
+        is($procfee->manager_id, $staff_id, "Processing fee manager_id set correctly");
+        is($procfee->issue_id, $cli_issue_id_4, "Processing fee issue_id set correctly");
+        is($procfee->description, "Perdedor", "Processing fee issue_id set correctly");
+        is($procfee->note, C4::Context->preference("ProcessingFeeNote"), "Processing fee contains note matching ProcessingFeeNote");
+        is($procfee->branchcode, $branchcode, "Processing fee branchcode set correctly");
+        $lostfine->delete();
+        $procfee->delete();
+    };
+
+    subtest "FinesLog tests" => sub {
+        plan tests => 2;
+
+        my $action_logs = $schema->resultset('ActionLog')->search()->count;
+
+        t::lib::Mocks::mock_preference( 'FinesLog', 0 );
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No logs were added' );
+        $lostfine->delete();
+        $procfee->delete();
+
+        t::lib::Mocks::mock_preference( 'FinesLog', 1 );
+        C4::Accounts::chargelostitem( $cli_borrowernumber, $cli_itemnumber4, 0, "Perdedor");
+        $lostfine = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'L' });
+        $procfee  = Koha::Account::Lines->find({ borrowernumber => $cli_borrowernumber, itemnumber => $cli_itemnumber4, accounttype => 'PF' });
+        is( $schema->resultset('ActionLog')->count(), $action_logs + 2, 'Logs were added' );
+        $lostfine->delete();
+        $procfee->delete();
+    };
 
     # Cleanup - this must be replaced with a transaction per subtest
     Koha::Patrons->find($cli_borrowernumber)->checkouts->delete;
