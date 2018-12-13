@@ -176,6 +176,7 @@ elsif ( $patron and $op eq "checkout" ) {
         if ($confirmed) {
             #warn "renewing";
             AddRenewal( $borrower->{borrowernumber}, $item->{itemnumber} );
+            push @newissueslist, $barcode;
         } else {
             #warn "renew confirmation";
             $template->param(
@@ -215,10 +216,10 @@ elsif ( $patron and $op eq "checkout" ) {
                     }
                 )->count;
             }
+
             AddIssue( $borrower, $barcode );
             push @newissueslist, $barcode;
-            print 'Issues \n';
-            print join(',', @newissueslist);
+
             if ( $hold_existed ) {
                 my $dtf = Koha::Database->new->schema->storage->datetime_parser;
                 $template->param(
@@ -248,7 +249,6 @@ elsif ( $patron and $op eq "checkout" ) {
 } # $op
 
 if ($borrower) {
-    print 'borrower \n';
 #   warn "issuer's  branchcode: " .   $issuer->{branchcode};
 #   warn   "user's  branchcode: " . $borrower->{branchcode};
     my $borrowername = sprintf "%s %s", ($borrower->{firstname} || ''), ($borrower->{surname} || '');

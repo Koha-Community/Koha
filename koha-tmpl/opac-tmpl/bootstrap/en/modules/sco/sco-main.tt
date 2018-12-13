@@ -84,6 +84,7 @@
                                     <input type="hidden" name="op" value="returnbook" />
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                    <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="returnbook" class="btn"><i class="return"></i> Return this item</button>
                                 </form>
                             [% END %]
@@ -92,6 +93,7 @@
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="barcode" value="[% barcode | html %]" />
+                                <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                 <input type="submit" name= "confirm" value="Return to account summary" class="btn back focus" />
                             </form>
                         </div> <!-- / .alert -->
@@ -109,6 +111,7 @@
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="" />
+                                    <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="returnbook" class="btn"><i class="icon return"></i> Return this item</button>
                                 </form>
                             [% END %]
@@ -119,6 +122,7 @@
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
+                                    <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" name="confirm" class="btn"><i class="icon renew"></i> Renew item</button>
                                   </form>
                             [% ELSE %]
@@ -127,6 +131,7 @@
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
+                                    <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                     <button type="submit" class="btn"><i class="icon renew"></i> Renew item</button>
                                 </form>
                             [% END %]
@@ -134,6 +139,7 @@
                             <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
+                                <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                 <button type="submit" class="btn"><i class="icon cancel"></i> Cancel</button>
                             </form>
                         </div>
@@ -239,13 +245,13 @@
                                             <tr>
                                                 <td>[% ISSUE.issuedate | html %]</td>
                                                 <td>
-                                                    [% IF ( newissues.match(ISSUE.barcode)) %]
-                                                        <span class="label label-info">NEW</span>
-                                                    [% END %]
                                                     [% UNLESS ( noitemlinks ) %]
                                                         <a href="/cgi-bin/koha/opac-detail.pl?bib=[% ISSUE.  biblionumber | uri %]">[% ISSUE.title | html %]</a>
                                                     [% ELSE %]
                                                         <strong>[% ISSUE.title | html %]</strong>
+                                                    [% END %]
+                                                    [% IF ( newissues.match(ISSUE.barcode)) %]
+                                                        <span class="label label-info">NEW</span>
                                                     [% END %]
                                                     <span class="item-details">[% ISSUE.author | html %]</span>
                                                     ([% ISSUE.barcode | html %])
@@ -260,6 +266,7 @@
                                                     <form action="/cgi-bin/koha/sco/sco-main.pl" method="post">
                                                         <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                                         <input type="hidden" name="barcode" value="[% ISSUE.barcode | html %]" />
+                                                        <input type="hidden" name="newissues" value="[% newissues | html %]" />
                                                         [% IF ISSUE.can_be_renewed %]
                                                             <input type="hidden" name="op" value="checkout" />
                                                             <input type="hidden" name="confirmed" value="1" />
