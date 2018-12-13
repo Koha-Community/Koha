@@ -15242,6 +15242,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (17.11.12 release)\n";
 }
 
+$DBversion = '17.11.12.001';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('PA_CLASS');");
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21730: Add new authorised value category PA_CLASS)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
