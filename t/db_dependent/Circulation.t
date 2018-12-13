@@ -2595,7 +2595,7 @@ subtest '_FixAccountForLostAndReturned returns undef if patron is deleted' => su
 };
 
 subtest 'Set waiting flag' => sub {
-    plan tests => 4;
+    plan tests => 9;
 
     my $library_1 = $builder->build( { source => 'Branch' } );
     my $patron_1  = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode}, categorycode => $patron_category->{categorycode} } } );
@@ -2632,6 +2632,17 @@ subtest 'Set waiting flag' => sub {
     is( $hold->found, 'W', 'Hold is waiting' );
     ( $status ) = CheckReserves($item->{itemnumber});
     is( $status, 'Waiting', 'Now the hold is waiting');
+
+    #Bug 21944 - Waiting transfer checked in at branch other than pickup location
+    set_userenv( $library_1 );
+    (undef, my $messages, undef, undef ) = AddReturn ( $item->{barcode}, $library_1->{branchcode} );
+    $hold = Koha::Holds->find( $reserve_id );
+    is( $hold->found, undef, 'Hold is no longer marked waiting' );
+    is( $hold->priority, 1,  "Hold is now priority one again");
+    is( $messages->{ResFound}->{ResFound}, "Reserved", "Hold is still returned");
+    is( $messages->{ResFound}->{found}, undef, "Hold is no longer marked found in return message");
+    is( $messages->{ResFound}->{priority}, 1, "Hold is priority 1 in return message");
+
 };
 
 subtest 'Cancel transfers on lost items' => sub {
