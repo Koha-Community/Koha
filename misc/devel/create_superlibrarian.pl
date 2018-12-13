@@ -49,7 +49,7 @@ my $patron = Koha::Patron->new({
     flags        => 1,
 })->store;
 
-$patron->update_password( $userid, $password );
+$patron->set_password({ password => $password, skip_validation => 1 });
 
 =head1 NAME
 
