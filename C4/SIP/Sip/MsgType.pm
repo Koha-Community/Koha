@@ -965,9 +965,10 @@ sub handle_patron_info {
         if ( defined($patron_pwd) ) {
 
             # If patron password was provided, report whether it was right or not.
-            $password_rc = $patron->check_password($patron_pwd);
             if ( $patron_pwd eq q{} && $server->{account}->{allow_empty_passwords} ) {
                 $password_rc = 1;
+            } else {
+                $password_rc = $patron->check_password($patron_pwd);
             }
             $resp .= add_field( FID_VALID_PATRON_PWD, sipbool( $password_rc ) );
         }
