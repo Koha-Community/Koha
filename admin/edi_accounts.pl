@@ -81,17 +81,14 @@ else {
             download_directory => scalar $input->param('download_directory'),
             san                => scalar $input->param('san'),
             transport          => scalar $input->param('transport'),
+            quotes_enabled     => $input->param('quotes_enabled') ? 1 : 0,
+            invoices_enabled   => $input->param('invoices_enabled') ? 1 : 0,
+            orders_enabled     => $input->param('orders_enabled') ? 1 : 0,
+            responses_enabled  => $input->param('responses_enabled') ? 1 : 0,
+            auto_orders        => $input->param('auto_orders') ? 1 : 0,
             id_code_qualifier  => scalar $input->param('id_code_qualifier'),
             plugin             => scalar $input->param('plugin'),
         };
-        # ensure all capability fields set to binary 0 or 1
-        foreach my $capability
-        (qw( quotes_enabled invoices_enabled orders_enabled responses_enabled auto_orders)) {
-            $fields->{$capability} = defined $input->param($capability);
-            if ($fields->{$capability} != 1) {
-                $fields->{$capability} = 0;
-            }
-        }
 
         if ($id) {
             $schema->resultset('VendorEdiAccount')->search(
