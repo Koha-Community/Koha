@@ -134,6 +134,8 @@ sub process_tt_block {
         # Already escaped with a special filter
         # We could escape it but should be safe
         or $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*$}
+        or $tt_block =~ m{\s?\|\s?\$Price[^\|]*$}
+        or $tt_block =~ m{\s?\|\s?\$HtmlTags[^\|]*$}
 
         # Already escaped correctly with raw
         or $tt_block =~ m{\|\s?\$raw}
@@ -166,6 +168,8 @@ sub process_tt_block {
       : q| |;
 
     if (   $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*\|.*$}
+        or $tt_block =~ m{\s?\|\s?\$Price[^\|]*\|.*$}
+        or $tt_block =~ m{\s?\|\s?\$HtmlTags[^\|]*\|.*$}
     ) {
         $tt_block =~
           s/\s*\|\s*(uri|url|html)\s*$//;    # Could be another filter...
