@@ -2705,7 +2705,7 @@ DROP TABLE IF EXISTS `accountlines`;
 CREATE TABLE `accountlines` (
   `accountlines_id` int(11) NOT NULL AUTO_INCREMENT,
   `issue_id` int(11) NULL DEFAULT NULL,
-  `borrowernumber` int(11) NOT NULL default 0,
+  `borrowernumber` int(11) DEFAULT NULL,
   `accountno` smallint(6) NOT NULL default 0,
   `itemnumber` int(11) default NULL,
   `date` date default NULL,
@@ -2722,7 +2722,7 @@ CREATE TABLE `accountlines` (
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
   KEY `itemnumber` (`itemnumber`),
-  CONSTRAINT `accountlines_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `accountlines_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
