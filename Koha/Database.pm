@@ -86,13 +86,15 @@ sub _new_schema {
         $encoding_query = "set client_encoding = 'UTF8';";
         $tz_query = qq(SET TIME ZONE = "$tz") if $tz;
     }
+
+    my $RaiseError = ( $ENV{DEBUG} || exists $ENV{_} && $ENV{_} =~ m|prove| ) ? 1 : 0;
     my $schema = Koha::Schema->connect(
         {
             dsn => "dbi:$db_driver:database=$db_name;host=$db_host;port=$db_port".($tls_options? $tls_options : ""),
             user => $db_user,
             password => $db_passwd,
             %encoding_attr,
-            RaiseError => $ENV{DEBUG} ? 1 : 0,
+            RaiseError => $RaiseError,
             PrintError => 1,
             unsafe => 1,
             quote_names => 1,
@@ -114,7 +116,7 @@ sub _new_schema {
         $dbh->do(q|
             SELECT * FROM systempreferences WHERE 1 = 0 |
         );
-        $dbh->{RaiseError} = $ENV{DEBUG} ? 1 : 0;
+        $dbh->{RaiseError} = $RaiseError
     };
     $dbh->{RaiseError} = 0 if $@;
 
