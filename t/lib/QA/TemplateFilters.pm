@@ -133,14 +133,13 @@ sub process_tt_block {
 
         # Already escaped with a special filter
         # We could escape it but should be safe
-        or $tt_block =~ m{\s?\|\s?\$KohaDates\s?$}
-        or $tt_block =~ m{\s?\|\s?\$Price\s?$}
+        or $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*$}
 
         # Already escaped correctly with raw
         or $tt_block =~ m{\|\s?\$raw}
 
         # Assignment, maybe we should require to use SET (?)
-        or $tt_block =~ m{=}
+        or ( $tt_block =~ m{=} and not $tt_block =~ m{\s\|\s} )
 
         # Already has url or uri filter
         or $tt_block =~ m{\|\s?ur(l|i)}
@@ -165,6 +164,21 @@ sub process_tt_block {
             ? q| ~|
             : q| |
       : q| |;
+
+    if (   $tt_block =~ m{\s?\|\s?\$KohaDates[^\|]*\|.*$}
+    ) {
+        $tt_block =~
+          s/\s*\|\s*(uri|url|html)\s*$//;    # Could be another filter...
+        $line =~ s{
+            \[%
+            \s*$pre_chomp\s*
+            \Q$tt_block\E\s*\|\s*(uri|url|html)
+            \s*$post_chomp\s*
+            %\]
+        }{[%$pre_chomp$tt_block$post_chomp%]}xms;
+
+        return ( $line, 'extra_filter_not_needed' );
+    }
 
     if (
         # Use the uri filter is needed
