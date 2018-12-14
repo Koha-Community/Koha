@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use Koha::Account::Lines;
 use Koha::Items;
@@ -125,6 +125,33 @@ subtest 'total_outstanding' => sub {
 
     $lines = Koha::Account::Lines->search({ borrowernumber => $patron->id });
     is( $lines->total_outstanding, -100, 'total_outstanding sums correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Keep account info when a patron is deleted' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item = $builder->build_object({ class => 'Koha::Items' });
+    my $line = Koha::Account::Line->new(
+    {
+        borrowernumber => $patron->borrowernumber,
+        itemnumber     => $item->itemnumber,
+        accounttype    => "F",
+        amount         => 10,
+    })->store;
+
+    $item->delete;
+    $line = $line->get_from_storage;
+    is( $line->itemnumber, undef, "The account line should not be deleted when the related item is delete");
+
+    $patron->delete;
+    $line = $line->get_from_storage;
+    is( $line->borrowernumber, undef, "The account line should not be deleted when the related patron is delete");
 
     $schema->storage->txn_rollback;
 };
