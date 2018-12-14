@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 use Koha::Account;
@@ -265,6 +265,33 @@ subtest 'apply() tests' => sub {
     is( $debit_2->discard_changes->amountoutstanding * 1,  0, 'Debit cancelled' );
     is( $debit_3->discard_changes->amountoutstanding * 1, 90, 'Outstanding amount correctly calculated' );
     is( $credit_2->discard_changes->amountoutstanding * 1, 0, 'No remaining credit' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Keep account info when a patron is deleted' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item = $builder->build_object({ class => 'Koha::Items' });
+    my $line = Koha::Account::Line->new(
+    {
+        borrowernumber => $patron->borrowernumber,
+        itemnumber     => $item->itemnumber,
+        accounttype    => "F",
+        amount         => 10,
+    })->store;
+
+    $item->delete;
+    $line = $line->get_from_storage;
+    is( $line->itemnumber, undef, "The account line should not be deleted when the related item is delete");
+
+    $patron->delete;
+    $line = $line->get_from_storage;
+    is( $line->borrowernumber, undef, "The account line should not be deleted when the related patron is delete");
 
     $schema->storage->txn_rollback;
 };
