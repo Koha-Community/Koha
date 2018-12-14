@@ -161,7 +161,7 @@
                                         <li><a href="/cgi-bin/koha/opac-user.pl#opac-user-holds"><span class="user_holds_waiting_count count_label">[% holds_waiting | html %]</span> hold(s) waiting</a></li>
                                     [% END %]
                                     [% IF total_owing && total_owing > 0 %]
-                                        <li><a href="/cgi-bin/koha/opac-account.pl"><span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 | html %]</span> due in fines and charges</a></li>
+                                        <li><a href="/cgi-bin/koha/opac-account.pl"><span class="user_fines_count count_label">[% total_owing | $Price with_symbol => 1 %]</span> due in fines and charges</a></li>
                                     [% END %]
                                 </ul>
                             </div>
