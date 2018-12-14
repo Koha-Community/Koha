@@ -261,13 +261,15 @@ INPUT
     is_deeply( \@missing_filters, [], 'html_entity is a valid filter for href' );
 };
 
-subtest 'Do not escape KohaDates output' => sub {
+subtest 'Do not escape KohaDates|Prices|HtmlTags output' => sub {
     plan tests => 2;
     my $input = <<INPUT;
 [% var | \$KohaDates %]
 [% var | \$KohaDates with_hours => 1 %]
 [% var | \$KohaDates | html %]
 [% var | \$KohaDates with_hours => 1 | html %]
+[% var | \$Price %]
+[% var | \$HtmlTags %]
 INPUT
 
     my $expected = <<EXPECTED;
@@ -275,6 +277,8 @@ INPUT
 [% var | \$KohaDates with_hours => 1 %]
 [% var | \$KohaDates %]
 [% var | \$KohaDates with_hours => 1 %]
+[% var | \$Price %]
+[% var | \$HtmlTags %]
 EXPECTED
 
     my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
