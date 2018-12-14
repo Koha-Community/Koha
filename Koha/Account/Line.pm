@@ -48,6 +48,7 @@ Return the item linked to this account line if exists
 sub item {
     my ( $self ) = @_;
     my $rs = $self->_result->itemnumber;
+    return unless $rs;
     return Koha::Item->_new_from_dbic( $rs );
 }
 
