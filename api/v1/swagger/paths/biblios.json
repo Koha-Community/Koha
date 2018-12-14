@@ -254,6 +254,42 @@
       }
     }
   },
+  "/biblios/{biblionumber}/componentparts": {
+    "get": {
+      "x-mojo-to": "Biblio#getcomponentparts",
+      "operationId": "getcomponentpartsByBiblio",
+      "tags": ["biblios", "componentparts"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumberPathParam" }
+      ],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "A biblio record with componentparts"
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
   "/biblios": {
     "post": {
       "x-mojo-to": "Biblio#add",

@@ -40,6 +40,7 @@ use Koha::Libraries;
 use Koha::Holdings;
 
 use Koha::Exceptions::Library;
+use Koha::Exceptions::Biblio;
 
 =head1 NAME
 
@@ -394,6 +395,34 @@ sub holdings_full {
     return $self->{_holdings_full};
 }
 
+=head3 componentparts
+
+my @componentparts = $biblio->componentparts();
+
+Returns the related component parts for this biblio.
+
+=cut
+
+sub componentparts {
+    my ($self) = @_;
+
+    my $record = C4::Biblio::GetMarcBiblio($self->biblionumber());
+    Koha::Exceptions::Biblio::NotFound->throw(error => 'Metadata not found.', biblionumber => $self->biblionumber()) unless $record;
+    my @componentPartRecords;
+    if ($record->field('001') && $record->field('003')) {
+        my ($componentPartBiblios, $totalCount, $query) = C4::Biblio::getComponentRecords( $record->field('001')->data(), $record->field('003')->data());
+        if (@$componentPartBiblios) {
+            for my $cb ( @{$componentPartBiblios} ) {
+                $cb =~ s/^<\?xml.*?\?>//;
+                my $component->{biblionumber} = C4::Biblio::getComponentBiblionumber($cb)+0;
+                $component->{marcxml} = Encode::decode('utf8', $cb);
+                push @componentPartRecords, $component;
+            }
+        }
+    }
+    return \@componentPartRecords;
+}
+
 
 =head3 itemtype
 
@@ -407,6 +436,20 @@ sub itemtype {
     my ( $self ) = @_;
 
     return $self->biblioitem()->itemtype();
+}
+
+=head3 marcxml
+
+my $marcxml = $biblio->marcxml();
+
+Returns the marcxml for this record.
+
+=cut
+
+sub marcxml {
+    my ( $self ) = @_;
+
+    return C4::Biblio::GetXmlBiblio( $self->biblionumber() );
 }
 
 =head3 holds

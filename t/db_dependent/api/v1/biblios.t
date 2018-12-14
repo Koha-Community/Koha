@@ -20,7 +20,7 @@ use Modern::Perl;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 use Data::Dumper;
 use C4::Auth;
@@ -44,7 +44,7 @@ my $t = Test::Mojo->new('Koha::REST::V1');
 
 $schema->storage->txn_begin;
 
-my $file = MARC::File::XML->in( 't/db_dependent/Record/testrecords/marcxml_utf8.xml' );
+my $file = MARC::File::XML->in( '../../Record/testrecords/marcxml_utf8.xml' );
 my $record = $file->next();
 my ( $biblionumber, $itemnumber );
 
@@ -99,6 +99,32 @@ subtest 'getexpanded() tests' => sub {
     ($bibnum, $title, $bibitemnum) = create_helper_biblio({ itemtype => 'BK' });
 
     $tx = $t->ua->build_tx(GET => "/api/v1/biblios/$bibnum/expanded");
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    $t->json_is('/biblio/biblionumber' => $bibnum);
+};
+
+subtest 'getcomponentparts() tests' => sub {
+    plan tests => 6;
+
+    my ($bibnum, $title, $bibitemnum) = create_helper_biblio({
+        itemtype => 'BK'
+    });
+
+    my $tx = $t->ua->build_tx(GET => "/api/v1/biblios/$bibnum/componentparts");
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $t->request_ok($tx)
+      ->status_is(200);
+
+    $t->json_is('/biblio/biblionumber' => $bibnum);
+
+    ($bibnum, $title, $bibitemnum) = create_helper_biblio({ itemtype => 'BK' });
+
+    $tx = $t->ua->build_tx(GET => "/api/v1/biblios/$bibnum/componentparts");
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
     $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $t->request_ok($tx)

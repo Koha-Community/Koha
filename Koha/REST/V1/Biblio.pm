@@ -37,6 +37,10 @@ sub get {
     unless ($biblio) {
         return $c->render(status => 404, openapi => {error => "Biblio not found"});
     }
+    my $marcxml = $biblio->marcxml;
+    $biblio = $biblio->unblessed;
+    $biblio->{serial} = $biblio->{serial} ? $biblio->{serial} : 0; # Don't know why null serial gives error even it is defined on Swagger
+    $biblio->{marcxml} = $marcxml;
     return $c->render(status => 200, openapi => $biblio);
 }
 
@@ -96,6 +100,22 @@ sub getholdings {
         return $c->render(status => 404, openapi => {error => "Biblio not found"});
     }
     return $c->render(status => 200, openapi => { biblio => $biblio, holdings => $biblio->holdings_full });
+}
+
+sub getcomponentparts {
+    my $c = shift->openapi->valid_input or return;
+
+    my $biblio = Koha::Biblios->find($c->validation->param('biblionumber'));
+
+    unless ($biblio) {
+        return $c->render(status => 404, openapi => {error => "Biblio not found"});
+    }
+    my $marcxml = $biblio->marcxml;
+    my $componentparts = $biblio->componentparts;
+    $biblio = $biblio->unblessed;
+    $biblio->{serial} = $biblio->{serial} ? $biblio->{serial} : 0; # Don't know why null serial gives error even it is defined on Swagger
+    $biblio->{marcxml} = $marcxml;
+    return $c->render(status => 200, openapi => { biblio => $biblio, componentparts => $componentparts });
 }
 
 sub add {
