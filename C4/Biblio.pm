@@ -3336,7 +3336,7 @@ sub ModBiblioMarc {
     my $userenv = C4::Context->userenv;
     if ($userenv) {
         my $borrowernumber = $userenv->{number};
-        my $borrowername = join ' ', @$userenv{qw(firstname surname)};
+        my $borrowername = join ' ', map { $_ // q{} } @$userenv{qw(firstname surname)};
         unless ($m_rs->in_storage) {
             Koha::Util::MARC::set_marc_field($record, C4::Context->preference('MarcFieldForCreatorId'), $borrowernumber);
             Koha::Util::MARC::set_marc_field($record, C4::Context->preference('MarcFieldForCreatorName'), $borrowername);
