@@ -90,7 +90,7 @@ if($op eq 'gennext' && @subscriptionid){
              my $planneddate = $date_received_today ? dt_from_string : $nextpublisheddate;
              ## Creating the new issue
              NewIssue( $newserialseq, $subscriptionid, $subscription->{'biblionumber'},
-                     1, $planneddate, $nextpublisheddate, $issue->{publisheddatetext},
+                     1, $planneddate, $nextpublisheddate, undef,
                      $issue->{notes}, $issue->{routingnotes} );
 
              ## Updating the subscription seq status
