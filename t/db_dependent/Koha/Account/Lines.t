@@ -34,7 +34,7 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'item() tests' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -62,6 +62,9 @@ subtest 'item() tests' => sub {
     my $account_line_item = $line->item;
     is( ref( $account_line_item ), 'Koha::Item', 'Koha::Account::Line->item should return a Koha::Item' );
     is( $line->itemnumber, $account_line_item->itemnumber, 'Koha::Account::Line->item should return the correct item' );
+
+    $line->itemnumber(undef)->store;
+    is( $line->item, undef, 'Koha::Account::Line->item should return undef if no item linked' );
 
     $schema->storage->txn_rollback;
 };
