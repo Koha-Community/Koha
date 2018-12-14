@@ -1356,17 +1356,33 @@ sub AddIssue {
             }
             $datedue->truncate( to => 'minute' );
 
-            $issue = Koha::Database->new()->schema()->resultset('Issue')->update_or_create(
-                {
-                    borrowernumber => $borrower->{'borrowernumber'},
-                    itemnumber     => $item->{'itemnumber'},
-                    issuedate      => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
-                    date_due       => $datedue->strftime('%Y-%m-%d %H:%M:%S'),
-                    branchcode     => C4::Context->userenv->{'branch'},
-                    onsite_checkout => $onsite_checkout,
-                    auto_renew      => $auto_renew ? 1 : 0
-                }
-              );
+            $issue =
+              Koha::Checkouts->find( { itemnumber => $item->{'itemnumber'} } );
+            if ($issue) {
+                $issue->set(
+                    {
+                        borrowernumber => $borrower->{'borrowernumber'},
+                        issuedate  => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
+                        date_due   => $datedue->strftime('%Y-%m-%d %H:%M:%S'),
+                        branchcode => C4::Context->userenv->{'branch'},
+                        onsite_checkout => $onsite_checkout,
+                        auto_renew      => $auto_renew ? 1 : 0
+                    }
+                )->store;
+            }
+            else {
+                $issue = Koha::Checkout->new(
+                    {
+                        borrowernumber => $borrower->{'borrowernumber'},
+                        itemnumber     => $item->{'itemnumber'},
+                        issuedate  => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
+                        date_due   => $datedue->strftime('%Y-%m-%d %H:%M:%S'),
+                        branchcode => C4::Context->userenv->{'branch'},
+                        onsite_checkout => $onsite_checkout,
+                        auto_renew      => $auto_renew ? 1 : 0
+                    }
+                )->store;
+            }
 
             if ( C4::Context->preference('ReturnToShelvingCart') ) {
                 # ReturnToShelvingCart is on, anything issued should be taken off the cart.
