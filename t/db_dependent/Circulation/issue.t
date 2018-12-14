@@ -170,13 +170,13 @@ $sth->execute;
 my $countissue = $sth -> fetchrow_array;
 is ($countissue ,0, "there is no issue");
 my $issue1 = C4::Circulation::AddIssue( $borrower_1, $barcode_1, $daysago10,0, $today, '' );
-is( ref $issue1, 'Koha::Schema::Result::Issue',
-       'AddIssue returns a Koha::Schema::Result::Issue object' );
+is( ref $issue1, 'Koha::Checkout',
+       'AddIssue returns a Koha::Checkout object' );
 my $datedue1 = dt_from_string( $issue1->date_due() );
 like(
     $datedue1,
     qr/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/,
-    "Koha::Schema::Result::Issue->date_due() returns a date"
+    "Koha::Checkout->date_due() returns a date"
 );
 my $issue_id1 = $issue1->issue_id;
 

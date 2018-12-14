@@ -653,11 +653,11 @@ EOF
         reset_template( { template => $template, code => $code, module => 'circulation' } );
 
         my $checkout = C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
-        $checkout->set_columns( { timestamp => $now, issuedate => $one_minute_ago } )->update; # FIXME $checkout is a Koha::Schema::Result::Issues, must be a Koha::Checkout
+        $checkout->set( { timestamp => $now, issuedate => $one_minute_ago } )->store;
         my $first_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
 
         $checkout = C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
-        $checkout->set_columns( { timestamp => $now, issuedate => $now } )->update;
+        $checkout->set( { timestamp => $now, issuedate => $now } )->store;
         my $yesterday = dt_from_string->subtract( days => 1 );
         C4::Circulation::AddIssue( $patron, $item3->{barcode}, $yesterday ); # Add an overdue
         my $second_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
@@ -713,11 +713,11 @@ EOF
         reset_template( { template => $tt_template, code => $code, module => 'circulation' } );
 
         $checkout = C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
-        $checkout->set_columns( { timestamp => $now, issuedate => $one_minute_ago } )->update;
+        $checkout->set( { timestamp => $now, issuedate => $one_minute_ago } )->store;
         my $first_tt_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
 
         $checkout = C4::Circulation::AddIssue( $patron, $item2->{barcode} ); # Add a second checkout
-        $checkout->set_columns( { timestamp => $now, issuedate => $now } )->update;
+        $checkout->set( { timestamp => $now, issuedate => $now } )->store;
         C4::Circulation::AddIssue( $patron, $item3->{barcode}, $yesterday ); # Add an overdue
         my $second_tt_slip = C4::Members::IssueSlip( $branchcode, $patron->{borrowernumber} );
 
@@ -776,9 +776,9 @@ EOF
         my $issue1 = C4::Circulation::AddIssue( $patron, $item1->{barcode} ); # Add a first checkout
         my $issue2 = C4::Circulation::AddIssue( $patron, $item2->{barcode}, $yesterday ); # Add an first overdue
         my $issue3 = C4::Circulation::AddIssue( $patron, $item3->{barcode}, $two_days_ago ); # Add an second overdue
-        $issue1 = Koha::Checkout->_new_from_dbic( $issue1 )->unblessed; # ->unblessed should be enough but AddIssue does not return a Koha::Checkout object
-        $issue2 = Koha::Checkout->_new_from_dbic( $issue2 )->unblessed;
-        $issue3 = Koha::Checkout->_new_from_dbic( $issue3 )->unblessed;
+        $issue1 = $issue1->unblessed;
+        $issue2 = $issue2->unblessed;
+        $issue3 = $issue3->unblessed;
 
         # For items.content
         my @item_fields = qw( date_due title barcode author itemnumber );
