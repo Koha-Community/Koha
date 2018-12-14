@@ -31,7 +31,7 @@
 
              [% IF ( batch_details ) %]
                 <h1>Add orders from [% comments | html %]
-                    ([% file_name | html %] staged on [% upload_timestamp | $KohaDates with_hours => 1 | html %])
+                    ([% file_name | html %] staged on [% upload_timestamp | $KohaDates  with_hours => 1 %])
                 </h1>
                 <form action="/cgi-bin/koha/acqui/addorderiso2709.pl" method="post" id="Aform">
                 <div id="tabs" class="toptabs">
@@ -411,7 +411,7 @@
                             [% batch_lis.import_status | html %]
                           [% END %]
                         </td>
-                        <td><span title="[% batch_lis.staged_date | html %]">[% batch_lis.staged_date | $KohaDates with_hours => 1 | html %]</span></td>
+                        <td><span title="[% batch_lis.staged_date | html %]">[% batch_lis.staged_date | $KohaDates  with_hours => 1 %]</span></td>
                         <td>[% batch_lis.num_records | html %]</td>
                         <td><a href="[% batch_lis.scriptname | url %]?import_batch_id=[% batch_lis.import_batch_id | uri %]&amp;basketno=[% basketno | uri %]&amp;booksellerid=[% booksellerid | uri %]">Add orders</a></td>
                       </tr>

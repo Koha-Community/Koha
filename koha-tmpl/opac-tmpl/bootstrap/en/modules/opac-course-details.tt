@@ -76,7 +76,7 @@
                                     <td>[% cr.item.itemcallnumber | html %]</td>
                                     <td>[% cr.item.copynumber | html %]</td>
                                     <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
-                                    <td><span title="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates as_due_date => 1 | html %]</span></td>
+                                    <td><span title="[% cr.issue.date_due | html %]">[% cr.issue.date_due | $KohaDates  as_due_date => 1 %]</span></td>
                                     <td>[% IF ( cr.public_note ) %]
                                             [% cr.public_note | html %]
                                         [% ELSIF ( cr.item.itemnotes ) %]

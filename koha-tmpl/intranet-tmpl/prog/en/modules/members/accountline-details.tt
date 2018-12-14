@@ -108,13 +108,13 @@
                                 [% IF offset_accountline %]
                                     <tr>
                                         <td>[% offset_accountline.date | $KohaDates %]</td>
-                                        <td>[% offset_accountline.timestamp | $KohaDates with_hours => 1 | html %]</td>
+                                        <td>[% offset_accountline.timestamp | $KohaDates  with_hours => 1 %]</td>
                                         <td>[% offset_accountline.amount | $Price %]</td>
                                         <td>[% offset_accountline.amountoutstanding | $Price %]</td>
                                         <td>[% PROCESS account_type_description account=offset_accountline %]</td>
                                         <td>[% offset_accountline.note | html %]</td>
                                         <td>[% IF offset_accountline.manager_id %]<a href="moremember.pl?borrowernumber=[% offset_accountline.manager_id | uri %]">[% offset_accountline.manager_id | html %]</a>[% END %]</td>
-                                        <td>[% ao.created_on | $KohaDates with_hours => 1 | html %]</td>
+                                        <td>[% ao.created_on | $KohaDates  with_hours => 1 %]</td>
                                         <td>[% ao.amount | $Price %]</td>
                                         <td>[% PROCESS offset_type_description account_offset=ao %]</td>
                                         <td><a href="accountline-details.pl?accountlines_id=[% offset_accountline.id | uri %]" class="btn btn-default btn-xs"><i class="fa fa-list"></i> Details</a></td>

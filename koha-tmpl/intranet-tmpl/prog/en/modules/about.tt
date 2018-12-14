@@ -114,7 +114,7 @@
             [% END %]
             <tr>
               <th scope="row">Date and time: </th>
-              <td>[% current_date_and_time | $KohaDates with_hours => 1 | html %]</td>
+              <td>[% current_date_and_time | $KohaDates  with_hours => 1 %]</td>
             </tr>
             <tr>
               [% timezone_config_class = (time_zone.config_invalid) ? 'status_warn' : '' %]

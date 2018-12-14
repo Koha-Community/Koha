@@ -66,23 +66,23 @@
                         &nbsp;
                     [% END %]</td>
                 <td>[% IF checkout.renewals %]
-                        Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates with_hours => 1 | html %]</small>
+                        Yes[% IF checkout.lastreneweddate %], <small>last on: [% checkout.lastreneweddate |$KohaDates  with_hours => 1 %]</small>
                             [% END %]
                     [% ELSE %]
                         No
                     [% END %]</td>
                 <td>[% IF checkout.issuedate %]
-                        <span title="[% checkout.issuedate | html %]">[% checkout.issuedate |$KohaDates with_hours => 1 | html %]</span>
+                        <span title="[% checkout.issuedate | html %]">[% checkout.issuedate |$KohaDates  with_hours => 1 %]</span>
                     [% ELSE %]
                         <span title="0000-00-00"></span>
                     [% END %]</td>
                 <td>[% IF checkout.date_due %]
-                        <span title="[% checkout.date_due | html %]">[% checkout.date_due |$KohaDates with_hours => 1 | html %]</span>
+                        <span title="[% checkout.date_due | html %]">[% checkout.date_due |$KohaDates  with_hours => 1 %]</span>
                     [% ELSE %]
                         <span title="0000-00-00"></span>
                     [% END %]</td>
                 <td>[% IF checkout.returndate %]
-                        <span title="[% checkout.returndate | html %]">[% checkout.returndate |$KohaDates with_hours => 1 | html %]</span>
+                        <span title="[% checkout.returndate | html %]">[% checkout.returndate |$KohaDates  with_hours => 1 %]</span>
                     [% ELSE %]
                         <span title="Checked out"><small>Checked out</small></span>
                     [% END %]</td>

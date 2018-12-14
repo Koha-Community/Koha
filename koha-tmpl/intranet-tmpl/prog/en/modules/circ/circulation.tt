@@ -1020,7 +1020,7 @@ No patron matched <span class="ex">[% message | html %]</span>
         // On-site checkout
         function toggle_onsite_checkout(){
             if ( $("#onsite_checkout").prop('checked') ) {
-                $("#duedatespec").val("[% todaysdate | $KohaDates with_hours => 1 | html %]")
+                $("#duedatespec").val("[% todaysdate | $KohaDates  with_hours => 1 %]")
                 [% IF !Koha.Preference('SpecifyDueDate') %]
                     $("#duedatespec").datetimepicker('destroy');
                 [% END %]

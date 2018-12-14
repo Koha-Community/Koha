@@ -223,8 +223,8 @@ canned reports and writing custom SQL reports.</p>
                         <td>[% savedreport.notes | html %]</td>
                         <td>[% savedreport.borrowersurname | html %][% IF ( savedreport.borrowerfirstname ) %], [% savedreport.borrowerfirstname | html %][% END %] ([% savedreport.borrowernumber | html %])</td>
                         <td><span title="[% savedreport.date_created | html %]">[% savedreport.date_created | $KohaDates %]</span></td>
-                        <td><span title="[% savedreport.last_modified | html %]">[% savedreport.last_modified | $KohaDates with_hours => 1 | html %]</span></td>
-                        <td><span title="[% savedreport.last_run | html %]">[% savedreport.last_run | $KohaDates with_hours => 1 | html %]</span></td>
+                        <td><span title="[% savedreport.last_modified | html %]">[% savedreport.last_modified | $KohaDates  with_hours => 1 %]</span></td>
+                        <td><span title="[% savedreport.last_run | html %]">[% savedreport.last_run | $KohaDates  with_hours => 1 %]</span></td>
                         <td class="report_public">
                         [% IF (savedreport.public) %]
                             Yes
