@@ -49,7 +49,7 @@
             <td>[% library.branchname | html %]</td>
             <td>[% library.issues | html %]</td>
             <td>[% IF library.seen %]
-                    [% library.seen | $KohaDates with_hours => 1 | html %]
+                    [% library.seen | $KohaDates  with_hours => 1 %]
                 [% ELSE %]
                     <span>Never</span>
                 [% END %]

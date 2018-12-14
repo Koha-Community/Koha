@@ -383,7 +383,7 @@
                 [% END %]
                     <td>
                 [% IF ( itemloo.onloan ) %]
-                    <span title="[% itemloo.date_due | html %]" class="checkedout">Due [% itemloo.date_due | $KohaDates as_due_date => 1 | html %]</span>
+                    <span title="[% itemloo.date_due | html %]" class="checkedout">Due [% itemloo.date_due | $KohaDates  as_due_date => 1 %]</span>
                 [% ELSE %]
                     <span title="0000-00-00">
                         [% IF ( itemloo.transfertwhen ) %]

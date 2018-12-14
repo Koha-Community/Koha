@@ -56,7 +56,7 @@
                 [% FOREACH s IN current_biblio_searches %]
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
+                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                     <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
@@ -93,7 +93,7 @@
                 [% FOREACH s IN previous_biblio_searches %]
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
+                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                     <td><a href="/cgi-bin/koha/catalogue/search.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
@@ -136,7 +136,7 @@
                 [% FOREACH s IN current_authority_searches %]
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
+                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                     <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
@@ -173,7 +173,7 @@
                 [% FOREACH s IN previous_authority_searches %]
                   <tr>
                     <td><input type="checkbox" name="id" value="[% s.id | html %]" /></td>
-                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates with_hours => 1 | html %]</span></td>
+                    <td><span title="[% s.time | html %]">[% s.time |$KohaDates  with_hours => 1 %]</span></td>
                     <td><a href="/cgi-bin/koha/authorities/authorities-home.pl?[% s.query_cgi | $raw %]">[% s.query_desc | html %]</a></td>
                     <td>[% s.total | html %]</td>
                   </tr>
