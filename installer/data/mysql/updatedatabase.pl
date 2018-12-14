@@ -15924,7 +15924,7 @@ if( CheckVersion( $DBversion ) ) {
         INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES ('UpdateItemWhenLostFromHoldList','',NULL,'This is a list of values to update an item when it is marked as lost from the holds to pull screen','Free');
     } );
     $dbh->do( q{
-        UPDATE systempreferences SET options="batchmod|moredetail|cronjob|additem|pendingreserves", value="batchmod|moredetail|cronjob|additem|pendingreserves" WHERE variable="MarkLostItemsAsReturned";
+        UPDATE systempreferences SET options="batchmod|moredetail|cronjob|additem|pendingreserves" WHERE variable="MarkLostItemsAsReturned";
     } );
 
     SetVersion( $DBversion );
@@ -16252,6 +16252,16 @@ $DBversion = "18.05.06.000";
 if ( CheckVersion($DBversion) ) {
     SetVersion ($DBversion);
     print "Upgrade to $DBversion done (18.05.06 release)\n";
+}
+
+
+$DBversion = '18.05.06.001';
+if( CheckVersion( $DBversion ) ) {
+
+    $dbh->do( "INSERT IGNORE INTO authorised_value_categories (category_name) VALUES ('PA_CLASS');");
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21730: Add new authorised value category PA_CLASS)\n";
 }
 
 # SEE bug 13068
