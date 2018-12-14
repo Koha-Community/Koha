@@ -18,9 +18,6 @@ use MARC::Record;
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-
 my $builder = t::lib::TestBuilder->new;
 
 my $bookseller1 = Koha::Acquisition::Bookseller->new(

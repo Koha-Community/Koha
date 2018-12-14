@@ -27,9 +27,6 @@ BEGIN {
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-
 map { $_->delete() } Koha::AudioAlerts->search();
 
 ## Check the basics

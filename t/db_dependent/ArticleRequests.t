@@ -44,7 +44,6 @@ my $builder = t::lib::TestBuilder->new;
 our $cache = Koha::Caches->get_instance;
 
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
 
 $dbh->do("DELETE FROM circulation_rules");
 

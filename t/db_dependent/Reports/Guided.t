@@ -264,6 +264,7 @@ subtest 'get_saved_reports' => sub {
         defined($errors) && exists($errors->{queryerr}),
         'attempting to run a report with an SQL syntax error returns error message (Bug 12214)'
     );
+    $dbh->{RaiseError} = 1;
 
     is_deeply( get_report_areas(), [ 'CIRC', 'CAT', 'PAT', 'ACQ', 'ACC', 'SER' ],
         "get_report_areas returns the correct array of report areas");

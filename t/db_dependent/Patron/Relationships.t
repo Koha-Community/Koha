@@ -30,11 +30,6 @@ BEGIN {
     use_ok('Koha::Patron::Relationships');
 }
 
-# Start transaction
-my $dbh = C4::Context->dbh;
-$dbh->{AutoCommit} = 0;
-$dbh->{RaiseError} = 1;
-
 my $builder = t::lib::TestBuilder->new();
 
 # Father

@@ -44,9 +44,6 @@ use_ok('Koha::Patron::Password::Recovery');
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-
 #
 # Start with fresh data
 #

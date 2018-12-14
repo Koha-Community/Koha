@@ -14,8 +14,6 @@ use MARC::Record;
 #Start transaction
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
 
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {

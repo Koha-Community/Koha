@@ -35,7 +35,6 @@ my $dbh     = $schema->storage->dbh;
 my $builder = t::lib::TestBuilder->new();
 
 # Start transaction
-$dbh->{RaiseError} = 1;
 $schema->storage->txn_begin();
 
 my $itemtype = $builder->build({ source => 'Itemtype' })->{ itemtype };

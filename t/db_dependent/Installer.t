@@ -57,8 +57,6 @@ my $column_name  = $column_names[0];
 ok( column_exists( 'borrowers', $column_name ), 'Known column does exist' );
 ok( ! column_exists( 'borrowers', 'xxx'), 'Column xxx does not exist' );
 {
-    my $dbh = C4::Context->dbh;
-    $dbh->{RaiseError} = 1;
     ok( ! column_exists( 'this_table_will_never_exist', 'xxx'), 'Column xxx does not exist, the table does not exist' );
 }
 my @constraint_names = $source->unique_constraint_names();

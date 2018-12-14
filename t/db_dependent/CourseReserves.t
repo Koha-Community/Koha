@@ -33,8 +33,6 @@ BEGIN {
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
 
 my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
 my $itemtype = $builder->build(

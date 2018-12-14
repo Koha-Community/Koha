@@ -26,10 +26,6 @@ use t::lib::TestBuilder;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
-
-# Start transaction
-$dbh->{RaiseError} = 1;
 
 my $builder = t::lib::TestBuilder->new;
 my $nb_of_currencies = Koha::Acquisition::Currencies->search->count;

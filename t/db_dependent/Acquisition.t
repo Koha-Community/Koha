@@ -125,9 +125,6 @@ sub _check_fields_of_orders {
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-
 # Creating some orders
 my $bookseller = Koha::Acquisition::Bookseller->new(
     {

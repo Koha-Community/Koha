@@ -16,7 +16,6 @@ my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
 
 $dbh->do(q{
     DELETE FROM aqorders;

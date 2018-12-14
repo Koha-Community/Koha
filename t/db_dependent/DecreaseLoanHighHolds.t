@@ -35,8 +35,6 @@ my $dbh    = C4::Context->dbh;
 my $schema = Koha::Database->new()->schema();
 my $builder = t::lib::TestBuilder->new;
 
-# Start transaction
-$dbh->{RaiseError} = 1;
 $schema->storage->txn_begin();
 
 my $now_value       = DateTime->now();

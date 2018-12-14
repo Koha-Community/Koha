@@ -37,7 +37,6 @@ my $dbh = C4::Context->dbh;
 my $database = Koha::Database->new();
 my $schema = $database->schema();
 $schema->storage->txn_begin();
-$dbh->{RaiseError} = 1;
 my $builder = t::lib::TestBuilder->new;
 
 #Start tests

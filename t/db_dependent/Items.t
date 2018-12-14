@@ -80,8 +80,6 @@ subtest 'General Add, Get and Del tests' => sub {
 
 
     # Do not modify anything, and do not explode!
-    my $dbh = C4::Context->dbh;
-    local $dbh->{RaiseError} = 1;
     $getitem->set({})->store;
 
     # Modify item; setting barcode.

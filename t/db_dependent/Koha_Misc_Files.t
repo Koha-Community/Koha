@@ -14,7 +14,6 @@ BEGIN {
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 
 ## new() parameter handling check
 is(Koha::Misc::Files->new(), undef, "new() param check test/0");

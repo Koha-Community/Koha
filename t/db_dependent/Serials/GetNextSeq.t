@@ -7,7 +7,6 @@ use Koha::Database;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 
 use C4::Serials::Frequency;
 use C4::Serials;

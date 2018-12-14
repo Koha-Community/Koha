@@ -39,8 +39,6 @@ my $borrower;
 
 sub build_test_objects {
 
-    $dbh->{RaiseError} = 1;
-
     # Set only to avoid exception.
     t::lib::Mocks::mock_preference('dateformat', 'metric');
 

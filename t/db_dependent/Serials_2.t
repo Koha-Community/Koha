@@ -29,7 +29,6 @@ my $library2 = $builder->build({
 });
 my $patron_category = $builder->build({ source => 'Category' });
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
 
 my $record = MARC::Record->new();
 $record->append_fields(

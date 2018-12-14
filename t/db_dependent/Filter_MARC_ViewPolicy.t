@@ -41,7 +41,6 @@ my $dbh = C4::Context->dbh;
 
 my $database = Koha::Database->new();
 my $schema   = $database->schema();
-$dbh->{RaiseError} = 1;
 
 sub run_hiding_tests {
 

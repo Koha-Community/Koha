@@ -37,7 +37,6 @@ BEGIN {
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 
 C4::Context->disable_syspref_cache();
 t::lib::Mocks::mock_preference('OPACBaseURL','http://localhost');

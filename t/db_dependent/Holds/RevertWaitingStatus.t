@@ -33,7 +33,6 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
 
 $dbh->do("DELETE FROM reserves");
 $dbh->do("DELETE FROM old_reserves");

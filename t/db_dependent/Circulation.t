@@ -105,9 +105,6 @@ my $now_value       = dt_from_string;
 my $mocked_datetime = Test::MockModule->new('DateTime');
 $mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
 
-# Start transaction
-$dbh->{RaiseError} = 1;
-
 my $cache = Koha::Caches->get_instance();
 $dbh->do(q|DELETE FROM special_holidays|);
 $dbh->do(q|DELETE FROM repeatable_holidays|);

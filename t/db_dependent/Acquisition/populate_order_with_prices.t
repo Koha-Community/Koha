@@ -13,9 +13,6 @@ use t::lib::Mocks;
 my $schema = Koha::Database->new()->schema();
 $schema->storage->txn_begin();
 
-my $dbh = C4::Context->dbh;
-$dbh->{RaiseError} = 1;
-
 my $builder = t::lib::TestBuilder->new;
 
 my $bookseller_inc_tax = Koha::Acquisition::Bookseller->new(
