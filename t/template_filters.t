@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 5;
+use Test::More tests => 6;
 use t::lib::QA::TemplateFilters;
 
 subtest 'Asset must use raw' => sub {
@@ -259,4 +259,43 @@ INPUT
 INPUT
     @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
     is_deeply( \@missing_filters, [], 'html_entity is a valid filter for href' );
+};
+
+subtest 'Do not escape KohaDates output' => sub {
+    plan tests => 2;
+    my $input = <<INPUT;
+[% var | \$KohaDates %]
+[% var | \$KohaDates with_hours => 1 %]
+[% var | \$KohaDates | html %]
+[% var | \$KohaDates with_hours => 1 | html %]
+INPUT
+
+    my $expected = <<EXPECTED;
+[% var | \$KohaDates %]
+[% var | \$KohaDates with_hours => 1 %]
+[% var | \$KohaDates %]
+[% var | \$KohaDates with_hours => 1 %]
+EXPECTED
+
+    my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
+    is( $new_content . "\n", $expected, );
+
+
+    my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
+    is_deeply(
+        \@missing_filters,
+        [
+            {
+                error       => "extra_filter_not_needed",
+                line        => "[% var | \$KohaDates | html %]",
+                line_number => 3,
+            },
+            {
+                error       => "extra_filter_not_needed",
+                line        => "[% var | \$KohaDates with_hours => 1 | html %]",
+                line_number => 4,
+            }
+        ]
+    );
+
 };
