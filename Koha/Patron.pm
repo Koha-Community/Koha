@@ -25,7 +25,6 @@ use List::MoreUtils qw( any uniq );
 use JSON qw( to_json );
 use Text::Unaccent qw( unac_string );
 
-use C4::Accounts;
 use C4::Context;
 use C4::Log;
 use Koha::AuthUtils;
@@ -849,8 +848,14 @@ sub add_enrolment_fee_if_needed {
     my ($self) = @_;
     my $enrolment_fee = $self->category->enrolmentfee;
     if ( $enrolment_fee && $enrolment_fee > 0 ) {
-        # insert fee in patron debts
-        C4::Accounts::manualinvoice( $self->borrowernumber, '', '', 'A', $enrolment_fee );
+        $self->account->add_debit(
+            {
+                amount  => $enrolment_fee,
+                user_id => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+                type => 'account'
+            }
+        );
     }
     return $enrolment_fee || 0;
 }
@@ -1297,10 +1302,11 @@ sub _type {
     return 'Borrower';
 }
 
-=head1 AUTHOR
+=head1 AUTHORS
 
 Kyle M Hall <kyle@bywatersolutions.com>
 Alex Sassmannshausen <alex.sassmannshausen@ptfs-europe.com>
+Martin Renvoize <martin.renvoize@ptfs-europe.com>
 
 =cut
 
