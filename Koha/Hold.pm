@@ -365,7 +365,17 @@ sub cancel {
             # and, if desired, charge a cancel fee
             my $charge = C4::Context->preference("ExpireReservesMaxPickUpDelayCharge");
             if ( $charge && $params->{'charge_cancel_fee'} ) {
-                C4::Accounts::manualinvoice($self->borrowernumber, $self->itemnumber, '', 'HE', $charge);
+                my $account =
+                  Koha::Account->new( { patron_id => $self->borrowernumber } );
+                $account->add_debit(
+                    {
+                        amount  => $charge,
+                        user_id => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                        library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+                        type    => 'hold_expired',
+                        item_id => $self->itemnumber
+                    }
+                );
             }
 
             C4::Log::logaction( 'HOLDS', 'CANCEL', $self->reserve_id, Dumper($self->unblessed) )
@@ -400,8 +410,8 @@ sub _type {
 =head1 AUTHORS
 
 Kyle M Hall <kyle@bywatersolutions.com>
-
 Jonathan Druart <jonathan.druart@bugs.koha-community.org>
+Martin Renvoize <martin.renvoize@ptfs-europe.com>
 
 =cut
 
