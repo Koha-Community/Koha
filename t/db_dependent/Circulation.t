@@ -1296,16 +1296,12 @@ subtest 'CanBookBeIssued & AllowReturnToBranch' => sub {
     my $patron_1      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
     my $patron_2      = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $item = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $homebranch->{branchcode},
-                holdingbranch => $holdingbranch->{branchcode},
-                biblionumber  => $biblioitem->{biblionumber}
-            }
+    my $item = $builder->build_sample_item(
+        {
+            homebranch    => $homebranch->{branchcode},
+            holdingbranch => $holdingbranch->{branchcode},
         }
-    );
+    )->unblessed;
 
     set_userenv($holdingbranch);
 
@@ -1387,19 +1383,12 @@ subtest 'AddIssue & AllowReturnToBranch' => sub {
     my $patron_1      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
     my $patron_2      = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $item = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $homebranch->{branchcode},
-                holdingbranch => $holdingbranch->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->{biblionumber}
-            }
+    my $item = $builder->build_sample_item(
+        {
+            homebranch    => $homebranch->{branchcode},
+            holdingbranch => $holdingbranch->{branchcode},
         }
-    );
+    )->unblessed;
 
     set_userenv($holdingbranch);
 
@@ -1456,27 +1445,16 @@ subtest 'CanBookBeIssued + Koha::Patron->is_debarred|has_overdues' => sub {
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
-
-    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
-    my $item_1 = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblioitem_1->{biblionumber}
-            }
+    my $item_1 = $builder->build_sample_item(
+        {
+            library => $library->{branchcode},
         }
-    );
-    my $biblioitem_2 = $builder->build( { source => 'Biblioitem' } );
-    my $item_2 = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblioitem_2->{biblionumber}
-            }
+    )->unblessed;
+    my $item_2 = $builder->build_sample_item(
+        {
+            library => $library->{branchcode},
         }
-    );
+    )->unblessed;
 
     my ( $error, $question, $alerts );
 
@@ -1529,17 +1507,11 @@ subtest 'CanBookBeIssued + Statistic patrons "X"' => sub {
             }
         }
     );
-    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
-    my $item_1 = $builder->build(
+    my $item_1 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->branchcode,
-                holdingbranch => $library->branchcode,
-                biblionumber  => $biblioitem_1->{biblionumber}
-            }
+            library => $library->{branchcode},
         }
-    );
+    )->unblessed;
 
     my ( $error, $question, $alerts ) = CanBookBeIssued( $patron, $item_1->{barcode} );
     is( $error->{STATS}, 1, '"Error" flag "STATS" must be set if CanBookBeIssued is called with a statistic patron (category_type=X)' );
@@ -1645,26 +1617,24 @@ subtest 'CanBookBeIssued + AllowMultipleIssuesOnABiblio' => sub {
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $biblionumber = $biblioitem->{biblionumber};
-    my $item_1 = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber,
-            }
+    my $biblionumber = $builder->build_sample_biblio(
+        {
+            branchcode => $library->{branchcode},
         }
-    );
-    my $item_2 = $builder->build(
-        {   source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                biblionumber  => $biblionumber,
-            }
+    )->biblionumber;
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $library->{branchcode},
         }
-    );
+    )->unblessed;
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $library->{branchcode},
+        }
+    )->unblessed;
 
     my ( $error, $question, $alerts );
     my $issue = AddIssue( $patron->unblessed, $item_1->{barcode}, dt_from_string->add( days => 1 ) );
@@ -1697,34 +1667,23 @@ subtest 'AddReturn + CumulativeRestrictionPeriods' => sub {
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
     # Add 2 items
-    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
-    my $item_1 = $builder->build(
+    my $biblionumber = $builder->build_sample_biblio(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem_1->{biblionumber}
-            }
+            branchcode => $library->{branchcode},
         }
-    );
-    my $biblioitem_2 = $builder->build( { source => 'Biblioitem' } );
-    my $item_2 = $builder->build(
+    )->biblionumber;
+    my $item_1 = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem_2->{biblionumber}
-            }
+            biblionumber => $biblionumber,
+            library      => $library->{branchcode},
         }
-    );
+    )->unblessed;
+    my $item_2 = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $library->{branchcode},
+        }
+    )->unblessed;
 
     # And the issuing rule
     Koha::IssuingRules->search->delete;
@@ -1818,21 +1777,17 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
 
-    # Add 2 items
-    my $biblioitem_1 = $builder->build( { source => 'Biblioitem' } );
-    my $item_1 = $builder->build(
+    my $biblionumber = $builder->build_sample_biblio(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem_1->{biblionumber}
-            }
+            branchcode => $library->{branchcode},
         }
-    );
+    )->biblionumber;
+    my $item_1 = $builder->build_sample_item(
+        {
+            biblionumber => $biblionumber,
+            library      => $library->{branchcode},
+        }
+    )->unblessed;
 
     # And the issuing rule
     Koha::IssuingRules->search->delete;
@@ -2045,33 +2000,11 @@ subtest 'AddReturn | is_overdue' => sub {
     my $manager = $builder->build_object({ class => "Koha::Patrons" });
     t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
 
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $item_type          = $builder->build_object(
-        {   class => 'Koha::ItemTypes',
-            value => {
-                notforloan         => undef,
-                rentalcharge       => 0,
-                defaultreplacecost => undef,
-                processfee         => 0,
-                rentalcharge_daily => 0,
-            }
-        }
-    );
-    my $item = $builder->build(
+    my $item = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->{biblionumber},
-                replacementprice => 7,
-                itype         => $item_type->itemtype
-            }
+            library      => $library->{branchcode},
         }
-    );
+    )->unblessed;
 
     Koha::IssuingRules->search->delete;
     my $rule = Koha::IssuingRule->new(
@@ -2658,26 +2591,15 @@ subtest 'Set waiting flag' => sub {
     my $library_2 = $builder->build( { source => 'Branch' } );
     my $patron_2  = $builder->build( { source => 'Borrower', value => { branchcode => $library_2->{branchcode}, categorycode => $patron_category->{categorycode} } } );
 
-    my $biblio = $builder->build( { source => 'Biblio' } );
-    my $biblioitem = $builder->build( { source => 'Biblioitem', value => { biblionumber => $biblio->{biblionumber} } } );
-
-    my $item = $builder->build(
+    my $item = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library_1->{branchcode},
-                holdingbranch => $library_1->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->{biblionumber},
-            }
+            library      => $library_1->{branchcode},
         }
-    );
+    )->unblessed;
 
     set_userenv( $library_2 );
     my $reserve_id = AddReserve(
-        $library_2->{branchcode}, $patron_2->{borrowernumber}, $biblioitem->{biblionumber},
+        $library_2->{branchcode}, $patron_2->{borrowernumber}, $item->{biblionumber},
         '', 1, undef, undef, '', undef, $item->{itemnumber},
     );
 
@@ -2783,20 +2705,11 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } );
 
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $item = $builder->build(
+    my $item = $builder->build_sample_item(
         {
-            source => 'Item',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->{biblionumber},
-            }
+            library      => $library->{branchcode},
         }
-    );
+    )->unblessed;
 
     my $issue = AddIssue( $patron->unblessed, $item->{barcode}, $five_days_go ); # date due was 10d ago
     my $actualissue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
@@ -2941,28 +2854,11 @@ subtest 'CanBookBeIssued | item-level_itypes=biblio' => sub {
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons', value => { categorycode => $patron_category->{categorycode} } } )->store;
 
-    my $itemtype = $builder->build(
+    my $item = $builder->build_sample_item(
         {
-            source => 'Itemtype',
-            value  => { notforloan => undef, }
+            library      => $library->{branchcode},
         }
     );
-
-    my $biblioitem = $builder->build( { source => 'Biblioitem', value => { itemtype => $itemtype->{itemtype} } } );
-    my $item = $builder->build_object(
-        {
-            class => 'Koha::Items',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                biblionumber  => $biblioitem->{biblionumber},
-                biblioitemnumber => $biblioitem->{biblioitemnumber},
-            }
-        }
-    )->store;
 
     my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, undef, undef, undef, undef );
     is_deeply( $needsconfirmation, {}, 'Item can be issued to this patron' );
@@ -2983,23 +2879,13 @@ subtest 'CanBookBeIssued | notforloan' => sub {
             value  => { notforloan => undef, }
         }
     );
-
-    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
-    my $item = $builder->build_object(
+    my $item = $builder->build_sample_item(
         {
-            class => 'Koha::Items',
-            value  => {
-                homebranch    => $library->{branchcode},
-                holdingbranch => $library->{branchcode},
-                notforloan    => 0,
-                itemlost      => 0,
-                withdrawn     => 0,
-                itype         => $itemtype->{itemtype},
-                biblionumber  => $biblioitem->{biblionumber},
-                biblioitemnumber => $biblioitem->{biblioitemnumber},
-            }
+            library  => $library->{branchcode},
+            itype    => $itemtype->{itemtype},
         }
-    )->store;
+    );
+    $item->biblioitem->itemtype($itemtype->{itemtype})->store;
 
     my ( $issuingimpossible, $needsconfirmation );
 
@@ -3084,7 +2970,12 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
     plan tests => 1;
 
     t::lib::Mocks::mock_preference( "AllowReturnToBranch", 'anywhere' );
-    my $item = $builder->build_object({ class => 'Koha::Items', value  => { onloan => '2018-01-01' }});
+    my $item = $builder->build_sample_item(
+        {
+            onloan => '2018-01-01',
+        }
+    );
+
     AddReturn( $item->barcode, $item->homebranch );
     $item->discard_changes; # refresh
     is( $item->onloan, undef, 'AddReturn did clear items.onloan' );
