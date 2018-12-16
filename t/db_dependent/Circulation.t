@@ -680,19 +680,41 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
         C4::Context->set_preference('OPACFineNoRenewalsBlockAutoRenew','1');
         C4::Context->set_preference('OPACFineNoRenewals','10');
         my $fines_amount = 5;
-        C4::Accounts::manualinvoice( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber}, "Some fines", 'F', $fines_amount );
+        my $account = Koha::Account->new({patron_id => $renewing_borrowernumber});
+        $account->add_debit(
+            {
+                amount      => $fines_amount,
+                type        => 'fine',
+                item_id     => $item_to_auto_renew->{itemnumber},
+                description => "Some fines"
+            }
+        )->accounttype->('F')->store;
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_renew', 'Can auto renew, OPACFineNoRenewals=10, patron has 5' );
 
-        C4::Accounts::manualinvoice( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber}, "Some fines", 'F', $fines_amount );
+        $account->add_debit(
+            {
+                amount      => $fines_amount,
+                type        => 'fine',
+                item_id     => $item_to_auto_renew->{itemnumber},
+                description => "Some fines"
+            }
+        )->accounttype->('F')->store;
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
         is( $error, 'auto_renew', 'Can auto renew, OPACFineNoRenewals=10, patron has 10' );
 
-        C4::Accounts::manualinvoice( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber}, "Some fines", 'F', $fines_amount );
+        $account->add_debit(
+            {
+                amount      => $fines_amount,
+                type        => 'fine',
+                item_id     => $item_to_auto_renew->{itemnumber},
+                description => "Some fines"
+            }
+        )->accounttype->('F')->store;
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );

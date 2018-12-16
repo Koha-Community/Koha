@@ -22,8 +22,8 @@ use Test::More tests => 6;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Accounts qw( manualinvoice );
 use C4::Circulation qw( CanBookBeIssued );
+use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 
@@ -68,7 +68,8 @@ t::lib::Mocks::mock_preference( 'AllowFineOverride', '' );
 my ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
 is( $issuingimpossible->{DEBT_GUARANTEES}, undef, "Patron can check out item" );
 
-manualinvoice( $guarantee->{borrowernumber}, undef, undef, 'L', 10.00 );
+my $account = Koha::Account->new( { patron_id => $guarantee->{borrowernumber} } );
+$account->add_debit({ amount => 10.00, type => 'lost_item' });
 ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->{barcode} );
 is( $issuingimpossible->{DEBT_GUARANTEES} + 0, '10.00' + 0, "Patron cannot check out item due to debt for guarantee" );
 

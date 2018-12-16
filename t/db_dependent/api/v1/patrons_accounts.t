@@ -25,7 +25,6 @@ use Test::Warn;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use C4::Accounts qw(manualinvoice);
 use C4::Auth;
 use Koha::Account::Line;
 
