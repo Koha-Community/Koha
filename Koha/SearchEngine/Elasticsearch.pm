@@ -86,12 +86,7 @@ sub get_elasticsearch {
     my $self = shift @_;
     unless (defined $self->{elasticsearch}) {
         my $conf = $self->get_elasticsearch_params();
-        $self->{elasticsearch} = Search::Elasticsearch->new(
-            client => "5_0::Direct",
-            nodes => $conf->{nodes},
-            cxn_pool => 'Sniff',
-            request_timeout => 60
-        );
+        $self->{elasticsearch} = Search::Elasticsearch->new($conf);
     }
     return $self->{elasticsearch};
 }
@@ -141,12 +136,16 @@ sub get_elasticsearch_params {
     else {
         die "No elasticsearch servers were specified in koha-conf.xml.\n";
     }
-    die "No elasticserver index_name was specified in koha-conf.xml.\n"
+    die "No elasticsearch index_name was specified in koha-conf.xml.\n"
       if ( !$es->{index_name} );
     # Append the name of this particular index to our namespace
     $es->{index_name} .= '_' . $self->index;
 
     $es->{key_prefix} = 'es_';
+    $es->{client} //= '5_0::Direct';
+    $es->{cxn_pool} //= 'Sniff';
+    $es->{request_timeout} //= 60;
+
     return $es;
 }
 
