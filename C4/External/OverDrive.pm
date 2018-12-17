@@ -32,7 +32,6 @@ BEGIN {
     require Exporter;
     our @ISA = qw( Exporter ) ;
     our @EXPORT = qw(
-        IsOverDriveEnabled
         GetOverDriveToken
     );
 }
@@ -60,23 +59,6 @@ C4::External::OverDrive - Retrieve OverDrive content availability information
 =head2 FUNCTIONS
 
 This module provides content search for OverDrive,
-
-=over
-
-=item IsOverDriveEnabled
-
-Returns 1 if all of the necessary system preferences for OverDrive are set.
-
-=back
-
-=cut
-
-sub IsOverDriveEnabled {
-    return (
-        C4::Context->preference( 'OverDriveClientKey' ) &&
-        C4::Context->preference( 'OverDriveClientSecret' )
-    );
-}
 
 =over
 

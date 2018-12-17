@@ -100,7 +100,7 @@ function fetch_availability( prod, $tr ) {
 function search( offset ) {
     $( '#overdrive-status' ).html( _("Searching OverDrive...") + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></span>' );
 
-    KOHA.OverDrive.Search( "[% OverDriveLibraryID | html %]", querystring, results_per_page, offset, function( data ) {
+    KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", querystring, results_per_page, offset, function( data ) {
         if ( data.error ) {
             $( '#overdrive-status' ).html( '<strong class="unavailable">' + _("Error searching OverDrive collection.") + '</strong>' );
             return;

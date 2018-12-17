@@ -1,4 +1,5 @@
 [% USE raw %]
+[% USE Koha %]
 [%- USE KohaPlugins -%]
 [% USE Asset %]
 [% UNLESS ( is_popup ) %]
@@ -274,8 +275,10 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
 </script>
 [% END %]
 
-[% IF (RecordedBooksEnabled) %]
+[% IF Koha.Preference('RecordedBooksClientSecret') && Koha.Preference('RecordedBooksLibraryID') %]
+<script>
   var SPINNER_THROBBER = "[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif";
+</script>
 [% END %]
 
 [% Asset.js("lib/jquery/plugins/jquery.cookie.min.js") | $raw %]

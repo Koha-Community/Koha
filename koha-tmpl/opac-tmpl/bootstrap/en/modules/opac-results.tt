@@ -6,6 +6,11 @@
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
+[% IF firstPage %]
+     [% SET OverDriveEnabled = Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') %]
+     [% SET RecordedBooksEnabled = Koha.Preference('RecordedBooksLibraryID') && Koha.Preference('RecordedBooksClientSecret') %]
+[% END %]
+
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( searchdesc ) %]
@@ -899,7 +904,7 @@ $(document).ready(function(){
         var $overdrive_results = $( '<div id="overdrive-results">' + MSG_SEARCHING.format('OverDrive') + ' <img class="throbber" src="[% interface | html %]/lib/jquery/plugins/themes/classic/throbber.gif" /></div>' );
         $( '#numresults' ) .append( ' ' )
             .append( $overdrive_results );
-        KOHA.OverDrive.Search( "[% OverDriveLibraryID | html %]", querystring, 1, 0, function( data ) {
+        KOHA.OverDrive.Search( "[% Koha.Preference('OverDriveLibraryID') | html %]", querystring, 1, 0, function( data ) {
             if ( data.error ) {
                 $overdrive_results.html( MSG_ERROR_SEARCHING_COLLECTION.format('OverDrive') );
                 return;
