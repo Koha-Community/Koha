@@ -284,9 +284,5 @@ END {
         skip "Cache not enabled", 1
           unless ( $cache->is_cache_active() );
         is( $destructorcount, 1, 'Destructor run exactly once' );
-        # cleanup temporary file
-        my $tmp_file = $cache->{ fastmmap_cache }->{ share_file };
-        unlink $tmp_file if defined $tmp_file;
-
     }
 }
