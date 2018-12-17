@@ -673,7 +673,7 @@ sub handle_checkin {
             $resp .= maybe_add( FID_ITEM_PROPS,           $item->sip_item_properties );
             $resp .= maybe_add( FID_COLLECTION_CODE,      $item->collection_code );
             $resp .= maybe_add( FID_CALL_NUMBER,          $item->call_number );
-            $resp .= maybe_add( FID_DESTINATION_LOCATION, $item->destination_loc );
+            $resp .= add_field( FID_DESTINATION_LOCATION, $item->destination_loc ) if ( $item->destination_loc || $server->{account}->{ct_always_send} );
             $resp .= maybe_add( FID_HOLD_PATRON_ID,       $item->hold_patron_bcode );
             $resp .= maybe_add( FID_HOLD_PATRON_NAME,     $item->hold_patron_name( $server->{account}->{da_field_template} ) );
             if ( $status->hold and $status->hold->{branchcode} ne $item->destination_loc ) {
