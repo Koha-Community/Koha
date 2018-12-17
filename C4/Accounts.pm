@@ -29,6 +29,7 @@ use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Items;
 
+use Mojo::Util qw(deprecated);
 use Data::Dumper qw(Dumper);
 
 use vars qw(@ISA @EXPORT);
@@ -37,7 +38,6 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      &manualinvoice
       &getnextacctno
       &chargelostitem
       &purge_zero_balance_fees
@@ -161,29 +161,15 @@ sub chargelostitem{
   &manualinvoice($borrowernumber, $itemnumber, $description, $type,
                  $amount, $note);
 
-C<$borrowernumber> is the patron's borrower number.
-C<$description> is a description of the transaction.
-C<$type> may be one of C<CS>, C<CB>, C<CW>, C<CF>, C<CL>, C<N>, C<L>,
-or C<REF>.
-C<$itemnumber> is the item involved, if pertinent; otherwise, it
-should be the empty string.
+This function is now deprecated and not used anywhere within koha. It is due for complete removal in 19.11
 
 =cut
 
-#'
-# FIXME: In Koha 3.0 , the only account adjustment 'types' passed to this function
-# are:
-# 		'C' = CREDIT
-# 		'FOR' = FORGIVEN  (Formerly 'F', but 'F' is taken to mean 'FINE' elsewhere)
-# 		'N' = New Card fee
-# 		'F' = Fine
-# 		'A' = Account Management fee
-# 		'M' = Sundry
-# 		'L' = Lost Item
-#
-
 sub manualinvoice {
     my ( $borrowernumber, $itemnum, $desc, $type, $amount, $note ) = @_;
+
+    deprecated "C4::Accounts::manualinvoice is deprecated in favor of Koha::Account->add_debit";
+
     my $manager_id = 0;
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $dbh      = C4::Context->dbh;
