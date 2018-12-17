@@ -1365,26 +1365,29 @@ sub anonymize {
     @columns = grep { !/borrowernumber|branchcode|categorycode|^date|password|flags|updated_on|lastseen|lang|login_attempts|flgAnonymized/ } @columns;
     push @columns, 'dateofbirth'; # add this date back in
     foreach my $col (@columns) {
-        if( $mandatory->{lc $col} ) {
-            my $str = $self->_anonymize_column($col);
-            $self->$col($str);
-        } else {
-            $self->$col(undef);
-        }
+        $self->_anonymize_column($col, $mandatory->{lc $col} );
     }
     $self->flgAnonymized(1)->store;
 }
 
 sub _anonymize_column {
-    my ( $self, $col ) = @_;
-    my $type = $self->_result->result_source->column_info($col)->{data_type};
+    my ( $self, $col, $mandatory ) = @_;
+    my $col_info = $self->_result->result_source->column_info($col);
+    my $type = $col_info->{data_type};
+    my $nullable = $col_info->{is_nullable};
+    my $val;
     if( $type =~ /char|text/ ) {
-        return Koha::Token->new->generate({ pattern => '\w{10}' });
+        $val = $mandatory
+            ? Koha::Token->new->generate({ pattern => '\w{10}' })
+            : $nullable
+            ? undef
+            : q{};
     } elsif( $type =~ /integer|int$|float|dec|double/ ) {
-        return 0;
+        $val = $nullable ? undef : 0;
     } elsif( $type =~ /date|time/ ) {
-        return dt_from_string;
+        $val = $nullable ? undef : dt_from_string;
     }
+    $self->$col($val);
 }
 
 =head2 Internal methods
