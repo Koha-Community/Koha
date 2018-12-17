@@ -24,7 +24,7 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');
     $self->addGrouping('Koha::Reporting::Report::Grouping::ItemType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Location');
-    $self->addGrouping('Koha::Reporting::Report::Grouping::Collection');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::CollectionCodeLoan');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationAge');
     $self->addGrouping('Koha::Reporting::Report::Grouping::PublishedYear');
@@ -41,7 +41,7 @@ sub BUILD {
     $self->addFilter('itemtype', 'Koha::Reporting::Report::Filter::Itemtype');
 #    $self->addFilter('itemtype_okm', 'Koha::Reporting::Report::Filter::ItemtypeOkm');
     $self->addFilter('language', 'Koha::Reporting::Report::Filter::LanguageAll');
-    $self->addFilter('collection_code', 'Koha::Reporting::Report::Filter::CollectionCode');
+    $self->addFilter('collection_code', 'Koha::Reporting::Report::Filter::CollectionCodeLoan');
 
     $self->addFilter('published_start', 'Koha::Reporting::Report::Filter::PublishedStart');
     $self->addFilter('published_end', 'Koha::Reporting::Report::Filter::PublishedEnd');

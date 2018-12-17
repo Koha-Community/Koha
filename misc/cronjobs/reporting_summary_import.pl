@@ -16,6 +16,8 @@ use Koha::Reporting::Import::DeletedItems;
 use Koha::Reporting::Import::UpdateItems;
 use Koha::Reporting::Import::Returns;
 use Koha::Reporting::Import::Reserves;
+use Koha::Reporting::Import::OldReserves;
+use Koha::Reporting::Import::UpdateReserves;
 use Koha::Reporting::Import::Messages;
 use Koha::Reporting::Import::UpdateAcquisitionsIsFirst;
 use Koha::Reporting::Import::Abstract;
@@ -43,6 +45,7 @@ unless ($config->{blockStatisticsGeneration}) {
 	my $importUpdateItems = new Koha::Reporting::Import::UpdateItems;
 	my $importReturns = new Koha::Reporting::Import::Returns;
 	my $importReserves = new Koha::Reporting::Import::Reserves;
+	my $importOldReserves = new Koha::Reporting::Import::OldReserves;
 	my $importMessages = new Koha::Reporting::Import::Messages;
 	my $updateAcquisitionsIsFirst = new Koha::Reporting::Import::UpdateAcquisitionsIsFirst;
 	#$importUpdateItems->truncateUpdateTable();
@@ -73,6 +76,8 @@ unless ($config->{blockStatisticsGeneration}) {
 	$importDeletedItems->massImport();
 	print "Reserves \n";
 	$importReserves->massImport();
+        print "Old Reserves \n";
+	$importOldReserves->massImport();
 
 	print "Update Items\n";
 	$importUpdateItems->massImport();

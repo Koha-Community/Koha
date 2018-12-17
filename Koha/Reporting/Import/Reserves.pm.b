@@ -25,7 +25,7 @@ sub loadDatas{
     my $statistics;
     my @parameters;
 
-    my $query .= 'select reserves.reservedate as reservedate, reserves.timestamp as datetime, reserves.reserve_id as reserve_id, "1" as amount, reserves.cancellationdate, reserves.suspend, reserves.found, reserves.pickupexpired, "0" as is_old, ';
+    my $query .= 'select reserves.reservedate as datetime, reserves.reserve_id as reserve_id, "1" as amount, reserves.cancellationdate, reserves.suspend, reserves.found, reserves.pickupexpired, "0" as is_old, ';
     $query .= 'reserves.branchcode as branch, reserves.borrowernumber, COALESCE(reserves.itemnumber, items_biblio.itemnumber, deleteditems.itemnumber, deleted_items_biblio.itemnumber) as itemnumber, ';
     $query .= "COALESCE(items.location, items_biblio.location, deleteditems.location, deleted_items_biblio.location) as location, ";
     $query .= "COALESCE(items.dateaccessioned, items_biblio.dateaccessioned, deleteditems.dateaccessioned, deleted_items_biblio.dateaccessioned) as acquired_year, ";
@@ -52,22 +52,21 @@ sub loadDatas{
     $query .= 'or deleted_items_biblio.itemnumber is not null or deleteditems.itemnumber is not null) ';
 
     if($self->getLastSelectedId()){
-        $query .= "and reserves.timestamp > ? ";
+        $query .= "and reserves.reserve_id > ? ";
         push @parameters, $self->getLastSelectedId();
     }
     if($self->getLastAllowedId()){
-        $query .= "and reserves.timestamp <= ? ";
+        $query .= "and reserves.reserve_id <= ? ";
         push @parameters, $self->getLastAllowedId();
     }
 
-    $query .= 'group by reserves.reserve_id ';
-    $query .= 'order by reserves.timestamp ';
+    $query .= 'group by reserve_id ';
+    $query .= 'order by reserve_id ';
 
     if($self->getLimit()){
         $query .= 'limit ?';
         push @parameters, $self->getLimit();
     }
-
     my $stmnt = $dbh->prepare($query);
     if(@parameters){
         $stmnt->execute(@parameters) or die($DBI::errstr);
@@ -81,8 +80,8 @@ sub loadDatas{
         $statistics = $stmnt->fetchall_arrayref({});
         if(defined @$statistics[-1]){
             my $lastRow =  @$statistics[-1];
-            if(defined $lastRow->{datetime}){
-                $self->updateLastSelected($lastRow->{datetime});
+            if(defined $lastRow->{reserve_id}){
+                $self->updateLastSelected($lastRow->{reserve_id});
             }
         }
     }
@@ -93,7 +92,7 @@ sub loadDatas{
 sub loadLastAllowedId{
     my $self = shift;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT MAX(timestamp) as datetime from reserves";
+    my $query = "SELECT MAX(reserve_id) as res_id from reserves";
     my $stmnt = $dbh->prepare($query);
     $stmnt->execute() or die($DBI::errstr);
 

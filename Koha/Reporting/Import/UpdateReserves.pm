@@ -1,19 +1,24 @@
 #!/usr/bin/perl
-package Koha::Reporting::Import::Reserves;
+package Koha::Reporting::Import::UpdateReserves;
 
 use Modern::Perl;
 use Moose;
 use Data::Dumper;
 use POSIX qw(strftime floor);
 use Time::Piece;
+use DateTime;
+use DateTime::Duration;
 use utf8;
+
+use constant LIMIT_DAYS => 5;
+
 
 extends 'Koha::Reporting::Import::Abstract';
 
 sub BUILD {
     my $self = shift;
     $self->initFactTable('reporting_reserves');
-    $self->setName('reserves_fact');
+    $self->setName('reserves_update_fact');
 
     $self->{column_transform_method}->{fact}->{reserve_status} = \&factReserveStatus;
     $self->{column_filters}->{item}->{datelastborrowed} = 1;
@@ -25,7 +30,7 @@ sub loadDatas{
     my $statistics;
     my @parameters;
 
-    my $query .= 'select reserves.reservedate as reservedate, reserves.timestamp as datetime, reserves.reserve_id as reserve_id, "1" as amount, reserves.cancellationdate, reserves.suspend, reserves.found, reserves.pickupexpired, "0" as is_old, ';
+    my $query .= 'select reserves.reservedate as datetime, reserves.reserve_id as reserve_id, "1" as amount, reserves.cancellationdate, reserves.suspend, reserves.found, reserves.pickupexpired, "0" as is_old, ';
     $query .= 'reserves.branchcode as branch, reserves.borrowernumber, COALESCE(reserves.itemnumber, items_biblio.itemnumber, deleteditems.itemnumber, deleted_items_biblio.itemnumber) as itemnumber, ';
     $query .= "COALESCE(items.location, items_biblio.location, deleteditems.location, deleted_items_biblio.location) as location, ";
     $query .= "COALESCE(items.dateaccessioned, items_biblio.dateaccessioned, deleteditems.dateaccessioned, deleted_items_biblio.dateaccessioned) as acquired_year, ";
@@ -51,23 +56,12 @@ sub loadDatas{
     $query .= 'where (items_biblio.itemnumber is not null or items.itemnumber is not null ';
     $query .= 'or deleted_items_biblio.itemnumber is not null or deleteditems.itemnumber is not null) ';
 
-    if($self->getLastSelectedId()){
-        $query .= "and reserves.timestamp > ? ";
-        push @parameters, $self->getLastSelectedId();
-    }
-    if($self->getLastAllowedId()){
-        $query .= "and reserves.timestamp <= ? ";
-        push @parameters, $self->getLastAllowedId();
-    }
+    $query .= "and reserves.reservedate > ? ";
+    push @parameters, $self->getDateLimit();
 
-    $query .= 'group by reserves.reserve_id ';
-    $query .= 'order by reserves.timestamp ';
-
-    if($self->getLimit()){
-        $query .= 'limit ?';
-        push @parameters, $self->getLimit();
-    }
-
+    $query .= 'group by reserve_id ';
+    $query .= 'order by reserve_id ';
+#    die Dumper $query;
     my $stmnt = $dbh->prepare($query);
     if(@parameters){
         $stmnt->execute(@parameters) or die($DBI::errstr);
@@ -76,33 +70,13 @@ sub loadDatas{
         $stmnt->execute() or die($DBI::errstr);
     }
 
-#die Dumper $stmnt->rows;
     if ($stmnt->rows >= 1){
         $statistics = $stmnt->fetchall_arrayref({});
-        if(defined @$statistics[-1]){
-            my $lastRow =  @$statistics[-1];
-            if(defined $lastRow->{datetime}){
-                $self->updateLastSelected($lastRow->{datetime});
-            }
-        }
     }
-    #die Dumper $statistics;
+    die Dumper $statistics;
     return $statistics;
 }
 
-sub loadLastAllowedId{
-    my $self = shift;
-    my $dbh = C4::Context->dbh;
-    my $query = "SELECT MAX(timestamp) as datetime from reserves";
-    my $stmnt = $dbh->prepare($query);
-    $stmnt->execute() or die($DBI::errstr);
-
-    my $lastId;
-    if($stmnt->rows == 1){
-        $lastId = $stmnt->fetch()->[0];
-        $self->setLastAllowedId($lastId);
-    }
-}
 
 sub factReserveStatus{
     my $self = shift;
@@ -136,5 +110,20 @@ sub factReserveStatus{
 
     return $result;
 }
+
+sub loadLastAllowedId{
+    my $self = shift;
+    my $lastId = $self->getDateLimit();
+    $self->setLastAllowedId($lastId);
+}
+
+
+sub getDateLimit{
+    my $self = shift; 
+    my $now = DateTime->now;
+    my $later = $now - DateTime::Duration->new( days => LIMIT_DAYS );
+    return $later->ymd . " 00:00:00"
+}
+
 
 1;

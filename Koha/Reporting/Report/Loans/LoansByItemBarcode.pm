@@ -22,7 +22,7 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');
     $self->addGrouping('Koha::Reporting::Report::Grouping::ItemType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Location');
-    $self->addGrouping('Koha::Reporting::Report::Grouping::Collection');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::CollectionCodeLoan');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationAge');
     $self->addGrouping('Koha::Reporting::Report::Grouping::PublishedYear');
@@ -41,7 +41,7 @@ sub BUILD {
     $self->addFilter('is_yle', 'Koha::Reporting::Report::Filter::IsYle');
     $self->addFilter('published_start', 'Koha::Reporting::Report::Filter::PublishedStart');
     $self->addFilter('published_end', 'Koha::Reporting::Report::Filter::PublishedEnd');
-    $self->addFilter('collection_code', 'Koha::Reporting::Report::Filter::CollectionCode');
+    $self->addFilter('collection_code', 'Koha::Reporting::Report::Filter::CollectionCodeLoan');
     $self->addFilter('acquired_start', 'Koha::Reporting::Report::Filter::AcquiredStart');
     $self->addFilter('acquirder_end', 'Koha::Reporting::Report::Filter::AcquiredEnd');
     $self->addFilter('location_type', 'Koha::Reporting::Report::Filter::Location::Type');

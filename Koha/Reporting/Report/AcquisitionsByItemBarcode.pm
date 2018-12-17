@@ -18,9 +18,9 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::Barcode');
 
     $self->addGrouping('Koha::Reporting::Report::Grouping::CnClass');
-    $self->addGrouping('Koha::Reporting::Report::Grouping::Language');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::LanguageAll');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');
-    $self->addGrouping('Koha::Reporting::Report::Grouping::ItemTypeOkm');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::ItemType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Location');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Collection');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationType');
@@ -33,8 +33,8 @@ sub BUILD {
     $self->addFilter('location', 'Koha::Reporting::Report::Filter::Location');
     $self->addFilter('cn_class', 'Koha::Reporting::Report::Filter::CnClass::Primary');
     $self->addFilter('cn_class_fict', 'Koha::Reporting::Report::Filter::CnClass::Fictive');
-    $self->addFilter('itemtype_okm', 'Koha::Reporting::Report::Filter::ItemtypeOkm');
-    $self->addFilter('language', 'Koha::Reporting::Report::Filter::Language');
+    $self->addFilter('itemtype_okm', 'Koha::Reporting::Report::Filter::Itemtype');
+    $self->addFilter('language', 'Koha::Reporting::Report::Filter::LanguageAll');
     $self->addFilter('is_yle', 'Koha::Reporting::Report::Filter::IsYle');
     $self->addFilter('collection_code', 'Koha::Reporting::Report::Filter::CollectionCode');
     $self->addFilter('published_start', 'Koha::Reporting::Report::Filter::PublishedStart');

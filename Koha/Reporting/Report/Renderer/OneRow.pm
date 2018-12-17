@@ -39,7 +39,7 @@ sub generateRows {
                 my $skip = 0;
                 foreach my $group (@$groups){
                     if(defined $row->{$group}){
-                        push @{$rowData}, $row->{$group};
+                        push $rowData, $row->{$group};
                     }
                     else{
                         $skip = 1;
@@ -47,14 +47,14 @@ sub generateRows {
                 }
                 foreach my $column (@$columns){
                     if(defined $row->{$column}){
-                        push @{$rowData}, $row->{$column};
+                        push $rowData, $row->{$column};
                     }
                     else{
-                        push @{$rowData},'';
+                        push $rowData,'';
                     }
                 }
                 if(!$skip){
-                    push @{$rowDatas}, $rowData;
+                    push $rowDatas, $rowData;
                 }
             }
 
@@ -66,9 +66,9 @@ sub getColumnsOneRow{
     my $self = shift;
     my $columnsTmp = $self->{columns};
     my $columns = [];
-    push @{$columns}, @$columnsTmp;
+    push $columns, @$columnsTmp;
     my $groups = $self->getGroups();
-    unshift  @{$columns}, @$groups;
+    unshift  $columns, @$groups;
     return $columns;
 }
 
@@ -79,14 +79,14 @@ sub getOneHeaderRow{
     my $columns = $self->getColumnsOneRow();
     my $headerRow = [];
     if(defined $firstGroup){
-        push @{$headerRow}, $firstGroup;
+        push $headerRow, $firstGroup;
     }
     foreach my $column (@$columns){
-        push @{$headerRow}, $column;
+        push $headerRow, $column;
     }
 
     if(@$headerRow){
-        push @{$headerRows}, $headerRow;
+        push $headerRows, $headerRow;
     }
     return $headerRows;
 }

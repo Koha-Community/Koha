@@ -35,8 +35,8 @@ sub loadOptions{
     my $dbh = C4::Context->dbh;
     my $options = [];
 
-    push @{$options}, { 'name' => 'no', 'description' => 'No', 'linked_filter' => 'branch_category_forced' };
-    push @{$options}, { 'name' => 'yes', 'description' => 'Yes', 'linked_filter' => 'branch_category_forced' };
+    push $options, { 'name' => 'no', 'description' => 'No', 'linked_filter' => 'branch_category_forced' };
+    push $options, { 'name' => 'yes', 'description' => 'Yes', 'linked_filter' => 'branch_category_forced' };
     return $options;
 }
 

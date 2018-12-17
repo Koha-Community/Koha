@@ -17,7 +17,7 @@ sub BUILD {
     $self->addGrouping('Koha::Reporting::Report::Grouping::Branch');
     $self->addGrouping('Koha::Reporting::Report::Grouping::ItemTypeOkm');
     $self->addGrouping('Koha::Reporting::Report::Grouping::Location');
-    $self->addGrouping('Koha::Reporting::Report::Grouping::Collection');
+    $self->addGrouping('Koha::Reporting::Report::Grouping::CollectionCodeLoan');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationType');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LocationAge');
     $self->addGrouping('Koha::Reporting::Report::Grouping::LoanType');
@@ -37,7 +37,7 @@ sub BUILD {
     $self->addFilter('is_yle', 'Koha::Reporting::Report::Filter::IsYle');
     $self->addFilter('acquired_start', 'Koha::Reporting::Report::Filter::AcquiredStart');
     $self->addFilter('acquirder_end', 'Koha::Reporting::Report::Filter::AcquiredEnd');
-    $self->addFilter('collection_code', 'Koha::Reporting::Report::Filter::CollectionCode');
+    $self->addFilter('collection_code', 'Koha::Reporting::Report::Filter::CollectionCodeLoan');
     $self->addFilter('location_type', 'Koha::Reporting::Report::Filter::Location::Type');
     $self->addFilter('location_age', 'Koha::Reporting::Report::Filter::Location::Age');
     $self->addFilter('loan_type', 'Koha::Reporting::Report::Filter::LoanType');

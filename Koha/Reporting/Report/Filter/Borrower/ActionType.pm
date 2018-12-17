@@ -31,7 +31,7 @@ sub getConditionString{
                 $notLoaned = $self->getNotLoanedCondition($table);
             }
             else{
-                push @{$tmpOptions}, $option;
+                push $tmpOptions, $option;
             }
         }
         $options = $tmpOptions;
@@ -76,7 +76,7 @@ sub getNotLoanedCondition{
 sub loadOptions{
    my $self = shift;
    my $options = [
-#       {'name' =>'0', 'description' => 'Not Loaned'},
+       {'name' =>'0', 'description' => 'Not Loaned'},
        {'name' =>'1', 'description' => 'Loaned'},
        {'name' =>'2', 'description' => 'New'},
        {'name' =>'3', 'description' => 'Deleted'}

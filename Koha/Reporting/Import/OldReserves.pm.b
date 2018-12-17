@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package Koha::Reporting::Import::Reserves;
+package Koha::Reporting::Import::OldReserves;
 
 use Modern::Perl;
 use Moose;
@@ -13,7 +13,7 @@ extends 'Koha::Reporting::Import::Abstract';
 sub BUILD {
     my $self = shift;
     $self->initFactTable('reporting_reserves');
-    $self->setName('reserves_fact');
+    $self->setName('reserves_old_fact');
 
     $self->{column_transform_method}->{fact}->{reserve_status} = \&factReserveStatus;
     $self->{column_filters}->{item}->{datelastborrowed} = 1;
@@ -25,7 +25,7 @@ sub loadDatas{
     my $statistics;
     my @parameters;
 
-    my $query .= 'select reserves.reservedate as reservedate, reserves.timestamp as datetime, reserves.reserve_id as reserve_id, "1" as amount, reserves.cancellationdate, reserves.suspend, reserves.found, reserves.pickupexpired, "0" as is_old, ';
+    my $query .= 'select reserves.reservedate as datetime, reserves.reserve_id as reserve_id, "1" as amount, reserves.cancellationdate, reserves.suspend, reserves.found, reserves.pickupexpired, "1" as is_old, ';
     $query .= 'reserves.branchcode as branch, reserves.borrowernumber, COALESCE(reserves.itemnumber, items_biblio.itemnumber, deleteditems.itemnumber, deleted_items_biblio.itemnumber) as itemnumber, ';
     $query .= "COALESCE(items.location, items_biblio.location, deleteditems.location, deleted_items_biblio.location) as location, ";
     $query .= "COALESCE(items.dateaccessioned, items_biblio.dateaccessioned, deleteditems.dateaccessioned, deleted_items_biblio.dateaccessioned) as acquired_year, ";
@@ -33,11 +33,11 @@ sub loadDatas{
     $query .= "COALESCE(items.ccode, items_biblio.ccode, deleteditems.ccode, deleted_items_biblio.ccode) as collection_code, ";
     $query .= "COALESCE(items.cn_sort, items_biblio.cn_sort, deleteditems.cn_sort, deleted_items_biblio.cn_sort) as cn_sort, ";
     $query .= "COALESCE(items.barcode, items_biblio.barcode, deleteditems.barcode, deleted_items_biblio.barcode) as barcode, ";
-    $query .= 'biblio_metadata.metadata as marcxml, biblioitems.publicationyear as published_year, biblioitems.biblioitemnumber, ';
+    $query .= 'biblio_metadata.metadata, biblioitems.publicationyear as published_year, biblioitems.biblioitemnumber, ';
     $query .= 'borrowers.categorycode, borrowers.zipcode as postcode, borrowers.dateofbirth, ';
     $query .= 'borrowers.cardnumber ';
 
-    $query .= 'from reserves ';
+    $query .= 'from old_reserves as reserves ';
     $query .= 'inner join biblio on reserves.biblionumber = biblio.biblionumber ';
     $query .= 'inner join biblioitems on biblioitems.biblionumber = biblio.biblionumber ';
     $query .= 'inner join biblio_metadata on biblio_metadata.biblionumber = biblioitems.biblionumber ';
@@ -52,22 +52,21 @@ sub loadDatas{
     $query .= 'or deleted_items_biblio.itemnumber is not null or deleteditems.itemnumber is not null) ';
 
     if($self->getLastSelectedId()){
-        $query .= "and reserves.timestamp > ? ";
+        $query .= "and reserves.reserve_id > ? ";
         push @parameters, $self->getLastSelectedId();
     }
     if($self->getLastAllowedId()){
-        $query .= "and reserves.timestamp <= ? ";
+        $query .= "and reserves.reserve_id <= ? ";
         push @parameters, $self->getLastAllowedId();
     }
-
-    $query .= 'group by reserves.reserve_id ';
-    $query .= 'order by reserves.timestamp ';
+    #$query .= ') as res ';
+    $query .= 'group by reserve_id ';
+    $query .= 'order by reserve_id ';
 
     if($self->getLimit()){
         $query .= 'limit ?';
         push @parameters, $self->getLimit();
     }
-
     my $stmnt = $dbh->prepare($query);
     if(@parameters){
         $stmnt->execute(@parameters) or die($DBI::errstr);
@@ -81,8 +80,8 @@ sub loadDatas{
         $statistics = $stmnt->fetchall_arrayref({});
         if(defined @$statistics[-1]){
             my $lastRow =  @$statistics[-1];
-            if(defined $lastRow->{datetime}){
-                $self->updateLastSelected($lastRow->{datetime});
+            if(defined $lastRow->{reserve_id}){
+                $self->updateLastSelected($lastRow->{reserve_id});
             }
         }
     }
@@ -93,7 +92,8 @@ sub loadDatas{
 sub loadLastAllowedId{
     my $self = shift;
     my $dbh = C4::Context->dbh;
-    my $query = "SELECT MAX(timestamp) as datetime from reserves";
+    #my $query = "select MAX(res_id) from (SELECT MAX(reserve_id) as res_id from reserves UNION ALL SELECT MAX(reserve_id) as res_id from old_reserves) as reservesunion";
+    my $query = "SELECT MAX(reserve_id) as res_id from old_reserves";
     my $stmnt = $dbh->prepare($query);
     $stmnt->execute() or die($DBI::errstr);
 

@@ -55,7 +55,7 @@ sub loadOptions{
                     $option->{'linked_filter'} = $self->getLinkedFilter();
                 }
                 $self->{branchgroups_hash}->{$option->{name}} = $option;
-                push @{$branchGroupOrder}, $option->{name};
+                push $branchGroupOrder, $option->{name};
             }
 
             if(!defined $option->{linked_options}){
@@ -63,7 +63,7 @@ sub loadOptions{
             }
 
             if(defined $row->{'branchcode'}){
-                push @{$option->{linked_options}}, $row->{'branchcode'};
+                push $option->{linked_options}, $row->{'branchcode'};
             }
 
         }
@@ -71,7 +71,7 @@ sub loadOptions{
         foreach my $branchName (@$branchGroupOrder){
             my $bOption = $self->getBranchGroupOption($branchName);
             if(defined $bOption){
-                push @{$branchGroups}, $bOption;
+                push $branchGroups, $bOption;
             }
         }
     }
@@ -102,7 +102,7 @@ sub modifyOptions{
         $stmnt->execute();
         if ($stmnt->rows >= 1){
             while ( my $row = $stmnt->fetchrow_hashref ) {
-                push @{$result}, $row->{branchcode};
+                push $result, $row->{branchcode};
             }
             $options = $result;
         }

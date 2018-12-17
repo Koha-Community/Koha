@@ -391,7 +391,7 @@ print Dumper 'fact';
         else{
             next;
         }
-        foreach my $dimensionName (sort keys %{$tmpRow}){
+        foreach my $dimensionName (sort keys $tmpRow){
             my $tmpKeys = $tmpRow->{$dimensionName};
             my $dimension = $dimensions->{$dimensionName};
             my $bussinesKeys = $dimension->getBusinessKey();
@@ -403,7 +403,7 @@ print Dumper 'fact';
             }
             my $primaryId = $dimension->getPrimaryIdByBusinessKey(\@bKey);
             if($primaryId){
-                push @{$row}, $primaryId;
+                push $row, $primaryId;
             }
             else{
                print Dumper "invalid dimesnion pkey". $dimensionName;
@@ -457,7 +457,7 @@ sub addFactInsertColumns{
     my $self = shift;
     my $dimensions = $_[0];
     my $fact = $_[1];
-    foreach my $dimensionName (sort keys %{$dimensions}){
+    foreach my $dimensionName (sort keys $dimensions){
         my $dimension = $dimensions->{$dimensionName};
         if($dimension && $dimension->getPrimaryId()){
             $fact->addImportColumn($dimension->getPrimaryId());
@@ -470,7 +470,7 @@ sub getPrimaryIdsByDimesionName{
     my $dimensions = $_[0];
     my $result = {};
     if(%$dimensions){
-        foreach my $dimensionName (keys %{$dimensions}){
+        foreach my $dimensionName (keys $dimensions){
             my $dimension = $dimensions->{$dimensionName};
             $result->{$dimensionName} = $dimension->getPrimaryId();
         }
@@ -560,7 +560,7 @@ sub applyColumnFilters{
     my $self = shift;
     my $dimensions = $_[0];
 
-    foreach my $dimensionName (keys %{$dimensions}){
+    foreach my $dimensionName (keys $dimensions){
         my $dimension = $dimensions->{$dimensionName};
         if(defined $self->{column_filters}->{$dimensionName}){
             my $columnFilters = $self->{column_filters}->{$dimensionName};
@@ -568,7 +568,7 @@ sub applyColumnFilters{
             my $filteredColumns = [];
             foreach my $importColumn (@$importColumns){
                 if(! defined $columnFilters->{$importColumn}){
-                    push @{$filteredColumns}, $importColumn;
+                    push $filteredColumns, $importColumn;
                 }
             }
             $dimension->setImportColumns($filteredColumns);
@@ -1354,7 +1354,7 @@ sub getConditionValues {
     my $name = shift;
     my $config = $self->getSearchableConfig();
 
-    my @keys = keys(%{$config->{$name}});
+    my @keys = keys($config->{$name});
     my $values = '(';
     foreach my $key (@keys) {
         if (\$key == \$keys[-1]) {
@@ -1395,7 +1395,7 @@ sub validateConfiguration {
     my @adultShelLocKeys = ();
     my @juvenileShelLocKeys = ();
     if (ref $config->{itemTypeToStatisticalCategory} eq 'HASH') {
-        @statCatKeys = keys(%{$config->{itemTypeToStatisticalCategory}});
+        @statCatKeys = keys($config->{itemTypeToStatisticalCategory});
     }
     if (ref $config->{patronCategories} eq 'ARRAY') {
         @categoryKeys = $config->{patronCategories};

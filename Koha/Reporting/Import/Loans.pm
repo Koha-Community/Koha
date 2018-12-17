@@ -22,6 +22,7 @@ sub BUILD {
 
     $self->{column_transform_method}->{fact}->{loan_type} = \&factLoanType;
     $self->{column_transform_method}->{fact}->{loaned_amount} = \&factLoanedAmount;
+    $self->{column_transform_method}->{fact}->{loan_ccode} = \&factLoanCcode;
     $self->{column_transform_method}->{item}->{datelastborrowed} = \&itemDatelastborrowed;
     #$self->setInsertOnDuplicateFact(1);
 }
@@ -35,7 +36,8 @@ sub loadDatas{
 
     my $query = 'select reporting_statistics_tmp.datetime, reporting_statistics_tmp.branch, reporting_statistics_tmp.type as loan_type, ';
     $query .= 'reporting_statistics_tmp.usercode, ';
-    $query .= 'reporting_statistics_tmp.borrowernumber, reporting_statistics_tmp.ccode as collection_code, reporting_statistics_tmp.itemnumber, ';
+    $query .= 'reporting_statistics_tmp.borrowernumber, reporting_statistics_tmp.ccode as loan_ccode, reporting_statistics_tmp.itemnumber, ';
+    $query .= 'COALESCE(items.ccode, deleteditems.ccode) as collection_code, ';
     $query .= 'COALESCE(items.itype, deleteditems.itype) as itemtype, ';
     $query .= 'COALESCE(items.location, deleteditems.location) as location, COALESCE(items.dateaccessioned, deleteditems.dateaccessioned) as acquired_year, ';
     $query .= 'COALESCE(items.biblioitemnumber, deleteditems.biblioitemnumber) as biblioitemnumber, COALESCE(items.cn_sort, deleteditems.cn_sort) as cn_sort, ';
@@ -142,6 +144,21 @@ sub factLoanType{
         }
     }
     return $type;
+}
+
+sub factLoanCcode{
+    my $self = shift;
+    my $data = $_[0];
+    my $fact = $_[1];
+
+    my $ccode;
+    if(defined $data->{loan_ccode}){
+       $ccode = $data->{loan_ccode}
+    }
+    else{
+       $ccode = '';
+    }
+    return $ccode;
 }
 
 sub factLoanedAmount{

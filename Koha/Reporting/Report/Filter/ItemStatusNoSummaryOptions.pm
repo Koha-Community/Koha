@@ -40,7 +40,7 @@ sub loadOptions{
 
             if(defined $name){
                 my $option = {'name' => $name, 'description' => $row->{'lib'}};
-                push @{$options}, $option;
+                push $options, $option;
             }
         }
     }

@@ -1,5 +1,5 @@
 #!/usr/bin/perl
-package Koha::Reporting::Report::Filter::Location;
+package Koha::Reporting::Report::Filter::CollectionCodeLoan;
 
 use Modern::Perl;
 use Moose;
@@ -9,28 +9,28 @@ extends 'Koha::Reporting::Report::Filter::Abstract';
 
 sub BUILD {
     my $self = shift;
-    $self->setName('location');
-    $self->setDescription('Location');
+    $self->setName('collection_code');
+    $self->setDescription('Collection');
     $self->setType('multiselect');
-    $self->setDimension('location');
-    $self->setField('location');
+    $self->setDimension('fact');
+    $self->setField('loan_ccode');
     $self->setRule('in');
 }
 
 sub loadOptions{
     my $self = shift;
     my $dbh = C4::Context->dbh;
-    my $branches = [];
+    my $options = [];
 
-    my $stmnt = $dbh->prepare("select authorised_value, lib from authorised_values where category='LOC'");
+    my $stmnt = $dbh->prepare("select authorised_value, lib from authorised_values where category='CCODE' order by lib");
     $stmnt->execute();
     if ($stmnt->rows >= 1){
         while ( my $row = $stmnt->fetchrow_hashref ) {
             my $option = {'name' => $row->{'authorised_value'}, 'description' => $row->{'lib'}};
-            push $branches, $option;
+            push $options, $option;
         }
     }
-    return $branches;
+    return $options;
 }
 
 1;

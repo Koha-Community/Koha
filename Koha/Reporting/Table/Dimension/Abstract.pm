@@ -53,7 +53,7 @@ sub addImportBusinesKeyId{
     my $self = shift;
     my $id = $_[0];
     if($id){
-        push @{$self->{import_business_key_ids}}, $id;
+        push $self->{import_business_key_ids}, $id;
     }
 }
 
@@ -139,7 +139,7 @@ sub addImportRow{
     if($row && $keys){
         $self->addImportBusinesKeyId($keys);
         my $keyHash = $self->{import_rows_by_business_key};
-        my @keyArray = sort keys %{$keys};
+        my @keyArray = sort keys $keys;
         $lastKey = $keyArray[-1];
         foreach my $keyName (@keyArray) {
             $key = $keys->{$keyName};
@@ -155,7 +155,7 @@ sub addImportRow{
         }
 
         if(!defined $keyHash->{$lastKeyValue}){
-            push @{$self->{import_rows}}, $row;
+            push $self->{import_rows}, $row;
             my $ref = $self->{import_rows};
             $keyHash->{$lastKeyValue} = $#$ref;
         }

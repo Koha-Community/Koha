@@ -23,7 +23,7 @@ sub loadDatas{
     my $statistics;
     my @parameters;
 
-    my $query = 'select accountlines.accountlines_id, accountlines.date as datetime, accountlines.borrowernumber, accountlines.amountoutstanding as amount, IF(accountlines.date <= DATE_SUB(CURDATE(), INTERVAL 3 YEAR), "Outdated", "Valid") as is_overdue, ';
+    my $query = 'select accountlines.accountlines_id, accountlines.date as datetime, accountlines.borrowernumber, accountlines.amountoutstanding as amount, IF(accountlines.date <= DATE_SUB(CURDATE(), INTERVAL 5 YEAR), "Outdated", "Valid") as is_overdue, ';
     $query .= 'borrowers.categorycode, borrowers.zipcode as postcode, borrowers.dateofbirth, borrowers.cardnumber , borrowers.branchcode as branch ';
     $query .= 'from accountlines ';
     $query .= 'left join borrowers on accountlines.borrowernumber = borrowers.borrowernumber ';
