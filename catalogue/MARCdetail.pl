@@ -274,7 +274,9 @@ foreach my $field (@fields) {
         $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{lib};
         $item->{ $subf[$i][0] } = GetAuthorisedValueDesc( $field->tag(),
                         $subf[$i][0], $subf[$i][1], '', $tagslib) || $subf[$i][1];
-        $norequests = 0 if $subf[$i][1] ==0 and $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan';
+        $norequests = 0
+          if  $tagslib->{ $field->tag() }->{ $subf[$i][0] }->{kohafield} eq 'items.notforloan'
+          and $subf[$i][1] == 0;
     }
     push @item_loop, $item if $item;
 }
