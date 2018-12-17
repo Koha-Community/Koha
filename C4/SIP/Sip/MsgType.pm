@@ -684,7 +684,11 @@ sub handle_checkin {
         }
     }
 
-    $resp .= maybe_add( FID_ALERT_TYPE, $status->alert_type ) if $status->alert;
+    if ( $status->alert && $status->alert_type ) {
+        $resp .= maybe_add( FID_ALERT_TYPE, $status->alert_type );
+    } elsif ( $server->{account}->{cv_send_00_on_success} ) {
+        $resp .= add_field( FID_ALERT_TYPE, '00' );
+    }
     $resp .= maybe_add( FID_SCREEN_MSG, $status->screen_msg, $server );
     $resp .= maybe_add( FID_PRINT_LINE, $status->print_line );
 
