@@ -133,7 +133,6 @@ recommends 'Archive::Extract', '0.60';
 recommends 'Archive::Zip', '1.30';
 recommends 'Array::Utils', '0.5';
 recommends 'CGI::Session::Driver::memcached', '0.04';
-recommends 'Cache::FastMmap', '1.34';
 recommends 'DBD::SQLite2', '0.33';
 recommends 'Devel::Cover', '0.89';
 recommends 'File::Copy', '2.08';

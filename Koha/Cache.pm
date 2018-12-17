@@ -51,7 +51,7 @@ use Koha::Config;
 use base qw(Class::Accessor);
 
 __PACKAGE__->mk_ro_accessors(
-    qw( cache memcached_cache fastmmap_cache memory_cache ));
+    qw( cache memcached_cache ));
 
 our %L1_cache;
 our $L1_encoder = Sereal::Encoder->new;
@@ -94,15 +94,6 @@ sub new {
         $self->{'cache'} = $self->{'memcached_cache'};
     }
 
-    if ( $self->{'default_type'} eq 'fastmmap'
-      && defined( $ENV{GATEWAY_INTERFACE} )
-      && can_load( modules => { 'Cache::FastMmap' => undef } )
-      && _initialize_fastmmap($self)
-      && defined( $self->{'fastmmap_cache'} ) )
-    {
-        $self->{'cache'} = $self->{'fastmmap_cache'};
-    }
-
     $ENV{DEBUG} && carp "Selected caching system: " . ($self->{'cache'} // 'none');
 
     return
@@ -138,33 +129,6 @@ sub _initialize_memcached {
         return $self;
     }
     $self->{'memcached_cache'} = $memcached;
-    return $self;
-}
-
-sub _initialize_fastmmap {
-    my ($self) = @_;
-    my ($cache, $share_file);
-
-    # Temporary workaround to catch fatal errors when: C4::Context module
-    # is not loaded beforehand, or Cache::FastMmap init fails for whatever
-    # other reason (e.g. due to permission issues - see Bug 13431)
-    eval {
-        $share_file = join( '-',
-            "/tmp/sharefile-koha", $self->{'namespace'},
-            C4::Context->config('hostname'), C4::Context->config('database') );
-
-        $cache = Cache::FastMmap->new(
-            'share_file'  => $share_file,
-            'expire_time' => $self->{'timeout'},
-            'unlink_on_exit' => 0,
-        );
-    };
-    if ( $@ ) {
-        warn "FastMmap cache initialization failed: $@";
-        return;
-    }
-    return unless defined $cache;
-    $self->{'fastmmap_cache'} = $cache;
     return $self;
 }
 
