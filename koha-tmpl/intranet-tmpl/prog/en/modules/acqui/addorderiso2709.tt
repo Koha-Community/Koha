@@ -10,8 +10,7 @@
  &rsaquo; Batch list
 [% END %]
 </title>
-[% Asset.css("css/datatables.css") | $raw %]
-<style>@media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
+<style>#dataPreview { width : 80%; } @media (max-width: 767px) { #dataPreview { margin: 0; width : auto; } }</style>
 [% INCLUDE 'doc-head-close.inc' %]
     [% Asset.js("js/acquisitions-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]

@@ -6,7 +6,6 @@
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Funds[% IF op == 'add_form' %] &rsaquo; [% IF ( budget_id ) %]Modify fund[% IF ( budget_name ) %] '[% budget_name | html %]'[% END %][% ELSE %]Add fund [% END %][% END %]</title>
-[% Asset.css("css/datatables.css") | $raw %]
 [% Asset.css("lib/jquery/plugins/treetable/stylesheets/jquery.treetable.css") | $raw %]
 [% INCLUDE 'doc-head-close.inc' %]
 </head>

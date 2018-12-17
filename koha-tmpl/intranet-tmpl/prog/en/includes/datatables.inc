@@ -1,7 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
 [% INCLUDE 'format_price.inc' %]
-[% Asset.css("css/buttons.dataTables.min.css") | $raw %]
 [% Asset.js("lib/jquery/plugins/jquery.dataTables.min.js") | $raw %]
 [% Asset.js("lib/jquery/plugins/dataTables.buttons.min.js") | $raw %]
 [% Asset.js("lib/jquery/plugins/buttons.colVis.min.js") | $raw %]

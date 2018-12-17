@@ -9,7 +9,6 @@
     [% ELSE %]&rsaquo; [% action | html %][% END %][% END %][% IF ( delete_confirm ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode | html %] Framework[% ELSE %]Default framework[% END %] &rsaquo; Confirm deletion[% END %][% IF ( delete_confirmed ) %]&rsaquo; [% IF ( authtypecode ) %][% authtypecode | html %] Framework[% ELSE %]Default framework[% END %] &rsaquo; Data deleted[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
-[% Asset.css("css/datatables.css") | $raw %]
 </head>
 
 <body id="admin_auth_tag_structure" class="admin">

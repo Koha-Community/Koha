@@ -86,6 +86,7 @@ div.dataTables_paginate {
 .paging_full_numbers > span > span {
     border-right : 1px solid #AAA;
     border-left : 1px solid #FFF;
+    color: #000;
     display : block;
     float : left;
     line-height:1.9em;
@@ -99,7 +100,6 @@ div.dataTables_paginate {
 .paging_full_numbers > span > span {
     background-color : #FFF;
     background-repeat: no-repeat;
-    color : #0000CC;
 }
 .paging_full_numbers a.paginate_button.first {
     background-color: transparent;
@@ -138,6 +138,11 @@ div.bottom.pager div:first-child {
 .paging_full_numbers a.paginate_active {
     background-color : #FFFFEA;
     color : #000;
+    font-weight: bold;
+}
+
+.paging_full_numbers a.current {
+    background-color : #FFFFCC;
     font-weight: bold;
 }
 
@@ -298,7 +303,13 @@ table.group tr.even td {
     border-right : 1px solid #BCBCBC;
 }
 
-button.dt-button, div.dt-button, a.dt-button {
+button.dt-button,
+div.dt-button,
+a.dt-button:link,
+a.dt-button:visited,
+a.dt-button:hover,
+a.dt-button:active {
+    color: #000;
     margin: 3px 3px 0;
 }
 

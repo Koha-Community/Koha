@@ -16,11 +16,6 @@
 [% IF op ==  'add' %] &rsaquo; New [% PROCESS ServerType %] server[% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-
-[% IF op == 'list' %]
-    [% Asset.css("css/datatables.css") | $raw %]
-[% END %]
-
 </head>
 
 <body id="admin_z3950servers" class="admin">
