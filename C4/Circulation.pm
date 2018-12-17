@@ -1356,30 +1356,24 @@ sub AddIssue {
             }
             $datedue->truncate( to => 'minute' );
 
-            $issue =
-              Koha::Checkouts->find( { itemnumber => $item->{'itemnumber'} } );
+            my $issue_attributes = {
+                borrowernumber  => $borrower->{'borrowernumber'},
+                issuedate       => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
+                date_due        => $datedue->strftime('%Y-%m-%d %H:%M:%S'),
+                branchcode      => C4::Context->userenv->{'branch'},
+                onsite_checkout => $onsite_checkout,
+                auto_renew      => $auto_renew ? 1 : 0,
+            };
+
+            $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
             if ($issue) {
-                $issue->set(
-                    {
-                        borrowernumber => $borrower->{'borrowernumber'},
-                        issuedate  => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
-                        date_due   => $datedue->strftime('%Y-%m-%d %H:%M:%S'),
-                        branchcode => C4::Context->userenv->{'branch'},
-                        onsite_checkout => $onsite_checkout,
-                        auto_renew      => $auto_renew ? 1 : 0
-                    }
-                )->store;
+                $issue->set($issue_attributes)->store;
             }
             else {
                 $issue = Koha::Checkout->new(
                     {
-                        borrowernumber => $borrower->{'borrowernumber'},
-                        itemnumber     => $item->{'itemnumber'},
-                        issuedate  => $issuedate->strftime('%Y-%m-%d %H:%M:%S'),
-                        date_due   => $datedue->strftime('%Y-%m-%d %H:%M:%S'),
-                        branchcode => C4::Context->userenv->{'branch'},
-                        onsite_checkout => $onsite_checkout,
-                        auto_renew      => $auto_renew ? 1 : 0
+                        itemnumber => $item->{itemnumber},
+                        %$issue_attributes,
                     }
                 )->store;
             }
