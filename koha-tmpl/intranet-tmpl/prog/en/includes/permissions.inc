@@ -57,6 +57,7 @@
     [%- CASE 'manage_didyoumean' -%]<span>Manage Did you mean? configuration</span>
     [%- CASE 'manage_column_config' -%]<span>Manage column configuration</span>
     [%- CASE 'manage_audio_alerts' -%]<span>Manage audio alerts</span>
+    [%- CASE 'manage_additional_fields' -%]<span>Manage additional fields for baskets or subscriptions (requires edit_subscription or order_manage permissions)</span>
     [%- CASE 'manage_sms_providers' -%]<span>Manage SMS cellular providers</span>
     [%- CASE 'manage_usage_stats' -%]<span>Manage usage statistics settings</span>
     [%- CASE 'manage_mana' -%]<span>Manage Mana KB content sharing</span>

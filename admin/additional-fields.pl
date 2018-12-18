@@ -26,19 +26,28 @@ use Koha::AdditionalFields;
 
 my $input = new CGI;
 
+my %flagsrequired;
+$flagsrequired{parameters} = 'manage_additional_fields';
+
+my $tablename = $input->param('tablename');
+my $op = $input->param('op') // ( $tablename ? 'list' : 'list_tables' );
+
+if( $op ne 'list_tables' ){
+    $flagsrequired{acquisition} = 'order_manage' if $tablename eq 'aqbasket';
+    $flagsrequired{serials} = 'edit_subscription' if $tablename eq 'subscription';
+}
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
         template_name   => "admin/additional-fields.tt",
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,
-        flagsrequired   => { parameters => 1 },
+        flagsrequired   => \%flagsrequired,
         debug           => 1,
     }
 );
 
-my $tablename = $input->param('tablename');
-my $op = $input->param('op') // ( $tablename ? 'list' : 'list_tables' );
 my $field_id = $input->param('field_id');
 my @messages;
 

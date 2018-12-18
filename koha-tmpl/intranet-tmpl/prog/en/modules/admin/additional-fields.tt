@@ -64,15 +64,23 @@
     [% END %]
 
     [% IF op == 'list_tables' %]
+        [% IF CAN_user_acquisitions_order_manage || CAN_user_serials_edit_subscription %]
         <h3>Additional fields</h3>
         <p>Select a table:</p>
         [% BLOCK table_option %]
             <li><a href="?tablename=[% value | uri %]">[% content | html %] (<tt>[% value | html %]</tt>)</a></li>
         [% END %]
         <ul>
-            [% WRAPPER table_option value="aqbasket" %]Order baskets[% END %]
-            [% WRAPPER table_option value="subscription" %]Subscriptions[% END %]
+            [% IF CAN_user_acquisition_order_manage %]
+                [% WRAPPER table_option value="aqbasket" %]Order baskets[% END %]
+            [% END %]
+            [% IF CAN_user_serials_edit_subscription %]
+                [% WRAPPER table_option value="subscription" %]Subscriptions[% END %]
+            [% END %]
         </ul>
+        [% ELSE %]
+            Additional permissions in the acquisitions or serials modules are required for editing additional fields
+        [% END %]
     [% ELSIF op == 'list' %]
         <h3>Additional fields for '[% tablename | html %]'</h3>
         [% IF fields %]
