@@ -4,7 +4,7 @@
     <div id="toolbar" class="btn-toolbar">
         [% IF ( CAN_user_editauthorities ) %]
             <div class="btn-group">
-                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#">
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#">
                     <i class="fa fa-plus"></i> New authority
                     <span class="caret"></span>
                 </a>
@@ -23,7 +23,7 @@
         [% IF ( authid ) %]
             [% IF ( CAN_user_editauthorities ) %]
                 <div class="btn-group">
-                    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                         <i class="fa fa-pencil"></i> Edit <span class="caret"></span>
                     </button>
                     <ul class="dropdown-menu">
@@ -40,7 +40,7 @@
             [% END %]
 
             <div class="btn-group">
-                <a class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-download"></i> Save
+                <a class="btn btn-default dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-download"></i> Save
                 <span class="caret"></span>
                 </a>
                 <ul class="dropdown-menu">

@@ -4,7 +4,7 @@
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items ||
 CAN_user_serials_create_subscription ) %]
     <div class="btn-group">
-    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New <span class="caret"></span></button>
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New <span class="caret"></span></button>
         <ul class="dropdown-menu">
             [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
              <li><a id="newbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl">New record</a></li>
@@ -29,7 +29,7 @@ CAN_user_serials_create_subscription ) %]
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue || CAN_user_editcatalogue_edit_items || CAN_user_tools_items_batchmod || CAN_user_tools_items_batchdel ) or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
     <div class="btn-group">
-    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
         <ul class="dropdown-menu">
             [% IF CAN_user_editcatalogue_edit_catalogue or ( frameworkcode == 'FA' and CAN_user_editcatalogue_fast_cataloging ) %]
             <li><a id="editbiblio" href="/cgi-bin/koha/cataloguing/addbiblio.pl?biblionumber=[% biblionumber | html %]">Edit record</a></li>
@@ -86,7 +86,7 @@ CAN_user_serials_create_subscription ) %]
 [% END %]
 
     <div class="btn-group">
-    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-download"></i> Save <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="/cgi-bin/koha/catalogue/export.pl?format=bibtex&amp;op=export&amp;bib=[% biblionumber | uri %]">BIBTEX</a></li>
         <li><a href="#" data-toggle="modal" data-target="#exportModal_">Dublin Core</a></li>
@@ -101,25 +101,25 @@ CAN_user_serials_create_subscription ) %]
 
 [% IF ( virtualshelves && intranetbookbag ) %]
     <div class="btn-group">
-    <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">Add to <span class="caret"></span></button>
+    <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">Add to <span class="caret"></span></button>
     <ul class="dropdown-menu">
         <li><a href="#" id="addtocart">Cart</a></li>
         <li><a href="#" id="addtoshelf">List</a></li>
     </ul>
     </div>
 [% ELSIF ( virtualshelves ) %]
-    <div class="btn-group"><a id="addtoshelf" class="btn btn-default btn-sm"><i class="fa fa-list"></i> Add to list</a> </div>
+    <div class="btn-group"><a id="addtoshelf" class="btn btn-default"><i class="fa fa-list"></i> Add to list</a> </div>
 [% ELSIF ( intranetbookbag ) %]
-    <div class="btn-group"><a id="addtocart" class="btn btn-default btn-sm"><i class="fa fa-shopping-cart"></i> Add to cart</a> </div>
+    <div class="btn-group"><a id="addtocart" class="btn btn-default"><i class="fa fa-shopping-cart"></i> Add to cart</a> </div>
 [% END %]
 
-    <div class="btn-group"><a id="printbiblio" class="btn btn-default btn-sm"><i class="fa fa-print"></i> Print</a></div>
+    <div class="btn-group"><a id="printbiblio" class="btn btn-default"><i class="fa fa-print"></i> Print</a></div>
 
 [% IF ( CAN_user_reserveforothers ) %]
     [% UNLESS ( norequests ) %]
         [% IF ( holdfor ) %]
             <div class="btn-group">
-                <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+                <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                     <i class="fa fa-sticky-note-o"></i>
                     Place hold
                     <span class="caret"></span>
@@ -130,13 +130,13 @@ CAN_user_serials_create_subscription ) %]
                 </ul>
             </div>
         [% ELSE %]
-            <div class="btn-group"><a id="placehold" class="btn btn-default btn-sm" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
+            <div class="btn-group"><a id="placehold" class="btn btn-default" href="/cgi-bin/koha/reserve/request.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-sticky-note-o"></i> Place hold</a></div>
         [% END %]
     [% END %]
 [% END %]
 
 [% IF Koha.Preference('ArticleRequests') %]
-    <div class="btn-group"><a id="placehold" class="btn btn-default btn-sm" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
+    <div class="btn-group"><a id="placehold" class="btn btn-default" href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% biblionumber | html %]"><i class="fa fa-file-text-o"></i> Request article</a></div>
 [% END %]
 
 [% FOREACH p IN plugins %]

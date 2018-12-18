@@ -135,11 +135,11 @@
 <div id="toolbar" class="btn-toolbar">
 [% UNLESS ( check_member ) %]
     [% IF quickadd && opadd %]
-        <button class="btn btn-default btn-sm toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
+        <button class="btn btn-default toggler" id="save_quick_add" name="save"><i class="fa fa-save"></i> Save</button>
     [% END %]
-    <button class="btn btn-default btn-sm toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
+    <button class="btn btn-default toggler" id="saverecord" name="save" ><i class="fa fa-save"></i> Save</button>
     [% IF opadd %]
-        <a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
+        <a class="btn btn-default" href="/cgi-bin/koha/members/member.pl" class="toggler save_entryform">
     [% ELSE %]
         <a class="btn btn-default btn-sm" href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrowernumber | html %]">
     [% END %]

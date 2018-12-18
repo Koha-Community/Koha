@@ -7,26 +7,26 @@
 <div id="toolbar" class="btn-toolbar">
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF ( guarantor ) %]
-            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;guarantorid=[% guarantor.borrowernumber | html %]&amp;categorycode=[% patron.categorycode | html %]">
+            <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;guarantorid=[% guarantor.borrowernumber | html %]&amp;categorycode=[% patron.categorycode | html %]">
         [% ELSE %]
-            <a id="editpatron" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% patron.categorycode | html %]">
+            <a id="editpatron" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% patron.categorycode | html %]">
         [% END %]
         <i class="fa fa-pencil"></i> Edit</a>
     [% END %]
 
     [% IF CAN_user_borrowers_edit_borrowers %]
         [% IF patron.is_adult AND Koha.Preference("borrowerRelationship") %]
-            <a id="addchild" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> Add child</a>
+            <a id="addchild" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=add&amp;guarantorid=[% patron.borrowernumber | html %]"><i class="fa fa-plus"></i> Add child</a>
         [% END %]
         [% IF CAN_user_borrowers_edit_borrowers %]
-            <a id="changepassword" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | html %]"><i class="fa fa-lock"></i> Change password</a>
+            <a id="changepassword" class="btn btn-default" href="/cgi-bin/koha/members/member-password.pl?member=[% patron.borrowernumber | html %]"><i class="fa fa-lock"></i> Change password</a>
         [% END %]
-        <a id="duplicate" class="btn btn-default btn-sm" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% patron.categorycode | html %]"><i class="fa fa-copy"></i> Duplicate</a>
+        <a id="duplicate" class="btn btn-default" href="/cgi-bin/koha/members/memberentry.pl?op=duplicate&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% patron.categorycode | html %]"><i class="fa fa-copy"></i> Duplicate</a>
     [% END %]
 
     [% IF CAN_user_circulate_circulate_remaining_permissions %]
     <div class="btn-group">
-        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-print"></i> Print <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li><a id="printsummary" href="#">Print summary</a></li>
                 <li><a id="printslip" href="#">Print slip</a></li>
@@ -39,14 +39,14 @@
     [% END %]
 
     [% IF ( CAN_user_reserveforothers ) %]
-        <a id="searchtohold" class="btn btn-default btn-sm" href="#"><i class="fa fa-search"></i> Search to hold</a>
+        <a id="searchtohold" class="btn btn-default" href="#"><i class="fa fa-search"></i> Search to hold</a>
     [% END %]
 
-    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default btn-sm"><i class="fa fa-comment-o"></i> Add message</a>
+    <a id="addnewmessageLabel" href="#add_message_form" data-toggle="modal" class="btn btn-default"><i class="fa fa-comment-o"></i> Add message</a>
 
          <div class="btn-group">
-        <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
-            <ul class="dropdown-menu">
+        <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">More <span class="caret"></span></button>
+            <ul class="dropdown-menu dropdown-menu-right">
                 [% IF CAN_user_borrowers_edit_borrowers %]
                     <li><a id="renewpatron" href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | html %]&amp;destination=[% destination | html %]&amp;reregistration=y">Renew patron</a></li>
                 [% ELSE %]

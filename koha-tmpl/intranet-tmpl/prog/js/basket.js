@@ -1,3 +1,5 @@
+/* global MSG_BASKET_EMPTY MSG_RECORD_IN_BASKET MSG_RECORD_ADDED MSG_NRECORDS_IN_BASKET MSG_NRECORDS_ADDED MSG_NO_RECORD_ADDED MSG_RECORD_REMOVED MSG_CONFIRM_DEL_BASKET MSG_CONFIRM_DEL_RECORDS MSG_IN_YOUR_CART MSG_NO_RECORD_SELECTED MSG_ITEM_IN_CART MSG_ITEM_NOT_IN_CART */
+
 //////////////////////////////////////////////////////////////////////////////
 // BASIC FUNCTIONS FOR COOKIE MANAGEMENT //
 //////////////////////////////////////////////////////////////////////////////
@@ -221,6 +223,7 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
 
 function showCartUpdate(msg){
 	// set body of popup window
+    console.log( msg );
 	$("#cartDetails").html(msg);
 	showCart();
     setTimeout(hideCart,2000);
@@ -455,17 +458,20 @@ function vShelfAdd(biblist) {
 }
 
 function showCart(){
-		var position = $("#cartmenulink").offset();
-        var toolbarh = $(".floating").outerHeight();
-        var scrolld = $(window).scrollTop();
-		var top = position.top + $("#cartmenulink").outerHeight();
-        if( scrolld > top ){
-            top = scrolld + toolbarh + 15;
-        }
-        var left = position.left;
-		$("#cartDetails").css("position","absolute").css("top",top);
-		$("#cartDetails").css("position","absolute").css("left",left);
-		$("#cartDetails").fadeIn("fast");
+    var position = $("#cartmenulink").offset();
+    var toolbarh = $(".floating").outerHeight();
+    var scrolld = $(window).scrollTop();
+    var top = position.top + $("#cartmenulink").outerHeight();
+    if( scrolld > top ){
+        top = scrolld + toolbarh + 15;
+    }
+    var left = position.left;
+    $("#cartDetails")
+        .css("position","absolute")
+        .css("top",top)
+        .css("left",left)
+        .css("z-index",1000);
+    $("#cartDetails").fadeIn("fast");
 }
 
 function hideCart(){
@@ -496,6 +502,9 @@ function updateAllLinks(target){
 }
 
 $(document).ready(function(){
-	$("#cartmenulink").click(function(){ openBasket(); return false; });
+    $("#cartmenulink").click(function( e ){
+        e.preventDefault();
+        openBasket();
+    });
 	if(basketcount){ updateBasket(basketcount); }
 });

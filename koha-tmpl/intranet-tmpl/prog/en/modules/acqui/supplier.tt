@@ -115,11 +115,11 @@
 [% IF ( enter ) %]
     <form action="updatesupplier.pl" name="updatesupplier" style="display:block" class="validated" method="post">
         <div id="toolbar" class="btn-toolbar">
-            <button class="btn btn-default btn-sm" type="submit"><i class="fa fa-save"></i> Save</button>
+            <button class="btn btn-default" type="submit"><i class="fa fa-save"></i> Save</button>
             [% IF ( booksellerid ) %]
-                <a class="btn btn-default btn-sm cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">
+                <a class="btn btn-default cancel" href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% booksellerid | html %]">
             [% ELSE %]
-                <a class="btn btn-default btn-sm cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
+                <a class="btn btn-default cancel" href="/cgi-bin/koha/acqui/acqui-home.pl">
             [% END %] <i class="fa fa-remove"></i> Cancel</a>
         </div>
 

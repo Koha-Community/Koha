@@ -1,8 +1,13 @@
 [% USE raw %]
 [% USE Branches %]
 [% USE Koha %]
-<div id="header" class="navbar navbar-default">
-    <div class="container-fluid">
+<nav class="navbar">
+    <div class="navbar-header">
+        <a href="#" class="header-menu-link collapsed" data-toggle="collapse" data-target="#header" aria-expanded="false" aria-controls="header">
+            <i class="fa fa-bars"></i> Menu
+        </a>
+    </div>
+    <div id="header" class="navbar-collapse collapse">
         <ul id="toplevelmenu" class="nav navbar-nav">
             [% IF ( CAN_user_circulate_circulate_remaining_permissions ) %]<li><a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a></li>[% END %]
             [% IF CAN_user_borrowers_edit_borrowers %]<li><a href="/cgi-bin/koha/members/members-home.pl">Patrons</a></li>[% END %]
@@ -55,7 +60,8 @@
                 </ul>
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right">
+    </div>
+        <ul id="user-menu" class="nav navbar-nav navbar-right">
             [% IF ( loggedinusername ) %]
             <li class="dropdown">
                 <a href="#" id="logged-in-menu" role="button" class="dropdown-toggle" data-toggle="dropdown">
@@ -82,7 +88,7 @@
                     </span>
                     <b class="caret"></b>
                 </a>
-                <ul class="dropdown-menu dropdown-menu-left" role="menu" aria-labelledby="logged-in-menu">
+                <ul class="dropdown-menu dropdown-menu-right" role="menu" aria-labelledby="logged-in-menu">
 
                     <li class="loggedin-menu-label">
                         Logged in as:<br />
@@ -148,7 +154,8 @@
             </li>
             [% END %]
         </ul>
-    </div>
+
     [% IF Koha.Preference('showLastPatron') %][% INCLUDE 'last-borrower.inc' %][% END %]
     [% IF ( intranetbookbag ) %]<div id="cartDetails">Your cart is empty.</div>[% END %]
-</div>
+
+</nav>

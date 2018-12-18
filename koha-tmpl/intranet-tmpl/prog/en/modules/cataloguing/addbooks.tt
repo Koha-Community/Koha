@@ -19,10 +19,10 @@
 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
   <div id="toolbar" class="btn-toolbar">
         [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
-            <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default btn-sm"><i class="fa fa-pencil"></i> Advanced editor</a>
+            <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil"></i> Advanced editor</a>
         [% END %]
         <div class="btn-group">
-            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New record <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-plus"></i> New record <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li><a href="/cgi-bin/koha/cataloguing/addbiblio.pl?frameworkcode=">Default framework</a></li>
                 [% FOREACH framework IN frameworks %]
@@ -32,8 +32,8 @@
         </div>
         [% IF servers.count > 0 %]
         <div class="btn-group">
-            <button class="btn btn-default btn-sm" id="z3950search"><i class="fa fa-search"></i> New from Z39.50/SRU</button>
-            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-default" id="z3950search"><i class="fa fa-search"></i> New from Z39.50/SRU</button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
                 <span class="caret"></span>
             </button>
             <ul class="dropdown-menu">

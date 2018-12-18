@@ -54,8 +54,8 @@
             <div class="col-md-8 col-md-offset-2">
 
     <div id="toolbar" class="btn-toolbar">
-        <a class="btn btn-default btn-sm" id="editsuggestion" href="suggestion.pl?op=edit&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-pencil"></i> Edit</a>
-        <a class="btn btn-default btn-sm deletesuggestion" href="suggestion.pl?op=delete&amp;edit_field=[% suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a>
+        <a class="btn btn-default" id="editsuggestion" href="suggestion.pl?op=edit&amp;suggestionid=[% suggestionid | html %]"><i class="fa fa-pencil"></i> Edit</a>
+        <a class="btn btn-default deletesuggestion" href="suggestion.pl?op=delete&amp;edit_field=[% suggestionid | html %]"><i class="fa fa-trash"></i> Delete</a>
     </div>
 
     <fieldset class="rows">
@@ -411,7 +411,7 @@
 
 [% IF ( op_else ) %]
 <div id="toolbar" class="btn-toolbar">
-    <a class="btn btn-default btn-sm" id="newsuggestion" href="suggestion.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a>
+    <a class="btn btn-default" id="newsuggestion" href="suggestion.pl?op=add"><i class="fa fa-plus"></i> New purchase suggestion</a>
 </div>
 
 <h1>Suggestions management</h1>

@@ -29,19 +29,19 @@
 <div id="editor">
     <input id="import-records-input" type="file" style="display: none">
     <div id="toolbar" class="btn-toolbar">
-        <button class="btn btn-default btn-sm" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
+        <button class="btn btn-default" id="new-record" title="Open fresh record"><i class="fa fa-plus"></i> <span>New record</span></button>
         <div class="btn-group">
-            <button class="btn btn-default btn-sm" id="save-record" title="Save current record (Ctrl-S)"><i class="fa fa-hdd-o"></i> <span>Save</span></button>
-            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown">
+            <button class="btn btn-default" id="save-record" title="Save current record (Ctrl-S)"><i class="fa fa-hdd-o"></i> <span>Save</span></button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown">
             <span class="caret"></span>
             </button>
             <ul class="dropdown-menu" id="save-dropdown">
             </ul>
         </div>
-        <button class="btn btn-default btn-sm" id="import-records" title="Import an MARC (ISO 2709) or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
-        <button class="btn btn-default btn-sm" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
+        <button class="btn btn-default" id="import-records" title="Import an MARC (ISO 2709) or MARCXML record"><i class="fa fa-download"></i> <span>Import record...</span></button>
+        <button class="btn btn-default" id="open-macros" title="Run and edit macros"><i class="fa fa-play"></i> <span>Macros...</span></button>
         <div class="btn-group">
-            <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
             <ul id="prefs-menu" class="dropdown-menu">
                 <li><a id="switch-editor" href="#">Switch to basic editor</a></li>
                 <li><a id="set-field-widgets" href="#"></a></li>
@@ -76,8 +76,8 @@
                 <li><a class="set-font" style="font-family: Monaco" href="#">Monaco</a></li>
             </ul>
         </div>
-        <button class="btn btn-default btn-sm" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
-        <button class="btn btn-default btn-sm" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa fa-keyboard-o"></i> Keyboard shortcuts <span class="caret"></span></button>
+        <button class="btn btn-default" id="show-alerts" title="Previous alerts"><i class="fa fa-bell"></i> Alerts <span class="caret"></span></button>
+        <button class="btn btn-default" id="show-shortcuts" title="Supported keyboard shortcuts"><i class="fa fa-keyboard-o"></i> Keyboard shortcuts <span class="caret"></span></button>
     </div>
     [%# CodeMirror instance will be inserted here %]
     <div id="statusbar">
