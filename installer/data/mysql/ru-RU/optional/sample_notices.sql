@@ -1,5 +1,3 @@
-truncate letter;
-
 INSERT INTO `letter`
 (module, code, name, title, content, message_transport_type)
 VALUES
