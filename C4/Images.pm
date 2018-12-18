@@ -179,8 +179,8 @@ sub _scale_image {
           and warn "Reducing image by "
           . ( $percent_reduce * 100 )
           . "\% or to $width_reduce pix X $height_reduce pix";
-        my $newimage = GD::Image->new( $width_reduce, $height_reduce, 1 )
-          ;        #'1' creates true color image...
+        my $newimage = GD::Image->new( $width_reduce, $height_reduce, $image->trueColor )
+          ;        # if third is set, creates true color image
         $newimage->copyResampled( $image, 0, 0, 0, 0, $width_reduce,
             $height_reduce, $width, $height );
         return $newimage;
