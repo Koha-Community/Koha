@@ -53,11 +53,6 @@ export OPAC_CGI_DIR="__OPAC_CGI_DIR__/opac"
 export PERL_MODULE_DIR="__PERL_MODULE_DIR__"
 export PLACK_DEBUG #This is set if debug-parameter is given or if mode is development
 
-#Make sure the pid-dir and log-dir exists + set owners and permissions
-mkdir -p $RUNDIR $LOGDIR
-chmod 770 $RUNDIR $LOGDIR
-chown $DAEMON_USER:$DAEMON_GROUP $LOGDIR $RUNDIR
-
 # include helper functions
 if [ -f "$HELPER_FUNCTIONS" ]; then
     . "$HELPER_FUNCTIONS"
