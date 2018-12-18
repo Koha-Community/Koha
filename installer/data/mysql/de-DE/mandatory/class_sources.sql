@@ -24,13 +24,17 @@ INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`
                                ('dewey', 'Standard-Sortierregeln für DDC', 'Dewey'),
                                ('lcc', 'Standard-Sortierregeln für LCC', 'LCC'),
                                ('generic', 'Generische Sortierregeln für Signaturen', 'Generic');
-
+-- splitting rules
+INSERT INTO `class_split_rules` (`class_split_rule`, `description`, `split_routine`) VALUES
+                                ('dewey', 'Umbruchregeln für DDC', 'Dewey'),
+                                ('lcc', 'Umbruchregeln für LCC', 'LCC'),
+                                ('generic', 'Generische Umbruchregeln', 'Generic');
 
 -- classification schemes or sources
-INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`) VALUES
-                            ('ddc', 'Dewey-Decimalklassifikation (DDC)', 1, 'dewey'),
-                            ('lcc', 'Klassifikation der Library of Congress (LCC)', 1, 'lcc'),
-                            ('udc', 'Universelle Dezimalklassifikation (UDC)', 0, 'generic'),
-                            ('sudocs', 'SuDoc-Klassifikation (U.S. GPO)', 0, 'generic'),
-                            ('anscr', 'ANSCR (Tonaufnahmen)', 0, 'generic'),
-                            ('z', 'Andere/Generische Klassifikation', 0, 'generic');
+INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`, `class_split_rule`) VALUES
+                            ('ddc', 'Dewey-Decimalklassifikation (DDC)', 1, 'dewey', 'dewey'),
+                            ('lcc', 'Klassifikation der Library of Congress (LCC)', 1, 'lcc', 'lcc'),
+                            ('udc', 'Universelle Dezimalklassifikation (UDC)', 0, 'generic', 'generic'),
+                            ('sudocs', 'SuDoc-Klassifikation (U.S. GPO)', 0, 'generic', 'generic'),
+                            ('anscr', 'ANSCR (Tonaufnahmen)', 0, 'generic', 'generic'),
+                            ('z', 'Andere/Generische Klassifikation', 0, 'generic', 'generic');

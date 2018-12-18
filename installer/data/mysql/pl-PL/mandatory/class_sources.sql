@@ -25,12 +25,17 @@ INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`
                                ('lcc', 'Default filing rules for LCC', 'LCC'),
                                ('generic', 'Generic call number filing rules', 'Generic');
 
+-- splitting rules
+INSERT INTO `class_split_rules` (`class_split_rule`, `description`, `split_routine`) VALUES
+                               ('dewey', 'Default splitting rules for DDC', 'Dewey'),
+                               ('lcc', 'Default splitting rules for LCC', 'LCC'),
+                               ('generic', 'Generic call number splitting rules', 'Generic');
 
 -- classification schemes or sources
-INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`) VALUES
-                            ('ddc', 'Dewey Decimal Classification', 1, 'dewey'),
-                            ('lcc', 'Library of Congress Classification', 1, 'lcc'),
-                            ('udc', 'Universal Decimal Classification', 0, 'generic'),
-                            ('sudocs', 'SuDoc Classification (U.S. GPO)', 0, 'generic'),
-                            ('anscr', 'ANSCR (Sound Recordings)', 0, 'generic'),
-                            ('z', 'Other/Generic Classification Scheme', 0, 'generic');
+INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`, `class_split_rule`) VALUES
+                            ('ddc', 'Dewey Decimal Classification', 1, 'dewey', 'dewey'),
+                            ('lcc', 'Library of Congress Classification', 1, 'lcc', 'lcc'),
+                            ('udc', 'Universal Decimal Classification', 0, 'generic', 'generic'),
+                            ('sudocs', 'SuDoc Classification (U.S. GPO)', 0, 'generic', 'generic'),
+                            ('anscr', 'ANSCR (Sound Recordings)', 0, 'generic', 'generic'),
+                            ('z', 'Other/Generic Classification Scheme', 0, 'generic', 'generic');

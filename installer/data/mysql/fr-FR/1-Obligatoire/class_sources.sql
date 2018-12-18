@@ -25,12 +25,17 @@ INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`
                                ('lcc', 'Régle de classement par déf. Bibliothèque du Congrès', 'LCC'),
                                ('generic', 'Règle de classement par défaut générique', 'Generic');
 
+-- splitting rules
+INSERT INTO `class_split_rules` (`class_split_rule`, `description`, `split_routine`) VALUES
+                               ('dewey', 'Default splitting rules for DDC', 'Dewey'),
+                               ('lcc', 'Default splitting rules for LCC', 'LCC'),
+                               ('generic', 'Generic call number splitting rules', 'Generic');
 
 -- classification schemes or sources
-INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`) VALUES
-                            ('ddc', 'Classification décimale Dewey', 1, 'dewey'),
-                            ('lcc', 'Classification de la Bibliothèque du Congrès', 1, 'lcc'),
-                            ('udc', 'Classification décimale universelle', 0, 'generic'),
-                            ('sudocs', 'SuDoc Classification (U.S. GPO)', 0, 'generic'),
-                            ('anscr', 'ANSCR (Sound Recordings)', 0, 'generic'),
-                            ('z', 'Autre schéma générique de classification', 0, 'generic');
+INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`, `class_split_rule`) VALUES
+                            ('ddc', 'Classification décimale Dewey', 1, 'dewey', 'dewey'),
+                            ('lcc', 'Classification de la Bibliothèque du Congrès', 1, 'lcc', 'lcc'),
+                            ('udc', 'Classification décimale universelle', 0, 'generic', 'generic'),
+                            ('sudocs', 'SuDoc Classification (U.S. GPO)', 0, 'generic', 'generic'),
+                            ('anscr', 'ANSCR (Sound Recordings)', 0, 'generic', 'generic'),
+                            ('z', 'Autre schéma générique de classification', 0, 'generic', 'generic');

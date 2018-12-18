@@ -26,12 +26,19 @@ INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`
                                ('lcc', 'Regole di default per LCC', 'LCC'),
                                ('generic', 'Regole generiche per la collocazione con classificazione', 'Generic');
 
+-- splitting rules
+INSERT INTO `class_split_rules` (`class_split_rule`, `description`, `split_routine`) VALUES
+                               ('dewey', 'Default splitting rules for DDC', 'Dewey'),
+                               ('lcc', 'Default splitting rules for LCC', 'LCC'),
+                               ('generic', 'Generic call number splitting rules', 'Generic');
 
 -- classification schemes or sources
-INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`) VALUES
-                            ('ddc', 'Classificazione  decimale Dewey', 1, 'dewey'),
-                            ('lcc', 'Classificazione della Library of Congress', 1, 'lcc'),
-                            ('udc', 'Classificazione Decimale Universale', 0, 'generic'),
-                            ('z', 'Altro sistema di classificazione', 0, 'generic');
+INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`, `class_split_rule`) VALUES
+                            ('ddc', 'Classificazione  decimale Dewey', 1, 'dewey', 'dewey'),
+                            ('lcc', 'Classificazione della Library of Congress', 1, 'lcc', 'lcc'),
+                            ('udc', 'Classificazione Decimale Universale', 0, 'generic', 'generic'),
+                            ('sudocs', 'SuDoc Classification (U.S. GPO)', 0, 'generic', 'generic'),
+                            ('anscr', 'ANSCR (Sound Recordings)', 0, 'generic', 'generic'),
+                            ('z', 'Altro sistema di classificazione', 0, 'generic', 'generic');
 
 SET FOREIGN_KEY_CHECKS=1;
