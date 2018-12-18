@@ -25,7 +25,7 @@ INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`
                                ('dewey', 'Default filing rules for DDC', 'Dewey'),
                                ('lcc', 'Default filing rules for LCC', 'LCC'),
                                ('generic', 'Generic call number filing rules', 'Generic');
-
+-- splitting rules
 INSERT INTO `class_split_rules` (`class_split_rule`, `description`, `split_routine`) VALUES
                                ('dewey', 'Default splitting rules for DDC', 'Dewey'),
                                ('lcc', 'Default splitting rules for LCC', 'LCC'),

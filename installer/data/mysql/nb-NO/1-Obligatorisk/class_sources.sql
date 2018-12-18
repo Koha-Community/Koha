@@ -25,12 +25,17 @@ INSERT INTO `class_sort_rules` (`class_sort_rule`, `description`, `sort_routine`
                                ('lcc', 'Standard sortering for LCC', 'LCC'),
                                ('generic', 'Generelle sorteringsregler', 'Generic');
 
+-- splitting rules
+INSERT INTO `class_split_rules` (`class_split_rule`, `description`, `split_routine`) VALUES
+                               ('dewey', 'Default splitting rules for DDC', 'Dewey'),
+                               ('lcc', 'Default splitting rules for LCC', 'LCC'),
+                               ('generic', 'Generic call number splitting rules', 'Generic');
 
 -- classification schemes or sources
-INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`) VALUES
-                            ('ddc', 'Dewey desimalklassifikasjon', 1, 'dewey'),
-                            ('lcc', 'Library of Congress klassifikasjon', 1, 'lcc'),
-                            ('udc', 'Universell desimalklassifikasjon', 0, 'generic'),
-                            ('sudocs', 'SuDoc klassifikasjon (U.S. GPO)', 0, 'generic'),
-                            ('anscr', 'ANSCR (Lydopptak)', 0, 'generic'),
-                            ('z', 'Andre klassifikasjonsskjema', 0, 'generic');
+INSERT INTO `class_sources` (`cn_source`, `description`, `used`, `class_sort_rule`, `class_split_rule`) VALUES
+                            ('ddc', 'Dewey desimalklassifikasjon', 1, 'dewey', 'dewey'),
+                            ('lcc', 'Library of Congress klassifikasjon', 1, 'lcc', 'lcc'),
+                            ('udc', 'Universell desimalklassifikasjon', 0, 'generic', 'generic'),
+                            ('sudocs', 'SuDoc klassifikasjon (U.S. GPO)', 0, 'generic', 'generic'),
+                            ('anscr', 'ANSCR (Lydopptak)', 0, 'generic', 'generic'),
+                            ('z', 'Andre klassifikasjonsskjema', 0, 'generic', 'generic');
