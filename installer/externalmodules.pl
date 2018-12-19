@@ -4,10 +4,9 @@
 # It provides you not only the list of modules BUT ALSO the files that uses those modules.
 # utf8 or warnings or other lib use are not taken into account at the moment.
 
-
-use strict;
-use warnings;
+use Modern::Perl;
 use C4::Context;
+
 my $dir=C4::Context->config('intranetdir');
 qx(grep -r "^ *use" $dir | grep -v "C4\|strict\|vars" >/tmp/modulesKoha.log);
 $dir=C4::Context->config('opacdir');
