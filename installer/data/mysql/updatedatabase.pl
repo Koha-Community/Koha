@@ -27,8 +27,7 @@
 
 # NOTE: Please keep the version in kohaversion.pl up-to-date!
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 use feature 'say';
 

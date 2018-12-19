@@ -3,8 +3,7 @@
 # Part of the Koha Library Software www.koha-community.org
 # Licensed under the GPL.
 
-use strict;
-use warnings;
+use Modern::Perl;
 
 # CPAN modules
 use DBI;
