@@ -321,7 +321,7 @@ sub unblessed_all_relateds {
 
     my %data;
     my $related_resultsets = $self->_result->{related_resultsets} || {};
-    my $rs = $self;
+    my $rs = $self->_result;
     while ( $related_resultsets and %$related_resultsets ) {
         my @relations = keys %{ $related_resultsets };
         if ( @relations ) {
@@ -404,7 +404,7 @@ sub AUTOLOAD {
         }
     }
 
-    my @known_methods = qw( is_changed id in_storage get_column discard_changes update related_resultset make_column_dirty );
+    my @known_methods = qw( is_changed id in_storage get_column discard_changes update make_column_dirty );
 
     Koha::Exceptions::Object::MethodNotCoveredByTests->throw(
         error      => sprintf("The method %s->%s is not covered by tests!", ref($self), $method),
