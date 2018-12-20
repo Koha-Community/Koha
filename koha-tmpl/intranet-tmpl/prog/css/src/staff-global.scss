@@ -2268,9 +2268,27 @@ li {
 .thumbnail {
     display: block;
     margin: auto;
+}
 
-    > li {
+.thumbnails {
+    li {
+        display: inline-block;
         list-style-type: none;
+    }
+
+    .remove {
+        border-top: 1px solid #EEE;
+        display: block;
+        font-size: 90%;
+        margin: 4px -4px 2px -4px;
+        padding-top: .5em;
+        text-align: center;
+    }
+
+    & + p {
+        border-top: 1px solid #eee;
+        margin-top: 1em;
+        padding-top: 1em;
     }
 }
 
