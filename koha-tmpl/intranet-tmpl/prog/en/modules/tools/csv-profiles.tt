@@ -193,6 +193,15 @@
                 </li>
 
                 <li class="marc_specific">
+                    <label for="opac_option">Show option in OPAC: </label>
+                    [% IF csv_profile.opac_option %]
+                        <input type="checkbox" name="opac_option" id="opac_option" value="1" checked="checked">
+                    [% ELSE %]
+                        <input type="checkbox" name="opac_option" id="opac_option" value="1">
+                    [% END %]
+                </li>
+
+                <li class="marc_specific">
                     <label for="marc_content" class="required">Profile MARC fields: </label>
                     <textarea cols="50" rows="2" name="marc_content" id="marc_content">[% csv_profile.content | html %]</textarea>
                     <span class="required">Required</span>

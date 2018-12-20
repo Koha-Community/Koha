@@ -691,7 +691,8 @@ CREATE TABLE `export_format` (
   `encoding` varchar(255) NOT NULL DEFAULT 'utf8',
   `type` varchar(255) DEFAULT 'marc',
   `used_for` varchar(255) DEFAULT 'export_records',
-  PRIMARY KEY  (`export_format_id`)
+  `opac_option` TINYINT(1) NOT NULL DEFAULT 0,
+  PRIMARY KEY (`export_format_id`)
 ) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci COMMENT='Used for CSV export';
 
 --
