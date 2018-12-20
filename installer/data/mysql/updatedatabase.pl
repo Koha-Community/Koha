@@ -17199,6 +17199,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22024 - Add missing splitting rule definitions)\n";
 }
 
+$DBversion = "18.11.01.000";
+if ( CheckVersion($DBversion) ) {
+    print "Upgrade to $DBversion done (18.11.01 release)\n";
+    SetVersion($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
