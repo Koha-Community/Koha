@@ -95,7 +95,7 @@
                     <select name="shelf_number" id="shelf_number">
                       <option value="">Select a list</option>
                         [% FOREACH list IN lists %]
-                          <option value="[% list.shelfnumber %]">[% list.shelfname %]</option>
+                          <option value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
                         [% END %]
                       </option>
                     </select>
