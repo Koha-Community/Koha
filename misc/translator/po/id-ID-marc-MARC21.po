@@ -6,9 +6,9 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2018-11-09 11:48-0300\n"
-"PO-Revision-Date: 2018-06-02 09:09+0000\n"
-"Last-Translator: ksorbo <keith@thesorbos.com>\n"
+"POT-Creation-Date: 2018-12-16 09:27-0300\n"
+"PO-Revision-Date: 2018-12-20 11:32+0000\n"
+"Last-Translator: ashimema <martin.renvoize@ptfs-europe.com>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: id\n"
 "MIME-Version: 1.0\n"
@@ -16,7 +16,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=1; plural=0;\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1527930544.427403\n"
+"X-POOTLE-MTIME: 1545305536.824312\n"
 "X-Pootle-Path: /id/18.05/id-ID-marc-MARC21.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -128,9 +128,9 @@ msgstr "%sHasil %s ke %s terhadap %s %sTidak ada hasil yang ditemukan %s"
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACResults.xsl:1113
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:903
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:906
-#, fuzzy, c-format
+#, c-format
 msgid "&amp;biblionumber="
-msgstr "[% biblionumber |url %]"
+msgstr "&amp;biblionumber="
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_linking_section.tt:47
 #, c-format
@@ -256,14 +256,14 @@ msgid "/cgi-bin/koha/catalogue/search.pl?q=Host-item:"
 msgstr "/cgi-bin/koha/catalogue/search.pl?q=Host-item:"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slimUtils.xsl:288
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=Provider:"
-msgstr "/cgi-bin/koha/catalogue/search.pl?q=rcn:"
+msgstr "/cgi-bin/koha/katalog/pencarian.pl?q=rcn:"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:343
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/catalogue/search.pl?q=Provider:\""
-msgstr "/cgi-bin/koha/catalogue/search.pl?q=se,phr:\""
+msgstr "/cgi-bin/koha/katalog/mencari.pl?q=se,phr:\""
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:656
 #: intranet-tmpl/prog/en/xslt/MARC21slim2intranetDetail.xsl:715
@@ -363,9 +363,9 @@ msgstr "/cgi-bin/koha/opac-search.pl?q=Host-item:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:286
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:360
-#, fuzzy, c-format
+#, c-format
 msgid "/cgi-bin/koha/opac-search.pl?q=Provider:"
-msgstr "/cgi-bin/koha/opac-search.pl?q=rcn:"
+msgstr "/cgi-bin/koha/opac-mencari.pl?q=rcn:"
 
 #: opac-tmpl/bootstrap/en/xslt/MARC21slimUtils.xsl:204
 #: opac-tmpl/bootstrap/en/xslt/MARC21slim2OPACDetail.xsl:728
@@ -764,9 +764,9 @@ msgid "08 Tape Configuration"
 msgstr ""
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_classifications.tt:67
-#, fuzzy, c-format
+#, c-format
 msgid "08- Classification validity"
-msgstr "Klasifikasi: "
+msgstr "validitas klasifikasi"
 
 #: intranet-tmpl/prog/en/modules/cataloguing/value_builder/marc21_field_008_authorities.tt:103
 #, c-format
@@ -2146,9 +2146,9 @@ msgid "Any word"
 msgstr "Setiap kata"
 
 #: intranet-tmpl/prog/en/data/marc21_field_007.xml:424
-#, fuzzy, c-format
+#, c-format
 msgid "Aperture card"
-msgstr "Kartu berlubang "
+msgstr "Kartu berlubang"
 
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS3-1.xsl:2300
 #: intranet-tmpl/prog/en/xslt/MARC21slim2MODS32.xsl:2772
@@ -2345,9 +2345,9 @@ msgid "Bathymetry/soundings"
 msgstr ""
 
 #: intranet-tmpl/prog/en/data/marc21_field_007.xml:1130
-#, fuzzy, c-format
+#, c-format
 msgid "Beta (1/2 in., videocassette)"
-msgstr "kasetvideo "
+msgstr "kaset video "
 
 #: intranet-tmpl/prog/en/data/marc21_field_007.xml:1138
 #, c-format
@@ -2361,15 +2361,14 @@ msgstr ""
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:169
 #: intranet-tmpl/prog/en/data/marc21_field_008.xml:440
-#, fuzzy, c-format
+#, c-format
 msgid "Bibliographic data"
-msgstr "#- Agen bibliografi nasional"
+msgstr "#- data bibliografi"
 
 #. SELECT name=f7
 #: intranet-tmpl/prog/en/includes/cateditor-widgets-marc21.inc:27
-#, fuzzy
 msgid "Bibliographic level"
-msgstr "Bibliografi"
+msgstr "Tingkat Bibliografi"
 
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:61
 #: intranet-tmpl/prog/en/data/marc21_field_006.xml:592
@@ -2527,14 +2526,14 @@ msgid "Braille"
 msgstr "Braille"
 
 #: intranet-tmpl/prog/en/data/marc21_field_007.xml:263
-#, fuzzy, c-format
+#, c-format
 msgid "Braille music format 1"
-msgstr "#- Tidak ada jenis musik braille yang ditentukan"
+msgstr "#-Format musik braille 1"
 
 #: intranet-tmpl/prog/en/data/marc21_field_007.xml:281
-#, fuzzy, c-format
+#, c-format
 msgid "Braille music format 2"
-msgstr "#- Tidak ada jenis musik braille yang ditentukan"
+msgstr "#- Format musik braille 2"
 
 #: intranet-tmpl/prog/en/data/marc21_field_007.xml:299
 #, fuzzy, c-format
