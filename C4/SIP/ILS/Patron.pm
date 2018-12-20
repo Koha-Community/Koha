@@ -65,7 +65,7 @@ sub new {
     $dob and $dob =~ s/-//g;    # YYYYMMDD
     my $dexpiry     = $kp->{dateexpiry};
     $dexpiry and $dexpiry =~ s/-//g;    # YYYYMMDD
-    my $fines_amount = $patron->account->balance;
+    my $fines_amount = $flags->{CHARGES}->{amount}; # This "amount" is the negative balance or the one of the guarantees
     $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
     my $fee_limit = _fee_limit();
     my $fine_blocked = $fines_amount > $fee_limit;
