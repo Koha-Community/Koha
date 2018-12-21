@@ -1,0 +1,35 @@
+{
+  "type": "object",
+  "required": [
+    "borrowernumber",
+    "branchcode"
+  ],
+  "properties": {
+    "borrower_ss_block_id": {
+      "description": "primary key",
+      "type": ["integer", "null"]
+    },
+    "borrowernumber": {
+      "type": "integer",
+      "description": "The user that is blocked"
+    },
+    "branchcode": {
+      "type": "string",
+      "description": "The branch where the block is in effect"
+    },
+    "expirationdate": {
+      "type": ["string", "null"],
+      "description": "When the personal branch-specific block is automatically lifted. If omitted, defaults to now + the default block duration",
+      "format": "date-time"
+    },
+    "created_by": {
+      "type": ["integer", "null"],
+      "description": "The librarian that created the block. If not provided, uses the logged in user."
+    },
+    "created_on": {
+      "type": "string",
+      "description": "When was this block created. If not provided, uses NOW()",
+      "format": "date-time"
+    }
+  }
+}

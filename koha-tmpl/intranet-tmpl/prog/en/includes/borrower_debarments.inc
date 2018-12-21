@@ -1,6 +1,22 @@
 <script type="text/javascript">
    //<![CDATA[
         $(document).ready(function(e){
+
+            let ssbb;
+            if (SSBranchBlocker !== undefined)
+                ssbb = new SSBranchBlocker(
+                    "",
+                    document.getElementById("ssbb-rootTable"),
+                    {
+                      borrowernumber: [% borrowernumber || 'undefined' %],
+                      defaultBlockDuration: [% Koha.Preference('SSBlockDefaultDuration') || 'undefined' %],
+                      locale: '[% lang || 'undefined' %]', [%# lang used to be the language/locale of the page? As it is set in C4::Templates. Now it is default? %]
+                      branches: [% To.json(Branches.all( unfiltered => 1 )) || '{}' %],
+                      rootElementSummaries: document.getElementById("ssbb-rootBlockSummary"),
+                      translations: ssbbTranslations,
+                    },
+                );
+
             $("div#reldebarments .remove_restriction").on("click",function(){
                 return confirm(_("Remove restriction?"));
             });
@@ -27,6 +43,7 @@
 </script>
 
 <div id="reldebarments">
+
     [% IF ( not debarments.defined || debarments.size < 1 ) %]
         <p>Patron is currently unrestricted.</p>
     [% ELSE %]
@@ -92,4 +109,7 @@
             </fieldset>
         </form>
     [% END %]
+
+    <div class="" id="ssbb-rootTable" style="margin-bottom: 2em"></div>
+
 </div>

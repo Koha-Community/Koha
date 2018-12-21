@@ -53,6 +53,15 @@
   "/biblios/{biblionumber}/holdings": {
     "$ref": "paths/biblios.json#/~1biblios~1{biblionumber}~1holdings"
   },
+  "/borrowers/{borrowernumber}/ssblocks": {
+    "$ref": "paths/borrowers.json#/~1borrowers~1{borrowernumber}~1ssblocks"
+  },
+  "/borrowers/{borrowernumber}/ssblocks/{borrower_ss_block_id}": {
+    "$ref": "paths/borrowers.json#/~1borrowers~1{borrowernumber}~1ssblocks~1{borrower_ss_block_id}"
+  },
+  "/borrowers/{borrowernumber}/ssblocks/hasblock/{branchcode}": {
+    "$ref": "paths/borrowers.json#/~1borrowers~1{borrowernumber}~1ssblocks~1hasblock~1{branchcode}"
+  },
   "/borrowers/status": {
     "$ref": "paths/borrowers.json#/~1borrowers~1status"
   },

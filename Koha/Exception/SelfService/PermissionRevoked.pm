@@ -11,6 +11,7 @@ use Exception::Class (
     'Koha::Exception::SelfService::PermissionRevoked' => {
         isa => 'Koha::Exception::SelfService',
         description => "The given borrower has got his self-service usage permission revoked",
+        fields => ['expirationdate'],
     },
 );
 

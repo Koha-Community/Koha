@@ -8,8 +8,10 @@ use Try::Tiny;
 use DateTime;
 use Scalar::Util qw(blessed);
 use File::Basename;
+use Data::Printer;
 
 use C4::SelfService;
+use C4::SelfService::BlockManager;
 use C4::Members::Attributes;
 use Koha::Patrons;
 use Koha::Patron::Debarments;
@@ -32,16 +34,15 @@ my $builder = t::lib::TestBuilder->new;
 my $todayYmd = DateTime->now()->ymd('-');
 my $hours;
 
-C4::Context->_new_userenv('DUMMY SESSION');
-C4::Context->set_userenv(0,0,'SSAPIUser','firstname','surname', 'BRANCH1', 'Library 1', 0, '', '');
-my $userenv = C4::Context->userenv;
+my $userenv;
 
 subtest("Scenario: User with all possible blocks and bans tries to access a Self-Service resource. Testing that exceptions are reported in the correct order.", sub {
-    plan tests => 16;
+    plan tests => 17;
 
     $schema->storage->txn_begin;
     my $debarment; #Debarment of the scenario borrower
     my $f; #Fines of the scenario borrower
+    my $ssblock; #Self-service branch specific block for the borrower
 
     my $user = $builder->build({
         source => 'Borrower',
@@ -56,6 +57,10 @@ subtest("Scenario: User with all possible blocks and bans tries to access a Self
         }
     });
     my $b = C4::Members::GetMember(borrowernumber => $user->{borrowernumber});
+
+    C4::Context->_new_userenv('DUMMY SESSION');
+    C4::Context->set_userenv($user->{borrowernumber},$user->{userid},'SSAPIUser','firstname','surname', 'CPL', 'CEEPEEÄL', 0, '', '');
+    $userenv = C4::Context->userenv;
 
     subtest("Set opening hours", sub {
         plan tests => 1;
@@ -72,7 +77,7 @@ subtest("Scenario: User with all possible blocks and bans tries to access a Self
         ok(1, "Step ok");
     });
     subtest("Given a user with all relevant blocks and bans", sub {
-        plan tests => 2;
+        plan tests => 3;
 
         C4::Members::Attributes::SetBorrowerAttributes($b->{borrowernumber}, [{ code => 'SSBAN', value => '1' }]);
 
@@ -82,6 +87,12 @@ subtest("Scenario: User with all possible blocks and bans tries to access a Self
 
         ok($f = Koha::Account::Line->new({ borrowernumber => $b->{borrowernumber}, amountoutstanding => 1000, note => 'fid' })->store(),
            "Fine given");
+
+        ok($ssblock = C4::SelfService::BlockManager::storeBlock( C4::SelfService::BlockManager::createBlock({
+            borrowernumber => $b->{borrowernumber},
+            branchcode     => 'CPL',
+        })),
+            "Self-service branch specific block is given");
     });
     subtest("Self-service resource accessing is not properly configured", sub {
         plan tests => 1;
@@ -105,6 +116,7 @@ subtest("Scenario: User with all possible blocks and bans tries to access a Self
             "CardLost: 1\n".
             "Debarred: 1\n".
             "OpeningHours: 1\n".
+            "BranchBlock: 1\n".
             "\n");
         Koha::Caches->get_instance()->clear_from_cache('SSRules');
         ok(1, "Step ok");
@@ -209,18 +221,28 @@ subtest("Scenario: User with all possible blocks and bans tries to access a Self
         throws_ok(sub {C4::SelfService::CheckSelfServicePermission($b, 'UPL', 'accessMainDoor')}, 'Koha::Exception::SelfService::OpeningHours',
                   "Library is closed");
     });
-    subtest("Borrower tries another library and is allowed access", sub {
-        plan tests => 1;
+    subtest("Borrower tries another library, but is blocked from that specific library", sub {
+        plan tests => 2;
 
-        C4::Members::Attributes::SetBorrowerAttributes($b->{borrowernumber}, [{ code => 'SST&C', value => '1' },
-                                                                            { code => 'SSBAN', value => '0' }]);
         $b = C4::Members::GetMember(borrowernumber => $user->{borrowernumber});
 
+        throws_ok(sub {C4::SelfService::CheckSelfServicePermission($b, 'CPL', 'accessMainDoor')}, 'Koha::Exception::SelfService::PermissionRevoked',
+                  "User is blocked from this specific library");
+        like($@->{expirationdate}, qr/^\d\d\d\d-\d\d-\d\d[T ]\d\d:\d\d:\d\d/,
+                  "And the given exception has the block's expirationdate");
+    });
+    subtest("Branch specific block is lifted, finally Borrower is allowed access", sub {
+        plan tests => 1;
+
+        $b = C4::Members::GetMember(borrowernumber => $user->{borrowernumber});
+
+        C4::SelfService::BlockManager::deleteBorrowersBlocks($b);
+
         ok(C4::SelfService::CheckSelfServicePermission($b, 'CPL', 'accessMainDoor'),
-           "Finely behaving user accesses a self-service resource.");
+            "Finely behaving user accesses a self-service resource.");
     });
     subtest("Check the log entries", sub {
-        plan tests => 66;
+        plan tests => 72;
 
         my $logs = C4::SelfService::GetAccessLogs($b->{borrowernumber});
         t::db_dependent::KohaSuomi::SelfService_context::testLogs($logs, 0, $b->{borrowernumber}, 'accessMainDoor', $todayYmd, 'misconfigured', $userenv);
@@ -233,7 +255,8 @@ subtest("Scenario: User with all possible blocks and bans tries to access a Self
         t::db_dependent::KohaSuomi::SelfService_context::testLogs($logs, 7, $b->{borrowernumber}, 'accessMainDoor', $todayYmd, 'denied',        $userenv);
         t::db_dependent::KohaSuomi::SelfService_context::testLogs($logs, 8, $b->{borrowernumber}, 'accessMainDoor', $todayYmd, 'denied',        $userenv);
         t::db_dependent::KohaSuomi::SelfService_context::testLogs($logs, 9, $b->{borrowernumber}, 'accessMainDoor', $todayYmd, 'closed',        $userenv);
-        t::db_dependent::KohaSuomi::SelfService_context::testLogs($logs, 10, $b->{borrowernumber}, 'accessMainDoor', $todayYmd, 'granted',       $userenv);
+        t::db_dependent::KohaSuomi::SelfService_context::testLogs($logs, 10, $b->{borrowernumber}, 'accessMainDoor', $todayYmd, 'revoked',      $userenv);
+        t::db_dependent::KohaSuomi::SelfService_context::testLogs($logs, 11, $b->{borrowernumber}, 'accessMainDoor', $todayYmd, 'granted',      $userenv);
     });
 
     C4::SelfService::FlushLogs();

@@ -1,4 +1,227 @@
 {
+  "/borrowers/{borrowernumber}/ssblocks": {
+    "delete": {
+      "x-mojo-to": "Borrower#ss_blocks_delete",
+      "operationId": "borrower_ss_blocks_delete",
+      "tags": ["borrowers", "self_service"],
+      "summary": "Deletes the Borrower's branch-specific self-service blocks for all branches",
+      "description": "",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        { "$ref": "../parameters.json#/borrowernumberPathParam" }
+      ],
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "ss_blocks_delete"
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Deleted ok",
+          "schema": {
+            "type": "object",
+            "required": [
+              "deleted_count"
+            ],
+            "properties": {
+              "deleted_count": {
+                "description": "How many Block-objects have been deleted in the DB",
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "get": {
+      "x-mojo-to": "Borrower#ss_blocks_list",
+      "operationId": "borrower_ss_blocks_list",
+      "tags": ["borrowers", "self_service"],
+      "summary": "Returns the Borrower's branch-specific self-service blocks",
+      "description": "Can access logged in user's own data, or his guarantees/guarantors. By default, returns the currently active blocks.",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/borrowernumberPathParam"
+        }
+      ],
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "allow-guarantee": true,
+        "permissions": {
+          "borrowers": "ss_blocks_list"
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "List of self-service blocks",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/borrowerSelfServiceBlock"
+            }
+          }
+        },
+        "404": {
+          "description": "No self-service blocks for the given Patron",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "Borrower#ss_blocks_post",
+      "operationId": "borrower_ss_blocks_post",
+      "tags": ["borrowers", "self_service"],
+      "summary": "Creates a branch-specific self-service block for the given borrower",
+      "description": "",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+          { "$ref": "../parameters.json#/borrowernumberPathParam" },
+          { "$ref": "../parameters.json#/borrowerSelfServiceBlockBodyParam" }
+      ],
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "ss_blocks_create"
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "The created self-service block",
+          "schema": { "$ref": "../definitions.json#/borrowerSelfServiceBlock" }
+        },
+        "400": {
+          "description": "Related borrower, creator or branchcode is missing",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/borrowers/{borrowernumber}/ssblocks/{borrower_ss_block_id}": {
+    "delete": {
+      "x-mojo-to": "Borrower#ss_block_delete",
+      "operationId": "borrower_ss_block_delete",
+      "tags": ["borrowers", "self_service"],
+      "summary": "Deletes the Borrower's branch-specific self-service blocks for all branches",
+      "description": "",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/borrowernumberPathParam",
+          "$ref": "../parameters.json#/borrower_ss_block_idPathParam"
+        }
+      ],
+      "x-koha-authorization": {
+        "permissions": {
+          "borrowers": "ss_blocks_delete"
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "Deleted ok",
+          "schema": {
+            "type": "object",
+            "required": [
+              "deleted_count"
+            ],
+            "properties": {
+              "deleted_count": {
+                "description": "How many Block-objects have been deleted in the DB",
+                "type": "integer"
+              }
+            }
+          }
+        }
+      }
+    },
+    "get": {
+      "x-mojo-to": "Borrower#ss_block_get",
+      "operationId": "borrower_ss_block_get",
+      "tags": ["borrowers", "self_service"],
+      "summary": "Returns the Borrower's single branch-specific self-service block",
+      "description": "Can access logged in user's own data, or his guarantees/guarantors",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/borrowernumberPathParam",
+          "$ref": "../parameters.json#/borrower_ss_block_idPathParam"
+        }
+      ],
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "allow-guarantee": true,
+        "permissions": {
+          "borrowers": "ss_blocks_get"
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "A self-service block",
+          "schema": {
+            "$ref": "../definitions.json#/borrowerSelfServiceBlock"
+          }
+        },
+        "404": {
+          "description": "No such self-service block",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/borrowers/{borrowernumber}/ssblocks/hasblock/{branchcode}": {
+    "get": {
+      "x-mojo-to": "Borrower#ss_block_has",
+      "operationId": "borrower_ss_block_has",
+      "tags": ["borrowers", "self_service"],
+      "summary": "Checks if the given borrower has a block to the given branch",
+      "description": "Can access logged in user's own data, or his guarantees/guarantors",
+      "produces": [
+        "application/json"
+      ],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/borrowernumberPathParam",
+          "$ref": "../parameters.json#/branchcodePathParam"
+        }
+      ],
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "allow-guarantee": true,
+        "permissions": {
+          "borrowers": "ss_blocks_get"
+        }
+      },
+      "responses": {
+        "200": {
+          "description": "A self-service block",
+          "schema": {
+            "$ref": "../definitions.json#/borrowerSelfServiceBlock"
+          }
+        },
+        "204": {
+          "description": "No such self-service block"
+        }
+      }
+    }
+  },
   "/borrowers/status": {
     "get": {
       "x-mojo-to": "Borrower#status",
@@ -52,7 +275,7 @@
         }
       },
       "operationId": "getSelfServiceStatus",
-      "tags": ["borrowers"],
+      "tags": ["borrowers", "self_service"],
       "summary": "Check if a borrower is allowed to access self-service resources",
       "description": "This endpoint is intended to be used by barcode readers to quickly check for self-service permissions and availability. The self-service device is expected to authenticate using it's own credentials and itäs own default library location. <p>See the description of response with status '200 OK' for expected access restrictions.</p>",
       "produces": [

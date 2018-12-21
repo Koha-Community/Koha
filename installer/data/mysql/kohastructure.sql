@@ -1914,6 +1914,25 @@ CREATE TABLE borrower_sync (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
+-- Table structure for table `borrower_ss_blocks`
+--
+
+DROP TABLE IF EXISTS `borrower_ss_blocks`;
+CREATE TABLE `borrower_ss_blocks` ( -- borrower self-service branch-specific blocks. Prevent access to specific self-service libraries, but not to all of them
+  `borrower_ss_block_id` int(12) NOT NULL auto_increment,
+  `borrowernumber` int(11) NOT NULL,    -- The user that is blocked, if the borrower-row is deleted, this block becomes useless as well
+  `branchcode` varchar(10) NOT NULL,    -- FK to branches. Where the block is in effect. Referential integrity enforced on software, because cannot delete the branch and preserve the old value ON DELETE/UPDATE.
+  `expirationdate` datetime NOT NULL,   -- When the personal branch-specific block is automatically lifted by the cronjob self_service_block_expiration.pl
+  `created_by` int(11) NOT NULL,        -- The librarian that created the block, referential integrity enforced with Perl, because the librarian can quit, but all the blocks he/she made must remain.
+  `created_on` datetime NOT NULL DEFAULT NOW(), -- When was this block created
+  PRIMARY KEY  (`borrower_ss_block_id`),
+  KEY `branchcode` (`branchcode`),
+  KEY `expirationdate` (`expirationdate`),
+  KEY `created_by` (`created_by`),
+  CONSTRAINT `borrower_ss_blocks_ibfk_1` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
 -- Table structure for table api_keys
 --
 

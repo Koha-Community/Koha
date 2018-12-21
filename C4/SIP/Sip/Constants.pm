@@ -79,6 +79,7 @@ BEGIN {
         FID_LOGIN_UID        FID_LOGIN_PWD
         FID_LOCATION_CODE
         FID_VALID_PATRON_PWD
+        FID_PAC_ACCESS_TYPE
         FID_PATRON_BIRTHDATE
         FID_PATRON_CLASS
         FID_INET_PROFILE
@@ -225,6 +226,8 @@ use constant {
     FID_LOGIN_PWD              => 'CO',
     FID_LOCATION_CODE          => 'CP',
     FID_VALID_PATRON_PWD       => 'CQ',
+
+    FID_PAC_ACCESS_TYPE        => 'PA', # Sip2.0 Extensions v1.00, used by 63/64 to denote self-service branch-specific access blocks
 
     # SIP Extensions used by Envisionware Terminals
     FID_PATRON_BIRTHDATE       => 'PB',

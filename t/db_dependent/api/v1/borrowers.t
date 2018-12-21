@@ -19,6 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 use Test::Mojo;
+use Data::Printer;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -26,7 +27,10 @@ use t::lib::Mocks;
 use Koha::Database;
 use Koha::Caches;
 use Koha::AuthUtils;
+use Koha::Auth::PermissionManager;
 use t::db_dependent::opening_hours_context;
+
+$ENV{VERBOSE} = 1;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -95,12 +99,13 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
             password => $hashed_password,
             lost     => 0,
             branchcode => $library->{branchcode},
-            gonenoaddress => 0
-
+            gonenoaddress => 0,
         }
     });
 
     my $b = Koha::Patrons->find($user->{borrowernumber});
+    Koha::Auth::PermissionManager->new()->grantPermission($user, 'borrowers', 'get_self_service_status');
+    authenticateToRESTAPI($user, $t->ua, $remote_address);
 
     my $SSRulesPref = C4::Context->preference("SSRules");
     C4::Context->set_preference("SSRules",
@@ -119,6 +124,7 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
     $t->request_ok($tx)
       ->status_is(200);
+    p($t->tx->res->body) if ($ENV{VERBOSE});
 
     my $json = $t->tx->res->json;
     is($json->{permission},'0', 'Permission denied');
@@ -132,6 +138,7 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
     $t->request_ok($tx)
       ->status_is(200);
+    p($t->tx->res->body) if ($ENV{VERBOSE});
 
     $json = $t->tx->res->json;
     is($json->{permission},'1', 'Permission granted!');
@@ -144,6 +151,7 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
     $t->request_ok($tx)
       ->status_is(200);
+    p($t->tx->res->body) if ($ENV{VERBOSE});
 
     $json = $t->tx->res->json;
     is($json->{permission},'0', 'Permission denied!');
@@ -180,6 +188,8 @@ subtest '/borrowers/ssstatus 501 get() tests' => sub {
     });
 
     my $b = Koha::Patrons->find($user->{borrowernumber});
+    Koha::Auth::PermissionManager->new()->grantPermission($user, 'borrowers', 'get_self_service_status');
+    authenticateToRESTAPI($user, $t->ua, $remote_address);
 
     my $SSRulesPref = C4::Context->preference("SSRules");
     C4::Context->set_preference("SSRules", "");
@@ -202,5 +212,20 @@ subtest '/borrowers/ssstatus 501 get() tests' => sub {
     $schema->storage->txn_rollback;
 
 };
+
+sub authenticateToRESTAPI {
+    my ($apiUser, $userAgent, $domain) = @_;
+    my $session = t::lib::Mocks::mock_session({borrower => $apiUser});
+    my $jar = Mojo::UserAgent::CookieJar->new;
+    $jar->add(
+        Mojo::Cookie::Response->new(
+            name   => 'CGISESSID',
+            value  => $session->id,
+            domain => $domain,
+            path   => '/',
+        )
+    );
+    $userAgent->cookie_jar($jar);
+}
 
 1;

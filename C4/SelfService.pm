@@ -113,6 +113,8 @@ sub _HasSelfServicePermission {
     _CheckDebarred($borrower, $rules)         if ($rules->{Debarred});
     _CheckMaxFines($borrower, $rules)         if ($rules->{MaxFines});
 
+    _CheckBranchBlock($borrower, $rules, $requestingBranchcode) if ($rules->{BranchBlock} && $action ne 'blockList'); #Blocklists deal with this using custom logic.
+
     if ($rules->{OpeningHours}) {
         $rules->{OpeningHours} = $requestingBranchcode if ($requestingBranchcode);
         _CheckOpeningHours($borrower, $rules);
@@ -183,6 +185,14 @@ sub _CheckBorrowerCategory {
 
     unless ($borrower->{categorycode} && $rules->{BorrowerCategories} =~ /$borrower->{categorycode}/) {
         Koha::Exception::SelfService::BlockedBorrowerCategory->throw(error => "Borrower category '".$borrower->{categorycode}."' is not allowed");
+    }
+}
+
+sub _CheckBranchBlock {
+    my ($borrower, $rules, $requestingBranchcode) = @_;
+    my $block = C4::SelfService::BlockManager::hasBlock($borrower, $requestingBranchcode);
+    if ($block) {
+        Koha::Exception::SelfService::PermissionRevoked->throw(expirationdate => $block->{expirationdate});
     }
 }
 

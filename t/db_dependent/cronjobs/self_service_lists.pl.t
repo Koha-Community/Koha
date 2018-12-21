@@ -3,12 +3,15 @@ use utf8;
 use English;
 use Carp::Always;
 
+use Storable;
+
 use Test::Most tests => 5;
 use File::Temp;
 use File::Slurp;
 
 use C4::Context;
 use C4::SelfServiceLists;
+use C4::SelfService::BlockManager;
 use C4::Encryption::Configuration;
 
 use Koha::Database;
@@ -17,56 +20,62 @@ $schema->storage->txn_begin;
 
 ok(C4::Context->set_preference('EncryptionConfiguration', "passphrase: 1234\ncipher-algorithm: AES-256"),
    "Given the syspref 'EncryptionConfiguration' is properly configured");
-ok(C4::Context->set_preference('SSRules', "Permission: 1\nMaxFines: 1\n AgeLimit:1\n"),
+ok(C4::Context->set_preference('SSRules', "Permission: 1\nMaxFines: 1\n AgeLimit:1\nBranchBlock: 1\n"),
    "Given the syspref 'SSRules' is properly configured");
 
 subtest "Scenario: C4::SelfServiceLists::export()", sub {
     plan tests => 6;
 
     ok(my $borrowers = [
-        {borrowernumber => 1, not_exported => 5, HasSelfServicePermission => 1},
-        {borrowernumber => 2, not_exported => 6, HasSelfServicePermission => 0},
-        {borrowernumber => 3, not_exported => 7, HasSelfServicePermission => 1},
+        {borrowernumber => 1, not_exported => 5, HasSelfServicePermission => 1, BranchSpecificBlocks => [{branchcode => 'CPL', expirationdate => '2018-01-01T15:15:15'}, {branchcode => 'IPT', expirationdate => '2018-02-02T16:16:16'}]},
+        {borrowernumber => 2, not_exported => 6, HasSelfServicePermission => 0, BranchSpecificBlocks => undef},
+        {borrowernumber => 3, not_exported => 7, HasSelfServicePermission => 1, BranchSpecificBlocks => undef},
     ],  "Given a bunch of borrowers with self service permission");
 
     subtest ".csv export", sub {
         plan tests => 3;
 
-        ok(my $filePath = C4::SelfServiceLists::export($borrowers, ['not_exported'], 'csv'),
+        ok(my $filePath = C4::SelfServiceLists::export(Storable::dclone($borrowers), ['not_exported'], 'csv'),
             "When the borrowers are exported as 'csv'");
         like($filePath, qr/\.csv$/,
              "Then a file is exported with the proper file suffix");
-        like(File::Slurp::read_file($filePath), qr/^borrowernumber,not_exported,HasSelfServicePermission\n1,5,1\n2,6,0\n3,7,1\n/s,
+        like(File::Slurp::read_file($filePath), qr/^
+                borrowernumber,not_exported,HasSelfServicePermission,BranchSpecificBlocks\n
+                1,5,1,\[CPL:IPT\]\n
+                2,6,0,\[\]\n
+                3,7,1,\[\]\n
+            /sx,
             "And the exported file has proper contents");
     };
     subtest ".csv export, subset of columns", sub {
         plan tests => 2;
 
-        ok(my $filePath = C4::SelfServiceLists::export($borrowers, undef, 'csv'),
+        ok(my $filePath = C4::SelfServiceLists::export(Storable::dclone($borrowers), undef, 'csv'),
             "When the borrowers are exported as 'csv'");
-        like(File::Slurp::read_file($filePath), qr/^borrowernumber,HasSelfServicePermission\n1,1\n2,0\n3,1\n/s,
+        like(File::Slurp::read_file($filePath), qr/^
+                borrowernumber,HasSelfServicePermission,BranchSpecificBlocks\n
+                1,1,\[CPL:IPT\]\n
+                2,0,\[\]\n
+                3,1,\[\]\n
+            /sx,
             "And the exported file has proper contents");
     };
     subtest ".yml export", sub {
-        plan tests => 6;
+        plan tests => 4;
 
-        ok(my $filePath = C4::SelfServiceLists::export($borrowers, ['not_exported'], 'yml'),
+        ok(my $filePath = C4::SelfServiceLists::export(Storable::dclone($borrowers), ['not_exported'], 'yml'),
             "When the borrowers are exported as 'yml'");
         like($filePath, qr/\.yml$/,
              "Then a file is exported with the proper file suffix");
-        like(File::Slurp::read_file($filePath), qr/---\n/s,
-            "And the exported file has proper contents1");
-        like(File::Slurp::read_file($filePath), qr/\n-?\s+borrowernumber: 1\n/s,
-            "And the exported file has proper contents2");
-        like(File::Slurp::read_file($filePath), qr/\n-?\s+not_exported: 5\n/s,
-            "And the exported file has proper contents3");
-        like(File::Slurp::read_file($filePath), qr/\n-?\s+HasSelfServicePermission: 1\n/s,
-            "And the exported file has proper contents4");
+        ok(my $yaml = YAML::XS::LoadFile($filePath),
+             "And is a valid .yaml-file");
+        cmp_deeply($yaml, $borrowers,
+             "And the exported contents are as expected");
     };
     subtest ".yml export, subset of columns", sub {
         plan tests => 2;
 
-        ok(my $filePath = C4::SelfServiceLists::export($borrowers, [], 'yml'),
+        ok(my $filePath = C4::SelfServiceLists::export(Storable::dclone($borrowers), [], 'yml'),
             "When the borrowers are exported as 'yml'");
         unlike(File::Slurp::read_file($filePath), qr/\n  not_exported: 5\n/s,
             "And the excluded column is missing");
@@ -84,7 +93,7 @@ subtest "Scenario: C4::SelfServiceLists::export()", sub {
 };
 
 subtest "Scenario: C4::SelfServiceLists::extract()", sub {
-    plan tests => 6;
+    plan tests => 8;
 
     ok(my $data = C4::SelfServiceLists::extract(10),
       "When simple columns are extracted");
@@ -93,6 +102,36 @@ subtest "Scenario: C4::SelfServiceLists::extract()", sub {
     ok($data->[2]->{cardnumber},     "And entries have the requested column 'cardnumber'");
     ok($data->[2]->{userid},         "And entries have the requested column 'userid'");
     ok(defined($data->[2]->{HasSelfServicePermission}), "And entries have the self service permission value");
+    ok(exists($data->[2]->{BranchSpecificBlocks}), "And entries have the branch specific blocks-list value");
+
+    subtest("Scenario: extract branch-specific self-service blocks", sub {
+        plan tests => 11;
+
+        my $blocks = [{
+                borrowernumber => $data->[2]->{borrowernumber},
+                branchcode     => 'CPL',
+                created_by     => $data->[0]->{borrowernumber},
+            },{
+                borrowernumber => $data->[2]->{borrowernumber},
+                branchcode     => 'IPT',
+                created_by     => $data->[0]->{borrowernumber},
+        }];
+        ok(my $block = C4::SelfService::BlockManager::storeBlock( C4::SelfService::BlockManager::createBlock($blocks->[0]) ),
+            "Given a simple block");
+        ok($block = C4::SelfService::BlockManager::storeBlock( C4::SelfService::BlockManager::createBlock($blocks->[1]) ),
+            "Given another simple block");
+
+        ok(my $data = C4::SelfServiceLists::extract(10),
+            "When simple columns are extracted");
+        is(ref($data), 'ARRAY', "Then extract() returns an ARRAYRef");
+        ok($data->[2]->{borrowernumber}, "And entries have the column 'borrowernumber' extracted by default");
+        ok($data->[2]->{cardnumber},     "And entries have the requested column 'cardnumber'");
+        ok($data->[2]->{userid},         "And entries have the requested column 'userid'");
+        ok(defined($data->[2]->{HasSelfServicePermission}), "And entries have the self service permission value");
+        cmp_deeply($data->[2]->{BranchSpecificBlocks}->[0], isa('C4::SelfService::Block'), "And 1st self-service block is found");
+        cmp_deeply($data->[2]->{BranchSpecificBlocks}->[1], isa('C4::SelfService::Block'), "And 2nd self-service block is found");
+        ok(! $data->[1]->{BranchSpecificBlocks}, "And self-service blocks are not found from where they shouldn't be");
+    });
 };
 
 subtest "Scenario: Execute a full list extraction pipeline", sub {

@@ -1,4 +1,20 @@
 {
+  "borrower_ss_block_idPathParam": {
+    "name": "borrower_ss_block_id",
+    "in": "path",
+    "description": "Internal borrower_ss_block identifier",
+    "required": true,
+    "type": "integer"
+  },
+  "borrowerSelfServiceBlockBodyParam": {
+    "name": "borrower_ss_block",
+    "description": "borrower_ss_block-table row",
+    "in": "body",
+    "required": true,
+    "schema" : {
+      "$ref": "../definitions/borrowerSelfServiceBlock.json"
+    }
+  },
   "borrowernumberPathParam": {
     "name": "borrowernumber",
     "in": "path",

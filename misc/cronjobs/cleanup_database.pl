@@ -338,6 +338,10 @@ if($allDebarments) {
     print "$count restrictions were deleted.\nDone with all restrictions purge.\n" if $verbose;
 }
 
+if (C4::Context->preference('SSBlockCleanOlderThanThis')) {
+    C4::SelfService::BlockManager::cleanup();
+}
+
 if( $pExpSelfReg ) {
     DeleteExpiredSelfRegs();
 }

@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE To %]
 [% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE Branches %]
 [% USE KohaDates %]
@@ -26,6 +27,10 @@
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/checkouts_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/holds_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.1/moment-with-locales.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/moment-timezone-with-data-2.23.0.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/xss-1.0.3.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/axios-0.19.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/self-service-branch-blocker-0.01.js"></script>
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/1.3.5/jspdf.min.js"></script>
 <script type="text/javascript" src="/intranet-tmpl/js/mydata/GUI.js"></script>
 <script type="text/JavaScript">
@@ -45,6 +50,27 @@ myDataTranslations = {
         'Suggestions': _("Suggestions"),
 
     };
+ssbbTranslations = {
+    'Self-service blocks'    : _('Self-service blocks'),
+    'Remove'                 : _('Remove'),
+    'Save'                   : _('Save'),
+    'Self-service blocks in' : _('Self-service blocks in'),
+    'Deleted'                : _('Deleted'),
+    'block'                  : _('block'),
+    'Deleting a Block failed': _('Deleting a Block failed'),
+    'Block added'            : _('Block added'),
+    'Adding a Block failed'  : _('Adding a Block failed'),
+    'Getting borrower'       : _('Getting borrower'),
+    'blocks failed'          : _('blocks failed'),
+    'Id'                     : _('Id'),
+    'Borrower'               : _('Borrower'),
+    'Branch'                 : _('Branch'),
+    'Expiration date'        : _('Expiration date'),
+    'Created by'             : _('Created by'),
+    'Created on'             : _('Created on'),
+    'Actions'                : _('Actions'),
+};
+
 var interface = "[% interface %]";
 var theme = "[% theme %]";
 var borrowernumber = "[% borrowernumber %]";
@@ -237,6 +263,8 @@ function validate1(date) {
         </ul>
     </div>
     [% END %]
+
+    <div id="ssbb-rootBlockSummary" class="circmessage attention" style="color: rgb(153, 0, 0);"></div>
 
 <h3>[% UNLESS ( I ) %]
    [% title | html %] [% firstname | html %] [% END %] [% surname | html %] ([% cardnumber | html %])</h3>
@@ -527,6 +555,7 @@ function validate1(date) {
 <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=2">Edit</a></div>
 
 </div>
+
 </div>
 
 <div id="finesholdsissues" class="toptabs">

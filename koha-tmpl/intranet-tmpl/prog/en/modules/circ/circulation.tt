@@ -1,4 +1,5 @@
 [% USE Koha %]
+[% USE To %]
 [% SET KOHA_VERSION = Koha.Preference('Version') %]
 [% USE Branches %]
 [% USE KohaDates %]
@@ -32,6 +33,11 @@
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/pages/circulation_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/checkouts_[% KOHA_VERSION %].js"></script>
 <script type="text/javascript" src="[% interface %]/[% theme %]/js/holds_[% KOHA_VERSION %].js"></script>
+<script type="text/javascript" src="[% interface %]/js/moment-with-locales-2.23.0.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/moment-timezone-with-data-2.23.0.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/xss-1.0.3.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/axios-0.19.min.js"></script>
+<script type="text/javascript" src="[% interface %]/js/self-service-branch-blocker-0.01.js"></script>
 <script type="text/javascript">
 //<![CDATA[
 /* Set some variable needed in circulation.js */
@@ -48,6 +54,27 @@ var relatives_borrowernumbers = new Array();
 [% FOREACH b IN relatives_borrowernumbers %]
     relatives_borrowernumbers.push("[% b %]");
 [% END %]
+
+ssbbTranslations = {
+    'Self-service blocks'    : _('Self-service blocks'),
+    'Remove'                 : _('Remove'),
+    'Save'                   : _('Save'),
+    'Self-service blocks in' : _('Self-service blocks in'),
+    'Deleted'                : _('Deleted'),
+    'block'                  : _('block'),
+    'Deleting a Block failed': _('Deleting a Block failed'),
+    'Block added'            : _('Block added'),
+    'Adding a Block failed'  : _('Adding a Block failed'),
+    'Getting borrower'       : _('Getting borrower'),
+    'blocks failed'          : _('blocks failed'),
+    'Id'                     : _('Id'),
+    'Borrower'               : _('Borrower'),
+    'Branch'                 : _('Branch'),
+    'Expiration date'        : _('Expiration date'),
+    'Created by'             : _('Created by'),
+    'Created on'             : _('Created on'),
+    'Actions'                : _('Actions'),
+};
 
 var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
 var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
@@ -800,6 +827,8 @@ No patron matched <span class="ex">[% message | html %]</span>
             [% IF ( lost ) %]
 			<li class="blocker"><span class="circ-hlt">Lost: </span>Patron's card is lost</li>
 			[% END %]
+
+            <div id="ssbb-rootBlockSummary" class="circmessage attention" style="color: rgb(153, 0, 0);"></div>
 
             [% IF ( userdebarred ) %]
                <li class="blocker">

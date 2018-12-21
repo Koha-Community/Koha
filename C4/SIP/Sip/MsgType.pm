@@ -18,6 +18,8 @@ use Data::Dumper;
 use CGI qw ( -utf8 );
 use C4::Auth qw(&check_api_auth);
 
+use C4::SelfService::BlockManager;
+
 use UNIVERSAL::can;
 
 use vars qw(@ISA @EXPORT_OK);
@@ -1003,6 +1005,8 @@ sub handle_patron_info {
             $resp .= maybe_add( FID_SCREEN_MSG, $patron->{branchcode}, $server);
         }
         $resp .= maybe_add( FID_PRINT_LINE, $patron->print_line );
+
+        $resp .= add_field( FID_PAC_ACCESS_TYPE, (C4::SelfService::BlockManager::hasBlock($patron)) ? 0 : 1 ); #Discussing with Finnish library automation vendors 2018-12-20. 0 - no access, 1 - welcome to library, 2,3,4,5... different access groups. Currently only supported 1 or 0
     } else {
 
         # Invalid patron ID:

@@ -18,6 +18,7 @@ use IPC::Run;
 
 use C4::Context;
 use C4::SelfService;
+use C4::SelfService::BlockManager;
 use C4::Encryption;
 use C4::Encryption::Configuration;
 
@@ -73,12 +74,22 @@ sub extract {
     my $borrowers = $dbh->selectall_arrayref("SELECT * FROM borrowers".($limit ? " LIMIT $limit" : ""), { Slice => {} }) or die $dbh->errstr;
     $logger->debug("Found '".scalar(@$borrowers)."' borrower rows");
 
+    my $rules = C4::SelfService::GetRules();
+    my $now = DateTime->now(time_zone => C4::Context->tz());
+
     for (my $i=0 ; $i<@$borrowers ; $i++) {
         $logger->debug("$i processed") if $i % 100 == 0;
         my $val;
         try {
             C4::SelfService::_HasSelfServicePermission( $borrowers->[$i], undef, 'blockList' );
             $val = 1;
+
+            if ($rules->{BranchBlock}) {
+                my $blocks = C4::SelfService::BlockManager::listBlocks($borrowers->[$i], $now);
+                if (@$blocks) {
+                    $borrowers->[$i]->{BranchSpecificBlocks} = $blocks;
+                }
+            }
         }
         catch {
             if (blessed($_) && $_->isa('Koha::Exception::SelfService')) {
@@ -90,6 +101,7 @@ sub extract {
             }
         };
         $borrowers->[$i]->{HasSelfServicePermission} = $val;
+        $borrowers->[$i]->{BranchSpecificBlocks} = undef unless ($borrowers->[$i]->{BranchSpecificBlocks});
     }
     return $borrowers;
 }
@@ -100,7 +112,7 @@ Exports a list of borrowers to a temporary file using the defined export medium.
 This file is intended to be deployed somewhere, as it is automatically removed after this program exits.
 
  @param {ARRAYRef of HASHes} List of borrowers
- @param {ARRAYRef} List of columns to pick for export. borrowernumber is automatically prepended, HasSelfServicePermission is automatically appended.
+ @param {ARRAYRef} List of columns to pick for export. borrowernumber is automatically prepended, HasSelfServicePermission is automatically appended. 'BranchSpecificBlocks' is appended if needed.
  @param {String} Type to export, eg. 'csv'
 
 =cut
@@ -114,10 +126,14 @@ sub export {
 
     unshift(@$columns, 'borrowernumber');
     push(@$columns, 'HasSelfServicePermission');
+    push(@$columns, 'BranchSpecificBlocks') if C4::SelfService::GetRules()->{BranchBlock};
     $logger->info("Exporting as '$type' to '$tempFile' picking columns '@$columns'");
 
     if ($type eq 'csv') {
         require Text::CSV_XS;
+
+        $_->{BranchSpecificBlocks} = '['.join(':', sort(map {$_->{branchcode}} @{$_->{BranchSpecificBlocks}})).']' for @$borrowers; #Turn C4::SelfService::Block-objects to simple branchcode string representation.
+
         Text::CSV_XS::csv(binary => 1, encoding => 'UTF-8', eol => "\n", headers => $columns, in => $borrowers, out => $tempFile) or die Text::CSV_XS->error_diag;
     }
     elsif ($type eq 'yml') {
@@ -155,6 +171,12 @@ sub exportMVXML {
     my ($borrowers, $tempFile, $type) = (shift, shift, BlockListType->cast(shift));
     require XML::Parser;
 
+    #Unsure if this is ever used with MV XML
+    #Breaking this xml-schema from MV might break the current in-production functionality, because MV cannot receive the block lists due to schema validation issues. This needs to be discussed with MV if this is needed or desired to be made like this. Maybe a simple .yml or .csv is enough?
+    #    <xs:element name="branch_blocks" type="xs:string" />
+    #
+    #$_->{BranchSpecificBlocks} = '['.join(':', sort(map {$_->{branchcode}} @{$_->{BranchSpecificBlocks}})).']' for @$borrowers; #Turn C4::SelfService::Block-objects to simple branchcode string representation.
+
     my @sb; #Using StringBuffer to reduce unnecessary String concatenation.
     # Initialize the XML blocklist
     push(@sb, << 'HEAD_END');
@@ -181,6 +203,9 @@ sub exportMVXML {
     </xs:element>
   </xs:schema>
 HEAD_END
+
+    #MV BranchBlock-support could look like this.
+    #push(@sb, "  <patronaccess>\n    <patronid_pac>" . $_->{borrowernumber} . "</patronid_pac>\n    <type_pac>" . $_->{HasSelfServicePermission} . "</type_pac>\n    <branch_blocks>" . $_->{BranchSpecificBlocks} . "</branch_blocks>\n  </patronaccess>\n")
 
     push(@sb, "  <patronaccess>\n    <patronid_pac>" . $_->{borrowernumber} . "</patronid_pac>\n    <type_pac>" . $_->{HasSelfServicePermission} . "</type_pac>\n  </patronaccess>\n")
         for @$borrowers;

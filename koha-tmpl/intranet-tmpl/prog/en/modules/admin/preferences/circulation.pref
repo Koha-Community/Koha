@@ -809,6 +809,14 @@ Circulation:
             - "the print receipt popup dialog when self checkout is finished"
     Self-Service API:
         -
+            - 'Clean expired self-service branch-specific access blocks older than this many days. You must enable access rule "BranchBlock" in syspref "SSRules" for this to have effect.'
+            - pref: SSBlockCleanOlderThanThis
+              class: integer
+        -
+            - 'Self-service branch-specific access block default duration in days. You must enable access rule "BranchBlock" in syspref "SSRules" for this to have effect.'
+            - pref: SSBlockDefaultDuration
+              class: integer
+        -
             - "Self-service resource usage rules and checks.<br/>"
             - "Used by the /borrowers/ssstatus-endpoint (real-time self-service access check) and block list generation cronjob self_service_lists.pl <br/>"
             - "The rules are YAML-formatted. <br/>"
@@ -824,6 +832,8 @@ Circulation:
             - "# How the codes are separated, is not important. The list is scanned from left to right for </br>"
             - "# text matching the users categorycode. <br/>"
             - "BorrowerCategories: PATRON STAFF LIB <br/>"
+            - "# Use Branch-specific blocks for Borrowers. Set them from the members/moremember.pl -page. <br/>"
+            - "BranchBlock: 1 <br/>"
             - "# Blocks if the user is younger than this <br/>"
             - "MinimumAge: 15 <br/>"
             - "# Checks generic limitations, is the card lost, is the account debarred, is the card expired <br/>"
