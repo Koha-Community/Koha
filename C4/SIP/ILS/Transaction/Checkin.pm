@@ -66,8 +66,6 @@ sub do_checkin {
 
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, undef, $return_date);
-    $self->alert(!$return);
-    # ignoring messages: NotIssued, WasLost, WasTransfered
 
     # biblionumber, biblioitemnumber, itemnumber
     # borrowernumber, reservedate, branchcode
@@ -117,7 +115,7 @@ sub do_checkin {
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );
     }
-    $self->alert(1) if defined $self->alert_type;  # alert_type could be "00", hypothetically
+    $self->alert(defined $self->alert_type);  # alert_type could be "00", hypothetically
     $self->ok($return);
 }
 
