@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 17.11\n"
-"POT-Creation-Date: 2018-11-19 19:57-0300\n"
+"POT-Creation-Date: 2018-12-16 12:01-0300\n"
 "PO-Revision-Date: 2018-06-01 08:58+0000\n"
 "Last-Translator: Marijana Glavica <mglavica@ffzg.hr>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -469,6 +469,16 @@ msgstr "%s (Zapis br. %s)"
 #, c-format
 msgid "%s (related searches: %s %s %s ). %s "
 msgstr "%s (povezana pretraživanja: %s %s %s ). %s "
+
+#. %1$s:  SET ctrl_preload = ' controls preload=none' #translatability 
+#. %2$s:  HTML5MediaParent _ ctrl_preload | html 
+#. %3$s:  HTML5MediaSet.child | html 
+#. %4$s:  HTML5MediaSet.srcblock | html 
+#. %5$s:  HTML5MediaSet.typeblock | html 
+#: opac-tmpl/bootstrap/en/modules/opac-detail.tt:998
+#, fuzzy, c-format
+msgid "%s <%s > <%s src=\"%s\" %s /> "
+msgstr "%s %s by %s %s "
 
 #. %1$s:  IF ( OVERDUE.debarred ) 
 #. %2$s:  ELSIF ( OVERDUE.status ) 
@@ -1608,7 +1618,7 @@ msgstr "%s%s%sKoha online%s katalog &rsaquo; Obnovljeni podaci su poslani"
 #. %2$s:  LibraryNameTitle 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:4
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:5
 #, fuzzy, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Your Interlibrary loan requests"
 msgstr ""
@@ -2815,13 +2825,6 @@ msgstr "-- Odaberi format --"
 msgid "-- none -- "
 msgstr "-- nijedna -- "
 
-#. %1$s:  ELSE 
-#. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:61
-#, c-format
-msgid ". %s Please contact a library staff member. %s "
-msgstr ". %s Molimo kontaktirajte knjižnično osoblje. %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-privacy.tt:96
 #, c-format
 msgid ". Once you've confirmed the deletion, no one can retrieve the list!"
@@ -3469,7 +3472,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:182
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:14
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:53
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:100
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:101
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:78
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:252
@@ -3728,8 +3731,8 @@ msgstr "Pregled rezultata"
 msgid "Browse shelf"
 msgstr "Pregledaj policu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:94
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:118
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:85
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:109
 #, c-format
 msgid "CAS login"
 msgstr "CAS login"
@@ -3821,7 +3824,7 @@ msgstr "Signatura: %s"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:341
 #: opac-tmpl/bootstrap/en/includes/overdrive-checkout.inc:16
 #: opac-tmpl/bootstrap/en/includes/opac-detail-sidebar.inc:115
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:194
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:195
 #: opac-tmpl/bootstrap/en/modules/opac-review.tt:56
 #: opac-tmpl/bootstrap/en/modules/clubs/enroll.tt:32
 #: opac-tmpl/bootstrap/en/modules/opac-downloadshelf.tt:69
@@ -4127,7 +4130,7 @@ msgstr "Pritisnite ovdje ako niste %s %s"
 msgid "Click here to login."
 msgstr "Pritisnite ovdje za prijavu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:144
 #, fuzzy, c-format
 msgid "Click here to view"
 msgstr "Pritisnite ovdje za prijavu."
@@ -4231,7 +4234,7 @@ msgstr "Dođite po primjerke za koje ste zainteresirani"
 msgid "Collection"
 msgstr "Zbirka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:147
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:148
 #, fuzzy, c-format
 msgid "Collection library:"
 msgstr "Naslov serije:"
@@ -4456,8 +4459,8 @@ msgstr "Slika ovitka"
 msgid "Create a new list"
 msgstr "Izradi novi popis"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:83
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:92
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:84
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:93
 #, fuzzy, c-format
 msgid "Create a new request "
 msgstr "Izradi novi popis"
@@ -4738,12 +4741,12 @@ msgid "Details for: "
 msgstr "Detalji za %s"
 
 #. %1$s:  request.backend 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:178
 #, fuzzy, c-format
 msgid "Details from %s"
 msgstr "Detalji za %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:134
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:135
 #, fuzzy, c-format
 msgid "Details from library"
 msgstr "Oznake iz ove knjižnice:"
@@ -4810,12 +4813,12 @@ msgid ""
 msgstr ""
 "Želite li da vas obavjestimo elektroničkom poštom kada stigne novi broj?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:186
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:178
 #, c-format
 msgid "Don't have a library card?"
 msgstr "Nemate člansku iskaznicu?"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:184
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:176
 #, c-format
 msgid "Don't have a password yet?"
 msgstr "Nemate lozinku?"
@@ -4944,7 +4947,7 @@ msgstr "Izdanje:"
 msgid "Editions"
 msgstr "Izdanja"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:199
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1121
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:41
 #, c-format
@@ -5360,7 +5363,7 @@ msgstr ""
 "je za korisnike koji žele pratiti ono što čitaju."
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:328
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:177
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:169
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:126
 #, c-format
 msgid "Forgot your password?"
@@ -5542,7 +5545,7 @@ msgstr "Odite na stranicu vašeg korisničkog računa"
 msgid "GoToBibliographicRequestPage "
 msgstr "GoToBibliographicRequestPage "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:150
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:141
 #, c-format
 msgid "Google login"
 msgstr "Prijava uz pomoć Google računa"
@@ -5695,7 +5698,7 @@ msgstr "Rezervacije (%s)"
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-ISBDdetail.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-imageviewer.tt:40
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:18
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:19
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:17
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:11
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry-update-submitted.tt:12
@@ -5766,7 +5769,7 @@ msgstr "Knjižnica koja posjeduje"
 msgid "How PayPal Works"
 msgstr "Kako radi PayPal"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:52
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:53
 #, c-format
 msgid "ILL module configuration problem. Contact your administrator."
 msgstr ""
@@ -5915,7 +5918,7 @@ msgid ""
 "If you do not enter a password a system generated password will be created."
 msgstr "%s %s Ako ne unesete lozinku, sustav će vam ju generirati %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:134
 #, c-format
 msgid ""
 "If you do not have a CAS account, but do have a local account, you can still "
@@ -5924,7 +5927,7 @@ msgstr ""
 "Ako nemate CAS korisničko ime, ali imate svoj lokalni korisnički račun, i "
 "dalje se možete prijaviti: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:156
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:147
 #, c-format
 msgid ""
 "If you do not have a Google account, but do have a local account, you can "
@@ -5932,7 +5935,7 @@ msgid ""
 msgstr ""
 "Možete se prijaviti s lokalnim računom ako nemate Google korisnički račun: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:95
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
 #, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a CAS account, you "
@@ -5941,7 +5944,7 @@ msgstr ""
 "Ako nemate Shibboleth korisnički račun ali imate CAS korisnički račun, "
 "možete koristiti CAS."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:98
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:89
 #, c-format
 msgid ""
 "If you do not have a Shibboleth account, but you do have a local login, then "
@@ -5950,13 +5953,13 @@ msgstr ""
 "Ako nemate Shibboleth korisnički račun, ali imate lokalni račun, ovdje se "
 "možete prijaviti."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:187
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:179
 #, c-format
 msgid ""
 "If you don't have a library card, stop by your local library to sign up."
 msgstr "Ako nemate člansku iskaznicu, obratite se u knjižnicu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:185
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:177
 #, c-format
 msgid ""
 "If you don't have a password yet, stop by the circulation desk the next time "
@@ -5965,7 +5968,7 @@ msgstr ""
 "Ako još nemate lozinku, javite se na pult za posudbu u knjižnici. Rado ćemo "
 "Vam pomoći."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:121
 #, c-format
 msgid ""
 "If you have a CAS account, please choose against which one you would like to "
@@ -5974,12 +5977,12 @@ msgstr ""
 "Ako imate CAS korisnički račun molimo odaberite preko kojeg se želite "
 "autenticirati:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:126
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:117
 #, c-format
 msgid "If you have a CAS account, please click here to log in."
 msgstr "Ako imate CAS korisnički račun, pritisnite ovdje za prijavu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:83
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:74
 #, c-format
 msgid "If you have a CAS account, you may use that below."
 msgstr "Ako imate CAS korisnički račun, možete ga ovdje koristiti."
@@ -5989,17 +5992,17 @@ msgstr "Ako imate CAS korisnički račun, možete ga ovdje koristiti."
 msgid "If you have a Shibboleth account, please "
 msgstr "Ako imate Shibboleth korisnički račun molimo "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:91
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:82
 #, c-format
 msgid "If you have a Shibboleth account, please click here to log in."
 msgstr "Ako imate Shibboleth korisnički račun, pritisnite ovdje za prijavu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:86
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:77
 #, c-format
 msgid "If you have a local account, you may use that below."
 msgstr "Ako imate lokalni korisnički račun, možete ga ovdje koristiti."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:144
 #, c-format
 msgid "If you want to, you can try to "
 msgstr "Ako želite, možete probati "
@@ -6086,9 +6089,9 @@ msgstr "Instruktori:"
 msgid "Interlibrary loan request"
 msgstr "Zahtjev za međuknjižničnom posudbom."
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:24
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:31
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:25
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:32
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:78
 #, c-format
 msgid "Interlibrary loan requests"
 msgstr "Zahtjevi za međuknjižničnom posudbom."
@@ -6344,12 +6347,12 @@ msgstr "Posljednja"
 msgid "Last location"
 msgstr "Posljednja lokacija"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:106
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:107
 #, fuzzy, c-format
 msgid "Last updated"
 msgstr "Popis je ažuriran."
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:163
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:164
 #, fuzzy, c-format
 msgid "Last updated:"
 msgstr "Popis je ažuriran."
@@ -6561,8 +6564,8 @@ msgstr "Učitavanje... "
 msgid "Local Login"
 msgstr "Lokalna prijava"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:97
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:88
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:133
 #, c-format
 msgid "Local login"
 msgstr "Lokalna prijava"
@@ -6595,7 +6598,7 @@ msgstr "Smještaj"
 #. INPUT type=submit
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:340
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:18
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:174
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:165
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:120
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:86
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:651
@@ -6642,7 +6645,7 @@ msgstr "Prijava"
 msgid "Log in to your account:"
 msgstr "Prijava:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:146
 #, c-format
 msgid "Log in with Google"
 msgstr "Prijava s Google korisničkim računom"
@@ -6658,12 +6661,12 @@ msgstr "Odjava"
 msgid "Log out and try again with a different user."
 msgstr "Odjavite se i pokušajte ponovo s drugim korisnikom."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:197
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:189
 #, c-format
 msgid "Logging on to the catalog has not been enabled by the library."
 msgstr "Prijava u katalog nije moguća."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:169
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:160
 #, c-format
 msgid "Login"
 msgstr "Korisničko ime"
@@ -6945,8 +6948,8 @@ msgstr ""
 msgid "New"
 msgstr "Novo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:26
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:56
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:27
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:57
 #, c-format
 msgid "New Interlibrary loan request"
 msgstr ""
@@ -7011,7 +7014,7 @@ msgstr "Novosti iz %s%s%sknjižnice%s"
 #: opac-tmpl/bootstrap/en/includes/shelfbrowser.inc:70
 #: opac-tmpl/bootstrap/en/includes/datatables.inc:2
 #: opac-tmpl/bootstrap/en/includes/calendar.inc:2
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:70
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:71
 #: opac-tmpl/bootstrap/en/modules/opac-overdrive-search.tt:64
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1081
 #, c-format
@@ -7403,14 +7406,14 @@ msgid "Notes/Comments"
 msgstr "Napomene/komentari"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:44
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:167
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:168
 #: opac-tmpl/bootstrap/en/modules/opac-request-article.tt:99
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:78
 #, c-format
 msgid "Notes:"
 msgstr "Napomene:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:140
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:131
 #, c-format
 msgid "Nothing"
 msgstr "Ništa"
@@ -7672,7 +7675,7 @@ msgstr "Stranice:"
 msgid "Parameters"
 msgstr "Parametri"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:171
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:162
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:808
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:818
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:829
@@ -7885,7 +7888,7 @@ msgstr ""
 msgid "Please choose a download format"
 msgstr "Odabir formata za preuzimanje"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:101
 #, c-format
 msgid "Please choose against which one you would like to authenticate: "
 msgstr "Molimo odaberite preko čega se želite autenticirati: "
@@ -7895,7 +7898,7 @@ msgstr "Molimo odaberite preko čega se želite autenticirati: "
 msgid "Please choose your privacy rule:"
 msgstr "Odaberite svoja pravila privatnosti:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:106
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:97
 #, c-format
 msgid "Please click here to log in."
 msgstr "Pritisnite ovdje za prijavu."
@@ -8018,7 +8021,7 @@ msgstr ""
 "trenutno posuđena na vaše ime, bez obzira koju opciju privatnosti ste "
 "odabrali."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:152
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:143
 #, c-format
 msgid ""
 "Please note that the Google login will only work if you are using the e-mail "
@@ -8252,7 +8255,7 @@ msgstr "Obrađujem..."
 msgid "Programmed texts"
 msgstr "Programirani tekst"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:62
 #, fuzzy, c-format
 msgid "Provider:"
 msgstr "SMS pružatelj usluge:"
@@ -8602,18 +8605,18 @@ msgstr "Prijavite probleme i neispravne poveznice"
 msgid "Request article"
 msgstr "Zatražite članak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:191
 #, fuzzy, c-format
 msgid "Request cancellation"
 msgstr "request_location"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:12
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:105
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:13
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:106
 #, fuzzy, c-format
 msgid "Request placed"
 msgstr "Zatražite članak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:159
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:160
 #, fuzzy, c-format
 msgid "Request placed:"
 msgstr "Zatražite članak"
@@ -8623,32 +8626,32 @@ msgstr "Zatražite članak"
 msgid "Request specific item type:"
 msgstr "Zatražite određenu vrstu primjerka:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:103
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:104
 #, fuzzy, c-format
 msgid "Request type"
 msgstr "Zatražite članak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:155
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:156
 #, fuzzy, c-format
 msgid "Request type:"
 msgstr "Zatražite članak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:10
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:11
 #, fuzzy, c-format
 msgid "Request updated"
 msgstr "Zatražite članak"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:102
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:103
 #, fuzzy, c-format
 msgid "Requested from"
 msgstr "Predloženo za"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:137
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:138
 #, fuzzy, c-format
 msgid "Requested from:"
 msgstr "Predloženo za:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:142
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:143
 #, fuzzy, c-format
 msgid "Requested item:"
 msgstr "Zatražite određenu vrstu primjerka:"
@@ -9322,7 +9325,7 @@ msgid "Shelving location"
 msgstr "Trenutna lokacija"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:317
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:90
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
 #, c-format
 msgid "Shibboleth Login"
 msgstr "Shibboleth prijava"
@@ -9488,7 +9491,7 @@ msgstr "Nažalost, običan pogled je privremeno nedostupan"
 msgid "Sorry, tags are not enabled on this system."
 msgstr "Nažalost, tagiranje nije omogućeno u ovome sustavu."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:81
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:72
 #, c-format
 msgid ""
 "Sorry, the CAS login also failed. If you have a local login you may use that "
@@ -9497,7 +9500,7 @@ msgstr ""
 "Nažalost, CAS prijava nije uspjela. Možete koristiti svoj lokalni korisnički "
 "račun ako ga imate."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:113
 #, c-format
 msgid "Sorry, the CAS login failed."
 msgstr "Nažalost, CAS prijava nije uspjela."
@@ -9538,12 +9541,12 @@ msgstr "Nažalost, premladi ste da biste rezervirali ovu građu."
 msgid "Sorry, you cannot place more than %s holds. "
 msgstr "Nažalost, ne može se rezervirati više od %s primjerka. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:142
 #, c-format
 msgid "Sorry, your Google login failed. "
 msgstr "Nažalost, Google prijava nije uspjela. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:68
 #, c-format
 msgid ""
 "Sorry, your Shibboleth identity does not match a valid library identity."
@@ -9619,7 +9622,7 @@ msgid "Statistics"
 msgstr "Statistika"
 
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:59
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:104
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:105
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:605
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:807
@@ -9630,7 +9633,7 @@ msgstr "Statistika"
 msgid "Status"
 msgstr "Status"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:151
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:152
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:673
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:231
 #, c-format
@@ -9734,7 +9737,7 @@ msgid "Submit changes"
 msgstr "Pošalji promjene"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:192
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:193
 #, fuzzy
 msgid "Submit modifications"
 msgstr "Pošalji promjene"
@@ -10389,12 +10392,6 @@ msgstr ""
 "Ovaj oblak prikazuje najčešće teme građe u našem katalogu. Kliknite na neku "
 "od tema da vidite što sve na tu temu imamo u zbirkama."
 
-#. %1$s:  IF Koha.Preference('OpacResetPassword') 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:58
-#, c-format
-msgid "This account has been locked! %s "
-msgstr "Vaš korisnički račun je zaključan! %s "
-
 #: opac-tmpl/bootstrap/en/modules/opac-discharge.tt:45
 #, c-format
 msgid ""
@@ -10528,7 +10525,7 @@ msgstr "Vrijeme čekanja za ispis potvrde je isteklo"
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:177
 #: opac-tmpl/bootstrap/en/includes/resort_form.inc:60
 #: opac-tmpl/bootstrap/en/modules/opac-course-details.tt:52
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:101
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:102
 #: opac-tmpl/bootstrap/en/modules/opac-topissues.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:53
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:77
@@ -10606,7 +10603,7 @@ msgstr ""
 "Ako želite prijaviti ovu grešku, molimo kontaktirajte administratora "
 "sustava. "
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:199
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:191
 #, c-format
 msgid "To report this error, you can email the Koha Administrator."
 msgstr ""
@@ -10801,7 +10798,7 @@ msgstr "Ažuriraj"
 msgid "Updates to your record"
 msgstr "Obnova podataka"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:200
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:192
 #, c-format
 msgid "Use top menu bar to navigate to another part of Koha."
 msgstr "Uz pomoć gornjeg izbornika možete pristupiti drugom dijelu Kohe."
@@ -10867,7 +10864,7 @@ msgstr "več je u upotrebi."
 msgid "Verification:"
 msgstr "Verifikacija:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:123
 #, fuzzy, c-format
 msgid "View"
 msgstr "Prikaži sve"
@@ -10878,8 +10875,8 @@ msgstr "Prikaži sve"
 msgid "View All"
 msgstr "Prikaži sve"
 
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:28
-#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:29
+#: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:130
 #, c-format
 msgid "View Interlibrary loan request"
 msgstr ""
@@ -11233,14 +11230,16 @@ msgstr "Nemate ovlasti za obnavljanje ovoga popisa."
 msgid "You do not have permission to view this list."
 msgstr "Nemate ovlasti za pregled ovoga popisa."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:69
+#. %1$s:  IF Koha.Preference('FailedLoginAttempts') 
+#. %2$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:60
 #, c-format
 msgid ""
-"You entered an incorrect username or password. Please try again! And "
-"remember, passwords are case sensitive."
+"You entered an incorrect username or password. Please try again! But note "
+"that passwords are case sensitive%s and that your account will be locked out "
+"after a fixed number of failed login attempts%s. Please contact a library "
+"staff member if you continue to have problems."
 msgstr ""
-"Unjeli ste krivo korisničko ime ili lozinku. Molimo pokušajte ponovo. "
-"Napomena: treba paziti na velika i mala slova u lozinkama."
 
 #: opac-tmpl/bootstrap/en/modules/errors/errorpage.tt:50
 #, c-format
@@ -11334,7 +11333,7 @@ msgid ""
 "available."
 msgstr "Koristitli ste poveznicu na kataložni zapis koji više ne postoji."
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:190
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:182
 #, c-format
 msgid "You may register here."
 msgstr "Ovdje se možete registrirati."
@@ -11368,11 +11367,6 @@ msgid ""
 msgstr ""
 "%s %s Morate se prijaviti u sustav ako se želite predbilježiti za obavijesti "
 "e-poštom o novim brojevima %s "
-
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:61
-#, c-format
-msgid "You must reset your password"
-msgstr "Morate promijeniti lozinku"
 
 #: opac-tmpl/bootstrap/en/modules/opac-reserve.tt:91
 #, c-format
@@ -11771,7 +11765,7 @@ msgstr "[% LibraryName |html %] Search RSS feed"
 msgid "[% limit or"
 msgstr "[% ograniči ili"
 
-#. %1$s:  HTML5MediaParent 
+#. %1$s:  HTML5MediaParent | html 
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:1002
 #, fuzzy, c-format
 msgid "[%s tag not supported by your browser.]"
@@ -12141,7 +12135,7 @@ msgstr "popis identifikatora bibliografskog zapisa i zapisa o primjerku"
 msgid "list of system record identifiers"
 msgstr "popis identifikatora sistemskog zapisa"
 
-#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:153
+#: opac-tmpl/bootstrap/en/modules/opac-auth.tt:144
 #, c-format
 msgid "log in using a different account"
 msgstr "prijavite se s drugim korisničkim računom"
