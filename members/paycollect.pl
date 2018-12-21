@@ -137,6 +137,7 @@ if ( $pay_individual || $writeoff_individual ) {
 }
 
 if ( $total_paid and $total_paid ne '0.00' ) {
+    $total_paid = $total_due if (abs($total_paid - $total_due) < 0.01);
     if ( $total_paid < 0 or $total_paid > $total_due ) {
         $template->param(
             error_over => 1,

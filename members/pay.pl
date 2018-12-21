@@ -99,6 +99,7 @@ elsif ( $input->param('confirm_writeoff') ) {
 
     my $accountline = Koha::Account::Lines->find( $accountlines_id );
 
+    $amount = $accountline->amountoutstanding if (abs($amount - $accountline->amountoutstanding) < 0.01);
     if ( $amount > $accountline->amountoutstanding ) {
         print $input->redirect( "/cgi-bin/koha/members/paycollect.pl?"
               . "borrowernumber=$borrowernumber"
