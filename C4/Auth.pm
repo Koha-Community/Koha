@@ -19,6 +19,8 @@ package C4::Auth;
 
 use strict;
 use warnings;
+use Carp qw/croak/;
+
 use Digest::MD5 qw(md5_base64);
 use JSON qw/encode_json/;
 use URI::Escape;
@@ -2025,11 +2027,48 @@ sub get_all_subpermissions {
   $flags = ($userid, $flagsrequired);
 
 C<$userid> the userid of the member
-C<$flags> is a hashref of required flags like C<$borrower-&lt;{authflags}> 
+C<$flags> is a query structure similar to that used by SQL::Abstract that
+denotes the combination of flags required.
+
+The main logic of this method is that things in arrays are OR'ed, and things
+in hashes are AND'ed.
 
 Returns member's flags or 0 if a permission is not met.
 
 =cut
+
+sub _dispatch {
+    my ($required, $flags) = @_;
+
+    my $ref = ref($required);
+    if ($ref eq '') {
+        if ($required eq '*') {
+            return 0 unless ( $flags or ref( $flags ) );
+        } else {
+            return 0 unless ( $flags and (!ref( $flags ) || $flags->{$required} ));
+        }
+    } elsif ($ref eq 'HASH') {
+        foreach my $key (keys %{$required}) {
+            my $require = $required->{$key};
+            my $rflags  = $flags->{$key};
+            return 0 unless _dispatch($require, $rflags);
+        }
+    } elsif ($ref eq 'ARRAY') {
+        my $satisfied = 0;
+        foreach my $require ( @{$required} ) {
+            my $rflags =
+              ( ref($flags) && !ref($require) && ( $require ne '*' ) )
+              ? $flags->{$require}
+              : $flags;
+            $satisfied++ if _dispatch( $require, $rflags );
+        }
+        return 0 unless $satisfied;
+    } else {
+        croak "Unexpected structure found: $ref";
+    }
+
+    return $flags;
+};
 
 sub haspermission {
     my ( $userid, $flagsrequired ) = @_;
@@ -2039,23 +2078,7 @@ sub haspermission {
     my $flags = getuserflags( $row, $userid );
 
     return $flags if $flags->{superlibrarian};
-
-    foreach my $module ( keys %$flagsrequired ) {
-        my $subperm = $flagsrequired->{$module};
-        if ( $subperm eq '*' ) {
-            return 0 unless ( $flags->{$module} == 1 or ref( $flags->{$module} ) );
-        } else {
-            return 0 unless (
-                ( defined $flags->{$module} and
-                    $flags->{$module} == 1 )
-                or
-                ( ref( $flags->{$module} ) and
-                    exists $flags->{$module}->{$subperm} and
-                    $flags->{$module}->{$subperm} == 1 )
-            );
-        }
-    }
-    return $flags;
+    return _dispatch($flagsrequired, $flags);
 
     #FIXME - This fcn should return the failed permission so a suitable error msg can be delivered.
 }
