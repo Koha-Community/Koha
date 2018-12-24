@@ -504,10 +504,7 @@ sub ModSuggestion {
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
         my $patron = Koha::Patrons->find( $full_suggestion->{suggestedby} );
 
-        my $transport = 'email';
-        if (C4::Context->preference("FallbackToSMSIfNoEmail")) {
-            $transport = ($patron->smsalertnumber) && (!$patron->email) ? 'sms' : 'email';
-        }
+        my $transport = (C4::Context->preference("FallbackToSMSIfNoEmail")) && ($patron->smsalertnumber) && (!$patron->email) ? 'sms' : 'email';
 
         if (
             my $letter = C4::Letters::GetPreparedLetter(
