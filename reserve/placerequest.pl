@@ -97,14 +97,18 @@ if ( $type eq 'str8' && $borrower ) {
 
         if ($multi_hold) {
             my $bibinfo = $bibinfos{$biblionumber};
-            AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,[$biblionumber],
-                       $bibinfo->{rank},$startdate,$expirationdate,$notes,$bibinfo->{title},$checkitem,$found);
+            if ( CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
+                AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,[$biblionumber],
+                           $bibinfo->{rank},$startdate,$expirationdate,$notes,$bibinfo->{title},$checkitem,$found);
+            }
         } else {
             # place a request on 1st available
             for ( my $i = 0 ; $i < $holds_to_place_count ; $i++ ) {
-                AddReserve( $branch, $borrower->{'borrowernumber'},
-                    $biblionumber, \@realbi, $rank[0], $startdate, $expirationdate, $notes, $title,
-                    $checkitem, $found, $itemtype );
+                if ( CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
+                    AddReserve( $branch, $borrower->{'borrowernumber'},
+                        $biblionumber, \@realbi, $rank[0], $startdate, $expirationdate, $notes, $title,
+                        $checkitem, $found, $itemtype );
+                }
             }
         }
     }
