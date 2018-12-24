@@ -675,21 +675,14 @@ sub get_matches {
                 warn "search failed ($query) $error";
             }
             else {
-                if ( C4::Context->preference('SearchEngine') eq 'Elasticsearch' ) {
-                    foreach my $matched ( @{$searchresults} ) {
-                        my ( $biblionumber_tag, $biblionumber_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber", $marcframework_used );
-                        my $id = ( $biblionumber_tag > 10 ) ?
-                            $matched->field($biblionumber_tag)->subfield($biblionumber_subfield) :
-                            $matched->field($biblionumber_tag)->data();
-                        $matches->{$id}->{score} += $matchpoint->{score};
-                        $matches->{$id}->{record} = $matched;
-                    }
-                }
-                else {
-                    foreach my $matched ( @{$searchresults} ) {
-                        $matches->{$matched}->{score} += $matchpoint->{'score'};
-                        $matches->{$matched}->{record} = $matched;
-                    }
+                foreach my $matched ( @{$searchresults} ) {
+                    my $target_record = C4::Search::new_record_from_zebra( 'biblioserver', $matched );
+                    my ( $biblionumber_tag, $biblionumber_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber", $marcframework_used );
+                    my $id = ( $biblionumber_tag > 10 ) ?
+                        $target_record->field($biblionumber_tag)->subfield($biblionumber_subfield) :
+                        $target_record->field($biblionumber_tag)->data();
+                    $matches->{$id}->{score} += $matchpoint->{score};
+                    $matches->{$id}->{record} = $target_record;
                 }
             }
 
@@ -741,10 +734,8 @@ sub get_matches {
         };
 
         foreach my $id ( keys %$matches ) {
-            my $target_record = C4::Search::new_record_from_zebra( 'biblioserver', $matches->{$id}->{record} );
-            my $result = C4::Biblio::TransformMarcToKoha( $target_record, $marcframework_used );
             push @results, {
-                record_id => $result->{biblionumber},
+                record_id => $id,
                 score     => $matches->{$id}->{score}
             };
         }
