@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 57;
+use Test::More tests => 58;
 use MARC::Record;
 
 use C4::Biblio;
@@ -413,6 +413,13 @@ my $res_id = AddReserve( $branch_1, $borrowernumbers[0], $biblio->biblionumber, 
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
     'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
 
+    #results should be the same for both ReservesControlBranch settings
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'ItemHomeLibrary' );
+is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
+    'tooManyReserves', 'Patron cannot reserve item with hold limit of 1, 1 bib level hold placed' );
+#reset for further tests
+t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
+
 subtest 'Test max_holds per library/patron category' => sub {
     plan tests => 6;
 
@@ -533,7 +540,7 @@ $schema->storage->txn_rollback;
 
 subtest 'CanItemBeReserved / holds_per_day tests' => sub {
 
-    plan tests => 9;
+    plan tests => 10;
 
     $schema->storage->txn_begin;
 
@@ -648,6 +655,13 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         'Patron can reserve if holds_per_day is undef (i.e. undef is unlimited daily cap)'
     );
     AddReserve( $library->branchcode, $patron->borrowernumber, $biblio_3->biblionumber, '', 1, );
+    is_deeply(
+        CanItemBeReserved( $patron->borrowernumber, $itemnumber_3 ),
+        { status => 'tooManyReserves', limit => 3 },
+        'Unlimited daily holds, but reached reservesallowed'
+    );
+    #results should be the same for both ReservesControlBranch settings
+    t::lib::Mocks::mock_preference('ReservesControlBranch', 'ItemHomeLibrary');
     is_deeply(
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_3 ),
         { status => 'tooManyReserves', limit => 3 },
