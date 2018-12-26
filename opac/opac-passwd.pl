@@ -60,7 +60,7 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
                 $template->param( 'passwords_mismatch'   => '1' );
             } else {
                 try {
-                    $patron->set_password( $new_password );
+                    $patron->set_password({ password => $new_password });
                     $template->param( 'password_updated' => '1' );
                     $template->param( 'borrowernumber'   => $borrowernumber );
                 }
