@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 34;
+use Test::More tests => 33;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -205,31 +205,6 @@ subtest 'has_overdues' => sub {
     $retrieved_patron = Koha::Patrons->find( $new_patron_1->borrowernumber );
     is( $retrieved_patron->has_overdues, 1, );
     $issue->delete();
-};
-
-subtest 'update_password' => sub {
-    plan tests => 7;
-
-    t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
-    my $original_userid   = $new_patron_1->userid;
-    my $original_password = $new_patron_1->password;
-    warning_like { $retrieved_patron_1->update_password( $new_patron_2->userid, 'another_password' ) }
-    qr{Duplicate entry},
-      'Koha::Patron->update_password should warn if the userid is already used by another patron';
-    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->userid,   $original_userid,   'Koha::Patron->update_password should not have updated the userid' );
-    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->password, $original_password, 'Koha::Patron->update_password should not have updated the userid' );
-
-    my $digest = $retrieved_patron_1->update_password( 'another_nonexistent_userid_1', 'another_password' );
-    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->userid,   'another_nonexistent_userid_1', 'Koha::Patron->update_password should have updated the userid' );
-    is( Koha::Patrons->find( $new_patron_1->borrowernumber )->password, $digest,             'Koha::Patron->update_password should have updated the password' );
-
-    my $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $new_patron_1->borrowernumber } )->count;
-    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->update_password should have logged' );
-
-    t::lib::Mocks::mock_preference( 'BorrowersLog', 0 );
-    $retrieved_patron_1->update_password( 'yet_another_nonexistent_userid_1', 'another_password' );
-    $number_of_logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'CHANGE PASS', object => $new_patron_1->borrowernumber } )->count;
-    is( $number_of_logs, 1, 'With BorrowerLogs, Koha::Patron->update_password should not have logged' );
 };
 
 subtest 'is_expired' => sub {

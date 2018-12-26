@@ -276,7 +276,7 @@ sub store {
                     $self->userid($stored_userid);
                 }
 
-                # Password must be updated using $self->update_password
+                # Password must be updated using $self->set_password
                 $self->password($self_from_storage->password);
 
                 if ( C4::Context->preference('FeeOnChangePatronCategory')
@@ -637,35 +637,6 @@ sub is_going_to_expire {
     return 0 if $self->dateexpiry =~ '^9999';
     return 1 if dt_from_string( $self->dateexpiry )->subtract( days => $delay ) < dt_from_string->truncate( to => 'day' );
     return 0;
-}
-
-=head3 update_password
-
-my $updated = $patron->update_password( $userid, $password );
-
-Update the userid and the password of a patron.
-If the userid already exists, returns and let DBIx::Class warns
-This will add an entry to action_logs if BorrowersLog is set.
-
-=cut
-
-sub update_password {
-    my ( $self, $userid, $password ) = @_;
-    eval { $self->userid($userid)->store; };
-    return if $@; # Make sure the userid is not already in used by another patron
-
-    return 0 if $password eq '****' or $password eq '';
-
-    my $digest = Koha::AuthUtils::hash_password($password);
-    $self->update(
-        {
-            password       => $digest,
-            login_attempts => 0,
-        }
-    );
-
-    logaction( "MEMBERS", "CHANGE PASS", $self->borrowernumber, "" ) if C4::Context->preference("BorrowersLog");
-    return $digest;
 }
 
 =head3 set_password
