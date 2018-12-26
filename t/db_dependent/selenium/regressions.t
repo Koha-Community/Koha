@@ -26,6 +26,7 @@ use C4::Context;
 use C4::Biblio qw( AddBiblio );
 use C4::Circulation;
 use Koha::AuthUtils;
+use t::lib::Mocks;
 use t::lib::Selenium;
 use t::lib::TestBuilder;
 
@@ -53,7 +54,8 @@ subtest 'OPAC - borrowernumber and branchcode as html attributes' => sub {
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { flags => 1 } } );
     my $password = Koha::AuthUtils::generate_password();
-    $patron->update_password( $patron->userid, $password );
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    $patron->set_password({ password => $password });
     $s->opac_auth( $patron->userid, $password );
     my $elt = $driver->find_element('//span[@class="loggedinusername"]');
     is( $elt->get_attribute('data-branchcode'), $patron->library->branchcode,

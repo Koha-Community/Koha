@@ -27,6 +27,7 @@ use Test::More tests => 2;
 
 use C4::Context;
 use Koha::AuthUtils;
+use t::lib::Mocks;
 use t::lib::Selenium;
 use t::lib::TestBuilder;
 
@@ -48,7 +49,8 @@ SKIP: {
 
         my $password = Koha::AuthUtils::generate_password();
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
-        $patron->update_password( $patron->userid, $password );
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $patron->set_password({ password => $password });
 
         # Patron does not have permission to access staff interface
         $s->auth( $patron->userid, $password );
@@ -79,7 +81,8 @@ SKIP: {
 
         my $password = Koha::AuthUtils::generate_password();
         my $patron = $builder->build_object({ class => 'Koha::Patrons', value => { flags => 0 }});
-        $patron->update_password( $patron->userid, $password );
+        t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+        $patron->set_password({ password => $password });
 
         # Using the modal
         $driver->find_element('//a[@class="login-link loginModal-trigger"]')->click;

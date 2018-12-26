@@ -369,7 +369,8 @@ my $builder = t::lib::TestBuilder->new;
 
 # Borrower Creation
 our $patron = $builder->build( { source => 'Borrower' } );
-Koha::Patrons->find( $patron->{borrowernumber} )->update_password( $patron->{userid}, 'password' );
+t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+Koha::Patrons->find( $patron->{borrowernumber} )->set_password({ password => 'password' });
 
 my $session = C4::Auth::get_session("");
 $session->flush;

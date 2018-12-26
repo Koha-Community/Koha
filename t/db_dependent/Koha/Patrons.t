@@ -1505,8 +1505,9 @@ subtest '->store' => sub {
         'Koha::Patron->store raises an exception on duplicate ID';
 
     # Test password
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
     my $password = 'password';
-    $patron_1->update_password($patron_1->userid, $password);
+    $patron_1->set_password({ password => $password });
     like( $patron_1->password, qr|^\$2|, 'Password should be hashed using bcrypt (start with $2)' );
     my $digest = $patron_1->password;
     $patron_1->surname('xxx')->store;
