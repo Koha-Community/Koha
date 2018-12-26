@@ -24,15 +24,14 @@ use CGI qw ( -utf8 );
 
 use C4::Auth;    # checkauth, getborrowernumber.
 use C4::Context;
-use Digest::MD5 qw(md5_base64);
 use C4::Circulation;
 use C4::Members;
 use C4::Output;
-use Koha::AuthUtils qw(hash_password);
 use Koha::Patrons;
 
+use Try::Tiny;
+
 my $query = new CGI;
-my $dbh   = C4::Context->dbh;
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -60,17 +59,19 @@ if ( C4::Context->preference("OpacPasswordChange") ) {
                 $template->param( 'Error_messages' => '1' );
                 $template->param( 'passwords_mismatch'   => '1' );
             } else {
-                my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $new_password );
-                unless ( $is_valid ) {
-                    $error = 'password_too_short' if $error eq 'too_short';
-                    $error = 'password_too_weak' if $error eq 'too_weak';
-                    $error = 'password_has_whitespaces' if $error eq 'has_whitespaces';
-                } else {
-                    # Password is valid and match
+                try {
                     $patron->set_password( $new_password );
                     $template->param( 'password_updated' => '1' );
                     $template->param( 'borrowernumber'   => $borrowernumber );
                 }
+                catch {
+                    $error = 'password_too_short'
+                        if $_->isa('Koha::Exceptions::Password::TooShort');
+                    $error = 'password_too_weak'
+                        if $_->isa('Koha::Exceptions::Password::TooWeak');
+                    $error = 'password_has_whitespaces'
+                        if $_->isa('Koha::Exceptions::Password::WhitespaceCharacters');
+                };
             }
         }
         else {
