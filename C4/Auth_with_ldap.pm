@@ -346,7 +346,7 @@ sub _do_changepassword {
 
     my $digest = hash_password($password);
     $debug and print STDERR "changing local password for borrowernumber=$borrowerid to '$digest'\n";
-    Koha::Patrons->find($borrowerid)->update_password( $userid, $password );
+    Koha::Patrons->find($borrowerid)->set_password({ password => $password, skip_validation => 1 });
 
     my ($ok, $cardnum) = checkpw_internal(C4::Context->dbh, $userid, $password);
     return $cardnum if $ok;
