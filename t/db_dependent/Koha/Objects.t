@@ -260,7 +260,7 @@ subtest '->search() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    Koha::Patrons->delete;
+    my $count = Koha::Patrons->search->count;
 
     # Create 10 patrons
     foreach (1..10) {
@@ -270,7 +270,7 @@ subtest '->search() tests' => sub {
     my $patrons = Koha::Patrons->search();
     is( ref($patrons), 'Koha::Patrons', 'search in scalar context returns the Koha::Object-based type' );
     my @patrons = Koha::Patrons->search();
-    is( scalar @patrons, 10, 'search in list context returns a list of objects' );
+    is( scalar @patrons, $count + 10, 'search in list context returns a list of objects' );
     my $i = 0;
     foreach (1..10) {
         is( ref($patrons[$i]), 'Koha::Patron', 'Objects in the list have the singular type' );
