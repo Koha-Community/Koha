@@ -708,7 +708,7 @@ sub set_password {
 
                 my $password_length = length($password);
                 Koha::Exceptions::Password::TooShort->throw(
-                    { length => $password_length, min_length => $min_length } );
+                    length => $password_length, min_length => $min_length );
             }
             elsif ( $error eq 'has_whitespaces' ) {
                 Koha::Exceptions::Password::WhitespaceCharacters->throw();
