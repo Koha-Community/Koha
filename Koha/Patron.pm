@@ -670,13 +670,15 @@ sub update_password {
 
 =head3 set_password
 
-    $patron->set_password( $plain_text_password );
+    $patron->set_password({ password => $plain_text_password [, skip_validation => 1 ] });
 
 Set the patron's password.
 
 =head4 Exceptions
 
 The passed string is validated against the current password enforcement policy.
+Validation can be skipped by passing the I<skip_validation> parameter.
+
 Exceptions are thrown if the password is not good enough.
 
 =over 4
@@ -692,24 +694,28 @@ Exceptions are thrown if the password is not good enough.
 =cut
 
 sub set_password {
-    my ( $self, $password ) = @_;
+    my ( $self, $args ) = @_;
 
-    my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password );
+    my $password = $args->{password};
 
-    if ( !$is_valid ) {
-        if ( $error eq 'too_short' ) {
-            my $min_length = C4::Context->preference('minPasswordLength');
-            $min_length = 3 if not $min_length or $min_length < 3;
+    unless ( $args->{skip_validation} ) {
+        my ( $is_valid, $error ) = Koha::AuthUtils::is_password_valid( $password );
 
-            my $password_length = length($password);
-            Koha::Exceptions::Password::TooShort->throw(
-                length => $password_length, min_length => $min_length );
-        }
-        elsif ( $error eq 'has_whitespaces' ) {
-            Koha::Exceptions::Password::WhitespaceCharacters->throw();
-        }
-        elsif ( $error eq 'too_weak' ) {
-            Koha::Exceptions::Password::TooWeak->throw();
+        if ( !$is_valid ) {
+            if ( $error eq 'too_short' ) {
+                my $min_length = C4::Context->preference('minPasswordLength');
+                $min_length = 3 if not $min_length or $min_length < 3;
+
+                my $password_length = length($password);
+                Koha::Exceptions::Password::TooShort->throw(
+                    { length => $password_length, min_length => $min_length } );
+            }
+            elsif ( $error eq 'has_whitespaces' ) {
+                Koha::Exceptions::Password::WhitespaceCharacters->throw();
+            }
+            elsif ( $error eq 'too_weak' ) {
+                Koha::Exceptions::Password::TooWeak->throw();
+            }
         }
     }
 
