@@ -37,9 +37,8 @@ __PACKAGE__->table("accountlines");
 =head2 borrowernumber
 
   data_type: 'integer'
-  default_value: 0
   is_foreign_key: 1
-  is_nullable: 0
+  is_nullable: 1
 
 =head2 accountno
 
@@ -119,12 +118,7 @@ __PACKAGE__->add_columns(
   "issue_id",
   { data_type => "integer", is_nullable => 1 },
   "borrowernumber",
-  {
-    data_type      => "integer",
-    default_value  => 0,
-    is_foreign_key => 1,
-    is_nullable    => 0,
-  },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "accountno",
   { data_type => "smallint", default_value => 0, is_nullable => 0 },
   "itemnumber",
@@ -212,7 +206,12 @@ __PACKAGE__->belongs_to(
   "borrowernumber",
   "Koha::Schema::Result::Borrower",
   { borrowernumber => "borrowernumber" },
-  { is_deferrable => 1, on_delete => "CASCADE", on_update => "CASCADE" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
 );
 
 =head2 itemnumber
@@ -236,8 +235,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-05-16 17:00:24
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pygYYKxFDRLX97PyeUeLvg
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-12-27 16:44:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Inx2QcGouIgjnlyBOLAwbA
 
 
 sub koha_objects_class {
