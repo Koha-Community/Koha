@@ -451,7 +451,7 @@ subtest 'GetMemberAccountBalance' => sub {
 };
 
 subtest 'purgeSelfRegistration' => sub {
-    plan tests => 2;
+    plan tests => 5;
 
     #purge unverified
     my $d=360;
@@ -467,8 +467,37 @@ subtest 'purgeSelfRegistration' => sub {
     t::lib::Mocks::mock_preference('PatronSelfRegistrationDefaultCategory', $c );
     t::lib::Mocks::mock_preference('PatronSelfRegistrationExpireTemporaryAccountsDelay', 360);
     C4::Members::DeleteExpiredOpacRegistrations();
-    $dbh->do("INSERT INTO borrowers (surname, address, city, branchcode, categorycode, dateenrolled) VALUES ('Testaabbcc', 'Street 1', 'CITY', ?, '$c', '2014-01-01 01:02:03')", undef, $library1->{branchcode});
-    is( C4::Members::DeleteExpiredOpacRegistrations(), 1, 'Test for DeleteExpiredOpacRegistrations');
+    my $self_reg = $builder->build_object({
+        class => 'Koha::Patrons',
+        value => {
+            dateenrolled => '2014-01-01 01:02:03',
+            categorycode => $c
+        }
+    });
+
+    my $checkout     = $builder->build_object({
+        class=>'Koha::Checkouts',
+        value=>{
+            borrowernumber=>$self_reg->borrowernumber
+        }
+    });
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with checkout");
+
+    my $account_line = $builder->build_object({
+        class=>'Koha::Account::Lines',
+        value=>{
+            borrowernumber=>$self_reg->borrowernumber,
+            amountoutstanding=>5
+        }
+    });
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with checkout and fine");
+
+    $checkout->delete;
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 0, "DeleteExpiredOpacRegistrations doesn't delete borrower with fine and no checkout");
+
+    $account_line->delete;
+    is( C4::Members::DeleteExpiredOpacRegistrations(), 1, "DeleteExpiredOpacRegistrations does delete borrower with no fines and no checkouts");
+
 };
 
 sub _find_member {
