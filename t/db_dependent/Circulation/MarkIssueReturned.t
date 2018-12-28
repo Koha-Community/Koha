@@ -61,28 +61,28 @@ subtest 'anonymous patron' => sub {
     # The next call will raise an error, because data are not correctly set
     t::lib::Mocks::mock_preference('AnonymousPatron', '');
     my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
-    eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, 'dropbox_branch', 'returndate', 2 ) };
+    eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, 2 ) };
     like ( $@, qr<Fatal error: the patron \(\d+\) .* AnonymousPatron>, 'AnonymousPatron is not set - Fatal error on anonymization' );
     Koha::Checkouts->find( $issue->issue_id )->delete;
 
     my $anonymous_borrowernumber = Koha::Patron->new({categorycode => $patron_category->{categorycode}, branchcode => $library->{branchcode} })->store->borrowernumber;
     t::lib::Mocks::mock_preference('AnonymousPatron', $anonymous_borrowernumber);
     $issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
-    eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, 'dropbox_branch', 'returndate', 2 ) };
+    eval { C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, 2 ) };
     is ( $@, q||, 'AnonymousPatron is set correctly - no error expected');
 };
 
 my ( $issue_id, $issue );
 # The next call will return undef for invalid item number
-eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, 'invalid_itemnumber', 'dropbox_branch', 'returndate', 0 ) };
+eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, 'invalid_itemnumber', undef, 0 ) };
 is( $@, '', 'No die triggered by invalid itemnumber' );
 is( $issue_id, undef, 'No issue_id returned' );
 
 # In the next call we return the item and try it another time
 $issue = C4::Circulation::AddIssue( $patron, $item->{barcode} );
-eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, undef, 0 ) };
+eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, 0 ) };
 is( $issue_id, $issue->issue_id, "Item has been returned (issue $issue_id)" );
-eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, undef, 0 ) };
+eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->{borrowernumber}, $item->{itemnumber}, undef, 0 ) };
 is( $@, '', 'No crash on returning item twice' );
 is( $issue_id, undef, 'Cannot return an item twice' );
 

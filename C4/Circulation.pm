@@ -1920,8 +1920,14 @@ sub AddReturn {
 
         if ($patron) {
             eval {
-                MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
-                    $circControlBranch, $return_date, $patron->privacy );
+                if ( $dropbox ) {
+                    MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
+                        $dropboxdate, $patron->privacy );
+                }
+                else {
+                    MarkIssueReturned( $borrowernumber, $item->{'itemnumber'},
+                        $return_date, $patron->privacy );
+                }
             };
             unless ( $@ ) {
                 if ( ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue ) || $return_date ) {
@@ -2098,30 +2104,25 @@ sub AddReturn {
 
 =head2 MarkIssueReturned
 
-  MarkIssueReturned($borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy);
+  MarkIssueReturned($borrowernumber, $itemnumber, $returndate, $privacy);
 
 Unconditionally marks an issue as being returned by
 moving the C<issues> row to C<old_issues> and
-setting C<returndate> to the current date, or
-the last non-holiday date of the branccode specified in
-C<dropbox_branch> .  Assumes you've already checked that 
-it's safe to do this, i.e. last non-holiday > issuedate.
+setting C<returndate> to the current date.
 
 if C<$returndate> is specified (in iso format), it is used as the date
-of the return. It is ignored when a dropbox_branch is passed in.
+of the return.
 
 C<$privacy> contains the privacy parameter. If the patron has set privacy to 2,
 the old_issue is immediately anonymised
 
 Ideally, this function would be internal to C<C4::Circulation>,
-not exported, but it is currently needed by one 
-routine in C<C4::Accounts>.
+not exported, but it is currently used in misc/cronjobs/longoverdue.pl.
 
 =cut
 
 sub MarkIssueReturned {
-    my ( $borrowernumber, $itemnumber, $dropbox_branch, $returndate, $privacy ) = @_;
-
+    my ( $borrowernumber, $itemnumber, $returndate, $privacy ) = @_;
 
     # Retrieve the issue
     my $issue = Koha::Checkouts->find( { itemnumber => $itemnumber } ) or return;
@@ -2137,41 +2138,26 @@ sub MarkIssueReturned {
         die "Fatal error: the patron ($borrowernumber) has requested their circulation history be anonymized on check-in, but the AnonymousPatron system preference is empty or not set correctly."
             unless Koha::Patrons->find( $anonymouspatron );
     }
-    my $database = Koha::Database->new();
-    my $schema   = $database->schema;
-    my $dbh   = C4::Context->dbh;
 
-    my $query = 'UPDATE issues SET returndate=';
-    my @bind;
-    if ($dropbox_branch) {
-        my $calendar = Koha::Calendar->new( branchcode => $dropbox_branch );
-        my $dropboxdate = $calendar->addDate( DateTime->now( time_zone => C4::Context->tz), -1 );
-        $query .= ' ? ';
-        push @bind, $dropboxdate->strftime('%Y-%m-%d %H:%M');
-    } elsif ($returndate) {
-        $query .= ' ? ';
-        push @bind, $returndate;
-    } else {
-        $query .= ' now() ';
-    }
-    $query .= ' WHERE issue_id = ?';
-    push @bind, $issue_id;
+    my $schema = Koha::Database->schema;
 
     # FIXME Improve the return value and handle it from callers
     $schema->txn_do(sub {
 
-        # Update the returndate
-        $dbh->do( $query, undef, @bind );
-
-        # We just updated the returndate, so we need to refetch $issue
-        $issue->discard_changes;
+        # Update the returndate value
+        if ( $returndate ) {
+            $issue->returndate( $returndate )->store->discard_changes; # update and refetch
+        }
+        else {
+            $issue->returndate( \'NOW()' )->store->discard_changes; # update and refetch
+        }
 
         # Create the old_issues entry
         my $old_checkout = Koha::Old::Checkout->new($issue->unblessed)->store;
 
         # anonymise patron checkout immediately if $privacy set to 2 and AnonymousPatron is set to a valid borrowernumber
         if ( $privacy == 2) {
-            $dbh->do(q|UPDATE old_issues SET borrowernumber=? WHERE issue_id = ?|, undef, $anonymouspatron, $old_checkout->issue_id);
+            $old_checkout->borrowernumber($anonymouspatron)->store;
         }
 
         # And finally delete the issue
@@ -3728,7 +3714,7 @@ sub LostItem{
             #warn " $issues->{'borrowernumber'}  /  $itemnumber ";
         }
 
-        MarkIssueReturned($borrowernumber,$itemnumber,undef,undef,$patron->privacy) if $mark_returned;
+        MarkIssueReturned($borrowernumber,$itemnumber,undef,$patron->privacy) if $mark_returned;
     }
 
     #When item is marked lost automatically cancel its outstanding transfers and set items holdingbranch to the transfer source branch (frombranch)
@@ -3799,7 +3785,6 @@ sub ProcessOfflineReturn {
             MarkIssueReturned(
                 $issue->{borrowernumber},
                 $itemnumber,
-                undef,
                 $operation->{timestamp},
             );
             ModItem(
@@ -3834,7 +3819,6 @@ sub ProcessOfflineIssue {
             MarkIssueReturned(
                 $issue->{borrowernumber},
                 $itemnumber,
-                undef,
                 $operation->{timestamp},
             );
         }
