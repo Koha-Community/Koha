@@ -45,6 +45,11 @@ use Exception::Class (
         isa => 'Koha::Exceptions::Object',
         description => "Method not covered by tests",
     },
+    'Koha::Exceptions::Object::BadValue' => {
+        isa         => 'Koha::Exceptions::Object',
+        description => 'Invalid data passed',
+        fields      => ['type', 'property', 'value'],
+    },
 );
 
 sub full_message {
@@ -55,6 +60,9 @@ sub full_message {
     unless ( $msg) {
         if ( $self->isa('Koha::Exceptions::Object::FKConstraint') ) {
             $msg = sprintf("Invalid parameter passed, %s=%s does not exist", $self->broken_fk, $self->value );
+        }
+        elsif ( $self->isa('Koha::Exceptions::Object::BadValue') ) {
+            $msg = sprintf("Invalid value passed, %s=%s expected type is %s", $self->property, $self->value, $self->type );
         }
     }
 
@@ -90,6 +98,10 @@ Exception to be used when an invalid object property has been requested.
 =head2 Koha::Exceptions::Object::MethodNotCoveredByTests
 
 Exception to be used when the invoked method is not covered by tests.
+
+=head2 Koha::Exceptions::Object::BadValue
+
+Exception to be used when a bad value has been passed for a property.
 
 =head1 Class methods
 
