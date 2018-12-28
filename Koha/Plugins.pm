@@ -79,6 +79,16 @@ sub GetPlugins {
 
             my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
 
+            my $plugin_enabled = $plugin->retrieve_data('__ENABLED__');
+            $plugin->{enabled} = $plugin_enabled;
+
+            # Want all plugins. Not only enabled ones.
+            if ( defined($params->{all}) && $params->{all} ) {
+                $plugin_enabled = 1;
+            }
+
+            next unless $plugin_enabled;
+
             # Limit results by method or metadata
             next if $method && !$plugin->can($method);
             my $plugin_metadata = $plugin->get_metadata;

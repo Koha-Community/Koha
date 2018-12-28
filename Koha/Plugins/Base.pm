@@ -50,7 +50,7 @@ sub new {
     ## Run the installation method if it exists and hasn't been run before
     if ( $self->can('install') && !$self->retrieve_data('__INSTALLED__') ) {
         if ( $self->install() ) {
-            $self->store_data( { '__INSTALLED__' => 1 } );
+            $self->store_data( { '__INSTALLED__' => 1, '__ENABLED__' => 1 } );
             if ( my $version = $plugin_version ) {
                 $self->store_data({ '__INSTALLED_VERSION__' => $version });
             }
@@ -270,6 +270,36 @@ sub _version_compare {
         }
     }
     return 0;
+}
+
+=head2 enable
+
+Method for enabling plugin
+
+$plugin->enable
+
+=cut
+
+sub enable {
+    my ($self) = @_;
+
+    $self->store_data( {'__ENABLED__' => 1}  );
+
+    return $self;
+}
+
+=head2 disable
+
+Method for disabling plugin
+
+$plugin->disable
+
+=cut
+
+sub disable {
+    my ($self) = @_;
+
+    $self->store_data( {'__ENABLED__' => 0}  );
 }
 
 1;

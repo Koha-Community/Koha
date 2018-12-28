@@ -77,7 +77,14 @@
 
                             [% FOREACH plugin IN plugins %]
                                 <tr>
-                                    <td><strong>[% plugin.metadata.name | html %]</strong></td>
+                                    <td>
+                                        [% IF ( plugin.enabled ) %]
+                                            <span class="label label-primary">ENABLED</span>
+                                        [% ELSE %]
+                                            <span class="label label-default">DISABLED</span>
+                                        [% END %]
+                                        <strong>[% plugin.metadata.name | html %]</strong>
+                                    </td>
                                     <td>
                                         [% plugin.metadata.description | html %]
 
@@ -124,6 +131,11 @@
                                                     [% END %]
                                                     [% IF ( CAN_user_plugins_manage ) %]
                                                             <li><a class="uninstall_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-uninstall.pl?class=[% plugin.class | html %]"><i class="fa fa-trash"></i> Uninstall</a></li>
+                                                        [% IF ( plugin.enabled ) %]
+                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=disable"><i class="fa fa-pause"></i> Disable</a></li>
+                                                        [% ELSE %]
+                                                                <li><a class="enable_plugin" data-plugin-name="[% plugin.metadata.name | html %]" href="/cgi-bin/koha/plugins/plugins-enable.pl?class=[% plugin.class | html %]&method=enable"><i class="fa fa-play"></i> Enable</a></li>
+                                                        [% END %]
                                                     [% END %]
                                                 </ul>
                                             </div>
