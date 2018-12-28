@@ -99,7 +99,7 @@ use C4::Members;
 
 =head1 DESCRIPTION
 
-This module contains routines for adding, modifying and deleting members/patrons/borrowers 
+This module contains routines for adding, modifying and deleting members/patrons/borrowers
 
 =head1 FUNCTIONS
 
@@ -141,7 +141,7 @@ The following will be set where applicable:
  $flags->{WAITING}->{message}       Message -- deprecated
  $flags->{WAITING}->{itemlist}      ref-to-array: list of available items
 
-=over 
+=over
 
 =item C<$flags-E<gt>{ODUES}-E<gt>{itemlist}> is a reference-to-array listing the
 overdue items. Its elements are references-to-hash, each describing an
@@ -157,7 +157,7 @@ fields from the reserves table of the Koha database.
 
 =back
 
-All the "message" fields that include language generated in this function are deprecated, 
+All the "message" fields that include language generated in this function are deprecated,
 because such strings belong properly in the display layer.
 
 The "message" field that comes from the DB is OK.
@@ -537,14 +537,14 @@ sub GetAllIssues {
     my $dbh = C4::Context->dbh;
     my $query =
 'SELECT *, issues.timestamp as issuestimestamp, issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp
-  FROM issues 
+  FROM issues
   LEFT JOIN items on items.itemnumber=issues.itemnumber
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
-  WHERE borrowernumber=? 
+  WHERE borrowernumber=?
   UNION ALL
-  SELECT *, old_issues.timestamp as issuestimestamp, old_issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp 
-  FROM old_issues 
+  SELECT *, old_issues.timestamp as issuestimestamp, old_issues.renewals AS renewals,items.renewals AS totalrenewals,items.timestamp AS itemstimestamp
+  FROM old_issues
   LEFT JOIN items on items.itemnumber=old_issues.itemnumber
   LEFT JOIN biblio ON items.biblionumber=biblio.biblionumber
   LEFT JOIN biblioitems ON items.biblioitemnumber=biblioitems.biblioitemnumber
@@ -641,11 +641,11 @@ sub GetBorrowersToExpunge {
     my $filtercategory   = $params->{'category_code'};
     my $filterbranch     = $params->{'branchcode'} ||
                         ((C4::Context->preference('IndependentBranches')
-                             && C4::Context->userenv 
+                             && C4::Context->userenv
                              && !C4::Context->IsSuperLibrarian()
                              && C4::Context->userenv->{branch})
                          ? C4::Context->userenv->{branch}
-                         : "");  
+                         : "");
     my $filterpatronlist = $params->{'patron_list_id'};
 
     my $dbh   = C4::Context->dbh;
@@ -703,13 +703,13 @@ sub GetBorrowersToExpunge {
     warn $query if $debug;
 
     my $sth = $dbh->prepare($query);
-    if (scalar(@query_params)>0){  
+    if (scalar(@query_params)>0){
         $sth->execute(@query_params);
     }
     else {
         $sth->execute;
     }
-    
+
     my @results;
     while ( my $data = $sth->fetchrow_hashref ) {
         push @results, $data;
@@ -920,18 +920,18 @@ sub DeleteExpiredOpacRegistrations {
     my $category_code = C4::Context->preference('PatronSelfRegistrationDefaultCategory');
 
     return 0 if not $category_code or not defined $delay or $delay eq q||;
+    my $date_enrolled = dt_from_string();
+    $date_enrolled->subtract( days => $delay );
 
-    my $query = qq|
-SELECT borrowernumber
-FROM borrowers
-WHERE categorycode = ? AND DATEDIFF( NOW(), dateenrolled ) > ? |;
+    my $registrations_to_del = Koha::Patrons->search({
+        dateenrolled => {'<=' => $date_enrolled->ymd},
+        categorycode => $category_code,
+    });
 
-    my $dbh = C4::Context->dbh;
-    my $sth = $dbh->prepare($query);
-    $sth->execute( $category_code, $delay );
     my $cnt=0;
-    while ( my ($borrowernumber) = $sth->fetchrow_array() ) {
-        Koha::Patrons->find($borrowernumber)->delete;
+    while ( my $registration = $registrations_to_del->next() ) {
+        next if $registration->checkouts->count || $registration->account->balance;
+        $registration->delete;
         $cnt++;
     }
     return $cnt;
