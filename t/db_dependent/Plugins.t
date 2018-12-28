@@ -9,7 +9,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 42;
+use Test::More tests => 44;
 
 use C4::Context;
 use Koha::Database;
@@ -77,15 +77,19 @@ close $fh;
 my $classname = ref($plugin);
 like( $plugin->test_template($fn), qr/^I am $fn/, 'Template works' );
 
+$plugin->enable;
+
 # testing GetPlugins
 my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
     method => 'report'
 });
+
 my @names = map { $_->get_metadata()->{'name'} } @plugins;
 is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
 @plugins =  Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
     metadata => { my_example_tag  => 'find_me' },
 });
+
 @names = map { $_->get_metadata()->{'name'} } @plugins;
 is( scalar grep( /^Test Plugin$/, @names), 1, "GetPlugins also found Test Plugin via a metadata tag" );
 # Test two metadata conditions; one does not exist for Test.pm
@@ -94,6 +98,16 @@ my @plugins2 = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
     metadata => { my_example_tag  => 'find_me', not_there => '1' },
 });
 isnt( scalar @plugins2, scalar @plugins, 'GetPlugins with two metadata conditions' );
+
+$plugin->disable;
+
+@plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins();
+@names = map { $_->get_metadata()->{'name'} } @plugins;
+is( scalar grep( /^Test Plugin$/, @names), 0, "GetPlugins does not found disabled Test Plugin" );
+
+@plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({ all => 1 });
+@names = map { $_->get_metadata()->{'name'} } @plugins;
+is( scalar grep( /^Test Plugin$/, @names), 1, "With all param, GetPlugins found disabled Test Plugin" );
 
 for my $pass ( 1 .. 2 ) {
     my $plugins_dir;
