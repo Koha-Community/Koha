@@ -143,6 +143,13 @@ sub store {
                     duplicate_id => $+{key}
                 );
             }
+            elsif( $_->{msg} =~ /Incorrect (?<type>\w+) value: '(?<value>.*)' for column '(?<property>\w+)'/ ) {
+                Koha::Exceptions::Object::BadValue->throw(
+                    type     => $+{type},
+                    value    => $+{value},
+                    property => $+{property}
+                );
+            }
         }
         # Catch-all for foreign key breakages. It will help find other use cases
         $_->rethrow();
