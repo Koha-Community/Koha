@@ -242,7 +242,7 @@ subtest "Test update method" => sub {
 
 subtest 'store() tests' => sub {
 
-    plan tests => 7;
+    plan tests => 8;
 
     # Using Koha::ApiKey to test Koha::Object>-store
     # Simple object with foreign keys and unique key
@@ -305,6 +305,23 @@ subtest 'store() tests' => sub {
     $api_key->set({ secret => 'Manuel' });
     my $ret = $api_key->store;
     is( ref($ret), 'Koha::ApiKey', 'store() returns the object on success' );
+
+    subtest 'Bad value tests' => sub {
+
+        plan tests => 1;
+
+        my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+        my $print_error = $schema->storage->dbh->{PrintError};
+        $schema->storage->dbh->{PrintError} = 0;
+
+        throws_ok
+            { $patron->lastseen('wrong_value')->store; }
+            'Koha::Exceptions::Object::BadValue',
+            'Exception thrown correctly';
+
+        $schema->storage->dbh->{PrintError} = $print_error;
+    };
 
     $schema->storage->txn_rollback;
 };
