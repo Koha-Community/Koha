@@ -22,7 +22,7 @@ use Test::Exception;
 
 subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
 
-    plan tests => 5;
+    plan tests => 9;
 
     use_ok('Koha::Exceptions::Object');
 
@@ -39,6 +39,25 @@ subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
         'Koha::Exceptions::Object::FKConstraint',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+
+    throws_ok {
+        Koha::Exceptions::Object::BadValue->throw(
+            type     => 'datetime',
+            property => 'a_property',
+            value    => 'a_value'
+        );
+    }
+    'Koha::Exceptions::Object::BadValue',
+        'Koha::Exceptions::Object::BadValue exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", 'Invalid value passed, a_property=a_value expected type is datetime', 'Koha::Exceptions::Object::BadValue stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Object::BadValue->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Object::BadValue',
+        'Koha::Exceptions::Object::BadValue is thrown :-D';
+    is( "$@", 'Manual message exception', 'Koha::Exceptions::Object::BadValue not stringified if manually passed' );
 };
 
 subtest 'Koha::Exceptions::Password tests' => sub {
