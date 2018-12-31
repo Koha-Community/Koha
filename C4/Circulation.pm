@@ -1906,13 +1906,7 @@ sub AddReturn {
         my $is_overdue;
         die "The item is not issed and cannot be returned" unless $issue; # Just in case...
         $patron or warn "AddReturn without current borrower";
-		my $circControlBranch;
         if ($dropbox) {
-            # define circControlBranch only if dropbox mode is set
-            # don't allow dropbox mode to create an invalid entry in issues (issuedate > today)
-            # FIXME: check issuedate > returndate, factoring in holidays
-
-            $circControlBranch = _GetCircControlBranch($item,$patron_unblessed);
             $is_overdue = $issue->is_overdue( $dropboxdate );
         } else {
             $is_overdue = $issue->is_overdue;
