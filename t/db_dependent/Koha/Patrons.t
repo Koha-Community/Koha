@@ -1518,7 +1518,7 @@ subtest '->store' => sub {
 
 subtest '->set_password' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -1532,6 +1532,10 @@ subtest '->set_password' => sub {
     throws_ok { $patron->set_password('ab'); }
         'Koha::Exceptions::Password::TooShort',
         'minPasswordLength is undef, fall back to 3, fail test';
+    is( "$@",
+        'Password length (2) is shorter than required (3)',
+        'Exception parameters passed correctly'
+    );
 
     t::lib::Mocks::mock_preference( 'minPasswordLength', 2 );
     throws_ok { $patron->set_password('ab'); }
