@@ -148,7 +148,7 @@
                                         [% FOREACH item IN item_loop %]
                                             <tr>
                                                 [% FOREACH sf_code IN item_subfield_codes %]
-                                                    <td>[% item.$sf_code | html %]</td>
+                                                    <td>[% item.$sf_code | $raw %]</td>
                                                 [% END %]
                                             </tr>
                                         [% END %]
