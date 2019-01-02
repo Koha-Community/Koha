@@ -39,11 +39,26 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 my $tx;
 
 subtest 'under() tests' => sub {
-    plan tests => 15;
+
+    plan tests => 20;
 
     $schema->storage->txn_begin;
 
     my ($borrowernumber, $session_id) = create_user_and_session();
+
+    # disable the /public namespace
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 0 );
+    $tx = $t->ua->build_tx( POST => "/api/v1/public/patrons/$borrowernumber/password" );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)
+      ->status_is(403)
+      ->json_is('/error', 'Configuration prevents the usage of this endpoint by unprivileged users');
+
+    # enable the /public namespace
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
+    $tx = $t->ua->build_tx( GET => "/api/v1/public/patrons/$borrowernumber/password" );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(404);
 
     # 401 (no authentication)
     $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );

@@ -55,7 +55,18 @@ sub under {
     my $c = shift->openapi->valid_input or return;;
 
     my $status = 0;
+
     try {
+
+        # /api/v1/{namespace}
+        my $namespace = $c->req->url->to_abs->path->[2];
+
+        if ( $namespace eq 'public'
+            and !C4::Context->preference('RESTPublicAPI') )
+        {
+            Koha::Exceptions::Authorization->throw(
+                "Configuration prevents the usage of this endpoint by unprivileged users");
+        }
 
         $status = authenticate_api_request($c);
 
@@ -86,6 +97,9 @@ sub under {
                 error => $_->error,
                 required_permissions => $_->required_permissions,
             });
+        }
+        elsif ($_->isa('Koha::Exceptions::Authorization')) {
+            return $c->render(status => 403, json => { error => $_->error });
         }
         elsif ($_->isa('Koha::Exceptions')) {
             return $c->render(status => 500, json => { error => $_->error });
