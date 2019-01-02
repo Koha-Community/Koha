@@ -1,0 +1,73 @@
+{
+  "type": "object",
+  "properties": {
+    "id": {
+      "$ref": "../x-primitives.json#/article_request_id"
+    },
+    "borrowernumber": {
+      "$ref": "../x-primitives.json#/borrowernumber"
+    },
+    "biblionumber": {
+      "$ref": "../x-primitives.json#/biblionumber"
+    },
+    "branchcode": {
+      "description": "code of pickup location branch",
+      "type": ["string", "null"]
+    },
+    "itemnumber": {
+      "description": "foreign key from the items table defining the specific item the patron has requested",
+      "type": ["integer", "null"]
+    },
+    "title": {
+      "description": "title information",
+      "type": ["string", "null"]
+    },
+    "author": {
+      "description": "author information",
+      "type": ["string", "null"]
+    },
+    "volume": {
+      "description": "volume information",
+      "type": ["string", "null"]
+    },
+    "issue": {
+      "description": "issue information",
+      "type": ["string", "null"]
+    },
+    "date": {
+      "description": "date information",
+      "type": ["string", "null"]
+    },
+    "pages": {
+      "description": "page information",
+      "type": ["string", "null"]
+    },
+    "chapters": {
+      "description": "chapter information",
+      "type": ["string", "null"]
+    },
+    "patron_notes": {
+      "description": "notes by patron related to this article request",
+      "type": ["string", "null"]
+    },
+    "status": {
+      "description": "request status",
+      "type": "string",
+      "enum": ["PENDING", "PROCESSING", "COMPLETED", "CANCELED"]
+    },
+    "notes": {
+      "description": "notes by staff related to this article request",
+      "type": ["string", "null"]
+    },
+    "created_on": {
+      "description": "date and time the article request was made",
+      "type": "string",
+      "format": "date-time"
+    },
+    "updated_on": {
+      "description": "date and time the article request was last updated",
+      "type": ["string", "null"],
+      "format": "date-time"
+    }
+  }
+}

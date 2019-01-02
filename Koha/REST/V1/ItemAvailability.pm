@@ -23,11 +23,60 @@ use C4::Auth qw( haspermission );
 
 use Koha::Exceptions;
 
+use Koha::Availability::ArticleRequest;
 use Koha::Availability::Checkout;
 use Koha::Availability::Hold;
 use Koha::Availability::Search;
 
 use Try::Tiny;
+
+sub article_request {
+    my $c = shift->openapi->valid_input or return;
+
+    my @availabilities;
+    my $user = $c->stash('koha.user');
+    my $borrowernumber = $c->validation->param('borrowernumber');
+    my $to_branch = $c->validation->param('branchcode');
+    my $patron;
+    my $librarian;
+
+    return try {
+        ($patron, $librarian) = _get_patron($c, $user, $borrowernumber);
+
+        my $items = $c->validation->output->{'itemnumber'};
+        my $params = {
+            patron => $patron,
+        };
+        if ($to_branch) {
+            $params->{'to_branch'} = $to_branch;
+        }
+        foreach my $itemnumber (@$items) {
+            if (my $item = Koha::Items->find($itemnumber)) {
+                $params->{'item'} = $item;
+                my $availability = Koha::Availability::ArticleRequest->item($params);
+                unless ($librarian) {
+                    push @availabilities, $availability->in_opac->swaggerize;
+                } else {
+                    push @availabilities, $availability->in_intranet->swaggerize;
+                }
+            }
+        }
+
+        $c->app->log->trace(Data::Dumper::Dumper(\@availabilities));
+        return $c->render(status => 200, openapi => \@availabilities);
+    }
+    catch {
+        if ($_->isa('Koha::Exceptions::AuthenticationRequired')) {
+            return $c->render(status => 401, openapi => { error => "Authentication required." });
+        }
+        elsif ($_->isa('Koha::Exceptions::NoPermission')) {
+            return $c->render(status => 403, openapi => {
+                error => "Authorization failure. Missing required permission(s).",
+                required_permissions => $_->required_permissions} );
+        }
+        Koha::Exceptions::rethrow_exception($_);
+    };
+}
 
 sub checkout {
     my $c = shift->openapi->valid_input or return;

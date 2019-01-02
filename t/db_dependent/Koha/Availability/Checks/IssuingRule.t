@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 13;
+use Test::More tests => 17;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 require t::db_dependent::Koha::Availability::Helpers;
@@ -548,6 +548,131 @@ sub t_zero_checkouts_allowed {
        1, 'I see that I have one checkout.');
     is(ref($issuingcalc->zero_checkouts_allowed), $expecting, "When I ask if"
        ." zero checkouts are allowed, exception $expecting is given.");
+};
+
+subtest 'no_article_requests_allowed' => \&t_no_article_requests_allowed;
+sub t_no_article_requests_allowed {
+    plan tests => 2;
+
+    set_default_system_preferences();
+    set_default_circulation_rules();
+    my $item = build_a_test_item();
+    my $patron = build_a_test_patron();
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new({
+        branchcode   => '*',
+        itemtype     => $item->effective_itemtype,
+        categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
+        reservesallowed => 0,
+        article_requests => 'no'
+    })->store;
+
+    my $issuingcalc = Koha::Availability::Checks::IssuingRule->new({
+        item => $item,
+        patron => $patron,
+    });
+    my $expecting = 'Koha::Exceptions::ArticleRequest::NotAllowed';
+
+    is($rule->article_requests, 'no', 'When I look at issuing rules, I see that'
+       .' article requests are not allowed for this itemtype.');
+    is(ref($issuingcalc->no_article_requests_allowed), $expecting, "When I ask if"
+       ." no article requests are allowed, exception $expecting is given.");
+};
+
+subtest 'no_item_article_requests_allowed' => \&t_no_item_article_requests_allowed;
+sub t_no_item_article_requests_allowed {
+    plan tests => 2;
+
+    set_default_system_preferences();
+    set_default_circulation_rules();
+    my $item = build_a_test_item();
+    my $patron = build_a_test_patron();
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new({
+        branchcode   => '*',
+        itemtype     => $item->effective_itemtype,
+        categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
+        reservesallowed => 0,
+        article_requests => 'bib_only'
+    })->store;
+
+    my $issuingcalc = Koha::Availability::Checks::IssuingRule->new({
+        item => $item,
+        patron => $patron,
+    });
+    my $expecting = 'Koha::Exceptions::ArticleRequest::ItemLevelRequestNotAllowed';
+
+    is($rule->article_requests, 'bib_only', 'When I look at issuing rules, I see that'
+       .' item level article requests are not allowed for this itemtype.');
+    is(ref($issuingcalc->opac_item_level_article_request_forbidden), $expecting, "When I ask if"
+       ." article requests are allowed, exception $expecting is given.");
+};
+
+subtest 'no_bib_article_requests_allowed' => \&t_no_bib_article_requests_allowed;
+sub t_no_bib_article_requests_allowed {
+    plan tests => 2;
+
+    set_default_system_preferences();
+    set_default_circulation_rules();
+    my $item = build_a_test_item();
+    my $patron = build_a_test_patron();
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new({
+        branchcode   => '*',
+        itemtype     => $item->effective_itemtype,
+        categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
+        reservesallowed => 0,
+        article_requests => 'item_only'
+    })->store;
+
+    my $issuingcalc = Koha::Availability::Checks::IssuingRule->new({
+        item => $item,
+        patron => $patron,
+    });
+    my $expecting = 'Koha::Exceptions::ArticleRequest::BibLevelRequestNotAllowed';
+
+    is($rule->article_requests, 'item_only', 'When I look at issuing rules, I see that'
+       .' bib level article requests are not allowed for this itemtype.');
+    is(ref($issuingcalc->opac_bib_level_article_request_forbidden), $expecting, "When I ask if"
+       ." article requests are allowed, exception $expecting is given.");
+};
+
+subtest 'all_article_requests_allowed' => \&t_all_article_requests_allowed;
+sub t_all_article_requests_allowed {
+    plan tests => 3;
+
+    set_default_system_preferences();
+    set_default_circulation_rules();
+    my $item = build_a_test_item();
+    my $patron = build_a_test_patron();
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new({
+        branchcode   => '*',
+        itemtype     => $item->effective_itemtype,
+        categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
+        reservesallowed => 0,
+        article_requests => 'yes'
+    })->store;
+
+    my $issuingcalc = Koha::Availability::Checks::IssuingRule->new({
+        item => $item,
+        patron => $patron,
+    });
+
+    is($rule->article_requests, 'yes', 'When I look at issuing rules, I see that'
+       .' all article requests are allowed for this itemtype.');
+    is(ref($issuingcalc->opac_bib_level_article_request_forbidden), '', "When I ask if"
+       ." bib level article requests are allowed, no exception is returned.");
+    is(ref($issuingcalc->opac_item_level_article_request_forbidden), '', "When I ask if"
+       ." item level article requests are allowed, no exception is returned.");
 };
 
 $schema->storage->txn_rollback;

@@ -1,0 +1,347 @@
+{
+  "/articlerequests": {
+    "get": {
+      "x-mojo-to": "ArticleRequest#list",
+      "operationId": "listRequests",
+      "tags": ["patrons", "articlerequests"],
+      "parameters": [
+        {
+          "name": "id",
+          "in": "query",
+          "description": "Internal article request identifier",
+          "type": "integer"
+        },
+        {
+          "$ref": "../parameters.json#/borrowernumberQueryParam"
+        },
+        {
+          "name": "requestdate",
+          "in": "query",
+          "description": "Request date",
+          "type": "string"
+        },
+        {
+          "name": "biblionumber",
+          "in": "query",
+          "description": "Internal biblio identifier",
+          "type": "integer"
+        },
+        {
+          "name": "branchcode",
+          "in": "query",
+          "description": "Branch code",
+          "type": "string"
+        },
+        {
+          "name": "status",
+          "in": "query",
+          "description": "Request status",
+          "type": "string",
+          "enum": ["PENDING", "PROCESSING", "COMPLETED", "CANCELED"]
+        },
+        {
+          "name": "itemnumber",
+          "in": "query",
+          "description": "Internal item identifier",
+          "type": "integer"
+        }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "A list of article requests",
+          "schema": {
+            "$ref": "../definitions.json#/articlerequests"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Request not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Borrower not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "borrowers": "1"
+        }
+      }
+    },
+    "post": {
+      "x-mojo-to": "ArticleRequest#add",
+      "operationId": "addRequest",
+      "tags": ["patrons", "articlerequests"],
+      "parameters": [{
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing informations about the new article request",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "borrowernumber": {
+                "description": "Borrower internal identifier",
+                "type": "integer"
+              },
+              "biblionumber": {
+                "description": "Biblio internal identifier",
+                "type": "integer"
+              },
+              "itemnumber": {
+                "description": "Item internal identifier",
+                "type": "integer"
+              },
+              "branchcode": {
+                "description": "Pickup location",
+                "type": ["string", "null"]
+              },
+              "title": {
+                "description": "title information",
+                "type": ["string", "null"]
+              },
+              "author": {
+                "description": "author information",
+                "type": ["string", "null"]
+              },
+              "volume": {
+                "description": "volume information",
+                "type": ["string", "null"]
+              },
+              "issue": {
+                "description": "issue information",
+                "type": ["string", "null"]
+              },
+              "date": {
+                "description": "date information",
+                "type": ["string", "null"]
+              },
+              "pages": {
+                "description": "page information",
+                "type": ["string", "null"]
+              },
+              "chapters": {
+                "description": "chapter information",
+                "type": ["string", "null"]
+              },
+              "patron_notes": {
+                "description": "notes by patron related to this article request",
+                "type": ["string", "null"]
+              }
+            }
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "Created article request",
+          "schema": {
+            "$ref": "../definitions.json#/articlerequest"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Borrower not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "permissions": {
+          "reserveforothers": "1"
+        }
+      }
+    }
+  },
+  "/articlerequests/{article_request_id}": {
+    "put": {
+      "x-mojo-to": "ArticleRequest#edit",
+      "operationId": "editRequest",
+      "tags": ["articlerequests"],
+      "parameters": [{
+          "$ref": "../parameters.json#/articleRequestIdPathParam"
+        }, {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing fields to modify",
+          "required": true,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "branchcode": {
+                "description": "Pickup location",
+                "type": "string"
+              }
+            }
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Updated article request",
+          "schema": {
+            "$ref": "../definitions.json#/articlerequest"
+          }
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Article request not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Article request not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "reserveforothers": "1"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "ArticleRequest#delete",
+      "operationId": "deleteRequest",
+      "tags": ["articlerequests"],
+      "parameters": [{
+          "$ref": "../parameters.json#/articleRequestIdPathParam"
+        }
+      ],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Successful deletion",
+          "schema": {
+            "type": "object"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Cancellation forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Article request not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "allow-owner": true,
+        "allow-guarantor": true,
+        "permissions": {
+          "reserveforothers": "1"
+        }
+      }
+    }
+  }
+}

@@ -1,4 +1,66 @@
 {
+  "/availability/biblio/articlerequest": {
+    "get": {
+      "x-mojo-to": "BiblioAvailability#article_request",
+      "operationId": "articleRequestBiblioAvailability",
+      "tags": ["items", "availability"],
+      "parameters": [
+        { "$ref": "../parameters.json#/biblionumbersQueryParam" },
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" },
+        { "$ref": "../parameters.json#/branchcodeQueryParam"},
+        {
+          "name": "limit_items",
+          "in": "query",
+          "description": "Check only first n available items.",
+          "required": false,
+          "type": "integer"
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Article requet availability information for items of biblio.",
+          "schema": {
+            "type": "array",
+            "items": {
+              "$ref": "../definitions.json#/availability~1biblio"
+            }
+          }
+        },
+        "400": {
+          "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
   "/availability/biblio/hold": {
     "get": {
       "x-mojo-to": "BiblioAvailability#hold",
@@ -92,6 +154,59 @@
         },
         "400": {
           "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      }
+    }
+  },
+  "/availability/item/articlerequest": {
+    "get": {
+      "x-mojo-to": "ItemAvailability#article_request",
+      "operationId": "articleRequestItemAvailability",
+      "tags": ["items", "availability"],
+      "parameters": [
+        { "$ref": "../parameters.json#/itemnumbersQueryParam" },
+        { "$ref": "../parameters.json#/borrowernumberQueryParam" },
+        { "$ref": "../parameters.json#/branchcodeQueryParam"}
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "200": {
+          "description": "Article request availability information for specific item(s).",
+          "schema": {
+            "type": "array",
+            "items": { "$ref": "../definitions.json#/availability~1item" }
+          }
+        },
+        "400": {
+          "description": "Missing or invalid parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Forbidden",
           "schema": {
             "$ref": "../definitions.json#/error"
           }

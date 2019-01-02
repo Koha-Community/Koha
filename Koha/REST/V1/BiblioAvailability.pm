@@ -23,6 +23,7 @@ use C4::Auth qw( haspermission );
 
 use Koha::Exceptions;
 
+use Koha::Availability::ArticleRequest;
 use Koha::Availability::Hold;
 use Koha::Availability::Search;
 
@@ -46,6 +47,56 @@ sub search {
         return $c->render(status => 200, openapi => \@availabilities);
     }
     catch {
+        Koha::Exceptions::rethrow_exception($_);
+    };
+}
+
+sub article_request {
+    my $c = shift->openapi->valid_input or return;
+
+    my @availabilities;
+    my $user = $c->stash('koha.user');
+    my $borrowernumber = $c->validation->param('borrowernumber');
+    my $to_branch = $c->validation->param('branchcode');
+    my $limit_items = $c->validation->param('limit_items');
+    my $patron;
+    my $librarian;
+
+    return try {
+        ($patron, $librarian) = _get_patron($c, $user, $borrowernumber);
+
+        my $biblios = $c->validation->output->{'biblionumber'};
+        my $params = {
+            patron => $patron,
+        };
+
+        $params->{'to_branch'} = $to_branch if $to_branch;
+        $params->{'limit'} = $limit_items if $limit_items;
+
+        foreach my $biblionumber (@$biblios) {
+            if (my $biblio = Koha::Biblios->find($biblionumber)) {
+                $params->{'biblio'} = $biblio;
+                my $availability = Koha::Availability::ArticleRequest->biblio($params);
+                unless ($librarian) {
+                    push @availabilities, $availability->in_opac->swaggerize;
+                } else {
+                    push @availabilities, $availability->in_intranet->swaggerize;
+                }
+            }
+        }
+
+        $c->app->log->trace(Data::Dumper::Dumper(\@availabilities));
+        return $c->render(status => 200, openapi => \@availabilities);
+    }
+    catch {
+        if ($_->isa('Koha::Exceptions::AuthenticationRequired')) {
+            return $c->render(status => 401, openapi => { error => "Authentication required." });
+        }
+        elsif ($_->isa('Koha::Exceptions::NoPermission')) {
+            return $c->render(status => 403, openapi => {
+                error => "Authorization failure. Missing required permission(s).",
+                required_permissions => $_->required_permissions} );
+        }
         Koha::Exceptions::rethrow_exception($_);
     };
 }

@@ -25,6 +25,7 @@ use CGI;
 
 use C4::Auth qw( check_cookie_auth get_session haspermission );
 
+use Koha::ArticleRequests;
 use Koha::Account::Lines;
 use Koha::Auth;
 use Koha::Checkouts;
@@ -498,13 +499,14 @@ sub check_object_ownership {
     return if not $c or not $user;
 
     my $parameters = {
-        accountlines_id => \&_object_ownership_by_accountlines_id,
-        borrowernumber  => \&_object_ownership_by_borrowernumber,
-        checkout_id     => \&_object_ownership_by_checkout_id,
-        reserve_id      => \&_object_ownership_by_reserve_id,
-        message_id      => \&_object_ownership_by_message_id,
-        suggestionid    => \&_object_ownership_by_suggestionid,
-        suggestedby     => \&_object_ownership_by_suggestedby,
+        article_request_id => \&_object_ownership_by_article_request_id, 
+        accountlines_id    => \&_object_ownership_by_accountlines_id,
+        borrowernumber     => \&_object_ownership_by_borrowernumber,
+        checkout_id        => \&_object_ownership_by_checkout_id,
+        reserve_id         => \&_object_ownership_by_reserve_id,
+        message_id         => \&_object_ownership_by_message_id,
+        suggestionid       => \&_object_ownership_by_suggestionid,
+        suggestedby        => \&_object_ownership_by_suggestedby
     };
     foreach my $check (keys %$additional_checks) {
         $parameters->{$check} = $additional_checks->{$check};
@@ -525,6 +527,20 @@ sub check_object_ownership {
             return 1 if &$check_ownership($c, $user, $c->req->json->{$param});
         }
     }
+}
+
+=head3 _object_ownership_by_article_request_id
+
+Finds a Koha::ArticleRequest object by C<$article_request_id> and checks if it
+belongs to C<$user>.
+
+=cut
+
+sub _object_ownership_by_article_request_id {
+    my ($c, $user, $article_request_id) = @_;
+
+    my $request = Koha::ArticleRequests->find($article_request_id);
+    return $request && $user->borrowernumber == $request->borrowernumber;
 }
 
 =head3 _object_ownership_by_accountlines_id

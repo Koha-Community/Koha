@@ -30,6 +30,7 @@ use Koha::Items;
 use Koha::Logger;
 
 use Koha::Exceptions;
+use Koha::Exceptions::ArticleRequest;
 use Koha::Exceptions::Checkout;
 use Koha::Exceptions::Hold;
 
@@ -391,6 +392,61 @@ sub zero_holds_allowed {
         || defined $rule->holds_per_record && $rule->holds_per_record == 0) {
         return Koha::Exceptions::Hold::ZeroHoldsAllowed->new;
     }
+    return;
+}
+
+=head3 no_article_requests_allowed
+
+Returns Koha::Exceptions::ArticleRequest::NotAllowed if article requests are not
+allowed at all.
+
+=cut
+
+sub no_article_requests_allowed {
+    my ($self) = @_;
+
+    return unless my $rule = $self->effective_issuing_rule;
+
+    if ($rule->article_requests eq 'no') {
+        return Koha::Exceptions::ArticleRequest::NotAllowed->new;
+    }
+
+    return;
+}
+
+=head3 opac_bib_level_article_request_forbidden
+
+Returns Koha::Exceptions::ArticleRequest::BibLevelRequestNotAllowed if biblio-level article requests are
+forbidden in OPAC.
+
+=cut
+
+sub opac_bib_level_article_request_forbidden {
+    my ($self) = @_;
+
+    return unless my $rule = $self->effective_issuing_rule;
+    if ($rule->article_requests ne 'yes' && $rule->article_requests ne 'bib_only') {
+        return Koha::Exceptions::ArticleRequest::BibLevelRequestNotAllowed->new;
+    }
+    return;
+}
+
+
+=head3 opac_item_level_article_request_forbidden
+
+Returns Koha::Exceptions::ArticleRequest::ItemLevelRequestNotAllowed if item-level article requests are
+forbidden in OPAC.
+
+=cut
+
+sub opac_item_level_article_request_forbidden {
+    my ($self) = @_;
+
+    return unless my $rule = $self->effective_issuing_rule;
+    if ($rule->article_requests ne 'yes' && $rule->article_requests ne 'item_only') {
+        return Koha::Exceptions::ArticleRequest::ItemLevelRequestNotAllowed->new;
+    }
+
     return;
 }
 

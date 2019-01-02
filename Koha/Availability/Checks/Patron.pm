@@ -34,7 +34,7 @@ sub new {
 
     unless ($patron) {
         Koha::Exceptions::MissingParameter->throw(
-            error => 'Patron related holdability checks require a patron. Not given.'
+            error => 'Patron related checks require a patron. Not given.'
         );
     }
     unless (ref($patron) eq 'Koha::Patron') {
