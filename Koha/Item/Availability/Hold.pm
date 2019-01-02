@@ -233,6 +233,10 @@ sub common_issuing_rule_checks {
         }
     }
 
+    if ($reason = $holdrulecalc->on_shelf_holds_forbidden) {
+        $self->unavailable($reason);
+    }
+
     return $self;
 }
 
