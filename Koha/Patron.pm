@@ -1092,6 +1092,7 @@ Return true if the patron (usually the logged in user) can see the patron's info
 
 sub can_see_patron_infos {
     my ( $self, $patron ) = @_;
+    return unless $patron;
     return $self->can_see_patrons_from( $patron->library->branchcode );
 }
 
