@@ -110,6 +110,13 @@ __PACKAGE__->table("accountlines");
   data_type: 'integer'
   is_nullable: 1
 
+=head2 branchcode
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 10
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -148,6 +155,8 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "manager_id",
   { data_type => "integer", is_nullable => 1 },
+  "branchcode",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
 );
 
 =head1 PRIMARY KEY
@@ -214,6 +223,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 branchcode
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "branchcode",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -235,8 +264,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-12-19 16:19:16
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:kvBIJshNRsm/HYJBbhm0IA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-03 16:10:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BO7iSB+QzoJNuZ8Uttba6A
 
 sub koha_objects_class {
     'Koha::Account::Lines';

@@ -17205,6 +17205,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22024 - Add missing splitting rule definitions)\n";
 }
 
+$DBversion = '18.12.00.004';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'accountlines', 'branchcode' ) ) {
+        $dbh->do("ALTER TABLE accountlines ADD branchcode VARCHAR( 10 ) NULL DEFAULT NULL AFTER manager_id");
+        $dbh->do("ALTER TABLE accountlines ADD CONSTRAINT accountlines_ibfk_branches FOREIGN KEY (branchcode) REFERENCES branches (branchcode) ON DELETE SET NULL ON UPDATE CASCADE");
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 19066 - Add branchcode to accountlines)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
