@@ -335,7 +335,6 @@ sub kocReturnItem {
         C4::Circulation::MarkIssueReturned(
             $borrowernumber,
             $item->itemnumber,
-            undef,
             $circ->{'date'},
             $patron->privacy
         );

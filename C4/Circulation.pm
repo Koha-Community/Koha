@@ -2111,7 +2111,8 @@ C<$privacy> contains the privacy parameter. If the patron has set privacy to 2,
 the old_issue is immediately anonymised
 
 Ideally, this function would be internal to C<C4::Circulation>,
-not exported, but it is currently used in misc/cronjobs/longoverdue.pl.
+not exported, but it is currently used in misc/cronjobs/longoverdue.pl
+and offline_circ/process_koc.pl.
 
 =cut
 
