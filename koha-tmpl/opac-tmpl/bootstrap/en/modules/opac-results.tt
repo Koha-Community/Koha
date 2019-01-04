@@ -9,7 +9,11 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF ( searchdesc ) %]
-    Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]
+    [% IF ( ms_value ) %]
+        Results of search for '[% ms_value | html %]'
+    [% ELSE %]
+        Search results
+    [% END %]
 [% ELSE %]
     You did not specify any search criteria.
 [% END %]</title>
@@ -29,13 +33,24 @@
     <div class="main">
         <ul class="breadcrumb">
             <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-            <li>
                 [% IF ( searchdesc ) %]
-                    <a href="#">Results of search [% IF ( query_desc ) %]for '[% query_desc | html %]'[% END %][% IF ( limit_desc ) %]&nbsp;with limit(s):&nbsp;'[% limit_desc | html %]'[% END %]</a>
+                    [% IF ( ReturnPath ) %]
+                        <li>
+                            <a href="[% ReturnPath | url %]">Advanced search</a> <span class="divider">&rsaquo;</span>
+                        </li>
+                    [% END %]
+                    <li>
+                        [% IF ( ms_value ) %]
+                            <a href="#">Results of search for '[% ms_value | html %]'</a>
+                        [% ELSE %]
+                            <a href="#">Search results</a>
+                        [% END %]
+                    </li>
                 [% ELSE %]
-                    <a href="#">You did not specify any search criteria</a>
+                    <li>
+                        <a href="#">You did not specify any search criteria</a>
+                    </li>
                 [% END %]
-            </li>
         </ul>
 
         [% UNLESS ( total ) %]
@@ -114,7 +129,7 @@
                     [% IF ( total ) %]
                         [% IF ( ReturnPath ) %]
                             <div class="returntosearch">
-                                <p><a href="[% ReturnPath | uri %]">Return to the last advanced search</a></p>
+                                <p><a href="[% ReturnPath | url %]">Return to the last advanced search</a></p>
                             </div>
                         [% END %]
                     [% END %]
