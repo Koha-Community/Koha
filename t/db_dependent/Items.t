@@ -29,6 +29,7 @@ use Koha::Library;
 use Koha::DateUtils;
 use Koha::MarcSubfieldStructures;
 use Koha::Caches;
+use Koha::AuthorisedValues;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -250,7 +251,7 @@ subtest 'GetHiddenItemnumbers tests' => sub {
 
 subtest 'GetItemsInfo tests' => sub {
 
-    plan tests => 4;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
@@ -265,6 +266,16 @@ subtest 'GetItemsInfo tests' => sub {
         source => 'Itemtype',
     });
 
+    Koha::AuthorisedValues->delete;
+    my $av1 = Koha::AuthorisedValue->new(
+        {
+            category         => 'RESTRICTED',
+            authorised_value => '1',
+            lib              => 'Restricted Access',
+            lib_opac         => 'Restricted Access OPAC',
+        }
+    )->store();
+
     # Add a biblio
     my $biblio = $builder->build_sample_biblio();
     # Add an item
@@ -273,6 +284,7 @@ subtest 'GetItemsInfo tests' => sub {
             homebranch    => $library1->{branchcode},
             holdingbranch => $library2->{branchcode},
             itype         => $itemtype->{itemtype},
+            restricted    => 1,
         },
         $biblio->biblionumber
     );
@@ -287,12 +299,19 @@ subtest 'GetItemsInfo tests' => sub {
 
     my @results = GetItemsInfo( $biblio->biblionumber );
     ok( @results, 'GetItemsInfo returns results');
+
     is( $results[0]->{ home_branch_opac_info }, "homebranch OPAC info",
         'GetItemsInfo returns the correct home branch OPAC info notice' );
     is( $results[0]->{ holding_branch_opac_info }, "holdingbranch OPAC info",
         'GetItemsInfo returns the correct holding branch OPAC info notice' );
     is( exists( $results[0]->{ onsite_checkout } ), 1,
         'GetItemsInfo returns a onsite_checkout key' );
+    is( $results[0]->{ restricted }, 1,
+        'GetItemsInfo returns a restricted value code' );
+    is( $results[0]->{ restrictedvalue }, "Restricted Access",
+        'GetItemsInfo returns a restricted value description (staff)' );
+    is( $results[0]->{ restrictedvalueopac }, "Restricted Access OPAC",
+        'GetItemsInfo returns a restricted value description (OPAC)' );
 
     $schema->storage->txn_rollback;
 };
