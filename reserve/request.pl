@@ -222,7 +222,6 @@ foreach my $biblionumber (@biblionumbers) {
     if ( $patron ) {
         { # CanBookBeReserved
             my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber );
-            $canReserve->{status} //= '';
             if ( $canReserve->{status} eq 'OK' ) {
 
                 #All is OK and we can continue

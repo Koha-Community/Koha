@@ -284,7 +284,7 @@ sub CanBookBeReserved{
         push (@itemnumbers, @hostitems);
     }
 
-    my $canReserve;
+    my $canReserve = { status => '' };
     foreach my $itemnumber (@itemnumbers) {
         $canReserve = CanItemBeReserved( $borrowernumber, $itemnumber, $pickup_branchcode );
         return { status => 'OK' } if $canReserve->{status} eq 'OK';

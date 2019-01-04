@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 58;
+use Test::More tests => 59;
 use Test::MockModule;
 use Test::Warn;
 
@@ -89,6 +89,10 @@ my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
     },
     $bibnum
 );
+
+my $biblio_with_no_item = $builder->build({
+    source => 'Biblio'
+});
 
 
 # Modify item; setting barcode.
@@ -511,6 +515,8 @@ $borrower->{dateofbirth} = DateTime->now->add( years => -30 );
 Koha::Patrons->find( $borrowernumber )->set({ dateofbirth => $borrower->{dateofbirth} })->store;
 
 is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblionumber)->{status} , 'OK', "Reserving a 'PEGI 16' Biblio by a 30 year old borrower succeeds");
+
+is( C4::Reserves::CanBookBeReserved($borrowernumber, $biblio_with_no_item->{biblionumber})->{status} , '', "Biblio with no item. Status is empty");
        ####
 ####### EO Bug 13113 <<<
        ####
