@@ -97,12 +97,6 @@ __PACKAGE__->table("issuingrules");
   data_type: 'integer'
   is_nullable: 1
 
-=head2 chargename
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 100
-
 =head2 maxissueqty
 
   data_type: 'integer'
@@ -261,8 +255,6 @@ __PACKAGE__->add_columns(
   { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "accountsent",
   { data_type => "integer", is_nullable => 1 },
-  "chargename",
-  { data_type => "varchar", is_nullable => 1, size => 100 },
   "maxissueqty",
   { data_type => "integer", is_nullable => 1 },
   "maxonsiteissueqty",
@@ -336,8 +328,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("branchcode", "categorycode", "itemtype");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-11-08 17:41:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:vOr4mEAacS5WKLQifgT8EA
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2019-01-04 03:06:35
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:slPyHZs0YvOKev3cAxdDJQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
