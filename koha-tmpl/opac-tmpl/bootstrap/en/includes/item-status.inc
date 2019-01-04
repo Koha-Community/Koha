@@ -65,13 +65,13 @@
 [% IF NOT ( item.isa('Koha::Item') ) AND item.itemnotforloan %]
     [% SET itemavailable = 0 %]
     [% IF ( item.notforloanvalueopac ) %]
-        <span class="item-status notforloan">[% item.notforloanvalueopac | html %] [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac | html %])</span>[% END %]</span>
+        <span class="item-status notforloan">[% item.notforloanvalueopac | html %] [% IF ( item.restrictedvalueopac ) %]<span class="restricted">([% item.restrictedvalueopac | html %])</span>[% END %]</span>
     [% ELSE %]
-        <span class="item-status notforloan">Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac | html %])</span>[% END %]</span>
+        <span class="item-status notforloan">Not for loan [% IF ( item.restrictedvalueopac ) %]<span class="restricted">([% item.restrictedvalueopac | html %])</span>[% END %]</span>
     [% END %]
 [% ELSIF NOT ( item.isa('Koha::Item') ) AND item.notforloan_per_itemtype %]
     [% SET itemavailable = 0 %]
-    <span class="item-status notforloan">Not for loan [% IF ( item.restrictedopac ) %]<span class="restricted">([% item.restrictedopac | html %])</span>[% END %]</span>
+    <span class="item-status notforloan">Not for loan [% IF ( item.restrictedvalueopac ) %]<span class="restricted">([% item.restrictedvalueopac | html %])</span>[% END %]</span>
 [% END %]
 
 [% IF ( item.damaged ) %]
@@ -90,6 +90,6 @@
 [% END %]
 
 [% IF ( itemavailable ) %]
-    [% IF NOT item.isa('Koha::Item') %][% SET restrictedopac = item.restrictedopac %][% END %]
-    <span class="item-status available">Available [% IF restrictedopac %]<span class="restricted">([% restrictedopac | html %])</span>[% END %]</span>
+    [% IF NOT item.isa('Koha::Item') %][% SET restrictedvalueopac = item.restrictedvalueopac %][% END %]
+    <span class="item-status available">Available [% IF restrictedvalueopac %]<span class="restricted">([% restrictedvalueopac | html %])</span>[% END %]</span>
 [% END %]

@@ -1050,8 +1050,8 @@ sub GetItemsInfo {
 
         # get restricted status and description if applicable
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $data->{frameworkcode}, kohafield => 'items.restricted', authorised_value => $data->{restricted} });
-        $data->{restricted}     = $descriptions->{lib} // '';
-        $data->{restrictedopac} = $descriptions->{opac_description} // '';
+        $data->{restrictedvalue}     = $descriptions->{lib} // '';
+        $data->{restrictedvalueopac} = $descriptions->{opac_description} // '';
 
         # my stack procedures
         $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({frameworkcode => $data->{frameworkcode}, kohafield => 'items.stack', authorised_value => $data->{stack} });
