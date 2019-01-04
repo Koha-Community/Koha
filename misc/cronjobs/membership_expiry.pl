@@ -126,6 +126,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
+use C4::Members;
 use C4::Context;
 use C4::Letters;
 use C4::Log;
@@ -182,6 +183,9 @@ warn 'found ' . $upcoming_mem_expires->count . ' soon expiring members'
 # main loop
 $letter_type = 'MEMBERSHIP_EXPIRY' if !$letter_type;
 while ( my $recent = $upcoming_mem_expires->next ) {
+    my $to_address = C4::Members::GetNoticeEmailAddress( $recent->borrowernumber );
+    next if (not $to_address);
+
     my $from_address = $recent->library->branchemail || $admin_adress;
     my $letter =  C4::Letters::GetPreparedLetter(
         module      => 'members',
