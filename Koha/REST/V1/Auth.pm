@@ -140,6 +140,8 @@ sub authenticate_api_request {
         if ($valid_token) {
             my $patron_id   = Koha::ApiKeys->find( $valid_token->{client_id} )->patron_id;
             my $patron      = Koha::Patrons->find($patron_id);
+            $c->stash('koha.user' => $patron);
+
             my $permissions = $authorization->{'permissions'};
             # Check if the patron is authorized
             if ( haspermission($patron->userid, $permissions)
