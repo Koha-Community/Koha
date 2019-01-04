@@ -17225,6 +17225,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22030: Add OverDriveUsername syspref)\n";
 }
 
+$DBversion = '18.12.00.006';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
+        ('AccountAutoReconcile','0','If enabled, patron balances will get reconciled automatically on each transaction.',NULL,'YesNo');
+    });
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 21915 - Add a way to automatically reconcile balance for patrons)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
