@@ -32,6 +32,7 @@ KOHA.coce = {
           $("[id^=coce-thumbnail]."+id).each(function() {
             var img = document.createElement("img");
             img.src = url;
+            img.classList.add("thumbnail");
             img.title = url; //FIXME: to delete
             $(this).html(img);
          });
