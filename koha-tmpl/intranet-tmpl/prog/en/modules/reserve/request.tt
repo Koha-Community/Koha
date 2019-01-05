@@ -3,6 +3,7 @@
 [% USE Branches %]
 [% USE Categories %]
 [% USE ItemTypes %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
     <title>Koha &rsaquo; Circulation &rsaquo; Holds &rsaquo; Place a hold on [% title |html %]</title>
@@ -324,7 +325,7 @@ function checkMultiHold() {
     [% END %]
 
     [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% borrowernumber %]">[% borrowerfirstname %] [% borrowersurname %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | $Price %]</strong></li>
     [% END %]
 
     [% IF ( diffbranch ) %]
