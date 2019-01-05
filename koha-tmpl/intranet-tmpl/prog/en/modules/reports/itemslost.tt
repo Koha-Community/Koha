@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE ColumnsSettings %]
 [% USE KohaDates %]
+[% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Reports &rsaquo; Lost items</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -83,8 +84,8 @@
                         </td>
                         <td>[% item.itemcallnumber %]</td>
                         <td>[% item.datelastseen | $KohaDates %]</td>
-                        <td>[% item.price %]</td>
-                        <td>[% item.replacementprice %]</td>
+                        <td>[% item.price | $Price %]</td>
+                        <td>[% item.replacementprice | $Price %]</td>
                         <td>[% Branches.GetName(item.homebranch) %]</td>
                         <td>[% item.effective_itemtype %]</td>
                         <td>[% Branches.GetName(item.holdingbranch) %]</td>
