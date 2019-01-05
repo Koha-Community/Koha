@@ -2,6 +2,7 @@
 [% USE Asset %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl.subfield | html %][% END %]</title>
@@ -32,7 +33,7 @@
         [% UNLESS ( item_level_itypes ) %]
         <li><span class="label">Item type:</span> [% itemtypename | html %]&nbsp;</li>
         [% END %]
-        [% IF ( rentalcharge ) %]<li><span class="label">Rental charge:</span>[% rentalcharge | html %]&nbsp;</li>[% END %]
+        [% IF ( rentalcharge ) %]<li><span class="label">Rental charge:</span>[% rentalcharge | $Price %]&nbsp;</li>[% END %]
         <li><span class="label">ISBN:</span> [% isbn | html %]&nbsp;</li>
         <li><span class="label">Publisher:</span>[% place | html %] [% publishercode | html %] [% publicationyear | html %]&nbsp;</li>
         [% IF ( volumeddesc ) %]<li><span class="label">Volume:</span> [% volumeddesc | html %]</li>[% END %]
@@ -62,7 +63,7 @@
             [% IF ( ITEM_DAT.collection ) %]<li><span class="label">Collection:</span> [% ITEM_DAT.collection | html %]</li> [% END %]
             <li><span class="label">Item callnumber:</span> [% ITEM_DAT.itemcallnumber | html %]&nbsp;</li>
             [% IF ( ITEM_DAT.displaycopy ) %]<li><span class="label">Copy number:</span> [% ITEM_DAT.copyvol | html %]&nbsp;</li> [% END %]
-            [% IF ( ITEM_DAT.replacementprice ) %]<li><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | html %]&nbsp;</li> [% END %]
+            [% IF ( ITEM_DAT.replacementprice ) %]<li><span class="label">Replacement price:</span> [% ITEM_DAT.replacementprice | $Price %]&nbsp;</li> [% END %]
 	    [% IF ITEM_DAT.materials %]<li><span class="label">Materials specified:</span> [% ITEM_DAT.materials | html %] </li> [% END %]
             </ol></div>
            <div class="listgroup"><h4>Statuses [% IF ( ITEM_DAT.status_advisory ) %](
