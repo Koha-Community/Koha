@@ -3,6 +3,7 @@
 [% USE Branches %]
 [% USE Koha %]
 [% USE KohaDates %]
+[% USE Price %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests  &rsaquo;</title>
@@ -605,7 +606,7 @@
                                     </li>
                                     <li class="price_paid">
                                         <span class="label price_paid">Price paid:</span>
-                                        [% IF request.price_paid %][% request.price_paid | html %][% ELSE %]<span>N/A</span>[% END %]
+                                        [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
                                     </li>
                                     <li class="req_id">
                                         <span class="label req_id">Request number:</span>
