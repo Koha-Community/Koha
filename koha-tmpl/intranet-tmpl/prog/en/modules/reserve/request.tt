@@ -6,6 +6,7 @@
 [% USE Categories %]
 [% USE ItemTypes %]
 [% USE AuthorisedValues %]
+[% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 [% UNLESS ( multi_hold ) %]
@@ -139,7 +140,7 @@
     [% END %]
 
     [% IF amount_outstanding && Koha.Preference('maxoutstanding') && amount_outstanding > Koha.Preference('maxoutstanding') %]
-    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | format('%.2f') %]</strong></li>
+    <li><a href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | uri %]">[% patron.firstname | html %] [% patron.surname | html %]</a>: <strong>Patron has outstanding fines: [% amount_outstanding | $Price %]</strong></li>
     [% END %]
 
     [% IF ( diffbranch ) %]
