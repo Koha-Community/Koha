@@ -286,7 +286,7 @@
                                         [% END %]
                                         <form method="post" id="picture-upload" style="display:none;" action="/cgi-bin/koha/tools/picture-upload.pl" enctype="multipart/form-data">
                                             [% IF ( patron.image ) %]
-                                                <div class="hint">To update the image for [% patron.title %] [% patron.firstname | html %] [% patron.surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.</div>
+                                                <div class="hint">To update the image for [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %], select a new image file and click 'Upload.' <br />Click the 'Delete' button to remove the current image.</div>
                                             [% ELSE %]
                                                 <div class="hint">[% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %] does not currently have an image available. To import an image for [% patron.title | html %] [% patron.firstname | html %] [% patron.surname | html %], enter the name of an image file to upload.</div>
                                             [% END %]

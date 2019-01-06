@@ -145,7 +145,7 @@
                 <h4 class="modal-title" id="patronImageEditLabel">Modal title</h4>
             </div>
             <div class="modal-body">
-                <img src="[% interface %]/[% theme %]/img/spinner-small.gif" alt="" />
+                <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" />
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-default" data-dismiss="modal">Cancel</button>
