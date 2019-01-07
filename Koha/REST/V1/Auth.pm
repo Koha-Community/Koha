@@ -113,6 +113,8 @@ if authorization is required and user has required permissions to access.
 sub authenticate_api_request {
     my ( $c ) = @_;
 
+    my $user;
+
     my $spec = $c->match->endpoint->pattern->defaults->{'openapi.op_spec'};
     my $authorization = $spec->{'x-koha-authorization'};
 
@@ -138,68 +140,55 @@ sub authenticate_api_request {
         );
 
         if ($valid_token) {
-            my $patron_id   = Koha::ApiKeys->find( $valid_token->{client_id} )->patron_id;
-            my $patron      = Koha::Patrons->find($patron_id);
-            $c->stash('koha.user' => $patron);
-
-            my $permissions = $authorization->{'permissions'};
-            # Check if the patron is authorized
-            if ( haspermission($patron->userid, $permissions)
-                or allow_owner($c, $authorization, $patron)
-                or allow_guarantor($c, $authorization, $patron) ) {
-
-                validate_query_parameters( $c, $spec );
-
-                # Everything is ok
-                return 1;
-            }
-
-            Koha::Exceptions::Authorization::Unauthorized->throw(
-                error => "Authorization failure. Missing required permission(s).",
-                required_permissions => $permissions,
+            my $patron_id = Koha::ApiKeys->find( $valid_token->{client_id} )->patron_id;
+            $user         = Koha::Patrons->find($patron_id);
+        }
+        else {
+            # If we have "Authorization: Bearer" header and oauth authentication
+            # failed, do not try other authentication means
+            Koha::Exceptions::Authentication::Required->throw(
+                error => 'Authentication failure.'
             );
         }
+    }
+    else {
 
-        # If we have "Authorization: Bearer" header and oauth authentication
-        # failed, do not try other authentication means
-        Koha::Exceptions::Authentication::Required->throw(
-            error => 'Authentication failure.'
-        );
+        my $cookie = $c->cookie('CGISESSID');
+
+        # Mojo doesn't use %ENV the way CGI apps do
+        # Manually pass the remote_address to check_auth_cookie
+        my $remote_addr = $c->tx->remote_address;
+        my ($status, $sessionID) = check_cookie_auth(
+                                                $cookie, undef,
+                                                { remote_addr => $remote_addr });
+        if ($status eq "ok") {
+            my $session = get_session($sessionID);
+            $user = Koha::Patrons->find($session->param('number'));
+            # $c->stash('koha.user' => $user);
+        }
+        elsif ($status eq "maintenance") {
+            Koha::Exceptions::UnderMaintenance->throw(
+                error => 'System is under maintenance.'
+            );
+        }
+        elsif ($status eq "expired" and $authorization) {
+            Koha::Exceptions::Authentication::SessionExpired->throw(
+                error => 'Session has been expired.'
+            );
+        }
+        elsif ($status eq "failed" and $authorization) {
+            Koha::Exceptions::Authentication::Required->throw(
+                error => 'Authentication failure.'
+            );
+        }
+        elsif ($authorization) {
+            Koha::Exceptions::Authentication->throw(
+                error => 'Unexpected authentication status.'
+            );
+        }
     }
 
-    my $cookie = $c->cookie('CGISESSID');
-    my ($session, $user);
-    # Mojo doesn't use %ENV the way CGI apps do
-    # Manually pass the remote_address to check_auth_cookie
-    my $remote_addr = $c->tx->remote_address;
-    my ($status, $sessionID) = check_cookie_auth(
-                                            $cookie, undef,
-                                            { remote_addr => $remote_addr });
-    if ($status eq "ok") {
-        $session = get_session($sessionID);
-        $user = Koha::Patrons->find($session->param('number'));
-        $c->stash('koha.user' => $user);
-    }
-    elsif ($status eq "maintenance") {
-        Koha::Exceptions::UnderMaintenance->throw(
-            error => 'System is under maintenance.'
-        );
-    }
-    elsif ($status eq "expired" and $authorization) {
-        Koha::Exceptions::Authentication::SessionExpired->throw(
-            error => 'Session has been expired.'
-        );
-    }
-    elsif ($status eq "failed" and $authorization) {
-        Koha::Exceptions::Authentication::Required->throw(
-            error => 'Authentication failure.'
-        );
-    }
-    elsif ($authorization) {
-        Koha::Exceptions::Authentication->throw(
-            error => 'Unexpected authentication status.'
-        );
-    }
+    $c->stash('koha.user' => $user);
 
     # We do not need any authorization
     unless ($authorization) {
@@ -225,6 +214,7 @@ sub authenticate_api_request {
         required_permissions => $permissions,
     );
 }
+
 sub validate_query_parameters {
     my ( $c, $action_spec ) = @_;
 
