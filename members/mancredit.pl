@@ -81,10 +81,13 @@ if ($add){
     my $amount      = $input->param('amount') || 0;
     my $type        = $input->param('type');
 
+    my $library_id = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
+
     $patron->account->add_credit({
         amount      => $amount,
         description => $description,
         item_id     => $item_id,
+        library_id  => $library_id,
         note        => $note,
         type        => $type,
         user_id     => $logged_in_user->id
