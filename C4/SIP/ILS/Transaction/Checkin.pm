@@ -129,6 +129,8 @@ sub do_checkin {
     }
 
     $self->ok($return);
+
+    return { messages => $messages };
 }
 
 sub resensitize {
