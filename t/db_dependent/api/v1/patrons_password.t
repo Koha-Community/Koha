@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 
 use Test::Mojo;
 use Test::Warn;
@@ -117,6 +117,94 @@ subtest 'set() (authorized user tests)' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
     $t->request_ok($tx)->status_is(200)->json_is('');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'set_public() (unprivileged user tests)' => sub {
+
+    plan tests => 15;
+
+    $schema->storage->txn_begin;
+
+    my ( $patron, $session ) = create_user_and_session({ authorized => 0 });
+    my $other_patron = $builder->build_object({ class => 'Koha::Patrons' });
+
+    # Enable the public API
+    t::lib::Mocks::mock_preference( 'RESTPublicAPI', 1 );
+
+    t::lib::Mocks::mock_preference( 'OpacPasswordChange',    0 );
+    t::lib::Mocks::mock_preference( 'minPasswordLength',     3 );
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+
+    my $new_password = 'abc';
+
+    my $tx
+        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+            . $other_patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => 'blah' } );
+
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)
+      ->status_is(403)
+      ->json_is({
+          error => 'Configuration prevents password changes by unprivileged users'
+        });
+
+    t::lib::Mocks::mock_preference( 'OpacPasswordChange', 1 );
+
+    my $password = 'holapassword';
+    $patron->set_password( $password );
+    $tx
+        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+            . $other_patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => $password } );
+
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)
+      ->status_is(403)
+      ->json_is({
+          error => "Changing other patron's password is forbidden"
+        });
+
+    $tx
+        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => 'wrong_password', old_password => $password } );
+
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)
+      ->status_is(400)
+      ->json_is({
+          error => "Passwords don't match"
+        });
+
+    $tx
+        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => 'badpassword' } );
+
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)
+      ->status_is(400)
+      ->json_is({
+          error => "Invalid password"
+        });
+
+    $tx
+        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+            . $patron->id
+            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => $password } );
+
+    $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
+    $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
+    $t->request_ok($tx)
+      ->status_is(200)
+      ->json_is('');
 
     $schema->storage->txn_rollback;
 };
