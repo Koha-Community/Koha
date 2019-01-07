@@ -215,6 +215,12 @@ sub authenticate_api_request {
     );
 }
 
+=head3 validate_query_parameters
+
+Validates the query parameters against the spec.
+
+=cut
+
 sub validate_query_parameters {
     my ( $c, $action_spec ) = @_;
 
