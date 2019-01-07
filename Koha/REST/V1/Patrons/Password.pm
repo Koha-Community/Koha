@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
+use C4::Auth qw(checkpw_internal);
+
 use Koha::Patrons;
 
 use Scalar::Util qw(blessed);
@@ -60,6 +62,66 @@ sub set {
 
         ## Change password
         $patron->set_password({ password => $password });
+
+        return $c->render( status => 200, openapi => "" );
+    }
+    catch {
+        unless ( blessed $_ && $_->can('rethrow') ) {
+            return $c->render( status => 500, openapi => { error => "$_" } );
+        }
+
+        # an exception was raised. return 400 with the stringified exception
+        return $c->render( status => 400, openapi => { error => "$_" } );
+    };
+}
+
+=head3 set_public
+
+Controller method that sets a patron's password, for unprivileged users
+
+=cut
+
+sub set_public {
+
+    my $c = shift->openapi->valid_input or return;
+
+    my $body      = $c->validation->param('body');
+    my $patron_id = $c->validation->param('patron_id');
+
+    unless ( C4::Context->preference('OpacPasswordChange') ) {
+        return $c->render(
+            status  => 403,
+            openapi => { error => "Configuration prevents password changes by unprivileged users" }
+        );
+    }
+
+    my $user = $c->stash('koha.user');
+
+    unless ( $user->borrowernumber == $patron_id ) {
+        return $c->render(
+            status  => 403,
+            openapi => {
+                error => "Changing other patron's password is forbidden"
+            }
+        );
+    }
+
+    my $old_password = $body->{old_password};
+    my $password     = $body->{password};
+    my $password_2   = $body->{password_2};
+
+    unless ( $password eq $password_2 ) {
+        return $c->render( status => 400, openapi => { error => "Passwords don't match" } );
+    }
+
+    return try {
+        my $dbh = C4::Context->dbh;
+        unless ( checkpw_internal($dbh, $user->userid, $old_password ) ) {
+            Koha::Exceptions::Authorization::Unauthorized->throw("Invalid password");
+        }
+
+        ## Change password
+        $user->set_password($password);
 
         return $c->render( status => 200, openapi => "" );
     }
