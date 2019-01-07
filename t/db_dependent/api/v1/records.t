@@ -171,9 +171,6 @@ MARCXML
             editcatalogue => "add_catalogue"
         });
 
-        C4::Context->flushZconns();
-        my $output = C4::Search::reindexZebraChanges();
-
         my $testMarcxml = <<MARCXML;
 <record>
   <leader>00510cam a22002054a 4500</leader>
@@ -223,8 +220,16 @@ MARCXML
             {record => $testMarcxml}, undef, $testContext
         );
 
-        C4::Context->flushZconns();
-        my $output = C4::Search::reindexZebraChanges();
+        my $matcher = Test::MockModule->new('C4::Matcher');
+        $matcher->mock( get_matches => sub {
+            my ($self, $match_record) = @_;
+
+            my @matches;
+            if ($match_record->field('020')->subfield('a') eq 'rest-test-isbn-duplicated') {
+                push @matches, { 'record_id' => $biblio->{'biblionumber'}, 'score' => 100 };
+            };
+            return @matches;
+        } );
 
         $schema->storage->txn_begin;
 
@@ -256,9 +261,6 @@ MARCXML
         my ($patron, $session) = create_user_and_session({
             editcatalogue => "add_catalogue"
         });
-
-        C4::Context->flushZconns();
-        my $output = C4::Search::reindexZebraChanges();
 
         my $testMarcxml = <<MARCXML;
 <record>

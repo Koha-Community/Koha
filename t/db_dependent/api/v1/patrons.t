@@ -138,7 +138,7 @@ $tx = $t->ua->build_tx(DELETE => "/api/v1/patrons/" . $patron->{ borrowernumber 
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is('/required_permissions', {"borrowers" => "1"});
+  ->json_is('/required_permissions', {"borrowers" => "*"});
 
 Koha::Auth::PermissionManager->grantAllSubpermissions(
     $librarian->{borrowernumber}, 'borrowers'
@@ -219,7 +219,7 @@ $tx = $t->ua->build_tx( GET => "/api/v1/patrons/alldata?borrowernumber=".$non_ex
 $tx->req->cookies( { name => 'CGISESSID', value => $session->id} );
 $t->request_ok($tx)->status_is(403);
 
-my $non_existent_id = $patron->{borrowernumber} + 1;
+$non_existent_id = $patron->{borrowernumber} + 1;
 $tx = $t->ua->build_tx( GET => "/api/v1/patrons/alldata?borrowernumber=".$patron->{borrowernumber}."&section=new" );
 $tx->req->cookies( { name => 'CGISESSID', value => $session->id} );
 $t->request_ok($tx)->status_is(400);

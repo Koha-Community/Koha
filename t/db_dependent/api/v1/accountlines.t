@@ -114,7 +114,7 @@ subtest 'list() tests' => sub {
     $json = $t->tx->res->json;
     ok(ref $json eq 'ARRAY', 'response is a JSON array');
     ok(scalar @$json == 4, 'response array contains 4 elements');
-    is($json->[3]->{description} => 'Silence in the library Remainder', 'Itemnumber converted');
+    is($json->[3]->{description} => 'Silence in the library', 'Itemnumber converted');
 
     $schema->storage->txn_rollback;
 };

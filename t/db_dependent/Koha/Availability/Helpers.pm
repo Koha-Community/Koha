@@ -108,6 +108,7 @@ sub set_default_circulation_rules {
         holds_per_record => 1,
         reservesallowed => 1,
         opacitemholds => 'Y',
+        onshelfholds => 1
     })->store;
     $dbh->do('DELETE FROM branch_item_rules');
     $dbh->do('DELETE FROM default_branch_circ_rules');

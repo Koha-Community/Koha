@@ -317,13 +317,14 @@ sub _cookie_auth {
     my $session;
     if ($status eq "ok") {
         $session = get_session($sessionID);
-        $user = Koha::Patrons->find($session->param('number'));
-        if ($session->param('number') eq '0') {
+        my $number = $session->param('number');
+        if (defined $number && $number eq '0') {
             Koha::Exceptions::Authentication::Required->throw(
                 error => 'Please do not use the API as the database '
                         .'administrative user. This could cause problems!'
             );
         }
+        $user = Koha::Patrons->find($number);
         $c->stash('koha.user' => $user);
     }
     elsif ($status eq "maintenance") {

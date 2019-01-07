@@ -79,9 +79,11 @@ subtest '/borrowers/status get() tests' => sub {
 };
 
 subtest '/borrowers/ssstatus 200 get() tests' => sub {
-    plan tests => 11;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
+
+    my $session = _create_session();
 
     my $password = '1234';
     my $hashed_password = Koha::AuthUtils::hash_password($password);
@@ -104,8 +106,6 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     });
 
     my $b = Koha::Patrons->find($user->{borrowernumber});
-    Koha::Auth::PermissionManager->new()->grantPermission($user, 'borrowers', 'get_self_service_status');
-    authenticateToRESTAPI($user, $t->ua, $remote_address);
 
     my $SSRulesPref = C4::Context->preference("SSRules");
     C4::Context->set_preference("SSRules",
@@ -123,6 +123,17 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     $tx->req->headers->remove('Content-Type');
     $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
     $t->request_ok($tx)
+      ->status_is(401);
+
+    Koha::Auth::PermissionManager->new()->grantPermission($user, 'borrowers', 'get_self_service_status');
+    authenticateToRESTAPI($user, $t->ua, $remote_address);
+
+    $tx = $t->ua->build_tx( GET => '/api/v1/borrowers/ssstatus' );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
+    $tx->req->body( Mojo::Parameters->new("cardnumber=".$b->cardnumber."&branchcode=".$b->branchcode)->to_string);
+    $tx->req->headers->remove('Content-Type');
+    $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
+    $t->request_ok($tx)
       ->status_is(200);
     p($t->tx->res->body) if ($ENV{VERBOSE});
 
@@ -133,6 +144,7 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     C4::Members::Attributes::SetBorrowerAttributes($b->borrowernumber, [{ code => 'SST&C', value => '1' }]);
 
     $tx = $t->ua->build_tx( GET => '/api/v1/borrowers/ssstatus' );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $tx->req->body( Mojo::Parameters->new("cardnumber=".$b->cardnumber."&branchcode=".$b->branchcode)->to_string);
     $tx->req->headers->remove('Content-Type');
     $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
@@ -146,6 +158,7 @@ subtest '/borrowers/ssstatus 200 get() tests' => sub {
     $b->set({ branchcode => 'MPL' })->store;
 
     $tx = $t->ua->build_tx( GET => '/api/v1/borrowers/ssstatus' );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $tx->req->body( Mojo::Parameters->new("cardnumber=".$b->cardnumber."&branchcode=".$b->branchcode)->to_string);
     $tx->req->headers->remove('Content-Type');
     $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
@@ -165,6 +178,8 @@ subtest '/borrowers/ssstatus 501 get() tests' => sub {
     plan tests => 3;
 
     $schema->storage->txn_begin;
+
+    my $session = _create_session();
 
     my $password = '1234';
     my $hashed_password = Koha::AuthUtils::hash_password($password);
@@ -200,6 +215,7 @@ subtest '/borrowers/ssstatus 501 get() tests' => sub {
     C4::Context->set_preference("OpeningHours",$hours);
 
     my $tx = $t->ua->build_tx( GET => '/api/v1/borrowers/ssstatus' );
+    $tx->req->cookies({name => 'CGISESSID', value => $session->id});
     $tx->req->body( Mojo::Parameters->new("cardnumber=".$b->cardnumber."&branchcode=".$b->branchcode)->to_string);
     $tx->req->headers->remove('Content-Type');
     $tx->req->headers->add('Content-Type' => 'application/x-www-form-urlencoded');
@@ -226,6 +242,23 @@ sub authenticateToRESTAPI {
         )
     );
     $userAgent->cookie_jar($jar);
+}
+
+sub _create_session {
+    my $loggedinuser = $builder->build({
+        source => 'Borrower',
+        value => {
+            gonenoaddress => 0,
+            lost => 0,
+            debarred => undef,
+            debarredcomment => undef,
+        }
+    });
+    Koha::Auth::PermissionManager->grantPermission(
+        scalar Koha::Patrons->find($loggedinuser->{borrowernumber}),
+        'borrowers', 'get_self_service_status'
+    );
+    return t::lib::Mocks::mock_session({borrower => $loggedinuser});
 }
 
 1;

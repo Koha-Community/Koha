@@ -146,6 +146,8 @@ Koha::IssuingRule->new({
     reservecharge => 0,
 })->store;
 
+Koha::Holds->delete;
+
 my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
     $biblionumber, undef, 1, undef, undef, undef, '', $itemnumber);
 
@@ -467,7 +469,7 @@ $schema->storage->txn_rollback;
 sub create_biblio {
     my ($title) = @_;
 
-    my $biblio = Koha::Biblio->new( { title => $title } )->store;
+    my $biblio = Koha::Biblio->new( { title => $title, datecreated => '2019-01-01' } )->store;
     my $biblioitem = Koha::Biblioitem->new({biblionumber => $biblio->biblionumber})->store;
 
     return $biblio->biblionumber;

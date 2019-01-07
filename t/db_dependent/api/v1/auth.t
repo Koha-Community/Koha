@@ -193,7 +193,7 @@ subtest 'get() test (get_api_session)' => sub {
             password => Koha::AuthUtils::hash_password($password),
         }
     });
-    warn "trying sessionid $sessionid";
+
     my $borrowernumber = $borrower->{borrowernumber};
     my $patron = Koha::Patrons->find($borrowernumber);
     Koha::Auth::PermissionManager->grantPermissions($patron, {

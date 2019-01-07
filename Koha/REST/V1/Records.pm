@@ -135,7 +135,7 @@ sub get_record {
         });
     }
 
-    my $componentPartBiblios = C4::Biblio::getComponentRecords( $record->field('001')->data(), $record->field('003')->data());
+    my $componentPartBiblios = C4::Biblio::getComponentRecords( $record );
     my @componentPartRecords;
     if ($componentPartBiblios) {
         for my $cb ( @{$componentPartBiblios} ) {

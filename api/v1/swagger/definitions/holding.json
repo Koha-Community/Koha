@@ -25,6 +25,10 @@
       "type": ["string", "null"],
       "description": "authorized value for the shelving location for this holding"
     },
+    "ccode": {
+      "type": ["string", "null"],
+      "description": "authorized value for the collection code for this holding"
+    },
     "callnumber": {
       "type": ["string", "null"],
       "description": "call number for this holding"
@@ -46,6 +50,11 @@
     "metadata": {
       "type": ["string", "null"],
       "description": "Metadata"
+    },
+    "deleted_on": {
+      "type": ["string", "null"],
+      "description": "the date this record was deleted from Koha",
+      "format": "date"
     }
   }
 }

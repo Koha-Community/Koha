@@ -41,7 +41,7 @@ my $remote_address = '127.0.0.1';
 my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'get() tests' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
@@ -62,8 +62,19 @@ subtest 'get() tests' => sub {
     })->store();
     my $transaction_id = $payment->transaction_id;
 
-    # Test transaction.
+    # Test transaction without permissions.
     my $tx = $t->ua->build_tx(GET => "/api/v1/payments/transaction/$transaction_id");
+    $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
+    $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
+    $t->request_ok($tx)
+      ->status_is(403);
+
+    Koha::Auth::PermissionManager->grantAllSubpermissions(
+        $borrowernumber, 'updatecharges'
+    );
+
+    # Test transaction.
+    $tx = $t->ua->build_tx(GET => "/api/v1/payments/transaction/$transaction_id");
     $tx->req->cookies({name => 'CGISESSID', value => $sessionid});
     $tx->req->env({REMOTE_ADDR => '127.0.0.1'});
     $t->request_ok($tx)

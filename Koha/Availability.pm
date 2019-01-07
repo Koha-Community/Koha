@@ -115,6 +115,8 @@ sub AUTOLOAD {
     }
 }
 
+sub DESTROY { }
+
 =head3 confirm
 
 Get: $availability->confirm

@@ -146,7 +146,7 @@ subtest '/availability/biblio' => sub {
     };
 
     subtest '/search' => sub {
-        plan tests => 21;
+        plan tests => 19;
 
         $schema->storage->txn_begin;
 
@@ -187,23 +187,17 @@ subtest '/availability/biblio' => sub {
         $t->request_ok($tx)
           ->status_is(200)
           ->json_has('/0/availability')
-          ->json_is('/0/availability/available' => Mojo::JSON->false)
+          ->json_is('/0/availability/available' => Mojo::JSON->true)
           ->json_is('/0/item_availabilities/0/itemnumber' => $item->itemnumber)
-          ->json_is('/0/item_availabilities/0/availability/available' => Mojo::JSON->false)
-          ->json_is('/0/item_availabilities/2/itemnumber' => $item3->itemnumber)
+          ->json_is('/0/item_availabilities/0/availability/available' => Mojo::JSON->true)
+          ->json_is('/0/item_availabilities/2/itemnumber' => $item2->itemnumber)
           ->json_is('/0/item_availabilities/2/availability/available' => Mojo::JSON->false)
-          ->json_is('/0/item_availabilities/1/itemnumber' => $item2->itemnumber)
-          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->false)
+          ->json_is('/0/item_availabilities/1/itemnumber' => $item3->itemnumber)
+          ->json_is('/0/item_availabilities/1/availability/available' => Mojo::JSON->true)
           ->json_is('/0/hold_queue_length' => 2)
-          ->json_is('/0/item_availabilities/0/availability/unavailabilities/Item::Held' => {
-                borrowernumber => $patron->borrowernumber
-            })
-          ->json_is('/0/item_availabilities/1/availability/unavailabilities/Item::NotForLoan' => {
+          ->json_is('/0/item_availabilities/2/availability/unavailabilities/Item::NotForLoan' => {
             code => "Not For Loan",
             status => 1,
-            })
-          ->json_is('/0/item_availabilities/2/availability/unavailabilities/Item::Held' => {
-                borrowernumber => $patron->borrowernumber
             });
 
         $schema->storage->txn_rollback;
