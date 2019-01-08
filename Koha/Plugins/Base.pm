@@ -45,7 +45,7 @@ sub new {
     my $self = bless( $args, $class );
 
     my $plugin_version = $self->get_metadata->{version};
-    my $database_version = $self->retrieve_data('__INSTALLED_VERSION__');
+    my $database_version = $self->retrieve_data('__INSTALLED_VERSION__') || 0;
 
     ## Run the installation method if it exists and hasn't been run before
     if ( $self->can('install') && !$self->retrieve_data('__INSTALLED__') ) {
@@ -57,13 +57,16 @@ sub new {
         } else {
             warn "Plugin $class failed during installation!";
         }
-    } elsif ( $self->can('upgrade') && $plugin_version && $database_version ) {
+    } elsif ( $self->can('upgrade') ) {
         if ( _version_compare( $plugin_version, $database_version ) == 1 ) {
             if ( $self->upgrade() ) {
                 $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
+            } else {
                 warn "Plugin $class failed during upgrade!";
             }
         }
+    } elsif ( $plugin_version ne $database_version ) {
+        $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
     }
 
     return $self;
