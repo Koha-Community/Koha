@@ -145,7 +145,7 @@
                   [% IF checkout_info.BORRNOTSAMEBRANCH %]
                       <li><i class="fa fa-li fa-warning"></i>This patron is from a different library ([% Branches.GetName( checkout_info.BORRNOTSAMEBRANCH ) | html %]).</li>
                   [% END %]
-                  [% IF checkout_ino.PATRON_CANT %]
+                  [% IF checkout_info.PATRON_CANT %]
                       <li><i class="fa fa-li fa-warning"></i>This patron can't check out this item per library circulation policy.</li>
                   [% END %]
                   [% IF checkout_info.NOT_FOR_LOAN_FORCING %]
