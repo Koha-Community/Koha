@@ -28,6 +28,7 @@ use Koha::Checkouts;
 use Koha::DateUtils;
 use Koha::Patrons;
 use Koha::Items;
+use Koha::Holds;
 
 =encoding UTF-8
 
@@ -325,7 +326,13 @@ sub recall_date {
 }
 sub hold_pickup_date {
     my $self = shift;
-    return $self->{hold_pickup_date} || 0;
+
+    my $hold = Koha::Holds->find({ itemnumber => $self->{itemnumber}, found => 'W' });
+    if ( $hold ) {
+        return $hold->expirationdate || 0;
+    }
+
+    return 0;
 }
 
 # This is a partial check of "availability".  It is not supposed to check everything here.
