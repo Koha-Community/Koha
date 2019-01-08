@@ -17205,6 +17205,16 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
+$DBversion = '18.11.01.001';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('OverDriveUsername','cardnumber','cardnumber|userid','Which patron information should be passed as OverDrive username','Choice')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22030: Add OverDriveUsername syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
