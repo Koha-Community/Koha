@@ -9,9 +9,10 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 41;
+use Test::More tests => 42;
 
 use C4::Context;
+use Koha::Database;
 
 use t::lib::Mocks;
 
@@ -23,6 +24,8 @@ BEGIN {
     use_ok('Koha::Plugins::Base');
     use_ok('Koha::Plugin::Test');
 }
+
+my $schema = Koha::Database->new->schema;
 
 my $mock_plugin = Test::MockModule->new( 'Koha::Plugin::Test' );
 $mock_plugin->mock( 'test_template', sub {
@@ -156,6 +159,28 @@ subtest 'output and output_html tests' => sub {
     like($stdout, qr{Content-Type: text/html; charset=UTF-8}, 'Correct content-type');
     like($stdout, qr{¡Hola output_html!}, 'Correct data');
 };
+
+subtest 'Version upgrade tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+
+    # make sure there's no version on the DB
+    $schema->resultset('PluginData')
+        ->search( { plugin_class => $plugin->{class}, plugin_key => '__INSTALLED_VERSION__' } )
+        ->delete;
+
+    $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+    my $version = $plugin->retrieve_data('__INSTALLED_VERSION__');
+
+    is( $version, $plugin->get_metadata->{version}, 'Version has been populated correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
 
 subtest 'Test _version_compare' => sub {
 
