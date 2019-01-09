@@ -223,6 +223,9 @@ sub checkin {
     } elsif( $data->{messages}->{withdrawn} && !$circ->ok ) {
             $circ->screen_msg("Item withdrawn, return not allowed");
             syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item withdrawn");
+    } elsif( $data->{messages}->{WasLost} && !$circ->ok ) {
+            $circ->screen_msg("Item lost, return not allowed");
+            syslog("LOG_DEBUG", "C4::SIP::ILS::Checkin - item lost");
     } elsif( !$item->{patron} ) {
         if( $checked_in_ok ) { # Mark checkin ok although book not checked out
             $circ->ok( 1 );
