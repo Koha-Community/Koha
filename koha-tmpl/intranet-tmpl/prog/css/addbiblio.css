@@ -1,10 +1,18 @@
-#addbibliotabs {
-	margin-top : 1em;
+form {
+    display: block;
 }
 
-#addbibliotabs .ui-tabs-panel {
-	float : left;
-    width: 100%;
+div#toolbar {
+    border: 0;
+}
+
+#addbibliotabs .ui-tabs-nav {
+    display: none;
+}
+
+.ui-tabs-panel h3 {
+    font-size: 140%;
+    margin: .3em 0;
 }
 
 .buttonPlus {
@@ -30,8 +38,10 @@ a.expandfield {
 	padding : .2em 1.2em;
 }
 
-div.tag {
+.tag {
+    border-bottom: 2px solid #D5E6E9;
     clear: both;
+    padding: .7em 0;
 }
 
 div.subfield_line {
@@ -60,7 +70,7 @@ div.subfield_line label {
 }
 
 .tagnum {
-	font-size : 110%;
+	font-size : 130%;
 	font-weight : bold;
 	color : #000;
 	padding : .1em .3em .1em 0;
@@ -76,6 +86,7 @@ a.tagnum {
 
 .subfield {
 	color : #00698a;
+	float: left;
 	width: 10em;
 	text-align:right;
 }
@@ -91,8 +102,7 @@ a.tagnum {
 
 .input_marceditor {
 	float:left;
-    min-width: 20em;
-    width: auto;
+	width:30em;
 }
 
 .indicator {
@@ -167,6 +177,87 @@ tbody tr.active td {
     width: 15em;
 }
 
+.ui-tabs .ui-tabs-panel {
+    border: 0;
+    padding: 0;
+}
+
+.toolbar-tabs-container {
+    margin: 3em -5px -5px -5px;
+}
+
+.toolbar-tabs {
+    background-color: #FFF;
+    clear: both;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    padding-left: 0;
+}
+
+.toolbar-tabs li {
+    background-color: #fff;
+    display: flex;
+    justify-content: center;
+    flex-grow: 1;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.toolbar-tabs li a {
+    border: 1px solid #EDF4F6;
+    border-left: 0;
+    border-right: 1px solid #EDF4F6;
+    display: block;
+    font-weight: bold;
+    padding: .3em 1.5em;
+    width: 100%;
+}
+
+.toolbar-tabs li.selected a {
+    background-color: #EDF4F6;
+    border-right: 1px solid #C3D6DB;
+    font-weight: bold;
+}
+
+.toolbar-tabs li.selected a:hover {
+    background-color: #EDF4F6;
+}
+
+.toolbar-tabs li a:hover {
+    background-color: #F4F8F9;
+}
+
+.toolbar-tabs li:last-child a {
+
+}
+
+.tag_anchors_list {
+    background-color: #FFF;
+    clear: both;
+    display: block;
+    font-size: 95%;
+    padding-left: 0;
+}
+
+.tag_anchor.selected {
+    font-weight: bold;
+}
+
+.tag_anchors {
+    display: none;
+    padding: .5em 0;
+}
+
+.tag_anchors a {
+    border-right: 1px solid #EDF4F6;
+    display: inline-block;
+    padding: 0 .4em;
+}
+
+.tag_anchors.tab_selected {
+    display: inline-block;
+}
 
 @media (min-width: 768px) {
     div.subfield_line label {

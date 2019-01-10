@@ -8,8 +8,7 @@
 [% Asset.js("js/cataloging.js") | $raw %]
 [% INCLUDE 'browser-strings.inc' %]
 [% Asset.js("js/browser.js") | $raw %]
-<script type="text/javascript">
-//<![CDATA[
+<script>
     var browser = KOHA.browser('[% searchid | html %]', parseInt('[% biblionumber | html %]', 10));
     browser.show();
 
@@ -30,11 +29,12 @@
 
         [% IF tab %]
           $('#addbibliotabs').selectTabByID("#[% tab | html %]");
+          console.log("[% tab %]");
         [% END %]
 
         Sticky = $("#toolbar");
         Sticky.hcSticky({
-            stickTo: ".main",
+            stickTo: "#f",
             stickyClass: "floating"
         });
 
@@ -134,6 +134,29 @@
             $("#frameworkcode").val( frameworkcode );
             Changefwk();
         });
+
+        $(".toolbar-tabs a").on("click",function(e){
+            e.preventDefault();
+            $(".toolbar-tabs li").removeClass("selected");
+            $(this).parent().addClass("selected");
+            var tabid = $(this).data("tabid");
+            $("#addbibliotabs").tabs( "option", "active", tabid );
+            $(".tag_anchors").removeClass("tab_selected").hide();
+            $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
+        });
+
+        $(".tag_anchor").on("click", function(e){
+            e.preventDefault();
+            var toolbar_height = $("#toolbar").outerHeight();
+            $(".tag_anchor").removeClass("selected");
+            $(this).addClass("selected");
+            var link = this.href;
+            var linkid = link.substring( link.indexOf("#") + 1 );
+            var dest = $("#" + linkid );
+            var yoffset = dest.offset();
+            window.scrollTo( 0, yoffset.top - toolbar_height - 20 );
+        });
+
     });
 
 function redirect(dest){
@@ -394,7 +417,6 @@ function Changefwk() {
     f.submit();
 }
 
-//]]>
 </script>
 [% Asset.css("css/addbiblio.css") | $raw %]
 
@@ -447,7 +469,7 @@ function Changefwk() {
     [% END %]
 
 [% IF ( done ) %]
-    <script type="text/javascript">
+    <script>
         opener.document.forms['f'].biblionumber.value=[% biblionumber | html %];
         opener.document.forms['f'].title.value='[% title | html %]';
         window.close();
@@ -549,7 +571,22 @@ function Changefwk() {
             <a class="btn btn-default btn-sm" id="cancel" href="/cgi-bin/koha/cataloguing/addbooks.pl">Cancel</a>
         [% END %]
     [% END %]
-</div>
+    <div class="toolbar-tabs-container">
+        <ul class="toolbar-tabs">
+            [%- FOREACH BIG_LOO IN BIG_LOOP -%][%- SET tabname = BIG_LOO.number + 1 -%][% IF loop.first %]<li class="selected">[% ELSE %]<li>[% END %]<a data-tabid="[% BIG_LOO.number | html %]" href="#tab[% BIG_LOO.number | html %]XX">[% tabname | html %]</a></li>[%- END -%]
+        </ul>
+        <ul class="tag_anchors_list">
+            [% FOREACH BIG_LOO IN BIG_LOOP %]
+                [% IF loop.first %][% SET tab_selected = "tab_selected" %][% ELSE %][% SET tab_selected = "" %][% END %]
+                [% FOREACH innerloo IN BIG_LOO.innerloop %]
+                    [% IF ( innerloo.tag ) %]
+                        <li class="tag_anchors tag_anchors_[% BIG_LOO.number | html %] [% tab_selected | html %]"><a class="tag_anchor" id="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" title="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" href="#div_indicator_tag_[% innerloo.tag | uri %]_[% innerloo.index | uri %][% innerloo.random | uri %]">[% innerloo.tag | uri %]</a></li>
+                    [% END %]
+                [% END %]
+            [% END %]
+        </ul>
+    </div>
+</div> <!-- /#toolbar.btn-toolbar -->
 
 [% IF bib_doesnt_exist %]
     <div class="dialog alert">
@@ -575,11 +612,13 @@ function Changefwk() {
     </ul>
 
 [% FOREACH BIG_LOO IN BIG_LOOP %]
+    [% SET tabname = BIG_LOO.number + 1 %]
     <div id="tab[% BIG_LOO.number | html %]XX">
-    
+
+    <h3>Section [% tabname %]</h3>
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
     [% IF ( innerloo.tag ) %]
-    <div class="tag" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+    <div class="tag clearfix" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
             [% IF advancedMARCEditor %]
                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
