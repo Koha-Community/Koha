@@ -1629,7 +1629,11 @@ sub NewSubscription {
         my $record = GetMarcBiblio($biblionumber);
         my ( $tag, $subf ) = GetMarcFromKohaField( 'biblio.serial', $bib->{'frameworkcode'} );
         if ($tag) {
-            eval { $record->field($tag)->update( $subf => 1 ); };
+            if (my $f = $record->field($tag)) {
+                $f->update( $subf => 1 )
+            } else {
+                $record->append_fields(MARC::Field->new($tag, '', '', $subf => 1));
+            }
         }
         ModBiblio( $record, $biblionumber, $bib->{'frameworkcode'} );
     }
