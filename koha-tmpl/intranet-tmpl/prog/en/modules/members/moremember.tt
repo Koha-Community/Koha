@@ -824,7 +824,7 @@
         var MSG_EXPORT_SELECT_CHECKOUTS = _("You must select checkout(s) to export");
         var MSG_CONFIRM_DELETE_MESSAGE = _("Are you sure you want to delete this message? This cannot be undone.");
 
-        columns_settings = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
+        columns_settings_issues_table = [% ColumnsSettings.GetColumns( 'members', 'moremember', 'issues-table', 'json' ) | $raw %]
 
         $(document).ready(function() {
             if ( $('#clubs-tab').length ) {
