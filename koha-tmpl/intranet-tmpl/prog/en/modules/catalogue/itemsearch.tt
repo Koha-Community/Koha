@@ -84,8 +84,22 @@
         </optgroup>
       [% END %]
     </select>
+    [% IF params.exists('op') %]
+        <select name="op" class="form-field-not">
+           <option value="like">is</option>
+            [% IF params.op == '!=' %]
+               <option value="!=" selected="selected">is not</option>
+            [% ELSE %]
+               <option value="!=">is not</option>
+            [% END %]
+        </select>
+    [% ELSE %]
+        <select name="op" class="form-field-not">
+           <option value="like">is</option>
+           <option value="!=">is not</option>
+        </select>
+    [% END %]
     <input type="text" name="q" class="form-field-value" value="" />
-    <input type="hidden" name="op" value="like" />
   </div>
 [% END %]
 
@@ -552,7 +566,7 @@
       form_field.append(button_field_new);
 
             // If a field is linked to an authorised values list, display the list.
-            $('div.form-field-select-text select[name="f"]').change(function() {
+            $('div.form-field-select-text select.form-field-column').change(function() {
                 loadAuthorisedValuesSelect($(this));
             }).change();
 
