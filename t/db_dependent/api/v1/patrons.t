@@ -50,8 +50,6 @@ subtest 'list() tests' => sub {
 
         $schema->storage->txn_begin;
 
-        Koha::Patrons->search->delete;
-
         my ( $patron_id, $session_id ) = create_user_and_session({ authorized => 1 });
         my $patron = Koha::Patrons->find($patron_id);
 
