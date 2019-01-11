@@ -16286,6 +16286,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21065 - Set ON DELETE SET NULL on accountlines.borrowernumber)\n";
 }
 
+$DBversion = '18.05.07.002';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('OverDriveUsername','cardnumber','cardnumber|userid','Which patron information should be passed as OverDrive username','Choice')
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22030 - Add Overdriveusername system preference)\n";
+}
+
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
