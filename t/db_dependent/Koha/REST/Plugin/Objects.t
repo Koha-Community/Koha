@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Koha::Patrons;
+use Koha::Cities;
 
 # Dummy app for testing the plugin
 use Mojolicious::Lite;
@@ -27,34 +27,34 @@ plugin 'Koha::REST::Plugin::Objects';
 plugin 'Koha::REST::Plugin::Query';
 plugin 'Koha::REST::Plugin::Pagination';
 
-get '/patrons' => sub {
+get '/cities' => sub {
     my $c = shift;
     $c->validation->output($c->req->params->to_hash);
-    my $patrons = $c->objects->search(Koha::Patrons->new);
-    $c->render( status => 200, json => $patrons );
+    my $cities = $c->objects->search(Koha::Cities->new);
+    $c->render( status => 200, json => $cities );
 };
 
-get '/patrons_to_model' => sub {
+get '/cities_to_model' => sub {
     my $c = shift;
     $c->validation->output($c->req->params->to_hash);
-    my $patrons_set = Koha::Patrons->new;
-    my $patrons = $c->objects->search( $patrons_set, \&to_model );
-    $c->render( status => 200, json => $patrons );
+    my $cities_set = Koha::Cities->new;
+    my $cities = $c->objects->search( $cities_set, \&to_model );
+    $c->render( status => 200, json => $cities );
 };
 
-get '/patrons_to_model_to_api' => sub {
+get '/cities_to_model_to_api' => sub {
     my $c = shift;
     $c->validation->output($c->req->params->to_hash);
-    my $patrons_set = Koha::Patrons->new;
-    my $patrons = $c->objects->search( $patrons_set, \&to_model, \&to_api );
-    $c->render( status => 200, json => $patrons );
+    my $cities_set = Koha::Cities->new;
+    my $cities = $c->objects->search( $cities_set, \&to_model, \&to_api );
+    $c->render( status => 200, json => $cities );
 };
 
 sub to_model {
     my $params = shift;
 
     if ( exists $params->{nombre} ) {
-        $params->{firstname} = delete $params->{nombre};
+        $params->{city_name} = delete $params->{nombre};
     }
 
     return $params;
@@ -63,8 +63,8 @@ sub to_model {
 sub to_api {
     my $params = shift;
 
-    if ( exists $params->{firstname} ) {
-        $params->{nombre} = delete $params->{firstname};
+    if ( exists $params->{city_name} ) {
+        $params->{nombre} = delete $params->{city_name};
     }
 
     return $params;
@@ -90,112 +90,113 @@ subtest 'objects.search helper' => sub {
 
     $schema->storage->txn_begin;
 
-    # Delete existing patrons
-    Koha::Patrons->search->delete;
+    # Remove existing cities to have more control on the search restuls
+    Koha::Cities->delete;
+
     # Create two sample patrons that match the query
     $builder->build_object({
-        class => 'Koha::Patrons',
+        class => 'Koha::Cities',
         value => {
-            firstname => 'Manuel'
+            city_name => 'Manuel'
         }
     });
     $builder->build_object({
-        class => 'Koha::Patrons',
+        class => 'Koha::Cities',
         value => {
-            firstname => 'Manuela'
+            city_name => 'Manuela'
         }
     });
 
-    $t->get_ok('/patrons?firstname=manuel&_per_page=1&_page=1')
+    $t->get_ok('/cities?city_name=manuel&_per_page=1&_page=1')
         ->status_is(200)
         ->header_like( 'Link' => qr/<http:\/\/.*\?.*&_page=2.*>; rel="next",/ )
         ->json_has('/0')
         ->json_hasnt('/1')
-        ->json_is('/0/firstname' => 'Manuel');
+        ->json_is('/0/city_name' => 'Manuel');
 
     $builder->build_object({
-        class => 'Koha::Patrons',
+        class => 'Koha::Cities',
         value => {
-            firstname => 'Emanuel'
+            city_name => 'Emanuel'
         }
     });
 
     # _match=starts_with
-    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=starts_with')
+    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=starts_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_hasnt('/2')
-        ->json_is('/0/firstname' => 'Manuel')
-        ->json_is('/1/firstname' => 'Manuela');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Manuela');
 
     # _match=ends_with
-    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=ends_with')
+    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=ends_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_hasnt('/2')
-        ->json_is('/0/firstname' => 'Manuel')
-        ->json_is('/1/firstname' => 'Emanuel');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Emanuel');
 
     # _match=exact
-    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=exact')
+    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=exact')
         ->status_is(200)
         ->json_has('/0')
         ->json_hasnt('/1')
-        ->json_is('/0/firstname' => 'Manuel');
+        ->json_is('/0/city_name' => 'Manuel');
 
     # _match=contains
-    $t->get_ok('/patrons?firstname=manuel&_per_page=3&_page=1&_match=contains')
+    $t->get_ok('/cities?city_name=manuel&_per_page=3&_page=1&_match=contains')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_has('/2')
         ->json_hasnt('/3')
-        ->json_is('/0/firstname' => 'Manuel')
-        ->json_is('/1/firstname' => 'Manuela')
-        ->json_is('/2/firstname' => 'Emanuel');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Manuela')
+        ->json_is('/2/city_name' => 'Emanuel');
 
     ## _to_model tests
     # _match=starts_with
-    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=starts_with')
+    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=starts_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_hasnt('/2')
-        ->json_is('/0/firstname' => 'Manuel')
-        ->json_is('/1/firstname' => 'Manuela');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Manuela');
 
     # _match=ends_with
-    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=ends_with')
+    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=ends_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_hasnt('/2')
-        ->json_is('/0/firstname' => 'Manuel')
-        ->json_is('/1/firstname' => 'Emanuel');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Emanuel');
 
     # _match=exact
-    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=exact')
+    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=exact')
         ->status_is(200)
         ->json_has('/0')
         ->json_hasnt('/1')
-        ->json_is('/0/firstname' => 'Manuel');
+        ->json_is('/0/city_name' => 'Manuel');
 
     # _match=contains
-    $t->get_ok('/patrons_to_model?nombre=manuel&_per_page=3&_page=1&_match=contains')
+    $t->get_ok('/cities_to_model?nombre=manuel&_per_page=3&_page=1&_match=contains')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
         ->json_has('/2')
         ->json_hasnt('/3')
-        ->json_is('/0/firstname' => 'Manuel')
-        ->json_is('/1/firstname' => 'Manuela')
-        ->json_is('/2/firstname' => 'Emanuel');
+        ->json_is('/0/city_name' => 'Manuel')
+        ->json_is('/1/city_name' => 'Manuela')
+        ->json_is('/2/city_name' => 'Emanuel');
 
     ## _to_model && _to_api tests
     # _match=starts_with
-    $t->get_ok('/patrons_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=starts_with')
+    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=starts_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
@@ -204,7 +205,7 @@ subtest 'objects.search helper' => sub {
         ->json_is('/1/nombre' => 'Manuela');
 
     # _match=ends_with
-    $t->get_ok('/patrons_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=ends_with')
+    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=ends_with')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
@@ -213,14 +214,14 @@ subtest 'objects.search helper' => sub {
         ->json_is('/1/nombre' => 'Emanuel');
 
     # _match=exact
-    $t->get_ok('/patrons_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=exact')
+    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=exact')
         ->status_is(200)
         ->json_has('/0')
         ->json_hasnt('/1')
         ->json_is('/0/nombre' => 'Manuel');
 
     # _match=contains
-    $t->get_ok('/patrons_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=contains')
+    $t->get_ok('/cities_to_model_to_api?nombre=manuel&_per_page=3&_page=1&_match=contains')
         ->status_is(200)
         ->json_has('/0')
         ->json_has('/1')
