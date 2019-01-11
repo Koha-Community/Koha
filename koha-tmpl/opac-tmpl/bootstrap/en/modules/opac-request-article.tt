@@ -13,6 +13,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
+        <li><a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblio.biblionumber | uri %]">Details for: [% biblio.title | html %]</a> <span class="divider">&rsaquo;</span></li>
         <li><a href="#">Request article</a></li>
     </ul>
 
@@ -177,7 +178,10 @@
                 <input type="submit" class="btn" value="Place request" />
             </form>
         [% ELSE %]
-            No article requests can be made for this record.
+            <h1 class="title">[% biblio.title | html %]</h1>
+            <div class="alert alert-info">
+                No article requests can be made for this record.
+            </div>
         [% END %]
 
     </div> <!-- / .container -->
@@ -187,7 +191,6 @@
 
 [% BLOCK jsinclude %]
 <script>
-// <![CDATA[
     allow_submit = false;
     $('#place-article-request').on('submit', function( event ){
         if ( ! allow_submit ) {
@@ -220,6 +223,5 @@
             $('#place-article-request').submit();
         }
     });
-// ]]>
 </script>
 [% END %]
