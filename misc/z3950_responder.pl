@@ -156,11 +156,6 @@ GetOptions(
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
 
-if (!@ARGV || $ARGV[-1] =~ /^-/) {
-    # No bind address specified. Use @:2100 by default.
-    push(@ARGV, '@:2100');
-}
-
 # If config_dir is not defined, default to z3950 under the Koha config directory
 if (!$config_dir) {
     (undef, $config_dir) = fileparse(Koha::Config->guess_koha_conf);

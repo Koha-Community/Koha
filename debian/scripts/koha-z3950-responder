@@ -1,0 +1,354 @@
+#!/bin/bash
+#
+# Copyright 2015 Theke Solutions
+# Copyright 2016 Koha-Suomi
+# Copyright 2018 The National Library of Finland, University of Helsinki
+#
+# This file is part of Koha.
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+. /lib/lsb/init-functions
+
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+usage()
+{
+    local scriptname=$(basename $0)
+
+    cat <<EOF
+$scriptname
+
+This script lets you manage the Z39.50/SRU daemons for your Koha instances.
+
+Usage:
+$scriptname --start|--stop|--restart [--quiet|-q] instancename1 [instancename2...]
+$scriptname --enable|--disable instancename1 [instancename2]
+$scriptname -h|--help
+
+    --start               Start the Z39.50/SRU daemon for the specified instances
+    --stop                Stop the Z39.50/SRU daemon for the specified instances
+    --restart             Restart the Z39.50/SRU daemon for the specified instances
+    --enable              Enable Z39.50/SRU for the specified instances
+    --disable             Disable Z39.50/SRU for the specified instances
+    --debugger            Enable running Z39.50/SRU in debug mode
+    --debugger-key        Specify the key the IDE is expecting
+    --debugger-location   Specify the host:port for your debugger tool (defaults
+                          to localhost:9000)
+    --debugger-path       Specify the path for the debugger library
+    --quiet|-q            Make the script quiet about non existent instance names
+                          (useful for calling from another scripts).
+    --help|-h             Display this help message
+
+EOF
+}
+
+start_z3950()
+{
+    local instancename=$1
+
+    local PIDFILE="/var/run/koha/${instancename}/z3950-responder.pid"
+    local NAME="${instancename}-koha-z3950-responder"
+    local CONFIGDIR="/etc/koha/z3950"
+
+    if [ -e "/etc/koha/sites/${instancename}/z3950/config.xml" ]; then
+        # pick instance-specific config dir
+        CONFIGDIR="/etc/koha/sites/${instancename}/z3950"
+    fi # else stick with the default one
+
+    _check_and_fix_perms $instancename
+
+    instance_user="${instancename}-koha"
+
+    daemonize="-D -d ${instancename}-koha-z3950"
+    logging="-l /var/log/koha/${instancename}/z3950.log"
+
+    if [ "$DEV_INSTALL" = "1" ]; then
+        LIBDIR=$KOHA_HOME
+    else
+        LIBDIR=$KOHA_HOME/lib
+    fi
+
+    Z3950RESPONDER="/usr/bin/perl $LIBDIR/misc/z3950_responder.pl"
+    if [ "$debug_mode" = "yes" ]; then
+        if [ "$DEV_INSTALL" = "1" ]; then
+            warn "Not a dev install, disabling debug mode"
+        else
+            environment="development"
+            daemonize=""
+            logging="" # remote debugger takes care
+            Z3950RESPONDER="/usr/bin/perl -d ${LIBDIR}/misc/z3950_responder.pl"
+        fi
+    fi
+
+    Z3950OPTS="-c ${CONFIGDIR} \
+               -u ${instance_user} \
+               -p ${PIDFILE} ${daemonize} ${logging}"
+
+    if ! is_z3950_running ${instancename}; then
+        export KOHA_CONF="/etc/koha/sites/${instancename}/koha-conf.xml"
+
+        log_daemon_msg "Starting Z39.50/SRU daemon for ${instancename}"
+
+        # Change to the instance's user dir
+        current_dir=$(pwd)
+        eval cd ~$instance_user
+
+        if ${Z3950RESPONDER} ${Z3950OPTS}; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+        # Go back to the original dir
+        cd "$current_dir"
+
+    else
+        log_daemon_msg "Error: Z39.50/SRU already running for ${instancename}"
+        log_end_msg 1
+    fi
+}
+
+stop_z3950()
+{
+    local instancename=$1
+
+    local PIDFILE="/var/run/koha/${instancename}/z3950-responder.pid"
+
+    if is_z3950_running ${instancename}; then
+
+        log_daemon_msg "Stopping Z39.50/SRU daemon for ${instancename}"
+
+        if start-stop-daemon --pidfile ${PIDFILE} --stop --retry=TERM/30/KILL/5; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: Z39.50/SRU not running for ${instancename}"
+        log_end_msg 1
+    fi
+}
+
+restart_z3950()
+{
+    local instancename=$1
+
+    local PIDFILE="/var/run/koha/${instancename}/z3950.pid"
+
+    if is_z3950_running ${instancename}; then
+
+        log_daemon_msg "Restarting Z39.50/SRU daemon for ${instancename}"
+
+        if stop_z3950 $instancename && start_z3950 $instancename; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    else
+        log_daemon_msg "Error: Z39.50/SRU not running for ${instancename}"
+        log_end_msg 1
+    fi
+}
+
+enable_z3950()
+{
+    local instancename=$1
+
+    if [ ! -e /etc/koha/sites/${instancename}/koha-conf.xml ] ;
+    then
+        echo "No such instance: ${instancename}" > /dev/stderr
+        return 1
+    fi
+
+    local configdir=/etc/koha/sites/${instancename}/z3950
+    if [ -e ${configdir}/config.xml ]
+    then
+        [ "${quiet}" != "yes" ] && warn "Z39.50/SRU already enabled for $name"
+        return 1
+    fi
+
+    if [ ! -e ${configdir} ]
+    then
+        mkdir ${configdir}
+    fi
+    cp /etc/koha/z3950/* ${configdir}/
+    chown ${name}-koha:${name}-koha ${configdir}/*
+    chmod 600 ${configdir}/*
+
+    [ "${quiet}" != "yes" ] && warn "Z39.50/SRU enabled for $name - edit files in ${configdir} to configure"
+    return 0
+}
+
+disable_z3950()
+{
+    local instancename=$1
+
+    if is_z3950_enabled $instancename; then
+        local configdir=/etc/koha/sites/${instancename}/z3950
+        mv ${configdir} ${configdir}.`date +%F_%T`
+        [ "${quiet}" != "yes" ] && warn "Z39.50/SRU disabled for ${instancename}"
+        return 0
+    else
+        [ "${quiet}" != "yes" ] && warn "Z39.50/SRU already disabled for ${instancename}"
+        return 1
+    fi
+}
+
+_check_and_fix_perms()
+{
+    local instance=$1
+
+    local files="/var/log/koha/${instance}/z3950.log"
+
+    for file in ${files}
+    do
+        if [ ! -e "${file}" ]; then
+            touch ${file}
+        fi
+        chown "${instance}-koha":"${instance}-koha" ${file}
+    done
+}
+
+set_action()
+{
+    if [ "$op" = "" ]; then
+        op=$1
+    else
+        die "Error: only one action can be specified."
+    fi
+}
+
+op=""
+quiet="no"
+debug_mode="no"
+debugger_key=""
+debugger_location="localhost:9000"
+debugger_path=""
+
+# Read command line parameters
+while [ $# -gt 0 ]; do
+
+    case "$1" in
+        -h|--help)
+            usage ; exit 0 ;;
+        -q|--quiet)
+            quiet="yes"
+            shift ;;
+        --start)
+            set_action "start"
+            shift ;;
+        --stop)
+            set_action "stop"
+            shift ;;
+        --restart)
+            set_action "restart"
+            shift ;;
+        --enable)
+            set_action "enable"
+            shift ;;
+        --disable)
+            set_action "disable"
+            shift ;;
+        --debugger)
+            debug_mode="yes"
+            shift ;;
+        --debugger-key)
+            debugger_key="$2"
+            shift 2 ;;
+        --debugger-location)
+            debugger_location="$2"
+            shift 2 ;;
+        --debugger-path)
+            debugger_path="$2"
+            shift 2 ;;
+        -*)
+            die "Error: invalid option switch ($1)" ;;
+        *)
+            # We expect the remaining stuff are the instance names
+            break ;;
+    esac
+
+done
+
+if [ $# -gt 0 ]; then
+    # We have at least one instance name
+    for name in "$@"; do
+
+        if is_instance $name; then
+
+            adjust_paths_dev_install $name
+            export DEV_INSTALL
+            export KOHA_HOME
+            PERL5LIB=$PERL5LIB:$KOHA_HOME/installer:$KOHA_HOME/lib/installer
+            # If debug mode is enabled, add the debugger lib path
+            # to PERL5LIB if appropriate
+            if [ "$debug_mode" = "yes" ]; then
+                if [ "$debugger_path" != "" ]; then
+                    PERL5LIB="${debugger_path}":$PERL5LIB
+                fi
+                export PERL5DB="BEGIN { require q(${debugger_path}/perl5db.pl) }"
+                export PERLDB_OPTS="RemotePort=${debugger_location} async=1 LogFile=/var/log/koha/${name}/z3950-debug.log"
+                export DBGP_IDEKEY=${debugger_key}
+                export PERL5OPT="-d"
+            fi
+
+            export PERL5LIB
+
+            case $op in
+                "start")
+                    start_z3950 $name
+                    ;;
+                "stop")
+                    stop_z3950 $name
+                    ;;
+                "restart")
+                    restart_z3950 $name
+                    ;;
+                "enable")
+                    enable_z3950 $name
+                    ;;
+                "disable")
+                    disable_z3950 $name
+                    ;;
+                *)
+                    usage
+                    ;;
+            esac
+
+        else
+            if [ "$quiet" = "no" ]; then
+                log_daemon_msg "Error: Invalid instance name $name"
+                log_end_msg 1
+            fi
+        fi
+
+    done
+else
+    if [ "$quiet" = "no" ]; then
+        warn "Error: you must provide at least one instance name"
+    fi
+fi
+
+exit 0

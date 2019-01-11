@@ -216,6 +216,29 @@ is_plack_running()
     fi
 }
 
+is_z3950_enabled()
+{
+    local instancename=$1
+
+    if [ -e /etc/koha/sites/$instancename/z3950/config.xml ]; then
+        return 0
+    else
+        return 1
+    fi
+}
+
+is_z3950_running()
+{
+    local instancename=$1
+
+    if start-stop-daemon --pidfile "/var/run/koha/${instancename}/z3950-responder.pid" \
+            --status ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 adjust_paths_dev_install()
 {
 # Adjust KOHA_HOME, PERL5LIB for dev installs, as indicated by

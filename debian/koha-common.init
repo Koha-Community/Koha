@@ -58,6 +58,7 @@ do_start()
     koha-start-zebra $(koha-list --enabled)
     koha-start-sip $(koha-list --enabled)
     koha-plack --start $(koha-list --enabled --plack)
+    koha-z3950-responder --start $(koha-list --enabled --z3950)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
         koha-indexer --start --quiet $(koha-list --enabled)
@@ -147,6 +148,24 @@ plack_status()
     done
 }
 
+#
+# Function that shows the status of the Z39.50/SRU server daemon for
+# enabled instances
+#
+z3950_status()
+{
+    for instance in $(koha-list --enabled --z3950); do
+
+        log_daemon_msg "Z39.50/SRU daemon running for instance ${instance}"
+
+        if is_z3950_running $instance ; then
+            log_end_msg 0
+        else
+            log_end_msg 1
+        fi
+    done
+}
+
 case "$1" in
   start)
 	[ "$VERBOSE" != no ] && log_daemon_msg "Starting $DESC" "$NAME"
@@ -189,6 +208,7 @@ case "$1" in
         zebra_status
         sip_status
         plack_status
+        z3950_status
         ;;
   *)
     echo "Usage: $SCRIPTNAME {start|stop|restart|force-reload|status}" >&2
