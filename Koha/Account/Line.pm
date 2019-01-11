@@ -29,6 +29,8 @@ use Koha::Items;
 
 use base qw(Koha::Object);
 
+=encoding utf8
+
 =head1 NAME
 
 Koha::Account::Line - Koha accountline Object class
