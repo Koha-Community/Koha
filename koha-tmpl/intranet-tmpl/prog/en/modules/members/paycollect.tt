@@ -99,11 +99,11 @@
 <ol>
 
     <li>
-        <label for="paid">Amount paid: </label>
+        <label for="paid">Amount being paid: </label>
         <input name="paid" id="paid" value="[% amountoutstanding | $Price %]"/>
     </li>
     <li>
-        <label for="collected">Collect from patron: </label>
+        <label for="collected">Collected from patron: </label>
         <input id="collected" value="[% amountoutstanding | $Price %]"/>
     </li>
     <li>
@@ -125,8 +125,10 @@
 </ol>
 </fieldset>
 
-    <div class="action"><input type="submit" name="submitbutton" value="Confirm" />
-        <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a></div>
+        <div class="action">
+            <input type="submit" name="submitbutton" value="Confirm" />
+            <a class="cancel" href="/cgi-bin/koha/members/pay.pl?borrowernumber=[% patron.borrowernumber | html %]">Cancel</a>
+        </div>
     </form>
 [% ELSIF ( writeoff_individual ) %]
     <form name="woindivfine" id="woindivfine" action="/cgi-bin/koha/members/pay.pl" method="post" >
@@ -251,17 +253,16 @@
      </div> <!-- /.row -->
 
 <!-- Modal -->
-<a class="hidden" href="#confirm_change_form" data-toggle="modal"></a>
 <div id="confirm_change_form" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h3>Amount collected higher than paid</h3>
+                <h3>The amount collected is more than the outstanding charge</h3>
             </div>
             <div class="modal-body">
-                <p>The amount collected from the patron is higher than the amount paid.</p>
+                <p>The amount collected from the patron is higher than the amount to be paid.</p>
                 <p>The change to give is <b><span id="modal_change">0.00</span></b>.</p>
-                <p>Do you still confirm the payment?</p>
+                <p>Confirm this payment?</p>
             </div>
             <div class="modal-footer">
                 <button class="btn btn-default approve" id="modal_submit" type="button"><i class="fa fa-check"></i> Yes</button>
@@ -288,13 +289,20 @@
             });
 
             if (change != undefined) {
-                forms.bind('submit', function(e) {
+                forms.on("submit", function(e) {
                     if (change.innerHTML > 0.00) {
                         e.preventDefault();
-                        $('a[href="#confirm_change_form"]').click();
+                        $("#confirm_change_form").modal("show");
+                    } else {
+                        return true;
                     }
                 });
             }
+
+            $("#confirm_change_form").on("hidden.bs.modal", function(){
+                // remove class added by preventDoubleFormSubmit if necessary
+                $("body, form input[type='submit'], form button[type='submit'], form a").removeClass('waiting');
+            });
 
             $('#modal_submit').click(function() {
                 forms[0].submit();
