@@ -98,6 +98,7 @@ if ( $backends_available ) {
                     whole   => $backend_result,
                     request => $new_request
                 );
+                $request = $new_request;
             } else {
                 # backend failure
                 $backend_result = {
@@ -115,7 +116,6 @@ if ( $backends_available ) {
             }
         }
         else {
-            $request = Koha::Illrequests->find( $params->{illrequest_id} );
             $backend_result = $request->backend_migrate($params);
             $template->param(
                 whole   => $backend_result,
