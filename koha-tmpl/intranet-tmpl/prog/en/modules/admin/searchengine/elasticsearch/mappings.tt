@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% PROCESS 'i18n.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Search engine configuration</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -75,22 +76,22 @@ a.add, a.delete {
       <div class="dialog [% m.type | html %]">
         [% SWITCH m.code %]
         [% CASE 'error_on_update' %]
-          An error occurred when updating mappings ([% m.message | html %]).
+          [% tx("An error occurred when updating mappings: {message}.", { message = m.message }) | html %]
         [% CASE 'error_on_delete' %]
-          An error occurred when deleting the existing mappings. Nothing has been changed!
-          (search field [% m.values.field_name | html %] with mapping [% m.values.marc_field | html %].)
+          [% t("An error occurred when deleting the existing mappings. Nothing has been changed!") %]
+          [% tx("(search field {field_name} with mapping {marc_field}.)", { field_name = m.values.field_name, marc_field = m.values.marc_field }) | html %]
         [% CASE 'invalid_field_weight' %]
-          Invalid field weight "[% m.weight | html %]", must be a positive decimal number.
+          [% tx("Invalid field weight '{weight}', must be a positive decimal number.", { weight = m.weight }) | html %]
         [% CASE 'error_on_update_es_mappings' %]
-          An error occurred when updating Elasticsearch index mappings: [% m.message | html %].
+          [% tx("An error occurred when updating Elasticsearch index mappings: {message}.", { message = m.message }) | html %]
         [% CASE 'reindex_required' %]
-          Index "[% m.index | html %]" needs to be reindexed
+          [% tx("Index '{index}' needs to be reindexed.", { index = m.index }) | html %]
         [% CASE 'recreate_required' %]
-          Index "[% m.index | html %]" needs to be recreated
+          [% tx("Index '{index}' needs to be recreated.", { index = m.index }) | html %]
         [% CASE 'success_on_update' %]
-          Mappings updated successfully.
+          [% t("Mappings updated successfully.") %]
         [% CASE 'success_on_reset' %]
-          Mappings have been reset successfully.
+          [% t("Mappings have been reset successfully.") %]
         [% CASE %]
           [% m.code | html %]
         [% END %]
@@ -115,9 +116,9 @@ a.add, a.delete {
             [% FOREACH e IN errors %]
                 <li>
                     [% IF ( e.type == "malformed_mapping" ) %]
-                        The value "[% e.value | html %]" is not supported for mappings
+                        <span>The value "[% e.value | html %]" is not supported for mappings</span>
                     [% ELSIF ( e.type == "no_mapping" ) %]
-                        There is no mapping for the index [% e.value | html %]
+                        <span>There is no mapping for the index [% e.value | html %]</span>
                     [% END %]
                 </li>
             [% END %]
