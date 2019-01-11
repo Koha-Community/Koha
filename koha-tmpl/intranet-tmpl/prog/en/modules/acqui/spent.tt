@@ -72,7 +72,7 @@
                 <span title="[% order.datereceived | html %]">[% order.datereceived | $KohaDates %]</span>
             </td>
             <td class="data cell">
-                [% order.rowtotal | html %]
+                [% order.rowtotal | $Price %]
             </td>
         </tr>
     [% END %]
@@ -81,7 +81,7 @@
         [% IF shipmentcosts.size || ( adjustments && adjustments.count > 0 ) %]
             <tr>
                 <td colspan="9"> Sub total </td>
-                <td class="data"> [% subtotal | html %] </td>
+                <td class="data"> [% subtotal | $Price %] </td>
             </tr>
         [% END %]
         [% IF shipmentcosts.size %]
@@ -89,7 +89,7 @@
                 <tr>
                     <td></td>
                     <td colspan="8">Shipping cost for invoice [% shipmentcost.invoicenumber | html %]</td>
-                    <td class="data total">[% shipmentcost.shipmentcost | html %]</td>
+                    <td class="data total">[% shipmentcost.shipmentcost | $Price %]</td>
                 </tr>
             [% END %]
         [% END %]
@@ -98,13 +98,13 @@
                 <tr>
                     <td></td>
                     <td colspan="8">Adjustment cost for invoice [% adjustment.invoiceid | html %]</td>
-                    <td class="data total">[% adjustment.adjustment | html %]</td>
+                    <td class="data total">[% adjustment.adjustment | $Price %]</td>
                 </tr>
             [% END %]
         [% END %]
         <tr>
             <td colspan="9">TOTAL</td>
-            <td class="data total">[% total | html %]</td>
+            <td class="data total">[% total | $Price %]</td>
         </tr>
     </tfoot>
 </table>
