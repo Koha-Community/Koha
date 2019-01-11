@@ -1,78 +1,70 @@
 {
   "type": "object",
   "properties": {
-    "branchcode": {
-      "$ref": "../x-primitives.json#/branchcode"
+    "library_id": {
+      "$ref": "../x-primitives.json#/library_id"
     },
-    "branchname": {
+    "name": {
       "type": "string",
       "description": "Printable name of library"
     },
-    "branchaddress1": {
+    "address1": {
       "type": ["string", "null"],
       "description": "the first address line of the library"
     },
-    "branchaddress2": {
+    "address2": {
       "type": ["string", "null"],
       "description": "the second address line of the library"
     },
-    "branchaddress3": {
+    "address3": {
       "type": ["string", "null"],
       "description": "the third address line of the library"
     },
-    "branchzip": {
+    "postal_code": {
       "type": ["string", "null"],
-      "description": "the zip or postal code of the library"
+      "description": "the postal code of the library"
     },
-    "branchcity": {
+    "city": {
       "type": ["string", "null"],
       "description": "the city or province of the library"
     },
-    "branchstate": {
+    "state": {
       "type": ["string", "null"],
       "description": "the reqional state of the library"
     },
-    "branchcountry": {
+    "country": {
       "type": ["string", "null"],
       "description": "the county of the library"
     },
-    "branchphone": {
+    "phone": {
       "type": ["string", "null"],
       "description": "the primary phone of the library"
     },
-    "branchfax": {
+    "fax": {
       "type": ["string", "null"],
       "description": "the fax number of the library"
     },
-    "branchemail": {
+    "email": {
       "type": ["string", "null"],
       "description": "the primary email address of the library"
     },
-    "branchreplyto": {
+    "reply_to_email": {
       "type": ["string", "null"],
       "description": "the email to be used as a Reply-To"
     },
-    "branchreturnpath": {
+    "return_path_email": {
       "type": ["string", "null"],
       "description": "the email to be used as Return-Path"
     },
-    "branchurl": {
+    "url": {
       "type": ["string", "null"],
       "description": "the URL for your library or branch's website"
     },
-    "issuing": {
-      "type": ["integer", "null"],
-      "description": "unused in Koha"
-    },
-    "branchip": {
+    "ip": {
       "type": ["string", "null"],
       "description": "the IP address for your library or branch"
     },
-    "branchprinter": {
-      "type": ["string", "null"],
-      "description": "unused in Koha"
-    },
-    "branchnotes": {
+    "notes": {
       "type": ["string", "null"],
       "description": "notes related to your library or branch"
     },
@@ -84,11 +76,15 @@
       "type": ["string", "null"],
       "description": "geolocation of your library"
     },
-    "marcorgcode": {
+    "marc_org_code": {
         "type": [ "string", "null" ],
         "description": "MARC Organization Code, see http://www.loc.gov/marc/organizations/orgshome.html, when empty defaults to syspref MARCOrgCode"
+    },
+    "pickup_location": {
+        "type": "boolean",
+        "description": "If the library can act as a pickup location"
     }
   },
   "additionalProperties": false,
-  "required": ["branchcode", "branchname"]
+  "required": ["library_id", "name"]
 }
