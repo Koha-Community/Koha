@@ -74,6 +74,7 @@ if ( $backends_available ) {
             csrf_token => Koha::Token->new->generate_csrf({
                 session_id => scalar $cgi->cookie('CGISESSID'),
             }),
+            ( $params->{error} ? ( error => $params->{error} ) : () ),
         );
 
     } elsif ( $op eq 'create' ) {
@@ -100,19 +101,13 @@ if ( $backends_available ) {
                 );
                 $request = $new_request;
             } else {
-                # backend failure
-                $backend_result = {
-                    stage => 'commit',
-                    next  => 'illview',
-                    error => {
-                        message => 'Migrating to backedn does not support migrate',
-                        status => 'Migrating to backedn does not support migrate'
-                    }
-                };
-                $template->param(
-                    whole   => $backend_result,
-                    request => $request
-                );
+                # Backend failure, redirect back to illview
+                print $cgi->redirect( '/cgi-bin/koha/ill/ill-requests.pl'
+                      . '?method=illview'
+                      . '&illrequest_id='
+                      . $request->id
+                      . '&error=migrate_target' );
+                exit;
             }
         }
         else {

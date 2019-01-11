@@ -502,6 +502,15 @@
 
                 [% ELSIF query_type == 'illview' %]
                     [% req_status = request.status %]
+
+                    [% IF error %]
+                      [% IF error == 'migrate_target' %]
+                          <div class="alert">
+                              The backend you tried to migrate to does not yet support migrations, please try again with an alternative target.
+                          </div>
+                      [% END %]
+                    [% END %]
+
                     <h1>Manage ILL request</h1>
                     <div id="request-toolbar" class="btn-toolbar">
                         <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
