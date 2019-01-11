@@ -1,4 +1,5 @@
 [% USE Branches %]
+[% USE Koha %]
 <div id="header" class="navbar navbar-default">
     <div class="container-fluid">
         <ul id="toplevelmenu" class="nav navbar-nav">
