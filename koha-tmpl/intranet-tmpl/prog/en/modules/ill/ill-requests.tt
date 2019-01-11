@@ -535,7 +535,7 @@
                                 [% ELSIF backends.size == 2 %]
                                     [% FOREACH backend IN backends %]
                                         [% IF backend != request.backend %]
-                                            <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]">
+                                            <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">
                                             <span class="fa [% action.ui_method_icon | html %]"></span>
                                             [% action.ui_method_name | html %]
                                             </a>
