@@ -18,10 +18,11 @@
     API Keys for [% INCLUDE 'patron-title.inc' %]
 </div>
 
-<div id="doc3" class="yui-t2">
-    <div id="bd">
-        <div id="yui-main">
-            <div class="yui-b">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
+
                 [% INCLUDE 'members-toolbar.inc' %]
 
                 <h1>API keys for [% INCLUDE 'patron-title.inc' %]</h1>
@@ -45,7 +46,7 @@
                 <div id="keys">
                     [% IF api_keys && api_keys.size > 0 %]
                         <p>
-                            <button class="btn btn-default btn-xs toggle_element" type="submit" id="show-api-form" data-element="#add-api-key"><i class="fa fa-plus"></i> Generate a new client id/key pair</button>
+                            <button class="btn btn-default btn-sm toggle_element" type="submit" id="show-api-form" data-element="#add-api-key"><i class="fa fa-plus"></i> Generate a new client id/key pair</button>
                         </p>
                         <table>
                             <thead>
@@ -93,12 +94,16 @@
                         <div class="dialog message">No keys defined for the current patron. <a href="#" class="toggle_element" data-element="#add-api-key" id="show-api-form"><i class="fa fa-plus"></i> Generate a new client id/secret pair</div>
                     [% END %]
                 </div>
-            </div>
-        </div>
-        <div class="yui-b">
-            [% INCLUDE 'circ-menu.inc' %]
-        </div>
-    </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                [% INCLUDE 'circ-menu.inc' %]
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+    </div> <!-- /.row -->
+
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'str/members-menu.inc' %]
