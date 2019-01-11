@@ -44,13 +44,11 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_begin;
 
     # Create test context
-    my $library = $builder->build( { source => 'Branch' } );
-    my $another_library = { %$library };   # create a copy of $library but make
-    delete $another_library->{branchcode}; # sure branchcode will be regenerated
-    $another_library = $builder->build(
-        { source => 'Branch', value => $another_library } );
-    my ( $borrowernumber, $session_id ) =
-      create_user_and_session( { authorized => 0 } );
+    my $library = $builder->build_object({ class => 'Koha::Libraries' });
+    my $another_library = $library->unblessed; # create a copy of $library but make
+    delete $another_library->{branchcode};     # sure branchcode will be regenerated
+    $another_library = $builder->build_object({ class => 'Koha::Libraries', value => $another_library });
+    my ( $borrowernumber, $session_id ) = create_user_and_session( { authorized => 0 } );
 
     ## Authorized user tests
     my $count_of_libraries = Koha::Libraries->search->count;
@@ -59,23 +57,40 @@ subtest 'list() tests' => sub {
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
-      ->status_is(200)
-      ->json_has('/'.($count_of_libraries-1).'/branchcode')
-      ->json_hasnt('/'.($count_of_libraries).'/branchcode');
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_has('/'.($count_of_libraries-1).'/library_id')
+      ->json_hasnt('/'.($count_of_libraries).'/library_id');
 
     subtest 'query parameters' => sub {
-        my @fields = qw(
-        branchname       branchaddress1 branchaddress2 branchaddress3
-        branchzip        branchcity     branchstate    branchcountry
-        branchphone      branchfax      branchemail    branchreplyto
-        branchreturnpath branchurl      issuing        branchip
-        branchprinter    branchnotes    opac_info
-        );
-        plan tests => scalar(@fields)*3;
 
-        foreach my $field (@fields) {
+        my $fields = {
+            name              => 'branchname',
+            address1          => 'branchaddress1',
+            address2          => 'branchaddress2',
+            address3          => 'branchaddress3',
+            postal_code       => 'branchzip',
+            city              => 'branchcity',
+            state             => 'branchstate',
+            country           => 'branchcountry',
+            phone             => 'branchphone',
+            fax               => 'branchfax',
+            email             => 'branchemail',
+            reply_to_email    => 'branchreplyto',
+            return_path_email => 'branchreturnpath',
+            url               => 'branchurl',
+            ip                => 'branchip',
+            notes             => 'branchnotes',
+            opac_info         => 'opac_info',
+        };
+
+        my $size = keys %{$fields};
+
+        plan tests => $size * 3;
+
+        foreach my $field ( keys %{$fields} ) {
+            my $model_field = $fields->{ $field };
             $tx = $t->ua->build_tx( GET =>
-                         "/api/v1/libraries?$field=$library->{$field}" );
+                         "/api/v1/libraries?$field=" . $library->$model_field );
             $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
             $tx->req->env( { REMOTE_ADDR => $remote_address } );
             my $result =
@@ -102,18 +117,20 @@ subtest 'get() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build( { source => 'Branch' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my ( $borrowernumber, $session_id ) =
       create_user_and_session( { authorized => 0 } );
 
-    my $tx = $t->ua->build_tx( GET => "/api/v1/libraries/" . $library->{branchcode} );
+    my $tx = $t->ua->build_tx( GET => "/api/v1/libraries/" . $library->branchcode );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
-      ->status_is(200)
-      ->json_is($library);
+      ->status_is( 200, 'SWAGGER3.2.2' )
+      ->json_is( '' => Koha::REST::V1::Library::_to_api( $library->TO_JSON ), 'SWAGGER3.3.2' );
 
-    my $non_existent_code = 'non_existent'.int(rand(10000));
+    my $non_existent_code = $library->branchcode;
+    $library->delete;
+
     $tx = $t->ua->build_tx( GET => "/api/v1/libraries/" . $non_existent_code );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
@@ -125,7 +142,8 @@ subtest 'get() tests' => sub {
 };
 
 subtest 'add() tests' => sub {
-    plan tests => 31;
+
+    plan tests => 17;
 
     $schema->storage->txn_begin;
 
@@ -133,28 +151,10 @@ subtest 'add() tests' => sub {
       create_user_and_session( { authorized => 0 } );
     my ( $authorized_borrowernumber, $authorized_session_id ) =
       create_user_and_session( { authorized => 1 } );
-    my $library = {
-        branchcode       => "LIBRARYBR1",
-        branchname       => "Library Name",
-        branchaddress1   => "Library Address1",
-        branchaddress2   => "Library Address2",
-        branchaddress3   => "Library Address3",
-        branchzip        => "Library Zipcode",
-        branchcity       => "Library City",
-        branchstate      => "Library State",
-        branchcountry    => "Library Country",
-        branchphone      => "Library Phone",
-        branchfax        => "Library Fax",
-        branchemail      => "Library Email",
-        branchreplyto    => "Library Reply-To",
-        branchreturnpath => "Library Return-Path",
-        branchurl        => "http://library.url",
-        issuing          => undef,                  # unused in Koha
-        branchip         => "127.0.0.1",
-        branchprinter    => "Library Printer",      # unused in Koha
-        branchnotes      => "Library Notes",
-        opac_info        => "<p>Library OPAC info</p>",
-    };
+
+    my $library_obj = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library     = Koha::REST::V1::Library::_to_api( $library_obj->TO_JSON );
+    $library_obj->delete;
 
     # Unauthorized attempt to write
     my $tx = $t->ua->build_tx( POST => "/api/v1/libraries" => json => $library );
@@ -189,30 +189,15 @@ subtest 'add() tests' => sub {
     $tx->req->cookies(
         { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    my $branchcode = $t->request_ok($tx)
-      ->status_is(201)
-      ->json_is( '/branchname'       => $library->{branchname} )
-      ->json_is( '/branchaddress1'   => $library->{branchaddress1} )
-      ->json_is( '/branchaddress2'   => $library->{branchaddress2} )
-      ->json_is( '/branchaddress3'   => $library->{branchaddress3} )
-      ->json_is( '/branchzip'        => $library->{branchzip} )
-      ->json_is( '/branchcity'       => $library->{branchcity} )
-      ->json_is( '/branchstate'      => $library->{branchstate} )
-      ->json_is( '/branchcountry'    => $library->{branchcountry} )
-      ->json_is( '/branchphone'      => $library->{branchphone} )
-      ->json_is( '/branchfax'        => $library->{branchfax} )
-      ->json_is( '/branchemail'      => $library->{branchemail} )
-      ->json_is( '/branchreplyto'    => $library->{branchreplyto} )
-      ->json_is( '/branchreturnpath' => $library->{branchreturnpath} )
-      ->json_is( '/branchurl'        => $library->{branchurl} )
-      ->json_is( '/branchip'        => $library->{branchip} )
-      ->json_is( '/branchnotes'      => $library->{branchnotes} )
-      ->json_is( '/opac_info'        => $library->{opac_info} )
-      ->header_is(Location => "/api/v1/libraries/$library->{branchcode}")
-      ->tx->res->json->{branchcode};
+    $t->request_ok($tx)
+      ->status_is( 201, 'SWAGGER3.2.1' )
+      ->json_is( '' => $library, 'SWAGGER3.3.1' )
+      ->header_is( Location => '/api/v1/libraries/' . $library->{library_id}, 'SWAGGER3.4.1' );
 
+    # save the library_id
+    my $library_id = $library->{library_id};
     # Authorized attempt to create with null id
-    $library->{branchcode} = undef;
+    $library->{library_id} = undef;
     $tx = $t->ua->build_tx(
         POST => "/api/v1/libraries" => json => $library );
     $tx->req->cookies(
@@ -223,15 +208,19 @@ subtest 'add() tests' => sub {
       ->json_has('/errors');
 
     # Authorized attempt to create with existing id
-    $library->{branchcode} = $branchcode;
+    $library->{library_id} = $library_id;
     $tx = $t->ua->build_tx(
         POST => "/api/v1/libraries" => json => $library );
     $tx->req->cookies(
         { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
-    $t->request_ok($tx)
-      ->status_is(400)
-      ->json_is('/error' => 'Library already exists');
+
+    warning_like {
+        $t->request_ok($tx)
+          ->status_is(409)
+          ->json_has( '/error' => "Fails when trying to add an existing library_id")
+          ->json_is(  '/conflict', 'PRIMARY' ); } # WTF
+        qr/^DBD::mysql::st execute failed: Duplicate entry '(.*)' for key 'PRIMARY'/;
 
     $schema->storage->txn_rollback;
 };
@@ -246,10 +235,11 @@ subtest 'update() tests' => sub {
     my ( $authorized_borrowernumber, $authorized_session_id ) =
       create_user_and_session( { authorized => 1 } );
 
-    my $branchcode = $builder->build( { source => 'Branch' } )->{branchcode};
+    my $library    = $builder->build_object({ class => 'Koha::Libraries' });
+    my $library_id = $library->branchcode;
 
     # Unauthorized attempt to update
-    my $tx = $t->ua->build_tx( PUT => "/api/v1/libraries/$branchcode"
+    my $tx = $t->ua->build_tx( PUT => "/api/v1/libraries/$library_id"
         => json => { branchname => 'New unauthorized name change' } );
     $tx->req->cookies(
         { name => 'CGISESSID', value => $unauthorized_session_id } );
@@ -259,10 +249,10 @@ subtest 'update() tests' => sub {
 
     # Attempt partial update on a PUT
     my $library_with_missing_field = {
-        branchaddress1 => "New library address",
+        address1 => "New library address",
     };
 
-    $tx = $t->ua->build_tx( PUT => "/api/v1/libraries/$branchcode" =>
+    $tx = $t->ua->build_tx( PUT => "/api/v1/libraries/$library_id" =>
                             json => $library_with_missing_field );
     $tx->req->cookies(
         { name => 'CGISESSID', value => $authorized_session_id } );
@@ -270,48 +260,27 @@ subtest 'update() tests' => sub {
     $t->request_ok($tx)
       ->status_is(400)
       ->json_has( "/errors" =>
-          [ { message => "Missing property.", path => "/body/branchaddress2" } ]
+          [ { message => "Missing property.", path => "/body/address2" } ]
       );
 
-    # Full object update on PUT
-    my $library_with_updated_field = {
-        branchcode       => "LIBRARYBR2",
-        branchname       => "Library Name",
-        branchaddress1   => "Library Address1",
-        branchaddress2   => "Library Address2",
-        branchaddress3   => "Library Address3",
-        branchzip        => "Library Zipcode",
-        branchcity       => "Library City",
-        branchstate      => "Library State",
-        branchcountry    => "Library Country",
-        branchphone      => "Library Phone",
-        branchfax        => "Library Fax",
-        branchemail      => "Library Email",
-        branchreplyto    => "Library Reply-To",
-        branchreturnpath => "Library Return-Path",
-        branchurl        => "http://library.url",
-        issuing          => undef,                  # unused in Koha
-        branchip         => "127.0.0.1",
-        branchprinter    => "Library Printer",      # unused in Koha
-        branchnotes      => "Library Notes",
-        opac_info        => "<p>Library OPAC info</p>",
-    };
+    my $deleted_library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library_with_updated_field = Koha::REST::V1::Library::_to_api( $deleted_library->TO_JSON );
+    $library_with_updated_field->{library_id} = $library_id;
+    $deleted_library->delete;
 
-    $tx = $t->ua->build_tx(
-        PUT => "/api/v1/libraries/$branchcode" => json => $library_with_updated_field );
-    $tx->req->cookies(
-        { name => 'CGISESSID', value => $authorized_session_id } );
+    $tx = $t->ua->build_tx( PUT => "/api/v1/libraries/$library_id" => json => $library_with_updated_field );
+    $tx->req->cookies( { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
-      ->status_is(200)
-      ->json_is( '/branchname' => 'Library Name' );
+      ->status_is(200, 'SWAGGER3.2.1')
+      ->json_is( '' => $library_with_updated_field, 'SWAGGER3.3.3' );
 
     # Authorized attempt to write invalid data
     my $library_with_invalid_field = { %$library_with_updated_field };
     $library_with_invalid_field->{'branchinvalid'} = 'Library invalid';
 
     $tx = $t->ua->build_tx(
-        PUT => "/api/v1/libraries/$branchcode" => json => $library_with_invalid_field );
+        PUT => "/api/v1/libraries/$library_id" => json => $library_with_invalid_field );
     $tx->req->cookies(
         { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
@@ -364,8 +333,8 @@ subtest 'delete() tests' => sub {
         { name => 'CGISESSID', value => $authorized_session_id } );
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)
-      ->status_is(204)
-      ->content_is('');
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $tx = $t->ua->build_tx( DELETE => "/api/v1/libraries/$branchcode" );
     $tx->req->cookies(
