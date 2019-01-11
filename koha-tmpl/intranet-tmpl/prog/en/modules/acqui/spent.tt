@@ -73,6 +73,7 @@
             </td>
             <td class="data cell">
                 [% order.rowtotal %]
+                [% order.rowtotal | $Price %]
             </td>
         </tr>
     [% END %]
@@ -81,19 +82,28 @@
         [% IF shipmentcosts.size %]
             <tr valign="top">
                 <td colspan="9"> Sub total </td>
-                <td class="data"> [% subtotal %] </td>
+                <td class="data"> [% subtotal | $Price %] </td>
             </tr>
             [% FOREACH shipmentcost IN shipmentcosts %]
                 <tr>
                     <td></td>
-                    <td colspan="8">Shipping cost for invoice [% shipmentcost.invoicenumber %]</td>
-                    <td class="data total">[% shipmentcost.shipmentcost %]</td>
+                    <td colspan="8">Shipping cost for invoice [% shipmentcost.invoicenumber | html %]</td>
+                    <td class="data total">[% shipmentcost.shipmentcost | $Price %]</td>
+                </tr>
+            [% END %]
+        [% END %]
+        [% IF ( adjustments && adjustments.count > 0 ) %]
+            [% FOREACH adjustment IN adjustments %]
+                <tr>
+                    <td></td>
+                    <td colspan="8">Adjustment cost for invoice [% adjustment.invoiceid | html %]</td>
+                    <td class="data total">[% adjustment.adjustment | $Price %]</td>
                 </tr>
             [% END %]
         [% END %]
         <tr>
             <td colspan="9">TOTAL</td>
-            <td class="data total">[% total %]</td>
+            <td class="data total">[% total | $Price %]</td>
         </tr>
     </tfoot>
 </table>
