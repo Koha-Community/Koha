@@ -68,7 +68,7 @@
         <span title="[% order.entrydate | html %]">[% order.entrydate | $KohaDates %]</span>
 	</td>
     <td class="data cell">
-	    [% order.subtotal | html %]
+	    [% order.subtotal | $Price %]
 	</td>
     </tr>
 [% END %]
@@ -79,7 +79,7 @@
                 <tr>
                     <td></td>
                     <td colspan="6">Adjustment cost for invoice [% adjustment.invoiceid | html %]</td>
-                    <td class="data total">[% adjustment.adjustment | html %]</td>
+                    <td class="data total">[% adjustment.adjustment | $Price %]</td>
                 </tr>
             [% END %]
 
@@ -93,7 +93,7 @@
         <td> </td>
 	<td> </td>
         <td class="data">
-            [% total | html %]
+            [% total | $Price %]
         </td>
     </tr>
     </tfoot>
