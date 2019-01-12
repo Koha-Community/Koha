@@ -100,7 +100,7 @@ if ( $patron->category->effective_BlockExpiredPatronOpacActions ) {
 # Pass through any reserve charge
 my $reservefee = $patron->category->reservefee;
 if ( $reservefee > 0){
-    $template->param( RESERVE_CHARGE => sprintf("%.2f",$reservefee));
+    $template->param( RESERVE_CHARGE => $reservefee);
 }
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
