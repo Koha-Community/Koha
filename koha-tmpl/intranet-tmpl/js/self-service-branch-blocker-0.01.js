@@ -250,6 +250,9 @@ class SSBranchBlocker {
 
   removeRow(borrower_ss_block_id) {
     let rowId = this._getRowId(borrower_ss_block_id);
+
+    if (! window.confirm(_("Are you sure you want to delete the block number")+" '"+borrower_ss_block_id+"' ?")) return;
+
     this.browser.delete('/borrowers/'+this.borrowernumber+'/ssblocks/'+borrower_ss_block_id)
     .then((response) => {
       this.dataTable.row("#"+rowId).remove().draw();

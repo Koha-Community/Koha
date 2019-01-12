@@ -69,6 +69,8 @@ ssbbTranslations = {
     'Created by'             : _('Created by'),
     'Created on'             : _('Created on'),
     'Actions'                : _('Actions'),
+    'Notes'                  : _('Notes'),
+    'Are you sure you want to delete the block number' : _('Are you sure you want to delete the block number'),
 };
 
 var interface = "[% interface %]";
@@ -156,8 +158,8 @@ if (nodename =="barcodes[]"){
     for (var i=0;i < Nodes.length;i++){
       if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
         Nodes[i].checked=false;
-      }     
-   }   
+      }
+   }
 
 }else {
     var Node=me.parentNode.nextSibling;
@@ -166,8 +168,8 @@ if (nodename =="barcodes[]"){
     for (var i=0;i<Nodes.length;i++){
       if (Nodes[i].nodeName=="INPUT" && Nodes[i].getAttribute("type")=="checkbox"){
         Nodes[i].checked=false;
-      }     
-   }   
+      }
+   }
 }
 }
 function validate1(date) {
@@ -193,7 +195,7 @@ function validate1(date) {
 </div>
 
 <div id="doc3" class="yui-t2">
-   
+
    <div id="bd">
 	<div id="yui-main">
 	<div class="yui-b">
@@ -280,7 +282,7 @@ function validate1(date) {
             [% INCLUDE 'member-display-address-style-us.inc' %]
         [% END %]
     </div>
-		    
+
 	<div class="rows">
 		<ol>
         [% IF ( I ) %]
@@ -441,16 +443,16 @@ function validate1(date) {
 [% END %]
 
 </div>
- <div class="yui-u"> 
+ <div class="yui-u">
  <div id="patron-library-details">
  <h3>Library use</h3>
-<div class="rows"> 
+<div class="rows">
 <ol>
     <li><span class="label">Card number: </span>[% cardnumber %]</li>
 	<li><span class="label">Borrowernumber: </span> [% borrowernumber %]</li>
     <li><span class="label">Category: </span>[% description %] ([% categorycode %])</li>
     <li><span class="label">Registration date: </span>[% dateenrolled | $KohaDates %]</li>
-    
+
     <li><span class="label">Expiration date: </span>
     [% IF ( was_renewed ) %]
             <strong class="reregistrinfo">[% dateexpiry | $KohaDates %]</strong>
@@ -458,7 +460,7 @@ function validate1(date) {
             [% dateexpiry | $KohaDates %]
     [% END %]
     </li>
-    
+
     <li><span class="label">Library: </span>[% branchname %]</li>
 
     [% IF ( OPACPrivacy ) %]<li><span class="label">Privacy Pref:</span>
@@ -484,7 +486,7 @@ function validate1(date) {
         *******
     [% ELSE %]
         <span class="problem"><a href="/cgi-bin/koha/members/member-password.pl?member=[% borrowernumber %]">Undefined</a></span>
-    [% END %] 
+    [% END %]
     </li>
     [% IF ( borrowernotes ) %]<li><span class="label">Circulation note: </span>[% borrowernotes %]</li>[% END %]
     [% IF ( opacnote ) %]<li><span class="label">OPAC note:</span>[% opacnote %]</li>[% END %]
@@ -518,7 +520,7 @@ function validate1(date) {
 	</div>
  </div>
     <div class="action"><a href="memberentry.pl?op=modify&amp;borrowernumber=[% borrowernumber %]&amp;step=3">Edit</a></div>
- 
+
     [% UNLESS ( I ) %]
  <div id="patron-alternate-address" style="padding-top: 1em;">
     <h3>Alternate address</h3>
