@@ -5,9 +5,10 @@ BEGIN {
 }
 
 use Modern::Perl '2015';
-use Test::Most tests => 9;
+use Test::Most tests => 10;
 use Test::MockModule;
 use Try::Tiny;
+use Data::Printer;
 
 use C4::SelfService::BlockManager;
 use C4::SelfService::Block;
@@ -156,7 +157,7 @@ subtest("Scenario: List only active blocks", sub {
     ok($blocks = C4::SelfService::BlockManager::listBlocks($blockedBorrower, $now->clone()->add(years => 1)),
         "When all the blocks for the bad borrower are fetched, as if the current date was 1 year to the future");
 
-    cmp_deeply($blocks, [], "Then there are no active blocks");
+    cmp_deeply($blocks, [], "Then the old block has expired");
 
     #Make sure that the precondition of having existing blocks is still in effect in this test Scenario
     ok($blocks = C4::SelfService::BlockManager::listBlocks($blockedBorrower),
@@ -316,6 +317,16 @@ subtest("Scenario: Cleanup stale blocks", sub {
 
     cmp_deeply(C4::SelfService::BlockManager::listBlocks($blockedBorrower), [],
         "Then nothing remains");
+});
+
+subtest("Scenario: Verify action logs are created.", sub {
+    plan tests => 2;
+
+    ok(my $logs = C4::Log::GetLogs(undef, undef, $librarian->{borrowernumber}, [$C4::SelfService::BlockManager::actionLogModuleName]),
+        "Given all the self-service branch specific block action log entries");
+p($logs);
+    is(@$logs, 12,
+        "Then there are the correct amount of logs");
 });
 
 done_testing();

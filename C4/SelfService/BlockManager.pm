@@ -16,6 +16,7 @@ use Storable;
 
 use C4::Context;
 use C4::SelfService::Block;
+use C4::Log;
 
 use Koha::Exception::DB;
 use Koha::Exception::UnknownObject;
@@ -24,6 +25,8 @@ use Koha::Exception::FeatureUnavailable;
 
 use Koha::Logger;
 my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
+
+our $actionLogModuleName = 'SELF-SERVICE';
 
 my %sqlCache;
 
@@ -52,6 +55,7 @@ sub cleanup {
 
     my $count = $sqlCache{cleanBlockSth}->execute($maxAgeDays) || Koha::Exception::DB->throw(error => $dbh->errstr());
     $logger->info("Cleaned '$count' blocks");
+
     return $count;
 }
 
@@ -92,7 +96,9 @@ sub deleteBlock {
         $sqlCache{deleteBlockSth} = $dbh->prepare("DELETE FROM borrower_ss_blocks WHERE borrower_ss_block_id = ?") || Koha::Exception::DB->throw(error => $dbh->errstr());
     }
 
-    return $sqlCache{deleteBlockSth}->execute($borrower_ss_block_id) || Koha::Exception::DB->throw(error => $dbh->errstr());
+    my $deletedCount = $sqlCache{deleteBlockSth}->execute($borrower_ss_block_id) || Koha::Exception::DB->throw(error => $dbh->errstr());
+    C4::Log::logaction($actionLogModuleName, 'BRANCHBLOCK-DEL', $borrower_ss_block_id, undef);
+    return $deletedCount;
 }
 
 =head2 deleteBorrowersBlocks
@@ -112,7 +118,9 @@ sub deleteBorrowersBlocks {
         $sqlCache{deleteBorrowersBlocksSth} = $dbh->prepare("DELETE FROM borrower_ss_blocks WHERE borrowernumber = ?") || Koha::Exception::DB->throw(error => $dbh->errstr());
     }
 
-    return $sqlCache{deleteBorrowersBlocksSth}->execute($borrowernumber) || Koha::Exception::DB->throw(error => $dbh->errstr());
+    my $rowsDeleted = $sqlCache{deleteBorrowersBlocksSth}->execute($borrowernumber) || Koha::Exception::DB->throw(error => $dbh->errstr());
+    C4::Log::logaction($actionLogModuleName, 'BRANCHBLOCK-DELALL', $borrowernumber, undef);
+    return $rowsDeleted;
 }
 
 =head2 getBlock
@@ -234,6 +242,7 @@ sub storeBlock {
             $block->{borrower_ss_block_id},
         ) || Koha::Exception::DB->throw(error => $sqlCache{createBlockSth}->errstr());
 
+        C4::Log::logaction($actionLogModuleName, 'BRANCHBLOCK-MOD', $block->{borrower_ss_block_id}, $block->toYaml());
     }
     #INSERT
     else {
@@ -251,6 +260,8 @@ sub storeBlock {
             $block->{created_on},
         ) || Koha::Exception::DB->throw(error => $sqlCache{createBlockSth}->errstr());
         $block->{borrower_ss_block_id} = $sqlCache{createBlockSth}->{mysql_insertid} // $sqlCache{createBlockSth}->last_insert_id() // Koha::Exception::DB->throw(error => "Couldn't get the last_insert_id from a newly created block $block");
+
+        C4::Log::logaction($actionLogModuleName, 'BRANCHBLOCK-ADD', $block->{borrower_ss_block_id}, $block->toYaml());
     }
 
     return $block;

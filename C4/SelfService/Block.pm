@@ -15,11 +15,14 @@ use DateTime;
 use DateTime::Format::ISO8601;
 use DateTime::Format::MySQL;
 use Data::Printer;
+use YAML::XS;
+use Storable;
 
 use C4::Context;
 use C4::SelfService;
 
 use Koha::Exception::UnknownProgramState;
+use Koha::Exception::FeatureUnavailable;
 
 use Koha::Logger;
 my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
@@ -60,11 +63,12 @@ sub new {
 }
 
 sub _getDefaultExpirationdate {
-    return DateTime->now(time_zone => C4::Context->tz)->add(days => C4::Context->preference('SSBlockDefaultDuration'));
+    my $ddur = C4::Context->preference('SSBlockDefaultDuration') // Koha::Exception::FeatureUnavailable->throw(error => "Syspref 'SSBlockDefaultDuration' is undefined");
+    return DateTime->now(time_zone => C4::Context->tz)->add(days => $ddur);
 }
 
 sub toString {
-    return np($_[0], multiline => 0, class => {show_methods => 'none'});
+    return np($_[0], multiline => 0, class => {show_methods => 'none'}, filters => { 'DateTime' => sub { $_[0]->datetime } } );
 }
 
 sub swaggerize {
@@ -75,6 +79,10 @@ sub swaggerize {
     $_[0]->{created_on}           = (blessed($_[0]->{created_on})) ? $_[0]->{created_on}->iso8601() : $_[0]->{created_on};
 
     return bless($_[0], 'HASH');
+}
+
+sub toYaml {
+    return YAML::XS::Dump(Storable::dclone($_[0])->swaggerize); # DateTime must be serialized as a string first
 }
 
 sub _parseDateTime {
