@@ -23,6 +23,7 @@ BEGIN {
 }
 
 use Modern::Perl;
+use utf8;
 
 use Test::Most tests => 5;
 use Test::Mojo;
@@ -111,11 +112,11 @@ subtest "List/GET blocks when there are no blocks to list" => sub {
 };
 
 subtest '/borrowers/{borrowernumber}/ssblocks POST' => sub {
-    plan tests => 12;
+    plan tests => 13;
     @blocks = (
-        { borrowernumber => $blockedUsers[0]->{borrowernumber}, branchcode => 'CPL', expirationdate => DateTime->now(time_zone => C4::Context->tz())->add(days => 1)->datetime(' ') },
-        { borrowernumber => $blockedUsers[0]->{borrowernumber}, branchcode => 'FPL' },
-        { borrowernumber => $blockedUsers[1]->{borrowernumber}, branchcode => 'IPT' },
+        { borrowernumber => $blockedUsers[0]->{borrowernumber}, branchcode => 'CPL', notes => 'asd', expirationdate => DateTime->now(time_zone => C4::Context->tz())->add(days => 1)->datetime(' ') },
+        { borrowernumber => $blockedUsers[0]->{borrowernumber}, branchcode => 'FPL', notes => undef, },
+        { borrowernumber => $blockedUsers[1]->{borrowernumber}, branchcode => 'IPT', notes => '', },
     );
 
     $t->post_ok('/api/v1/borrowers/'.$blockedUsers[0]->{borrowernumber}.'/ssblocks' => {Accept => '*/*'} => json => $blocks[0]);
@@ -135,6 +136,18 @@ subtest '/borrowers/{borrowernumber}/ssblocks POST' => sub {
             "Block ".($i+1)." created as expected");
         $blocks[$i]->{borrower_ss_block_id} = $t->tx->res->json->{borrower_ss_block_id};
     }
+
+    subtest("Scenario: Sanitate XSS", sub {
+        plan tests => 3;
+
+        push(@blocks, { borrowernumber => $blockedUsers[1]->{borrowernumber}, branchcode => 'CPL', notes => '<<script></script>script>...</script>'});
+        $t->post_ok('/api/v1/borrowers/'.$blocks[3]->{borrowernumber}.'/ssblocks' => {Accept => '*/*'} => json => $blocks[3]);
+        p($t->tx->res->body) if ($ENV{VERBOSE});
+        $t->status_is('200');
+        $t->json_is('/notes', '😄😄script😆😄/script😆script😆...😄/script😆',
+            "notes-field sanitated against xss");
+        $blocks[3]->{borrower_ss_block_id} = $t->tx->res->json->{borrower_ss_block_id};
+    });
 };
 
 subtest "List/GET blocks when there is something to list/GET" => sub {
@@ -158,8 +171,9 @@ subtest "List/GET blocks when there is something to list/GET" => sub {
         $t->tx->res->json,
         [
             noclass(C4::SelfService::Block::get_deeply_testable($blocks[2])),
+            bool(1),
         ],
-        "Blocked Borrower 2 has one block");
+        "Blocked Borrower 2 has two blocks");
 
     $t->get_ok('/api/v1/borrowers/'.$blockedUsers[1]->{borrowernumber}.'/ssblocks/'.$blocks[2]->{borrower_ss_block_id});
     p($t->tx->res->body) if ($ENV{VERBOSE});

@@ -31,6 +31,7 @@ CREATE TABLE `borrower_ss_blocks` ( -- borrower self-service branch-specific blo
   `borrowernumber` int(11) NOT NULL,    -- The user that is blocked, if the borrower-row is deleted, this block becomes useless as well
   `branchcode` varchar(10) NOT NULL,    -- FK to branches. Where the block is in effect. Referential integrity enforced on software, because cannot delete the branch and preserve the old value ON DELETE/UPDATE.
   `expirationdate` datetime NOT NULL,   -- When the personal branch-specific block is automatically lifted by the cronjob self_service_block_expiration.pl
+  `notes` text,                         -- Non-formal user created notes about the block.
   `created_by` int(11) NOT NULL,        -- The librarian that created the block, referential integrity enforced with Perl, because the librarian can quit, but all the blocks he/she made must remain.
   `created_on` datetime NOT NULL DEFAULT NOW(), -- When was this block created
   PRIMARY KEY  (`borrower_ss_block_id`),
@@ -119,4 +120,3 @@ else { #Tests for the atomicupdate
     warn  "    not ok 3 - $test\n";
   }
 }
-

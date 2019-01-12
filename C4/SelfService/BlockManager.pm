@@ -227,11 +227,13 @@ sub storeBlock {
 
     _checkForeignKeys($block);
 
+    $block->xssScrub();
+
     #UPDATE
     if ($block->id) {
         if (_isSthStale($sqlCache{updateBlockSth}, $dbh)) {
             $logger->debug(sprintf("Preparing a new statement using '%s' to update %s", $dbh->{Driver}, $block->toString())) if $logger->is_debug();
-            $sqlCache{updateBlockSth} = $dbh->prepare("UPDATE borrower_ss_blocks SET borrowernumber = ?, branchcode = ?, expirationdate = ? WHERE borrower_ss_block_id = ?");
+            $sqlCache{updateBlockSth} = $dbh->prepare("UPDATE borrower_ss_blocks SET borrowernumber = ?, branchcode = ?, expirationdate = ?, notes = ? WHERE borrower_ss_block_id = ?");
         }
 
         #TODO Updating an existing block has some limitations? Disallow changing branch etc. Easier to implement traceability
@@ -239,6 +241,7 @@ sub storeBlock {
             $block->{borrowernumber},
             $block->{branchcode},
             $block->{expirationdate},
+            $block->{notes},
             $block->{borrower_ss_block_id},
         ) || Koha::Exception::DB->throw(error => $sqlCache{createBlockSth}->errstr());
 
@@ -248,7 +251,7 @@ sub storeBlock {
     else {
         if (_isSthStale($sqlCache{createBlockSth}, $dbh)) {
             $logger->debug(sprintf("Preparing a new statement using '%s' to create %s", $dbh->{Driver}, $block->toString())) if $logger->is_debug();
-            $sqlCache{createBlockSth} = $dbh->prepare("INSERT INTO borrower_ss_blocks VALUES (?,?,?,?,?,?)");
+            $sqlCache{createBlockSth} = $dbh->prepare("INSERT INTO borrower_ss_blocks VALUES (?,?,?,?,?,?,?)");
         }
 
         $sqlCache{createBlockSth}->execute(
@@ -256,6 +259,7 @@ sub storeBlock {
             $block->{borrowernumber},
             $block->{branchcode},
             $block->{expirationdate},
+            $block->{notes},
             $block->{created_by},
             $block->{created_on},
         ) || Koha::Exception::DB->throw(error => $sqlCache{createBlockSth}->errstr());

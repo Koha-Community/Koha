@@ -43,11 +43,12 @@ subtest("Scenario: Create a block without a logged in user", sub {
 });
 
 subtest("Scenario: Having logged in, create a block", sub {
-    plan tests => 8;
+    plan tests => 9;
     my $expectedBlock = { #This is what this subtest should result in.
         borrowernumber => $blockedBorrower->{borrowernumber},
         branchcode     => 'FPL',
         expirationdate => $now->clone()->add(days => C4::Context->preference('SSBlockDefaultDuration')),
+        notes          => 'this is a no note',
         created_by     => $librarian->{borrowernumber},
         created_on     => $now->iso8601(),
     };
@@ -58,6 +59,7 @@ subtest("Scenario: Having logged in, create a block", sub {
         borrowernumber => $expectedBlock->{borrowernumber},
         branchcode     => $expectedBlock->{branchcode},
         #expirationdate => $expectedBlock->{expirationdate}, #Let the constructor automatically set the expiration date based on defaults
+        notes          => 'this is a no note',
     }),  "When a block is created");
 
     ok($block = C4::SelfService::BlockManager::storeBlock($block),
@@ -73,6 +75,8 @@ subtest("Scenario: Having logged in, create a block", sub {
         "And the borrowernumber is as expected");
     is($block->{branchcode}, $expectedBlock->{branchcode},
         "And the branchcode is as expected");
+    is($block->{notes}, $expectedBlock->{notes},
+        "And the notes is as expected");
 });
 
 subtest("Scenario: Persist blocks with bad foreign key references", sub {
@@ -82,6 +86,7 @@ subtest("Scenario: Persist blocks with bad foreign key references", sub {
         C4::SelfService::BlockManager::storeBlock(C4::SelfService::BlockManager::createBlock({    #This throws
                                                  borrowernumber => 9999,
                                                  branchcode     => 'CPL',
+                                                 notes          => 'this is a no note2',
                                              }));
     }, 'Koha::Exception::UnknownObject',
         "Given a bad borrower, we get a foreign key exception");
@@ -90,6 +95,7 @@ subtest("Scenario: Persist blocks with bad foreign key references", sub {
     ok(C4::SelfService::BlockManager::storeBlock( C4::SelfService::BlockManager::createBlock({
                                                  borrowernumber => $blockedBorrower->{borrowernumber},
                                                  branchcode     => 'CPL',
+                                                 notes          => 'this is a no note2',
                                              })),
         "Given a good borrowernumber, no exceptions are thrown");
 
@@ -97,6 +103,7 @@ subtest("Scenario: Persist blocks with bad foreign key references", sub {
         C4::SelfService::BlockManager::storeBlock(C4::SelfService::BlockManager::createBlock({    #This throws
                                                  borrowernumber => $blockedBorrower->{borrowernumber},
                                                  branchcode     => 'NOT_EXISTS',
+                                                 notes          => 'this is a no note3',
                                              }));
     }, 'Koha::Exception::UnknownObject',
         "Given a bad branch, we get a foreign key exception");
@@ -105,6 +112,7 @@ subtest("Scenario: Persist blocks with bad foreign key references", sub {
     ok(C4::SelfService::BlockManager::storeBlock( C4::SelfService::BlockManager::createBlock({    #This throws
                                                  borrowernumber => $blockedBorrower->{borrowernumber},
                                                  branchcode     => 'FPL',
+                                                 notes          => 'this is a no note3',
                                              })),
         "Given a good branchcode, no exceptions are thrown");
 });
@@ -121,6 +129,7 @@ subtest("Scenario: List all the blocks the bad borrower has accumulated so far",
                 borrowernumber       => $blockedBorrower->{borrowernumber},
                 branchcode           => $_[0],
                 expirationdate       => re(qr/^$defaultExpirationdateYMD/),
+                notes                => re(qr/this is a no note/),
                 created_by           => $librarian->{borrowernumber},
                 created_on           => re(qr/^$nowYMD/),
             },
@@ -168,19 +177,22 @@ subtest("Scenario: List only active blocks", sub {
 });
 
 subtest("Scenario: Edit an existing block", sub {
-    plan tests => 3;
+    plan tests => 4;
 
     ok(my $blocks = C4::SelfService::BlockManager::listBlocks($blockedBorrower->{borrowernumber}),
         "Given all the blocks for a borrower");
 
     my $edited = $blocks->[0];
     $edited->{expirationdate} = DateTime->now()->add(days => 30);
+    $edited->{notes}          = 'this is a no note4';
 
     ok(C4::SelfService::BlockManager::storeBlock($edited),
         "When a block has been edited");
 
     is(C4::SelfService::BlockManager::getBlock($edited->id())->expirationdate->iso8601, $edited->expirationdate->iso8601,
-        "Then the changes are persisted to the DB");
+        "Then the changes are persisted to the DB - expirationdate");
+    is(C4::SelfService::BlockManager::getBlock($edited->id())->{notes}, $edited->{notes},
+        "Then the changes are persisted to the DB - notes");
 });
 
 subtest("Scenario: Delete remaining blocks", sub {
@@ -324,7 +336,7 @@ subtest("Scenario: Verify action logs are created.", sub {
 
     ok(my $logs = C4::Log::GetLogs(undef, undef, $librarian->{borrowernumber}, [$C4::SelfService::BlockManager::actionLogModuleName]),
         "Given all the self-service branch specific block action log entries");
-p($logs);
+
     is(@$logs, 12,
         "Then there are the correct amount of logs");
 });

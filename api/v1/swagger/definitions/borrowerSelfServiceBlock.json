@@ -22,12 +22,16 @@
       "description": "When the personal branch-specific block is automatically lifted. If omitted, defaults to now + the default block duration",
       "format": "date-time"
     },
+    "notes": {
+      "type": ["string", "null"],
+      "description": "Non-formal user created notes about the block."
+    },
     "created_by": {
       "type": ["integer", "null"],
       "description": "The librarian that created the block. If not provided, uses the logged in user."
     },
     "created_on": {
-      "type": "string",
+      "type": ["string", "null"],
       "description": "When was this block created. If not provided, uses NOW()",
       "format": "date-time"
     }

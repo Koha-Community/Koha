@@ -10,6 +10,7 @@ use Modern::Perl '2015';
 use Try::Tiny;
 use Scalar::Util qw(blessed);
 use Carp::Always;
+use utf8;
 
 use DateTime;
 use DateTime::Format::ISO8601;
@@ -85,6 +86,17 @@ sub toYaml {
     return YAML::XS::Dump(Storable::dclone($_[0])->swaggerize); # DateTime must be serialized as a string first
 }
 
+=head2 xssScrub
+
+It would be better to use HTML::Scrubber but redesigning Koha's API validation strategies is outside the scope of this work.
+
+=cut
+
+sub xssScrub {
+    $_[0]->{notes} =~ s/</😄/gsm if $_[0]->{notes};
+    $_[0]->{notes} =~ s/>/😆/gsm if $_[0]->{notes};
+}
+
 sub _parseDateTime {
     my $dt;
     eval {
@@ -140,6 +152,7 @@ sub get_deeply_testable {
         borrowernumber       => $got->{borrowernumber}       // Test::Deep::Regexp->new(qr/^\d+$/),
         branchcode           => $got->{branchcode},
         expirationdate       => $got->{expirationdate}       // Test::Deep::Regexp->new(qr/^\d\d\d\d-\d\d-\d\d[ T]\d\d:\d\d:\d\d/),
+        notes                => $got->{notes},
         created_by           => $got->{created_by}           // Test::Deep::Regexp->new(qr/^\d+$/),
         created_on           => $got->{created_on}           // Test::Deep::Regexp->new(qr/^\d\d\d\d-\d\d-\d\d[ T]\d\d:\d\d:\d\d/),
     }, 'C4::SelfService::Block');

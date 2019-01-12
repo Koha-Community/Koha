@@ -16,6 +16,7 @@ package Koha::REST::V1::Borrower;
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
+use utf8;
 
 use Mojo::Base 'Mojolicious::Controller';
 use Mojo::JSON;

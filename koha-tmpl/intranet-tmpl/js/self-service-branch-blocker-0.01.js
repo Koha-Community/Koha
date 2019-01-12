@@ -7,18 +7,15 @@
  * for more documentation about possible request-response pairs, see the Swagger-UI in
  * @see https://koha-hostname/api/v1/doc/
  *
- * Repository
- * @see {@link https://github.com/Hypernova-Oy/self-service_branch_blocker}
- *
  * @license GPL3+
  * @copyright Hypernova Oy
  */
 class SSBranchBlocker {
 
   /**
-   * 
-   * @param {String or URL} baseUrl 
-   * @param {HTMLElement} htmlRoot 
+   *
+   * @param {String or URL} baseUrl
+   * @param {HTMLElement} htmlRoot
    * @param {Object} options
    *                   borrowernumber: The borrower to whom the blocks are looked and created for
    *                   branches: Array of Branch-objects used to populate the branch selector,
@@ -137,7 +134,8 @@ class SSBranchBlocker {
           "branchcode":"CPL",
           "created_by":7349,
           "created_on":"2018-12-22 12:40:48",
-          "expirationdate":"2018-12-21 15:40:05"
+          "expirationdate":"2018-12-21 15:40:05",
+          "notes":"noteno note"
         },
         {
           "borrower_ss_block_id":90,
@@ -145,7 +143,8 @@ class SSBranchBlocker {
           "branchcode":"FPL",
           "created_by":7349,
           "created_on":"2018-12-22 12:40:48",
-          "expirationdate":"2018-12-22 13:58:51"
+          "expirationdate":"2018-12-22 13:58:51",
+          "notes":"notena nante"
         }
       ],*/
       columns: [
@@ -161,6 +160,7 @@ class SSBranchBlocker {
             }
           }
         },
+        { name: "notes",            title: this._("Notes"),           data: "notes" },
         { name: "createdby",        title: this._("Created by"),      data: "created_by" },
         { name: "createdon",        title: this._("Created on"),      data: "created_on",
           render: (data, type, full, meta) => {
@@ -214,7 +214,7 @@ class SSBranchBlocker {
   /**
    * Renders a summary of the given blocks to the optional summary html element
    * If no blocks or the summary target html is given during construction, does nothing.
-   * @param {Array of Blocks} blocks 
+   * @param {Array of Blocks} blocks
    */
   createSummary(blocks) {
     if (! (this.htmlRootElementSummaries && blocks)) return;
@@ -242,6 +242,7 @@ class SSBranchBlocker {
       borrowernumber:       this.borrowernumber,
       branchcode:           this.htmlBranchSelectorContainer.innerHTML, // DataTables must receive text
       expirationdate:       `<input id="${this._getHtmlId('new-expirationdate')}" size="8" type="text" value="${expirationdate}"/>`,
+      notes:                `<input id="${this._getHtmlId('new-notes')}" size="20" type="text" value=""/>`,
       created_by:           "",
       created_on:           "",
     } ]).draw();
@@ -340,6 +341,7 @@ class SSBranchBlocker {
     else {
       block.expirationdate = undefined;
     }
+    block.notes = filterXSS(document.getElementById(this._getHtmlId('new-notes')).value);
 
     //created_by and created_on are automatically set by the API. There is no reason to override those.
 
@@ -348,7 +350,7 @@ class SSBranchBlocker {
 
   /**
    * Using globalize.js would be more reasonable, but not doing anything more complicated than absolutely necessary due to Koha not having any modern user interface infrastructure to support dynamic anything.
-   * 
+   *
    * _() might look like a bad naming convention at first, but this is how GNU gettext is used on the serverside.
    * @param {String} msg to translate
    */
@@ -359,7 +361,7 @@ class SSBranchBlocker {
 
   /**
    * Translate a branchcode to a Branch-object
-   * @param {String} branchcode 
+   * @param {String} branchcode
    * @returns {Branch}
    */
   _getBranch(branchcode) {
