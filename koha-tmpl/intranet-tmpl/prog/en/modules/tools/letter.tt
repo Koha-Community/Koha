@@ -93,7 +93,7 @@
               [% FOREACH lette IN letter %]
                 [% can_edit = lette.branchcode || !independant_branch %]
                 <tr>
-                  <td>X[%lette.branchcode%]X[% IF lette.branchname%][% lette.branchname | html %][% ELSE %](All libraries)[% END %]</td>
+                  <td>[% IF lette.branchname %][% lette.branchname | html %][% ELSE %](All libraries)[% END %]</td>
                   <td>
                       [% SWITCH lette.module %]
                           [% CASE 'acquisition' %]<span>Acquisition</span>
