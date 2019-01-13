@@ -67,7 +67,7 @@
 [% END %]
 
 [% IF ( alert.OTHER_CHARGES ) %]
-    <div class="dialog message">The patron has unpaid charges for holds, rentals etc of [% alert.OTHER_CHARGES %]</div>
+    <div class="dialog message">The patron has unpaid charges for holds, rentals etc of [% alert.OTHER_CHARGES | $Price %]</div>
 [% END %]
 
 [% IF alert.HIGHHOLDS %]
@@ -106,7 +106,7 @@
 [% END %]
 
 [% IF ( RENTALCHARGE && RENTALCHARGE > 0 ) %]
-    <li>Rental charge for this item: [% RENTALCHARGE %]</li>
+    <li>Rental charge for this item: [% RENTALCHARGE | $Price %]</li>
 [% END %]
 
 [% IF ( RENEW_ISSUE ) %]

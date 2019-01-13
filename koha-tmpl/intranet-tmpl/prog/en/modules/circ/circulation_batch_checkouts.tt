@@ -191,7 +191,7 @@
                       <li>This item has been lost with a status of "[% checkout_info.alert.ITEM_LOST %]."</li>
                   [% END %]
                   [% IF checkout_info.alert.OTHER_CHARGES %]
-                      <li>The patron has unpaid charges for holds, rentals etc of [% checkout_info.alert.OTHER_CHARGES %].</li>
+                      <li>The patron has unpaid charges for holds, rentals etc of [% checkout_info.alert.OTHER_CHARGES | $Price %].</li>
                   [% END %]
                 </ul>
               [% END %]
