@@ -96,7 +96,7 @@ sub build_issue_data {
         $itemtype = Koha::ItemTypes->find( $itemtype );
         $checkout->{itemtype_description} = $itemtype->description; #FIXME Should not it be translated_description
 
-        $checkout->{charge} = sprintf( "%.2f", $charge ); # TODO Should be done in the template using Price
+        $checkout->{charge} = $charge;
 
         $checkout->{overdue} = $c->is_overdue;
 
