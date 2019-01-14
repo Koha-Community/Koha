@@ -52,6 +52,7 @@ my $error = q{};
 my ( $soonest_renew_date, $latest_auto_renew_date );
 
 if ($barcode) {
+    $barcode =~ s/^\s*|\s*$//g; # remove leading/trailing whitespace
     $item = $schema->resultset("Item")->single( { barcode => $barcode } );
 
     if ($item) {
