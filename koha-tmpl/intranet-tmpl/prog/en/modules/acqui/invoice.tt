@@ -109,7 +109,7 @@
                               [% total_adj = total_adj + adjustment.adjustment %]
                               <tr>
                                   <td><input type="hidden" name="adjustment_id" value="[% adjustment.adjustment_id | html %]" />[% adjustment.adjustment_id | html %]</td>
-                                  <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price %]" /></td>
+                                  <td><input type="text" name="adjustment" id="adjustment_[% adjustment.adjustment_id | html %]" value="[% adjustment.adjustment | $Price on_editing => 1 %]" /></td>
                                   <td>
                                       [% reasons = AuthorisedValues.Get("ADJ_REASON") %]
                                       [% IF reasons.0 %]
