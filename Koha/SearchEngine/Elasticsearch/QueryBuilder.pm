@@ -80,7 +80,6 @@ sub build_query {
 
     my $stemming         = C4::Context->preference("QueryStemming")        || 0;
     my $auto_truncation  = C4::Context->preference("QueryAutoTruncate")    || 0;
-    my $weight_fields    = C4::Context->preference("QueryWeightFields")    || 0;
     my $fuzzy_enabled    = C4::Context->preference("QueryFuzzy")           || 0;
 
     $query = '*' unless defined $query;
@@ -1065,6 +1064,7 @@ sub _search_fields {
                 ) : (
                     'staff_client' => 1
                 ),
+                'type' => { '!=' => 'boolean' },
                 'search_marc_map.index_name' => $self->index,
                 'search_marc_map.marc_type' => C4::Context->preference('marcflavour'),
                 'search_marc_to_fields.search' => 1,
