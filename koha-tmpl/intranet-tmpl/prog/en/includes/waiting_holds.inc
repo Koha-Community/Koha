@@ -28,11 +28,11 @@
                         [% END %]
                         <br />Barcode: [% reserveloo.item.barcode | html %]
                 </td>
-                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrower.borrowernumber | uri %]">[% reserveloo.borrower.surname | html %], [% reserveloo.borrower.firstname | html %]</a>
-                    [% IF ( reserveloo.borrower.phone ) %]<br />[% reserveloo.borrower.phone | html %][% END %]
+                <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrower.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=reserveloo.borrower %]</a>
+                    [% IF ( reserveloo.borrower.phone ) %]<br /><span class="patron_phone">[% reserveloo.borrower.phone | html %]</span>[% END %]
                     [% IF ( reserveloo.borrower.first_valid_email_address ) %]
-                        <br /><a href="mailto:[% reserveloo.borrower.first_valid_email_address | uri %]?subject=[% "Hold waiting: " | uri %][% reserveloo.biblio.title | uri %]">
-                        [% reserveloo.borrower.first_valid_email_address | html %]</a>
+                        <span class="patron_email"><br /><a href="mailto:[% reserveloo.borrower.first_valid_email_address | uri %]?subject=[% "Hold waiting: " | uri %][% reserveloo.biblio.title | uri %]">
+                        [% reserveloo.borrower.first_valid_email_address | html %]</a></span>
                     [% END %]
                 </td>
                 <td>[% Branches.GetName( reserveloo.item.homebranch ) | html %]</td>
