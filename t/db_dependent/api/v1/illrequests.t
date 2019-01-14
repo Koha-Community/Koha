@@ -99,7 +99,7 @@ subtest 'list() tests' => sub {
     my $response = $illrequest->unblessed;
     $response->{id_prefix} = $illrequest->id_prefix;
 
-    my $req_formatted = add_formatted($illrequest);
+    my $req_formatted = add_formatted($response);
 
     # One illrequest created, should get returned
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
@@ -134,7 +134,7 @@ subtest 'list() tests' => sub {
     my $response2 = $illrequest2->unblessed;
     $response2->{id_prefix} = $illrequest2->id_prefix;
 
-    my $req2_formatted = add_formatted($illrequest2);
+    my $req2_formatted = add_formatted($response2);
 
     # Two illrequest created, should get returned
     $tx = $t->ua->build_tx( GET => '/api/v1/illrequests' );
@@ -159,20 +159,19 @@ sub add_formatted {
     my @format_dates = ( 'placed', 'updated' );
     # We need to embellish the request with properties that the API
     # controller calculates on the fly
-    my $req_unblessed = $req->unblessed;
     # Create new "formatted" columns for each date column
     # that needs formatting
     foreach my $field(@format_dates) {
-        if (defined $req_unblessed->{$field}) {
-            $req_unblessed->{$field . "_formatted"} = format_sqldatetime(
-                $req_unblessed->{$field},
+        if (defined $req->{$field}) {
+            $req->{$field . "_formatted"} = format_sqldatetime(
+                $req->{$field},
                 undef,
                 undef,
                 1
             );
         }
     }
-    return $req_unblessed;
+    return $req;
 }
 
 sub create_user_and_session {
