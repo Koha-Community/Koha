@@ -376,8 +376,7 @@ sub _merge_script {
     my ( $id, $script, $bind ) = @_;
     chomp ($script, $bind);
     return <<HERE;
-<script type="text/javascript">
-//<![CDATA[
+<script>
 $script
 function BindEvents$id() {
 $bind
@@ -385,7 +384,6 @@ $bind
 \$(document).ready(function() {
     BindEvents$id();
 });
-//]]>
 </script>
 HERE
 }
