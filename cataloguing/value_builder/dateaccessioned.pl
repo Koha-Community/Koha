@@ -20,7 +20,6 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use C4::Biblio qw/GetMarcFromKohaField/;
 use Koha::DateUtils;
 
 my $builder = sub {
@@ -29,12 +28,8 @@ my $builder = sub {
 
     my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
-	# find the tag/subfield mapped to items.dateaccessioned
-	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned","");
-	my $res  = <<END_OF_JS;
-<script type="text/javascript">
-//<![CDATA[
-//  
+    my $res  = <<END_OF_JS;
+<script>
 // from: cataloguing/value_builder/dateaccessioned.pl
 
 function Focus$function_name(event) {
@@ -53,7 +48,6 @@ function set_to_today( id, force ) {
         \$("#" + id).val("$date");
     }
 }
-//]]>
 </script>
 END_OF_JS
     return $res;
