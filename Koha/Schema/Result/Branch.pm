@@ -680,8 +680,9 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-03 16:10:04
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WyXH3sMlyuJIx0fd31RswA
 
-
-# You can replace this text with custom code or comments, and it will be preserved on regeneration
+__PACKAGE__->add_columns(
+    '+pickup_location' => { is_boolean => 1 }
+);
 
 sub koha_objects_class {
     'Koha::Libraries';
