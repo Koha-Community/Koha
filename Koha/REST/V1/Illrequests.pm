@@ -40,7 +40,6 @@ sub list {
     my $c = shift->openapi->valid_input or return;
 
     my $args = $c->req->params->to_hash // {};
-    my $filter;
     my $output = [];
     my @format_dates = ( 'placed', 'updated' );
 
