@@ -2888,7 +2888,7 @@ sub AddRenewal {
                 branchcode        => $branchcode,
                 description       => 'Renewal of Rental Item '
                   . $biblio->title
-                  . " $item->barcode",
+                  . " " . $item->barcode,
             }
         )->store();
     }
