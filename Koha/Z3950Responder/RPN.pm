@@ -42,7 +42,6 @@ sub to_koha {
     my $attrs = $self->{'attributes'};
     my $fields = $mappings->{use}{default} // '_all';
     my $split = 0;
-    my $quote = '';
     my $prefix = '';
     my $suffix = '';
     my $term = $self->{'term'};
@@ -54,7 +53,6 @@ sub to_koha {
                 $fields = $mappings->{use}{$use} if defined $mappings->{use}{$use};
             } elsif ($attr->{'attributeType'} == 4) { # structure
                 $split = 1 if ($attr->{'attributeValue'} == 2);
-                $quote = '"' if ($attr->{'attributeValue'} == 1);
             } elsif ($attr->{'attributeType'} == 5) { # truncation
                 my $truncation = $attr->{'attributeValue'};
                 $prefix = '*' if ($truncation == 2 || $truncation == 3);
@@ -71,6 +69,7 @@ sub to_koha {
             $word =~ s/^[\,\.;:\\\/\"\'\-\=]+//g;
             $word =~ s/[\,\.;:\\\/\"\'\-\=]+$//g;
             next if (!$word);
+            $word = $self->escape($word);
             my @words;
             foreach my $field (@{$fields}) {
                 push(@words, "$field:($prefix$word$suffix)");
@@ -81,15 +80,22 @@ sub to_koha {
     }
 
     my @terms;
+    $term = $self->escape($term);
     foreach my $field (@{$fields}) {
         push(@terms, "$field:($prefix$term$suffix)");
     }
     return '(' . join(' OR ', @terms) . ')';
 }
 
+sub escape {
+    my ($self, $term) = @_;
+
+    $term =~ s/([()])/\\$1/g;
+    return $term;
+}
+
 package Net::Z3950::RPN::And;
-sub to_koha
-{
+sub to_koha {
     my ($self, $mappings) = @_;
 
     return '(' . $self->[0]->to_koha($mappings) . ' AND ' .
@@ -97,8 +103,7 @@ sub to_koha
 }
 
 package Net::Z3950::RPN::Or;
-sub to_koha
-{
+sub to_koha {
     my ($self, $mappings) = @_;
 
     return '(' . $self->[0]->to_koha($mappings) . ' OR ' .
@@ -106,8 +111,7 @@ sub to_koha
 }
 
 package Net::Z3950::RPN::AndNot;
-sub to_koha
-{
+sub to_koha {
     my ($self, $mappings) = @_;
 
     return '(' . $self->[0]->to_koha($mappings) . ' NOT ' .
