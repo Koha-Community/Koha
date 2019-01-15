@@ -53,7 +53,7 @@ sub calculate {
 		}
 		else {
 		$sth = $dbh->prepare("
-        SELECT itemtype, description, biblioitems.itemtype, COUNT(*) AS total
+        SELECT biblioitems.itemtype, description, biblioitems.itemtype, COUNT(*) AS total
 			FROM itemtypes, biblioitems, items 
 		WHERE biblioitems.itemtype=itemtypes.itemtype 
 		AND items.biblioitemnumber=biblioitems.biblioitemnumber
@@ -65,7 +65,7 @@ sub calculate {
 	} else {
 		if (C4::Context->preference('item-level_itypes')) {
 		$sth = $dbh->prepare("
-        SELECT itemtype, description,items.itype AS itemtype, COUNT(*) AS total
+        SELECT biblioitems.itemtype, description,items.itype AS itemtype, COUNT(*) AS total
 			FROM itemtypes,items
 		WHERE items.itype=itemtypes.itemtype
 			GROUP BY items.itype
