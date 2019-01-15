@@ -121,6 +121,9 @@
 
                                 <p>Item is not allowed renewal.</p>
 
+                            [% ELSIF error == "onsite_checkout" %]
+                                <p>Item cannot be renewed because it's an onsite checkout</p>
+
                             [% ELSE %]
 
                                 [% error | html %]
