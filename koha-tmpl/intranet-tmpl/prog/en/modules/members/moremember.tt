@@ -133,6 +133,17 @@
                                     [% IF ( lost ) %]
                                         <li class="blocker">Patron's card has been reported lost.</li>
                                     [% END %]
+                                    [% IF ( expired ) %]
+                                        <li class="blocker">
+                                            <span class="circ-hlt">Expiration:</span>
+                                            [% IF ( patron.dateexpiry ) %]
+                                                Patron's card expired on [% patron.dateexpiry | $KohaDates %].
+                                            [% ELSE %]
+                                                Patron's card has expired.
+                                            [% END %]
+                                            <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit details</a>
+                                        </li>
+                                    [% END %]
                                 </ul>
                             </div>
                         [% END %]
@@ -428,6 +439,12 @@
                                             <span class="label">Expiration date: </span>
                                             [% IF ( was_renewed ) %]
                                                 <strong class="reregistrinfo">[% patron.dateexpiry | $KohaDates %]</strong>
+                                            [% ELSIF ( expired ) %]
+                                                <span class="blocker">
+                                                    [% patron.dateexpiry | $KohaDates %]
+                                                    <strong><em>Expired</em></strong>
+                                                    <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify]&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit details</a>
+                                                </span>
                                             [% ELSE %]
                                                 [% patron.dateexpiry | $KohaDates %]
                                             [% END %]

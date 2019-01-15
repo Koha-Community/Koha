@@ -308,6 +308,22 @@ if( $patron_messages->count > 0 ){
 my ( $subtag, $region ) = split '-', $patron->lang;
 my $translated_language = C4::Languages::language_get_description( $subtag, $subtag, 'language' );
 
+# if the expiry date is before today ie they have expired
+if ( $patron->is_expired ) {
+    $template->param(
+        expired => "1",
+        flagged => 1
+    );
+}
+# check for NotifyBorrowerDeparture
+elsif ( $patron->is_going_to_expire ) {
+    # borrower card soon to expire warn librarian
+    $template->param(
+        "warndeparture" => $patron->dateexpiry,
+        flagged => 1
+    );
+}
+
 my $total = $patron->account->balance;
 $template->param(
     patron          => $patron,

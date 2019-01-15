@@ -660,7 +660,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 			[% IF ( warndeparture ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card will expire soon.
-            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit Details</a>
+            Patron's card expires on [% expiry | $KohaDates %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit details</a>
 
 			</li>
 			[% END %]
@@ -673,7 +673,7 @@ No patron matched <span class="ex">[% message | html %]</span>
 
 			[% IF ( expired ) %]
 			<li><span class="circ-hlt">Expiration:</span> Patron's card has expired.
-            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit Details</a>
+            [% IF ( expiry ) %]Patron's card expired on [% expiry | $KohaDates %][% END %] <a href="/cgi-bin/koha/members/setstatus.pl?borrowernumber=[% patron.borrowernumber | uri %]&amp;destination=circ&amp;reregistration=y">Renew</a> or <a href="/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% patron.borrowernumber | html %]&amp;categorycode=[% categorycode | html %]">Edit details</a>
 
 			</li>
 			[% END %]
