@@ -115,21 +115,12 @@
                                 <ul>
                                     [% FOREACH MARCurl IN MARCURLS %]
                                         <li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
-
-                                        [% IF ( OPACURLOpenInNewWindow ) %]
-                                            [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
-                                            [% ELSE %]
+                                            [% IF ( OPACURLOpenInNewWindow ) %]
                                                 <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
-                                            [% END %]
-                                        [% ELSE %]
-                                            [% IF trackclicks == 'track' || trackclicks == 'anonymous' %]
-                                                <a href="/cgi-bin/koha/tracklinks.pl?uri=[% MARCurl.MARCURL | uri %]&amp;biblionumber=[% biblio.biblionumber | uri %]" title="[% MARCurl.MARCURL | html %]">
                                             [% ELSE %]
                                                 <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
                                             [% END %]
-                                        [% END %]
-                                        [% MARCurl.linktext | html %]</a>
+                                            [% MARCurl.linktext | html %]</a>
                                             [% IF ( MARCurl.notes ) %]
                                                 <ul>
                                                     [% FOREACH note IN MARCurl.notes %]
