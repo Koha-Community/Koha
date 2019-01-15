@@ -3000,8 +3000,38 @@ sub GetBiblioCountByBasketno {
     return $sth->fetchrow;
 }
 
-# Note this subroutine should be moved to Koha::Acquisition::Order
-# Will do when a DBIC decision will be taken.
+=head3 populate_order_with_prices
+
+$order = populate_order_with_prices({
+    order        => $order #a hashref with the order values
+    booksellerid => $booksellerid #FIXME - should obtain from order basket
+    receiving    => 1 # boolean representing order stage, should pass only this or ordering
+    ordering     => 1 # boolean representing order stage
+});
+
+
+Sets calculated values for an order - all values are stored with pull precision regardless of rounding preference except fot
+tax value which is calculated on rounded values if requested
+
+For ordering the values set are:
+    rrp_tax_included
+    rrp_tax_excluded
+    ecost_tax_included
+    ecost_tax_excluded
+    tax_value_on_ordering
+For receiving the value set are:
+    unitprice_tax_included
+    unitprice_tax_excluded
+    tax_value_on_receiving
+
+Note: When receiving if the rounded value of the unitprice matches the rounded value of the ecost then then ecost (full precision) is used.
+
+Returns a hashref of the order
+
+FIXME: Move this to Koha::Acquisition::Order.pm
+
+=cut
+
 sub populate_order_with_prices {
     my ($params) = @_;
 
@@ -3025,11 +3055,15 @@ sub populate_order_with_prices {
             # rrp tax excluded = rrp tax included / ( 1 + tax rate )
             $order->{rrp_tax_excluded} = $order->{rrp_tax_included} / ( 1 + $order->{tax_rate_on_ordering} );
 
+            # ecost tax included = rrp tax included  ( 1 - discount )
+            $order->{ecost_tax_included} = $order->{rrp_tax_included} * ( 1 - $discount );
+
             # ecost tax excluded = rrp tax excluded * ( 1 - discount )
             $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
 
-            # ecost tax included = rrp tax included  ( 1 - discount )
-            $order->{ecost_tax_included} = $order->{rrp_tax_included} * ( 1 - $discount );
+            # tax value = quantity * ecost tax excluded * tax rate
+            $order->{tax_value_on_ordering} = ( get_rounded_price($order->{ecost_tax_included}) - get_rounded_price($order->{ecost_tax_excluded}) ) * $order->{quantity};
+
         }
         else {
             # The user entered the rrp tax excluded
@@ -3041,16 +3075,12 @@ sub populate_order_with_prices {
             # ecost tax excluded = rrp tax excluded * ( 1 - discount )
             $order->{ecost_tax_excluded} = $order->{rrp_tax_excluded} * ( 1 - $discount );
 
-            # ecost tax included = rrp tax excluded * ( 1 + tax rate ) * ( 1 - discount )
-            $order->{ecost_tax_included} =
-                $order->{rrp_tax_excluded} *
-                ( 1 + $order->{tax_rate_on_ordering} ) *
-                ( 1 - $discount );
-        }
+            # ecost tax included = rrp tax excluded * ( 1 + tax rate ) * ( 1 - discount ) = ecost tax excluded * ( 1 + tax rate )
+            $order->{ecost_tax_included} = $order->{ecost_tax_excluded} * ( 1 + $order->{tax_rate_on_ordering} );
 
-        # tax value = quantity * ecost tax excluded * tax rate
-        $order->{tax_value_on_ordering} =
-            $order->{quantity} * get_rounded_price($order->{ecost_tax_excluded}) * $order->{tax_rate_on_ordering};
+            # tax value = quantity * ecost tax included * tax rate
+            $order->{tax_value_on_ordering} = $order->{quantity} * get_rounded_price($order->{ecost_tax_excluded}) * $order->{tax_rate_on_ordering};
+        }
     }
 
     if ($receiving) {
