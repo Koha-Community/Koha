@@ -1,6 +1,6 @@
 -- Coded values conforming to the Z39.77-2006 Holdings Statements for Bibliographic Items');
 -- ISSN: 1041-5653
--- Refer to http://www.niso.org/standards/index.html
+-- Refer to https://www.niso.org/publications/standards
 
 -- General Holdings: Type of Unit Designator
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','0','Informazione non disponibile, non applicabile');

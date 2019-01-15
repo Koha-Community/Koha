@@ -1,6 +1,6 @@
 -- Valeurs codées conformes aux mentions de fonds Z39.71-2006 pour les éléments bibliographiques
 -- ISSN: 1041-5653
--- Voir to http://www.niso.org/standards/index.html
+-- Voir to https://www.niso.org/publications/standards
 
 -- Fonds général : Désignateur de type d'unité
 INSERT INTO `authorised_values` (category, authorised_value, lib) VALUES ('HINGS_UT','0','Information non disponible; Non applicable');
