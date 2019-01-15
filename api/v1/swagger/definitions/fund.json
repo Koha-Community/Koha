@@ -1,7 +1,7 @@
 {
   "type": "object",
   "properties": {
-    "id": {
+    "fund_id": {
       "$ref": "../x-primitives.json#/fund_id"
     },
     "code": {
@@ -9,14 +9,91 @@
         "string",
         "null"
       ],
-      "description": "Fund code"
+      "description": "Code assigned to the fund by the user"
     },
     "name": {
       "type": [
         "string",
         "null"
       ],
-      "description": "Fund name"
+      "description": "Name assigned to the fund by the user"
+    },
+    "library_id": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Internal identifier for the library that this fund belongs to"
+    },
+    "total_amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Total amount for this fund"
+    },
+    "warn_at_percentage": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Warning at percentage"
+    },
+    "warn_at_amount": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Warning at amount"
+    },
+    "notes": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Notes related to this fund"
+    },
+    "budget_id": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Internal identifier for the budget"
+    },
+    "timestamp": {
+      "type": [
+        "string"
+      ],
+      "format": "date-time",
+      "description": "Timestamp"
+    },
+    "fund_owner_id": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Internal identifier for the fund owner"
+    },
+    "fund_access": {
+      "type": [
+        "number",
+        "null"
+      ],
+      "description": "Level of permission for this fund (1: owner, 2: owner, users and library, 3: owner and users)"
+    },
+    "statistic1_auth_value_category": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Statistical category for this fund"
+    },
+    "statistic2_auth_value_category": {
+      "type": [
+        "string",
+        "null"
+      ],
+      "description": "Second statistical category for this fund"
     }
   },
   "additionalProperties": false,
