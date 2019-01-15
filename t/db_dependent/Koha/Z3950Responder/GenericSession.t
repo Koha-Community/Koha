@@ -68,7 +68,7 @@ subtest 'test_search' => sub {
     $search->mock('simple_search_compat', sub {
         my ( $self, $query ) = @_;
 
-        return (1, undef, 0) unless $query eq '((author:(author)) AND (title:(title)))';
+        return (1, undef, 0) unless $query eq '((author:(author)) AND ((title:(title\(s\))) OR (title:(another))))';
 
         my @records = ($marc_record_1, $marc_record_2);
         return (undef, \@records, 2);
@@ -97,7 +97,7 @@ subtest 'test_search' => sub {
     $Zconn->connect('127.0.0.1:42111', 0);
     is($Zconn->errcode(), 0, 'Connection is successful: ' . $Zconn->errmsg());
 
-    my $rs = $Zconn->search_pqf('@and @attr 1=1 author @attr 1=4 title');
+    my $rs = $Zconn->search_pqf('@and @attr 1=1 @attr 4=1 author @or @attr 1=4 title(s) @attr 1=4 another');
     is($Zconn->errcode(), 0, 'Search is successful: ' . $Zconn->errmsg());
 
     is($rs->size(), 2, 'Two results returned');
