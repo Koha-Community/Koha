@@ -117,6 +117,9 @@
 
                                 <p>[% borrower.firstname %] [% borrower.surname %] ( <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% borrower.borrowernumber %]"> [% borrower.cardnumber %] </a> ) is currently restricted.</p>
 
+                            [% ELSIF error == "onsite_checkout" %]
+                                <p>Item cannot be renewed because it's an onsite checkout</p>
+
                             [% ELSE %]
 
                                 [% error %]
