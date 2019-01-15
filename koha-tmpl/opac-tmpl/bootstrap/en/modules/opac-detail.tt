@@ -1152,7 +1152,6 @@
                         <div><a id="facebook" href="http://www.facebook.com/sharer.php?u=[% current_url |url %]&amp;t=[% title |url %]" title="Share on Facebook">Facebook</a></div>
                         <div><a id="linkedin" href="http://www.linkedin.com/shareArticle?mini=true&amp;url=[% current_url |url %]&amp;title=[% title |url %]" title="Share on LinkedIn">LinkedIn</a></div>
                         <div><a id="email" href="mailto:?subject=[% title |url %]&amp;body=[% title |url %]%20([% current_url |url %])" title="Share by email">Email</a></div>
-                        <div><div class="g-plusone" data-size="small" data-count="false"></div></div>
                         <div><a id="twitter" href="https://twitter.com/share" class="twitter-share-button" data-count="none" data-text="[% title |url %]" data-lang="[% lang | html %]">Tweet</a></div>
                     </div>
                 [% END %]
@@ -1381,7 +1380,6 @@
 [% INCLUDE 'datatables.inc' %]
 [% INCLUDE 'columns_settings.inc' %]
 [% IF ( SocialNetworks ) %]
-    <script src="https://apis.google.com/js/plusone.js">
     //<![CDATA[
       {lang: '[% lang | html %]'}
     //]]>
