@@ -48,9 +48,9 @@
                 <option value='phone'>Phone number</option>
               [% END %]
               [% IF searchfieldstype == "address" %]
-                <option selected="selected" value='address'>Street Address</option>
+                <option selected="selected" value='address'>Street address</option>
               [% ELSE %]
-                <option value='address'>Street Address</option>
+                <option value='address'>Street address</option>
               [% END %]
               [% IF searchfieldstype == "dateofbirth" %]
                 <option selected="selected" value='dateofbirth'>Date of birth</option>
