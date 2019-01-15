@@ -21,7 +21,7 @@ use Modern::Perl;
 
 use Mojo::Base 'Mojolicious::Controller';
 
-use C4::Auth qw( check_cookie_auth get_session haspermission );
+use C4::Auth qw( check_cookie_auth checkpw_internal get_session haspermission );
 use C4::Context;
 
 use Koha::ApiKeys;
@@ -37,6 +37,7 @@ use Koha::Exceptions;
 use Koha::Exceptions::Authentication;
 use Koha::Exceptions::Authorization;
 
+use MIME::Base64;
 use Module::Load::Conditional;
 use Scalar::Util qw( blessed );
 use Try::Tiny;
@@ -78,7 +79,7 @@ sub under {
             return $c->render(status => 401, json => { error => $_->error });
         }
         elsif ($_->isa('Koha::Exceptions::Authentication')) {
-            return $c->render(status => 500, json => { error => $_->error });
+            return $c->render(status => 401, json => { error => $_->error });
         }
         elsif ($_->isa('Koha::Exceptions::BadParameter')) {
             return $c->render(status => 400, json => $_->error );
@@ -145,6 +146,21 @@ sub authenticate_api_request {
         }
         else {
             # If we have "Authorization: Bearer" header and oauth authentication
+            # failed, do not try other authentication means
+            Koha::Exceptions::Authentication::Required->throw(
+                error => 'Authentication failure.'
+            );
+        }
+    }
+    elsif ( $authorization_header and $authorization_header =~ /^Basic / ) {
+        unless ( C4::Context->preference('RESTBasicAuth') ) {
+            Koha::Exceptions::Authentication::Required->throw(
+                error => 'Basic authentication disabled'
+            );
+        }
+        $user = $c->_basic_auth( $authorization_header );
+        unless ( $user ) {
+            # If we have "Authorization: Basic" header and authentication
             # failed, do not try other authentication means
             Koha::Exceptions::Authentication::Required->throw(
                 error => 'Authentication failure.'
@@ -388,6 +404,32 @@ sub _object_ownership_by_reserve_id {
 
     my $reserve = Koha::Holds->find($reserve_id);
     return $reserve && $user->borrowernumber == $reserve->borrowernumber;
+}
+
+=head3 _basic_auth
+
+Internal method that performs Basic authentication.
+
+=cut
+
+sub _basic_auth {
+    my ( $c, $authorization_header ) = @_;
+
+    my ( $type, $credentials ) = split / /, $authorization_header;
+
+    unless ($credentials) {
+        Koha::Exceptions::Authentication::Required->throw( error => 'Authentication failure.' );
+    }
+
+    my $decoded_credentials = decode_base64( $credentials );
+    my ( $user_id, $password ) = split( /:/, $decoded_credentials, 2 );
+
+    my $dbh = C4::Context->dbh;
+    unless ( checkpw_internal($dbh, $user_id, $password ) ) {
+        Koha::Exceptions::Authorization::Unauthorized->throw( error => 'Invalid password' );
+    }
+
+    return Koha::Patrons->find({ userid => $user_id });
 }
 
 1;
