@@ -1,6 +1,12 @@
 Web services:
     REST API:
         -
+            - pref: RESTBasicAuth
+              choices:
+                  yes: Enable
+                  no: "Disable"
+            - '<a href="https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA" target="_blank">Basic authentication</a> for the REST API.'
+        -
             - "Set the default number of results returned by the REST API endpoints to"
             - pref: "RESTdefaultPageSize"
               class: integer
