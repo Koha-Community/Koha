@@ -481,21 +481,22 @@ $template->param(
     OPACShowCheckoutName => C4::Context->preference("OPACShowCheckoutName"),
 );
 
-# adding items linked via host biblios
-
-my $analyticfield = '773';
-if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC'){
-    $analyticfield = '773';
-} elsif ($marcflavour eq 'UNIMARC') {
-    $analyticfield = '461';
-}
-foreach my $hostfield ( $record->field($analyticfield)) {
-    my $hostbiblionumber = $hostfield->subfield("0");
-    my $linkeditemnumber = $hostfield->subfield("9");
-    my @hostitemInfos = GetItemsInfo($hostbiblionumber);
-    foreach my $hostitemInfo (@hostitemInfos){
-        if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
-            push(@all_items, $hostitemInfo);
+if ( C4::Context->preference('EasyAnalyticalRecords') ) {
+    # adding items linked via host biblios
+    my $analyticfield = '773';
+    if ($marcflavour eq 'MARC21' || $marcflavour eq 'NORMARC'){
+        $analyticfield = '773';
+    } elsif ($marcflavour eq 'UNIMARC') {
+        $analyticfield = '461';
+    }
+    foreach my $hostfield ( $record->field($analyticfield)) {
+        my $hostbiblionumber = $hostfield->subfield("0");
+        my $linkeditemnumber = $hostfield->subfield("9");
+        my @hostitemInfos = GetItemsInfo($hostbiblionumber);
+        foreach my $hostitemInfo (@hostitemInfos){
+            if ($hostitemInfo->{itemnumber} eq $linkeditemnumber){
+                push(@all_items, $hostitemInfo);
+            }
         }
     }
 }
