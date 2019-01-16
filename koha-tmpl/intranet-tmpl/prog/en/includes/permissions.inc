@@ -34,7 +34,7 @@
     [%- CASE 'override_renewals' -%]<span>Override blocked renewals</span>
     [%- CASE 'manage_checkout_notes' %]<span>Mark checkout notes as seen/not seen</span>
     [%- CASE 'manage_circ_rules' -%]<span>manage circulation rules</span>
-    [%- CASE 'manage_circ_rules_from_any_libraries' -%]<span>Edit circulation rules from any library. If not set the logged in user could only edit circulation rules for their own library (please note that manage_circ_rules is still required)</span>
+    [%- CASE 'manage_circ_rules_from_any_libraries' -%]<span>Manage circulation rules for any library. If not set the logged in user can only edit circulation rules for their own library (please note that manage_circ_rules is still required)</span>
     [%- CASE 'parameters_remaining_permissions' -%]<span>Remaining system parameters permissions</span>
     [%- CASE 'manage_circ_rules' -%]<span>Manage circulation rules</span>
     [%- CASE 'manage_sysprefs' -%]<span>Manage global system preferences</span>
