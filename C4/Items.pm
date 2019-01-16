@@ -520,8 +520,7 @@ sub ModItemFromMarc {
 
   ModItem({ column => $newvalue }, $biblionumber, $itemnumber);
 
-Change one or more columns in an item record and update
-the MARC representation of the item.
+Change one or more columns in an item record.
 
 The first argument is a hashref mapping from item column
 names to the new values.  The second and third arguments
