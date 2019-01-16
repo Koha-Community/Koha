@@ -112,7 +112,7 @@ INSERT IGNORE INTO `marc_subfield_structure` (`tagfield`, `tagsubfield`, `liblib
 		('952', 'n', 'Total Holds', 'Total Holds', 0, 0, 'items.reserves', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 'o', 'Full call number', 'Full call number', 0, 0, 'items.itemcallnumber', 10, '', '', NULL, 0, 0, '', '', '', NULL),
 		('952', 'p', 'Barcode', 'Barcode', 0, 0, 'items.barcode', 10, '', '', 'barcode.pl', 0, 0, '', '', '', NULL),
-		('952', 'q', 'Checked out', 'Checked out', 0, 0, 'items.onloan', 10, '', '', '', NULL, -5, '', '', '', NULL),
+		('952', 'q', 'Date due', 'Date due', 0, 0, 'items.onloan', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 'r', 'Date last seen', 'Date last seen', 0, 0, 'items.datelastseen', 10, '', '', '', NULL, -5, '', '', '', NULL),
              ('952', 's', 'Date last checked out', 'Date last checked out', 0, 0, 'items.datelastborrowed', 10, '', '', '', NULL, -5, '', '', '', NULL),
 		('952', 't', 'Copy number', 'Copy number', 0, 0, 'items.copynumber', 10, '', '', '', NULL, 0, '', '', '', NULL),
