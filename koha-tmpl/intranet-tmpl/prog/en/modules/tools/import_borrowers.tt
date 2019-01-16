@@ -262,7 +262,7 @@
             </ul>
         </li>
 
-        [% IF ( ExtendedPatronAttributes ) %]
+        [% IF ( Koha.Preference('ExtendedPatronAttributes') ) %]
             <li>
                 If loading patron attributes, the 'patron_attributes' field should contain a comma-separated list of attribute types and values. The attribute type code and a colon should precede each value. For example: <b>INSTID:12345,LANG:fr</b> or <b>STARTDATE:January 1 2010,TRACK:Day</b>. If an input record has more than one attribute, the fields should either be entered as an unquoted string (previous examples), or with each field wrapped in separate double quotes and delimited by a comma: <b>&quot;STARTDATE:January 1, 2010&quot;,&quot;TRACK:Day&quot;</b>.  The second syntax would be required if the data might have a comma in it, like a date string.
             </li>
