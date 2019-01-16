@@ -79,7 +79,6 @@ BEGIN {
     #Modify data
     push @EXPORT, qw(
         &ModMember
-        &changepassword
     );
 
     #Insert data
