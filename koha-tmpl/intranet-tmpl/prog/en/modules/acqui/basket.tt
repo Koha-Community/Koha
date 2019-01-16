@@ -541,7 +541,7 @@
                             </td>
                             <td>
                             [% IF ( books_loo.left_holds_on_order ) %]
-                            <span class="button" title="Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked with this order cancel holds first">Can't cancel order</span><br>
+                            <span class="button" title="Can't cancel order, ([% books_loo.holds_on_order | html %]) holds are linked with this order. Cancel holds first">Can't cancel order</span><br>
                             [% ELSE %]
                             <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% books_loo.ordernumber | uri %]&biblionumber=[% books_loo.biblionumber | uri %]&basketno=[% basketno | uri %]&referrer=/cgi-bin/koha/acqui/basket.pl%3Fbasketno=[% basketno | uri %]" class="button">Cancel order</a><br>
                             [% END %]
