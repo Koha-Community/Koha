@@ -183,7 +183,7 @@
 				</td>
 				<td>
                         [% IF ( loop_order.left_holds_on_order ) %]
-                        <span class="button" title="Can't cancel order, ([% loop_order.holds_on_order | html %]) holds are linked with this order cancel holds first">Can't cancel order</span><br>
+                        <span class="button" title="Can't cancel order, ([% loop_order.holds_on_order | html %]) holds are linked with this order. Cancel holds first">Can't cancel order</span><br>
                         [% ELSE %]
                         <a href="/cgi-bin/koha/acqui/cancelorder.pl?ordernumber=[% loop_order.ordernumber | uri %]&biblionumber=[% loop_order.biblionumber | uri %]&referrer=[% "/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid" | uri %]">Cancel order</a><br />
                         [% END %]
