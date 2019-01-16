@@ -28,12 +28,13 @@ use Koha::DateUtils qw( dt_from_string );
 
 use base qw(Koha::Object);
 
-use Koha::Items;
-use Koha::Biblioitems;
-use Koha::ArticleRequests;
 use Koha::ArticleRequest::Status;
+use Koha::ArticleRequests;
+use Koha::Biblio::Metadatas;
+use Koha::Biblioitems;
 use Koha::IssuingRules;
 use Koha::Item::Transfer::Limits;
+use Koha::Items;
 use Koha::Libraries;
 use Koha::Subscriptions;
 
@@ -59,6 +60,22 @@ sub store {
     $self->datecreated( dt_from_string ) unless $self->datecreated;
 
     return $self->SUPER::store;
+}
+
+=head3 metadata
+
+my $metadata = $biblio->metadata();
+
+Returns a Koha::Biblio::Metadata object
+
+=cut
+
+sub metadata {
+    my ( $self ) = @_;
+
+    $self->{_metadata} ||= Koha::Biblio::Metadatas->find( { biblionumber => $self->id } );
+
+    return $self->{_metadata};
 }
 
 =head3 subtitles

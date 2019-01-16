@@ -19,6 +19,8 @@ use Modern::Perl;
 
 use Carp;
 
+use C4::Biblio qw();
+
 use Koha::Database;
 
 use base qw(Koha::Object);
@@ -32,6 +34,28 @@ Koha::Metadata - Koha Metadata Object class
 =head2 Class Methods
 
 =cut
+
+=head3 record
+
+my @record = $biblio->record($params);
+
+Returns a MARC::Record object for a record.
+
+This method accepts the same paramters as C4::Biblio::GetMarcBiblio,
+but does not require the 'biblionumber' parameter.
+
+=cut
+
+sub record {
+    my ( $self, $params ) = @_;
+
+    $params->{biblionumber} = $self->biblionumber;
+
+    my $record = C4::Biblio::GetMarcBiblio($params);
+
+    return $record;
+}
+
 
 =head3 type
 
