@@ -2008,28 +2008,31 @@ sub searchResults {
         # Pull out the items fields
         my @fields = $marcrecord->field($itemtag);
         my $marcflavor = C4::Context->preference("marcflavour");
+
         # adding linked items that belong to host records
-        my $analyticsfield = '773';
-        if ($marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC') {
-            $analyticsfield = '773';
-        } elsif ($marcflavor eq 'UNIMARC') {
-            $analyticsfield = '461';
-        }
-        foreach my $hostfield ( $marcrecord->field($analyticsfield)) {
-            my $hostbiblionumber = $hostfield->subfield("0");
-            my $linkeditemnumber = $hostfield->subfield("9");
-            if( $hostbiblionumber ) {
-                my $hostbiblio = GetMarcBiblio({
-                    biblionumber => $hostbiblionumber,
-                    embed_items  => 1 });
-                my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
-                if( $hostbiblio ) {
-                    my @hostitems = $hostbiblio->field($itemfield);
-                    foreach my $hostitem (@hostitems){
-                        if ($hostitem->subfield("9") eq $linkeditemnumber){
-                            my $linkeditem =$hostitem;
-                            # append linked items if they exist
-                            push @fields, $linkeditem if $linkeditem;
+        if ( C4::Context->preference('EasyAnalyticalRecords') ) {
+            my $analyticsfield = '773';
+            if ($marcflavor eq 'MARC21' || $marcflavor eq 'NORMARC') {
+                $analyticsfield = '773';
+            } elsif ($marcflavor eq 'UNIMARC') {
+                $analyticsfield = '461';
+            }
+            foreach my $hostfield ( $marcrecord->field($analyticsfield)) {
+                my $hostbiblionumber = $hostfield->subfield("0");
+                my $linkeditemnumber = $hostfield->subfield("9");
+                if( $hostbiblionumber ) {
+                    my $hostbiblio = GetMarcBiblio({
+                        biblionumber => $hostbiblionumber,
+                        embed_items  => 1 });
+                    my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
+                    if( $hostbiblio ) {
+                        my @hostitems = $hostbiblio->field($itemfield);
+                        foreach my $hostitem (@hostitems){
+                            if ($hostitem->subfield("9") eq $linkeditemnumber){
+                                my $linkeditem =$hostitem;
+                                # append linked items if they exist
+                                push @fields, $linkeditem if $linkeditem;
+                            }
                         }
                     }
                 }
