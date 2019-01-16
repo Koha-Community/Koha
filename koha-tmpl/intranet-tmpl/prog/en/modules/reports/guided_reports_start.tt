@@ -740,7 +740,7 @@ canned reports and writing custom SQL reports.</p>
                 [% FOREACH header_ro IN header_row %]
                     [% IF header_ro.cell == 'itemnumber' %]
                         <th>
-                            [% header_ro.cell | html %] <button type="submit" data-toggle="tooltip" title="Send visible items to batch modification" class="btn btn-xs btn-default send_to_item_mod"><i class="fa fa-pencil"></i> Batch modify</button>
+                            [% header_ro.cell | html %] <button type="submit" data-toggle="tooltip" title="Send visible items to batch modification" id="batchModify" class="btn btn-xs btn-default send_to_item_mod"><i class="fa fa-pencil"></i> Batch modify</button>
                         </th>
                     [% ELSE %]
                         <th>[% header_ro.cell | html %]</th>
