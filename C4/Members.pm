@@ -62,11 +62,6 @@ BEGIN {
         &IssueSlip
     );
 
-    #Modify data
-    push @EXPORT, qw(
-        &changepassword
-    );
-
     #Check data
     push @EXPORT, qw(
         &checkuserpassword
