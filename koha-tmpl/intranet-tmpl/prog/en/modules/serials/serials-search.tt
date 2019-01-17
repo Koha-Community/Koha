@@ -437,6 +437,7 @@
         $(document).ready(function() {
             var osrlt = $("#opened table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 "sPaginationType": "four_button",
+                "order": [[ 2, "asc" ]],
                 "aoColumnDefs": [
                     { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
                     { "sType": "title-string", "aTargets" : [ "title-string" ] },
@@ -446,6 +447,7 @@
 
             var csrlt = $("#closed table").dataTable($.extend(true, {}, dataTablesDefaults, {
                 // FIXME sort function of additional_fields!
+                "order": [[ 2, "asc" ]],
                 "sPaginationType": "four_button",
                 "aoColumnDefs": [
                     { 'bSortable': false, 'aTargets': [ 'NoSort' ] },
