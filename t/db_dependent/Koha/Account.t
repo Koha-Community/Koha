@@ -27,6 +27,7 @@ use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 
+
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
@@ -62,7 +63,6 @@ subtest 'outstanding_debits() tests' => sub {
         is( ref($lines_arr[$i]), 'Koha::Account::Line', 'outstanding_debits returns a list of Koha::Account::Line objects in list context' );
         $i++;
     }
-
     my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
     Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -2 })->store;
     my $just_one = Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 3, amountoutstanding =>  3 })->store;
@@ -141,7 +141,7 @@ subtest 'outstanding_credits() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     $schema->storage->txn_begin;
 
@@ -151,6 +151,7 @@ subtest 'add_credit() tests' => sub {
 
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $account = Koha::Account->new( { patron_id => $patron->borrowernumber } );
+    is( defined $account, 1, "Account is defined" );
 
     is( $account->balance, 0, 'Patron has no balance' );
 
