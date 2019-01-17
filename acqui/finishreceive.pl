@@ -59,6 +59,16 @@ my $bookfund         = $input->param("bookfund");
 my $order            = GetOrder($ordernumber);
 my $new_ordernumber  = $ordernumber;
 
+#bug18723 regression fix
+if (C4::Context->preference("CurrencyFormat") eq 'FR') {
+    if (rindex($unitprice, '.') ge 0) {
+        substr($unitprice, rindex($unitprice, '.'), 1, ',');
+    }
+    if (rindex($replacementprice,'.') ge 0) {
+        substr($replacementprice, rindex($replacementprice, '.'), 1, ',');
+    }
+}
+
 $unitprice = Koha::Number::Price->new( $unitprice )->unformat();
 $replacementprice = Koha::Number::Price->new( $replacementprice )->unformat();
 my $order_obj = Koha::Acquisition::Orders->find( $ordernumber );
