@@ -400,31 +400,31 @@
                                 </div>
                                 <div class="rows">
                                     <ol>
-                                        <li>
+                                        <li id="patron-cardnumber">
                                             <span class="label">Card number: </span>
                                             [% patron.cardnumber | html %]
                                         </li>
-                                        <li>
+                                        <li id="patron-borrowernumber">
                                             <span class="label">Borrowernumber: </span>
                                             [% patron.borrowernumber | html %]
                                         </li>
-                                        <li>
+                                        <li id="patron-categorydescription">
                                             <span class="label">Category: </span>
                                             [% patron.category.description | html %] ([% patron.categorycode | html %])
                                         </li>
-                                        <li>
+                                        <li id="patron-dateenrolled">
                                             <span class="label">Registration date: </span>
                                             [% patron.dateenrolled | $KohaDates %]
                                         </li>
 
                                         [% IF ( patron.date_renewed ) %]
-                                            <li>
+                                            <li id="patron-daterenewed">
                                                 <span class="label">Renewal date: </span>
                                                 [% patron.date_renewed | $KohaDates %]
                                             </li>
                                         [% END %]
 
-                                        <li>
+                                        <li id="patron-expirationdate">
                                             <span class="label">Expiration date: </span>
                                             [% IF ( was_renewed ) %]
                                                 <strong class="reregistrinfo">[% patron.dateexpiry | $KohaDates %]</strong>
@@ -432,13 +432,13 @@
                                                 [% patron.dateexpiry | $KohaDates %]
                                             [% END %]
                                         </li>
-                                        <li>
+                                        <li id="patron-branchname">
                                             <span class="label">Library: </span>
                                             [% branchname | html %]
                                         </li>
 
                                         [% IF ( OPACPrivacy ) %]
-                                            <li>
+                                            <li id="patron-privacypref">
                                                 <span class="label">Privacy Pref:</span>
                                                     [% IF ( privacy0 ) %]Forever[% END %]
                                                     [% IF ( privacy1 ) %]Default[% END %]
@@ -446,7 +446,7 @@
                                             </li>
                                         [% END %]
 
-                                        <li>
+                                        <li id="patron-privacyguarantor">
                                             <span class="label">Show checkouts to guarantor</span>
                                             [% IF privacy_guarantor_checkouts %]
                                                 Yes
@@ -456,22 +456,22 @@
                                         </li>
 
                                         [% IF ( patron.sort1 ) %]
-                                            <li>
+                                            <li id="patron-sort1">
                                                 <span class="label">Sort field 1:</span>
                                                 [% AuthorisedValues.GetByCode('Bsort1', patron.sort1) | html %]
                                             </li>
                                         [% END %]
                                         [% IF ( patron.sort2 ) %]
-                                            <li>
+                                            <li id="patron-sort2">
                                                 <span class="label">Sort field 2:</span>
                                                 [% AuthorisedValues.GetByCode('Bsort2', patron.sort2) | html %]
                                             </li>
                                         [% END %]
-                                        <li>
+                                        <li id="patron-username">
                                             <span class="label">Username: </span>
                                             [% patron.userid | html %]
                                         </li>
-                                        <li>
+                                        <li id="patron-password">
                                             <span class="label">Password: </span>
                                             [% IF ( patron.password ) %]
                                                 *******
@@ -481,21 +481,21 @@
                                         </li>
 
                                         [% IF ( patron.borrowernotes ) %]
-                                            <li>
+                                            <li id="patron-borrowernotes">
                                                 <span class="label">Circulation note: </span>
                                                 [% patron.borrowernotes | html %]
                                             </li>
                                         [% END %]
 
                                         [% IF ( patron.opacnote ) %]
-                                            <li>
+                                            <li id="patron-opacnote">
                                                 <span class="label">OPAC note:</span>
                                                 [% patron.opacnote | html %]
                                             </li>
                                         [% END %]
 
                                         [% IF ( Koha.Preference('CheckPrevCheckout') == 'softyes' || Koha.Preference('CheckPrevCheckout') == 'softno' ) %]
-                                            <li>
+                                            <li id="patron-checkprev">
                                                 <span class="label">Check previous checkouts: </span>
                                                 [% IF ( patron.checkprevcheckout == 'yes' ) %]
                                                     Yes
@@ -508,7 +508,7 @@
                                         [% END %]
 
                                         [% IF Koha.Preference('TranslateNotices') %]
-                                            <li>
+                                            <li id="patron-translatenotices">
                                                 <span class="label">Preferred language for notices: </span>
                                                 [% translated_language | html %]
                                             </li>
@@ -535,21 +535,21 @@
                                     <div class="rows">
                                         <ol>
                                             [% IF ( patron.B_phone ) %]
-                                                <li>
+                                                <li id="patron-bphone">
                                                     <span class="label">Phone: </span>
                                                     <a href="tel:[% patron.B_phone | uri %]">[% patron.B_phone |html  %]</a>
                                                 </li>
                                             [% END %]
 
                                             [% IF ( patron.B_email ) %]
-                                                <li class="email">
+                                                <li id="patron-bemail" class="email">
                                                     <span class="label">Email: </span>
                                                     <a title="[% patron.B_email | html %]" href="mailto:[% patron.B_email | url %]">[% B_email |html %]</a>
                                                 </li>
                                             [% END %]
 
                                             [% IF ( patron.contactnote ) %]
-                                                <li>
+                                                <li id="patron-contactnote">
                                                     <span class="label">Contact note: </span>
                                                     [% patron.contactnote |html %]
                                                 </li>
@@ -573,56 +573,56 @@
                                     <div class="rows">
                                         <ol>
                                             [% IF ( patron.altcontactsurname ) %]
-                                                <li>
+                                                <li id="patron-altcontactsurname">
                                                     <span class="label">Surname: </span>
                                                     [% patron.altcontactsurname | html %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.altcontactfirstname ) %]
-                                                <li>
+                                                <li id="patron-altcontactfirstname">
                                                     <span class="label">First name: </span>
                                                     [% patron.altcontactfirstname | html %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.altcontactaddress1 ) %]
-                                                <li>
+                                                <li id="patron-altcontactaddress1">
                                                     <span class="label">Address: </span>
                                                     [% patron.altcontactaddress1 | html %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.altcontactaddress2 ) %]
-                                                <li>
+                                                <li id="patron-altcontactaddress2">
                                                     <span class="label">Address 2: </span>
                                                     [% patron.altcontactaddress2 | html %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.altcontactaddress3 ) %]
-                                                <li>
+                                                <li id="patron-altcontactaddress3">
                                                     <span class="label">City: </span>
                                                     [% patron.altcontactaddress3 | html %]
                                                 </li>
                                             [% END %]
 
                                             [% IF ( patron.altcontactstate ) %]
-                                                <li>
+                                                <li id="patron-altcontactstate">
                                                     <span class="label">State: </span>
                                                     [% patron.altcontactstate | html %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.altcontactzipcode ) %]
-                                                <li>
+                                                <li id="patron-altcontactzipcode">
                                                     <span class="label">ZIP/Postal code: </span>
                                                     [% patron.altcontactzipcode | html %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.altcontactcountry ) %]
-                                                <li>
+                                                <li id="patron-altcontactcountry">
                                                     <span class="label">Country: </span>
                                                     [% patron.altcontactcountry | html %]
                                                 </li>
                                             [% END %]
                                             [% IF ( patron.altcontactphone ) %]
-                                                <li>
+                                                <li id="patron-altcontactphone">
                                                     <span class="label">Phone: </span>
                                                     <a href="tel:[% patron.altcontactphone | url %]">[% patron.altcontactphone | html %]</a>
                                                 </li>
