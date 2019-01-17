@@ -292,7 +292,7 @@
         <li><label for="rrp">Retail price: </label>[% rrp | $Price %] <span class="hint">(adjusted for [% cur_active | html %], [% IF (listincgst == 1) %]tax inclusive[% ELSE %]tax exclusive[% END %])</span></li>
         <li>
             <label for="replacementprice">Replacement price:</label>
-            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price %]" />
+            <input type="text" size="20" name="replacementprice" id="replacementprice" value="[% replacementprice | $Price on_editing => 1 %]" />
         </li>
         <li><label for="ecost">Budgeted cost: </label>[% ecost | $Price %] <span class="hint">[% IF (listincgst == 1) %](tax inclusive)[% ELSE %](tax exclusive)[% END %]</span></li>
         <li>
