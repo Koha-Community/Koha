@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 17;
+use Test::More tests => 18;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 require t::db_dependent::Koha::Availability::Helpers;
@@ -425,6 +425,71 @@ sub t_on_shelf_holds_forbidden_all_available {
        .' to see if on shelf holds are forbidden, then no exception is given.');
     };
 };
+
+subtest 'on_shelf_holds_forbidden if one available to which reserves are not allowed' => \&t_on_shelf_holds_forbidden_one_non_reservable_available;
+sub t_on_shelf_holds_forbidden_one_non_reservable_available {
+    plan tests => 1;
+
+    set_default_system_preferences();
+    set_default_circulation_rules();
+    my $item = build_a_test_item();
+    my $patron = build_a_test_patron();
+    my $biblio = Koha::Biblios->find($item->biblionumber);
+    my $biblioitem = Koha::Biblioitems->find($item->biblioitemnumber);
+    my $item2 = build_a_test_item($biblio, $biblioitem);
+    $item2->itype($item->itype)->store;
+    $item2->ccode("test")->store;
+
+    Koha::IssuingRules->search->delete;
+    my $rule = Koha::IssuingRule->new({
+        branchcode   => '*',
+        itemtype     => $item->effective_itemtype,
+        categorycode => '*',
+        ccode        => '*',
+        permanent_location => '*',
+        holds_per_record => 1,
+        reservesallowed => 1, # Reserves allowed
+        onshelfholds => 2,
+    })->store;
+    my $rule2 = Koha::IssuingRule->new({
+        branchcode   => '*',
+        itemtype     => $item2->effective_itemtype,
+        categorycode => '*',
+        ccode        => 'test',
+        permanent_location => '*',
+        holds_per_record => 0,
+        reservesallowed => 0, # Reserves not allowed
+        onshelfholds => 2,
+    })->store;
+
+    my $expecting = 'Koha::Exceptions::Hold::OnShelfNotAllowed';
+    my $expecting_for_non_reservable = 'Koha::Exceptions::Hold::ZeroHoldsAllowed';
+
+    subtest 'While one of two items is available' => sub {
+        plan tests => 8;
+        is($rule->onshelfholds, 2, 'When I look at issuing rules, I see that'
+           .' onshelfholds are allowed if all are unavailable.');
+        ok(issue_item($item, $patron), 'We have issued the item that can be reserved.');
+        $item = Koha::Items->find($item->itemnumber); #refresh
+        my $issuingcalc;
+        ok($issuingcalc = Koha::Availability::Checks::IssuingRule->new({
+            item => $item
+        }), 'First, we will check on shelf hold restrictions for the item that is'
+           .' unavailable.');
+        ok(!$issuingcalc->on_shelf_holds_forbidden, 'When I check availability calculation'
+        .' to see if on shelf holds are forbidden, then no exception is given.');
+        ok($issuingcalc = Koha::Availability::Checks::IssuingRule->new({
+            item => $item2
+        }), 'Then, we will check on shelf hold restrictions for the item that is'
+           .' available.');
+        ok($issuingcalc->zero_holds_allowed, 'When I check '
+           .'availability calculation to see if zero holds are allowed.');
+        is(ref($issuingcalc->zero_holds_allowed), $expecting_for_non_reservable, 'Then'
+           ." exception $expecting is given.");
+        ok(!$issuingcalc->on_shelf_holds_forbidden, 'When I check availability calculation'
+        .' to see if on shelf holds are forbidden, then no exception is given.');
+    };
+}
 
 subtest 'opac_item_level_hold_forbidden' => \&t_opac_item_level_hold_forbidden;
 sub t_opac_item_level_hold_forbidden {

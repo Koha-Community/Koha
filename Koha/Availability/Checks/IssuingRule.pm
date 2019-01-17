@@ -178,6 +178,8 @@ sub new {
     $self->{'patron'} = $patron;
     # Store item into object
     $self->{'item'} = $item;
+    # Store branchcode into object
+    $self->{'branchcode'} = $branchcode;
 
     bless $self, $class;
 }
@@ -331,8 +333,10 @@ sub on_shelf_holds_forbidden {
               || ( $i->damaged
                 && !C4::Context->preference('AllowHoldsOnDamagedItems') )
               || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan) {
-                $any_available = 1;
-                last;
+                if ($self->_holds_allowed($i) ) {
+                    $any_available = 1;
+                    last;
+                }
             }
         }
         return Koha::Exceptions::Hold::OnShelfNotAllowed->new if $any_available;
@@ -512,6 +516,21 @@ sub _validate_parameter {
             );
         }
     }
+}
+
+sub _holds_allowed {
+    my ($self, $item) = @_;
+
+    my $args = {
+        item => $item,
+        branchcode => $self->branchcode,
+        use_cache => $self->use_cache,
+    };
+    $args->{patron} = $self->patron if $self->patron;
+
+    my $holdrulecalc = Koha::Availability::Checks::IssuingRule->new($args);
+
+    return !$holdrulecalc->zero_holds_allowed;
 }
 
 1;

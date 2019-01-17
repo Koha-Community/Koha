@@ -231,10 +231,9 @@ sub common_issuing_rule_checks {
         if ($reason = $holdrulecalc->maximum_holds_for_record_reached($params)) {
             $self->unavailable($reason);
         }
-    }
-
-    if ($reason = $holdrulecalc->on_shelf_holds_forbidden) {
-        $self->unavailable($reason);
+        if ($reason = $holdrulecalc->on_shelf_holds_forbidden) {
+            $self->unavailable($reason);
+        }
     }
 
     return $self;
