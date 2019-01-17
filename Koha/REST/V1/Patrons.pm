@@ -15,8 +15,6 @@ package Koha::REST::V1::Patrons;
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use Modern::Perl;
-
 use Mojo::Base 'Mojolicious::Controller';
 
 use Koha::DateUtils;
