@@ -48,7 +48,7 @@ subtest 'list() tests' => sub {
     my $another_library = $library->unblessed; # create a copy of $library but make
     delete $another_library->{branchcode};     # sure branchcode will be regenerated
     $another_library = $builder->build_object({ class => 'Koha::Libraries', value => $another_library });
-    my ( $borrowernumber, $session_id ) = create_user_and_session( { authorized => 0 } );
+    my ( $borrowernumber, $session_id ) = create_user_and_session( { authorized => 1 } );
 
     ## Authorized user tests
     my $count_of_libraries = Koha::Libraries->search->count;
@@ -119,7 +119,7 @@ subtest 'get() tests' => sub {
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my ( $borrowernumber, $session_id ) =
-      create_user_and_session( { authorized => 0 } );
+      create_user_and_session( { authorized => 1 } );
 
     my $tx = $t->ua->build_tx( GET => "/api/v1/libraries/" . $library->branchcode );
     $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
