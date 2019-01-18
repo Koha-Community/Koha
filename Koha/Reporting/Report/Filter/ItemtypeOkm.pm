@@ -32,7 +32,8 @@ sub loadOptions{
         {'name' => 'Muut aineistot', 'description' => 'Muut aineistot'},
         {'name' => 'Celian cd-levy', 'description' => 'Celian cd-levy'},
         {'name' => 'E-kirja', 'description' => 'E-kirja'},
-        {'name' => 'Verkkoaineisto', 'description' => 'Verkkoaineisto'}
+        {'name' => 'Verkkoaineisto', 'description' => 'Verkkoaineisto'},
+        {'name' => 'Lehdet', 'description' => 'Lehdet'}
     ];
 
     return $itemTypes;

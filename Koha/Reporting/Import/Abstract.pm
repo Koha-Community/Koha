@@ -780,6 +780,9 @@ sub itemItemTypeOkm{
         elsif($category && $category eq 'Online'){
             $result = 'Verkkoaineisto';
         }
+        elsif($category && $category eq 'Serials'){
+            $result = 'Lehdet';
+        }
     }
 
     return $result;

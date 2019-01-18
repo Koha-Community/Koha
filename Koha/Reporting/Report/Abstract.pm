@@ -337,6 +337,7 @@ sub initFromRequest{
 
     if(defined $request->{groupings}){
         my $requestGroups = $request->{groupings};
+        $nullSelected = 1;
         if(@$requestGroups){
             foreach my $requestGroup (@$requestGroups){
                 if(defined $requestGroup->{name} && defined $requestGroup->{selectedValue} && $requestGroup->{selectedValue} == 1){

@@ -300,7 +300,7 @@ sub getIfNullColumn{
     my $self = shift;
     my $columnName = $_[0];
     if(defined $columnName && $columnName ne ''){
-        $columnName = 'IFNULL(' . $columnName . ", 'null')";
+        $columnName = 'IFNULL(' . $columnName . ", 'Ei määritetty')";
     }
     return $columnName;
 }
