@@ -16,7 +16,7 @@ my $query = new CGI;
 
 my $view = new Koha::Reporting::View;
 my $reportData = $view->createReportsViewJson();
-my $reportsJson = encode_utf8(encode_json($reportData));
+my $reportsJson = to_json($reportData);
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
