@@ -107,8 +107,7 @@
                 <a class="btn btn-default btn-sm toggle_sql" id="toggle_sql_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide SQL code</a>
             </div>
             <div class="btn-group">
-                <a class="btn btn-default btn-sm toggle_chart_settings" id="toggle_chart_settings_hid" href="#"><i class="fa fa-eye"></i> Show chart settings</a>
-                <a class="btn btn-default btn-sm toggle_chart_settings" id="toggle_chart_settings_vis" href="#" style="display:none;"><i class="fa fa-eye-slash"></i> Hide chart settings</a>
+                <a class="btn btn-default btn-sm" href="#" data-toggle="modal" data-target="#chartModal"><i class="fa fa-bar-chart"></i> Create chart</a>
             </div>
         [% END %]
 
