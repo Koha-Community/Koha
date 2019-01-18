@@ -73,7 +73,7 @@ my $query = qq{
     SELECT biblionumber, metadata
     FROM biblio_metadata
     WHERE format='marcxml'
-    AND marcflavour = ?
+    AND  `schema` = ?
 };
 if($length) {
     $query .= "LIMIT $length";

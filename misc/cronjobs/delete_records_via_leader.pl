@@ -79,7 +79,7 @@ This script has the following parameters :
 
 my @metadatas =    # Should be replaced by a call to C4::Search on zebra index
                    # Record-status when bug 15537 will be pushed
-  Koha::Biblio::Metadatas->search( { format => 'marcxml', marcflavour => C4::Context->preference('marcflavour'), metadata => { LIKE => '%<leader>_____d%' } } );
+  Koha::Biblio::Metadatas->search( { format => 'marcxml', schema => C4::Context->preference('marcflavour'), metadata => { LIKE => '%<leader>_____d%' } } );
 
 my $total_records_count   = @metadatas;
 my $deleted_records_count = 0;

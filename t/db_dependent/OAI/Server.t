@@ -362,7 +362,7 @@ subtest 'Bug 19725: OAI-PMH ListRecords and ListIdentifiers should use biblio_me
     $record->append_fields(MARC::Field->new(999, '', '', z => '_'));
     ModBiblio( $record, $biblionumber );
     my $from_dt = dt_from_string(
-        Koha::Biblio::Metadatas->find({ biblionumber => $biblionumber, format => 'marcxml', marcflavour => 'MARC21' })->timestamp
+        Koha::Biblio::Metadatas->find({ biblionumber => $biblionumber, format => 'marcxml', schema => 'MARC21' })->timestamp
     );
     my $from = $from_dt->ymd . 'T' . $from_dt->hms . 'Z';
     $oaidc[0]->{header}->{datestamp} = $from;

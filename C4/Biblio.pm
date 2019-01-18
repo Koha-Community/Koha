@@ -101,7 +101,6 @@ use C4::Debug;
 use Koha::Caches;
 use Koha::Authority::Types;
 use Koha::Acquisition::Currencies;
-use Koha::Biblio::Metadata;
 use Koha::Biblio::Metadatas;
 use Koha::Holds;
 use Koha::ItemTypes;
@@ -1223,7 +1222,7 @@ sub GetXmlBiblio {
         FROM biblio_metadata
         WHERE biblionumber=?
             AND format='marcxml'
-            AND marcflavour=?
+            AND `schema`=?
     |, undef, $biblionumber, C4::Context->preference('marcflavour')
     );
     return $marcxml;
@@ -3251,8 +3250,8 @@ sub _koha_delete_biblio_metadata {
     $schema->txn_do(
         sub {
             $dbh->do( q|
-                INSERT INTO deletedbiblio_metadata (biblionumber, format, marcflavour, metadata)
-                SELECT biblionumber, format, marcflavour, metadata FROM biblio_metadata WHERE biblionumber=?
+                INSERT INTO deletedbiblio_metadata (biblionumber, format, `schema`, metadata)
+                SELECT biblionumber, format, `schema`, metadata FROM biblio_metadata WHERE biblionumber=?
             |,  undef, $biblionumber );
             $dbh->do( q|DELETE FROM biblio_metadata WHERE biblionumber=?|,
                 undef, $biblionumber );
@@ -3324,7 +3323,7 @@ sub ModBiblioMarc {
     my $metadata = {
         biblionumber => $biblionumber,
         format       => 'marcxml',
-        marcflavour  => C4::Context->preference('marcflavour'),
+        schema       => C4::Context->preference('marcflavour'),
     };
     $record->as_usmarc; # Bug 20126/10455 This triggers field length calculation
 

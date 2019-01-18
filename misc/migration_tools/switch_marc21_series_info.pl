@@ -63,7 +63,7 @@ my $count_sth = $dbh->prepare(
     SELECT COUNT(biblionumber)
     FROM biblio_metadata
     WHERE format='marcxml'
-        AND marcflavour=?
+        AND `schema`=?
         AND (
             ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="a"]')
                 OR ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="v"]')
@@ -79,7 +79,7 @@ my $bibs_sth = $dbh->prepare(
     SELECT biblionumber
     FROM biblio_metadata
     WHERE format='marcxml'
-        AND marcflavour=?
+        AND `schema`=?
         AND (
             ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="a"]')
                 OR ExtractValue(metadata,'//datafield[@tag="440"]/subfield[@code="v"]')

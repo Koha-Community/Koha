@@ -2311,7 +2311,7 @@ sub SearchItems {
         $query .= qq{ AND $where_str };
     }
 
-    $query .= q{ AND biblio_metadata.format = 'marcxml' AND biblio_metadata.marcflavour = ? };
+    $query .= q{ AND biblio_metadata.format = 'marcxml' AND biblio_metadata.schema = ? };
     push @where_args, C4::Context->preference('marcflavour');
 
     my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;

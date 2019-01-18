@@ -152,7 +152,7 @@ sub biblios_to_sanitize {
         SELECT biblionumber
         FROM biblio_metadata
         WHERE format = 'marcxml'
-            AND marcflavour = ?
+            AND `schema` = ?
             AND metadata LIKE "%&amp;amp;%"
         };
     return @{ $dbh->selectcol_arrayref( $query, { Slice => {} }, C4::Context->preference('marcflavour') ) };
