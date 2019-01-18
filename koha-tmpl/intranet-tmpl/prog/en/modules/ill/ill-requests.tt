@@ -204,9 +204,9 @@
                                         </option>
                                         [% FOREACH alias IN AuthorisedValues.Get('ILLSTATUS') %]
                                             [% IF alias.id == current_alias %]
-                                            <option value="[% alias.id %]" selected>
+                                            <option value="[% alias.id | html %]" selected>
                                             [% ELSE %]
-                                            <option value="[% alias.id %]">
+                                            <option value="[% alias.id | html %]">
                                             [% END %]
                                                 [% alias.lib | html %]
                                             </option>
