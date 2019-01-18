@@ -108,7 +108,7 @@ sub set_public {
 
     my $old_password = $body->{old_password};
     my $password     = $body->{password};
-    my $password_2   = $body->{password_2};
+    my $password_2   = $body->{password_repeated};
 
     unless ( $password eq $password_2 ) {
         return $c->render( status => 400, openapi => { error => "Passwords don't match" } );

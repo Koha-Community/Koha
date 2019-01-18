@@ -139,10 +139,15 @@ subtest 'set_public() (unprivileged user tests)' => sub {
 
     my $new_password = 'abc';
 
-    my $tx
-        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+    my $tx = $t->ua->build_tx(
+              POST => "/api/v1/public/patrons/"
             . $other_patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => 'blah' } );
+            . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => 'blah'
+            }
+    );
 
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
@@ -156,10 +161,15 @@ subtest 'set_public() (unprivileged user tests)' => sub {
 
     my $password = 'holapassword';
     $patron->set_password( $password );
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+    $tx = $t->ua->build_tx(
+              POST => "/api/v1/public/patrons/"
             . $other_patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => $password } );
+            . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => $password
+            }
+    );
 
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
@@ -169,10 +179,15 @@ subtest 'set_public() (unprivileged user tests)' => sub {
           error => "Changing other patron's password is forbidden"
         });
 
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+    $tx = $t->ua->build_tx(
+              POST => "/api/v1/public/patrons/"
             . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => 'wrong_password', old_password => $password } );
+            . "/password" => json => {
+            password          => $new_password,
+            password_repeated => 'wrong_password',
+            old_password      => $password
+            }
+    );
 
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
@@ -182,10 +197,15 @@ subtest 'set_public() (unprivileged user tests)' => sub {
           error => "Passwords don't match"
         });
 
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+    $tx = $t->ua->build_tx(
+              POST => "/api/v1/public/patrons/"
             . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => 'badpassword' } );
+            . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => 'badpassword'
+            }
+    );
 
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
@@ -195,10 +215,15 @@ subtest 'set_public() (unprivileged user tests)' => sub {
           error => "Invalid password"
         });
 
-    $tx
-        = $t->ua->build_tx( POST => "/api/v1/public/patrons/"
+    $tx = $t->ua->build_tx(
+              POST => "/api/v1/public/patrons/"
             . $patron->id
-            . "/password" => json => { password => $new_password, password_2 => $new_password, old_password => $password } );
+            . "/password" => json => {
+            password          => $new_password,
+            password_repeated => $new_password,
+            old_password      => $password
+            }
+    );
 
     $tx->req->cookies( { name => 'CGISESSID', value => $session->id } );
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
