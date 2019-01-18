@@ -181,7 +181,8 @@ sub delete {
 
     if (my $problem = _opac_patron_restrictions($c, $user)) {
         return $c->render( status => 403, openapi => {
-            error => "Reserve cannot be cancelled. Reason: $problem"} );
+            error => "Reserve cannot be cancelled. Reason: $problem"} )
+            if ($problem ne 'maximumholdsreached');
     }
 
     if ($user
