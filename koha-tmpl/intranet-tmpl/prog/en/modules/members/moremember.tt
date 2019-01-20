@@ -153,7 +153,11 @@
                                     [% END %]
 
                                     [% IF patron.account_locked %]
-                                        <li class="blocker">Account has been [% IF patron.login_attempts < 0 %]administratively [% END %]locked out.</li>
+                                        [% IF patron.login_attempts < 0 %]
+                                            <li class="blocker">Account has been administratively locked.</li>
+                                        [% ELSE %]
+                                            <li class="blocker">Account has been locked.</li>
+                                        [% END %]
                                     [% END %]
                                 </ul>
                             </div>
