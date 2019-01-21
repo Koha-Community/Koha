@@ -1,0 +1,236 @@
+[% USE Koha %]
+[% SET KOHA_VERSION = Koha.Preference('Version') %]
+[% USE KohaDates %]
+[% USE ColumnsSettings %]
+[% USE AuthorisedValues %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Circulation &rsaquo; Holds to pull</title>
+[% INCLUDE 'doc-head-close.inc' %]
+<!-- Plugin datatables -->
+<link rel="stylesheet" type="text/css" href="[% interface %]/[% theme %]/css/datatables_[% KOHA_VERSION %].css" />
+[% INCLUDE 'datatables.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
+<script type="text/JavaScript">
+//<![CDATA[
+$(document).ready(function() {
+  var columns_settings = [% ColumnsSettings.GetColumns('circ', 'holds', 'holds-to-pull', 'json') %];
+  var holdst = KohaTable("#holdst", {
+    "aoColumnDefs": [
+        { "sType": "anti-the", "aTargets" : [ "anti-the" ] },
+        { "sType": "title-string", "aTargets" : [ "title-string" ] },
+        { "sType": "string", "aTargets": [ "string-sort" ] } //Target columns that use <br> separators and pull-down menus.
+    ],
+    "sPaginationType": "full_numbers"
+  }, columns_settings);
+  holdst.fnAddFilters("filter");
+  [%# add separateData function to cleanse jQuery select lists by breaking apart strings glued with BR tags and then de-duplicating any repeated library codes %]
+  function separateData ( ColumnData ){
+    var cD = ColumnData;
+    var new_array = new Array();
+    for ( j=0 ; j<cD.length ; j++ ) {
+        var split_array = cD[j].split(/<\/ul>/gi);
+        for ( k=0 ; k<split_array.length ; k++ ){
+            var str = $.trim(split_array[k].replace(/<ul style="padding-left:0"><li style="list-style-type:none">/g, ''));
+              <!-- <ul><li>[% ItemTypes.GetDescription( itype ) %]</li></ul> -->
+            str = $.trim(str.replace(/<\/li>/g, ''));
+            if ($.inArray(str, new_array) == -1 && str.length > 0 ) {
+                new_array.push(str);
+            }
+        }
+    }
+    new_array.sort();
+    return new_array;
+  }
+  [%# add SeparateData function into createSelect function, so that it does the createSelect on clean data %]
+  function createSelect( data ) {
+      data = separateData(data);
+      var r='<select style="width:99%"><option value="">' + _("None") + '</option>', i, len=data.length;
+      for ( i=0 ; i<len ; i++ ) {
+          r += '<option value="'+data[i]+'">'+data[i]+'</option>';
+      }
+      return r+'</select>';
+  }
+  $("#homebranchfilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(4) ) );
+      $('select', this).change( function () {
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 4, true, false );
+      } );
+  } );
+  $("#holdatfilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
+      $('select', this).change( function () {
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 5, true, false );
+      } );
+  } );
+  $("#itypefilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(10) ) );
+      $('select', this).change( function () {
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 10, true, false );
+      } );
+  } );
+  $("#locationfilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(11) ) );
+      $('select', this).change( function () {
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 11, true, false );
+      } );
+  } );
+  $("#sublocationfilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(12) ) );
+      $('select', this).change( function () {
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 12, true, false );
+      } );
+  } );
+  $("#ccodefilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(13) ) );
+      $('select', this).change( function () {
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 13, true, false );
+      } );
+  } );
+  $("#genrefilter").each( function () {
+      $(this).html( createSelect( holdst.fnGetColumnData(14) ) );
+      $('select', this).change( function () {
+          var filter_value = "\\b" + $(this).val() + "\\b";
+          holdst.fnFilter( filter_value, 14, true, false );
+      } );
+  } );
+});
+//]]>
+</script>
+</head>
+<body id="circ_pendingreserves" class="circ">
+[% INCLUDE 'header.inc' %]
+[% INCLUDE 'circ-search.inc' %]
+
+
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/circ/circulation-home.pl">Circulation</a> &rsaquo; Holds to pull</div>
+
+<div id="doc3" class="yui-t2">
+
+   <div id="bd">
+    <div id="yui-main" style="padding-left:10px">
+
+<h2>Holds to pull reported on [% reporteddate %]</h2>
+<p>The following holds have not been filled. Please retrieve them and check them in.</p>
+<div class="searchresults">
+    [% IF ( reserveloop ) %]
+    <table id="holdst" style="width:100%;">
+    <thead>
+        <tr>
+        <td><input type="text" class="filter" data-column_num="0" placeholder="Pull this many items" style="width:100%"/></td>
+        <td><input type="text" class="filter" data-column_num="1" placeholder="Items available" style="width:100%"/></td>
+        <td><input type="text" class="filter" data-column_num="2" placeholder="Patron holds" style="width:100%"/></td>
+        <td><input type="text" class="filter" data-column_num="3" placeholder="Patron name" style="width:100%"/></td>
+        <td id="homebranchfilter"></td> <!-- 4 -->
+        <td id="holdatfilter"></td> <!-- 5 -->
+        <td><input type="text" class="filter" data-column_num="6" placeholder="Call number" style="width:100%"/></td>
+        <td><input type="text" class="filter" data-column_num="7" placeholder="Title" style="width:100%"/></td>
+        <td><input type="text" class="filter" data-column_num="8" placeholder="Available copy" style="width:100%"/></td>
+        <td><input type="text" class="filter" data-column_num="9" placeholder="Available enumeration" style="width:100%"/></td>
+        <td id="itypefilter"></td> <!-- 10 -->
+        <td id="locationfilter"></td> <!-- 11 -->
+        <td id="sublocationfilter"></td> <!-- 12 -->
+        <td id="ccodefilter"></td> <!-- 13 -->
+        <td id="genrefilter"></td> <!-- 14 -->
+        <td><input type="text" class="filter" data-column_num="15" placeholder="Item notes" style="width:100%"/></td>
+        <td><input type="text" class="filter" data-column_num="16" placeholder="Earliest hold date" style="width:100%"/></td>
+        </tr>
+        <tr>
+        <th>Pull this many items</th>
+        <th>Items available</th>
+        <th>Patrons with holds</th>
+        <th style="min-width:150px">First patron</th>
+        <th class="string-sort">Libraries</th>
+        <th class="string-sort">Earliest hold at</th>
+        <th style="min-width:85px">Available call numbers</th>
+        <th class="anti-the" style="min-width:200px">Title</th>
+        <th>Available copy numbers</th>
+        <th>Available enumeration</th>
+        <th class="string-sort">Available itypes</th>
+        <th class="string-sort">Available locations</th>
+        <th class="string-sort">Available sublocations</th>
+        <th class="string-sort">Available collections</th>
+        <th class="string-sort">Available genres</th>
+        <th style="min-width:150px">Itemnotes</th>
+        <th class="title-string">Earliest hold date</th>
+        </tr>
+    </thead>
+    <tbody>
+        [% FOREACH reserveloo IN reserveloop %]
+        <tr>
+        [% IF ( reserveloo.borrowernumber ) %]
+            <td><b>[% reserveloo.pullcount %]</b></td>
+            <td>[% reserveloo.count %]</td>
+            <td>[% reserveloo.rcount %]</td>
+            <td><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% reserveloo.borrowernumber %]">
+                [% IF (reserveloo.borrowerinfo) %][% reserveloo.borrowerinfo %][% END %]
+                </a>
+            </td>
+            <td>
+                [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
+                    <ul style="padding-left:0"><li style="list-style-type:none">[% holdingbranch %]</li></ul>
+                [% END %]
+            </td>
+            <td>[% reserveloo.branch %]</td>
+            <td>[% reserveloo.itemcallnumber %]</td>
+            <td>
+                [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
+                [% reserveloo.title |html %] [% IF (reserveloo.number) %][% reserveloo.number %][% END %] [% FOREACH s IN reserveloo.subtitle %] [% s %][% END %]</a><br/><br/>
+                [% IF ( reserveloo.author ) %]by [% reserveloo.author %]<br/><br/>[% END %]
+                [% IF ( reserveloo.editionstatement ) %][%reserveloo.editionstatement %][% END %]
+            </td>
+        [% ELSE %]
+            <td>"</td>
+            <td>"</td>
+            <td>"</td>
+            <td>"</td>
+            <td>"</td>
+        [% END %]
+        <td>[% reserveloo.copyno %]</td>
+        <td>[% reserveloo.enumchron %]</td>
+        <td>
+          [% FOREACH itype IN reserveloo.itypes %]
+              <ul style="padding-left:0"><li style="list-style-type:none">[% itype %]</li></ul>
+          [% END %]
+        </td>
+        <td>
+          [% FOREACH loc IN reserveloo.locations %]
+              <ul style="padding-left:0"><li style="list-style-type:none">[% loc %]</li></ul>
+          [% END %]
+        </td>
+        <td>
+          [% FOREACH subloc IN reserveloo.sublocations %]
+              <ul style="padding-left:0"><li style="list-style-type:none">[% subloc %]</li></ul>
+          [% END %]
+        </td>
+        <td>
+          [% FOREACH ccode IN reserveloo.ccodes %]
+              <ul style="padding-left:0"><li style="list-style-type:none">[% ccode %]</li></ul>
+          [% END %]
+        </td>
+        <td>
+          [% FOREACH genre IN reserveloo.genres %]
+              <ul style="padding-left:0"><li style="list-style-type:none">[% genre %]</li></ul>
+          [% END %]
+        </td>
+        <td>[% reserveloo.itemnotes %]<br/></td>
+        <td>
+            <span title="[% reserveloo.reservedate %]">[% reserveloo.reservedate | $KohaDates %]</span>
+        </td>
+        </tr>
+        [% END %]
+    </tbody>
+    </table>
+    [% ELSE %]
+        <b>No items found. Please ask your system administrator to ensure that update_holds_to_pull.pl gets run regularily.</b>
+    [% END %]
+</div>
+
+</div>
+</div>
+[% INCLUDE 'intranet-bottom.inc' %]
