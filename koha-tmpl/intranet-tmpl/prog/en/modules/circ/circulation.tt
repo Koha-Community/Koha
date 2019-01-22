@@ -348,7 +348,11 @@
         [% END %]
 
         [% IF ( WTHDRAWN ) %]
-            <li>Item has been withdrawn</li>
+            <li>
+                <span>Item has been withdrawn</span>
+                [% item_withdrawn_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.withdrawn', authorised_value => item.withdrawn ) %]
+                [% IF (item_withdrawn_lib) %]<span class="co-withdrawn">([% item_withdrawn_lib | html %])</span>[% END %]
+            </li>
         [% END %]
 
         [% IF ( RESTRICTED ) %]
