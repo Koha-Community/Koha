@@ -53,49 +53,56 @@ $(document).ready(function() {
   $("#homebranchfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(4) ) );
       $('select', this).change( function () {
-          var filter_value = "\\b" + $(this).val() + "\\b";
+          var to_filter = $(this).val();
+          var filter_value = (to_filter == '') ? to_filter : "\\b" + to_filter + "\\b";
           holdst.fnFilter( filter_value, 4, true, false );
       } );
   } );
   $("#holdatfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(5) ) );
       $('select', this).change( function () {
-          var filter_value = "\\b" + $(this).val() + "\\b";
+          var to_filter = $(this).val();
+          var filter_value = (to_filter == '') ? to_filter : "\\b" + to_filter + "\\b";
           holdst.fnFilter( filter_value, 5, true, false );
       } );
   } );
   $("#itypefilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(10) ) );
       $('select', this).change( function () {
-          var filter_value = "\\b" + $(this).val() + "\\b";
+          var to_filter = $(this).val();
+          var filter_value = (to_filter == '') ? to_filter : "\\b" + to_filter + "\\b";
           holdst.fnFilter( filter_value, 10, true, false );
       } );
   } );
   $("#locationfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(11) ) );
       $('select', this).change( function () {
-          var filter_value = "\\b" + $(this).val() + "\\b";
+          var to_filter = $(this).val();
+          var filter_value = (to_filter == '') ? to_filter : "\\b" + to_filter + "\\b";
           holdst.fnFilter( filter_value, 11, true, false );
       } );
   } );
   $("#sublocationfilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(12) ) );
       $('select', this).change( function () {
-          var filter_value = "\\b" + $(this).val() + "\\b";
+          var to_filter = $(this).val();
+          var filter_value = (to_filter == '') ? to_filter : "\\b" + to_filter + "\\b";
           holdst.fnFilter( filter_value, 12, true, false );
       } );
   } );
   $("#ccodefilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(13) ) );
       $('select', this).change( function () {
-          var filter_value = "\\b" + $(this).val() + "\\b";
+          var to_filter = $(this).val();
+          var filter_value = (to_filter == '') ? to_filter : "\\b" + to_filter + "\\b";
           holdst.fnFilter( filter_value, 13, true, false );
       } );
   } );
   $("#genrefilter").each( function () {
       $(this).html( createSelect( holdst.fnGetColumnData(14) ) );
       $('select', this).change( function () {
-          var filter_value = "\\b" + $(this).val() + "\\b";
+          var to_filter = $(this).val();
+          var filter_value = (to_filter == '') ? to_filter : "\\b" + to_filter + "\\b";
           holdst.fnFilter( filter_value, 14, true, false );
       } );
   } );
