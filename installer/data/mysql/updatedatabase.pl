@@ -15252,6 +15252,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (17.11.13 release)\n";
 }
 
+$DBversion = '17.11.14.000';
+if( CheckVersion( $DBversion ) ) {
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (17.11.14 release)\n";
+}
+
 # DEVELOPER PROCESS, search for anything to execute in the db_update directory
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
