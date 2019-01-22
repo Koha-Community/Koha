@@ -5,9 +5,10 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use Test::Warn;
+use MARC::Field;
 use MARC::Record;
 
 use t::lib::Mocks;
@@ -53,6 +54,11 @@ $module->mock('GetAuthority', sub {
             [ '001', '4' ],
             [ '151', ' ', ' ', a => 'New York (City)' ],
             [ '551', ' ', ' ', a => 'New York (State)', w => 'g' ]
+            );
+    } elsif ($authid eq '5') {
+        $record->add_fields(
+            [ '001', '5' ],
+            [ '100', ' ', ' ', a => 'Lastname, Firstname', b => 'b', c => 'c', i => 'i' ]
             );
     } else {
         undef $record;
@@ -212,6 +218,26 @@ subtest 'AddAuthority should respect AUTO_INCREMENT (BZ 18104)' => sub {
     my $id3 = AddAuthority( $record, undef, 'GEOGR_NAME' );
     ok( $id3 > 0, 'Tested AddAuthority with UNIMARC' );
     is( $record->field('001')->data, $id3, 'Check updated 001' );
+};
+
+subtest 'CompareFieldWithAuthority tests' => sub {
+    plan tests => 3;
+
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+
+    $builder->build({ source => 'AuthType', value => { authtypecode => 'PERSO_NAME' }});
+
+    my $field = MARC::Field->new('100', 0, 0, a => 'Lastname, Firstname', b => 'b', c => 'c');
+
+    ok(C4::AuthoritiesMarc::CompareFieldWithAuthority({'field' => $field, 'authid' => 5}), 'Authority matches');
+
+    $field->add_subfields(i => 'X');
+
+    ok(C4::AuthoritiesMarc::CompareFieldWithAuthority({'field' => $field, 'authid' => 5}), 'Compare ignores unlisted subfields');
+
+    $field->add_subfields(d => 'd');
+
+    ok(!C4::AuthoritiesMarc::CompareFieldWithAuthority({'field' => $field, 'authid' => 5}), 'Authority does not match');
 };
 
 $schema->storage->txn_rollback;

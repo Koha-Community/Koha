@@ -714,9 +714,7 @@ sub _check_valid_auth_link {
     my ( $authid, $field ) = @_;
     require C4::AuthoritiesMarc;
 
-    my $authorized_heading =
-      C4::AuthoritiesMarc::GetAuthorizedHeading( { 'authid' => $authid } ) || '';
-   return ($field->as_string('abcdefghijklmnopqrstuvwxyz') eq $authorized_heading);
+    return C4::AuthoritiesMarc::CompareFieldWithAuthority( { 'field' => $field, 'authid' => $authid } );
 }
 
 =head2 GetBiblioData

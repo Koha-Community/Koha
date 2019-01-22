@@ -172,6 +172,8 @@ sub preferred_authorities {
 
     if (C4::Heading::valid_heading_subfield('100', 'e', '')) ...
 
+Check if the given subfield is valid for the given field.
+
 =cut
 
 sub valid_heading_subfield {

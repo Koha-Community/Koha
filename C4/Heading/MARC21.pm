@@ -68,6 +68,52 @@ my $bib_heading_fields = {
         subfields  => 'adfghklmnoprst',
         main_entry => 1
     },
+    '147' => {
+        auth_type => 'NAME_EVENT',
+        subfields => 'acdgvxyz68',
+        main_entry => 1
+    },
+    '148' => {
+        auth_type => 'CHRON_TERM',
+        subfields => 'abvxyz68',
+        main_entry => 1
+    },
+    '150' => {
+        auth_type => 'TOPIC_TERM',
+        subfields => 'abvxyz68',
+        main_entry => 1
+    },
+    '151' => {
+        auth_type => 'GEOGR_NAME',
+        subfields => 'avxyz68',
+        main_entry => 1
+    },
+    '155' => {
+        auth_type => 'GENRE/FORM',
+        subfields => 'abvxyz68',
+        main_entry => 1
+    },
+    '162' => {
+        auth_type => 'MED_PERFRM',
+        subfields => 'a68',
+        main_entry => 1
+    },
+    '180' => {
+        auth_type => 'TOPIC_TERM',
+        subfields => 'vxyz68'
+    },
+    '181' => {
+        auth_type => 'GEOGR_NAME',
+        subfields => 'vxyz68'
+    },
+    '182' => {
+        auth_type => 'CHRON_TERM',
+        subfields => 'vxyz68'
+    },
+    '185' => {
+        auth_type => 'GENRE/FORM',
+        subfields => 'vxyz68'
+    },
     '440' => { auth_type => 'UNIF_TITLE', subfields => 'anp', series => 1 },
     '600' => {
         auth_type => 'PERSO_NAME',
@@ -122,44 +168,70 @@ my $bib_heading_fields = {
 my $auth_heading_fields = {
     '100' => {
         auth_type  => 'PERSO_NAME',
-        subfields  => 'abcdfghjklmnopqrstvxyz',
+        subfields  => 'abcdefghjklmnopqrstvxyz68',
         main_entry => 1
     },
     '110' => {
         auth_type  => 'CORPO_NAME',
-        subfields  => 'abcdfghklmnoprstvxyz',
+        subfields  => 'abcdefghklmnoprstvxyz68',
         main_entry => 1
     },
     '111' => {
         auth_type  => 'MEETI_NAME',
-        subfields  => 'acdfghjklnpqstvxyz',
+        subfields  => 'acdefghklnpqstvxyz68',
         main_entry => 1
     },
     '130' => {
         auth_type  => 'UNIF_TITLE',
-        subfields  => 'adfghklmnoprstvxyz',
+        subfields  => 'adfghklmnoprstvxyz68',
+        main_entry => 1
+    },
+    '147' => {
+        auth_type  => 'NAME_EVENT',
+        subfields  => 'acdgvxyz68',
         main_entry => 1
     },
     '148' => {
-        auth_type => 'CHRON_TERM',
-        subfields => 'avxyz',
+        auth_type  => 'CHRON_TERM',
+        subfields  => 'abvxyz68',
         main_entry => 1
     },
     '150' => {
-        auth_type => 'TOPIC_TERM',
-        subfields => 'abgvxyz',
+        auth_type  => 'TOPIC_TERM',
+        subfields  => 'abvxyz68',
         main_entry => 1
     },
     '151' => {
-        auth_type => 'GEOG_NAME',
-        subfields => 'agvxyz',
+        auth_type  => 'GEOG_NAME',
+        subfields  => 'avxyz68',
         main_entry => 1
     },
     '155' => {
-        auth_type => 'GENRE/FORM',
-        subfields => 'agvxyz',
+        auth_type  => 'GENRE/FORM',
+        subfields  => 'abvxyz68',
         main_entry => 1
-    }
+    },
+    '162' => {
+        auth_type  => 'MED_PERFRM',
+        subfields  => 'a68',
+        main_entry => 1
+    },
+    '180' => {
+        auth_type => 'TOPIC_TERM',
+        subfields => 'vxyz68',
+    },
+    '181' => {
+        auth_type => 'GEOGR_NAME',
+        subfields => 'vxyz68',
+    },
+    '182' => {
+        auth_type => 'CHRON_TERM',
+        subfields => 'vxyz68',
+    },
+    '185' => {
+        auth_type => 'GENRE/FORM',
+        subfields => 'vxyz68',
+    },
 };
 
 =head2 subdivisions
@@ -222,6 +294,30 @@ sub valid_heading_subfield {
         return 1 if ($heading_fields->{$tag}->{subfields} =~ /$subfield/);
     }
     return 0;
+}
+
+=head2 get_valid_bib_heading_subfields
+
+=cut
+
+sub get_valid_bib_heading_subfields {
+    my $self          = shift;
+    my $tag           = shift;
+
+    return $bib_heading_fields->{$tag}->{subfields} // undef;
+}
+
+=head2 get_auth_heading_subfields_to_report
+
+=cut
+
+sub get_auth_heading_subfields_to_report {
+    my $self          = shift;
+    my $tag           = shift;
+
+    my $subfields = $auth_heading_fields->{$tag}->{subfields} // '';
+    $subfields =~ s/[68]//;
+    return $subfields;
 }
 
 =head2 parse_heading

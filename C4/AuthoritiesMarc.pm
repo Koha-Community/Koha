@@ -1,6 +1,7 @@
 package C4::AuthoritiesMarc;
 
 # Copyright 2000-2002 Katipo Communications
+# Copyright 2018 The National Library of Finland, University of Helsinki
 #
 # This file is part of Koha.
 #
@@ -338,10 +339,12 @@ sub GuessAuthTypeCode {
         '110'=>{authtypecode=>'CORPO_NAME'},
         '111'=>{authtypecode=>'MEETI_NAME'},
         '130'=>{authtypecode=>'UNIF_TITLE'},
+        '147'=>{authtypecode=>'NAME_EVENT'},
         '148'=>{authtypecode=>'CHRON_TERM'},
         '150'=>{authtypecode=>'TOPIC_TERM'},
         '151'=>{authtypecode=>'GEOGR_NAME'},
         '155'=>{authtypecode=>'GENRE/FORM'},
+        '162'=>{authtypecode=>'MED_PERFRM'},
         '180'=>{authtypecode=>'GEN_SUBDIV'},
         '181'=>{authtypecode=>'GEO_SUBDIV'},
         '182'=>{authtypecode=>'CHRON_SUBD'},
@@ -922,6 +925,8 @@ sub BuildSummary {
 # construct MARC21 summary
 # FIXME - looping over 1XX is questionable
 # since MARC21 authority should have only one 1XX
+        use C4::Heading::MARC21;
+        my $handler = C4::Heading::MARC21->new();
         my $subfields_to_report;
         foreach my $field ($record->field('1..')) {
             my $tag = $field->tag();
@@ -929,31 +934,9 @@ sub BuildSummary {
 # FIXME - 152 is not a good tag to use
 # in MARC21 -- purely local tags really ought to be
 # 9XX
-            if ($tag eq '100') {
-                $subfields_to_report = 'abcdefghjklmnopqrstvxyz';
-            } elsif ($tag eq '110') {
-                $subfields_to_report = 'abcdefghklmnoprstvxyz';
-            } elsif ($tag eq '111') {
-                $subfields_to_report = 'acdefghklnpqstvxyz';
-            } elsif ($tag eq '130') {
-                $subfields_to_report = 'adfghklmnoprstvxyz';
-            } elsif ($tag eq '148') {
-                $subfields_to_report = 'abvxyz';
-            } elsif ($tag eq '150') {
-                $subfields_to_report = 'abvxyz';
-            } elsif ($tag eq '151') {
-                $subfields_to_report = 'avxyz';
-            } elsif ($tag eq '155') {
-                $subfields_to_report = 'abvxyz';
-            } elsif ($tag eq '180') {
-                $subfields_to_report = 'vxyz';
-            } elsif ($tag eq '181') {
-                $subfields_to_report = 'vxyz';
-            } elsif ($tag eq '182') {
-                $subfields_to_report = 'vxyz';
-            } elsif ($tag eq '185') {
-                $subfields_to_report = 'vxyz';
-            }
+
+            $subfields_to_report = $handler->get_auth_heading_subfields_to_report($tag);
+
             if ($subfields_to_report) {
                 push @authorized, {
                     heading => $field->as_string($subfields_to_report),
@@ -1077,42 +1060,45 @@ sub GetAuthorizedHeading {
             return $field->as_string('abcdefghijlmnopqrstuvwxyz');
         }
     } else {
+        use C4::Heading::MARC21;
+        my $handler = C4::Heading::MARC21->new();
+
         foreach my $field ($record->field('1..')) {
-            my $tag = $field->tag();
-            next if "152" eq $tag;
-# FIXME - 152 is not a good tag to use
-# in MARC21 -- purely local tags really ought to be
-# 9XX
-            if ($tag eq '100') {
-                return $field->as_string('abcdefghjklmnopqrstvxyz68');
-            } elsif ($tag eq '110') {
-                return $field->as_string('abcdefghklmnoprstvxyz68');
-            } elsif ($tag eq '111') {
-                return $field->as_string('acdefghklnpqstvxyz68');
-            } elsif ($tag eq '130') {
-                return $field->as_string('adfghklmnoprstvxyz68');
-            } elsif ($tag eq '148') {
-                return $field->as_string('abvxyz68');
-            } elsif ($tag eq '150') {
-                return $field->as_string('abvxyz68');
-            } elsif ($tag eq '151') {
-                return $field->as_string('avxyz68');
-            } elsif ($tag eq '155') {
-                return $field->as_string('abvxyz68');
-            } elsif ($tag eq '180') {
-                return $field->as_string('vxyz68');
-            } elsif ($tag eq '181') {
-                return $field->as_string('vxyz68');
-            } elsif ($tag eq '182') {
-                return $field->as_string('vxyz68');
-            } elsif ($tag eq '185') {
-                return $field->as_string('vxyz68');
-            } else {
-                return $field->as_string();
-            }
+            my $subfields = $handler->get_valid_bib_heading_subfields($field->tag());
+            return $field->as_string($subfields) if ($subfields);
         }
     }
     return;
+}
+
+=head2 CompareFieldWithAuthority
+
+  $match = &CompareFieldWithAuthority({ field => $field, authid => $authid })
+
+Takes a MARC::Field from a bibliographic record and an authid, and returns true if they match.
+
+=cut
+
+sub CompareFieldWithAuthority {
+    my $args = shift;
+
+    my $record = GetAuthority($args->{authid});
+    return unless (ref $record eq 'MARC::Record');
+    if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+        # UNIMARC has same subfields for bibs and authorities
+        foreach my $field ($record->field('2..')) {
+            return compare_fields($field, $args->{field}, 'abcdefghijlmnopqrstuvwxyz');
+        }
+    } else {
+        use C4::Heading::MARC21;
+        my $handler = C4::Heading::MARC21->new();
+
+        foreach my $field ($record->field('1..')) {
+            my $subfields = $handler->get_valid_bib_heading_subfields($field->tag());
+            return compare_fields($field, $args->{field}, $subfields) if ($subfields);
+        }
+    }
+    return 0;
 }
 
 =head2 BuildAuthHierarchies
@@ -1576,6 +1562,26 @@ sub get_auth_type_location {
     }
 }
 
+=head2 compare_fields
+
+  my match = compare_fields($field1, $field2, 'abcde');
+
+Compares the listed subfields of both fields and return true if they all match
+
+=cut
+
+sub compare_fields {
+    my ($field1, $field2, $subfields) = @_;
+
+    foreach my $subfield (split(//, $subfields)) {
+        my $subfield1 = $field1->subfield($subfield) // '';
+        my $subfield2 = $field2->subfield($subfield) // '';
+        return 0 unless $subfield1 eq $subfield2;
+    }
+    return 1;
+}
+
+
 END { }       # module clean-up code here (global destructor)
 
 1;
@@ -1586,6 +1592,7 @@ __END__
 Koha Development Team <http://koha-community.org/>
 
 Paul POULAIN paul.poulain@free.fr
+Ere Maijala ere.maijala@helsinki.fi
 
 =cut
 

@@ -230,6 +230,9 @@ sub run_tests {
 
     my $marcflavour = shift;
     t::lib::Mocks::mock_preference('marcflavour', $marcflavour);
+    # Authority tests don't interact well with Elasticsearch at the moment due to the fact that there's currently no way to
+    # roll back ES index changes.
+    t::lib::Mocks::mock_preference('SearchEngine', 'Zebra');
 
     my $isbn = '0590353403';
     my $title = 'Foundation';
