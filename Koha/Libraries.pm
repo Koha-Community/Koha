@@ -85,7 +85,6 @@ sub pickup_locations {
         unless C4::Context->preference('UseBranchTransferLimits');
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
 
-    my $items;
     if ($item) {
         unless (ref($item) eq 'Koha::Item') {
             $item = Koha::Items->find($item);
