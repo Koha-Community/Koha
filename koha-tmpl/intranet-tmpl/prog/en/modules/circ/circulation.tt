@@ -154,8 +154,8 @@
     [% IF ( itemtype_notforloan ) %]
         Item type is normally not for loan.
     [% ELSIF ( item_notforloan ) %]
-        [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
-        Item is normally not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib %])[% END %].
+        [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
+        Item is normally not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib | html %])[% END %].
     [% END %]
       [% IF CAN_user_circulate_force_checkout %]
         Check out anyway?
@@ -340,8 +340,8 @@
             [% IF ( itemtype_notforloan ) %]
                 Item type not for loan.
             [% ELSIF ( item_notforloan ) %]
-                [% item_notforloan_lib = AuthorisedValues.GetByCode( authvalcode_notforloan, item_notforloan, 0 ) %]
-                Item not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib %])[% END %].
+                [% item_notforloan_lib = AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) %]
+                Item not for loan [% IF (item_notforloan_lib) %]([% item_notforloan_lib | html %])[% END %].
             [% END %]
             </li>
         [% END %]
