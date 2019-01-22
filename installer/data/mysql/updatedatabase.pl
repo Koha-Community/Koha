@@ -16296,6 +16296,11 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22030 - Add Overdriveusername system preference)\n";
 }
 
+$DBversion = "18.05.08.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (18.05.08 release)\n";
+        SetVersion ($DBversion);
+}
 
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
