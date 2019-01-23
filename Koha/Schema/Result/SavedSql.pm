@@ -105,6 +105,11 @@ __PACKAGE__->table("saved_sql");
   is_nullable: 1
   size: 80
 
+=head2 mana_id
+
+  data_type: 'integer'
+  is_nullable: 1
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -148,6 +153,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "report_subgroup",
   { data_type => "varchar", is_nullable => 1, size => 80 },
+  "mana_id",
+  { data_type => "integer", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -163,8 +170,8 @@ __PACKAGE__->add_columns(
 __PACKAGE__->set_primary_key("id");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:7UCqSsNMGdq+S7MwZulmwA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-23 12:56:39
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:f7wxGGnBk3z6mw2CkaeD9A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
