@@ -141,7 +141,7 @@
     </div>
 [% END %]
 
-<script type="text/javascript">
+<script>
     function mana_use( mana_id ){
         $.ajax( {
             type:"POST",

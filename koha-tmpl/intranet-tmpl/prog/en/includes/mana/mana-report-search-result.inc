@@ -4,7 +4,7 @@
 [% USE Branches %]
 [% USE raw %]
 
-<script type="text/javascript">
+<script>
 //<![CDATA[
 $(document).ready(function() {
     $(document).on('click', 'button.mana-use', function() {

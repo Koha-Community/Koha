@@ -1,4 +1,4 @@
-<script type="text/JavaScript">
+<script>
 //<![CDATA[
 $(document).ready(function() {
     function mana_increment(mana_id, resource, fieldvalue, stepvalue = 1) {
