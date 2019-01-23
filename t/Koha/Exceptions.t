@@ -17,7 +17,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::MockObject;
 use Test::Exception;
 
 subtest 'Koha::Exceptions::Hold tests' => sub {
@@ -98,6 +99,32 @@ subtest 'Koha::Exceptions::Password tests' => sub {
     throws_ok
         { Koha::Exceptions::Password::TooShort->throw( "Manual message exception" ) }
         'Koha::Exceptions::Password::TooShort',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+};
+
+subtest 'Koha::Exceptions::Metadata tests' => sub {
+
+    plan tests => 5;
+
+    use_ok('Koha::Exceptions::Metadata');
+
+    my $object = Test::MockObject->new;
+    $object->mock( 'id', 'an_id' );
+    $object->mock( 'format', 'a_format' );
+    $object->mock( 'schema', 'a_schema' );
+
+    throws_ok
+        { Koha::Exceptions::Metadata::Invalid->throw( id => 'an_id', format => 'a_format', schema => 'a_schema' ); }
+        'Koha::Exceptions::Metadata::Invalid',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", 'Invalid data, cannot decode object (id=an_id, format=a_format, schema=a_schema)', 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Metadata::Invalid->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Metadata::Invalid',
         'Exception is thrown :-D';
     is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
 };
