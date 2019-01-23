@@ -15,18 +15,17 @@
         <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
             [% IF ( Koha.Preference('Mana') == 1) && !mana_url %]
                 <div class="dialog message">
-                    <p><center>The Mana Knowledge Base feature is enabled but not configured.</center></p>
+                    <h4>The Mana Knowledge Base feature is enabled but not configured.</h4>
                     <p>This feature allows you to retrieve and share data (subscription patterns and reports) with other Koha libaries.</p>
                     <p>
-                        Ask your system administrator to configure this feature, or remove this note by disabling the 'Mana' system preference
-                        <a href=/cgi-bin/koha/admin/share_content.pl>here.</a>
+                        Ask your system administrator to configure this feature, or remove this note by <a href=/cgi-bin/koha/admin/share_content.pl>disabling the 'Mana' system preference</a>.
                     </p>
                 </div>
             [% END %]
             [% IF ( Koha.Preference('Mana') == 2 ) %]
-                <div class="dialog alert">
-                    <p><center> You haven't decided if you want to activate Mana Knowlede Base, please let us know by clicking<center></p>
-                    <a href=/cgi-bin/koha/admin/share_content.pl><center>Here</center></a>
+                <div class="dialog message">
+                    <h4>Share content with Mana KB?</h4>
+                    <p> You haven't decided if you want to activate Mana Knowledge Base. <a href=/cgi-bin/koha/admin/share_content.pl>Change your Mana KB settings</a>.</p>
                 </div>
             [% END %]
         <h1>Koha administration</h1>
@@ -203,7 +202,7 @@
                         <dd>Share with the Koha community the usage statistics of your Koha installation.</dd>
                     [% END %]
                     [% IF ( CAN_user_parameters ) %]
-                        <dt><a href="/cgi-bin/koha/admin/share_content.pl">Using Mana-KB</a></dt>
+                        <dt><a href="/cgi-bin/koha/admin/share_content.pl">Share content with Mana KB</a></dt>
                         <dd>Share content (subscriptions, reports) with Koha communty</dd>
                     [% END %]
                 </dl>
