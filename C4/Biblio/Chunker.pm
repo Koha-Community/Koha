@@ -20,8 +20,10 @@ package C4::Biblio::Chunker;
 use Modern::Perl;
 
 use Koha::Exception::DB;
+use Koha::Exception::Parse;
 
 use C4::Record;
+use C4::Biblio;
 
 =head SYNOPSIS
 
@@ -55,7 +57,10 @@ sub getChunkAsMARCRecord {
 
     for (my $i=0 ; $i<scalar(@$chunk) ; $i++) {
         my $bi = $chunk->[$i];
-        (undef, $chunk->[$i]) = C4::Record::marcxml2marc($bi->{marcxml});
+        my $marcxml = C4::Biblio::GetXmlBiblio($bi->{biblionumber});
+        my $error = "";
+        ($error, $chunk->[$i]) = C4::Record::marcxml2marc($marcxml);
+        Koha::Exception::Parse->throw(error => "Couldn't get MARC::Record for biblio $bi->{biblionumber}") if $error;
         $chunk->[$i]->{biblionumber} = $bi->{biblionumber};
         $chunk->[$i]->{biblioitemnumber} = $bi->{biblioitemnumber};
         $chunk->[$i]->{frameworkcode} = $bi->{frameworkcode};
