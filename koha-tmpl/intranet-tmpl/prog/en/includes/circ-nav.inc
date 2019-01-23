@@ -38,7 +38,7 @@
         <h5>Circulation reports</h5>
         <ul>
             <li><a href="/cgi-bin/koha/circ/view_holdsqueue.pl">Holds queue</a></li>
-            <li><a href="/cgi-bin/koha/circ/pendingreserves.pl">Holds to pull</a></li>
+            <li><a href="/cgi-bin/koha/circ/pendingreserves2.pl">Holds to pull</a></li>
             <li><a href="/cgi-bin/koha/circ/waitingreserves.pl">Holds awaiting pickup</a></li>
             <li><a href="/cgi-bin/koha/circ/reserveratios.pl">Hold ratios</a></li>
             <li><a href="/cgi-bin/koha/circ/transferstoreceive.pl">Transfers to receive</a></li>
