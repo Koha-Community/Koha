@@ -27,15 +27,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         exportColumns = dt_parameters["exportColumns"];
     }
 
-    dt_parameters[ "buttons" ] = [
-        {
-            extend: 'colvis',
-            columns: included_ids,
-            text: _("Column visibility"),
-            exportOptions: {
-                columns: exportColumns
-            },
-        },
+    var export_buttons = [
         {
             extend: 'excelHtml5',
             text: _("Excel"),
@@ -63,7 +55,26 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             exportOptions: {
                 columns: exportColumns
             },
+        }
+    ];
+
+    dt_parameters[ "buttons" ] = [
+        {
+            extend: 'colvis',
+            fade: 100,
+            columns: included_ids,
+            text: '<i class="fa fa-lg fa-gear"></i>',
+            exportOptions: {
+                columns: exportColumns
+            },
         },
+        {
+            extend: 'collection',
+            fade: 100,
+            text: '<i class="fa fa-lg fa-download"></i>',
+            buttons: export_buttons
+        }
+
     ];
 
     var table = $(selector);
