@@ -17244,6 +17244,31 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21753: Drop chargename from issuingrules )\n";
 }
 
+$DBversion = '18.12.00.008';
+if( CheckVersion( $DBversion ) ) {
+    if( !column_exists( 'subscription', 'mana_id' ) ) {
+        $dbh->do( "ALTER TABLE subscription ADD mana_id int(11) NULL DEFAULT NULL" );
+    }
+
+    if( !column_exists( 'saved_sql', 'mana_id' ) ) {
+        $dbh->do( "ALTER TABLE saved_sql ADD mana_id int(11) NULL DEFAULT NULL" );
+    }
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('Mana','2',NULL,'request to Mana Webservice. Mana centralize common information between other Koha to facilitate the creation of new subscriptions, vendors, report queries etc... You can search, share, import and comment the content of Mana.','YesNo');
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('AutoShareWithMana','','','defines datas automatically shared with mana','multiple');
+    });
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` ) VALUES
+        ('ManaToken','',NULL,'Security token used for authentication on Mana KB service (anti spam)','Textarea');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17047 - Mana knowledge base)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
