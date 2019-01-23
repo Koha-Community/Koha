@@ -17,11 +17,11 @@ package Koha::Biblio::Metadata;
 
 use Modern::Perl;
 
-use Carp;
-
-use C4::Biblio qw();
+use MARC::Record;
+use MARC::File::XML;
 
 use Koha::Database;
+use Koha::Exceptions::Metadata;
 
 use base qw(Koha::Object);
 
@@ -31,33 +31,62 @@ Koha::Metadata - Koha Metadata Object class
 
 =head1 API
 
-=head2 Class Methods
+=head2 Class methods
 
 =cut
 
 =head3 record
 
-my @record = $biblio->record($params);
+my $record = $metadata->record;
 
-Returns a MARC::Record object for a record.
+Returns an object representing the metadata record. The expected record type
+corresponds to this table:
 
-This method accepts the same paramters as C4::Biblio::GetMarcBiblio,
-but does not require the 'biblionumber' parameter.
+    -------------------------------
+    | format     | object type    |
+    -------------------------------
+    | marcxml    | MARC::Record   |
+    -------------------------------
+
+=head4 Error handling
+
+=over
+
+=item If an unsupported format is found, it throws a I<Koha::Exceptions::Metadata> exception.
+
+=item If it fails to create the record object, it throws a I<Koha::Exceptions::Metadata::Invalid> exception.
+
+=back
 
 =cut
 
 sub record {
-    my ( $self, $params ) = @_;
 
-    $params->{biblionumber} = $self->biblionumber;
+    my ($self) = @_;
 
-    my $record = C4::Biblio::GetMarcBiblio($params);
+    my $record;
+
+    if ( $self->format eq 'marcxml' ) {
+        $record = eval { MARC::Record::new_from_xml( $self->metadata, 'utf-8', $self->schema ); };
+        unless ($record) {
+            Koha::Exceptions::Metadata::Invalid->throw(
+                id     => $self->id,
+                format => $self->format,
+                schema => $self->schema
+            );
+        }
+    }
+    else {
+        Koha::Exceptions::Metadata->throw(
+            'Koha::Biblio::Metadata->record called on unhandled format: ' . $self->format );
+    }
 
     return $record;
 }
 
+=head2 Internal methods
 
-=head3 type
+=head3 _type
 
 =cut
 
