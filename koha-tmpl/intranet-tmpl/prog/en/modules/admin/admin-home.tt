@@ -22,7 +22,13 @@
                         <a href=/cgi-bin/koha/admin/share_content.pl>here.</a>
                     </p>
                 </div>
-           [% END %]
+            [% END %]
+            [% IF ( Koha.Preference('Mana') == 2 ) %]
+                <div class="dialog alert">
+                    <p><center> You haven't decided if you want to activate Mana Knowlede Base, please let us know by clicking<center></p>
+                    <a href=/cgi-bin/koha/admin/share_content.pl><center>Here</center></a>
+                </div>
+            [% END %]
         <h1>Koha administration</h1>
         <div class="row">
             <div class="col-md-6 sysprefs">

@@ -275,7 +275,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LocalHoldsPriorityItemControl',  'holdingbranch',  'holdingbranch|homebranch',  'decides if the feature operates using the item''s home or holding library.',  'Choice'),
 ('LocalHoldsPriorityPatronControl',  'PickupLibrary',  'HomeLibrary|PickupLibrary',  'decides if the feature operates using the library set as the patron''s home library, or the library set as the pickup library for the given hold.',  'Choice'),
 ('makePreviousSerialAvailable','0','','make previous serial automatically available when collecting a new serial. Please note that the item-level_itypes syspref must be set to specific item.','YesNo'),
-('Mana','1',NULL,'request to Mana Webservice. Mana centralize common information between other Koha to facilitate the creation of new subscriptions, vendors, report queries etc... You can search, share, import and comment the content of Mana.','YesNo'),
+('Mana','2',NULL,'request to Mana Webservice. Mana centralize common information between other Koha to facilitate the creation of new subscriptions, vendors, report queries etc... You can search, share, import and comment the content of Mana.','YesNo'),
 ('ManInvInNoissuesCharge','1',NULL,'MANUAL_INV charges block checkouts (added to noissuescharge).','YesNo'),
 ('MARCAuthorityControlField008','|| aca||aabn           | a|a     d',NULL,'Define the contents of MARC21 authority control field 008 position 06-39','Textarea'),
 ('MarcFieldDocURL', NULL, NULL, 'URL used for MARC field documentation. Following substitutions are available: {MARC} = marc flavour, eg. "MARC21" or "UNIMARC". {FIELD} = field number, eg. "000" or "048". {LANG} = user language, eg. "en" or "fi-FI"', 'free'),

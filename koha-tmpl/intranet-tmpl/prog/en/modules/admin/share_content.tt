@@ -63,6 +63,11 @@ Well done! You successfully created your Mana KB account. Check your mailbox and
                                     [% ELSE %]
                                         <option value="1">Yes</option>
                                     [% END %]
+                                    [% IF Koha.Preference('Mana') == 2 %]
+                                        <option value="2" selected="selected">No, let me think about it</option>
+                                    [% ELSE %]
+                                        <option value="2">No, let me think about it</option>
+                                    [% END %]
                                 </select>
                                 <div class="hint">Enable Mana allow you to search, import and comment content from Mana server, and, to share your own.</div>
                             </li>
