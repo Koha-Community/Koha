@@ -1,4 +1,4 @@
-package Koha::REST::V1::Hold;
+package Koha::REST::V1::Holds;
 
 # This file is part of Koha.
 #
@@ -181,10 +181,10 @@ sub add {
             if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
                 my $broken_fk = $_->broken_fk;
 
-                if ( grep { $_ eq $broken_fk } keys %{$Koha::REST::V1::Hold::to_api_mapping} ) {
+                if ( grep { $_ eq $broken_fk } keys %{$Koha::REST::V1::Holds::to_api_mapping} ) {
                     $c->render(
                         status  => 404,
-                        openapi => $Koha::REST::V1::Hold::to_api_mapping->{$broken_fk} . ' not found.'
+                        openapi => $Koha::REST::V1::Holds::to_api_mapping->{$broken_fk} . ' not found.'
                     );
                 }
                 else {
@@ -284,8 +284,8 @@ sub _to_api {
     my $hold = shift;
 
     # Rename attributes
-    foreach my $column ( keys %{ $Koha::REST::V1::Hold::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Hold::to_api_mapping->{$column};
+    foreach my $column ( keys %{ $Koha::REST::V1::Holds::to_api_mapping } ) {
+        my $mapped_column = $Koha::REST::V1::Holds::to_api_mapping->{$column};
         if (    exists $hold->{ $column }
              && defined $mapped_column )
         {
@@ -313,8 +313,8 @@ attribute names.
 sub _to_model {
     my $hold = shift;
 
-    foreach my $attribute ( keys %{ $Koha::REST::V1::Hold::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::Hold::to_model_mapping->{$attribute};
+    foreach my $attribute ( keys %{ $Koha::REST::V1::Holds::to_model_mapping } ) {
+        my $mapped_attribute = $Koha::REST::V1::Holds::to_model_mapping->{$attribute};
         if (    exists $hold->{ $attribute }
              && defined $mapped_attribute )
         {
