@@ -27,145 +27,389 @@ use Koha::Patrons;
 use Koha::Holds;
 use Koha::DateUtils;
 
+use Try::Tiny;
+
+=head1 API
+
+=head2 Class methods
+
+=head3 list
+
+Mehtod that handles listing Koha::Hold objects
+
+=cut
+
 sub list {
     my $c = shift->openapi->valid_input or return;
 
-    my $params = $c->req->query_params->to_hash;
-    my @valid_params = Koha::Holds->_resultset->result_source->columns;
-    foreach my $key (keys %$params) {
-        delete $params->{$key} unless grep { $key eq $_ } @valid_params;
+    return try {
+        my $holds_set = Koha::Holds->new;
+        my $holds     = $c->objects->search( $holds_set, \&_to_model, \&_to_api );
+        return $c->render( status => 200, openapi => $holds );
     }
-    my $holds = Koha::Holds->search($params);
-
-    return $c->render(status => 200, openapi => $holds);
+    catch {
+        if ( blessed $_ && $_->isa('Koha::Exceptions') ) {
+            return $c->render(
+                status  => 500,
+                openapi => { error => "$_" }
+            );
+        }
+        else {
+            return $c->render(
+                status  => 500,
+                openapi => { error => "Something went wrong, check Koha logs for details." }
+            );
+        }
+    };
 }
+
+=head3 add
+
+Method that handles adding a new Koha::Hold object
+
+=cut
 
 sub add {
     my $c = shift->openapi->valid_input or return;
 
-    my $body = $c->req->json;
+    return try {
+        my $body = $c->validation->param('body');
 
-    my $borrowernumber = $body->{borrowernumber};
-    my $biblionumber = $body->{biblionumber};
-    my $itemnumber = $body->{itemnumber};
-    my $branchcode = $body->{branchcode};
-    my $expirationdate = $body->{expirationdate};
-    my $itemtype = $body->{itemtype};
+        my $biblio;
 
-    my $borrower = Koha::Patrons->find($borrowernumber);
-    unless ($borrower) {
-        return $c->render( status  => 404,
-                           openapi => {error => "Borrower not found"} );
-    }
+        my $biblio_id         = $body->{biblio_id};
+        my $pickup_library_id = $body->{pickup_library_id};
+        my $item_id           = $body->{item_id};
+        my $patron_id         = $body->{patron_id};
+        my $item_type         = $body->{item_type};
+        my $expiration_date   = $body->{expiration_date};
+        my $notes             = $body->{notes};
 
-    unless ($biblionumber or $itemnumber) {
-        return $c->render( status => 400, openapi => {
-            error => "At least one of biblionumber, itemnumber should be given"
-        } );
-    }
-    unless ($branchcode) {
-        return $c->render( status  => 400,
-                           openapi => { error => "Branchcode is required" } );
-    }
+        if ( $item_id and $biblio_id ) {
 
-    my $biblio;
-    if ($itemnumber) {
-        my $item = Koha::Items->find( $itemnumber );
-        $biblio = $item->biblio;
-        if ($biblionumber and $biblionumber != $biblio->biblionumber) {
-            return $c->render(
-                status => 400,
-                openapi => {
-                    error => "Item $itemnumber doesn't belong to biblio $biblionumber"
-                });
+            # check they are consistent
+            unless ( Koha::Items->search( { itemnumber => $item_id, biblionumber => $biblio_id } )
+                ->count > 0 )
+            {
+                return $c->render(
+                    status  => 400,
+                    openapi => { error => "Item $item_id doesn't belong to biblio $biblio_id" }
+                );
+            }
+            else {
+                $biblio = Koha::Biblios->find($biblio_id);
+            }
         }
-        $biblionumber ||= $biblio->biblionumber;
-    } else {
-        $biblio = Koha::Biblios->find( $biblionumber );
+        elsif ($item_id) {
+            my $item = Koha::Items->find($item_id);
+
+            unless ($item) {
+                return $c->render(
+                    status  => 404,
+                    openapi => { error => "item_id not found." }
+                );
+            }
+            else {
+                $biblio = $item->biblio;
+            }
+        }
+        elsif ($biblio_id) {
+            $biblio = Koha::Biblios->find($biblio_id);
+        }
+        else {
+            return $c->render(
+                status  => 400,
+                openapi => { error => "At least one of biblio_id, item_id should be given" }
+            );
+        }
+
+        unless ($biblio) {
+            return $c->render(
+                status  => 400,
+                openapi => "Biblio not found."
+            );
+        }
+
+        my $can_place_hold
+            = $item_id
+            ? C4::Reserves::CanItemBeReserved( $patron_id, $item_id )
+            : C4::Reserves::CanBookBeReserved( $patron_id, $biblio_id );
+
+        unless ( $can_place_hold->{status} eq 'OK' ) {
+            return $c->render(
+                status => 403,
+                openapi =>
+                    { error => "Hold cannot be placed. Reason: " . $can_place_hold->{status} }
+            );
+        }
+
+        my $priority = C4::Reserves::CalculatePriority($biblio_id);
+
+        # AddReserve expects date to be in syspref format
+        if ($expiration_date) {
+            $expiration_date = output_pref( dt_from_string( $expiration_date, 'rfc3339' ) );
+        }
+
+        my $hold_id = C4::Reserves::AddReserve(
+            $pickup_library_id,
+            $patron_id,
+            $biblio_id,
+            undef,    # $bibitems param is unused
+            $priority,
+            undef,    # hold date, we don't allow it currently
+            $expiration_date,
+            $notes,
+            $biblio->title,
+            $item_id,
+            undef,    # TODO: Why not?
+            $item_type
+        );
+
+        unless ($hold_id) {
+            return $c->render(
+                status  => 500,
+                openapi => 'Error placing the hold. See Koha logs for details.'
+            );
+        }
+
+        my $hold = Koha::Holds->find($hold_id);
+
+        return $c->render( status => 201, openapi => _to_api($hold->TO_JSON) );
     }
+    catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions') ) {
+            if ( $_->isa('Koha::Exceptions::Object::FKConstraint') ) {
+                my $broken_fk = $_->broken_fk;
 
-    my $can_reserve =
-      $itemnumber
-      ? CanItemBeReserved( $borrowernumber, $itemnumber )
-      : CanBookBeReserved( $borrowernumber, $biblionumber );
-
-    unless ($can_reserve->{status} eq 'OK') {
-        return $c->render( status => 403, openapi => {
-            error => "Reserve cannot be placed. Reason: ". $can_reserve->{status}
-        } );
-    }
-
-    my $priority = C4::Reserves::CalculatePriority($biblionumber);
-    $itemnumber ||= undef;
-
-    # AddReserve expects date to be in syspref format
-    if ($expirationdate) {
-        $expirationdate = output_pref(dt_from_string($expirationdate, 'iso'));
-    }
-
-    my $reserve_id = C4::Reserves::AddReserve($branchcode, $borrowernumber,
-        $biblionumber, undef, $priority, undef, $expirationdate, undef,
-        $biblio->title, $itemnumber, undef, $itemtype);
-
-    unless ($reserve_id) {
-        return $c->render( status => 500, openapi => {
-            error => "Error while placing reserve. See Koha logs for details."
-        } );
-    }
-
-    my $reserve = Koha::Holds->find($reserve_id);
-
-    return $c->render( status => 201, openapi => $reserve );
+                if ( grep { $_ eq $broken_fk } keys %{$Koha::REST::V1::Hold::to_api_mapping} ) {
+                    $c->render(
+                        status  => 404,
+                        openapi => $Koha::REST::V1::Hold::to_api_mapping->{$broken_fk} . ' not found.'
+                    );
+                }
+                else {
+                    return $c->render(
+                        status  => 500,
+                        openapi => { error => "Uncaught exception: $_" }
+                    );
+                }
+            }
+            else {
+                return $c->render(
+                    status  => 500,
+                    openapi => { error => "$_" }
+                );
+            }
+        }
+        else {
+            return $c->render(
+                status  => 500,
+                openapi => { error => "Something went wrong. check the logs." }
+            );
+        }
+    };
 }
+
+=head3 edit
+
+Method that handles modifying a Koha::Hold object
+
+=cut
 
 sub edit {
     my $c = shift->openapi->valid_input or return;
 
-    my $reserve_id = $c->validation->param('reserve_id');
-    my $hold = Koha::Holds->find( $reserve_id );
+    my $hold_id = $c->validation->param('hold_id');
+    my $hold = Koha::Holds->find( $hold_id );
 
     unless ($hold) {
         return $c->render( status  => 404,
-                           openapi => {error => "Reserve not found"} );
+                           openapi => {error => "Hold not found"} );
     }
 
     my $body = $c->req->json;
 
-    my $branchcode = $body->{branchcode};
-    my $priority = $body->{priority};
-    my $suspend_until = $body->{suspend_until};
+    my $pickup_library_id = $body->{pickup_library_id};
+    my $priority          = $body->{priority};
+    my $suspended_until   = $body->{suspended_until};
 
-    if ($suspend_until) {
-        $suspend_until = output_pref(dt_from_string($suspend_until, 'iso'));
+    if ($suspended_until) {
+        $suspended_until = output_pref(dt_from_string($suspended_until, 'rfc3339'));
     }
 
     my $params = {
-        reserve_id => $reserve_id,
-        branchcode => $branchcode,
-        rank => $priority,
-        suspend_until => $suspend_until,
-        itemnumber => $hold->itemnumber
+        reserve_id    => $hold_id,
+        branchcode    => $pickup_library_id,
+        rank          => $priority,
+        suspend_until => $suspended_until,
+        itemnumber    => $hold->itemnumber
     };
 
     C4::Reserves::ModReserve($params);
-    $hold = Koha::Holds->find($reserve_id);
+    $hold->discard_changes; # refresh
 
-    return $c->render( status => 200, openapi => $hold );
+    return $c->render( status => 200, openapi => _to_api( $hold->TO_JSON ) );
 }
+
+=head3 delete
+
+Method that handles deleting a Koha::Hold object
+
+=cut
 
 sub delete {
     my $c = shift->openapi->valid_input or return;
 
-    my $reserve_id = $c->validation->param('reserve_id');
-    my $hold = Koha::Holds->find( $reserve_id );
+    my $hold_id = $c->validation->param('hold_id');
+    my $hold    = Koha::Holds->find($hold_id);
 
     unless ($hold) {
-        return $c->render( status => 404, openapi => {error => "Reserve not found"} );
+        return $c->render( status => 404, openapi => { error => "Hold not found." } );
     }
 
     $hold->cancel;
 
     return $c->render( status => 200, openapi => {} );
 }
+
+
+=head3 _to_api
+
+Helper function that maps unblessed Koha::Hold objects into REST api
+attribute names.
+
+=cut
+
+sub _to_api {
+    my $hold = shift;
+
+    # Rename attributes
+    foreach my $column ( keys %{ $Koha::REST::V1::Hold::to_api_mapping } ) {
+        my $mapped_column = $Koha::REST::V1::Hold::to_api_mapping->{$column};
+        if (    exists $hold->{ $column }
+             && defined $mapped_column )
+        {
+            # key != undef
+            $hold->{ $mapped_column } = delete $hold->{ $column };
+        }
+        elsif (    exists $hold->{ $column }
+                && !defined $mapped_column )
+        {
+            # key == undef
+            delete $hold->{ $column };
+        }
+    }
+
+    return $hold;
+}
+
+=head3 _to_model
+
+Helper function that maps REST api objects into Koha::Hold
+attribute names.
+
+=cut
+
+sub _to_model {
+    my $hold = shift;
+
+    foreach my $attribute ( keys %{ $Koha::REST::V1::Hold::to_model_mapping } ) {
+        my $mapped_attribute = $Koha::REST::V1::Hold::to_model_mapping->{$attribute};
+        if (    exists $hold->{ $attribute }
+             && defined $mapped_attribute )
+        {
+            # key => !undef
+            $hold->{ $mapped_attribute } = delete $hold->{ $attribute };
+        }
+        elsif (    exists $hold->{ $attribute }
+                && !defined $mapped_attribute )
+        {
+            # key => undef / to be deleted
+            delete $hold->{ $attribute };
+        }
+    }
+
+    if ( exists $hold->{lowestPriority} ) {
+        $hold->{lowestPriority} = ($hold->{lowestPriority}) ? 1 : 0;
+    }
+
+    if ( exists $hold->{suspend} ) {
+        $hold->{suspend} = ($hold->{suspend}) ? 1 : 0;
+    }
+
+    if ( exists $hold->{reservedate} ) {
+        $hold->{reservedate} = output_pref({ str => $hold->{reservedate}, dateformat => 'sql' });
+    }
+
+    if ( exists $hold->{cancellationdate} ) {
+        $hold->{cancellationdate} = output_pref({ str => $hold->{cancellationdate}, dateformat => 'sql' });
+    }
+
+    if ( exists $hold->{timestamp} ) {
+        $hold->{timestamp} = output_pref({ str => $hold->{timestamp}, dateformat => 'sql' });
+    }
+
+    if ( exists $hold->{waitingdate} ) {
+        $hold->{waitingdate} = output_pref({ str => $hold->{waitingdate}, dateformat => 'sql' });
+    }
+
+    if ( exists $hold->{expirationdate} ) {
+        $hold->{expirationdate} = output_pref({ str => $hold->{expirationdate}, dateformat => 'sql' });
+    }
+
+    if ( exists $hold->{suspend_until} ) {
+        $hold->{suspend_until} = output_pref({ str => $hold->{suspend_until}, dateformat => 'sql' });
+    }
+
+    return $hold;
+}
+
+=head2 Global variables
+
+=head3 $to_api_mapping
+
+=cut
+
+our $to_api_mapping = {
+    reserve_id       => 'hold_id',
+    borrowernumber   => 'patron_id',
+    reservedate      => 'hold_date',
+    biblionumber     => 'biblio_id',
+    branchcode       => 'pickup_library_id',
+    notificationdate => undef,
+    reminderdate     => undef,
+    cancellationdate => 'cancelation_date',
+    reservenotes     => 'notes',
+    found            => 'status',
+    itemnumber       => 'item_id',
+    waitingdate      => 'waiting_date',
+    expirationdate   => 'expiration_date',
+    lowestPriority   => 'lowest_priority',
+    suspend          => 'suspended',
+    suspend_until    => 'suspended_until',
+    itemtype         => 'item_type',
+};
+
+=head3 $to_model_mapping
+
+=cut
+
+our $to_model_mapping = {
+    hold_id           => 'reserve_id',
+    patron_id         => 'borrowernumber',
+    hold_date         => 'reservedate',
+    biblio_id         => 'biblionumber',
+    pickup_library_id => 'branchcode',
+    cancelation_date  => 'cancellationdate',
+    notes             => 'reservenotes',
+    status            => 'found',
+    item_id           => 'itemnumber',
+    waiting_date      => 'waitingdate',
+    expiration_date   => 'expirationdate',
+    lowest_priority   => 'lowestPriority',
+    suspended         => 'suspend',
+    suspended_until   => 'suspend_until',
+    item_type         => 'itemtype',
+};
 
 1;
