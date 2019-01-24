@@ -132,6 +132,9 @@
             [% IF ( CAN_user_parameters_manage_usage_stats ) %]
                 <li><a href="/cgi-bin/koha/admin/usage_statistics.pl">Share usage statistics</a></li>
             [% END %]
+            [% IF ( CAN_user_parameters_manage_mana ) %]
+                <li><a href="/cgi-bin/koha/admin/share_content.pl">Share content with Mana KB</a></li>
+            [% END %]
         </ul>
     [% END %]
 </div>
