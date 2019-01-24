@@ -4,7 +4,7 @@ use DateTime::TimeZone;
 
 use C4::Context;
 
-use Test::More tests => 67;
+use Test::More tests => 68;
 
 use Test::MockModule;
 use Test::Warn;
@@ -48,6 +48,9 @@ cmp_ok $date_string, 'eq', '2011-06-16 12:00 PM', 'iso output 12hr';
 
 $date_string = output_pref({ dt => $dt, dateformat => 'rfc3339' });
 like($date_string, qr/2011-06-16T12:00:00\+|-\d\d:\d\d/, 'RFC3339 output');
+
+$date_string = output_pref({ dt => $dt, dateformat => 'rfc3339', dateonly => 1 });
+is($date_string, '2011-06-16', 'RFC3339 output');
 
 # "notime" doesn't actually mean anything in this context, but we
 # can't pass undef or output_pref will try to access the database
