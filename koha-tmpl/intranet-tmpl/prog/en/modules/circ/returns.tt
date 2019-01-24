@@ -379,7 +379,7 @@
         <caption><a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a></caption>
         <tr>
             <th>Hold for:</th>
-            <td>[% INCLUDE 'patron-title.inc' patron=patron %]</td>
+            <td>[% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
         </tr>
         </table>
         <form method="post" action="returns.pl"><input type="submit" value="OK" />
@@ -421,7 +421,7 @@
                     [% END %]
                     <h5>Hold for:</h5>
                         <li>
-                            [% INCLUDE 'patron-title.inc' patron=patron %]
+                            <td>[% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
                             <span class="patron-category"> - [% patron.category.description | html %]</span>
                         </li>
 
