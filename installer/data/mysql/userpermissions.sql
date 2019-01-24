@@ -30,6 +30,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_sms_providers', 'Manage SMS cellular providers'),
    ( 3, 'manage_audio_alerts', 'Manage audio alerts'),
    ( 3, 'manage_usage_stats', 'Manage usage statistics settings'),
+   ( 3, 'manage_mana', 'Manage Mana KB content sharing'),
    ( 4, 'edit_borrowers', 'Add, modify and view patron information'),
    ( 4, 'view_borrower_infos_from_any_libraries', 'View patron infos from any libraries'),
    ( 6, 'place_holds', 'Place holds for patrons'),

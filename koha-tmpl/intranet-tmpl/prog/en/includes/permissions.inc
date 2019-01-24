@@ -59,6 +59,7 @@
     [%- CASE 'manage_audio_alerts' -%]<span>Manage audio alerts</span>
     [%- CASE 'manage_sms_providers' -%]<span>Manage SMS cellular providers</span>
     [%- CASE 'manage_usage_stats' -%]<span>Manage usage statistics settings</span>
+    [%- CASE 'manage_mana' -%]<span>Manage Mana KB content sharing</span>
     [%- CASE 'edit_borrowers' -%]<span>Add, modify and view patron information</span>
     [%- CASE 'view_borrower_infos_from_any_libraries' -%]<span>View patron infos from any libraries. If not set the logged in user could only access patron infos from its own library or group of libraries.</span>
     [%- CASE 'modify_holds_priority' -%]<span>Modify holds priority</span>
