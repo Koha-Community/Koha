@@ -585,7 +585,7 @@
         <!-- Build ISBN -->
         <xsl:if test="marc:datafield[@tag=020]/marc:subfield[@code='a']">
           <span class="results_summary isbn"><span class="label">ISBN: </span>
-            <xsl:for-each select="marc:datafield[@tag=020]/marc:subfield[@code='a']">
+            <xsl:for-each select="marc:datafield[@tag=020]/marc:subfield[(@code='a' or @code='q')]">
               <span property="isbn">
                 <xsl:value-of select="."/>
                 <xsl:choose>
