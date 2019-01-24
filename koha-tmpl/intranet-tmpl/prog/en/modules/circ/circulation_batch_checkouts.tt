@@ -28,13 +28,15 @@
         Batch check out
     [% END %]
 </div>
-<div id="doc3" class="yui-t2">
 
-   <div id="bd">
-<div id="yui-main">
-<div class="yui-b">
-
-<div class="yui-g">
+<div class="main container-fluid">
+    <div class="row">
+        [% IF patron %]
+            <div class="col-sm-10 col-sm-push-2">
+        [% ELSE %]
+            <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+        [% END %]
+            <main>
 
 [% IF patron %]
 [% INCLUDE 'members-toolbar.inc' %]
@@ -166,7 +168,7 @@
                       <li><i class="fa fa-li fa-warning"></i>High demand item. Loan period shortened to [% checkout_info.HIGHHOLDS.duration | html %] days (due [% checkout_info.HIGHHOLDS.returndate | html %]).</li>
                   [% END %]
                   [% IF checkout_info.HIGHHOLDS %] <!-- FIXME -->
-                      <script type="text/javascript">
+                      <script>
                           $(document).ready(function() {
                               $("input[name=duedatespec]:hidden").val('[% checkout_info.HIGHHOLDS.returndate | html %]');
                           });
@@ -280,22 +282,22 @@
     <div class="dialog message">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
 [% END %]
 
-</div>
-</div>
-</div>
-[% IF patron %]
-    <div class="yui-b">
-        [% INCLUDE 'circ-menu.inc' %]
-    </div>
-[% END %]
-</div>
+                  </main>
+                      </div> <!-- /.col-sm-10.col-sm-push-2 -->
+                      [% IF patron %]
+                          <div class="col-sm-2 col-sm-pull-10">
+                              <aside>
+                                  [% INCLUDE 'circ-menu.inc' %]
+                              </aside>
+                          </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+                      [% END %]
+                  </div> <!-- /.row -->
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
-    <script type="text/javascript">
-
+    <script>
         $(document).ready(function() {
             if($('#barcodelist').length) {
                 $('#barcodelist').focus();

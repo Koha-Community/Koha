@@ -23,32 +23,33 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a id="go-to-home" href="#offline-home">Offline circulation</a></div>
 
-<div id="doc3" class="yui-t2">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
-    <div id="bd">
-        <div id="yui-main">
             <audio id="alert_sound" src="[% interface | html %]/prog/sound/critical.ogg" preload="auto"></audio>
             <audio id="success_sound" src="[% interface | html %]/prog/sound/beep.ogg" preload="auto"></audio>
 
-            <div id="alerts" class="yui-b">
-            </div>
+            <div id="alerts"></div>
+
             [% UNLESS (AllowOfflineCirculation) %]
                 <div id="noofflinecircwarning" class="dialog alert">
                     <p><strong>Warning:</strong> Offline Circulation has been disabled. You may continue and record transactions, but patron and item information will not be available.</p>
                 </div>
             [% END %]
 
-            <div id="offline-home" class="yui-b offline-home">
-                <div class="yui-g">
-                    <h1>Offline circulation</h1>
-                    <div class="yui-u first">
+            <div id="offline-home" class="offline-home">
+                <h1>Offline circulation</h1>
+                <div class="row">
+                    <div class="col-sm-6">
                         <ul>
                             <li><a id="go-to-circ" href="#offline-circulation">Check out</a></li>
                             <li><a id="go-to-returns" href="#offline-returns">Check in</a></li>
                         </ul>
                     </div>
 
-                    <div class="yui-u">
+                    <div class="col-sm-6">
                         <p><strong>Note:</strong> You must be online to use these options.</p>
                         <ul>
                             <li><a id="go-to-sync" href="#offline-sync">Synchronize</a></li>
@@ -58,16 +59,16 @@
                 </div>
             </div>
 
-            <div id="offline-sync" style="display: none;" class="yui-b offline-sync">
+            <div id="offline-sync" style="display: none;" class="offline-sync">
                 <div id="toolbar" class="btn-toolbar">
                     [% IF (AllowOfflineCirculation) %]
-                        <a href="#" id="download-records" class="btn btn-default btn-sm"><i class="fa fa-arrow-down"></i>Download records</a>
+                        <a href="#" id="download-records" class="btn btn-default btn-sm"><i class="fa fa-arrow-down"></i> Download records</a>
                     [% END %]
-                    <a href="#" id="upload-transactions" class="btn btn-default btn-sm"><i class="fa fa-arrow-up"></i>Upload transactions</a>
+                    <a href="#" id="upload-transactions" class="btn btn-default btn-sm"><i class="fa fa-arrow-up"></i> Upload transactions</a>
                 </div>
-                <div class="yui-g">
-                    <h1>Offline circulation</h1>
-                    <div class="yui-u first">
+                <h1>Offline circulation</h1>
+                <div class="row">
+                    <div class="col-sm-6">
                         <div id="download-message">
                             In order for offline circulation to work on this computer,
                             your library's records must be up-to-date on this computer:
@@ -79,7 +80,7 @@
                         </div>
                     </div>
 
-                    <div class="yui-u">
+                    <div class="col-sm-6">
                         <div id="upload-message">
                         </div>
                         <div>View <a href="/cgi-bin/koha/offline_circ/list.pl">pending offline circulation actions</a></div>
@@ -87,12 +88,12 @@
                 </div>
             </div>
 
-            <div id="offline-returns" style="display: none;" class="yui-b offline-returns">
-                <div class="yui-g">
+            <div id="offline-returns" style="display: none;" class="offline-returns">
+                <div class="row">
                     <form id="checkin-form" method="post" action="/cgi-bin/koha/circ/returns.pl" autocomplete="off" >
-                        <div class="yui-u first">
+                        <div class="col-sm-6">
                             <fieldset>
-                                <legend>Check In</legend>
+                                <legend>Check in</legend>
                                 <label for="checkin-barcode">Enter item barcode: </label>
                                 <input name="barcode" id="checkin-barcode" size="14" class="focus" type="text" />
                                 <input type="submit" class="submit" value="Submit" />
@@ -113,34 +114,30 @@
                 </div>
             </div>
 
-            <div style="display: none;" class="yui-b offline-circulation-instructions">
-                <div class="yui-g">
-                    Scan a patron barcode to start.
-                </div>
+            <div style="display: none;" class="offline-circulation-instructions">
+                Scan a patron barcode to start.
             </div>
 
-            <div id="offline-circulation" style="display: none;" class="yui-b offline-circulation">
-                <div class="yui-g">
-                    <form method="post" action="/cgi-bin/koha/circ/offline.pl" id="mainform" name="mainform" autocomplete="off">
-                        <fieldset id="circ_circulation_issue">
-                            <span id="clearscreen"><a href="/cgi-bin/koha/circ/offline.pl" title="Clear screen">x</a></span>
-                            <label for="checkout-barcode">Checking out to <span class="patron-title"></span></label>
-                            <div class="hint">Enter item barcode:</div>
-                            <input type="text" name="barcode" id="checkout-barcode" class="barcode focus" size="14" />
-                            <input type="submit" value="Check Out" />
+            <div id="offline-circulation" style="display: none;" class="offline-circulation">
+                <form method="post" action="/cgi-bin/koha/circ/offline.pl" id="mainform" name="mainform" autocomplete="off">
+                    <fieldset id="circ_circulation_issue">
+                        <span id="clearscreen"><a href="/cgi-bin/koha/circ/offline.pl" title="Clear screen">x</a></span>
+                        <label for="checkout-barcode">Checking out to <span class="patron-title"></span></label>
+                        <div class="hint">Enter item barcode:</div>
+                        <input type="text" name="barcode" id="checkout-barcode" class="barcode focus" size="14" />
+                        <input type="submit" value="Check Out" />
 
-                            <div class="date-select">
-                                <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
+                        <div class="date-select">
+                            <div class="hint">Specify due date [% INCLUDE 'date-format.inc' %]: </div>
                                 <input type="text" size="13" id="duedatespec" name="duedatespec" value="[% duedatespec | html %]" />
-                                <label for="stickyduedate"> Remember for session:</label>
-                                <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
-                                <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
-                            </div>
-                        </fieldset>
-                    </form>
-                </div>
+                            <label for="stickyduedate"> Remember for session:</label>
+                            <input type="checkbox" id="stickyduedate" onclick="this.form.barcode.focus();" name="stickyduedate" checked="checked" />
+                            <input type="button" class="action" id="cleardate" value="Clear" name="cleardate" onclick="this.checked = false; this.form.duedatespec.value = ''; this.form.stickyduedate.checked = false; this.form.barcode.focus(); return false;" />
+                        </div>
+                    </fieldset>
+                </form>
 
-                <div class="yui-g"><div id="patronlists" class="toptabs">
+                <div id="patronlists" class="toptabs">
                     <ul>
                         <li><a href="#checkouts"><span class="checkout-count">0</span> Checkouts</a></li>
                         <li><a href="#fines"><span class="fine-amount">0</span> in fines</a></li>
@@ -199,22 +196,29 @@
                 </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <div class="yui-b offline-circulation" style="display: none;">
-        <div class="patroninfo"><h5 class="patron-title">&nbsp;</h5>
-            <ul>
-                <li id="patron-address-1"></li>
-                <li id="patron-address-2"></li>
-                <li id="patron-address-parts"><!-- city, state, zipcode, country --></li>
-                <li id="patron-phone"></li>
-                <li id="patron-email"></li>
-                <li id="patron-category"></li>
-                <li id="patron-library"></li>
-            </ul>
-        </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
+
+        <div class="offline-circulation" style="display: none;">
+            <div class="col-sm-2 col-sm-pull-10">
+                <aside>
+                    <div class="patroninfo"><h5 class="patron-title">&nbsp;</h5>
+                        <ul>
+                            <li id="patron-address-1"></li>
+                            <li id="patron-address-2"></li>
+                            <li id="patron-address-parts"><!-- city, state, zipcode, country --></li>
+                            <li id="patron-phone"></li>
+                            <li id="patron-email"></li>
+                            <li id="patron-category"></li>
+                            <li id="patron-library"></li>
+                        </ul>
+                    </div>
+                </aside>
+            </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+        </div> <!-- /.row -->
     </div>
-</div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
@@ -222,7 +226,7 @@
     [% Asset.js("js/offlinecirc.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/jquery-ui-timepicker-addon.min.js") | $raw %]
     [% INCLUDE 'timepicker.inc' %]
-    <script type="text/javascript">
+    <script>
         var ALERT_SUCCESSFUL_CHECKIN = _("Checked in item.");
         var ALERT_MATERIALS = _("Note about the accompanying materials: %s");
         var ALERT_RESTRICTED = _("Patron is RESTRICTED");
@@ -628,7 +632,7 @@
                 }
             }
             curpatron = patron;
-            $('#yui-main').show();
+            $('main').show();
             setTimeout(function() { $('#checkout-barcode').trigger('focus'), 1 });
         }
 
