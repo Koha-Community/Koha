@@ -1,7 +1,7 @@
 {
   "/holds": {
     "get": {
-      "x-mojo-to": "Hold#list",
+      "x-mojo-to": "Holds#list",
       "operationId": "listHolds",
       "tags": ["patrons", "holds"],
       "parameters": [
@@ -150,7 +150,7 @@
       }
     },
     "post": {
-      "x-mojo-to": "Hold#add",
+      "x-mojo-to": "Holds#add",
       "operationId": "addHold",
       "tags": ["patrons", "holds"],
       "parameters": [{
@@ -250,7 +250,7 @@
   },
   "/holds/{hold_id}": {
     "put": {
-      "x-mojo-to": "Hold#edit",
+      "x-mojo-to": "Holds#edit",
       "operationId": "editHold",
       "tags": ["holds"],
       "parameters": [{
@@ -334,7 +334,7 @@
       }
     },
     "delete": {
-      "x-mojo-to": "Hold#delete",
+      "x-mojo-to": "Holds#delete",
       "operationId": "deleteHold",
       "tags": ["holds"],
       "parameters": [{
