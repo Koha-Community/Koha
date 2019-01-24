@@ -202,7 +202,7 @@ $(document).ready(function() {
                     var res_id = $(this).attr('reserve_id');
                     $(this).after('<div id="updating_reserveno'+res_id+'" class="waiting"><img src="/intranet-tmpl/prog/img/spinner-small.gif" alt="" /><span class="waiting_msg"></span></div>');
                     var api_url = '/api/v1/holds/'+res_id;
-                    var update_info = JSON.stringify({ branchcode: $(this).val(), priority: parseInt($(this).attr("priority"),10) });
+                    var update_info = JSON.stringify({ pickup_library_id: $(this).val(), priority: parseInt($(this).attr("priority"),10) });
                     $.ajax({
                         method: "PUT",
                         url: api_url,
