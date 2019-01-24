@@ -23,13 +23,10 @@ use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
 
-use MIME::Base64;
-
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
 
 my $t = Test::Mojo->new('Koha::REST::V1');
-my $tx;
 
 subtest 'success tests' => sub {
 
@@ -44,22 +41,19 @@ subtest 'success tests' => sub {
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
     $patron->set_password($password);
+    my $userid = $patron->userid;
 
-    my $credentials = encode_base64( $patron->userid . ':' . $password );
-
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->headers->authorization("Basic $credentials");
-    $t->request_ok($tx)->status_is( 200, 'Successful authentication and permissions check' );
+    $t->get_ok("//$userid:$password@/api/v1/patrons")
+      ->status_is( 200, 'Successful authentication and permissions check' );
 
     $patron->flags(undef)->store;
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->headers->authorization("Basic $credentials");
-    $t->request_ok($tx)->status_is( 403, 'Successful authentication and not enough permissions' )
-        ->json_is(
+    $t->get_ok("//$userid:$password@/api/v1/patrons")
+      ->status_is( 403, 'Successful authentication and not enough permissions' )
+      ->json_is(
         '/error' => 'Authorization failure. Missing required permission(s).',
         'Error message returned'
-        );
+      );
 
     $schema->storage->txn_rollback;
 };
@@ -78,26 +72,18 @@ subtest 'failure tests' => sub {
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
     $patron->set_password($password);
+    my $userid = $patron->userid;
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->headers->authorization("Basic ");
-    $t->request_ok($tx)->status_is( 401, 'No credentials passed' );
+    $t->get_ok("//@/api/v1/patrons")
+      ->status_is( 401, 'No credentials passed' );
 
-    $patron->flags(undef)->store;
-
-    my $credentials = encode_base64( $patron->userid . ':' . $bad_password );
-
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->headers->authorization("Basic $credentials");
-    $t->request_ok($tx)->status_is( 403, 'Successful authentication and not enough permissions' )
-        ->json_is( '/error' => 'Invalid password', 'Error message returned' );
-
+    $t->get_ok("//$userid:$bad_password@/api/v1/patrons")
+      ->status_is( 403, 'Failed authentication, invalid password' )
+      ->json_is( '/error' => 'Invalid password', 'Error message returned' );
 
     t::lib::Mocks::mock_preference( 'RESTBasicAuth', 0 );
 
-    $tx = $t->ua->build_tx( GET => "/api/v1/patrons" );
-    $tx->req->headers->authorization("Basic $credentials");
-    $t->request_ok($tx)
+    $t->get_ok("//$userid:$password@/api/v1/patrons")
       ->status_is( 401, 'Basic authentication is disabled' )
       ->json_is( '/error' => 'Basic authentication disabled', 'Expected error message rendered' );
 
