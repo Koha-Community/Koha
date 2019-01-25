@@ -29,7 +29,8 @@ use Koha::Item;
 use Koha::DateUtils;
 use t::lib::TestBuilder;
 
-use Test::More tests => 33;
+use Test::More tests => 29;
+use Test::Exception;
 use Test::Warn;
 
 use_ok('Koha::Hold');
@@ -98,20 +99,12 @@ is( $hold->suspend_until, undef, "Hold is suspended without a date" );
 $hold->resume();
 is( $hold->suspend, 0, "Hold is not suspended" );
 is( $hold->suspend_until, undef, "Hold no longer has suspend_until date" );
-$hold->found('W');
-warning_like { $hold->suspend_hold }
-    qr/Unable to suspend waiting hold!/, 'Catch warn about failed suspend';
-is( $hold->suspend, 0, "Waiting hold cannot be suspended" );
 
 $item = $hold->item();
 
 my $hold_borrower = $hold->borrower();
 ok( $hold_borrower, 'Got hold borrower' );
 is( $hold_borrower->borrowernumber(), $borrower->{borrowernumber}, 'Hold borrower matches correct borrower' );
-
-is( $hold->is_waiting, 1, 'The hold is waiting' );
-is( $hold->is_found, 1, 'The hold is found');
-ok( !$hold->is_in_transit, 'The hold is not in transit' );
 
 t::lib::Mocks::mock_preference( 'ReservesMaxPickUpDelay', '5' );
 $hold->found('T');
@@ -183,3 +176,97 @@ subtest "delete() tests" => sub {
     $schema->storage->txn_rollback();
  };
 
+subtest 'suspend() tests' => sub {
+
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog', 0 );
+
+    my $hold = $builder->build_object(
+        {   class => 'Koha::Holds',
+            value => { suspend => 0, suspend_until => undef, waitingdate => undef }
+        }
+    );
+
+    ok( !$hold->is_suspended, 'Hold is not suspended' );
+    my $suspended = $hold->suspend_hold;
+    is( ref($suspended) , 'Koha::Hold', 'suspend returns the Koha::Hold object' );
+    is( $suspended->id, $hold->id, 'suspend returns the same object' );
+    ok( $suspended->is_suspended, 'The hold is suspended' );
+    is( $suspended->suspend_until, undef, 'It is an indefinite suspension' );
+
+    # resume the hold
+    $suspended->resume;
+    $hold->discard_changes;
+
+    # create a DT
+    my $date = dt_from_string()->add( days => 1 );
+    $suspended = $hold->suspend_hold( $date );
+    is( ref($suspended) , 'Koha::Hold', 'suspend returns the Koha::Hold object' );
+    is( $suspended->id, $hold->id, 'suspend returns the same object' );
+    ok( $suspended->is_suspended, 'The hold is suspended' );
+    is( $suspended->suspend_until, $date->truncate( to => 'day' ), 'It is an indefinite suspension' );
+
+    # resume the hold
+    $suspended->resume;
+    $hold->discard_changes;
+
+    # set hold found=W
+    $hold->set_waiting;
+    throws_ok
+        { $hold->suspend_hold; }
+        'Koha::Exceptions::Hold::CannotSuspendFound',
+        'Exception is thrown when a found hold is tried to suspend';
+
+    is( $@->status, 'W', 'Exception gets the \'status\' parameter set correctly' );
+
+    # set hold found=T
+    $hold->set_waiting(1);
+    throws_ok
+        { $hold->suspend_hold; }
+        'Koha::Exceptions::Hold::CannotSuspendFound',
+        'Exception is thrown when a found hold is tried to suspend';
+
+    is( $@->status, 'T', 'Exception gets the \'status\' parameter set correctly' );
+
+    my $holds_module = Test::MockModule->new('Koha::Hold');
+    $holds_module->mock( 'is_found', 1 );
+
+    # bad data case
+    $hold->found('X');
+    throws_ok
+        { $hold->suspend_hold }
+        'Koha::Exceptions::Hold::CannotSuspendFound',
+        'Exception is thrown when a found hold is tried to suspend';
+
+    is( $@->error, 'Unhandled data exception on found hold (id='
+                    . $hold->id
+                    . ', found='
+                    . $hold->found
+                    . ')' , 'Exception gets the \'status\' parameter set correctly' );
+
+    $holds_module->unmock( 'is_found' );
+
+    # Enable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog', 1 );
+
+    my $logs_count = $schema->resultset('ActionLog')->search(
+            { module => 'HOLDS', action => 'SUSPEND', object => $hold->id } )->count;
+
+    $hold = $builder->build_object(
+        {   class => 'Koha::Holds',
+            value => { suspend => 0, suspend_until => undef, waitingdate => undef, found => undef }
+        }
+    );
+
+    $hold->suspend_hold;
+    my $new_logs_count = $schema->resultset('ActionLog')->search(
+            { module => 'HOLDS', action => 'SUSPEND', object => $hold->id } )->count;
+
+    is( $new_logs_count, $logs_count + 1, 'If logging is enabled, suspending a hold gets logged' );
+
+    $schema->storage->txn_rollback;
+};
