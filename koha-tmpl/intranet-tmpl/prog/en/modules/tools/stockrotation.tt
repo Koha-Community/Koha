@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE KohaDates %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Stock rotation</title>
@@ -55,15 +56,15 @@
                     <h2>Stock rotation</h2>
 
                     [% IF existing_rotas.size > 0 %]
-                        <table class="rotas_table" role="grid">
+                        <table id="stock_rotation" class="rotas_table" role="grid">
                             <thead>
                                 <tr>
-                                <th>Name</th>
+                                <th class="anti-the">Name</th>
                                 <th>Cyclical</th>
                                 <th>Active</th>
                                 <th>Description</th>
                                 <th>Number of items</th>
-                                <th>&nbsp;</th>
+                                <th class="NoSort">&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -79,12 +80,12 @@
                                                 <i class="fa fa-pencil"></i>
                                                 Edit
                                             </a>
-                                            <div class="btn-group" role="group">
+                                            <div class="btn-group dropup" role="group">
                                                 <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     Manage
                                                     <i class="fa fa-caret-down"></i>
                                                 </button>
-                                                <ul class="dropdown-menu">
+                                                <ul class="dropdown-menu pull-right">
                                                     <li><a href="?op=manage_stages&amp;rota_id=[% rota.rota_id | uri %]">Stages</a></li>
                                                     [% IF CAN_user_stockrotation_manage_rota_items && rota.stockrotationstages.count > 0 %]
                                                     <li><a href="?op=manage_items&amp;rota_id=[% rota.rota_id | uri %]">Items</a></li>
@@ -363,16 +364,16 @@
 
                     [% IF items.count > 0 %]
                         <h3>Manage items assigned to &quot;[% rota.title | html %]&quot;</h3>
-                        <table id="sr_manage_items" class="items_table" role="grid">
+                        <table id="stock_rotation_manage_items" class="items_table" role="grid">
                             <thead>
                                 <tr>
-                                <th>Barcode</th>
-                                <th>Title</th>
-                                <th>Author</th>
-                                <th>Callnumber</th>
-                                <th class="NoSearch">In transit</th>
-                                <th class="NoSort">Stages &amp; duration in days<br>(current stage highlighted)</th>
-                                <th class="NoSort">&nbsp;</th>
+                                    <th>Barcode</th>
+                                    <th>Title</th>
+                                    <th>Author</th>
+                                    <th>Call number</th>
+                                    <th class="NoSearch">In transit</th>
+                                    <th class="NoSort">Stages &amp; duration in days<br>(current stage highlighted)</th>
+                                    <th class="NoSort">&nbsp;</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -497,6 +498,7 @@
 
                 [% END %]
             </div>
+
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -507,22 +509,14 @@
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
     </div> <!-- /.row -->
 
-
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/tools-menu.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
+    [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/pages/stockrotation.js") | $raw %]
     <script>
-        $(document).ready(function() {
-            $('#sr_manage_items').dataTable($.extend(true, {}, dataTablesDefaults, {
-                "autoWidth": false,
-                "aoColumnDefs": [
-                    { "bSortable": false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                    { "bSortable": true, "bSearchable": false, 'aTargets': [ 'NoSearch' ] }
-                ],
-                "sPaginationType": "four_button"
-            }));
-        });
+        var stock_rotation_items_columns_settings = [% ColumnsSettings.GetColumns( 'tools', 'stockrotation', 'stock_rotation_manage_items', 'json' ) | $raw %];
+        var stock_rotation_columns_settings = [% ColumnsSettings.GetColumns( 'tools', 'stockrotation', 'stock_rotation', 'json' ) | $raw %];
     </script>
 [% END %]
 
