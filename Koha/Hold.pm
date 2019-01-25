@@ -34,6 +34,8 @@ use Koha::Libraries;
 use Koha::Old::Holds;
 use Koha::Calendar;
 
+use Koha::Exceptions::Hold;
+
 use base qw(Koha::Object);
 
 =head1 NAME
@@ -85,16 +87,28 @@ sub suspend_hold {
 
     my $date = $dt ? $dt->clone()->truncate( to => 'day' )->datetime : undef;
 
-    if ( $self->is_waiting ) {    # We can't suspend waiting holds
-        carp "Unable to suspend waiting hold!";
-        return $self;
+    if ( $self->is_found ) {    # We can't suspend found holds
+        if ( $self->is_waiting ) {
+            Koha::Exceptions::Hold::CannotSuspendFound->throw( status => 'W' );
+        }
+        elsif ( $self->is_in_transit ) {
+            Koha::Exceptions::Hold::CannotSuspendFound->throw( status => 'T' );
+        }
+        else {
+            Koha::Exceptions::Hold::CannotSuspendFound->throw(
+                      'Unhandled data exception on found hold (id='
+                    . $self->id
+                    . ', found='
+                    . $self->found
+                    . ')' );
+        }
     }
 
     $self->suspend(1);
-    $self->suspend_until( $date );
+    $self->suspend_until($date);
     $self->store();
 
-    logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, Dumper($self->unblessed) )
+    logaction( 'HOLDS', 'SUSPEND', $self->reserve_id, Dumper( $self->unblessed ) )
         if C4::Context->preference('HoldsLog');
 
     return $self;
