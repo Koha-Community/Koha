@@ -17,8 +17,29 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 use Test::Exception;
+
+subtest 'Koha::Exceptions::Hold tests' => sub {
+
+    plan tests => 5;
+
+    use_ok('Koha::Exceptions::Hold');
+
+    throws_ok
+        { Koha::Exceptions::Hold::CannotSuspendFound->throw( status => 'W' ); }
+        'Koha::Exceptions::Hold::CannotSuspendFound',
+        'Exception is thrown :-D';
+
+    # stringify the exception
+    is( "$@", 'Found hold cannot be suspended. Status=W', 'Exception stringified correctly' );
+
+    throws_ok
+        { Koha::Exceptions::Hold::CannotSuspendFound->throw( "Manual message exception" ) }
+        'Koha::Exceptions::Hold::CannotSuspendFound',
+        'Exception is thrown :-D';
+    is( "$@", 'Manual message exception', 'Exception not stringified if manually passed' );
+};
 
 subtest 'Koha::Exceptions::Object::FKConstraint tests' => sub {
 
