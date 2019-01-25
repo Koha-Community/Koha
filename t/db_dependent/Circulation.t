@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 126;
+use Test::More tests => 125;
 use Test::MockModule;
 
 use Data::Dumper;
@@ -2259,7 +2259,8 @@ subtest '_FixAccountForLostAndReturned' => sub {
                     notforloan         => undef,
                     rentalcharge       => 0,
                     defaultreplacecost => undef,
-                    processfee         => 0
+                    processfee         => 0,
+                    rental_charge_daily => 0,
                 }
             }
         );
