@@ -47,13 +47,13 @@ sub new {
     my ( $class, $params ) = @_;
 
     Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: patron")
-        unless $patron;
+        unless $params->{patron};
     Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: library")
-        unless $library;
+        unless $params->{library};
     Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: item")
-        unless $item;
+        unless $params->{item};
     Koha::Exceptions::MissingParameter->throw("Missing mandatory parameter: to_date")
-        unless $to_date;
+        unless $params->{to_date};
 
     Carp::confess("Key 'patron' is not a Koha::Patron object!")
       unless $params->{patron}->isa('Koha::Patron');
