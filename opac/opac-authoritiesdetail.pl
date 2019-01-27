@@ -40,7 +40,7 @@ use Modern::Perl;
 
 use C4::AuthoritiesMarc;
 use C4::Auth;
-use C4::Biblio;
+use C4::Biblio qw(GetMarcUrls);
 use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
