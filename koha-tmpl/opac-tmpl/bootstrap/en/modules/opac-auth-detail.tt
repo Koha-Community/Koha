@@ -115,7 +115,7 @@
                                 <ul>
                                     [% FOREACH MARCurl IN MARCURLS %]
                                         <li>[% IF ( MARCurl.part ) %][% MARCurl.part | html %]<br />[% END %]
-                                            [% IF ( OPACURLOpenInNewWindow ) %]
+                                            [% IF ( Koha.Preference('OPACURLOpenInNewWindow') ) %]
                                                 <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]" target="_blank" rel="noreferrer">
                                             [% ELSE %]
                                                 <a href="[% MARCurl.MARCURL | url %]" title="[% MARCurl.MARCURL | html %]">
