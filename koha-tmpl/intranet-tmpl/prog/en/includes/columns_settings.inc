@@ -72,6 +72,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         },
         {
             extend: 'collection',
+            autoClose: true,
             fade: 100,
             className: "export_controls",
             titleAttr: _("Export or print"),

@@ -305,12 +305,115 @@ table.group tr.even td {
 
 button.dt-button,
 div.dt-button,
+a.dt-button,
 a.dt-button:link,
 a.dt-button:visited,
 a.dt-button:hover,
 a.dt-button:active {
     color: #000;
+    font-size: 1em;
     margin: 3px 3px 0;
+}
+
+button.dt-button::before,
+div.dt-button::before,
+a.dt-button::before {
+    content: '';
+}
+
+button.dt-button:active:not(.disabled):hover:not(.disabled),
+button.dt-button.active:not(.disabled):hover:not(.disabled),
+div.dt-button:active:not(.disabled):hover:not(.disabled),
+div.dt-button.active:not(.disabled):hover:not(.disabled),
+a.dt-button:active:not(.disabled):hover:not(.disabled),
+a.dt-button.active:not(.disabled):hover:not(.disabled) {
+    background: #FFC none;
+    border-color: #CCC;
+    box-shadow: none;
+    text-shadow: none;
+}
+
+div.dt-button-collection {
+    width: auto;
+}
+
+div.dt-button-collection a.dt-button {
+    background: #FFF none;
+    border-color: #EEE;
+    text-shadow: none;
+}
+
+div.dt-button-collection a.dt-button::before {
+    color: #CCC;
+    content: "\f00d";
+    display: inline-block;
+    font-family: FontAwesome;
+    margin-right: .5em;
+    width: 1em;
+}
+
+div.dt-button-collection a.dt-button:active:not(.disabled),
+div.dt-button-collection a.dt-button.active:not(.disabled) {
+    background: #E6F0F2 none;
+    border: 1px solid #999;
+    box-shadow: none;
+}
+
+div.dt-button-collection a.dt-button:active:not(.disabled)::before,
+div.dt-button-collection a.dt-button.active:not(.disabled)::before {
+    color:  #538200;
+    content: "\f00c";
+    display: inline-block;
+    font-family: FontAwesome;
+    margin-right: .5em;
+    width: 1em;
+}
+
+div.dt-button-collection a.dt-button:not(.disabled):hover,
+div.dt-button-collection a.dt-button.active:not(.disabled):hover {
+    box-shadow: none;
+    border: 1px solid #999;
+    background: #FFC none;
+}
+
+
+div.dt-button-collection a.dt-button:not(.disabled)::before,
+div.dt-button-collection a.dt-button.active:not(.disabled):hover::before {
+    color:  #CC0000;
+    content: "\f00d";
+    display: inline-block;
+    font-family: FontAwesome;
+    margin-right: .5em;
+    width: 1em;
+}
+
+div.dt-button-collection a.dt-button.buttons-html5:not(.disabled)::before {
+    color: #222BAC;
+    display: inline-block;
+    font-family: FontAwesome;
+    margin-right: .5em;
+    width: 1em;
+}
+
+div.dt-button-collection a.dt-button.buttons-excel:not(.disabled)::before {
+    content: "\f1c3";
+}
+
+div.dt-button-collection a.dt-button.buttons-csv:not(.disabled)::before {
+    content: "\f0ce";
+}
+
+div.dt-button-collection a.dt-button.buttons-copy:not(.disabled)::before {
+    content: "\f0c5";
+}
+
+div.dt-button-collection a.dt-button.buttons-print:not(.disabled)::before {
+    color:  #222BAC;
+    content: "\f02f";
+    display: inline-block;
+    font-family: FontAwesome;
+    margin-right: .5em;
+    width: 1em;
 }
 
 .dt-button-text {
