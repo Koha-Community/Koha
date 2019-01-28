@@ -386,5 +386,137 @@
         }
       }
     }
+  },
+  "/holds/{hold_id}/suspension": {
+    "post": {
+      "x-mojo-to": "Holds#suspend",
+      "operationId": "suspendHold",
+      "tags": ["holds"],
+      "parameters": [{
+          "$ref": "../parameters.json#/hold_id_pp"
+        }, {
+          "name": "body",
+          "in": "body",
+          "description": "A JSON object containing fields to modify",
+          "required": false,
+          "schema": {
+            "type": "object",
+            "properties": {
+              "expiration_date": {
+                "description": "Date the hold suspension expires",
+                "type": "string",
+                "format": "date"
+              }
+            }
+          }
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "201": {
+          "description": "Hold suspended"
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Hold not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "reserveforothers": "1"
+        }
+      }
+    },
+    "delete": {
+      "x-mojo-to": "Holds#resume",
+      "operationId": "resumeHold",
+      "tags": ["holds"],
+      "parameters": [
+        {
+          "$ref": "../parameters.json#/hold_id_pp"
+        }
+      ],
+      "consumes": ["application/json"],
+      "produces": ["application/json"],
+      "responses": {
+        "204": {
+          "description": "Hold resumed"
+        },
+        "400": {
+          "description": "Missing or wrong parameters",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Hold not allowed",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Hold not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal server error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "reserveforothers": "1"
+        }
+      }
+    }
   }
 }
