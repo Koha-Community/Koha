@@ -272,6 +272,82 @@ sub delete {
     return $c->render( status => 200, openapi => {} );
 }
 
+=head3 suspend
+
+Method that handles suspending a hold
+
+=cut
+
+sub suspend {
+    my $c = shift->openapi->valid_input or return;
+
+    my $hold_id  = $c->validation->param('hold_id');
+    my $hold     = Koha::Holds->find($hold_id);
+    my $body     = $c->req->json;
+    my $exp_date = ($body) ? $body->{expiration_date} : undef;
+
+    unless ($hold) {
+        return $c->render( status => 404, openapi => { error => 'Hold not found.' } );
+    }
+
+    return try {
+        my $date = ($exp_date) ? dt_from_string( $exp_date, 'rfc3339' ) : undef;
+        $hold->suspend_hold($date);
+        $hold->discard_changes;
+        $c->res->headers->location( $c->req->url->to_string );
+        return $c->render(
+            status  => 201,
+            openapi => {
+                expiration_date => output_pref(
+                    {   dt         => dt_from_string( $hold->suspend_until ),
+                        dateformat => 'rfc3339',
+                        dateonly   => 1
+                    }
+                )
+            }
+        );
+    }
+    catch {
+        if ( blessed $_ and $_->isa('Koha::Exceptions::Hold::CannotSuspendFound') ) {
+            return $c->render( status => 400, openapi => { error => "$_" } );
+        }
+        else {
+            return $c->render(
+                status  => 500,
+                openapi => { error => "Something went wrong. check the logs." }
+            );
+        }
+    };
+}
+
+=head3 resume
+
+Method that handles resuming a hold
+
+=cut
+
+sub resume {
+    my $c = shift->openapi->valid_input or return;
+
+    my $hold_id = $c->validation->param('hold_id');
+    my $hold    = Koha::Holds->find($hold_id);
+    my $body    = $c->req->json;
+
+    unless ($hold) {
+        return $c->render( status => 404, openapi => { error => 'Hold not found.' } );
+    }
+
+    return try {
+        $hold->resume;
+        return $c->render( status => 204, openapi => {} );
+    }
+    catch {
+        return $c->render(
+            status  => 500,
+            openapi => { error => "Something went wrong. check the logs." }
+        );
+    };
+}
 
 =head3 _to_api
 
