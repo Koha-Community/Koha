@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Mojo;
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -327,6 +327,82 @@ subtest 'Reserves with itemtype' => sub {
 };
 
 $schema->storage->txn_rollback;
+
+subtest 'suspend and resume tests' => sub {
+
+    plan tests => 20;
+
+    $schema->storage->txn_begin;
+
+    my $password = 'AbcdEFG123';
+
+    my $patron = $builder->build_object(
+        { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 1 } } );
+    $patron->set_password($password);
+    my $userid = $patron->userid;
+
+    # Disable logging
+    t::lib::Mocks::mock_preference( 'HoldsLog',      0 );
+    t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
+
+    my $hold = $builder->build_object(
+        {   class => 'Koha::Holds',
+            value => { suspend => 0, suspend_until => undef, waitingdate => undef }
+        }
+    );
+
+    ok( !$hold->is_suspended, 'Hold is not suspended' );
+    $t->post_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
+        ->status_is( 201, 'Hold suspension created' );
+
+    $hold->discard_changes;    # refresh object
+
+    ok( $hold->is_suspended, 'Hold is suspended' );
+    $t->json_is(
+        '/expiration_date',
+        output_pref(
+            {   dt         => dt_from_string( $hold->suspend_until ),
+                dateformat => 'rfc3339',
+                dateonly   => 1
+            }
+        )
+    );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
+      ->status_is( 204, "Correct status when deleting a resource" )
+      ->json_is( undef );
+
+    # Pass a an expiration date for the suspension
+    my $date = dt_from_string()->add( days => 5 );
+    $t->post_ok(
+              "//$userid:$password@/api/v1/holds/"
+            . $hold->id
+            . "/suspension" => json => {
+            expiration_date =>
+                output_pref( { dt => $date, dateformat => 'rfc3339', dateonly => 1 } )
+            }
+    )->status_is( 201, 'Hold suspension created' )
+        ->json_is( '/expiration_date',
+        output_pref( { dt => $date, dateformat => 'rfc3339', dateonly => 1 } ) );
+
+    $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
+      ->status_is( 204, "Correct status when deleting a resource" )
+      ->json_is( undef );
+
+    $hold->set_waiting->discard_changes;
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
+      ->status_is( 400, 'Cannot suspend waiting hold' )
+      ->json_is( '/error', 'Found hold cannot be suspended. Status=W' );
+
+    $hold->set_waiting(1)->discard_changes;
+
+    $t->post_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
+      ->status_is( 400, 'Cannot suspend waiting hold' )
+      ->json_is( '/error', 'Found hold cannot be suspended. Status=T' );
+
+    $schema->storage->txn_rollback;
+};
 
 sub create_biblio {
     my ($title) = @_;
