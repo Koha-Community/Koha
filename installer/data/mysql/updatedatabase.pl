@@ -17269,6 +17269,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 17047 - Mana knowledge base)\n";
 }
 
+$DBversion = '18.12.00.009';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable, value, options, explanation, type) VALUES ('FallbackToSMSIfNoEmail', 0, 'Enable|Disable', 'Send messages by SMS if no patron email is defined', 'YesNo');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 17047 - Mana knowledge base)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
