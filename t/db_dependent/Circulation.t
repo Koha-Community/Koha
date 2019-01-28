@@ -2302,13 +2302,13 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 replacementprice => $replacement_amount,
                 itype            => $item_type->itemtype
             },
-            $biblionumber
+            $biblio->biblionumber
         );
 
         AddIssue( $patron->unblessed, $barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 1 }, $biblionumber, $item_id );
+        ModItem( { itemlost => 1 }, $biblio->biblionumber, $item_id );
         LostItem( $item_id, 1 );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
@@ -2902,7 +2902,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
         value => { branchcode => $library->id }
     });
 
-    my ( $biblionumber, $biblioitemnumber ) = add_biblio( $title, $author );
+    my $biblio = $builder->build_sample_biblio({ title=> $title, author => $author });
     my ( undef, undef, $item_id ) = AddItem(
         {
             homebranch       => $library->id,
@@ -2911,7 +2911,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
             replacementprice => 23.00,
             itype            => $itemtype->id
         },
-        $biblionumber
+        $biblio->biblionumber
     );
     my $item = Koha::Items->find( $item_id );
 
