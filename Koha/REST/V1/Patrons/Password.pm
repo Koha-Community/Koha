@@ -59,7 +59,7 @@ sub set {
     return try {
 
         ## Change password
-        $patron->set_password($password);
+        $patron->set_password({ password => $password });
 
         return $c->render( status => 200, openapi => "" );
     }
