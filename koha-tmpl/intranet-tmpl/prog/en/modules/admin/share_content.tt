@@ -31,7 +31,7 @@
 
                 [% UNLESS (mana_url) %]
                     <div class="dialog alert" role="alert">
-                        Mana configuration is currently empty. This feature will not work. Please contact your site administartor.
+                        Mana configuration is currently empty. This feature will not work. Please contact your site administrator.
                     </div>
                 [% END %]
 
@@ -43,7 +43,7 @@
                 <p>Learn more about Mana KB on the <a href="https://wiki.koha-community.org/wiki/Mana_central_database">official Mana KB documentation</a>.</p>
 
                 [% IF (mana_url) %]
-                    <p> Your Mana KB server is currently: <strong>[% mana_url | url %]</strong></p>
+                    <p>Your Mana KB server is currently: <strong>[% mana_url | url %]</strong></p>
                 [% END %]
 
                 <form id="mana_preference" method="post" class="clearfix">
