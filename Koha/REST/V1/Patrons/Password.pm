@@ -121,7 +121,7 @@ sub set_public {
         }
 
         ## Change password
-        $user->set_password($password);
+        $user->set_password({ password => $password });
 
         return $c->render( status => 200, openapi => "" );
     }

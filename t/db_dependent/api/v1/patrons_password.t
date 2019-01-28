@@ -160,7 +160,7 @@ subtest 'set_public() (unprivileged user tests)' => sub {
     t::lib::Mocks::mock_preference( 'OpacPasswordChange', 1 );
 
     my $password = 'holapassword';
-    $patron->set_password( $password );
+    $patron->set_password({ password => $password });
     $tx = $t->ua->build_tx(
               POST => "/api/v1/public/patrons/"
             . $other_patron->id
