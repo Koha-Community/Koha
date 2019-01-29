@@ -94,42 +94,11 @@ subtest 'list() tests' => sub {
 };
 
 subtest 'get() tests' => sub {
-    plan tests => 3;
+    plan tests => 2;
 
     $schema->storage->txn_begin;
     unauthorized_access_tests('GET', -1, undef);
     $schema->storage->txn_rollback;
-
-    subtest 'access own object tests' => sub {
-        plan tests => 4;
-
-        $schema->storage->txn_begin;
-
-        my ( $patron_id, $session_id ) = create_user_and_session({ authorized => 0 });
-
-        # Access patron's own data even though they have no borrowers flag
-        my $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $patron_id);
-        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
-        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
-        $t->request_ok($tx)
-          ->status_is(200);
-
-        my $guarantee = $builder->build_object({
-            class => 'Koha::Patrons',
-            value => {
-                guarantorid => $patron_id,
-            }
-        });
-
-        # Access guarantee's data even though guarantor has no borrowers flag
-        $tx = $t->ua->build_tx(GET => "/api/v1/patrons/" . $guarantee->id );
-        $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
-        $tx->req->env({ REMOTE_ADDR => '127.0.0.1' });
-        $t->request_ok($tx)
-          ->status_is(200);
-
-        $schema->storage->txn_rollback;
-    };
 
     subtest 'librarian access tests' => sub {
         plan tests => 6;
