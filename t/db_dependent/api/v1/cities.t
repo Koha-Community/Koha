@@ -45,8 +45,7 @@ subtest 'list() tests' => sub {
     $schema->storage->txn_begin;
 
     Koha::Cities->search->delete;
-    my ( $borrowernumber, $session_id ) =
-      create_user_and_session( { authorized => 0 } );
+    my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 1 });
 
     ## Authorized user tests
     # No cities, so empty array should be returned
@@ -116,7 +115,7 @@ subtest 'get() tests' => sub {
     $schema->storage->txn_begin;
 
     my $city = $builder->build_object({ class => 'Koha::Cities' });
-    my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 0 });
+    my ( $borrowernumber, $session_id ) = create_user_and_session({ authorized => 1 });
 
     my $tx = $t->ua->build_tx( GET => "/api/v1/cities/" . $city->id );
     $tx->req->cookies({ name => 'CGISESSID', value => $session_id });
