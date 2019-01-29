@@ -1,4 +1,4 @@
-package Koha::Fees;
+package Koha::Charges::Fees;
 
 # Copyright 2018 ByWater Solutions
 #
@@ -27,11 +27,11 @@ use Koha::Exceptions;
 
 =head1 NAME
 
-Koha::Feess - Module calculating fees in Koha
+Koha::Charges::Fees - Module calculating fees in Koha
 
 =head3 new
 
-Koha::Fees->new(
+Koha::Charges::Fees->new(
     {
         patron    => $patron,
         library   => $library,

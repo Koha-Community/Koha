@@ -59,7 +59,7 @@ use Koha::RefundLostItemFeeRules;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::Config::SysPrefs;
-use Koha::Fees;
+use Koha::Charges::Fees;
 use Carp;
 use List::MoreUtils qw( uniq any );
 use Scalar::Util qw( looks_like_number );
@@ -716,7 +716,7 @@ sub CanBookBeIssued {
         #  So issuingimpossible should be ok.
     }
 
-    my $fees = Koha::Fees->new(
+    my $fees = Koha::Charges::Fees->new(
         {
             patron    => $patron,
             library   => $library,
@@ -1347,7 +1347,7 @@ sub AddIssue {
 
             my $patron = Koha::Patrons->find( $borrower );
             my $library = Koha::Libraries->find( $branch );
-            my $fees = Koha::Fees->new(
+            my $fees = Koha::Charges::Fees->new(
                 {
                     patron    => $patron,
                     library   => $library,
@@ -2893,7 +2893,7 @@ sub AddRenewal {
     }
 
 
-    my $fees = Koha::Fees->new(
+    my $fees = Koha::Charges::Fees->new(
         {
             patron    => $patron,
             library   => $library,

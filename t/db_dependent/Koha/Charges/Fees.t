@@ -30,7 +30,7 @@ use C4::Calendar;
 use Koha::DateUtils qw(dt_from_string);
 
 BEGIN {
-    use_ok('Koha::Fees');
+    use_ok('Koha::Charges::Fees');
 }
 
 my $builder = t::lib::TestBuilder->new();
@@ -89,7 +89,7 @@ my $patron = $builder->build_object(
 my $dt_from = dt_from_string();
 my $dt_to = dt_from_string()->add( days => 6 );
 
-my $fees = Koha::Fees->new(
+my $fees = Koha::Charges::Fees->new(
     {
         patron    => $patron,
         library   => $library,
