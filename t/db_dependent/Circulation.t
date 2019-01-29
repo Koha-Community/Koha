@@ -2848,6 +2848,8 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     $schema->storage->txn_begin;
 
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+
     my $issuing_charges = 15;
     my $title   = 'A title';
     my $author  = 'Author, An';
@@ -2862,7 +2864,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     );
 
     my $library  = $builder->build_object({ class => 'Koha::Libraries' });
-    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes', value => { rental_charge_daily => 0.00 }});
     my $patron   = $builder->build_object({
         class => 'Koha::Patrons',
         value => { branchcode => $library->id }
@@ -3004,8 +3006,8 @@ sub test_debarment_on_checkout {
         { borrowernumber => $patron->{borrowernumber}, type => 'SUSPENSION' } );
 };
 
-subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
-    plan tests => 8;
+subtest 'Incremented fee tests' => sub {
+    plan tests => 11;
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
 
@@ -3094,4 +3096,15 @@ subtest 'Koha::ItemType::calc_rental_charge_daily tests' => sub {
     $accountline->delete();
     $issue->delete();
 
+    $itemtype->rentalcharge('2.000000')->store;
+    is( $itemtype->rentalcharge, '2.000000', 'Rental charge updated and retreived correctly' );
+    $issue = AddIssue( $patron->unblessed, $item->barcode, $dt_to, undef, $dt_from);
+    my $accountlines = Koha::Account::Lines->search({ itemnumber => $item->id });
+    is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly");
+    $accountlines->delete();
+    AddRenewal( $patron->id, $item->id, $library->id, $dt_to_renew, $dt_to );
+    $accountlines = Koha::Account::Lines->search({ itemnumber => $item->id });
+    is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly, for renewal");
+    $accountlines->delete();
+    $issue->delete();
 };
