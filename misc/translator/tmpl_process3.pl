@@ -91,6 +91,7 @@ sub text_replace_tag ($$) {
                          
               } sort {
                   $attr->{$a}->[3] <=> $attr->{$b}->[3] #FIXME
+                      || $a cmp $b # Sort attributes BZ 22236
               } keys %$attr);
         $it .= '>';
     }
