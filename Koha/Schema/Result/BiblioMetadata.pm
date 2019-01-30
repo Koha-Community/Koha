@@ -41,7 +41,7 @@ __PACKAGE__->table("biblio_metadata");
   is_nullable: 0
   size: 16
 
-=head2 marcflavour
+=head2 schema
 
   data_type: 'varchar'
   is_nullable: 0
@@ -68,7 +68,7 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "format",
   { data_type => "varchar", is_nullable => 0, size => 16 },
-  "marcflavour",
+  "schema",
   { data_type => "varchar", is_nullable => 0, size => 16 },
   "metadata",
   { data_type => "longtext", is_nullable => 0 },
@@ -103,7 +103,7 @@ __PACKAGE__->set_primary_key("id");
 
 =item * L</format>
 
-=item * L</marcflavour>
+=item * L</schema>
 
 =back
 
@@ -111,7 +111,7 @@ __PACKAGE__->set_primary_key("id");
 
 __PACKAGE__->add_unique_constraint(
   "biblio_metadata_uniq_key",
-  ["biblionumber", "format", "marcflavour"],
+  ["biblionumber", "format", "schema"],
 );
 
 =head1 RELATIONS
@@ -132,8 +132,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2017-12-07 10:24:45
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yMvtHn61obhiDDPh7+CIuQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-30 11:34:16
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:FJk/YOw8Y/QRmmPPL3G5qQ
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
