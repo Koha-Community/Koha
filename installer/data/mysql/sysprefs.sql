@@ -38,7 +38,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('AllowPurchaseSuggestionBranchChoice','0','1','Allow user to choose branch when making a purchase suggestion','YesNo'),
 ('AllowRenewalIfOtherItemsAvailable','0',NULL,'If enabled, allow a patron to renew an item with unfilled holds if other available items can fill that hold.','YesNo'),
 ('AllowRenewalLimitOverride','0',NULL,'if ON, allows renewal limits to be overridden on the circulation screen','YesNo'),
-('AllowRenewalOnHoldOverride','1',NULL,'If ON, allow items on hold to be renewed with a specified due date','YesNo'),
+('AllowRenewalOnHoldOverride','0',NULL,'If ON, allow items on hold to be renewed with a specified due date','YesNo'),
 ('AllowReturnToBranch','anywhere','anywhere|homebranch|holdingbranch|homeorholdingbranch','Where an item may be returned','Choice'),
 ('AllowSelfCheckReturns','0','','If enabled, patrons may return items through the Web-based Self Checkout','YesNo'),
 ('AllowStaffToSetCheckoutsVisibilityForGuarantor','0',NULL,'If enabled, library staff can set a patron''s checkouts to be visible to linked patrons from the opac.',  'YesNo'),
