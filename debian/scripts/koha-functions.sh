@@ -157,6 +157,20 @@ is_sitemap_enabled()
     fi
 }
 
+is_sip_running()
+{
+    local instancename=$1
+
+    if daemon --name="$instancename-koha-sip" \
+            --pidfiles="/var/run/koha/$instancename/" \
+            --user="$instancename-koha.$instancename-koha" \
+            --running ; then
+        return 0
+    else
+        return 1
+    fi
+}
+
 is_zebra_running()
 {
     local instancename=$1

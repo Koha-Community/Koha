@@ -1,0 +1,308 @@
+#!/bin/bash
+
+# koha-sip - Manage SIP server for Koha instances
+#              Copyright 2019 Theke Solutions
+#              Copyright 2012 Catalyst IT, Ltd
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+set -e
+
+. /lib/lsb/init-functions
+
+# Read configuration variable file if it is present
+[ -r /etc/default/koha-common ] && . /etc/default/koha-common
+
+# include helper functions
+if [ -f "/usr/share/koha/bin/koha-functions.sh" ]; then
+    . "/usr/share/koha/bin/koha-functions.sh"
+else
+    echo "Error: /usr/share/koha/bin/koha-functions.sh not present." 1>&2
+    exit 1
+fi
+
+usage()
+{
+    local scriptname=$(basename $0)
+
+    cat <<EOF
+$scriptname
+
+This script lets you manage the SIP server for your Koha instances.
+
+Usage:
+$scriptname [--start|--stop|--restart] instancename1 [instancename2...]
+$scriptname -h|--help
+
+    --start               Start the SIP server for the specified instance(s)
+    --stop                Stop the SIP server for the specified instance(s)
+    --restart             Restart the SIP server for the specified instance(s)
+    --status              Show the status of the SIP server for the specified instance(s)
+    --verbose|-v          Display progress and actions messages
+    --help|-h             Display this help message
+
+EOF
+}
+
+start_sip()
+{
+    local name=$1
+
+    _check_and_fix_perms $name
+
+    if ! is_sip_running $name; then
+
+        adjust_paths_dev_install $name
+        export KOHA_CONF PERL5LIB
+        if [ "$DEV_INSTALL" = "" ]; then
+            LIBDIR=$KOHA_HOME/lib
+        else
+            LIBDIR=$KOHA_HOME
+        fi
+
+        DAEMONOPTS="--name=${name}-koha-sip \
+                    --errlog=/var/log/koha/${name}/sip-error.log \
+                    --stdout=/var/log/koha/${name}/sip.log \
+                    --output=/var/log/koha/${name}/sip-output.log \
+                    --verbose=1 \
+                    --respawn \
+                    --delay=30 \
+                    --pidfiles=/var/run/koha/${name} \
+                    --user=${name}-koha.${name}-koha"
+
+        SIP_PARAMS="$LIBDIR/C4/SIP/SIPServer.pm \
+                    /etc/koha/sites/${name}/SIPconfig.xml"
+
+        [ "$verbose" != "no" ] && \
+            log_daemon_msg "Starting Koha Zebra daemon for ${name}"
+
+        if daemon $DAEMONOPTS -- perl $SIP_PARAMS; then
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 0) || return 0
+        else
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 1) || return 1
+        fi
+    else
+        if [ "$verbose" != "no" ]; then
+            log_daemon_msg "Warning: SIP server already running for ${name}"
+            log_end_msg 0
+        else
+            return 0
+        fi
+    fi
+}
+
+stop_sip()
+{
+    local name=$1
+
+    if is_sip_running $name; then
+
+        DAEMONOPTS="--name=${name}-koha-sip \
+                    --errlog=/var/log/koha/${name}/sip-error.log \
+                    --stdout=/var/log/koha/${name}/sip.log \
+                    --output=/var/log/koha/${name}/sip-output.log \
+                    --verbose=1 \
+                    --respawn \
+                    --delay=30 \
+                    --pidfiles=/var/run/koha/${name} \
+                    --user=${name}-koha.${name}-koha"
+
+        [ "$verbose" != "no" ] && \
+            log_daemon_msg "Stopping SIP server for ${name}"
+
+        if daemon $DAEMONOPTS --stop; then
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 0) || return 0
+        else
+            ([ "$verbose" != "no" ] && \
+                log_end_msg 1) || return 1
+        fi
+    else
+        if [ "$verbose" != "no" ]; then
+            log_daemon_msg "Warning: SIP server not running for ${name}"
+            log_end_msg 0
+        else
+            return 0
+        fi
+    fi
+}
+
+restart_sip()
+{
+    local name=$1
+
+    if is_sip_running ${name}; then
+        local noLF="-n"
+        [ "$verbose" != "no" ] && noLF=""
+        echo $noLF `stop_sip ${name}`
+        echo $noLF `start_sip ${name}`
+    else
+        if [ "$verbose" != "no" ]; then
+            log_daemon_msg "Warning: SIP server not running for ${name}"
+            log_end_msg 0
+        else
+            return 0
+        fi
+    fi
+}
+
+sip_status()
+{
+    local name=$1
+
+    if is_sip_running ${name}; then
+        log_daemon_msg "SIP server running for ${name}"
+        log_end_msg 0
+    else
+        log_daemon_msg "SIP server not running for ${name}"
+        log_end_msg 3
+    fi
+}
+
+enable_sip()
+{
+    local name=$1
+
+    sipfile=/etc/koha/sites/${name}/SIPconfig.xml
+
+    if is_sip_enabled ${name}; then
+        echo "Warning: SIP server already enabled for ${name}"
+    else
+        echo "Enabling SIP server for ${name} - edit ${sipfile} to configure"
+        cp -v /etc/koha/SIPconfig.xml ${sipfile}
+        chown ${name}-koha:${name}-koha ${sipfile}
+        chmod 600 ${sipfile}
+    fi
+}
+
+_check_and_fix_perms()
+{
+    local name=$1
+
+    local files="/var/log/koha/${name}/sip-error.log \
+                 /var/log/koha/${name}/sip.log \
+                 /var/log/koha/$name/sip-output.log"
+
+    for file in ${files}
+    do
+        if [ ! -e "${file}" ]; then
+            touch ${file}
+        fi
+        chown "${name}-koha":"${name}-koha" ${file}
+    done
+}
+
+set_action()
+{
+    if [ "$op" = "" ]; then
+        op=$1
+    else
+        die "Error: only one action can be specified."
+    fi
+}
+
+op=""
+verbose="no"
+
+# Backwards compatible with old koha-*-sip scripts
+# TODO: Remove once there's consensus to remove the legacy scripts
+used_script_name=$(basename $0)
+
+if [ "$used_script_name" != "koha-sip" ]; then
+    warn "Deprecated script used (${used_script_name})"
+
+    case "$used_script_name" in
+        koha-start-sip)
+            set_action "start" ;;
+        koha-stop-sip)
+            set_action "stop" ;;
+        *)
+            break ;;
+    esac
+fi
+# / Backwards compatible handling code
+
+# Read command line parameters
+while [ $# -gt 0 ]; do
+
+    case "$1" in
+        -h|--help)
+            usage ; exit 0 ;;
+        -v|--verbose)
+            verbose="yes"
+            shift ;;
+        --start)
+            set_action "start"
+            shift ;;
+        --stop)
+            set_action "stop"
+            shift ;;
+        --restart)
+            set_action "restart"
+            shift ;;
+        --status)
+            set_action "status"
+            shift ;;
+        --enable)
+            set_action "enable"
+            shift ;;
+        -*)
+            die "Error: invalid option switch ($1)" ;;
+        *)
+            # We expect the remaining stuff are the instance names
+            break ;;
+    esac
+
+done
+
+if [ $# -gt 0 ]; then
+    # We have at least one instance name
+    for name in "$@"; do
+
+        if is_instance $name; then
+
+            case $op in
+                "start")
+                    start_sip $name
+                    ;;
+                "stop")
+                    stop_sip $name
+                    ;;
+                "restart")
+                    restart_sip $name
+                    ;;
+                "status")
+                    sip_status $name
+                    ;;
+                "enable")
+                    enable_sip $name
+            esac
+
+        else
+            if [ "$verbose" != "no" ]; then
+                log_daemon_msg "Error: Invalid instance name $name"
+                log_end_msg 1
+            fi
+        fi
+
+    done
+else
+    if [ "$verbose" != "no" ]; then
+        warn "Error: you must provide at least one instance name"
+    fi
+fi
+
+exit 0
