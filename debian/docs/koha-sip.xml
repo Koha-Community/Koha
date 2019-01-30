@@ -1,0 +1,95 @@
+<article xmlns='http://docbook.org/ns/docbook'>
+<title>koha-sip</title>
+<info>
+<productname>Koha</productname> is the first free software library automation package.
+<author>
+  <orgname>The Koha Community</orgname>
+  <uri>https://koha-community.org/</uri>
+</author>
+</info>
+
+<refentry xml:id="koha-sip">
+
+  <refmeta>
+    <refentrytitle>koha-sip</refentrytitle>
+    <manvolnum>8</manvolnum>
+  </refmeta>
+
+  <refnamediv>
+    <refname>koha-sip</refname>
+    <refpurpose>Handle SIP server for named Koha instances.</refpurpose>
+    <refclass>UNIX/Linux</refclass>
+  </refnamediv>
+
+  <refsynopsisdiv>
+    <cmdsynopsis>
+      <command>koha-sip</command>
+      <arg><option>--start</option>|<option>--stop</option>|<option>--restart</option></arg>
+      <arg><option>--status</option></arg>
+      <arg><option>--enable</option></arg>
+      <arg><option>--verbose</option>|<option>-v</option></arg>
+      <arg><option>-h</option>|<option>--help</option></arg>
+    </cmdsynopsis>
+  </refsynopsisdiv>
+
+  <refsect1><title>Options</title>
+  <para>All option switches are mutually exclusive</para>
+  <variablelist>
+    <varlistentry>
+      <term><option>--start</option></term>
+      <listitem>
+        <para>Starts the SIP server for the specified Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--stop</option></term>
+      <listitem>
+        <para>Stops the SIP server for the specified Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--restart</option></term>
+      <listitem>
+        <para>Restarts the SIP server for the specified Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--enable</option></term>
+      <listitem>
+        <para>Copies the default SIP configuration file (/etc/koha/SIPconfig.xml) to the instance's configuration directory (/etc/koha/sites/)</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>--status</option></term>
+      <listitem>
+        <para>Show status information about the SIP server for the specified Koha instances.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-v</option>|<option>--verbose</option></term>
+      <listitem>
+        <para>Display progress messages.</para>
+      </listitem>
+    </varlistentry>
+    <varlistentry>
+      <term><option>-h</option>|<option>--help</option></term>
+      <listitem>
+        <para>This help.</para>
+      </listitem>
+    </varlistentry>
+  </variablelist>
+  </refsect1>
+
+  <refsect1><title>Description</title>
+  <para>This script handles SIP servers for Koha instances.</para>
+  </refsect1>
+
+  <refsect1><title>See also</title>
+  <simplelist type="inline">
+    <member><command>koha-list(8)</command></member>
+  </simplelist>
+  </refsect1>
+
+</refentry>
+
+</article>
