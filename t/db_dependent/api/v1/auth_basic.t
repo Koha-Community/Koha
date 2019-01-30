@@ -40,7 +40,7 @@ subtest 'success tests' => sub {
 
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
-    $patron->set_password($password);
+    $patron->set_password({ password => $password });
     my $userid = $patron->userid;
 
     $t->get_ok("//$userid:$password@/api/v1/patrons")
@@ -71,7 +71,7 @@ subtest 'failure tests' => sub {
 
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 2**4 } } );
-    $patron->set_password($password);
+    $patron->set_password({ password => $password });
     my $userid = $patron->userid;
 
     $t->get_ok("//@/api/v1/patrons")
