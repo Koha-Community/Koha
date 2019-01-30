@@ -64,7 +64,7 @@ do
         if [ "$RET" = 0 ]; then
             restart_apache="yes"
             if is_sip_enabled $name; then
-                koha-stop-sip $name
+                koha-sip --stop $name
             fi
             if is_zebra_running $name; then
                 koha-zebra --stop $name
