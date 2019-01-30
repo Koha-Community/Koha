@@ -98,19 +98,11 @@ _koha_sip_enabled_instances()
     return 0
 }
 
-# koha-*-sip autocomplete with sip-enabled instances
-complete -F _koha_sip_enabled_instances koha-start-sip
-complete -F _koha_sip_enabled_instances koha-restart-sip
-complete -F _koha_sip_enabled_instances koha-stop-sip
-
 _koha_sip_disabled()
 {
     _koha_list_cmd "--nosip"
     return 0
 }
-
-# koha-enable-sip autocompletes with sip-disabled instances
-complete -F _koha_sip_disabled koha-enable-sip
 
 _koha_disabled_instances()
 {
