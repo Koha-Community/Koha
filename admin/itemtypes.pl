@@ -73,6 +73,7 @@ if ( $op eq 'add_form' ) {
     my $description  = $input->param('description');
     my $rentalcharge = $input->param('rentalcharge');
     my $rentalcharge_daily = $input->param('rentalcharge_daily');
+    my $rentalcharge_hourly = $input->param('rentalcharge_hourly');
     my $defaultreplacecost = $input->param('defaultreplacecost');
     my $processfee = $input->param('processfee');
     my $image = $input->param('image') || q||;
@@ -94,6 +95,7 @@ if ( $op eq 'add_form' ) {
         $itemtype->description($description);
         $itemtype->rentalcharge($rentalcharge);
         $itemtype->rentalcharge_daily($rentalcharge_daily);
+        $itemtype->rentalcharge_hourly($rentalcharge_hourly);
         $itemtype->defaultreplacecost($defaultreplacecost);
         $itemtype->processfee($processfee);
         $itemtype->notforloan($notforloan);
@@ -118,7 +120,8 @@ if ( $op eq 'add_form' ) {
                 itemtype            => $itemtype_code,
                 description         => $description,
                 rentalcharge        => $rentalcharge,
-                rentalcharge_daily => $rentalcharge_daily,
+                rentalcharge_daily  => $rentalcharge_daily,
+                rentalcharge_hourly => $rentalcharge_hourly,
                 defaultreplacecost  => $defaultreplacecost,
                 processfee          => $processfee,
                 notforloan          => $notforloan,

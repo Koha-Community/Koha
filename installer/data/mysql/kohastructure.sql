@@ -951,7 +951,8 @@ CREATE TABLE `itemtypes` ( -- defines the item types
   itemtype varchar(10) NOT NULL default '', -- unique key, a code associated with the item type
   description LONGTEXT, -- a plain text explanation of the item type
   rentalcharge decimal(28,6) default NULL, -- the amount charged when this item is checked out/issued
-  rentalcharge_daily decimal(28,6) default NULL, -- the amount charged for each increment (day/hour) between checkout date and due date
+  rentalcharge_daily decimal(28,6) default NULL, -- the amount charged for each day between checkout date and due date
+  rentalcharge_hourly decimal(28,6) default NULL, -- the amount charged for each hour between checkout date and due date
   defaultreplacecost decimal(28,6) default NULL, -- default replacement cost
   processfee decimal(28,6) default NULL, -- default text be recorded in the column note when the processing fee is applied
   notforloan smallint(6) default NULL, -- 1 if the item is not for loan, 0 if the item is available for loan

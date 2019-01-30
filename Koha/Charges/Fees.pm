@@ -22,6 +22,7 @@ use Modern::Perl;
 use Carp qw( confess );
 
 use Koha::Calendar;
+use Koha::IssuingRules;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::Exceptions;
 
@@ -85,25 +86,44 @@ sub new {
 =cut
 
 sub accumulate_rentalcharge {
-    my ( $self, $params ) = @_;
+    my ( $self ) = @_;
 
     my $itemtype = Koha::ItemTypes->find( $self->item->effective_itemtype );
-    my $rentalcharge_daily = $itemtype->rentalcharge_daily;
+    my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {
+            categorycode => $self->patron->categorycode,
+            itemtype     => $itemtype->id,
+            branchcode   => $self->library->id
+        }
+    );
+    my $units = $issuing_rule->lengthunit;
+    my $rentalcharge_increment = ( $units eq 'days' ) ? $itemtype->rentalcharge_daily : $itemtype->rentalcharge_hourly;
 
-    return undef unless $rentalcharge_daily && $rentalcharge_daily > 0;
+    return 0 unless $rentalcharge_increment && $rentalcharge_increment > 0;
 
     my $duration;
-    if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
-        my $calendar = Koha::Calendar->new( branchcode => $self->library->id );
-        $duration = $calendar->days_between( $self->from_date, $self->to_date );
+    my $calendar = Koha::Calendar->new( branchcode => $self->library->id );
+
+    if ( $units eq 'hours' ) {
+        if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
+            $duration =
+              $calendar->hours_between( $self->from_date, $self->to_date );
+        }
+        else {
+            $duration = $self->to_date->delta_ms($self->from_date);
+        }
     }
     else {
-        $duration = $self->to_date->delta_days($self->from_date);
+        if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
+            $duration =
+              $calendar->days_between( $self->from_date, $self->to_date );
+        }
+        else {
+            $duration = $self->to_date->delta_days( $self->from_date );
+        }
     }
-    my $days = $duration->in_units('days');
 
-    my $charge = $rentalcharge_daily * $days;
-
+    my $charge = $rentalcharge_increment * $duration->in_units($units);
     return $charge;
 }
 

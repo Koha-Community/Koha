@@ -5,6 +5,10 @@ if ( CheckVersion($DBversion) ) {
         $dbh->do("ALTER TABLE `itemtypes` ADD COLUMN `rentalcharge_daily` decimal(28,6) default NULL AFTER `rentalcharge`");
     }
 
+    if ( !column_exists( 'itemtypes', 'rentalcharge_hourly' ) ) {
+        $dbh->do("ALTER TABLE `itemtypes` ADD COLUMN `rentalcharge_hourly` decimal(28,6) default NULL AFTER `rentalcharge_daily`");
+    }
+
     if ( column_exists( 'itemtypes', 'rental_charge_daily' ) ) {
         $dbh->do("UPDATE `itemtypes` SET `rentalcharge_daily` = `rental_charge_daily`");
         $dbh->do("ALTER TABLE `itemtypes` DROP COLUMN `rental_charge_daily`");
