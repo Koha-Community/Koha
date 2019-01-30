@@ -497,10 +497,12 @@
                 'bSort': false,
             }, columns_settings);
 
-            $(table).treetable({
-                expandable: true
-            });
-            $(table).treetable('expandAll');
+            [% IF orders_grouped.size %]
+                $(table).treetable({
+                    expandable: true
+                });
+                $(table).treetable('expandAll');
+            [% END %]
 
             $("#hide_received_orders").click(function(e){
                 e.preventDefault();
