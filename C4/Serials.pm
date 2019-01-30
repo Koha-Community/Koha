@@ -1308,7 +1308,7 @@ sub ModSubscription {
     $biblionumber, $callnumber, $notes, $letter, $manualhistory,
     $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
     $graceperiod, $location, $enddate, $subscriptionid, $skip_serialseq,
-    $itemtype, $previousitemtype
+    $itemtype, $previousitemtype, $mana_id
     ) = @_;
 
     my $dbh   = C4::Context->dbh;
@@ -1321,7 +1321,7 @@ sub ModSubscription {
             callnumber=?, notes=?, letter=?, manualhistory=?,
             internalnotes=?, serialsadditems=?, staffdisplaycount=?,
             opacdisplaycount=?, graceperiod=?, location = ?, enddate=?,
-            skip_serialseq=?, itemtype=?, previousitemtype=?
+            skip_serialseq=?, itemtype=?, previousitemtype=?, mana_id=?
         WHERE subscriptionid = ?";
 
     my $sth = $dbh->prepare($query);
@@ -1335,7 +1335,7 @@ sub ModSubscription {
         $letter,          ($manualhistory ? $manualhistory : 0),
         $internalnotes, $serialsadditems, $staffdisplaycount, $opacdisplaycount,
         $graceperiod,     $location,       $enddate,        $skip_serialseq,
-        $itemtype,        $previousitemtype,
+        $itemtype,        $previousitemtype, $mana_id,
         $subscriptionid
     );
     my $rows = $sth->rows;
