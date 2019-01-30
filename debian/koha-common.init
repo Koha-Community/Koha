@@ -10,7 +10,7 @@
 #                    if enabled, start:
 #                      - a Zebra server (using koha-zebra)
 #                      - a Plack server (using koha-plack)
-#                      - a SIP server   (using koha-start-sip)
+#                      - a SIP server   (using koha-sip)
 ### END INIT INFO
 
 # Author: Lars Wirzenius <lars@catalyst.net.nz>
@@ -58,7 +58,7 @@ do_start()
     # We insure all required directories exist, including disabled ones.
     koha-create-dirs $(koha-list)
     koha-zebra --start $(koha-list --enabled)
-    koha-start-sip $(koha-list --enabled)
+    koha-sip   --start $(koha-list --enabled --sip)
     koha-plack --start $(koha-list --enabled --plack)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
@@ -73,7 +73,7 @@ do_stop()
 {
     # We stop everything, including disabled ones.
     koha-zebra --stop $(koha-list) || true
-    koha-stop-sip $(koha-list) || true
+    koha-sip   --stop $(koha-list --sip)
     koha-plack --stop --quiet $(koha-list --enabled --plack)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
@@ -86,8 +86,7 @@ do_stop()
 #
 do_reload() {
     koha-zebra --restart $(koha-list --enabled)
-    koha-stop-sip $(koha-list) || true
-    koha-start-sip $(koha-list --enabled)
+    koha-sip   --restart $(koha-list --enabled --sip)
     koha-plack --restart --quiet $(koha-list --enabled --plack)
 
     if [ "$USE_INDEXER_DAEMON" = "yes" ]; then
