@@ -234,8 +234,8 @@ Item types administration
                     <span class="hint">This fee is charged once per checkout/renewal per item</span>
                 </li>
                 <li>
-                    <label for="rental_charge_daily">Daily rental charge: </label>
-                    <input type="text" id="rental_charge_daily" name="rental_charge_daily" size="10" value="[% itemtype.rental_charge_daily | $Price %]" />
+                    <label for="rentalcharge_daily">Daily rental charge: </label>
+                    <input type="text" id="rentalcharge_daily" name="rentalcharge_daily" size="10" value="[% itemtype.rentalcharge_daily | $Price %]" />
                     <span class="hint">This fee is charged a checkout/renewal time for each day between the checkout/renewal date and due date.</span>
                 </li>
                 <li>
@@ -380,7 +380,7 @@ Item types administration
             </td>
             <td>
             [% UNLESS ( itemtype.notforloan ) %]
-              [% itemtype.rental_charge_daily | $Price %]
+              [% itemtype.rentalcharge_daily | $Price %]
             [% END %]
             </td>
             <td>[% itemtype.defaultreplacecost | $Price %]</td>

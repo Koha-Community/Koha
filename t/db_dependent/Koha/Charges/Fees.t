@@ -58,7 +58,7 @@ my $itemtype = $builder->build_object(
     {
         class => 'Koha::ItemTypes',
         value => {
-            rental_charge_daily => '0.00',
+            rentalcharge_daily => '0.00',
             rentalcharge        => '0.00',
             processfee          => '0.00',
             defaultreplacecost  => '0.00',
@@ -99,20 +99,20 @@ my $fees = Koha::Charges::Fees->new(
     }
 );
 
-subtest 'Koha::ItemType::rental_charge_daily tests' => sub {
+subtest 'accumulate_rentalcharge tests' => sub {
     plan tests => 4;
 
-    $itemtype->rental_charge_daily(1.00);
+    $itemtype->rentalcharge_daily(1.00);
     $itemtype->store();
-    is( $itemtype->rental_charge_daily,
+    is( $itemtype->rentalcharge_daily,
         1.00, 'Daily return charge stored correctly' );
 
     t::lib::Mocks::mock_preference( 'finesCalendar', 'ignoreCalendar' );
-    my $charge = $fees->rental_charge_daily();
+    my $charge = $fees->accumulate_rentalcharge();
     is( $charge, 6.00, 'Daily rental charge calculated correctly with finesCalendar = ignoreCalendar' );
 
     t::lib::Mocks::mock_preference( 'finesCalendar', 'noFinesWhenClosed' );
-    $charge = $fees->rental_charge_daily();
+    $charge = $fees->accumulate_rentalcharge();
     is( $charge, 6.00, 'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed' );
 
     my $calendar = C4::Calendar->new( branchcode => $library->id );
@@ -121,6 +121,6 @@ subtest 'Koha::ItemType::rental_charge_daily tests' => sub {
         title       => 'Test holiday',
         description => 'Test holiday'
     );
-    $charge = $fees->rental_charge_daily();
+    $charge = $fees->accumulate_rentalcharge();
     is( $charge, 5.00, 'Daily rental charge calculated correctly with finesCalendar = noFinesWhenClosed and closed Wednesdays' );
 };

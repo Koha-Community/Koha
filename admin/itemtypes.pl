@@ -72,7 +72,7 @@ if ( $op eq 'add_form' ) {
     my $itemtype     = Koha::ItemTypes->find($itemtype_code);
     my $description  = $input->param('description');
     my $rentalcharge = $input->param('rentalcharge');
-    my $rental_charge_daily = $input->param('rental_charge_daily');
+    my $rentalcharge_daily = $input->param('rentalcharge_daily');
     my $defaultreplacecost = $input->param('defaultreplacecost');
     my $processfee = $input->param('processfee');
     my $image = $input->param('image') || q||;
@@ -93,7 +93,7 @@ if ( $op eq 'add_form' ) {
     if ( $itemtype and $is_a_modif ) {    # it's a modification
         $itemtype->description($description);
         $itemtype->rentalcharge($rentalcharge);
-        $itemtype->rental_charge_daily($rental_charge_daily);
+        $itemtype->rentalcharge_daily($rentalcharge_daily);
         $itemtype->defaultreplacecost($defaultreplacecost);
         $itemtype->processfee($processfee);
         $itemtype->notforloan($notforloan);
@@ -118,7 +118,7 @@ if ( $op eq 'add_form' ) {
                 itemtype            => $itemtype_code,
                 description         => $description,
                 rentalcharge        => $rentalcharge,
-                rental_charge_daily => $rental_charge_daily,
+                rentalcharge_daily => $rentalcharge_daily,
                 defaultreplacecost  => $defaultreplacecost,
                 processfee          => $processfee,
                 notforloan          => $notforloan,

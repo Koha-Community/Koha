@@ -75,22 +75,22 @@ sub new {
     return bless( $params, $class );
 }
 
-=head3 rental_charge_daily
+=head3 accumulate_rentalcharge
 
-    my $fee = $self->rental_charge_daily();
+    my $fee = $self->accumulate_rentalcharge();
 
     This method calculates the daily rental fee for a given itemtype for a given
     period of time passed in as a pair of DateTime objects.
 
 =cut
 
-sub rental_charge_daily {
+sub accumulate_rentalcharge {
     my ( $self, $params ) = @_;
 
     my $itemtype = Koha::ItemTypes->find( $self->item->effective_itemtype );
-    my $rental_charge_daily = $itemtype->rental_charge_daily;
+    my $rentalcharge_daily = $itemtype->rentalcharge_daily;
 
-    return undef unless $rental_charge_daily && $rental_charge_daily > 0;
+    return undef unless $rentalcharge_daily && $rentalcharge_daily > 0;
 
     my $duration;
     if ( C4::Context->preference('finesCalendar') eq 'noFinesWhenClosed' ) {
@@ -102,7 +102,7 @@ sub rental_charge_daily {
     }
     my $days = $duration->in_units('days');
 
-    my $charge = $rental_charge_daily * $days;
+    my $charge = $rentalcharge_daily * $days;
 
     return $charge;
 }

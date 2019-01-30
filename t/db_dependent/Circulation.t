@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 125;
+use Test::More tests => 126;
 use Test::MockModule;
 
 use Data::Dumper;
@@ -75,7 +75,7 @@ my $itemtype = $builder->build(
         value  => {
             notforloan          => undef,
             rentalcharge        => 0,
-            rental_charge_daily => 0,
+            rentalcharge_daily => 0,
             defaultreplacecost  => undef,
             processfee          => undef
         }
@@ -1962,7 +1962,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
                 rentalcharge       => 0,
                 defaultreplacecost => undef,
                 processfee         => $processfee_amount,
-                rental_charge_daily => 0,
+                rentalcharge_daily => 0,
             }
         }
     );
@@ -2260,7 +2260,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
                     rentalcharge       => 0,
                     defaultreplacecost => undef,
                     processfee         => 0,
-                    rental_charge_daily => 0,
+                    rentalcharge_daily => 0,
                 }
             }
         );
@@ -2864,7 +2864,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     );
 
     my $library  = $builder->build_object({ class => 'Koha::Libraries' });
-    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes', value => { rental_charge_daily => 0.00 }});
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes', value => { rentalcharge_daily => 0.00 }});
     my $patron   = $builder->build_object({
         class => 'Koha::Patrons',
         value => { branchcode => $library->id }
@@ -3029,7 +3029,7 @@ subtest 'Incremented fee tests' => sub {
             value  => {
                 notforloan          => undef,
                 rentalcharge        => 0,
-                rental_charge_daily => 1.000000
+                rentalcharge_daily => 1.000000
             }
         }
     )->store;
@@ -3051,7 +3051,7 @@ subtest 'Incremented fee tests' => sub {
         }
     )->store;
 
-    is( $itemtype->rental_charge_daily, '1.000000', 'Daily rental charge stored and retreived correctly' );
+    is( $itemtype->rentalcharge_daily, '1.000000', 'Daily rental charge stored and retreived correctly' );
     is( $item->effective_itemtype, $itemtype->id, "Itemtype set correctly for item");
 
     my $dt_from = dt_from_string();
@@ -3107,4 +3107,61 @@ subtest 'Incremented fee tests' => sub {
     is( $accountlines->count, '2', "Fixed charge and accrued charge recorded distinctly, for renewal");
     $accountlines->delete();
     $issue->delete();
+};
+
+subtest 'CanBookBeIssued & RentalFeesCheckoutConfirmation' => sub {
+    plan tests => 2;
+
+    t::lib::Mocks::mock_preference('RentalFeesCheckoutConfirmation', 1);
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+
+    my $library =
+      $builder->build_object( { class => 'Koha::Libraries' } )->store;
+    my $patron = $builder->build_object(
+        {
+            class => 'Koha::Patrons',
+            value => { categorycode => $patron_category->{categorycode} }
+        }
+    )->store;
+
+    my $itemtype = $builder->build_object(
+        {
+            class => 'Koha::ItemTypes',
+            value => {
+                notforloan             => 0,
+                rentalcharge           => 0,
+                rentalcharge_daily => 0
+            }
+        }
+    );
+
+    my $biblioitem = $builder->build( { source => 'Biblioitem' } );
+    my $item = $builder->build_object(
+        {
+            class => 'Koha::Items',
+            value  => {
+                homebranch    => $library->id,
+                holdingbranch => $library->id,
+                notforloan    => 0,
+                itemlost      => 0,
+                withdrawn     => 0,
+                itype         => $itemtype->id,
+                biblionumber  => $biblioitem->{biblionumber},
+                biblioitemnumber => $biblioitem->{biblioitemnumber},
+            }
+        }
+    )->store;
+
+    my ( $issuingimpossible, $needsconfirmation );
+    my $dt_from = dt_from_string();
+    my $dt_due = dt_from_string()->add( days => 3 );
+
+    $itemtype->rentalcharge('1.000000')->store;
+    ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
+    is_deeply( $needsconfirmation, { RENTALCHARGE => '1' }, 'Item needs rentalcharge confirmation to be issued' );
+    $itemtype->rentalcharge('0')->store;
+    $itemtype->rentalcharge_daily('1.000000')->store;
+    ( $issuingimpossible, $needsconfirmation ) = CanBookBeIssued( $patron, $item->barcode, $dt_due, undef, undef, undef );
+    is_deeply( $needsconfirmation, { RENTALCHARGE => '3' }, 'Item needs rentalcharge confirmation to be issued, increment' );
+    $itemtype->rentalcharge_daily('0')->store;
 };

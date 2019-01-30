@@ -1004,7 +1004,7 @@ sub CanBookBeIssued {
     if ( $rentalConfirmation ){
         my ($rentalCharge) = GetIssuingCharges( $item->itemnumber, $patron->borrowernumber );
         my $itemtype = Koha::ItemTypes->find( $item->itype ); # GetItem sets effective itemtype
-        $rentalCharge += $itemtype->calc_rental_charge_daily( { from => dt_from_string(), to => $duedate } );
+        $rentalCharge += $fees->accumulate_rentalcharge({ from => dt_from_string(), to => $duedate });
         if ( $rentalCharge > 0 ){
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
         }
@@ -1464,7 +1464,7 @@ sub AddIssue {
             );
             ModDateLastSeen( $item->itemnumber );
 
-           # If it costs to borrow this book, charge it to the patron's account.
+            # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item->itemnumber, $borrower->{'borrowernumber'} );
             if ( $charge > 0 ) {
                 my $description = "Rental";
@@ -1473,10 +1473,10 @@ sub AddIssue {
 
             my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
             if ( $itemtype ) {
-                my $daily_charge = $fees->rental_charge_daily();
-                if ( $daily_charge > 0 ) {
-                    AddIssuingCharge( $issue, $daily_charge, 'Daily rental' ) if $daily_charge > 0;
-                    $charge += $daily_charge;
+                my $accumulate_charge = $fees->accumulate_rentalcharge();
+                if ( $accumulate_charge > 0 ) {
+                    AddIssuingCharge( $issue, $accumulate_charge, 'Daily rental' ) if $accumulate_charge > 0;
+                    $charge += $accumulate_charge;
                     $item->{charge} = $charge;
                 }
             }
@@ -2923,15 +2923,15 @@ sub AddRenewal {
         AddIssuingCharge($issue, $charge, $description);
     }
 
-    # Charge a new daily rental fee, if applicable
+    # Charge a new accumulate rental fee, if applicable
     my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
     if ( $itemtype ) {
-        my $daily_charge = $fees->rental_charge_daily();
-        if ( $daily_charge > 0 ) {
+        my $accumulate_charge = $fees->accumulate_rentalcharge();
+        if ( $accumulate_charge > 0 ) {
             my $type_desc = "Renewal of Daily Rental Item " . $biblio->title . " $item->{'barcode'}";
-            AddIssuingCharge( $issue, $daily_charge, $type_desc )
+            AddIssuingCharge( $issue, $accumulate_charge, $type_desc )
         }
-        $charge += $daily_charge;
+        $charge += $accumulate_charge;
     }
 
     # Send a renewal slip according to checkout alert preferencei
