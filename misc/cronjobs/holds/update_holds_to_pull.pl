@@ -210,11 +210,11 @@ sub check_issuingrules {
         );
         if ($issuing_rule->reservesallowed && $issuing_rule->reservesallowed != 0) {
             my $colid = GetItemsCollection($itemnumber);
-
+            my $cnsort = $item->cn_sort ? $item->cn_sort : ' ';
             if ($colid) {
-                push @itemcallnumbers, $item->cn_sort." <a href=".$rotColUrl.$colid.">Col. ".$colid."</a>";
+                push @itemcallnumbers, $cnsort." <a href=".$rotColUrl.$colid.">Col. ".$colid."</a>";
             } else {
-                push @itemcallnumbers, $item->cn_sort;
+                push @itemcallnumbers, $cnsort;
             }
             if ($item->ccode) {
                 push @ccodes, $item->ccode;
@@ -225,7 +225,9 @@ sub check_issuingrules {
             if ($item->genre) {
                 push @genres, $item->genre;
             }
-            push @locations, $item->location;
+            if ($item->location) {
+                push @locations, $item->location;
+            }
             push @itypes, $item->itype;
             push @holdingbranches, $item->holdingbranch;
             $count++;
