@@ -51,7 +51,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
         [%- FOREACH server = z3950_servers -%]
             {
                 server_id: [% server.id | html %],
-                name: '[% server.servername | html %]',
+                name: '[% server.servername | html_entity %]',
                 recordtype: '[% server.recordtype | html %]',
                 checked: [% server.checked ? 'true' : 'false' | html %],
             },
