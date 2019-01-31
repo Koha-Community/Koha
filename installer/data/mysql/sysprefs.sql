@@ -658,7 +658,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('UseCashRegisters','0','','Use cash registers with the accounting system and assign patron transactions to them.','YesNo'),
 ('UseControlNumber','0','','If ON, record control number (w subfields) and control number (001) are used for linking of bibliographic records.','YesNo'),
 ('UseCourseReserves','0',NULL,'Enable the course reserves feature.','YesNo'),
-('useDaysMode','Calendar','Calendar|Days|Datedue','Choose the method for calculating due date: select Calendar to use the holidays module, and Days to ignore the holidays module','Choice'),
+('useDaysMode','Calendar','Calendar|Days|Datedue|Dayweek','Choose the method for calculating due date: select Calendar, Datedue or Dayweek to use the holidays module, and Days to ignore the holidays module','Choice'),
 ('useDefaultReplacementCost', '0', NULL, 'default replacement cost defined in item type', 'YesNo'),
 ('useDischarge','','','Allows librarians to discharge borrowers and borrowers to request a discharge','YesNo'),
 ('UseEmailReceipts','0','','Send email receipts for payments and write-offs','YesNo'),
