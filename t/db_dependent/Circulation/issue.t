@@ -85,6 +85,22 @@ my $categorycode = $builder->build({
         value => { enrolmentfee => undef }
     })->{categorycode};
 
+# A default issuingrule should always be present
+my $issuingrule = $builder->build(
+    {
+        source => 'Issuingrule',
+        value  => {
+            itemtype      => '*',
+            categorycode  => '*',
+            branchcode    => '*',
+            lengthunit    => 'days',
+            issuelength   => 0,
+            renewalperiod => 0,
+            renewalsallowed => 0
+        }
+    }
+);
+
 # Add Dates
 my $dt_today = dt_from_string;
 my $today    = output_pref(
