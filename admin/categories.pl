@@ -92,8 +92,10 @@ elsif ( $op eq 'add_validate' ) {
     my $BlockExpiredPatronOpacActions = $input->param('BlockExpiredPatronOpacActions');
     my $checkPrevCheckout = $input->param('checkprevcheckout');
     my $default_privacy = $input->param('default_privacy');
-    my $can_reset_password = $input->param('can_reset_password');
+    my $reset_password = $input->param('reset_password');
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
+
+    $reset_password = undef if $reset_password eq -1;
 
     my $is_a_modif = $input->param("is_a_modif");
 
@@ -123,7 +125,7 @@ elsif ( $op eq 'add_validate' ) {
         $category->BlockExpiredPatronOpacActions($BlockExpiredPatronOpacActions);
         $category->checkprevcheckout($checkPrevCheckout);
         $category->default_privacy($default_privacy);
-        $category->can_reset_password($can_reset_password);
+        $category->reset_password($reset_password);
         eval {
             $category->store;
             $category->replace_branch_limitations( \@branches );
@@ -150,7 +152,7 @@ elsif ( $op eq 'add_validate' ) {
             BlockExpiredPatronOpacActions => $BlockExpiredPatronOpacActions,
             checkprevcheckout => $checkPrevCheckout,
             default_privacy => $default_privacy,
-            can_reset_password => $can_reset_password,
+            reset_password => $reset_password,
         });
         eval {
             $category->store;

@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Koha %]
+[% USE Categories %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo;
 [% IF Koha.Preference( 'opacuserlogin' ) == 1 %]
@@ -169,7 +170,7 @@
 
                             <input type="submit" value="Log in" class="btn" />
                             <p/>
-                            [% IF Koha.Preference('OpacPasswordChange') && Koha.Preference('OpacResetPassword') %]
+                            [% IF Koha.Preference('OpacPasswordChange') && Categories.can_any_reset_password %]
                                 <div id="forgotpassword">
                                     <a href="/cgi-bin/koha/opac-password-recovery.pl">Forgot your password?</a>
                                 </div>

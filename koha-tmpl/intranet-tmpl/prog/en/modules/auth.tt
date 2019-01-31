@@ -1,6 +1,7 @@
 [% USE raw %]
 [% USE Koha %]
 [% USE Branches %]
+[% USE Categories %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; 
@@ -42,7 +43,7 @@
 
 [% IF too_many_login_attempts %]
     <div id="login_error"><strong>Error: </strong>This account has been locked!</div>
-    [% IF Koha.Preference('OpacResetPassword') && Koha.Preference('OpacBaseURL') %]
+    [% IF Categories.can_any_reset_password && Koha.Preference('OpacBaseURL') %]
         <a href="[% Koha.Preference('OpacBaseURL') | url %]/cgi-bin/koha/opac-password-recovery.pl">You must reset your password</a>.
     [% END %]
 [% ELSIF invalid_username_or_password %]

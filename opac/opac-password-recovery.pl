@@ -43,6 +43,7 @@ my $errMultipleAccountsForEmail;
 my $errAlreadyStartRecovery;
 my $errTooManyEmailFound;
 my $errBadEmail;
+my $errResetForbidden;
 
 #new password form error
 my $errLinkNotValid;
@@ -74,36 +75,45 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
         $errMultipleAccountsForEmail = 1;
     }
     elsif ( $borrower = $search_results->next() ) {    # One matching borrower
-        my @emails = grep { $_ } ( $borrower->email, $borrower->emailpro, $borrower->B_email );
 
-        my $firstNonEmptyEmail;
-        $firstNonEmptyEmail = $emails[0] if @emails;
+        if ( $borrower->category->effective_reset_password ) {
 
-        # Is the given email one of the borrower's ?
-        if ( $email && !( grep /^$email$/i, @emails ) ) {
-            $hasError    = 1;
-            $errNoBorrowerFound = 1;
-        }
+            my @emails = grep { $_ } ( $borrower->email, $borrower->emailpro, $borrower->B_email );
 
-        # If there is no given email, and there is no email on record
-        elsif ( !$email && !$firstNonEmptyEmail ) {
-            $hasError           = 1;
-            $errNoBorrowerEmail = 1;
-        }
+            my $firstNonEmptyEmail;
+            $firstNonEmptyEmail = $emails[0] if @emails;
 
-# Check if a password reset already issued for this borrower AND we are not asking for a new email
-        elsif ( not $query->param('resendEmail') ) {
-            if ( ValidateBorrowernumber( $borrower->borrowernumber ) ) {
-                $hasError                = 1;
-                $errAlreadyStartRecovery = 1;
+            # Is the given email one of the borrower's ?
+            if ( $email && !( grep /^$email$/i, @emails ) ) {
+                $hasError    = 1;
+                $errNoBorrowerFound = 1;
             }
-            else {
-                DeleteExpiredPasswordRecovery( $borrower->borrowernumber );
+
+            # If there is no given email, and there is no email on record
+            elsif ( !$email && !$firstNonEmptyEmail ) {
+                $hasError           = 1;
+                $errNoBorrowerEmail = 1;
+            }
+
+            # Check if a password reset already issued for this
+            # borrower AND we are not asking for a new email
+            elsif ( not $query->param('resendEmail') ) {
+                if ( ValidateBorrowernumber( $borrower->borrowernumber ) ) {
+                    $hasError                = 1;
+                    $errAlreadyStartRecovery = 1;
+                }
+                else {
+                    DeleteExpiredPasswordRecovery( $borrower->borrowernumber );
+                }
+            }
+            # Set the $email, if we don't have one.
+            if ( !$hasError && !$email ) {
+                $email = $firstNonEmptyEmail;
             }
         }
-        # Set the $email, if we don't have one.
-        if ( !$hasError && !$email ) {
-            $email = $firstNonEmptyEmail;
+        else {
+            $hasError          = 1;
+            $errResetForbidden = 1;
         }
     }
     else {    # 0 matching borrower
@@ -119,6 +129,7 @@ if ( $query->param('sendEmail') || $query->param('resendEmail') ) {
             errBadEmail             => $errBadEmail,
             errNoBorrowerEmail      => $errNoBorrowerEmail,
             errMultipleAccountsForEmail => $errMultipleAccountsForEmail,
+            errResetForbidden       => $errResetForbidden,
             password_recovery       => 1,
             email                   => HTML::Entities::encode($email),
             username                => $username
