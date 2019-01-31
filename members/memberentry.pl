@@ -536,7 +536,10 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
                                                                 # patron attributes or messaging preferences sections
 
         # should never raise an exception as password validity is checked above
-        $patron->set_password({ password => $newdata{password} });
+        my $password = $newdata{password};
+        if ( $password and $password ne '****' ) {
+            $patron->set_password({ password => $password });
+        }
 
         if (C4::Context->preference('ExtendedPatronAttributes') and $input->param('setting_extended_patron_attributes')) {
             C4::Members::Attributes::SetBorrowerAttributes($borrowernumber, $extended_patron_attributes);
