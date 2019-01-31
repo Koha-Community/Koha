@@ -803,11 +803,26 @@ to ensure those parts are correct.
 sub _clean_search_term {
     my ( $self, $term ) = @_;
 
+    # Lookahead for checking if we are inside quotes
+    my $lookahead = '(?=(?:[^\"]*+\"[^\"]*+\")*+[^\"]*+$)';
+
     # Some hardcoded searches (like with authorities) produce things like
     # 'an=123', when it ought to be 'an:123' for our purposes.
     $term =~ s/=/:/g;
+
     $term = $self->_convert_index_strings_freeform($term);
     $term =~ s/[{}]/"/g;
+
+    # Remove unbalanced quotes
+    my $unquoted = $term;
+    my $count = ($unquoted =~ tr/"/ /);
+    if ($count % 2 == 1) {
+        $term = $unquoted;
+    }
+
+    # Remove unquoted colons that have whitespace on either side of them
+    $term =~ s/(\:[:\s]+|[:\s]+:)$lookahead//g;
+
     return $term;
 }
 
