@@ -161,6 +161,7 @@
 
                 var re = /^tag_\d*_code_/;
                 for(var i=0, len = subfields.length ; i< len ; i++) {
+                    if(subfields[i].hasAttribute('name') == 0) { continue; }  // div elements specific to Select2
                     if(subfields[i].getAttribute('name').match(re)){ // it s a subfield
                         var code     = subfields[i];
                         var subfield = subfields[i+1];
