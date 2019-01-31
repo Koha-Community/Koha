@@ -165,6 +165,18 @@
                     <span>Select <i>All branches</i> if this category type must to be displayed all the time. Otherwise select libraries you want to associate with this value.
                     </span>
                 </li>
+                <li>
+                    <label for="can_reset_password">Password reset in OPAC: </label>
+                    <select name="can_reset_password" id="can_reset_password">
+                        [% IF category.can_reset_password %]
+                            <option value="0">Allowed</option>
+                            <option value="1" selected="selected">Not allowed</option>
+                        [% ELSE %]
+                            <option value="0" selected="selected">Allowed</option>
+                            <option value="1">Not allowed</option>
+                        [% END %]
+                    </select>
+                </li>
                 <li><label for="block_expired">Block expired patrons:</label>
                     <select name="BlockExpiredPatronOpacActions" id="block_expired">
                         [% IF not category or category.BlockExpiredPatronOpacActions == -1%]
