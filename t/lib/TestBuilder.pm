@@ -546,6 +546,8 @@ sub _gen_default_values {
         },
         Itemtype => {
             rentalcharge => 0,
+            rentalcharge_daily => 0,
+            rentalcharge_hourly => 0,
             defaultreplacecost => 0,
             processfee => 0,
         },
