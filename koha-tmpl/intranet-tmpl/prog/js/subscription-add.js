@@ -1,4 +1,4 @@
-/* global irregularity more_than_one_serial subscriptionid tags */
+/* global _ irregularity more_than_one_serial subscriptionid tags interface theme mana_enabled MSG_FREQUENCY_LENGTH_ERROR */
 
 var globalnumpatterndata;
 var globalfreqdata;
@@ -47,13 +47,13 @@ function Clear(id) {
 
 function Check_page1() {
     if ( $("#aqbooksellerid").val().length == 0) {
-        input_box = confirm(_("If you wish to claim late or missing issues you must link this subscription to a vendor. Click OK to ignore or Cancel to return and enter a vendor"));
+        input_box = confirm( MSG_LINK_TO_VENDOR );
         if (input_box==false) {
             return false;
         }
     }
     if ($("#biblionumber").val().length == 0) {
-        alert(_("You must choose or create a biblio"));
+        alert( MSG_LINK_BIBLIO );
         return false;
     }
 
@@ -63,23 +63,23 @@ function Check_page1() {
 function Check_page2(){
     if( more_than_one_serial == "" ){
         if($("#acqui_date").val().length == 0){
-            alert(_("You must choose a first publication date"));
+            alert( MSG_REQUIRED_PUB_DATE );
             return false;
         }
     }
     if($("#sublength").val().length == 0 && $("input[name='enddate']").val().length == 0){
-        alert(_("You must choose a subscription length or an end date."));
+        alert( MSG_REQUIRED_SUB_LENGTH );
         return false;
     }
     if(advancedpatternlocked == 0){
-        alert(_("You have modified the advanced prediction pattern. Please save your work or cancel modifications."));
+        alert( MSG_SAVE_PREDICTION_PATTERN );
         return false;
     }
     if(patternneedtobetested){
         if( irregularity !== "" ){
-           alert(_("Warning! Present pattern has planned irregularities. Click on 'Test prediction pattern' to check if it's still valid"));
+            alert( MSG_PATTERN_IRREG );
         } else {
-            alert(_("Please click on 'Test prediction pattern' before saving subscription."));
+            alert( MSG_TEST_PREDICTION );
         }
         return false;
     }
@@ -95,7 +95,7 @@ function frequencyload(){
         $("input[name='unitsperissue']").val(manafreqdata.unitsperissue);
         $("input[name='issuesperunit']").val(manafreqdata.issuesperunit);
         if ($( "#numberpattern option:selected" ).val() === "mana" ) {
-            $("input[name='mana_id']").val(manaid);
+            $("#mana_id").val(manaid);
         }
     } else {
         $.getJSON("subscription-frequency.pl",{"frequency_id":document.f.frequency.value,ajax:'true'},
@@ -110,7 +110,7 @@ function frequencyload(){
                 }
             }
         );
-        $("input[name='mana_id']").val("");
+        $("#mana_id").val("");
     }
 }
 
@@ -119,7 +119,7 @@ function numberpatternload(){
         globalnumpatterndata=mananumpatterndata;
         $("input[name='sndescription']").val(mananumpatterndata.description);
         if($("#frequency option:selected" ).val() === "mana"){
-            $("input[name='mana_id']").val(manaid);
+            $("#mana_id").val(manaid);
         }
         if (globalnumpatterndata==undefined){
             return false;
@@ -137,7 +137,7 @@ function numberpatternload(){
                 restoreAdvancedPattern();
             }
         );
-        $("input[name='mana_id']").val("");
+        $("#mana_id").val("");
     }
 }
 
@@ -260,24 +260,24 @@ function testPredictionPattern() {
     var error = 0;
     var error_msg = "";
     if(frequencyid == undefined || frequencyid == ""){
-        error_msg += _("- Frequency is not defined") + "\n";
+        error_msg += "- " + MSG_FREQUENCY_UNDEFINED + "\n";
         error ++;
     }
     acquidate = $("#acqui_date").val();
     if(acquidate == undefined || acquidate == ""){
-        error_msg += _("- First publication date is not defined") + "\n";
+        error_msg += "-" + MSG_PUB_DATE_UNDEFINED + "\n";
         error ++;
     }
     if( more_than_one_serial !== "" ){
         var nextacquidate = $("#nextacquidate").val();
         if(nextacquidate == undefined || nextacquidate == ""){
-            error_msg += _("- Next issue publication date is not defined") + "\n";
+            error_msg += "-" + MSG_NEXT_ISSUE_UNDEFINED + "\n";
             error ++;
         }
     }
 
     if(error){
-        alert(_("Cannot test prediction pattern for the following reason(s): %s").format(error_msg));
+        alert( MSG_PATTERN_TEST_FAILED.format(error_msg) );
         return false;
     }
 
@@ -326,7 +326,7 @@ function testPredictionPattern() {
 
 function saveAdvancedPattern() {
     if ($("#patternname").val().length == 0) {
-        alert(_("Please enter a name for this pattern"));
+        alert( MSG_PATTERN_NAME );
         return false;
     }
 
@@ -341,8 +341,8 @@ function saveAdvancedPattern() {
     });
     var cnfrm = 1;
     if(found){
-        var msg = _("This pattern name already exists. Do you want to modify it?")
-            + "\n" + _("Warning: it will modify the pattern for all subscriptions that are using it.");
+        var msg = MSG_PATTERN_NAME_EXISTS
+            + "\n" + MSG_OVERWRITE_PATTERNS;
         cnfrm = confirm(msg);
     }
 
@@ -372,7 +372,7 @@ function saveAdvancedPattern() {
                     $("#numberpattern").val(data.numberpatternid);
                     numberpatternload();
                 } else {
-                    alert(_("Something went wrong. Unable to create a new numbering pattern."));
+                    alert( MSG_PATTERN_CREATE_FAILED );
                 }
             }
         );
@@ -393,7 +393,7 @@ function show_page_2() {
 }
 
 function mana_search() {
-    $("#mana_search").html("<p>" + _("Mana kb is being asked for your subscription..") + "</p>");
+    $("#mana_search").html("<p>" + MSG_MANA_SEARCHING + "... <img src='" + interface + "/" + theme + "/img/spinner-small.gif' /></p>");
     $("#mana_search").show();
 
     $.ajax({
@@ -402,33 +402,33 @@ function mana_search() {
         data: {id: $("#biblionumber").val(), resource: 'subscription', usecomments: 1},
         dataType: "html",
     })
-    .done( function( result ) {
-        $("#mana_search_result .modal-body").html(result);
-        $("#mana_search_result_label").text(_("Results from Mana Knowledge Base"));
-        $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
-            "sPaginationType": "four_button",
-            "order":[[4, "desc"], [5, "desc"]],
-            "autoWidth": false,
-            "columnDefs": [
-                { "width": "35%", "targets": 1 }
-            ],
-            "aoColumnDefs": [
-                { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
-                { "sType": "title-string", "aTargets" : [ "title-string" ] },
-                { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
-            ]
-        }));
-        if( $("#mana_results_datatable").length && $("td.dataTables_empty").length == 0){
-            $("#mana_search").html("<p>" + _("Subscription found on Mana Knowledge Base:") + "</p><p> <a style='cursor:pointer' data-toggle='modal' data-target='#mana_search_result'>" + _("Quick fill") + "</a></p>");
-        }
-        else if ( $("#mana_results_datatable").length ){
-            $("#mana_search").html("<p>" + _("No subscription found on Mana Knowledge Base :(") + "</p><p>" + _(" Please feel free to share you pattern with all others librarians once you are done") + "</p>");
-        }
-        else{
-            $("#mana_search").html( result );
-        }
-        $("#mana_search").show();
-    })
+        .done( function( result ) {
+            $("#mana_search_result .modal-body").html(result);
+            $("#mana_search_result_label").text( MSG_MANA_RESULTS );
+            $("#mana_results_datatable").dataTable($.extend(true, {}, dataTablesDefaults, {
+                "sPaginationType": "four_button",
+                "order":[[4, "desc"], [5, "desc"]],
+                "autoWidth": false,
+                "columnDefs": [
+                    { "width": "35%", "targets": 1 }
+                ],
+                "aoColumnDefs": [
+                    { 'bSortable': false, "bSearchable": false, 'aTargets': [ 'NoSort' ] },
+                    { "sType": "title-string", "aTargets" : [ "title-string" ] },
+                    { 'sType': "anti-the", 'aTargets' : [ 'anti-the'] }
+                ]
+            }));
+            if( $("#mana_results_datatable").length && $("td.dataTables_empty").length == 0){
+                $("#mana_search").html("<p>" + MSG_MANA_SUBSCRIPTION_FOUND + "</p><p> <a href=\"#\" data-toggle=\"modal\" data-target=\"#mana_search_result\"><i class=\"fa fa-window-maximize\"></i> " + MSG_MANA_SHOW_DETAILS + "</a></p>");
+            }
+            else if ( $("#mana_results_datatable").length ){
+                $("#mana_search").html("<p>" + MSG_MANA_NO_SUBSCRIPTION_FOUND + "</p><p>" + MSG_MANA_SHARE_PATTERN + "</p>");
+            }
+            else{
+                $("#mana_search").html( result );
+            }
+            $("#mana_search").show();
+        });
 }
 
 function mana_use(mana_id){
@@ -440,70 +440,83 @@ function mana_use(mana_id){
         data: {id: mana_id, resource: 'subscription'},
         dataType: "json",
     })
-    .done(function(result){
-        var select = document.getElementById('numberpattern');
-        for(i = 0; i < select.length; i++){
-            if(select[i].value === "mana"){
-                select.remove(i);
+        .done(function(result){
+            var select = document.getElementById('numberpattern');
+            for(i = 0; i < select.length; i++){
+                if(select[i].value === "mana"){
+                    select.remove(i);
+                }
             }
-        }
-        var optionnumpattern = document.createElement("option");
-        optionnumpattern.text = result.label + " (mana)";
-        optionnumpattern.selected = true;
-        optionnumpattern.value="mana";
-        select.add(optionnumpattern);
+            var optionnumpattern = document.createElement("option");
+            optionnumpattern.text = result.label + " (mana)";
+            optionnumpattern.selected = true;
+            optionnumpattern.value="mana";
+            select.add(optionnumpattern);
 
-        mananumpatterndata = {
-            id:"mana",
-            add1:result.add1,
-            add2:result.add2,
-            add3:result.add3,
-            description:result.sndescription,
-            displayorder:result.displayorder,
-            every1:result.every1,
-            every2:result.every2,
-            every3:result.every3,
-            label:result.label,
-            label1:result.label1,
-            label2:result.label2,
-            label3:result.label3,
-            numbering1:result.numbering1,
-            numbering2:result.numbering2,
-            numbering3:result.numbering3,
-            numberingmethod:result.numberingmethod,
-            setto1:result.setto1,
-            setto2:result.setto2,
-            setto3:result.setto3,
-            whenmorethan1:result.whenmorethan1,
-            whenmorethan2:result.whenmorethan2,
-            whenmorethan3:result.whenmorethan3,
-        };
-        select = document.getElementById("frequency");
-        for(i = 0; i < select.length; i++){
-            if(select[i].value === "mana"){
-                select.remove(i);
+            mananumpatterndata = {
+                id:"mana",
+                add1:result.add1,
+                add2:result.add2,
+                add3:result.add3,
+                description:result.sndescription,
+                displayorder:result.displayorder,
+                every1:result.every1,
+                every2:result.every2,
+                every3:result.every3,
+                label:result.label,
+                label1:result.label1,
+                label2:result.label2,
+                label3:result.label3,
+                numbering1:result.numbering1,
+                numbering2:result.numbering2,
+                numbering3:result.numbering3,
+                numberingmethod:result.numberingmethod,
+                setto1:result.setto1,
+                setto2:result.setto2,
+                setto3:result.setto3,
+                whenmorethan1:result.whenmorethan1,
+                whenmorethan2:result.whenmorethan2,
+                whenmorethan3:result.whenmorethan3,
+            };
+            select = document.getElementById("frequency");
+            for(i = 0; i < select.length; i++){
+                if(select[i].value === "mana"){
+                    select.remove(i);
+                }
             }
-        }
-        var optionfreq = document.createElement("option");
-        optionfreq.text = result.sfdescription + " (mana)";
-        optionfreq.selected = true;
-        optionfreq.value="mana";
-        select.add(optionfreq);
-        manafreqdata = {
-            id:"mana",
-            description:result.sfdescription,
-            displayorder:result.displayorder,
-            issuesperunit:result.issuesperunit,
-            unit:result.unit,
-            unitsperissue:result.unitsperissue,
-        };
-        manaid = result.id;
-        $("input[name='mana_id']").val(manaid);
-        $("#mana_search_result").modal("hide");
-        frequencyload();
-        numberpatternload();
-    }).fail( function( result ){
-    });
+            var optionfreq = document.createElement("option");
+            optionfreq.text = result.sfdescription + " (mana)";
+            optionfreq.selected = true;
+            optionfreq.value="mana";
+            select.add(optionfreq);
+            manafreqdata = {
+                id:"mana",
+                description:result.sfdescription,
+                displayorder:result.displayorder,
+                issuesperunit:result.issuesperunit,
+                unit:result.unit,
+                unitsperissue:result.unitsperissue,
+            };
+            manaid = result.id;
+            $("#mana_id").val(manaid);
+            $("#mana_search_result").modal("hide");
+            frequencyload();
+            numberpatternload();
+        })
+        .done( function(){
+            $("tr").removeClass("selected");
+            $(".mana-use i").attr("class","fa fa-download");
+        })
+        .fail( function( result ){
+        });
+}
+
+function mana_comment_close(){
+    $("#selected_id").val("");
+    $("#mana-resource-id").val("");
+    $("#mana-comment").val("");
+    $("#mana_results").show();
+    $("#new_mana_comment").hide();
 }
 
 $(document).ready(function() {
@@ -511,7 +524,14 @@ $(document).ready(function() {
         mana_search();
     }
     $("#displayexample").hide();
-    $("#mana_search_result").modal("hide");
+
+    // When Mana search results modal is hidden, hide comment form and any status messages
+    $("#mana_search_result").on("hide.bs.modal", function(){
+        $("#mana_results").show();
+        $("#new_mana_comment").hide();
+        $(".mana_comment_status").hide();
+    });
+
     $("#aqbooksellerid").on('keypress', function(e) {
         if (e.keyCode == 13) {
             e.preventDefault();
@@ -651,5 +671,12 @@ $(document).ready(function() {
     });
     $('#save-subscription').on("click", function(e){
         $('select:disabled').removeAttr('disabled');
+    });
+
+    $("body").on("click", ".mana-use", function(e) {
+        e.preventDefault();
+        $(this).find("i").attr("class","fa fa-refresh fa-spin");
+        var subscription_id = $(this).data("subscription_id");
+        mana_use( subscription_id );
     });
 });

@@ -29,6 +29,7 @@
             <main>
 
     [% INCLUDE 'serials-toolbar.inc' %]
+    [% INCLUDE 'mana/mana-comment-status.inc' %]
 
     <h1>Subscription for [% bibliotitle | html %] [% IF closed %](closed)[% END %]</h1>
     [% IF ( abouttoexpire ) %]
@@ -466,8 +467,8 @@
         var MSG_REOPEN_SUBSCRIPTION = _("Are you sure you want to reopen this subscription?");
         var CONFIRM_DELETE_SUBSCRIPTION = _("Are you sure you want to delete this subscription?");
     </script>
-    [% INCLUDE 'mana.inc' %]
     [% Asset.js("js/serials-toolbar.js") | $raw %]
+    [% Asset.js("js/mana.js") | $raw %]
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/jquery/plugins/treetable/jquery.treetable.js") | $raw %]
     [% INCLUDE 'columns_settings.inc' %]
@@ -511,9 +512,14 @@
                 table.fnFilter( '', 4 ); // Not filter, display all columns
             });
             $("#show_all_orders").click();
-
-
         });
+
+        function mana_comment_close(){
+            $("#selected_id").val("");
+            $("#mana-resource-id").val("");
+            $("#mana-comment").val("");
+            $("#mana-comment-box").modal("hide");
+        }
     </script>
 [% END %]
 

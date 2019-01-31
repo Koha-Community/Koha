@@ -8,13 +8,6 @@
             [% ELSE %]
                 <div class="btn-group"><a id="newsubscription" class="btn btn-default" href="/cgi-bin/koha/serials/subscription-add.pl"><i class="fa fa-plus"></i> New subscription</a></div>
             [% END %]
-            [% IF Koha.Preference('Mana') == 1 and Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
-                [% IF one_language_enabled==0 or mana_id %]
-                    <div class="btn-group"><a data-toggle="modal" data-toggle="tooltip" title="Share the subscription with other librairies. Your email address will be associated to your sharing." data-target="#mana_share_modal" class="btn btn-default btn-sm"><i class="fa fa-share-alt"></i> Share</a></div>
-                [% ELSE %]
-                    <div class="btn-group" id="mana-subscription-share" data-toggle="tooltip" title="Share the subscription with other libraries. Your email address will be associated to your sharing."><a class="btn btn-default btn-sm"><i class="fa fa-share-alt"></i> Share</a></div>
-                [% END %]
-            [% END %]
         [% END %]
 
         [% IF ( CAN_user_serials_edit_subscription || CAN_user_serials_create_subscription || CAN_user_serials_delete_subscription ) %]
@@ -72,37 +65,28 @@
             [% END %]
         [% END %]
 
+        [% IF Koha.Preference('Mana') == 1 and Koha.Preference('AutoShareWithMana').grep('subscription').size == 0 %]
+            [% IF one_language_enabled==0 or mana_id %]
+                <div class="btn-group"><a data-toggle="modal" data-toggle="tooltip" title="Share the subscription with other librairies. Your email address will be associated to your sharing." data-target="#mana_share_modal" class="btn btn-default"><i class="fa fa-share-alt"></i> Share</a></div>
+            [% ELSE %]
+                <div class="btn-group" id="mana-subscription-share" data-toggle="tooltip" title="Share the subscription with other libraries. Your email address will be associated to your sharing."><a class="btn btn-default"><i class="fa fa-share-alt"></i> Share</a></div>
+            [% END %]
+        [% END %]
+
         [% IF ( mana_id && Koha.Preference('Mana') == 1 ) %]
             <div class="btn-group">
                 <button class="btn btn-default btn-sm dropdown-toggle" data-toggle="dropdown"> Report mistake <span class="caret"></span></button>
-                <ul class="dropdown-menu">
-                    [% FOREACH c IN mana_comments %]
-                        <li class="mana-comment" data-id="[% c.id | $raw %]">
-                            <a href="#">[% c.message | html %] ([% c.nb | html %])</a>
-                        </li>
+                <ul class="dropdown-menu mana-actions">
+                    [% IF ( mana_comments ) %]
+                        [% FOREACH c IN mana_comments %]
+                            <li>
+                                <a data-commentid="[% c.id | html %]" data-resourceid="[% mana_id | html %]" href="#">[% c.message | html %] ([% c.nb | html %])</a>
+                            </li>
+                        [% END %]
+                        <li role="separator" class="divider"></li>
                     [% END %]
-                    <li role="separator" class="divider"></li>
-                    <li class="mana-other-comment"><a href="#">Other</a> </li>
+                    <li><a data-commentid="other" data-resourceid="[% mana_id | html %]" href="#">New comment</a></li>
                 </ul>
-            </div>
-
-            <div id="mana-comment-box" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label" style="display: none;">
-                <div class="modal-dialog modal-lg" style="width: 30%">
-                    <div class="modal-content" style="">
-                        <div class="modal-header">
-                            <button type="button" id="mana-comment-close" class="closebtn"  aria-hidden="true">×</button>
-                            <h3 id="mana_submit_comment"> Please enter a new comment (max 35 characters)</h3>
-                        </div>
-                        <div class="modal-body">
-                            <input hidden id="mana-resource" value="subscription">
-                            <input hidden id="mana-resource-id" value="[% mana_id | $raw %]">
-                            <div>
-                                <input type="text" maxlength="35" size="35" id="mana-comment">
-                            </div>
-                            <button id="mana-send-comment"> Comment </button>
-                        </div>
-                    </div>
-                </div>
             </div>
         [% END %]
     </div>
@@ -116,22 +100,46 @@
     </div>
 [% END %]
 
-<div id="mana_share_modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mana_share_modal_label" style="display: none;">
-    <div class="modal-dialog">
+<div class="modal" id="mana-comment-box" tabindex="-1" role="dialog" aria-labelledby="mana_submit_comment">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <form id="mana_comment_form" action="/cgi-bin/koha/serials/subscription-detail.pl" method="get">
+                <div class="modal-header">
+                    <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title" id="mana_submit_comment">Please enter a new comment (max 35 characters)</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="mana-resource" value="subscription" />
+                    <input type="hidden" id="mana-resource-id" value="[% mana_id | html %]" />
+                    <input type="text" maxlength="35" size="35" id="mana-comment" required="required" />
+                    <button id="mana-send-comment">Submit</button>
+                    <a href="#" class="cancel" id="mana-comment-close">Cancel</a>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                </div>
+            </form>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /#mana-comment-box -->
+
+<div id="mana_share_modal" class="modal" tabindex="-1" role="dialog" aria-labelledby="mana_share_modal_label">
+    <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h3 id="mana_share_modal_label">Share [% bibliotitle | html %] to Mana</h3>
+                <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 id="mana_share_modal_label">Share [% bibliotitle | html %] to Mana</h4>
             </div>
             <div class="modal-body">
                 [% IF (mana_id) %]
                     <div class="alert">
-<h1>[% mana_id | $raw %]</h1>
                         <p>Your subscription is already linked with a Mana subscription model. Share it if you have made modifications, otherwise it will do nothing.</p>
                     </div>
                 [% END %]
                 [% IF ( languages_loop ) %]
                     [% UNLESS ( one_language_enabled ) %]
                         <div class="rows">
+                            <ol>
                                 <li><span class="label">Frequency: </span>
                                         [% frequency.description | html %]
                                 </li>
@@ -194,21 +202,17 @@
                                         [% END %]
                                     </select>
                                     <input type="hidden" id="op" name="op" value="share"/>
-                                    <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | $raw %]"/>
+                                    <input type="hidden" id="subscriptionid" name="subscriptionid" value="[% subscriptionid | html %]"/>
                                 </fieldset>
                             </form>
-                        </div>
+                        </div> <!-- /.rows -->
                     [% END %]
                 [% END %]
-            </div>
+            </div> <!-- /.modal-body -->
             <div class="modal-footer">
-                <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-                [% IF one_language_enabled==0 %]
-                    <button type="submit" form="mana_share_form" class="btn btn-primary">Share</button>
-                [% ELSE %]
-                    <div class="btn-group" id="mana-subscription-share"><a class="btn btn-primary">Share</a></div>
-                [% END %]
+                <button type="submit" form="mana_share_form" class="btn btn-default">Share</button>
+                <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Cancel</button>
             </div>
-        </div>
-    </div>
-</div>
+        </div> <!-- /.modal-content -->
+    </div> <!-- /.modal-dialog -->
+</div> <!-- /#mana-share-modal -->

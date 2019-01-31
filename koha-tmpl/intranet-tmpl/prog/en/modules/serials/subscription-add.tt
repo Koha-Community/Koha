@@ -7,8 +7,13 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Serials &rsaquo; [% IF ( modify ) %][% bibliotitle | html %] &rsaquo; Modify subscription[% ELSE %]New subscription[% END %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
+[% Asset.css("css/datatables.css") | $raw %]
 <style>
 fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
+#mana_comment_errortext { font-weight: bold; font-family: monospace;}
+/* Prevents Bootstrap menus from being hidden inside modal */
+#mana_search_result .modal { overflow: visible; }
+#mana_search_result .modal-body { overflow-y: visible; }
 </style>
 </head>
 
@@ -27,8 +32,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 
 <div class="main container-fluid">
     <div class="row">
-
-            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle | html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+            <div class="col-sm-12">
+                <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle | html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+            </div>
             <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
                 [% IF ( modify ) %]
                     <input type="hidden" name="op" value="modsubscription" />
@@ -475,25 +481,35 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                 </div>
             </form>
         </div>
-        <div id="mana_search_result" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label" style="width: 100%; left:0%; margin-left: auto; display: none;">
-            <div class="modal-dialog modal-lg">
+
+        <!-- Mana Search Result Modal -->
+        <div class="modal" id="mana_search_result" tabindex="-1" role="dialog" aria-labelledby="mana_search_result_label">
+            <div class="modal-dialog modal-lg" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
-                        <h3 id="mana_search_result_label"></h3>
+                        <button type="button" class="closebtn" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="mana_search_result_label">Modal title</h4>
                     </div>
                     <div class="modal-body">
-            </div>
-        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+             </div>
+         </div>
 
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% INCLUDE 'datatables.inc' %]
+    [% Asset.js("js/mana.js") | $raw %]
     <script>
         var subscriptionid = "[% subscriptionid | html %]";
         var irregularity = "[% irregularity | html %]";
         var more_than_one_serial = "[% more_than_one_serial | html %]";
         var tags = [];
+        var interface = "[% interface | html %]";
+        var theme = "[% theme | html %]";
         [% FOREACH field IN dont_export_field_loop %]
             tags.push("[% field.fieldid | html %]");
         [% END %]
@@ -503,16 +519,22 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
         var MSG_REQUIRED_SUB_LENGTH = _("You must choose a subscription length or an end date.");
         var MSG_TEST_PREDICTION = _("Please click on 'Test prediction pattern' before saving subscription.");
         var MSG_REQUIRED_PUB_DATE = _("You must choose a first publication date");
-        var MSG = _("You have modified the advanced prediction pattern. Please save your work or cancel modifications.");
+        var MSG_SAVE_PREDICTION_PATTERN = _("You have modified the advanced prediction pattern. Please save your work or cancel modifications.");
         var MSG_PATTERN_IRREG = _("Warning! Present pattern has planned irregularities. Click on 'Test prediction pattern' to check if it's still valid")
         var MSG_PATTERN_NAME = _("Please enter a name for this pattern");
         var MSG_PATTERN_NAME_EXISTS = _("This pattern name already exists. Do you want to modify it?");
-        var MSG_OVERWRITE_PATTERNS = _("Warning: it will modify the pattern for all subscriptions that are using it.");
+        var MSG_OVERWRITE_PATTERNS = _("Warning: This will modify the pattern for all subscriptions that are using it.");
         var MSG_PATTERN_CREATE_FAILED = _("Something went wrong. Unable to create a new numbering pattern.");
         var MSG_PATTERN_TEST_FAILED = _("Cannot test prediction pattern for the following reason(s): %s");
         var MSG_FREQUENCY_UNDEFINED = _("Frequency is not defined");
         var MSG_PUB_DATE_UNDEFINED = _("First publication date is not defined");
         var MSG_NEXT_ISSUE_UNDEFINED = _("Next issue publication date is not defined");
+        var MSG_MANA_SEARCHING = _("Searching for subscription in Mana Knowledge Base");
+        var MSG_MANA_RESULTS = _("Results from Mana Knowledge Base");
+        var MSG_MANA_SUBSCRIPTION_FOUND = _("Subscription found on Mana Knowledge Base:");
+        var MSG_MANA_SHOW_DETAILS = _("Show Mana results");
+        var MSG_MANA_NO_SUBSCRIPTION_FOUND = _("No subscription found on Mana Knowledge Base");
+        var MSG_MANA_SHARE_PATTERN = _("Please feel free to share your pattern with all others librarians once you are done");
     </script>
     [% Asset.js("js/subscription-add.js") | $raw %]
     [% Asset.js("js/showpredictionpattern.js") | $raw %]
