@@ -65,7 +65,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             columns: included_ids,
             className: "columns_controls",
             titleAttr: _("Columns settings"),
-            text: '<i class="fa fa-lg fa-gear"></i>',
+            text: '<i class="fa fa-lg fa-gear"></i> <span class="dt-button-text">' + _("Columns") + '</span>',
             exportOptions: {
                 columns: exportColumns
             },
@@ -75,7 +75,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
             fade: 100,
             className: "export_controls",
             titleAttr: _("Export or print"),
-            text: '<i class="fa fa-lg fa-download"></i>',
+            text: '<i class="fa fa-lg fa-download"></i> <span class="dt-button-text">' + _("Export") + '</span>',
             buttons: export_buttons
         }
 
