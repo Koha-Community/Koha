@@ -144,7 +144,6 @@ sub addDate {
 
     $unit ||= 'days'; # default days ?
     my $dt;
-
     if ( $unit eq 'hours' ) {
         # Fixed for legacy support. Should be set as a branch parameter
         my $return_by_hour = 10;
@@ -154,7 +153,6 @@ sub addDate {
         # days
         $dt = $self->addDays($startdate, $add_duration);
     }
-
     return $dt;
 }
 
@@ -206,20 +204,31 @@ sub addDays {
             }
         }
 
-    } else { # Days or Datedue
+    } else { # Days, Datedue or Dayweek
         # use straight days, then use calendar to push
-        # the date to the next open day if Datedue
+        # the date to the next open day as appropriate
+        # if Datedue or Dayweek
         $base_date->add_duration($days_duration);
 
-        if ( $self->{days_mode} eq 'Datedue' ) {
-            # Datedue, then use the calendar to push
+        if ( $self->{days_mode} eq 'Datedue' ||
+            $self->{days_mode} eq 'Dayweek') {
+            # Datedue or Dayweek, then use the calendar to push
             # the date to the next open day if holiday
             if ( $self->is_holiday($base_date) ) {
-
+                my $dow = $base_date->day_of_week;
+                my $days = $days_duration->in_units('days');
+                my $push_amt = (
+                    # We're using Dayweek useDaysMode option
+                    $self->{days_mode} eq 'Dayweek' &&
+                    # It's period based on weeks
+                    $days % 7 == 0 &&
+                    # It's not a permanently closed day
+                    !$self->{weekly_closed_days}->[$dow] == 1
+                ) ? 7 : 1;
                 if ( $days_duration->is_negative() ) {
-                    $base_date = $self->prev_open_day($base_date);
+                    $base_date = $self->prev_open_days($base_date, $push_amt);
                 } else {
-                    $base_date = $self->next_open_day($base_date);
+                    $base_date = $self->next_open_days($base_date, $push_amt);
                 }
             }
         }
@@ -275,11 +284,9 @@ sub next_open_days {
     my $base_date = $dt->clone();
 
     $base_date->add(days => $to_add);
-
     while ($self->is_holiday($base_date)) {
         $base_date->add(days => $to_add);
     }
-
     return $base_date;
 }
 
