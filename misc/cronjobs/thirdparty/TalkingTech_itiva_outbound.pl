@@ -337,7 +337,7 @@ sub GetWaitingHolds {
         my $waiting_date = dt_from_string( $issue->{waitingdate}, 'sql' );
         my $pickup_date = $waiting_date->clone->add( days => $pickupdelay );
         if ( $calendar->is_holiday($pickup_date) ) {
-            $pickup_date = $calendar->next_open_day( $pickup_date );
+            $pickup_date = $calendar->next_open_days( $pickup_date, 1 );
         }
 
         $issue->{'date_due'} = output_pref({dt => $pickup_date, dateformat => 'iso' });
@@ -345,7 +345,7 @@ sub GetWaitingHolds {
 
         my $days_to_subtract = 0;
         if ( $calendar->is_holiday($waiting_date) ) {
-            my $next_open_day = $calendar->next_open_day( $waiting_date );
+            my $next_open_day = $calendar->next_open_days( $waiting_date, 1 );
             $days_to_subtract = $calendar->days_between($waiting_date, $next_open_day)->days;
         }
 

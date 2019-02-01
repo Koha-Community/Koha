@@ -171,9 +171,9 @@ sub addHours {
           $self->is_holiday($base_date) ) {
 
         if ( $hours_duration->is_negative() ) {
-            $base_date = $self->prev_open_day($base_date);
+            $base_date = $self->prev_open_days($base_date, 1);
         } else {
-            $base_date = $self->next_open_day($base_date);
+            $base_date = $self->next_open_days($base_date, 1);
         }
 
         $base_date->set_hour($return_by_hour);
@@ -196,12 +196,12 @@ sub addDays {
 
         if ( $days_duration->is_negative() ) {
             while ($days) {
-                $base_date = $self->prev_open_day($base_date);
+                $base_date = $self->prev_open_days($base_date, 1);
                 --$days;
             }
         } else {
             while ($days) {
-                $base_date = $self->next_open_day($base_date);
+                $base_date = $self->next_open_days($base_date, 1);
                 --$days;
             }
         }
@@ -270,27 +270,31 @@ sub is_holiday {
     return 0;
 }
 
-sub next_open_day {
-    my ( $self, $dt ) = @_;
+sub next_open_days {
+    my ( $self, $dt, $to_add ) = @_;
     my $base_date = $dt->clone();
 
-    $base_date->add(days => 1);
+    $base_date->add(days => $to_add);
 
     while ($self->is_holiday($base_date)) {
-        $base_date->add(days => 1);
+        $base_date->add(days => $to_add);
     }
 
     return $base_date;
 }
 
-sub prev_open_day {
-    my ( $self, $dt ) = @_;
+sub prev_open_days {
+    my ( $self, $dt, $to_sub ) = @_;
     my $base_date = $dt->clone();
 
-    $base_date->add(days => -1);
+    # It feels logical to be passed a positive number, though we're
+    # subtracting, so do the right thing
+    $to_sub = $to_sub > 0 ? 0 - $to_sub : $to_sub;
+
+    $base_date->add(days => $to_sub);
 
     while ($self->is_holiday($base_date)) {
-        $base_date->add(days => -1);
+        $base_date->add(days => $to_sub);
     }
 
     return $base_date;
@@ -306,7 +310,7 @@ sub days_forward {
     my $base_dt = $start_dt->clone();
 
     while ($num_days--) {
-        $base_dt = $self->next_open_day($base_dt);
+        $base_dt = $self->next_open_days($base_dt, 1);
     }
 
     return $base_dt;
@@ -468,21 +472,23 @@ Passed two dates returns a DateTime::Duration object measuring the length betwee
 ignoring closed days. Always returns a positive number irrespective of the
 relative order of the parameters
 
-=head2 next_open_day
+=head2 next_open_days
 
-$datetime = $calendar->next_open_day($duedate_dt)
+$datetime = $calendar->next_open_days($duedate_dt, $to_add)
 
-Passed a Datetime returns another Datetime representing the next open day. It is
-intended for use to calculate the due date when useDaysMode syspref is set to either
-'Datedue' or 'Calendar'.
+Passed a Datetime and number of days,  returns another Datetime representing
+the next open day after adding the passed number of days. It is intended for
+use to calculate the due date when useDaysMode syspref is set to either
+'Datedue', 'Calendar' or 'Dayweek'.
 
-=head2 prev_open_day
+=head2 prev_open_days
 
-$datetime = $calendar->prev_open_day($duedate_dt)
+$datetime = $calendar->prev_open_days($duedate_dt, $to_sub)
 
-Passed a Datetime returns another Datetime representing the previous open day. It is
-intended for use to calculate the due date when useDaysMode syspref is set to either
-'Datedue' or 'Calendar'.
+Passed a Datetime and a number of days, returns another Datetime
+representing the previous open day after subtracting the number of passed
+days. It is intended for use to calculate the due date when useDaysMode
+syspref is set to either 'Datedue', 'Calendar' or 'Dayweek'.
 
 =head2 set_daysmode
 

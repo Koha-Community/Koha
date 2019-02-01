@@ -3581,7 +3581,7 @@ sub CalcDateDue {
           my $calendar = Koha::Calendar->new( branchcode => $branch );
           if ( $calendar->is_holiday($datedue) ) {
               # Don't return on a closed day
-              $datedue = $calendar->prev_open_day( $datedue );
+              $datedue = $calendar->prev_open_days( $datedue, 1 );
           }
         }
     }
