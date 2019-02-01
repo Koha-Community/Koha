@@ -117,7 +117,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 47;
+    plan tests => 49;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -213,6 +213,15 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             marc_field => '9520',
         },
         {
+            name => 'local_classification',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            sort => 1,
+            marc_type => 'marc21',
+            marc_field => '952o',
+        },
+        {
             name => 'type_of_record',
             type => 'string',
             facet => 0,
@@ -251,6 +260,10 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
 
     my $see = Koha::SearchEngine::Elasticsearch::Search->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
 
+    my $callno = 'ABC123';
+    my $callno2 = 'ABC456';
+    my $long_callno = '1234567890' x 30;
+
     my $marc_record_1 = MARC::Record->new();
     $marc_record_1->leader('     cam  22      a 4500');
     $marc_record_1->append_fields(
@@ -262,8 +275,9 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         MARC::Field->new('245', '', '', a => 'Title:', b => 'first record'),
         MARC::Field->new('999', '', '', c => '1234567'),
         # '  ' for testing trimming of white space in boolean value callback:
-        MARC::Field->new('952', '', '', 0 => '  ', g => '123.30'),
-        MARC::Field->new('952', '', '', 0 => 0, g => '127.20'),
+        MARC::Field->new('952', '', '', 0 => '  ', g => '123.30', o => $callno),
+        MARC::Field->new('952', '', '', 0 => 0, g => '127.20', o => $callno2),
+        MARC::Field->new('952', '', '', 0 => 1, g => '0.00', o => $long_callno),
     );
     my $marc_record_2 = MARC::Record->new();
     $marc_record_2->leader('     cam  22      a 4500');
@@ -272,7 +286,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         # MARC::Field->new('210', '', '', a => 'Title 2'),
         # MARC::Field->new('245', '', '', a => 'Title: second record'),
         MARC::Field->new('999', '', '', c => '1234568'),
-        MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric'),
+        MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric', o => $long_callno),
     );
     my $records = [$marc_record_1, $marc_record_2];
 
@@ -336,7 +350,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     is(scalar @{$docs->[0][1]->{items_withdrawn_status}}, 2, 'First document items_withdrawn_status field should have two values');
     is_deeply(
         $docs->[0][1]->{items_withdrawn_status},
-        ['false', 'false'],
+        ['false', 'true'],
         'First document items_withdrawn_status field should be set correctly'
     );
 
@@ -372,6 +386,12 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     is(scalar @{$docs->[0][1]->{isbn}}, 4, 'First document isbn field should contain four values');
     is_deeply($docs->[0][1]->{isbn}, ['978-1-56619-909-4', '9781566199094', '1-56619-909-3', '1566199093'], 'First document isbn field should be set correctly');
 
+    is_deeply(
+        $docs->[0][1]->{'local_classification'},
+        [$callno, $callno2, $long_callno],
+        'First document local_classification field should be set correctly'
+    );
+
     # Second record:
 
     is(scalar @{$docs->[1][1]->{author}}, 1, 'Second document author field should contain one value');
@@ -388,6 +408,12 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
         $docs->[1][1]->{sum_item_price},
         0,
         'Second document sum_item_price field should be set correctly'
+    );
+
+    is_deeply(
+        $docs->[1][1]->{local_classification__sort},
+        [substr($long_callno, 0, 255)],
+        'Second document local_classification__sort field should be set correctly'
     );
 
     # Mappings marc_type:

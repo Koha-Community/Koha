@@ -375,12 +375,7 @@ sub _process_mappings {
                 $options->{property} => $_data
             }
         }
-        # For sort fields, index only a single field with concatenated values
-        if ($sort && @{$record_document->{$target}}) {
-            @{$record_document->{$target}}[0] .= " $_data";
-        } else {
-            push @{$record_document->{$target}}, $_data;
-        }
+        push @{$record_document->{$target}}, $_data;
     }
 }
 
@@ -509,6 +504,20 @@ sub marc_records_to_documents {
                     }
                 }
                 $record_document->{$field} = \@isbns;
+            }
+        }
+
+        # Remove duplicate values and collapse sort fields
+        foreach my $field (keys %{$record_document}) {
+            if (ref($record_document->{$field}) eq 'ARRAY') {
+                @{$record_document->{$field}} = do {
+                    my %seen;
+                    grep { !$seen{ref($_) eq 'HASH' && defined $_->{input} ? $_->{input} : $_}++ } @{$record_document->{$field}};
+                };
+                if ($field =~ /__sort$/) {
+                    # Make sure to keep the sort field length sensible. 255 was chosen as a nice round value.
+                    $record_document->{$field} = [substr(join(' ', @{$record_document->{$field}}), 0, 255)];
+                }
             }
         }
 
