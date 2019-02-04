@@ -5,6 +5,9 @@
 <ul>
     <li><a href="/cgi-bin/koha/tools/tools-home.pl">Tools home</a></li>
 </ul>
+[% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons
+  || CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons
+  || CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) %]
 <h5>Patrons and circulation</h5>
 <ul>
     [% IF ( CAN_user_tools_manage_patron_lists ) %]
@@ -41,6 +44,13 @@
 	<li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></li>
     [% END %]
 </ul>
+[% END %]
+[% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || CAN_user_tools_records_batchdel
+  || CAN_user_tools_records_batchmod || CAN_user_tools_export_catalog || CAN_user_tools_inventory
+  || CAN_user_tools_label_creator || CAN_user_tools_rotating_collections
+  || ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') )
+  || CAN_user_tools_marc_modification_templates || CAN_user_tools_stage_marc_import
+  || CAN_user_tools_manage_staged_marc || CAN_user_tools_upload_local_cover_images ) %]
 <h5>Catalog</h5>
 <ul>
     [% IF ( CAN_user_tools_items_batchdel ) %]
@@ -87,6 +97,10 @@
     <li><a href="/cgi-bin/koha/tools/upload-cover-image.pl">Upload local cover image</a></li>
     [% END %]
 </ul>
+[% END %]
+[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_news
+  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( UseKohaPlugins && CAN_user_plugins_tool )
+  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
 <h5>Additional tools</h5>
 <ul>
     [% IF ( CAN_user_tools_edit_calendar ) %]
@@ -116,4 +130,6 @@
     [% IF ( CAN_user_tools_access_files ) %]
     <li><a href="/cgi-bin/koha/tools/access_files.pl">Access files</a></li>
     [% END %]
-</ul></div></div>
+</ul>
+[% END %]
+</div></div>

@@ -13,7 +13,11 @@
 <div class="container-fluid">
     <div class="row">
         <div class="col-sm-4">
+[% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons
+  || CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons
+  || CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) %]
 <h3>Patrons and circulation</h3>
+[% END %]
 <dl>
     [% IF (CAN_user_tools_manage_patron_lists) %]
     <dt><a href="/cgi-bin/koha/patron_lists/lists.pl">Patron lists</a>
@@ -27,7 +31,7 @@
 
     [% IF ( CAN_user_tools_moderate_comments ) %]
     <dt><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">Comments</a> [% IF ( pendingcomments ) %]<span class="number_box"><a href="/cgi-bin/koha/reviews/reviewswaiting.pl">[% pendingcomments | html %]</a></span>[% END %]</dt>
-	<dd>Moderate patron comments. </dd>
+    <dd>Moderate patron comments. </dd>
     [% END %]
     
     [% IF ( CAN_user_tools_import_patrons ) %]
@@ -62,19 +66,23 @@
 
     [% IF ( CAN_user_tools_moderate_tags ) %]
     <dt><a href="/cgi-bin/koha/tags/review.pl">Tags</a> [% IF ( pendingtags ) %]<span class="number_box"><a href="/cgi-bin/koha/tags/review.pl">[% pendingtags | html %]</a></span>[% END %]</dt>
-	<dd>Moderate patron tags</dd>
+    <dd>Moderate patron tags</dd>
     [% END %]
 
     [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
     <dt><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></dt>
-	<dd>Upload patron images in a batch or one at a time</dd>
+    <dd>Upload patron images in a batch or one at a time</dd>
     [% END %]
-	</dl>
+    </dl>
 </div>
 
 
 <div class="col-sm-4 col-sm-push-4">
+[% IF ( CAN_user_tools_edit_calendar || CAN_user_tools_manage_csv_profiles || CAN_user_tools_view_system_logs || CAN_user_tools_edit_news
+  || CAN_user_tools_schedule_tasks || CAN_user_tools_edit_quotes || ( UseKohaPlugins && CAN_user_plugins_tool )
+  || CAN_user_tools_upload_general_files || CAN_user_tools_access_files ) %]
 <h3>Additional tools</h3>
+[% END %]
 <dl>
     [% IF ( CAN_user_tools_edit_calendar ) %]
     <dt><a href="/cgi-bin/koha/tools/holidays.pl">Calendar</a></dt>
@@ -83,11 +91,11 @@
 
     [% IF ( CAN_user_tools_manage_csv_profiles ) %]
     <dt><a href="/cgi-bin/koha/tools/csv-profiles.pl">CSV profiles</a></dt>
-	<dd>Manage CSV export profiles</dd>
+    <dd>Manage CSV export profiles</dd>
     [% END %]
 
     [% IF ( CAN_user_tools_view_system_logs ) %]
-	<dt><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></dt>
+    <dt><a href="/cgi-bin/koha/tools/viewlog.pl">Log viewer</a></dt>
     <dd>Browse the system logs</dd>
     [% END %]
 
@@ -100,7 +108,7 @@
     <dt><a href="/cgi-bin/koha/tools/scheduler.pl">Task scheduler</a></dt>
     <dd>Schedule tasks to run</dd>
     [% END %]
-	
+
     [% IF ( CAN_user_tools_edit_quotes ) %]
     <dt><a href="/cgi-bin/koha/tools/quotes.pl">Edit quotes for QOTD feature</a></dt>
     <dd>Quote editor for Quote-of-the-day feature in OPAC</dd>
@@ -125,7 +133,14 @@
 </div>
 
 <div class="col-sm-4 col-sm-pull-4">
+[% IF ( CAN_user_tools_items_batchdel || CAN_user_tools_items_batchmod || CAN_user_tools_records_batchdel
+  || CAN_user_tools_records_batchmod || CAN_user_tools_export_catalog || CAN_user_tools_inventory
+  || CAN_user_tools_label_creator || CAN_user_tools_rotating_collections
+  || ( CAN_user_stockrotation_manage_rotas && Koha.Preference('StockRotation') )
+  || CAN_user_tools_marc_modification_templates || CAN_user_tools_stage_marc_import
+  || CAN_user_tools_manage_staged_marc || CAN_user_tools_upload_local_cover_images ) %]
 <h3>Catalog</h3>
+[% END %]
 <dl>
     [% IF ( CAN_user_tools_items_batchdel ) %]
     <dt><a href="/cgi-bin/koha/tools/batchMod.pl?del=1">Batch item deletion</a></dt>
