@@ -721,6 +721,7 @@
           <th class="title-string">Receive date</th>
           <th>Status</th>
           <th>Quantity</th>
+          <th>Internal note</th>
           <th>Subscription</th>
           <th>Subscription callnumber</th>
         </tr>
@@ -772,6 +773,7 @@
               [% END %]
             </td>
             <td>[% order.quantity | html %]</td>
+            <td>[% order.order_internalnote | html %]</td>
             <td>
                 [% IF order.subscriptionid %]
                     <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% order.subscriptionid | uri %]">[% order.subscriptionid | html %]</a>
