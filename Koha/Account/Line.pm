@@ -220,7 +220,7 @@ This method allows updating a debit or credit on a patron's account
     );
 
 $update_type can be any of:
-  - fine_increment
+  - fine_update
 
 Authors Note: The intention here is that this method is only used
 to adjust accountlines where the final amount is not yet known/fixed.
@@ -236,7 +236,7 @@ sub adjust {
     my $amount       = $params->{amount};
     my $update_type  = $params->{type};
 
-    unless ( exists($Koha::Account::Line::offset_type->{$update_type}) ) {
+    unless ( exists($Koha::Account::Line::allowed_update->{$update_type}) ) {
         Koha::Exceptions::Account::UnrecognisedType->throw(
             error => 'Update type not recognised'
         );
@@ -259,6 +259,9 @@ sub adjust {
             my $difference                = $amount - $amount_before;
             my $new_outstanding           = $amount_outstanding_before + $difference;
 
+            my $offset_type = substr( $update_type, 0, index( $update_type, '_' ) );
+            $offset_type .= ( $difference > 0 ) ? "_increase" : "_decrease";
+
             # Catch cases that require patron refunds
             if ( $new_outstanding < 0 ) {
                 my $account =
@@ -268,7 +271,7 @@ sub adjust {
                         amount      => $new_outstanding * -1,
                         description => 'Overpayment refund',
                         type        => 'credit',
-                        ( $update_type eq 'fine_increment' ? ( item_id => $self->itemnumber ) : ()),
+                        ( $update_type eq 'fine_update' ? ( item_id => $self->itemnumber ) : ()),
                     }
                 );
                 $new_outstanding = 0;
@@ -280,7 +283,7 @@ sub adjust {
                     date              => \'NOW()',
                     amount            => $amount,
                     amountoutstanding => $new_outstanding,
-                    ( $update_type eq 'fine_increment' ? ( lastincrement => $difference ) : ()),
+                    ( $update_type eq 'fine_update' ? ( lastincrement => $difference ) : ()),
                 }
             )->store();
 
@@ -288,7 +291,7 @@ sub adjust {
             my $account_offset = Koha::Account::Offset->new(
                 {
                     debit_id => $self->id,
-                    type     => $Koha::Account::Line::offset_type->{$update_type},
+                    type     => $offset_type,
                     amount   => $difference
                 }
             )->store();
@@ -310,7 +313,7 @@ sub adjust {
                             manager_id        => undef,
                         }
                     )
-                ) if ( $update_type eq 'fine_increment' );
+                ) if ( $update_type eq 'fine_update' );
             }
         }
     );
@@ -358,17 +361,11 @@ sub _type {
 
 =head2 Name mappings
 
-=head3 $offset_type
-
-=cut
-
-our $offset_type = { 'fine_increment' => 'Fine Update', };
-
 =head3 $allowed_update
 
 =cut
 
-our $allowed_update = { 'fine_increment' => 'FU', };
+our $allowed_update = { 'fine_update' => 'FU', };
 
 =head1 AUTHORS
 

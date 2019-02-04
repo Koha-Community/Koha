@@ -336,12 +336,12 @@ subtest 'adjust() tests' => sub {
     throws_ok { $debit_1->adjust( { amount => 50, type => 'bad' } ) }
     qr/Update type not recognised/, 'Exception thrown for unrecognised type';
 
-    throws_ok { $debit_1->adjust( { amount => 50, type => 'fine_increment' } ) }
+    throws_ok { $debit_1->adjust( { amount => 50, type => 'fine_update' } ) }
     qr/Update type not allowed on this accounttype/,
       'Exception thrown for type conflict';
 
     # Increment an unpaid fine
-    $debit_2->adjust( { amount => 150, type => 'fine_increment' } )->discard_changes;
+    $debit_2->adjust( { amount => 150, type => 'fine_update' } )->discard_changes;
 
     is( $debit_2->amount * 1, 150, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 150, 'Fine amountoutstanding was update in full' );
@@ -352,7 +352,7 @@ subtest 'adjust() tests' => sub {
     is( $offsets->count, 1, 'An offset is generated for the increment' );
     my $THIS_offset = $offsets->next;
     is( $THIS_offset->amount * 1, 50, 'Amount was calculated correctly (increment by 50)' );
-    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+    is( $THIS_offset->type, 'fine_increase', 'Adjust type stored correctly' );
 
     is( $schema->resultset('ActionLog')->count(), $action_logs + 0, 'No log was added' );
 
@@ -368,7 +368,7 @@ subtest 'adjust() tests' => sub {
     t::lib::Mocks::mock_preference( 'FinesLog', 1 );
 
     # Increment the partially paid fine
-    $debit_2->adjust( { amount => 160, type => 'fine_increment' } )->discard_changes;
+    $debit_2->adjust( { amount => 160, type => 'fine_update' } )->discard_changes;
 
     is( $debit_2->amount * 1, 160, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 120, 'Fine amountoutstanding was updated by difference' );
@@ -378,12 +378,12 @@ subtest 'adjust() tests' => sub {
     is( $offsets->count, 3, 'An offset is generated for the increment' );
     $THIS_offset = $offsets->last;
     is( $THIS_offset->amount * 1, 10, 'Amount was calculated correctly (increment by 10)' );
-    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+    is( $THIS_offset->type, 'fine_increase', 'Adjust type stored correctly' );
 
     is( $schema->resultset('ActionLog')->count(), $action_logs + 1, 'Log was added' );
 
     # Decrement the partially paid fine, less than what was paid
-    $debit_2->adjust( { amount => 50, type => 'fine_increment' } )->discard_changes;
+    $debit_2->adjust( { amount => 50, type => 'fine_update' } )->discard_changes;
 
     is( $debit_2->amount * 1, 50, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 10, 'Fine amountoutstanding was updated by difference' );
@@ -393,10 +393,10 @@ subtest 'adjust() tests' => sub {
     is( $offsets->count, 4, 'An offset is generated for the decrement' );
     $THIS_offset = $offsets->last;
     is( $THIS_offset->amount * 1, -110, 'Amount was calculated correctly (decrement by 110)' );
-    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+    is( $THIS_offset->type, 'fine_decrease', 'Adjust type stored correctly' );
 
     # Decrement the partially paid fine, more than what was paid
-    $debit_2->adjust( { amount => 30, type => 'fine_increment' } )->discard_changes;
+    $debit_2->adjust( { amount => 30, type => 'fine_update' } )->discard_changes;
     is( $debit_2->amount * 1, 30, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 0, 'Fine amountoutstanding was zeroed (payment was 40)' );
     is( $debit_2->lastincrement * 1, -20, 'lastincrement is the to the right value' );
@@ -405,7 +405,7 @@ subtest 'adjust() tests' => sub {
     is( $offsets->count, 5, 'An offset is generated for the decrement' );
     $THIS_offset = $offsets->last;
     is( $THIS_offset->amount * 1, -20, 'Amount was calculated correctly (decrement by 20)' );
-    is( $THIS_offset->type, 'Fine Update', 'Adjust type stored correctly' );
+    is( $THIS_offset->type, 'fine_decrease', 'Adjust type stored correctly' );
 
     my $overpayment_refund = $account->lines->last;
     is( $overpayment_refund->amount * 1, -10, 'A new credit has been added' );

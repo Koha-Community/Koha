@@ -573,12 +573,9 @@ sub UpdateFine {
     }
 
     if ( $data ) {
-        # we're updating an existing fine.  Only modify if amount changed
-        # Note that in the current implementation, you cannot pay against an accruing fine
-        # (i.e. , of accounttype 'FU').  Doing so will break accrual.
         if ( $data->{'amount'} != $amount ) {
             my $accountline = Koha::Account::Lines->find( $data->{accountlines_id} );
-            $accountline->adjust({ amount => $amount, type => 'fine_increment' });
+            $accountline->adjust({ amount => $amount, type => 'fine_update' });
         }
     } else {
         if ( $amount ) { # Don't add new fines with an amount of 0
