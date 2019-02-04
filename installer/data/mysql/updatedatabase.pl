@@ -17322,6 +17322,15 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22132 - Add Basic authentication)\n";
 }
 
+$DBversion = '18.12.00.013';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO permissions (module_bit, code, description) VALUES ( 3, 'manage_mana', 'Manage Mana KB content sharing');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22198 - Add ghranular permission setting for Mana KB)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
