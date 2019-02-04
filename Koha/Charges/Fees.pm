@@ -30,6 +30,8 @@ use Koha::Exceptions;
 
 Koha::Charges::Fees - Module calculating fees in Koha
 
+=head2 Class methods
+
 =head3 new
 
 Koha::Charges::Fees->new(
