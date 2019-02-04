@@ -594,6 +594,7 @@ foreach my $subscription (@subscriptions) {
     $cell{histenddate}       = $subscription->{histenddate};
     $cell{branchcode}        = $subscription->{branchcode};
     $cell{callnumber}        = $subscription->{callnumber};
+    $cell{location}          = $subscription->{location};
     $cell{closed}            = $subscription->{closed};
     $cell{letter}            = $subscription->{letter};
     $cell{biblionumber}      = $subscription->{biblionumber};

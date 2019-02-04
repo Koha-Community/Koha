@@ -810,6 +810,9 @@
                                 [% IF ( subscription.closed ) %]
                                     <p class="subscription_closed">This subscription is closed.</p>
                                 [% END %]
+                                [% IF ( subscription.location ) %]
+                                  <p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location ) | html %]
+                                [% END %]
                                 [% IF ( subscription.callnumber ) %]
                                   <p class="subscription_callnumber">Call number: [% subscription.callnumber | html %]</p>
                                 [% END %]
