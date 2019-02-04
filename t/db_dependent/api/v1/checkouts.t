@@ -32,16 +32,21 @@ use C4::Circulation;
 use C4::Items;
 
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Patron;
 
 my $schema = Koha::Database->schema;
-$schema->storage->txn_begin;
-my $dbh = C4::Context->dbh;
 my $builder = t::lib::TestBuilder->new;
-$dbh->{RaiseError} = 1;
+
+$schema->storage->txn_begin;
+
+t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
 
 $ENV{REMOTE_ADDR} = '127.0.0.1';
 my $t = Test::Mojo->new('Koha::REST::V1');
+my $tx;
+
+my $dbh = C4::Context->dbh;
 
 $dbh->do('DELETE FROM issues');
 $dbh->do('DELETE FROM items');
@@ -73,14 +78,14 @@ my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 my $module = new Test::MockModule('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });
 
-my $tx = $t->ua->build_tx(GET => "/api/v1/checkouts?borrowernumber=$borrowernumber");
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$borrowernumber");
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
   ->json_is([]);
 
 my $notexisting_borrowernumber = $borrowernumber + 1;
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?borrowernumber=$notexisting_borrowernumber");
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$notexisting_borrowernumber");
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
@@ -99,16 +104,16 @@ my $date_due2 = Koha::DateUtils::dt_from_string( $issue2->date_due );
 my $issue3 = C4::Circulation::AddIssue($loggedinuser, 'TEST000003', $date_due);
 my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?borrowernumber=$borrowernumber");
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$borrowernumber");
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/0/borrowernumber' => $borrowernumber)
-  ->json_is('/0/itemnumber' => $itemnumber1)
-  ->json_is('/0/date_due' => $date_due1->ymd . ' ' . $date_due1->hms)
-  ->json_is('/1/borrowernumber' => $borrowernumber)
-  ->json_is('/1/itemnumber' => $itemnumber2)
-  ->json_is('/1/date_due' => $date_due2->ymd . ' ' . $date_due2->hms)
+  ->json_is('/0/patron_id' => $borrowernumber)
+  ->json_is('/0/item_id' => $itemnumber1)
+  ->json_is('/0/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
+  ->json_is('/1/patron_id' => $borrowernumber)
+  ->json_is('/1/item_id' => $itemnumber2)
+  ->json_is('/1/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
   ->json_hasnt('/2');
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/".$issue3->issue_id);
@@ -119,7 +124,7 @@ $t->request_ok($tx)
               required_permissions => { circulate => "circulate_remaining_permissions" }
 						});
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?borrowernumber=".$loggedinuser->{borrowernumber});
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=".$loggedinuser->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
 $t->request_ok($tx)
   ->status_is(403)
@@ -127,38 +132,38 @@ $t->request_ok($tx)
 						  required_permissions => { circulate => "circulate_remaining_permissions" }
 					  });
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?borrowernumber=$borrowernumber");
-$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$borrowernumber");
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/0/borrowernumber' => $borrowernumber)
-  ->json_is('/0/itemnumber' => $itemnumber1)
-  ->json_is('/0/date_due' => $date_due1->ymd . ' ' . $date_due1->hms)
-  ->json_is('/1/borrowernumber' => $borrowernumber)
-  ->json_is('/1/itemnumber' => $itemnumber2)
-  ->json_is('/1/date_due' => $date_due2->ymd . ' ' . $date_due2->hms)
+  ->json_is('/0/patron_id' => $borrowernumber)
+  ->json_is('/0/item_id' => $itemnumber1)
+  ->json_is('/0/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
+  ->json_is('/1/patron_id' => $borrowernumber)
+  ->json_is('/1/item_id' => $itemnumber2)
+  ->json_is('/1/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
   ->json_hasnt('/2');
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue1->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/borrowernumber' => $borrowernumber)
-  ->json_is('/itemnumber' => $itemnumber1)
-  ->json_is('/date_due' => $date_due1->ymd . ' ' . $date_due1->hms)
+  ->json_is('/patron_id' => $borrowernumber)
+  ->json_is('/item_id' => $itemnumber1)
+  ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
   ->json_hasnt('/1');
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $date_due1->ymd . ' ' . $date_due1->hms);
+  ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) );
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $date_due2->ymd . ' ' . $date_due2->hms);
+  ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due2 }) );
 
 
 $dbh->do('DELETE FROM issuingrules');
@@ -172,7 +177,7 @@ $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $expected_datedue->ymd . ' ' . $expected_datedue->hms);
+  ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) );
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue3->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
@@ -187,14 +192,14 @@ $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
 $t->request_ok($tx)
   ->status_is(403)
-  ->json_is({ error => "Opac Renewal not allowed"	});
+  ->json_is({ error => "Opac Renewal not allowed" });
 
 t::lib::Mocks::mock_preference( "OpacRenewalAllowed", 1 );
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
+$tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)
   ->status_is(200)
-  ->json_is('/date_due' => $expected_datedue->ymd . ' ' . $expected_datedue->hms);
+  ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $expected_datedue}) );
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});

@@ -15,8 +15,6 @@ package Koha::REST::V1::Checkout;
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use Modern::Perl;
-
 use Mojo::Base 'Mojolicious::Controller';
 
 use C4::Auth qw( haspermission );
@@ -24,42 +22,84 @@ use C4::Context;
 use C4::Circulation;
 use Koha::Checkouts;
 
+use Try::Tiny;
+
+=head1 NAME
+
+Koha::REST::V1::Checkout
+
+=head1 API
+
+=head2 Methods
+
+=head3 list
+
+List Koha::Checkout objects
+
+=cut
+
 sub list {
-    my ($c, $args, $cb) = @_;
-
-    my $borrowernumber = $c->param('borrowernumber');
-    my $checkouts = C4::Circulation::GetIssues({
-        borrowernumber => $borrowernumber
-    });
-
-    $c->$cb($checkouts, 200);
+    my $c = shift->openapi->valid_input or return;
+    try {
+        my $checkouts_set = Koha::Checkouts->new;
+        my $checkouts = $c->objects->search( $checkouts_set, \&_to_model, \&_to_api );
+        return $c->render( status => 200, openapi => $checkouts );
+    } catch {
+        if ( $_->isa('DBIx::Class::Exception') ) {
+            return $c->render(
+                status => 500,
+                openapi => { error => $_->{msg} }
+            );
+        } else {
+            return $c->render(
+                status => 500,
+                openapi => { error => "Something went wrong, check the logs." }
+            );
+        }
+    };
 }
+
+=head3 get
+
+get one checkout
+
+=cut
 
 sub get {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $checkout_id = $args->{checkout_id};
-    my $checkout = Koha::Checkouts->find($checkout_id);
+    my $checkout = Koha::Checkouts->find( $c->validation->param('checkout_id') );
 
-    if (!$checkout) {
-        return $c->$cb({
-            error => "Checkout doesn't exist"
-        }, 404);
+    unless ($checkout) {
+        return $c->render(
+            status => 404,
+            openapi => { error => "Checkout doesn't exist" }
+        );
     }
 
-    return $c->$cb($checkout->unblessed, 200);
+    return $c->render(
+        status => 200,
+        openapi => _to_api($checkout->TO_JSON)
+    );
 }
 
+=head3 renew
+
+Renew a checkout
+
+=cut
+
 sub renew {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $checkout_id = $args->{checkout_id};
-    my $checkout = Koha::Checkouts->find($checkout_id);
+    my $checkout_id = $c->validation->param('checkout_id');
+    my $checkout = Koha::Checkouts->find( $checkout_id );
 
-    if (!$checkout) {
-        return $c->$cb({
-            error => "Checkout doesn't exist"
-        }, 404);
+    unless ($checkout) {
+        return $c->render(
+            status => 404,
+            openapi => { error => "Checkout doesn't exist" }
+        );
     }
 
     my $borrowernumber = $checkout->borrowernumber;
@@ -69,7 +109,10 @@ sub renew {
     unless (C4::Context->preference('OpacRenewalAllowed')) {
         my $user = $c->stash('koha.user');
         unless ($user && haspermission($user->userid, { circulate => "circulate_remaining_permissions" })) {
-            return $c->$cb({error => "Opac Renewal not allowed"}, 403);
+            return $c->render(
+                status => 403,
+                openapi => { error => "Opac Renewal not allowed"}
+            );
         }
     }
 
@@ -77,13 +120,100 @@ sub renew {
         $borrowernumber, $itemnumber);
 
     if (!$can_renew) {
-        return $c->$cb({error => "Renewal not authorized ($error)"}, 403);
+        return $c->render(
+            status => 403,
+            openapi => { error => "Renewal not authorized ($error)" }
+        );
     }
 
     AddRenewal($borrowernumber, $itemnumber, $checkout->branchcode);
     $checkout = Koha::Checkouts->find($checkout_id);
 
-    return $c->$cb($checkout->unblessed, 200);
+    return $c->render(
+        status => 200,
+        openapi => _to_api( $checkout->TO_JSON )
+    );
 }
+
+=head3 _to_api
+
+Helper function that maps a hashref of Koha::Checkout attributes into REST api
+attribute names.
+
+=cut
+
+sub _to_api {
+    my $checkout = shift;
+
+    foreach my $column ( keys %{ $Koha::REST::V1::Checkout::to_api_mapping } ) {
+        my $mapped_column = $Koha::REST::V1::Checkout::to_api_mapping->{$column};
+        if ( exists $checkout->{ $column } && defined $mapped_column )
+        {
+            $checkout->{ $mapped_column } = delete $checkout->{ $column };
+        }
+        elsif ( exists $checkout->{ $column } && !defined $mapped_column ) {
+            delete $checkout->{ $column };
+        }
+    }
+    return $checkout;
+}
+
+=head3 _to_model
+
+Helper function that maps REST api objects into Koha::Checkouts
+attribute names.
+
+=cut
+
+sub _to_model {
+    my $checkout = shift;
+
+    foreach my $attribute ( keys %{ $Koha::REST::V1::Checkout::to_model_mapping } ) {
+        my $mapped_attribute = $Koha::REST::V1::Checkout::to_model_mapping->{$attribute};
+        if ( exists $checkout->{ $attribute } && defined $mapped_attribute )
+        {
+            $checkout->{ $mapped_attribute } = delete $checkout->{ $attribute };
+        }
+        elsif ( exists $checkout->{ $attribute } && !defined $mapped_attribute )
+        {
+            delete $checkout->{ $attribute };
+        }
+    }
+    return $checkout;
+}
+
+=head2 Global variables
+
+=head3 $to_api_mapping
+
+=cut
+
+our $to_api_mapping = {
+    issue_id        => 'checkout_id',
+    borrowernumber  => 'patron_id',
+    itemnumber      => 'item_id',
+    date_due        => 'due_date',
+    branchcode      => 'library_id',
+    returndate      => 'checkin_date',
+    lastreneweddate => 'last_renewed_date',
+    issuedate       => 'checked_out_date',
+    notedate        => 'note_date',
+};
+
+=head3 $to_model_mapping
+
+=cut
+
+our $to_model_mapping = {
+    checkout_id       => 'issue_id',
+    patron_id         => 'borrowernumber',
+    item_id           => 'itemnumber',
+    due_date          => 'date_due',
+    library_id        => 'branchcode',
+    checkin_date      => 'returndate',
+    last_renewed_date => 'lastreneweddate',
+    checked_out_date  => 'issuedate',
+    note_date         => 'notedate',
+};
 
 1;
