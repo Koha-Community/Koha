@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 17;
 use Test::MockModule;
 use DBI;
 use DateTime;
@@ -94,6 +94,202 @@ is($date, '2013-02-' . (9 + $issuelength) . 'T23:59:00', "date expiry ( 9 + $iss
 
 $date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower, 1 );
 is($date, '2013-02-' . (9 + $renewalperiod) . 'T23:59:00', "date expiry ( 9 + $renewalperiod )");
+
+
+# Now we want to test the Dayweek useDaysMode option
+# For this we need a loan period that is a mutiple of 7 days
+# But, since we currently don't have that, let's test it does the
+# right thing in that case, it should act as though useDaysMode is set to
+# Datedue
+#Set syspref ReturnBeforeExpiry = 0 and useDaysMode = 'Dayweek'
+t::lib::Mocks::mock_preference('ReturnBeforeExpiry', 0);
+t::lib::Mocks::mock_preference('useDaysMode', 'Dayweek');
+
+# No closed day interfering, so we should get the regular due date
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower );
+is($date, '2013-02-' . (9 + $issuelength) . 'T23:59:00', "useDaysMode = Dayweek, no closed days, issue date expiry ( start + $issuelength )");
+
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower, 1 );
+is($date, '2013-02-' . (9 + $renewalperiod) . 'T23:59:00', "useDaysMode = Dayweek, no closed days, renewal date expiry ( start + $renewalperiod )");
+
+# Now let's add a closed day on the expected renewal date, it should
+# roll forward as per Datedue (i.e. one day at a time)
+# For issues...
+$calendar->insert_single_holiday(
+    day             => 9 + $issuelength,
+    month           => 2,
+    year            => 2013,
+    title           =>'DayweekTest1',
+    description     => 'DayweekTest1'
+);
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower );
+is($date, '2013-02-' . (9 + $issuelength + 1) . 'T23:59:00', "useDaysMode = Dayweek, closed on due date, 10 day loan (should not trigger 7 day roll forward), issue date expiry ( start + $issuelength  + 1 )");
+# Remove the holiday we just created
+$calendar->delete_holiday(
+    day             => 9 + $issuelength,
+    month           => 2,
+    year            => 2013
+);
+
+# ...and for renewals...
+$calendar->insert_single_holiday(
+    day             => 9 + $renewalperiod,
+    month           => 2,
+    year            => 2013,
+    title           =>'DayweekTest2',
+    description     => 'DayweekTest2'
+);
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $borrower, 1 );
+is($date, '2013-02-' . (9 + $renewalperiod + 1) . 'T23:59:00', "useDaysMode = Dayweek, closed on due date, 5 day renewal (should not trigger 7 day roll forward), renewal date expiry ( start + $renewalperiod  + 1 )");
+# Remove the holiday we just created
+$calendar->delete_holiday(
+    day             => 9 + $renewalperiod,
+    month           => 2,
+    year            => 2013,
+);
+
+# Now we test it does the right thing if the loan and renewal periods
+# are a multiple of 7 days
+my $dayweek_categorycode = 'C';
+my $dayweek_itemtype = 'MX';
+my $dayweek_branchcode = 'FPL';
+my $dayweek_issuelength = 14;
+my $dayweek_renewalperiod = 7;
+my $dayweek_lengthunit = 'days';
+
+Koha::Database->schema->resultset('Issuingrule')->create({
+  categorycode  => $dayweek_categorycode,
+  itemtype      => $dayweek_itemtype,
+  branchcode    => $dayweek_branchcode,
+  issuelength   => $dayweek_issuelength,
+  renewalperiod => $dayweek_renewalperiod,
+  lengthunit    => $dayweek_lengthunit,
+});
+my $dayweek_borrower = {categorycode => 'C', dateexpiry => $dateexpiry};
+
+# For issues...
+$start_date = DateTime->new({year => 2013, month => 2, day => 9});
+$calendar->insert_single_holiday(
+    day             => 9 + $dayweek_issuelength,
+    month           => 2,
+    year            => 2013,
+    title           =>'DayweekTest3',
+    description     => 'DayweekTest3'
+);
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $dayweek_borrower );
+my $issue_should_add = $dayweek_issuelength + 7;
+my $dayweek_issue_expected = $start_date->add( days => $issue_should_add );
+is($date, $dayweek_issue_expected->strftime('%F') . 'T23:59:00', "useDaysMode = Dayweek, closed on due date, 14 day loan (should trigger 7 day roll forward), issue date expiry ( start + $issue_should_add )");
+# Remove the holiday we just created
+$calendar->delete_holiday(
+    day             => 9 + $dayweek_issuelength,
+    month           => 2,
+    year            => 2013,
+);
+
+# ...and for renewals...
+$start_date = DateTime->new({year => 2013, month => 2, day => 9});
+$calendar->insert_single_holiday(
+    day             => 9 + $dayweek_renewalperiod,
+    month           => 2,
+    year            => 2013,
+    title           => 'DayweekTest4',
+    description     => 'DayweekTest4'
+);
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $dayweek_borrower, 1 );
+my $renewal_should_add = $dayweek_renewalperiod + 7;
+my $dayweek_renewal_expected = $start_date->add( days => $renewal_should_add );
+is($date, $dayweek_renewal_expected->strftime('%F') . 'T23:59:00', "useDaysMode = Dayweek, closed on due date, 7 day renewal (should trigger 7 day roll forward), renewal date expiry ( start + $renewal_should_add )");
+# Remove the holiday we just created
+$calendar->delete_holiday(
+    day             => 9 + $dayweek_renewalperiod,
+    month           => 2,
+    year            => 2013,
+);
+
+# Now test it continues to roll forward by 7 days until it finds
+# an open day, so we create a 3 week period of closed Saturdays
+$start_date = DateTime->new({year => 2013, month => 2, day => 9});
+my $expected_rolled_date = DateTime->new({year => 2013, month => 3, day => 9});
+my $holiday = $start_date->clone();
+$holiday->add(days => 7);
+$calendar->insert_single_holiday(
+    day             => $holiday->day,
+    month           => $holiday->month,
+    year            => 2013,
+    title           =>'DayweekTest5',
+    description     => 'DayweekTest5'
+);
+$holiday->add(days => 7);
+$calendar->insert_single_holiday(
+    day             => $holiday->day,
+    month           => $holiday->month,
+    year            => 2013,
+    title           =>'DayweekTest6',
+    description     => 'DayweekTest6'
+);
+$holiday->add(days => 7);
+$calendar->insert_single_holiday(
+    day             => $holiday->day,
+    month           => $holiday->month,
+    year            => 2013,
+    title           =>'DayweekTest7',
+    description     => 'DayweekTest7'
+);
+# For issues...
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $dayweek_borrower );
+$dayweek_issue_expected = $start_date->add( days => $issue_should_add );
+is($date, $expected_rolled_date->strftime('%F') . 'T23:59:00', "useDaysMode = Dayweek, closed on due date and two subequent due dates, 14 day loan (should trigger 2 x 7 day roll forward), issue date expiry ( start + 28 )");
+# ...and for renewals...
+$start_date = DateTime->new({year => 2013, month => 2, day => 9});
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $dayweek_borrower, 1 );
+$dayweek_issue_expected = $start_date->add( days => $renewal_should_add );
+is($date, $expected_rolled_date->strftime('%F') . 'T23:59:00', "useDaysMode = Dayweek, closed on due date and three subsequent due dates, 7 day renewal (should trigger 3 x 7 day roll forward), issue date expiry ( start + 28 )");
+# Remove the holidays we just created
+$start_date = DateTime->new({year => 2013, month => 2, day => 9});
+my $del_holiday = $start_date->clone();
+$del_holiday->add(days => 7);
+$calendar->delete_holiday(
+    day             => $del_holiday->day,
+    month           => $del_holiday->month,
+    year            => 2013
+);
+$del_holiday->add(days => 7);
+$calendar->delete_holiday(
+    day             => $del_holiday->day,
+    month           => $del_holiday->month,
+    year            => 2013
+);
+$del_holiday->add(days => 7);
+$calendar->delete_holiday(
+    day             => $del_holiday->day,
+    month           => $del_holiday->month,
+    year            => 2013
+);
+
+# Now test that useDaysMode "Dayweek" doesn't try to roll forward onto
+# a permanently closed day and instead rolls forward just one day
+$start_date = DateTime->new({year => 2013, month => 2, day => 9});
+# Our tests are concerned with Saturdays, so let's close on Saturdays
+$calendar->insert_week_day_holiday(
+    weekday => 6,
+    title => "Saturday closure",
+    description => "Closed on Saturdays"
+);
+# For issues...
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $dayweek_borrower );
+$dayweek_issue_expected = $start_date->add( days => $dayweek_issuelength + 1 );
+is($date, $dayweek_issue_expected->strftime('%F') . 'T23:59:00', "useDaysMode = Dayweek, due on Saturday, closed on Saturdays, 14 day loan (should trigger 1 day roll forward), issue date expiry ( start + 15 )");
+# ...and for renewals...
+$start_date = DateTime->new({year => 2013, month => 2, day => 9});
+$date = C4::Circulation::CalcDateDue( $start_date, $itemtype, $branchcode, $dayweek_borrower, 1 );
+$dayweek_renewal_expected = $start_date->add( days => $dayweek_renewalperiod + 1 );
+is($date, $dayweek_renewal_expected->strftime('%F') . 'T23:59:00', "useDaysMode = Dayweek, due on Saturday, closed on Saturdays, 7 day renewal (should trigger 1 day roll forward), issue date expiry ( start + 8 )");
+# Remove the holiday we just created
+$calendar->delete_holiday(
+    weekday => 6
+);
+
 
 $cache->clear_from_cache('single_holidays');
 $schema->storage->txn_rollback;
