@@ -61,7 +61,7 @@
                             </select>
                         </li>
                         <li>
-                            <label for="illfilter_barcode">Patron barcode:</label>
+                            <label for="illfilter_barcode">Cardnumber:</label>
                             <input type="text" name="illfilter_barcode" id="illfilter_barcode" />
                         </li>
                     </ol>
@@ -142,7 +142,7 @@
 
                                     </li>
                                     <li>
-                                        <label for="subject" class="required">Subject Line</label>
+                                        <label for="subject" class="required">Subject line:</label>
                                         <input type="text" name="subject" id="subject" type="text" value="[% whole.value.draft.subject | html %]" required="required" />
                                     </li>
                                     <li>
@@ -468,7 +468,7 @@
                                     <th class="updated_formatted">Updated on</th>
                                     <th>Request number</th>
                                     <th>Comments</th>
-                                    <th class="patron_cardnumber">Patron barcode</th>
+                                    <th class="patron_cardnumber">Cardnumber</th>
                                     <th class="actions"></th>
                                 </tr>
                             </thead>
@@ -797,7 +797,7 @@
                     name: _("Updated on"),
                 },
                 patron_cardnumber: {
-                    name: _("Patron barcode")
+                    name: _("Cardnumber")
                 }
             };
 
