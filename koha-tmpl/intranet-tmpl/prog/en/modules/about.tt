@@ -222,8 +222,8 @@
             [% END %]
             [% IF ai_holds %]
                 <h4>Holds</h4>
-                <p>The following ids exist in both tables [% "holds" | $HtmlTags tag="strong" %] and [% "old_reserves" | $HtmlTags tag="strong" %]:</p>
-                <p>[% FOR h IN ai_holds %][% h.reserve_id %][% UNLESS loop.last %], [% END %][% END %]</p>
+                <p>The following ids exist in both tables [% "reserves" | $HtmlTags tag="strong" %] and [% "old_reserves" | $HtmlTags tag="strong" %]:</p>
+                <p>[% FOR h IN ai_holds %][% h.reserve_id | html %][% UNLESS loop.last %], [% END %][% END %]</p>
             [% END %]
             <br/>
         [% END %]
