@@ -1,10 +1,11 @@
 {
   "/checkouts": {
     "get": {
+      "x-mojo-to": "Checkout#list",
       "operationId": "listCheckouts",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
-        "$ref": "../parameters.json#/borrowernumberQueryParam"
+        "$ref": "../parameters.json#/patron_id_qp"
       }],
       "produces": [
         "application/json"
@@ -26,8 +27,6 @@
         }
       },
       "x-koha-authorization": {
-        "allow-owner": true,
-        "allow-guarantor": true,
         "permissions": {
           "circulate": "circulate_remaining_permissions"
         }
@@ -36,6 +35,7 @@
   },
   "/checkouts/{checkout_id}": {
     "get": {
+      "x-mojo-to": "Checkout#get",
       "operationId": "getCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -57,14 +57,13 @@
         }
       },
       "x-koha-authorization": {
-        "allow-owner": true,
-        "allow-guarantor": true,
         "permissions": {
           "circulate": "circulate_remaining_permissions"
         }
       }
     },
     "put": {
+      "x-mojo-to": "Checkout#renew",
       "operationId": "renewCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -86,8 +85,6 @@
         }
       },
       "x-koha-authorization": {
-        "allow-owner": true,
-        "allow-guarantor": true,
         "permissions": {
           "circulate": "circulate_remaining_permissions"
         }
