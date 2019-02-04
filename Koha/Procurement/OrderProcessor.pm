@@ -524,14 +524,14 @@ sub getBookseller{
     $vendorAssignedId = $order->getVendorAssignedId();
     if($vendorAssignedId){
         my $dbh = C4::Context->dbh;
-        my $stmnt = $dbh->prepare("SELECT id FROM aqbooksellers as aq INNER JOIN procurement_bookseller_link as plink on aq.id = plink.aqbooksellers_id and plink.vendor_assigned_id = ?");
+        my $stmnt = $dbh->prepare("SELECT id FROM vendor_edi_accounts WHERE san = ? AND id_code_qualifier='91' AND transport='FILE' AND orders_enabled='1'");
         $stmnt->execute($vendorAssignedId) or die($DBI::errstr);
         $bookseller = $stmnt->fetchrow_array();
     }
 
     if(!$bookseller){
-        $self->getLogger()->logError("No bookseller found with VendorAssignedId: $vendorAssignedId in table procurement_bookseller_link.");
-        $self->getLogger()->log("No bookseller found with VendorAssignedId: $vendorAssignedId in table procurement_bookseller_link.");
+        $self->getLogger()->logError("No vendor account found with VendorAssignedId: $vendorAssignedId in table vendor_edi_accounts.");
+        $self->getLogger()->log("No vendor account found with VendorAssignedId: $vendorAssignedId in table vendor_edi_accounts.");
         die();
     }
 
