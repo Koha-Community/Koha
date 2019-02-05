@@ -261,7 +261,8 @@
         <xsl:param name="field"/>
         <xsl:param name="url"/>
         <xsl:variable name="ind2" select="$field/@ind2"/>
-        <span class="results_summary">
+        <span>
+	    <xsl:attribute name="class"><xsl:value-of select="concat('results_summary ', 'f264 ', 'ind2-',$ind2)"/></xsl:attribute>
             <xsl:choose>
                 <xsl:when test="$ind2='0'">
                     <span class="label">Producer: </span>
