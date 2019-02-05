@@ -2,6 +2,7 @@
 #
 # koha-reset-passwd -- reset password for a user in a Koha instance
 # Copyright 2010  Catalyst IT, Ltd
+# Copyright 2019  Theke Solutions
 # 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -27,32 +28,56 @@ else
     exit 1
 fi
 
-pwdigest() {
-    echo -n "$1" |
-    perl -e 'use Digest::MD5 qw(md5_base64);
-             while (<>) { print md5_base64($_), "\n"; }'
+usage()
+{
+    local scriptname=$0
+    cat <<EOF
+Resets the password for the specified user on the Koha instance.
+
+Usage: $scriptname instancename userid
+
+Note: The generated password will be printed.
+EOF
 }
 
+set_password()
+{
+    local instancename=$1
+    local userid=$2
+    local password=$(pwgen 12 1)
 
-[ $# -lt 2 ] && die "Usage: $0 instancename username..."
+    # Optionally use alternative paths for a dev install
+    adjust_paths_dev_install $1
+
+    if [ "$DEV_INSTALL" = "" ]; then
+        KOHA_BINDIR=$KOHA_HOME/bin
+    else
+        KOHA_BINDIR=$KOHA_HOME/misc
+    fi
+
+    if sudo -u "$instancename-koha" -H \
+        env PERL5LIB=$PERL5LIB \
+        KOHA_CONF="/etc/koha/sites/$instancename/koha-conf.xml" \
+        $KOHA_BINDIR/admin/set_password.pl --userid $userid --password $password ; then
+
+        echo "$userid $password"
+        return 0
+    else
+        return 1
+    fi
+}
+
+if [ $# -lt 2 ]; then
+    usage
+    die "Wrong parameters"
+fi
+
 instance="$1"
 shift
 
-temp="$(mktemp)"
-
-cat <<eof > "$temp"
-use koha_$instance;
-eof
-
 for userid in "$@"
 do
-    password="$(pwgen 12 1)"
-    digest="$(pwdigest $password)"
-    echo "$userid $password"
-    echo "UPDATE borrowers SET password = '$digest' WHERE userid = '$userid';" \
-        >> "$temp"
+    set_password $instance $userid
 done
 
-mysql --defaults-extra-file=/etc/mysql/koha-common.cnf < "$temp"
-
-rm "$temp"
+exit 0
