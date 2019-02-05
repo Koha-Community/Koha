@@ -12,7 +12,7 @@ if( CheckVersion( $DBversion ) ) {
             $dbh->do( "ALTER TABLE illrequests DROP FOREIGN KEY illrequests_safk");
         }
         if ( index_exists( 'illrequests', 'illrequests_safk' ) ) {
-            $dbh->do( "DROP INDEX illrequests_safk IN illrequests" );
+            $dbh->do( "DROP INDEX illrequests_safk ON illrequests" );
         }
         # Now change the illrequests.status_alias column definition from int to varchar
         $dbh->do( "ALTER TABLE illrequests MODIFY COLUMN status_alias varchar(80)" );
