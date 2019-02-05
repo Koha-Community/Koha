@@ -1,4 +1,4 @@
--- Useful patron atribute types
+-- Useful patron attribute types
 
 -- definitions for custom patron fields known as extended patron attributes
 -- TRUNCATE borrower_attribute_types;
