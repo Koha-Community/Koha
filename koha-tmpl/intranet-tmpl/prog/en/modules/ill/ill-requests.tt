@@ -203,10 +203,10 @@
                                             [% request.capabilities.$stat.name | html %]
                                         </option>
                                         [% FOREACH alias IN AuthorisedValues.Get('ILLSTATUS') %]
-                                            [% IF alias.id == current_alias %]
-                                            <option value="[% alias.id | html %]" selected>
+                                            [% IF alias.authorised_value == current_alias %]
+                                            <option value="[% alias.authorised_value | html %]" selected>
                                             [% ELSE %]
-                                            <option value="[% alias.id | html %]">
+                                            <option value="[% alias.authorised_value | html %]">
                                             [% END %]
                                                 [% alias.lib | html %]
                                             </option>
@@ -873,7 +873,7 @@
             // Get our data from the API and process it prior to passing
             // it to datatables
             var ajax = $.ajax(
-                '/api/v1/illrequests?embed=metadata,patron,capabilities,library'
+                '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias'
                 ).done(function() {
                     var data = JSON.parse(ajax.responseText);
                     // Make a copy, we'll be removing columns next and need

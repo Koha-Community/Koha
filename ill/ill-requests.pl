@@ -174,7 +174,7 @@ if ( $backends_available ) {
             $request->price_paid($params->{price_paid});
             $request->notesopac($params->{notesopac});
             $request->notesstaff($params->{notesstaff});
-            my $alias = ($params->{status_alias} =~ /\d/) ?
+            my $alias = ($params->{status_alias}) ?
                 $params->{status_alias} :
                 undef;
             $request->status_alias($alias);
