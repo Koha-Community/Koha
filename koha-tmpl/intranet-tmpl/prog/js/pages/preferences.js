@@ -3,6 +3,11 @@
 
 KOHA.Preferences = {
     Save: function ( form ) {
+        if ( ! $(form).valid() ) {
+            humanMsg.displayAlert( MSG_INVALID );
+            return;
+        }
+
         modified_prefs = $( form ).find( '.modified' );
         // $.serialize removes empty value, we need to keep them.
         // If a multiple select has all its entries unselected
@@ -181,4 +186,23 @@ $( document ).ready( function () {
         if ( alert_text.length )  alert(alert_text);
     });
 
+    $(".prefs-tab form").each(function () {
+        $(this).validate({
+            rules: { },
+            errorPlacement: function(error, element) {
+                var placement = $(element).parent();
+                if (placement) {
+                    $(placement).append(error)
+                } else {
+                    error.insertAfter(element);
+                }
+            }
+        });
+    });
+
+    $(".preference-email").each(function() {
+        $(this).rules("add", {
+            email: true
+        });
+    });
 } );
