@@ -40,7 +40,7 @@ GetOptions(
     'm|matchpoint=s'                => \$matchpoint,
     'd|default=s'                   => \%defaults,
     'o|overwrite'                   => \$overwrite_cardnumber,
-    'p|preserve-extended-atributes' => \$ext_preserve,
+    'p|preserve-extended-attributes' => \$ext_preserve,
     'v|verbose+'                    => \$verbose,
     'h|help|?'                      => \$help,
 ) or pod2usage(2);
@@ -99,7 +99,7 @@ import_patrons.pl - CLI script to import patrons data into Koha
 
 =head1 SYNOPSIS
 
-import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve-extended-atributes] [--verbose]
+import_patrons.pl --file /path/to/patrons.csv --matchpoint cardnumber --confirm [--default branchcode=MPL] [--overwrite] [--preserve-extended-attributes] [--verbose]
 
 =head1 OPTIONS
 
@@ -129,7 +129,7 @@ Set defaults to patron fields, repeatable e.g. --default branchcode=MPL --defaul
 
 Overwrite existing patrons with new data if a match is found
 
-=item B<-p|--preserve-extended-atributes>
+=item B<-p|--preserve-extended-attributes>
 
 Retain extended patron attributes for existing patrons being overwritten
 
