@@ -34,7 +34,7 @@ sub loadDatas{
     my $query = 'select reporting_statistics_tmp.datetime, reporting_statistics_tmp.branch, reporting_statistics_tmp.type as loan_type, ';
     $query .= 'reporting_statistics_tmp.usercode, reporting_statistics_tmp.itemtype, ';
     $query .= 'reporting_statistics_tmp.borrowernumber, reporting_statistics_tmp.ccode as collection_code, reporting_statistics_tmp.itemnumber, ';
-    $query .= 'COALESCE(items.location, deleteditems.location) as location, COALESCE(items.dateaccessioned, deleteditems.dateaccessioned) as acquired_year, ';
+    $query .= 'COALESCE(items.location, deleteditems.location) as location, COALESCE(items.datereceived, deleteditems.datereceived) as acquired_year, ';
     $query .= 'COALESCE(items.biblioitemnumber, deleteditems.biblioitemnumber) as biblioitemnumber, COALESCE(items.cn_sort, deleteditems.cn_sort) as cn_sort, COALESCE(biblioitems.marcxml, deletedbiblioitems.marcxml) as marcxml, COALESCE(items.barcode, deleteditems.barcode) as barcode, ';
     $query .= 'biblioitems.publicationyear as published_year, ';
     $query .= 'borrowers.categorycode, borrowers.zipcode as postcode, borrowers.dateofbirth, borrowers.cardnumber ';

@@ -25,8 +25,8 @@ sub loadDatas{
 
     print Dumper "SELECTING";
 
-    my $query = "select items.itemnumber, items.location, items.homebranch as branch, items.dateaccessioned as acquired_year, items.itype as itemtype, ";
-    $query .=  "COALESCE(items.dateaccessioned, '0000-00-00') as datetime, items.biblioitemnumber, items.cn_sort, '0' as is_deleted, ";
+    my $query = "select items.itemnumber, items.location, items.homebranch as branch, items.datereceived as acquired_year, items.itype as itemtype, ";
+    $query .=  "COALESCE(items.datereceived, '0000-00-00') as datetime, items.biblioitemnumber, items.cn_sort, '0' as is_deleted, ";
     $query .= 'biblio_metadata.metadata, biblioitems.publicationyear as published_year ';
     $query .= 'from reporting_update_items as update_items ';
     $query .= 'left join items on items.itemnumber=update_items.itemnumber ';

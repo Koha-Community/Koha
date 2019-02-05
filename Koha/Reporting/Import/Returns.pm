@@ -36,7 +36,7 @@ sub loadDatas{
     $query .= 'reporting_statistics_tmp.usercode, ';
     $query .= 'reporting_statistics_tmp.borrowernumber, reporting_statistics_tmp.ccode as collection_code, reporting_statistics_tmp.itemnumber, ';
     $query .= 'COALESCE(items.itype, deleteditems.itype) as itemtype, ';
-    $query .= 'COALESCE(items.location, deleteditems.location) as location, COALESCE(items.dateaccessioned, deleteditems.dateaccessioned) as acquired_year, ';
+    $query .= 'COALESCE(items.location, deleteditems.location) as location, COALESCE(items.datereceived, deleteditems.datereceived) as acquired_year, ';
     $query .= 'COALESCE(items.biblioitemnumber, deleteditems.biblioitemnumber) as biblioitemnumber, COALESCE(items.cn_sort, deleteditems.cn_sort) as cn_sort, ';
     $query .= 'COALESCE(bibliometa.metadata, deletedbibliometa.metadata, dbibliometa.metadata, ddeletedbibliometa.metadata) as marcxml, COALESCE(items.barcode, deleteditems.barcode) as barcode, ';
     $query .= 'COALESCE(biblioitems.publicationyear, deletedbiblioitems.publicationyear, dbiblioitems.publicationyear, ddeletedbiblioitems.publicationyear) as published_year, ';

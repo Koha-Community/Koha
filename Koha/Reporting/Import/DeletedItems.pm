@@ -28,7 +28,7 @@ sub loadDatas{
 
     my $itemtypes = Koha::Reporting::Import::Abstract->getConditionValues('itemTypeToStatisticalCategory');
 
-    my $query = "select deleteditems.itemnumber, deleteditems.location, deleteditems.barcode, deleteditems.homebranch as branch, deleteditems.dateaccessioned as acquired_year, deleteditems.itype as itemtype, COALESCE(deleteditems.timestamp) as datetime, deleteditems.biblioitemnumber, deleteditems.cn_sort, ";
+    my $query = "select deleteditems.itemnumber, deleteditems.location, deleteditems.barcode, deleteditems.homebranch as branch, deleteditems.datereceived as acquired_year, deleteditems.itype as itemtype, COALESCE(deleteditems.timestamp) as datetime, deleteditems.biblioitemnumber, deleteditems.cn_sort, ";
     $query .= 'COALESCE(bibliometa.metadata, deletedbibliometa.metadata) as marcxml, COALESCE(biblioitems.publicationyear, deletedbiblioitems.publicationyear) as published_year ';
     $query .= 'from deleteditems ';
     $query .= 'left join biblioitems on deleteditems.biblioitemnumber = biblioitems.biblioitemnumber ';

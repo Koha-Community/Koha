@@ -28,7 +28,7 @@ sub loadDatas{
     my $query .= 'select reserves.reservedate as reservedate, reserves.timestamp as datetime, reserves.reserve_id as reserve_id, "1" as amount, reserves.cancellationdate, reserves.suspend, reserves.found, reserves.pickupexpired, "0" as is_old, ';
     $query .= 'reserves.branchcode as branch, reserves.borrowernumber, COALESCE(reserves.itemnumber, items_biblio.itemnumber, deleteditems.itemnumber, deleted_items_biblio.itemnumber) as itemnumber, ';
     $query .= "COALESCE(items.location, items_biblio.location, deleteditems.location, deleted_items_biblio.location) as location, ";
-    $query .= "COALESCE(items.dateaccessioned, items_biblio.dateaccessioned, deleteditems.dateaccessioned, deleted_items_biblio.dateaccessioned) as acquired_year, ";
+    $query .= "COALESCE(items.datereceived, items_biblio.datereceived, deleteditems.datereceived, deleted_items_biblio.datereceived) as acquired_year, ";
     $query .= "COALESCE(items.itype, items_biblio.itype, deleteditems.itype, deleted_items_biblio.itype) as itemtype, ";
     $query .= "COALESCE(items.ccode, items_biblio.ccode, deleteditems.ccode, deleted_items_biblio.ccode) as collection_code, ";
     $query .= "COALESCE(items.cn_sort, items_biblio.cn_sort, deleteditems.cn_sort, deleted_items_biblio.cn_sort) as cn_sort, ";
