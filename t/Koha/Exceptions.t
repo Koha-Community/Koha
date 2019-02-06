@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 2;
 use Test::Exception;
 
 subtest 'Koha::Exceptions::Hold tests' => sub {
