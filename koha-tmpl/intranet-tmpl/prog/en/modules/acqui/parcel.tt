@@ -318,6 +318,17 @@
                     Suggested by: [% order.surnamesuggestedby | html %][% IF ( order.firstnamesuggestedby ) %], [% order.firstnamesuggestedby | html %] [% END %]
                     (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% order.suggestionid | uri %]&amp;op=show">suggestion #[% order.suggestionid | html %]</a>)
                 [% END %]
+                <br />
+                [% IF ( order.order_internalnote ) %]
+                    <p class="ordernote"><strong>Internal note: </strong>[% order.order_internalnote | html %] [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% order.ordernumber | uri %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]&type=internal">Change internal note</a>]</p>
+                [% ELSE %]
+                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% order.ordernumber | uri %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]&type=internal">Add internal note</a>]
+                [% END %]
+                [% IF ( order.order_vendornote ) %]
+                    <p class="ordernote"><strong>Vendor note: </strong>[% order.order_vendornote | html %]</p>
+                [% ELSE %]
+                    [<a href="/cgi-bin/koha/acqui/modordernotes.pl?ordernumber=[% order.ordernumber | uri %]&amp;referrer=/cgi-bin/koha/acqui/parcel.pl%3Finvoiceid=[% invoiceid | uri %]&type=vendor">Add vendor note</a>]
+                [% END %]
                 </td>
                 <td>
                   <a href="/cgi-bin/koha/acqui/showorder.pl?ordernumber=[% order.ordernumber | uri %]" class="previewData">Order</a><br>
