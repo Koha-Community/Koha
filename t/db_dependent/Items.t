@@ -813,20 +813,40 @@ subtest '_mod_item_dates' => sub {
 };
 
 subtest 'get_hostitemnumbers_of' => sub {
-    plan tests => 1;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    my $builder = t::lib::TestBuilder->new;
 
-    my $bib = MARC::Record->new();
-    $bib->append_fields(
+    # Host item field without 0 or 9
+    my $bib1 = MARC::Record->new();
+    $bib1->append_fields(
         MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
         MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
         MARC::Field->new('773', ' ', ' ', b => 'b without 0 or 9'),
     );
-    my ($biblionumber, $bibitemnum) = AddBiblio($bib, '');
+    my ($biblionumber1, $bibitemnum1) = AddBiblio($bib1, '');
+    my @itemnumbers1 = C4::Items::get_hostitemnumbers_of( $biblionumber1 );
+    is( scalar @itemnumbers1, 0, '773 without 0 or 9');
 
-    my @itemnumbers = C4::Items::get_hostitemnumbers_of( $biblionumber );
-    is( @itemnumbers, 0, );
+    # Correct host item field, analytical records on
+    t::lib::Mocks::mock_preference('EasyAnalyticalRecords', 1);
+    my $hostitem = $builder->build_sample_item();
+    my $bib2 = MARC::Record->new();
+    $bib2->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
+        MARC::Field->new('245', ' ', ' ', a => 'Silence in the library'),
+        MARC::Field->new('773', ' ', ' ', 0 => $hostitem->biblionumber , 9 => $hostitem->itemnumber, b => 'b' ),
+    );
+    my ($biblionumber2, $bibitemnum2) = AddBiblio($bib2, '');
+    my @itemnumbers2 = C4::Items::get_hostitemnumbers_of( $biblionumber2 );
+    is( scalar @itemnumbers2, 1, '773 with 0 and 9, EasyAnalyticalRecords on');
+
+    # Correct host item field, analytical records off
+    t::lib::Mocks::mock_preference('EasyAnalyticalRecords', 0);
+    @itemnumbers2 = C4::Items::get_hostitemnumbers_of( $biblionumber2 );
+    is( scalar @itemnumbers2, 0, '773 with 0 and 9, EasyAnalyticalRecords off');
 
     $schema->storage->txn_rollback;
 };
