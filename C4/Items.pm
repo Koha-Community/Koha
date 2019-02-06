@@ -1199,8 +1199,12 @@ references on array of itemnumbers.
 
 sub get_hostitemnumbers_of {
     my ($biblionumber) = @_;
-    my $marcrecord = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
 
+    if( !C4::Context->preference('EasyAnalyticalRecords') ) {
+        return ();
+    }
+
+    my $marcrecord = C4::Biblio::GetMarcBiblio({ biblionumber => $biblionumber });
     return unless $marcrecord;
 
     my ( @returnhostitemnumbers, $tag, $biblio_s, $item_s );
