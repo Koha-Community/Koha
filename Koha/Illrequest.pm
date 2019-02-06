@@ -185,7 +185,7 @@ sub status_alias {
         # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
         # We need a way of accepting implied undef, so we can nullify
         # the status_alias column, when called from $self->status
-        my $val = $newval == -1 ? undef : $newval;
+        my $val = $newval eq "-1" ? undef : $newval;
         my $newval = $self->SUPER::status_alias($newval);
         if ($newval) {
             return $newval;
@@ -225,7 +225,7 @@ sub status {
         # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
         # We need a way of passing implied undef to nullify status_alias
         # so we pass -1, which is special cased in the overloaded setter
-        $self->status_alias(-1);
+        $self->status_alias("-1");
         return $self->SUPER::status($newval);
     }
     return $self->SUPER::status;
