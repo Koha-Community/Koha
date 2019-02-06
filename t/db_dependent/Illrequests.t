@@ -837,7 +837,7 @@ subtest 'Custom statuses' => sub {
         {
             class => 'Koha::Illrequests',
             value => {
-                status_alias => $av->id
+                status_alias => $av->authorised_value
             }
         }
     );
