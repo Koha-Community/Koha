@@ -175,7 +175,7 @@
                         <select name="Filter">
                             <option value="" selected="selected">All</option>
                             [% FOREACH ccode_av IN ccode_avlist %]
-                                <option value="[% ccode_av.value | html %]">[% ccode_av.lib | html %]</option>
+                                <option value="[% ccode_av.authorised_value | html %]">[% ccode_av.lib | html %]</option>
                             [% END %]
                         </select>
                     [% ELSE %]
