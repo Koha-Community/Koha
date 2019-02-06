@@ -33,6 +33,7 @@ use Koha::Illcomments;
 use Koha::Illrequestattributes;
 use Koha::AuthorisedValue;
 use Koha::Patron;
+use Koha::AuthorisedValues;
 
 use base qw(Koha::Object);
 
@@ -115,16 +116,23 @@ available for request.
     my $statusalias = $request->statusalias;
 
 Returns a request's status alias, as a Koha::AuthorisedValue instance
-or implicit undef
+or implicit undef. This is distinct from status_alias, which only returns
+the value in the status_alias column, this method returns the entire
+AuthorisedValue object
 
 =cut
 
 sub statusalias {
     my ( $self ) = @_;
     return unless $self->status_alias;
-    return Koha::AuthorisedValue->_new_from_dbic(
-        scalar $self->_result->status_alias
-    );
+    # We can't know which result is the right one if there are multiple
+    # ILLSTATUS authorised values with the same authorised_value column value
+    # so we just use the first
+    return Koha::AuthorisedValues->search({
+        branchcode => $self->branchcode,
+        category => 'ILLSTATUS',
+        authorised_value => $self->SUPER::status_alias
+    })->next;
 }
 
 =head3 illrequestattributes
@@ -160,6 +168,46 @@ sub patron {
     );
 }
 
+=head3 status_alias
+Overloaded getter/setter for status_alias,
+that only returns authorised values from the
+correct category
+
+=cut
+
+sub status_alias {
+    my ($self, $newval) = @_;
+    if ($newval) {
+        # This is hackery to enable us to undefine
+        # status_alias, since we need to have an overloaded
+        # status_alias method to get us around the problem described
+        # here:
+        # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
+        # We need a way of accepting implied undef, so we can nullify
+        # the status_alias column, when called from $self->status
+        my $val = $newval == -1 ? undef : $newval;
+        my $newval = $self->SUPER::status_alias($newval);
+        if ($newval) {
+            return $newval;
+        } else {
+            return;
+        }
+    }
+    # We can't know which result is the right one if there are multiple
+    # ILLSTATUS authorised values with the same authorised_value column value
+    # so we just use the first
+    my $alias = Koha::AuthorisedValues->search({
+        branchcode => $self->branchcode,
+        category => 'ILLSTATUS',
+        authorised_value => $self->SUPER::status_alias
+    })->next;
+    if ($alias) {
+        return $alias->authorised_value;
+    } else {
+        return;
+    }
+}
+
 =head3 status
 
 Overloaded getter/setter for request status,
@@ -170,7 +218,14 @@ also nullifies status_alias
 sub status {
     my ( $self, $newval) = @_;
     if ($newval) {
-        $self->status_alias(undef);
+        # This is hackery to enable us to undefine
+        # status_alias, since we need to have an overloaded
+        # status_alias method to get us around the problem described
+        # here:
+        # https://bugs.koha-community.org/bugzilla3/show_bug.cgi?id=20581#c156
+        # We need a way of passing implied undef to nullify status_alias
+        # so we pass -1, which is special cased in the overloaded setter
+        $self->status_alias(-1);
         return $self->SUPER::status($newval);
     }
     return $self->SUPER::status;
