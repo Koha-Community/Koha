@@ -600,7 +600,6 @@ elsif ( $phase eq 'Save Report' ) {
     }
 
     create_non_existing_group_and_subgroup($input, $group, $subgroup);
-
     ## FIXME this is AFTER entering a name to save the report under
     if ($sql =~ /;?\W?(UPDATE|DELETE|DROP|INSERT|SHOW|CREATE)\W/i) {
         push @errors, {sqlerr => $1};
@@ -659,7 +658,6 @@ elsif ( $phase eq 'Save Report' ) {
                     cache_expiry   => $cache_expiry,
                     public         => $public,
                 } );
-
                 logaction( "REPORTS", "ADD", $id, "$name | $sql" ) if C4::Context->preference("ReportsLog");
             $template->param(
                 'save_successful' => 1,
@@ -1058,7 +1056,6 @@ sub groups_with_subgroups {
 
 sub create_non_existing_group_and_subgroup {
     my ($input, $group, $subgroup) = @_;
-
     if (defined $group and $group ne '') {
         my $report_groups = C4::Reports::Guided::get_report_groups;
         if (not exists $report_groups->{$group}) {
@@ -1068,6 +1065,9 @@ sub create_non_existing_group_and_subgroup {
                 authorised_value => $group,
                 lib => $groupdesc,
             })->store;
+            my $cache_key = "AuthorisedValues-REPORT_GROUP-0-".C4::Context->userenv->{"branch"};
+            my $cache  = Koha::Caches->get_instance();
+            my $result = $cache->clear_from_cache($cache_key);
         }
         if (defined $subgroup and $subgroup ne '') {
             if (not exists $report_groups->{$group}->{subgroups}->{$subgroup}) {
@@ -1078,6 +1078,9 @@ sub create_non_existing_group_and_subgroup {
                     lib => $subgroupdesc,
                     lib_opac => $group,
                 })->store;
+            my $cache_key = "AuthorisedValues-REPORT_SUBGROUP-0-".C4::Context->userenv->{"branch"};
+            my $cache  = Koha::Caches->get_instance();
+            my $result = $cache->clear_from_cache($cache_key);
             }
         }
     }
