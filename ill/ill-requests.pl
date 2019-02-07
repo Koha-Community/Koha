@@ -174,9 +174,9 @@ if ( $backends_available ) {
             $request->price_paid($params->{price_paid});
             $request->notesopac($params->{notesopac});
             $request->notesstaff($params->{notesstaff});
-            my $alias = ($params->{status_alias}) ?
+            my $alias = (length $params->{status_alias} > 0) ?
                 $params->{status_alias} :
-                undef;
+                "-1";
             $request->status_alias($alias);
             $request->store;
             my $backend_result = {
