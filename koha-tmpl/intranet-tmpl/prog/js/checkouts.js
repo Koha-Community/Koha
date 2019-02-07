@@ -408,11 +408,12 @@ $(document).ready(function() {
                         if ( oObj.can_renew ) {
                             // Do nothing
                         } else if ( oObj.can_renew_error == "on_reserve" ) {
-                            msg += "<span class='renewals-disabled-no-override'>"
+                            msg += "<span>"
                                     + "<a href='/cgi-bin/koha/reserve/request.pl?biblionumber=" + oObj.biblionumber + "'>" + ON_HOLD + "</a>"
                                     + "</span>";
 
-                            span_style = AllowRenewalLimitOverride ? "" : "display: none";
+                            span_style = "display: none";
+                            span_class = "renewals-allowed";
                         } else if ( oObj.can_renew_error == "too_many" ) {
                             msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE
