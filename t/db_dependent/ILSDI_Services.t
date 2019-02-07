@@ -299,7 +299,7 @@ subtest 'LookupPatron test' => sub {
 
 subtest 'Holds test' => sub {
 
-    plan tests => 4;
+    plan tests => 5;
 
     $schema->storage->txn_begin;
 
@@ -349,6 +349,17 @@ subtest 'Holds test' => sub {
 
     $reply = C4::ILSDI::Services::HoldTitle( $query );
     is( $reply->{code}, 'itemAlreadyOnHold', "Item already on hold" );
+
+    my $biblio_with_no_item = $builder->build({
+        source => 'Biblio',
+    });
+
+    $query = new CGI;
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $biblio_with_no_item->{biblionumber});
+
+    $reply = C4::ILSDI::Services::HoldTitle( $query );
+    is( $reply->{code}, 'NoItems', 'Biblio has no item' );
 
     my $biblio2 = $builder->build({
         source => 'Biblio',
