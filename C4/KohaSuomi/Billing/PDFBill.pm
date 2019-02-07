@@ -296,6 +296,21 @@ sub claimingTemplate {
             $message->{'content'} =~ s/$removestart$removematch$removeend//;
         }
     }
+
+    my $finestart = "<fine>";
+    my $fineend = "</fine>";
+    my @finematches = $message->{'content'} =~ /$finestart(.*?)$fineend/g;
+    foreach my $finematch (@finematches) {
+        my $fine = substr($finematch, index($finematch, ':')+2, length($finematch));
+        $fine =~ s/[^\d,\.]//g;
+        my $description = substr($finematch, 0, index($finematch, ':'));
+        $description =~ s/^\s+|\s+$//g;
+        unless (check_billing_fine($borrowernumber, $fine, $description, 'B')) {
+            C4::Accounts::manualinvoice($borrowernumber, undef, $description, 'B', $fine, $description);
+            $message->{'content'} =~ s/$finestart.*$fineend//;
+        }
+    }
+
     my $start = "<var>";
     my $end = "</var>";
 
