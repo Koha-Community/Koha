@@ -79,7 +79,7 @@
                     <div class="newsitem">
                         <a name="newsitem[% koha_new.idnew | html %]" href="/cgi-bin/koha/opac-main.pl?news_id=[% koha_new.idnew | uri %]"><h4 class="newsheader">[% koha_new.title | html %]</h4></a>
                         <div class="newsbody">[% koha_new.content | $raw %]</div>
-                        <div class="newsfooter">(published on [% koha_new.timestamp | $KohaDates with_hours = 1 | html %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %])</div>
+                        <div class="newsfooter">(published on [% koha_new.timestamp | $KohaDates with_hours = 1 %][% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %] by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %][% END %])</div>
                     </div>
                 [% END %]
             </div>
