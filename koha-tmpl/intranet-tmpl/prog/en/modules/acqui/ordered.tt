@@ -28,48 +28,48 @@
     <thead>
     <tr>
     <th class="anti-the"> Title </th>
-	<th> Order </th>
-	<th> Vendor </th>
+    <th> Order </th>
+    <th> Vendor </th>
     <th> Item type </th>
     <th> Left on order </th>
-	<th> Estimated cost per unit </th>
+    <th> Estimated cost per unit </th>
     <th class="title-string"> Date ordered </th>
-	<th> Subtotal </th>
+    <th> Subtotal </th>
     </tr>
     </thead>
     <tbody>
 [% FOREACH order IN ordered %]
     <tr>
-	<td class="cell">
+    <td class="cell">
             <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% order.biblionumber | uri %]">
-	    [% order.title | html %]
+        [% order.title | html %]
             </a>
-	</td>
-	<td class="cell">
+    </td>
+    <td class="cell">
         [% IF ( CAN_user_acquisition_order_manage ) %]
             <a href="/cgi-bin/koha/acqui/neworderempty.pl?ordernumber=[% order.ordernumber | uri %]&amp;booksellerid=[% order.booksellerid | uri %]&amp;basketno=[% order.basketno | uri %]">[% order.ordernumber | html %]</a>
         [% ELSE %]
             [% order.ordernumber | html %]
         [% END %]
-	</td>
-	<td class="cell">
+    </td>
+    <td class="cell">
         <a href="/cgi-bin/koha/acqui/supplier.pl?booksellerid=[% order.booksellerid | uri %]">[% order.vendorname | html %]</a>
-	</td>
-	<td class="cell">
+    </td>
+    <td class="cell">
         [% ItemTypes.GetDescription( order.itype ) | html %]
-	</td>
-	<td class="cell">
-	    [% order.left | html %]
-	</td>
+    </td>
+    <td class="cell">
+        [% order.left | html %]
+    </td>
     <td class="data cell">
         [% order.ecost_tax_included | $Price %]
-	</td>
+    </td>
     <td class="cell">
         <span title="[% order.entrydate | html %]">[% order.entrydate | $KohaDates %]</span>
-	</td>
+    </td>
     <td class="data cell">
-	    [% order.subtotal | $Price %]
-	</td>
+        [% order.subtotal | $Price %]
+    </td>
     </tr>
 [% END %]
     </tbody>
@@ -91,7 +91,7 @@
         <td> </td>
         <td> </td>
         <td> </td>
-	<td> </td>
+        <td> </td>
         <td class="data">
             [% total | $Price %]
         </td>
