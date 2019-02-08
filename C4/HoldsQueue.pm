@@ -409,6 +409,8 @@ sub MapItemsToHoldRequests {
                   || ( $item->{holdallowed} == 1
                     && $item->{homebranch} ne $request->{borrowerbranch} );
 
+                next unless Koha::Items->find( $item->{itemnumber} )->can_be_transferred( { to => scalar Koha::Libraries->find( $request->{branchcode} ) } );
+
                 my $local_holds_priority_item_branchcode =
                   $item->{$LocalHoldsPriorityItemControl};
 
@@ -463,6 +465,7 @@ sub MapItemsToHoldRequests {
                 and ( !$request->{itemtype} # If hold itemtype is set, item's itemtype must match
                     || $items_by_itemnumber{ $request->{itemnumber} }->{itype} eq $request->{itemtype} )
                 )
+                and Koha::Items->find( $request->{itemnumber} )->can_be_transferred( { to => scalar Koha::Libraries->find( $request->{branchcode} ) } )
 
               )
             {
@@ -510,6 +513,8 @@ sub MapItemsToHoldRequests {
         my $holding_branch_items = $items_by_branch{$pickup_branch};
         if ( $holding_branch_items ) {
             foreach my $item (@$holding_branch_items) {
+                next unless Koha::Items->find( $item->{itemnumber} )->can_be_transferred( { to => scalar Koha::Libraries->find( $request->{branchcode} ) } );
+
                 if (
                     $request->{borrowerbranch} eq $item->{homebranch}
                     && ( ( $item->{hold_fulfillment_policy} eq 'any' ) # Don't fill item level holds that contravene the hold pickup policy at this time
@@ -532,6 +537,7 @@ sub MapItemsToHoldRequests {
                 my $holding_branch_items = $items_by_branch{$holdingbranch};
                 foreach my $item (@$holding_branch_items) {
                     next if $request->{borrowerbranch} ne $item->{homebranch};
+                    next unless Koha::Items->find( $item->{itemnumber} )->can_be_transferred( { to => scalar Koha::Libraris->find( $request->{branchcode} ) } );
 
                     # Don't fill item level holds that contravene the hold pickup policy at this time
                     next unless $item->{hold_fulfillment_policy} eq 'any'
@@ -568,6 +574,7 @@ sub MapItemsToHoldRequests {
                 foreach my $item (@$holding_branch_items) {
                     next if $pickup_branch ne $item->{homebranch};
                     next if ( $item->{holdallowed} == 1 && $item->{homebranch} ne $request->{borrowerbranch} );
+                    next unless Koha::Items->find( $item->{itemnumber} )->can_be_transferred( { to => scalar Koha::Libraries->find( $request->{branchcode} ) } );
 
                     # Don't fill item level holds that contravene the hold pickup policy at this time
                     next unless $item->{hold_fulfillment_policy} eq 'any'
@@ -596,6 +603,8 @@ sub MapItemsToHoldRequests {
                         next unless ( !$request->{itemtype}
                             || $current_item->{itype} eq $request->{itemtype} );
 
+                        next unless Koha::Items->find( $current_item->{itemnumber} )->can_be_transferred( { to => scalar Koha::Libraries->find( $request->{branchcode} ) } );
+
                         $itemnumber = $current_item->{itemnumber};
                         last; # quit this loop as soon as we have a suitable item
                     }
@@ -619,6 +628,8 @@ sub MapItemsToHoldRequests {
                         # If hold itemtype is set, item's itemtype must match
                         next unless ( !$request->{itemtype}
                             || $item->{itype} eq $request->{itemtype} );
+
+                        next unless Koha::Items->find( $item->{itemnumber} )->can_be_transferred( { to => scalar Koha::Libraries->find( $request->{branchcode} ) } );
 
                         $itemnumber = $item->{itemnumber};
                         $holdingbranch = $branch;

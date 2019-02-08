@@ -694,6 +694,10 @@ sub HoldTitle {
         $branch = $patron->branchcode;
     }
 
+    my $destination = Koha::Libraries->find($branch);
+    return { code => 'libraryNotPickupLocation' } unless $destination->pickup_location;
+    return { code => 'cannotBeTransferred' } unless $biblio->can_be_transferred({ to => $destination });
+
     # Add the reserve
     #    $branch,    $borrowernumber, $biblionumber,
     #    $constraint, $bibitems,  $priority, $resdate, $expdate, $notes,
@@ -757,10 +761,6 @@ sub HoldItem {
     # If the biblio does not match the item, return an error code
     return { code => 'RecordNotFound' } if $item->biblionumber ne $biblio->biblionumber;
 
-    # Check for item disponibility
-    my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber )->{status};
-    return { code => $canitembereserved } unless $canitembereserved eq 'OK';
-
     # Pickup branch management
     my $branch;
     if ( $cgi->param('pickup_location') ) {
@@ -769,6 +769,10 @@ sub HoldItem {
     } else { # if the request provide no branch, use the borrower's branch
         $branch = $patron->branchcode;
     }
+
+    # Check for item disponibility
+    my $canitembereserved = C4::Reserves::CanItemBeReserved( $borrowernumber, $itemnumber, $branch )->{status};
+    return { code => $canitembereserved } unless $canitembereserved eq 'OK';
 
     # Add the reserve
     #    $branch,    $borrowernumber, $biblionumber,

@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 use Test::MockModule;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -449,3 +449,96 @@ subtest 'Holds test' => sub {
 
     $schema->storage->txn_rollback;
 };
+
+subtest 'Holds test for branch transfer limits' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    # Test enforement of branch transfer limits
+    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '1' );
+    t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
+
+    my $patron = $builder->build({
+        source => 'Borrower',
+    });
+
+    my $origin_branch = $builder->build(
+        {
+            source => 'Branch',
+            value  => {
+                pickup_location => 1,
+            }
+        }
+    );
+    my $pickup_branch = $builder->build(
+        {
+            source => 'Branch',
+            value  => {
+                pickup_location => 1,
+            }
+        }
+    );
+
+    my $biblio = $builder->build({
+        source => 'Biblio',
+    });
+    my $biblioitem = $builder->build({
+        source => 'Biblioitem',
+        value => {
+            biblionumber => $biblio->{biblionumber},
+        }
+    });
+    my $item = $builder->build({
+        source => 'Item',
+        value => {
+            homebranch => $origin_branch->{branchcode},
+            holdingbranch => $origin_branch->{branchcode},
+            biblionumber => $biblio->{biblionumber},
+            damaged => 0,
+            itemlost => 0,
+        }
+    });
+
+    Koha::IssuingRules->search()->delete();
+    my $issuingrule = $builder->build({
+        source => 'Issuingrule',
+        value => {
+            categorycode => '*',
+            itemtype => '*',
+            branchcode => '*',
+            reservesallowed => 99,
+        }
+    });
+
+    my $limit = Koha::Item::Transfer::Limit->new({
+        toBranch => $pickup_branch->{branchcode},
+        fromBranch => $item->{holdingbranch},
+        itemtype => $item->{itype},
+    })->store();
+
+    my $query = new CGI;
+    $query->param( 'pickup_location', $pickup_branch->{branchcode} );
+    $query->param( 'patron_id', $patron->{borrowernumber});
+    $query->param( 'bib_id', $biblio->{biblionumber});
+    $query->param( 'item_id', $item->{itemnumber});
+
+    my $reply = C4::ILSDI::Services::HoldItem( $query );
+    is( $reply->{code}, 'cannotBeTransferred', "Item hold, Item cannot be transferred" );
+
+    $reply = C4::ILSDI::Services::HoldTitle( $query );
+    is( $reply->{code}, 'cannotBeTransferred', "Record hold, Item cannot be transferred" );
+
+    t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '0' );
+
+    $reply = C4::ILSDI::Services::HoldItem( $query );
+    is( $reply->{code}, undef, "Item hold, Item can be transferred" );
+
+    Koha::Holds->search()->delete();
+
+    $reply = C4::ILSDI::Services::HoldTitle( $query );
+    is( $reply->{code}, undef, "Record hold, Item con be transferred" );
+
+    $schema->storage->txn_rollback;
+}

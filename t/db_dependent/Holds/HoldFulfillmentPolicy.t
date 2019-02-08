@@ -4,9 +4,10 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 use Koha::Holds;
 
 BEGIN {
@@ -137,3 +138,20 @@ $reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
 ( $status ) = CheckReserves($itemnumber);
 is( $status, 'Reserved', "Hold where pickup ne home, pickup ne holding targeted" );
 Koha::Holds->find( $reserve_id )->cancel;
+
+# Test enforement of branch transfer limits
+t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '1' );
+t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
+Koha::Holds->search()->delete();
+my ($item) = Koha::Biblios->find($biblionumber)->items;
+my $limit = Koha::Item::Transfer::Limit->new(
+    {
+        toBranch   => $library_C,
+        fromBranch => $item->holdingbranch,
+        itemtype   => $item->effective_itemtype,
+    }
+)->store();
+$reserve_id = AddReserve( $library_C, $borrowernumber, $biblionumber, '', 1 );
+($status) = CheckReserves($itemnumber);
+is( $status, '',  "No hold where branch transfer is not allowed" );
+Koha::Holds->find($reserve_id)->cancel;

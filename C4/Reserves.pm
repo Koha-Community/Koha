@@ -23,37 +23,38 @@ package C4::Reserves;
 
 use strict;
 #use warnings; FIXME - Bug 2505
-use C4::Context;
-use C4::Biblio;
-use C4::Members;
-use C4::Items;
-use C4::Circulation;
 use C4::Accounts;
+use C4::Biblio;
+use C4::Circulation;
+use C4::Context;
+use C4::Items;
+use C4::Members;
 
 # for _koha_notify_reserve
-use C4::Members::Messaging;
-use C4::Members qw();
 use C4::Letters;
 use C4::Log;
+use C4::Members qw();
+use C4::Members::Messaging;
 
-use Koha::Biblios;
-use Koha::DateUtils;
-use Koha::Calendar;
-use Koha::Database;
-use Koha::Hold;
-use Koha::Old::Hold;
-use Koha::Holds;
-use Koha::Libraries;
-use Koha::IssuingRules;
-use Koha::Items;
-use Koha::ItemTypes;
-use Koha::Patrons;
-use Koha::CirculationRules;
 use Koha::Account::Lines;
+use Koha::Biblios;
+use Koha::Calendar;
+use Koha::CirculationRules;
+use Koha::Database;
+use Koha::DateUtils;
+use Koha::Hold;
+use Koha::Holds;
+use Koha::IssuingRules;
+use Koha::ItemTypes;
+use Koha::Items;
+use Koha::Libraries;
+use Koha::Libraries;
+use Koha::Old::Hold;
+use Koha::Patrons;
 
-use List::MoreUtils qw( firstidx any );
 use Carp;
 use Data::Dumper;
+use List::MoreUtils qw( firstidx any );
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
@@ -482,7 +483,7 @@ sub CanItemBeReserved {
             return { status => 'libraryNotPickupLocation' };
         }
         unless ($item->can_be_transferred({ to => $destination })) {
-            return 'cannotBeTransferred';
+            return { status => 'cannotBeTransferred' };
         }
     }
 
@@ -801,6 +802,7 @@ sub CheckReserves {
                     next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $patron->branchcode));
                     my $hold_fulfillment_policy = $branchitemrule->{hold_fulfillment_policy};
                     next if ( ($branchitemrule->{hold_fulfillment_policy} ne 'any') && ($res->{branchcode} ne $item->$hold_fulfillment_policy) );
+                    next unless $item->can_be_transferred( { to => scalar Koha::Libraries->find( $res->{branchcode} ) } );
                     $priority = $res->{'priority'};
                     $highest  = $res;
                     last if $local_hold_match;
@@ -1140,7 +1142,7 @@ sub ModReserveMinusPriority {
 
 =head2 IsAvailableForItemLevelRequest
 
-  my $is_available = IsAvailableForItemLevelRequest($item_record,$borrower_record);
+  my $is_available = IsAvailableForItemLevelRequest( $item_record, $borrower_record, $pickup_branchcode );
 
 Checks whether a given item record is available for an
 item-level hold request.  An item is available if
@@ -1165,6 +1167,7 @@ and canreservefromotherbranches.
 sub IsAvailableForItemLevelRequest {
     my $item = shift;
     my $borrower = shift;
+    my $pickup_branchcode = shift;
 
     my $dbh = C4::Context->dbh;
     # must check the notforloan setting of the itemtype
@@ -1186,6 +1189,13 @@ sub IsAvailableForItemLevelRequest {
         ($item->{damaged} && !C4::Context->preference('AllowHoldsOnDamagedItems'));
 
     my $on_shelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item_object, patron => $patron } );
+
+    if ($pickup_branchcode) {
+        my $destination = Koha::Libraries->find($pickup_branchcode);
+        return 0 unless $destination;
+        return 0 unless $destination->pickup_location;
+        return 0 unless $item_object->can_be_transferred( { to => $destination } );
+    }
 
     if ( $on_shelf_holds == 1 ) {
         return 1;

@@ -199,7 +199,7 @@
         <li>
             <label for="pickup">Pickup at:</label>
             <select name="pickup" size="1" id="pickup">
-                [% PROCESS options_for_libraries libraries => Branches.all({ search_params => { pickup_location => 1 } }) %]
+                [% PROCESS options_for_libraries libraries => Branches.all({ selected => pickup, search_params => { pickup_location => 1 } }) %]
             </select>
         </li>
 
@@ -340,6 +340,8 @@
                                 Patron is from different library
                             [% ELSIF itemloo.not_holdable == 'itemAlreadyOnHold' %]
                                 Patron already has hold for this item
+                            [% ELSIF itemloo.not_holdable == 'cannotBeTransferred' %]
+                                Cannot be transferred to pickup library
                             [% ELSE %]
                                 [% itemloo.not_holdable | html %]
                             [% END %]
@@ -661,6 +663,8 @@
     [% INCLUDE 'columns_settings.inc' %]
     [% Asset.js("js/circ-patron-search-results.js") | $raw %]
     <script>
+        var biblionumber = "[% biblionumber %]";
+        var borrowernumber = "[% patron.borrowernumber %]";
         var MSG_CONFIRM_DELETE_HOLD   = _("Are you sure you want to cancel this hold?");
         var patron_homebranch = "[% Branches.GetName( patron.branchcode ) |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";
         var override_items = {[% FOREACH bibitemloo IN bibitemloop %][% FOREACH itemloo IN bibitemloo.itemloop %][% IF ( itemloo.override ) %]
@@ -685,6 +689,16 @@
             $("#requestany").on('change', function(){
                 ToggleHoldsToPlace();
             });
+
+            [% IF Koha.Preference('UseBranchTransferLimits') %]
+                $("#pickup").on('change', function(){
+                    var pickup = $("#pickup").val();
+                    var url = "?pickup=" + pickup;
+                    url += "&borrowernumber=" + borrowernumber;
+                    url += "&biblionumber=" + biblionumber;
+                    window.location.replace(url);
+                });
+            [% END %]
 
             [% IF AutoResumeSuspendedHolds %]
                 $(".suspend_until_datepicker, .datepickerfrom, .datepickerto").datepicker("option", "minDate", 1);

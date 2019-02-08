@@ -67,6 +67,7 @@ my ( $template, $borrowernumber, $cookie, $flags ) = get_template_and_user(
 );
 
 my $showallitems = $input->param('showallitems');
+my $pickup = $input->param('pickup') || C4::Context->userenv->{'branch'};
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
 
@@ -221,7 +222,7 @@ foreach my $biblionumber (@biblionumbers) {
     my $force_hold_level;
     if ( $patron ) {
         { # CanBookBeReserved
-            my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber );
+            my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber, $pickup );
             if ( $canReserve->{status} eq 'OK' ) {
 
                 #All is OK and we can continue
@@ -472,7 +473,7 @@ foreach my $biblionumber (@biblionumbers) {
 
                 $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber );
+                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $pickup );
                 $item->{not_holdable} = $can_item_be_reserved->{status} unless ( $can_item_be_reserved->{status} eq 'OK' );
 
                 $item->{item_level_holds} = Koha::IssuingRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
@@ -645,6 +646,7 @@ $template->param( biblionumbers => $biblionumbers );
 $template->param( exceeded_maxreserves => $exceeded_maxreserves );
 $template->param( exceeded_holds_per_record => $exceeded_holds_per_record );
 $template->param( subscriptionsnumber => CountSubscriptionFromBiblionumber($biblionumber));
+$template->param( pickup => $pickup );
 
 if ( C4::Context->preference( 'AllowHoldDateInFuture' ) ) {
     $template->param( reserve_in_future => 1 );

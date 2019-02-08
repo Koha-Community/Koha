@@ -8,7 +8,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 44;
+use Test::More tests => 48;
 use Data::Dumper;
 
 use C4::Calendar;
@@ -34,6 +34,9 @@ $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
 my $builder = t::lib::TestBuilder->new;
+
+t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '0' );
+t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
 
 my $library1 = $builder->build({
     source => 'Branch',
@@ -357,6 +360,49 @@ $items_insert_sth->execute( $barcode + 4, $branchcodes[2], $branchcodes[0] );
 C4::HoldsQueue::CreateQueue();
 $holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
 is( $holds_queue->[0]->{cardnumber}, $borrower3->{cardnumber}, "Holds queue giving priority to patron who's home library matches item's home library");
+
+### Test branch transfer limits ###
+t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
+t::lib::Mocks::mock_preference('LocalHoldsPriorityItemControl', 'holdingbranch');
+t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '1' );
+C4::Context->clear_syspref_cache();
+$dbh->do("DELETE FROM reserves");
+$sth->execute( $borrower1->{borrowernumber}, $biblionumber, $branchcodes[0], 1 );
+$sth->execute( $borrower2->{borrowernumber}, $biblionumber, $branchcodes[1], 2 );
+
+$dbh->do("DELETE FROM items");
+# barcode, homebranch, holdingbranch, itemtype
+$items_insert_sth->execute( $barcode, $branchcodes[2], $branchcodes[2] );
+my $item = Koha::Items->find( { barcode => $barcode } );
+
+my $limit1 = Koha::Item::Transfer::Limit->new(
+    {
+        toBranch   => $branchcodes[0],
+        fromBranch => $branchcodes[2],
+        itemtype   => $item->effective_itemtype,
+    }
+)->store();
+
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( $holds_queue->[0]->{cardnumber}, $borrower2->{cardnumber}, "Holds queue skips hold transfer that would violate branch transfer limits");
+
+my $limit2 = Koha::Item::Transfer::Limit->new(
+    {
+        toBranch   => $branchcodes[1],
+        fromBranch => $branchcodes[2],
+        itemtype   => $item->effective_itemtype,
+    }
+)->store();
+
+C4::HoldsQueue::CreateQueue();
+$holds_queue = $dbh->selectall_arrayref("SELECT * FROM tmp_holdsqueue", { Slice => {} });
+is( $holds_queue->[0]->{cardnumber}, undef, "Holds queue doesn't fill hold where all available items would violate branch transfer limits");
+
+$limit1->delete();
+$limit2->delete();
+t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '0' );
+### END Test branch transfer limits ###
 
 # Test holdingbranch = patron branch
 t::lib::Mocks::mock_preference('LocalHoldsPriorityPatronControl', 'HomeLibrary');
@@ -706,7 +752,7 @@ $dbh->do("DELETE FROM default_branch_item_rules");
 $dbh->do("DELETE FROM default_circ_rules");
 $dbh->do("DELETE FROM branch_item_rules");
 
-my $item = Koha::Items->find( { biblionumber => $biblionumber } );
+$item = Koha::Items->find( { biblionumber => $biblionumber } );
 $item->holdingbranch( $item->homebranch );
 $item->store();
 
@@ -759,6 +805,30 @@ sub test_queue {
     diag( "Wrong pick-up/hold for first target (pick_branch, hold_branch, reserves, hold_fill_targets, tmp_holdsqueue): "
         . Dumper ($pick_branch, $hold_branch, map dump_records($_), qw(reserves hold_fill_targets tmp_holdsqueue)) )
       unless $ok;
+
+    # Test enforcement of branch transfer limit
+    if ( $r->{pickbranch} ne $r->{holdingbranch} ) {
+        t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '1' );
+        my $limit = Koha::Item::Transfer::Limit->new(
+            {
+                toBranch   => $r->{pickbranch},
+                fromBranch => $r->{holdingbranch},
+                itemtype   => $r->{itype},
+            }
+        )->store();
+        C4::Context->clear_syspref_cache();
+        C4::HoldsQueue::CreateQueue();
+        $results = $dbh->selectall_arrayref( $test_sth, { Slice => {} } )
+          ;    # should be only one
+        my $s = $results->[0];
+        isnt( $r->{holdingbranch}, $s->{holdingbranch}, 'Hold is not trapped for pickup at a branch that cannot be transferred to');
+
+        $limit->delete();
+        t::lib::Mocks::mock_preference( 'UseBranchTransferLimits', '0' );
+        C4::Context->clear_syspref_cache();
+        C4::HoldsQueue::CreateQueue();
+    }
+
 }
 
 sub dump_records {
