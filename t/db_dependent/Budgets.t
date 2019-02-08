@@ -819,12 +819,23 @@ is( scalar @{$authCat}, 0, "GetBudgetAuthCats returns only non-empty sorting cat
 # /Test GetBudgetAuthCats
 
 subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
-    plan tests => 10;
+    plan tests => 20;
 
+    my $budget_period = $builder->build({
+        source => 'Aqbudgetperiod',
+        value  => {
+            budget_period_active => 1,
+            budget_total => 10000,
+        }
+    });
     my $budget = $builder->build({
         source => 'Aqbudget',
         value  => {
             budget_amount => 1000,
+            budget_encumb => undef,
+            budget_expend => undef,
+            budget_period_id => $budget_period->{budget_period_id},
+            budget_parent_id => undef,
         }
     });
     my $invoice = $builder->build({
@@ -834,11 +845,14 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
         }
     });
 
-    my $spent = GetBudgetSpent( $budget->{budget_id} );
-    my $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    my $spent     = GetBudgetSpent( $budget->{budget_id} );
+    my $ordered   = GetBudgetOrdered( $budget->{budget_id} );
+    my $hierarchy = GetBudgetHierarchy($budget_period->{budget_period_id} );
 
     is( $spent, 0, "New budget, no orders/invoices, should be nothing spent");
     is( $ordered, 0, "New budget, no orders/invoices, should be nothing ordered");
+    is( @$hierarchy[0]->{total_spent},0,"New budgets, no orders/invoices, budget hierarchy shows 0 spent");
+    is( @$hierarchy[0]->{total_ordered},0,"New budgets, no orders/invoices, budget hierarchy shows 0 ordered");
 
     my $inv_adj_1 = $builder->build({
         source => 'AqinvoiceAdjustment',
@@ -852,8 +866,11 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
 
     $spent = GetBudgetSpent( $budget->{budget_id} );
     $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    $hierarchy = GetBudgetHierarchy($budget_period->{budget_period_id} );
     is( $spent, 0, "After adding invoice adjustment on open invoice, should be nothing spent");
     is( $ordered, 0, "After adding invoice adjustment on open invoice not encumbered, should be nothing ordered");
+    is( @$hierarchy[0]->{total_spent},0,"After adding invoice adjustment on open invoice, budget hierarchy shows 0 spent");
+    is( @$hierarchy[0]->{total_ordered},0,"After adding invoice adjustment on open invoice, budget hierarchy shows 0 ordered");
 
     my $inv_adj_2 = $builder->build({
         source => 'AqinvoiceAdjustment',
@@ -867,8 +884,11 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
 
     $spent = GetBudgetSpent( $budget->{budget_id} );
     $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    $hierarchy = GetBudgetHierarchy($budget_period->{budget_period_id} );
     is( $spent, 0, "After adding invoice adjustment on open invoice, should be nothing spent");
     is( $ordered, 3, "After adding invoice adjustment on open invoice encumbered, should be 3 ordered");
+    is( @$hierarchy[0]->{total_spent},0,"After adding invoice adjustment on open invoice encumbered, budget hierarchy shows 0 spent");
+    is( @$hierarchy[0]->{total_ordered},3,"After adding invoice adjustment on open invoice encumbered, budget hierarchy shows 3 ordered");
 
     my $invoice_2 = $builder->build({
         source => 'Aqinvoice',
@@ -897,13 +917,20 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
 
     $spent = GetBudgetSpent( $budget->{budget_id} );
     $ordered = GetBudgetOrdered( $budget->{budget_id} );
+    $hierarchy = GetBudgetHierarchy($budget_period->{budget_period_id} );
     is( $spent, 6, "After adding invoice adjustment on closed invoice, should be 6 spent, encumber has no affect once closed");
     is( $ordered, 3, "After adding invoice adjustment on closed invoice, should still be 3 ordered");
+    is( @$hierarchy[0]->{total_spent},6,"After adding invoice adjustment on closed invoice, budget hierarchy shows 6 spent");
+    is( @$hierarchy[0]->{total_ordered},3,"After adding invoice adjustment on closed invoice, budget hierarchy still shows 3 ordered");
 
-    my $budget_2 = $builder->build({
+    my $budget0 = $builder->build({
         source => 'Aqbudget',
         value  => {
             budget_amount => 1000,
+            budget_encumb => undef,
+            budget_expend => undef,
+            budget_period_id => $budget_period->{budget_period_id},
+            budget_parent_id => $budget->{budget_id},
         }
     });
     my $inv_adj_5 = $builder->build({
@@ -912,7 +939,7 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
             invoiceid     => $invoice->{invoiceid},
             adjustment    => 3,
             encumber_open => 1,
-            budget_id     => $budget_2->{budget_id},
+            budget_id     => $budget0->{budget_id},
         }
     });
     my $inv_adj_6 = $builder->build({
@@ -921,14 +948,17 @@ subtest 'GetBudgetSpent and GetBudgetOrdered' => sub {
             invoiceid     => $invoice_2->{invoiceid},
             adjustment    => 3,
             encumber_open => 1,
-            budget_id     => $budget_2->{budget_id},
+            budget_id     => $budget0->{budget_id},
         }
     });
 
     $spent = GetBudgetSpent( $budget->{budget_id} );
     $ordered = GetBudgetOrdered( $budget->{budget_id} );
-    is( $spent, 6, "After adding invoice adjustment on a different budget should be 6 spent/budget unaffected");
-    is( $ordered, 3, "After adding invoice adjustment on a different budget, should still be 3 ordered/budget unaffected");
+    $hierarchy = GetBudgetHierarchy($budget_period->{budget_period_id} );
+    is( $spent, 6, "After adding invoice adjustment on a child budget should be 6 spent/budget unaffected");
+    is( $ordered, 3, "After adding invoice adjustment on a child budget, should still be 3 ordered/budget unaffected");
+    is( @$hierarchy[0]->{total_spent},9,"After adding invoice adjustment on child budget, budget hierarchy shows 9 spent");
+    is( @$hierarchy[0]->{total_ordered},6,"After adding invoice adjustment on child budget, budget hierarchy shows 6 ordered");
 
 };
 

@@ -584,27 +584,45 @@ sub GetBudgetHierarchy {
         WHERE closedate IS NULL
         GROUP BY shipmentcost_budgetid
         |, 'budget_id');
+    my $hr_budget_spent_adjustment = $dbh->selectall_hashref(q|
+        SELECT budget_id,
+               SUM(adjustment) as adjustments
+        FROM aqinvoice_adjustments
+        JOIN aqinvoices USING (invoiceid)
+        WHERE closedate IS NOT NULL
+        GROUP BY budget_id
+        |, 'budget_id');
+    my $hr_budget_ordered_adjustment = $dbh->selectall_hashref(q|
+        SELECT budget_id,
+               SUM(adjustment) as adjustments
+        FROM aqinvoice_adjustments
+        JOIN aqinvoices USING (invoiceid)
+        WHERE closedate IS NULL AND encumber_open = 1
+        GROUP BY budget_id
+        |, 'budget_id');
 
 
     foreach my $budget (@sort) {
         if ( not defined $budget->{budget_parent_id} ) {
-            _recursiveAdd( $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment );
+            _recursiveAdd( $budget, undef, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment );
         }
     }
     return \@sort;
 }
 
 sub _recursiveAdd {
-    my ($budget, $parent, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment ) = @_;
+    my ($budget, $parent, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment ) = @_;
 
     foreach my $child (@{$budget->{children}}){
-        _recursiveAdd($child, $budget, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment );
+        _recursiveAdd($child, $budget, $hr_budget_spent, $hr_budget_spent_shipment, $hr_budget_ordered, $hr_budget_ordered_shipment, $hr_budget_spent_adjustment, $hr_budget_ordered_adjustment );
     }
 
     $budget->{budget_spent} += $hr_budget_spent->{$budget->{budget_id}}->{budget_spent};
     $budget->{budget_spent} += $hr_budget_spent_shipment->{$budget->{budget_id}}->{shipmentcost};
+    $budget->{budget_spent} += $hr_budget_spent_adjustment->{$budget->{budget_id}}->{adjustments};
     $budget->{budget_ordered} += $hr_budget_ordered->{$budget->{budget_id}}->{budget_ordered};
     $budget->{budget_ordered} += $hr_budget_ordered_shipment->{$budget->{budget_id}}->{shipmentcost};
+    $budget->{budget_ordered} += $hr_budget_ordered_adjustment->{$budget->{budget_id}}->{adjustments};
 
     $budget->{total_spent} += $budget->{budget_spent};
     $budget->{total_ordered} += $budget->{budget_ordered};
