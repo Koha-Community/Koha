@@ -679,8 +679,8 @@ CREATE TABLE `deleteditems` (
   `renewals` smallint(6) default NULL, -- number of times this item has been renewed
   `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
   `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
-  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$x)
-  `itemnotes_nonpublic` LONGTEXT default NULL,
+  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$z)
+  `itemnotes_nonpublic` LONGTEXT default NULL, -- non-public notes on this item (MARC21 952$x)
   `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
   `paidfor` LONGTEXT,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
@@ -942,8 +942,8 @@ CREATE TABLE `items` ( -- holdings/item information
   `renewals` smallint(6) default NULL, -- number of times this item has been renewed
   `reserves` smallint(6) default NULL, -- number of times this item has been placed on hold/reserved
   `restricted` tinyint(1) default NULL, -- authorized value defining use restrictions for this item (MARC21 952$5)
-  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$x)
-  `itemnotes_nonpublic` LONGTEXT default NULL,
+  `itemnotes` LONGTEXT, -- public notes on this item (MARC21 952$z)
+  `itemnotes_nonpublic` LONGTEXT default NULL, -- non-public notes on this item (MARC21 952$x)
   `holdingbranch` varchar(10) default NULL, -- foreign key from the branches table for the library that is currently in possession item (MARC21 952$b)
   `paidfor` LONGTEXT,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP, -- date and time this item was last altered
