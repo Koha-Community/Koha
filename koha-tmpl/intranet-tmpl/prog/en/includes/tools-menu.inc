@@ -7,7 +7,7 @@
 </ul>
 [% IF ( CAN_user_tools_manage_patron_lists || CAN_user_clubs || CAN_user_tools_moderate_comments || CAN_user_tools_import_patrons
   || CAN_user_tools_edit_notices || CAN_user_tools_edit_notice_status_triggers || CAN_user_tools_label_creator || CAN_user_tools_delete_anonymize_patrons
-  || CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || CAN_user_tools_batch_upload_patron_images ) %]
+  || CAN_user_tools_edit_patrons || CAN_user_tools_moderate_tags || ( CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') ) ) %]
 <h5>Patrons and circulation</h5>
 <ul>
     [% IF ( CAN_user_tools_manage_patron_lists ) %]
@@ -43,7 +43,7 @@
     [% IF ( CAN_user_tools_moderate_tags ) %]
     <li><a href="/cgi-bin/koha/tags/review.pl">Tag moderation</a></li>
     [% END %]
-    [% IF ( CAN_user_tools_batch_upload_patron_images ) %]
+    [% IF ( CAN_user_tools_batch_upload_patron_images && Koha.Preference('patronimages') ) %]
 	<li><a href="/cgi-bin/koha/tools/picture-upload.pl">Upload patron images</a></li>
     [% END %]
 </ul>

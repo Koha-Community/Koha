@@ -37,6 +37,12 @@ use Koha::Token;
 
 my $input = new CGI;
 
+unless (C4::Context->preference('patronimages')) {
+    # redirect to intranet home if patronimages is not enabled
+    print $input->redirect("/cgi-bin/koha/mainpage.pl");
+    exit;
+}
+
 my ($template, $loggedinuser, $cookie)
     = get_template_and_user({template_name => "tools/picture-upload.tt",
 					query => $input,
