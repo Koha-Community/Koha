@@ -52,18 +52,18 @@ my $marc_mod_template = '';
 my $marc_mod_template_id = undef;
 
 my $result = GetOptions(
-    'encoding:s'    => \$encoding,
-    'file:s'        => \$input_file,
-    'format:s'      => \$format,
-    'match|match-bibs:s'  => \$match,
-    'add-items'     => \$add_items,
-    'item-action:s' => \$item_action,
-    'no-replace'    => \$no_replace,
-    'no-create'     => \$no_create,
-    'comment:s'     => \$batch_comment,
-    'authorities'   => \$authorities,
-    'marcmodtemplate:s' => \$marc_mod_template,
-    'h|help'        => \$want_help
+    'encoding:s'         => \$encoding,
+    'file:s'             => \$input_file,
+    'format:s'           => \$format,
+    'match|match-bibs:s' => \$match,
+    'add-items'          => \$add_items,
+    'item-action:s'      => \$item_action,
+    'no-replace'         => \$no_replace,
+    'no-create'          => \$no_create,
+    'comment:s'          => \$batch_comment,
+    'authorities'        => \$authorities,
+    'marcmodtemplate:s'  => \$marc_mod_template,
+    'h|help'             => \$want_help
 );
 
 if($marc_mod_template ne '') {
@@ -104,19 +104,21 @@ unless (-r $input_file) {
 
 my $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
-process_batch({
-    format        => $format,
-    input_file    => $input_file,
-    record_type   => $record_type,
-    match         => $match,
-    add_items     => $add_items,
-    batch_comment => $batch_comment,
-    encoding      => $encoding,
-    no_replace    => $no_replace,
-    no_create     => $no_create,
-    item_action   => $item_action,
-    marc_mod_template_id => $marc_mod_template_id,
-});
+process_batch(
+    {
+        format               => $format,
+        input_file           => $input_file,
+        record_type          => $record_type,
+        match                => $match,
+        add_items            => $add_items,
+        batch_comment        => $batch_comment,
+        encoding             => $encoding,
+        no_replace           => $no_replace,
+        no_create            => $no_create,
+        item_action          => $item_action,
+        marc_mod_template_id => $marc_mod_template_id,
+    }
+);
 $dbh->commit();
 
 exit 0;
@@ -139,14 +141,15 @@ sub process_batch {
 
     print "... staging MARC records -- please wait\n";
     #FIXME: We should really allow the use of marc modification frameworks and to_marc plugins here if possible
-    my ($batch_id, $num_valid_records, $num_items, @import_errors) =
-        BatchStageMarcRecords(
-            $record_type, $params->{encoding},
-            $marc_records, $params->{input_file},
-            $params->{'marc_mod_template_id'},
-            $params->{batch_comment}, '',
-            $params->{add_items}, 0,
-            100, \&print_progress_and_commit);
+    my ( $batch_id, $num_valid_records, $num_items, @import_errors ) =
+      BatchStageMarcRecords(
+        $record_type,                      $params->{encoding},
+        $marc_records,                     $params->{input_file},
+        $params->{'marc_mod_template_id'}, $params->{batch_comment},
+        '',                                $params->{add_items},
+        0,                                 100,
+        \&print_progress_and_commit
+      );
     print "... finished staging MARC records\n";
 
     my $num_with_matches = 0;
