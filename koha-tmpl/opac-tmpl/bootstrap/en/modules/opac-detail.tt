@@ -477,11 +477,14 @@
                                 [% ELSE %]
                                     <select id="star_rating" name="rating" data-rating-enabled="0" disabled="disabled" autocomplete="off">
                                 [% END %]
+                                    [% IF ( rating_avg_int == 0 ) %]
+                                        <option value="" selected="selected"></option>
+                                    [% END %]
                                     [% FOREACH i IN [ 1 2 3 4 5  ] %]
                                         [% IF rating_avg_int == i %]
                                             <option value="[% i | html %]" selected="selected">[% i | html %]</option>
                                         [% ELSE %]
-                                            <option value"[% i | html %]">[% i | html %]</option>
+                                            <option value="[% i | html %]">[% i | html %]</option>
                                         [% END %]
                                     [% END %]
                                 </select>

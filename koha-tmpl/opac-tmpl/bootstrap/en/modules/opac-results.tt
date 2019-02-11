@@ -738,6 +738,10 @@ $(document).ready(function(){
     });
     enableCheckboxActions();
 
+    $(".br-readonly a").on("click", function(e){
+        e.preventDefault();
+    });
+
     [% IF ( IDreamBooksResults ) %]
         $('.idbresult').each(function() {
             var isbn = $(this).children('a').text().replace(/\s*/,'');
