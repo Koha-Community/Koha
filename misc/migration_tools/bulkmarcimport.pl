@@ -176,9 +176,12 @@ if ($fk_off) {
 if ($delete) {
 	if ($biblios){
     	print "deleting biblios\n";
-    	$dbh->do("truncate biblio");
-    	$dbh->do("truncate biblioitems");
-    	$dbh->do("truncate items");
+        $dbh->do("DELETE FROM biblio");
+        $dbh->do("ALTER TABLE biblio AUTO_INCREMENT = 1");
+        $dbh->do("DELETE FROM biblioitems");
+        $dbh->do("ALTER TABLE biblioitems AUTO_INCREMENT = 1");
+        $dbh->do("DELETE FROM items");
+        $dbh->do("ALTER TABLE items AUTO_INCREMENT = 1");
 	}
 	else {
     	print "deleting authorities\n";
