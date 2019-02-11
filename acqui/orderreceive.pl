@@ -229,7 +229,6 @@ $template->param(
     name                  => $bookseller->name,
     cur_active_sym        => $active_currency->symbol,
     cur_active            => $active_currency->currency,
-    listincgst            => $bookseller->listincgst,
     invoiceincgst         => $bookseller->invoiceincgst,
     title                 => $order->{'title'},
     author                => $order->{'author'},
