@@ -46,7 +46,7 @@ t::lib::Mocks::mock_config( 'mana_config', 'https://foo.bar');
 is(Koha::SharedContent::get_sharing_url(), 'https://foo.bar', 'Mana URL');
 
 my $result = Koha::SharedContent::search_entities('report', $query);
-ok($result->{msg} =~ /Can\'t connect to foo.bar:443$/, 'Unable to connect');
+ok($result->{msg} =~ /Can\'t connect to foo.bar:443/, 'Unable to connect');
 is($result->{code}, 500, 'Code is 500');
 
 my $ua = Test::MockModule->new('LWP::UserAgent');
