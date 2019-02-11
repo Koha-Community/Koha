@@ -29,7 +29,6 @@
 
         [% IF tab %]
           $('#addbibliotabs').selectTabByID("#[% tab | html %]");
-          console.log("[% tab %]");
         [% END %]
 
         Sticky = $("#toolbar");
@@ -573,7 +572,7 @@ function Changefwk() {
     [% END %]
     <div class="toolbar-tabs-container">
         <ul class="toolbar-tabs">
-            [%- FOREACH BIG_LOO IN BIG_LOOP -%][%- SET tabname = BIG_LOO.number + 1 -%][% IF loop.first %]<li class="selected">[% ELSE %]<li>[% END %]<a data-tabid="[% BIG_LOO.number | html %]" href="#tab[% BIG_LOO.number | html %]XX">[% tabname | html %]</a></li>[%- END -%]
+            [%- FOREACH BIG_LOO IN BIG_LOOP -%][%- SET tabname = BIG_LOO.number -%][% IF loop.first %]<li class="selected">[% ELSE %]<li>[% END %]<a data-tabid="[% BIG_LOO.number | html %]" href="#tab[% BIG_LOO.number | html %]XX">[% tabname | html %]</a></li>[%- END -%]
         </ul>
         <ul class="tag_anchors_list">
             [% FOREACH BIG_LOO IN BIG_LOOP %]
@@ -612,13 +611,13 @@ function Changefwk() {
     </ul>
 
 [% FOREACH BIG_LOO IN BIG_LOOP %]
-    [% SET tabname = BIG_LOO.number + 1 %]
+    [% SET tabname = BIG_LOO.number %]
     <div id="tab[% BIG_LOO.number | html %]XX">
 
-    <h3>Section [% tabname %]</h3>
+    <h3>Section [% tabname | html %]</h3>
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
     [% IF ( innerloo.tag ) %]
-    <div class="tag clearfix" id="tag_[% innerloo.tag %]_[% innerloo.index %][% innerloo.random %]">
+    <div class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
         <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
             [% IF advancedMARCEditor %]
                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
