@@ -186,7 +186,7 @@ sub status_alias {
         # We need a way of accepting implied undef, so we can nullify
         # the status_alias column, when called from $self->status
         my $val = $newval eq "-1" ? undef : $newval;
-        my $newval = $self->SUPER::status_alias($newval);
+        my $newval = $self->SUPER::status_alias($val);
         if ($newval) {
             return $newval;
         } else {
