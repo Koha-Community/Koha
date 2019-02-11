@@ -19,8 +19,7 @@
 # with this program; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
-use strict;
-use warnings;
+use Modern::Perl;
 BEGIN {
     # find Koha's Perl modules
     # test carefully before changing this
@@ -31,6 +30,7 @@ BEGIN {
 use C4::Context;
 use C4::ImportBatch;
 use C4::Matcher;
+use C4::MarcModificationTemplates;
 use Getopt::Long;
 
 $| = 1;
@@ -48,6 +48,8 @@ my $no_replace;
 my $format = 'ISO2709';
 my $no_create;
 my $item_action = 'always_add';
+my $marc_mod_template = '';
+my $marc_mod_template_id = undef;
 
 my $result = GetOptions(
     'encoding:s'    => \$encoding,
@@ -60,8 +62,29 @@ my $result = GetOptions(
     'no-create'     => \$no_create,
     'comment:s'     => \$batch_comment,
     'authorities'   => \$authorities,
+    'marcmodtemplate:s' => \$marc_mod_template,
     'h|help'        => \$want_help
 );
+
+if($marc_mod_template ne '') {
+   my @templates = GetModificationTemplates();
+   foreach my $this_template (@templates) {
+       if($this_template->{'name'} eq $marc_mod_template) {
+          if(!defined $marc_mod_template_id) {
+               $marc_mod_template_id = $this_template->{'template_id'};
+           } else {
+               print "WARNING: MARC modification template name " .
+                   "'$marc_mod_template' matches multiple templates. " .
+                   "Please fix this issue before proceeding.\n";
+               exit 1;
+           }
+       }
+   }
+
+   if(!defined $marc_mod_template_id ) {
+       die "Can't locate MARC modification template '$marc_mod_template'\n";
+   }
+}
 
 $record_type = 'auth' if ($authorities);
 
@@ -92,6 +115,7 @@ process_batch({
     no_replace    => $no_replace,
     no_create     => $no_create,
     item_action   => $item_action,
+    marc_mod_template_id => $marc_mod_template_id,
 });
 $dbh->commit();
 
@@ -116,8 +140,13 @@ sub process_batch {
     print "... staging MARC records -- please wait\n";
     #FIXME: We should really allow the use of marc modification frameworks and to_marc plugins here if possible
     my ($batch_id, $num_valid_records, $num_items, @import_errors) =
-        BatchStageMarcRecords($record_type, $params->{encoding}, $marc_records, $params->{input_file}, undef, $params->{batch_comment}, '', $params->{add_items}, 0,
-                              100, \&print_progress_and_commit);
+        BatchStageMarcRecords(
+            $record_type, $params->{encoding},
+            $marc_records, $params->{input_file},
+            $params->{'marc_mod_template_id'},
+            $params->{batch_comment}, '',
+            $params->{add_items}, 0,
+            100, \&print_progress_and_commit);
     print "... finished staging MARC records\n";
 
     my $num_with_matches = 0;
@@ -218,6 +247,14 @@ Parameters:
                             the record batch; if the comment
                             has spaces in it, surround the
                             comment with quotation marks.
+    --marcmodtemplate <TEMPLATE>
+                            This parameter allows you to specify the
+                            name of an existing MARC modification
+                            template to apply as the MARC records are
+                            imported (these templates are created in
+                            the "MARC modification templates" tool in
+                            Koha). If not specified, no MARC modification
+                            templates are used (default).
     --help or -h            show this message.
 _USAGE_
 }
