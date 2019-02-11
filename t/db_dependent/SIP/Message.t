@@ -58,7 +58,7 @@ subtest 'Testing Patron Status Request V2' => sub {
 subtest 'Testing Patron Info Request V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 18;
+    plan tests => 20;
     $C4::SIP::Sip::protocol_version = 2;
     test_request_patron_info_v2();
     $schema->storage->txn_rollback;
@@ -269,6 +269,14 @@ sub test_request_patron_info_v2 {
     $msg->handle_patron_info( $server );
     $respcode = substr( $response, 0, 2 );
     check_field( $respcode, $response, FID_VALID_PATRON_PWD, 'Y', 'code CQ should be Y if empty AD allowed' );
+
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', '1' );
+    my $patron = Koha::Patrons->find({ cardnumber => $card });
+    $patron->update({ login_attempts => 0 });
+    is( $patron->account_locked, 0, "Patron account not locked already" );
+    $msg->handle_patron_info( $server );
+    $patron = Koha::Patrons->find({ cardnumber => $card });
+    is( $patron->account_locked, 0, "Patron account is not locked by patron info messages with empty password" );
 
     # Finally, we send a wrong card number
     Koha::Patrons->search({ cardnumber => $card })->delete;
