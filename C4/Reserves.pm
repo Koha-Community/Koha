@@ -869,7 +869,7 @@ sub AutoUnsuspendReserves {
 
     my @holds = Koha::Holds->search( { suspend_until => { '<=' => $today->ymd() } } );
 
-    map { $_->suspend(0)->suspend_until(undef)->store() } @holds;
+    map { $_->resume() } @holds;
 }
 
 =head2 ModReserve
