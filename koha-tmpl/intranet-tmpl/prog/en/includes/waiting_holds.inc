@@ -1,4 +1,5 @@
 [% USE ItemTypes %]
+[% USE AuthorisedValues %]
 <table id="[% table_name | html %]">
     <thead>
         <tr>
@@ -8,6 +9,7 @@
             <th>Patron</th>
             <th>Home branch</th>
             <th>Current location</th>
+            <th>Available location</th>
             <th>Call number</th>
             <th>Copy number</th>
             <th>Enumeration</th>
@@ -37,6 +39,7 @@
                 </td>
                 <td>[% Branches.GetName( reserveloo.item.homebranch ) | html %]</td>
                 <td>[% Branches.GetName( reserveloo.item.holdingbranch ) | html %]</td>
+                <td>[% AuthorisedValues.GetByCode('LOC', reserveloo.item.location) | html %]</td>
                 <td>[% reserveloo.item.itemcallnumber | html %]</td>
                 <td>[% reserveloo.item.copynumber | html %]</td>
                 <td>[% reserveloo.item.enumchron | html %]</td>
