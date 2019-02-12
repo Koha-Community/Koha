@@ -103,7 +103,7 @@ subtest 'AuthenticatePatron test' => sub {
 
 subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -227,6 +227,8 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
 
     # Check results:
     is_deeply( $reply->{'attributes'}, [ $cmp ], 'Test GetPatronInfo - show_attributes parameter' );
+
+    ok( exists $reply->{is_expired}, 'There should be the is_expired information');
 
     # Cleanup
     $schema->storage->txn_rollback;
