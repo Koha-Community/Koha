@@ -432,6 +432,7 @@ sub build_authorities_query_compat {
 
     # Convert to lower case
     $marclist = [map(lc, @{$marclist})];
+    $orderby  = lc $orderby;
 
     # Make sure everything exists
     foreach my $m (@$marclist) {
@@ -454,7 +455,7 @@ sub build_authorities_query_compat {
       : ( $orderby =~ /^auth/ )    ? 'local-number'
       :                              undef;
     if ($sort_field) {
-        my $sort_order = ( $orderby =~ /Asc$/ ) ? 'asc' : 'desc';
+        my $sort_order = ( $orderby =~ /asc$/ ) ? 'asc' : 'desc';
         %sort = ( $sort_field => $sort_order, );
     }
     my %search = (
@@ -887,7 +888,6 @@ operands and double quoted strings.
 
 =cut
 
-my $tokenize_split_re = qr/((?:${field_name_pattern}${multi_field_pattern}:)?"[^"]+"|\s+)/;
 sub _truncate_terms {
     my ( $self, $query ) = @_;
 
@@ -914,12 +914,14 @@ any field prefixes and quoted strings.
 
 =cut
 
+my $tokenize_split_re = qr/((?:${field_name_pattern}${multi_field_pattern}:)?"[^"]+"|\s+)/;
+
 sub _split_query {
     my ( $self, $query ) = @_;
 
     # '"donald duck" title:"the mouse" and peter" get split into
     # ['', '"donald duck"', '', ' ', '', 'title:"the mouse"', '', ' ', 'and', ' ', 'pete']
-    my @tokens = split /((?:[\w\-.]+:)?"[^"]+"|\s+)/, $query;
+    my @tokens = split $tokenize_split_re, $query;
 
     # Filter out empty values
     @tokens = grep( /\S/, @tokens );
