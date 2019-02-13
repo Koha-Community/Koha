@@ -89,3 +89,43 @@ span.overridden {
     font-weight: bold;
     color: red;
 }
+
+.sortable {
+    margin-left: 0;
+    max-width: 20em;
+    padding: .5em 0;
+}
+
+.sortable label {
+    font-weight: bold;
+}
+
+.sortable li {
+    background: #FCFCFC url("data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAA4AAAAMAQMAAABoTh6ZAAAABlBMVEVMaXHExMQ/ZYtiAAAAAXRSTlMAQObYZgAAABNJREFUeNpjYGBgMDYAIQjAxgYAKfECU0ml038AAAAASUVORK5CYII=") repeat-y;
+    border:  1px solid #EEE;
+    cursor: move;
+    font-weight: bold;
+    list-style-type: none;
+    margin: .5em 0;
+    padding: .1em .5em;
+    padding-left:  20px;
+}
+
+.sortable li:hover {
+    background-color: #FFC;
+}
+
+.sortable li li {
+    background: transparent none;
+    border: 0;
+    font-weight: normal;
+    padding-left: 0;
+}
+
+.sortable li li label {
+    font-weight: normal;
+}
+
+.sortable li.ui-sortable-helper {
+    background-color: #FFC;
+}
