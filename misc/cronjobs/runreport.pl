@@ -30,7 +30,7 @@ use Koha::DateUtils;
 use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
 use MIME::Lite;
-use Text::CSV_XS;
+use Text::CSV::Encoded;
 use CGI qw ( -utf8 );
 use Carp;
 use Encode;
@@ -273,17 +273,18 @@ foreach my $report_id (@ARGV) {
         }
         $message = $cgi->table(join "", @rows);
     } elsif ($format eq 'csv') {
-        my $csv = Text::CSV_XS->new({
+        my $csv = Text::CSV::Encoded->new({
+            encoding_out => 'utf8',
             binary      => 1,
             quote_char  => $quote,
             sep_char    => $separator,
             });
 
         if ( $csv_header ) {
-            my $fields = $sth->{NAME};
-            $csv->combine( @$fields );
+            my @fields = map { decode( 'utf8', $_ ) } @{ $sth->{NAME} };
+            $csv->combine( @fields );
             $message .= $csv->string() . "\n";
-            push @rows_to_store, [@$fields] if $store_results;
+            push @rows_to_store, [@fields] if $store_results;
         }
 
         while (my $line = $sth->fetchrow_arrayref) {
