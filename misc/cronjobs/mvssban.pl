@@ -20,12 +20,11 @@ use utf8;
 use strict;
 use C4::Context;
 use XML::Parser;
+use YAML::XS;
+use Data::Dumper;
 
 # Nag about missing targetfile
-if ( $ARGV[0] eq '' ) {
-    print "No target filename given.\n";
-    exit 1;
-}
+die "No target filename given." unless $ARGV[0];
 
 # Initialize the XML blocklist
 my $xml = << 'HEAD_END';
@@ -53,42 +52,49 @@ my $xml = << 'HEAD_END';
   </xs:schema>
 HEAD_END
 
-my $dbh=C4::Context->dbh();
+# Get self service rules and build query
+my $ssrules = C4::Context->preference('SSRules');
+my $rules = YAML::XS::Load($ssrules);
 
-# Get self service rules
-my $sth_ssrules=$dbh->prepare ( "SELECT value FROM systempreferences WHERE variable='SSRules'" );
-$sth_ssrules->execute();
+print Dumper $rules if $ENV{'DEBUG'};
 
-my @ssrules = $sth_ssrules->fetchrow_array();
-$sth_ssrules->finish();
+die "BorrowerCategories not defined in SSRules" unless $rules->{BorrowerCategories}; # Allowed borrower categories will need to be defined
+my $categories="'" . $rules->{BorrowerCategories} . "'";
+   $categories=~s/ +/', '/g;
 
-@ssrules=split (':', $ssrules[0]);
-@ssrules=split (' ', $ssrules[1]);
+my $blocks="SELECT borrowernumber FROM borrower_attributes WHERE code='SSBAN' AND attribute IN ('1', 'BANNED'"; # Always block explicitly banned
+   $blocks.=", 'NOTACCEPTED'" if $rules->{TaC};
+   $blocks.=", 'NOPERMISSION'" if $rules->{Permission};
+   $blocks.=")"; 
 
-my $categories;
-foreach (@ssrules) {
-  $categories.=', ' if ($categories ne '');
-  $categories.='\''. $_ . '\'';
-}
+my $options;
+   $options.="OR lost='1' " if $rules->{CardLost};
+   $options.="OR dateexpiry<NOW() " if $rules->{CardExpired};
+   $options.="OR debarred IS NOT NULL " if $rules->{Debarred};
+
+warn "MinimumAge, OpeningHours and/or MaxFines is defined in SSRules, but not supported" if ( $rules->{MinimumAge} || $rules->{OpeningHours} || $rules->{MaxFines} ); 
 
 # Get the patrons to be blocked and put their cardnumbers in XML
-my $sth_blockme=$dbh->prepare ("SELECT DISTINCT cardnumber FROM borrowers WHERE borrowernumber IN (SELECT borrowernumber FROM borrower_attributes WHERE code='SSBAN' and attribute in ('1', 'BANNED', 'NOPERMISSION', 'NOTACCEPTED') OR lost='1' OR categorycode NOT IN ($categories));"); 
-$sth_blockme->execute();
-while (my @patron = $sth_blockme->fetchrow_array()) {
-    $xml = $xml . "  <patronaccess>\n    <patronid_pac>" . $patron[0] . "</patronid_pac>\n    <type_pac>1</type_pac>\n  </patronaccess>\n" unless $patron[0] eq '';
+my $dbh=C4::Context->dbh();
+
+warn "SELECT DISTINCT cardnumber FROM borrowers WHERE categorycode NOT IN ($categories) OR borrowernumber IN ($blocks) $options;" if $ENV{'DEBUG'};
+my $sth=$dbh->prepare ("SELECT DISTINCT cardnumber FROM borrowers WHERE categorycode NOT IN ($categories) OR borrowernumber IN ($blocks) $options;");
+$sth->execute();
+
+while (my @patron = $sth->fetchrow_array()) {
+    $xml.="  <patronaccess>\n    <patronid_pac>" . $patron[0] . "</patronid_pac>\n    <type_pac>1</type_pac>\n  </patronaccess>\n" unless $patron[0] eq '';
 }
-$xml = $xml . "</NewDataSet>\n";
-$dbh->disconnect;
+$xml.="</NewDataSet>\n";
+
+$sth->finish();
+$dbh->disconnect();
 
 # Validate and write XML to a file. Validation is very basic, but not much can go wrong here.
-if ( XML::Parser->new->parse($xml) ) {
-    open XML, '>encoding(utf8)', $ARGV[0] or die "Can't write targetfile.";
-    print XML $xml;
-    close XML;
-    print "New blocklist written to " . $ARGV[0] . ".\n";
-} else {
-    print "The XML is not valid, will not write a targetfile.\n";
-    exit 1;
-}
+die "The XML is not valid, will not write a targetfile." unless XML::Parser->new->parse($xml);
 
+open XML, '>encoding(utf8)', $ARGV[0] or die "Can't write targetfile.";
+print XML $xml;
+close XML;
+
+print "New blocklist written to " . $ARGV[0] . ".\n";
 exit 0;
