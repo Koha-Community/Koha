@@ -29,7 +29,7 @@ use Koha::DateUtils;
 use Getopt::Long qw(:config auto_help auto_version);
 use Pod::Usage;
 use MIME::Lite;
-use Text::CSV_XS;
+use Text::CSV::Encoded;
 use CGI qw ( -utf8 );
 use Carp;
 use Encode;
@@ -269,7 +269,8 @@ foreach my $report_id (@ARGV) {
         }
         $message = $cgi->table(join "", @rows);
     } elsif ($format eq 'csv') {
-        my $csv = Text::CSV_XS->new({
+        my $csv = Text::CSV::Encoded->new({
+            encoding_out => 'utf8',
             binary      => 1,
             quote_char  => $quote,
             sep_char    => $separator,
