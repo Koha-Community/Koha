@@ -258,17 +258,47 @@ sub store {
                 # Actionlogs
                 if ( C4::Context->preference("BorrowersLog") ) {
                     my $info;
-                    for my $key ( keys %{ $self_from_storage->unblessed } ) {
-                        if ( $self_from_storage->$key ne $self->$key ) {
+                    my $from_storage = $self_from_storage->unblessed;
+                    my $from_object  = $self->unblessed;
+                    for my $key ( keys %{$from_storage} ) {
+                        if (
+                            (
+                                  !defined( $from_storage->{$key} )
+                                && defined( $from_object->{$key} )
+                            )
+                            || ( defined( $from_storage->{$key} )
+                                && !defined( $from_object->{$key} ) )
+                            || (
+                                   defined( $from_storage->{$key} )
+                                && defined( $from_object->{$key} )
+                                && ( $from_storage->{$key} ne
+                                    $from_object->{$key} )
+                            )
+                          )
+                        {
                             $info->{$key} = {
-                                before => $self_from_storage->$key,
-                                after  => $self->$key
+                                before => $from_storage->{$key},
+                                after  => $from_object->{$key}
                             };
                         }
                     }
 
-                    logaction( "MEMBERS", "MODIFY", $self->borrowernumber,
-                        to_json( $info, { utf8 => 1, pretty => 1, canonical => 1 } ) );
+                    if ( defined($info) ) {
+                        logaction(
+                            "MEMBERS",
+                            "MODIFY",
+                            $self->borrowernumber,
+                            to_json(
+                                $info,
+                                { utf8 => 1, pretty => 1, canonical => 1 }
+                            )
+                        );
+                    }
+                    else {
+                        logaction( "MEMBERS", "MODIFY", $self->borrowernumber,
+                            "NON-STANDARD FIELD CHANGED" );
+
+                    }
                 }
 
                 # Final store
