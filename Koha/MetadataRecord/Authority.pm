@@ -183,8 +183,6 @@ sub get_all_authorities_iterator {
     if ($options{slice}) {
         $slice_count = $options{slice}->{count};
         $slice_modulo = $options{slice}->{index};
-        $slice_modulo = 0 if ($slice_modulo == $slice_count);
-
         $search_terms->{authid} = \[ ' mod ? = ?', $slice_count, $slice_modulo];
         $search_terms = {
             '-and' => [

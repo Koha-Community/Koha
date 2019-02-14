@@ -125,6 +125,10 @@ unless ($index_authorities || $index_biblios) {
     $index_authorities = $index_biblios = 1;
 }
 
+if ($processes && @record_numbers) {
+    die "Argument p|processes cannot be combined with bn|bnumber";
+}
+
 pod2usage(1) if $help;
 pod2usage( -exitstatus => 0, -verbose => 2 ) if $man;
 
@@ -135,11 +139,12 @@ _verify_index_state($Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX, $dele
 
 my $slice_index = 0;
 my $slice_count = $processes // 1;
+my %iterator_options;
 
 if ($slice_count > 1) {
     # Fire up child processes for processing slices from 2 on. This main process will handle slice 1.
-    $slice_index = 1;
-    for (my $proc = 2; $proc <= $processes; $proc++) {
+    $slice_index = 0;
+    for (my $proc = 1; $proc < $slice_count; $proc++) {
         my $pid = fork();
         die "Failed to fork a child process\n" unless defined $pid;
         if ($pid == 0) {
@@ -149,12 +154,8 @@ if ($slice_count > 1) {
         }
     }
     # Fudge the commit count a bit to spread out the Elasticsearch commits
-    $commit *= 1 + 0.10 * ($slice_index - 1);
-}
-
-my %iterator_options;
-if ($slice_index) {
-    _log(1, "Processing slice $slice_index of $slice_count\n");
+    $commit *= 1 + 0.10 * $slice_index;
+    _log(1, "Processing slice @{[$slice_index + 1]} of $slice_count\n");
     $iterator_options{slice} = { index => $slice_index, count => $slice_count };
 }
 
@@ -193,16 +194,16 @@ if ($index_authorities) {
     _do_reindex($next, $Koha::SearchEngine::Elasticsearch::AUTHORITIES_INDEX);
 }
 
-if ($slice_index == 1) {
+if ($slice_index == 0) {
     # Main process, wait for children
-    for (my $proc = 2; $proc <= $processes; $proc++) {
+    for (my $proc = 1; $proc < $processes; $proc++) {
         wait();
     }
 }
 
 =head2 _verify_index_state
 
-    _                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       verify_index_state($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, 1);
+    _verify_index_state($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, 1);
 
 Checks the index state and recreates it if requested.
 
