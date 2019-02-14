@@ -255,33 +255,23 @@ sub store {
                     $self->add_enrolment_fee_if_needed;
                 }
 
-                my $borrowers_log = C4::Context->preference("BorrowersLog");
-                my $previous_cardnumber = $self_from_storage->cardnumber;
-                if ($borrowers_log
-                    && ( !defined $previous_cardnumber
-                        || $previous_cardnumber ne $self->cardnumber )
-                    )
-                {
-                    logaction(
-                        "MEMBERS",
-                        "MODIFY",
-                        $self->borrowernumber,
-                        to_json(
-                            {
-                                cardnumber_replaced => {
-                                    previous_cardnumber => $previous_cardnumber,
-                                    new_cardnumber      => $self->cardnumber,
-                                }
-                            },
-                            { utf8 => 1, pretty => 1 }
-                        )
-                    );
+                # Actionlogs
+                if ( C4::Context->preference("BorrowersLog") ) {
+                    my $info;
+                    for my $key ( keys %{ $self_from_storage->unblessed } ) {
+                        if ( $self_from_storage->$key ne $self->$key ) {
+                            $info->{$key} = {
+                                before => $self_from_storage->$key,
+                                after  => $self->$key
+                            };
+                        }
+                    }
+
+                    logaction( "MEMBERS", "MODIFY", $self->borrowernumber,
+                        to_json( $info, { utf8 => 1, pretty => 1, canonical => 1 } ) );
                 }
 
-                logaction( "MEMBERS", "MODIFY", $self->borrowernumber,
-                    "UPDATE (executed w/ arg: " . $self->borrowernumber . ")" )
-                  if $borrowers_log;
-
+                # Final store
                 $self = $self->SUPER::store;
             }
         }
