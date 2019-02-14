@@ -131,7 +131,7 @@ sub get_all_biblios_iterator {
     if ($options{slice}) {
         $slice_count = $options{slice}->{count};
         $slice_modulo = $options{slice}->{index};
-        $search_terms = \[ ' mod(biblionumber, ?) = ?', $slice_count, $slice_modulo];
+        $search_terms = \[ 'mod(biblionumber, ?) = ?', $slice_count, $slice_modulo ];
     }
 
     my $database = Koha::Database->new();

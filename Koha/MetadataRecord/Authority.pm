@@ -183,11 +183,10 @@ sub get_all_authorities_iterator {
     if ($options{slice}) {
         $slice_count = $options{slice}->{count};
         $slice_modulo = $options{slice}->{index};
-        $search_terms->{authid} = \[ ' mod ? = ?', $slice_count, $slice_modulo];
         $search_terms = {
             '-and' => [
-                $search_terms,
-                \[ ' mod(authid, ?) = ?', $slice_count, $slice_modulo]
+                %{$search_terms},
+                \[ 'mod(authid, ?) = ?', $slice_count, $slice_modulo ]
             ]
         };
     }
