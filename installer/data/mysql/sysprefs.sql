@@ -393,7 +393,6 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('OPACMySummaryNote','','','Note to display on the patron summary page. This note only appears if the patron is connected.','Free'),
 ('OpacNav','Important links here.','70|10','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','Textarea'),
 ('OpacNavBottom','Important links here.','70|10','Use HTML tags to add navigational links to the left-hand navigational bar in OPAC','Textarea'),
-('OpacNavRight','','70|10','Show the following HTML in the right hand column of the main page under the main login form','Textarea'),
 ('OpacNewsLibrarySelect','0','','Show selector for branches on OPAC news page','YesNo'),
 ('OPACNoResultsFound','','70|10','Display this HTML when no results are found for a search in the OPAC','Textarea'),
 ('OPACNumbersPreferPhrase','0',NULL,'Control the use of phr operator in callnumber and standard number OPAC searches','YesNo'),

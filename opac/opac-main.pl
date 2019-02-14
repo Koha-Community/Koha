@@ -104,6 +104,7 @@ if ( $patron ) {
 
 $template->param(
     koha_news           => @all_koha_news,
+    news_lang           => $news_lang,
     branchcode          => $homebranch,
     display_daily_quote => C4::Context->preference('QuoteOfTheDay'),
     daily_quote         => $quote,

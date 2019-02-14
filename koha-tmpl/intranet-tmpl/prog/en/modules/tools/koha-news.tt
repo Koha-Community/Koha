@@ -39,8 +39,10 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
 [% END %]
 
 [% IF ( add_form ) %]
-    [% IF ( op == 'add' ) %][% default_lang = lang | html %]
-    [% ELSE %][% default_lang = new_detail.lang | html %]
+    [% IF ( op == 'add' ) %]
+        [% default_lang = lang %]
+    [% ELSE %]
+        [% default_lang = new_detail.lang %]
     [% END %]
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
             <input type="hidden" name="op" value="[% op | html %]" />
@@ -66,11 +68,21 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
                 <option value="slip"                    >Slip</option>
                 [% END %]
                 [% FOREACH lang_lis IN lang_list %]
-                [% IF ( lang_lis.language == default_lang ) %]
-                    <option value="[% lang_lis.language | html %]" selected="selected">OPAC ([% lang_lis.language | html %])</option>
-                [% ELSE %]
-                    <option value="[% lang_lis.language | html %]"                    >OPAC ([% lang_lis.language | html %])</option>
-                [% END %]
+                    <optgroup label="[% lang_lis.language | html %]">
+                        [% FOREACH location IN [ '', 'OpacNavRight' ] %]
+                            [% IF ( location == '' ) %]
+                                [% SET location_lang = lang_lis.language %]
+                                [% SET location = "OPAC news" %]
+                            [% ELSE %]
+                                [% SET location_lang = location _ "_" _ lang_lis.language %]
+                            [% END %]
+                            [% IF ( location_lang == default_lang ) %]
+                                <option value="[% location_lang | html %]" selected="selected">[% location | html %] ([% lang_lis.language | html %])</option>
+                            [% ELSE %]
+                                <option value="[% location_lang | html %]">[% location | html %] ([% lang_lis.language | html %])</option>
+                            [% END %]
+                        [% END %]
+                    </optgroup>
                 [% END %]
             </select>
             </li>
