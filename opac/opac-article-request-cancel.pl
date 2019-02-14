@@ -39,9 +39,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $id = $query->param('id');
 
-if ( $id && $borrowernumber ) {
+if ( $id ) {
     my $ar = Koha::ArticleRequests->find( $id );
-    $ar->cancel() if $ar;
+    if ( !$ar || $ar->borrowernumber != $borrowernumber ) {
+        print $query->redirect("/cgi-bin/koha/errors/404.pl");
+        exit;
+    }
+
+    $ar->cancel();
 }
 
 print $query->redirect("/cgi-bin/koha/opac-user.pl#opac-user-article-requests");
