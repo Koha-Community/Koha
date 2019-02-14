@@ -100,11 +100,11 @@
 
     <li>
         <label for="paid">Amount being paid: </label>
-        <input name="paid" id="paid" value="[% amountoutstanding | $Price %]"/>
+        <input name="paid" id="paid" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
         <label for="collected">Collected from patron: </label>
-        <input id="collected" value="[% amountoutstanding | $Price %]"/>
+        <input id="collected" value="[% amountoutstanding | $Price on_editing => 1 %]"/>
     </li>
     <li>
         <label>Change to give: </label>
@@ -202,7 +202,7 @@
         </li>
     <li>
         <label for="paid">Amount paid :</label>
-        <input name="paid" id="paid" value="[% total | $Price %]"/>
+        <input name="paid" id="paid" value="[% total | $Price on_editing => 1 %]"/>
     </li>
     <li>
         [% IF type == 'writeoff' %]
@@ -210,7 +210,7 @@
         [% ELSE %]
             <label for="collected">Collect from patron: </label>
         [% END %]
-        <input id="collected" value="[% total | $Price %]"/>
+        <input id="collected" value="[% total | $Price on_editing => 1 %]"/>
     </li>
     <li>
         <label>Change to give: </label>
