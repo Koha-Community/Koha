@@ -266,7 +266,7 @@ sub count_auth_use {
         query => {
             bool => {
 #                query  => { match_all => {} },
-                filter => { term      => { 'authority-number' => $authid } }
+                filter => { term      => { 'koha-auth-number' => $authid } }
             }
         }
     };
