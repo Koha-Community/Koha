@@ -28,7 +28,7 @@
 		});
 
         [% IF tab %]
-          $('#addbibliotabs').selectTabByID("#[% tab | html %]");
+          $('#addbibliotabs').selectTabByID("tab[% tab | html %]");
         [% END %]
 
         Sticky = $("#toolbar");
@@ -139,7 +139,7 @@
             $(".toolbar-tabs li").removeClass("selected");
             $(this).parent().addClass("selected");
             var tabid = $(this).data("tabid");
-            $("#addbibliotabs").tabs( "option", "active", tabid );
+            $('#addbibliotabs').selectTabByID("tab" + tabid + "XX");
             $(".tag_anchors").removeClass("tab_selected").hide();
             $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
         });
@@ -571,15 +571,27 @@ function Changefwk() {
         [% END %]
     [% END %]
     <div class="toolbar-tabs-container">
-        <ul class="toolbar-tabs">
-            [%- FOREACH BIG_LOO IN BIG_LOOP -%][%- SET tabname = BIG_LOO.number -%][% IF loop.first %]<li class="selected">[% ELSE %]<li>[% END %]<a data-tabid="[% BIG_LOO.number | html %]" href="#tab[% BIG_LOO.number | html %]XX">[% tabname | html %]</a></li>[%- END -%]
-        </ul>
+        [% IF ( BIG_LOOP.size > 1 ) %]
+            <ul class="toolbar-tabs">
+                [%- FOREACH BIG_LOO IN BIG_LOOP -%]
+                    [% IF loop.first %]
+                        <li class="selected">
+                    [% ELSE %]
+                        <li>
+                    [% END %]
+                        <a data-tabid="[% BIG_LOO.number | html %]" href="#tab[% BIG_LOO.number | html %]XX">[% BIG_LOO.number | html %]</a>
+                    </li>
+                [%- END -%]
+            </ul>
+        [% END %]
         <ul class="tag_anchors_list">
             [% FOREACH BIG_LOO IN BIG_LOOP %]
                 [% IF loop.first %][% SET tab_selected = "tab_selected" %][% ELSE %][% SET tab_selected = "" %][% END %]
                 [% FOREACH innerloo IN BIG_LOO.innerloop %]
                     [% IF ( innerloo.tag ) %]
-                        <li class="tag_anchors tag_anchors_[% BIG_LOO.number | html %] [% tab_selected | html %]"><a class="tag_anchor" id="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" title="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" href="#div_indicator_tag_[% innerloo.tag | uri %]_[% innerloo.index | uri %][% innerloo.random | uri %]">[% innerloo.tag | uri %]</a></li>
+                        <li class="tag_anchors tag_anchors_[% BIG_LOO.number | html %] [% tab_selected | html %]">
+                            <a class="tag_anchor" id="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" title="tag_anchor_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]" href="#div_indicator_tag_[% innerloo.tag | uri %]_[% innerloo.index | uri %][% innerloo.random | uri %]">[% innerloo.tag | uri %]</a>
+                        </li>
                     [% END %]
                 [% END %]
             [% END %]
@@ -606,15 +618,16 @@ function Changefwk() {
 <div id="addbibliotabs" class="toptabs numbered">
     <ul>
         [% FOREACH BIG_LOO IN BIG_LOOP %]
-        <li><a href="#tab[% BIG_LOO.number | uri %]XX">[% BIG_LOO.number | html %]</a></li>
+            <li><a href="#tab[% BIG_LOO.number | uri %]XX">[% BIG_LOO.number | html %]</a></li>
         [% END %]
     </ul>
 
 [% FOREACH BIG_LOO IN BIG_LOOP %]
-    [% SET tabname = BIG_LOO.number %]
     <div id="tab[% BIG_LOO.number | html %]XX">
 
-    <h3>Section [% tabname | html %]</h3>
+    [% IF ( BIG_LOOP.size > 1 ) %]
+        <h3>Section [% BIG_LOO.number | html %]</h3>
+    [% END %]
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
     [% IF ( innerloo.tag ) %]
     <div class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
