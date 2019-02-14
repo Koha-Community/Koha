@@ -1,7 +1,7 @@
 $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
 
-    unless( foreign_key_exists( 'messages', 'borrowernumber' ) ) {
+    unless( foreign_key_exists( 'messages', 'messages_borrowernumber' ) ) {
         $dbh->do(q|
             DELETE m FROM messages m
             LEFT JOIN borrowers b ON m.borrowernumber=b.borrowernumber
