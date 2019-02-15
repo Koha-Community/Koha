@@ -408,6 +408,7 @@ sub marc_records_to_documents {
     my $control_fields_rules = $rules->{control_fields};
     my $data_fields_rules = $rules->{data_fields};
     my $marcflavour = lc C4::Context->preference('marcflavour');
+    my $use_array = C4::Context->preference('ElasticsearchMARCFormat') eq 'ARRAY';
 
     my @record_documents;
 
@@ -527,31 +528,126 @@ sub marc_records_to_documents {
 
         # TODO: Perhaps should check if $records_document non empty, but really should never be the case
         $record->encoding('UTF-8');
-        my @warnings;
-        {
-            # Temporarily intercept all warn signals (MARC::Record carps when record length > 99999)
-            local $SIG{__WARN__} = sub {
-                push @warnings, $_[0];
-            };
-            $record_document->{'marc_data'} = encode_base64(encode('UTF-8', $record->as_usmarc()));
-        }
-        if (@warnings) {
-            # Suppress warnings if record length exceeded
-            unless (substr($record->leader(), 0, 5) eq '99999') {
-                foreach my $warning (@warnings) {
-                    carp $warning;
-                }
+        if ($use_array) {
+            $record_document->{'marc_data_array'} = $self->_marc_to_array($record);
+            $record_document->{'marc_format'} = 'ARRAY';
+        } else {
+            my @warnings;
+            {
+                # Temporarily intercept all warn signals (MARC::Record carps when record length > 99999)
+                local $SIG{__WARN__} = sub {
+                    push @warnings, $_[0];
+                };
+                $record_document->{'marc_data'} = encode_base64(encode('UTF-8', $record->as_usmarc()));
             }
-            $record_document->{'marc_data'} = $record->as_xml_record($marcflavour);
-            $record_document->{'marc_format'} = 'MARCXML';
-        }
-        else {
-            $record_document->{'marc_format'} = 'base64ISO2709';
+            if (@warnings) {
+                # Suppress warnings if record length exceeded
+                unless (substr($record->leader(), 0, 5) eq '99999') {
+                    foreach my $warning (@warnings) {
+                        carp $warning;
+                    }
+                }
+                $record_document->{'marc_data'} = $record->as_xml_record($marcflavour);
+                $record_document->{'marc_format'} = 'MARCXML';
+            }
+            else {
+                $record_document->{'marc_format'} = 'base64ISO2709';
+            }
         }
         my $id = $record->subfield('999', 'c');
         push @record_documents, [$id, $record_document];
     }
     return \@record_documents;
+}
+
+=head2 _marc_to_array($record)
+
+    my @fields = _marc_to_array($record)
+
+Convert a MARC::Record to an array modeled after MARC-in-JSON
+(see https://github.com/marc4j/marc4j/wiki/MARC-in-JSON-Description)
+
+=over 4
+
+=item C<$record>
+
+A MARC::Record object
+
+=back
+
+=cut
+
+sub _marc_to_array {
+    my ($self, $record) = @_;
+
+    my $data = {
+        leader => $record->leader(),
+        fields => []
+    };
+    for my $field ($record->fields()) {
+        my $tag = $field->tag();
+        if ($field->is_control_field()) {
+            push @{$data->{fields}}, {$tag => $field->data()};
+        } else {
+            my $subfields = ();
+            foreach my $subfield ($field->subfields()) {
+                my ($code, $contents) = @{$subfield};
+                push @{$subfields}, {$code => $contents};
+            }
+            push @{$data->{fields}}, {
+                $tag => {
+                    ind1 => $field->indicator(1),
+                    ind2 => $field->indicator(2),
+                    subfields => $subfields
+                }
+            };
+        }
+    }
+    return $data;
+}
+
+=head2 _array_to_marc($data)
+
+    my $record = _array_to_marc($data)
+
+Convert an array modeled after MARC-in-JSON to a MARC::Record
+
+=over 4
+
+=item C<$data>
+
+An array modeled after MARC-in-JSON
+(see https://github.com/marc4j/marc4j/wiki/MARC-in-JSON-Description)
+
+=back
+
+=cut
+
+sub _array_to_marc {
+    my ($self, $data) = @_;
+
+    my $record = MARC::Record->new();
+
+    $record->leader($data->{leader});
+    for my $field (@{$data->{fields}}) {
+        my $tag = (keys %{$field})[0];
+        $field = $field->{$tag};
+        my $marc_field;
+        if (ref($field) eq 'HASH') {
+            my @subfields;
+            foreach my $subfield (@{$field->{subfields}}) {
+                my $code = (keys %{$subfield})[0];
+                push @subfields, $code;
+                push @subfields, $subfield->{$code};
+            }
+            $marc_field = MARC::Field->new($tag, $field->{ind1}, $field->{ind2}, @subfields);
+        } else {
+            $marc_field = MARC::Field->new($tag, $field)
+        }
+        $record->append_fields($marc_field);
+    }
+;
+    return $record;
 }
 
 =head2 _field_mappings($facet, $suggestible, $sort, $target_name, $target_type, $range)

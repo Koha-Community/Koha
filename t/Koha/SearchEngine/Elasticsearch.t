@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::Exception;
 
 use t::lib::Mocks;
@@ -120,6 +120,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     plan tests => 50;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ISO2709');
 
     my @mappings = (
         {
@@ -502,4 +503,83 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     ok(defined $exception, "Exception has been thrown when processing mapping with unmatched closing parenthesis");
     ok($exception->isa("Koha::Exceptions::Elasticsearch::MARCFieldExprParseError"), "Exception is of correct class");
     ok($exception->message =~ /Unmatched closing parenthesis/, "Exception has the correct message");
+};
+
+subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents_array () tests' => sub {
+
+    plan tests => 6;
+
+    t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
+    t::lib::Mocks::mock_preference('ElasticsearchMARCFormat', 'ARRAY');
+
+    my @mappings = (
+        {
+            name => 'control_number',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            sort => undef,
+            marc_type => 'marc21',
+            marc_field => '001',
+        }
+    );
+
+    my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
+    $se->mock('_foreach_mapping', sub {
+        my ($self, $sub) = @_;
+
+        foreach my $map (@mappings) {
+            $sub->(
+                $map->{name},
+                $map->{type},
+                $map->{facet},
+                $map->{suggestible},
+                $map->{sort},
+                $map->{marc_type},
+                $map->{marc_field}
+            );
+        }
+    });
+
+    my $see = Koha::SearchEngine::Elasticsearch::Search->new({ index => $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX });
+
+    my $marc_record_1 = MARC::Record->new();
+    $marc_record_1->leader('     cam  22      a 4500');
+    $marc_record_1->append_fields(
+        MARC::Field->new('001', '123'),
+        MARC::Field->new('020', '', '', a => '1-56619-909-3'),
+        MARC::Field->new('100', '', '', a => 'Author 1'),
+        MARC::Field->new('110', '', '', a => 'Corp Author'),
+        MARC::Field->new('210', '', '', a => 'Title 1'),
+        MARC::Field->new('245', '', '', a => 'Title:', b => 'first record'),
+        MARC::Field->new('999', '', '', c => '1234567'),
+    );
+    my $marc_record_2 = MARC::Record->new();
+    $marc_record_2->leader('     cam  22      a 4500');
+    $marc_record_2->append_fields(
+        MARC::Field->new('100', '', '', a => 'Author 2'),
+        # MARC::Field->new('210', '', '', a => 'Title 2'),
+        # MARC::Field->new('245', '', '', a => 'Title: second record'),
+        MARC::Field->new('999', '', '', c => '1234568'),
+        MARC::Field->new('952', '', '', 0 => 1, g => 'string where should be numeric'),
+    );
+    my $records = [$marc_record_1, $marc_record_2];
+
+    $see->get_elasticsearch_mappings(); #sort_fields will call this and use the actual db values unless we call it first
+
+    my $docs = $see->marc_records_to_documents($records);
+
+    # First record:
+    is(scalar @{$docs}, 2, 'Two records converted to documents');
+
+    is($docs->[0][0], '1234567', 'First document biblionumber should be set as first element in document touple');
+
+    is_deeply($docs->[0][1]->{control_number}, ['123'], 'First record control number should be set correctly');
+
+    is($docs->[0][1]->{marc_format}, 'ARRAY', 'First document marc_format should be set correctly');
+
+    my $decoded_marc_record = $see->decode_record_from_result($docs->[0][1]);
+
+    ok($decoded_marc_record->isa('MARC::Record'), "ARRAY record successfully decoded from result");
+    is($decoded_marc_record->as_usmarc(), $marc_record_1->as_usmarc(), "Decoded ARRAY record has same data as original record");
 };

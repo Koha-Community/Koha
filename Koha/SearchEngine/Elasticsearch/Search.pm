@@ -382,6 +382,9 @@ sub decode_record_from_result {
     elsif ($result->{marc_format} eq 'MARCXML') {
         return MARC::Record->new_from_xml($result->{marc_data}, 'UTF-8', uc C4::Context->preference('marcflavour'));
     }
+    elsif ($result->{marc_format} eq 'ARRAY') {
+        return $self->_array_to_marc($result->{marc_data_array});
+    }
     else {
         Koha::Exceptions::Elasticsearch->throw("Missing marc_format field in Elasticsearch result");
     }
