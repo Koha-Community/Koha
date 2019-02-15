@@ -1367,7 +1367,7 @@ sub AddIssue {
                 auto_renew      => $auto_renew ? 1 : 0,
             };
 
-            $issue = Koha::Checkouts->find( { itemnumber => $item->{itemnumber} } );
+            $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
             if ($issue) {
                 $issue->set($issue_attributes)->store;
             }
