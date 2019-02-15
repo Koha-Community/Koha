@@ -48,7 +48,6 @@ sub new {
 sub do_checkout {
 	my $self = shift;
 	syslog('LOG_DEBUG', "ILS::Transaction::Checkout performing checkout...");
-	my $pending        = $self->{item}->pending_queue;
 	my $shelf          = $self->{item}->hold_shelf;
 	my $barcode        = $self->{item}->id;
 	my $patron_barcode = $self->{patron}->id;
