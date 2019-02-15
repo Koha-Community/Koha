@@ -1115,6 +1115,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 messages_borrowernumbers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Message>
+
+=cut
+
+__PACKAGE__->has_many(
+  "messages_borrowernumbers",
+  "Koha::Schema::Result::Message",
+  { "foreign.borrowernumber" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 old_issues
 
 Type: has_many
@@ -1431,8 +1446,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-27 13:16:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:c3Tb59Kku0Hh+tsVV5eCDg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-02-15 13:15:09
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NhuG8jv9ut+qIIm3vGHsrQ
 
 __PACKAGE__->belongs_to(
     "guarantor",
