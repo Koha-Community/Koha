@@ -39,11 +39,6 @@ subtest '->baskets() tests' => sub {
 
     $schema->storage->txn_begin();
 
-    # Delete existing data
-    $schema->resultset('Aqorder')->delete();
-    $schema->resultset('Aqbasket')->delete();
-    Koha::Acquisition::Booksellers->delete();
-    $schema->resultset('Subscription')->delete();
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
 
     my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
@@ -66,12 +61,6 @@ subtest '->subscriptions() tests' => sub {
     plan tests => 5;
 
     $schema->storage->txn_begin();
-
-    # Delete existing data
-    $schema->resultset('Aqorder')->delete();
-    $schema->resultset('Aqbasket')->delete();
-    Koha::Acquisition::Booksellers->delete();
-    $schema->resultset('Subscription')->delete();
 
     my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
     is( $vendor->subscriptions->count, 0, 'Vendor has no subscriptions' );
@@ -153,12 +142,6 @@ subtest '->contacts() tests' => sub {
     plan tests => 4;
 
     $schema->storage->txn_begin();
-
-    # Delete existing data
-    $schema->resultset('Aqorder')->delete();
-    $schema->resultset('Aqbasket')->delete();
-    Koha::Acquisition::Booksellers->delete();
-    $schema->resultset('Subscription')->delete();
 
     my $vendor = $builder->build_object( { class => 'Koha::Acquisition::Booksellers' } );
 
