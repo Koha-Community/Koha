@@ -25,8 +25,8 @@ $(document).ready(function() {
                  alert( MSG_MMT_CONTROL_FIELD_EMPTY );
                  return false;
             }
-            if ( ( $("#from_field").val() < 10 && $("#to_subfield").val().length   === 0 ) ||
-                 ( $("#to_field").val()   < 10 && $("#from_subfield").val().length === 0 ) ) {
+            if ( ( $("#from_field").val() < 10 && $("#to_field").val()   >= 10 ) ||
+                 ( $("#to_field").val()   < 10 && $("#from_field").val() >= 10 ) ) {
                 alert( MSG_MMT_CONTROL_FIELD );
                 return false;
              }
