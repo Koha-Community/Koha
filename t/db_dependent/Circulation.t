@@ -45,6 +45,7 @@ use Koha::CirculationRules;
 use Koha::Subscriptions;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
+use Koha::ActionLogs;
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -476,17 +477,27 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     );
 
     t::lib::Mocks::mock_preference('RenewalLog', 0);
-    my $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
-    my $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    my $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
+    my %params_renewal = (
+        timestamp => { -like => $date . "%" },
+        module => "CIRCULATION",
+        action => "RENEWAL",
+    );
+    my %params_issue = (
+        timestamp => { -like => $date . "%" },
+        module => "CIRCULATION",
+        action => "ISSUE"
+    );
+    my $old_log_size = Koha::ActionLogs->count( \%params_renewal );
     AddRenewal( $renewing_borrower->{borrowernumber}, $item_7->itemnumber, $branch );
-    my $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    my $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is ($new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog');
 
     t::lib::Mocks::mock_preference('RenewalLog', 1);
-    $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
-    $old_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
+    $old_log_size = Koha::ActionLogs->count( \%params_renewal );
     AddRenewal( $renewing_borrower->{borrowernumber}, $item_7->itemnumber, $branch );
-    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is ($new_log_size, $old_log_size + 1, 'renew log successfully added');
 
     my $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $item_7->itemnumber } );
@@ -496,12 +507,12 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     $fines->delete();
 
 
-    my $old_issue_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["ISSUE"]) } );
-    my $old_renew_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    my $old_issue_log_size = Koha::ActionLogs->count( \%params_issue );
+    my $old_renew_log_size = Koha::ActionLogs->count( \%params_renewal );
     AddIssue( $renewing_borrower,$item_7->barcode,Koha::DateUtils::output_pref({str=>$datedue6->date_due, dateformat =>'iso'}),0,$date, 0, undef );
-    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["RENEWAL"]) } );
+    $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is ($new_log_size, $old_renew_log_size + 1, 'renew log successfully added when renewed via issuing');
-    $new_log_size =  scalar(@{GetLogs( $date, $date, undef,["CIRCULATION"], ["ISSUE"]) } );
+    $new_log_size = Koha::ActionLogs->count( \%params_issue );
     is ($new_log_size, $old_issue_log_size, 'renew not logged as issue when renewed via issuing');
 
     $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $item_7->itemnumber } );
@@ -2888,12 +2899,16 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     # Check the item out
     AddIssue( $patron->unblessed, $item->barcode );
-
     t::lib::Mocks::mock_preference( 'RenewalLog', 0 );
     my $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
-    my $old_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    my %params_renewal = (
+        timestamp => { -like => $date . "%" },
+        module => "CIRCULATION",
+        action => "RENEWAL",
+    );
+    my $old_log_size = Koha::ActionLogs->count( \%params_renewal );;
     AddRenewal( $patron->id, $item->id, $library->id );
-    my $new_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    my $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is( $new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog' );
 
     my $checkouts = $patron->checkouts;
@@ -2902,9 +2917,9 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     t::lib::Mocks::mock_preference( 'RenewalLog', 1 );
     $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
-    $old_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    $old_log_size = Koha::ActionLogs->count( \%params_renewal );
     AddRenewal( $patron->id, $item->id, $library->id );
-    $new_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
+    $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is( $new_log_size, $old_log_size + 1, 'renew log successfully added' );
 
     my $lines = Koha::Account::Lines->search({
