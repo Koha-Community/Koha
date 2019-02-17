@@ -1,6 +1,7 @@
 [% USE Koha %]
 [% USE Branches %]
 [% USE Categories %]
+[% PROCESS 'html_helpers.inc' %]
 <div class="gradient">
 <h1 id="logo"><a href="/cgi-bin/koha/mainpage.pl">[% LibraryName | html %]</a></h1><!-- Begin Patrons Resident Search Box -->
 <div id="header_search">
