@@ -26,12 +26,14 @@ use Text::CSV::Encoded;
 use C4::Context;
 use C4::Koha;
 use C4::Output;
-use C4::Log;
 use C4::Items;
 use C4::Serials;
 use C4::Debug;
 use C4::Search;    # enabled_staff_search_views
 
+use Koha::ActionLogs;
+use Koha::Database;
+use Koha::DateUtils;
 use Koha::Items;
 use Koha::Patrons;
 
@@ -102,26 +104,59 @@ $template->param(
 );
 
 if ($do_it) {
+    my $dtf = Koha::Database->new->schema->storage->datetime_parser;
+    my %search_params;
+
+    if ($datefrom and $dateto ) {
+        my $dateto_endday = dt_from_string($dateto);
+        $dateto_endday->set( # We set last second of day to see all log from that day
+            hour => 23,
+            minute => 59,
+            second => 59
+        );
+        $search_params{'timestamp'} = {
+            -between => [
+                $dtf->format_datetime( dt_from_string($datefrom) ),
+                $dtf->format_datetime( $dateto_endday ),
+            ]
+        };
+    } elsif ($datefrom) {
+        $search_params{'timestamp'} = {
+            '>=' => $dtf->format_datetime( dt_from_string($datefrom) )
+        };
+    } elsif ($dateto) {
+        my $dateto_endday = dt_from_string($dateto);
+        $dateto_endday->set( # We set last second of day to see all log from that day
+            hour => 23,
+            minute => 59,
+            second => 59
+        );
+        $search_params{'timestamp'} = {
+            '<=' => $dtf->format_datetime( $dateto_endday )
+        };
+    }
+    $search_params{user} = $user if $user;
+    $search_params{module} = { -in => [ @modules ] } if ( defined $modules[0] and $modules[0] ne '' ) ;
+    $search_params{action} = { -in => [ @actions ] } if ( defined $actions[0] && $actions[0] ne '' );
+    $search_params{object} = $object if $object;
+    $search_params{info} = $info if $info;
+    $search_params{interface} = { -in => [ @interfaces ] } if ( defined $interfaces[0] && $interfaces[0] ne '' );
+
+    my @logs = Koha::ActionLogs->search(\%search_params);
 
     my @data;
-    my ( $results, $modules, $actions, $interfaces );
-    if ( defined $actions[0] && $actions[0] ne '' ) { $actions  = \@actions; }     # match All means no limit
-    if ( $modules[0] ne '' ) { $modules = \@modules; }    # match All means no limit
-    if ( defined $interfaces[0] && $interfaces[0] ne '' ) { $interfaces = \@interfaces; }    # match All means no limit
-    $results = GetLogs( $datefrom, $dateto, $user, $modules, $actions, $object, $info, $interfaces );
-    @data = @$results;
-    foreach my $result (@data) {
-
+    foreach my $log (@logs) {
+        my $result = $log->unblessed;
         # Init additional columns for CSV export
         $result->{'biblionumber'}      = q{};
         $result->{'biblioitemnumber'}  = q{};
         $result->{'barcode'}           = q{};
 
-        if ( substr( $result->{'info'}, 0, 4 ) eq 'item' || $result->{module} eq "CIRCULATION" ) {
+        if ( substr( $log->info, 0, 4 ) eq 'item' || $log->module eq "CIRCULATION" ) {
 
             # get item information so we can create a working link
-            my $itemnumber = $result->{'object'};
-            $itemnumber = $result->{'info'} if ( $result->{module} eq "CIRCULATION" );
+            my $itemnumber = $log->object;
+            $itemnumber = $log->info if ( $log->module eq "CIRCULATION" );
             my $item = Koha::Items->find($itemnumber);
             if ($item) {
                 $result->{'biblionumber'}     = $item->biblionumber;
@@ -131,24 +166,24 @@ if ($do_it) {
         }
 
         #always add firstname and surname for librarian/user
-        if ( $result->{'user'} ) {
-            my $patron = Koha::Patrons->find( $result->{'user'} );
+        if ( $log->user ) {
+            my $patron = Koha::Patrons->find( $log->user );
             if ($patron) {
                 $result->{librarian} = $patron;
             }
         }
 
         #add firstname and surname for borrower, when using the CIRCULATION, MEMBERS, FINES
-        if ( $result->{module} eq "CIRCULATION" || $result->{module} eq "MEMBERS" || $result->{module} eq "FINES" ) {
-            if ( $result->{'object'} ) {
-                my $patron = Koha::Patrons->find( $result->{'object'} );
+        if ( $log->module eq "CIRCULATION" || $log->module eq "MEMBERS" || $log->module eq "FINES" ) {
+            if ( $log->object ) {
+                my $patron = Koha::Patrons->find( $log->object );
                 if ($patron) {
                     $result->{patron} = $patron;
                 }
             }
         }
+        push @data, $result;
     }
-
     if ( $output eq "screen" ) {
 
         # Printing results to screen
@@ -171,7 +206,6 @@ if ($do_it) {
         foreach my $module (@modules) {
             $template->param( $module => 1 );
         }
-
         output_html_with_http_headers $input, $cookie, $template->output;
     }
     else {
