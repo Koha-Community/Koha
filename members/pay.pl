@@ -147,13 +147,6 @@ sub add_accounts_to_template {
     my $total = $account_lines->total_outstanding;
     my @accounts;
     while ( my $account_line = $account_lines->next ) {
-        $account_line = $account_line->unblessed;
-        if ( $account_line->{itemnumber} ) {
-            my $item = Koha::Items->find( $account_line->{itemnumber} );
-            my $biblio = $item->biblio;
-            $account_line->{biblionumber} = $biblio->biblionumber;
-            $account_line->{title}        = $biblio->title;
-        }
         push @accounts, $account_line;
     }
     borrower_add_additional_fields($patron);
@@ -198,6 +191,7 @@ sub redirect_to_paycollect {
     $redirect .=
       get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );
     $redirect .= get_for_redirect( 'description', "description$line_no", 0 );
+    $redirect .= get_for_redirect( 'issue_id', "issue_id$line_no", 0 );
     $redirect .= get_for_redirect( 'title', "title$line_no", 0 );
     $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
     $redirect .= get_for_redirect( 'accountlines_id', "accountlines_id$line_no", 0 );

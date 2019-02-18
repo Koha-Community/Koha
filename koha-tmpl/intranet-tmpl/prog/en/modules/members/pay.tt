@@ -46,6 +46,9 @@
     <th class="NoSort">Actions</th>
     <th>Description</th>
     <th class="title-string">Date</th>
+    <th>Barcode</th>
+    <th>Due date</th>
+    <th>Return date</th>
     <th class="NoSort">Payment note</th>
     <th>Account type</th>
     <th>Amount</th>
@@ -70,6 +73,7 @@
     [% END %]
     <input type="hidden" name="itemnumber[% line.accountlines_id | html %]" value="[% line.itemnumber | html %]" />
     <input type="hidden" name="description[% line.accountlines_id | html %]" value="[% line.description | html %]" />
+    <input type="hidden" name="issue_id[% line.accountlines_id | html %]" value="[% line.issue_id | html %]" />
     <input type="hidden" name="accounttype[% line.accountlines_id | html %]" value="[% line.accounttype | html %]" />
     <input type="hidden" name="amount[% line.accountlines_id | html %]" value="[% line.amount | html %]" />
     <input type="hidden" name="accountlines_id[% line.accountlines_id | html %]" value="[% line.accountlines_id | html %]" />
@@ -101,10 +105,25 @@
           [% CASE %][% line.accounttype | html %]
         [%- END -%]
         [%- IF line.description %], [% line.description | html %][% END %]
-        [% IF line.title %]([% line.title | html %])[% END %]
+        [% IF line.itemnumber %]([% line.item.biblio.title | html %])[% END %]
     </td>
     <td>
         <span title="[% line.date | html %]">[% line.date | $KohaDates %]</span>
+    </td>
+    <td>
+        [% IF line.itemnumber %]
+            <a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% line.itemnumber | uri %]&amp;biblionumber=[% line.item.biblionumber | uri %]#item[% line.itemnumber | uri %]">[% line.item.barcode | html %]</a>
+        [% END %]
+    </td>
+    <td>
+        [% IF line.issue_id %]
+            [% line.issue.date_due | $KohaDates as_due_date => 1 %]
+        [% END %]
+    </td>
+    <td>
+        [% IF line.issue_id %]
+            [% line.issue.returndate | $KohaDates with_hours => 1 %]
+        [% END %]
     </td>
     <td class="actions">
         <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
@@ -120,18 +139,18 @@
 <tfoot>
     [% IF outstanding_credits.total_outstanding < 0 %]
         <tr>
-            <td class="total" colspan="7">Outstanding credits could be applied: </td>
+            <td class="total" colspan="10">Outstanding credits could be applied: </td>
             <td class="credit" style="text-align: right;"><button type="submit" id="apply_credits" name="apply_credits" value="apply_credits" class="btn btn-default btn-sm">Apply <strong class="credit">[% outstanding_credits.total_outstanding | $Price %]</strong></button></td>
         </tr>
     [% END %]
     [% IF ( account_grp.total ) %]
         <tr>
-            <td class="total" colspan="7" style="text-align: right;">Sub total:</td>
+            <td class="total" colspan="10" style="text-align: right;">Sub total:</td>
             <td style="text-align: right;">[% account_grp.total | $Price %]</td>
         </tr>
     [% END %]
     <tr>
-        <td class="total" colspan="7">Total due:</td>
+        <td class="total" colspan="10">Total due:</td>
         [% IF outstanding_credits.total_outstanding < 0 %]
             <td style="text-align: right;">[% total + outstanding_credits.total_outstanding | $Price %]</td>
         [% ELSE %]

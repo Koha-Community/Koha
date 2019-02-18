@@ -42,6 +42,9 @@
                         <tr>
                             <th class="title-string">Date</th>
                             <th>Description of charges</th>
+                            <th>Barcode</th>
+                            <th>Due date</th>
+                            <th>Return date</th>
                             <th>Note</th>
                             <th>Amount</th>
                             <th>Outstanding</th>
@@ -66,6 +69,24 @@
                                 [% IF ( accountline.itemnumber ) %]
                                     [% SET biblio = accountline.item.biblio %]
                                     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% accountline.itemnumber | uri %]">[% biblio.title | html %]</a>
+                                [% END %]
+                            </td>
+
+                            <td>
+                                [% IF ( accountline.itemnumber ) %]
+                                    <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% accountline.item.biblionumber | uri %]&amp;itemnumber=[% accountline.itemnumber | uri %]#item[% accountline.itemnumber | uri %]">[% accountline.item.barcode | html %]</a>
+                                [% END %]
+                            </td>
+
+                            <td>
+                                [% IF ( accountline.issue_id ) %]
+                                    [% accountline.issue.date_due | $KohaDates as_due_date => 1 %]
+                                [% END %]
+                            </td>
+
+                            <td>
+                                [% IF ( accountline.issue_id ) %]
+                                    [% accountline.issue.returndate | $KohaDates with_hours => 1 %]
                                 [% END %]
                             </td>
 
