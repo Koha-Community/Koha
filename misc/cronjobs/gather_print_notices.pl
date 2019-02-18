@@ -19,7 +19,6 @@ use Pod::Usage;
 use Getopt::Long;
 use C4::Log;
 
-use File::Basename qw( dirname );
 use Koha::DateUtils;
 use MIME::Lite;
 
@@ -181,7 +180,7 @@ sub print_notices {
                 filepath => $filepath,
             });
         } elsif ( $format eq 'ods' ) {
-            generate_ods ({
+            _generate_ods ({
                 messages => $branch_messages,
                 filepath => $filepath,
             });
@@ -249,57 +248,36 @@ sub generate_csv {
     }
 }
 
-sub generate_ods {
+sub _generate_ods {
     my ( $params ) = @_;
     my $messages = $params->{messages};
-    my $filepath = $params->{filepath};
-
-    # Create document
-    use OpenOffice::OODoc;
-    my $tmpdir = dirname $filepath;
-    odfWorkingDirectory( $tmpdir );
-    my $doc = odfDocument( file => $filepath, create => 'spreadsheet' );
+    my $ods_filepath = $params->{filepath};
 
     # Prepare sheet
-    my @headers;
-    my @rows;
-    my $i = 0;
+    my $ods_content;
+    my $has_headers;
     foreach my $message ( @$messages ) {
-        my @lines = split /\n/, $message->{content};
-        chomp for @lines;
-
-        # We don't have headers, get them
-        unless ( @headers ) {
-            @headers = split $delimiter, $lines[0];
-            my $nb_cols = scalar @headers;
-            my $nb_rows = scalar @$messages;
-            my $sheet = $doc->expandTable( 0, $nb_rows + 1, $nb_cols );
-            @rows = $doc->getTableRows($sheet);
-
-            # Write headers row
-            my $row = $rows[0];
-            my $j = 0;
-            for my $header ( @headers ) {
-                $doc->cellValue( $row, $j, Encode::encode( 'UTF8', $header ) );
-                $j++;
-            }
-            $i = 1;
+        my @message_lines = split /\n/, $message->{content};
+        chomp for @message_lines;
+        # Get headers from first message
+        if ($has_headers) {
+            shift @message_lines;
+        } else {
+            $has_headers = 1;
         }
-
-        # Write all rows
-        shift @lines; # remove headers
-        for my $line ( @lines ) {
-            my @row_data = split $delimiter, $line;
-            my $row = $rows[$i];
-            # Note scalar(@$row_data) should be equal to $nb_cols
-            for ( my $j = 0 ; $j < scalar(@row_data) ; $j++ ) {
-                my $value = Encode::encode( 'UTF8', $row_data[$j] );
-                $doc->cellValue( $row, $j, $value );
+        foreach my $message_line ( @message_lines ) {
+            my @content_row;
+            my @message_cells = split $delimiter, $message_line;
+            foreach ( @message_cells ) {
+                push @content_row, Encode::encode( 'UTF8', $_ );
             }
-            $i++;
+            push @$ods_content, \@content_row;
         }
     }
-    $doc->save();
+
+    # Process
+    use Koha::Util::OpenDocument;
+    generate_ods($ods_filepath, $ods_content);
 }
 
 sub send_files {
