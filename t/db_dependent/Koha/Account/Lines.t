@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 use Test::Exception;
 
 use Koha::Account;
@@ -410,6 +410,47 @@ subtest 'adjust() tests' => sub {
     my $overpayment_refund = $account->lines->last;
     is( $overpayment_refund->amount * 1, -10, 'A new credit has been added' );
     is( $overpayment_refund->description, 'Overpayment refund', 'Credit generated with the expected description' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'issue() tests' => sub {
+    plan tests => 6;
+
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build( { source => 'Branch' } );
+    my $patron = $builder->build( { source => 'Borrower' } );
+    my $item = $builder->build( { source => 'Item' } );
+
+    my $checkout = Koha::Checkout->new(
+        {   borrowernumber => $patron->{borrowernumber},
+            itemnumber     => $item->{itemnumber},
+            branchcode     => $library->{branchcode},
+        })->store;
+
+    my $line = Koha::Account::Line->new(
+        {
+            borrowernumber  => $patron->{borrowernumber},
+            itemnumber      => $item->{itemnumber},
+            issue_id        => $checkout->issue_id,
+            accounttype     => "F",
+            amount          => 10,
+        })->store;
+
+    my $line_issue = $line->issue;
+    is( ref($line_issue), 'Koha::Checkout', 'Result type is correct' );
+    is( $line_issue->issue_id, $checkout->issue_id, 'Koha::Account::Line->issue should return the correct issue');
+
+    my ( $returned, undef, $old_checkout) = C4::Circulation::AddReturn( $item->{barcode} ,$library->{branchcode} );
+    is( $returned, 1, 'The item should have been returned' );
+
+    my $old_line_issue = $line->issue;
+    is( ref($old_line_issue), 'Koha::Old::Checkout', 'Result type is correct' );
+    is( $old_line_issue->issue_id, $old_checkout->issue_id, 'Koha::Account::Line->issue should return the correct old_issue' );
+
+    $line->issue_id(undef)->store;
+    is( $line->issue, undef, 'Koha::Account::Line->issue should return undef if no issue linked' );
 
     $schema->storage->txn_rollback;
 };

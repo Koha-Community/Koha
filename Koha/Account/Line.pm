@@ -54,6 +54,21 @@ sub item {
     return Koha::Item->_new_from_dbic( $rs );
 }
 
+=head3 issue
+
+Return the item linked to this account line if exists
+
+=cut
+
+sub issue {
+    my ( $self ) = @_;
+    return unless $self->issue_id ;
+
+    my $issue = Koha::Checkouts->find( $self->issue_id );
+    $issue = Koha::Old::Checkouts->find( $self->issue_id ) unless $issue;
+    return $issue;
+}
+
 =head3 void
 
 $payment_accountline->void();
