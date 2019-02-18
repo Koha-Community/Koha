@@ -1411,9 +1411,9 @@ subtest 'Log cardnumber change' => sub {
 
     my @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
     my $log_info = from_json( $logs[0]->info );
-    is( $log_info->{cardnumber_replaced}->{new_cardnumber}, 'TESTCARDNUMBER', 'Got correct new cardnumber' );
-    is( $log_info->{cardnumber_replaced}->{previous_cardnumber}, $cardnumber, 'Got correct old cardnumber' );
-    is( scalar @logs, 2, 'With BorrowerLogs, Change in cardnumber should be logged, as well as general alert of patron mod.' );
+    is( $log_info->{cardnumber}->{after}, 'TESTCARDNUMBER', 'Got correct new cardnumber' );
+    is( $log_info->{cardnumber}->{before}, $cardnumber, 'Got correct old cardnumber' );
+    is( scalar @logs, 1, 'With BorrowerLogs, one detailed MODIFY action should be logged for the modification.' );
 };
 
 $schema->storage->txn_rollback;
