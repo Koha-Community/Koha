@@ -67,7 +67,7 @@ my $news_id = $input->param('news_id');
 my @all_koha_news;
 
 if (defined $news_id){
-    @all_koha_news = Koha::News->search({ idnew => $news_id });
+    @all_koha_news = Koha::News->search({ idnew => $news_id, lang => { '!=', 'koha' } }); # get news that is not staff-only news
     if (scalar @all_koha_news > 0){
         $template->param( news_item => @all_koha_news );
     } else {
