@@ -67,7 +67,7 @@ subtest 'Testing Patron Info Request V2' => sub {
 subtest 'Checkin V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 23;
+    plan tests => 25;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkin_v2();
     $schema->storage->txn_rollback;
@@ -377,6 +377,22 @@ sub test_checkin_v2 {
     check_field( $respcode, $response, FID_ALERT_TYPE, '00', 'FID_ALERT_TYPE (CV) field is 00' );
     $server->{account}->{checked_in_ok} = 0;
     $server->{account}->{cv_send_00_on_success} = 0;
+
+    $server->{account}->{checked_in_ok} = 1;
+    $server->{account}->{ct_always_send} = 0;
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_DESTINATION_LOCATION, undef, 'No FID_DESTINATION_LOCATION (CT) field' );
+    $server->{account}->{ct_always_send} = 1;
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin( $server );
+    $respcode = substr( $response, 0, 2 );
+    check_field( $respcode, $response, FID_DESTINATION_LOCATION, q{}, 'FID_DESTINATION_LOCATION (CT) field is empty but present' );
+    $server->{account}->{checked_in_ok} = 0;
+    $server->{account}->{ct_always_send} = 0;
 
     # Checkin at wrong branch: issue item and switch branch, and checkin
     my $issue = Koha::Checkout->new({ branchcode => $branchcode, borrowernumber => $patron1->{borrowernumber}, itemnumber => $item->{itemnumber} })->store;
