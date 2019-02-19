@@ -3000,7 +3000,7 @@ CREATE TABLE aqbasketusers (
 DROP TABLE IF EXISTS `suggestions`;
 CREATE TABLE `suggestions` ( -- purchase suggestions
   `suggestionid` int(8) NOT NULL auto_increment, -- unique identifier assigned automatically by Koha
-  `suggestedby` int(11) NOT NULL default 0, -- borrowernumber for the person making the suggestion, foreign key linking to the borrowers table
+  `suggestedby` int(11) DEFAULT NULL, -- borrowernumber for the person making the suggestion, foreign key linking to the borrowers table
   `suggesteddate` date NOT NULL, -- date the suggestion was submitted
   `managedby` int(11) default NULL, -- borrowernumber for the librarian managing the suggestion, foreign key linking to the borrowers table
   `manageddate` date default NULL, -- date the suggestion was updated
@@ -3033,10 +3033,19 @@ CREATE TABLE `suggestions` ( -- purchase suggestions
   PRIMARY KEY  (`suggestionid`),
   KEY `suggestedby` (`suggestedby`),
   KEY `managedby` (`managedby`),
-  KEY `status` (`STATUS`),
+  KEY `acceptedby` (`acceptedby`),
+  KEY `rejectedby` (`rejectedby`),
   KEY `biblionumber` (`biblionumber`),
+  KEY `budgetid` (`budgetid`),
   KEY `branchcode` (`branchcode`),
+  KEY `status` (`STATUS`),
+  CONSTRAINT `suggestions_ibfk_suggestedby` FOREIGN KEY (`suggestedby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `suggestions_ibfk_managedby` FOREIGN KEY (`managedby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `suggestions_ibfk_acceptedby` FOREIGN KEY (`acceptedby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `suggestions_ibfk_rejectedby` FOREIGN KEY (`rejectedby`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `suggestions_ibfk_biblionumber` FOREIGN KEY (`biblionumber`) REFERENCES `biblio` (`biblionumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `suggestions_budget_id_fk` FOREIGN KEY (`budgetid`) REFERENCES `aqbudgets` (`budget_id`) ON DELETE SET NULL ON UPDATE CASCADE
+  CONSTRAINT `suggestions_ibfk_branchcode` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE,
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
