@@ -1399,8 +1399,8 @@ $nb_of_patrons = Koha::Patrons->search->count;
 $retrieved_patron_1->delete;
 is( Koha::Patrons->search->count, $nb_of_patrons - 1, 'Delete should have deleted the patron' );
 
-subtest 'Log cardnumber change' => sub {
-    plan tests => 3;
+subtest 'BorrowersLog tests' => sub {
+    plan tests => 4;
 
     t::lib::Mocks::mock_preference( 'BorrowersLog', 1 );
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
@@ -1414,6 +1414,11 @@ subtest 'Log cardnumber change' => sub {
     is( $log_info->{cardnumber}->{after}, 'TESTCARDNUMBER', 'Got correct new cardnumber' );
     is( $log_info->{cardnumber}->{before}, $cardnumber, 'Got correct old cardnumber' );
     is( scalar @logs, 1, 'With BorrowerLogs, one detailed MODIFY action should be logged for the modification.' );
+
+    t::lib::Mocks::mock_preference( 'TrackLastPatronActivity', 1 );
+    $patron->track_login();
+    @logs = $schema->resultset('ActionLog')->search( { module => 'MEMBERS', action => 'MODIFY', object => $patron->borrowernumber } );
+    is( scalar @logs, 1, 'With BorrowerLogs and TrackLastPatronActivity we should not spam the logs');
 };
 
 $schema->storage->txn_rollback;

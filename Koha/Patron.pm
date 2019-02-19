@@ -21,7 +21,7 @@ package Koha::Patron;
 use Modern::Perl;
 
 use Carp;
-use List::MoreUtils qw( uniq );
+use List::MoreUtils qw( any uniq );
 use JSON qw( to_json );
 use Text::Unaccent qw( unac_string );
 
@@ -260,7 +260,9 @@ sub store {
                     my $info;
                     my $from_storage = $self_from_storage->unblessed;
                     my $from_object  = $self->unblessed;
+                    my @skip_fields  = (qw/lastseen/);
                     for my $key ( keys %{$from_storage} ) {
+                        next if any { /$key/ } @skip_fields;
                         if (
                             (
                                   !defined( $from_storage->{$key} )
@@ -293,11 +295,6 @@ sub store {
                                 { utf8 => 1, pretty => 1, canonical => 1 }
                             )
                         );
-                    }
-                    else {
-                        logaction( "MEMBERS", "MODIFY", $self->borrowernumber,
-                            "NON-STANDARD FIELD CHANGED" );
-
                     }
                 }
 
