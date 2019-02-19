@@ -54,19 +54,19 @@ sub item {
     return Koha::Item->_new_from_dbic( $rs );
 }
 
-=head3 issue
+=head3 checkout
 
-Return the item linked to this account line if exists
+Return the checkout linked to this account line if exists
 
 =cut
 
-sub issue {
+sub checkout {
     my ( $self ) = @_;
     return unless $self->issue_id ;
 
-    my $issue = Koha::Checkouts->find( $self->issue_id );
-    $issue = Koha::Old::Checkouts->find( $self->issue_id ) unless $issue;
-    return $issue;
+    my $checkout = Koha::Checkouts->find( $self->issue_id );
+    $checkout = Koha::Old::Checkouts->find( $self->issue_id ) unless $checkout;
+    return $checkout;
 }
 
 =head3 void

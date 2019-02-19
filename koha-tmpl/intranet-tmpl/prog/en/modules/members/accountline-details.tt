@@ -80,13 +80,13 @@
 
                             <td>
                                 [% IF ( accountline.issue_id ) %]
-                                    [% accountline.issue.date_due | $KohaDates as_due_date => 1 %]
+                                    [% accountline.checkout.date_due | $KohaDates as_due_date => 1 %]
                                 [% END %]
                             </td>
 
                             <td>
                                 [% IF ( accountline.issue_id ) %]
-                                    [% accountline.issue.returndate | $KohaDates with_hours => 1 %]
+                                    [% accountline.checkout.returndate | $KohaDates with_hours => 1 %]
                                 [% END %]
                             </td>
 

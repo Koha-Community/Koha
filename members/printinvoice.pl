@@ -58,7 +58,7 @@ my $total = $patron->account->balance;
 my $accountline_object = Koha::Account::Lines->find($accountlines_id);
 my $accountline = $accountline_object->unblessed;
 $accountline->{item} = $accountline_object->item || "" ;
-$accountline->{issue} = $accountline_object->issue || "";
+$accountline->{checkout} = $accountline_object->checkout || "";
 
 my $totalcredit;
 if ( $total <= 0 ) {

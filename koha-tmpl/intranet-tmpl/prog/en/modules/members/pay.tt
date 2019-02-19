@@ -117,12 +117,12 @@
     </td>
     <td>
         [% IF line.issue_id %]
-            [% line.issue.date_due | $KohaDates as_due_date => 1 %]
+            [% line.checkout.date_due | $KohaDates as_due_date => 1 %]
         [% END %]
     </td>
     <td>
         [% IF line.issue_id %]
-            [% line.issue.returndate | $KohaDates with_hours => 1 %]
+            [% line.checkout.returndate | $KohaDates with_hours => 1 %]
         [% END %]
     </td>
     <td class="actions">

@@ -67,8 +67,8 @@
         [%- IF account.description %], [% account.description | html %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>[% END %]</td>
       <td>[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% account.itemnumber | uri %]&amp;biblionumber=[% account.item.biblionumber | uri %]#item[% account.itemnumber | uri %]">[% account.item.barcode | html %]</a>[% END %]</td>
-      <td>[% IF ( account.issue_id ) %][% account.issue.date_due | $KohaDates as_due_date => 1 %][% END %]</td>
-      <td>[% IF ( account.issue_id ) %][% account.issue.returndate | $KohaDates with_hours => 1 %][% END %]</td>
+      <td>[% IF ( account.issue_id ) %][% account.checkout.date_due | $KohaDates as_due_date => 1 %][% END %]</td>
+      <td>[% IF ( account.issue_id ) %][% account.checkout.returndate | $KohaDates with_hours => 1 %][% END %]</td>
       <td>[% IF account.itemnumber %][% Branches.GetName( account.item.homebranch ) | html %][% END %]</td>
       <td>[% account.note | html_line_break %]</td>
       [% IF account.amount <= 0 %]<td class="credit" style="text-align: right;">[% ELSE %]<td class="debit" style="text-align: right;">[% END %][% account.amount | $Price %]</td>

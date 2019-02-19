@@ -61,8 +61,8 @@
         [%- IF account.description %], [% account.description | html %][% END %]
       </td>
       <td>[% account.item.barcode | html %]</td>
-      <td>[% account.issue.date_due | $KohaDates as_due_date => 1 %]</td>
-      <td>[% account.issue.returndate | $KohaDates with_hours => 1 %]</td>
+      <td>[% account.checkout.date_due | $KohaDates as_due_date => 1 %]</td>
+      <td>[% account.checkout.returndate | $KohaDates with_hours => 1 %]</td>
       <td>[% account.note | html %]</td>
       [% IF ( account.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amount | $Price %]</td>
       [% IF ( account.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% account.amountoutstanding | $Price %]</td>
