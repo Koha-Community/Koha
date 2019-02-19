@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::Exception;
 
 use Koha::Account;
 use Koha::Account::Lines;
@@ -31,6 +32,21 @@ use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+
+subtest 'new' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    throws_ok { Koha::Account->new(); } qr/No patron id passed in!/, 'Croaked on bad call to new';
+
+    my $patron  = $builder->build_object({ class => 'Koha::Patrons' });
+    my $account = Koha::Account->new( { patron_id => $patron->borrowernumber } );
+    is( defined $account, 1, "Account is defined" );
+
+    $schema->storage->txn_rollback;
+};
 
 subtest 'outstanding_debits() tests' => sub {
 
@@ -139,7 +155,7 @@ subtest 'outstanding_credits() tests' => sub {
 
 subtest 'add_credit() tests' => sub {
 
-    plan tests => 16;
+    plan tests => 15;
 
     $schema->storage->txn_begin;
 
@@ -149,7 +165,6 @@ subtest 'add_credit() tests' => sub {
 
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $account = Koha::Account->new( { patron_id => $patron->borrowernumber } );
-    is( defined $account, 1, "Account is defined" );
 
     is( $account->balance, 0, 'Patron has no balance' );
 
