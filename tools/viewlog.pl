@@ -90,7 +90,7 @@ if ( $src eq 'circ' ) {
 $template->param(
     debug => $debug,
     C4::Search::enabled_staff_search_views,
-    subscriptionsnumber => CountSubscriptionFromBiblionumber($input->param('object')),
+    subscriptionsnumber => CountSubscriptionFromBiblionumber(scalar $input->param('object')),
     object => $object,
 );
 
