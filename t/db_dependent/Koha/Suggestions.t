@@ -19,7 +19,8 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
+use Test::Exception;
 
 use Koha::Suggestion;
 use Koha::Suggestions;
@@ -78,3 +79,90 @@ is( Koha::Suggestions->search->count, $nb_of_suggestions + 1, 'Delete should hav
 
 $schema->storage->txn_rollback;
 
+subtest 'constraints' => sub {
+    plan tests => 11;
+    $schema->storage->txn_begin;
+
+    my $patron = $builder->build_object( { class => "Koha::Patrons" } );
+    my $biblio = $builder->build_sample_biblio();
+    my $branch = $builder->build_object( { class => "Koha::Libraries" } );
+
+    my $suggestion = $builder->build_object(
+        {
+            class => "Koha::Suggestions",
+            value => {
+                suggestedby  => $patron->borrowernumber,
+                biblionumber => $biblio->biblionumber,
+                branchcode   => $branch->branchcode,
+                managedby    => undef,
+                acceptedby   => undef,
+                rejectedby   => undef,
+                budgetid     => undef,
+            }
+        }
+    );
+
+    # suggestedby
+    $patron->delete;
+    $suggestion = $suggestion->get_from_storage;
+    is( $suggestion->suggestedby, undef,
+        "The suggestion is not deleted when the related patron is deleted" );
+
+    # biblionumber
+    $biblio->delete;
+    $suggestion = $suggestion->get_from_storage;
+    is( $suggestion->biblionumber, undef,
+        "The suggestion is not deleted when the related biblio is deleted" );
+
+    # branchcode
+    $branch->delete;
+    $suggestion = $suggestion->get_from_storage;
+    is( $suggestion->branchcode, undef,
+        "The suggestion is not deleted when the related branch is deleted" );
+
+    # managerid
+    throws_ok { $suggestion->managedby(1029384756)->store; }
+    'Koha::Exceptions::Object::FKConstraint',
+      'store raises an exception on invalid managerid';
+    my $manager = $builder->build_object( { class => "Koha::Patrons" } );
+    $suggestion->managedby( $manager->borrowernumber )->store;
+    $manager->delete;
+    $suggestion = $suggestion->get_from_storage;
+    is( $suggestion->managedby, undef,
+        "The suggestion is not deleted when the related manager is deleted" );
+
+    # acceptedby
+    throws_ok { $suggestion->acceptedby(1029384756)->store; }
+    'Koha::Exceptions::Object::FKConstraint',
+      'store raises an exception on invalid acceptedby id';
+    my $acceptor = $builder->build_object( { class => "Koha::Patrons" } );
+    $suggestion->acceptedby( $acceptor->borrowernumber )->store;
+    $acceptor->delete;
+    $suggestion = $suggestion->get_from_storage;
+    is( $suggestion->acceptedby, undef,
+        "The suggestion is not deleted when the related acceptor is deleted" );
+
+    # rejectedby
+    throws_ok { $suggestion->rejectedby(1029384756)->store; }
+    'Koha::Exceptions::Object::FKConstraint',
+      'store raises an exception on invalid rejectedby id';
+    my $rejecter = $builder->build_object( { class => "Koha::Patrons" } );
+    $suggestion->rejectedby( $rejecter->borrowernumber )->store;
+    $rejecter->delete;
+    $suggestion = $suggestion->get_from_storage;
+    is( $suggestion->rejectedby, undef,
+        "The suggestion is not deleted when the related rejecter is deleted" );
+
+    # budgetid
+    throws_ok { $suggestion->budgetid(1029384756)->store; }
+    'Koha::Exceptions::Object::FKConstraint',
+      'store raises an exception on invalid budgetid';
+    my $fund = $builder->build_object( { class => "Koha::Acquisition::Funds" } );
+    $suggestion->budgetid( $fund->id )->store;
+    $fund->delete;
+    $suggestion = $suggestion->get_from_storage;
+    is( $suggestion->budgetid, undef,
+        "The suggestion is not deleted when the related budget is deleted" );
+
+    $schema->storage->txn_rollback;
+};
