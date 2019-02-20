@@ -160,6 +160,9 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
     _editorKeys[delete_field] =  function( cm ) {
             // Delete line (or cut)
             if ( cm.somethingSelected() ) return true;
+            var curLine = cm.getLine( cm.getCursor().line );
+
+            $("#clipboard").prepend('<option>'+curLine+'</option>');
 
             cm.execCommand('deleteLine');
         }
@@ -193,8 +196,49 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             var field = cm.marceditor.getCurrentField();
             if ( !field ) return;
 
-            var subfield = field.getSubfieldAt( cm.getCursor().ch );
-            if ( subfield ) subfield.delete();
+            var curCursor = cm.getCursor();
+            var subfield = field.getSubfieldAt( curCursor().ch );
+            var subfieldText= cm.getRange({line:curCursor.line,ch:subfield.start},{line:curCursor.line,ch:subfield.end});
+            if ( subfield ) {
+                $("#clipboard").prepend('<option>'+subfieldText+'</option>');
+                subfield.delete();
+            }
+        }
+
+    _editorKeys[copy_line] = function( cm ) {
+            // Copy line
+            if ( cm.somethingSelected() ) return true;
+            var curLine = cm.getLine( cm.getCursor().line );
+            $("#clipboard").prepend('<option>'+curLine+'</option>');
+        }
+
+    _editorKeys[copy_subfield] = function( cm ) {
+            // Copy subfield
+            var field = cm.marceditor.getCurrentField();
+            if ( !field ) return;
+
+            var curCursor = cm.getCursor();
+            var subfield = field.getSubfieldAt( curCursor().ch );
+            var subfieldText= cm.getRange({line:curCursor.line,ch:subfield.start},{line:curCursor.line,ch:subfield.end});
+            if ( subfield ) {
+                $("#clipboard").prepend('<option>'+subfieldText+'</option>');
+            }
+        }
+
+    _editorKeys[paste_line] = function( cm ) {
+            // Paste line from "clipboard"
+            if ( cm.somethingSelected() ) return true;
+            var cBoard = document.getElementById("clipboard");
+            var strUser = cBoard.options[cBoard.selectedIndex].text;
+            cm.replaceRange( strUser, cm.getCursor(), null );
+        }
+
+    _editorKeys[insert_line] = function( cm ) {
+            // Copy line and insert below
+            if ( cm.somethingSelected() ) return true;
+            var curLine = cm.getLine( cm.getCursor().line );
+            cm.execCommand('newlineAndIndent');
+            cm.replaceRange( curLine, cm.getCursor(), null );
         }
 
      _editorKeys[next_position] =  function( cm ) {
