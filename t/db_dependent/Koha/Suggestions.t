@@ -83,6 +83,9 @@ subtest 'constraints' => sub {
     plan tests => 11;
     $schema->storage->txn_begin;
 
+    my $print_error = $schema->storage->dbh->{PrintError};
+    $schema->storage->dbh->{PrintError} = 0;
+
     my $patron = $builder->build_object( { class => "Koha::Patrons" } );
     my $biblio = $builder->build_sample_biblio();
     my $branch = $builder->build_object( { class => "Koha::Libraries" } );
@@ -164,5 +167,6 @@ subtest 'constraints' => sub {
     is( $suggestion->budgetid, undef,
         "The suggestion is not deleted when the related budget is deleted" );
 
+    $schema->storage->dbh->{PrintError} = $print_error;
     $schema->storage->txn_rollback;
 };
