@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE KohaDates %]
 [% USE AudioAlerts %]
+[% USE To %]
 [% USE Price %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha [% END %] &rsaquo; Self checkout </title>
@@ -368,7 +369,7 @@
             return true;
         }
         [% IF Koha.Preference('AudioAlerts') %]
-            var AUDIO_ALERTS = JSON.parse( '[% AudioAlerts.AudioAlerts | replace( "'", "\\'" ) | replace( '"', '\\"' ) | html %]' );
+            var AUDIO_ALERTS = JSON.parse( "[% To.json(AudioAlerts.AudioAlerts) | $raw %]" );
             $( document ).ready(function() {
                 if ( AUDIO_ALERTS ) {
                     for ( var k in AUDIO_ALERTS ) {
