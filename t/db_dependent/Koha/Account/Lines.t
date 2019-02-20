@@ -414,7 +414,7 @@ subtest 'adjust() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'issue() tests' => sub {
+subtest 'checkout() tests' => sub {
     plan tests => 6;
 
     $schema->storage->txn_begin;
@@ -440,17 +440,17 @@ subtest 'issue() tests' => sub {
 
     my $line_checkout = $line->checkout;
     is( ref($line_checkout), 'Koha::Checkout', 'Result type is correct' );
-    is( $line_checkout->issue_id, $checkout->issue_id, 'Koha::Account::Line->issue should return the correct issue');
+    is( $line_checkout->issue_id, $checkout->issue_id, 'Koha::Account::Line->checkout should return the correct checkout');
 
     my ( $returned, undef, $old_checkout) = C4::Circulation::AddReturn( $item->{barcode} ,$library->{branchcode} );
     is( $returned, 1, 'The item should have been returned' );
 
     my $old_line_checkout = $line->checkout;
     is( ref($old_line_checkout), 'Koha::Old::Checkout', 'Result type is correct' );
-    is( $old_line_checkout->issue_id, $old_checkout->issue_id, 'Koha::Account::Line->issue should return the correct old_issue' );
+    is( $old_line_checkout->issue_id, $old_checkout->issue_id, 'Koha::Account::Line->checkout should return the correct old_checkout' );
 
     $line->issue_id(undef)->store;
-    is( $line->checkout, undef, 'Koha::Account::Line->issue should return undef if no issue linked' );
+    is( $line->checkout, undef, 'Koha::Account::Line->checkout should return undef if no checkout linked' );
 
     $schema->storage->txn_rollback;
 };
