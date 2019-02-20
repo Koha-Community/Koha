@@ -78,7 +78,7 @@ is( $accountline->amountoutstanding, "10.000000", "Found 10.00 amount outstandin
 is( $accountline->accounttype, "L", "Account type is L" );
 
 my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id })->next();
-is( $offset->type, 'Manual Debit', 'Got correct offset type' );
+is( $offset->type, 'Lost Item', 'Got correct offset type' );
 is( $offset->amount, '10.000000', 'Got amount of $10.00' );
 
 $schema->storage->txn_rollback;
