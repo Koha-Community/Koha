@@ -2896,7 +2896,8 @@ sub AddRenewal {
             patron    => $patron,
             library   => $circ_library,
             item      => $item_object,
-            to_date   => dt_from_string( $datedue ),
+            from_date => dt_from_string( $issue->date_due, 'sql' ),
+            to_date   => dt_from_string($datedue),
         }
     );
 
