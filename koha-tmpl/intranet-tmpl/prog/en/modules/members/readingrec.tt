@@ -110,18 +110,18 @@
                                 [% END %]
                             </td>
                             <td data-order="[% issue.issuedate | html %]">
-                                [% issue.issuedate |$KohaDates  with_hours => 1 %]
+                                [% issue.issuedate |$KohaDates with_hours => 1 %]
                             </td>
                             <td>[% Branches.GetName( issue.branchcode ) | html %]</td>
                             [% IF Koha.Preference('RecordStaffUserOnCheckout') %]
                                 <td><a href="/cgi-bin/koha/circ/circulation.pl?borrowernumber=[% issue.issuer_id | uri %]">[% issue.firstname | html %] [% issue.surname | html %]</a></td>
                             [% END %]
                             <td data-order="[% issue.date_due | html %]">
-                                [% issue.date_due |$KohaDates  with_hours => 1 %]
+                                [% issue.date_due | $KohaDates as_due_date => 1 %]
                             </td>
                             [% IF  issue.returndate %]
                                 <td data-order="[% issue.returndate | html %]">
-                                [% issue.returndate |$KohaDates  with_hours => 1 %]
+                                [% issue.returndate |$KohaDates with_hours => 1 %]
                             [% ELSE %]
                                 <td data-order="checked out">
                                 <small>Checked out</small>
@@ -151,7 +151,6 @@
                 [% INCLUDE table_readingrec %]
             </div> <!-- /.page-section -->
         [% END # /IF Koha.Preference('OnSiteCheckouts') %]
-
 [% END %]
 
             </main>

@@ -56,7 +56,7 @@
                 [% FOREACH overduesloo IN overduesloop %]
                     <tr>
                         <td>
-                            [% overduesloo.date_due | html %]
+                            [% overduesloo.date_due | $KohaDates as_due_date => 1 %]
                         </td>
                         <td>
                             [% INCLUDE 'biblio-title.inc' biblio=overduesloo link = 1 %] [% IF ( overduesloo.author ) %] by [% overduesloo.author | html %][% END %]
@@ -82,7 +82,7 @@
     [% IF ( todayoverduesloop ) %]
         <div id="branch_odues_today_odues" class="page-section">
             <table style="width:100%;">
-			<caption>Today's notifications</caption>
+            <caption>Today's notifications</caption>
             <tr>
                 <th>Date due</th>
                 <th>Title</th>
@@ -94,7 +94,7 @@
                     <tr>
                         <td>
                             <p>
-                            [% todayoverduesloo.date_due | html %]
+                            [% todayoverduesloo.date_due | $KohaDates as_due_date => 1 %]
                             </p>
                         </td>
                         <td>

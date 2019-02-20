@@ -418,12 +418,12 @@
                                                     [% IF ( ISSUE.overdue ) %]
                                                         <td class="date_due overdue" data-order="[% ISSUE.date_due | html %]">
                                                             <span class="tdlabel">Date due:</span>
-                                                            [% ISSUE.date_due | $KohaDates  as_due_date => 1 %]
+                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
                                                         </td>
                                                     [% ELSE %]
                                                         <td class="date_due" data-order="[% ISSUE.date_due | html %]">
                                                             <span class="tdlabel">Date due:</span>
-                                                            [% ISSUE.date_due | $KohaDates  as_due_date => 1 %]
+                                                            [% ISSUE.date_due | $KohaDates as_due_date => 1 %]
                                                         </td>
                                                     [% END %]
                                                     [% UNLESS ( item_level_itypes ) %]

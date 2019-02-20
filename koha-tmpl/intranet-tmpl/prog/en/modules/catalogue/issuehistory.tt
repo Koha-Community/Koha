@@ -96,7 +96,7 @@
                     [% checkout.issuedate |$KohaDates  with_hours => 1 %]
                 </td>
                 <td data-order="[% checkout.date_due | html %]">
-                    [% checkout.date_due |$KohaDates  with_hours => 1 %]
+                    [% checkout.date_due | $KohaDates as_due_date => 1 %]
                 </td>
                 <td data-order="[% checkout.returndate | html %]">
                     [% checkout.returndate |$KohaDates  with_hours => 1 %]
