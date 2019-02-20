@@ -84,8 +84,6 @@ Koha::Patron - Koha Patron Object class
 
 =head2 Class Methods
 
-=cut
-
 =head3 new
 
 =cut
@@ -884,7 +882,6 @@ It has been introduced to replaced the C4::Members::GetPendingIssues subroutine
 It should not be used directly, prefer to access fields you need instead of
 retrieving all these fields in one go.
 
-
 =cut
 
 sub pending_checkouts {
@@ -1221,6 +1218,7 @@ my $is_child = $patron->is_child
 Return true if the patron has a category with a type Child (C)
 
 =cut
+
 sub is_child {
     my( $self ) = @_;
     return $self->category->category_type eq 'C' ? 1 : 0;
