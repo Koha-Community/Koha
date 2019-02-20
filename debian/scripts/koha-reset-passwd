@@ -44,7 +44,6 @@ set_password()
 {
     local instancename=$1
     local userid=$2
-    local password=$(pwgen 12 1)
 
     # Optionally use alternative paths for a dev install
     adjust_paths_dev_install $1
@@ -58,9 +57,8 @@ set_password()
     if sudo -u "$instancename-koha" -H \
         env PERL5LIB=$PERL5LIB \
         KOHA_CONF="/etc/koha/sites/$instancename/koha-conf.xml" \
-        $KOHA_BINDIR/admin/set_password.pl --userid $userid --password $password ; then
+        $KOHA_BINDIR/admin/set_password.pl --userid $userid ; then
 
-        echo "$userid $password"
         return 0
     else
         return 1

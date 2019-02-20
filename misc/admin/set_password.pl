@@ -18,8 +18,11 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
+use Bytes::Random::Secure;
 use Getopt::Long;
 use Pod::Usage;
+use String::Random;
 
 use Koha::Patrons;
 
@@ -33,12 +36,16 @@ GetOptions(
 );
 
 pod2usage(1) if $help;
-pod2usage("password is mandatory")     unless $password;
 
 unless ( $userid or $patron_id or $cardnumber ) {
     pod2usage("userid is mandatory")       unless $userid;
     pod2usage("patron_id is mandatory")    unless $patron_id;
     pod2usage("cardnumber is mandatory")   unless $cardnumber;
+}
+
+unless ($password) {
+    my $generator  = String::Random->new( rand_gen => \&alt_rand );
+    $password      = $generator->randregex('[A-Za-z][A-Za-z0-9_]{6}.[A-Za-z][A-Za-z0-9_]{6}\d');
 }
 
 my $filter;
@@ -64,6 +71,15 @@ unless ( $patrons->count > 0 ) {
 my $patron = $patrons->next;
 $patron->set_password({ password => $password, skip_validation => 1 });
 
+print $patron->userid . " " . $password . "\n";
+
+sub alt_rand { # Alternative randomizer
+    my ($max) = @_;
+    my $random = Bytes::Random::Secure->new( NonBlocking => 1 );
+    my $r = $random->irand / 2**32;
+    return int( $r * $max );
+}
+
 =head1 NAME
 
 set_password.pl - Set the specified password for the user in Koha
@@ -75,7 +91,7 @@ set_password.pl
 
  Options:
    -?|--help        brief help message
-   --password       the password to be set
+   --password       the password to be set (optional)
    --userid         the userid to be used to find the patron
    --patron_id      the borrowernumber for the patron
    --cardnumber     the cardnumber for the patron
@@ -94,7 +110,7 @@ The patron's userid (for finding the patron)
 
 =item B<--password>
 
-The password to be set in the database
+The password to be set in the database. If no password is passed, a random one is generated.
 
 =item B<--patron_id>
 
