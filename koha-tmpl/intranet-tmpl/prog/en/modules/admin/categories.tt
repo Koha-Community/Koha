@@ -197,6 +197,38 @@
                       [% END %]
                     </select>
                 </li>
+                <li>
+                    <label for="change_password">Password change in OPAC: </label>
+                    <select name="change_password" id="change_password">
+                      [% IF category.change_password.defined %]
+                        [% IF category.change_password %]
+                          [% IF Koha.Preference('OpacPasswordChange') %]
+                            <option value="-1">Follow system preference OpacPasswordChange (enabled)</option>
+                          [% ELSE %]
+                            <option value="-1">Follow system preference OpacPasswordChange (disabled)</option>
+                          [% END %]
+                            <option value="1" selected="selected">Allowed</option>
+                            <option value="0">Not allowed</option>
+                        [% ELSE %]
+                          [% IF Koha.Preference('OpacPasswordChange') %]
+                            <option value="-1">Follow system preference OpacPasswordChange (enabled)</option>
+                          [% ELSE %]
+                            <option value="-1">Follow system preference OpacPasswordChange (disabled)</option>
+                          [% END %]
+                            <option value="1">Allowed</option>
+                            <option value="0" selected="selected">Not allowed</option>
+                        [% END %]
+                      [% ELSE %]
+                          [% IF Koha.Preference('OpacPasswordChange') %]
+                            <option value="-1" selected="selected">Follow system preference OpacPasswordChange (enabled)</option>
+                          [% ELSE %]
+                            <option value="-1" selected="selected">Follow system preference OpacPasswordChange (disabled)</option>
+                          [% END %]
+                            <option value="1">Allowed</option>
+                            <option value="0">Not allowed</option>
+                      [% END %]
+                    </select>
+                </li>
                 <li><label for="block_expired">Block expired patrons:</label>
                     <select name="BlockExpiredPatronOpacActions" id="block_expired">
                         [% IF not category or category.BlockExpiredPatronOpacActions == -1%]

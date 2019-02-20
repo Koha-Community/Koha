@@ -93,9 +93,11 @@ elsif ( $op eq 'add_validate' ) {
     my $checkPrevCheckout = $input->param('checkprevcheckout');
     my $default_privacy = $input->param('default_privacy');
     my $reset_password = $input->param('reset_password');
+    my $change_password = $input->param('change_password');
     my @branches = grep { $_ ne q{} } $input->multi_param('branches');
 
     $reset_password = undef if $reset_password eq -1;
+    $change_password = undef if $change_password eq -1;
 
     my $is_a_modif = $input->param("is_a_modif");
 
@@ -126,6 +128,7 @@ elsif ( $op eq 'add_validate' ) {
         $category->checkprevcheckout($checkPrevCheckout);
         $category->default_privacy($default_privacy);
         $category->reset_password($reset_password);
+        $category->change_password($change_password);
         eval {
             $category->store;
             $category->replace_branch_limitations( \@branches );
@@ -153,6 +156,7 @@ elsif ( $op eq 'add_validate' ) {
             checkprevcheckout => $checkPrevCheckout,
             default_privacy => $default_privacy,
             reset_password => $reset_password,
+            change_password => $change_password,
         });
         eval {
             $category->store;
