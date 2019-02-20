@@ -530,13 +530,13 @@ Circulation:
             - This is is a list of value pairs, the first value is followed immediately by colon space then the second value i.e.:<br/>
             - "PROC: FIC"
             - <br/> When an item is checked in, if the location value on the left matches the items location value
-            - "it will be updated to the right-hand value.<br/> E.g. ''PROC: FIC'' will cause an item that was set to ''Book Cart'' to now be in the ''Fiction'' shelving location."
-            - <br/>Note that PROC and CART are special values, for these locations only can location and permanent_location differ.  In all other cases an update will affect both.
-            - <br/>Items in the CART location will be returned to their permanent location on checkout
-            - <br/>You can use the special term _BLANK_ on either side of a pair to update/remove items with no location assigned
-            - <br>You can use the special term _ALL_ on the left side to affect all items
-            - and the special term _PERM_ on the right side to return items to their permanent location
-            - <br>**Use of an _ALL_ rule will override/ignore any other values**
+            - "it will be updated to the right-hand value.<br/> E.g. ''PROC: FIC'' will cause an item that was set to ''Processing Center'' to now be in the ''Fiction'' shelving location."
+            - <br/>Note that PROC and CART are special values, for these locations only can location and permanent_location differ, in all other cases an update will affect both.
+            - <br/>Items in the CART location will be returned to their permanent location on checkout.
+            - <br/>You can use the special term _BLANK_ on either side of a pair to update/remove items with no location assigned.
+            - <br>You can use the special term _ALL_ on the left side to affect all items.
+            - and the special term _PERM_ on the right side to return items to their permanent location.
+            - <br><b>Use of an _ALL_ rule will override/ignore any other values.</b>
             - <br>Each pair of values should be on a separate line.
         -
             - pref: UpdateNotForLoanStatusOnCheckin
