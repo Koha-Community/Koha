@@ -205,9 +205,6 @@ if ( $action eq 'create' ) {
                 }
             );
 
-            $template->param( OpacPasswordChange =>
-                  C4::Context->preference('OpacPasswordChange') );
-
             $borrower{categorycode}     ||= C4::Context->preference('PatronSelfRegistrationDefaultCategory');
             $borrower{password}         ||= Koha::AuthUtils::generate_password;
             my $consent_dt = delete $borrower{gdpr_proc_consent};

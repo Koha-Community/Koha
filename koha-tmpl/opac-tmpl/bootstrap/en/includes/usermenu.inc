@@ -40,7 +40,7 @@
                 <a href="/cgi-bin/koha/opac-tags.pl?mine=1">your tags</a></li>
             [% END %]
 
-            [% IF ( OpacPasswordChange ) %]
+            [% IF logged_in_user.category.effective_change_password %]
                 [% IF ( passwdview ) %]
                     <li class="active">
                 [% ELSE %]

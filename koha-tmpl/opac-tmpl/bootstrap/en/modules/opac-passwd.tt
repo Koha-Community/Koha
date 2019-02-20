@@ -51,7 +51,7 @@
                         </div>
                     [% END # /IF Error_messages %]
 
-                    [% IF ( OpacPasswordChange ) %]
+                    [% IF logged_in_user.category.effective_change_password %]
                         [% IF ( Ask_data ) %]
 
 
@@ -71,7 +71,7 @@
                         [% END # /IF Ask_data %]
                     [% ELSE %]
                         <div class="alert">You can't change your password.</div>
-                    [% END # /IF OpacPasswordChange %]
+                    [% END # /IF logged_in_user.category.effective_change_password %]
 
                     [% IF ( password_updated ) %]
                         <div class="alert alert-success">

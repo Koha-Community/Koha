@@ -58,9 +58,6 @@ if (
         }
     );
 
-    $template->param(
-        OpacPasswordChange => C4::Context->preference('OpacPasswordChange') );
-
     my $patron_attrs = $m->unblessed;
     $patron_attrs->{password} ||= Koha::AuthUtils::generate_password;
     my $consent_dt = delete $patron_attrs->{gdpr_proc_consent};
@@ -76,7 +73,7 @@ if (
         C4::Form::MessagingPreferences::handle_form_action($cgi, { borrowernumber => $patron->borrowernumber }, $template, 1, C4::Context->preference('PatronSelfRegistrationDefaultCategory') ) if C4::Context->preference('EnhancedMessagingPreferences');
 
         $template->param( password_cleartext => $patron->plain_text_password );
-        $template->param( borrower => $patron->unblessed );
+        $template->param( borrower => $patron );
         $template->param(
             PatronSelfRegistrationAdditionalInstructions =>
               C4::Context->preference(

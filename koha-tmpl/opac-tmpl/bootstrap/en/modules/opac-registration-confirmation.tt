@@ -53,7 +53,13 @@
                                 </p>
                             [% END %]
 
-                            <p id="patron-instructions">For your convenience, the login box on this page has been pre-filled with this data. Please log in[% IF OpacPasswordChange %] and change your password[% END %].</p>
+                            <p id="patron-instructions">
+                            [% IF borrower.category.effective_change_password %]
+                                <span>For your convenience, the login box on this page has been pre-filled with this data. Please log in and change your password.</span>
+                            [% ELSE %]
+                                <span>For your convenience, the login box on this page has been pre-filled with this data. Please log in.</span>
+                            [% END %]
+                            </p>
                         [% END %]
 
                         <div id="PatronSelfRegistrationAdditionalInstructions">[% PatronSelfRegistrationAdditionalInstructions | $raw %]</div>
