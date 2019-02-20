@@ -52,7 +52,7 @@
                             <tr>
                                 <td data-order="[% item.date_due | html %]">
                                     [% IF item.is_overdue %]<span class="overdue">[% END %]
-                                    [% item.date_due | $KohaDates %]
+                                    [% item.date_due | $KohaDates as_due_date => 1 %]
                                     [% IF item.is_overdue %]</span>[% END %]
                                 </td>
                                 <td>
