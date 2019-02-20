@@ -27,13 +27,10 @@ use DateTime;
 use MARC::Record;
 
 use C4::Context;
-use C4::Biblio;
 use C4::Circulation;
-use C4::Items;
 
 use Koha::Database;
 use Koha::DateUtils;
-use Koha::Patron;
 
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
@@ -91,10 +88,10 @@ $t->request_ok($tx)
   ->status_is(200)
   ->json_is([]);
 
-my $biblionumber = create_biblio('RESTful Web APIs');
-my $itemnumber1 = create_item($biblionumber, 'TEST000001');
-my $itemnumber2 = create_item($biblionumber, 'TEST000002');
-my $itemnumber3 = create_item($biblionumber, 'TEST000003');
+my $biblionumber = $builder->build_sample_biblio({ title => 'RESTful Web APIs'})->biblionumber;
+my $itemnumber1 = $builder->build_sample_item({ biblionumber => $biblionumber, barcode => 'TEST000001'})->itemnumber;
+my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber, barcode => 'TEST000002'})->itemnumber;
+my $itemnumber3 = $builder->build_sample_item({ biblionumber => $biblionumber, barcode => 'TEST000003'})->itemnumber;
 
 my $date_due = DateTime->now->add(weeks => 2);
 my $issue1 = C4::Circulation::AddIssue($patron, 'TEST000001', $date_due);
@@ -122,15 +119,15 @@ $t->request_ok($tx)
   ->status_is(403)
   ->json_is({ error => "Authorization failure. Missing required permission(s).",
               required_permissions => { circulate => "circulate_remaining_permissions" }
-						});
+            });
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=".$loggedinuser->{borrowernumber});
 $tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
 $t->request_ok($tx)
   ->status_is(403)
   ->json_is({ error => "Authorization failure. Missing required permission(s).",
-						  required_permissions => { circulate => "circulate_remaining_permissions" }
-					  });
+              required_permissions => { circulate => "circulate_remaining_permissions" }
+            });
 
 $tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$borrowernumber");
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
@@ -185,7 +182,7 @@ $t->request_ok($tx)
   ->status_is(403)
   ->json_is({ error => "Authorization failure. Missing required permission(s).",
               required_permissions => { circulate => "circulate_remaining_permissions" }
-						});
+            });
 
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
@@ -199,27 +196,3 @@ $t->request_ok($tx)
   ->status_is(403)
   ->json_is({ error => 'Renewal not authorized (too_many)' });
 
-sub create_biblio {
-    my ($title) = @_;
-
-    my $record = new MARC::Record;
-    $record->append_fields(
-        new MARC::Field('200', ' ', ' ', a => $title),
-    );
-
-    my ($biblionumber) = C4::Biblio::AddBiblio($record, '');
-
-    return $biblionumber;
-}
-
-sub create_item {
-    my ($biblionumber, $barcode) = @_;
-
-    my $item = {
-        barcode => $barcode,
-    };
-
-    my $itemnumber = C4::Items::AddItem($item, $biblionumber);
-
-    return $itemnumber;
-}
