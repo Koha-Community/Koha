@@ -221,12 +221,12 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
             }
 
             AddIssue( $borrower, $barcode );
+            $template->param( issued => 1 );
             push @newissueslist, $barcode;
 
             if ( $hold_existed ) {
                 my $dtf = Koha::Database->new->schema->storage->datetime_parser;
                 $template->param(
-                    issued => 1,
                     # If the hold existed before the check in, let's confirm that the charge line exists
                     # Note that this should not be needed but since we do not have proper exception handling here we do it this way
                     patron_has_hold_fee => Koha::Account::Lines->search(
