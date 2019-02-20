@@ -25,7 +25,7 @@ use C4::Items qw( get_hostitemnumbers_of );
 use C4::Circulation qw( CanBookBeRenewed barcodedecode CanBookBeIssued AddRenewal );
 use C4::Accounts;
 use C4::Biblio qw( GetMarcBiblio );
-use C4::Reserves qw( CanBookBeReserved IsAvailableForItemLevelRequest CalculatePriority AddReserve CanItemBeReserved );
+use C4::Reserves qw( CanBookBeReserved IsAvailableForItemLevelRequest CalculatePriority AddReserve CanItemBeReserved CanReserveBeCanceledFromOpac);
 use C4::Context;
 use C4::Auth;
 use CGI qw ( -utf8 );
@@ -937,7 +937,9 @@ sub CancelHold {
     my $reserve_id = $cgi->param('item_id');
     my $hold = Koha::Holds->find( $reserve_id );
     return { code => 'RecordNotFound' } unless $hold;
-    return { code => 'RecordNotFound' } unless ($hold->borrowernumber == $borrowernumber);
+
+    # Check if reserve belongs to the borrower and if it is in a state which allows cancellation
+    return { code => 'BorrowerCannotCancelHold' } unless CanReserveBeCanceledFromOpac( $reserve_id, $borrowernumber );
 
     $hold->cancel;
 
