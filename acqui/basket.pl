@@ -138,7 +138,7 @@ if ( $op eq 'delete_confirm' ) {
             my $itemcount = $biblio->items->count;
             my $error;
             if ($countbiblio == 0 && $itemcount == 0 && $subscriptions == 0) {
-                $error = DelBiblio($myorder->{biblionumber}) }
+                $error = DelBiblio($myorder->{biblionumber}, 1) }
             else {
                 push @cannotdelbiblios, {biblionumber=> ($myorder->{biblionumber}),
                                          title=> $myorder->{'title'},

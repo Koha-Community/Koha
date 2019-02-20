@@ -28,7 +28,7 @@ for my $file ( @ARGV ) {
         print "Delete biblionumber $biblionumber ";
         my $error;
         eval {
-            $error = DelBiblio $biblionumber;
+            $error = DelBiblio($biblionumber, 1);
         };
         if ( $@ or $error) {
             say "KO $@ ($! | $error)";

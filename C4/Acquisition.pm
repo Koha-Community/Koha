@@ -1919,7 +1919,7 @@ sub DelOrder {
         # If there are no items left,
         if ( $itemcount == 0 ) {
             # We delete the record
-            my $delcheck = DelBiblio($bibnum);
+            my $delcheck = DelBiblio($bibnum, 1);
 
             if($delcheck) {
                 $error->{'delbiblio'} = 1;

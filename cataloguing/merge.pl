@@ -171,7 +171,7 @@ if ($merge) {
     if (scalar(@errors) == 0) {
         # Move holds
         MergeHolds($dbh, $ref_biblionumber, $biblionumber);
-        my $error = DelBiblio($biblionumber);
+        my $error = DelBiblio($biblionumber, 1);
         push @errors, $error if ($error);
     }
 }

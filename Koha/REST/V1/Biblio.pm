@@ -181,7 +181,7 @@ sub delete {
         }
     }
 
-    my $res = C4::Biblio::DelBiblio($biblio->biblionumber);
+    my $res = C4::Biblio::DelBiblio($biblio->biblionumber, 1);
 
     unless ($res) {
         return $c->render(status => 200, openapi => {});

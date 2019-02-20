@@ -181,7 +181,7 @@ if ( $op eq 'form' ) {
 
             # Finally, delete the biblio
             my $error = eval {
-                C4::Biblio::DelBiblio( $biblionumber );
+                C4::Biblio::DelBiblio( $biblionumber, 1 );
             };
             if ( $error or $@ ) {
                 push @messages, {

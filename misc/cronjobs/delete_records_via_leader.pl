@@ -107,7 +107,7 @@ foreach my $m (@metadatas) {
 
     }
 
-    my $error = $test ? q{Test mode enabled} : DelBiblio($biblionumber);
+    my $error = $test ? q{Test mode enabled} : DelBiblio($biblionumber, 1);
     if ( $error ) {
         say "ERROR DELETING BIBLIO $biblionumber: $error";
     } else {

@@ -130,7 +130,7 @@ sub update_bib {
 sub delete_bib {
     my $query = shift;
     my $biblionumber = shift;
-    my $error = DelBiblio($biblionumber);
+    my $error = DelBiblio($biblionumber, 1);
 
     if (defined $error) {
         print $query->header(-type => 'text/xml', -status => '400 Bad request');
