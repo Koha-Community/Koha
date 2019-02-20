@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 57;
+use Test::More tests => 54;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -187,14 +187,6 @@ $t->request_ok($tx)
               required_permissions => { circulate => "circulate_remaining_permissions" }
 						});
 
-t::lib::Mocks::mock_preference( "OpacRenewalAllowed", 0 );
-$tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
-$t->request_ok($tx)
-  ->status_is(403)
-  ->json_is({ error => "Opac Renewal not allowed" });
-
-t::lib::Mocks::mock_preference( "OpacRenewalAllowed", 1 );
 $tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
 $tx->req->cookies({name => 'CGISESSID', value => $session->id});
 $t->request_ok($tx)

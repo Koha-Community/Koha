@@ -105,17 +105,6 @@ sub renew {
     my $borrowernumber = $checkout->borrowernumber;
     my $itemnumber = $checkout->itemnumber;
 
-    # Disallow renewal if OpacRenewalAllowed is off and user has insufficient rights
-    unless (C4::Context->preference('OpacRenewalAllowed')) {
-        my $user = $c->stash('koha.user');
-        unless ($user && haspermission($user->userid, { circulate => "circulate_remaining_permissions" })) {
-            return $c->render(
-                status => 403,
-                openapi => { error => "Opac Renewal not allowed"}
-            );
-        }
-    }
-
     my ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
         $borrowernumber, $itemnumber);
 
