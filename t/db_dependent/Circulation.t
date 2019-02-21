@@ -2334,9 +2334,8 @@ subtest '_FixAccountForLostAndReturned' => sub {
             'Payment applied'
         );
 
-        # TODO use add_debit when time comes
         my $manual_debit_amount = 80;
-        C4::Accounts::manualinvoice( $patron->id, undef, undef, 'FU', $manual_debit_amount );
+        $account->add_debit( { amount => $manual_debit_amount, type => 'fine' } );
 
         is( $account->balance, $manual_debit_amount + $replacement_amount - $payment_amount, 'Manual debit applied' );
 
