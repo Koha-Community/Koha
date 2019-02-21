@@ -69,7 +69,7 @@ subtest 'Failure tests' => sub {
     is( $issue_id, undef, 'No issue_id returned' );
 
     # In the next call we return the item and try it another time
-    $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
+    $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
     eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0 ) };
     is( $issue_id, $issue->issue_id, "Item has been returned (issue $issue_id)" );
     eval { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, undef, 0 ) };
@@ -172,7 +172,7 @@ subtest 'Manually pass a return date' => sub {
     my $old_checkout = Koha::Old::Checkouts->find( $issue_id );
     is( $old_checkout->returndate, '2018-12-25 00:00:00', 'Manually passed date stored correctly' );
 
-    $issue = C4::Circulation::AddIssue( $patron, $item->barcode );
+    $issue = C4::Circulation::AddIssue( $patron->unblessed, $item->barcode );
 
     throws_ok
         { $issue_id = C4::Circulation::MarkIssueReturned( $patron->borrowernumber, $item->itemnumber, 'bad_date', 0 ); }
