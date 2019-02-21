@@ -2269,6 +2269,7 @@ sub _calculate_new_debar_dt {
                 'lengthunit',
                 'firstremind',
                 'maxsuspensiondays',
+                'suspension_chargeperiod',
             ]
         }
     );

@@ -2065,7 +2065,16 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
 
     # We want to charge 2 days every 2 days, without grace
     # With 5 days of overdue: (5 * 2) / 2
-    $rule->suspension_chargeperiod(2)->store;
+    Koha::CirculationRules->set_rule(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rule_name    => 'suspension_chargeperiod',
+            rule_value   => '2',
+        }
+    );
+
     $expected_expiration = dt_from_string->add( days => floor( 5 * 2 ) / 2 );
     test_debarment_on_checkout(
         {
@@ -2079,8 +2088,17 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
 
     # We want to charge 2 days every 3 days, with 1 day of grace
     # With 5 days of overdue: ((5-1) / 3 ) * 2
-    $rule->suspension_chargeperiod(3)->store;
-    $rule->firstremind(1)->store;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rules        => {
+                suspension_chargeperiod => 3,
+                firstremind             => 1,
+            }
+        }
+    );
     $expected_expiration = dt_from_string->add( days => floor( ( ( 5 - 1 ) / 3 ) * 2 ) );
     test_debarment_on_checkout(
         {
@@ -2094,9 +2112,18 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
 
     # Use finesCalendar to know if holiday must be skipped to calculate the due date
     # We want to charge 2 days every days, with 0 day of grace (to not burn brains)
-    $rule->finedays(2)->store;
-    $rule->suspension_chargeperiod(1)->store;
-    $rule->firstremind(0)->store;
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => undef,
+            branchcode   => undef,
+            itemtype     => undef,
+            rules        => {
+                finedays                => 2,
+                suspension_chargeperiod => 1,
+                firstremind             => 0,
+            }
+        }
+    );
     t::lib::Mocks::mock_preference('finesCalendar', 'noFinesWhenClosed');
     t::lib::Mocks::mock_preference('SuspensionsCalendar', 'noSuspensionsWhenClosed');
 
@@ -2241,7 +2268,7 @@ subtest 'AddReturn | is_overdue' => sub {
     )->unblessed;
 
     Koha::CirculationRules->search->delete;
-    my $rule = Koha::CirculationRules->set_rules(
+    Koha::CirculationRules->set_rules(
         {
             categorycode => undef,
             itemtype     => undef,

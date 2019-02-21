@@ -148,6 +148,9 @@ our $RULE_KINDS = {
     reservesallowed => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    suspension_chargeperiod => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     # Not included (deprecated?):
     #   * accountsent
     #   * reservecharge
