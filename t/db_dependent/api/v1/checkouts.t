@@ -17,14 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 54;
+use Test::More tests => 51;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use DateTime;
-use MARC::Record;
 
 use C4::Context;
 use C4::Circulation;
@@ -35,130 +34,97 @@ use Koha::DateUtils;
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
 
-$schema->storage->txn_begin;
-
-t::lib::Mocks::mock_preference( 'SessionStorage', 'tmp' );
-
-$ENV{REMOTE_ADDR} = '127.0.0.1';
+t::lib::Mocks::mock_preference( 'RESTBasicAuth', 1 );
 my $t = Test::Mojo->new('Koha::REST::V1');
-my $tx;
+
+$schema->storage->txn_begin;
 
 my $dbh = C4::Context->dbh;
 
-$dbh->do('DELETE FROM issues');
-$dbh->do('DELETE FROM items');
+#FIXME - should be removed
 $dbh->do('DELETE FROM issuingrules');
-my $loggedinuser = $builder->build({ source => 'Borrower' });
 
-$dbh->do(q{
-    INSERT INTO user_permissions (borrowernumber, module_bit, code)
-    VALUES (?, 1, 'circulate_remaining_permissions')
-}, undef, $loggedinuser->{borrowernumber});
+my $librarian = $builder->build_object({
+    class => 'Koha::Patrons',
+    value => { flags => 2 }
+});
+my $password = 'thePassword123';
+$librarian->set_password({ password => $password, skip_validation => 1 });
+my $userid = $librarian->userid;
 
-my $session = C4::Auth::get_session('');
-$session->param('number', $loggedinuser->{ borrowernumber });
-$session->param('id', $loggedinuser->{ userid });
-$session->param('ip', '127.0.0.1');
-$session->param('lasttime', time());
-$session->flush;
-
-my $patron = $builder->build({ source => 'Borrower', value => { flags => 0 } });
-my $borrowernumber = $patron->{borrowernumber};
-my $patron_session = C4::Auth::get_session('');
-$patron_session->param('number', $borrowernumber);
-$patron_session->param('id', $patron->{ userid });
-$patron_session->param('ip', '127.0.0.1');
-$patron_session->param('lasttime', time());
-$patron_session->flush;
+my $patron = $builder->build_object({
+    class => 'Koha::Patrons',
+    value => { flags => 0 }
+});
+my $unauth_password = 'thePassword000';
+$patron->set_password({ password => $unauth_password, skip_validattion => 1 });
+my $unauth_userid = $patron->userid;
+my $patron_id = $patron->borrowernumber;
 
 my $branchcode = $builder->build({ source => 'Branch' })->{ branchcode };
 my $module = new Test::MockModule('C4::Context');
 $module->mock('userenv', sub { { branch => $branchcode } });
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$borrowernumber");
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id" )
   ->status_is(200)
   ->json_is([]);
 
-my $notexisting_borrowernumber = $borrowernumber + 1;
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$notexisting_borrowernumber");
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+my $notexisting_patron_id = $patron_id + 1;
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$notexisting_patron_id" )
   ->status_is(200)
   ->json_is([]);
 
-my $biblionumber = $builder->build_sample_biblio({ title => 'RESTful Web APIs'})->biblionumber;
-my $itemnumber1 = $builder->build_sample_item({ biblionumber => $biblionumber, barcode => 'TEST000001'})->itemnumber;
-my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber, barcode => 'TEST000002'})->itemnumber;
-my $itemnumber3 = $builder->build_sample_item({ biblionumber => $biblionumber, barcode => 'TEST000003'})->itemnumber;
+my $item1 = $builder->build_sample_item;
+my $item2 = $builder->build_sample_item;
+my $item3 = $builder->build_sample_item;
 
 my $date_due = DateTime->now->add(weeks => 2);
-my $issue1 = C4::Circulation::AddIssue($patron, 'TEST000001', $date_due);
+my $issue1 = C4::Circulation::AddIssue($patron->unblessed, $item1->barcode, $date_due);
 my $date_due1 = Koha::DateUtils::dt_from_string( $issue1->date_due );
-my $issue2 = C4::Circulation::AddIssue($patron, 'TEST000002', $date_due);
+my $issue2 = C4::Circulation::AddIssue($patron->unblessed, $item2->barcode, $date_due);
 my $date_due2 = Koha::DateUtils::dt_from_string( $issue2->date_due );
-my $issue3 = C4::Circulation::AddIssue($loggedinuser, 'TEST000003', $date_due);
+my $issue3 = C4::Circulation::AddIssue($librarian->unblessed, $item3->barcode, $date_due);
 my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$borrowernumber");
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id" )
   ->status_is(200)
-  ->json_is('/0/patron_id' => $borrowernumber)
-  ->json_is('/0/item_id' => $itemnumber1)
+  ->json_is('/0/patron_id' => $patron_id)
+  ->json_is('/0/item_id' => $item1->itemnumber)
   ->json_is('/0/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
-  ->json_is('/1/patron_id' => $borrowernumber)
-  ->json_is('/1/item_id' => $itemnumber2)
+  ->json_is('/1/patron_id' => $patron_id)
+  ->json_is('/1/item_id' => $item2->itemnumber)
   ->json_is('/1/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
   ->json_hasnt('/2');
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/".$issue3->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
-$t->request_ok($tx)
+
+$t->get_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id )
   ->status_is(403)
   ->json_is({ error => "Authorization failure. Missing required permission(s).",
               required_permissions => { circulate => "circulate_remaining_permissions" }
             });
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=".$loggedinuser->{borrowernumber});
-$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
-$t->request_ok($tx)
-  ->status_is(403)
-  ->json_is({ error => "Authorization failure. Missing required permission(s).",
-              required_permissions => { circulate => "circulate_remaining_permissions" }
-            });
-
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts?patron_id=$borrowernumber");
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id")
   ->status_is(200)
-  ->json_is('/0/patron_id' => $borrowernumber)
-  ->json_is('/0/item_id' => $itemnumber1)
+  ->json_is('/0/patron_id' => $patron_id)
+  ->json_is('/0/item_id' => $item1->itemnumber)
   ->json_is('/0/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
-  ->json_is('/1/patron_id' => $borrowernumber)
-  ->json_is('/1/item_id' => $itemnumber2)
+  ->json_is('/1/patron_id' => $patron_id)
+  ->json_is('/1/item_id' => $item2->itemnumber)
   ->json_is('/1/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
   ->json_hasnt('/2');
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue1->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
   ->status_is(200)
-  ->json_is('/patron_id' => $borrowernumber)
-  ->json_is('/item_id' => $itemnumber1)
+  ->json_is('/patron_id' => $patron_id)
+  ->json_is('/item_id' => $item1->itemnumber)
   ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
   ->json_hasnt('/1');
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue1->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
   ->status_is(200)
   ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) );
 
-$tx = $t->ua->build_tx(GET => "/api/v1/checkouts/" . $issue2->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id)
   ->status_is(200)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $date_due2 }) );
 
@@ -170,29 +136,21 @@ $dbh->do(q{
 }, {}, '*', '*', '*', 7, 1);
 
 my $expected_datedue = DateTime->now->add(days => 14)->set(hour => 23, minute => 59, second => 0);
-$tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->put_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
   ->status_is(200)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) );
 
-$tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue3->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $patron_session->id});
-$t->request_ok($tx)
+$t->put_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id)
   ->status_is(403)
   ->json_is({ error => "Authorization failure. Missing required permission(s).",
               required_permissions => { circulate => "circulate_remaining_permissions" }
             });
 
-$tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue2->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->put_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id)
   ->status_is(200)
   ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $expected_datedue}) );
 
-$tx = $t->ua->build_tx(PUT => "/api/v1/checkouts/" . $issue1->issue_id);
-$tx->req->cookies({name => 'CGISESSID', value => $session->id});
-$t->request_ok($tx)
+$t->put_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
   ->status_is(403)
   ->json_is({ error => 'Renewal not authorized (too_many)' });
 
