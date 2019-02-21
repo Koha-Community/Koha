@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
+use Test::More tests => 6;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -169,6 +169,77 @@ subtest 'subscription' => sub {
     $order = Koha::Acquisition::Orders->find( $o->ordernumber );
     is( ref( $order->subscription ), 'Koha::Subscription',
         '->subscription should return a Koha::Subscription object if created from a subscription');
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'duplicate_to | add_item' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    my $item = $builder->build_sample_item;
+    my $order_no_sub = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value =>
+              {
+                  biblionumber => $item->biblionumber,
+                  subscriptionid => undef, # not linked to a subscription
+              }
+        }
+    );
+    $order_no_sub->basket->create_items(undef)->store; # use syspref
+    $order_no_sub->add_item( $item->itemnumber );
+
+    $item = $builder->build_sample_item;
+    my $order_from_sub = $builder->build_object(
+        {
+            class => 'Koha::Acquisition::Orders',
+            value =>
+              {
+                  biblionumber => $item->biblionumber,
+                  # Will be linked to a subscription by TestBuilder
+              }
+        }
+    );
+    $order_from_sub->basket->create_items(undef)->store; # use syspref
+    $order_from_sub->add_item( $item->itemnumber );
+
+    my $basket_to = $builder->build_object(
+         { class => 'Koha::Acquisition::Baskets' });
+
+    subtest 'Create item on receiving' => sub {
+        plan tests => 2;
+
+        t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
+
+        my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
+        is( $duplicated_order->items->count, 1,
+            'Items should be copied if the original order is not created from a subscription'
+        );
+
+        $duplicated_order = $order_from_sub->duplicate_to($basket_to);
+        is( $duplicated_order->items->count, 0,
+            'Items should not be copied if the original order is created from a subscription'
+        );
+    };
+
+    subtest 'Create item on ordering' => sub {
+        plan tests => 2;
+
+        t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
+
+        my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
+        is( $duplicated_order->items->count, 1,
+            'Items should be copied if items are created on ordering'
+        );
+
+        $duplicated_order = $order_from_sub->duplicate_to($basket_to);
+        is( $duplicated_order->items->count, 1,
+            'Items should be copied if items are created on ordering, even if created from subscription'
+        );
+    };
 
     $schema->storage->txn_rollback;
 };
