@@ -338,7 +338,7 @@ subtest 'suspend and resume tests' => sub {
 
     my $patron = $builder->build_object(
         { class => 'Koha::Patrons', value => { userid => 'tomasito', flags => 1 } } );
-    $patron->set_password($password);
+    $patron->set_password({ password => $password, skip_validation => 1 });
     my $userid = $patron->userid;
 
     # Disable logging
