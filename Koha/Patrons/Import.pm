@@ -176,6 +176,7 @@ sub import_patrons {
                     if ( $attr->{code} eq $matchpoint and $attr->{value} ne '' ) {
                         my @borrowernumbers = $matchpoint_attr_type->get_patrons( $attr->{value} );
                         $borrowernumber = $borrowernumbers[0] if scalar(@borrowernumbers) == 1;
+                        $patron = Koha::Patrons->find( $borrowernumber );
                         last;
                     }
                 }
