@@ -40,7 +40,7 @@
             <div id="issues-table-actions">
                 <fieldset class="action">
                     [% IF ( CAN_user_circulate_override_renewals ) %]
-                        [% IF CAN_user_circulate_override_renewals && Koha.Preference( 'AllowRenewalLimitOverride' ) %]
+                        [% IF Koha.Preference( 'AllowRenewalLimitOverride' ) || Koha.Preference( 'AllowRenewalOnHoldOverride' ) %]
                             <label for="override_limit">Override renewal restrictions:</label>
                             <input type="checkbox" name="override_limit" id="override_limit" value="1" />
                         [% END %]
