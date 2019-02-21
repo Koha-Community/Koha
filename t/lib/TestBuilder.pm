@@ -175,11 +175,16 @@ sub build_sample_item {
     my $itype = delete $args->{itype}
       || $self->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
 
+    my $barcode =
+      exists( $args->{barcode} )
+      ? $args->{barcode}
+      : $self->_gen_text( { info => { size => SIZE_BARCODE } } );
+
     my ( undef, undef, $itemnumber ) = C4::Items::AddItem(
         {
             homebranch    => $library,
             holdingbranch => $library,
-            barcode       => $self->_gen_text( { info => { size => SIZE_BARCODE } } ),
+            barcode       => $barcode,
             itype         => $itype,
             %$args,
         },
