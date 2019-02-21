@@ -214,7 +214,6 @@ my $params_4 = { file => $handle_4, matchpoint => $attribute->{code}, };
 my $result_4 = $patrons_import->import_patrons($params_4);
 
 # Then ...
-warn Data::Dumper::Dumper( $result_4 );
 is($result_4->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons with extended user');
 is(scalar @{$result_4->{errors}}, 0, 'Got the expected 0 size error array from import_patrons with extended user');
 
@@ -236,7 +235,6 @@ is($result_4->{overwritten}, 0, 'Got the expected 0 overwritten result from impo
 
 seek $handle_4,0,0; #Reset to verify finding a matched patron works
 my $result_4a = $patrons_import->import_patrons($params_4);
-warn Data::Dumper::Dumper( $result_4a );
 is($result_4a->{already_in_db}, 1, 'Got the expected 1 already_in_db from import_patrons with extended user matched');
 is(scalar @{$result_4->{errors}}, 0, 'Got the expected 0 size error array from import_patrons with extended user matched');
 
