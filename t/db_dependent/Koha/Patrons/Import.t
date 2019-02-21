@@ -18,7 +18,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 142;
+use Test::More tests => 155;
 use Test::Warn;
 
 # To be replaced by t::lib::Mock
@@ -201,26 +201,30 @@ is($result_3b->{overwritten}, 0, 'Got the expected 0 overwritten result from imp
 
 # Given ... a new input and mocked C4::Context
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 1);
+my $attribute = $builder->build({ source => "BorrowerAttributeType"});
 
-my $new_input_line = '1001,Donna,Sullivan,Mrs,Henry,DS,59,Court,Burrows,Reading,Salt Lake City,Pennsylvania,19605,United States,hsullivan1@purevolume.com,3-(864)009-3006,7-(291)885-8423,1-(879)095-5038,09/19/1970,LPL,PT,03/04/2015,07/01/2015,hsullivan1,8j6P6Dmap';
-my $filename_4 = make_csv($temp_dir, $csv_headers, $new_input_line);
+my $csv_headers_a  = 'cardnumber,surname,firstname,title,othernames,initials,streetnumber,streettype,address,address2,city,state,zipcode,country,email,phone,mobile,fax,dateofbirth,branchcode,categorycode,dateenrolled,dateexpiry,userid,password,patron_attributes';
+my $res_header_a   = 'cardnumber, surname, firstname, title, othernames, initials, streetnumber, streettype, address, address2, city, state, zipcode, country, email, phone, mobile, fax, dateofbirth, branchcode, categorycode, dateenrolled, dateexpiry, userid, password, patron_attributes';
+my $new_input_line = '1001,Donna,Sullivan,Mrs,Henry,DS,59,Court,Burrows,Reading,Salt Lake City,Pennsylvania,19605,United States,hsullivan1@purevolume.com,3-(864)009-3006,7-(291)885-8423,1-(879)095-5038,09/19/1970,LPL,PT,03/04/2015,07/01/2015,hsullivan1,8j6P6Dmap,'.$attribute->{code}.':1';
+my $filename_4 = make_csv($temp_dir, $csv_headers_a, $new_input_line);
 open(my $handle_4, "<", $filename_4) or die "cannot open < $filename_4: $!";
-my $params_4 = { file => $handle_4, matchpoint => 'SHOW_BCODE', };
+my $params_4 = { file => $handle_4, matchpoint => $attribute->{code}, };
 
 # When ...
 my $result_4 = $patrons_import->import_patrons($params_4);
 
 # Then ...
+warn Data::Dumper::Dumper( $result_4 );
 is($result_4->{already_in_db}, 0, 'Got the expected 0 already_in_db from import_patrons with extended user');
 is(scalar @{$result_4->{errors}}, 0, 'Got the expected 0 size error array from import_patrons with extended user');
 
 is($result_4->{feedback}->[0]->{feedback}, 1, 'Got the expected 1 feedback from import_patrons with extended user');
 is($result_4->{feedback}->[0]->{name}, 'headerrow', 'Got the expected header row name from import_patrons with extended user');
-is($result_4->{feedback}->[0]->{value}, $res_header, 'Got the expected header row value from import_patrons with extended user');
+is($result_4->{feedback}->[0]->{value}, $res_header_a, 'Got the expected header row value from import_patrons with extended user');
 
 is($result_4->{feedback}->[1]->{feedback}, 1, 'Got the expected second feedback from import_patrons with extended user');
 is($result_4->{feedback}->[1]->{name}, 'attribute string', 'Got the expected attribute string from import_patrons with extended user');
-is($result_4->{feedback}->[1]->{value}, '', 'Got the expected second feedback value from import_patrons with extended user');
+is($result_4->{feedback}->[1]->{value}, $attribute->{code}.':1', 'Got the expected second feedback value from import_patrons with extended user');
 
 is($result_4->{feedback}->[2]->{feedback}, 1, 'Got the expected third feedback from import_patrons with extended user');
 is($result_4->{feedback}->[2]->{name}, 'lastimported', 'Got the expected last imported name from import_patrons with extended user');
@@ -229,6 +233,27 @@ like($result_4->{feedback}->[2]->{value}, qr/^Donna \/ \d+/, 'Got the expected t
 is($result_4->{imported}, 1, 'Got the expected 1 imported result from import_patrons with extended user');
 is($result_4->{invalid}, 0, 'Got the expected 0 invalid result from import_patrons with extended user');
 is($result_4->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons with extended user');
+
+seek $handle_4,0,0; #Reset to verify finding a matched patron works
+my $result_4a = $patrons_import->import_patrons($params_4);
+warn Data::Dumper::Dumper( $result_4a );
+is($result_4a->{already_in_db}, 1, 'Got the expected 1 already_in_db from import_patrons with extended user matched');
+is(scalar @{$result_4->{errors}}, 0, 'Got the expected 0 size error array from import_patrons with extended user matched');
+
+is($result_4a->{feedback}->[0]->{feedback}, 1, 'Got the expected 1 feedback from import_patrons with extended user matched');
+is($result_4a->{feedback}->[0]->{name}, 'headerrow', 'Got the expected header row name from import_patrons with extended user matched');
+is($result_4a->{feedback}->[0]->{value}, $res_header_a, 'Got the expected header row value from import_patrons with extended user matched');
+
+is($result_4a->{feedback}->[1]->{feedback}, 1, 'Got the expected second feedback from import_patrons with extended user matched');
+is($result_4a->{feedback}->[1]->{name}, 'attribute string', 'Got the expected attribute string from import_patrons with extended user matched');
+is($result_4a->{feedback}->[1]->{value}, $attribute->{code}.':1', 'Got the expected second feedback value from import_patrons with extended user matched');
+
+is($result_4a->{feedback}->[2]->{already_in_db}, '1', 'Got the expected already_in_db from import_patrons with extended user matched');
+like($result_4a->{feedback}->[2]->{value}, qr/^Donna \/ \d+/, 'Got the expected third feedback value from import_patrons with extended user matched');
+
+is($result_4a->{imported}, 0, 'Got the expected 0 imported result from import_patrons with extended user matched');
+is($result_4a->{invalid}, 0, 'Got the expected 0 invalid result from import_patrons with extended user matched');
+is($result_4a->{overwritten}, 0, 'Got the expected 0 overwritten result from import_patrons with extended user matched');
 
 t::lib::Mocks::mock_preference('ExtendedPatronAttributes', 0);
 
