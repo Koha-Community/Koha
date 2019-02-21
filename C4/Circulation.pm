@@ -419,7 +419,7 @@ sub TooMany {
         |;
 
         my $rule_itemtype = $maxissueqty_rule->itemtype;
-        if ($rule_itemtype eq "*") {
+        unless ($rule_itemtype) {
             # matching rule has the default item type, so count only
             # those existing loans that don't fall under a more
             # specific rule
@@ -457,7 +457,7 @@ sub TooMany {
         $count_query .= " AND borrowernumber = ? ";
         push @bind_params, $borrower->{'borrowernumber'};
         my $rule_branch = $maxissueqty_rule->branchcode;
-        if ($rule_branch ne "*") {
+        unless ($rule_branch) {
             if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
                 $count_query .= " AND issues.branchcode = ? ";
                 push @bind_params, $branch;
@@ -471,8 +471,8 @@ sub TooMany {
 
         my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $count_query, {}, @bind_params );
 
-        my $max_checkouts_allowed = $maxissueqty_rule ? $maxissueqty_rule->rule_value : 0;
-        my $max_onsite_checkouts_allowed = $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : 0;
+        my $max_checkouts_allowed = $maxissueqty_rule ? $maxissueqty_rule->rule_value : undef;
+        my $max_onsite_checkouts_allowed = $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : undef;
 
         if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
             if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
