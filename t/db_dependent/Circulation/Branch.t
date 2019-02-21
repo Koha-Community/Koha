@@ -176,12 +176,6 @@ Koha::CirculationRules->set_rules(
     }
 );
 
-$query = q|
-    INSERT INTO default_circ_rules
-    (singleton, holdallowed, returnbranch)
-    VALUES( ?, ?, ? )
-|;
-$dbh->do( $query, {}, 'singleton', 3, 'homebranch' );
 Koha::CirculationRules->set_rules(
     {
         branchcode   => undef,

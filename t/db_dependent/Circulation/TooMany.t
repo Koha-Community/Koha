@@ -43,10 +43,6 @@ $dbh->do(q|DELETE FROM branches|);
 $dbh->do(q|DELETE FROM categories|);
 $dbh->do(q|DELETE FROM accountlines|);
 $dbh->do(q|DELETE FROM itemtypes|);
-$dbh->do(q|DELETE FROM branch_item_rules|);
-$dbh->do(q|DELETE FROM default_branch_circ_rules|);
-$dbh->do(q|DELETE FROM default_circ_rules|);
-$dbh->do(q|DELETE FROM default_branch_item_rules|);
 $dbh->do(q|DELETE FROM issuingrules|);
 Koha::CirculationRules->search()->delete();
 
