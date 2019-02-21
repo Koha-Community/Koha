@@ -75,7 +75,6 @@ my $avs = Koha::AuthorisedValues->search(
         category => $category,
     },
     {
-        group_by => 'lib',
         order_by => [ 'category', 'lib', 'lib_opac' ],
     }
 );
