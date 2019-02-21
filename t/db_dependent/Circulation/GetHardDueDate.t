@@ -10,7 +10,7 @@ use Koha::Library;
 
 use t::lib::TestBuilder;
 
-use Test::More tests => 10;
+use Test::More tests => 9;
 
 BEGIN {
     use_ok('C4::Circulation');

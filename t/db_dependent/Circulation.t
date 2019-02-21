@@ -2974,17 +2974,23 @@ subtest 'ItemsDeniedRenewal preference' => sub {
     C4::Context->set_preference('ItemsDeniedRenewal','');
 
     my $idr_lib = $builder->build_object({ class => 'Koha::Libraries'});
-    $dbh->do(
-        q{
-        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, issuelength, lengthunit, renewalsallowed, renewalperiod,
-                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
-        },
-        {},
-        '*', $idr_lib->branchcode, '*', 25,
-        14,  'days',
-        10,   7,
-        undef,  0,
-        .10, 1
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => '*',
+            itemtype     => '*',
+            branchcode   => $idr_lib->branchcode,
+            rules        => {
+                reservesallowed => 25,
+                issuelength     => 14,
+                lengthunit      => 'days',
+                renewalsallowed => 10,
+                renewalperiod   => 7,
+                norenewalbefore => undef,
+                auto_renew      => 0,
+                fine            => .10,
+                chargeperiod    => 1,
+            }
+        }
     );
 
     my $deny_book = $builder->build_object({ class => 'Koha::Items', value => {
