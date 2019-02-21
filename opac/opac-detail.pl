@@ -662,7 +662,7 @@ if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
         if ( $basket->effective_create_items eq 'ordering' ) {
             @itemnumbers_on_order = $order->items->get_column('itemnumber');
         }
-        $total_quantity += $order->{quantity};
+        $total_quantity += $order->quantity;
     }
     $template->{VARS}->{acquisition_details} = {
         total_quantity => $total_quantity,
