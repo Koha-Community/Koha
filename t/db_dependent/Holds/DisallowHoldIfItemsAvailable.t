@@ -127,7 +127,7 @@ AddReturn( $item1->{barcode} );
         my $hold_allowed_from_home_library = 1;
         my $hold_allowed_from_any_libraries = 2;
         my $sth_delete_rules = $dbh->prepare(q|DELETE FROM default_circ_rules|);
-        my $sth_insert_rule = $dbh->prepare(q|INSERT INTO default_circ_rules(singleton, maxissueqty, maxonsiteissueqty, holdallowed, hold_fulfillment_policy, returnbranch) VALUES ('singleton', NULL, NULL, ?, 'any', 'homebranch');|);
+        my $sth_insert_rule = $dbh->prepare(q|INSERT INTO default_circ_rules(singleton, holdallowed, hold_fulfillment_policy, returnbranch) VALUES ('singleton', ?, 'any', 'homebranch');|);
 
         subtest 'Item is available at a different library' => sub {
             plan tests => 4;
@@ -243,7 +243,6 @@ $rule = Koha::IssuingRule->new(
         categorycode => '*',
         itemtype     => '*',
         branchcode   => '*',
-        maxissueqty  => 99,
         issuelength  => 7,
         lengthunit   => 8,
         reservesallowed => 99,

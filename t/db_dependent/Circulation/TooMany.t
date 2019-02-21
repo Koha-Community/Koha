@@ -163,16 +163,19 @@ subtest '1 Issuingrule exist 0 0: no issue allowed' => sub {
 
 subtest '1 Issuingrule exist with onsiteissueqty=unlimited' => sub {
     plan tests => 4;
-    my $issuingrule = $builder->build({
-        source => 'Issuingrule',
-        value => {
-            branchcode         => $branch->{branchcode},
-            categorycode       => $category->{categorycode},
-            itemtype           => '*',
-            maxissueqty        => 1,
-            maxonsiteissueqty  => undef,
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => '*',
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => undef,
+            }
         },
-    });
+    );
+
     my $issue = C4::Circulation::AddIssue( $patron, $item->{barcode}, dt_from_string() );
     t::lib::Mocks::mock_preference('ConsiderOnSiteCheckoutsAsNormalCheckouts', 0);
     is_deeply(
