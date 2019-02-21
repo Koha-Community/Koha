@@ -18,7 +18,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 33;
+use Test::More tests => 34;
 use Test::MockModule;
 use Test::Warn;
 
@@ -79,7 +79,12 @@ my $amount = '5.000000';
 my $description = "Test fee!";
 my $type = 'L';
 my $note = 'Test note!';
-manualinvoice( $patron->{borrowernumber}, $item->{itemnumber}, $description, $type, $amount, $note );
+warning_like {
+    C4::Accounts::manualinvoice( $patron->{borrowernumber},
+        $item->{itemnumber}, $description, $type, $amount, $note )
+}
+qr/C4::Accounts::manualinvoice is deprecated in favor of Koha::Account->add_debit/,
+  "deprecation warning recieved for manualinvoice";
 my ($accountline) = Koha::Account::Lines->search(
     {
         borrowernumber => $patron->{borrowernumber}
