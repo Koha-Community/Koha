@@ -150,7 +150,6 @@ our $RULE_KINDS = {
     },
     # Not included (deprecated?):
     #   * accountsent
-    #   * chargename
     #   * reservecharge
     #   * restrictedtype
 };
