@@ -129,37 +129,27 @@ sub renew {
 }
 
 sub renewability {
-    my ($c, $args, $cb) = @_;
+    my $c = shift->openapi->valid_input or return;
 
-    my $user = $c->stash('koha.user');
+    my $checkout_id = $c->validation->param('checkout_id');
+    my $checkout = Koha::Checkouts->find( $checkout_id );
 
-    my $OpacRenewalAllowed;
-    if ($user->borrowernumber == $borrowernumber) {
-        $OpacRenewalAllowed = C4::Context->preference('OpacRenewalAllowed');
+    unless ($checkout) {
+        return $c->render(
+            status => 404,
+            openapi => { error => "Checkout doesn't exist" }
+        );
     }
-
-    unless ($user && ($OpacRenewalAllowed
-            || haspermission($user->userid, { circulate => "circulate_remaining_permissions" }))) {
-        return $c->$cb({error => "You don't have the required permission"}, 403);
-    }
-
-    my $checkout_id = $args->{checkout_id};
-    my $checkout = Koha::Issues->find($checkout_id);
-
-    if (!$checkout) {
-        return $c->$cb({
-            error => "Checkout doesn't exist"
-        }, 404);
-    }
-
-    my $borrowernumber = $checkout->borrowernumber;
-    my $itemnumber = $checkout->itemnumber;
 
     my ($can_renew, $error) = C4::Circulation::CanBookBeRenewed(
-        $borrowernumber, $itemnumber);
+        $checkout->borrowernumber, $checkout->itemnumber);
 
-    return $c->$cb({ renewable => Mojo::JSON->true, error => undef }, 200) if $can_renew;
-    return $c->$cb({ renewable => Mojo::JSON->false, error => $error }, 200);
+    my $renewable = Mojo::JSON->false;
+    $renewable = Mojo::JSON->true if $can_renew;
+    return $c->render(
+        status => 200,
+        openapi => { renewable => $renewable, error => $error }
+    );
 }
 
 =head3 _to_api

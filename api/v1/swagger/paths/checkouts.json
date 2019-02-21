@@ -99,6 +99,7 @@
   },
   "/checkouts/{checkout_id}/renewability": {
     "get": {
+      "x-mojo-to": "Checkout#renewability",
       "operationId": "renewabilityCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -120,8 +121,6 @@
         }
       },
       "x-koha-authorization": {
-        "allow-owner": true,
-        "allow-guarantor": true,
         "permissions": {
           "circulate": "circulate_remaining_permissions"
         }
