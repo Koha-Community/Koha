@@ -136,21 +136,21 @@ $dbh->do(q{
 }, {}, '*', '*', '*', 7, 1);
 
 my $expected_datedue = DateTime->now->add(days => 14)->set(hour => 23, minute => 59, second => 0);
-$t->put_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
+$t->post_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
   ->status_is(200)
   ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) );
 
-$t->put_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id)
+$t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id . "/renewal" )
   ->status_is(403)
   ->json_is({ error => "Authorization failure. Missing required permission(s).",
               required_permissions => { circulate => "circulate_remaining_permissions" }
             });
 
-$t->put_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id)
+$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewal" )
   ->status_is(200)
   ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $expected_datedue}) );
 
-$t->put_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id)
+$t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
   ->status_is(403)
   ->json_is({ error => 'Renewal not authorized (too_many)' });
 

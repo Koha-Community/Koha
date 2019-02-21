@@ -61,8 +61,10 @@
           "circulate": "circulate_remaining_permissions"
         }
       }
-    },
-    "put": {
+    }
+  },
+  "/checkouts/{checkout_id}/renewal": {
+    "post": {
       "x-mojo-to": "Checkout#renew",
       "operationId": "renewCheckout",
       "tags": ["patrons", "checkouts"],
