@@ -85,6 +85,7 @@ while ( my $b = $borrowers_rs->next ) {
         firstname      => $b->firstname  // '',
         cardnumber     => $b->cardnumber // '',
         dateofbirth    => format_sqldatetime($b->dateofbirth, undef, undef, 1) // '',
+        age            => $b->get_age    // 'Age unknown',
         address        => $b->address    // '',
         city           => $b->city       // '',
         zipcode        => $b->zipcode    // '',

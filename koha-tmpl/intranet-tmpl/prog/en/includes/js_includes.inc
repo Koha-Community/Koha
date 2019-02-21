@@ -108,7 +108,7 @@
                         }
                         return $( "<li></li>" )
                         .data( "ui-autocomplete-item", item )
-                        .append( "<a href=\"" + item.link + "\">" + item.surname + ", " + item.firstname + cardnumber + " <small>" + item.dateofbirth + " " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+                        .append( "<a href=\"" + item.link + "\">" + item.surname + ", " + item.firstname + cardnumber + " <small>" + item.dateofbirth + " (" + item.age + ") " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
                         .appendTo( ul );
                     };
                 }
