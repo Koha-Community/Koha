@@ -100,6 +100,9 @@ our $RULE_KINDS = {
     hardduedatecompare => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
+    holds_per_day => {
+        scope => [ 'branchcode', 'categorycode', 'itemtype' ],
+    },
     holds_per_record => {
         scope => [ 'branchcode', 'categorycode', 'itemtype' ],
     },
