@@ -254,6 +254,7 @@
                 [% ELSE %]
                     <div class="split_regex">
                         <input type="text" name="split_regex" id="split_regex" value="" />
+                        <a href="#" title="Delete" class="del_regex"><i class="fa fa-fw fa-trash"></i>Delete</a>
                     </div>
                 [% END %]
             </div>
@@ -400,6 +401,7 @@
 
         $(document).ready(function(){
             update_regex_block();
+            update_delete_links_visibility();
             $("#split_routine").on("change", function(){
                 update_regex_block();
             });
