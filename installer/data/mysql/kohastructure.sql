@@ -4419,6 +4419,34 @@ CREATE TABLE itemtypes_branches( -- association table between authorised_values 
     FOREIGN KEY (branchcode) REFERENCES branches(branchcode) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table `return_claims`
+--
+
+DROP TABLE IF EXISTS `return_claims`;
+CREATE TABLE return_claims (
+    id int(11) auto_increment,
+    itemnumber int(11) NOT NULL,
+    issue_id int(11) NULL DEFAULT NULL,
+    borrowernumber int(11) NOT NULL,
+    notes MEDIUMTEXT DEFAULT NULL,
+    created_on TIMESTAMP NULL,
+    created_by int(11) NULL DEFAULT NULL,
+    updated_on TIMESTAMP NULL ON UPDATE CURRENT_TIMESTAMP,
+    updated_by int(11) NULL DEFAULT NULL,
+    resolution  varchar(80) NULL DEFAULT NULL,
+    resolved_on TIMESTAMP NULL DEFAULT NULL,
+    resolved_by int(11) NULL DEFAULT NULL,
+    PRIMARY KEY (`id`),
+    KEY `itemnumber` (`itemnumber`),
+    UNIQUE( issue_id ),
+    CONSTRAINT `rc_items_ibfk` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `rc_borrowers_ibfk` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+    CONSTRAINT `rc_created_by_ibfk` FOREIGN KEY (`created_by`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT `rc_updated_by_ibfk` FOREIGN KEY (`updated_by`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+    CONSTRAINT `rc_resolved_by_ibfk` FOREIGN KEY (`resolved_by`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
