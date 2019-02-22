@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:26+0200\n"
-"PO-Revision-Date: 2018-12-17 10:45+0000\n"
+"PO-Revision-Date: 2019-02-20 14:04+0000\n"
 "Last-Translator: Katrin Fischer <katrin.fischer@bsz-bw.de>\n"
 "Language-Team: \n"
 "Language: de\n"
@@ -13,7 +13,7 @@ msgstr ""
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "X-Generator: Pootle 2.8\n"
 "X-Poedit-SourceCharset: utf-8\n"
-"X-POOTLE-MTIME: 1545043555.208537\n"
+"X-POOTLE-MTIME: 1550671487.243211\n"
 "X-Pootle-Path: /de/18.05/de-DE-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1824,12 +1824,14 @@ msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
 msgstr "Aktiviere"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't Display"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
 msgstr "Deaktiviere"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# easy ways to create analytical record relationships"
-msgstr "die Funktion zur einfachen Erstellung von Verknüpfungen zwischen Titeldatensätzen."
+msgstr ""
+"die Funktion zur einfachen Erstellung von Verknüpfungen für unselbstständige "
+"Werke"
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EnableAdvancedCatalogingEditor# <br/> NOTE:"
@@ -2438,8 +2440,10 @@ msgid "circulation.pref#AllowHoldPolicyOverride# Don't allow"
 msgstr "Erlaube nicht"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#AllowHoldPolicyOverride# staff to force addition of holds even if the patron already has the maximum number of holds allowed."
-msgstr "das Bibliothekspersonal die Anzahl Vormerkungen zu erhöhen selbst wenn der Benutzer die Limite der Vormerkungen erreicht hat."
+msgid "circulation.pref#AllowHoldPolicyOverride# staff to override hold policies when placing holds."
+msgstr ""
+", dass Mitarbeiter die Vormerkbeschränkungen beim Setzen von Vormerkungen "
+"übergehen können."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Allow"
@@ -3943,7 +3947,7 @@ msgid "circulation.pref#decreaseLoanHighHolds# Enable"
 msgstr "Verkürze"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#decreaseLoanHighHolds# days for items with more than"
+msgid "circulation.pref#decreaseLoanHighHolds# days for high demand items with more than"
 msgstr "Tage, wenn auf einem Exemplar mehr als"
 
 # Circulation > Holds Policy
@@ -4688,7 +4692,7 @@ msgstr "Overdrive für die Benutzerauthentifizierung mit Koha eingerichtet sein"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# Overdrive uses the patron's"
-msgstr ""
+msgstr "Overdrive verwendet"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# Required"
@@ -4696,7 +4700,7 @@ msgstr "erforderlich"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# cardnumber"
-msgstr ""
+msgstr "die Ausweisnummer"
 
 # Enhanced Content > OverDrive
 # Enhanced Content > OverDrive
@@ -4705,7 +4709,7 @@ msgstr "für den Zugang von Benutzern zu Overdrive. <br />"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# user name"
-msgstr ""
+msgstr "den Benutzernamen"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# users to access their OverDrive circulation history, and circulate items.<br />"
@@ -5200,8 +5204,8 @@ msgid "logs.pref#CataloguingLog# Log"
 msgstr "Aufzeichnung"
 
 # Logging > Logging
-msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on."
-msgstr "von Veränderungen an bibliographischen Datensätzen oder Exemplardaten. Das geschieht jedes Mal, wenn ein Buch ausgeliehen wird. Es wird daher nicht empfohlen diese Funktion zu aktivieren."
+msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records."
+msgstr "Änderungen an bibliografischen und Exemplardatensätzen."
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
@@ -6460,8 +6464,11 @@ msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form afte
 msgstr "der Anmeldemaske mit Passwort und Benutzername, nachdem der Benutzer sich selbst angemeldet hat."
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_unverified_opac_registrations.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>HINWEIS:</strong> Dieser Systemparameter erfordert den Cronjob <code>misc/cronjobs/delete_unverified_opac_registrations.pl</code>. Bitten Sie Ihren Systemadministrator darum diesen einzurichten."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr ""
+"<br><strong>HINWEIS:</strong> Dieser Systemparameter erfordert den Cronjob "
+"<code>misc/cronjobs/cleanup_database.pl</code>. Bitten Sie Ihren "
+"Systemadministrator darum diesen einzurichten."
 
 # OPAC > Self Registration
 msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# Don't require"
@@ -6908,11 +6915,11 @@ msgid "patrons.pref#CheckPrevCheckout# Do not"
 msgstr "Keine Prüfung"
 
 # Patrons > General
-msgid "patrons.pref#CheckPrevCheckout# Unless overridden, do"
+msgid "patrons.pref#CheckPrevCheckout# Unless overridden by patron category, do"
 msgstr "Wenn nicht überschrieben, Prüfung"
 
 # Patrons > General
-msgid "patrons.pref#CheckPrevCheckout# Unless overridden, do not"
+msgid "patrons.pref#CheckPrevCheckout# Unless overridden by patron category, do not"
 msgstr "Wenn nicht überschrieben, keine Prüfung"
 
 # Patrons > General
@@ -8340,8 +8347,20 @@ msgid "web_services.pref#OAI-PMH:MaxCount# records at a time in response to a Li
 msgstr "Datensätze bei einer Anfrage mit ListRecords oder ListIdentifiers zurück."
 
 # Web services > OAI-PMH
-msgid "web_services.pref#OAI-PMH:archiveID# : ."
-msgstr ": ."
+msgid "web_services.pref#OAI-PMH:archiveID# .  Please, insert prefix without ending colon (\":\") char. The archiveID should respect OAI specification. See "
+msgstr ""
+"Bitte geben Sie das Präfix ohne den Doppelpunkt (\":\") am Ende an. Die "
+"archiveID sollte gemäß der OAI-Spezifikation angegeben werden. Siehe "
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:archiveID# <a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\">Implementation guidelines</a>. "
+msgstr ""
+"<a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\""
+">Implementierungsrichtlinien</a>. "
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:archiveID# Example: \"oai:example-library.org\""
+msgstr "Beispiel: \"oai:example-library.org\""
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# Identify records at this site with the prefix"
@@ -8374,4 +8393,3 @@ msgstr "Zeige maximal"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "Zeilen für einen Report, der über den Reports Web Service ausgeführt wird."
-
