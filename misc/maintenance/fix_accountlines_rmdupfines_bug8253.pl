@@ -98,13 +98,13 @@ foreach my $keeper (@$results) {
         }
 
         my $sql =
-            "DELETE FROM accountlines WHERE accountlines_id = ? LIMIT 1";
+            "DELETE FROM accountlines WHERE accountlines_id = ?";
         $dbh->do( $sql, undef, $f->{'accountlines_id'} );
     }
 
     if ($has_changed) {
         my $sql =
-            "UPDATE accountlines SET amountoutstanding = ? WHERE accountlines_id = ? LIMIT 1";
+            "UPDATE accountlines SET amountoutstanding = ? WHERE accountlines_id = ?";
         $dbh->do(
             $sql,                           undef,
             $keeper->{'amountoutstanding'}, $keeper->{'accountlines_id'}
