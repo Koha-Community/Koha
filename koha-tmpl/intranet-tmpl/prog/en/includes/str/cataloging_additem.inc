@@ -1,3 +1,4 @@
+[% USE raw %]
 <script>
     var searchid = '[% searchid | html %]';
     var biblionumber = '[% biblionumber | html %]';
