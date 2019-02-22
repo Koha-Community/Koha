@@ -2,16 +2,17 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2019-01-17 13:10+0000\n"
-"Last-Translator: Victor Grousset <victor.grousset@biblibre.com>\n"
-"Language-Team: French (France) (http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
+"PO-Revision-Date: 2019-02-22 09:40+0000\n"
+"Last-Translator: Fridolin SOMERS <fridolin.somers@biblibre.com>\n"
+"Language-Team: French (France) "
+"(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1547730638.227318\n"
+"X-POOTLE-MTIME: 1550828433.378903\n"
 "X-Pootle-Path: /fr/18.05/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -1534,10 +1535,15 @@ msgstr "Utiliser le texte suivant pour modifier comment les notices d'autorité 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE:</strong> Cette préférence système requiert le cronjob "
+"<code>misc/migration_tools/merge_authority.pl</code>. Demandez à votre "
+"administrateur système de le paramétrer."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
 msgstr ""
+"Lors de la modification d'une notice d'autorité, ne pas mettre à jour les "
+"notices bibliographiques rattachées si le nombre dépasse"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# records. (Above this limit, the merge_authority cron job will merge them.)"
@@ -1830,8 +1836,8 @@ msgid "cataloguing.pref#EasyAnalyticalRecords# Display"
 msgstr "Afficher"
 
 # Cataloging > Interface
-msgid "cataloguing.pref#EasyAnalyticalRecords# Don't Display"
-msgstr "Ne pas afficher"
+msgid "cataloguing.pref#EasyAnalyticalRecords# Don't display"
+msgstr ""
 
 # Cataloging > Interface
 msgid "cataloguing.pref#EasyAnalyticalRecords# easy ways to create analytical record relationships"
@@ -2484,8 +2490,8 @@ msgid "circulation.pref#AllowHoldPolicyOverride# Don't allow"
 msgstr "Interdire"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#AllowHoldPolicyOverride# staff to force addition of holds even if the patron already has the maximum number of holds allowed."
-msgstr "le personnel à ajouter des réservations même si l'adhérent a atteint son maximum de réservations autorisées."
+msgid "circulation.pref#AllowHoldPolicyOverride# staff to override hold policies when placing holds."
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Allow"
@@ -4109,8 +4115,8 @@ msgid "circulation.pref#decreaseLoanHighHolds# Enable"
 msgstr "Activer"
 
 # Circulation > Holds Policy
-msgid "circulation.pref#decreaseLoanHighHolds# days for items with more than"
-msgstr "jours pour les exemplaires avec plus de"
+msgid "circulation.pref#decreaseLoanHighHolds# days for high demand items with more than"
+msgstr ""
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# holds"
@@ -5462,8 +5468,8 @@ msgid "logs.pref#CataloguingLog# Log"
 msgstr "Journaliser"
 
 # Logging > Logging
-msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records. Since this occurs whenever a book is checked in or out as well, it is not advisable to turn this on."
-msgstr "les modification des notices bibliographiques et des exemplaires. Tout prêt et tout retour d'un exemplaire est ainsi journalisé, ce qui crée un grand nombre d'entrées dans le journal de Koha. Aussi est-il déconseillé d'activer ce suivi."
+msgid "logs.pref#CataloguingLog# any changes to bibliographic or item records."
+msgstr ""
 
 # Logging > Logging
 msgid "logs.pref#CronjobLog# Don't log"
@@ -6726,7 +6732,7 @@ msgid "opac.pref#PatronSelfRegistrationPrefillForm# password and login form afte
 msgstr "le formulaire de connexion après qu'un adhérent se soit enregistré lui-même."
 
 # OPAC > Self Registration
-msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/delete_unverified_opac_registrations.pl</code> cronjob. Ask your system administrator to schedule it."
+msgid "opac.pref#PatronSelfRegistrationVerifyByEmail# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cleanup_database.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
 
 # OPAC > Self Registration
@@ -7170,12 +7176,12 @@ msgid "patrons.pref#CheckPrevCheckout# Do not"
 msgstr "Non"
 
 # Patrons > General
-msgid "patrons.pref#CheckPrevCheckout# Unless overridden, do"
-msgstr "A moins qu'il ne soit spécifié autrement., oui"
+msgid "patrons.pref#CheckPrevCheckout# Unless overridden by patron category, do"
+msgstr ""
 
 # Patrons > General
-msgid "patrons.pref#CheckPrevCheckout# Unless overridden, do not"
-msgstr "A moins qu'il ne soit spécifié autrement, non"
+msgid "patrons.pref#CheckPrevCheckout# Unless overridden by patron category, do not"
+msgstr ""
 
 # Patrons > General
 msgid "patrons.pref#DefaultPatronSearchFields# Comma separated list defining the default fields to be used during a patron search"
@@ -7372,6 +7378,8 @@ msgstr "un mot de passe robuste pour les bibliothécaires et les adhérents"
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# <br>If you would prefer to send SMS via E-mail, set SMSSendDriver to: Email"
 msgstr ""
+"<br>Si vous préférez envoyer les SMS par émail, positionnez SMSSendDriver "
+"sur : Email"
 
 # Patrons > General
 msgid "patrons.pref#SMSSendDriver# Use the SMS::Send::"
@@ -7463,7 +7471,7 @@ msgstr "automatiquement au champ numéro de carte le prochain plus grand numéro
 
 # Patrons > General
 msgid "patrons.pref#borrowerRelationship# (input multiple choices separated by |). Leave empty to deactivate"
-msgstr "(saisr plusieurs valeurs séparées par |). Laisser vide pour désactiver"
+msgstr "(saisir plusieurs valeurs séparées par |). Laisser vide pour désactiver"
 
 # Patrons > General
 msgid "patrons.pref#borrowerRelationship# Guarantors can be the following of those they guarantee:"
@@ -8622,12 +8630,32 @@ msgid "web_services.pref#OAI-PMH:MaxCount# records at a time in response to a Li
 msgstr "notices à la fois en réponse aux requêtes ListRecords et ListIdentifiers."
 
 # Web services > OAI-PMH
-msgid "web_services.pref#OAI-PMH:archiveID# : ."
-msgstr ": ."
+msgid "web_services.pref#OAI-PMH:archiveID# .  Please, insert prefix without ending colon (\":\") char. The archiveID should respect OAI specification. See "
+msgstr ""
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:archiveID# <a href=\"http://www.openarchives.org/OAI/2.0/guidelines-oai-identifier.htm\">Implementation guidelines</a>. "
+msgstr ""
+
+# Web services > OAI-PMH
+msgid "web_services.pref#OAI-PMH:archiveID# Example: \"oai:example-library.org\""
+msgstr ""
 
 # Web services > OAI-PMH
 msgid "web_services.pref#OAI-PMH:archiveID# Identify records at this site with the prefix"
 msgstr "Identifier les enregistrement de ce site avec le préfixe :"
+
+# Web services > REST API
+msgid "web_services.pref#RESTBasicAuth# <a href=\"https://www.w3.org/Protocols/HTTP/1.0/spec.html#BasicAA\" target=\"_blank\">Basic authentication</a> for the REST API."
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTBasicAuth# Disable"
+msgstr ""
+
+# Web services > REST API
+msgid "web_services.pref#RESTBasicAuth# Enable"
+msgstr ""
 
 # Web services > REST API
 msgid "web_services.pref#RESTOAuth2ClientCredentials# Disable"
@@ -8656,4 +8684,3 @@ msgstr "Renvoyer uniquement"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "colonnes d'un rapport demandé par l'intermédiaire du Web service des rapports."
-
