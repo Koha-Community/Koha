@@ -41,7 +41,6 @@ BEGIN {
 
 can_ok( 'C4::Accounts',
     qw(
-        getnextacctno
         chargelostitem
         manualinvoice
         purge_zero_balance_fees )
@@ -756,7 +755,6 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     Koha::Account::Line->new(
         {
             borrowernumber    => $patron->borrowernumber,
-            accountno         => 1,
             date              => $today,
             description       => 'a Res fee',
             accounttype       => 'Res',
@@ -766,7 +764,6 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     Koha::Account::Line->new(
         {
             borrowernumber    => $patron->borrowernumber,
-            accountno         => 2,
             date              => $today,
             description       => 'a Rental fee',
             accounttype       => 'Rent',
@@ -776,7 +773,6 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     Koha::Account::Line->new(
         {
             borrowernumber    => $patron->borrowernumber,
-            accountno         => 3,
             date              => $today,
             description       => 'a Manual invoice fee',
             accounttype       => 'Copie',

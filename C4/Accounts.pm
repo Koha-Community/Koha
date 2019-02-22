@@ -38,7 +38,6 @@ BEGIN {
     require Exporter;
     @ISA    = qw(Exporter);
     @EXPORT = qw(
-      &getnextacctno
       &chargelostitem
       &purge_zero_balance_fees
     );
@@ -59,29 +58,6 @@ including looking up and modifying the amount of money owed by a
 patron.
 
 =head1 FUNCTIONS
-
-=head2 getnextacctno
-
-  $nextacct = &getnextacctno($borrowernumber);
-
-Returns the next unused account number for the patron with the given
-borrower number.
-
-=cut
-
-#'
-# FIXME - Okay, so what does the above actually _mean_?
-sub getnextacctno {
-    my ($borrowernumber) = shift or return;
-    my $sth = C4::Context->dbh->prepare(
-        "SELECT accountno+1 FROM accountlines
-            WHERE    (borrowernumber = ?)
-            ORDER BY accountno DESC
-            LIMIT 1"
-    );
-    $sth->execute($borrowernumber);
-    return ($sth->fetchrow || 1);
-}
 
 =head2 chargelostitem
 
@@ -174,7 +150,6 @@ sub manualinvoice {
     $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
     my $dbh      = C4::Context->dbh;
     my $insert;
-    my $accountno  = getnextacctno($borrowernumber);
     my $amountleft = $amount;
 
     my $branchcode = C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef;
@@ -182,7 +157,6 @@ sub manualinvoice {
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber    => $borrowernumber,
-            accountno         => $accountno,
             date              => \'NOW()',
             amount            => $amount,
             description       => $desc,
@@ -207,7 +181,6 @@ sub manualinvoice {
         logaction("FINES", 'CREATE',$borrowernumber,Dumper({
             action            => 'create_fee',
             borrowernumber    => $borrowernumber,
-            accountno         => $accountno,
             amount            => $amount,
             description       => $desc,
             accounttype       => $type,

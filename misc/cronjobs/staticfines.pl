@@ -226,14 +226,13 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
             $sth4->execute($itemnumber);
             my $title = $sth4->fetchrow;
 
-            my $nextaccntno = C4::Accounts::getnextacctno($borrowernumber);
             my $desc        = "staticfine";
             my $query       = "INSERT INTO accountlines
-                        (borrowernumber,itemnumber,date,amount,description,accounttype,amountoutstanding,lastincrement,accountno)
-                                VALUES (?,?,now(),?,?,'F',?,?,?)";
+                        (borrowernumber,itemnumber,date,amount,description,accounttype,amountoutstanding,lastincrement)
+                                VALUES (?,?,now(),?,?,'F',?,?)";
             my $sth2 = $dbh->prepare($query);
-            $bigdebug and warn "query: $query\nw/ args: $borrowernumber, $itemnumber, $amount, $desc, $amount, $amount, $nextaccntno\n";
-            $sth2->execute( $borrowernumber, $itemnumber, $amount, $desc, $amount, $amount, $nextaccntno );
+            $bigdebug and warn "query: $query\nw/ args: $borrowernumber, $itemnumber, $amount, $desc, $amount, $amount\n";
+            $sth2->execute( $borrowernumber, $itemnumber, $amount, $desc, $amount, $amount );
 
         }
     }

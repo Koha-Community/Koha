@@ -82,7 +82,6 @@ my %row = (
     'description'             => $accountline->{'description'},
     'amount'                  => $accountline->{'amount'},
     'amountoutstanding'       => $accountline->{'amountoutstanding'},
-    'accountno' => $accountline->{'accountno'},
     accounttype => $accountline->{accounttype},
     'note'      => $accountline->{'note'},
 );

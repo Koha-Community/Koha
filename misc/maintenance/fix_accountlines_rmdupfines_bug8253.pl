@@ -65,7 +65,7 @@ my $query = "
     SELECT * FROM accountlines
     WHERE ( accounttype =  'FU' OR accounttype =  'F' )
     AND description like '%23:59%'
-    ORDER BY borrowernumber, itemnumber, accountno, description
+    ORDER BY borrowernumber, itemnumber, accountlines_id, description
 ";
 my $sth = $dbh->prepare($query);
 $sth->execute();
@@ -98,20 +98,16 @@ foreach my $keeper (@$results) {
         }
 
         my $sql =
-            "DELETE FROM accountlines WHERE borrowernumber = ? AND accountno = ? AND itemnumber = ? AND date = ? AND description = ? LIMIT 1";
-        $dbh->do( $sql, undef, $f->{'borrowernumber'},
-            $f->{'accountno'}, $f->{'itemnumber'}, $f->{'date'},
-            $f->{'description'} );
+            "DELETE FROM accountlines WHERE accountlines_id = ? LIMIT 1";
+        $dbh->do( $sql, undef, $f->{'accountlines_id'} );
     }
 
     if ($has_changed) {
         my $sql =
-            "UPDATE accountlines SET amountoutstanding = ? WHERE borrowernumber = ? AND accountno = ? AND itemnumber = ? AND date = ? AND description = ? LIMIT 1";
+            "UPDATE accountlines SET amountoutstanding = ? WHERE accountlines_id = ? LIMIT 1";
         $dbh->do(
             $sql,                           undef,
-            $keeper->{'amountoutstanding'}, $keeper->{'borrowernumber'},
-            $keeper->{'accountno'},         $keeper->{'itemnumber'},
-            $keeper->{'date'},              $keeper->{'description'}
+            $keeper->{'amountoutstanding'}, $keeper->{'accountlines_id'}
         );
     }
 }

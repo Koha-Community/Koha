@@ -85,12 +85,6 @@ sub pay {
 
     my $patron = Koha::Patrons->find( $self->{patron_id} );
 
-    # We should remove accountno, it is no longer needed
-    my $last = $self->lines->search(
-        {},
-        { order_by => 'accountno' } )->next();
-    my $accountno = $last ? $last->accountno + 1 : 1;
-
     my $manager_id = $userenv ? $userenv->{number} : 0;
 
     my @fines_paid; # List of account lines paid on with this payment
@@ -138,7 +132,6 @@ sub pay {
                         new_amountoutstanding => 0,
                         amount_paid           => $old_amountoutstanding,
                         accountlines_id       => $fine->id,
-                        accountno             => $fine->accountno,
                         manager_id            => $manager_id,
                         note                  => $note,
                     }
@@ -189,7 +182,6 @@ sub pay {
                         new_amountoutstanding => $fine->amountoutstanding,
                         amount_paid           => $amount_to_pay,
                         accountlines_id       => $fine->id,
-                        accountno             => $fine->accountno,
                         manager_id            => $manager_id,
                         note                  => $note,
                     }
@@ -212,7 +204,6 @@ sub pay {
     my $payment = Koha::Account::Line->new(
         {
             borrowernumber    => $self->{patron_id},
-            accountno         => $accountno,
             date              => dt_from_string(),
             amount            => 0 - $amount,
             description       => $description,
@@ -236,7 +227,6 @@ sub pay {
             type           => $type,
             amount         => $amount,
             borrowernumber => $self->{patron_id},
-            accountno      => $accountno,
         }
     );
 
@@ -248,7 +238,6 @@ sub pay {
                 {
                     action            => "create_$type",
                     borrowernumber    => $self->{patron_id},
-                    accountno         => $accountno,
                     amount            => 0 - $amount,
                     amountoutstanding => 0 - $balance_remaining,
                     accounttype       => $account_type,
@@ -343,16 +332,10 @@ sub add_credit {
 
     $schema->txn_do(
         sub {
-            # We should remove accountno, it is no longer needed
-            my $last = $self->lines->search(
-                {},
-                { order_by => 'accountno' } )->next();
-            my $accountno = $last ? $last->accountno + 1 : 1;
 
             # Insert the account line
             $line = Koha::Account::Line->new(
                 {   borrowernumber    => $self->{patron_id},
-                    accountno         => $accountno,
                     date              => \'NOW()',
                     amount            => $amount,
                     description       => $description,
@@ -380,7 +363,6 @@ sub add_credit {
                     type           => $type,
                     amount         => $amount,
                     borrowernumber => $self->{patron_id},
-                    accountno      => $accountno,
                 }
             ) if grep { $type eq $_ } ('payment', 'writeoff') ;
 
@@ -391,7 +373,6 @@ sub add_credit {
                     Dumper(
                         {   action            => "create_$type",
                             borrowernumber    => $self->{patron_id},
-                            accountno         => $accountno,
                             amount            => $amount,
                             description       => $description,
                             amountoutstanding => $amount,
@@ -476,10 +457,6 @@ sub add_debit {
 
     $schema->txn_do(
         sub {
-            # We should remove accountno, it is no longer needed
-            my $last = Koha::Account::Lines->search( { borrowernumber => $self->{patron_id} },
-                { order_by => 'accountno' } )->next();
-            my $accountno = $last ? $last->accountno + 1 : 1;
 
             # Insert the account line
             $line = Koha::Account::Line->new(
@@ -514,7 +491,6 @@ sub add_debit {
                     Dumper(
                         {   action            => "create_$type",
                             borrowernumber    => $self->{patron_id},
-                            accountno         => $accountno,
                             amount            => $amount,
                             description       => $description,
                             amountoutstanding => $amount,

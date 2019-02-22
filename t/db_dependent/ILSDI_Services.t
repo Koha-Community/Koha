@@ -197,7 +197,6 @@ subtest 'GetPatronInfo/GetBorrowerAttributes test for extended patron attributes
             source => 'Accountline',
             value  => {
                 borrowernumber    => $brwr->{borrowernumber},
-                accountno         => 1,
                 accounttype       => 'xxx',
                 amountoutstanding => 10
             }

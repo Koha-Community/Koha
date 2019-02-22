@@ -4,7 +4,7 @@ use Modern::Perl;
 use C4::Stats;
 use Koha::Database;
 
-use Test::More tests => 19;
+use Test::More tests => 18;
 
 BEGIN {
     use_ok('C4::Stats');
@@ -32,7 +32,6 @@ my $params = {
               other => "bla",
               itemtype => "BK",
               location => "LOC",
-              accountno => 51,
               ccode => "CODE",
 };
 my $return_error;
@@ -105,7 +104,6 @@ $params = {
               other => "bla",
               itemtype => "BK",
               location => "LOC",
-              accountno => 51,
               ccode => "CODE",
               type => "return"
 };
@@ -120,7 +118,6 @@ cmp_ok($params->{amount},'==', $line->{value},          "UpdateStats save amount
 is ($params->{other},          $line->{other},          "UpdateStats save other param in other field of statistics table");
 is ($params->{itemtype},       $line->{itemtype},       "UpdateStats save itemtype param in itemtype field of statistics table");
 is ($params->{location},       $line->{location},       "UpdateStats save location param in location field of statistics table");
-is ($params->{accountno},      $line->{proccode},       "UpdateStats save accountno param in proccode field of statistics table");
 is ($params->{ccode},          $line->{ccode},          "UpdateStats save ccode param in ccode field of statistics table");
 
 $dbh->do(q|DELETE FROM statistics|);
@@ -131,7 +128,6 @@ $params = {
     amount         => 5.1,
     other          => "bla",
     itemtype       => "BK",
-    accountno      => 51,
     ccode          => "CODE",
     type           => "return"
 };
@@ -151,7 +147,6 @@ $params = {
     other          => "bla",
     itemtype       => "BK",
     location       => undef,
-    accountno      => 51,
     ccode          => "CODE",
     type           => "return"
 };

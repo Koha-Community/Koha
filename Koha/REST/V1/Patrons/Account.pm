@@ -226,7 +226,6 @@ sub _to_model {
 
 our $to_api_mapping = {
     accountlines_id   => 'account_line_id',
-    accountno         => undef,                  # removed
     accounttype       => 'account_type',
     amountoutstanding => 'amount_outstanding',
     borrowernumber    => 'patron_id',

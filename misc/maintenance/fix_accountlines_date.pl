@@ -127,7 +127,7 @@ if (not $result or $want_help or ($mode ne 'us' and $mode ne 'metric')) {
 our $dbh = C4::Context->dbh;
 $dbh->{AutoCommit} = 0;
 my $sth = $dbh->prepare("
-SELECT borrowernumber, itemnumber, accountno, description
+SELECT accountlines_id, description
   FROM accountlines
   WHERE accounttype in ('FU', 'F', 'O', 'M')
 ;");
@@ -136,7 +136,7 @@ $sth->execute();
 my $update_sth = $dbh->prepare('
 UPDATE accountlines
   SET description = ?
-  WHERE borrowernumber = ? AND itemnumber = ? AND accountno = ?
+  WHERE accountlines_id = ?
 ;');
 
 
@@ -161,7 +161,7 @@ while (my $accountline = $sth->fetchrow_hashref) {
     }
 
     print "Changing description from '" . $accountline->{'description'} . "' to '" . $description . "'\n" if $DEBUG;
-    $update_sth->execute($description, $accountline->{'borrowernumber'}, $accountline->{'itemnumber'}, $accountline->{'accountno'});
+    $update_sth->execute($description, $accountline->{'accountlines_id'});
 
     $done++;
 

@@ -64,7 +64,6 @@ C<$params> is an hashref whose expected keys are:
     amount             : the amount of the transaction
     other              : sipmode
     itemtype           : the type of the item
-    accountno          : the count
     ccode              : the collection code of the item
 
 type key is mandatory.
@@ -83,7 +82,7 @@ sub UpdateStats {
 # make some controls
     return () if ! defined $params;
 # change these arrays if new types of transaction or new parameters are allowed
-    my @allowed_keys = qw (type branch amount other itemnumber itemtype borrowernumber accountno ccode location);
+    my @allowed_keys = qw (type branch amount other itemnumber itemtype borrowernumber ccode location);
     my @allowed_circulation_types = qw (renew issue localuse return onsite_checkout);
     my @allowed_accounts_types = qw (writeoff payment);
     my @circulation_mandatory_keys = qw (type branch borrowernumber itemnumber ccode itemtype);
@@ -123,7 +122,6 @@ sub UpdateStats {
     my $other             = exists $params->{other}          ? $params->{other}          : '';
     my $itemtype          = exists $params->{itemtype}       ? $params->{itemtype}       : '';
     my $location          = exists $params->{location}       ? $params->{location}       : undef;
-    my $accountno         = exists $params->{accountno}      ? $params->{accountno}      : '';
     my $ccode             = exists $params->{ccode}          ? $params->{ccode}          : '';
 
     my $dbh = C4::Context->dbh;
@@ -132,13 +130,13 @@ sub UpdateStats {
         (datetime,
          branch,          type,        value,
          other,           itemnumber,  itemtype, location,
-         borrowernumber,  proccode,    ccode)
-         VALUES (now(),?,?,?,?,?,?,?,?,?,?)"
+         borrowernumber,  ccode)
+         VALUES (now(),?,?,?,?,?,?,?,?,?)"
     );
     $sth->execute(
         $branch,     $type,     $amount,   $other,
         $itemnumber, $itemtype, $location, $borrowernumber,
-        $accountno,  $ccode
+        $ccode
     );
 }
 

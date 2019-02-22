@@ -81,7 +81,6 @@ my %row = (
     'amount'                  => sprintf( "%.2f", $accountline->{'amount'} ),
     'amountoutstanding' =>
       sprintf( "%.2f", $accountline->{'amountoutstanding'} ),
-    'accountno' => $accountline->{'accountno'},
     accounttype => $accountline->{accounttype},
     'note'      => $accountline->{'note'},
 );
