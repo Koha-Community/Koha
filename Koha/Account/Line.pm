@@ -318,7 +318,6 @@ sub adjust {
                     Dumper(
                         {   action            => $update_type,
                             borrowernumber    => $self->borrowernumber,
-                            accountno         => $self->accountno,
                             amount            => $amount,
                             description       => undef,
                             amountoutstanding => $new_outstanding,
