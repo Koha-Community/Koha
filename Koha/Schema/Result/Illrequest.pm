@@ -54,6 +54,13 @@ __PACKAGE__->table("illrequests");
   is_nullable: 1
   size: 50
 
+=head2 status_alias
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 80
+
 =head2 placed
 
   data_type: 'date'
@@ -143,6 +150,8 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 50 },
   "status",
   { data_type => "varchar", is_nullable => 1, size => 50 },
+  "status_alias",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 80 },
   "placed",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "replied",
@@ -253,9 +262,29 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 status_alias
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-27 13:16:48
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:rv6QyhxEah2r/rDcz3aOOw
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::AuthorisedValue>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "status_alias",
+  "Koha::Schema::Result::AuthorisedValue",
+  { authorised_value => "status_alias" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-02-22 14:32:49
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:I6fY8XRfEmRxSzOeVT9Krw
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration
