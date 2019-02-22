@@ -86,7 +86,7 @@ start_sip()
                     /etc/koha/sites/${name}/SIPconfig.xml"
 
         [ "$verbose" != "no" ] && \
-            log_daemon_msg "Starting Koha Zebra daemon for ${name}"
+            log_daemon_msg "Starting SIP server for ${name}"
 
         if daemon $DAEMONOPTS -- perl $SIP_PARAMS; then
             ([ "$verbose" != "no" ] && \
