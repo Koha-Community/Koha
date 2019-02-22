@@ -18,15 +18,17 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                [% IF !order_loop && search_done %]
+                    <div class="dialog message">
+                        Your search returned no results.
+                    </div>
+                [% END %]
 
-[% UNLESS ( order_loop ) %]<form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
-<fieldset class="rows">
-    <legend>Search orders</legend>
-    [% INCLUDE 'filter-orders.inc' %]
-</fieldset>
-    <input type="hidden" name="do_search" value="1" />
-	<fieldset class="action"><input type="submit" value="Search" /></fieldset>
-	</form>[% END %]
+                [% UNLESS ( order_loop ) %]
+                    [% PROCESS filter_form context => "main" %]
+                [% END %]
+
+
     [% IF ( order_loop ) %]<h1>Search results</h1>
 	<div id="acqui_histsearch">
         <table id="histsearcht">
@@ -101,8 +103,6 @@
             </tbody>
         </table>
     </div>
-    [% ELSIF search_done %]
-      There is no order for this search.
     [% END %]
 
 </main>
@@ -110,6 +110,9 @@
 
 <div class="col-sm-2 col-sm-pull-10">
     <aside>
+        [% IF ( order_loop ) %]
+            [% PROCESS filter_form context => "sidebar" %]
+        [% END %]
         [% INCLUDE 'acquisitions-menu.inc' %]
     </aside>
 </div> <!-- /.col-sm-2.col-sm-pull-10 -->
@@ -133,16 +136,30 @@
                 "sPaginationType": "four_button"
             }, columns_settings );
 
-            [% UNLESS order_loop %]
-                patron_autocomplete({
-                    patron_container: $("#basket_creators"),
-                    input_autocomplete: $("#find_patron"),
-                    patron_input_name: 'created_by',
-                    field_to_retrieve: 'borrowernumber'
-                });
-            [% END %]
+            patron_autocomplete({
+                patron_container: $("#basket_creators"),
+                input_autocomplete: $("#find_patron"),
+                patron_input_name: 'created_by',
+                field_to_retrieve: 'borrowernumber'
+            });
         });
     </script>
+[% END %]
+
+[% BLOCK filter_form %]
+    <form action="/cgi-bin/koha/acqui/histsearch.pl" method="post">
+        [% IF ( context == "sidebar" ) %]
+            <fieldset class="brief">
+                <h4>Search orders</h4>
+        [% ELSE %]
+            <fieldset class="rows">
+                <legend>Search orders</legend>
+        [% END %]
+            [% INCLUDE 'filter-orders.inc' %]
+        </fieldset>
+        <input type="hidden" name="do_search" value="1" />
+        <fieldset class="action"><input type="submit" value="Search" /></fieldset>
+    </form>
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]

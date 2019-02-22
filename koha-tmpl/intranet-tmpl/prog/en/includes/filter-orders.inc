@@ -10,7 +10,7 @@
     <li><label for="name">Vendor: </label> <input type="text" name="name" id="name" value="[% filters.name | html %]" /></li>
     <li><label for="basket">Basket: </label> <input type="text" name="basket" id="basket" value="[% filters.basket | html %]" /></li>
     <li><label for="basket_creators">Basket created by: </label>
-        <input autocomplete="off" id="find_patron" type="text" style="width:150px" class="noEnterSubmit" />
+        <input autocomplete="off" id="find_patron" type="text" class="noEnterSubmit" />
         <div>
             <div id="basket_creators" style="float:left;"></div>
         </div>
