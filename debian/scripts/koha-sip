@@ -64,7 +64,8 @@ start_sip()
     if ! is_sip_running $name; then
 
         adjust_paths_dev_install $name
-        export KOHA_CONF PERL5LIB
+        export KOHA_HOME PERL5LIB
+
         if [ "$DEV_INSTALL" = "" ]; then
             LIBDIR=$KOHA_HOME/lib
         else
@@ -275,6 +276,8 @@ if [ $# -gt 0 ]; then
     for name in "$@"; do
 
         if is_instance $name; then
+
+            export KOHA_CONF="/etc/koha/sites/$name/koha-conf.xml"
 
             case $op in
                 "start")
