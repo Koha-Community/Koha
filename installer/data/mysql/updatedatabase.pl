@@ -13036,7 +13036,7 @@ if ( CheckVersion($DBversion) ) {
         INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('TrackLastPatronActivity', '0', 'If set, the field borrowers.lastseen will be updated everytime a patron is seen', NULL, 'YesNo');
     });
 
-    print "Upgrade to $DBversion done (Bug 16274 - Make the selfregistration branchcode selection configurable)\n";
+    print "Upgrade to $DBversion done (Bug 16276: Add a new pref TrackLastPatronActivity and new column borrowers.lastseen)\n";
     SetVersion($DBversion);
 }
 
