@@ -83,6 +83,7 @@
                     <th>Rep.price</th>
                     <th>Library</th>
                     <th>Item type</th>
+                    <th>Collection code</th>
                     <th>Current location</th>
                     <th>Location</th>
                     <th>Not for loan status</th>
@@ -112,6 +113,7 @@
                         <td>[% item.replacementprice | $Price %]</td>
                         <td>[% Branches.GetName(item.homebranch) | html %]</td>
                         <td>[% ItemTypes.GetDescription(item.effective_itemtype) | html %]</td>
+                        <td>[% AuthorisedValues.GetByCode( 'CCODE', item.ccode ) | html %]</td>
                         <td>[% Branches.GetName(item.holdingbranch) | html %]</td>
                         <td>[% AuthorisedValues.GetByCode( 'LOC', item.location ) | html %]</td>
                         <td>[% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.notforloan', authorised_value => item.notforloan ) | html %]
