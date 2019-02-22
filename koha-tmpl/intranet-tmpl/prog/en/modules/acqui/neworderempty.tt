@@ -71,7 +71,7 @@
     </div>
 [% END %]
 
-<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" class="validated" id="Aform" onsubmit="return Check(this);" >
+<form action="/cgi-bin/koha/acqui/addorder.pl" method="post" class="validated noEnterSubmit" id="Aform" onsubmit="return Check(this);" >
 
     <fieldset class="rows">
         <legend>Patrons</legend>
@@ -532,7 +532,6 @@
     [% INCLUDE 'additem.js.inc' %]
     [% Asset.js("js/additem.js") | $raw %]
     [% Asset.js("js/cataloging.js") | $raw %]
-    [% Asset.js("js/prevent_submit.js") | $raw %]
     <script>
         actTotal = "";
 

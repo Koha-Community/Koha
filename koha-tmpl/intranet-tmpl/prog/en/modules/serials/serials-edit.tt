@@ -5,7 +5,6 @@
 <title>Koha &rsaquo; Serials &rsaquo; Serial edition [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% Asset.js("js/cataloging.js") | $raw %]
-[% Asset.js("js/prevent_submit.js") | $raw %]
 [% INCLUDE 'calendar.inc' %]
 <script>
 //<![CDATA[
@@ -97,7 +96,7 @@ $(document).ready(function() {
     [% IF location %] ([% AuthorisedValues.GetByCode('LOC', location) | html %])[% END %]
     [% IF ( callnumber ) %] callnumber: [% callnumber | html %][% END %]</h1>
 [% IF internalnotes %]<p>Nonpublic note: [% internalnotes | html %]</p>[% END %]
-<form method="post" name="f" action="serials-edit.pl" id="serials_edit">
+<form method="post" name="f" class="noEnterSubmit" action="serials-edit.pl" id="serials_edit">
 
 [% IF ( Errors ) %]
 <div class="dialog alert">

@@ -23,7 +23,7 @@
 <h1>Receive items from : [% name | html %] [% IF ( invoice ) %][[% invoice | html %]] [% END %] (order #[% ordernumber | html %])</h1>
 
 [% IF ( count ) %]
-    <form action="/cgi-bin/koha/acqui/finishreceive.pl" method="post" onsubmit="return Check(this);">
+    <form action="/cgi-bin/koha/acqui/finishreceive.pl" class="noEnterSubmit" method="post" onsubmit="return Check(this);">
 <div class="row">
 <div class="col-sm-6">
     <div class="dialog alert order_error" style="display:none"></div>
@@ -329,7 +329,6 @@
     [% INCLUDE 'additem.js.inc' %]
     [% Asset.js("js/additem.js") | $raw %]
     [% Asset.js("js/cataloging.js") | $raw %]
-    [% Asset.js("js/prevent_submit.js") | $raw %]
     <script>
         function Check(form) {
             [% IF (AcqCreateItemReceiving) %]
