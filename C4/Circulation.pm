@@ -2822,7 +2822,7 @@ sub AddRenewal {
     my $itemnumber      = shift or return;
     my $branch          = shift;
     my $datedue         = shift;
-    my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz)->ymd();
+    my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz);
 
     my $item   = GetItem($itemnumber) or return;
     my $item_object = Koha::Items->find( $itemnumber ); # Should replace $item
