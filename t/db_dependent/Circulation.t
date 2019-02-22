@@ -2824,7 +2824,7 @@ $cache->clear_from_cache('single_holidays');
 
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
-    plan tests => 12;
+    plan tests => 13;
 
     $schema->storage->txn_begin;
 
@@ -2875,6 +2875,10 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     AddRenewal( $patron->id, $item->id, $library->id );
     my $new_log_size = scalar( @{ GetLogs( $date, $date, undef, ["CIRCULATION"], ["RENEWAL"] ) } );
     is( $new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog' );
+
+    my $checkouts = $patron->checkouts;
+    # The following will fail if run on 00:00:00
+    unlike ( $checkouts->next->lastreneweddate, qr/00:00:00/, 'AddRenewal should set the renewal date with the time part');
 
     t::lib::Mocks::mock_preference( 'RenewalLog', 1 );
     $date = output_pref( { dt => dt_from_string(), datenonly => 1, dateformat => 'iso' } );
