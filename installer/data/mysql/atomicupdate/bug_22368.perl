@@ -2,11 +2,7 @@ $DBversion = 'XXX';    # will be replaced by the RM
 if ( CheckVersion($DBversion) ) {
 
     # Add constraint for suggestedby
-    my $sth = $dbh->prepare(
-q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='suggestions_ibfk_suggestedby'|
-    );
-    $sth->execute;
-    unless ( $sth->fetchrow_hashref ) {
+    unless( foreign_key_exists( 'suggestions', 'suggestions_ibfk_suggestedby' ) ) {
         $dbh->do("ALTER TABLE suggestions CHANGE COLUMN suggestedby suggestedby INT(11) NULL DEFAULT NULL;");
         $dbh->do(
 "UPDATE suggestions SET suggestedby = NULL where suggestedby NOT IN (SELECT borrowernumber FROM borrowers)"
@@ -17,11 +13,7 @@ q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='sugg
     }
 
     # Add constraint for managedby
-    $sth = $dbh->prepare(
-q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='suggestions_ibfk_managedby'|
-    );
-    $sth->execute;
-    unless ( $sth->fetchrow_hashref ) {
+    unless( foreign_key_exists( 'suggestions', 'suggestions_ibfk_managedby' ) ) {
         $dbh->do(
 "UPDATE suggestions SET managedby = NULL where managedby NOT IN (SELECT borrowernumber FROM borrowers)"
         );
@@ -31,11 +23,7 @@ q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='sugg
     }
 
     # Add constraint for acceptedby
-    $sth = $dbh->prepare(
-q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='suggestions_ibfk_acceptedby'|
-    );
-    $sth->execute;
-    unless ( $sth->fetchrow_hashref ) {
+    unless( foreign_key_exists( 'suggestions', 'suggestions_ibfk_acceptedby' ) ) {
         $dbh->do(
 "UPDATE suggestions SET acceptedby = NULL where acceptedby NOT IN (SELECT borrowernumber FROM borrowers)"
         );
@@ -45,11 +33,7 @@ q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='sugg
     }
 
     # Add constraint for rejectedby
-    $sth = $dbh->prepare(
-q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='suggestions_ibfk_rejectedby'|
-    );
-    $sth->execute;
-    unless ( $sth->fetchrow_hashref ) {
+    unless( foreign_key_exists( 'suggestions', 'suggestions_ibfk_rejectedby' ) ) {
         $dbh->do(
 "UPDATE suggestions SET rejectedby = NULL where rejectedby NOT IN (SELECT borrowernumber FROM borrowers)"
         );
@@ -59,11 +43,7 @@ q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='sugg
     }
 
     # Add constraint for biblionumber
-    $sth = $dbh->prepare(
-q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='suggestions_ibfk_biblionumber'|
-    );
-    $sth->execute;
-    unless ( $sth->fetchrow_hashref ) {
+    unless( foreign_key_exists( 'suggestions', 'suggestions_ibfk_biblionumber' ) ) {
         $dbh->do(
 "UPDATE suggestions SET biblionumber = NULL where biblionumber NOT IN (SELECT biblionumber FROM biblio)"
         );
@@ -73,11 +53,7 @@ q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='sugg
     }
 
     # Add constraint for branchcode
-    $sth = $dbh->prepare(
-q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='suggestions_ibfk_branchcode'|
-    );
-    $sth->execute;
-    unless ( $sth->fetchrow_hashref ) {
+    unless( foreign_key_exists( 'suggestions', 'suggestions_ibfk_branchcode' ) ) {
         $dbh->do(
 "UPDATE suggestions SET branchcode = NULL where branchcode NOT IN (SELECT branchcode FROM branches)"
         );
@@ -87,6 +63,5 @@ q|SELECT * FROM INFORMATION_SCHEMA.TABLE_CONSTRAINTS WHERE CONSTRAINT_NAME='sugg
     }
 
     SetVersion($DBversion);
-    print
-"Upgrade to $DBversion done (Bug 22368 - Add missing constraints to suggestions)\n";
+    print "Upgrade to $DBversion done (Bug 22368 - Add missing constraints to suggestions)\n";
 }
