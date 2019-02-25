@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 124;
+use Test::More tests => 123;
 
 use Data::Dumper;
 use DateTime;
