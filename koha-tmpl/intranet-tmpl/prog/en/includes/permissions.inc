@@ -103,7 +103,7 @@
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_circ_rules' -%]
         <span class="sub_permission manage_circ_rules_subpermission">
-            manage circulation rules
+            Manage circulation rules
         </span>
         <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_circ_rules_from_any_libraries' -%]
