@@ -524,7 +524,7 @@ sub getBookseller{
     $vendorAssignedId = $order->getVendorAssignedId();
     if($vendorAssignedId){
         my $dbh = C4::Context->dbh;
-        my $stmnt = $dbh->prepare("SELECT id FROM vendor_edi_accounts WHERE san = ? AND id_code_qualifier='91' AND transport='FILE' AND orders_enabled='1'");
+        my $stmnt = $dbh->prepare("SELECT vendor_id FROM vendor_edi_accounts WHERE san = ? AND id_code_qualifier='91' AND transport='FILE' AND orders_enabled='1'");
         $stmnt->execute($vendorAssignedId) or die($DBI::errstr);
         $bookseller = $stmnt->fetchrow_array();
     }
