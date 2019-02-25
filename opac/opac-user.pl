@@ -222,6 +222,7 @@ if ( $pending_checkouts->count ) { # Useless test
         my ($status,$renewerror) = CanBookBeRenewed( $borrowernumber, $issue->{'itemnumber'} );
         ($issue->{'renewcount'},$issue->{'renewsallowed'},$issue->{'renewsleft'}) = GetRenewCount($borrowernumber, $issue->{'itemnumber'});
         ( $issue->{'renewalfee'}, $issue->{'renewalitemtype'} ) = GetIssuingCharges( $issue->{'itemnumber'}, $borrowernumber );
+        $issue->{itemtype_object} = Koha::ItemTypes->find( Koha::Items->find( $issue->{itemnumber} )->effective_itemtype );
         if($status && C4::Context->preference("OpacRenewalAllowed")){
             $issue->{'status'} = $status;
         }

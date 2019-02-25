@@ -295,7 +295,13 @@
                                                             <input type="checkbox" name="item" value="[% ISSUE.itemnumber | uri %]"/> <a href="/cgi-bin/koha/opac-renew.pl?from=opac_user&amp;item=[% ISSUE.itemnumber | uri %]&amp;borrowernumber=[% ISSUE.borrowernumber | uri %]">Renew</a>
                                                         [% END %]
                                                         [% IF ISSUE.renewalfee > 0 %]
-                                                            <span class="renewalfee">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
+                                                            <span class="renewalfee label label-warning">Fee for item type '[% ItemTypes.GetDescription( ISSUE.renewalitemtype) | html %]': [% ISSUE.renewalfee | $Price %]</span>
+                                                        [% END %]
+                                                        [% IF ISSUE.itemtype_object.rentalcharge_daily > 0 %]
+                                                            <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_daily | $Price %] per day</span>
+                                                        [% END %]
+                                                        [% IF ISSUE.itemtype_object.rentalcharge_hourly > 0 %]
+                                                            <span class="renewalfee label label-warning">[% ISSUE.itemtype_object.rentalcharge_hourly | $Price %] per hour</span>
                                                         [% END %]
                                                         <span class="renewals">([% ISSUE.renewsleft | html %] of [% ISSUE.renewsallowed | html %] renewals remaining)</span>
                                                     [% ELSIF ( ISSUE.on_reserve ) %]
