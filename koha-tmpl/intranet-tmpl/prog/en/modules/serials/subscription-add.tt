@@ -218,7 +218,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                 <legend>Serials planning</legend>
                                 <ol>
                                     <li>
-                                        <label for="firstacquidate" class="required">First issue publication date:</label>
+                                        <label for="acqui_date" class="required">First issue publication date:</label>
                                         [% UNLESS (more_than_one_serial) %]
                                           <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]" class="datepicker required" required="required" />
                                         [% ELSE %]
@@ -282,11 +282,11 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                         <input type="hidden" name="issuelengthcount">
                                     </li>
                                     <li>
-                                        <label for="startdate" class="required"> Subscription start date:</label>
+                                        <label for="from" class="required"> Subscription start date:</label>
                                         <input type="text" size="10" id="from" name="startdate" value="[% startdate | $KohaDates %]" class="datepickerfrom required" required="required" />
                                     </li>
                                     <li>
-                                        <label for="enddate">Subscription end date:</label>
+                                        <label for="to">Subscription end date:</label>
                                         <input type="text" size="10" id="to" name="enddate" value="[% enddate | $KohaDates %]" class="datepickerto" />
                                     </li>
                                     <li>
