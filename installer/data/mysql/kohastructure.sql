@@ -4630,6 +4630,25 @@ CREATE TABLE `library_smtp_servers` (
     CONSTRAINT `library_smtp_servers_smtp_servers_fk` FOREIGN KEY (`smtp_server_id`) REFERENCES `smtp_servers` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_unicode_ci;
 
+--
+-- Table structure for table background_jobs
+--
+
+DROP TABLE IF EXISTS `background_jobs`;
+CREATE TABLE background_jobs (
+    id INT(11) NOT NULL AUTO_INCREMENT,
+    status VARCHAR(32),
+    progress INT(11),
+    size INT(11),
+    borrowernumber INT(11),
+    type VARCHAR(64),
+    data TEXT,
+    enqueued_on DATETIME DEFAULT NULL,
+    started_on DATETIME DEFAULT NULL,
+    ended_on DATETIME DEFAULT NULL,
+    PRIMARY KEY (id)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
