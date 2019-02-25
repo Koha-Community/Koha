@@ -55,10 +55,7 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 #get account details
 my $total = $patron->account->balance;
-my $accountline_object = Koha::Account::Lines->find($accountlines_id);
-my $accountline = $accountline_object->unblessed;
-$accountline->{item} = $accountline_object->item || "" ;
-$accountline->{checkout} = $accountline_object->checkout || "";
+my $accountline = Koha::Account::Lines->find($accountlines_id)->unblessed;
 
 my $totalcredit;
 if ( $total <= 0 ) {
