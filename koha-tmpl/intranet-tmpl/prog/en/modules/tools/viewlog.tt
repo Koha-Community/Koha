@@ -3,6 +3,7 @@
 [% USE Koha %]
 [% USE AuthorisedValues %]
 [% USE Branches %]
+[% USE KohaDates %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>
@@ -208,7 +209,7 @@
                             <tbody>
                             [% FOREACH loopro IN looprow %]
                                 <tr>
-                                    <td>[% loopro.timestamp | html %]</td>
+                                    <td>[% loopro.timestamp | $KohaDates with_hours=1 %]</td>
                                     <td>
                                         [% IF loopro.librarian %]
                                             <a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% loopro.librarian.borrowernumber | uri %]" title="display detail for this librarian."> [% IF ( loopro.librarian.firstname ) || ( loopro.librarian.surname ) %][% loopro.librarian.firstname | html %] [% loopro.librarian.surname | html %] ([% loopro.librarian.borrowernumber | html %]) [% ELSE %][% loopro.librarian.borrowernumber | html %][% END %]</a>
