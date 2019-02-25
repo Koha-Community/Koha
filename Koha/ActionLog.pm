@@ -31,6 +31,8 @@ Koha::ActionLog - Koha ActionLog Object class
 
 =head2 Class methods
 
+=cut
+
 =head2 Internal methods
 
 =head3 _type

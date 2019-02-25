@@ -45,6 +45,12 @@ sub _type {
     return 'ActionLog';
 }
 
+=head3 object_class
+
+Single object class
+
+=cut
+
 sub object_class {
     return 'Koha::ActionLog';
 }
