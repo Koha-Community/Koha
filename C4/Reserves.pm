@@ -576,7 +576,7 @@ sub ChargeReserveFee {
 INSERT INTO accountlines ( borrowernumber, accountno, date, amount, description, accounttype, amountoutstanding ) VALUES (?, ?, NOW(), ?, ?, 'Res', ?)
     };
     my $dbh = C4::Context->dbh;
-    my $nextacctno = &getnextacctno( $borrowernumber );
+    my $nextacctno = C4::Accounts::getnextacctno( $borrowernumber );
     $dbh->do( $accquery, undef, ( $borrowernumber, $nextacctno, $fee, "Reserve Charge - $title", $fee ) );
 }
 
