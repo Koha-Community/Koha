@@ -14,6 +14,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 /* Prevents Bootstrap menus from being hidden inside modal */
 #mana_search_result .modal { overflow: visible; }
 #mana_search_result .modal-body { overflow-y: visible; }
+fieldset.rows table { clear: none; margin: 0; }
 </style>
 </head>
 
@@ -32,35 +33,36 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
 
 <div class="main container-fluid">
     <div class="row">
-            <div class="col-sm-12">
-                <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle | html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
-            </div>
-            <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
-                [% IF ( modify ) %]
-                    <input type="hidden" name="op" value="modsubscription" />
-                    <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
-                [% ELSE %]
-                        <input type="hidden" name="op" value="addsubscription" />
-                [% END %]
-                <input type="hidden" name="user" value="[% logged_in_user.userid | html %]" />
-                <input type="hidden" name="irreg_check" value="0" />
-
-                <div id="page_1">
-                    <div class="col-md-6">
+        <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+            <h1>[% IF ( modify ) %] Modify subscription for <i>[% bibliotitle | html %]</i>[% ELSE %]Add a new subscription[% END %] (<span id="page_number">1/2</span>)</h1>
+        </div>
+    </div>
+    <form method="post" id="subscription_add_form" name="f" action="/cgi-bin/koha/serials/subscription-add.pl" class="validated">
+                <div class="row" id="page_1">
+                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
+                        [% IF ( modify ) %]
+                            <input type="hidden" name="op" value="modsubscription" />
+                            <input type="hidden" name="subscriptionid" value="[% subscriptionid | html %]" />
+                        [% ELSE %]
+                                <input type="hidden" name="op" value="addsubscription" />
+                        [% END %]
+                        <input type="hidden" name="user" value="[% logged_in_user.userid | html %]" />
+                        <input type="hidden" name="irreg_check" value="0" />
                         <fieldset id="subscription_add_information" class="rows">
                             <legend>Subscription details</legend>
                             <ol>
                                 [% IF ( subscriptionid ) %]
-                                    <li><span class="label">Subscription #</span> [% subscriptionid | html %]</li>
+                                    <li><span class="label">Subscription number: </span> [% subscriptionid | html %]</li>
                                 [% END %]
                                 <li>
                                     <label for="aqbooksellerid">Vendor: </label>
                                     <input type="text" name="aqbooksellerid" id="aqbooksellerid" value="[% aqbooksellerid | html %]" size="8" /> (<input type="text" name="aqbooksellername" id="aqbooksellername" value="[% aqbooksellername | html %]" disabled="disabled" readonly="readonly" />) <a href="#" id="vendor_search"><i class="fa fa-search"></i> Search for a vendor</a>
                                 </li>
                                 <li>
-                                    <label for="biblionumber" class="required" title="Subscriptions must be associated with a bibliographic record">Record:</label>
+                                    <label for="biblionumber" class="required">Record:</label>
                                     <input type="text" name="biblionumber" id="biblionumber" value="[% bibnum | html %]" size="8" />
                                     (<input type="text" name="title" value="[% bibliotitle | html %]" disabled="disabled" readonly="readonly" />) <span class="required" title="Subscriptions must be associated with a bibliographic record">Required</span>
+                                    <div class="hint">Subscriptions must be associated with a bibliographic record</div>
                                     <div class="inputnote"> <a href="#" id="record_search"><i class="fa fa-search"></i> Search for record</a>
                                         [% IF ( CAN_user_editcatalogue ) %]
                                             [% IF ( modify ) %]
@@ -73,11 +75,11 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                 </li>
                                 <li class="radio">
                                     [% IF ( serialsadditems ) %]
-                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
-                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial </label></p>
+                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1" checked="checked" /><label class="widelabel" for="serialsadditems-yes"> Create an item record when receiving this serial</label></p>
+                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" /><label class="widelabel" for="serialsadditems-no"> Do not create an item record when receiving this serial </label></p>
                                     [% ELSE %]
-                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label class="widelabel" for="serialsadditems-yes">create an item record when receiving this serial</label></p>
-                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label class="widelabel" for="serialsadditems-no">do not create an item record when receiving this serial</label></p>
+                                        <p><input type="radio" id="serialsadditems-yes" name="serialsadditems" value="1"/><label class="widelabel" for="serialsadditems-yes"> Create an item record when receiving this serial</label></p>
+                                        <p><input type="radio" id="serialsadditems-no" name="serialsadditems" value="0" checked="checked" /><label class="widelabel" for="serialsadditems-no"> Do not create an item record when receiving this serial</label></p>
                                     [% END %]
                                 </li>
                                 <li class="radio">
@@ -116,7 +118,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                 </li>
                                 <li>
                                     <label for="branchcode">Library:</label>
-                                    <select name="branchcode" id="branchcode" style="width: 20em;">
+                                    <select name="branchcode" id="branchcode">
                                         [% UNLESS ( Independentbranches ) %]
                                             <option value="">None</option>
                                         [% END %]
@@ -125,7 +127,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                         [% ELSE %]
                                             [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
                                         [% END %]
-                                    </select> (select a library)
+                                    </select>
                                 </li>
                                 <li>
                                     <label for="notes">Public note:</label>
@@ -210,13 +212,12 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                             </ol>
                         </fieldset>
                         <fieldset class="action">
-                            <input type="button" value="Next &gt;&gt;" id="subscription_add_next" style="float:right;" />
+                            <button type="button" id="subscription_add_next" style="float:right;">Next <i class="fa fa-long-arrow-right"></i></button>
                         </fieldset>
-                    </div>
-                </div>
-
-                <div id="page_2">
-                    <div class="col-md-6">
+                    </div> <!-- /.col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2 -->
+                </div> <!-- /.row#page_1 -->
+                <div class="row" id="page_2">
+                    <div class="col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
                 [% IF ( Koha.Preference('Mana') == 1) && !mana_url %]
                     <fieldset>
                         <p><center>The Mana Knowledge Base can be used to import subscription patterns submitted by other libraries and save you extra work. Ask your system administrator to configure this service and complete the configuration, or remove this message by disabling the system preference
@@ -235,8 +236,9 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                           <input type="text" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]" class="datepicker required" required="required" />
                                         [% ELSE %]
                                           [% firstacquidate | $KohaDates %]
-                                          <input type="hidden" size="10" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]"/>
+                                          <input type="hidden" id="acqui_date" name="firstacquidate" value="[% firstacquidate | $KohaDates %]"/>
                                         [% END %]
+                                        <span class="required">Required</span>
                                     </li>
                                     [% IF (more_than_one_serial) %]
                                       <li>
@@ -315,6 +317,7 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                                 </option>
                                             [% END %]
                                         </select>
+                                        <span class="required">Required</span>
                                     </li>
                                     <li>
                                         <label for="locale">Locale:</label>
@@ -328,9 +331,10 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                                 [% END %]
                                             [% END %]
                                         </select>
-                                        <span class="hint">If empty, English is used</span>
+                                        <div class="hint">If empty, English is used</div>
                                     </li>
                                     <li id="more_options">
+                                        <span class="label">&nbsp;</span>
                                         <table id="moreoptionst">
                                             <thead>
                                                 <tr>
@@ -342,19 +346,19 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>
+                                                    <th scope="row">
                                                       [% IF (more_than_one_serial) %]
-                                                        Last value
+                                                        Last value:
                                                       [% ELSE %]
-                                                        Begins with
+                                                        Begins with:
                                                       [% END %]
-                                                    </td>
+                                                    </th>
                                                     <td id="beginsX"><input type="text" id="lastvaluetemp1" name="lastvaluetemp1" value="[% lastvalue1 | html %]" /></td>
                                                     <td id="beginsY"><input type="text" id="lastvaluetemp2" name="lastvaluetemp2" value="[% lastvalue2 | html %]" /></td>
                                                     <td id="beginsZ"><input type="text" id="lastvaluetemp3" name="lastvaluetemp3" value="[% lastvalue3 | html %]" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Inner counter</td>
+                                                    <th scope="row">Inner counter:</th>
                                                     <td id="innerX"><input type="text" id="innerlooptemp1" name="innerlooptemp1" value="[% innerloop1 | html %]" /></td>
                                                     <td id="innerY"><input type="text" id="innerlooptemp2" name="innerlooptemp2" value="[% innerloop2 | html %]" /></td>
                                                     <td id="innerZ"><input type="text" id="innerlooptemp3" name="innerlooptemp3" value="[% innerloop3 | html %]" /></td>
@@ -363,23 +367,27 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                         </table>
                                     </li>
                                     <li>
+                                        <span class="label">&nbsp;</span>
                                         <a href="#" class="toggle_advanced_pattern show_advanced_pattern"><i class="fa fa-plus-square"></i> Show advanced pattern</a>
                                         <a href="#" style="display:none;" class="toggle_advanced_pattern hide_advanced_pattern"><i class="fa fa-minus-square"></i> Hide advanced pattern</a>
                                     </li>
+                                </ol>
+
                                     <div id="advancedpredictionpattern" style="display:none">
+                                        <ol>
                                       <li>
                                         <label for="patternname" class="required">Pattern name:</label>
                                         <input id="patternname" name="patternname" type="text" readonly="readonly" class="required" required="required" />
+                                        <span class="required">Required</span>
                                       </li>
                                       <li>
                                         <label for="numberingmethod">Numbering formula:</label>
                                         <input readonly="readonly" type="text" name="numberingmethod" id="numberingmethod" size="50" value="[% numberingmethod | html %]" />
                                       </li>
+                                      <li>
+                                        <span class="label">Advanced prediction pattern: </span>
                                         <table id="advancedpredictionpatternt">
                                             <thead>
-                                                <tr>
-                                                    <th colspan="4">Advanced prediction pattern</th>
-                                                </tr>
                                                 <tr>
                                                     <th>&nbsp;</th>
                                                     <th>X</th>
@@ -389,43 +397,43 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                             </thead>
                                             <tbody>
                                                 <tr>
-                                                    <td>Label</td>
+                                                    <th scope="row">Label: </th>
                                                     <td><input type="text" readonly="readonly" id="label1" name="label1" /></td>
                                                     <td><input type="text" readonly="readonly" id="label2" name="label2" /></td>
                                                     <td><input type="text" readonly="readonly" id="label3" name="label3" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Begins with</td>
+                                                    <th scope="row">Begins with: </th>
                                                     <td><input type="text" readonly="readonly" id="lastvalue1" name="lastvalue1" /></td>
                                                     <td><input type="text" readonly="readonly" id="lastvalue2" name="lastvalue2" /></td>
                                                     <td><input type="text" readonly="readonly" id="lastvalue3" name="lastvalue3" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Add</td>
+                                                    <th scope="row">Add: </th>
                                                     <td><input type="text" readonly="readonly" id="add1" name="add1" /></td>
                                                     <td><input type="text" readonly="readonly" id="add2" name="add2" /></td>
                                                     <td><input type="text" readonly="readonly" id="add3" name="add3" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Every</td>
+                                                    <th scope="row">Every: </th>
                                                     <td><input type="text" readonly="readonly" id="every1" name="every1" /></td>
                                                     <td><input type="text" readonly="readonly" id="every2" name="every2" /></td>
                                                     <td><input type="text" readonly="readonly" id="every3" name="every3" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Set back to</td>
+                                                    <th scope="row">Set back to: </th>
                                                     <td><input type="text" readonly="readonly" id="setto1" name="setto1" /></td>
                                                     <td><input type="text" readonly="readonly" id="setto2" name="setto2" /></td>
                                                     <td><input type="text" readonly="readonly" id="setto3" name="setto3" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>When more than</td>
+                                                    <th scope="row">When more than: </th>
                                                     <td><input type="text" readonly="readonly" id="whenmorethan1" name="whenmorethan1" /></td>
                                                     <td><input type="text" readonly="readonly" id="whenmorethan2" name="whenmorethan2" /></td>
                                                     <td><input type="text" readonly="readonly" id="whenmorethan3" name="whenmorethan3" /></td>
                                                 </tr>
                                                 <tr>
-                                                    <td>Inner counter</td>
+                                                    <th scope="row">Inner counter: </th>
                                                     <td><input type="text" readonly="readonly" id="innerloop1" name="innerloop1" /></td>
                                                     <td><input type="text" readonly="readonly" id="innerloop2" name="innerloop2" /></td>
                                                     <td><input type="text" readonly="readonly" id="innerloop3" name="innerloop3" /></td>
@@ -442,18 +450,25 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                                                             <option value="seasonabrv">Name of season (abbreviated)</option>
                                                         </select>
                                                     [% END %]
-                                                    <td>Formatting</td>
+                                                    <th scope="row">Formatting:</th>
                                                     <td>[% PROCESS numbering_select name="numbering1" %]</td>
                                                     <td>[% PROCESS numbering_select name="numbering2" %]</td>
                                                     <td>[% PROCESS numbering_select name="numbering3" %]</td>
                                                 </tr>
                                             </tbody>
                                         </table>
-                                        <input id="modifyadvancedpatternbutton" type="button" value="Modify pattern" />
-                                        <input id="restoreadvancedpatternbutton" type="button" value="Cancel modifications" style="display:none" />
-                                        <input id="saveadvancedpatternbutton" type="button" value="Save as new pattern" style="display:none" />
-                                    </div>
-                                </ol>
+                                    </li>
+                                    <li>
+                                        <span class="label">&nbsp;</span>
+                                        <a href="#" id="modifyadvancedpatternbutton"><i class="fa fa-pencil"></i> Modify pattern</a>
+                                        <button type="button" class="btn btn-default btn-xs" id="saveadvancedpatternbutton" style="display:none"><i class="fa fa-save"></i> Save as new pattern</button>
+                                        <a class="cancel" href="#" id="restoreadvancedpatternbutton" style="display:none">Cancel modifications</a>
+                                    </li>
+                                    </ol>
+                                </div> <!-- /#advancedpredictionpattern -->
+                                <fieldset class="action">
+                                    <button type="button" id="testpatternbutton" class="btn btn-default btn-sm"><i class="fa fa-play"></i> Test prediction pattern</a>
+                                </fieldset>
                             </fieldset>
 
                             [% IF additional_fields %]
@@ -469,16 +484,15 @@ fieldset.rows li.radio { width: 100%; } /* override staff-global.css */
                             <input type="hidden" id="unitsperissue"  name="unitsperissue" value=""/>
                             <input type="hidden" id="issuesperunit"  name="issuesperunit" value=""/>
                             <fieldset class="action">
-                                <input type="button" id="subscription_add_previous" value="&lt;&lt; Previous" style="float:left;"/>
-                                <input id="testpatternbutton" type="button" value="Test prediction pattern" />
+                                <button type="button" id="subscription_add_previous" style="float:left"><i class="fa fa-long-arrow-left"></i> Previous</button>
                                 <input id="save-subscription" type="submit" value="Save subscription" style="float:right;" accesskey="w"/>
                             </fieldset>
                         </div>
                     </div>
                     <div class="col-md-6">
-                        <li id="displayexample"></li>
+                        <fieldset id="displayexample"></fieldset>
                     </div>
-                </div>
+                </div> <!-- /.row#page_2 -->
             </form>
         </div>
 

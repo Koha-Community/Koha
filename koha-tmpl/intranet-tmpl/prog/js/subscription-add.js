@@ -210,7 +210,7 @@ function displaymoreoptions() {
 }
 
 function modifyAdvancedPattern() {
-    $("#patternname").prop('readOnly', false).val('');
+    $("#patternname").prop('readOnly', false).val('').focus();
     $("#numberingmethod").prop('readOnly', false);
 
     $("#advancedpredictionpatternt input").each(function() {
@@ -318,7 +318,7 @@ function testPredictionPattern() {
         url:"/cgi-bin/koha/serials/showpredictionpattern.pl",
         data: ajaxData,
         success: function(data) {
-            $("#displayexample").html(data).show();
+            showPredictionPatternTest( data );
             patternneedtobetested = 0;
         }
     });
@@ -519,6 +519,16 @@ function mana_comment_close(){
     $("#new_mana_comment").hide();
 }
 
+function showPredictionPatternTest( data ){
+    $("#displayexample").html(data).show();
+    $("#page_2 > div").attr("class","col-xs-6");
+}
+
+function hidePredcitionPatternTest(){
+    $("#displayexample").hide();
+    $("#page_2 > div").attr("class","col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2");
+}
+
 $(document).ready(function() {
     if ( mana_enabled == 1 ) {
         mana_search();
@@ -678,5 +688,10 @@ $(document).ready(function() {
         $(this).find("i").attr("class","fa fa-refresh fa-spin");
         var subscription_id = $(this).data("subscription_id");
         mana_use( subscription_id );
+    });
+
+    $("#displayexample").on("click", "#hidepredictionpattern", function(e){
+        e.preventDefault();
+        hidePredcitionPatternTest();
     });
 });

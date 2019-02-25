@@ -343,6 +343,10 @@ th {
     font-weight: bold;
     text-align: center;
 
+    &[scope="row"] {
+        text-align: right;
+    }
+
     &.data {
         font-family: $font-monospace;
         text-align: right;
@@ -1019,7 +1023,7 @@ fieldset {
 
         div {
             &.hint {
-                margin-bottom: .4em;
+                margin: .5em 0;
                 margin-left: 10.5em;
             }
         }
@@ -1074,6 +1078,7 @@ fieldset {
             }
 
             &.radio {
+                margin: 0;
                 padding-left: 9em;
                 width: auto;
 
@@ -1893,6 +1898,21 @@ dd {
     }
 }
 
+.readonly,
+input[type='text']:read-only {
+    background: #EEE url("../img/locked.png") center left no-repeat;
+    border-style: inset;
+    border-width: 1px;
+    cursor: default;
+    padding-left: 15px;
+}
+
+.readonly:focus,
+input[type='text']:read-only:focus {
+    border-color: unset;
+    border-radius: unset;
+}
+
 .checkedout {
     color: #999999;
     font-style: italic;
@@ -2437,12 +2457,6 @@ li {
 .searchhighlightblob {
     font-size: 75%;
     font-style: italic;
-}
-
-#displayexample {
-    background-color: #CCCCCC;
-    margin-bottom: 10px;
-    padding: 5px;
 }
 
 #irregularity_summary {
