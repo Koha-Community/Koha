@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 51;
+use Test::More tests => 53;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -137,8 +137,9 @@ $dbh->do(q{
 
 my $expected_datedue = DateTime->now->add(days => 14)->set(hour => 23, minute => 59, second => 0);
 $t->post_ok ( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
-  ->status_is(200)
-  ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) );
+  ->status_is(201)
+  ->json_is('/due_date' => output_pref( { dateformat => "rfc3339", dt => $expected_datedue }) )
+  ->header_is(Location => "/api/v1/checkouts/" . $issue1->issue_id . "/renewal");
 
 $t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id . "/renewal" )
   ->status_is(403)
@@ -147,8 +148,10 @@ $t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->i
             });
 
 $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewal" )
-  ->status_is(200)
-  ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $expected_datedue}) );
+  ->status_is(201)
+  ->json_is('/due_date' => output_pref({ dateformat => "rfc3339", dt => $expected_datedue}) )
+  ->header_is(Location => "/api/v1/checkouts/" . $issue2->issue_id . "/renewal");
+
 
 $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/renewal" )
   ->status_is(403)

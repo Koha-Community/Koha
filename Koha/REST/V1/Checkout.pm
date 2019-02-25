@@ -118,8 +118,9 @@ sub renew {
     AddRenewal($borrowernumber, $itemnumber, $checkout->branchcode);
     $checkout = Koha::Checkouts->find($checkout_id);
 
+    $c->res->headers->location( $c->req->url->to_string );
     return $c->render(
-        status => 200,
+        status => 201,
         openapi => _to_api( $checkout->TO_JSON )
     );
 }
