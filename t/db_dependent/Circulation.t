@@ -2844,7 +2844,7 @@ $cache->clear_from_cache('single_holidays');
 
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
-    plan tests => 12;
+    plan tests => 9;
 
     $schema->storage->txn_begin;
 
@@ -2912,17 +2912,14 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
     my $line = $lines->next;
     is( $line->accounttype, 'Rent',       'The issuing charge generates an accountline' );
-    is( $line->branchcode,  $library->id, 'AddIssuingCharge correctly sets branchcode' );
     is( $line->description, 'Rental',     'AddIssuingCharge set a hardcoded description for the accountline' );
 
     $line = $lines->next;
     is( $line->accounttype, 'Rent', 'Fine on renewed item is closed out properly' );
-    is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
     is( $line->description, "Renewal of Rental Item $title $barcode", 'AddRenewal set a hardcoded description for the accountline' );
 
     $line = $lines->next;
     is( $line->accounttype, 'Rent', 'Fine on renewed item is closed out properly' );
-    is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
     is( $line->description, "Renewal of Rental Item $title $barcode", 'AddRenewal set a hardcoded description for the accountline' );
 
     $schema->storage->txn_rollback;
@@ -2930,7 +2927,7 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
 subtest 'ProcessOfflinePayment() tests' => sub {
 
-    plan tests => 4;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
@@ -2947,7 +2944,6 @@ subtest 'ProcessOfflinePayment() tests' => sub {
 
     my $line = $lines->next;
     is( $line->amount+0, $amount * -1, 'amount picked from params' );
-    is( $line->branchcode, $library->id, 'branchcode set correctly' );
 
     $schema->storage->txn_rollback;
 };
