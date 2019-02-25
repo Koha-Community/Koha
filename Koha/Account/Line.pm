@@ -64,9 +64,9 @@ sub checkout {
     my ( $self ) = @_;
     return unless $self->issue_id ;
 
-    my $checkout = Koha::Checkouts->find( $self->issue_id );
-    $checkout = Koha::Old::Checkouts->find( $self->issue_id ) unless $checkout;
-    return $checkout;
+    $self->{_checkout} ||= Koha::Checkouts->find( $self->issue_id );
+    $self->{_checkout} ||= Koha::Old::Checkouts->find( $self->issue_id );
+    return $self->{_checkout};
 }
 
 =head3 void
