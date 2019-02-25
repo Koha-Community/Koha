@@ -191,7 +191,6 @@ sub redirect_to_paycollect {
     $redirect .=
       get_for_redirect( 'amountoutstanding', "amountoutstanding$line_no", 1 );
     $redirect .= get_for_redirect( 'description', "description$line_no", 0 );
-    $redirect .= get_for_redirect( 'issue_id', "issue_id$line_no", 0 );
     $redirect .= get_for_redirect( 'title', "title$line_no", 0 );
     $redirect .= get_for_redirect( 'itemnumber',   "itemnumber$line_no",   0 );
     $redirect .= get_for_redirect( 'accountlines_id', "accountlines_id$line_no", 0 );
