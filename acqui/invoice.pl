@@ -212,7 +212,6 @@ foreach my $r ( @{$budgets} ) {
 
 @{$budget_loop} =
   sort { uc( $a->{b_txt} ) cmp uc( $b->{b_txt} ) } @{$budget_loop};
-warn Data::Dumper::Dumper( $budget_loop );
 
 my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({ invoiceid => $details->{'invoiceid'} });
 if ( $adjustments ) { $template->param( adjustments => $adjustments ); }
