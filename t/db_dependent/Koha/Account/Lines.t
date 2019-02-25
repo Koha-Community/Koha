@@ -22,6 +22,7 @@ use Modern::Perl;
 use Test::More tests => 7;
 use Test::Exception;
 
+use C4::Circulation qw/AddIssue AddReturn/;
 use Koha::Account;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
@@ -419,32 +420,29 @@ subtest 'checkout() tests' => sub {
 
     $schema->storage->txn_begin;
 
-    my $library = $builder->build( { source => 'Branch' } );
-    my $patron = $builder->build( { source => 'Borrower' } );
-    my $item = $builder->build( { source => 'Item' } );
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item = $builder->build_sample_item;
+    my $account = $patron->account;
 
-    my $checkout = Koha::Checkout->new(
-        {   borrowernumber => $patron->{borrowernumber},
-            itemnumber     => $item->{itemnumber},
-            branchcode     => $library->{branchcode},
-        })->store;
+    t::lib::Mocks::mock_userenv({ branchcode => $library->branchcode });
+    my $checkout = AddIssue( $patron->unblessed, $item->barcode );
 
-    my $line = Koha::Account::Line->new(
-        {
-            borrowernumber  => $patron->{borrowernumber},
-            itemnumber      => $item->{itemnumber},
-            issue_id        => $checkout->issue_id,
-            accounttype     => "F",
-            amount          => 10,
-        })->store;
+    my $line = $account->add_debit({
+        amount   => 10,
+        item_id  => $item->itemnumber,
+        issue_id => $checkout->issue_id,
+        type     => 'fine',
+    });
 
     my $line_checkout = $line->checkout;
     is( ref($line_checkout), 'Koha::Checkout', 'Result type is correct' );
     is( $line_checkout->issue_id, $checkout->issue_id, 'Koha::Account::Line->checkout should return the correct checkout');
 
-    my ( $returned, undef, $old_checkout) = C4::Circulation::AddReturn( $item->{barcode} ,$library->{branchcode} );
+    my ( $returned, undef, $old_checkout) = C4::Circulation::AddReturn( $item->barcode, $library->branchcode );
     is( $returned, 1, 'The item should have been returned' );
 
+    $line = $line->get_from_storage;
     my $old_line_checkout = $line->checkout;
     is( ref($old_line_checkout), 'Koha::Old::Checkout', 'Result type is correct' );
     is( $old_line_checkout->issue_id, $old_checkout->issue_id, 'Koha::Account::Line->checkout should return the correct old_checkout' );
