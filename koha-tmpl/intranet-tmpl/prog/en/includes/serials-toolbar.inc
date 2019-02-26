@@ -91,7 +91,7 @@
                     <div class="modal-content" style="">
                         <div class="modal-header">
                             <button type="button" id="mana-comment-close" class="closebtn"  aria-hidden="true">×</button>
-                            <h3 id="mana_submit_comment"> Please enter a new commment (max 35 caracters)</h3>
+                            <h3 id="mana_submit_comment"> Please enter a new comment (max 35 characters)</h3>
                         </div>
                         <div class="modal-body">
                             <input hidden id="mana-resource" value="subscription">
