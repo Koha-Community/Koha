@@ -42,12 +42,8 @@
                                     Bibliographic record [% message.biblionumber | html %] does not exist in the database.
                                 [% ELSIF message.code == 'authority_not_exists' %]
                                     Authority record [% message.authid | html %] does not exist in the database.
-                                [% ELSIF message.code == 'biblio_not_modified' %]
-                                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber | uri %]">[% message.biblionumber | html %]</a> has not been modified. An error occurred on modifying it.
                                 [% ELSIF message.code == 'authority_not_modified' %]
                                     Authority record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | uri %]">[% message.authid | html %]</a> has not been modified. An error occurred on modifying it.
-                                [% ELSIF message.code == 'biblio_modified' %]
-                                    Bibliographic record <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% message.biblionumber | uri %]">[% message.biblionumber | html %]</a> has successfully been modified.
                                 [% ELSIF message.code == 'authority_modified' %]
                                     Bibliographic record <a href="/cgi-bin/koha/authorities/detail.pl?authid=[% message.authid | uri %]">[% message.authid | html %]</a> has successfully been modified.
                                 [% END %]
@@ -147,7 +143,7 @@
                         </form> <!-- /#record_ids_selection -->
                     [% ELSIF view == 'list' %]
                         [% IF records %]
-                            <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post" id="process">
+                            <form action="/cgi-bin/koha/tools/batch_record_modification.pl" method="post">
                                 <label for="marc_modification_template_id" class="required">Modify record using the following template: </label>
                                 <select name="marc_modification_template_id" id="marc_modification_template_id" required="required">
                                     <option value="">Select a template</option>
@@ -233,48 +229,13 @@
                                 <fieldset class="action">
                                     <input type="hidden" name="op" value="modify" />
                                     <input type="hidden" name="recordtype" value="[% recordtype | html %]" />
-                                    <input type="button" id="mainformsubmit" value="Modify selected records" class="button" />
-                                    <input type="hidden" name="runinbackground" id="runinbackground" value="" />
-                                    <input type="hidden" name="completedJobID" id="completedJobID" value="" />
-                                    <a class="cancel" href="/cgi-bin/koha/tools/batch_record_modification.pl">Cancel</a>
+                                    <input type="submit" id="mainformsubmit" value="Modify selected records" class="button" />
                                 </fieldset>
-                                <div id="jobpanel">
-                                    <div id="jobstatus" class="progress_panel">Job progress: <div id="jobprogress"></div> <span id="jobprogresspercent">0</span>%</div>
-                                    <div id="jobfailed"></div>
-                                </div>
                             </form> <!-- /#process -->
                         [% ELSE %]
                             <div class="dialog message">
                                 No records were modified. [% IF recordtype != 'biblio' %]<a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>[% END %]
                             </div>
-                        [% END %]
-                    [% ELSIF view == 'report' %]
-                        [% IF report.total_records == report.total_success %]
-                            <div class="dialog message">
-                                All records have successfully been modified! [% IF recordtype != 'biblio' %]<a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>[% END %]
-                            </div>
-                        [% ELSE %]
-                            <div class="dialog message">
-                                [% report.total_success | html %] / [% report.total_records | html %] records have successfully been modified. Some errors occurred. <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
-                            </div>
-                        [% END %]
-
-                        [% IF recordtype == 'biblio' %]
-                            <h3>Next steps</h3>
-                            <ul>
-                                <li><a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
-                                [% IF lists.count %]
-                                <li>
-                                    <label for="add_bibs_to_list">Add modified records to the following list: </label>
-                                    <select name="add_bibs_to_list" id="add_bibs_to_list">
-                                        <option value="">Select a list</option>
-                                        [% FOREACH list IN lists %]
-                                            <option class="shelf" value="[% list.shelfnumber | html %]">[% list.shelfname | html %]</option>
-                                        [% END %]
-                                    </select>
-                                </li>
-                                [% END %]
-                            </ul>
                         [% END %]
                     [% ELSIF view == 'errors' %]
                         [% FOR error IN errors %]
@@ -284,6 +245,12 @@
                                 </div>
                             [% END %]
                         [% END %]
+                     [% ELSIF view == 'enqueued' %]
+                        <div class="dialog message">
+                            The job has been enqueued! It will be processed as soon as possible (FIXME - well, it could depend on a config?)
+                            <a href="/cgi-bin/koha/admin/background_jobs.pl?op=view&id=[% job_id | uri %]" title="View detail of the enqueued job">View detail of the enqueued job</a>
+                            | <a href="/cgi-bin/koha/tools/batch_record_modification.pl" title="New batch record modification">New batch record modification</a>
+                        </div>
                     [% ELSE %]
                         <div class="dialog alert">
                             No action defined for the template.
@@ -291,7 +258,6 @@
                     [% END %]
                 </main>
             </div> <!-- /.col-sm-10.col-sm-push-2 -->
-
             <div class="col-sm-2 col-sm-pull-10">
                 <aside>
                     [% INCLUDE 'tools-menu.inc' %]
@@ -362,7 +328,7 @@
                     alert(_("Please select a modification template."));
                     return false;
                 }
-                return submitBackgroundJob(document.getElementById("process"));
+                return true;
             });
 
             $("#record_ids_selection").on("submit", function(e) {

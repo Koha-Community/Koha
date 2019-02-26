@@ -22,15 +22,17 @@ use Modern::Perl;
 
 use CGI;
 use List::MoreUtils qw( uniq );
+use JSON qw( encode_json );
+use Net::RabbitFoot;
 
 use C4::Auth qw( get_template_and_user );
 use C4::Output qw( output_html_with_http_headers );
 use C4::AuthoritiesMarc qw( BuildSummary ModAuthority );
-use C4::BackgroundJob;
 use C4::Biblio qw( GetMarcBiblio ModBiblio );
-use C4::MarcModificationTemplates qw( GetModificationTemplateActions GetModificationTemplates ModifyRecordWithTemplate );
+use C4::MarcModificationTemplates qw( GetModificationTemplateActions GetModificationTemplates );
 
 use Koha::Biblios;
+use Koha::BackgroundJob::BatchUpdateBiblio;
 use Koha::MetadataRecord::Authority;
 use Koha::Virtualshelves;
 
@@ -52,23 +54,6 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user({
 $template->param( lists => scalar Koha::Virtualshelves->search([{ category => 1, owner => $loggedinuser }, { category => 2 }]) );
 
 my $sessionID = $input->cookie("CGISESSID");
-
-my $runinbackground = $input->param('runinbackground');
-my $completedJobID = $input->param('completedJobID');
-if ( $completedJobID ) {
-    my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
-    my $report = $job->get('report');
-    my $messages = $job->get('messages');
-    $template->param(
-        report => $report,
-        messages => $messages,
-        view => 'report',
-        recordtype => $recordtype,
-    );
-    output_html_with_http_headers $input, $cookie, $template->output;
-    $job->clear();
-    exit;
-}
 
 my @templates = GetModificationTemplates( $mmtid );
 unless ( @templates ) {
@@ -165,105 +150,17 @@ if ( $op eq 'form' ) {
     # We want to modify selected records!
     my @record_ids = $input->multi_param('record_id');
 
-    my ( $job );
-    if ( $runinbackground ) {
-        my $job_size = scalar( @record_ids );
-        $job = C4::BackgroundJob->new( $sessionID, "FIXME", '/cgi-bin/koha/tools/batch_record_modification.pl', $job_size );
-        my $job_id = $job->id;
-        if (my $pid = fork) {
-            $dbh->{InactiveDestroy}  = 1;
-
-            my $reply = CGI->new("");
-            print $reply->header(-type => 'text/html');
-            print '{"jobID":"' . $job_id . '"}';
-            exit 0;
-        } elsif (defined $pid) {
-            close STDOUT;
-        } else {
-            warn "fork failed while attempting to run tools/batch_record_modification.pl as a background job";
-            exit 0;
+    my $job_id = Koha::BackgroundJob::BatchUpdateBiblio->new->enqueue(
+        {
+            mmtid       => $mmtid,
+            record_type => $recordtype,
+            record_ids  => \@record_ids,
         }
-    }
-
-    my $report = {
-        total_records => 0,
-        total_success => 0,
-    };
-    my $progress = 0;
-    $dbh->{RaiseError} = 1;
-    RECORD_IDS: for my $record_id ( sort { $a <=> $b } @record_ids ) {
-        $report->{total_records}++;
-        next unless $record_id;
-
-        if ( $recordtype eq 'biblio' ) {
-            # Biblios
-            my $biblionumber = $record_id;
-
-            # Finally, modify the biblio
-            my $error = eval {
-                my $record = GetMarcBiblio({ biblionumber => $biblionumber });
-                ModifyRecordWithTemplate( $mmtid, $record );
-                my $frameworkcode = C4::Biblio::GetFrameworkCode( $biblionumber );
-                ModBiblio( $record, $biblionumber, $frameworkcode );
-            };
-            if ( $error and $error != 1 or $@ ) { # ModBiblio returns 1 if everything as gone well
-                push @messages, {
-                    type => 'error',
-                    code => 'biblio_not_modified',
-                    biblionumber => $biblionumber,
-                    error => ($@ ? $@ : $error),
-                };
-            } else {
-                push @messages, {
-                    type => 'success',
-                    code => 'biblio_modified',
-                    biblionumber => $biblionumber,
-                };
-                $report->{total_success}++;
-            }
-        } else {
-            # Authorities
-            my $authid = $record_id;
-            my $error = eval {
-                my $authority = Koha::MetadataRecord::Authority->get_from_authid( $authid );
-                my $record = $authority->record;
-                ModifyRecordWithTemplate( $mmtid, $record );
-                ModAuthority( $authid, $record, $authority->authtypecode );
-            };
-            if ( $error and $error != $authid or $@ ) {
-                push @messages, {
-                    type => 'error',
-                    code => 'authority_not_modified',
-                    authid => $authid,
-                    error => ($@ ? $@ : 0),
-                };
-            } else {
-                push @messages, {
-                    type => 'success',
-                    code => 'authority_modified',
-                    authid => $authid,
-                };
-                $report->{total_success}++;
-            }
-        }
-
-        $job->set({
-            view => 'report',
-            report => $report,
-            messages => \@messages,
-        });
-        $job->progress( ++$progress ) if $runinbackground;
-    }
-
-    if ($runinbackground) {
-        $job->finish if defined $job;
-    } else {
-        $template->param(
-            view => 'report',
-            report => $report,
-            messages => \@messages,
-        );
-    }
+    );
+    $template->param(
+        view => 'enqueued',
+        job_id => $job_id,
+    );
 }
 
 $template->param(
