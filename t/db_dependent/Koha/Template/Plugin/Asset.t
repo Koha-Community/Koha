@@ -4,10 +4,11 @@ use Modern::Perl;
 
 use Test::More tests => 16;
 use Template;
+use Test::MockModule;
 
-use C4::Context;
-
-my $version = C4::Context->preference('Version');
+my $version = "22.0509045";
+my $koha_module = Test::MockModule->new( "Koha" );
+$koha_module->mock( "version", sub { return "22.05.09.045" } );
 
 my $template = Template->new({
     PLUGIN_BASE => 'Koha::Template::Plugin',
