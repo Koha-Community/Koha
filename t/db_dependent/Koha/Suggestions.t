@@ -105,6 +105,7 @@ subtest 'constraints' => sub {
         }
     );
 
+    my $nonexistent_borrowernumber = $patron->borrowernumber;
     # suggestedby
     $patron->delete;
     $suggestion = $suggestion->get_from_storage;
@@ -124,7 +125,7 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related branch is deleted" );
 
     # managerid
-    throws_ok { $suggestion->managedby(1029384756)->store; }
+    throws_ok { $suggestion->managedby($nonexistent_borrowernumber)->store; }
     'Koha::Exceptions::Object::FKConstraint',
       'store raises an exception on invalid managerid';
     my $manager = $builder->build_object( { class => "Koha::Patrons" } );
@@ -135,7 +136,7 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related manager is deleted" );
 
     # acceptedby
-    throws_ok { $suggestion->acceptedby(1029384756)->store; }
+    throws_ok { $suggestion->acceptedby($nonexistent_borrowernumber)->store; }
     'Koha::Exceptions::Object::FKConstraint',
       'store raises an exception on invalid acceptedby id';
     my $acceptor = $builder->build_object( { class => "Koha::Patrons" } );
@@ -146,7 +147,7 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related acceptor is deleted" );
 
     # rejectedby
-    throws_ok { $suggestion->rejectedby(1029384756)->store; }
+    throws_ok { $suggestion->rejectedby($nonexistent_borrowernumber)->store; }
     'Koha::Exceptions::Object::FKConstraint',
       'store raises an exception on invalid rejectedby id';
     my $rejecter = $builder->build_object( { class => "Koha::Patrons" } );
@@ -157,7 +158,7 @@ subtest 'constraints' => sub {
         "The suggestion is not deleted when the related rejecter is deleted" );
 
     # budgetid
-    throws_ok { $suggestion->budgetid(1029384756)->store; }
+    throws_ok { $suggestion->budgetid($nonexistent_borrowernumber)->store; }
     'Koha::Exceptions::Object::FKConstraint',
       'store raises an exception on invalid budgetid';
     my $fund = $builder->build_object( { class => "Koha::Acquisition::Funds" } );
