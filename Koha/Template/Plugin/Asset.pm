@@ -48,6 +48,7 @@ use base qw( Template::Plugin );
 use File::Basename;
 use File::Spec;
 use C4::Context;
+use Koha;
 
 =head1 FUNCTIONS
 
@@ -140,7 +141,8 @@ sub url {
         ".",
     );
 
-    my $version = C4::Context->preference('Version');
+    my $version = Koha::version;
+    $version =~ s/([0-9]+)\.([0-9]+)\.([0-9]+)\.([0-9]+)/$1.$2$3$4/;
     foreach my $dir (@dirs) {
         my $abspath = File::Spec->catfile($root, $dir, $filename);
         if (-e $abspath) {
