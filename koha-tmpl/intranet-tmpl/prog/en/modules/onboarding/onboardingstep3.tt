@@ -1,4 +1,6 @@
 [% USE Koha %]
+[% USE raw %]
+[% USE Asset %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Web installer &rsaquo; Create Koha administrator patron</title>
 [% INCLUDE 'installer-doc-head-close.inc' %]
@@ -113,7 +115,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'validator-strings.inc' %]
     [% INCLUDE 'installer-strings.inc' %]
-    <script src="[% interface | html %]/[% theme | html %]/js/onboarding.js"></script>
+    [% Asset.js("js/onboarding.js") | $raw %]
     [% PROCESS 'password_check.inc' %]
     [% PROCESS 'add_password_check' new_password => 'password' %]
 [% END %]
