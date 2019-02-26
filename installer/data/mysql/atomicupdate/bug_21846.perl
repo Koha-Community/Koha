@@ -23,6 +23,6 @@ if( CheckVersion( $DBversion ) ) {
 
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 21846 - Using emoji as tags has broken weights)\n";
-    my $maintenance_script = C4::Context->config("intranetdir") . "misc/maintenance/fix_tags_weight.pl";
+    my $maintenance_script = C4::Context->config("intranetdir") . "/misc/maintenance/fix_tags_weight.pl";
     print "WARNING: (Bug 21846) You need to manually run $maintenance_script to fix possible issues with tags.\n";
 }
