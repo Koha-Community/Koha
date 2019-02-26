@@ -1,9 +1,10 @@
 [% USE raw %]
-        <script src="[% interface | html %]/lib/jquery/jquery-2.2.3.min.js"></script>
-        <script src="[% interface | html %]/lib/jquery/jquery-migrate-1.3.0.min.js"></script>
-        <script src="[% interface | html %]/lib/jquery/jquery-ui-1.11.4.min.js"></script>
-        <script src="[% interface | html %]/lib/bootstrap/bootstrap.min.js"></script>
-        <script src="[% interface | html %]/lib/jquery/plugins/jquery.validate.min.js"></script>
+[% USE Asset %]
+        [% Asset.js("lib/jquery/jquery-2.2.3.min.js") | $raw %]
+        [% Asset.js("lib/jquery/jquery-migrate-1.3.0.min.js") | $raw %]
+        [% Asset.js("lib/jquery/jquery-ui-1.11.4.min.js") | $raw %]
+        [% Asset.js("lib/bootstrap/bootstrap.min.js") | $raw %]
+        [% Asset.js("lib/jquery/plugins/jquery.validate.min.js") | $raw %]
         <script>
             function _(s) { return s } // dummy function for gettext
             [%# Prevent XFS attacks -%]

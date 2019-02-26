@@ -1,6 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
-<script src="[% interface | html %]/lib/select2/js/select2.min.js"></script>
+[% Asset.js("lib/select2/js/select2.min.js") | $raw %]
 [% Asset.css("lib/select2/css/select2.min.css") | $raw %]
 [% Asset.css("css/select2.css") | $raw %]
 <script>
