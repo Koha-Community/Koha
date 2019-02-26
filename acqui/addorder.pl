@@ -286,7 +286,7 @@ if ( $basket->{is_standing} || $orderinfo->{quantity} ne '0' ) {
     }
     my $order_users_ids = $input->param('users_ids');
     my @order_users = split( /:/, $order_users_ids );
-    ModOrderUsers( $orderinfo->{ordernumber}, @order_users );
+    ModOrderUsers( $order->ordernumber, @order_users );
 
     # now, add items if applicable
     if ($basket->effective_create_items eq 'ordering') {
