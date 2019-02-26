@@ -82,7 +82,7 @@ is($request->method, 'GET', 'Get subscription - Method is get');
 my %query = $request->uri->query_form;
 is($query{title}, 'The English historical review', 'Check title');
 is($query{issn}, '0013-8266', 'Check issn');
-is($query{ean}, '', 'Check ean');
+is($query{ean}, undef, 'Check ean');
 is($query{publishercode}, 'Longman', 'Check publisher');
 
 is($request->uri->path, '/subscription.json', 'Path is subscription');

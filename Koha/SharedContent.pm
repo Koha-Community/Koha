@@ -154,7 +154,7 @@ sub build_request {
     if ( $type eq 'get' ) {
         my $params = shift;
         $params = join '&',
-            map { defined $params->{$_} ? $_ . "=" . $params->{$_} : () }
+            map { defined $params->{$_} && $params->{$_} ne '' ? $_ . "=" . $params->{$_} : () }
             keys %$params;
         my $url = "$mana_url/$resource.json?$params";
         return HTTP::Request->new( GET => $url );
@@ -164,7 +164,7 @@ sub build_request {
         my $id = shift;
         my $params = shift;
         $params = join '&',
-            map { defined $params->{$_} ? $_ . "=" . $params->{$_} : () }
+            map { defined $params->{$_} && $params->{$_} ne '' ? $_ . "=" . $params->{$_} : () }
             keys %$params;
 
         my $url = "$mana_url/$resource/$id.json?$params";
