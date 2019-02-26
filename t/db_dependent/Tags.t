@@ -89,8 +89,8 @@ subtest 'add_tag_index() tests' => sub {
         '👍'  => 1,
     };
 
-    for my $term ( keys %{ $terms } ) {
-        for (my $i=1; $i <= $terms->{$term}; $i++) {
+    while ( my ( $term, $count ) = each %$terms ) {
+        for  ( 1 .. $count ) {
             C4::Tags::add_tag_approval( $term );
             C4::Tags::add_tag_index( $term, $biblio->biblionumber );
         }
