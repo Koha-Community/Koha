@@ -65,15 +65,12 @@ binmode( STDOUT, ":encoding(UTF-8)" );
 my $help;
 my $verbose;
 
-my $result = GetOptions(
+GetOptions(
     'help|h'    => \$help,
     'verbose|v' => \$verbose
-);
+) or pod2usage(2);
 
-if ( not $result or $help ) {
-    pod2usage();
-    exit 0;
-}
+pod2usage(1) if $help;
 
 fix_tags_approval($verbose);
 fix_tags_index( $verbose );
