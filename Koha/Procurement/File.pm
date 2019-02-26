@@ -12,6 +12,7 @@ use XML::LibXML;
 
 use C4::Context;
 use Koha::Procurement::Logger;
+use Koha::Procurement::EdiMessage;
 use Koha::Procurement::Config;
 
 has 'objectFactory' => (
@@ -24,6 +25,12 @@ has 'logger' => (
     isa => 'Koha::Procurement::Logger',
     reader => 'getLogger',
     writer => 'setLogger',
+);
+
+has 'edi_msg' => (
+    is      => 'rw',
+    reader => 'getMsgUpdater',
+    writer => 'setMsgUpdater',
 );
 
 has 'config' => (
@@ -65,6 +72,7 @@ sub BUILD {
     my ($tmpPath, $loadPath, $archivePath, $failPath);
     $self->setLogger(new Koha::Procurement::Logger);
     $self->setConfig(new Koha::Procurement::Config);
+    $self->setMsgUpdater(new Koha::Procurement::EdiMessage);
     %filteredFileNamesHash = map { $_ => 1 } @filteredFileNames;
 
     my $settings = $self->getConfig()->getSettings();
@@ -145,6 +153,7 @@ sub archiveFile {
     my $archivePath = $self->getArchivePath() . $fileName;
 
     $self->saveFileHash($filePath, $fileName);
+    $self->getMsgUpdater()->update($fileName, 'OK');
     if(move($filePath, $archivePath)){
         $self->getLogger()->log("File: $filePath moved to $archivePath for archive.");
     }
@@ -166,6 +175,7 @@ sub moveToFailFolder{
     my $fileName = $self->getFilenaMeFromPath($filePath);
     my $failPath = $self->getFailPath() . $fileName;
 
+    $self->getMsgUpdater()->update($fileName, 'FAILED');
     if(move($filePath, $failPath)){
         $self->getLogger()->log("File: $filePath moved to $failPath.");
     }
@@ -180,7 +190,8 @@ sub fillLoadFolder {
     my $loadPath = $self->getLoadPath();
     my @tmpFiles = $self->getFileNamesInDirectory($tmpPath);
 
-    my ($tmpFile, $fullPath, $fullLoadPath);
+    my ($tmpFile, $fullPath, $fullLoadPath, $fullMessage);
+
     if(@tmpFiles > 2){
         foreach(@tmpFiles){
             $tmpFile = $_;
@@ -189,11 +200,19 @@ sub fillLoadFolder {
             if($self->filterFile($tmpFile)){
                 next;
             }
-            if(!eval{XML::LibXML->new()->parse_file($fullPath)}) {
-                $self->getLogger()->log("File: $fullPath is not valid XML, processing postponed.");
+
+            $fullMessage = read_file($fullPath);
+            $self->getMsgUpdater()->add($tmpFile, $fullMessage);
+
+            if (eval{XML::LibXML->new()->parse_file($fullPath)}) {
+                $self->getMsgUpdater()->findBookseller($fullPath);
+            } else {
+                $self->getMsgUpdater()->update($tmpFile, 'POSTPONED');
+                $self->getLogger()->logError("File: $fullPath is not valid XML, processing postponed.");
                 next;
             }
             if(!$self->fileAlreadyImported($tmpFile)){
+                $self->getMsgUpdater()->update($tmpFile, 'PROCESSING');
                 if(move($fullPath, $fullLoadPath)){
                     $self->getLogger()->log("File: $fullPath moved to $fullLoadPath for import.");
                 }
@@ -202,6 +221,7 @@ sub fillLoadFolder {
                 }
             }
             else{
+                $self->getMsgUpdater()->update($tmpFile, 'DUPLICATE');
                 if(unlink $fullPath){
                     $self->getLogger()->log("File: $fullPath already imported. Removing it.");
                 }
