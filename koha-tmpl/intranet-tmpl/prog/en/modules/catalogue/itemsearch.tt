@@ -155,6 +155,9 @@
             [% IF notforloans.size %]
                 [% INCLUDE form_field_select name="notforloan" options = notforloans empty_option = "All statuses" %]
             [% END %]
+            [% IF itemlosts.size %]
+                [% INCLUDE form_field_select name="itemlost" options = itemlosts empty_option = "All statuses" %]
+            [% END %]
           </fieldset>
           <fieldset>
             [% INCLUDE form_field_select_text %]
@@ -174,7 +177,6 @@
               <span class="hint">(inclusive)</span>
             </div>
             [% INCLUDE form_field_radio_yes_no name="damaged" %]
-            [% INCLUDE form_field_radio_yes_no name="itemlost" %]
             <div class="form-field">
               <label class="form-field-label" for="issues_op">Checkout count:</label>
               <select id="issues_op" name="issues_op">
@@ -272,6 +274,7 @@
                 + '      <th id="items_itype">' + _("Itemtype") + '</th>'
                 + '      <th id="item_inventoryno">' + _("Inventory number") + '</th>'
                 + '      <th id="items_status">' + _("Status") + '</th>'
+                + '      <th id="items_itemlost">' + _("Lost") + '</th>'
                 + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
                 + '      <th id=""></th>'
                 + '    </tr>'
@@ -365,7 +368,7 @@
                     { 'sName': 'title' },
                     { 'sName': 'publicationyear' },
                     { 'sName': 'publishercode' },
-          { 'sName': 'ccode' },
+                    { 'sName': 'ccode' },
                     { 'sName': 'barcode' },
                     { 'sName': 'itemcallnumber' },
                     { 'sName': 'homebranch' },
@@ -374,6 +377,7 @@
                     { 'sName': 'itype'},
                     { 'sName': 'stocknumber' },
                     { 'sName': 'notforloan' },
+                    { 'sName': 'itemlost' },
                     { 'sName': 'issues' },
                     { 'sName': 'checkbox', 'bSortable': false }
                 ],
@@ -406,6 +410,11 @@
                     { 'type': 'text' },
                     [% IF notforloans.size %]
                         { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => notforloans %] },
+                    [% ELSE %]
+                        null,
+                    [% END %]
+                    [% IF itemlosts.size %]
+                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => itemlosts %] },
                     [% ELSE %]
                         null,
                     [% END %]

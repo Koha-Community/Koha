@@ -63,7 +63,7 @@ if (defined $format and $format eq 'json') {
                 push @f, $columns[$i];
                 push @c, 'and';
 
-                if ( grep /^$columns[$i]$/, qw( ccode homebranch holdingbranch location itype notforloan ) ) {
+                if ( grep /^$columns[$i]$/, qw( ccode homebranch holdingbranch location itype notforloan itemlost ) ) {
                     push @q, "$word";
                     push @op, '=';
                 } else {
@@ -103,6 +103,9 @@ my $notforloan_values = $mss->count ? GetAuthorisedValues($mss->next->authorised
 $mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.location', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
 my $location_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
 
+$mss = Koha::MarcSubfieldStructures->search({ frameworkcode => '', kohafield => 'items.itemlost', authorised_value => [ -and => {'!=' => undef }, {'!=' => ''}] });
+my $itemlost_values = $mss->count ? GetAuthorisedValues($mss->next->authorised_value) : [];
+
 if (scalar keys %params > 0) {
     # Parameters given, it's a search
 
@@ -111,7 +114,7 @@ if (scalar keys %params > 0) {
         filters => [],
     };
 
-    foreach my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan)) {
+    foreach my $p (qw(homebranch holdingbranch location itype ccode issues datelastborrowed notforloan itemlost)) {
         if (my @q = $cgi->multi_param($p)) {
             if ($q[0] ne '') {
                 my $f = {
@@ -164,7 +167,7 @@ if (scalar keys %params > 0) {
     push @{ $filter->{filters} }, $f;
 
     # Yes/No parameters
-    foreach my $p (qw(damaged itemlost)) {
+    foreach my $p (qw( damaged )) {
         my $v = $cgi->param($p) // '';
         my $f = {
             field => $p,
@@ -230,6 +233,12 @@ if (scalar keys %params > 0) {
         my $location_map = {};
         foreach my $loc_value (@$location_values) {
             $location_map->{$loc_value->{authorised_value}} = $loc_value->{lib};
+        }
+
+        # Get itemlost labels
+        my $itemlost_map = {};
+        foreach my $il_value (@$itemlost_values) {
+            $itemlost_map->{$il_value->{authorised_value}} = $il_value->{lib};
         }
 
         foreach my $item (@$results) {
@@ -304,6 +313,14 @@ foreach my $value (@$notforloan_values) {
     };
 }
 
+my @itemlosts;
+foreach my $value (@$itemlost_values) {
+    push @itemlosts, {
+        value => $value->{authorised_value},
+        label => $value->{lib},
+    };
+}
+
 my @items_search_fields = GetItemSearchFields();
 
 my $authorised_values = {};
@@ -319,6 +336,7 @@ $template->param(
     itemtypes => \@itemtypes,
     ccodes => \@ccodes,
     notforloans => \@notforloans,
+    itemlosts => \@itemlosts,
     items_search_fields => \@items_search_fields,
     authorised_values_json => to_json($authorised_values),
 );
