@@ -83,6 +83,13 @@ if (C4::Context->preference("IndependentBranches")) {
     }
 }
 
+if ( my $anonymous_patron = C4::Context->preference("AnonymousPatron") ) {
+    if ( $patron->id eq $anonymous_patron ) {
+        print $input->redirect("/cgi-bin/koha/members/moremember.pl?borrowernumber=$member&error=CANT_DELETE_ANONYMOUS_PATRON");
+        exit 0;    # Exit without error
+    }
+}
+
 my $op = $input->param('op') || 'delete_confirm';
 my $dbh = C4::Context->dbh;
 my $is_guarantor = $patron->guarantee_relationships->count;
