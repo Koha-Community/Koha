@@ -35,13 +35,20 @@ sub update {
 sub findBookseller {
     my $self = shift;
     my $messagefile = $_[0];
-    my $dbh = C4::Context->dbh;
+
+    my $qualifier=91;
     my $san = XML::LibXML->new()->parse_file($messagefile)->findnodes('/LibraryShipNotice/Header/BuyerParty/PartyID[PartyIDType/text() = "VendorAssignedID"]/Identifier')->string_value();
-    my $sth = $dbh->prepare("SELECT vendor_id FROM vendor_edi_accounts WHERE san = ? AND id_code_qualifier='91' AND transport='FILE' AND orders_enabled='1'");
-    $sth->execute($san);
+    if (!$san) {
+       $qualifier=92;
+       $san = XML::LibXML->new()->parse_file($messagefile)->findnodes('/LibraryShipNotice/Header/SellerParty/PartyID[PartyIDType/text() = "BuyerAssignedID"]/Identifier')->string_value();
+    }
+
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare("SELECT vendor_id FROM vendor_edi_accounts WHERE san = ? AND id_code_qualifier=? AND transport='FILE' AND orders_enabled='1'");
+    $sth->execute($san, $qualifier);
     my $vendor_id = $sth->fetchrow_array();
     my $basename = basename($messagefile);
-    $dbh->do("UPDATE edifact_messages SET vendor_id='$vendor_id' WHERE filename='$basename'");
+    $dbh->do("UPDATE edifact_messages SET vendor_id='$vendor_id' WHERE filename='$basename'") if $vendor_id;
 }
 
 1;

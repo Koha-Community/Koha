@@ -182,6 +182,15 @@ sub getVendorAssignedId {
     return $header->findnodes('BuyerParty/PartyID[PartyIDType/text() = "VendorAssignedID"]/Identifier',$parser)->string_value();
 }
 
+sub getBuyerAssignedId {
+    my $self = shift;
+    my $xmlObject = $self->getXmlData();
+    my $parser = $self->getParser();
+
+    my $header = $self->getHeader($xmlObject, $parser);
+    return $header->findnodes('SellerParty/PartyID[PartyIDType/text() = "BuyerAssignedID"]/Identifier',$parser)->string_value();
+}
+
 sub normalizeEncoding {
     my $self = shift;
     my $value = $_[0];

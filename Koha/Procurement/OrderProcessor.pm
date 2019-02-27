@@ -519,19 +519,28 @@ sub updateAqbudgetLog {
 sub getBookseller{
     my $self = shift;
     my ($order) = @_;
-    my ($bookseller,$vendorAssignedId) = (0,0);
+    my ($san, $qualifier, $bookseller) = (0, 91, 0);
 
-    $vendorAssignedId = $order->getVendorAssignedId();
-    if($vendorAssignedId){
-        my $dbh = C4::Context->dbh;
-        my $stmnt = $dbh->prepare("SELECT vendor_id FROM vendor_edi_accounts WHERE san = ? AND id_code_qualifier='91' AND transport='FILE' AND orders_enabled='1'");
-        $stmnt->execute($vendorAssignedId) or die($DBI::errstr);
-        $bookseller = $stmnt->fetchrow_array();
+    $san = $order->getVendorAssignedId();
+    if (!$san) {
+        $san = $order->getBuyerAssignedId();
+        $qualifier = 92;
     }
 
+    my $dbh = C4::Context->dbh;
+    my $stmnt = $dbh->prepare("SELECT vendor_id FROM vendor_edi_accounts WHERE san = ? AND id_code_qualifier=? AND transport='FILE' AND orders_enabled='1'");
+    $stmnt->execute($san, $qualifier) or die($DBI::errstr);
+    $bookseller = $stmnt->fetchrow_array();
+
     if(!$bookseller){
-        $self->getLogger()->logError("No vendor account found with VendorAssignedId: $vendorAssignedId in table vendor_edi_accounts.");
-        $self->getLogger()->log("No vendor account found with VendorAssignedId: $vendorAssignedId in table vendor_edi_accounts.");
+        if ($san) {
+            $self->getLogger()->logError("No vendor for SAN $san (qualifier $qualifier) in vendor_edi_accounts.");
+            $self->getLogger()->log("No vendor for SAN $san (qualifier $qualifier) in vendor_edi_accounts.");
+        }
+        else {
+            $self->getLogger()->logError("No vendor in shipment notice.");
+            $self->getLogger()->log("No vendor in shipment notice.");
+        }
         die();
     }
 
