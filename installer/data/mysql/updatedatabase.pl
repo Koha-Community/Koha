@@ -17248,7 +17248,7 @@ if ( CheckVersion($DBversion) ) {
     SetVersion($DBversion);
 }
 
-$DBversion = '18.12.00.014';
+$DBversion = '18.11.03.001';
 if( CheckVersion( $DBversion ) ) {
     unless( foreign_key_exists( 'messages', 'messages_borrowernumber' ) ) {
         $dbh->do(q|
