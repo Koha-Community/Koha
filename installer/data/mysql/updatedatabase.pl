@@ -17081,9 +17081,16 @@ if( CheckVersion( $DBversion ) ) {
             ADD COLUMN class_split_rule varchar(10) NOT NULL default ''
             AFTER class_sort_rule
         |);
+
         $dbh->do(q|
             UPDATE class_sources
             SET class_split_rule = class_sort_rule
+        |);
+
+        $dbh->do(q|
+            UPDATE class_sources
+            SET class_split_rule = 'generic'
+            WHERE class_split_rule NOT IN('dewey', 'generic', 'lcc')
         |);
 
         $dbh->do(q|
