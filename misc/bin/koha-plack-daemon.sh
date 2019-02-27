@@ -1,6 +1,8 @@
 #!/bin/bash
 #
-# Copyright 2015 Theke Solutions, 2018 Koha-Suomi Oy
+# Copyright 2019 The National Library of Finland
+# Copyright 2018 Koha-Suomi Oy
+# Copyright 2015 Theke Solutions
 #
 # This file is part of Koha.
 #
@@ -53,6 +55,14 @@ export OPAC_CGI_DIR="__OPAC_CGI_DIR__/opac"
 export PERL_MODULE_DIR="__PERL_MODULE_DIR__"
 export PLACK_DEBUG #This is set if debug-parameter is given or if mode is development
 
+PERL="/usr/bin/env perl"
+PLACKUP="/usr/bin/plackup"
+STARMAN="/usr/bin/starman"
+# Parameters to pass to the perl interpreter, and server programs
+PERL_PARAMS=""
+STARMAN_PARAMS=""
+PLACKUP_PARAMS=""
+
 # include helper functions
 if [ -f "$HELPER_FUNCTIONS" ]; then
     . "$HELPER_FUNCTIONS"
@@ -80,9 +90,10 @@ $scriptname -h|--help
     reload              Reload the application without losing connections
     debug               Trigger PLACK_DEBUG -environment variable
     debugger            Start perl with the -d -flag
-    deployment          Set the plack mode
-    development         Set the plack mode
-    test                Set the plack mode
+    deployment          Set the plack mode, uses starman
+    development         Set the plack mode, uses plackup with HTTP::Server::PSGI
+    test                Set the plack mode, uses plackup with HTTP::Server::PSGI
+    trace               Start the service with the '-MDevel::Trace' -flag
     listen              Port or socket to listen on, defaults to $LISTEN
     --help|-h           Display this help message
 
@@ -107,17 +118,21 @@ start_plack()
     WORKERS=$(xmllint --xpath "yazgfs/config/plack_workers/text()" $KOHA_CONF 2> /dev/null || printf "10")
     REQUESTS=$(xmllint --xpath "yazgfs/config/plack_max_requests/text()" $KOHA_CONF 2> /dev/null || printf "1000")
 
-    test "$DEBUGGER" == "1" && DEBUGGER_STR="/usr/bin/perl -d "
-
     STARMANOPTS="-M FindBin \
                  --user=$DAEMON_USER --group=$DAEMON_GROUP \
                  --listen $LISTEN \
                  -E $MODE \
                  $PSGIFILE "
 
+    # Use a single threaded non-forking server for development for better debugger control.
     if [[ "$MODE" != "deployment" ]]; then
-        STARMANOPTS="$STARMANOPTS --workers 1"
-        $DEBUGGER_STR $STARMAN $STARMANOPTS
+        CMD="$PERL $PERL_PARAMS $PLACKUP \
+                -E $MODE \
+                --server HTTP::Server::PSGI \
+                --listen $LISTEN \
+                -r -R $PERL_MODULE_DIR \
+                -a $PSGIFILE"
+        su -s /bin/bash -c "$CMD" www-data
     fi
 
     if [[ "$MODE" == "deployment" ]]; then
@@ -133,7 +148,7 @@ start_plack()
         if ! is_plack_running; then
             log_daemon_msg "Starting Plack daemon"
 
-            if $DEBUGGER_STR $STARMAN $STARMANOPTS; then
+            if $PERL $PERL_PARAMS $STARMAN $STARMANOPTS; then
                 log_end_msg 0
             else
                 log_end_msg 1
@@ -258,9 +273,10 @@ while [ $# -gt 0 ]; do
             shift ;;
         debug)
             export PLACK_DEBUG=1
+            export STARMAN_DEBUG=1
             shift ;;
         debugger)
-            DEBUGGER="1"
+            PERL_PARAMS="$PERL_PARAMS -d"
             shift ;;
         deployment)
             MODE="deployment"
@@ -268,10 +284,13 @@ while [ $# -gt 0 ]; do
         development)
             MODE="development"
             export PLACK_DEBUG=1
+            export STARMAN_DEBUG=1
             shift ;;
         test)
             MODE="test"
             shift ;;
+        trace)
+            PERL_PARAMS="$PERL_PARAMS -d:Trace"
         listen)
             LISTEN="$2"
             shift; shift; ;;
