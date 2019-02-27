@@ -51,6 +51,10 @@
                                 <h3>Unable to delete patrons from other libraries with current settings</h3>
                                 <p>Insufficient privileges.</p>
                             [% END %]
+                            [% IF ( error == 'CANT_DELETE_ANONYMOUS_PATRON' ) %]
+                                <h3>Unable to delete patron that is set as AnonymousPatron</h3>
+                                <p>This patron cannot be deleted while set as AnonymousPatron in the system preferences.</p>
+                            [% END %]
                             [% IF ( error == 'CANT_DELETE' ) %]
                                 <h3>Unable to delete patron</h3>
                                 <p>Insufficient privileges.</p>
