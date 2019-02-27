@@ -305,24 +305,6 @@ if ($add_op) {
 		$arghash->{biblionumber} = $arg;
 	}
 	$results = get_approval_rows($arghash);
-    my @filtered_results;
-    foreach my $my_tag (@$my_tags) {
-        if (grep { $_->{term} eq $my_tag->{term} } @$results) {
-            if (! $my_tag->{visible} ) {
-                my $check_biblio = GetMarcBiblio({
-                    biblionumber => $my_tag->{biblionumber},
-                    embed_items  => 1,
-                    opac         => 1,
-                    borcat       => $borcat });
-                if ($check_biblio) {
-                    push @filtered_results, $my_tag;
-                }
-            } else {
-                push @filtered_results, $my_tag;
-            }
-        }
-    }
-    $results = \@filtered_results;
     stratify_tags(10, $results); # work out the differents sizes for things
 	my $count = scalar @$results;
 	$template->param(TAGLOOP_COUNT => $count, mine => $mine);
