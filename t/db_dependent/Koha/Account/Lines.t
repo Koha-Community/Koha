@@ -274,17 +274,25 @@ subtest 'apply() tests' => sub {
     $schema->storage->txn_rollback;
 };
 
-subtest 'Keep account info when a patron is deleted' => sub {
+subtest 'Keep account info when related patron, staff or item is deleted' => sub {
 
-    plan tests => 2;
+    plan tests => 3;
 
     $schema->storage->txn_begin;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $staff = $builder->build_object( { class => 'Koha::Patrons' } );
     my $item = $builder->build_object({ class => 'Koha::Items' });
+    my $issue = $builder->build_object(
+        {
+            class => 'Koha::Checkout',
+            value => { itemnumber => $item->itemnumber }
+        }
+    );
     my $line = Koha::Account::Line->new(
     {
         borrowernumber => $patron->borrowernumber,
+        manager_id     => $staff->borrowernumber,
         itemnumber     => $item->itemnumber,
         accounttype    => "F",
         amount         => 10,
@@ -293,6 +301,10 @@ subtest 'Keep account info when a patron is deleted' => sub {
     $item->delete;
     $line = $line->get_from_storage;
     is( $line->itemnumber, undef, "The account line should not be deleted when the related item is delete");
+
+    $staff->delete;
+    $line = $line->get_from_storage;
+    is( $line->manager_id, undef, "The account line should not be deleted when the related staff is delete");
 
     $patron->delete;
     $line = $line->get_from_storage;
