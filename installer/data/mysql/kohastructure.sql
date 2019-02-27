@@ -2681,15 +2681,17 @@ CREATE TABLE `accountlines` (
   `lastincrement` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `note` MEDIUMTEXT NULL default NULL,
-  `manager_id` int(11) NULL,
+  `manager_id` int(11) NULL DEFAULT NULL,
   `branchcode` VARCHAR( 10 ) NULL DEFAULT NULL, -- the branchcode of the library where a payment was made, a manual invoice created, etc.
   PRIMARY KEY (`accountlines_id`),
   KEY `acctsborridx` (`borrowernumber`),
   KEY `timeidx` (`timestamp`),
   KEY `itemnumber` (`itemnumber`),
   KEY `branchcode` (`branchcode`),
+  KEY `manager_id` (`manager_id`),
   CONSTRAINT `accountlines_ibfk_borrowers` FOREIGN KEY (`borrowernumber`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
-  CONSTRAINT `accountlines_ibfk_2` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE SET NULL,
+  CONSTRAINT `accountlines_ibfk_items` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE SET NULL ON UPDATE CASCADE,
+  CONSTRAINT `accountlines_ibfk_borrowers_2` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE,
   CONSTRAINT `accountlines_ibfk_branches` FOREIGN KEY (`branchcode`) REFERENCES `branches` (`branchcode`) ON DELETE SET NULL ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
