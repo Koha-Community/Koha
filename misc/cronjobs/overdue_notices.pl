@@ -683,6 +683,8 @@ END_SQL
                         # email or sms is requested but not exist, do a print.
                         $effective_mtt = 'print';
                     }
+                    splice @items, $PrintNoticesMaxLines if $effective_mtt eq 'print' && $PrintNoticesMaxLines && scalar @items > $PrintNoticesMaxLines;
+                    #catch the case where we are sending a print to someone with an email
 
                     my $letter_exists = C4::Letters::getletter( 'circulation', $overdue_rules->{"letter$i"}, $branchcode, $effective_mtt ) ? 1 : 0;
                     my $letter = parse_overdues_letter(
