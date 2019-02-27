@@ -94,6 +94,7 @@ unless ($confirm) {
 
 say scalar(@$members) . " patrons to delete" if $verbose;;
 
+my $anonymous_patron = C4::Context->preference("AnonymousPatron");
 my $deleted = 0;
 for my $member (@$members) {
     print "Trying to delete patron $member->{borrowernumber}... "
@@ -108,6 +109,13 @@ for my $member (@$members) {
     if ( my $charges = $patron->account->non_issues_charges ) { # And what if we owe to this patron?
         say "Failed to delete patron $borrowernumber: patron has $charges in fines" if $verbose;
         next;
+    }
+
+    if ( $anonymous_patron ) {
+        if ( $patron->id eq $anonymous_patron ) {
+            say "Failed to delete patron $borrowernumber: patron is AnonymousPatron";
+            next;
+        }
     }
 
     if ( $confirm ) {
