@@ -397,7 +397,7 @@ sub merge {
     if (scalar(@$errors) == 0) {
         # Move holds
         MergeHolds($dbh,$tobiblio,$frombiblio);
-        my $error = DelBiblio($frombiblio, 1);
+        my $error = DelBiblio($frombiblio);
         push @$errors, $error if ($error);
     }
 }
