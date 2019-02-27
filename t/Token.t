@@ -99,5 +99,5 @@ subtest 'Pattern parameter' => sub {
     $id = $tokenizer->generate({ pattern => '[A-Z]{10}' });
     is( length($id), 10, 'Check length again' );
     ok( $id !~ /[^A-Z]/, 'Only uppercase letters' );
-    throws_ok( sub { $tokenizer->generate({ pattern => 'abc[', }) }, 'Koha::Exceptions::Token::BadPattern', 'Exception should be thrown when wrong pattern is used');
+    throws_ok( sub { $tokenizer->generate({ pattern => 'abc{d,e}', }) }, 'Koha::Exceptions::Token::BadPattern', 'Exception should be thrown when wrong pattern is used');
 };
