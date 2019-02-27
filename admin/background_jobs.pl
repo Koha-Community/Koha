@@ -51,8 +51,16 @@ if ( $op eq 'view' ) {
     } else {
         $op = 'list';
     }
-
 }
+
+if ( $op eq 'cancel' ) {
+    my $id = $input->param('id');
+    if ( my $job = Koha::BackgroundJobs->find($id) ) { # FIXME Make sure logged in user can cancel this job
+        $job->cancel;
+    }
+    $op = 'list';
+}
+
 
 if ( $op eq 'list' ) {
     my $jobs = Koha::BackgroundJobs->search({}, { order_by => { -desc => 'enqueued_on' }});

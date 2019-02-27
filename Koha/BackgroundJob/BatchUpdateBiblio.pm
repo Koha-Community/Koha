@@ -14,9 +14,12 @@ sub process {
 
     my $job_type = $args->{job_type};
 
-    return unless exists $args->{job_id};
-
     my $job = Koha::BackgroundJobs->find( $args->{job_id} );
+
+    if ( !exists $args->{job_id} || !$job || $job->status eq 'cancelled' ) {
+        $channel->ack;
+        return;
+    }
 
     my $job_progress = 0;
     $job->started_on(dt_from_string)
@@ -29,14 +32,16 @@ sub process {
     my @record_ids = @{ $args->{record_ids} };
 
     my $report = {
-        total_records => 0,
+        total_records => scalar @record_ids,
         total_success => 0,
     };
     my @messages;
     my $dbh = C4::Context->dbh;
     $dbh->{RaiseError} = 1;
     RECORD_IDS: for my $biblionumber ( sort { $a <=> $b } @record_ids ) {
-        $report->{total_records}++;
+
+        last if $job->get_from_storage->status eq 'cancelled';
+
         next unless $biblionumber;
 
         # Modify the biblio
@@ -69,9 +74,9 @@ sub process {
     $job_data->{report} = $report;
 
     $job->ended_on(dt_from_string)
-        ->status('finished')
-        ->data(encode_json $job_data)
-        ->store;
+        ->data(encode_json $job_data);
+    $job->status('finished') if $job->status ne 'cancelled';
+    $job->store;
     $channel->ack(); # FIXME Is that ok even on failure?
 }
 

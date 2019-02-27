@@ -3,6 +3,8 @@ package Koha::BackgroundJob;
 use Modern::Perl;
 use JSON qw( encode_json decode_json );
 use Carp qw( croak );
+use Net::RabbitFoot;
+
 use C4::Context;
 use Koha::DateUtils qw( dt_from_string );
 use Koha::BackgroundJobs;
@@ -81,6 +83,10 @@ sub report {
     return $data_dump->{report};
 }
 
+sub cancel {
+    my ( $self ) = @_;
+    $self->status('cancelled')->store;
+}
 
 sub _type {
     return 'BackgroundJob';
