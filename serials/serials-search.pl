@@ -139,8 +139,8 @@ if ($mana) {
         expiration_date_filter => $expiration_date_dt,
         done_searched => $searched,
         routing       => $routing,
-        additional_field_filters => $additional_field_filters,
-        additional_fields_for_subscription => $additional_fields,
+        additional_field_filters => \@additional_field_filters,
+        additional_fields_for_subscription => \@additional_fields,
         marcflavour   => (uc(C4::Context->preference("marcflavour"))),
         mana => $mana,
         search_only => 1
