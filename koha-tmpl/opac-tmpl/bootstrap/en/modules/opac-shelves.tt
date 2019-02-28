@@ -415,7 +415,7 @@
                                                                 [% FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS %]
                                                                     [% ITEM_RESULT.homebranch | html %]
                                                                     [% IF ( ITEM_RESULT.location_opac ) %]
-                                                                        , [% ITEM_RESULT.location_opac | html %]
+                                                                        <span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>
                                                                     [% END %]
                                                                     [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                                         ([% ITEM_RESULT.itemcallnumber | html %])

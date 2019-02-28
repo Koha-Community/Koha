@@ -707,7 +707,7 @@
             <td class="ci-barcode"><a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% riloo.itembiblionumber | uri %]&amp;itemnumber=[% riloo.itemnumber | uri %]#item[% riloo.itemnumber | uri %]">[% riloo.barcode | html %]</a></td>
             <td class="ci-homelibrary">[% Branches.GetName( riloo.homebranch ) | html %]</td>
             <td class="ci-holdinglibrary">[% Branches.GetName( riloo.holdingbranch ) | html %]</td>
-            <td class="ci-shelvinglocation">[% riloo.location | html %]</td>
+            <td class="ci-shelvinglocation"><span class="shelvingloc">[% riloo.location | html %]</span></td>
             <td class="ci-callnumber">[% riloo.itemcallnumber | html %]</td>
             <td class="ci-dateaccessioned">[% riloo.dateaccessioned | $KohaDates %]</td>
             <td class="ci-type">[% ItemTypes.GetDescription( riloo.itemtype ) | html %] [% AuthorisedValues.GetByCode('CCODE', riloo.ccode) | html %]</td>

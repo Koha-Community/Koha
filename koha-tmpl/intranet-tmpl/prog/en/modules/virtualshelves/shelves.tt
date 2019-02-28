@@ -245,7 +245,9 @@
             <td>
                 <ul>
                 [% FOREACH result IN itemsloo.ITEM_RESULTS %]
-                    <li>[% result.holdingbranch | html %] [% IF ( result.location_intranet ) %] ([% result.location_intranet | html %]) [% END %]
+                    <li>
+                        [% result.holdingbranch | html %]
+                        [% IF ( result.location_intranet ) %]<span class="shelvingloc">[% result.location_intranet | html %]</span>[% END %]
                         [% IF ( result.itemcallnumber ) %]
                             [<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% result.itemcallnumber |uri %]%22">[% result.itemcallnumber | html %]</a>]
                         [% END %]

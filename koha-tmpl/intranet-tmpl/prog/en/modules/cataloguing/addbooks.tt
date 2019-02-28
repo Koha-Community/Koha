@@ -103,15 +103,13 @@
                         <span class="available">
                         [% FOREACH items_loo IN resultsloo.available_items_loop %]
                             [% items_loo.count | html %] [% items_loo.branchname | html %]
-                            <i>
-                        [% IF ( items_loo.location ) %][% items_loo.location | html %][% END %]
-                        [% IF ( items_loo.itemcallnumber ) %][% items_loo.itemcallnumber | html %][% END %]
+                            [% IF ( items_loo.location ) %]<span class="shelvingloc">[% items_loo.location | html %]</span>[% END %]
+                            [% IF ( items_loo.itemcallnumber ) %][% items_loo.itemcallnumber | html %][% END %]
                             [% IF ( items_loo.classification ) %]
                             <a href="/cgi-bin/koha/catalogue/search.pl?q=callnum:[% items_loo.classification |url %]">
                                 [% items_loo.classification | html %]
                             </a>
                         [% END %]
-                        </i>
                             <br />
                         [% END %]
                         </span>

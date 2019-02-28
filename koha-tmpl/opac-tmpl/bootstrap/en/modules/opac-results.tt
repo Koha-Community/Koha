@@ -387,13 +387,13 @@
                                                                         [% END %]
 
                                                                         [% IF ( singleBranchMode ) %]
-                                                                            [% available_items_loo.location | html %]
+                                                                            <span class="shelvingloc">[% available_items_loo.location | html %]</span>
                                                                         [% ELSE %]
                                                                             [% available_items_loo.branchname | html %]
                                                                         [% END %]
 
                                                                         [% IF ( OPACItemsResultsDisplay ) %]
-                                                                            [% UNLESS ( singleBranchMode ) %][% available_items_loo.location | html %][% END %]
+                                                                            [% UNLESS ( singleBranchMode ) %]<span class="shelvingloc">[% available_items_loo.location | html %]</span>[% END %]
                                                                             [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/opac-search.pl?q=callnum:%22[% available_items_loo.itemcallnumber |url %]%22">[% available_items_loo.itemcallnumber | html %]</a>][% END %]
                                                                         [% END %]
                                                                         ([% available_items_loo.count | html %]),
