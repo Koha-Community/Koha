@@ -73,8 +73,12 @@
         <span class="Z3988" title="[% ocoins | html %]"></span>
     [% END %]
 
-    [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce ) %]
-        <div id="catalogue_detail_biblio" class="col-xs-9">
+    [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
+        [% IF ( XSLTDetailsDisplay ) %]
+            <div id="catalogue_detail_biblio" class="col-xs-9">
+        [% ELSE %]
+            <div id="catalogue_detail_biblio" class="col-xs-9">
+        [% END %]
     [% ELSE %]
         <div id="catalogue_detail_biblio" class="col-xs-12">
     [% END %]
@@ -125,7 +129,7 @@
             </span>
         [% END %]
 
-        [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce ) %]
+        [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled || IntranetCoce || (Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL')) ) %]
         </div><div class="col-xs-3" id="bookcoverimg">
         [% IF ( LocalCoverImages ) %]
             <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
@@ -148,6 +152,10 @@
             <span class="no-image">No cover image available</span>
           [% END %]
             </a>
+        [% END %]
+
+        [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
+            <a href="[% biblio.custom_cover_image_url | url %]"><img alt="Cover image" src="[% biblio.custom_cover_image_url | url %]" />
         [% END %]
         [% END %]
 

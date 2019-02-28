@@ -533,6 +533,8 @@ foreach my $myorder (@allorders_using_biblio) {
     }
 }
 
+$template->param(biblio => $biblio);
+
 my $count_orders_using_biblio = scalar @orders_using_biblio ;
 $template->param (countorders => $count_orders_using_biblio);
 
