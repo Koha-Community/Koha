@@ -1,5 +1,3 @@
-[% USE raw %]
-[% USE Asset %]
 [% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -10,7 +8,6 @@
     [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% Asset.css('css/datatables.css') | $raw %]
 </head>
 
 [% marcfield_tables = ['subscription'] %]
