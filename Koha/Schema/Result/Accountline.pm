@@ -69,6 +69,13 @@ __PACKAGE__->table("accountlines");
   is_nullable: 1
   size: 80
 
+=head2 debit_type
+
+  data_type: 'varchar'
+  is_foreign_key: 1
+  is_nullable: 1
+  size: 16
+
 =head2 status
 
   data_type: 'varchar'
@@ -143,6 +150,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "accounttype",
   { data_type => "varchar", is_nullable => 1, size => 80 },
+  "debit_type",
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 16 },
   "status",
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "payment_type",
@@ -252,6 +261,26 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 debit_type
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::AccountDebitType>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "debit_type",
+  "Koha::Schema::Result::AccountDebitType",
+  { code => "debit_type" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 itemnumber
 
 Type: belongs_to
@@ -313,8 +342,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-09-23 10:45:21
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:L+QlTTT+MdGoA3shpyaBgQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-10-11 10:47:58
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:RKg4gDSu0WwJ1C9YmDv3pw
 
 sub koha_objects_class {
     'Koha::Account::Lines';

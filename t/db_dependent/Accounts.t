@@ -786,21 +786,21 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
             interface   => 'commandline'
         }
     );
+    Koha::Account::DebitTypes->new(
+        {
+            code        => 'Copie',
+            description => 'Fee for copie',
+            is_system   => 0
+        }
+    )->store;
     Koha::Account::Line->new(
         {
             borrowernumber    => $patron->borrowernumber,
             date              => $today,
             description       => 'a Manual invoice fee',
-            accounttype       => 'Copie',
+            debit_type        => 'Copie',
             amountoutstanding => $manual,
             interface         => 'commandline'
-        }
-    )->store;
-    Koha::AuthorisedValue->new(
-        {
-            category         => 'MANUAL_INV',
-            authorised_value => 'Copie',
-            lib              => 'Fee for copie',
         }
     )->store;
 

@@ -32,7 +32,6 @@ INSERT IGNORE INTO authorised_value_categories( category_name )
     ('NOT_LOAN'),
     ('CCODE'),
     ('LOC'),
-    ('MANUAL_INV'),
     ('BOR_NOTES'),
     ('OPAC_SUG'),
     ('SIP_MEDIA_TYPE'),

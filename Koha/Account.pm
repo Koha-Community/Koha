@@ -628,28 +628,21 @@ Charges exempt from non-issue are:
 sub non_issues_charges {
     my ($self) = @_;
 
-    # FIXME REMOVE And add a warning in the about page + update DB if length(MANUAL_INV) > 5
-    my $ACCOUNT_TYPE_LENGTH = 5;    # this is plain ridiculous...
-
+    #NOTE: With bug 23049 these preferences could be moved to being attached
+    #to individual debit types to give more flexability and specificity.
     my @not_fines;
     push @not_fines, 'Res'
       unless C4::Context->preference('HoldsInNoissuesCharge');
-    push @not_fines, 'Rent'
+    push @not_fines, ( 'RENT', 'RENT_DAILY', 'RENT_RENEW', 'RENT_DAILY_RENEW' )
       unless C4::Context->preference('RentalsInNoissuesCharge');
     unless ( C4::Context->preference('ManInvInNoissuesCharge') ) {
-        my $dbh = C4::Context->dbh;
-        push @not_fines,
-          @{
-            $dbh->selectcol_arrayref(q|
-                SELECT authorised_value FROM authorised_values WHERE category = 'MANUAL_INV'
-            |)
-          };
+        my @man_inv = Koha::Account::DebitTypes->search({ system => 0 })->get_column('code');
+        push @not_fines, @man_inv;
     }
-    @not_fines = map { substr( $_, 0, $ACCOUNT_TYPE_LENGTH ) } uniq(@not_fines);
 
     return $self->lines->search(
         {
-            accounttype    => { -not_in => \@not_fines }
+            debit_type => { -not_in => \@not_fines }
         },
     )->total_outstanding;
 }
