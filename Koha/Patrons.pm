@@ -360,36 +360,37 @@ sub anonymize {
     if( $params->{verbose} ) {
         warn "Anonymized $count patrons\n";
     }
+}
 
-=head3 search_patrons_to_update
+=head3 search_patrons_to_update_category
 
-    my $patrons = Koha::Patrons->search_patrons_to_anonymise( {
-                      from => $from_category,
-                      fine_max => $fine_max,
-                      fine_min  => $fin_min,
-                      au     => $au,
-                      ao    => $ao,
+    my $patrons = Koha::Patrons->search_patrons_to_update_category( {
+                      from          => $from_category,
+                      fine_max      => $fine_max,
+                      fine_min      => $fin_min,
+                      too_young     => $too_young,
+                      too_old      => $too_old,
                   });
 
-This method returns all patron who should be updated form one category to another meeting criteria:
+This method returns all patron who should be updated from one category to another meeting criteria:
 
-from - original category
-fine_min - with fines totaling at least this amount
-fine_max - with fines above this amount
-au - under the age limit for 'from'
-ao - over the agelimit for 'from'
+from          - borrower categorycode
+fine_min      - with fines totaling at least this amount
+fine_max      - with fines above this amount
+too_young     - if passed, select patrons who are under the age limit for the current category
+too_old       - if passed, select patrons who are over the age limit for the current category
 
 =cut
 
-sub search_patrons_to_update {
+sub search_patrons_to_update_category {
     my ( $self, $params ) = @_;
     my %query;
-    my $search_params = $params->{search_params};;
+    my $search_params;
 
     my $cat_from = Koha::Patron::Categories->find($params->{from});
     $search_params->{categorycode}=$params->{from};
-    if ($params->{ageover} || $params->{ageunder}){
-        if( $cat_from->dateofbirthrequired && $params->{ageunder} ) {
+    if ($params->{too_young} || $params->{too_old}){
+        if( $cat_from->dateofbirthrequired && $params->{too_young} ) {
             my $date_after = output_pref({
                 dt         => dt_from_string()->subtract( years => $cat_from->dateofbirthrequired),
                 dateonly   => 1,
@@ -397,7 +398,7 @@ sub search_patrons_to_update {
             });
             $search_params->{dateofbirth}{'>'} = $date_after;
         }
-        if( $cat_from->upperagelimit && $params->{ageover} ) {
+        if( $cat_from->upperagelimit && $params->{too_old} ) {
             my $date_before = output_pref({
                 dt         => dt_from_string()->subtract( years => $cat_from->upperagelimit),
                 dateonly   => 1,
@@ -408,30 +409,29 @@ sub search_patrons_to_update {
     }
     if ($params->{fine_min} || $params->{fine_max}) {
         $query{join} = ["accountlines"];
-        $query{select} = ["borrowernumber", { sum => 'amountoutstanding', -as => 'total_fines'} ];
-        $query{as} = [qw/borrowernumber  total_fines/];
+        $query{select} = ["borrowernumber", "accountlines.amountoutstanding" ];
         $query{group_by} = ["borrowernumber"];
-        $query{having}{total_fines}{'<='}=$params->{fine_max} if defined $params->{fine_max};
-        $query{having}{total_fines}{'>='}=$params->{fine_min} if defined $params->{fine_min};
+        $query{having} = \['sum(accountlines.amountoutstanding) <= ?',$params->{fine_max}] if defined $params->{fine_max};
+        $query{having} = \['sum(accountlines.amountoutstanding) >= ?',$params->{fine_min}] if defined $params->{fine_min};
     }
-    return Koha::Patrons->search($search_params,\%query);
+    return $self->search($search_params,\%query);
 }
 
-=head3 update_category
+=head3 update_category_to
 
-    Koha::Patrons->search->update_category( {
-            to   => $to,
+    Koha::Patrons->search->update_category_to( {
+            category   => $to_category,
         });
 
-Update supplied patrons from one category to another and take care of guarantor info.
+Update supplied patrons from current category to another and take care of guarantor info.
 To make sure all the conditions are met, the caller has the responsibility to
 call search_patrons_to_update to filter the Koha::Patrons set
 
 =cut
 
-sub update_category {
+sub update_category_to {
     my ( $self, $params ) = @_;
-    my $to = $params->{to};
+    my $to = $params->{category};
 
     my $to_cat = Koha::Patron::Categories->find($to);
     return unless $to_cat;

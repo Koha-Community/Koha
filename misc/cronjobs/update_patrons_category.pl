@@ -40,7 +40,7 @@ update_patrons_category.pl - Given a set of parameters update selected patrons f
 =head1 SYNOPSIS
 
 update_patrons_category.pl -f=categorycode -t=categorycode
-                          [-b=branchcode] [-au] [-ao] [-fo=X] [-fu=X]
+                          [-b=branchcode] [--too_old] [--too_young] [-fo=X] [-fu=X]
                           [-rb=date] [-ra=date] [-v]
                           [--field column=value ...]
 
@@ -49,13 +49,13 @@ update_patrons_category.pl --help | --man
 Options:
    --help                   brief help message
    --man                    full documentation
-   -ao --ageover            update if over  maximum age for current category
-   -au --ageunder           update if under minimuum age  current category
+   -too_old                 update if over  maximum age for current category
+   -too_young               update if under minimuum age  current category
    -fo=X --fineover=X       update if fines over  X amount
    -fu=X --fineunder=X      update if fines under X amount
    -rb=date --regbefore     update if registration date is before given date
    -ra=date --regafter      update if registration date is after a given date
-   -d --dbfield name=value    where <name> is a column in the borrowers table, patrons will be updated if the field is equal to given <value>
+   -d --dbfield name=value  where <name> is a column in the borrowers table, patrons will be updated if the field is equal to given <value>
    -v -verbose              verbose mode
    -c --confirm             commit changes to db, no action will be taken unless this switch is included
    -b --branch <branchname> only deal with patrons from this library/branch
@@ -95,11 +95,11 @@ branches.branchcode table.
 
 *required* defines the category patrons will be converted to. Expects the code from categories.categorycode.
 
-=item B<--ageover | -ao>
+=item B<--too_old>
 
 Update patron only if they are above the maximum age range specified for the 'from' category.
 
-=item B<--ageunde | -au>
+=item B<--too_young>
 
 Update patron only if they are below the minimum age range specified for the 'from' category.
 
@@ -139,7 +139,7 @@ C<update_patron_categories.pl> - Suggests that you read this help. :)
 
 C<update_patron_categories.pl> -b=<branchcode> -f=<categorycode> -t=<categorycode> --confirm  - Processes a single branch, and updates the patron categories from fromcat to tocat.
 
-C<update_patron_categories.pl> -b=<branchcode> -f=<categorycode> -t=<categorycode>  -a --confirm  - Processes a single branch, and updates the patron categories from fromcat to tocat for patrons outside the age range of fromcat.
+C<update_patron_categories.pl> -b=<branchcode> -f=<categorycode> -t=<categorycode>  --too_old --confirm  - Processes a single branch, and updates the patron categories from fromcat to tocat for patrons over the age range of fromcat.
 
 C<update_patron_categories.pl> -f=<categorycode> -t=<categorycode> -v  - Processes all branches, shows all messages, and reports the patrons who would be affected. Takes no action on the database.
 
@@ -171,8 +171,8 @@ GetOptions(
     'c|confirm'       => \$doit,
     'f|from=s'        => \$fromcat,
     't|to=s'          => \$tocat,
-    'ao|ageover'      => \$ageover,
-    'au|ageunder'     => \$ageunder,
+    'too_old'         => \$ageover,
+    'too_young'       => \$ageunder,
     'fo|finesover=s'  => \$fine_min,
     'fu|finesunder=s' => \$fine_max,
     'rb|regbefore=s'  => \$reg_bef,
@@ -244,12 +244,12 @@ while ( my ( $key, $value ) = each %fields ) {
     $params{ "me." . $key } = $value;
 }
 
-my $target_patrons = Koha::Patrons->search_patrons_to_update(
+my $target_patrons = Koha::Patrons->search({ search_params => \%params })->search_patrons_to_update(
     {
         from          => $fromcat,
         search_params => \%params,
-        ageunder      => $ageunder,
-        ageover       => $ageover,
+        too_young     => $ageunder,
+        too_old       => $ageover,
         fine_min      => $fine_min,
         fine_max      => $fine_max,
     }
