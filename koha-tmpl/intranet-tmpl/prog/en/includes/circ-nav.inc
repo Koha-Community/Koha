@@ -11,7 +11,7 @@
             <li><a href="/cgi-bin/koha/circ/circulation.pl">Check out</a></li>
             <li><a href="/cgi-bin/koha/circ/returns.pl">Check in</a></li>
             <li><a href="/cgi-bin/koha/circ/renew.pl">Renew</a></li>
-            [% IF Branches.InIndependentBranchesMode %]
+            [% IF !Koha.Preference('IndependentBranchesTransfers') || CAN_user_superlibrarian %]
                 <li><a href="/cgi-bin/koha/circ/branchtransfers.pl">Transfer</a></li>
             [% END %]
             [% IF ( AutoLocation ) %][% ELSE %][% IF ( IndependentBranches ) %][% ELSE %]

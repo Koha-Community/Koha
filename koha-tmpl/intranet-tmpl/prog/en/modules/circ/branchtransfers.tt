@@ -152,7 +152,7 @@
 			<li>
                 <label for="tobranchcd">Destination library: </label>
                     <select name="tobranchcd" id="tobranchcd">
-                        [% PROCESS options_for_libraries libraries => Branches.all( selected => tobranchcd ) %]
+                        [% PROCESS options_for_libraries libraries => Branches.all( selected => tobranchcd, unfiltered => 1) %]
                     </select>
             </li>
             <li>

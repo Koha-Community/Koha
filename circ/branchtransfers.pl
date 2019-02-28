@@ -64,6 +64,12 @@ my ($template, $user, $cookie, $flags ) = get_template_and_user(
     }
 );
 
+# Check transfers is allowed from system preference
+if ( C4::Context->preference("IndependentBranchesTransfers") && !C4::Context->IsSuperLibrarian() ) {
+    print $query->redirect("/cgi-bin/koha/errors/403.pl");
+    exit;
+}
+
 my $messages;
 my $found;
 my $reserved;

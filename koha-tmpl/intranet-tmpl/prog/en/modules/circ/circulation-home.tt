@@ -88,7 +88,7 @@
                 <h3>Transfers</h3>
 
                 <ul class="buttons-list">
-                    [% IF Branches.InIndependentBranchesMode %]
+                    [% IF !Koha.Preference('IndependentBranchesTransfers') || CAN_user_superlibrarian %]
                         <li>
                             <a class="circ-button" href="/cgi-bin/koha/circ/branchtransfers.pl"><i class="fa fa-exchange"></i> Transfer</a>
                         </li>
