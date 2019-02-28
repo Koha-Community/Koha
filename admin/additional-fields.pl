@@ -21,7 +21,6 @@ use CGI;
 use C4::Auth;
 use C4::Koha;
 use C4::Output;
-use Koha::AdditionalField;
 use Koha::AdditionalFields;
 
 my $input = new CGI;

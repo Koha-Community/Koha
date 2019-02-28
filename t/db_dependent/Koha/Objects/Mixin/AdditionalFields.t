@@ -6,8 +6,7 @@ use Test::More tests => 12;
 
 use Koha::Acquisition::Baskets; # Koha::Acquisition::Baskets uses the mixin
 use Koha::AdditionalFields;
-use Koha::AdditionalField;
-use Koha::AdditionalFieldValue;
+use Koha::AdditionalFieldValues;
 use Koha::Database;
 
 use t::lib::TestBuilder;
