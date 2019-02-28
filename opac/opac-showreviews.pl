@@ -109,6 +109,8 @@ for my $result (@$reviews){
     $result->{notes} = $biblioitem->notes;
     $result->{timestamp} = $biblioitem->timestamp;
 
+    $result->{biblio_object} = $biblio; # TODO Use this variable directly in the template
+
     my $patron = Koha::Patrons->find( $result->{borrowernumber} );
     if ( $patron ) {
         $result->{borrtitle} = $patron->title;
