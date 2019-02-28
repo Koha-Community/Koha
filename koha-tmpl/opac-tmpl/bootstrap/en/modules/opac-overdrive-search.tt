@@ -5,12 +5,6 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; OverDrive search for '[% q | html %]'</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-[% Asset.css("css/jquery.rating.css") | $raw %]
-<style>
-.actions a.addtocart {
-    display: inline;
-}
-</style>
 [% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='overdrive-results-page' bodyclass='scrollto' %]
@@ -62,7 +56,6 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% Asset.js("js/overdrive.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %]
 <script>
 var OD_password_required = [% IF Koha.Preference('OverDrivePasswordRequired') %]1[% ELSE %]0[% END %];
 var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) | html %]";
@@ -124,10 +117,23 @@ function search( offset ) {
             results.push( '<span class="results_summary mediatype"><span class="label">' + _("Type:") + ' </span>', prod.mediaType, '</span>' );
 
             if ( prod.starRating ) {
+                var rating_value = Math.round( prod.starRating );
                 results.push( '<div class="results_summary ratings">' );
+                results.push( '<div class="br-wrapper br-theme-fontawesome-stars">');
+                results.push( '<div class="br-widget br-readonly">');
                 for ( var rating = 1; rating <= 5; rating++ ) {
-                    results.push( '<input class="star" type="radio" name="rating-' + i + '" value="' + rating + '"' + ( rating == Math.round( prod.starRating ) ? ' checked="checked"' : '' ) + ' disabled="disabled" />' );
+
+                    results.push( '<a href="#"' );
+                    if( rating == rating_value ){
+                        results.push( ' class="br-selected br-current"></a>' );
+                    } else if( rating_value > rating ){
+                        results.push( ' class="br-selected"></a>' );
+                    } else {
+                        results.push( '></a>');
+                    }
                 }
+                results.push( '</div>' );
+                results.push( '</div>' );
                 results.push( '</div>' );
             }
 

@@ -5,12 +5,6 @@
 <title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; RecordedBooks search for '[% q | html %]'</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
-[% Asset.css("css/jquery.rating.css") | $raw %]
-<style>
-.actions a.addtocart {
-    display: inline;
-}
-</style>
 [% END %]
 </head>
 [% INCLUDE 'bodytag.inc' bodyid='recordedbooks-results-page' bodyclass='scrollto' %]
@@ -62,8 +56,7 @@
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
 [% Asset.js("js/recordedbooks.js") | $raw %]
-[% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %]
-<script type="text/javascript">
+<script>
 var querystring = "[% q |replace( "'", "\'" ) |replace( '\n', '\\n' ) |replace( '\r', '\\r' ) |html %]";
 var results_per_page = [% OPACnumSearchResults || 20 | html %];
 
@@ -144,7 +137,6 @@ function search( page ) {
 
         if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');
 
-        $( '#recordedbooks-results-list input.star' ).rating();
     } );
 }
 
