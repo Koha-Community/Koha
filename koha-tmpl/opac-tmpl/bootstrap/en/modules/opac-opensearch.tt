@@ -59,6 +59,11 @@
 
 [% bt_id = ( SEARCH_RESULT.normalized_upc || SEARCH_RESULT.normalized_isbn ) %]
 [% IF ( BakerTaylorEnabled ) %][% IF bt_id %]<a href="https://[% BakerTaylorBookstoreURL |url %][% bt_id | uri %]"><img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL |url %][% bt_id | uri %]" /></a>[% END %][% END %]
+
+[% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
+    <img alt="Cover image" src="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]" />
+[% END %]
+
 	   <p>[% IF ( SEARCH_RESULT.author ) %]By [% SEARCH_RESULT.author | html %]. [% END %]
 	   [% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place | html %] [% END %][% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode | html %][% END %][% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear | html %]
                     [% ELSE %][% IF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate | html %][% END %][% END %]
