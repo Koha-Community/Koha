@@ -330,7 +330,7 @@ $schema->storage->txn_rollback;
 
 subtest 'suspend and resume tests' => sub {
 
-    plan tests => 20;
+    plan tests => 21;
 
     $schema->storage->txn_begin;
 
@@ -359,7 +359,7 @@ subtest 'suspend and resume tests' => sub {
 
     ok( $hold->is_suspended, 'Hold is suspended' );
     $t->json_is(
-        '/expiration_date',
+        '/end_date',
         output_pref(
             {   dt         => dt_from_string( $hold->suspend_until ),
                 dateformat => 'rfc3339',
@@ -378,12 +378,13 @@ subtest 'suspend and resume tests' => sub {
               "//$userid:$password@/api/v1/holds/"
             . $hold->id
             . "/suspension" => json => {
-            expiration_date =>
+            end_date =>
                 output_pref( { dt => $date, dateformat => 'rfc3339', dateonly => 1 } )
             }
     )->status_is( 201, 'Hold suspension created' )
-        ->json_is( '/expiration_date',
-        output_pref( { dt => $date, dateformat => 'rfc3339', dateonly => 1 } ) );
+        ->json_is( '/end_date',
+        output_pref( { dt => $date, dateformat => 'rfc3339', dateonly => 1 } ) )
+        ->header_is( Location => "/api/v1/holds/" . $hold->id . "/suspension", 'The Location header is set' );
 
     $t->delete_ok( "//$userid:$password@/api/v1/holds/" . $hold->id . "/suspension" )
       ->status_is( 204, "Correct status when deleting a resource" )
