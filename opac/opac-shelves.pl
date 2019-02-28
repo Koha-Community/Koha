@@ -327,7 +327,8 @@ if ( $op eq 'view' ) {
                     $this_item->{incart} = 1;
                 }
 
-                $this_item->{biblionumber} = $biblionumber;
+                $this_item->{biblio_object} = $biblio;
+                $this_item->{biblionumber}  = $biblionumber;
                 push @items, $this_item;
             }
 
