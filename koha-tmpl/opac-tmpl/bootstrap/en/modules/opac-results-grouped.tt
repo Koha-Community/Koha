@@ -212,7 +212,7 @@
                                                                         [% FOREACH available_items_loo IN GROUP_RESULT.available_items_loop %]
                                                                             [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname | html %][% END %]
                                                                             [% IF ( OPACItemsResultsDisplay ) %]
-                                                                                [% IF ( available_items_loo.location ) %][% available_items_loo.location | html %][% END %]
+                                                                                [% IF ( available_items_loo.location ) %]<span class="shelvingloc">[% available_items_loo.location | html %]</span>[% END %]
                                                                                 [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/opac-search.pl?q=callnum:[% available_items_loo.itemcallnumber |url %]">[% available_items_loo.itemcallnumber | html %]</a>][% END %]
                                                                             [% END %]
                                                                             ([% available_items_loo.count | html %]),

@@ -224,7 +224,8 @@
                                             [% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]
                                                 [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                     <p>
-                                                        [% ITEM_RESULT.branchname | html %] [% ITEM_RESULT.location_description | html %]
+                                                        [% ITEM_RESULT.branchname | html %]
+                                                        <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
                                                         [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                             ([% ITEM_RESULT.itemcallnumber | html %])
                                                         [% END %]
@@ -299,7 +300,7 @@
                                                                 <span class="callnumber">[% ITEM_RESULT.itemcallnumber | html %]</span>
                                                             </strong>
                                                             [% ITEM_RESULT.branchname | html %]
-                                                            <span class="shelvingloc inline">[% ITEM_RESULT.location_description | html %]</span>
+                                                            <span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span>
                                                         </span>
                                                     </div>
                                                 [% END %]

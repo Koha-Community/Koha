@@ -508,7 +508,7 @@
                                         <li>
                                         [% END %]
                                         [% IF ( available_items_loo.branchname ) %][% available_items_loo.branchname | html %][% END %]
-                                        [% IF ( available_items_loo.location ) %][% available_items_loo.location | html %][% END %]
+                                        [% IF ( available_items_loo.location ) %]<span class="shelvingloc">[% available_items_loo.location | html %]</span>[% END %]
                                         [% IF ( available_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% available_items_loo.itemcallnumber |uri %]%22">[% available_items_loo.itemcallnumber | html %]</a>][% END %]
                                         ([% available_items_loo.count | html %])
                                         [% IF item_level_itypes && available_items_loo.description %]
@@ -530,7 +530,7 @@
                                         <li>
                                         [% END %]
                                         [% IF ( onloan_items_loo.branchname ) %][% onloan_items_loo.branchname | html %][% END %]
-                                        [% IF ( onloan_items_loo.location ) %][% onloan_items_loo.location | html %][% END %]
+                                        [% IF ( onloan_items_loo.location ) %]<span class="shelvingloc">[% onloan_items_loo.location | html %]</span>[% END %]
                                         [% IF ( onloan_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% onloan_items_loo.itemcallnumber |uri %]%22">[% onloan_items_loo.itemcallnumber | html %]</a>][% END %]
                                         ([% onloan_items_loo.count | html %][% IF ( onloan_items_loo.longoverdue ) %], [% onloan_items_loo.longoverdue | html %] long overdue[% END %]) date due: [% onloan_items_loo.due_date | $KohaDates %]
                                         [% IF item_level_itypes && onloan_items_loo.description %]
@@ -552,7 +552,7 @@
                                         <li>
                                         [% END %]
                                         [% IF ( other_items_loo.branchname ) %][% other_items_loo.branchname | html %][% END %]
-                                        [% IF ( other_items_loo.location ) %][% other_items_loo.location | html %][% END %]
+                                        [% IF ( other_items_loo.location ) %]<span class="shelvingloc">[% other_items_loo.location | html %]</span>[% END %]
                                         [% IF ( other_items_loo.itemcallnumber ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% other_items_loo.itemcallnumber |uri %]%22">[% other_items_loo.itemcallnumber | html %]</a>][% END %]
                                         [% IF ( other_items_loo.withdrawn ) %]([% AuthorisedValues.GetByCode( 'WITHDRAWN', other_items_loo.withdrawn ) | html %])[% END %]
                                         [% IF ( other_items_loo.itemlost ) %]([% AuthorisedValues.GetByCode( 'LOST', other_items_loo.itemlost ) | html %])[% END %]

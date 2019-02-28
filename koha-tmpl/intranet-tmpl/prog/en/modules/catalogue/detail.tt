@@ -392,7 +392,10 @@
                         </td>
                     [% END %]
                     <td class="location">[% UNLESS ( singlebranchmode ) %][% Branches.GetName( item.branchcode ) | html %] [% END %]</td>
-                    <td class="homebranch">[% Branches.GetName(item.homebranch) | html %]<span class="shelvingloc">[% item.location | html %]</span> </td>
+                    <td class="homebranch">
+                        [% Branches.GetName(item.homebranch) | html %]
+                        <span class="shelvingloc">[% item.location | html %]</span>
+                    </td>
                     [% IF ( itemdata_ccode ) %]<td>[% item.ccode | html %]</td>[% END %]
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]

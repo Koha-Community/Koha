@@ -1288,7 +1288,7 @@
                     [% END %]
 
                     [% IF ( Koha.Preference('OpacLocationOnDetail') == 'column' && itemdata_location ) %]
-                        <td class="shelving_location">[% ITEM_RESULT.location_description | html %]</td>
+                        <td class="shelving_location"><span class="shelvingloc">[% ITEM_RESULT.location_description | html %]</span></td>
                     [% END %]
 
                     <td class="call_no" property="sku">

@@ -219,7 +219,8 @@
                                                     <ul>
                                                         [% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                             <li>
-                                                                <strong>[% ITEM_RESULT.branchname | html %]</strong>[% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac | html %][% END %]
+                                                                <strong>[% ITEM_RESULT.branchname | html %]</strong>
+                                                                [% IF ( ITEM_RESULT.location_opac ) %]<span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>[% END %]
                                                                 [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                                     ([% ITEM_RESULT.itemcallnumber | html %])
                                                                 [% END %]
@@ -273,7 +274,8 @@
                                             </td>
                                             <td>[% IF ( BIBLIO_RESULT.ITEM_RESULTS ) %]<ul>[% FOREACH ITEM_RESULT IN BIBLIO_RESULT.ITEM_RESULTS %]
                                                 <li>
-                                                    [% ITEM_RESULT.branchname | html %][% IF ( ITEM_RESULT.location_opac ) %], [% ITEM_RESULT.location_opac | html %][% END %]
+                                                    [% ITEM_RESULT.branchname | html %]
+                                                    [% IF ( ITEM_RESULT.location_opac ) %]<span class="shelvingloc">[% ITEM_RESULT.location_opac | html %]</span>[% END %]
                                                     [% IF ( ITEM_RESULT.itemcallnumber ) %]
                                                         ([% ITEM_RESULT.itemcallnumber | html %])
                                                     [% END %]
