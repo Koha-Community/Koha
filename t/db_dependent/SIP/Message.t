@@ -67,7 +67,7 @@ subtest 'Testing Patron Info Request V2' => sub {
 subtest 'Checkin V2' => sub {
     my $schema = Koha::Database->new->schema;
     $schema->storage->txn_begin;
-    plan tests => 25;
+    plan tests => 27;
     $C4::SIP::Sip::protocol_version = 2;
     test_checkin_v2();
     $schema->storage->txn_rollback;
@@ -377,6 +377,25 @@ sub test_checkin_v2 {
     check_field( $respcode, $response, FID_ALERT_TYPE, '00', 'FID_ALERT_TYPE (CV) field is 00' );
     $server->{account}->{checked_in_ok} = 0;
     $server->{account}->{cv_send_00_on_success} = 0;
+
+    t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', '1' );
+    $server->{account}->{checked_in_ok} = 1;
+    $server->{account}->{cv_triggers_alert} = 0;
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin( $server );
+    $respcode = substr( $response, 0, 2 );
+    is( substr( $response, 5, 1 ), 'Y', 'Checkin without CV triggers alert flag when cv_triggers_alert is off' );
+    t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', '0' );
+    $server->{account}->{cv_triggers_alert} = 1;
+    undef $response;
+    $msg = C4::SIP::Sip::MsgType->new( $siprequest, 0 );
+    $msg->handle_checkin( $server );
+    $respcode = substr( $response, 0, 2 );
+    is( substr( $response, 5, 1 ), 'N', 'Checkin without CV does not trigger alert flag when cv_triggers_alert is on' );
+    $server->{account}->{checked_in_ok} = 0;
+    $server->{account}->{cv_triggers_alert} = 0;
+    t::lib::Mocks::mock_preference( 'RecordLocalUseOnReturn', '1' );
 
     $server->{account}->{checked_in_ok} = 1;
     $server->{account}->{ct_always_send} = 0;

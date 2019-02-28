@@ -197,7 +197,7 @@ sub test_cardnumber_compare {
 }
 
 sub checkin {
-    my ( $self, $item_id, $trans_date, $return_date, $current_loc, $item_props, $cancel, $checked_in_ok ) = @_;
+    my ( $self, $item_id, $trans_date, $return_date, $current_loc, $item_props, $cancel, $checked_in_ok, $cv_triggers_alert ) = @_;
     my ( $patron, $item, $circ );
 
     $circ = C4::SIP::ILS::Transaction::Checkin->new();
@@ -206,7 +206,7 @@ sub checkin {
     $circ->item( $item = C4::SIP::ILS::Item->new($item_id) );
 
     if ($item) {
-        $circ->do_checkin( $current_loc, $return_date );
+        $circ->do_checkin( $current_loc, $return_date, $cv_triggers_alert );
     }
     else {
         $circ->alert(1);

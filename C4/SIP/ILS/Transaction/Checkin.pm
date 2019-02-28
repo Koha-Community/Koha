@@ -47,6 +47,8 @@ sub do_checkin {
     my $self = shift;
     my $branch = shift;
     my $return_date = shift;
+    my $cv_triggers_alert = shift;
+
     if (!$branch) {
         $branch = 'SIP2';
     }
@@ -66,6 +68,8 @@ sub do_checkin {
 
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
     my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, undef, $return_date);
+    $self->alert(!$return);
+    # ignoring messages: NotIssued, WasLost, WasTransfered
 
     # biblionumber, biblioitemnumber, itemnumber
     # borrowernumber, reservedate, branchcode
@@ -115,7 +119,14 @@ sub do_checkin {
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );
     }
-    $self->alert(defined $self->alert_type);  # alert_type could be "00", hypothetically
+
+    my $alert = defined $self->alert_type;
+    if ( $cv_triggers_alert ) {
+        $self->alert($alert); # Overwrites existing alert value, should set to 0 if there is no alert type
+    } else {
+        $self->alert($alert) if $alert; # Doesn't affect alert value unless an alert type is set
+    }
+
     $self->ok($return);
 }
 
