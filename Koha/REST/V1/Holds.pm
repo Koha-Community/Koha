@@ -284,21 +284,21 @@ sub suspend {
     my $hold_id  = $c->validation->param('hold_id');
     my $hold     = Koha::Holds->find($hold_id);
     my $body     = $c->req->json;
-    my $exp_date = ($body) ? $body->{expiration_date} : undef;
+    my $end_date = ($body) ? $body->{end_date} : undef;
 
     unless ($hold) {
         return $c->render( status => 404, openapi => { error => 'Hold not found.' } );
     }
 
     return try {
-        my $date = ($exp_date) ? dt_from_string( $exp_date, 'rfc3339' ) : undef;
+        my $date = ($end_date) ? dt_from_string( $end_date, 'rfc3339' ) : undef;
         $hold->suspend_hold($date);
         $hold->discard_changes;
         $c->res->headers->location( $c->req->url->to_string );
         return $c->render(
             status  => 201,
             openapi => {
-                expiration_date => output_pref(
+                end_date => output_pref(
                     {   dt         => dt_from_string( $hold->suspend_until ),
                         dateformat => 'rfc3339',
                         dateonly   => 1
