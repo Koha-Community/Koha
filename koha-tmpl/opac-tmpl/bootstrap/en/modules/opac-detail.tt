@@ -97,6 +97,13 @@
                             <img alt="See Baker &amp; Taylor" src="[% BakerTaylorImageURL | html %][% bt_id | html %]" />
                         [% END %]
                     [% END %]
+                    [% IF Koha.Preference('OPACCustomCoverImages') AND Koha.Preference('CustomCoverImagesURL') %]
+                         [% IF ( OPACURLOpenInNewWindow ) %]
+                            <a href="[% biblio.custom_cover_image_url | url %]" target="_blank" rel="noreferrer"><img alt="Cover image" src="[% biblio.custom_cover_image_url | url %]" /></a>
+                        [% ELSE %]
+                            <a href="[% biblio.custom_cover_image_url | url %]"><img alt="Cover image" src="[% biblio.custom_cover_image_url | url %]" /></a>
+                        [% END %]
+                    [% END %]
                     </div><!-- / #bookcover -->
 
                     <abbr class="unapi-id" title="koha:biblionumber:[% biblio.biblionumber | html %]"><!-- unAPI --></abbr>
