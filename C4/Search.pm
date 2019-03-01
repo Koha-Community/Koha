@@ -2298,6 +2298,8 @@ sub searchResults {
             $oldbiblio->{'alternateholdings_count'} = $alternateholdingscount;
         }
 
+        $oldbiblio->{biblio_object} = Koha::Biblios->find( $oldbiblio->{biblionumber} );
+
         push( @newresults, $oldbiblio );
     }
 
