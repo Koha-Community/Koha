@@ -972,7 +972,7 @@ sub _read_configuration {
     return $configuration;
 }
 
-=head2
+=head2 get_facetable_fields
 
 my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
 
