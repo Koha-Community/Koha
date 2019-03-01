@@ -313,7 +313,7 @@ Enhanced Content:
             - pref: TagsExternalDictionary
               class: file
             - on the server to be approved without moderation.
-    Local Cover Images:
+    Local or remote cover images:
         -
             - pref: LocalCoverImages
               choices:
@@ -332,6 +332,21 @@ Enhanced Content:
                   yes: Allow
                   no: "Don't allow"
             - multiple images to be attached to each bibliographic record.
+        -
+            - pref: CustomCoverImages
+              choices:
+                  yes: Display
+                  no: "Don't display"
+            - "custom remote url images in the staff client.<br/>"
+            - pref: OPACCustomCoverImages
+              choices:
+                  yes: Display
+                  no: "Don't display"
+            - "custom remote url images at the OPAC.<br/>"
+            - "Using the following URL:"
+            - pref: CustomCoverImagesURL
+              class: url
+            - "You can defined it using the following patterns: %isbn%, %issn%."
     HTML5 Media:
         -
             - Show a tab with a HTML5 media player for files catalogued in field 856
