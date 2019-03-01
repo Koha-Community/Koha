@@ -343,7 +343,7 @@ a.add, a.delete {
 
                     [% IF index.index_name == 'biblios' %]
                         <h3>Facet order</h3>
-                        <div id="facet_[% index.index_name %]">
+                        <div id="facet_[% index.index_name | html %]">
                             <table>
                                 <thead>
                                     <tr>
@@ -356,7 +356,7 @@ a.add, a.delete {
                                     [% FOREACH f IN facetable_fields %]
                                         <tr>
                                             <td>
-                                                [% f.name %]
+                                                [% f.name | html %]
                                             </td>
                                             <td>
                                                 [% SWITCH f.name %]
@@ -369,14 +369,14 @@ a.add, a.delete {
                                                 [% CASE 'ccode' %]Collections
                                                 [% CASE 'holdingbranch' %]Holding libraries
                                                 [% CASE 'homebranch' %]Home libraries
-                                                [% CASE %][% f %]
+                                                [% CASE %][% f | html %]
                                                 [% END %]
                                             </td>
                                             <td>
                                                 [% IF f.facet_order %]
-                                                    <input type="checkbox" name="display_facet" value="[% f.name %]" checked="checked" />
+                                                    <input type="checkbox" name="display_facet" value="[% f.name | html %]" checked="checked" />
                                                 [% ELSE %]
-                                                    <input type="checkbox" name="display_facet" value="[% f.name %]" />
+                                                    <input type="checkbox" name="display_facet" value="[% f.name | html %]" />
                                                 [% END %]
                                             </td>
                                         </tr>
