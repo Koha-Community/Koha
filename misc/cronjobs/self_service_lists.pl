@@ -1,4 +1,7 @@
 #!/usr/bin/perl
+
+BEGIN { $ENV{KOHA_INTERFACE} = 'commandline'; };
+
 use Modern::Perl;
 use utf8;
 use English;
@@ -93,11 +96,8 @@ GetOptions(
     'h|help'                     => sub { print $HELP; exit 0; },
 ) or die("Error in command line arguments\n$!");
 
-use C4::Context;
-#C4::Context->setCommandlineEnvironment();
-C4::Context->interface('commandline');
 use Koha::Logger;
-Koha::Logger->setConsoleVerbosity($argv{verbosity});
+Koha::Logger->setVerbosity($argv{verbosity});
 
 use C4::SelfServiceLists;
 C4::SelfServiceLists::run(\%argv);

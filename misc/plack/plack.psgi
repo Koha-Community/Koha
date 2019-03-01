@@ -87,13 +87,17 @@ if ($ENV{PERL5_DEBUG_HOST}) { #Dynamically load the remote debugging middleware 
 }
 
 
-my $intranet = Plack::App::CGIBin->new(
-    root => $ENV{INTRANET_CGI_DIR}
-)->to_app;
+my $intranet = builder {
+    Plack::App::CGIBin->new(
+        root => $ENV{INTRANET_CGI_DIR}
+    )->to_app;
+};
 
-my $opac = Plack::App::CGIBin->new(
-    root => $ENV{OPAC_CGI_DIR}
-)->to_app;
+my $opac = builder {
+    Plack::App::CGIBin->new(
+        root => $ENV{OPAC_CGI_DIR}
+    )->to_app;
+};
 
 my $apiv1  = builder {
     my $server = Mojo::Server::PSGI->new;
@@ -104,12 +108,6 @@ my $apiv1  = builder {
 my $proxies = C4::Context->config('trusted_proxy');
 
 builder {
-    # Enable logging
-    enable "+Koha::Middleware::Logger";
-    enable "LogWarn";
-    enable "LogErrors";
-    enable "Camelcadedb" if $ENV{PERL5_DEBUG_HOST};
-
     enable "ReverseProxy";
     enable_if { $proxies } "Plack::Middleware::RealIP",
         header => 'X-Forwarded-For',
@@ -125,6 +123,12 @@ builder {
         path => qr{^/intranet-tmpl/}, root => "$ENV{PERL_MODULE_DIR}/koha-tmpl/";
     enable "Plack::Middleware::Static",
         path => qr{^/opac-tmpl/}, root => "$ENV{PERL_MODULE_DIR}/koha-tmpl/";
+
+    # Enable logging after the rerouting has been done, so the proper interface can be automatically detected
+    enable "+Koha::Middleware::Logger";
+    enable "LogWarn";
+    enable "LogErrors";
+    enable "Camelcadedb" if $ENV{PERL5_DEBUG_HOST};
 
     # + is required so Plack doesn't try to prefix Plack::Middleware::
     enable "+Koha::Middleware::SetEnv";

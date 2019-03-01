@@ -34,7 +34,7 @@ use C4::Context;
 use Koha::Exception::BadParameter;
 use Koha::Exception::DB;
 
-my $logger = Koha::Logger->new();
+our $logger = Koha::Logger->get();
 
 sub new {
     my ($class, $self) = @_;
@@ -182,7 +182,7 @@ sub listDiffs {
         push(@params, $ee);
     }
 
-    $logger->sql('trace', $sql, \@params) if $logger->is_trace();
+    Koha::Logger->sql($logger, 'trace', $sql, \@params) if $logger->is_trace();
     my $sth = $dbh->prepare($sql);
     $sth->execute(@params);
     if ($sth->err) {

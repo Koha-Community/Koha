@@ -26,7 +26,7 @@ use Koha::Exception::UnknownProgramState;
 use Koha::Exception::FeatureUnavailable;
 
 use Koha::Logger;
-my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
+our $logger = Koha::Logger->get();
 
 use fields qw(borrower_ss_block_id borrowernumber branchcode expirationdate created_by created_on);
 

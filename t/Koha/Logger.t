@@ -16,153 +16,195 @@
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 use Modern::Perl;
-use Test::More;
+use Test::Most tests => 5;
 
-use Log::Log4perl;
+#Initialize the Log4perl to write to /tmp/log4perl_test.log so we can clean it later
+BEGIN {
+    $ENV{KOHA_INTERFACE} = 'commandline';
+    require t::Koha::Logger;
+    $ENV{LOG4PERL_CONF} = t::Koha::Logger::getLog4perlConfig();
+}
+
 use Scalar::Util qw(blessed);
 use Try::Tiny;
 
 use C4::Context;
-C4::Context->setCommandlineEnvironment(); #Set the context already prior to loading Koha::Logger (this actually doesn't fix the logger interface definition issue. Just doing it like this to show this doesn't work)
-is(C4::Context->interface(), 'commandline', "Current Koha interface is 'commandline'"); #Show in test output what we are expecting to make test plan more understandable
-
-#Initialize the Log4perl to write to /tmp/log4perl_test.log so we can clean it later
-Log::Log4perl::init( t::Koha::Logger::getLog4perlConfig() );
-
-require Koha::Logger;
-use t::Koha::Logger;
+use Koha::Logger;
 
 
-##################################################################################################
-#### Test for Bug 16304 - Koha::Logger, lazy load loggers so environment has time to get set  ####
-use t::Koha::Logger_Invoker; #Inside the invoker we already get the Koha's interface from C4::Context->interface. Unfortunately use-definitions are resolved before other code is executed, so the context is not yet properly set.
-use t::Koha::Logger_InvokerLazyLoad; #We set the reference to the Koha::Logger as package-level, but dont load the Log::Log4perl-object yet with uninitialized environment
+use t::Koha::Logger::Invoker;
+use t::Koha::Logger::Submodule::Subvoker;
 
-subtest "Logger_Invoker package-level logger has a bad interface", \&Logger_Invoker_badInterface;
-sub Logger_Invoker_badInterface {
-    t::Koha::Logger_Invoker::arbitrarySubroutineWritingToLog();
+my $prevLogger;
+
+subtest "Basic logging", \&commandline_logging;
+sub commandline_logging {
+    plan tests => 4;
+    is(C4::Context->interface(), 'commandline', "Current Koha interface is 'commandline'"); #Show in test output what we are expecting to make test plan more understandable
+
+    t::Koha::Logger::Submodule::Subvoker::loggingSubroutine();
 
     my $log = t::Koha::Logger::slurpLog('wantArray');
-    ok($log->[0] =~ /\[opac\./, "Log entry doesn't have 'commandline'-interface, but the default 'opac' instead");
+    like($log->[0], qr/\[commandline\./, "Log entry has 'commandline'-interface");
+    like($log->[0], qr/\Qsubvoker says no\E/, 'Log entry is sane');
+    ok($prevLogger = $t::Koha::Logger::Invoker::logger, 'Got hold of the package-level logger so it can be later re-interfaced');
 }
 t::Koha::Logger::clearLog();
 
-subtest "Logger_InvokerLazyLoad package-level logger has the correct interface", \&Logger_InvokerLazyLoad_correctInterface;
-sub Logger_InvokerLazyLoad_correctInterface {
-    t::Koha::Logger_InvokerLazyLoad::arbitrarySubroutineWritingToLog();
+subtest "Interface changes, and Loggers are reoriented", \&interface_changes;
+sub interface_changes {
+    plan tests => 4;
+    is(C4::Context->interface('opac'), 'opac', "Given a new interface 'opac'");
+
+    t::Koha::Logger::Invoker::arbitrarySubroutineWritingToLog();
 
     my $log = t::Koha::Logger::slurpLog('wantArray');
-    ok($log->[0] =~ /\[commandline\./, "Log entry has 'commandline'-interface");
+    like($log->[0], qr/\[opac\./, "Log entry has 'opac'-interface");
+    like($log->[0], qr/\QA run-of-a-mill -error\E/, 'Log entry is sane');
+    isnt($prevLogger, $t::Koha::Logger::Invoker::logger, 'Package-logger has been re-interfaced to use the log4perl-config from the new Koha interface');
 }
 t::Koha::Logger::clearLog();
 
-#### END OF Test for Bug 16304 - Koha::Logger, lazy load loggers so environment has time to get set  ####
-#########################################################################################################
 
-###############################################################################################
-#### KD976 - Koha::Logger overload configuration for command line scripts verbosity levels ####
-subtest "Overload Logger configurations", \&overloadLoggerConfigurations;
-sub overloadLoggerConfigurations {
-    my ($logger, $log, $LOGFILEOUT, $stdoutLogHandle, $stdoutLogPtr, @stdoutLog);
-    $stdoutLogPtr = \$stdoutLogHandle;
+subtest "Koha::Logger->setVerbosity() - Overload Logger levels", \&overloadLoggerLevels;
+sub overloadLoggerLevels {
+    plan tests => 7;
+    my ($logger, $log);
 
-    #Test increasing log verbosity
-    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
-    Koha::Logger->setConsoleVerbosity(1);
-    $logger = Koha::Logger->get({category => "test-is-fun-1"});
-    _loggerBlarbAllLevels($logger);
-    $log = t::Koha::Logger::slurpLog('wantArray');
-    @stdoutLog = split("\n", $stdoutLogHandle);
-    ok($log->[0]     =~ /info/,  'Increment by 1. file   - info ok');
-    ok($stdoutLog[0] =~ /info/,  'Increment by 1. stdout - info ok');
-    ok($log->[1]     =~ /warn/,  'Increment by 1. file   - warn ok');
-    ok($stdoutLog[1] =~ /warn/,  'Increment by 1. stdout - warn ok');
-    ok($log->[2]     =~ /error/, 'Increment by 1. file   - error ok');
-    ok($stdoutLog[2] =~ /error/, 'Increment by 1. stdout - error ok');
-    ok($log->[3]     =~ /fatal/, 'Increment by 1. file   - fatal ok');
-    ok($stdoutLog[3] =~ /fatal/, 'Increment by 1. stdout - fatal ok');
-    t::Koha::Logger::clearLog();
+    subtest "Increment global log verbosity by 1 from the initial level.", sub {
+        plan tests => 7;
 
-    #Test decreasing log verbosity
-    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
-    Koha::Logger->setConsoleVerbosity(-1);
-    $logger = Koha::Logger->get({category => "test-is-fun-2"});
-    _loggerBlarbAllLevels($logger);
-    $log = t::Koha::Logger::slurpLog('wantArray');
-    @stdoutLog = split("\n", $stdoutLogHandle);
-    ok($log->[0]     =~ /error/, 'Decrement by 1. file   - error ok');
-    ok($stdoutLog[0] =~ /error/, 'Decrement by 1. stdout - error ok');
-    ok($log->[1]     =~ /fatal/, 'Decrement by 1. file   - fatal ok');
-    ok($stdoutLog[1] =~ /fatal/, 'Decrement by 1. stdout - fatal ok');
-    t::Koha::Logger::clearLog();
+        ok(Koha::Logger->setVerbosity(1),
+            "When the global log verbosity levels are incremented by one.");
 
-    #Test increasing log verbosity multiple levels
-    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
-    Koha::Logger->setConsoleVerbosity(2);
-    $logger = Koha::Logger->get({category => "test-is-fun-3"});
-    _loggerBlarbAllLevels($logger);
-    $log = t::Koha::Logger::slurpLog('wantArray');
-    @stdoutLog = split("\n", $stdoutLogHandle);
-    ok($log->[0]     =~ /debug/, 'Increment by 1. file   - debug ok');
-    ok($stdoutLog[0] =~ /debug/, 'Increment by 1. stdout - debug ok');
-    ok($log->[1]     =~ /info/,  'Increment by 1. file   - info ok');
-    ok($stdoutLog[1] =~ /info/,  'Increment by 1. stdout - info ok');
-    ok($log->[2]     =~ /warn/,  'Increment by 1. file   - warn ok');
-    ok($stdoutLog[2] =~ /warn/,  'Increment by 1. stdout - warn ok');
-    ok($log->[3]     =~ /error/, 'Increment by 1. file   - error ok');
-    ok($stdoutLog[3] =~ /error/, 'Increment by 1. stdout - error ok');
-    ok($log->[4]     =~ /fatal/, 'Increment by 1. file   - fatal ok');
-    ok($stdoutLog[4] =~ /fatal/, 'Increment by 1. stdout - fatal ok');
-    t::Koha::Logger::clearLog();
+        ok(t::Koha::Logger::Submodule::Subvoker::blarbAllLevels(), #Make sure the nested loggers don't get adjusted multiple times. First change inherited from the parent logger and then doubly from themselves.
+            "And a message is blarbed on all the log levels.");
 
-    #Test decreasing log verbosity beyond FATAL, this results to no output
-    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
-    Koha::Logger->setConsoleVerbosity(-3);
-    $logger = Koha::Logger->get({category => "test-is-fun-4"});
-    _loggerBlarbAllLevels($logger);
-    $log = t::Koha::Logger::slurpLog('wantArray');
-    @stdoutLog = split("\n", $stdoutLogHandle);
-    is(scalar(@$log), 0,         'Decrement overboard. no logging');
-    t::Koha::Logger::clearLog();
+        $log = t::Koha::Logger::slurpLog('wantArray');
+        is(scalar(@$log), 4,
+            "Then 4 log entries are generated");
 
-    #Test static log level
-    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
-    Koha::Logger->setConsoleVerbosity('FATAL');
-    $logger = Koha::Logger->get({category => "test-is-fun-5"});
-    _loggerBlarbAllLevels($logger);
-    $log = t::Koha::Logger::slurpLog('wantArray');
-    @stdoutLog = split("\n", $stdoutLogHandle);
-    ok($log->[0]     =~ /fatal/, 'Static log level. file   - fatal ok');
-    ok($stdoutLog[0] =~ /fatal/, 'Static log level. stdout - fatal ok');
-    t::Koha::Logger::clearLog();
-
-    #Test bad log level, then continue using the default config unhindered
-    Koha::Logger->setConsoleVerbosity(); #Clear overrides with empty params
-    ($LOGFILEOUT, $stdoutLogPtr) = _reopenStdoutScalarHandle($LOGFILEOUT, $stdoutLogPtr);
-    try {
-        Koha::Logger->setConsoleVerbosity('WARNNNG');
-        die "We should have died";
-    } catch {
-        ok($_ =~ /verbosity must be a positive or negative digit/, "Bad \$verbosiness, but got instructions on how to properly give \$verbosiness");
+        like($log->[0],     qr/info/,  'And info ok');
+        like($log->[1],     qr/warn/,  'And warn ok');
+        like($log->[2],     qr/error/, 'And error ok');
+        like($log->[3],     qr/fatal/, 'And fatal ok');
+        t::Koha::Logger::clearLog();
     };
-    $logger = Koha::Logger->get({category => "test-is-fun-6"});
-    _loggerBlarbAllLevels($logger);
-    $log = t::Koha::Logger::slurpLog('wantArray');
-    @stdoutLog = split("\n", $stdoutLogHandle);
-    is(scalar(@stdoutLog), 0,    'Bad config, defaulting. Stdout not printed to in default mode.');
-    ok($log->[0]     =~ /warn/,  'Bad config, defaulting. file   - warn ok');
-    ok($log->[1]     =~ /error/, 'Bad config, defaulting. file   - error ok');
-    ok($log->[2]     =~ /fatal/, 'Bad config, defaulting. file   - fatal ok');
-    t::Koha::Logger::clearLog();
 
-    close($LOGFILEOUT);
+    subtest "Decrement global log verbosity by 1 from the initial level.", sub {
+        plan tests => 5;
+
+        ok(Koha::Logger->setVerbosity(-1),
+            "When the global log verbosity levels are decremented by one.");
+
+        ok(t::Koha::Logger::Invoker::blarbAllLevels(),
+            "And a message is blarbed on all the log levels.");
+
+        $log = t::Koha::Logger::slurpLog('wantArray');
+        is(scalar(@$log), 2,
+            "Then 2 log entries are generated");
+
+        like($log->[0],     qr/error/, 'And error ok');
+        like($log->[1],     qr/fatal/, 'And fatal ok');
+        t::Koha::Logger::clearLog();
+    };
+
+    subtest "Increment global log verbosity by 3 from the initial level.", sub {
+        plan tests => 9;
+
+        ok(Koha::Logger->setVerbosity(3),
+            "When the global log verbosity levels are incremented by three.");
+
+        ok(t::Koha::Logger::Submodule::Subvoker::blarbAllLevels(),
+            "And a message is blarbed on all the log levels.");
+
+        $log = t::Koha::Logger::slurpLog('wantArray');
+        is(scalar(@$log), 6,
+            "Then 6 log entries are generated");
+
+        like($log->[0],     qr/trace/, 'And trace ok');
+        like($log->[1],     qr/debug/, 'And debug ok');
+        like($log->[2],     qr/info/,  'And info ok');
+        like($log->[3],     qr/warn/,  'And warn ok');
+        like($log->[4],     qr/error/, 'And error ok');
+        like($log->[5],     qr/fatal/, 'And fatal ok');
+        t::Koha::Logger::clearLog();
+    };
+
+    subtest "Set global log verbosity to OFF.", sub {
+        plan tests => 3;
+
+        ok(Koha::Logger->setVerbosity('OFF'),
+            "When the global log verbosity level is set to OFF.");
+
+        ok(t::Koha::Logger::Invoker::blarbAllLevels(),
+            "And a message is blarbed on all the log levels.");
+
+        $log = t::Koha::Logger::slurpLog('wantArray');
+        is(scalar(@$log), 0,
+            "Then no log entries are generated");
+
+        t::Koha::Logger::clearLog();
+    };
+
+    subtest "Set global log verbosity to ERROR.", sub {
+        plan tests => 5;
+
+        ok(Koha::Logger->setVerbosity('ERROR'),
+            "When the global log verbosity level is set to ERROR.");
+
+        ok(t::Koha::Logger::Submodule::Subvoker::blarbAllLevels(),
+            "And a message is blarbed on all the log levels.");
+
+        $log = t::Koha::Logger::slurpLog('wantArray');
+        is(scalar(@$log), 2,
+            "Then 2 log entries are generated");
+
+        like($log->[0],     qr/error/, 'And error ok');
+        like($log->[1],     qr/fatal/, 'And fatal ok');
+        t::Koha::Logger::clearLog();
+    };
+
+    subtest "Setting the global log verbosity to a bad level causes an exception.", sub {
+        plan tests => 1;
+
+        throws_ok(sub { Koha::Logger->setVerbosity('FUTUL') }, qr/FUTUL/,
+            "When the global log verbosity level is set to FUTUL. An exception is thrown");
+
+        t::Koha::Logger::clearLog();
+    };
+
+    subtest "Re-interfacing loggers pick log level overloads", sub {
+        plan tests => 7;
+
+        my $prevLogger = $t::Koha::Logger::Invoker::logger;
+
+        is(C4::Context->interface('intranet'), 'intranet',
+            "Given a new interface 'intranet'");
+
+        ok(Koha::Logger->getVerbosity('ERROR'),
+            "When the global log verbosity level is at ERROR.");
+
+        ok(t::Koha::Logger::Invoker::blarbAllLevels(),
+            "And a message is blarbed on all the log levels.");
+
+        $log = t::Koha::Logger::slurpLog('wantArray');
+        is(scalar(@$log), 2,
+            "Then 2 log entries are generated");
+
+        like($log->[0],     qr/error/, 'And error ok');
+        like($log->[1],     qr/fatal/, 'And fatal ok');
+
+        isnt($prevLogger, $t::Koha::Logger::Invoker::logger, 'Package-logger has been re-interfaced to use the log4perl-config from the new Koha interface');
+
+        t::Koha::Logger::clearLog();
+    };
 }
 
-#### END OF Test for KD976 - Koha::Logger overload configuration for command line scripts verbosity levels ####
-###############################################################################################################
 
 subtest "Return value passthrough", \&returnValuePassthrough;
 sub returnValuePassthrough {
+    plan tests => 4;
     my ($logger, $log, $retval);
 
     $logger = Koha::Logger->get({category => "retval-madness-1"});
@@ -178,13 +220,13 @@ sub returnValuePassthrough {
     is($retval, 1, "Koha::Logger returns 1 per Log4perl best practices");
     t::Koha::Logger::clearLog();
 }
-t::Koha::Logger::clearLog();
 
 
 subtest "Koha::Logger->sql()", \&sqlsql;
 sub sqlsql {
+    plan tests => 3;
     my $logger = Koha::Logger->get({category => "sqlsql-1"});
-    my $retval = $logger->sql('fatal', 'SELECT * FROM a WHERE b=? AND c=? OR d=?', [1,2,3]) if $logger->is_fatal();
+    my $retval = Koha::Logger->sql($logger, 'fatal', 'SELECT * FROM a WHERE b=? AND c=? OR d=?', [1,2,3]) if $logger->is_fatal();
     my $log = t::Koha::Logger::slurpLog('wantArray');
     is(scalar(@$log), 1, "One entry written");
     is($retval, 1, "Koha::Logger->sql() returns 'true' per Log4perl best practices");
@@ -193,23 +235,5 @@ sub sqlsql {
 }
 
 
-sub _loggerBlarbAllLevels {
-    my ($logger) = @_;
-    $logger->trace('trace');
-    $logger->debug('debug');
-    $logger->info('info');
-    $logger->warn('warn');
-    $logger->error('error');
-    $logger->fatal('fatal');
-}
-sub _reopenStdoutScalarHandle {
-    my ($LOGFILEOUT, $pointerToScalar) = @_;
-    $$pointerToScalar = '';
-    close($LOGFILEOUT) if $LOGFILEOUT;
-    open($LOGFILEOUT, '>', $pointerToScalar) or die $!;
-    $LOGFILEOUT->autoflush ( 1 );
-    select $LOGFILEOUT; #Use this as the default print target, so Console appender is redirected to this logfile
-    return ($LOGFILEOUT, $pointerToScalar);
-}
-
+t::Koha::Logger::clearLog();
 done_testing();

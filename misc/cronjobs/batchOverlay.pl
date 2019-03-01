@@ -17,6 +17,8 @@
 # with Koha; if not, write to the Free Software Foundation, Inc.,
 # 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
+BEGIN { $ENV{KOHA_INTERFACE} = 'commandline'; };
+
 use Modern::Perl;
 use Carp;
 use Getopt::Long qw(:config no_ignore_case);
@@ -52,13 +54,11 @@ It is advised to test first with the syspref's "dry-run"-flag on.
 
   -h --help             This friendly help!
 
-  -v --verbose          Use 5 to get maximum logging on the console STDOUT.
-                        When not set, uses the Koha::Logger log4perl.conf.
-                        When set:
-                        - in addition to the default logging, logs to this console.
-                        - Increases/decreases the default Log4perl verbosity by this many levels.
-                        Use 0 to get foreground logging using the default log level.
-                        Defaults to undef, which outputs using log4perl.conf directives.
+  -v --verbose          Set the log level to one of the Log4perl log levels
+                            FATAL|ERROR|TRACE|...
+                        or use a signed integer to adjust the verbosity
+                            -1 decrease log verbosity by one level
+                            +1 increase log verbosity by one level
 
   --chunk               Size of the single overlaying operation in bibliographic
                         records. This is essentially the size of the reports
@@ -90,7 +90,7 @@ EXAMPLE
 
     batchOverlay.pl -m 6 -c 1 --chunk 500 -v 4
 
-    batchOverlay.pl -b 545433 -b 406554
+    batchOverlay.pl -b 545433 -b 406554 -v TRACE
 
 USAGE
 
@@ -100,12 +100,10 @@ if ($help || $rtfm ne "true") {
 }
 
 
-use C4::Context;
 use C4::BatchOverlay;
-use Koha::Logger;
 
-C4::Context->setCommandlineEnvironment();
-Koha::Logger->setConsoleVerbosity($verbose);
+use Koha::Logger;
+Koha::Logger->setVerbosity($verbose);
 
 my $batchOverlayer = C4::BatchOverlay->new();
 

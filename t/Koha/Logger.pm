@@ -36,7 +36,7 @@ sub getLog4perlConfig {
         log4perl.appender.CLI.layout=\${layout_class}
         log4perl.appender.CLI.layout.ConversionPattern=\${layout_pattern}
     );
-    return \$cfg;
+    return $cfg;
 }
 
 

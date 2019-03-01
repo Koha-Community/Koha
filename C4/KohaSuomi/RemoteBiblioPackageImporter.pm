@@ -54,7 +54,7 @@ use Koha::Exception::UnknownProgramState;
 use Koha::Exception::Parse;
 use Koha::Exception::BadSystemPreference;
 
-my $logger = Koha::Logger->get({category => __PACKAGE__});
+our $logger = Koha::Logger->get();
 
 =head2 new
 

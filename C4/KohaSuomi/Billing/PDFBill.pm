@@ -36,7 +36,7 @@ use Data::Dumper;
 use C4::KohaSuomi::Billing::BillingManager;
 use POSIX qw(strftime);
 
-my $logger = Koha::Logger->get({category => __PACKAGE__});
+our $logger = Koha::Logger->get();
 
 use vars qw($VERSION @ISA @EXPORT);
 
@@ -370,7 +370,7 @@ sub check_item_fine {
         $sth = $dbh->prepare("SELECT * FROM accountlines WHERE borrowernumber = ? and itemnumber = ? and accounttype = ? and amountoutstanding = ?");
         $sth->execute($borrowernumber, $itemnumber, $accounttype, $fine);
     }
-    
+
     if (my $overdueprice = $sth->fetchrow_hashref){
         return 1;
     }

@@ -23,7 +23,7 @@ use C4::Encryption;
 use C4::Encryption::Configuration;
 
 use Koha::Logger;
-my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
+our $logger = Koha::Logger->get();
 
 =head2 run
 

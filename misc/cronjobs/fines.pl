@@ -26,6 +26,8 @@
 # You should have received a copy of the GNU General Public License
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
+BEGIN { $ENV{KOHA_INTERFACE} = 'commandline'; };
+
 use strict;
 use warnings;
 use 5.010;
@@ -47,10 +49,10 @@ my $output_dir;
 my $log;
 
 GetOptions(
-    'h|help'    => \$help,
-    'v|verbose' => \$verbose,
-    'l|log'     => \$log,
-    'o|out:s'   => \$output_dir,
+    'h|help'      => \$help,
+    'v|verbose:s' => \$verbose,
+    'l|log'       => \$log,
+    'o|out:s'     => \$output_dir,
 );
 my $usage = << 'ENDUSAGE';
 
@@ -63,7 +65,9 @@ This script has the following parameters :
     -h --help: this message
     -l --log: log the output to a file (optional if the -o parameter is given)
     -o --out:  ouput directory for logs (defaults to env or /tmp if !exist)
-    -v --verbose
+    -v --verbose: Log level (ERROR,INFO,TRACE,...) or log level adjustment, where
+                  negative values decrease log verbosity and positive values
+                  increment it.
 
 ENDUSAGE
 
@@ -71,6 +75,10 @@ if ($help) {
     print $usage;
     exit;
 }
+
+use Koha::Logger;
+Koha::Logger->setVerbosity($verbose);
+our $logger = Koha::Logger->get();
 
 cronlogaction();
 
@@ -102,8 +110,7 @@ for my $overdue ( @{$overdues} ) {
     next if $overdue->{itemlost};
 
     if ( !defined $overdue->{borrowernumber} ) {
-        carp
-"ERROR in Getoverdues : issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
+        $logger->error("issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.");
         next;
     }
     my $borrower = BorType( $overdue->{borrowernumber} );
@@ -161,21 +168,9 @@ if ($filename){
     close $fh;
 }
 
-if ($verbose) {
-    my $overdue_items = @{$overdues};
-    print <<"EOM";
-Fines assessment -- $today
-EOM
-    if ($filename) {
-        say "Saved to $filename";
-    }
-    print <<"EOM";
-Number of Overdue Items:
-     counted $overdue_items
-    reported $counted
-
-EOM
-}
+$logger->info("Logging changes to file '$filename'") if $filename;
+$logger->info("Counted '".($overdues ? scalar(@$overdues) : 0)."' overdue loans");
+$logger->info("Reported '$counted' overdue loans");
 
 sub set_holiday {
     my ( $branch, $dt ) = @_;

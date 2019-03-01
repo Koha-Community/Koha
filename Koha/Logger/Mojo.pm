@@ -84,7 +84,7 @@ sub get {
 Overloads MojoX::Log::Log4perl::_get_logger by optionally including interface
 and category.
 
-For REST API, 'rest' should be the root category by default (defined in startup)
+For REST API, 'rest' should be the interface by default (defined in startup)
 
 =cut
 

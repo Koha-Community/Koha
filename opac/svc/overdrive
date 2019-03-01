@@ -26,7 +26,7 @@ use C4::Output;
 use Koha::Logger;
 use Koha::ExternalContent::OverDrive;
 
-my $logger = Koha::Logger->get({ interface => 'opac' });
+our $logger = Koha::Logger->get({ interface => 'opac' });
 our $cgi = new CGI;
 my $page_url = $cgi->referer();
 

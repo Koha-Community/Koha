@@ -1,5 +1,6 @@
 package Koha::Middleware::Logger;
 
+# Copyright 2019 The National Library of Finland
 # Copyright 2018 Koha-Suomi Oy
 #
 # This file is part of Koha.
@@ -40,14 +41,21 @@ Koha::Middleware::Logger - Plack Middleware to enable Koha::Logger
 
 =cut
 
-sub prepare_app {
-    my $self = shift;
-
-    $self->logger(Koha::Logger->get({ interface => 'plack-error' }));
-}
+our $logger = Koha::Logger->get(); # package logger must be globally available so it can be re-interfaced when the interface changes.
 
 sub call {
     my ($self, $env) = @_;
+
+    die "Cannot determine the used interface from \$env->{PATH_INFO} '".$env->{PATH_INFO}."'" unless ($env->{PATH_INFO} =~ m!^/(\w+)[/\-]!);
+    my $interface = ($1 eq 'intranet') ? $1 :
+                    ($1 eq 'opac')     ? $1 :
+                    ($1 eq 'api')      ? 'rest'
+                                       : '';
+    $logger->error("Unable to find the correct interface from Plack \$env->{PATH_INFO}='".$env->{PATH_INFO}."'. Using the root logger.") unless $interface;
+
+
+    C4::Context->interface($interface);
+    $self->logger($logger);
 
     $env->{'psgix.logger'} = sub {
         my $args = shift;

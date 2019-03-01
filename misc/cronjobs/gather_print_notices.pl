@@ -1,5 +1,7 @@
 #!/usr/bin/perl -w
 
+BEGIN { $ENV{KOHA_INTERFACE} = 'commandline'; };
+
 use Modern::Perl;
 
 BEGIN {
@@ -7,10 +9,6 @@ BEGIN {
     # test carefully before changing this
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
-}
-BEGIN {
-    use C4::Context;
-    C4::Context->interface('commandline'); #The interface must be set prior to initializing any loggers.
 }
 
 use CGI qw( utf8 ); # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
@@ -58,8 +56,8 @@ GetOptions(
 pod2usage(0) if $help;
 
 use Koha::Logger;
-Koha::Logger->setConsoleVerbosity($verbose);
-my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
+Koha::Logger->setVerbosity($verbose);
+our $logger = Koha::Logger->get();
 
 my $output_directory = $ARGV[0];
 
@@ -361,7 +359,7 @@ sub send_files {
               Path     => $filepath,
               Filename => $filename,
               Encoding => 'base64',
-            ) or $logger->logdie("Attaching file '$filepath' as '$mimetype' failed!"); #Guessing this 
+            ) or $logger->logdie("Attaching file '$filepath' as '$mimetype' failed!"); #Guessing this
         }
     }
 

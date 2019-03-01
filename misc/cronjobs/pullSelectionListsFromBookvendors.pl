@@ -4,6 +4,8 @@
 # Connects to our booksellers services to fetch the selection lists and stages them to the MARC reservoir
 # Calls the /misc/stage_file.pl to do the dirty staging!
 
+BEGIN { $ENV{KOHA_INTERFACE} = 'commandline'; };
+
 use Modern::Perl;
 
 use Net::FTP;
@@ -75,8 +77,8 @@ unless ( $kv_selects || $btj_selects || $btj_biblios ) {
     die "ERROR: you must define atleast one of these\n--kv_selects\n--btj_selects";
 }
 
-C4::Context->setCommandlineEnvironment();
-Koha::Logger->setConsoleVerbosity($verbose);
+use Koha::Logger;
+Koha::Logger->setVerbosity($verbose);
 
 #my $listdirectory = '/tmp/'; #Where to store selection lists
 my $stagedFileVerificationDuration_days = 700; #Stop looking for selection lists older than this when staging MARC for the Koha reservoir

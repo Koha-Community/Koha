@@ -24,7 +24,7 @@ use Koha::Exception::BadParameter;
 use Koha::Exception::FeatureUnavailable;
 
 use Koha::Logger;
-my $logger = bless({lazyLoad => {category => __PACKAGE__}}, 'Koha::Logger');
+our $logger = Koha::Logger->get();
 
 our $actionLogModuleName = 'SELF-SERVICE';
 

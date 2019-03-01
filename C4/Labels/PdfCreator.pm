@@ -32,7 +32,7 @@ use Koha::Exception::DB;
 use Koha::Exception::Labels::UnknownItems;
 
 use Koha::Logger;
-my $log = Koha::Logger->new({category => __PACKAGE__});
+our $logger = Koha::Logger->get();
 
 =head new
 
@@ -72,7 +72,7 @@ sub create {
 
     ##Start .pdf creation.
     my $filePath = $self->getFile()->stringify();
-    $log->debug("Writing PDF to '$filePath'") if $log->is_debug;
+    $logger->debug("Writing PDF to '$filePath'") if $logger->is_debug;
 #    system("rm", "$filePath");
     prFile($filePath);
     $self->setMediaBoxFromSheet($sheet);
@@ -131,7 +131,7 @@ sub setMediaBoxFromSheet {
         Koha::Exception::BadParameter->throw(error => $cc[0]."():> Param \$sheet '$sheet' is not a proper Sheet-object!");
     }
     my @pos = (0, 0, $sheet->getPdfDimensions()->{width}, $sheet->getPdfDimensions()->{height});
-    $log->debug("Setting MediaBox as '@pos'") if $log->is_debug;
+    $logger->debug("Setting MediaBox as '@pos'") if $logger->is_debug;
     prMbox(@pos);
 }
 
@@ -140,7 +140,7 @@ sub printBoundingBox {
     if ($object->getBoundingBox()) {
         my $pos = $object->getPdfPosition();
         my @pos = ($pos->{x}, $pos->{y}, $object->getPdfDimensions()->{width}, $object->getPdfDimensions()->{height});
-        $log->debug("Bounding box at '".join(', ',@pos)."'") if $log->is_debug;
+        $logger->debug("Bounding box at '".join(', ',@pos)."'") if $logger->is_debug;
         prAdd(_box(@pos));
     }
 }
@@ -148,12 +148,12 @@ sub printElement {
     my ($self, $element, $itemId) = @_;
 
     try {
-        $log->debug("PrintElement item:'$itemId'") if $log->is_debug;
+        $logger->debug("PrintElement item:'$itemId'") if $logger->is_debug;
         my $text = C4::Labels::DataSourceManager::executeDataSource($element, $itemId);
-        $log->debug("PrintElement item:'$itemId', text:'$text'") if $log->is_debug;
+        $logger->debug("PrintElement item:'$itemId', text:'$text'") if $logger->is_debug;
         C4::Labels::DataSourceManager::executeDataFormat($element, $text);
     } catch { #Simply tag the Exception with the current Element and pass it upstream
-        $log->warn("PrintElement item:'$itemId', exception:'$_'") if $log->is_warn;
+        $logger->warn("PrintElement item:'$itemId', exception:'$_'") if $logger->is_warn;
         my $idTag = "Error printing label for Item '$itemId'";
         die "$idTag\n$_" unless blessed($_) && $_->can('rethrow');
         $_->{message} = $idTag."\n".$_->{message};

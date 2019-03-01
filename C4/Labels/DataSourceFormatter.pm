@@ -29,7 +29,7 @@ use Koha::Exception::UnknownObject;
 use Koha::Exception::BadParameter;
 
 use Koha::Logger;
-my $log = Koha::Logger->new({category => __PACKAGE__});
+our $logger = Koha::Logger->get();
 
 =head SYNOPSIS
 
@@ -77,7 +77,7 @@ sub public_barcode39 {
         ySize         => $yScaling,
         xSize         => $xScaling,
     );
-    $log->debug(  "Barcode39 ".$log->flatten(\%pos)  ) if $log->is_debug;
+    $logger->debug(  "Barcode39 ".$logger->flatten(\%pos)  ) if $logger->is_debug;
     PDF::Reuse::Barcode::Code39 (%pos,
                                  value         => '*'.$text.'*',
                                  text          => $showText,
@@ -108,7 +108,7 @@ sub public_barcode128 {
         ySize         => $yScaling,
         xSize         => $xScaling,
     );
-    $log->debug(  "Barcode128 ".$log->flatten(\%pos)  ) if $log->is_debug;
+    $logger->debug(  "Barcode128 ".$logger->flatten(\%pos)  ) if $logger->is_debug;
     PDF::Reuse::Barcode::Code128 (%pos,
                                   value         => $text,
                                   text          => $showText,);
@@ -142,7 +142,7 @@ sub public_barcodeEAN13 {
         ySize         => $yScaling,
         xSize         => $xScaling,
     );
-    $log->debug(  "EAN13 ".$log->flatten(\%pos)  ) if $log->is_debug;
+    $logger->debug(  "EAN13 ".$logger->flatten(\%pos)  ) if $logger->is_debug;
     PDF::Reuse::Barcode::EAN13  (%pos,
                                  value         => $text,
                                  text          => $showText,);
@@ -176,7 +176,7 @@ sub public_barcodeEAN13checksum {
         ySize         => $yScaling,
         xSize         => $xScaling,
     );
-    $log->debug(  "EAN13checksum ".$log->flatten(\%pos)  ) if $log->is_debug;
+    $logger->debug(  "EAN13checksum ".$logger->flatten(\%pos)  ) if $logger->is_debug;
     PDF::Reuse::Barcode::EAN13  (%pos,
                                  value         => $text,
                                  text          => $showText,);
@@ -288,7 +288,7 @@ sub _printLines {
         my $line = $lines->[$i];
         my $posTop = $pos->{y} - ($fontSize*($i+1)) - (($i != 0) ? $lineSeparation*$i : 0);
         my @pos = ($pos->{x}, $posTop);
-        $log->debug(  "_printLine ".$log->flatten(\@pos)  ) if $log->is_debug;
+        $logger->debug(  "_printLine ".$logger->flatten(\@pos)  ) if $logger->is_debug;
         PDF::Reuse::prText(@pos, $line);
     }
 }

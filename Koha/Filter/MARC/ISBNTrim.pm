@@ -37,7 +37,7 @@ our $NAME = 'ISBNTrim';
 our $VERSION = '1.0';
 
 use Koha::Logger;
-my $logger = Koha::Logger->get({category => __PACKAGE__});
+our $logger = Koha::Logger->get({category => __PACKAGE__});
 
 =head2 filter
 

@@ -104,6 +104,8 @@ use Koha::Config;
 use Koha::Config::SysPref;
 use Koha::Config::SysPrefs;
 
+our $logger; # This is lazy-loaded to avoid system compile-time issues
+
 =head1 NAME
 
 C4::Context - Maintain and manipulate the context of a Koha script
@@ -1029,7 +1031,6 @@ Sets the Koha environment for command line scripts.
 sub setCommandlineEnvironment {
    my ($class) = @_;
 
-   C4::Context->interface('commandline'); #Set interface for logger and friends
    C4::Context->_new_userenv('commandline');
    my $clisu = _enforceCommandlineSuperuserBorrowerExists();
    C4::Context->set_userenv($clisu->borrowernumber,$clisu->userid,$clisu->cardnumber,$clisu->firstname,$clisu->surname, $clisu->branchcode, '', {}, '', '', '');
@@ -1058,28 +1059,56 @@ sub _enforceCommandlineSuperuserBorrowerExists {
 
 =head2 interface
 
-Sets the current interface for later retrieval in any Perl module
+Sets or gets the current interface for later retrieval in any Perl module.
+If the interface changes, re-interfaces all known Koha::Loggers
 
     C4::Context->interface('opac');
     C4::Context->interface('intranet');
     my $interface = C4::Context->interface;
 
+ @dies if trying to change to an invalid interface
+
 =cut
 
+our @allowedInterfaces = ('opac', 'intranet', 'sip', 'commandline', 'rest',
+                          ''); #Empty interface can be set in the incredible case where the interface cannot be detected from the plack-environment. This causes the root logger to be used.
 sub interface {
     my ($class, $interface) = @_;
 
-    if (defined $interface) {
-        $interface = lc $interface;
-        if ($interface eq 'opac' || $interface eq 'intranet' || $interface eq 'sip' ||
-            $interface eq 'commandline' || $interface eq 'rest' ) {
-            $context->{interface} = $interface;
-        } else {
-            warn "invalid interface : '$interface'";
+    _setInterface(_validInterface($interface)) if (defined $interface);
+    _setInterface(_validInterface($ENV{KOHA_INTERFACE})) if (not($context->{interface}) && $ENV{KOHA_INTERFACE});
+
+    return $context->{interface} if $context->{interface};
+
+    #We might try to autodetect the interface by observing the call stack,
+    #but there are so many different interfaces within this single process, using various emulations,
+    #that accurately maintaining this autodetection looks like a difficult problem.
+
+    return '';
+}
+sub _validInterface {
+    my $interface = lc($_[0]);
+    return $interface if defined grep {/^$interface/} @allowedInterfaces;
+    die "invalid interface : '$interface'";
+}
+sub _setInterface {
+    my ($newInterface) = @_;
+    unless ($context->{interface}) {
+        $context->{interface} = $newInterface;
+        C4::Context->setCommandlineEnvironment() if ($newInterface eq 'commandline');
+    }
+    else {
+        unless ($context->{interface} eq $newInterface) {
+            my $oldInterface = $context->{interface};
+            $context->{interface} = $newInterface;
+            Koha::Logger::reinterfaceLoggers($oldInterface); # If the interface was set previously and has now changed, loggers need to be changed to point to the new interface appenders.
+            C4::Context->setCommandlineEnvironment() if ($newInterface eq 'commandline');
+        }
+        else {
+            $context->{interface} = $newInterface;
         }
     }
-
-    return $context->{interface} // 'opac';
+    return $context->{interface};
 }
 
 # always returns a string for OK comparison via "eq" or "ne"
@@ -1104,6 +1133,10 @@ sub only_my_library {
       && !C4::Context->IsSuperLibrarian()
       && C4::Context->userenv->{branch};
 }
+
+C4::Context->import(); #This makes sure the $context is loaded at this point
+Koha::Logger->init( C4::Context->config("log4perl_conf") );
+$logger = Koha::Logger->get();
 
 1;
 
