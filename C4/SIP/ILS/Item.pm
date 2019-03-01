@@ -1,6 +1,6 @@
 #
 # ILS::Item.pm
-# 
+#
 # A Class for hiding the ILS's concept of the item from OpenSIP
 #
 
@@ -12,7 +12,7 @@ use warnings;
 use Carp;
 
 #use C4::SIP::SIPServer;
-use C4::SIP::Sip qw(get_logger);
+use C4::SIP::Sip;
 use C4::SIP::ILS::Transaction;
 
 use C4::Debug;
@@ -67,6 +67,9 @@ use Koha::Biblios;
 );
 =cut
 
+use Koha::Logger;
+our $logger = Koha::Logger->get();
+
 sub new {
 	my ($class, $item_id) = @_;
 	my $type = ref($class) || $class;
@@ -74,7 +77,7 @@ sub new {
     my $itemnumber = GetItemnumberFromBarcode($item_id);
 	my $item = GetBiblioFromItemNumber($itemnumber);    # actually biblio.*, biblioitems.* AND items.*  (overkill)
 	if (! $item) {
-                C4::SIP::Sip::get_logger()->debug("new ILS::Item('$item_id'): not found");
+                $logger->debug("new ILS::Item('$item_id'): not found");
 		warn "new ILS::Item($item_id) : No item '$item_id'.";
         return;
 	}
@@ -103,7 +106,7 @@ sub new {
 	$self = $item;
 	bless $self, $type;
 
-    C4::SIP::Sip::get_logger()->debug("new ILS::Item('$item_id'): found with title '$self->{title}'");
+    $logger->debug("new ILS::Item('$item_id'): found with title '$self->{title}'");
 
     return $self;
 }
@@ -165,7 +168,7 @@ sub hold_patron_name {
     my $borrowernumber = (@_ ? shift: $self->hold_patron_id()) or return;
     my $holder = GetMember(borrowernumber=>$borrowernumber);
     unless ($holder) {
-        C4::SIP::Sip::get_logger()->debug("While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
+        $logger->debug("While checking hold, GetMember failed for borrowernumber '$borrowernumber'");
         return;
     }
     my $email = $holder->{email} || '';
@@ -317,7 +320,7 @@ sub hold_pickup_date {
 
 # This is a partial check of "availability".  It is not supposed to check everything here.
 # An item is available for a patron if it is:
-# 1) checked out to the same patron 
+# 1) checked out to the same patron
 #    AND no pending (i.e. non-W) hold queue
 # OR
 # 2) not checked out
@@ -369,4 +372,3 @@ sub fill_reserve {
 }
 1;
 __END__
-

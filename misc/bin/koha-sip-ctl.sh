@@ -21,19 +21,18 @@ SIPCONFIGDIR="__KOHA_CONF_DIR__/SIPconfig"
 LOGBASEDIR="__LOG_DIR__"
 LOGDIR="$LOGBASEDIR/sip2"
 RUNDIR="/var/run/koha/sip2"
-LOCKDIR="/var/lock/koha/sip2"
 
-DAEMON_USER=koha
-DAEMON_GROUP=koha
+DAEMON_USER=__KOHA_USER__-sip
+DAEMON_GROUP=__KOHA_GROUP__-sip
 
 ##  0  ## Show how to use this carp!
 help_usage() {
     echo "$0 -service"
     echo "Starts and stops Koha SIP server worker configurations"
-    echo 
+    echo
     echo "USAGE:"
     echo "service $0 start|stop|restart <configName> [--tcpdump]"
-    echo 
+    echo
     echo "Param1 start, stop, restart daemon"
     echo "Param2 configuration name. Finds all *.xml-files from $SIPCONFIGDIR."
     echo "    Each config file is a clone of SIPconfig.xml containing specific"
@@ -41,7 +40,7 @@ help_usage() {
     echo "    Param2 is the name of the config without the trailing filetype."
     echo "    OR ALL which targets all configuration files."
     echo "Param3 if defined, enables tcpdump:ing the RAW connection packets."
-    echo 
+    echo
     exit 1
 }
 
@@ -66,17 +65,15 @@ operateSIPserverDaemon() {
 
     NAME=koha-sip-$SIPDEVICE-daemon
 
-    ERRLOG=$LOGDIR/$SIPDEVICE.err
-    STDOUT=$LOGDIR/$SIPDEVICE.std
-    OUTPUT=$LOGDIR/$SIPDEVICE.out
-    LOG4PERL=$LOGBASEDIR/sip2.log
+    OUTPUT=$LOGDIR/$SIPDEVICE.log
 
-    touch $ERRLOG $STDOUT $OUTPUT $LOG4PERL
-    [ $(whoami) = "root"  ] && chown $DAEMON_USER:$DAEMON_GROUP $ERRLOG $STDOUT $OUTPUT $LOG4PERL
+    touch $OUTPUT
+    chown $DAEMON_USER:root $OUTPUT
+    chmod 600 $OUTPUT
 
-    echo "SIP2 $SIPDEVICE $ACTION"
+    LOGBANG="--errlog=$OUTPUT --dbglog=$OUTPUT --output=$OUTPUT"
 
-    daemon --delay=30 --name=$NAME --pidfiles=$RUNDIR --user=$DAEMON_USER --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --respawn --command=perl $DAEMON_ACTION -- -I$KOHA_PATH/C4/SIP/ -MILS $KOHA_PATH/C4/SIP/SIPServer.pm $SIPCONFIG 
+    daemon --delay=30 --name=$NAME --pidfiles=$RUNDIR --user=$DAEMON_USER $LOGBANG --respawn --command=perl $DAEMON_ACTION -- -I$KOHA_PATH/C4/SIP/ -MILS $KOHA_PATH/C4/SIP/SIPServer.pm $SIPCONFIG
 }
 
 operateTcpdumpDaemon() {
@@ -89,16 +86,15 @@ operateTcpdumpDaemon() {
 
     NAME=koha-sip-$SIPDEVICE-tcpdump-daemon
 
-    ERRLOG=$LOGDIR/$SIPDEVICE-tcpdump.err
-    STDOUT=$LOGDIR/$SIPDEVICE-tcpdump.std
     OUTPUT=$LOGDIR/$SIPDEVICE-tcpdump.out
+    LOGBANG="--errlog=$OUTPUT --dbglog=$OUTPUT --output=$OUTPUT"
 
     SIPCONFIG_SERVICE_PORT=`xmlstarlet sel -N "x=http://openncip.org/acs-config/1.0/" -t -c '/x:acsconfig/x:listeners/x:service[@transport="RAW"]' $SIPCONFIG | xmlstarlet sel -N "x=http://openncip.org/acs-config/1.0/" -t -v "/x:service/@port"`
     SIP_PORT=`echo $SIPCONFIG_SERVICE_PORT | grep -Po '(?<=:)\d+(?=\/)'`
 
     echo "SIP2 tcpdump $SIPDEVICE $ACTION"
 
-    daemon --delay=30 --name=$NAME --pidfiles=$RUNDIR --errlog=$ERRLOG --stdout=$STDOUT --output=$OUTPUT --respawn --command=/usr/sbin/tcpdump $DAEMON_ACTION -- -i any -A port $SIP_PORT
+    daemon --delay=30 --name=$NAME --pidfiles=$RUNDIR $LOGBANG --respawn --command=/usr/sbin/tcpdump $DAEMON_ACTION -- -i any -A port $SIP_PORT
 }
 
 # Parse arguments
@@ -117,9 +113,9 @@ for ARGS in $@; do
 done
 
 # Create the required dirs
-mkdir -p $RUNDIR $LOCKDIR $LOGDIR
-chmod g-w $RUNDIR $LOCKDIR $LOGDIR
-chown $DAEMON_USER:$DAEMON_GROUP $RUNDIR $LOCKDIR $LOGDIR
+mkdir -p $RUNDIR $LOGDIR
+chmod 711 $RUNDIR $LOGDIR
+chown $DAEMON_USER:root $RUNDIR $LOGDIR
 
 # Allowed parameters are start stop and restart
 case $ACTION in start | stop | restart )

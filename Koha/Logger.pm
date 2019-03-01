@@ -20,6 +20,7 @@ Log::Log4perl->wrapper_register('Plack::Middleware::LogErrors::LogHandle');
 Log::Log4perl->wrapper_register('Plack::Middleware::LogWarn');
 Log::Log4perl->wrapper_register('Koha::Logger::Mojo');
 Log::Log4perl->wrapper_register('MojoX::Log::Log4perl');
+Log::Log4perl->wrapper_register('Net::Server::Log::Log::Log4perl');
 
 use Koha::Exception::BadParameter;
 

@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 package C4::SIP::SIPServer;
 
+BEGIN { $ENV{KOHA_INTERFACE} = 'sip'; };
+
 use strict;
 use warnings;
 use FindBin qw($Bin);
@@ -11,21 +13,23 @@ use Socket qw(:DEFAULT :crlf);
 use Scalar::Util qw(blessed);
 require UNIVERSAL::require;
 
+use C4::Context;
 use C4::SIP::Sip::Constants qw(:all);
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType qw( handle login_core );
 
-use Koha::Logger;
+use Koha::Caches;
 
 use base qw(Net::Server::PreFork);
 
-use constant LOG_SIP => "local6"; # Local alias for the logging facility
+use Koha::Logger;
+our $logger = Koha::Logger->get();
 
 #
 # Main	# not really, since package SIPServer
 #
-# FIXME: Is this a module or a script?  
+# FIXME: Is this a module or a script?
 # A script with no MAIN namespace?
 # A module that takes command line args?
 
@@ -46,15 +50,6 @@ my @parms;
 foreach my $svc (keys %{$config->{listeners}}) {
     push @parms, "port=" . $svc;
 }
-
-#
-# Logging
-#
-# Log lines look like this:
-# Jun 16 21:21:31 server08 steve_sip[19305]: ILS::Transaction::Checkout performing checkout...
-# [  TIMESTAMP  ] [ HOST ] [ IDENT ]  PID  : Message...
-#
-# The IDENT is determined by config file 'server-params' arguments
 
 
 #
@@ -79,7 +74,6 @@ __PACKAGE__ ->run(@parms);
 #
 
 my $activeSIPServer;
-my $activeLogger;
 
 # process_request is the callback used by Net::Server to handle
 # an incoming connection request.
@@ -93,7 +87,6 @@ sub process_request {
     $self->{config} = $config;
 
     $self->{account} = undef; # Clear out the account from the last request, it may be different
-    $self->{logger} = _set_logger( Koha::Logger->get({ interface => 'sip' }) );
     #Flush previous MDCs to prevent accidentally leaking incorrect MDC-entries
     Log::Log4perl::MDC->put("accountid", undef);
     Log::Log4perl::MDC->put("peeraddr", $self->{server}->{peeraddr}); #peer address is known at this point, so reset it here. Other MDC depends on a successful login.
@@ -114,14 +107,14 @@ sub process_request {
     $self->{service} = $config->find_service($sockaddr, $port, $proto);
 
     if (!defined($self->{service})) {
-                C4::SIP::SIPServer::get_logger()->error("process_request: Unknown recognized server connection: $sockaddr:$port/$proto");
+                $logger->error("process_request: Unknown recognized server connection: $sockaddr:$port/$proto");
 		die "process_request: Bad server connection";
     }
 
     $transport = $transports{$self->{service}->{transport}};
 
     if (!defined($transport)) {
-                C4::SIP::SIPServer::get_logger()->warn("Unknown transport '$service->{transport}', dropping");
+                $logger->warn("Unknown transport '$service->{transport}', dropping");
 		return;
     } else {
 		&$transport($self);
@@ -147,13 +140,13 @@ sub raw_transport {
     # In practice it should only iterate once but be prepared
     local $SIG{ALRM} = sub { die 'raw transport Timed Out!' };
     my $timeout = $self->get_timeout({ transport => 1 });
-    C4::SIP::SIPServer::get_logger()->debug("raw_transport: timeout is $service->{timeout}");
+    $logger->debug("raw_transport: timeout is $service->{timeout}");
     alarm $timeout;
     while (!$self->{account}) {
         $input = read_request();
         if (!$input) {
             # EOF on the socket
-            C4::SIP::SIPServer::get_logger()->info("raw_transport: shutting down: EOF during login");
+            $logger->info("raw_transport: shutting down: EOF during login");
             return;
         }
         $input =~ s/[\r\n]+$//sm; # Strip off trailing line terminator(s)
@@ -163,32 +156,31 @@ sub raw_transport {
     }
     alarm 0;
 
-    $self->{logger} = _set_logger( Koha::Logger->get( { interface => 'sip', category => $self->{account}->{id} } ) ); # Add id to namespace
     #Set MDCs after properly authenticating
     Log::Log4perl::MDC->put("accountid", $self->{account}->{id});
 
     if (! $self->{account}->{id}) {
-        C4::SIP::SIPServer::get_logger()->error("Login failed shutting down");
+        $logger->error("Login failed shutting down");
         return;
     }
-    C4::SIP::SIPServer::get_logger()->debug("raw_transport: uname/inst: '$self->{account}->{id}/$self->{account}->{institution}'");
+    $logger->debug("raw_transport: uname/inst: '$self->{account}->{id}/$self->{account}->{institution}'");
 
     $self->sip_protocol_loop();
 
-    C4::SIP::SIPServer::get_logger()->info("raw_transport: shutting down");
+    $logger->info("raw_transport: shutting down");
     return;
 }
 
 sub get_clean_string {
 	my $string = shift;
 	if (defined $string) {
-                C4::SIP::SIPServer::get_logger()->debug("get_clean_string  pre-clean(length " . length($string) . "): $string");
+                $logger->debug("get_clean_string  pre-clean(length " . length($string) . "): $string");
 		chomp($string);
 		$string =~ s/^[^A-z0-9]+//;
 		$string =~ s/[^A-z0-9]+$//;
-                C4::SIP::SIPServer::get_logger()->debug("get_clean_string post-clean(length " . length($string) . "): $string)");
+                $logger->debug("get_clean_string post-clean(length " . length($string) . "): $string)");
 	} else {
-                C4::SIP::SIPServer::get_logger()->info("get_clean_string called on undefined");
+                $logger->info("get_clean_string called on undefined");
 	}
 	return $string;
 }
@@ -198,7 +190,7 @@ sub get_clean_input {
 	my $in = <STDIN>;
 	$in = get_clean_string($in);
 	while (my $extra = <STDIN>){
-                C4::SIP::SIPServer::get_logger()->error("get_clean_input got extra lines: $extra");
+                $logger->error("get_clean_input got extra lines: $extra");
 	}
 	return $in;
 }
@@ -211,7 +203,7 @@ sub telnet_transport {
     my $input;
     my $config  = $self->{config};
     my $timeout = $self->get_timeout({ transport => 1 });
-    C4::SIP::SIPServer::get_logger()->debug("telnet_transport: timeout is $timeout");
+    $logger->debug("telnet_transport: timeout is $timeout");
 
     eval {
 	local $SIG{ALRM} = sub { die "telnet_transport: Timed Out ($timeout seconds)!\n"; };
@@ -230,10 +222,10 @@ sub telnet_transport {
 		$pwd = <STDIN>;
 		alarm 0;
 
-                C4::SIP::SIPServer::get_logger()->debug("telnet_transport 1: uid length " . length($uid) . ", pwd length " . length($pwd));
+                $logger->debug("telnet_transport 1: uid length " . length($uid) . ", pwd length " . length($pwd));
 		$uid = get_clean_string ($uid);
 		$pwd = get_clean_string ($pwd);
-                C4::SIP::SIPServer::get_logger()->debug("telnet_transport 2: uid length " . length($uid) . ", pwd length " . length($pwd));
+                $logger->debug("telnet_transport 2: uid length " . length($uid) . ", pwd length " . length($pwd));
 
 	    if (exists ($config->{accounts}->{$uid})
 		&& ($pwd eq $config->{accounts}->{$uid}->{password})) {
@@ -242,26 +234,25 @@ sub telnet_transport {
                 last;
             }
 	    }
-		C4::SIP::SIPServer::get_logger()->warn("Invalid login attempt: ' . ($uid||'')  . '");
+		$logger->warn("Invalid login attempt: ' . ($uid||'')  . '");
 		print("Invalid login$CRLF");
 	}
     }; # End of eval
 
     if ($@) {
-		C4::SIP::SIPServer::get_logger()->error("telnet_transport: Login timed out");
+		$logger->error("telnet_transport: Login timed out");
 		die "Telnet Login Timed out";
     } elsif (!defined($account)) {
-		C4::SIP::SIPServer::get_logger()->error("telnet_transport: Login Failed");
+		$logger->error("telnet_transport: Login Failed");
 		die "Login Failure";
     } else {
 		print "Login OK.  Initiating SIP$CRLF";
     }
 
     $self->{account} = $account;
-    $self->{logger} = _set_logger( Koha::Logger->get( { interface => 'sip', category => $self->{account}->{id} } ) ); # Add id to namespace
-    C4::SIP::SIPServer::get_logger()->debug("telnet_transport: uname/inst: '$account->{id}/$account->{institution}'");
+    $logger->debug("telnet_transport: uname/inst: '$account->{id}/$account->{institution}'");
     $self->sip_protocol_loop();
-    C4::SIP::SIPServer::get_logger()->info("telnet_transport: shutting down");
+    $logger->info("telnet_transport: shutting down");
     return;
 }
 
@@ -291,7 +282,7 @@ sub sip_protocol_loop {
     # In short, we'll take any valid message here.
     eval {
         local $SIG{ALRM} = sub {
-            C4::SIP::SIPServer::get_logger()->debug("Inactive: timed out");
+            $logger->debug("Inactive: timed out");
             die "Timed Out!\n";
         };
         my $previous_alarm = alarm($timeout);
@@ -303,14 +294,14 @@ sub sip_protocol_loop {
             alarm($timeout);
 
             unless ($inputbuf) {
-                C4::SIP::SIPServer::get_logger()->error("sip_protocol_loop: empty input skipped");
+                $logger->error("sip_protocol_loop: empty input skipped");
                 print("96$CR");
                 next;
             }
 
             my $status = C4::SIP::Sip::MsgType::handle( $inputbuf, $self, q{} );
             if ( !$status ) {
-                C4::SIP::SIPServer::get_logger()->error("sip_protocol_loop: failed to handle " . substr( $inputbuf, 0, 2 ) );
+                $logger->error("sip_protocol_loop: failed to handle " . substr( $inputbuf, 0, 2 ) );
             }
             next if $status eq REQUEST_ACS_RESEND;
         }
@@ -345,16 +336,16 @@ sub read_request {
     # treat as one line to include the extra linebreaks we are trying to remove!
       }
       else {
-          C4::SIP::SIPServer::get_logger()->debug('EOF returned on read');
+          $logger->debug('EOF returned on read');
           return;
       }
       my $len = length $buffer;
       if ( $len != $raw_length ) {
           my $trim = $raw_length - $len;
-          C4::SIP::SIPServer::get_logger()->debug("read_request trimmed $trim character(s) ");
+          $logger->debug("read_request trimmed $trim character(s) ");
       }
 
-      C4::SIP::SIPServer::get_logger()->info("INPUT MSG: '$buffer'");
+      $logger->info("INPUT MSG: '$buffer'");
       return $buffer;
 }
 
@@ -390,7 +381,7 @@ sub get_timeout {
         my $policy = $server->{policy} // {};
         my $rv = sprintf( "%03d", $policy->{timeout} // 0 );
         if( length($rv) != 3 ) {
-            C4::SIP::SIPServer::get_logger()->error("LOG_ERR", "Policy timeout has wrong size: '$rv'");
+            $logger->error("LOG_ERR", "Policy timeout has wrong size: '$rv'");
             return '000';
         }
         return $rv;
@@ -424,32 +415,6 @@ sub _set_SIPServer {
     }
     $activeSIPServer = $sipServer;
     return $activeSIPServer;
-}
-
-=head2 get_logger
-
-    my $logger = C4::SIP::SIPServer::get_logger()
-
-@RETURNS Koha::Logger, the logger used to log this SIP-transaction
-
-=cut
-
-sub get_logger {
-    unless($activeLogger) {
-        my @cc = caller(1);
-        die "$cc[3]() asks for \$activeLogger, but he is not defined yet";
-    }
-    return $activeLogger;
-}
-
-sub _set_logger {
-    my ($logger) = @_;
-    unless (blessed($logger) && $logger->isa('Koha::Logger')) {
-        my @cc = caller(0);
-        die "$cc[3]():> \$logger '$logger' is not a Koha::Logger-object";
-    }
-    $activeLogger = $logger;
-    return $activeLogger;
 }
 
 1;

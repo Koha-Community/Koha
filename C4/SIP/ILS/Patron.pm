@@ -1,6 +1,6 @@
 #
 # ILS::Patron.pm
-# 
+#
 # A Class for hiding the ILS's concept of the patron from the OpenSIP
 # system
 #
@@ -21,11 +21,14 @@ use C4::Members;
 use C4::Reserves;
 use C4::Items qw( GetBarcodeFromItemnumber GetItemnumbersForBiblio);
 use C4::Auth qw(checkpw);
-use C4::SIP::Sip qw(get_logger);
+use C4::SIP::Sip;
 
 use Koha::Libraries;
 use Koha::Logger;
 use Koha::Patrons;
+
+use Koha::Logger;
+our $logger = Koha::Logger->get();
 
 our $kp;    # koha patron
 
@@ -37,7 +40,7 @@ sub new {
     $debug and warn "new Patron (GetMember): " . Dumper($kp);
 
     unless (defined $kp) {
-        C4::SIP::Sip::get_logger()->debug("new ILS::Patron($patron_id): no such patron");
+        $logger->debug("new ILS::Patron($patron_id): no such patron");
         return;
     }
     $kp = GetMember( borrowernumber => $kp->{borrowernumber});
@@ -125,7 +128,7 @@ sub new {
     $ilspatron{items} = GetPendingIssues($kp->{borrowernumber});
     $self = \%ilspatron;
     $debug and warn Dumper($self);
-    C4::SIP::Sip::get_logger()->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
+    $logger->debug("new ILS::Patron($patron_id): found patron '$self->{id}'");
     C4::Log::logaction("MEMBERS", "LOGIN", $kp->{borrowernumber}, "SIP login", "sip") if C4::Context->preference("BorrowersLog");
     bless $self, $type;
     return $self;
@@ -236,7 +239,7 @@ sub expired {
 #
 # remove the hold on item item_id from my hold queue.
 # return true if I was holding the item, false otherwise.
-# 
+#
 sub drop_hold {
     my ($self, $item_id) = @_;
     return if !$item_id;
@@ -361,7 +364,7 @@ sub enable {
     foreach my $field ('charge_ok', 'renew_ok', 'recall_ok', 'hold_ok', 'inet') {
         $self->{$field} = 1;
     }
-    C4::SIP::Sip::get_logger()->debug("Patron($self->{id})->enable: charge: $self->{charge_ok}, ".
+    $logger->debug("Patron($self->{id})->enable: charge: $self->{charge_ok}, ".
                                             "renew:$self->{renew_ok}, recall:$self->{recall_ok}, hold:$self->{hold_ok}");
     $self->{screen_msg} = "Enable feature not implemented."; # "All privileges restored.";   # TODO: not really affecting patron record
     return $self;
@@ -391,7 +394,7 @@ sub holds_blocked_by_excessive_fees {
     return ( $self->fee_amount
           && $self->fee_amount > C4::Context->preference("maxoutstanding") );
 }
-    
+
 sub library_name {
     my $self = shift;
     unless ($self->{library_name}) {
@@ -591,4 +594,3 @@ __END__
     {itemlist}    ref-to-array: list of available items
 
 =cut
-
