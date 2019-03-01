@@ -659,6 +659,29 @@ sub is_serial {
     return 0;
 }
 
+=head3 custom_cover_image_url
+
+my $image_url = $biblio->custom_cover_image_url
+
+Return the specific url of the cover image for this bibliographic record.
+It is built regaring the value of the system preference CustomCoverImagesURL
+
+=cut
+
+sub custom_cover_image_url {
+    my ( $self ) = @_;
+    my $url = C4::Context->preference('CustomCoverImagesURL');
+    if ( $url =~ m|%isbn%| ) {
+        my $isbn = $self->biblioitem->isbn;
+        $url =~ s|%isbn%|$isbn|g;
+    }
+    if ( $url =~ m|%issn%| ) {
+        my $issn = $self->biblioitem->issn;
+        $url =~ s|%issn%|$issn|g;
+    }
+    return $url;
+}
+
 =head3 type
 
 =cut
