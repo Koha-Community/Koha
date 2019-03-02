@@ -60,6 +60,28 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do("ALTER TABLE default_branch_circ_rules DROP COLUMN maxissueqty, DROP COLUMN maxonsiteissueqty");
     }
 
+    if ( column_exists( 'issuingrules', 'maxissueqty' ) ) {
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT IF(categorycode='*', NULL, categorycode),
+                   IF(branchcode='*', NULL, branchcode),
+                   IF(itemtype='*', NULL, itemtype),
+                   'maxissueqty',
+                   COALESCE( maxissueqty, '' )
+            FROM issuingrules
+        ");
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT IF(categorycode='*', NULL, categorycode),
+                   IF(branchcode='*', NULL, branchcode),
+                   IF(itemtype='*', NULL, itemtype),
+                   'maxonsiteissueqty',
+                   COALESCE( maxonsiteissueqty, '' )
+            FROM issuingrules
+        ");
+        $dbh->do("ALTER TABLE issuingrules DROP COLUMN maxissueqty, DROP COLUMN maxonsiteissueqty");
+    }
+
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 18925 - Move maxissueqty and maxonsiteissueqty to circulation_rules)\n";
 }
