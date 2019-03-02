@@ -135,26 +135,26 @@
                                                                 <a name="viewnote" data-toggle="popover" title="Note" data-content="[% rule.note | html %]" data-placement="top" data-trigger="hover">View note</a>
                                                             [% ELSE %]&nbsp;[% END %]
                                                         </td>
-							<td>
+                            <td>
                                 [% SET rule_value = CirculationRules.Get( rule.branchcode, rule.categorycode, rule.itemtype, 'maxissueqty' ) %]
                                 [% IF rule_value  %]
                                     [% rule_value | html %]
                                 [% ELSE %]
                                     <span>Unlimited</span>
                                 [% END %]
-							</td>
-							<td>
+                            </td>
+                            <td>
                                 [% SET rule_value = CirculationRules.Get( rule.branchcode, rule.categorycode, rule.itemtype, 'maxonsiteissueqty' ) %]
                                 [% IF rule_value  %]
                                     [% rule_value | html %]
                                 [% ELSE %]
                                     <span>Unlimited</span>
                                 [% END %]
-							</td>
-							<td>[% rule.issuelength | html %]</td>
-							<td>
-							    [% rule.lengthunit | html %]
-							</td>
+                            </td>
+                            <td>[% rule.issuelength | html %]</td>
+                            <td>
+                                [% rule.lengthunit | html %]
+                            </td>
                             <td>
                               [% IF ( rule.hardduedate ) %]
                                 [% IF ( rule.hardduedatebefore ) %]
