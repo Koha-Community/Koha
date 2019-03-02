@@ -38,6 +38,8 @@ use Time::HiRes qw(gettimeofday);
 use C4::Context;
 use C4::Biblio qw( AddBiblio ); # We shouldn't use it
 
+use Koha::CirculationRules;
+
 use Test::More tests => 20;
 use MARC::Record;
 use MARC::Field;
@@ -147,7 +149,18 @@ SKIP: {
     $dbh->do(q|INSERT INTO itemtypes (itemtype, description, rentalcharge, notforloan) VALUES (?, ?, ?, ?)|, undef, $itemtype->{itemtype}, $itemtype->{description}, $itemtype->{rentalcharge}, $itemtype->{notforloan});
 
     my $issuing_rules = $sample_data->{issuingrule};
-    $dbh->do(q|INSERT INTO issuingrules (categorycode, itemtype, branchcode, maxissueqty, issuelength, lengthunit, renewalperiod) VALUES (?, ?, ?, ?, ?, ?, ?)|, undef, $issuing_rules->{categorycode}, $issuing_rules->{itemtype}, $issuing_rules->{branchcode}, $issuing_rules->{maxissueqty}, $issuing_rules->{issuelength}, $issuing_rules->{lengthunit}, $issuing_rules->{renewalperiod});
+    $dbh->do(q|INSERT INTO issuingrules (categorycode, itemtype, branchcode, issuelength, lengthunit, renewalperiod) VALUES (?, ?, ?, ?, ?, ?)|, undef, $issuing_rules->{categorycode}, $issuing_rules->{itemtype}, $issuing_rules->{branchcode}, $issuing_rules->{issuelength}, $issuing_rules->{lengthunit}, $issuing_rules->{renewalperiod});
+    Koha::CirculationRules->set_rules(
+        {
+            categorycode => $issuing_rules->{categorycode},
+            itemtype     => $issuing_rules->{itemtype},
+            branchcode   => $issuing_rules->{branchcode},
+            rules        => {
+                maxissueqty => $issuing_rules->{maxissueqty}
+            }
+        }
+    );
+
 
     for my $biblionumber ( @biblionumbers ) {
         $driver->get($base_url."/cataloguing/additem.pl?biblionumber=$biblionumber");
