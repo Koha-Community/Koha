@@ -533,9 +533,9 @@
                     <th>&nbsp;</th>
                 </tr>
                 [% FOREACH c IN categorycodes %]
-                    [% SET patron_maxissueqty = CirculationRules.Get( branchcode, c, undef, 'patron_maxissueqty' ) %]
-                    [% SET patron_maxonsiteissueqty = CirculationRules.Get( branchcode, c, undef, 'patron_maxonsiteissueqty' ) %]
-                    [% SET max_holds = CirculationRules.Get( branchcode, c, undef, 'max_holds' ) %]
+                    [% SET patron_maxissueqty = CirculationRules.Search( branchcode, c, undef, 'patron_maxissueqty' ) %]
+                    [% SET patron_maxonsiteissueqty = CirculationRules.Search( branchcode, c, undef, 'patron_maxonsiteissueqty' ) %]
+                    [% SET max_holds = CirculationRules.Search( branchcode, c, undef, 'max_holds' ) %]
 
                     [% IF patron_maxissueqty || patron_maxonsiteissueqty || max_holds %]
                     <tr>
@@ -561,9 +561,8 @@
                             [% END %]
                         </td>
                         <td>
-                            [% SET rule_value = CirculationRules.Get( branch_cat_rule_loo.branchcode || '*', branch_cat_rule_loo.categorycode, branch_cat_rule_loo.itemtype, 'max_holds' ) %]
-                            [% IF rule_value.defined && rule_value != '' %]
-                                [% rule_value | html %]
+                            [% IF max_holds.defined && max_holds != '' %]
+                                [% max_holds | html %]
                             [% ELSE %]
                                 <span>Unlimited</span>
                             [% END %]
