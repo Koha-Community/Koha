@@ -310,7 +310,7 @@ sub buildKohaItemsNamespace {
                 $status = "Lost";
             }
             if ($item->{damaged}) {
-                $status = "Damaged"; 
+                $status = "Damaged";
             }
             if (defined $transfertwhen && $transfertwhen ne '') {
                 $status = 'In transit';
