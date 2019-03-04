@@ -4324,6 +4324,18 @@ CREATE TABLE stockrotationitems (
       ON UPDATE CASCADE ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Table structure for table `keyboardshortcuts`
+--
+
+DROP TABLE IF EXISTS `keyboard_shortcuts`;
+CREATE TABLE keyboard_shortcuts (
+shortcut_name varchar(80) NOT NULL,
+shortcut_keys varchar(80) NOT NULL,
+shortcut_desc varchar(200) NOT NULL,
+PRIMARY KEY (shortcut_name)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
 /*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;

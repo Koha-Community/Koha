@@ -268,6 +268,7 @@
 </div>
 
 <div id="shortcuts-contents" style="display: none">
+<a id="redefine_shortcuts" href="/cgi-bin/koha/tools/adveditorshortcuts.pl">Redefine shortcuts</a>
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -276,53 +277,15 @@
         </tr>
     </thead>
     <tbody>
-        <tr>
-            <td>Alt-C</td>
-            <td>Insert copyright symbol (©)</td>
-        </tr>
-        <tr>
-            <td>Alt-P</td>
-            <td>Insert copyright symbol (℗) (sound recordings)</td>
-        </tr>
-        <tr>
-            <td>Ctrl-D</td>
-            <td>Insert delimiter (‡)</td>
-        </tr>
-        <tr>
-            <td>Ctrl-H</td>
-            <td>Get help on current subfield</td>
-        </tr>
-        <tr>
-            <td>Ctrl-Shift-L</td>
-            <td>Link field to authorities</td>
-        </tr>
+        [% FOREACH shortcut IN shortcuts %]
+            <tr>
+                <td>[% shortcut.shortcut_keys %]</td>
+                <td>[% shortcut.shortcut_desc %]</td>
+            </tr>
+        [% END %]
         <tr>
             <td>Ctrl-S</td>
-            <td>Save record</td>
-        </tr>
-        <tr>
-            <td>Ctrl-X</td>
-            <td>Delete current field</td>
-        </tr>
-        <tr>
-            <td>Ctrl-Shift-X</td>
-            <td>Delete current subfield</td>
-        </tr>
-        <tr>
-            <td>Enter</td>
-            <td>New field on next line</td>
-        </tr>
-        <tr>
-            <td>Shift-Enter</td>
-            <td>Insert line break</td>
-        </tr>
-        <tr>
-            <td>Tab</td>
-            <td>Move to next position</td>
-        </tr>
-        <tr>
-            <td>Shift-Tab</td>
-            <td>Move to previous position</td>
+            <td>Save record (cannot be remapped)</td>
         </tr>
     </tbody>
 </table>

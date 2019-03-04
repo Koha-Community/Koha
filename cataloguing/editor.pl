@@ -31,6 +31,7 @@ use DBIx::Class::ResultClass::HashRefInflator;
 use Koha::Database;
 use Koha::MarcSubfieldStructures;
 use Koha::BiblioFrameworks;
+use Koha::KeyboardShortcuts;
 
 my $input = CGI->new;
 
@@ -50,6 +51,13 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 my $schema = Koha::Database->new->schema;
+
+my @keyboard_shortcuts = Koha::KeyboardShortcuts->search();
+
+# Keyboard shortcuts
+$template->param(
+    shortcuts => \@keyboard_shortcuts,
+);
 
 # Available import batches
 $template->{VARS}->{editable_batches} = [ $schema->resultset('ImportBatch')->search(

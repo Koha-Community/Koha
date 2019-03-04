@@ -135,36 +135,36 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             return [];
         }
     }
+    var _editorKeys = {};
 
-    var _editorKeys = {
-        'Alt-C': function( cm ) {
+    _editorKeys[insert_copyright] =  function( cm ) {
             cm.replaceRange( '©', cm.getCursor() );
-        },
+        }
 
-        'Alt-P': function( cm ) {
+    _editorKeys[insert_copyright_sound] = function( cm ) {
             cm.replaceRange( '℗', cm.getCursor() );
-        },
+        }
 
-        Enter: function( cm ) {
+    _editorKeys[new_line] = function( cm ) {
             var cursor = cm.getCursor();
             cm.replaceRange( '\n', { line: cursor.line }, null, 'marcAware' );
             cm.setCursor( { line: cursor.line + 1, ch: 0 } );
-        },
+        }
 
-        'Shift-Enter': function( cm ) {
+    _editorKeys[line_break] =  function( cm ) {
             var cur = cm.getCursor();
 
             cm.replaceRange( "\n", cur, null );
-        },
+        }
 
-        'Ctrl-X': function( cm ) {
+    _editorKeys[delete_field] =  function( cm ) {
             // Delete line (or cut)
             if ( cm.somethingSelected() ) return true;
 
             cm.execCommand('deleteLine');
-        },
+        }
 
-        'Shift-Ctrl-L': function( cm ) {
+    _editorKeys[link_authorities] =  function( cm ) {
             // Launch the auth search popup
             var field = cm.marceditor.getCurrentField();
 
@@ -186,18 +186,18 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             }
             newin=window.open("../authorities/auth_finder.pl?source=biblio&authtypecode="+authtype+"&index="+index+"&value_mainstr="+encodeURI(mainmainstring)+"&value_main="+encodeURI(mainstring), "_blank",'width=700,height=550,toolbar=false,scrollbars=yes');
 
-        },
+        }
 
-        'Shift-Ctrl-X': function( cm ) {
+    _editorKeys[delete_subfield] = function( cm ) {
             // Delete subfield
             var field = cm.marceditor.getCurrentField();
             if ( !field ) return;
 
             var subfield = field.getSubfieldAt( cm.getCursor().ch );
             if ( subfield ) subfield.delete();
-        },
+        }
 
-        Tab: function( cm ) {
+     _editorKeys[next_position] =  function( cm ) {
             // Move through parts of tag/fixed fields
             var positions = getTabPositions( cm.marceditor );
             var cur = cm.getCursor();
@@ -210,9 +210,9 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             }
 
             cm.setCursor( { line: cur.line + 1, ch: 0 } );
-        },
+        }
 
-        'Shift-Tab': function( cm ) {
+    _editorKeys[prev_position] = function( cm ) {
             // Move backwards through parts of tag/fixed fields
             var positions = getTabPositions( cm.marceditor );
             var cur = cm.getCursor();
@@ -233,15 +233,13 @@ define( [ 'marc-record', 'koha-backend', 'preferences', 'text-marc', 'widget' ],
             } else {
                 cm.setCursor( { line: cur.line - 1, ch: 0 } );
             }
-        },
+        }
 
-        'Ctrl-D': function( cm ) {
-            // Insert subfield delimiter
-            var cur = cm.getCursor();
+    _editorKeys[insert_delimiter] = function(cm){
+        var cur = cm.getCursor();
 
-            cm.replaceRange( "‡", cur, null );
-        },
-    };
+        cm.replaceRange( "‡", cur, null );
+    }
 
     // The objects below are part of a field/subfield manipulation API, accessed through the base
     // editor object.

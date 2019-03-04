@@ -5,6 +5,9 @@
 [% Asset.js("lib/koha/cateditor/marc-mode.js") | $raw %]
 [% Asset.js("lib/require.js") | $raw %]
 <script>
+[% FOREACH shortcut IN shortcuts -%]
+    var [% shortcut.shortcut_name | html %] = "[% shortcut.shortcut_keys | html %]";
+[% END %]
     var authInfo = {
         [%- FOREACH authtag = authtags -%]
             [% authtag.tagfield | html %]: {
