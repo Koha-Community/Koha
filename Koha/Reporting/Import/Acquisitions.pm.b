@@ -27,41 +27,56 @@ sub loadDatas{
     my $statistics;
     my @parameters;
 
-    my $query = "select COALESCE(allitems.datereceived, '0000-00-00') as datetime, IFNULL(allitems.price, '0.00') as amount, allitems.itemnumber, ";
+    my $itemtypes = Koha::Reporting::Import::Abstract->getConditionValues('itemTypeToStatisticalCategory');
+    my $notforloan = Koha::Reporting::Import::Abstract->getConditionValues('notForLoanStatuses');
+
+    my $query = 'select aqorders.entrydate as datetime, aqorders.unitprice as amount, aqorders_items.itemnumber, ';
     $query .= 'allitems.homebranch as branch, allitems.location, ';
     $query .= 'allitems.datereceived as acquired_year, allitems.biblioitemnumber, allitems.ccode as collection_code, ';
     $query .= 'allitems.itype as itemtype, allbmeta.metadata as marcxml, allbitems.publicationyear as published_year ';
-    $query .= 'from items as allitems ';
+    $query .= 'from aqorders ';
+    $query .= 'inner join aqorders_items on aqorders.ordernumber = aqorders_items.ordernumber ';
+    $query .= 'inner join items ';
+    $query .= 'as allitems on aqorders_items.itemnumber=allitems.itemnumber and allitems.itype in '.$itemtypes.' and allitems.notforloan not in '.$notforloan.' ';
     $query .= 'inner join biblioitems as allbitems on allitems.biblioitemnumber=allbitems.biblioitemnumber ';
     $query .= 'inner join biblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
     my ($where, $parameters) = $self->getWhere();
     push @parameters, @$parameters;
 
-    my $query2 = "UNION ALL select COALESCE(allitems.datereceived, '0000-00-00') as datetime, IFNULL(allitems.price, '0.00') as amount, allitems.itemnumber, ";
+    my $query2 = 'UNION ALL select aqorders.entrydate as datetime, aqorders.unitprice as amount, aqorders_items.itemnumber, ';
     $query2 .= 'allitems.homebranch as branch, allitems.location, ';
     $query2 .= 'allitems.datereceived as acquired_year, allitems.biblioitemnumber, allitems.ccode as collection_code, ';
     $query2 .= 'allitems.itype as itemtype, allbmeta.metadata as marcxml, allbitems.publicationyear as published_year ';
-    $query2 .= 'from deleteditems as allitems ';
+    $query2 .= 'from aqorders ';
+    $query2 .= 'inner join aqorders_items on aqorders.ordernumber = aqorders_items.ordernumber ';
+    $query2 .= 'inner join deleteditems ';
+    $query2 .= 'as allitems on aqorders_items.itemnumber=allitems.itemnumber and allitems.itype in '.$itemtypes.' and allitems.notforloan not in '.$notforloan.' ';
     $query2 .= 'inner join biblioitems as allbitems on allitems.biblioitemnumber=allbitems.biblioitemnumber ';
     $query2 .= 'inner join biblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
     my ($where2, $parameters2) = $self->getWhere();
     push @parameters, @$parameters2;
 
-    my $query3 = "UNION ALL select COALESCE(allitems.datereceived, '0000-00-00') as datetime, IFNULL(allitems.price, '0.00') as amount, allitems.itemnumber, ";
+    my $query3 = 'UNION ALL select aqorders.entrydate as datetime, aqorders.unitprice as amount, aqorders_items.itemnumber, ';
     $query3 .= 'allitems.homebranch as branch, allitems.location, ';
     $query3 .= 'allitems.datereceived as acquired_year, allitems.biblioitemnumber, allitems.ccode as collection_code, ';
     $query3 .= 'allitems.itype as itemtype, allbmeta.metadata as marcxml, allbitems.publicationyear as published_year ';
-    $query3 .= 'from items as allitems ';
+    $query3 .= 'from aqorders ';
+    $query3 .= 'inner join aqorders_items on aqorders.ordernumber = aqorders_items.ordernumber ';
+    $query3 .= 'inner join items ';
+    $query3 .= 'as allitems on aqorders_items.itemnumber=allitems.itemnumber and allitems.itype in '.$itemtypes.' and allitems.notforloan not in '.$notforloan.' ';
     $query3 .= 'inner join deletedbiblioitems as allbitems on allitems.biblioitemnumber=allbitems.biblioitemnumber ';
     $query3 .= 'inner join deletedbiblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
     my ($where3, $parameters3) = $self->getWhere();
     push @parameters, @$parameters3;
 
-    my $query4 = "UNION ALL select COALESCE(allitems.datereceived, '0000-00-00') as datetime, IFNULL(allitems.price, '0.00') as amount, allitems.itemnumber, ";
+    my $query4 = 'UNION ALL select aqorders.entrydate as datetime, aqorders.unitprice as amount, aqorders_items.itemnumber, ';
     $query4 .= 'allitems.homebranch as branch, allitems.location, ';
     $query4 .= 'allitems.datereceived as acquired_year, allitems.biblioitemnumber, allitems.ccode as collection_code, ';
     $query4 .= 'allitems.itype as itemtype, allbmeta.metadata as marcxml, allbitems.publicationyear as published_year ';
-    $query4 .= 'from deleteditems as allitems ';
+    $query4 .= 'from aqorders ';
+    $query4 .= 'inner join aqorders_items on aqorders.ordernumber = aqorders_items.ordernumber ';
+    $query4 .= "inner join deleteditems ";
+    $query4 .= 'as allitems on aqorders_items.itemnumber=allitems.itemnumber and allitems.itype in '.$itemtypes.' and allitems.notforloan not in '.$notforloan.' ';
     $query4 .= 'inner join deletedbiblioitems as allbitems on allitems.biblioitemnumber=allbitems.biblioitemnumber ';
     $query4 .= 'inner join deletedbiblio_metadata as allbmeta on allbitems.biblionumber=allbmeta.biblionumber ';
     my ($where4, $parameters4) = $self->getWhere();
@@ -99,17 +114,15 @@ sub loadDatas{
 sub getWhere{
     my $self = shift;
     my @parameters;
-    my $itemtypes = Koha::Reporting::Import::Abstract->getConditionValues('itemTypeToStatisticalCategory');
-    my $notforloan = Koha::Reporting::Import::Abstract->getConditionValues('notForLoanStatuses');
-    my $where = 'where allitems.itype in '.$itemtypes.' and allitems.notforloan not in '.$notforloan.' ';
+    my $where = "where aqorders.orderstatus != 'cancelled' and aqorders_items.itemnumber is not null ";
     if($self->getLastSelectedId()){
         $where .= $self->getWhereLogic($where);
-        $where .= " allitems.itemnumber > ? ";
+        $where .= " aqorders_items.itemnumber > ? ";
         push @parameters, $self->getLastSelectedId();
     }
     if($self->getLastAllowedId()){
         $where .= $self->getWhereLogic($where);
-        $where .= " allitems.itemnumber <= ? ";
+        $where .= " aqorders_items.itemnumber <= ? ";
         push @parameters, $self->getLastAllowedId();
     }
     return ($where, \@parameters );
