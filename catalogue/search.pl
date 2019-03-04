@@ -385,11 +385,19 @@ my @indexes = map uri_unescape($_), $cgi->multi_param('idx');
 if ($indexes[0] && (!$indexes[1] || $params->{'scan'})) {
     my $idx = "ms_".$indexes[0];
     $idx =~ s/\,/comma/g;  # template toolkit doesn't like variables with a , in it
+    $idx =~ s/-/dash/g;  # template toolkit doesn't like variables with a dash in it
     $template->param($idx => 1);
 }
 
 # an operand can be a single term, a phrase, or a complete ccl query
 my @operands = map uri_unescape($_), $cgi->multi_param('q');
+
+# if a simple search, display the value in the search box
+if ($operands[0] && !$operands[1]) {
+    my $ms_query = $operands[0];
+    $ms_query =~ s/ #\S+//;
+    $template->param(ms_value => $ms_query);
+}
 
 # limits are use to limit to results to a pre-defined category such as branch or language
 my @limits = map uri_unescape($_), $cgi->multi_param('limit');
