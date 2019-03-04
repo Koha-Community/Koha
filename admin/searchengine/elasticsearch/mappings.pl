@@ -176,6 +176,7 @@ for my $index_name (@index_names) {
     }
 }
 
+my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
 for my $index_name (@index_names) {
     my $search_fields = Koha::SearchFields->search(
         { 'search_marc_map.index_name' => $index_name, 'search_marc_map.marc_type' => $marc_type, },
@@ -187,7 +188,6 @@ for my $index_name (@index_names) {
     );
 
     my @mappings;
-    my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
     my @facetable_field_names = map { $_->name } @facetable_fields;
 
     while ( my $s = $search_fields->next ) {
@@ -215,7 +215,6 @@ while ( my $search_field = $search_fields->next ) {
     push @all_search_fields, $search_field_unblessed;
 }
 
-my @facetable_fields = Koha::SearchEngine::Elasticsearch->get_facetable_fields();
 $template->param(
     indexes           => \@indexes,
     all_search_fields => \@all_search_fields,
