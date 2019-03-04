@@ -42,6 +42,8 @@ Options:
     --biblios|-b      Only run process for biblios.
     -c|--commit n     Specify how many records will be batched up before
                       they're added to Elasticsearch (default: 5000).
+    -p|--processes n  Specify the number of parallel processes to use
+                      for indexing.
     --verbose|-v      Be verbose.
     --help|-h         Print this help.
 
@@ -91,6 +93,11 @@ run_rebuild_elasticsearch()
     fi
     rebuild_opts="--commit ${commit_size}"
 
+    if [ "${clo_processes}" > 0 ]; then
+        processes=${clo_processes}
+    fi
+    rebuild_opts="--processes ${processes}"
+
     if [ "${biblios}" = "yes" ]; then
         rebuild_opts="${rebuild_opts} -b"
     fi
@@ -118,6 +125,7 @@ authorities="yes"
 biblios_only="no"
 authorities_only="no"
 commit_size=5000
+processes=1
 verbose="no"
 op=""
 
@@ -135,6 +143,9 @@ while [ -n "$*" ]; do
             ;;
         -c|--commit)
             clo_commit_size="$2" ; shift
+            ;;
+        -p|--processes)
+            clo_processes="$2" ; shift
             ;;
         --rebuild)
             set_action "rebuild"
