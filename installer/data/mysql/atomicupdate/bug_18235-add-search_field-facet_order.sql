@@ -1,4 +1,4 @@
-ALTER TABLE search_field ADD COLUMN facet_order TINYINT(4) DEFAULT '0' AFTER weight;
+ALTER TABLE search_field ADD COLUMN facet_order TINYINT(4) DEFAULT NULL AFTER weight;
 UPDATE search_field SET facet_order=1 WHERE name='author';
 UPDATE search_field SET facet_order=2 WHERE name='itype';
 UPDATE search_field SET facet_order=3 WHERE name='location';
