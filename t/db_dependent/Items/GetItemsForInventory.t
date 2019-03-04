@@ -62,15 +62,18 @@ subtest 'Old version is unchanged' => sub {
 
 subtest 'Skip items with waiting holds' => sub {
 
-    plan tests => 6;
+    plan tests => 7;
 
     $schema->storage->txn_begin;
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $itemtype
         = $builder->build_object( { class => 'Koha::ItemTypes', value => { rentalcharge => 0 } } );
-    my $patron = $builder->build_object(
+    my $patron_1 = $builder->build_object(
         { class => 'Koha::Patrons', value => { branchcode => $library->id } } );
+    my $patron_2 = $builder->build_object(
+        { class => 'Koha::Patrons', value => { branchcode => $library->id } } );
+
 
     my $title_1 = 'Title 1, ';
     my $title_2 = 'Title 2, bizzarre one so doesn\'t already exist';
@@ -112,11 +115,16 @@ subtest 'Skip items with waiting holds' => sub {
     is( scalar @{$items_2},     $second_items_count, 'Results and count match' );
     is( $first_items_count + 2, $second_items_count, 'Two items added, count makes sense' );
 
-    # Add a waiting hold
-    my $reserve_id
-        = C4::Reserves::AddReserve( $library->branchcode, $patron->borrowernumber,
+    # Add 2 waiting holds
+    C4::Reserves::AddReserve( $library->branchcode, $patron_1->borrowernumber,
         $item_1->biblionumber, '', 1, undef, undef, '', "title for fee",
         $item_1->itemnumber, 'W' );
+    C4::Reserves::AddReserve( $library->branchcode, $patron_1->borrowernumber,
+        $item_2->biblionumber, '', 1, undef, undef, '', "title for fee",
+        $item_2->itemnumber, undef );
+    C4::Reserves::AddReserve( $library->branchcode, $patron_2->borrowernumber,
+        $item_2->biblionumber, '', 2, undef, undef, '', "title for fee",
+        $item_2->itemnumber, undef );
 
     my ( $new_items, $new_items_count ) = GetItemsForInventory( { ignore_waiting_holds => 1 } );
     is( $new_items_count, $first_items_count + 1, 'Item on hold skipped, count makes sense' );
@@ -124,6 +132,7 @@ subtest 'Skip items with waiting holds' => sub {
         'Item on hold skipped, the other one we added is present' );
     ok( (none { $_->{title} eq $title_1 } @{$new_items}),
         'Item on hold skipped, no one matches' );
+    is( scalar(@$new_items), $new_items_count, 'total and number of items is the same');
 
     $schema->storage->txn_rollback;
 };
