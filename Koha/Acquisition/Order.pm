@@ -248,7 +248,7 @@ sub duplicate_to {
 
             $new_order = Koha::Acquisition::Order->new($order_info)->store;
 
-            if ( ! $self->subscriptionid || $self->basket->effective_create_items eq 'ordering') { # Do copy items if not a serial OR if items are created on ordering
+            if ( ! $self->subscriptionid && $self->basket->effective_create_items eq 'ordering') { # Do copy items if not a subscription order AND if items are created on ordering
                 my $items = $self->items;
                 while ( my ($item) = $items->next ) {
                     my $item_info = $item->unblessed;

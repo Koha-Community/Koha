@@ -215,8 +215,8 @@ subtest 'duplicate_to | add_item' => sub {
         t::lib::Mocks::mock_preference('AcqCreateItem', 'receiving');
 
         my $duplicated_order = $order_no_sub->duplicate_to($basket_to);
-        is( $duplicated_order->items->count, 1,
-            'Items should be copied if the original order is not created from a subscription'
+        is( $duplicated_order->items->count, 0,
+            'Items should not be copied if the original order did not create items on ordering'
         );
 
         $duplicated_order = $order_from_sub->duplicate_to($basket_to);
@@ -236,8 +236,8 @@ subtest 'duplicate_to | add_item' => sub {
         );
 
         $duplicated_order = $order_from_sub->duplicate_to($basket_to);
-        is( $duplicated_order->items->count, 1,
-            'Items should be copied if items are created on ordering, even if created from subscription'
+        is( $duplicated_order->items->count, 0,
+            'Items should never be copied if the original order is created from a subscription'
         );
     };
 
