@@ -9,6 +9,7 @@ INSERT INTO account_offset_types ( type ) VALUES
 ('Forgiven'),
 ('Dropbox'),
 ('Rental Fee'),
+('Reserve Fee'),
 ('fine_increase'),
 ('fine_decrease'),
 ('Fine'),
