@@ -93,7 +93,7 @@ subtest '_clean_search_term() tests' => sub {
     );
 
     my $res = $qb->_clean_search_term('an=123');
-    is($res, 'an:123', 'equals sign replaced with colon');
+    is($res, 'koha-auth-number:123', 'equals sign replaced with colon');
 
     $res = $qb->_clean_search_term('"balanced quotes"');
     is($res, '"balanced quotes"', 'balanced quotes returned correctly');
