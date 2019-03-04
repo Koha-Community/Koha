@@ -111,7 +111,7 @@ run_rebuild_elasticsearch()
     fi
 
     if koha-shell \
-          -c "${KOHA_BINDIR}/search_tools/rebuild_elastic_search.pl ${rebuild_opts}" \
+          -c "${KOHA_BINDIR}/search_tools/rebuild_elasticsearch.pl ${rebuild_opts}" \
           ${name}; then
         return 0
     else

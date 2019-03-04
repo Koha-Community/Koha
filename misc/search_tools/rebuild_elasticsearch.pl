@@ -21,11 +21,11 @@
 
 =head1 NAME
 
-rebuild_elastic_search.pl - inserts records from a Koha database into Elasticsearch
+rebuild_elasticsearch.pl - inserts records from a Koha database into Elasticsearch
 
 =head1 SYNOPSIS
 
-B<rebuild_elastic_search.pl>
+B<rebuild_elasticsearch.pl>
 [B<-c|--commit>=C<count>]
 [B<-v|--verbose>]
 [B<-h|--help>]
