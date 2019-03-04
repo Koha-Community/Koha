@@ -28,7 +28,7 @@
     <p class="tip">Enter search keywords:</p>
     <form action="/cgi-bin/koha/catalogue/search.pl"  method="get" id="cat-search-block">
         [% IF ( Koha.Preference('IntranetCatalogSearchPulldown') ) %][% INCLUDE 'search_indexes.inc' %][% END %]
-        <input type="text" name="q" id="search-form" size="40" value="" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
+        <input type="text" name="q" id="search-form" size="40" value="[% ms_value | html %]" title="Enter the terms you wish to search for." class="head-searchbox form-text" />
         <input type="submit" class="submit" value="Submit" />
     </form>
 </div>
