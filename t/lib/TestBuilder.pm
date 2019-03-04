@@ -7,6 +7,7 @@ use C4::Biblio;
 use C4::Items;
 use Koha::Biblios;
 use Koha::Items;
+use Koha::DateUtils qw( dt_from_string );
 
 use Bytes::Random::Secure;
 use Carp;
@@ -488,12 +489,12 @@ sub _gen_real {
 
 sub _gen_date {
     my ($self, $params) = @_;
-    return $self->schema->storage->datetime_parser->format_date(DateTime->now())
+    return $self->schema->storage->datetime_parser->format_date(dt_from_string)
 }
 
 sub _gen_datetime {
     my ($self, $params) = @_;
-    return $self->schema->storage->datetime_parser->format_datetime(DateTime->now());
+    return $self->schema->storage->datetime_parser->format_datetime(dt_from_string);
 }
 
 sub _gen_text {
