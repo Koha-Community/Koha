@@ -777,9 +777,9 @@ sub GetItemsForInventory {
     my $max_cnsort = GetClassSort($class_source,undef,$maxlocation);
 
     my $select_columns = q{
-        SELECT items.itemnumber, barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, withdrawn, stocknumber
+        SELECT DISTINCT(items.itemnumber), barcode, itemcallnumber, title, author, biblio.biblionumber, biblio.frameworkcode, datelastseen, homebranch, location, notforloan, damaged, itemlost, withdrawn, stocknumber
     };
-    my $select_count = q{SELECT COUNT(*)};
+    my $select_count = q{SELECT COUNT(DISTINCT(items.itemnumber))};
     my $query = q{
         FROM items
         LEFT JOIN biblio ON items.biblionumber = biblio.biblionumber
