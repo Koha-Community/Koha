@@ -17452,6 +17452,17 @@ if( CheckVersion( $DBversion ) ) {
   SetVersion( $DBversion );
   print "Upgrade to $DBversion done (Bug 19575 - Use canonical field names and resolve aliased fields)\n";
 }
+
+$DBversion = '18.12.00.019';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO account_offset_types ( type ) VALUES ( 'Reserve Fee' );
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21728 - Add 'Reserve Fee' to the account_offset_types table if missing)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
