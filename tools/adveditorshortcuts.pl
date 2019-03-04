@@ -45,7 +45,6 @@ use Koha::KeyboardShortcuts;
 
 my $input            = new CGI;
 my $op               = $input->param('op') || 'list';
-my @messages;
 
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {   template_name   => "tools/adveditorshortcuts.tt",

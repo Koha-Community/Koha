@@ -279,8 +279,8 @@
     <tbody>
         [% FOREACH shortcut IN shortcuts %]
             <tr>
-                <td>[% shortcut.shortcut_keys %]</td>
-                <td>[% shortcut.shortcut_desc %]</td>
+                <td>[% shortcut.shortcut_keys | html %]</td>
+                <td>[% shortcut.shortcut_desc | html %]</td>
             </tr>
         [% END %]
         <tr>

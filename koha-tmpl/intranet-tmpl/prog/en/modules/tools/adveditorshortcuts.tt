@@ -40,10 +40,10 @@
                         <tbody>
                            [% FOREACH shortcut IN shortcuts %]
                         <tr>
-                            <td><label for="shortcut_keys">[% shortcut.shortcut_desc %]</label></td>
+                            <td><label for="shortcut_keys">[% shortcut.shortcut_desc | html %]</label></td>
                             <td>
-                                <input type="hidden" name="shortcut_name" value="[% shortcut.shortcut_name %]">
-                                <input type="text" name="shortcut_keys" value="[% shortcut.shortcut_keys %]">
+                                <input type="hidden" name="shortcut_name" value="[% shortcut.shortcut_name | html %]">
+                                <input type="text" name="shortcut_keys" value="[% shortcut.shortcut_keys | html %]">
                            </td>
                         </tr>
                    [% END %]
