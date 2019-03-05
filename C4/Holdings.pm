@@ -393,7 +393,7 @@ sub GetMarcHoldingsByBiblionumber {
         q|
         SELECT metadata
         FROM holdings_metadata
-        WHERE holding_id IN (SELECT holding_id FROM holdings WHERE biblionumber=?)
+        WHERE holding_id IN (SELECT holding_id FROM holdings WHERE biblionumber=? AND deleted_on IS NULL)
             AND format='marcxml'
             AND marcflavour=?
         |
@@ -428,7 +428,7 @@ sub GetMarcHoldingsFields {
 	my ( $biblionumber ) = @_;
 
     # This is so much faster than using Koha::Holdings->search that it makes sense even if it's ugly.
-    my $sth = C4::Context->dbh->prepare( 'SELECT * FROM holdings WHERE biblionumber = ?' );
+    my $sth = C4::Context->dbh->prepare( 'SELECT * FROM holdings WHERE biblionumber = ? AND deleted_on IS NULL' );
     $sth->execute( $biblionumber );
     my $holdings = $sth->fetchall_arrayref({});
     $sth->finish();
