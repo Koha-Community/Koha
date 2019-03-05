@@ -38,6 +38,7 @@ use Koha::BiblioFrameworks;
 use Koha::Libraries;
 use Koha::Patron::Categories;
 use Koha::SharedContent;
+use Koha::Util::OpenDocument;
 
 =head1 NAME
 
@@ -938,7 +939,6 @@ elsif ($phase eq 'Export'){
                 }
 
                 # Process
-                use Koha::Util::OpenDocument;
                 generate_ods($ods_filepath, $ods_content);
 
                 # Output
