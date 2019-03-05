@@ -70,7 +70,6 @@ $(document).ready(function(){
     var checked = [];
     $("#bookbag_form").checkCheckboxes("*", true).each(
         function() {
-            selRecord(this.value,true);
             $(this).change();
         }
     );
@@ -80,7 +79,6 @@ $(document).ready(function(){
     var checked = [];
     $("#bookbag_form").unCheckCheckboxes("*",true).each(
         function() {
-            selRecord(this.value,false);
             $(this).change();
         }
     );
