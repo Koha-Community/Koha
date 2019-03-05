@@ -20,6 +20,7 @@ package Koha::Item;
 use Modern::Perl;
 
 use Carp;
+use List::MoreUtils qw(any);
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -190,6 +191,40 @@ sub can_article_request {
 
     return 1 if $rule && $rule ne 'no' && $rule ne 'bib_only';
     return q{};
+}
+
+=head3 hidden_in_opac
+
+my $bool = $item->hidden_in_opac({ [ rules => $rules ] })
+
+Returns true if item fields match the hidding criteria defined in $rules.
+Returns false otherwise.
+
+Takes HASHref that can have the following parameters:
+    OPTIONAL PARAMETERS:
+    $rules : { <field> => [ value_1, ... ], ... }
+
+Note: $rules inherits its structure from the parsed YAML from reading
+the I<OpacHiddenItems> system preference.
+
+=cut
+
+sub hidden_in_opac {
+    my ( $self, $params ) = @_;
+
+    my $rules = $params->{rules} // {};
+
+    my $hidden_in_opac = 0;
+
+    foreach my $field ( keys %{$rules} ) {
+
+        if ( any { $self->$field eq $_ } @{ $rules->{$field} } ) {
+            $hidden_in_opac = 1;
+            last;
+        }
+    }
+
+    return $hidden_in_opac;
 }
 
 =head3 can_be_transferred
