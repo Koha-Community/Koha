@@ -272,7 +272,7 @@ function AreMandatoriesNotOk(){
 	}
         if( tabflag[tag+subfield+tagnumber][0] != 1 && (document.getElementById(mandatories[i]) != null && ! document.getElementById(mandatories[i]).value || document.getElementById(mandatories[i]) == null)){
             tabflag[tag+subfield+tagnumber][0] = 0 + tabflag[tag+subfield+tagnumber] ;
-            document.getElementById(mandatories[i]).setAttribute('class','subfield_not_filled');
+            document.getElementById(mandatories[i]).setAttribute('class','input_marceditor noEnterSubmit subfield_not_filled');
             $('#' + mandatories[i]).focus();
             tabflag[tag+subfield+tagnumber][1]=label[i];
             tabflag[tag+subfield+tagnumber][2]=tab[i];
@@ -662,7 +662,6 @@ function Changefwk() {
                 [% UNLESS advancedMARCEditor %]
                     [% IF ( subfield_loo.mandatory ) %]<span class="subfield subfield_mandatory">[% ELSE %]<span class="subfield">[% END %]
                         [% subfield_loo.marc_lib | $raw %]
-                        [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
                     </span>
                     </label>
                 [% END %]
@@ -702,7 +701,9 @@ function Changefwk() {
                     [% END %]
                     </select>
                 [% END %]
-                
+                [% IF ( subfield_loo.mandatory ) %]
+                    <span class="required">Required</span>
+                [% END %]
                 <span class="subfield_controls">
                 [% IF ( subfield_loo.repeatable ) %]
                     <a href="#" class="buttonPlus" tabindex="1" onclick="CloneSubfield('subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]','[% advancedMARCEditor | html %]'); return false;">
