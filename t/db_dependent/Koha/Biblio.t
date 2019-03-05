@@ -17,7 +17,9 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
+
+use t::lib::TestBuilder;
 
 use C4::Biblio;
 use Koha::Database;
@@ -27,7 +29,8 @@ BEGIN {
     use_ok('Koha::Biblios');
 }
 
-my $schema = Koha::Database->new->schema;
+my $schema  = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
 
 subtest 'metadata() tests' => sub {
 
@@ -52,6 +55,34 @@ subtest 'metadata() tests' => sub {
     is( ref $record2, 'MARC::Record', 'Method record() returned a MARC::Record object' );
 
     is( $record2->field('245')->subfield("a"), $title, 'Title in 245$a matches title from original record object' );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'hidden_in_opac() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    $item_1->withdrawn( 1 )->store->discard_changes;
+    $item_2->withdrawn( 1 )->store->discard_changes;
+
+    ok( !$biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio not hidden' );
+
+    $item_2->withdrawn( 2 )->store->discard_changes;
+    $biblio->discard_changes; # refresh
+
+    ok( !$biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio not hidden' );
+
+    $item_1->withdrawn( 2 )->store->discard_changes;
+    $biblio->discard_changes; # refresh
+
+    ok( $biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio hidden' );
 
     $schema->storage->txn_rollback;
 };
