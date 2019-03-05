@@ -1730,7 +1730,6 @@ subtest 'AddReturn + suspension_chargeperiod' => sub {
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
-            maxissueqty  => 99,
             issuelength  => 1,
             firstremind  => 0,        # 0 day of grace
             finedays     => 2,        # 2 days of fine per day of overdue
@@ -1896,7 +1895,6 @@ subtest 'AddReturn | is_overdue' => sub {
             categorycode => '*',
             itemtype     => '*',
             branchcode   => '*',
-            maxissueqty  => 99,
             issuelength  => 6,
             lengthunit   => 'days',
             fine         => 1, # Charge 1 every day of overdue
@@ -2500,12 +2498,12 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
     $dbh->do('DELETE FROM issuingrules');
     $dbh->do(
     q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed,
-                                    maxissueqty, issuelength, lengthunit,
+                                    issuelength, lengthunit,
                                     renewalsallowed, renewalperiod,
                                     norenewalbefore, auto_renew,
                                     fine, chargeperiod)
           VALUES (?, ?, ?, ?,
-                  ?, ?, ?,
+                  ?, ?,
                   ?, ?,
                   ?, ?,
                   ?, ?
@@ -2513,7 +2511,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
         },
         {},
         '*',   '*', '*', 25,
-        1,     14,  'days',
+        14,  'days',
         1,     7,
         undef, 0,
         .10,   1
@@ -2555,12 +2553,12 @@ subtest 'ItemsDeniedRenewal preference' => sub {
     my $idr_lib = $builder->build_object({ class => 'Koha::Libraries'});
     $dbh->do(
         q{
-        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, maxissueqty, issuelength, lengthunit, renewalsallowed, renewalperiod,
-                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
+        INSERT INTO issuingrules ( categorycode, branchcode, itemtype, reservesallowed, issuelength, lengthunit, renewalsallowed, renewalperiod,
+                    norenewalbefore, auto_renew, fine, chargeperiod ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ? )
         },
         {},
         '*', $idr_lib->branchcode, '*', 25,
-        20,  14,  'days',
+        14,  'days',
         10,   7,
         undef,  0,
         .10, 1
