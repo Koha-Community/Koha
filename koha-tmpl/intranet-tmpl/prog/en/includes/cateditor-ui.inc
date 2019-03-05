@@ -785,7 +785,7 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
             if ( resizeTimer == null ) resizeTimer = setTimeout( function() {
                 resizeTimer = null;
 
-                var pos = $('#editor .CodeMirror').position();
+                var pos = $('#editor .CodeMirror').offset();
                 $('#editor .CodeMirror').height( $(window).height() - pos.top - 24 - $('#changelanguage').height() ); // 24 is hardcoded value but works well
 
                 $('.modal-body').each( function() {
