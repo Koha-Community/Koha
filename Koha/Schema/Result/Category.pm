@@ -221,21 +221,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 branch_borrower_circ_rules
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::BranchBorrowerCircRule>
-
-=cut
-
-__PACKAGE__->has_many(
-  "branch_borrower_circ_rules",
-  "Koha::Schema::Result::BranchBorrowerCircRule",
-  { "foreign.categorycode" => "self.categorycode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 categories_branches
 
 Type: has_many
@@ -266,24 +251,9 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 default_borrower_circ_rule
 
-Type: might_have
-
-Related object: L<Koha::Schema::Result::DefaultBorrowerCircRule>
-
-=cut
-
-__PACKAGE__->might_have(
-  "default_borrower_circ_rule",
-  "Koha::Schema::Result::DefaultBorrowerCircRule",
-  { "foreign.categorycode" => "self.categorycode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-10-05 14:29:17
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yvHcgnSv1RXNMXJixVtt0Q
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-05 20:42:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:XR5anXl3qCAm/Fa/l+zYpQ
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

@@ -30,16 +30,6 @@ __PACKAGE__->table("default_branch_circ_rules");
   is_nullable: 0
   size: 10
 
-=head2 maxissueqty
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 maxonsiteissueqty
-
-  data_type: 'integer'
-  is_nullable: 1
-
 =head2 holdallowed
 
   data_type: 'tinyint'
@@ -63,10 +53,6 @@ __PACKAGE__->table("default_branch_circ_rules");
 __PACKAGE__->add_columns(
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 0, size => 10 },
-  "maxissueqty",
-  { data_type => "integer", is_nullable => 1 },
-  "maxonsiteissueqty",
-  { data_type => "integer", is_nullable => 1 },
   "holdallowed",
   { data_type => "tinyint", is_nullable => 1 },
   "hold_fulfillment_policy",
@@ -110,8 +96,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-04-29 10:32:00
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:wnrxD1/tp8X01YHmys02lg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-05 20:42:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:SYfKl5LgCoDZVhPooF55SA
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration

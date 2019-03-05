@@ -17463,6 +17463,94 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21728 - Add 'Reserve Fee' to the account_offset_types table if missing)\n";
 }
 
+$DBversion = '18.12.00.020';
+if( CheckVersion( $DBversion ) ) {
+    if ( TableExists( 'branch_borrower_circ_rules' ) ) {
+        if ( column_exists( 'branch_borrower_circ_rules', 'maxissueqty' ) ) {
+            $dbh->do("
+                INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+                SELECT categorycode, branchcode, NULL, 'patron_maxissueqty', COALESCE( maxissueqty, '' )
+                FROM branch_borrower_circ_rules
+            ");
+            $dbh->do("
+                INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+                SELECT categorycode, branchcode, NULL, 'patron_maxonsiteissueqty', COALESCE( maxonsiteissueqty, '' )
+                FROM branch_borrower_circ_rules
+            ");
+            $dbh->do("DROP TABLE branch_borrower_circ_rules");
+        }
+    }
+
+    if ( TableExists( 'default_borrower_circ_rules' ) ) {
+        if ( column_exists( 'default_borrower_circ_rules', 'maxissueqty' ) ) {
+            $dbh->do("
+                INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+                SELECT categorycode, NULL, NULL, 'patron_maxissueqty', COALESCE( maxissueqty, '' )
+                FROM default_borrower_circ_rules
+            ");
+            $dbh->do("
+                INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+                SELECT categorycode, NULL, NULL, 'patron_maxonsiteissueqty', COALESCE( maxonsiteissueqty, '' )
+                FROM default_borrower_circ_rules
+            ");
+            $dbh->do("DROP TABLE default_borrower_circ_rules");
+        }
+    }
+
+    if ( column_exists( 'default_circ_rules', 'maxissueqty' ) ) {
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT NULL, NULL, NULL, 'patron_maxissueqty', COALESCE( maxissueqty, '' )
+            FROM default_circ_rules
+        ");
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT NULL, NULL, NULL, 'patron_maxonsiteissueqty', COALESCE( maxonsiteissueqty, '' )
+            FROM default_circ_rules
+        ");
+        $dbh->do("ALTER TABLE default_circ_rules DROP COLUMN maxissueqty, DROP COLUMN maxonsiteissueqty");
+    }
+
+    if ( column_exists( 'default_branch_circ_rules', 'maxissueqty' ) ) {
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT NULL, branchcode, NULL, 'patron_maxissueqty', COALESCE( maxissueqty, '' )
+            FROM default_branch_circ_rules
+        ");
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT NULL, NULL, NULL, 'patron_maxonsiteissueqty', COALESCE( maxonsiteissueqty, '' )
+            FROM default_branch_circ_rules
+        ");
+        $dbh->do("ALTER TABLE default_branch_circ_rules DROP COLUMN maxissueqty, DROP COLUMN maxonsiteissueqty");
+    }
+
+    if ( column_exists( 'issuingrules', 'maxissueqty' ) ) {
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT IF(categorycode='*', NULL, categorycode),
+                   IF(branchcode='*', NULL, branchcode),
+                   IF(itemtype='*', NULL, itemtype),
+                   'maxissueqty',
+                   COALESCE( maxissueqty, '' )
+            FROM issuingrules
+        ");
+        $dbh->do("
+            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+            SELECT IF(categorycode='*', NULL, categorycode),
+                   IF(branchcode='*', NULL, branchcode),
+                   IF(itemtype='*', NULL, itemtype),
+                   'maxonsiteissueqty',
+                   COALESCE( maxonsiteissueqty, '' )
+            FROM issuingrules
+        ");
+        $dbh->do("ALTER TABLE issuingrules DROP COLUMN maxissueqty, DROP COLUMN maxonsiteissueqty");
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18925 - Move maxissueqty and maxonsiteissueqty to circulation_rules)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 

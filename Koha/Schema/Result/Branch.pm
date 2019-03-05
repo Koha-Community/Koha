@@ -301,21 +301,6 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
-=head2 branch_borrower_circ_rules
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::BranchBorrowerCircRule>
-
-=cut
-
-__PACKAGE__->has_many(
-  "branch_borrower_circ_rules",
-  "Koha::Schema::Result::BranchBorrowerCircRule",
-  { "foreign.branchcode" => "self.branchcode" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 branch_item_rules
 
 Type: has_many
@@ -677,8 +662,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-03 16:10:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:WyXH3sMlyuJIx0fd31RswA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-05 20:42:53
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nArzlMOpUO6oVOAZUgzSRg
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }
