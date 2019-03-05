@@ -20,6 +20,7 @@ use Getopt::Long;
 use C4::Log;
 
 use Koha::DateUtils;
+use Koha::Util::OpenDocument;
 use MIME::Lite;
 
 my (
@@ -276,7 +277,6 @@ sub _generate_ods {
     }
 
     # Process
-    use Koha::Util::OpenDocument;
     generate_ods($ods_filepath, $ods_content);
 }
 
