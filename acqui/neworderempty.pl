@@ -290,7 +290,7 @@ if ( not $ordernumber or $biblionumber ) {
                 next if IsMarcStructureInternal($mss);
                 next if $mss->{tab} == -1;
                 # We only need to display the values
-                my $value = join '; ', map { $_->subfield( $subfield ) } @fields;
+                my $value = join '; ', map { $tag < 10 ? $_->data : $_->subfield( $subfield ) } @fields;
                 if ( $value ) {
                     push @catalog_details, {
                         tag => $tag,
