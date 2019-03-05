@@ -150,6 +150,8 @@ sub AddHolding {
     # now add the record
     ModHoldingMarc( $record, $holding_id, $frameworkcode );
 
+    ModZebra( $biblionumber, "specialUpdate", "biblioserver" );
+
     logaction( "CATALOGUING", "ADD", $holding_id, "holding" ) if C4::Context->preference("CataloguingLog");
     return $holding_id;
 }
@@ -206,6 +208,8 @@ sub ModHolding {
     # modify the other koha tables
     _koha_modify_holding( $dbh, $holding_id, $rowData, $frameworkcode );
 
+    ModZebra( _koha_get_holding_biblionumber( $dbh, $holding_id ), "specialUpdate", "biblioserver" );
+
     return 1;
 }
 
@@ -240,6 +244,8 @@ sub DelHolding {
 
     # delete holding
     _koha_delete_holding( $dbh, $holding_id );
+
+    ModZebra( _koha_get_holding_biblionumber( $dbh, $holding_id ), "specialUpdate", "biblioserver" );
 
     logaction( "CATALOGUING", "DELETE", $holding_id, "holding" ) if C4::Context->preference("CataloguingLog");
 
@@ -569,6 +575,26 @@ sub _koha_delete_holding {
     );
     return;
 }
+
+=head2 _koha_get_holding_biblionumber
+
+  $error = _koha_get_holding_biblionumber($dbh, $holding_id);
+
+Internal sub for getting biblionumber associated with a holding
+
+C<$dbh> - the database handle
+
+C<$holding_id> - the holding_id of the holding for which to get the biblionumber
+
+=cut
+
+sub _koha_get_holding_biblionumber {
+    my ( $dbh, $holding_id ) = @_;
+    my $sth = $dbh->prepare("SELECT biblionumber FROM holdings WHERE holding_id=?");
+    $sth->execute($holding_id);
+    return $sth->fetchrow;
+}
+
 
 =head1 INTERNAL FUNCTIONS
 
