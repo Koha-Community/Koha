@@ -217,7 +217,7 @@ sub generate_subfield_form {
             }
             elsif ( $subfieldlib->{authorised_value} eq "holdings" ) {
                 push @authorised_values, "" unless ( $subfieldlib->{mandatory} );
-                my $holdings = Koha::Holdings->search({biblionumber => $biblionumber}, { order_by => ['holdingbranch'] })->unblessed;
+                my $holdings = Koha::Holdings->search({biblionumber => $biblionumber, deleted_on => undef }, { order_by => ['holdingbranch'] })->unblessed;
                 for my $holding ( @$holdings ) {
                     push @authorised_values, $holding->{holding_id};
                     $authorised_lib{$holding->{holding_id}} = $holding->{holding_id} . ' ' . $holding->{holdingbranch} . ' ' . $holding->{location} . ' ' . $holding->{ccode} . ' ' . $holding->{callnumber};
