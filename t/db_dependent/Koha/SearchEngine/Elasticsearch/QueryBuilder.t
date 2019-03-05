@@ -169,7 +169,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 30;
+    plan tests => 33;
 
     my $qb;
 
@@ -237,6 +237,11 @@ subtest 'build_query tests' => sub {
         '(title:(donald duck)) AND (author:disney)',
         'multiple query terms are enclosed in parenthesis while a single one is not'
     );
+
+    my ($simple_query, $query_cgi, $query_desc);
+    ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat( undef, ['"donald duck"', 'walt disney'], ['ti', 'au'] );
+    is($query_cgi, 'idx=ti&q=%22donald%20duck%22&idx=au&q=walt%20disney', 'query cgi ok for multiterm query');
+    is($query_desc, '(title:("donald duck")) (author:(walt disney))', 'query desc ok for multiterm query');
 
     t::lib::Mocks::mock_preference( 'QueryAutoTruncate', '1' );
 
@@ -362,14 +367,14 @@ subtest 'build_query tests' => sub {
         "query of specific field is added AND suppress:0"
     );
 
-    my ($simple_query, $query_cgi);
-    ( undef, $query, $simple_query, $query_cgi ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef, undef, undef, undef, { suppress => 0 } );
+    ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef, undef, undef, undef, { suppress => 0 } );
     is(
         $query->{query}{query_string}{query},
         '(title:"donald duck")',
         "query of specific field is not added AND suppress:0"
     );
-    is($query_cgi, 'q=title%3A%22donald%20duck%22', 'query cgi');
+    is($query_cgi, 'idx=&q=title%3A%22donald%20duck%22', 'query cgi');
+    is($query_desc, 'title:"donald duck"', 'query desc ok');
 };
 
 

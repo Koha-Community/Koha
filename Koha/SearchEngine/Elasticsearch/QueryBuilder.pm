@@ -226,8 +226,9 @@ sub build_query_compat {
     # would be to pass them separately into build_query and let it build
     # them into a structured ES query itself. Maybe later, though that'd be
     # more robust.
+    my $search_param_query_str = join( ' ', $self->_create_query_string(@search_params) );
     my $query_str = join( ' AND ',
-        join( ' ', $self->_create_query_string(@search_params) ) || (),
+        $search_param_query_str || (),
         $self->_join_queries( $self->_convert_index_strings(@$limits) ) || () );
 
     my @fields = '_all';
@@ -243,19 +244,32 @@ sub build_query_compat {
     $options{expanded_facet} = $params->{expanded_facet};
     my $query = $self->build_query( $query_str, %options );
 
-    #die Dumper($query);
     # We roughly emulate the CGI parameters of the zebra query builder
-    my $query_cgi;
-    $query_cgi = 'q=' . uri_escape_utf8( $operands->[0] ) if @$operands;
+    my $query_cgi = '';
+    shift @$operators; # Shift out the one we unshifted before
+    $ea = each_array( @$operands, @$operators, @$indexes );
+    while ( my ( $oand, $otor, $index ) = $ea->() ) {
+        $query_cgi .= '&' if $query_cgi;
+        $query_cgi .= 'idx=' . uri_escape_utf8( $index // '') . '&q=' . uri_escape_utf8( $oand );
+        $query_cgi .= '&op=' . uri_escape_utf8( $otor ) if $otor;
+    }
+    $query_cgi .= '&scan=1' if ( $scan );
+
     my $simple_query;
     $simple_query = $operands->[0] if @$operands == 1;
-    my $query_desc   = $simple_query;
-    my $limit        = $self->_join_queries( $self->_convert_index_strings(@$limits));
+    my $query_desc;
+    if ( $simple_query ) {
+        $query_desc = $simple_query;
+    } else {
+        $query_desc = $search_param_query_str;
+    }
+    my $limit     = $self->_join_queries( $self->_convert_index_strings(@$limits));
     my $limit_cgi = ( $orig_limits and @$orig_limits )
       ? '&limit=' . join( '&limit=', map { uri_escape_utf8($_) } @$orig_limits )
       : '';
     my $limit_desc;
     $limit_desc = "$limit" if $limit;
+
     return (
         undef,  $query,     $simple_query, $query_cgi, $query_desc,
         $limit, $limit_cgi, $limit_desc,   undef,      undef
