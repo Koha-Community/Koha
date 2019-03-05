@@ -127,41 +127,51 @@ use Koha::ItemTypes;
     my $frameworks = Koha::BiblioFrameworks->search;
     my $invalid_locations_per_framework;
     while ( my $framework = $frameworks->next ) {
-        my $avs = Koha::AuthorisedValues->search_by_koha_field(
-            {
-                frameworkcode => $framework->frameworkcode,
-                kohafield     => 'items.location'
+        my $msss = Koha::MarcSubfieldStructures->search({ frameworkcode => $framework->frameworkcode, authorised_value => { '!=' => [ -and => ( undef, '' ) ]} });
+        while ( my $mss = $msss->next ) {
+            my $kohafield = $mss->kohafield;
+            next if grep {/$kohafield/} qw( branches itemtypes cn_source ); # internal categories
+            my $avs = Koha::AuthorisedValues->search_by_koha_field(
+                {
+                    frameworkcode => $framework->frameworkcode,
+                    kohafield     => $kohafield,
+                }
+            );
+            (my $tmp_kohafield = $kohafield) =~ s|items|me|; # replace items.attr with me.attr
+            my $items = Koha::Items->search(
+                {
+                    $tmp_kohafield =>
+                      { -not_in => [ $avs->get_column('authorised_value') ] },
+                    'biblio.frameworkcode' => $framework->frameworkcode
+                },
+                { join => [ 'biblioitem', 'biblio' ] }
+            );
+            if ( $items->count ) {
+                $invalid_locations_per_framework->{ $framework->frameworkcode } =
+                  { items => $items, av_category => $mss->authorised_value, kohafield => $kohafield };
             }
-        );
-        my $items = Koha::Items->search(
-            {
-                location =>
-                  { -not_in => [ $avs->get_column('authorised_value') ] },
-                'biblio.frameworkcode' => $framework->frameworkcode
-            },
-            { join => [ 'biblioitem', 'biblio' ] }
-        );
-        if ( $items->count ) {
-            $invalid_locations_per_framework->{ $framework->frameworkcode } =
-              { items => $items, av_category => $avs->next->category, };
         }
     }
     if (%$invalid_locations_per_framework) {
-        new_section('Wrong value dor items.location');
+        new_section('Wrong values linked to authorised values');
         for my $frameworkcode ( keys %$invalid_locations_per_framework ) {
             my $output;
             my $items =
               $invalid_locations_per_framework->{$frameworkcode}->{items};
             my $av_category =
               $invalid_locations_per_framework->{$frameworkcode}->{av_category};
+            my $kohafield =
+              $invalid_locations_per_framework->{$frameworkcode}->{kohafield};
+            my ( $table, $column ) = split '\.', $kohafield;
             while ( my $i = $items->next ) {
-                $output .= " {" . $i->itemnumber . " => " . $i->location . "}";
+                my $value = $table eq 'items' ? $i->$column : $i->biblioitem->$column;
+                $output .= " {" . $i->itemnumber . " => " . $value . "}";
             }
             new_item(
                 sprintf(
                     "The Framework *%s* is using the authorised value's category *%s*, "
-                    . "but the following items.location do not have a value defined ({itemnumber => value }):\n%s",
-                    $frameworkcode, $av_category, $output
+                    . "but the following %s do not have a value defined ({itemnumber => value }):\n%s",
+                    $frameworkcode, $av_category, $kohafield, $output
                 )
             );
         }
