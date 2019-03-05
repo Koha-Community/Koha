@@ -229,7 +229,7 @@ $(document).ready(function() {
     }
 
     $("body").append("\
-        <div id='suspend-modal' class='modal fade' tabindex='-1' role='dialog' aria-hidden='true'>\
+        <div id='suspend-modal' class='modal fade' role='dialog' aria-hidden='true'>\
             <div class='modal-dialog'>\
             <div class='modal-content'>\
             <form id='suspend-modal-form' class='form-inline'>\
