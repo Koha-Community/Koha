@@ -20,6 +20,7 @@ package Koha::Biblio;
 use Modern::Perl;
 
 use Carp;
+use List::MoreUtils qw(any);
 
 use C4::Biblio qw();
 
@@ -184,6 +185,30 @@ sub can_be_transferred {
     }
 
     return 0;
+}
+
+=head3 hidden_in_opac
+
+my $bool = $biblio->hidden_in_opac({ [ rules => $rules ] })
+
+Returns true if the biblio matches the hidding criteria defined in $rules.
+Returns false otherwise.
+
+Takes HASHref that can have the following parameters:
+    OPTIONAL PARAMETERS:
+    $rules : { <field> => [ value_1, ... ], ... }
+
+Note: $rules inherits its structure from the parsed YAML from reading
+the I<OpacHiddenItems> system preference.
+
+=cut
+
+sub hidden_in_opac {
+    my ( $self, $params ) = @_;
+
+    my $rules = $params->{rules} // {};
+
+    return !(any { !$_->hidden_in_opac({ rules => $rules }) } $self->items);
 }
 
 =head3 article_request_type
