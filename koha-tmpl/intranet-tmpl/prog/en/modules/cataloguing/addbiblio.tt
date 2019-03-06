@@ -511,7 +511,7 @@ function Changefwk() {
     <div class="btn-group">
         <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-cog"></i> Settings <span class="caret"></span></button>
         <ul id="settings-menu" class="dropdown-menu">
-            [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
+            [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
                 <li><a href="#" id="switcheditor">Switch to advanced editor</a></li>
             [% END %]
             [% IF marcflavour != 'NORMARC' AND NOT advancedMARCEditor %]

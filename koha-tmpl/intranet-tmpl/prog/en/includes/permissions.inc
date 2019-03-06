@@ -271,6 +271,11 @@
             Edit catalog (Modify bibliographic/holdings data)
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'advanced_editor' -%]
+        <span class="sub_permission advanced_editor_subpermission">
+            Use the advanced cataloging editor (requires edit_catalogue)
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_items' -%]
         <span class="sub_permission edit_items_subpermission">
             Edit items

@@ -18,7 +18,7 @@
 
 [% IF ( CAN_user_editcatalogue_edit_catalogue ) %]
   <div id="toolbar" class="btn-toolbar">
-        [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 %]
+        [% IF Koha.Preference( 'EnableAdvancedCatalogingEditor' ) == 1 && CAN_user_editcatalogue_advanced_editor %]
             <a id="useadvanced" href="/cgi-bin/koha/cataloguing/editor.pl" class="btn btn-default"><i class="fa fa-pencil"></i> Advanced editor</a>
         [% END %]
         <div class="btn-group">
