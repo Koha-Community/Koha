@@ -21,7 +21,7 @@
 [% url_params = [] %]
 [% FOREACH param IN CGI.params.pairs %]
     [% escaped_value = BLOCK %][% param.value | uri %][% END %]
-    [% url_params.push(param.key _ '=' _ escaped_value) | html %]
+    [% url_params.push(param.key _ '=' _ escaped_value) %]
 [% END %]
 [% SET referrer = '/cgi-bin/koha/serials/serials-search.pl?' %]
 [% referrer = BLOCK %][% referrer | url %][% url_params.join("&amp;") |uri %][% END %]
