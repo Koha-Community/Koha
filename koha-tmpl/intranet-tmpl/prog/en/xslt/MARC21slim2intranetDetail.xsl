@@ -281,6 +281,13 @@
         </span>
     </xsl:if>
 
+    <xsl:if test="marc:datafield[@tag=942]/marc:subfield[@code='c']">
+      <span class="results_summary item-type">
+        <span class="label">Item type: </span>
+        <xsl:value-of select="marc:datafield[@tag=942]/marc:subfield[@code='c']"/>
+      </span>
+    </xsl:if>
+
     <xsl:call-template name="show-lang-041"/> <!-- koha-suomi: language -->
 
         <!--Series: Alternate Graphic Representation (MARC 880) -->
