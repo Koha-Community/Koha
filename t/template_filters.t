@@ -16,7 +16,7 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 6;
+use Test::More tests => 7;
 use t::lib::QA::TemplateFilters;
 
 subtest 'Asset must use raw' => sub {
@@ -301,5 +301,22 @@ EXPECTED
             }
         ]
     );
+};
 
+subtest 'Do not escape TT methods' => sub {
+    plan tests => 2;
+    my $input = <<INPUT;
+[% my_array.push(a_var) %]
+INPUT
+
+    my $expected = <<EXPECTED;
+[% my_array.push(a_var) %]
+EXPECTED
+
+    my $new_content = t::lib::QA::TemplateFilters::fix_filters($input);
+    is( $new_content . "\n", $expected, );
+
+
+    my @missing_filters = t::lib::QA::TemplateFilters::missing_filters($input);
+    is_deeply(\@missing_filters, []);
 };
