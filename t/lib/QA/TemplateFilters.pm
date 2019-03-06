@@ -27,6 +27,10 @@ our @tt_directives = (
     qr{^\s*LAST},
 );
 
+our @tt_methods = (
+    qr{\.push\(},
+);
+
 sub fix_filters {
     return _process_tt_content( @_ )->{new_content};
 }
@@ -127,6 +131,9 @@ sub process_tt_block {
     return ( $line, $error ) if
         # It's a TT directive, no filters needed
         grep { $tt_block =~ $_ } @tt_directives
+
+        # It's a TT method
+        or grep { $tt_block =~ $_ } @tt_methods
 
         # It is a comment
         or $tt_block =~ m{^\#}
