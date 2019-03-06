@@ -72,7 +72,6 @@ subtest fill_holds_at_checkout => sub {
         holds_per_record => 3,
         issuelength      => 5,
         lengthunit       => 'days',
-        maxissueqty      => 10,
     })->store;
 
     my $reserve1 = AddReserve($branch->{branchcode},$borrower->{borrowernumber},$biblio->{biblionumber});
