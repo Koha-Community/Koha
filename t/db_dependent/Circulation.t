@@ -930,6 +930,14 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     LostItem( $item_3->itemnumber, 'test', 0 );
     my $accountline = Koha::Account::Lines->find( { itemnumber => $item_3->itemnumber } );
     is( $accountline->issue_id, $checkout->id, "Issue id added for lost replacement fee charge" );
+    is(
+        $accountline->description,
+        sprintf( "%s %s %s",
+            $item_3->biblio->title  || '',
+            $item_3->barcode        || '',
+            $item_3->itemcallnumber || '' ),
+        "Account line description must not contain 'Lost Items ', but be title, barcode, itemcallnumber"
+    );
   }
 
 {
