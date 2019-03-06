@@ -12,7 +12,7 @@
 -- authority type.
 
 INSERT INTO auth_types (authtypecode, authtypetext, auth_tag_to_report, summary) VALUES
-		('', 'Default', '', '');
+		('', 'Oletus', '', '');
 
 
 -- ******************************************************
@@ -24,14 +24,14 @@ INSERT INTO auth_types (authtypecode, authtypetext, auth_tag_to_report, summary)
 
 
 INSERT INTO auth_types (authtypecode, authtypetext, auth_tag_to_report, summary) VALUES
-		('PERSO_NAME', 'Personal Name', '100', 'Personal Names'),
-		('CORPO_NAME', 'Corporate Name', '110', 'Corporate Names'),
-		('MEETI_NAME', 'Meeting Name', '111', 'Meeting Name'),
-		('UNIF_TITLE', 'Uniform Title', '130', 'Uniform Title'),
-		('CHRON_TERM', 'Chronological Term', '148', 'Chronological Term'),
-		('TOPIC_TERM', 'Topical Term', '150', 'Topical Term'),
-		('GEOGR_NAME', 'Geographic Name', '151', 'Geographic Name'),
-		('GENRE/FORM', 'Genre/Form Term', '155', 'Genre/Form Term');
+		('PERSO_NAME', 'Henkilönnimi', '100', 'Henkilönnimi'),
+		('CORPO_NAME', 'Yhteisönnimi', '110', 'Yhteisönnimi'),
+		('MEETI_NAME', 'Kokouksen nimi', '111', 'Kokouksen nimi'),
+		('UNIF_TITLE', 'Yhtenäistetty nimeke', '130', 'Yhtenäistetty nimeke'),
+		('CHRON_TERM', 'Aikaa ilmaiseva termi', '148', 'Aikaa ilmaiseva termi'),
+		('TOPIC_TERM', 'Kontrolloidun asiasanaston termi', '150', 'Kontrolloidun asiasanaston termi'),
+		('GEOGR_NAME', 'Maantieteellinen nimi', '151', 'Maantieteellinen nimi'),
+		('GENRE/FORM', 'Aineiston lajityyppi/muoto', '155', 'Aineiston lajityyppi/muoto hakuterminä');
 
 
 -- ******************************************************
