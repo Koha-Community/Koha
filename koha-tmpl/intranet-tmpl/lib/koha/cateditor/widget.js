@@ -121,6 +121,13 @@ define( [ 'resources' ], function( Resources ) {
                         materialInfo[ $(this).attr('id') ] = this;
                     } );
 
+                    if (widget.getMaterial) {
+                        const material = widget.getMaterial();
+                        if (material) {
+                            $matSelect.val(material);
+                        }
+                    }
+
                     $matSelect.change( function() {
                         widget.loadXMLMaterial( materialInfo[ $matSelect.val() ] );
                         widget.nodeChanged();
