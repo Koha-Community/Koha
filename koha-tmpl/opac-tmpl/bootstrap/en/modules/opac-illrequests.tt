@@ -62,7 +62,8 @@
                             <p>
                                 [% Koha.Preference('ILLModuleCopyrightClearance') | $raw %]
                             </p>
-                            <a href="?method=create&stage=copyrightclearance&backend=[% whole.value.backend | uri %]"
+                            [% USE link_url = url('/cgi-bin/koha/opac-illrequests.pl', whole.value.other) %]
+                            <a href="[% link_url _ '&amp;stage=copyrightclearance' | $raw %]"
                                class="btn btn-sm btn-default"><i class="fa fa-check"></i> Yes</a>
                             <a href="/cgi-bin/koha/opac-illrequests.pl"
                                class="btn btn-sm btn-default"><i class="fa fa-times"></i> No</a>
