@@ -128,8 +128,10 @@ function checkEnter(e){ //e is event object passed from function invocation
     } else {
         characterCode = e.keyCode; //character code is contained in IE's keyCode property
     }
-
-    if(characterCode == 13){ //if generated character code is equal to ascii 13 (if enter key)
+    if( characterCode == 13 //if generated character code is equal to ascii 13 (if enter key)
+        && e.target.nodeName == "INPUT"
+        && e.target.type != "submit" // Allow enter to submit using the submit button
+    ){
         return false;
     } else {
         return true;
