@@ -2936,6 +2936,7 @@ subtest 'CanBookBeIssued | is_overdue' => sub {
             branchcode   => undef,
             itemtype     => undef,
             rules        => {
+                maxissueqty     => 1,
                 reservesallowed => 25,
                 issuelength     => 14,
                 lengthunit      => 'days',
