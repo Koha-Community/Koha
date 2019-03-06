@@ -1,17 +1,5 @@
         <fieldset class="rows" id="memberentry_address">
         <legend id="alt_address_lgd">Alternate address</legend><ol>
-        [% UNLESS noB_address %]
-            <li>
-                [% IF ( mandatoryB_address ) %]
-                    <label for="B_address" class="required">
-                [% ELSE %]
-                    <label for="B_address">
-                [% END %]
-                Address: </label>
-                    <input type="text" id="B_address" name="B_address" size="40" value="[% patron.B_address | html %]" />
-      [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
-            </li>
-        [% END %]
 
         [% IF roadtypes %]
                 <li>
@@ -32,6 +20,19 @@
             [% END %]
             </select>
             [% IF ( mandatoryB_streettype ) %]<span class="required">Required</span>[% END %]
+            </li>
+        [% END %]
+
+        [% UNLESS noB_address %]
+            <li>
+                [% IF ( mandatoryB_address ) %]
+                    <label for="B_address" class="required">
+                [% ELSE %]
+                    <label for="B_address">
+                [% END %]
+                Address: </label>
+                    <input type="text" id="B_address" name="B_address" size="40" value="[% patron.B_address | html %]" />
+      [% IF ( mandatoryB_address ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
 
@@ -81,6 +82,20 @@
                 [% END %]
                 City: </label>
                 <input type="text" id="B_city" name="B_city" size="20" value="[% patron.B_city | html %]" />
+                [% IF cities.count %]or choose
+                    <select class="select_city" data-addressfield="B_" name="select_city">
+                        <option value="|||"></option>
+                        [% FOREACH c IN cities %]
+                            [% IF c.city_name == patron.B_city && c.city_state == patron.B_state && c.city_zipcode == patron.B_zipcode %]
+                            <option value="[% c.city_zipcode | html %]|[% c.city_name | html %]|[% c.city_state | html %]|[% c.city_country | html %]" selected="selected">
+                            [% ELSE %]
+                            <option value="[% c.city_zipcode | html %]|[% c.city_name | html %]|[% c.city_state | html %]|[% c.city_country | html %]">
+                            [% END %]
+                                [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %]
+                            </option>
+                        [% END %]
+                    </select>
+                [% END %]
       [% IF ( mandatoryB_city ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]

@@ -425,12 +425,9 @@
 
 [% END %]
 [% UNLESS noaddress && noaddress2 && nocity && nostate && nozipcode && nocountry %]
-    [% SWITCH Koha.Preference( 'AddressFormat' ) %]
-        [% CASE 'de' %]
-            [% INCLUDE 'member-main-address-style-de.inc' %]
-        [% CASE # us %]
-            [% INCLUDE 'member-main-address-style-us.inc' %]
-     [% END %]
+    [% IF Koha.Preference( 'AddressFormat' ) %]
+        [% INCLUDE "member-main-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+    [% END %]
 [% END # nostreet && nocity etc group%]
 
 [% UNLESS nophone && nophonepro && nomobile && noemail && noemailpro && nofax %]

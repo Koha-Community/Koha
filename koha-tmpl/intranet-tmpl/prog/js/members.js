@@ -293,14 +293,15 @@ $(document).ready(function(){
         $("#quick_add_form #guarantorsearch, #guarantorsearch").val(LABEL_SET_TO_PATRON);
     });
 
-    $(document.body).on('change','select[name="select_city"]',function(){
-        $('select[name="select_city"]').val( $(this).val() );
+    $(document.body).on('change','.select_city',function(){
+        var selected_city = $(this).val();
+        var addressfield = $(this).data("addressfield");
         var myRegEx=new RegExp(/(.*)\|(.*)\|(.*)\|(.*)/);
-        $(this).val().match(myRegEx);
-        $('input[name="zipcode"]').val( RegExp.$1 );
-        $('input[name="city"]').val( RegExp.$2 );
-        $('input[name="state"]').val( RegExp.$3 );
-        $('input[name="country"]').val( RegExp.$4 );
+        var matches = selected_city.match( myRegEx );
+        $("#" + addressfield + "zipcode").val( matches[1] );
+        $("#" + addressfield + "city").val( matches[2] );
+        $("#" + addressfield + "state").val( matches[3] );
+        $("#" + addressfield + "country").val( matches[4] );
     });
 
     dateformat = $("#dateofbirth").siblings(".hint").first().html();

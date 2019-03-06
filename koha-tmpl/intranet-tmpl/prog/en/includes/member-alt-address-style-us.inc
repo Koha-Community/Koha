@@ -68,7 +68,21 @@
                 [% END %]
                 City: </label>
                 <input type="text" id="B_city" name="B_city" size="20" value="[% patron.B_city | html %]" />
-      [% IF ( mandatoryB_city ) %]<span class="required">Required</span>[% END %]
+                [% IF cities.count %]or choose
+                    <select class="select_city" data-addressfield="B_" name="select_city">
+                        <option value="|||"></option>
+                        [% FOREACH c IN cities %]
+                            [% IF c.city_name == patron.B_city && c.city_state == patron.B_state && c.city_zipcode == patron.B_zipcode %]
+                            <option value="[% c.city_zipcode | html %]|[% c.city_name | html %]|[% c.city_state | html %]|[% c.city_country | html %]" selected="selected">
+                            [% ELSE %]
+                            <option value="[% c.city_zipcode | html %]|[% c.city_name | html %]|[% c.city_state | html %]|[% c.city_country | html %]">
+                            [% END %]
+                                [% c.city_name | html %] [% c.city_state | html %] [% c.city_zipcode | html %]
+                            </option>
+                        [% END %]
+                    </select>
+                [% END %]
+                [% IF ( mandatoryB_city ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]
         [% UNLESS noB_state %]
@@ -138,7 +152,7 @@
                 <label for="contactnote">
                 [% END %]
                 Contact note: </label>
-                <textarea id="contactnote" name="contactnote" cols="40" rows="2">[% contactnote | html %]</textarea>
+                <textarea id="contactnote" name="contactnote" cols="40" rows="2">[% patron.contactnote | html %]</textarea>
         [% IF ( mandatorycontactnote ) %]<span class="required">Required</span>[% END %]
             </li>
         [% END %]

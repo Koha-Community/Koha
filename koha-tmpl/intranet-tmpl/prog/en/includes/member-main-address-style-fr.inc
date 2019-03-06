@@ -2,14 +2,16 @@
     <legend id="main_address_lgd">Main address</legend><ol>
 [% UNLESS nostreettype %]
     [% UNLESS nostreetnumber %]
-        [% IF ( mandatorystreetnumber ) %]
-            <label for="streetnumber" class="required">
-        [% ELSE %]
-            <label for="streetnumber">
-        [% END %]
-            Street number: </label>
-            <input type="text" id="streetnumber" name="streetnumber" size="5" value="[% patron.streetnumber | html %]" />
-        [% IF ( mandatorystreetnumber ) %]<span class="required">Required</span>[% END %]
+        <li>
+            [% IF ( mandatorystreetnumber ) %]
+                <label for="streetnumber" class="required">
+            [% ELSE %]
+                <label for="streetnumber">
+            [% END %]
+                Street number: </label>
+                <input type="text" id="streetnumber" name="streetnumber" size="5" value="[% patron.streetnumber | html %]" />
+            [% IF ( mandatorystreetnumber ) %]<span class="required">Required</span>[% END %]
+        </li>
     [% END %]
 
     [% IF roadtypes %]
@@ -80,7 +82,7 @@
     City: </label>
     <input type="text" id="city" name="city" size="20" value="[% patron.city | html %]" />
     [% IF cities.count %]or choose
-        <select id="select_city" name="select_city">
+        <select class="select_city" data-addressfield="" name="select_city">
             <option value="|||"></option>
         [% FOREACH c IN cities %]
             [% IF c.city_name == patron.city && c.city_state == patron.state && c.city_zipcode == patron.zipcode %]
