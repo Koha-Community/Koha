@@ -3,8 +3,8 @@ if( CheckVersion( $DBversion ) ) {
 
     # Add constraint for manager_id
     unless( foreign_key_exists( 'accountlines', 'accountlines_ibfk_borrowers_2' ) ) {
-        $dbh->do("ALTER TABLE accountlines CHANGE COLUMN manager_id manager_id INT(11) NULL DEFAULT NULL;");
-        $dbh->do("UPDATE accountlines a LEFT JOIN borrowers b ON ( a.manager_id = b.borrowernumber) SET a.manager_id = NULL WHERE b.borrowernumber IS NULL;
+        $dbh->do("ALTER TABLE accountlines CHANGE COLUMN manager_id manager_id INT(11) NULL DEFAULT NULL");
+        $dbh->do("UPDATE accountlines a LEFT JOIN borrowers b ON ( a.manager_id = b.borrowernumber) SET a.manager_id = NULL WHERE b.borrowernumber IS NULL");
         $dbh->do("ALTER TABLE accountlines ADD CONSTRAINT `accountlines_ibfk_borrowers_2` FOREIGN KEY (`manager_id`) REFERENCES `borrowers` (`borrowernumber`) ON DELETE SET NULL ON UPDATE CASCADE");
     }
 
