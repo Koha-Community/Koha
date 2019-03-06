@@ -1,12 +1,15 @@
 $DBversion = 'XXX';  # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
-    if ( column_exists( 'refund_lost_item_fee_rules', 'refund' ) ) {
-        $dbh->do("
-            INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
-            SELECT NULL, IF(branchcode='*', NULL, branchcode), NULL, 'refund', refund
-            FROM refund_lost_item_fee_rules
-        ");
-        $dbh->do("DROP TABLE refund_lost_item_fee_rules");
+
+    if ( TableExists('refund_lost_item_fee_rules') ) {
+        if ( column_exists( 'refund_lost_item_fee_rules', 'refund' ) ) {
+            $dbh->do("
+                INSERT INTO circulation_rules ( categorycode, branchcode, itemtype, rule_name, rule_value )
+                SELECT NULL, IF(branchcode='*', NULL, branchcode), NULL, 'refund', refund
+                FROM refund_lost_item_fee_rules
+            ");
+            $dbh->do("DROP TABLE refund_lost_item_fee_rules");
+        }
     }
 
     SetVersion( $DBversion );
