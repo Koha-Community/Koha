@@ -85,7 +85,7 @@
  * single subfield, '@'.
  */
 
-require( [ 'koha-backend', 'widget' ], function( KohaBackend, Widget ) {
+require( [ 'koha-backend', 'widget', 'text-marc' ], function( KohaBackend, Widget, TextMarc ) {
     Widget.Register( '000@', {
         makeTemplate: function() {
             return '     nam a22     7a 4500';
@@ -236,6 +236,30 @@ require( [ 'koha-backend', 'widget' ], function( KohaBackend, Widget ) {
             var $result = $( '<span class="subfield-widget fixed-widget">' + _("Fixed data:") + '<span class="hint widget-loading">' + _("Loading...") + '</span></span>' );
 
             return $result[0];
+        },
+        materialTypeMapping: {
+            a: {
+                a: 'BKS', c: 'BKS', d: 'BKS', m: 'BKS',
+                b: 'CR', i: 'CR', s: 'CR',
+            },
+            t: 'BKS',
+            c: 'MU', d: 'MU', i: 'MU', j: 'MU',
+            e: 'MP', f: 'MP',
+            g: 'VM', k: 'VM', o: 'VM', r: 'VM',
+            m: 'CF',
+            p: 'MX',
+        },
+        getMaterial: function () {
+            const record = TextMarc.TextToRecord(this.editor.cm.getValue());
+            const leader = record.leader();
+            const leader6 = leader.substring(6, 7);
+            let materialType = this.materialTypeMapping[leader6];
+            if (typeof materialType === 'object') {
+                const leader7 = leader.substring(7, 8);
+                materialType = materialType[leader7];
+            }
+
+            return materialType;
         },
         postCreate: function( node, mark ) {
             this.createFromXML( 'marc21/xml/008' );
