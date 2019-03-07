@@ -27,6 +27,7 @@ use Koha::SearchFields;
 use Koha::SearchMarcMaps;
 
 use Carp;
+use Clone qw(clone);
 use JSON;
 use Modern::Perl;
 use Readonly;
@@ -192,13 +193,15 @@ sub get_elasticsearch_mappings {
 
     if (!defined $all_mappings{$self->index}) {
         $sort_fields{$self->index} = {};
+        # Clone the general mapping to break ties with the original hash
         my $mappings = {
-            data => scalar _get_elasticsearch_mapping('general', '')
+            data => clone(_get_elasticsearch_field_config('general', ''))
         };
         my $marcflavour = lc C4::Context->preference('marcflavour');
         $self->_foreach_mapping(
             sub {
                 my ( $name, $type, $facet, $suggestible, $sort, $marc_type ) = @_;
+
                 return if $marc_type ne $marcflavour;
                 # TODO if this gets any sort of complexity to it, it should
                 # be broken out into its own function.
@@ -214,19 +217,19 @@ sub get_elasticsearch_mappings {
                     $es_type = 'stdno';
                 }
 
-                $mappings->{data}{properties}{$name} = _get_elasticsearch_mapping('search', $es_type);
+                $mappings->{data}{properties}{$name} = _get_elasticsearch_field_config('search', $es_type);
 
                 if ($facet) {
-                    $mappings->{data}{properties}{ $name . '__facet' } = _get_elasticsearch_mapping('facet', $es_type);
+                    $mappings->{data}{properties}{ $name . '__facet' } = _get_elasticsearch_field_config('facet', $es_type);
                 }
                 if ($suggestible) {
-                    $mappings->{data}{properties}{ $name . '__suggestion' } = _get_elasticsearch_mapping('suggestible', $es_type);
+                    $mappings->{data}{properties}{ $name . '__suggestion' } = _get_elasticsearch_field_config('suggestible', $es_type);
                 }
                 # Sort is a bit special as it can be true, false, undef.
                 # We care about "true" or "undef",
                 # "undef" means to do the default thing, which is make it sortable.
                 if (!defined $sort || $sort) {
-                    $mappings->{data}{properties}{ $name . '__sort' } = _get_elasticsearch_mapping('sort', $es_type);
+                    $mappings->{data}{properties}{ $name . '__sort' } = _get_elasticsearch_field_config('sort', $es_type);
                     $sort_fields{$self->index}{$name} = 1;
                 }
             }
@@ -238,15 +241,15 @@ sub get_elasticsearch_mappings {
     return $all_mappings{$self->index};
 }
 
-=head2 _get_elasticsearch_mapping
+=head2 _get_elasticsearch_field_config
 
-Get the Elasticsearch mappings for the given purpose and data type.
+Get the Elasticsearch field config for the given purpose and data type.
 
-$mapping = _get_elasticsearch_mapping('search', 'text');
+$mapping = _get_elasticsearch_field_config('search', 'text');
 
 =cut
 
-sub _get_elasticsearch_mapping {
+sub _get_elasticsearch_field_config {
 
     my ( $purpose, $type ) = @_;
 
