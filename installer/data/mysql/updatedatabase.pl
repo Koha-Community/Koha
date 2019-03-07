@@ -17551,6 +17551,26 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18925 - Move maxissueqty and maxonsiteissueqty to circulation_rules)\n";
 }
 
+$DBversion = '18.12.00.021';
+if ( CheckVersion($DBversion) ) {
+
+    if ( !column_exists( 'itemtypes', 'rentalcharge_daily' ) ) {
+        $dbh->do("ALTER TABLE `itemtypes` ADD COLUMN `rentalcharge_daily` decimal(28,6) default NULL AFTER `rentalcharge`");
+    }
+
+    if ( !column_exists( 'itemtypes', 'rentalcharge_hourly' ) ) {
+        $dbh->do("ALTER TABLE `itemtypes` ADD COLUMN `rentalcharge_hourly` decimal(28,6) default NULL AFTER `rentalcharge_daily`");
+    }
+
+    if ( column_exists( 'itemtypes', 'rental_charge_daily' ) ) {
+        $dbh->do("UPDATE `itemtypes` SET `rentalcharge_daily` = `rental_charge_daily`");
+        $dbh->do("ALTER TABLE `itemtypes` DROP COLUMN `rental_charge_daily`");
+    }
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 20912 - Support granular rental charges)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
