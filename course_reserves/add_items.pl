@@ -40,6 +40,7 @@ my $course_id    = $cgi->param('course_id')    || '';
 my $barcode      = $cgi->param('barcode')      || '';
 my $return       = $cgi->param('return')       || '';
 my $itemnumber   = ($cgi->param('itemnumber') && $action eq 'lookup') ? $cgi->param('itemnumber') : '';
+my $is_edit      = $cgi->param('is_edit')      || '';
 
 my $item = Koha::Items->find( { ( $itemnumber ? ( itemnumber => $itemnumber ) : ( barcode => $barcode ) ) } );
 my $title = ($item) ? $item->biblio->title : undef;
@@ -79,6 +80,7 @@ if ( $action eq 'lookup' and $item ) {
         biblio         => $item->biblio,
         course_item    => $course_item,
         course_reserve => $course_reserve,
+        is_edit        => $is_edit,
 
         ccodes    => GetAuthorisedValues('CCODE'),
         locations => GetAuthorisedValues('LOC'),
