@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE AuthorisedValues %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Tags &rsaquo; [% IF ( do_it ) %]Review &rsaquo; [% ELSE %]Review tags[% END %]</title>
@@ -48,7 +49,9 @@ tr.selected { background-color : #FFFFCC; } tr.selected td { background-color : 
             <td>[% IF ( title.items ) %]<ul style="font-size:80%">[% FOREACH item IN title.items %]
                 <li>
                     [% item.branchname | html %]
-                    <span class="shelvingloc">[% item.location_description | html %]</span>
+                    <span class="shelvingloc">
+                        [% AuthorisedValues.GetDescriptionByKohaField( kohafield => 'items.location', authorised_value => item.location ) | html %]
+                    </span>
                     [% IF ( item.itemcallnumber ) %]
                         ([% item.itemcallnumber | html %])
                     [% END %]
