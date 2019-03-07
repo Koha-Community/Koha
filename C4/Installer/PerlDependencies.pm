@@ -889,7 +889,7 @@ our $PERL_DEPS = {
        min_ver  => '0.17'
     },
     'Clone' => {
-        usage    => 'ILL, Test suite',
+        usage    => 'ILL, Test suite, Elasticsearch integration',
         required => '1',
         min_ver  => '0.37',
     },
