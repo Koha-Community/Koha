@@ -1975,7 +1975,6 @@ DROP TABLE IF EXISTS `statistics`;
 CREATE TABLE `statistics` ( -- information related to transactions (circulation and fines) in Koha
   `datetime` datetime default NULL, -- date and time of the transaction
   `branch` varchar(10) default NULL, -- foreign key, branch where the transaction occurred
-  `proccode` varchar(4) default NULL, -- type of procedure used when making payments (does not appear in the code)
   `value` double(16,4) default NULL, -- monetary value associated with the transaction
   `type` varchar(16) default NULL, -- transaction type (localuse, issue, return, renew, writeoff, payment)
   `other` LONGTEXT, -- used by SIP
@@ -1988,7 +1987,6 @@ CREATE TABLE `statistics` ( -- information related to transactions (circulation 
   `ccode` varchar(80) default NULL, -- foreign key from the items table, links transaction to a specific collection code
   KEY `timeidx` (`datetime`),
   KEY `branch_idx` (`branch`),
-  KEY `proccode_idx` (`proccode`),
   KEY `type_idx` (`type`),
   KEY `usercode_idx` (`usercode`),
   KEY `itemnumber_idx` (`itemnumber`),

@@ -5,7 +5,11 @@ if( CheckVersion( $DBversion ) ) {
         $dbh->do( "ALTER TABLE accountlines DROP COLUMN accountno" );
     }
 
+    if( column_exists( 'statistics', 'proccode' ) ) {
+        $dbh->do( "ALTER TABLE statistics DROP COLUMN proccode" );
+    }
+
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
-    print "Upgrade to $DBversion done (Bug XXXXX - description)\n";
+    print "Upgrade to $DBversion done (Bug 21683 - Remove accountlines.accountno and statistics.proccode fields)\n";
 }
