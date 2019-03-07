@@ -272,17 +272,52 @@ if ($borrower) {
         push @checkouts, $checkout;
     }
 
+    my $show_priority;
+    for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
+        m/priority/ and $show_priority = 1;
+    }
+
+    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
+    my $total = $patron->account->balance;
+    my $accts = Koha::Account::Lines->search(
+        { borrowernumber => $borrower->{borrowernumber} },
+        { order_by       => { -desc => 'accountlines_id' } }
+    );
+
+    my @accountlines;
+    while ( my $line = $accts->next ) {
+        my $accountline = $line->unblessed;
+        $accountline->{'amount'} = sprintf( "%.2f", $accountline->{'amount'} || '0.00');
+        if ( $accountline->{'amount'} >= 0 ) {
+            $accountline->{'amountcredit'} = 1;
+        }
+        $accountline->{'amountoutstanding'} =
+        sprintf( "%.2f", $accountline->{'amountoutstanding'} || '0.00' );
+        if ( $accountline->{'amountoutstanding'} >= 0 ) {
+            $accountline->{'amountoutstandingcredit'} = 1;
+        }
+        push @accountlines, $accountline;
+    }
+
+    my $holds = $patron->holds;
+
     $template->param(
         validuser => 1,
         borrowername => $borrowername,
         issues_count => scalar(@checkouts),
         ISSUES => \@checkouts,
+        HOLDS => $holds,
         newissues => join(',',@newissueslist),
         patronid => $patronid,
         patronlogin => $patronlogin,
         patronpw => $patronpw,
         noitemlinks => 1 ,
         borrowernumber => $borrower->{'borrowernumber'},
+        SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
+        AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
+        showpriority   => $show_priority,
+        ACCOUNT_LINES => \@accountlines,
+        total => sprintf( "%.2f", $total ),
     );
 
     my $patron_messages = Koha::Patron::Messages->search(
