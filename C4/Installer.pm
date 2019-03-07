@@ -30,7 +30,7 @@ use vars qw(@ISA @EXPORT);
 BEGIN {
     require Exporter;
     @ISA = qw( Exporter );
-    push @EXPORT, qw( foreign_key_exists index_exists column_exists );
+    push @EXPORT, qw( foreign_key_exists index_exists column_exists TableExists);
 };
 
 =head1 NAME
@@ -527,6 +527,7 @@ sub index_exists {
 
 sub column_exists {
     my ( $table_name, $column_name ) = @_;
+    return unless TableExists($table_name);
     my $dbh = C4::Context->dbh;
     my ($exists) = $dbh->selectrow_array(
         qq|
@@ -536,6 +537,19 @@ sub column_exists {
     );
     return $exists;
 }
+
+sub TableExists { # Could be renamed table_exists for consistency
+    my $table = shift;
+    eval {
+                my $dbh = C4::Context->dbh;
+                local $dbh->{PrintError} = 0;
+                local $dbh->{RaiseError} = 1;
+                $dbh->do(qq{SELECT * FROM $table WHERE 1 = 0 });
+            };
+    return 1 unless $@;
+    return 0;
+}
+
 
 =head1 AUTHOR
 
