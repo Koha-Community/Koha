@@ -277,7 +277,6 @@ if ($borrower) {
         m/priority/ and $show_priority = 1;
     }
 
-    my $patron = Koha::Patrons->find( $borrower->{borrowernumber} );
     my $total = $patron->account->balance;
     my $accts = Koha::Account::Lines->search(
         { borrowernumber => $borrower->{borrowernumber} },
