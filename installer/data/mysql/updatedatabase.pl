@@ -17967,21 +17967,6 @@ foreach my $file ( sort readdir $dirh ) {
 
 =head1 FUNCTIONS
 
-=head2 TableExists($table)
-
-=cut
-
-sub TableExists {
-    my $table = shift;
-    eval {
-                local $dbh->{PrintError} = 0;
-                local $dbh->{RaiseError} = 1;
-                $dbh->do(qq{SELECT * FROM $table WHERE 1 = 0 });
-            };
-    return 1 unless $@;
-    return 0;
-}
-
 =head2 DropAllForeignKeys($table)
 
 Drop all foreign keys of the table $table
