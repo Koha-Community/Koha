@@ -681,7 +681,7 @@ sub CanBookBeIssued {
     my $onsite_checkout     = $params->{onsite_checkout}     || 0;
     my $override_high_holds = $params->{override_high_holds} || 0;
 
-    my $item = Koha::Items->find({barcode => $barcode });
+    my $item_object = Koha::Items->find({barcode => $barcode });
 
     # MANDATORY CHECKS - unless item exists, nothing else matters
     unless ( $item_object ) {
@@ -689,16 +689,16 @@ sub CanBookBeIssued {
     }
     return ( \%issuingimpossible, \%needsconfirmation ) if %issuingimpossible;
 
-    my $item_unblessed = $item->unblessed; # Transition...
-    my $issue = $item->checkout;
-    my $biblio = $item->biblio;
+    my $item_unblessed = $item_object->unblessed; # Transition...
+    my $issue = $item_object->checkout;
+    my $biblio = $item_object->biblio;
 
     my $biblioitem = $biblio->biblioitem;
-    my $effective_itemtype = $item->effective_itemtype;
+    my $effective_itemtype = $item_object->effective_itemtype;
     my $dbh             = C4::Context->dbh;
     my $patron_unblessed = $patron->unblessed;
 
-    my $library = Koha::Libraries->find( _GetCircControlBranch($item, $patron_unblessed) );
+    my $circ_library = Koha::Libraries->find( _GetCircControlBranch($item_unblessed, $patron_unblessed) );
     #
     # DUE DATE is OK ? -- should already have checked.
     #
@@ -709,7 +709,7 @@ sub CanBookBeIssued {
     unless ( $duedate ) {
         my $issuedate = $now->clone();
 
-        my $branch = _GetCircControlBranch($item_unblessed, $patron_unblessed);
+        my $branch = $circ_library;
         $duedate = CalcDateDue( $issuedate, $effective_itemtype, $branch, $patron_unblessed );
 
         # Offline circ calls AddIssue directly, doesn't run through here
@@ -719,7 +719,7 @@ sub CanBookBeIssued {
     my $fees = Koha::Charges::Fees->new(
         {
             patron    => $patron,
-            library   => $library,
+            library   => $circ_library,
             item      => $item_object,
             to_date   => $duedate,
         }
@@ -738,17 +738,17 @@ sub CanBookBeIssued {
     #
     # BORROWER STATUS
     #
-    if ( $patron->category->category_type eq 'X' && (  $item->barcode  )) {
+    if ( $patron->category->category_type eq 'X' && (  $item_object->barcode  )) {
     	# stats only borrower -- add entry to statistics table, and return issuingimpossible{STATS} = 1  .
         &UpdateStats({
                      branch => C4::Context->userenv->{'branch'},
                      type => 'localuse',
-                     itemnumber => $item->itemnumber,
+                     itemnumber => $item_object->itemnumber,
                      itemtype => $effective_itemtype,
                      borrowernumber => $patron->borrowernumber,
-                     ccode => $item->ccode}
+                     ccode => $item_object->ccode}
                     );
-        ModDateLastSeen( $item->itemnumber ); # FIXME Move to Koha::Item
+        ModDateLastSeen( $item_object->itemnumber ); # FIXME Move to Koha::Item
         return( { STATS => 1 }, {});
     }
 
@@ -859,7 +859,7 @@ sub CanBookBeIssued {
         } else {
             my ($CanBookBeRenewed,$renewerror) = CanBookBeRenewed(
                 $patron->borrowernumber,
-                $item->itemnumber,
+                $item_object->itemnumber,
             );
             if ( $CanBookBeRenewed == 0 ) {    # no more renewals allowed
                 if ( $renewerror eq 'onsite_checkout' ) {
@@ -901,7 +901,7 @@ sub CanBookBeIssued {
       and $issue
       and $issue->onsite_checkout
       and $issue->borrowernumber == $patron->borrowernumber ? 1 : 0 );
-    my $toomany = TooMany( $patron_unblessed, $item->biblionumber, $item_unblessed, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
+    my $toomany = TooMany( $patron_unblessed, $item_object->biblionumber, $item_unblessed, { onsite_checkout => $onsite_checkout, switch_onsite_checkout => $switch_onsite_checkout, } );
     # if TooMany max_allowed returns 0 the user doesn't have permission to check out this book
     if ( $toomany && not exists $needsconfirmation{RENEW_ISSUE} ) {
         if ( $toomany->{max_allowed} == 0 ) {
@@ -929,14 +929,14 @@ sub CanBookBeIssued {
     #
     # ITEM CHECKING
     #
-    if ( $item->notforloan )
+    if ( $item_object->notforloan )
     {
         if(!C4::Context->preference("AllowNotForLoanOverride")){
             $issuingimpossible{NOT_FOR_LOAN} = 1;
-            $issuingimpossible{item_notforloan} = $item->notforloan;
+            $issuingimpossible{item_notforloan} = $item_object->notforloan;
         }else{
             $needsconfirmation{NOT_FOR_LOAN_FORCING} = 1;
-            $needsconfirmation{item_notforloan} = $item->notforloan;
+            $needsconfirmation{item_notforloan} = $item_object->notforloan;
         }
     }
     else {
@@ -969,17 +969,17 @@ sub CanBookBeIssued {
             }
         }
     }
-    if ( $item->withdrawn && $item->withdrawn > 0 )
+    if ( $item_object->withdrawn && $item_object->withdrawn > 0 )
     {
         $issuingimpossible{WTHDRAWN} = 1;
     }
-    if (   $item->restricted
-        && $item->restricted == 1 )
+    if (   $item_object->restricted
+        && $item_object->restricted == 1 )
     {
         $issuingimpossible{RESTRICTED} = 1;
     }
-    if ( $item->itemlost && C4::Context->preference("IssueLostItem") ne 'nothing' ) {
-        my $av = Koha::AuthorisedValues->search({ category => 'LOST', authorised_value => $item->itemlost });
+    if ( $item_object->itemlost && C4::Context->preference("IssueLostItem") ne 'nothing' ) {
+        my $av = Koha::AuthorisedValues->search({ category => 'LOST', authorised_value => $item_object->itemlost });
         my $code = $av->count ? $av->next->lib : '';
         $needsconfirmation{ITEM_LOST} = $code if ( C4::Context->preference("IssueLostItem") eq 'confirm' );
         $alerts{ITEM_LOST} = $code if ( C4::Context->preference("IssueLostItem") eq 'alert' );
@@ -988,9 +988,9 @@ sub CanBookBeIssued {
         my $userenv = C4::Context->userenv;
         unless ( C4::Context->IsSuperLibrarian() ) {
             my $HomeOrHoldingBranch = C4::Context->preference("HomeOrHoldingBranch");
-            if ( $item->$HomeOrHoldingBranch ne $userenv->{branch} ){
+            if ( $item_object->$HomeOrHoldingBranch ne $userenv->{branch} ){
                 $issuingimpossible{ITEMNOTSAMEBRANCH} = 1;
-                $issuingimpossible{'itemhomebranch'} = $item->$HomeOrHoldingBranch;
+                $issuingimpossible{'itemhomebranch'} = $item_object->$HomeOrHoldingBranch;
             }
             $needsconfirmation{BORRNOTSAMEBRANCH} = $patron->branchcode
               if ( $patron->branchcode ne $userenv->{branch} );
@@ -1002,8 +1002,8 @@ sub CanBookBeIssued {
     my $rentalConfirmation = C4::Context->preference("RentalFeesCheckoutConfirmation");
 
     if ( $rentalConfirmation ){
-        my ($rentalCharge) = GetIssuingCharges( $item->itemnumber, $patron->borrowernumber );
-        my $itemtype = Koha::ItemTypes->find( $item->itype ); # GetItem sets effective itemtype
+        my ($rentalCharge) = GetIssuingCharges( $item_object->itemnumber, $patron->borrowernumber );
+        my $itemtype = Koha::ItemTypes->find( $item_object->itype ); # GetItem sets effective itemtype
         $rentalCharge += $fees->accumulate_rentalcharge({ from => dt_from_string(), to => $duedate });
         if ( $rentalCharge > 0 ){
             $needsconfirmation{RENTALCHARGE} = $rentalCharge;
@@ -1012,7 +1012,7 @@ sub CanBookBeIssued {
 
     unless ( $ignore_reserves ) {
         # See if the item is on reserve.
-        my ( $restype, $res ) = C4::Reserves::CheckReserves( $item->itemnumber );
+        my ( $restype, $res ) = C4::Reserves::CheckReserves( $item_object->itemnumber );
         if ($restype) {
             my $resbor = $res->{'borrowernumber'};
             if ( $resbor ne $patron->borrowernumber ) {
@@ -1086,7 +1086,7 @@ sub CanBookBeIssued {
     ) {
         # Check if borrower has already issued an item from the same biblio
         # Only if it's not a subscription
-        my $biblionumber = $item->biblionumber;
+        my $biblionumber = $item_object->biblionumber;
         require C4::Serials;
         my $is_a_subscription = C4::Serials::CountSubscriptionFromBiblionumber($biblionumber);
         unless ($is_a_subscription) {
@@ -1317,21 +1317,21 @@ sub AddIssue {
     # Stop here if the patron or barcode doesn't exist
     if ( $borrower && $barcode && $barcodecheck ) {
         # find which item we issue
-        my $item = Koha::Items->find({ barcode => $barcode })
+        my $item_object = Koha::Items->find({ barcode => $barcode })
           or return;    # if we don't get an Item, abort.
-        my $item_unblessed = $item->unblessed;
+        my $item_unblessed = $item_object->unblessed;
 
         my $branch = _GetCircControlBranch( $item_unblessed, $borrower );
 
         # get actual issuing if there is one
-        my $actualissue = $item->checkout;
+        my $actualissue = $item_object->checkout;
 
         # check if we just renew the issue.
         if ( $actualissue and $actualissue->borrowernumber eq $borrower->{'borrowernumber'}
                 and not $switch_onsite_checkout ) {
             $datedue = AddRenewal(
                 $borrower->{'borrowernumber'},
-                $item->itemnumber,
+                $item_object->itemnumber,
                 $branch,
                 $datedue,
                 $issuedate,    # here interpreted as the renewal date
@@ -1362,13 +1362,13 @@ sub AddIssue {
                 # who wants to borrow it now. mark it returned before issuing to the new borrower
                 my ( $allowed, $message ) = CanBookBeReturned( $item_unblessed, C4::Context->userenv->{branch} );
                 return unless $allowed;
-                AddReturn( $item->barcode, C4::Context->userenv->{'branch'} );
+                AddReturn( $item_object->barcode, C4::Context->userenv->{'branch'} );
             }
 
-            C4::Reserves::MoveReserve( $item->itemnumber, $borrower->{'borrowernumber'}, $cancelreserve );
+            C4::Reserves::MoveReserve( $item_object->itemnumber, $borrower->{'borrowernumber'}, $cancelreserve );
 
             # Starting process for transfer job (checking transfert and validate it if we have one)
-            my ($datesent) = GetTransfers( $item->itemnumber );
+            my ($datesent) = GetTransfers( $item_object->itemnumber );
             if ($datesent) {
                 # updating line of branchtranfert to finish it, and changing the to branch value, implement a comment for visibility of this case (maybe for stats ....)
                 my $sth = $dbh->prepare(
@@ -1379,14 +1379,14 @@ sub AddIssue {
                     WHERE itemnumber= ? AND datearrived IS NULL"
                 );
                 $sth->execute( C4::Context->userenv->{'branch'},
-                    $item->itemnumber );
+                    $item_object->itemnumber );
             }
 
             # If automatic renewal wasn't selected while issuing, set the value according to the issuing rule.
             unless ($auto_renew) {
                 my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
                     {   categorycode => $borrower->{categorycode},
-                        itemtype     => $item->effective_itemtype,
+                        itemtype     => $item_object->effective_itemtype,
                         branchcode   => $branch
                     }
                 );
@@ -1396,7 +1396,7 @@ sub AddIssue {
 
             # Record in the database the fact that the book was issued.
             unless ($datedue) {
-                my $itype = $item->effective_itemtype;
+                my $itype = $item_object->effective_itemtype;
                 $datedue = CalcDateDue( $issuedate, $itype, $branch, $borrower );
 
             }
@@ -1411,14 +1411,14 @@ sub AddIssue {
                 auto_renew      => $auto_renew ? 1 : 0,
             };
 
-            $issue = Koha::Checkouts->find( { itemnumber => $item->itemnumber } );
+            $issue = Koha::Checkouts->find( { itemnumber => $item_object->itemnumber } );
             if ($issue) {
                 $issue->set($issue_attributes)->store;
             }
             else {
                 $issue = Koha::Checkout->new(
                     {
-                        itemnumber => $item->itemnumber,
+                        itemnumber => $item_object->itemnumber,
                         %$issue_attributes,
                     }
                 )->store;
@@ -1426,58 +1426,58 @@ sub AddIssue {
 
             if ( C4::Context->preference('ReturnToShelvingCart') ) {
                 # ReturnToShelvingCart is on, anything issued should be taken off the cart.
-                CartToShelf( $item->itemnumber );
+                CartToShelf( $item_object->itemnumber );
             }
 
             if ( C4::Context->preference('UpdateTotalIssuesOnCirc') ) {
-                UpdateTotalIssues( $item->biblionumber, 1 );
+                UpdateTotalIssues( $item_object->biblionumber, 1 );
             }
 
             ## If item was lost, it has now been found, reverse any list item charges if necessary.
-            if ( $item->itemlost ) {
+            if ( $item_object->itemlost ) {
                 if (
                     Koha::RefundLostItemFeeRules->should_refund(
                         {
                             current_branch      => C4::Context->userenv->{branch},
-                            item_home_branch    => $item->homebranch,
-                            item_holding_branch => $item->holdingbranch,
+                            item_home_branch    => $item_object->homebranch,
+                            item_holding_branch => $item_object->holdingbranch,
                         }
                     )
                   )
                 {
-                    _FixAccountForLostAndReturned( $item->itemnumber, undef,
-                        $item->barcode );
+                    _FixAccountForLostAndReturned( $item_object->itemnumber, undef,
+                        $item_object->barcode );
                 }
             }
 
             ModItem(
                 {
-                    issues        => $item->issues + 1,
+                    issues        => $item_object->issues + 1,
                     holdingbranch => C4::Context->userenv->{'branch'},
                     itemlost      => 0,
                     onloan        => $datedue->ymd(),
                     datelastborrowed => DateTime->now( time_zone => C4::Context->tz() )->ymd(),
                 },
-                $item->biblionumber,
-                $item->itemnumber,
+                $item_object->biblionumber,
+                $item_object->itemnumber,
                 { log_action => 0 }
             );
-            ModDateLastSeen( $item->itemnumber );
+            ModDateLastSeen( $item_object->itemnumber );
 
             # If it costs to borrow this book, charge it to the patron's account.
-            my ( $charge, $itemtype ) = GetIssuingCharges( $item->itemnumber, $borrower->{'borrowernumber'} );
+            my ( $charge, $itemtype ) = GetIssuingCharges( $item_object->itemnumber, $borrower->{'borrowernumber'} );
             if ( $charge > 0 ) {
                 my $description = "Rental";
                 AddIssuingCharge( $issue, $charge, $description );
             }
 
-            my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
-            if ( $itemtype ) {
+            my $itemtype_object = Koha::ItemTypes->find( $item_object->effective_itemtype );
+            if ( $itemtype_object ) {
                 my $accumulate_charge = $fees->accumulate_rentalcharge();
                 if ( $accumulate_charge > 0 ) {
                     AddIssuingCharge( $issue, $accumulate_charge, 'Daily rental' ) if $accumulate_charge > 0;
                     $charge += $accumulate_charge;
-                    $item->{charge} = $charge;
+                    $item_unblessed->{charge} = $charge;
                 }
             }
 
@@ -1488,11 +1488,11 @@ sub AddIssue {
                     type => ( $onsite_checkout ? 'onsite_checkout' : 'issue' ),
                     amount         => $charge,
                     other          => ( $sipmode ? "SIP-$sipmode" : '' ),
-                    itemnumber     => $item->itemnumber,
-                    itemtype       => $item->effective_itemtype,
-                    location       => $item->location,
+                    itemnumber     => $item_object->itemnumber,
+                    itemtype       => $item_object->effective_itemtype,
+                    location       => $item_object->location,
                     borrowernumber => $borrower->{'borrowernumber'},
-                    ccode          => $item->ccode,
+                    ccode          => $item_object->ccode,
                 }
             );
 
@@ -1501,14 +1501,14 @@ sub AddIssue {
             my %conditions        = (
                 branchcode   => $branch,
                 categorycode => $borrower->{categorycode},
-                item_type    => $item->effective_itemtype,
+                item_type    => $item_object->effective_itemtype,
                 notification => 'CHECKOUT',
             );
             if ( $circulation_alert->is_enabled_for( \%conditions ) ) {
                 SendCirculationAlert(
                     {
                         type     => 'CHECKOUT',
-                        item     => $item->unblessed,
+                        item     => $item_object->unblessed,
                         borrower => $borrower,
                         branch   => $branch,
                     }
@@ -1517,7 +1517,7 @@ sub AddIssue {
             logaction(
                 "CIRCULATION", "ISSUE",
                 $borrower->{'borrowernumber'},
-                $item->itemnumber,
+                $item_object->itemnumber,
             ) if C4::Context->preference("IssueLog");
         }
     }
@@ -2853,10 +2853,10 @@ sub AddRenewal {
     my $datedue         = shift;
     my $lastreneweddate = shift || DateTime->now(time_zone => C4::Context->tz);
 
-    my $item   = Koha::Items->find($itemnumber) or return;
-    my $biblio = $item->biblio;
-    my $issue  = $item->checkout;
-    my $item_unblessed = $item->unblessed;
+    my $item_object   = Koha::Items->find($itemnumber) or return;
+    my $biblio = $item_object->biblio;
+    my $issue  = $item_object->checkout;
+    my $item_unblessed = $item_object->unblessed;
 
     my $dbh = C4::Context->dbh;
 
@@ -2872,7 +2872,7 @@ sub AddRenewal {
     my $patron = Koha::Patrons->find( $borrowernumber ) or return; # FIXME Should do more than just return
     my $patron_unblessed = $patron->unblessed;
 
-    my $circ_library = Koha::Libraries->find( _GetCircControlBranch($item, $patron_unblessed) );
+    my $circ_library = Koha::Libraries->find( _GetCircControlBranch($item_unblessed, $patron_unblessed) );
 
     if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
         _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
@@ -2882,13 +2882,13 @@ sub AddRenewal {
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date or the current due date
     # based on the value of the RenewalPeriodBase syspref.
+    my $itemtype = $item_object->effective_itemtype;
     unless ($datedue) {
 
-        my $itemtype = $item->effective_itemtype;
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         dt_from_string( $issue->date_due, 'sql' ) :
                                         DateTime->now( time_zone => C4::Context->tz());
-        $datedue =  CalcDateDue($datedue, $itemtype, _GetCircControlBranch($item_unblessed, $patron_unblessed), $patron_unblessed, 'is a renewal');
+        $datedue =  CalcDateDue($datedue, $itemtype, $circ_library, $patron_unblessed, 'is a renewal');
     }
 
     my $fees = Koha::Charges::Fees->new(
@@ -2912,22 +2912,22 @@ sub AddRenewal {
     $sth->execute( $datedue->strftime('%Y-%m-%d %H:%M'), $renews, $lastreneweddate, $borrowernumber, $itemnumber );
 
     # Update the renewal count on the item, and tell zebra to reindex
-    $renews = $item->renewals + 1;
-    ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item->biblionumber, $itemnumber, { log_action => 0 } );
+    $renews = $item_object->renewals + 1;
+    ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item_object->biblionumber, $itemnumber, { log_action => 0 } );
 
     # Charge a new rental fee, if applicable
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
     if ( $charge > 0 ) {
-        my $description = "Renewal of Rental Item " . $biblio->title . " " .$item->barcode;
+        my $description = "Renewal of Rental Item " . $biblio->title . " " .$item_object->barcode;
         AddIssuingCharge($issue, $charge, $description);
     }
 
     # Charge a new accumulate rental fee, if applicable
-    my $itemtype = Koha::ItemTypes->find( $item_object->effective_itemtype );
-    if ( $itemtype ) {
+    my $itemtype_object = Koha::ItemTypes->find( $itemtype );
+    if ( $itemtype_object ) {
         my $accumulate_charge = $fees->accumulate_rentalcharge();
         if ( $accumulate_charge > 0 ) {
-            my $type_desc = "Renewal of Daily Rental Item " . $biblio->title . " $item->{'barcode'}";
+            my $type_desc = "Renewal of Daily Rental Item " . $biblio->title . " $item_unblessed->{'barcode'}";
             AddIssuingCharge( $issue, $accumulate_charge, $type_desc )
         }
         $charge += $accumulate_charge;
@@ -2939,7 +2939,7 @@ sub AddRenewal {
         my %conditions        = (
             branchcode   => $branch,
             categorycode => $patron->categorycode,
-            item_type    => $item->effective_itemtype,
+            item_type    => $itemtype,
             notification => 'CHECKOUT',
         );
         if ( $circulation_alert->is_enabled_for( \%conditions ) ) {
@@ -2974,10 +2974,10 @@ sub AddRenewal {
             type           => 'renew',
             amount         => $charge,
             itemnumber     => $itemnumber,
-            itemtype       => $item->effective_itemtype,
-            location       => $item->location,
+            itemtype       => $itemtype,
+            location       => $item_object->location,
             borrowernumber => $borrowernumber,
-            ccode          => $item->ccode,
+            ccode          => $item_object->ccode,
         }
     );
 

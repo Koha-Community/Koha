@@ -41,7 +41,7 @@ use MARC::Field;
 my $branch;
 my $context = Test::MockModule->new('C4::Context');
 $context->mock( 'userenv', sub {
-    return { branch => $branch }
+    return { branch => $branch, number => 1234, firstname => "Adam", surname => "Smaith" }
 });
 
 my $schema = Koha::Database->schema;
@@ -175,6 +175,8 @@ subtest "AddReturn logging on statistics table (item-level_itypes=1)" => sub {
         "item-level itype recorded on statistics for return");
     warning_like { AddIssue( $borrower, $item_without_itemtype->{ barcode } ) }
                  [qr/^item-level_itypes set but no itemtype set for item/,
+                 qr/^item-level_itypes set but no itemtype set for item/,
+                 qr/^item-level_itypes set but no itemtype set for item/,
                  qr/^item-level_itypes set but no itemtype set for item/,
                  qr/^item-level_itypes set but no itemtype set for item/,
                  qr/^item-level_itypes set but no itemtype set for item/],
