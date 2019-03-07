@@ -17597,6 +17597,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 15774 - Add permission for managing additional fields)\n";
 }
 
+$DBversion = '18.12.00.023';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+      INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type)
+      VALUES ('ILLOpacbackends',NULL,NULL,'ILL backends to enabled for OPAC initiated requests','multiple');
+    |);
+
+    # Always end with this (adjust the bug info)
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 20639 - Add ILLOpacbackends syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
