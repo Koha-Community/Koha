@@ -139,7 +139,7 @@
                     [% IF ( hold.item_level_hold ) %]
                         <i>
                             Only item
-                            <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% hold.biblionumber | uri %]">
+                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% hold.biblionumber | uri %]&amp;itemnumber=[% hold.itemnumber | uri %]#item[% hold.itemnumber | uri %]">
                                 [% IF ( hold.barcodenumber ) %]
                                     [% hold.barcodenumber | html %]
                                     <input type="hidden" name="itemnumber" value="[% hold.itemnumber | html %]" />
