@@ -60,11 +60,6 @@
     [% ELSE %]
         <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title as phrase</option>
     [% END %]
-    [% IF ms_ticommaphr %]
-        <option selected="selected" value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title as phrase</option>
-    [% ELSE %]
-        <option value="ti,phr">&nbsp;&nbsp;&nbsp;&nbsp; Title as phrase</option>
-    [% END %]
     [% IF ms_se %]
         <option selected="seleced" value="se">&nbsp;&nbsp;&nbsp;&nbsp; Series title</option>
     [% ELSE %]
