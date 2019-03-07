@@ -2028,7 +2028,7 @@ subtest 'extended_attributes' => sub {
     my $patron_1 = $builder->build_object({class=> 'Koha::Patrons'});
     my $patron_2 = $builder->build_object({class=> 'Koha::Patrons'});
 
-    set_logged_in_user($patron_1);
+    t::lib::Mocks::mock_userenv({ patron => $patron_1 });
 
     my $attribute_type1 = Koha::Patron::Attribute::Type->new(
         {
@@ -2103,7 +2103,7 @@ subtest 'extended_attributes' => sub {
     is( $non_existent, undef, 'Koha::Patron->get_extended_attribute must return undef if the attribute does not exist' );
 
     # Test branch limitations
-    set_logged_in_user($patron_2);
+    t::lib::Mocks::mock_userenv({ patron => $patron_2 });
     # Return all
     $extended_attributes_for_1 = $patron_1->extended_attributes;
     is( $extended_attributes_for_1->count, 3, 'There should be 2 attributes for patron 1, the limited one should be returned');
