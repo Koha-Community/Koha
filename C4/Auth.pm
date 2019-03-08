@@ -2024,14 +2024,21 @@ sub get_all_subpermissions {
 
 =head2 haspermission
 
+  $flagsrequired = '*';                                 # Any permission at all
+  $flagsrequired = 'a_flag';                            # a_flag must be satisfied (all subpermissions)
+  $flagsrequired = [ 'a_flag', 'b_flag' ];              # a_flag OR b_flag must be satisfied
+  $flagsrequired = { 'a_flag => 1, 'b_flag' => 1 };     # a_flag AND b_flag must be satisfied
+  $flagsrequired = { 'a_flag' => 'sub_a' };             # sub_a of a_flag must be satisfied
+  $flagsrequired = { 'a_flag' => [ 'sub_a, 'sub_b' ] }; # sub_a OR sub_b of a_flag must be satisfied
+
   $flags = ($userid, $flagsrequired);
 
 C<$userid> the userid of the member
 C<$flags> is a query structure similar to that used by SQL::Abstract that
-denotes the combination of flags required.
+denotes the combination of flags required. It is a required parameter.
 
 The main logic of this method is that things in arrays are OR'ed, and things
-in hashes are AND'ed.
+in hashes are AND'ed. The `*` character can be used, at any depth, to denote `ANY`
 
 Returns member's flags or 0 if a permission is not met.
 
