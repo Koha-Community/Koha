@@ -20,7 +20,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 3;
+use Test::More tests => 4;
+use Test::Exception;
 
 use Koha::Database;
 use t::lib::TestBuilder;
@@ -69,6 +70,17 @@ $builder->build(
         },
     }
 );
+
+subtest 'undef top level tests' => sub {
+
+    plan tests => 2;
+
+    throws_ok { my $r = haspermission( $borr1->{userid} ); }
+    'Koha::Exceptions::WrongParameter',
+      'Exception thrown when missing $requiredflags';
+    throws_ok { my $r = haspermission( $borr1->{userid}, undef ); }
+    'Koha::Exceptions::WrongParameter', 'Exception thrown when explicit undef';
+};
 
 subtest 'scalar top level tests' => sub {
 

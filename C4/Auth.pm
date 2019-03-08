@@ -2072,6 +2072,10 @@ sub _dispatch {
 
 sub haspermission {
     my ( $userid, $flagsrequired ) = @_;
+
+    Koha::Exceptions::WrongParameter->throw('$flagsrequired should not be undef')
+      unless defined($flagsrequired);
+
     my $sth = C4::Context->dbh->prepare("SELECT flags FROM borrowers WHERE userid=?");
     $sth->execute($userid);
     my $row = $sth->fetchrow();
