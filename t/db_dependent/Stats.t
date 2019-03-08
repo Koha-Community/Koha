@@ -4,7 +4,7 @@ use Modern::Perl;
 use C4::Stats;
 use Koha::Database;
 
-use Test::More tests => 19;
+use Test::More tests => 18;
 
 BEGIN {
     use_ok('C4::Stats');
@@ -119,7 +119,6 @@ is ($params->{other},          $line->{other},          "UpdateStats save other 
 is ($params->{itemtype},       $line->{itemtype},       "UpdateStats save itemtype param in itemtype field of statistics table");
 is ($params->{location},       $line->{location},       "UpdateStats save location param in location field of statistics table");
 is ($params->{ccode},          $line->{ccode},          "UpdateStats save ccode param in ccode field of statistics table");
-is (undef,                     $line->{proccode},       "UpdateStats save no proccode param in proccode field of statistics table");
 
 $dbh->do(q|DELETE FROM statistics|);
 $params = {
