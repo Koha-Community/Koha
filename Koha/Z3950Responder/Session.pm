@@ -23,9 +23,10 @@ use Modern::Perl;
 
 use C4::Circulation qw( GetTransfers );
 use C4::Context;
-use C4::Items qw( GetItem );
 use C4::Reserves qw( GetReserveStatus );
 use C4::Search qw();
+
+use Koha::Items;
 use Koha::Logger;
 
 =head1 NAME
@@ -262,28 +263,28 @@ sub add_item_status {
     my $itemnumber = $field->subfield($itemnumber_subfield);
     next unless $itemnumber;
 
-    my $item = GetItem( $itemnumber );
+    my $item = Koha::Items->find( $itemnumber );
     return unless $item;
 
     my @statuses;
 
-    if ( $item->{onloan} ) {
+    if ( $item->onloan() ) {
         push @statuses, $status_strings->{CHECKED_OUT};
     }
 
-    if ( $item->{itemlost} ) {
+    if ( $item->itemlost() ) {
         push @statuses, $status_strings->{LOST};
     }
 
-    if ( $item->{notforloan} ) {
+    if ( $item->notforloan() ) {
         push @statuses, $status_strings->{NOT_FOR_LOAN};
     }
 
-    if ( $item->{damaged} ) {
+    if ( $item->damaged() ) {
         push @statuses, $status_strings->{DAMAGED};
     }
 
-    if ( $item->{withdrawn} ) {
+    if ( $item->withdrawn() ) {
         push @statuses, $status_strings->{WITHDRAWN};
     }
 
