@@ -229,7 +229,7 @@ sub authenticate_api_request {
 
     my $permissions = $authorization->{'permissions'};
     # Check if the user is authorized
-    if ( haspermission($user->userid, $permissions)
+    if ( ( defined($permissions) and haspermission($user->userid, $permissions) )
         or allow_owner($c, $authorization, $user)
         or allow_guarantor($c, $authorization, $user) ) {
 
