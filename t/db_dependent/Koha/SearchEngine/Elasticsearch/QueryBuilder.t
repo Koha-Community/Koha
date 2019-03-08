@@ -169,7 +169,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 26;
+    plan tests => 30;
 
     my $qb;
 
@@ -222,6 +222,20 @@ subtest 'build_query tests' => sub {
         $query->{query}{query_string}{query},
         "(donald duck)",
         "query not altered if QueryAutoTruncate disabled"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['donald duck'], ['title'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:(donald duck))',
+        'multiple words in a query term are enclosed in parenthesis'
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( ['AND'], ['donald duck', 'disney'], ['title', 'author'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:(donald duck)) AND (author:disney)',
+        'multiple query terms are enclosed in parenthesis while a single one is not'
     );
 
     t::lib::Mocks::mock_preference( 'QueryAutoTruncate', '1' );
@@ -324,7 +338,21 @@ subtest 'build_query tests' => sub {
     is(
         $query->{query}{query_string}{query},
         '(title:"donald duck")',
-        "query of specific field is not truncated when surrouned by quotes"
+        "query of specific field is not truncated when surrounded by quotes"
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['donald duck'], ['title'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:(donald* duck*))',
+        'words of a multi-word term are properly truncated'
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( ['AND'], ['donald duck', 'disney'], ['title', 'author'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(title:(donald* duck*)) AND (author:disney*)',
+        'words of a multi-word term and single-word term are properly truncated'
     );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef, undef, undef, undef, { suppress => 1 } );

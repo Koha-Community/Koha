@@ -786,6 +786,7 @@ sub _create_query_string {
         my $field = $_->{field}    ? $_->{field} . ':'    : '';
 
         my $oand = $self->_modify_string_by_type(%$_);
+        $oand = "($oand)" if $field && scalar(split(/\s+/, $oand)) > 1;
         "$otor($field$oand)";
     } @queries;
 }
