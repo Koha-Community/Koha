@@ -74,8 +74,8 @@ subtest 'get_facetable_fields() tests' => sub {
     $builder->build({
         source => 'SearchField',
         value => {
-            name => 'se',
-            label => 'se',
+            name => 'title-series',
+            label => 'titles-series',
             type => 'string',
             facet_order => 4
         }
@@ -117,7 +117,7 @@ subtest 'get_facetable_fields() tests' => sub {
     is($faceted_fields[1]->facet_order, 2);
     is($faceted_fields[2]->name, 'itype');
     is($faceted_fields[2]->facet_order, 3);
-    is($faceted_fields[3]->name, 'se');
+    is($faceted_fields[3]->name, 'title-series');
     is($faceted_fields[3]->facet_order, 4);
     is($faceted_fields[4]->name, 'su-geo');
     is($faceted_fields[4]->facet_order, 5);

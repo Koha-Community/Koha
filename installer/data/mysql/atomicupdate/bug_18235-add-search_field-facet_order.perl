@@ -8,7 +8,7 @@ if( CheckVersion( $DBversion ) ) {
     $dbh->do("UPDATE search_field SET facet_order=2 WHERE name='itype'");
     $dbh->do("UPDATE search_field SET facet_order=3 WHERE name='location'");
     $dbh->do("UPDATE search_field SET facet_order=4 WHERE name='su-geo'");
-    $dbh->do("UPDATE search_field SET facet_order=5 WHERE name='se'");
+    $dbh->do("UPDATE search_field SET facet_order=5 WHERE name='title-series'");
     $dbh->do("UPDATE search_field SET facet_order=6 WHERE name='subject'");
     $dbh->do("UPDATE search_field SET facet_order=7 WHERE name='ccode'");
     $dbh->do("UPDATE search_field SET facet_order=8 WHERE name='holdingbranch'");
