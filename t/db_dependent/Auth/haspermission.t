@@ -73,13 +73,16 @@ $builder->build(
 
 subtest 'undef top level tests' => sub {
 
-    plan tests => 2;
+    plan tests => 1;
 
-    throws_ok { my $r = haspermission( $borr1->{userid} ); }
-    'Koha::Exceptions::WrongParameter',
-      'Exception thrown when missing $requiredflags';
-    throws_ok { my $r = haspermission( $borr1->{userid}, undef ); }
-    'Koha::Exceptions::WrongParameter', 'Exception thrown when explicit undef';
+    my $pass = haspermission( $borr2->{userid} );
+    ok($pass, "let through undef privs");
+
+    #throws_ok { my $r = haspermission( $borr1->{userid} ); }
+    #'Koha::Exceptions::WrongParameter',
+    #  'Exception thrown when missing $requiredflags';
+    #throws_ok { my $r = haspermission( $borr1->{userid}, undef ); }
+    #'Koha::Exceptions::WrongParameter', 'Exception thrown when explicit undef';
 };
 
 subtest 'scalar top level tests' => sub {
