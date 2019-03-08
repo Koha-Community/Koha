@@ -109,7 +109,7 @@ define( [ 'resources' ], function( Resources ) {
             createFromXML: function( resourceId ) {
                 var widget = this;
 
-                Resources[resourceId].done( function( xml ) {
+                return Resources[resourceId].done( function( xml ) {
                     $(widget.node).find('.widget-loading').remove();
                     var $matSelect = $('<select class="material-select"></select>').appendTo(widget.node);
                     var $contents = $('<span class="material-contents"/>').appendTo(widget.node);

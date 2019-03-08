@@ -243,7 +243,18 @@ require( [ 'koha-backend', 'widget', 'text-marc' ], function( KohaBackend, Widge
             return this.materialTypeMapping[this.text.substring(0, 1)];
         },
         postCreate: function( node, mark ) {
-            this.createFromXML( 'marc21/xml/007' );
+            this.createFromXML( 'marc21/xml/007' ).then(() => {
+                $(this.node).find('.material-select').on('change', (e) => {
+                    const keys = Object.keys(this.materialTypeMapping);
+                    const k = keys.filter(k => this.materialTypeMapping[k] === $(e.target).val());
+                    this.setFixed(0, 1, k, '+input');
+
+                    // FIXME There must be a better way to update display
+                    const n = $(this.node).find('[name="f00"]');
+                    n.triggerHandler('focus');
+                    n.triggerHandler('blur');
+                });
+            });
         }
     } );
 
