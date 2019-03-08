@@ -189,7 +189,7 @@ sub authenticate_api_request {
         # Manually pass the remote_address to check_auth_cookie
         my $remote_addr = $c->tx->remote_address;
         my ($status, $sessionID) = check_cookie_auth(
-                                                $cookie, '*',
+                                                $cookie, undef,
                                                 { remote_addr => $remote_addr });
         if ($status eq "ok") {
             my $session = get_session($sessionID);

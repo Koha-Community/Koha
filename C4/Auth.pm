@@ -1606,7 +1606,11 @@ sub check_api_auth {
   ($status, $sessionId) = check_api_auth($cookie, $userflags);
 
 Given a CGISESSID cookie set during a previous login to Koha, determine
-if the user has the privileges specified by C<$userflags>.
+if the user has the privileges specified by C<$userflags>. C<$userflags>
+is passed unaltered into C<haspermission> and as such accepts all options
+avaiable to that routine with the one caveat that C<check_api_auth> will
+also allow 'undef' to be passed and in such a case the permissions check
+will be skipped altogether.
 
 C<check_cookie_auth> is meant for authenticating special services
 such as tools/upload-file.pl that are invoked by other pages that
@@ -1701,7 +1705,7 @@ sub check_cookie_auth {
             return ( "expired", undef );
         } else {
             $session->param( 'lasttime', time() );
-            my $flags = haspermission( $userid, $flagsrequired );
+            my $flags = defined($flagsrequired) ? haspermission( $userid, $flagsrequired ) : 1;
             if ($flags) {
                 return ( "ok", $sessionID );
             } else {
