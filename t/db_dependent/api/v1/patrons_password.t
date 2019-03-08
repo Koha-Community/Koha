@@ -141,7 +141,7 @@ subtest 'set_public() (unprivileged user tests)' => sub {
 
     my $tx = $t->ua->build_tx(
               POST => "/api/v1/public/patrons/"
-            . $other_patron->id
+            . $patron->id
             . "/password" => json => {
             password          => $new_password,
             password_repeated => $new_password,
@@ -175,8 +175,8 @@ subtest 'set_public() (unprivileged user tests)' => sub {
     $tx->req->env( { REMOTE_ADDR => '127.0.0.1' } );
     $t->request_ok($tx)
       ->status_is(403)
-      ->json_is({
-          error => "Changing other patron's password is forbidden"
+      ->json_has({
+          error => "Authorization failure. Missing required permission(s)."
         });
 
     $tx = $t->ua->build_tx(
