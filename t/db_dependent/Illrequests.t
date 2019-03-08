@@ -376,7 +376,7 @@ subtest 'Backend testing (mocks)' => sub {
 
 subtest 'Backend core methods' => sub {
 
-    plan tests => 17;
+    plan tests => 19;
 
     $schema->storage->txn_begin;
 
@@ -384,6 +384,7 @@ subtest 'Backend core methods' => sub {
     my $backend = Test::MockObject->new;
     $backend->set_isa('Koha::Illbackends::Mock');
     $backend->set_always('name', 'Mock');
+    $backend->mock('capabilities', sub { return 'Mock'; });
 
     my $config = Test::MockObject->new;
     $config->set_always('backend_dir', "/tmp");
@@ -423,6 +424,8 @@ subtest 'Backend core methods' => sub {
     $backend->set_series('create',
                          { stage => 'bar', method => 'create' },
                          { stage => 'commit', method => 'create' },
+                         { stage => 'commit', method => 'create' },
+                         { stage => 'commit', method => 'create' },
                          { stage => 'commit', method => 'create' });
     # Test non-commit
     is_deeply($illrq->backend_create({test => 1}),
@@ -451,6 +454,45 @@ subtest 'Backend core methods' => sub {
               },
               "Backend create: arbitrary stage, permitted.");
     is($illrq->status, "NEW", "Backend create: not-queued.");
+
+    # Test that enabling the unmediated workflow causes the backend's
+    # 'unmediated_ill' method to be called
+    t::lib::Mocks::mock_preference('ILLModuleUnmediated', '1');
+    $backend->mock(
+        'capabilities',
+        sub {
+            my ($self, $name) = @_;
+            if ($name eq 'unmediated_ill') {
+                return sub {
+                    return { unmediated_ill => 1 };
+                };
+            }
+        }
+    );
+    $illrq->status('NEW');
+    is_deeply(
+        $illrq->backend_create({test => 1}),
+        {
+            'opac_template' => '/tmp/Mock/opac-includes/.inc',
+            'template' => '/tmp/Mock/intra-includes/.inc',
+            'unmediated_ill' => 1
+        },
+        "Backend create: commit stage, permitted, ILLModuleUnmediated enabled."
+    );
+
+    # Test that disabling the unmediated workflow causes the backend's
+    # 'unmediated_ill' method to be NOT called
+    t::lib::Mocks::mock_preference('ILLModuleUnmediated', '0');
+    $illrq->status('NEW');
+    is_deeply(
+        $illrq->backend_create({test => 1}),
+        {
+            stage => 'commit', method => 'create', permitted => 1,
+            template => "/tmp/Mock/intra-includes/create.inc",
+            opac_template => "/tmp/Mock/opac-includes/create.inc",
+        },
+        "Backend create: commit stage, permitted, ILLModuleUnmediated disabled."
+    );
 
     # backend_renew
     $backend->set_series('renew', { stage => 'bar', method => 'renew' });
