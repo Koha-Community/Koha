@@ -19,15 +19,17 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 2;
 use t::lib::TestBuilder;
-use DateTime;
+use t::lib::Mocks;
 use File::Spec;
 use File::Basename;
-use Data::Dumper;
+
+use Koha::DateUtils;
 
 my $scriptDir = dirname(File::Spec->rel2abs( __FILE__ ));
 
+my $schema  = Koha::Database->new->schema;
 my $dbh = C4::Context->dbh;
 
 my $library1;
@@ -36,11 +38,11 @@ my $library3;
 my $borrower;
 
 sub build_test_objects {
-    $dbh->{AutoCommit} = 0;
+
     $dbh->{RaiseError} = 1;
 
     # Set only to avoid exception.
-    $ENV{"OVERRIDE_SYSPREF_dateformat"} = 'metric';
+    t::lib::Mocks::mock_preference('dateformat', 'metric');
 
     my $builder = t::lib::TestBuilder->new;
 
@@ -126,7 +128,7 @@ DELETESQL
     my $item3 = $builder->build({
         source => 'Item'
     });
-    my $now = DateTime->now();
+    my $now = dt_from_string();
     my $tomorrow = $now->add(days => 1)->strftime('%F');
 
     my $issue1 = $builder->build({
@@ -191,72 +193,78 @@ close $scriptfh;
 
 my $sthmq = $dbh->prepare('SELECT * FROM message_queue WHERE borrowernumber = ?');
 
-#
-# Test default behavior
-#
+subtest 'Default behaviour tests' => sub {
 
-build_test_objects();
+    plan tests => 3;
 
-run_script($scriptContent, 'advanced_notices.pl', '-c');
+    $schema->storage->txn_begin;
 
-$sthmq->execute($borrower->{borrowernumber});
+    build_test_objects();
 
-my $messages = $sthmq->fetchall_hashref('message_id');
+    run_script($scriptContent, 'advanced_notices.pl', '-c');
 
-is(scalar(keys %$messages), 1, 'There is one message in the queue');
+    $sthmq->execute($borrower->{borrowernumber});
 
-for my $message (keys %$messages) {
-    $messages->{$message}->{content} =~ /(\d+) (.*)/;
-    my $count = $1;
-    my $branchname = $2;
+    my $messages = $sthmq->fetchall_hashref('message_id');
 
-    is ($count, '3', 'Issue count is 3');
-    is ($branchname, $library1->{branchname}, 'Branchname is that of borrowers home branch.');
-}
+    is(scalar(keys %$messages), 1, 'There is one message in the queue');
 
-$dbh->rollback;
+    for my $message (keys %$messages) {
+        $messages->{$message}->{content} =~ /(\d+) (.*)/;
+        my $count = $1;
+        my $branchname = $2;
 
-#
-# Test -digest-per-branch
-#
-
-build_test_objects();
-
-run_script($scriptContent, 'advanced_notices.pl', '-c', '-digest-per-branch');
-
-$sthmq->execute($borrower->{borrowernumber});
-
-$messages = $sthmq->fetchall_hashref('message_id');
-
-is(scalar(keys %$messages), 2, 'There are two messages in the queue');
-
-my %expected = (
-    $library2->{branchname} => {
-        count => 1,
-    },
-    $library3->{branchname} => {
-        count => 2,
+        is ($count, '3', 'Issue count is 3');
+        is ($branchname, $library1->{branchname}, 'Branchname is that of borrowers home branch.');
     }
- );
 
-my %expected_branchnames = (
-    $library2->{branchname} => 1,
-    $library3->{branchname} => 1
-);
+    $schema->storage->txn_rollback;
+};
 
-my $i = 0;
-for my $message (keys %$messages) {
-    $messages->{$message}->{content} =~ /(\d+) (.*)/;
-    my $count = $1;
-    my $branchname = $2;
+subtest '--digest-per-branch tests' => sub {
 
-    ok ($expected_branchnames{$branchname}, 'Branchname is that of expected issuing branch.');
+    plan tests => 5;
 
-    $expected_branchnames{$branchname} = 0;
+    $schema->storage->txn_begin;
 
-    is ($count, $expected{$branchname}->{count}, 'Issue count is ' . $expected{$branchname}->{count});
+    build_test_objects();
 
-    $i++;
-}
+    run_script($scriptContent, 'advanced_notices.pl', '-c', '-digest-per-branch');
 
-$dbh->rollback;
+    $sthmq->execute($borrower->{borrowernumber});
+
+    my $messages = $sthmq->fetchall_hashref('message_id');
+
+    is(scalar(keys %$messages), 2, 'There are two messages in the queue');
+
+    my %expected = (
+        $library2->{branchname} => {
+            count => 1,
+        },
+        $library3->{branchname} => {
+            count => 2,
+        }
+     );
+
+    my %expected_branchnames = (
+        $library2->{branchname} => 1,
+        $library3->{branchname} => 1
+    );
+
+    my $i = 0;
+    for my $message (keys %$messages) {
+        $messages->{$message}->{content} =~ /(\d+) (.*)/;
+        my $count = $1;
+        my $branchname = $2;
+
+        ok ($expected_branchnames{$branchname}, 'Branchname is that of expected issuing branch.');
+
+        $expected_branchnames{$branchname} = 0;
+
+        is ($count, $expected{$branchname}->{count}, 'Issue count is ' . $expected{$branchname}->{count});
+
+        $i++;
+    }
+
+    $schema->storage->txn_rollback;
+};
