@@ -2084,7 +2084,6 @@ sub _dispatch {
 sub haspermission {
     my ( $userid, $flagsrequired ) = @_;
 
-    return 1 unless defined($flagsrequired); # This is horrifying but restores behaviour prior to bug 22031
 
     #Koha::Exceptions::WrongParameter->throw('$flagsrequired should not be undef')
     #  unless defined($flagsrequired);
@@ -2094,6 +2093,7 @@ sub haspermission {
     my $row = $sth->fetchrow();
     my $flags = getuserflags( $row, $userid );
 
+    return $flags unless defined($flagsrequired);
     return $flags if $flags->{superlibrarian};
     return _dispatch($flagsrequired, $flags);
 
