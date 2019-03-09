@@ -380,7 +380,7 @@ subtest 'build_object() tests' => sub {
 
     subtest 'Test all classes' => sub {
         my $Koha_modules_dir = dirname(__FILE__) . '/../../Koha';
-        my @koha_object_based_modules = `/bin/grep -rl 'sub object_class' $Koha_modules_dir`;
+        my @koha_object_based_modules = `/bin/grep -rl -e '^sub object_class' $Koha_modules_dir`;
         my @source_in_failure;
         for my $module_filepath ( @koha_object_based_modules ) {
             chomp $module_filepath;
