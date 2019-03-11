@@ -197,12 +197,9 @@ body {
 #statusbar {
     background-color: #F4F8F9;
     border: solid 2px #b9d8d9;
-    border-bottom-style: none;
-    border-radius: 6px 6px 0 0;
-    margin-bottom: -32px;
+    border-radius: 6px;
     overflow: auto;
     padding: 4px;
-    padding-bottom: 0;
 }
 
 #statusbar #status-tag-info, #statusbar #status-subfield-info {
@@ -455,4 +452,13 @@ body {
 /* Hotpatch from latest CodeMirror: Fix gutter positioning */
 .CodeMirror-gutter-wrapper {
     position: absolute;
+}
+
+/* Small devices (tablets, 768px and up) */
+@media (min-width: @screen-sm-min) {
+    #statusbar {
+        border-bottom-style: none;
+        border-radius: 6px 6px 0 0;
+        margin-bottom: -32px;
+    }
 }
