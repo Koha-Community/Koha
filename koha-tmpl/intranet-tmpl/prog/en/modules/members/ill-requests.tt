@@ -13,51 +13,51 @@
 </head>
 
 <body>
-	[% INCLUDE 'header.inc' %]
-	[% INCLUDE 'patron-search.inc' %]
+    [% INCLUDE 'header.inc' %]
+    [% INCLUDE 'patron-search.inc' %]
 
-	<div id="breadcrumbs">
-		<a href="/cgi-bin/koha/mainpage.pl">Home</a>
-		&rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
-		&rsaquo; ILL requests for [% INCLUDE 'patron-title.inc' %]
-	</div>
+    <div id="breadcrumbs">
+        <a href="/cgi-bin/koha/mainpage.pl">Home</a>
+        &rsaquo; <a href="/cgi-bin/koha/members/members-home.pl">Patrons</a>
+        &rsaquo; ILL requests for [% INCLUDE 'patron-title.inc' %]
+    </div>
 
-	<div id="doc3" class="yui-t1">
+    <div id="doc3" class="yui-t1">
 
-	<div id="bd">
-		<div id="yui-main">
-			<div class="yui-b">
-				<div class="yui-g">
-					<h2>ILL requests</h2>
-					[% INCLUDE 'ill-list-table.inc' %]
-				</div>
-			</div>
-		</div>
-		<div class="yui-b">
-			[% INCLUDE 'circ-menu.inc' %]
-		</div>
-	</div>
+    <div id="bd">
+        <div id="yui-main">
+            <div class="yui-b">
+                <div class="yui-g">
+                    <h2>ILL requests</h2>
+                    [% INCLUDE 'ill-list-table.inc' %]
+                </div>
+            </div>
+        </div>
+        <div class="yui-b">
+            [% INCLUDE 'circ-menu.inc' %]
+        </div>
+    </div>
 
-	[% MACRO jsinclude BLOCK %]
-		[% INCLUDE 'datatables.inc' %]
-		[% INCLUDE 'columns_settings.inc' %]
-		[% INCLUDE 'calendar.inc' %]
-		[% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
-		<script>
-			// Date format for datepickers
-			var dateMap = {
-				dmydot: 'dd.mm.yy',
-				iso: 'yy-mm-dd',
-				metric: 'dd/mm/yy',
-				us: 'mm/dd/yy'
-			};
-			var dateFormat = dateMap['[% Koha.Preference('dateformat') | html %]'];
-			var prefilters = '[% prefilters | html %]';
-			// Set column settings
-			var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
-		</script>
+    [% MACRO jsinclude BLOCK %]
+        [% INCLUDE 'datatables.inc' %]
+        [% INCLUDE 'columns_settings.inc' %]
+        [% INCLUDE 'calendar.inc' %]
+        [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
+        <script>
+            // Date format for datepickers
+            var dateMap = {
+                dmydot: 'dd.mm.yy',
+                iso: 'yy-mm-dd',
+                metric: 'dd/mm/yy',
+                us: 'mm/dd/yy'
+            };
+            var dateFormat = dateMap['[% Koha.Preference('dateformat') | html %]'];
+            var prefilters = '[% prefilters | html %]';
+            // Set column settings
+            var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
+        </script>
         [% INCLUDE 'ill-list-table-strings.inc' %]
-		[% Asset.js("js/ill-list-table.js") | $raw %]
-	[% END %]
+        [% Asset.js("js/ill-list-table.js") | $raw %]
+    [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
