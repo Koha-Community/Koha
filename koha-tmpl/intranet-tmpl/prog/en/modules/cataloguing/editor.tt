@@ -19,12 +19,12 @@
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a> &rsaquo; Editor</div>
 
-<div id="doc3" class="yui-t2">
-<div id="bd">
+<div class="main container-fluid">
+    <div class="row">
+        <div class="col-sm-10 col-sm-push-2">
+            <main>
 
 <h1 id="title">Cataloging editor</h1>
-
-<div id="yui-main"><div class="yui-b">
 
 <div id="editor">
     <input id="import-records-input" type="file" style="display: none">
@@ -87,30 +87,30 @@
         </div>
     </div>
 </div>
+            </main>
+        </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
-</div></div>
+        <div class="col-sm-2 col-sm-pull-10">
+            <aside>
+                <h3>Search</h3>
+                <form id="quicksearch">
+                    <fieldset class="brief">
+                    <ol>
+                        <li><label for="search-by-keywords">Keywords:</label></li>
+                        <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
+                        <li><label for="search-by-author">Author:</label></li>
+                        <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
+                        <li><label for="search-by-isbn">ISBN:</label></li>
+                        <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
+                        <li><label for="search-by-title">Title:</label></li>
+                        <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
+                        <li><a href="#" id="show-advanced-search" title="Show advanced search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
+                    </fieldset>
+                </form>
+            </aside>
+        </div> <!-- /.col-sm-2.col-sm-pull-10 -->
+     </div> <!-- /.row -->
 
-<div class="yui-b" id="sidebar">
-
-<h3>Search</h3>
-<form id="quicksearch">
-    <fieldset class="brief">
-    <ol>
-        <li><label for="search-by-keywords">Keywords:</label></li>
-        <li><input class="search-box" data-qualifier="term" id="search-by-keywords" placeholder="(Ctrl-Alt-K)" /></li>
-        <li><label for="search-by-author">Author:</label></li>
-        <li><input class="search-box" data-qualifier="author" id="search-by-author" placeholder="(Ctrl-Alt-A)" /></li>
-        <li><label for="search-by-isbn">ISBN:</label></li>
-        <li><input class="search-box" data-qualifier="isbn" id="search-by-isbn" placeholder="(Ctrl-Alt-I)" /></li>
-        <li><label for="search-by-title">Title:</label></li>
-        <li><input class="search-box" data-qualifier="title" id="search-by-title" placeholder="(Ctrl-Alt-T)" /></li>
-        <li><a href="#" id="show-advanced-search" title="Show advanced search (Ctrl-Alt-S)">Advanced &raquo;</a></li>
-    </fieldset>
-</form>
-
-</div>
-
-</div>
 </div>
 
 <div id="advanced-search-ui" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="advanced-search-title" aria-hidden="true">
