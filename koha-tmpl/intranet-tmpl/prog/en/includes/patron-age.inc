@@ -1,8 +1,9 @@
 [%- USE KohaDates -%]
+[%- USE I18N -%]
 [%- IF ( patron ) -%]
     [%- IF ( patron.dateofbirth ) -%]
-        [% patron.dateofbirth | $KohaDates -%]
-        [%- IF ( patron.get_age ) %] ([% patron.get_age | html %])
-        [%- ELSIF ( patron.age ) %] ([% patron.age | html %])[% END -%]
+        [%- patron.dateofbirth | $KohaDates %]
+        [%- SET age = (patron.get_age != undef) ? patron.get_age : patron.age -%]
+        [% I18N.tnx('({age} year)', '({age} years)', age, { age => age }) | html %]
    [%- END -%]
 [%- END -%]

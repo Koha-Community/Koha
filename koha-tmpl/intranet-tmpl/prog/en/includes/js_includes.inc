@@ -106,9 +106,14 @@
                             // Display card number in parentheses if it exists
                             cardnumber = " (" + item.cardnumber + ") ";
                         }
+                        var itemString = "<a href=\"" + item.link + "\">" + item.surname + ", " + item.firstname + cardnumber + " <small>";
+                        if( item.dateofbirth ) {
+                            itemString += item.dateofbirth + " (" + item.age + " " +  _("years") + "), ";
+                        }
+                        itemString += item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>";
                         return $( "<li></li>" )
                         .data( "ui-autocomplete-item", item )
-                        .append( "<a href=\"" + item.link + "\">" + item.surname + ", " + item.firstname + cardnumber + " <small>" + item.dateofbirth + " (" + item.age + ") " + item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>" )
+                        .append( itemString )
                         .appendTo( ul );
                     };
                 }
