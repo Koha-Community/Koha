@@ -129,7 +129,7 @@
                 <td class="basketfilterclass">[% loop_order.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno %]">[% loop_order.basketno %]</a>)</td>
                 <td>
                   [% IF loop_order.basketgroupid %]
-                    [% loop_order.basketgroupname %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% loop_order.booksellerid %]">[% loop_order.basketgroupid %]</a>)
+                    [% loop_order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid | uri %]&amp;basketgroupid=[% loop_order.basketgroupid | uri %]">[% loop_order.basketgroupid | html %]</a>)
                   [% ELSE %]
                     No basket group
                   [% END %]
@@ -270,7 +270,7 @@
                 <td>[% order.basketname %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno %]">[% order.basketno %]</a>)</td>
                 <td>
                   [% IF order.basketgroupid %]
-                    [% order.basketgroupname %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% order.booksellerid %]">[% order.basketgroupid %]</a>)
+                    [% order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?booksellerid=[% booksellerid | uri %]&amp;basketgroupid=[% order.basketgroupid | uri %]">[% order.basketgroupid | html %]</a>)
                   [% ELSE %]
                     No basket group
                   [% END %]
