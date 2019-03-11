@@ -161,11 +161,6 @@ div#header_search
    padding-right: 0;
 }
 
-body
-{
-   padding-right: 1.5em;
-}
-
 .yui-u
 {
    padding-right: 0.5em;
@@ -314,8 +309,8 @@ ul#toplevelmenu {
     float: right;
 }
 #cartmenulink {
-    background: url("../img/cart-small.gif") no-repeat scroll right center transparent;
-    padding-right: 15px;
+    background: url("../img/cart-small.gif") no-repeat bottom 50% right 10px;
+    padding-right: 25px;
 }
 
 
@@ -424,4 +419,61 @@ div#yui-main {
 div#yui-main.sysprefs {
     margin-right: 0em;
     float: right;
+}
+
+#user-menu {
+    left: 5px;
+    right: unset;
+}
+
+div.dt-buttons {
+    position: relative;
+    float: right;
+}
+
+#catalog-search-link {
+    border-right: 0;
+    border-left: 1px solid #fff;
+    padding-left: .3em;
+}
+
+#catalog-search-dropdown > a {
+    border-left: 0;
+    border-right: 1px solid #a3c8cf;
+    margin: 0;
+    padding: .4em .6em;
+}
+
+#catalog-search-dropdown > a.catalog-search-dropdown-hover,
+#catalog-search-dropdown > a:hover {
+    border-left: 0;
+    border-right: 1px solid #82b4be;
+}
+
+@media (max-width: 767px) {
+    h1#logo {
+        float: none;
+        margin:  auto;
+        position: relative;
+    }
+
+    div#header_search {
+        margin-right: 0;
+    }
+
+    #user-menu .open .dropdown-menu {
+        float: left;
+        left: 0;
+        min-width: 160px;
+        margin: 2px 0px 0px;
+        position: absolute;
+        right: auto;
+        top: 100%;
+        z-index: 1000;
+    }
+
+    .navbar .nav > li {
+        float: none;
+    }
+
 }
