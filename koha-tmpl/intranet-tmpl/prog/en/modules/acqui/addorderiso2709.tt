@@ -77,6 +77,20 @@
 
                 }
 
+        if (! $("#all_budget_id").val() ) {
+            // If there is no default fund
+            var error = 0;
+            $(".selected [name='budget_id']").each(function(){
+            if (!$(this).val()) {
+                error++;
+            }
+            });
+            if ( error > 0 ) {
+            alert(_("Some budgets are not defined in item records"));
+            return false;
+            }
+        }
+
                 return disableUnchecked($(this));
             });
             $('#tabs').tabs();
