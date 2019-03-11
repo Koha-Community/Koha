@@ -38,11 +38,6 @@ my $builder = t::lib::TestBuilder->new;
 $dbh->{RaiseError} = 1;
 $schema->storage->txn_begin();
 
-$dbh->do('DELETE FROM issues');
-$dbh->do('DELETE FROM issuingrules');
-$dbh->do('DELETE FROM borrowers');
-$dbh->do('DELETE FROM items');
-
 my $now_value       = DateTime->now();
 my $mocked_datetime = Test::MockModule->new('DateTime');
 $mocked_datetime->mock( 'now', sub { return $now_value->clone; } );
@@ -54,29 +49,36 @@ my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
 t::lib::Mocks::mock_userenv({ branchcode => $library->{branchcode} });
 is( C4::Context->userenv->{branch}, $library->{branchcode}, 'userenv set' );
 
-my $patron_category = $builder->build({ source => 'Category', value => { category_type => 'P', enrolmentfee => 0 } });
+my $patron_category = $builder->build({
+    source => 'Category',
+    value => {
+        category_type => 'P',
+        enrolmentfee => 0
+    }
+});
+
 my @patrons;
 for my $i ( 1 .. 20 ) {
-    my $patron = Koha::Patron->new(
-        { cardnumber => $i, firstname => 'Kyle', surname => 'Hall', categorycode => $category->{categorycode}, branchcode => $library->{branchcode}, categorycode => $patron_category->{categorycode}, } )
-      ->store();
+    my $patron = Koha::Patron->new({
+        firstname => 'Kyle',
+        surname => 'Hall',
+        categorycode => $category->{categorycode},
+        branchcode => $library->{branchcode},
+        categorycode => $patron_category->{categorycode},
+    })->store();
     push( @patrons, $patron );
 }
 
-my $biblio = Koha::Biblio->new()->store();
-my $biblioitem =
-  $schema->resultset('Biblioitem')->new( { biblionumber => $biblio->biblionumber } )->insert();
+my $biblio = $builder->build_sample_biblio();
 
 my @items;
 for my $i ( 1 .. 10 ) {
-    my $item = Koha::Item->new(
+    my $item = $builder->build_sample_item(
         {
             biblionumber     => $biblio->id(),
-            biblioitemnumber => $biblioitem->id(),
-            barcode          => $i,
             itype            => $itemtype
         }
-    )->store();
+    );
     push( @items, $item );
 }
 
@@ -91,13 +93,16 @@ for my $i ( 0 .. 5 ) {
     )->store();
 }
 
+my $item   = pop(@items);
+my $patron = pop(@patrons);
+
 $builder->build(
     {
         source => 'Issuingrule',
         value => {
             branchcode => '*',
             categorycode => '*',
-            itemtype => '*',
+            itemtype => $item->itype,
             issuelength => '14',
             lengthunit => 'days',
             reservesallowed => '99',
@@ -105,8 +110,6 @@ $builder->build(
     }
 );
 
-my $item   = pop(@items);
-my $patron = pop(@patrons);
 
 my $orig_due = C4::Circulation::CalcDateDue(
     DateTime->now(time_zone => C4::Context->tz()),
