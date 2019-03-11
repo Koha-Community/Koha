@@ -22,8 +22,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Output;
-use C4::Members;
-use C4::Members::Attributes qw(GetBorrowerAttributes);
 use Koha::Patrons;
 
 my $input = new CGI;
@@ -45,7 +43,6 @@ my $logged_in_user = Koha::Patrons->find( $loggedinuser ) or die "Not logged in"
 my $patron         = Koha::Patrons->find( $borrowernumber );
 output_and_exit_if_error( $input, $cookie, $template, { module => 'members', logged_in_user => $logged_in_user, current_patron => $patron } );
 
-my $category = $patron->category;
 $template->param(
     prefilters => "borrowernumber=$borrowernumber",
     patron => $patron,
