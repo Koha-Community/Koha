@@ -1,4 +1,6 @@
 [% USE raw %]
+[% USE Branches %]
+[% USE Price %]
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
@@ -27,6 +29,11 @@
             <th>Suggestion</th>
             <th>Suggested by</th>
             <th>Accepted by</th>
+            <th>Library</th>
+            <th>Fund</th>
+            <th>Price</th>
+            <th>Quantity</th>
+            <th>Total</th>
             <th>&nbsp;</th>
         </tr>
         </thead>
@@ -51,6 +58,23 @@
                 </td>
                 <td>
                     [% suggestions_loo.surnamemanagedby | html %][% IF ( suggestions_loo.firstnamemanagedby ) %],[% END %] [% suggestions_loo.firstnamemanagedby | html %]
+                </td>
+                <td>
+                    [% Branches.GetName(suggestions_loo.branchcode) | html %]
+                </td>
+                <td>
+                    [% suggestions_loo.budget_name | html %]
+                </td>
+                <td>
+                    [% suggestions_loo.price | $Price %]
+                </td>
+                <td>
+                    [% IF (suggestions_loo.quantity > 0) %]
+                        [% suggestions_loo.quantity | html %]
+                    [% END %]
+                </td>
+                <td>
+                    [% suggestions_loo.total | $Price %]
                 </td>
                 <td class="actions">
                     [% IF ( suggestions_loo.biblionumber ) %]

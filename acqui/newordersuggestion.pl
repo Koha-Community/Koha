@@ -95,6 +95,7 @@ use C4::Auth;    # get_template_and_user
 use C4::Output;
 use C4::Suggestions;
 use C4::Biblio;
+use C4::Budgets;
 
 use Koha::Acquisition::Booksellers;
 
@@ -136,6 +137,14 @@ my $suggestions_loop = SearchSuggestion(
         STATUS        => 'ACCEPTED'
     }
 );
+
+foreach my $suggestion (@$suggestions_loop) {
+            if ($suggestion->{budgetid}){
+                my $bud = GetBudget( $suggestion->{budgetid} );
+                $suggestion->{budget_name} = $bud->{budget_name} if $bud;
+            }
+}
+
 my $vendor = Koha::Acquisition::Booksellers->find( $booksellerid );
 $template->param(
     suggestions_loop        => $suggestions_loop,
