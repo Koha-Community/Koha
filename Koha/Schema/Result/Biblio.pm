@@ -302,6 +302,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 suggestions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Suggestion>
+
+=cut
+
+__PACKAGE__->has_many(
+  "suggestions",
+  "Koha::Schema::Result::Suggestion",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 tags_all
 
 Type: has_many
@@ -348,7 +363,7 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bUv00JjY09Hj2Zj4klqyxA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ebn7Szfm8/HbrdAc7ekTnA
 
 1;

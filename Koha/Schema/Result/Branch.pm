@@ -631,6 +631,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 suggestions
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Suggestion>
+
+=cut
+
+__PACKAGE__->has_many(
+  "suggestions",
+  "Koha::Schema::Result::Suggestion",
+  { "foreign.branchcode" => "self.branchcode" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 transport_cost_frombranches
 
 Type: has_many
@@ -662,8 +677,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-05 20:42:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:nArzlMOpUO6oVOAZUgzSRg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:pKohWwsuUHcZSlGDj7zmcw
 
 __PACKAGE__->add_columns(
     '+pickup_location' => { is_boolean => 1 }

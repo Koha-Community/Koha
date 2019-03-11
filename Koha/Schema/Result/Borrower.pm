@@ -1315,6 +1315,66 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 suggestions_acceptedbies
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Suggestion>
+
+=cut
+
+__PACKAGE__->has_many(
+  "suggestions_acceptedbies",
+  "Koha::Schema::Result::Suggestion",
+  { "foreign.acceptedby" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 suggestions_managedbies
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Suggestion>
+
+=cut
+
+__PACKAGE__->has_many(
+  "suggestions_managedbies",
+  "Koha::Schema::Result::Suggestion",
+  { "foreign.managedby" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 suggestions_rejectedbies
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Suggestion>
+
+=cut
+
+__PACKAGE__->has_many(
+  "suggestions_rejectedbies",
+  "Koha::Schema::Result::Suggestion",
+  { "foreign.rejectedby" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
+=head2 suggestions_suggestedbies
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Suggestion>
+
+=cut
+
+__PACKAGE__->has_many(
+  "suggestions_suggestedbies",
+  "Koha::Schema::Result::Suggestion",
+  { "foreign.suggestedby" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 tags_all
 
 Type: has_many
@@ -1446,8 +1506,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-02-15 13:15:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:NhuG8jv9ut+qIIm3vGHsrQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F/j4bsmnxc2Cja5DKfMseQ
 
 __PACKAGE__->belongs_to(
     "guarantor",

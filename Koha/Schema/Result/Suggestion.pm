@@ -32,8 +32,8 @@ __PACKAGE__->table("suggestions");
 =head2 suggestedby
 
   data_type: 'integer'
-  default_value: 0
-  is_nullable: 0
+  is_foreign_key: 1
+  is_nullable: 1
 
 =head2 suggesteddate
 
@@ -44,6 +44,7 @@ __PACKAGE__->table("suggestions");
 =head2 managedby
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 manageddate
@@ -55,6 +56,7 @@ __PACKAGE__->table("suggestions");
 =head2 acceptedby
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 accepteddate
@@ -66,6 +68,7 @@ __PACKAGE__->table("suggestions");
 =head2 rejectedby
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 rejecteddate
@@ -144,6 +147,7 @@ __PACKAGE__->table("suggestions");
 =head2 biblionumber
 
   data_type: 'integer'
+  is_foreign_key: 1
   is_nullable: 1
 
 =head2 reason
@@ -165,6 +169,7 @@ __PACKAGE__->table("suggestions");
 =head2 branchcode
 
   data_type: 'varchar'
+  is_foreign_key: 1
   is_nullable: 1
   size: 10
 
@@ -208,19 +213,19 @@ __PACKAGE__->add_columns(
   "suggestionid",
   { data_type => "integer", is_auto_increment => 1, is_nullable => 0 },
   "suggestedby",
-  { data_type => "integer", default_value => 0, is_nullable => 0 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "suggesteddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 0 },
   "managedby",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "manageddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "acceptedby",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "accepteddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "rejectedby",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "rejecteddate",
   { data_type => "date", datetime_undef_if_invalid => 1, is_nullable => 1 },
   "STATUS",
@@ -257,7 +262,7 @@ __PACKAGE__->add_columns(
   "isbn",
   { data_type => "varchar", is_nullable => 1, size => 30 },
   "biblionumber",
-  { data_type => "integer", is_nullable => 1 },
+  { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "reason",
   { data_type => "mediumtext", is_nullable => 1 },
   "patronreason",
@@ -265,7 +270,7 @@ __PACKAGE__->add_columns(
   "budgetid",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "branchcode",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
+  { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
   "collectiontitle",
   { data_type => "mediumtext", is_nullable => 1 },
   "itemtype",
@@ -294,6 +299,66 @@ __PACKAGE__->set_primary_key("suggestionid");
 
 =head1 RELATIONS
 
+=head2 acceptedby
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "acceptedby",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "acceptedby" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 biblionumber
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Biblio>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "biblionumber",
+  "Koha::Schema::Result::Biblio",
+  { biblionumber => "biblionumber" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 branchcode
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Branch>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "branchcode",
+  "Koha::Schema::Result::Branch",
+  { branchcode => "branchcode" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
 =head2 budgetid
 
 Type: belongs_to
@@ -314,9 +379,69 @@ __PACKAGE__->belongs_to(
   },
 );
 
+=head2 managedby
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:54
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dOt4/U4rLcXq+aACRwcpYw
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "managedby",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "managedby" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 rejectedby
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "rejectedby",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "rejectedby" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+=head2 suggestedby
+
+Type: belongs_to
+
+Related object: L<Koha::Schema::Result::Borrower>
+
+=cut
+
+__PACKAGE__->belongs_to(
+  "suggestedby",
+  "Koha::Schema::Result::Borrower",
+  { borrowernumber => "suggestedby" },
+  {
+    is_deferrable => 1,
+    join_type     => "LEFT",
+    on_delete     => "SET NULL",
+    on_update     => "CASCADE",
+  },
+);
+
+
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:UsG/gxLa0HMMbcpbscV29Q
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
