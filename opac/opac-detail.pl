@@ -647,7 +647,7 @@ if ( C4::Context->preference('OPACAcquisitionDetails' ) ) {
                 push @itemnumbers_on_order, $itemnumber;
             }
         }
-        $total_quantity += $order->quantity;
+        $total_quantity += $order->{quantity};
     }
     $template->{VARS}->{acquisition_details} = {
         total_quantity => $total_quantity,
