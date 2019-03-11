@@ -218,7 +218,7 @@ sub status {
         for (qw(EXPIRED CHARGES CREDITS GNA LOST DBARRED NOTES)) {
                 ($flags->{$_}) or next;
                 if ($flags->{$_}->{noissues}) {
-                        my $basic_privileges_ok = 0;
+                        $basic_privileges_ok = 0;
                 }
         }
 
