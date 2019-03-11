@@ -99,8 +99,6 @@ if ( not defined $record ) {
     exit;
 }
 
-$template->param( ocoins => GetCOinSBiblio($record) );
-
 my $biblio_object = Koha::Biblios->find( $biblionumber ); # FIXME Should replace $biblio
 my $tagslib = &GetMarcStructure(1,$frameworkcode);
 my $biblio = GetBiblioData($biblionumber);
@@ -114,6 +112,8 @@ if($query->cookie("holdfor")){
         holdfor_cardnumber => $holdfor_patron->cardnumber,
     );
 }
+
+$template->param( ocoins => $biblio_object->get_coins );
 
 #count of item linked
 my $itemcount = $biblio_object->items->count;

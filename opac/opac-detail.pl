@@ -847,9 +847,7 @@ $template->param(
 );
 
 # COinS format FIXME: for books Only
-$template->param(
-    ocoins => GetCOinSBiblio($record),
-);
+$template->param( ocoins => $biblio->get_coins );
 
 my ( $loggedincommenter, $reviews );
 if ( C4::Context->preference('reviewson') ) {

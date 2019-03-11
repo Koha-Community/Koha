@@ -247,11 +247,18 @@ sub XSLTParse4Display {
 
     $variables ||= {};
     if (C4::Context->preference('OPACShowOpenURL')) {
-        my ($biblio) = GetBiblioItemByBiblioNumber($biblionumber);
+        my @biblio_itemtypes;
+        my $biblio = Koha::Biblios->find($biblionumber);
+        if (C4::Context->preference('item-level_itypes')) {
+            @biblio_itemtypes = $biblio->items->get_column("itype");
+        } else {
+            push @biblio_itemtypes, $biblio->biblioitem->itemtype;
+        }
         my @itypes = split( /\s/, C4::Context->preference('OPACOpenURLItemTypes') );
-        if (grep /^$biblio->{itemtype}$/, @itypes) {
-            $variables->{OpenURLResolverURL} =
-              C4::Biblio::GetOpenURLResolverURL($orig_record);
+        my %original = ();
+        map { $original{$_} = 1 } @biblio_itemtypes;
+        if ( grep { $original{$_} } @itypes ) {
+            $variables->{OpenURLResolverURL} = $biblio->get_openurl;
         }
     }
     my $varxml = "<variables>\n";

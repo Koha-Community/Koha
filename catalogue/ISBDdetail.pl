@@ -137,7 +137,7 @@ $template->param (
     biblionumber        => $biblionumber,
     isbdview            => 1,
     z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
-    ocoins => GetCOinSBiblio($record),
+    ocoins => $biblio->get_coins,
     C4::Search::enabled_staff_search_views,
     searchid            => scalar $query->param('searchid'),
 );

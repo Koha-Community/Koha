@@ -21,7 +21,7 @@ use Test::More;
 use Test::MockModule;
 use Test::Warn;
 
-plan tests => 47;
+plan tests => 45;
 
 use_ok('C4::Biblio');
 
@@ -62,12 +62,6 @@ warning_is { @arr = LinkBibHeadingsToAuthorities(q{}, q{}) }
            "LinkBibHeadingsToAuthorities returns carped warning on undef record";
 
 is($arr[0], 0, 'LinkBibHeadingsToAuthorities correct error return');
-
-warning_is { $ret = GetCOinSBiblio() }
-           { carped => 'GetCOinSBiblio called with undefined record'},
-           "GetCOinSBiblio returns carped warning on undef record";
-
-ok( !defined $ret, 'GetCOinSBiblio returns undef if not passed rec');
 
 warning_is { $ret = GetMarcPrice(undef, 'MARC21') }
            { carped => 'GetMarcPrice called on undefined record'},

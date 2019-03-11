@@ -279,7 +279,7 @@ if ( $op eq 'view' ) {
                 $this_item->{imageurl}          = $itemtype ? C4::Koha::getitemtypeimagelocation( 'intranet', $itemtype->imageurl ) : q{};
                 $this_item->{description}       = $itemtype ? $itemtype->description : q{}; #FIXME Should this be translated_description ?
                 $this_item->{notforloan}        = $itemtype->notforloan if $itemtype;
-                $this_item->{'coins'}           = GetCOinSBiblio($record);
+                $this_item->{'coins'}           = $biblio->get_coins;
                 $this_item->{'subtitle'}        = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $biblionumber ) );
                 $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );
                 $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );

@@ -21,6 +21,8 @@ use Modern::Perl;
 
 use Carp;
 use List::MoreUtils qw(any);
+use URI;
+use URI::Escape;
 
 use C4::Biblio qw();
 
@@ -462,6 +464,196 @@ sub has_items_waiting_or_intransit {
     }
 
     return 0;
+}
+
+=head2 get_coins
+
+my $coins = $biblio->get_coins;
+
+Returns the COinS (a span) which can be included in a biblio record
+
+=cut
+
+sub get_coins {
+    my ( $self ) = @_;
+
+    my $record = $self->metadata->record;
+
+    my $pos7 = substr $record->leader(), 7, 1;
+    my $pos6 = substr $record->leader(), 6, 1;
+    my $mtx;
+    my $genre;
+    my ( $aulast, $aufirst ) = ( '', '' );
+    my @authors;
+    my $title;
+    my $hosttitle;
+    my $pubyear   = '';
+    my $isbn      = '';
+    my $issn      = '';
+    my $publisher = '';
+    my $pages     = '';
+    my $titletype = '';
+
+    # For the purposes of generating COinS metadata, LDR/06-07 can be
+    # considered the same for UNIMARC and MARC21
+    my $fmts6 = {
+        'a' => 'book',
+        'b' => 'manuscript',
+        'c' => 'book',
+        'd' => 'manuscript',
+        'e' => 'map',
+        'f' => 'map',
+        'g' => 'film',
+        'i' => 'audioRecording',
+        'j' => 'audioRecording',
+        'k' => 'artwork',
+        'l' => 'document',
+        'm' => 'computerProgram',
+        'o' => 'document',
+        'r' => 'document',
+    };
+    my $fmts7 = {
+        'a' => 'journalArticle',
+        's' => 'journal',
+    };
+
+    $genre = $fmts6->{$pos6} ? $fmts6->{$pos6} : 'book';
+
+    if ( $genre eq 'book' ) {
+            $genre = $fmts7->{$pos7} if $fmts7->{$pos7};
+    }
+
+    ##### We must transform mtx to a valable mtx and document type ####
+    if ( $genre eq 'book' ) {
+            $mtx = 'book';
+            $titletype = 'b';
+    } elsif ( $genre eq 'journal' ) {
+            $mtx = 'journal';
+            $titletype = 'j';
+    } elsif ( $genre eq 'journalArticle' ) {
+            $mtx   = 'journal';
+            $genre = 'article';
+            $titletype = 'a';
+    } else {
+            $mtx = 'dc';
+    }
+
+    if ( C4::Context->preference("marcflavour") eq "UNIMARC" ) {
+
+        # Setting datas
+        $aulast  = $record->subfield( '700', 'a' ) || '';
+        $aufirst = $record->subfield( '700', 'b' ) || '';
+        push @authors, "$aufirst $aulast" if ($aufirst or $aulast);
+
+        # others authors
+        if ( $record->field('200') ) {
+            for my $au ( $record->field('200')->subfield('g') ) {
+                push @authors, $au;
+            }
+        }
+
+        $title     = $record->subfield( '200', 'a' );
+        my $subfield_210d = $record->subfield('210', 'd');
+        if ($subfield_210d and $subfield_210d =~ /(\d{4})/) {
+            $pubyear = $1;
+        }
+        $publisher = $record->subfield( '210', 'c' ) || '';
+        $isbn      = $record->subfield( '010', 'a' ) || '';
+        $issn      = $record->subfield( '011', 'a' ) || '';
+    } else {
+
+        # MARC21 need some improve
+
+        # Setting datas
+        if ( $record->field('100') ) {
+            push @authors, $record->subfield( '100', 'a' );
+        }
+
+        # others authors
+        if ( $record->field('700') ) {
+            for my $au ( $record->field('700')->subfield('a') ) {
+                push @authors, $au;
+            }
+        }
+        $title = $record->subfield( '245', 'a' ) . $record->subfield( '245', 'b' );
+        if ($titletype eq 'a') {
+            $pubyear   = $record->field('008') || '';
+            $pubyear   = substr($pubyear->data(), 7, 4) if $pubyear;
+            $isbn      = $record->subfield( '773', 'z' ) || '';
+            $issn      = $record->subfield( '773', 'x' ) || '';
+            $hosttitle = $record->subfield( '773', 't' ) || $record->subfield( '773', 'a') || q{};
+            my @rels = $record->subfield( '773', 'g' );
+            $pages = join(', ', @rels);
+        } else {
+            $pubyear   = $record->subfield( '260', 'c' ) || '';
+            $publisher = $record->subfield( '260', 'b' ) || '';
+            $isbn      = $record->subfield( '020', 'a' ) || '';
+            $issn      = $record->subfield( '022', 'a' ) || '';
+        }
+
+    }
+
+    my @params = (
+        [ 'ctx_ver', 'Z39.88-2004' ],
+        [ 'rft_val_fmt', "info:ofi/fmt:kev:mtx:$mtx" ],
+        [ ($mtx eq 'dc' ? 'rft.type' : 'rft.genre'), $genre ],
+        [ "rft.${titletype}title", $title ],
+    );
+
+    # rft.title is authorized only once, so by checking $titletype
+    # we ensure that rft.title is not already in the list.
+    if ($hosttitle and $titletype) {
+        push @params, [ 'rft.title', $hosttitle ];
+    }
+
+    push @params, (
+        [ 'rft.isbn', $isbn ],
+        [ 'rft.issn', $issn ],
+    );
+
+    # If it's a subscription, these informations have no meaning.
+    if ($genre ne 'journal') {
+        push @params, (
+            [ 'rft.aulast', $aulast ],
+            [ 'rft.aufirst', $aufirst ],
+            (map { [ 'rft.au', $_ ] } @authors),
+            [ 'rft.pub', $publisher ],
+            [ 'rft.date', $pubyear ],
+            [ 'rft.pages', $pages ],
+        );
+    }
+
+    my $coins_value = join( '&amp;',
+        map { $$_[1] ? $$_[0] . '=' . uri_escape_utf8( $$_[1] ) : () } @params );
+
+    return $coins_value;
+}
+
+=head2 get_openurl
+
+my $url = $biblio->get_openurl;
+
+Returns url for OpenURL resolver set in OpenURLResolverURL system preference
+
+=cut
+
+sub get_openurl {
+    my ( $self ) = @_;
+
+    my $OpenURLResolverURL = C4::Context->preference('OpenURLResolverURL');
+
+    if ($OpenURLResolverURL) {
+        my $uri = URI->new($OpenURLResolverURL);
+
+        if (not defined $uri->query) {
+            $OpenURLResolverURL .= '?';
+        } else {
+            $OpenURLResolverURL .= '&amp;';
+        }
+        $OpenURLResolverURL .= $self->get_coins;
+    }
+
+    return $OpenURLResolverURL;
 }
 
 =head3 type

@@ -77,6 +77,7 @@ if ( C4::Context->preference('UseKohaPlugins') &&
 my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
 my $record       = GetMarcBiblio({ biblionumber => $biblionumber });
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit
@@ -117,7 +118,7 @@ if ( $xslfile ) {
 }
 
 $template->param( 'SpineLabelShowPrintOnBibDetails' => C4::Context->preference("SpineLabelShowPrintOnBibDetails") );
-$template->param( ocoins => GetCOinSBiblio($record) );
+$template->param( ocoins => $biblio->get_coins );
 
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
@@ -489,7 +490,6 @@ if (C4::Context->preference('TagsEnabled') and $tag_quantity = C4::Context->pref
 }
 
 #we only need to pass the number of holds to the template
-my $biblio = Koha::Biblios->find( $biblionumber );
 my $holds = $biblio->holds;
 $template->param( holdcount => $holds->count );
 

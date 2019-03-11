@@ -682,8 +682,8 @@ for (my $i=0;$i<@servers;$i++) {
             }
 
             if (C4::Context->preference('COinSinOPACResults')) {
-                my $record = GetMarcBiblio({ biblionumber => $res->{'biblionumber'} });
-                $res->{coins} = GetCOinSBiblio($record);
+                my $biblio = Koha::Biblios->find( $res->{'biblionumber'} );
+                $res->{coins} = $biblio->get_coins;
             }
             if ( C4::Context->preference( "Babeltheque" ) and $res->{normalized_isbn} ) {
                 if( my $isbn = Business::ISBN->new( $res->{normalized_isbn} ) ) {

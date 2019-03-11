@@ -17,12 +17,13 @@
 
 use Modern::Perl;
 
-use Test::More tests => 5;
-
-use t::lib::TestBuilder;
+use Test::More tests => 6;
 
 use C4::Biblio;
 use Koha::Database;
+
+use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 BEGIN {
     use_ok('Koha::Biblio');
@@ -106,4 +107,39 @@ subtest 'items() tests' => sub {
 
     $schema->storage->txn_rollback;
 
+};
+
+subtest 'get_coins and get_openurl' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $builder = t::lib::TestBuilder->new;
+    my $biblio = $builder->build_sample_biblio({
+            title => 'Title 1',
+            author => 'Author 1'
+        });
+
+    is(
+        $biblio->get_coins,
+        'ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Title%201&amp;rft.au=Author%201',
+        'GetCOinsBiblio returned right metadata'
+    );
+
+    t::lib::Mocks::mock_preference("OpenURLResolverURL", "https://koha.example.com/");
+    is(
+        $biblio->get_openurl,
+        'https://koha.example.com/?ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Title%201&amp;rft.au=Author%201',
+        'Koha::Biblio->get_openurl returned right URL'
+    );
+
+    t::lib::Mocks::mock_preference("OpenURLResolverURL", "https://koha.example.com/?client_id=ci1");
+    is(
+        $biblio->get_openurl,
+        'https://koha.example.com/?client_id=ci1&amp;ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Title%201&amp;rft.au=Author%201',
+        'Koha::Biblio->get_openurl returned right URL'
+    );
+
+    $schema->storage->txn_rollback;
 };

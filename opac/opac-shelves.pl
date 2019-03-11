@@ -294,7 +294,7 @@ if ( $op eq 'view' ) {
                     $this_item->{description}       = $itemtype->description; #FIXME Should not it be translated_description?
                     $this_item->{notforloan}        = $itemtype->notforloan;
                 }
-                $this_item->{'coins'}           = GetCOinSBiblio($record);
+                $this_item->{'coins'}           = $biblio->get_coins;
                 $this_item->{'subtitle'}        = GetRecordValue( 'subtitle', $record, GetFrameworkCode( $biblionumber ) );
                 $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );
                 $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
