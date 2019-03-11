@@ -273,13 +273,12 @@ if ( $backends_available ) {
         my $active_filters = [];
         foreach my $filter(@{$possible_filters}) {
             if ($params->{$filter}) {
-                push @{$active_filters},
-                    { name => $filter, value => $params->{$filter}};
+                push @{$active_filters}, "$filter=$params->{$filter}";
             }
         }
         if (scalar @{$active_filters} > 0) {
             $template->param(
-                prefilters => $active_filters
+                prefilters => join(",", @{$active_filters})
             );
         }
 
