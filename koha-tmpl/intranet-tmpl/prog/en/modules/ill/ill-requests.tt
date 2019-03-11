@@ -928,7 +928,7 @@
             // Get our data from the API and process it prior to passing
             // it to datatables
             var ajax = $.ajax(
-                '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias,comments'
+                '/api/v1/illrequests?embed=metadata,patron,capabilities,library,status_alias,comments,requested_partners'
                 ).done(function() {
                     var data = JSON.parse(ajax.responseText);
                     // Make a copy, we'll be removing columns next and need
