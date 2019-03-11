@@ -23,19 +23,16 @@ package C4::Reserves;
 
 use strict;
 #use warnings; FIXME - Bug 2505
+
 use C4::Accounts;
 use C4::Biblio;
 use C4::Circulation;
 use C4::Context;
 use C4::Items;
-use C4::Members;
-
-# for _koha_notify_reserve
 use C4::Letters;
 use C4::Log;
-use C4::Members qw();
 use C4::Members::Messaging;
-
+use C4::Members;
 use Koha::Account::Lines;
 use Koha::Biblios;
 use Koha::Calendar;
@@ -47,7 +44,6 @@ use Koha::Holds;
 use Koha::IssuingRules;
 use Koha::ItemTypes;
 use Koha::Items;
-use Koha::Libraries;
 use Koha::Libraries;
 use Koha::Old::Hold;
 use Koha::Patrons;
