@@ -79,26 +79,27 @@
         [% END %]
         </div>
         <div id="holdsover">
-                [% IF ( ReservesMaxPickUpDelay ) %]<p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>[% END %]
-               [% IF ( overloop ) %]
-               <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
-                   <input type="hidden" name="cancelall" value="1" />
-                   <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
-                   <input type="hidden" name="tab" value="holdsover">
-                   [% IF TransferWhenCancelAllWaitingHolds %]
-                       <input type="submit" value="Cancel and Transfer all" />
-                   [% ELSE %]
-                       <input type="submit" value="Cancel all" />
+            [% IF ( ReservesMaxPickUpDelay ) %]<p>Holds listed here have been awaiting pickup for more than [% ReservesMaxPickUpDelay | html %] days.</p>[% END %]
+            [% IF ( overloop ) %]
+                <span id="holdsover-cancel-all">
+                   <form name="cancelAllReserve" action="waitingreserves.pl" method="post">
+                       <input type="hidden" name="cancelall" value="1" />
+                       <input type="hidden" name="allbranches" value="[% allbranches | html %]" />
+                       <input type="hidden" name="tab" value="holdsover">
+                       [% IF TransferWhenCancelAllWaitingHolds %]
+                           <input type="submit" value="Cancel and Transfer all" />
+                       [% ELSE %]
+                           <input type="submit" value="Cancel all" />
+                       [% END %]
+                   </form>
+                   [% UNLESS TransferWhenCancelAllWaitingHolds %]
+                        Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds syspref)
                    [% END %]
-               </form>
-               [% UNLESS TransferWhenCancelAllWaitingHolds %]
-                    Only items that need not be transferred will be cancelled (TransferWhenCancelAllWaitingHolds sypref)
-               [% END %]
-
+                </span>
                [% INCLUDE waiting_holds.inc table_name='holdso' reserveloop=overloop %]
-        [% ELSE %]
-            <div class="dialog message">No holds found.</div>
-                [% END %]
+            [% ELSE %]
+                <div class="dialog message">No holds found.</div>
+            [% END %]
         </div>
         </div>
     [% END %]

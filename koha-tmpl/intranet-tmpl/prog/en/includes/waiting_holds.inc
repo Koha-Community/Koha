@@ -7,7 +7,7 @@
             <th class="title-string">Date hold placed</th>
             <th class="anti-the">Title</th>
             <th>Patron</th>
-            <th>Home branch</th>
+            <th>Home library</th>
             <th>Current location</th>
             <th>Shelving location</th>
             <th>Call number</th>
