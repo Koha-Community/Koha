@@ -40,7 +40,7 @@ my $t              = Test::Mojo->new('Koha::REST::V1');
 
 subtest 'list() tests' => sub {
 
-    plan tests => 21;
+    plan tests => 24;
 
     # Mock ILLBackend (as object)
     my $backend = Test::MockObject->new;
@@ -81,7 +81,8 @@ subtest 'list() tests' => sub {
     $t->request_ok($tx)->status_is(200)->json_is( [] );
 
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
-    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_1  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $patron_2  = $builder->build_object( { class => 'Koha::Patrons' } );
 
     # Create an ILL request
     my $illrequest = $builder->build_object(
@@ -90,7 +91,7 @@ subtest 'list() tests' => sub {
             value => {
                 backend        => 'Mock',
                 branchcode     => $library->branchcode,
-                borrowernumber => $patron->borrowernumber
+                borrowernumber => $patron_1->borrowernumber
             }
         }
     );
@@ -114,7 +115,7 @@ subtest 'list() tests' => sub {
     $tx->req->env( { REMOTE_ADDR => $remote_address } );
     $t->request_ok($tx)->status_is(200)
         ->json_has( '/0/patron', 'patron embedded' )
-        ->json_is( '/0/patron/patron_id', $patron->borrowernumber, 'The right patron is embeded')
+        ->json_is( '/0/patron/patron_id', $patron_1->borrowernumber, 'The right patron is embeded')
         ->json_has( '/0/requested_partners', 'requested_partners embedded' )
         ->json_has( '/0/capabilities', 'capabilities embedded' )
         ->json_has( '/0/library', 'library embedded'  )
@@ -128,7 +129,7 @@ subtest 'list() tests' => sub {
             value => {
                 backend        => 'Mock',
                 branchcode     => $library->branchcode,
-                borrowernumber => $patron->borrowernumber
+                borrowernumber => $patron_2->borrowernumber
             }
         }
     );
@@ -153,6 +154,13 @@ subtest 'list() tests' => sub {
     $t->request_ok($tx)->status_is(400)->json_is(
         [{ path => '/query/request_blah', message => 'Malformed query string'}]
     );
+
+    # Test the borrowernumber parameter
+    $tx = $t->ua->build_tx( GET => '/api/v1/illrequests?borrowernumber=' .
+        $patron_2->borrowernumber );
+    $tx->req->cookies( { name => 'CGISESSID', value => $session_id } );
+    $tx->req->env( { REMOTE_ADDR => $remote_address } );
+    $t->request_ok($tx)->status_is(200)->json_is( [ $response2 ] );
 
     $schema->storage->txn_rollback;
 };
