@@ -251,7 +251,6 @@ if ( $step == 5 ) {
             branchcode      => $branchcode,
             categorycode    => $categorycode,
             itemtype        => $itemtype,
-            maxissueqty     => $maxissueqty,
             renewalsallowed => $renewalsallowed,
             renewalperiod   => $renewalperiod,
             issuelength     => $issuelength,
@@ -262,11 +261,29 @@ if ( $step == 5 ) {
         my $issuingrule = Koha::IssuingRule->new($params);
         eval { $issuingrule->store; };
 
-        unless ($@) {
-            push @messages, { code => 'success_on_insert_circ_rule' };
-        }
-        else {
+        if ($@) {
             push @messages, { code => 'error_on_insert_circ_rule' };
+        } else {
+
+            eval {
+                Koha::CirculationRules->set_rules(
+                    {
+                        categorycode => $categorycode,
+                        itemtype     => $itemtype,
+                        branchcode   => $branchcode,
+                        rules        => {
+                            maxissueqty => $maxissueqty,
+                        }
+                    }
+                );
+            };
+
+            unless ($@) {
+                push @messages, { code => 'success_on_insert_circ_rule' };
+            }
+            else {
+                push @messages, { code => 'error_on_insert_circ_rule' };
+            }
         }
     }
 
