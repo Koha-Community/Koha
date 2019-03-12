@@ -142,6 +142,7 @@ our $mapping = {
     'labels/label-manage'                      => '/tools.html#batches',
     'labels/spinelabel-home'                   => '/tools.html#quick-spine-label-creator',
     'mainpage'                                 => '/',
+    'members/apikeys'                          => '/webservices.html#api-key-management-interface-for-patrons',
     'members/boraccount'                       => '/patrons.html#fines',
     'members/discharge'                        => '/patrons.html#patron-discharges',
     'members/files'                            => '/patrons.html#files',
