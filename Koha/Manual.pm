@@ -111,6 +111,7 @@ our $mapping = {
     'cataloguing/linkitem'                     => '/cataloging.html#adding-analytic-records',
     'cataloguing/merge'                        => '/cataloging.html#merging-records',
     'cataloguing/moveitem'                     => '/cataloging.html#moving-items',
+    'circ/article-requests'                    => '/circulation.html#article-requests',
     'circ/branchoverdues'                      => '/circulation.html#overdues-with-fines',
     'circ/branchtransfers'                     => '/circulation.html#transfers',
     'circ/circulation-home'                    => '/circulation.html',
