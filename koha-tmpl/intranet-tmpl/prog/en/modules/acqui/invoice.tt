@@ -139,13 +139,13 @@
                                   <td>
                                       <select id="budget_id_[% adjustment.adjustment_id | html %]" name="budget_id">
                                               <option value="">No fund</option>
-                                          [% FOREACH budget IN budgets_loop %]
-                                              [% IF ( budget.budget_id == adjustment.budget_id ) %]
-                                                  <option selected="selected" value="[% budget.budget_id | html %]">
+                                          [% FOREACH budget IN budgets %]
+                                              [% IF ( budget.b_id == adjustment.budget_id ) %]
+                                                  <option selected="selected" value="[% budget.b_id | html %]">
                                               [% ELSE %]
-                                                  <option value="[% budget.budget_id | html %]">
+                                                  <option value="[% budget.b_id | html %]">
                                               [% END %]
-                                              [% budget.budget_name | html %]
+                                              [% budget.b_txt | html %]
                                               </option>
                                           [% END %]
                                       </select>
@@ -207,9 +207,9 @@
                                   <label for="budget_id_new">Fund: </label>
                                   <select id="budget_id_new" name="budget_id">
                                       <option selected="selected" value="">No fund</option>
-                                      [% FOREACH budget IN budgets_loop %]
-                                          <option value="[% budget.budget_id | html %]">
-                                          [% budget.budget_name | html %]
+                                      [% FOREACH budget IN budgets %]
+                                          <option value="[% budget.b_id | html %]">
+                                          [% budget.b_txt | html %]
                                           </option>
                                       [% END %]
                                   </select>
