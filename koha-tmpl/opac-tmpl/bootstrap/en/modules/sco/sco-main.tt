@@ -253,9 +253,9 @@
                     <div class="span12">
                         <div class="tabbable">
                             <ul class="nav nav-tabs">
-                                <li class="active"><a href="#checkouts-tab" data-toggle="tab">Checkouts</a></li>
-                                <li><a href="#holds-tab" data-toggle="tab">Holds</a></li>
-                                <li><a href="#account-tab" data-toggle="tab">Fines and charges</a></li>
+                                <li class="active"><a href="#checkouts-tab" data-toggle="tab">Checkouts ([% issues_count | html %])</a></li>
+                                <li><a href="#holds-tab" data-toggle="tab">Holds ([% HOLDS.count | html %])</a></li>
+                                <li><a href="#account-tab" data-toggle="tab">Fines and charges ([% total | $Price %])</a></li>
                             </ul>
                             <div class="tab-content">
                                 <div id="checkouts-tab" class="tab-pane active">
