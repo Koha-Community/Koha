@@ -32,7 +32,8 @@ $(document).ready(function() {
                         resolvedName = row.status_alias.lib;
                     } else {
                         resolvedName = getStatusName(
-                            oData[0].capabilities[row.status].name
+                            oData[0].capabilities[row.status].name,
+                            row
                         );
                     }
                     uniques[resolvedName] = 1
