@@ -223,7 +223,6 @@ function addSelRecords(valSel) { // function for adding a selection of biblios t
 
 function showCartUpdate(msg){
 	// set body of popup window
-    console.log( msg );
 	$("#cartDetails").html(msg);
 	showCart();
     setTimeout(hideCart,2000);
