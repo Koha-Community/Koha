@@ -159,7 +159,7 @@ elsif ( $op eq 'delete_confirmed' ) {
 
 # display the form for duplicating
 elsif ( $op eq 'duplicate_form'){
-    my $budgetperiod = GetBudgetPeriod($budget_period_id, $input);
+    my $budgetperiod = GetBudgetPeriod($budget_period_id);
     $template->param(
         'duplicate_form' => '1',
         'budget_period_id' => $budget_period_id,
