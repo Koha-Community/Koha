@@ -26,15 +26,23 @@ use Koha::Serials;
 use Koha::Reports;
 use C4::Context;
 
+=head1 SharedContent
+
+Koha::SharedContent - Set of methods to quering Mana KB server
+
 =head1 DESCRIPTION
 
-Package for accessing shared content via Mana
-
-=head2 Package Functions
+Package for accessing shared content via Mana KB. Methods here are intended
+to build and process queries for requesting Mana KB server.
 
 =cut
 
-=head3 process_request
+=head2 process_request
+
+Koha::SharedContent::process_request($request);
+
+Send a request to Mana KB server. URL is defined in koha-conf.xml in mana_config
+tag. $request parameter must be a HTTP::Request object. See build_request method.
 
 =cut
 
@@ -70,7 +78,12 @@ sub process_request {
     return $result ;
 }
 
-=head3 increment_entity_value
+=head2 increment_entity_value
+
+Koha::SharedContent::increment_entity_value($entity_type, $mana_entity_id, $field);
+
+Increment of 1 the field $field of a Mana entity. I.e, this is used to count the number
+of Koha instance using a specific entity.
 
 =cut
 
@@ -78,7 +91,11 @@ sub increment_entity_value {
     return process_request(build_request('increment', @_));
 }
 
-=head3 send_entity
+=head2 send_entity
+
+my $result = Koha::SharedContent::send_entity($language, $borrowernumber, $mana_entity_id, $entity_type);
+
+Share a Koha entity (i.e subscription or report) to Mana KB.
 
 =cut
 
@@ -99,7 +116,11 @@ sub send_entity {
     return $result;
 }
 
-=head3 prepare_entity_data
+=head2 prepare_entity_data
+
+$data = prepare_entity_data($language, $borrowernumber, $mana_entity_id, $entity_type);
+
+Prepare Koha entity data to be sent to Mana KB.
 
 =cut
 
@@ -133,7 +154,12 @@ sub prepare_entity_data {
     return $ressource_mana_info;
 }
 
-=head3 get_entity_by_id
+=head2 get_entity_by_id
+
+my $entity = Koha::SharedContent::get_entity_by_id($entity_type, $mana_entity_id, [{usecomments => 1}]);
+
+Retrieve a Mana entity to be imported into Koha. Add {usecomments => 1} to tell Mana to
+embed all user reviews.
 
 =cut
 
@@ -141,7 +167,12 @@ sub get_entity_by_id {
     return process_request(build_request('getwithid', @_));
 }
 
-=head3 search_entities
+=head2 search_entities
+
+my $result = Koha::SharedContent::search_entities( $entity_type, $search_params );
+my $entities = $result->{data};
+
+Search entities on ManaKB.
 
 =cut
 
@@ -149,7 +180,11 @@ sub search_entities {
     return process_request(build_request('get', @_));
 }
 
-=head3 build_request
+=head2 build_request
+
+$request = build_request($mana_method, [$param1, $param2, ...]);
+
+Create a HTTP::Request object to be passed to process_request.
 
 =cut
 
@@ -208,7 +243,11 @@ sub build_request {
     }
 }
 
-=head3 get_sharing_url
+=head2 get_sharing_url
+
+my $mana_url = get_sharing_url();
+
+Get the Mana KB server URL set in koha config file.
 
 =cut
 
