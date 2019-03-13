@@ -186,7 +186,7 @@ our $to_api_mapping = {
     branchcode      => 'library_id',
     returndate      => 'checkin_date',
     lastreneweddate => 'last_renewed_date',
-    issuedate       => 'checked_out_date',
+    issuedate       => 'checkout_date',
     notedate        => 'note_date',
 };
 
@@ -202,7 +202,7 @@ our $to_model_mapping = {
     library_id        => 'branchcode',
     checkin_date      => 'returndate',
     last_renewed_date => 'lastreneweddate',
-    checked_out_date  => 'issuedate',
+    checkout_date     => 'issuedate',
     note_date         => 'notedate',
 };
 
