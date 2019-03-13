@@ -41,9 +41,6 @@ $schema->storage->txn_begin;
 
 my $dbh = C4::Context->dbh;
 
-#FIXME - should be removed
-$dbh->do('DELETE FROM issuingrules');
-
 my $librarian = $builder->build_object({
     class => 'Koha::Patrons',
     value => { flags => 2 }
