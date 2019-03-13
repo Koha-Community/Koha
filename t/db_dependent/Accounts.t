@@ -84,7 +84,7 @@ warning_like {
         $item->{itemnumber}, $description, $type, $amount, $note )
 }
 qr/C4::Accounts::manualinvoice is deprecated in favor of Koha::Account->add_debit/,
-  "deprecation warning recieved for manualinvoice";
+  "deprecation warning received for manualinvoice";
 my ($accountline) = Koha::Account::Lines->search(
     {
         borrowernumber => $patron->{borrowernumber}
