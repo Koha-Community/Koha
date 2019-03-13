@@ -17737,6 +17737,20 @@ INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) V
     print "Upgrade to $DBversion done (Bug 18837: Add ILLModuleUnmediated Syspref)\n";
 }
 
+$DBversion = '18.12.00.028';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO account_offset_types ( type ) VALUES ( 'Account Fee' );
+    });
+
+    $dbh->do(q{
+        INSERT IGNORE INTO account_offset_types ( type ) VALUES ( 'Hold Expired' );
+    });
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21756 - Add 'Account Fee' and 'Hold Expired' to the account_offset_types table if missing)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
