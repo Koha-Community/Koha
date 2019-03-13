@@ -1,8 +1,10 @@
 [% USE raw %]
 [% USE Asset %]
 [% USE KohaDates %]
+[% USE ColumnsSettings %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
+[% INCLUDE 'columns_settings.inc' %]
 <title>Koha &rsaquo; Tools &rsaquo; Patron lists &rsaquo; [% list.name | html %] &rsaquo; Add patrons</title>
 [% INCLUDE 'doc-head-close.inc' %]
 
@@ -184,7 +186,8 @@
         $(document).ready(function() {
             $('#patrons_to_add_fieldset').hide();
 
-                $('#patron-list-table').dataTable($.extend(true, {}, dataTablesDefaults, {
+                var columns_settings_table = [% ColumnsSettings.GetColumns('members', 'patron-lists', 'patron-list-table', 'json') | $raw %]
+                KohaTable('patron-list-table', {
                     "order": [[ 3, "asc" ]],
                     "aoColumns": [
                         null,null,null,null,null,null,null,{ "sType": "title-string" },null
@@ -193,7 +196,7 @@
                         { "aTargets": [ 0 ], "bSortable": false, "bSearchable": false },
                     ],
                     "sPaginationType": "four_button"
-                } ));
+                }, columns_settings_table);
 
             patron_autocomplete({
                 patron_container: $("#patrons_to_add"),
