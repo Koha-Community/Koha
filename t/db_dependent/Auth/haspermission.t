@@ -50,6 +50,15 @@ my $borr2 = $builder->build(
         },
     }
 );
+my $borr3 = $builder->build(
+    {
+        source => 'Borrower',
+        value  => {
+            surname => 'Bor2',
+            flags   => 2**13,    # top level tools
+        },
+    }
+);
 $builder->build(
     {
         source => 'UserPermission',
@@ -149,6 +158,16 @@ subtest 'hashref top level AND tests' => sub {
         }
     );
     is( ref($r), 'HASH', 'Borrower2 (/tools|upload_local_cover_image AND /tools|batch_upload_patron_images) granular' );
+    $r = haspermission(
+        $borr3->{userid},
+        {
+            tools => {
+                'upload_local_cover_images'  => 1,
+                'batch_upload_patron_images' => 1
+            },
+        }
+    );
+    is( ref($r), 'HASH', 'Borrower3 (/tools|upload_local_cover_image AND /tools|batch_upload_patron_images) granular' );
     $r = haspermission(
         $borr2->{userid},
         {
