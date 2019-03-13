@@ -269,6 +269,8 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('LibraryThingForLibrariesEnabled','0','','Enable or Disable Library Thing for Libraries Features','YesNo'),
 ('LibraryThingForLibrariesID','','','See:http://librarything.com/forlibraries/','free'),
 ('LibraryThingForLibrariesTabbedView','0','','Put LibraryThingForLibraries Content in Tabs.','YesNo'),
+('LibrisKey', '', 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', NULL, 'Free'),
+('LibrisURL', 'http://api.libris.kb.se/bibspell/', 'This it the base URL for the Libris spellchecking API.',NULL,'Free'),
 ('LinkerKeepStale','0',NULL,'If ON the authority linker will keep existing authority links for headings where it is unable to find a match.','YesNo'),
 ('LinkerModule','Default','Default|FirstMatch|LastMatch','Chooses which linker module to use (see documentation).','Choice'),
 ('LinkerOptions','','','A pipe-separated list of options for the linker.','free'),
@@ -647,6 +649,5 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('XSLTListsDisplay','default','','Enable XSLT stylesheet control over lists pages display on intranet','Free'),
 ('XSLTResultsDisplay','default','','Enable XSL stylesheet control over results page display on intranet','Free'),
 ('z3950AuthorAuthFields','701,702,700',NULL,'Define the MARC biblio fields for Personal Name Authorities to fill biblio.author','free'),
-('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo'),
-('LibrisKey', '', 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', NULL, 'Free'),
-('LibrisURL', 'http://api.libris.kb.se/bibspell/', 'This it the base URL for the Libris spellchecking API.',NULL,'Free');
+('z3950NormalizeAuthor','0','','If ON, Personal Name Authorities will replace authors in biblio.author','YesNo')
+;

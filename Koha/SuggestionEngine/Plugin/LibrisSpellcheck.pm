@@ -71,9 +71,17 @@ This module provides facilities for using the LIBRIS spell checker API
 
 =over
 
+=item NAME
+
+my $name = $plugin->NAME;
+
+=back
+
 =item get_suggestions(query)
 
 Sends in the search query and gets an XML with a suggestion
+
+my $suggestions = $plugin->get_suggestions(\%query);
 
 =back
 
