@@ -897,6 +897,7 @@ CREATE TABLE `items` ( -- holdings/item information
 DROP TABLE IF EXISTS `itemtypes`;
 CREATE TABLE `itemtypes` ( -- defines the item types
   itemtype varchar(10) NOT NULL default '', -- unique key, a code associated with the item type
+  parent_type varchar(10) NULL default NULL, -- unique key, a code associated with the item type
   description LONGTEXT, -- a plain text explanation of the item type
   rentalcharge decimal(28,6) default NULL, -- the amount charged when this item is checked out/issued
   rentalcharge_daily decimal(28,6) default NULL, -- the amount charged for each day between checkout date and due date
@@ -914,6 +915,7 @@ CREATE TABLE `itemtypes` ( -- defines the item types
   hideinopac tinyint(1) NOT NULL DEFAULT 0, -- Hide the item type from the search options in OPAC
   searchcategory varchar(80) default NULL, -- Group this item type with others with the same value on OPAC search options
   PRIMARY KEY  (`itemtype`),
+  CONSTRAINT itemtypes_ibfk_1 FOREIGN KEY (parent_type) REFERENCES itemtypes(itemtype) ON UPDATE CASCADE ON DELETE CASCADE,
   UNIQUE KEY `itemtype` (`itemtype`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
