@@ -2,6 +2,7 @@
 [% USE Branches %]
 [% USE KohaDates %]
 [% USE Price %]
+[% USE ItemTypes %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
     <title>Summary for [% patron.firstname %] [% patron.surname %] ([% patron.cardnumber %])</title>
@@ -52,7 +53,7 @@
                         </td>
                         <td>[% issue.author | html %]</td>
                         <td>[% issue.itemcallnumber | html %]</td>
-                        <td>[% issue.itemtype_description | html %]</td>
+                        <td>[% ItemTypes.GetDescription( issue.itype ) | html %]</td>
                         <td>[% issue.date_due | $KohaDates  as_due_date => 1 %]</td>
                         <td>[% issue.barcode | html %]</td>
                         <td>[% issue.charge | $Price %]</td>
