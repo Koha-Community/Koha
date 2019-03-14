@@ -19,10 +19,10 @@ use Modern::Perl;
 
 use Test::More tests => 1;
 
-use C4::Context;
 use C4::Circulation;
-
+use C4::Context;
 use Koha::Database;
+use Koha::DateUtils;
 use Koha::Items;
 
 use t::lib::Mocks;
@@ -69,7 +69,7 @@ subtest 'Test StoreLastBorrower' => sub {
     my $patron_object = $item_object->last_returned_by();
     is( $patron_object, undef, 'Koha::Item::last_returned_by returned undef' );
 
-    my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode}, undef, undef, '2010-10-10' );
+    my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode},  undef, dt_from_string('2010-10-10') );
 
     $item_object   = Koha::Items->find( $item->{itemnumber} );
     $patron_object = $item_object->last_returned_by();
@@ -92,7 +92,7 @@ subtest 'Test StoreLastBorrower' => sub {
         }
     );
 
-    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode}, undef, undef, '2010-10-10' );
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
 
     $item_object   = Koha::Items->find( $item->{itemnumber} );
     $patron_object = $item_object->last_returned_by();
@@ -133,7 +133,7 @@ subtest 'Test StoreLastBorrower' => sub {
             },
         }
     );
-    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode}, undef, undef, '2010-10-10' );
+    ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, $patron->{branchcode}, undef, dt_from_string('2010-10-10') );
 
     $item_object   = Koha::Items->find( $item->{itemnumber} );
     is( $item_object->last_returned_by, undef, 'Last patron to return item should not be stored if StoreLastBorrower if off' );

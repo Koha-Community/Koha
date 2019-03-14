@@ -868,8 +868,8 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
             }
         );
 
-        my ( $returned_1, undef, undef ) = C4::Circulation::AddReturn( $item_1->{barcode}, undef, undef, undef, '2010-10-10' );
-        my ( $returned_2, undef, undef ) = C4::Circulation::AddReturn( $item_2->{barcode}, undef, undef, undef, '2011-11-11' );
+        my ( $returned_1, undef, undef ) = C4::Circulation::AddReturn( $item_1->{barcode}, undef, undef, dt_from_string('2010-10-10') );
+        my ( $returned_2, undef, undef ) = C4::Circulation::AddReturn( $item_2->{barcode}, undef, undef, dt_from_string('2011-11-11') );
         is( $returned_1 && $returned_2, 1, 'The items should have been returned' );
 
         my $patrons_to_anonymise = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->search( { 'me.borrowernumber' => $patron->{borrowernumber} } );
@@ -932,7 +932,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
             }
         );
 
-        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
+        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, dt_from_string('2010-10-10') );
         is( $returned, 1, 'The item should have been returned' );
         my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->anonymise_issue_history( { before => '2010-10-11' } );
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should not return any error if success' );
@@ -973,7 +973,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
             }
         );
 
-        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
+        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, dt_from_string('2010-10-10') );
         is( $returned, 1, 'The item should have been returned' );
         my $rows_affected = Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->anonymise_issue_history( { before => '2010-10-11' } );
         ok( $rows_affected > 0, 'AnonymiseIssueHistory should affect at least 1 row' );
@@ -1011,7 +1011,7 @@ subtest 'search_patrons_to_anonymise & anonymise_issue_history' => sub {
             }
         );
 
-        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, undef, '2010-10-10' );
+        my ( $returned, undef, undef ) = C4::Circulation::AddReturn( $item->{barcode}, undef, undef, dt_from_string('2010-10-10') );
         is( Koha::Patrons->search_patrons_to_anonymise( { before => '2010-10-11' } )->count, 0 );
         Koha::Patrons->find( $patron->{borrowernumber})->delete;
     };
