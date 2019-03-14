@@ -29,6 +29,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 use URI::Escape;
+use Scalar::Util qw( looks_like_number );
 
 use C4::Context;
 use C4::Templates;
@@ -89,6 +90,9 @@ sub pagination_bar {
     my $startfrom_name = (@_) ? shift : 'page';
     my $additional_parameters = shift || {};
 
+    $current_page = looks_like_number($current_page) ? $current_page : undef;
+    $nb_pages     = looks_like_number($nb_pages)     ? $nb_pages     : undef;
+
     # how many pages to show before and after the current page?
     my $pages_around = 2;
 
@@ -106,7 +110,7 @@ sub pagination_bar {
     my $url = $base_url . (($base_url =~ m/$delim/ or $base_url =~ m/\?/) ? '&amp;' : '?' ) . $startfrom_name . '=';
     my $url_suffix;
     while ( my ( $k, $v ) = each %$additional_parameters ) {
-        $url_suffix .= '&amp;' . $k . '=' . $v;
+        $url_suffix .= '&amp;' . URI::Escape::uri_escape_utf8($k) . '=' . URI::Escape::uri_escape_utf8($v);
     }
     my $pagination_bar = '';
 
