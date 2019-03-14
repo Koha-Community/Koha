@@ -117,7 +117,7 @@ subtest 'get_elasticsearch_mappings() tests' => sub {
 
 subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' => sub {
 
-    plan tests => 49;
+    plan tests => 50;
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 
@@ -239,6 +239,15 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
             marc_type => 'marc21',
             marc_field => 'leader_/6-7',
         },
+        {
+            name => 'ff7-00',
+            type => 'string',
+            facet => 0,
+            suggestible => 0,
+            sort => 0,
+            marc_type => 'marc21',
+            marc_field => '007_/0',
+        },
     );
 
     my $se = Test::MockModule->new('Koha::SearchEngine::Elasticsearch');
@@ -268,6 +277,7 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     $marc_record_1->leader('     cam  22      a 4500');
     $marc_record_1->append_fields(
         MARC::Field->new('001', '123'),
+        MARC::Field->new('007', 'ku'),
         MARC::Field->new('020', '', '', a => '1-56619-909-3'),
         MARC::Field->new('100', '', '', a => 'Author 1'),
         MARC::Field->new('110', '', '', a => 'Corp Author'),
@@ -300,6 +310,8 @@ subtest 'Koha::SearchEngine::Elasticsearch::marc_records_to_documents () tests' 
     is($docs->[0][0], '1234567', 'First document biblionumber should be set as first element in document touple');
 
     is_deeply($docs->[0][1]->{control_number}, ['123'], 'First record control number should be set correctly');
+
+    is_deeply($docs->[0][1]->{'ff7-00'}, ['k'], 'First record ff7-00 should be set correctly');
 
     is(scalar @{$docs->[0][1]->{author}}, 2, 'First document author field should contain two values');
     is_deeply($docs->[0][1]->{author}, ['Author 1', 'Corp Author'], 'First document author field should be set correctly');

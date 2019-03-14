@@ -610,8 +610,8 @@ An optional range as a string in the format "<START>-<END>" or "<START>",
 where "<START>" and "<END>" are integers specifying a range that will be used
 for extracting a substring from MARC data as Elasticsearch field target value.
 
-The first character position is "1", and the range is inclusive,
-so "1-3" means the first three characters of MARC data.
+The first character position is "0", and the range is inclusive,
+so "0-2" means the first three characters of MARC data.
 
 If only "<START>" is provided only one character at position "<START>" will
 be extracted.
@@ -626,7 +626,7 @@ sub _field_mappings {
     my @mappings;
 
     my $substr_args = undef;
-    if ($range) {
+    if (defined $range) {
         # TODO: use value_callback instead?
         my ($start, $end) = map(int, split /-/, $range, 2);
         $substr_args = [$start];
