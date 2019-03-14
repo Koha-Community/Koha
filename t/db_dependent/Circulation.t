@@ -2629,48 +2629,43 @@ subtest 'Cancel transfers on lost items' => sub {
     my $patron_1 = $builder->build( { source => 'Borrower', value => { branchcode => $library_1->{branchcode}, categorycode => $patron_category->{categorycode} } } );
     my $library_2 = $builder->build( { source => 'Branch' } );
     my $patron_2  = $builder->build( { source => 'Borrower', value => { branchcode => $library_2->{branchcode}, categorycode => $patron_category->{categorycode} } } );
-    my $biblio = $builder->build( { source => 'Biblio' } );
-    my $biblioitem = $builder->build( { source => 'Biblioitem', value => { biblionumber => $biblio->{biblionumber} } } );
-    my $item = $builder->build(
+    my $biblio = $builder->build_sample_biblio({branchcode => $library->{branchcode}});
+    my $item   = $builder->build_sample_item(
         {
-            source => 'Item',
+            class => 'Koha::Items',
             value => {
-                homebranch => $library_1->{branchcode},
-                holdingbranch => $library_1->{branchcode},
-                notforloan => 0,
-                itemlost => 0,
-                withdrawn => 0,
-                biblionumber => $biblioitem->{biblionumber},
+                biblionumber => $biblio->biblionumber,
+                library      => $library_1->{branchcode},
             }
         }
     );
 
     set_userenv( $library_2 );
     my $reserve_id = AddReserve(
-        $library_2->{branchcode}, $patron_2->{borrowernumber}, $biblioitem->{biblionumber}, '', 1, undef, undef, '', undef, $item->{itemnumber},
+        $library_2->{branchcode}, $patron_2->{borrowernumber}, $item->biblionumber, '', 1, undef, undef, '', undef, $item->itemnumber,
     );
 
     #Return book and add transfer
     set_userenv( $library_1 );
     my $do_transfer = 1;
-    my ( $res, $rr ) = AddReturn( $item->{barcode}, $library_1->{branchcode} );
-    ModReserveAffect( $item->{itemnumber}, undef, $do_transfer, $reserve_id );
-    C4::Circulation::transferbook( $library_2->{branchcode}, $item->{barcode} );
+    my ( $res, $rr ) = AddReturn( $item->barcode, $library_1->{branchcode} );
+    ModReserveAffect( $item->itemnumber, undef, $do_transfer, $reserve_id );
+    C4::Circulation::transferbook( $library_2->{branchcode}, $item->barcode );
     my $hold = Koha::Holds->find( $reserve_id );
     is( $hold->found, 'T', 'Hold is in transit' );
 
     #Check transfer exists and the items holding branch is the transfer destination branch before marking it as lost
-    my ($datesent,$frombranch,$tobranch) = GetTransfers($item->{itemnumber});
+    my ($datesent,$frombranch,$tobranch) = GetTransfers($item->itemnumber);
     is( $tobranch, $library_2->{branchcode}, 'The transfer record exists in the branchtransfers table');
-    my $itemcheck = Koha::Items->find($item->{itemnumber});
+    my $itemcheck = Koha::Items->find($item->itemnumber);
     is( $itemcheck->holdingbranch, $library_2->{branchcode}, 'Items holding branch is the transfers destination branch before it is marked as lost' );
 
     #Simulate item being marked as lost and confirm the transfer is deleted and the items holding branch is the transfers source branch
-    ModItem( { itemlost => 1 }, $biblio->{biblionumber}, $item->{itemnumber} );
-    LostItem( $item->{itemnumber}, 'test', 1 );
-    ($datesent,$frombranch,$tobranch) = GetTransfers($item->{itemnumber});
+    ModItem( { itemlost => 1 }, $item->biblionumber, $item->itemnumber );
+    LostItem( $item->itemnumber, 'test', 1 );
+    ($datesent,$frombranch,$tobranch) = GetTransfers($item->itemnumber);
     is( $tobranch, undef, 'The transfer on the lost item has been deleted as the LostItemCancelOutstandingTransfer is enabled');
-    $itemcheck = Koha::Items->find($item->{itemnumber});
+    $itemcheck = Koha::Items->find($item->itemnumber);
     is( $itemcheck->holdingbranch, $library_1->{branchcode}, 'Lost item with cancelled hold has holding branch equallying the transfers source branch' );
 };
 
