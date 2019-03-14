@@ -1837,6 +1837,7 @@ sub AddReturn {
         undef $branch;
     }
     $branch = C4::Context->userenv->{'branch'} unless $branch;  # we trust userenv to be a safe fallback/default
+    $return_date //= dt_from_string();
     my $messages;
     my $patron;
     my $doreturn       = 1;
@@ -1931,8 +1932,6 @@ sub AddReturn {
     }
 
     # case of a return of document (deal with issues and holdingbranch)
-    my $today = DateTime->now( time_zone => C4::Context->tz() );
-
     if ($doreturn) {
         my $is_overdue;
         die "The item is not issed and cannot be returned" unless $issue; # Just in case...
@@ -2023,8 +2022,7 @@ sub AddReturn {
 
         if ( $issue and $issue->is_overdue ) {
         # fix fine days
-            $today = $return_date if $return_date;
-            my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item_unblessed, dt_from_string($issue->date_due), $today );
+            my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item_unblessed, dt_from_string($issue->date_due), $return_date );
             if ($reminder){
                 $messages->{'PrevDebarred'} = $debardate;
             } else {
@@ -2037,7 +2035,7 @@ sub AddReturn {
              } else {
                   my $borrower_debar_dt = dt_from_string( $patron->debarred );
                   $borrower_debar_dt->truncate(to => 'day');
-                  my $today_dt = $today->clone()->truncate(to => 'day');
+                  my $today_dt = $return_date->clone()->truncate(to => 'day');
                   if ( DateTime->compare( $borrower_debar_dt, $today_dt ) != -1 ) {
                       $messages->{'PrevDebarred'} = $patron->debarred;
                   }
@@ -2192,7 +2190,7 @@ sub MarkIssueReturned {
 
 =head2 _debar_user_on_return
 
-    _debar_user_on_return($borrower, $item, $datedue, today);
+    _debar_user_on_return($borrower, $item, $datedue, $returndate);
 
 C<$borrower> borrower hashref
 
@@ -2200,7 +2198,7 @@ C<$item> item hashref
 
 C<$datedue> date due DateTime object
 
-C<$return_date> DateTime object representing the return time
+C<$returndate> DateTime object representing the return time
 
 Internal function, called only by AddReturn that calculates and updates
  the user fine days, and debars them if necessary.
@@ -2213,6 +2211,7 @@ sub _debar_user_on_return {
     my ( $borrower, $item, $dt_due, $return_date ) = @_;
 
     my $branchcode = _GetCircControlBranch( $item, $borrower );
+    $return_date //= dt_from_string();
 
     my $circcontrol = C4::Context->preference('CircControl');
     my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
@@ -2302,21 +2301,20 @@ sub _debar_user_on_return {
 
 =head2 _FixOverduesOnReturn
 
-   &_FixOverduesOnReturn($brn,$itm, $exemptfine, $dropboxmode);
+   &_FixOverduesOnReturn($borrowernumber, $itemnumber, $exemptfine);
 
-C<$brn> borrowernumber
+C<$borrowernumber> borrowernumber
 
-C<$itm> itemnumber
+C<$itemnumber> itemnumber
 
 C<$exemptfine> BOOL -- remove overdue charge associated with this issue. 
-C<$dropboxmode> BOOL -- remove lastincrement on overdue charge associated with this issue.
 
 Internal function
 
 =cut
 
 sub _FixOverduesOnReturn {
-    my ($borrowernumber, $item, $exemptfine ) = @_;
+    my ( $borrowernumber, $item, $exemptfine ) = @_;
     unless( $borrowernumber ) {
         warn "_FixOverduesOnReturn() not supplied valid borrowernumber";
         return;
