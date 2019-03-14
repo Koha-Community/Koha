@@ -93,9 +93,6 @@ sub build_issue_data {
         my ( $charge, $itemtype ) =
           GetIssuingCharges( $checkout->{itemnumber}, $borrowernumber );
 
-        $itemtype = Koha::ItemTypes->find( $itemtype );
-        $checkout->{itemtype_description} = $itemtype->description; #FIXME Should not it be translated_description
-
         $checkout->{charge} = $charge;
 
         $checkout->{overdue} = $c->is_overdue;
