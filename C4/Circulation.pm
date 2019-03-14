@@ -1836,7 +1836,7 @@ patron who last borrowed the book.
 =cut
 
 sub AddReturn {
-    my ( $barcode, $branch, $exemptfine, $dropbox, $return_date, $dropboxdate ) = @_;
+    my ( $barcode, $branch, $exemptfine, $return_date ) = @_;
 
     if ($branch and not Koha::Libraries->find($branch)) {
         warn "AddReturn error: branch '$branch' not found.  Reverting to " . C4::Context->userenv->{'branch'};
@@ -1943,25 +1943,14 @@ sub AddReturn {
         my $is_overdue;
         die "The item is not issed and cannot be returned" unless $issue; # Just in case...
         $patron or warn "AddReturn without current borrower";
-        if ($dropbox) {
-            $is_overdue = $issue->is_overdue( $dropboxdate );
-        } else {
-            $is_overdue = $issue->is_overdue;
-        }
+        $is_overdue = $issue->is_overdue( $return_date );
 
         if ($patron) {
             eval {
-                if ( $dropbox ) {
-                    MarkIssueReturned( $borrowernumber, $item->itemnumber,
-                        $dropboxdate, $patron->privacy );
-                }
-                else {
-                    MarkIssueReturned( $borrowernumber, $item->itemnumber,
-                        $return_date, $patron->privacy );
-                }
+                MarkIssueReturned( $borrowernumber, $item->itemnumber, $return_date, $patron->privacy );
             };
             unless ( $@ ) {
-                if ( ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue ) || $return_date ) {
+                if ( C4::Context->preference('CalculateFinesOnReturn') && $is_overdue ) {
                     _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed, return_date => $return_date } );
                 }
             } else {
@@ -2035,13 +2024,12 @@ sub AddReturn {
 
     # fix up the overdues in accounts...
     if ($borrowernumber) {
-        my $fix = _FixOverduesOnReturn($borrowernumber, $item->itemnumber, $exemptfine, $dropbox);
+        my $fix = _FixOverduesOnReturn( $borrowernumber, $item->itemnumber, $exemptfine );
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->itemnumber...) failed!";  # zero is OK, check defined
 
         if ( $issue and $issue->is_overdue ) {
         # fix fine days
-            $today = dt_from_string($return_date) if $return_date;
-            $today = $dropboxdate if $dropbox;
+            $today = $return_date if $return_date;
             my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item_unblessed, dt_from_string($issue->date_due), $today );
             if ($reminder){
                 $messages->{'PrevDebarred'} = $debardate;
@@ -2334,7 +2322,7 @@ Internal function
 =cut
 
 sub _FixOverduesOnReturn {
-    my ($borrowernumber, $item, $exemptfine, $dropbox ) = @_;
+    my ($borrowernumber, $item, $exemptfine ) = @_;
     unless( $borrowernumber ) {
         warn "_FixOverduesOnReturn() not supplied valid borrowernumber";
         return;
@@ -2374,30 +2362,6 @@ sub _FixOverduesOnReturn {
         if (C4::Context->preference("FinesLog")) {
             &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
         }
-    } elsif ($dropbox && $accountline->lastincrement) {
-        my $outstanding = $accountline->amountoutstanding - $accountline->lastincrement;
-        my $amt = $accountline->amount - $accountline->lastincrement;
-
-        Koha::Account::Offset->new(
-            {
-                debit_id => $accountline->id,
-                type => 'Dropbox',
-                amount => $accountline->lastincrement * -1,
-            }
-        )->store();
-
-        if ( C4::Context->preference("FinesLog") ) {
-            &logaction( "FINES", 'MODIFY', $borrowernumber,
-                "Dropbox adjustment $amt, item $item" );
-        }
-
-        $accountline->accounttype('F');
-
-        if ( $outstanding >= 0 && $amt >= 0 ) {
-            $accountline->amount($amt);
-            $accountline->amountoutstanding($outstanding);
-        }
-
     } else {
         $accountline->accounttype('F');
     }
@@ -4124,7 +4088,7 @@ sub _CalculateAndUpdateFine {
       : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
       :                                     $issue->branchcode;
 
-    my $date_returned = $return_date ? dt_from_string($return_date) : dt_from_string();
+    my $date_returned = $return_date ? $return_date : dt_from_string();
 
     my ( $amount, $unitcounttotal, $unitcount  ) =
       C4::Overdues::CalcFine( $item, $borrower->{categorycode}, $control_branchcode, $datedue, $date_returned );

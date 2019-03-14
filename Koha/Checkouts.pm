@@ -21,9 +21,9 @@ use Modern::Perl;
 
 use Carp;
 
-use Koha::Database;
-
+use C4::Context;
 use Koha::Checkout;
+use Koha::Database;
 
 use base qw(Koha::Objects);
 
@@ -36,6 +36,23 @@ Koha::Checkouts - Koha Checkout object set class
 =head2 Class Methods
 
 =cut
+
+=head3 calculate_dropbox_date
+
+my $dt = Koha::Checkouts::calculate_dropbox_date();
+
+=cut
+
+sub calculate_dropbox_date {
+    my $userenv    = C4::Context->userenv;
+    my $branchcode = $userenv->{branch} // q{};
+
+    my $calendar = Koha::Calendar->new( branchcode => $branchcode );
+    my $today        = DateTime->now( time_zone => C4::Context->tz() );
+    my $dropbox_date = $calendar->addDate( $today, -1 );
+
+    return $dropbox_date;
+}
 
 =head3 type
 

@@ -33,22 +33,24 @@ use Modern::Perl;
 
 use CGI qw ( -utf8 );
 use DateTime;
-use C4::Context;
+
 use C4::Auth qw/:DEFAULT get_session/;
-use C4::Output;
+use C4::Biblio;
 use C4::Circulation;
+use C4::Context;
+use C4::Items;
+use C4::Koha;   # FIXME : is it still useful ?
+use C4::Members::Messaging;
+use C4::Members;
+use C4::Output;
 use C4::Print;
 use C4::Reserves;
-use C4::Biblio;
-use C4::Items;
-use C4::Members;
-use C4::Members::Messaging;
-use C4::Koha;   # FIXME : is it still useful ?
 use C4::RotatingCollections;
 use Koha::AuthorisedValues;
-use Koha::DateUtils;
-use Koha::Calendar;
 use Koha::BiblioFrameworks;
+use Koha::Calendar;
+use Koha::Checkouts;
+use Koha::DateUtils;
 use Koha::Holds;
 use Koha::Items;
 use Koha::Patrons;
@@ -203,17 +205,16 @@ my $dropboxmode = $query->param('dropboxmode');
 my $dotransfer  = $query->param('dotransfer');
 my $canceltransfer = $query->param('canceltransfer');
 my $dest = $query->param('dest');
-my $calendar    = Koha::Calendar->new( branchcode => $userenv_branch );
 #dropbox: get last open day (today - 1)
-my $today       = DateTime->now( time_zone => C4::Context->tz());
-my $dropboxdate = $calendar->addDate($today, -1);
+my $dropboxdate = Koha::Checkouts::calculate_dropbox_date();
 
 my $return_date_override = $query->param('return_date_override');
+my $return_date_override_dt;
 my $return_date_override_remember =
   $query->param('return_date_override_remember');
 if ($return_date_override) {
     if ( C4::Context->preference('SpecifyReturnDate') ) {
-        my $return_date_override_dt = eval {dt_from_string( $return_date_override ) };
+        $return_date_override_dt = eval {dt_from_string( $return_date_override ) };
         if ( $return_date_override_dt ) {
             # note that we've overriden the return date
             $template->param( return_date_was_overriden => 1);
@@ -301,10 +302,11 @@ if ($barcode) {
         barcode => $barcode,
     );
 
+    my $return_date = $dropboxmode ? $dropboxdate : $return_date_override_dt;
 
     # do the return
     ( $returned, $messages, $issue, $borrower ) =
-      AddReturn( $barcode, $userenv_branch, $exemptfine, $dropboxmode, $return_date_override, $dropboxdate );
+      AddReturn( $barcode, $userenv_branch, $exemptfine, $return_date );
 
     if ($returned) {
         my $time_now = DateTime->now( time_zone => C4::Context->tz )->truncate( to => 'minute');
@@ -616,7 +618,7 @@ $template->param(
     errmsgloop     => \@errmsgloop,
     exemptfine     => $exemptfine,
     dropboxmode    => $dropboxmode,
-    dropboxdate    => output_pref($dropboxdate),
+    dropboxdate    => $dropboxdate,
     forgivemanualholdsexpire => $forgivemanualholdsexpire,
     overduecharges => $overduecharges,
     AudioAlerts        => C4::Context->preference("AudioAlerts"),
