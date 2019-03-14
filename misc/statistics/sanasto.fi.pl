@@ -141,8 +141,8 @@ Lainautun nimekkeen tunnus
             $hostDatabaseIdentifier = $hostRecord->subfield('999','c');
         };
         if ($@) {
-            warn "Component part bn: '".$r->subfield('999','c')."' has Items and is checked out?";
-            $hostDatabaseIdentifier = $r->subfield('999','c');
+            warn "Biblionumber '".$r->subfield('999','c')."' claims to be a component part, but has items and is checked out? Skipping.";
+            return;
         }
     }
     else {
@@ -194,7 +194,7 @@ MARC 084
 =head2 Kustantaja
 MARC 260b
 =cut
-    my $publisher = _sanitate($r->subfield($r, '260c'));
+    my $publisher = _sanitate($r->subfield('260', 'b'));
 
 =head2 Asiasanasto
 MARC 650, mikäli sanastona YSA
