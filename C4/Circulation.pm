@@ -1759,7 +1759,7 @@ sub GetBranchItemRule {
 =head2 AddReturn
 
   ($doreturn, $messages, $iteminformation, $borrower) =
-      &AddReturn( $barcode, $branch [,$exemptfine] [,$dropbox] [,$returndate] );
+      &AddReturn( $barcode, $branch [,$exemptfine] [,$returndate] );
 
 Returns a book.
 
@@ -1771,12 +1771,6 @@ Returns a book.
 
 =item C<$exemptfine> indicates that overdue charges for the item will be
 removed. Optional.
-
-=item C<$dropbox> indicates that the check-in date is assumed to be
-yesterday, or the last non-holiday as defined in C4::Calendar .  If
-overdue charges are applied and C<$dropbox> is true, the last charge
-will be removed.  This assumes that the fines accrual script has run
-for _today_. Optional.
 
 =item C<$return_date> allows the default return date to be overridden
 by the given return date. Optional.
