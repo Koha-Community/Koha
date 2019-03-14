@@ -53,37 +53,7 @@ $(document).ready(function() {
                     {
                         "mDataProp": function( oObj ) {
                             var data = "";
-
-                            if ( oObj.suspend == 1 ) {
-                                data += "<p>" + HOLD_IS_SUSPENDED;
-                                if ( oObj.suspend_until ) {
-                                    data += " " + UNTIL.format( oObj.suspend_until_formatted );
-                                }
-                                data += "</p>";
-                            }
-
-                            if ( oObj.itemtype_limit ) {
-                                data += NEXT_AVAILABLE_ITYPE.format( oObj.itemtype_limit );
-                            }
-
                             if ( oObj.barcode ) {
-                                data += "<em>";
-                                if ( oObj.found == "W" ) {
-
-                                    if ( oObj.waiting_here ) {
-                                        data += ITEM_IS_WAITING_HERE;
-                                    } else {
-                                        data += ITEM_IS_WAITING;
-                                        data += " " + AT.format( oObj.waiting_at );
-                                    }
-
-                                } else if ( oObj.transferred ) {
-                                    data += ITEM_IS_IN_TRANSIT.format( oObj.from_branch, oObj.date_sent );
-                                } else if ( oObj.not_transferred ) {
-                                    data += NOT_TRANSFERRED_YET.format( oObj.not_transferred_by );
-                                }
-                                data += "</em>";
-
                                 data += " <a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "&itemnumber="
@@ -94,7 +64,6 @@ $(document).ready(function() {
                                   + oObj.barcode.escapeHtml()
                                   + "</a>";
                             }
-
                             return data;
                         }
                     },
@@ -159,7 +128,47 @@ $(document).ready(function() {
                                      + "<i class='fa fa-pause'></i> " + SUSPEND + "</a>";
                             }
                         }
-                    }
+                    },
+                    {
+                        "mDataProp": function( oObj ) {
+                            var data = "";
+                            if ( oObj.suspend != 1 && !oObj.itemtype_limit) {
+                                data = _("Hold has been placed\n");
+                            }
+
+                            if ( oObj.suspend == 1 ) {
+                                data += "<p>" + HOLD_IS_SUSPENDED;
+                                if ( oObj.suspend_until ) {
+                                    data += " " + UNTIL.format( oObj.suspend_until_formatted );
+                                }
+                                data += "</p>";
+                            }
+
+                            if ( oObj.itemtype_limit ) {
+                                data += NEXT_AVAILABLE_ITYPE.format( oObj.itemtype_limit );
+                            }
+
+                            if ( oObj.barcode ) {
+                                data += "<em>";
+                                if ( oObj.found == "W" ) {
+
+                                    if ( oObj.waiting_here ) {
+                                        data += ITEM_IS_WAITING_HERE;
+                                    } else {
+                                        data += ITEM_IS_WAITING;
+                                        data += " " + AT.format( oObj.waiting_at );
+                                    }
+
+                                } else if ( oObj.transferred ) {
+                                    data += ITEM_IS_IN_TRANSIT.format( oObj.from_branch, oObj.date_sent );
+                                } else if ( oObj.not_transferred ) {
+                                    data += NOT_TRANSFERRED_YET.format( oObj.not_transferred_by );
+                                }
+                                data += "</em>";
+                            }
+                            return data;
+                        }
+                   }
                 ],
                 "bPaginate": false,
                 "bProcessing": true,
