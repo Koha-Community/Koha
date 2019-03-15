@@ -297,8 +297,7 @@ sub adjust {
                 {
                     date              => \'NOW()',
                     amount            => $amount,
-                    amountoutstanding => $new_outstanding,
-                    ( $update_type eq 'fine_update' ? ( lastincrement => $difference ) : ()),
+                    amountoutstanding => $new_outstanding
                 }
             )->store();
 

@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 126;
+use Test::More tests => 125;
 use Test::MockModule;
 
 use Data::Dumper;
@@ -849,7 +849,6 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 
     my $line = Koha::Account::Lines->search({ borrowernumber => $renewing_borrower->{borrowernumber} })->next();
     is( $line->accounttype, 'FU', 'Account line type is FU' );
-    is( $line->lastincrement, '15.000000', 'Account line last increment is 15.00' );
     is( $line->amountoutstanding, '15.000000', 'Account line amount outstanding is 15.00' );
     is( $line->amount, '15.000000', 'Account line amount is 15.00' );
     is( $line->issue_id, $issue->id, 'Account line issue id matches' );
@@ -2381,7 +2380,6 @@ subtest '_FixOverduesOnReturn' => sub {
             itemnumber     => $item->itemnumber,
             amount => 99.00,
             amountoutstanding => 99.00,
-            lastincrement => 9.00,
         }
     )->store();
 

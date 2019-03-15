@@ -316,7 +316,7 @@ subtest 'Keep account info when related patron, staff or item is deleted' => sub
 
 subtest 'adjust() tests' => sub {
 
-    plan tests => 33;
+    plan tests => 29;
 
     $schema->storage->txn_begin;
 
@@ -360,7 +360,6 @@ subtest 'adjust() tests' => sub {
     is( $debit_2->amount * 1, 150, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 150, 'Fine amountoutstanding was update in full' );
     isnt( $debit_2->date, undef, 'Date has been set' );
-    is( $debit_2->lastincrement * 1, 50, 'lastincrement is the to the right value' );
 
     my $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
     is( $offsets->count, 1, 'An offset is generated for the increment' );
@@ -386,7 +385,6 @@ subtest 'adjust() tests' => sub {
 
     is( $debit_2->amount * 1, 160, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 120, 'Fine amountoutstanding was updated by difference' );
-    is( $debit_2->lastincrement * 1, 10, 'lastincrement is the to the right value' );
 
     $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
     is( $offsets->count, 3, 'An offset is generated for the increment' );
@@ -401,7 +399,6 @@ subtest 'adjust() tests' => sub {
 
     is( $debit_2->amount * 1, 50, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 10, 'Fine amountoutstanding was updated by difference' );
-    is( $debit_2->lastincrement * 1, -110, 'lastincrement is the to the right value' );
 
     $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
     is( $offsets->count, 4, 'An offset is generated for the decrement' );
@@ -413,7 +410,6 @@ subtest 'adjust() tests' => sub {
     $debit_2->adjust( { amount => 30, type => 'fine_update' } )->discard_changes;
     is( $debit_2->amount * 1, 30, 'Fine amount was updated in full' );
     is( $debit_2->amountoutstanding * 1, 0, 'Fine amountoutstanding was zeroed (payment was 40)' );
-    is( $debit_2->lastincrement * 1, -20, 'lastincrement is the to the right value' );
 
     $offsets = Koha::Account::Offsets->search( { debit_id => $debit_2->id } );
     is( $offsets->count, 5, 'An offset is generated for the decrement' );

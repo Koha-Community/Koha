@@ -346,7 +346,6 @@ sub add_credit {
                     manager_id        => $user_id,
                     branchcode        => $library_id,
                     itemnumber        => $item_id,
-                    lastincrement     => undef,
                 }
             )->store();
 
@@ -472,7 +471,6 @@ sub add_debit {
                     itemnumber        => $item_id,
                     issue_id          => $issue_id,
                     branchcode        => $library_id,
-                    ( $type eq 'fine' ? ( lastincrement => $amount ) : ()),
                 }
             )->store();
 
