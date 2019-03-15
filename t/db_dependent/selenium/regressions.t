@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 use Test::MockModule;
 
 use C4::Context;
@@ -185,6 +185,52 @@ subtest 'Display circulation table correctly' => sub {
 
     push @cleanup, $patron->checkouts, $item->biblio, $item, $patron,
       $patron->category, $library;
+};
+
+subtest 'XSS vulnerabilities in pagination' => sub {
+    plan tests => 3;
+
+    my $patron = $builder->build_object({ class => 'Koha::Patrons' });
+    for ( 1 .. 30 ) { # We want the pagination to be displayed
+        push @cleanup, $builder->build_object(
+            {
+                class => 'Koha::Virtualshelves',
+                value => {
+                    category                 => 1,
+                    allow_change_from_owner  => 1,
+                    allow_change_from_others => 0,
+                    owner                    => $patron->borrowernumber
+                }
+            }
+        );
+    }
+
+    my $password = Koha::AuthUtils::generate_password();
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    $patron->set_password({ password => $password });
+    $s->opac_auth( $patron->userid, $password );
+
+    my $public_lists = $s->opac_base_url . q|opac-shelves.pl?op=list&category=1|;
+    $driver->get($public_lists);
+
+    $s->remove_error_handler;
+    my $alert_text = eval { $driver->get_alert_text() };
+    $s->add_error_handler;
+    is( $alert_text, undef, 'No alert box displayed' );
+
+    my $booh_alert = 'booh!';
+    $public_lists = $s->opac_base_url . qq|opac-shelves.pl?op=list&category=1"><script>alert('$booh_alert')</script>|;
+    $driver->get($public_lists);
+
+    $s->remove_error_handler;
+    $alert_text = eval { $driver->get_alert_text() };
+    $s->add_error_handler;
+    is( $alert_text, undef, 'No alert box displayed, even if evil intent' );
+
+    my $second_page = $driver->find_element('//div[@class="pages"]/span[@class="currentPage"]/following-sibling::a');
+    like( $second_page->get_attribute('href'), qr{category=1%22%3E%3Cscript%3Ealert%28%27booh%21%27%29%3C%2Fscript%3E}, 'The second patch should displayed the variables and attributes correctly URI escaped' );
+
+    push @cleanup, $patron, $patron->category, $patron->library;
 };
 
 END {

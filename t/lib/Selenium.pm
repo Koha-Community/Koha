@@ -49,7 +49,16 @@ sub new {
     $self->{driver} = Selenium::Remote::Driver->new(
         port               => $self->{selenium_port},
         remote_server_addr => $self->{selenium_addr},
-        error_handler => sub {
+    );
+    bless $self, $class;
+    $self->add_error_handler;
+    return $self;
+}
+
+sub add_error_handler {
+    my ( $self ) = @_;
+    $self->{driver}->error_handler(
+        sub {
             my ( $driver, $selenium_error ) = @_;
             print STDERR "\nSTRACE:";
             my $i = 1;
@@ -57,11 +66,15 @@ sub new {
                 print STDERR "\t" . $call_details[1]. ":" . $call_details[2] . " in " . $call_details[3]."\n";
             }
             print STDERR "\n";
-            $class->capture( $driver );
+            $self->capture( $driver );
             croak $selenium_error;
         }
     );
-    return bless $self, $class;
+}
+
+sub remove_error_handler {
+    my ( $self ) = @_;
+    $self->{driver}->error_handler( sub {} );
 }
 
 sub config {
@@ -95,6 +108,7 @@ sub opac_auth {
     $password ||= $self->password;
     my $mainpage = $self->opac_base_url . 'opac-main.pl';
 
+    $self->driver->get($mainpage . q|?logout.x=1|); # Logout before, to make sure we will see the login form
     $self->driver->get($mainpage);
     $self->fill_form( { userid => $login, password => $password } );
     $self->submit_form;
@@ -239,6 +253,21 @@ when we use automation test using Selenium
 
 Capture a screenshot and upload it using the excellent lut.im service provided by framasoft
 The url of the image will be printed on STDERR (it should be better to return it instead)
+
+=head2 add_error_handler
+    $c->add_error_handler
+
+Add our specific error handler to the driver.
+It will displayed a trace as well as capture a screenshot of the current screen.
+So only case you should need it is after you called remove_error_handler
+
+=head remove_error_handler
+    $c->remove_error_handler
+
+Do *not* call this method if you are not aware of what it will do!
+It will remove any kinds of error raised by the driver.
+It can be useful in some cases, for instance if you want to make sure something will not happen and that could make the driver exploses otherwise.
+You certainly should call it for only one statement then must call add_error_handler right after.
 
 =head1 AUTHORS
 
