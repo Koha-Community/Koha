@@ -17727,6 +17727,16 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 20750 - Allow timestamped auditing of ILL request events)\n";
 }
 
+$DBversion = '18.12.00.027';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q{
+INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES
+       ('ILLModuleUnmediated','0','','If enabled, try to immediately progress newly placed ILL requests.','YesNo');
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18837: Add ILLModuleUnmediated Syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
