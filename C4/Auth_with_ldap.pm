@@ -221,7 +221,9 @@ sub checkpw_ldap {
 		return(1, $cardnumber, $local_userid);
         }
     } elsif ($config{replicate}) { # A2, C2
-        Koha::Patron->new( \%borrower )->store;
+        my $patron = Koha::Patron->new( \%borrower )->store;
+        die "Insert of new patron failed" unless $patron;
+        $borrowernumber = $patron->borrowernumber;
         C4::Members::Messaging::SetMessagingPreferencesFromDefaults( { borrowernumber => $borrowernumber, categorycode => $borrower{'categorycode'} } );
    } else {
         return 0;   # B2, D2
