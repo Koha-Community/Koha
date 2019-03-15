@@ -530,7 +530,6 @@ sub UpdateFine {
     #   "A"   is Account Management Fee
     #   "N"   is New Card
     #   "M"   is Sundry
-    #   "O"   is Overdue ??
     #   "F"   is Fine ??
     #   "FU"  is Fine UPDATE??
     #   "Pay" is Payment
@@ -538,7 +537,7 @@ sub UpdateFine {
     my $sth = $dbh->prepare(
         "SELECT * FROM accountlines
         WHERE borrowernumber=? AND
-        (( accounttype IN ('O','F','M') AND amountoutstanding<>0 ) OR
+        (( accounttype IN ('F','M') AND amountoutstanding<>0 ) OR
            accounttype = 'FU' )"
     );
     $sth->execute( $borrowernumber );

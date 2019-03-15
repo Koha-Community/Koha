@@ -416,7 +416,6 @@ $debit_type can be any of:
   - processing
   - rent
   - reserve
-  - overdue
   - manual
 
 =cut
@@ -701,7 +700,6 @@ our $account_type_debit = {
     'processing'    => 'PF',
     'rent'          => 'Rent',
     'reserve'       => 'Res',
-    'overdue'       => 'O',
     'manual_debit'  => 'M',
     'hold_expired'  => 'HE'
 };

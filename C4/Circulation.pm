@@ -2329,10 +2329,7 @@ sub _FixOverduesOnReturn {
         {
             borrowernumber => $borrowernumber,
             itemnumber     => $item,
-            -or            => [
-                accounttype => 'FU',
-                accounttype => 'O',
-            ],
+            accounttype    => 'FU'
         }
     )->next();
     return 0 unless $accountline;    # no warning, there's just nothing to fix

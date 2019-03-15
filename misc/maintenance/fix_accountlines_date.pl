@@ -129,7 +129,7 @@ $dbh->{AutoCommit} = 0;
 my $sth = $dbh->prepare("
 SELECT accountlines_id, description
   FROM accountlines
-  WHERE accounttype in ('FU', 'F', 'O', 'M')
+  WHERE accounttype in ('FU', 'F', 'M')
 ;");
 $sth->execute();
 
