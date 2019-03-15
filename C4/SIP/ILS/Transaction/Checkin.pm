@@ -12,9 +12,10 @@ use strict;
 use C4::SIP::ILS::Transaction;
 
 use C4::Circulation;
-use C4::Reserves qw( ModReserveAffect );
-use C4::Items qw( ModItemTransfer );
 use C4::Debug;
+use C4::Items qw( ModItemTransfer );
+use C4::Reserves qw( ModReserveAffect );
+use Koha::DateUtils qw( dt_from_string );
 
 use parent qw(C4::SIP::ILS::Transaction);
 
@@ -67,7 +68,7 @@ sub do_checkin {
                    . substr( $return_date, 16, 2 );
 
     $debug and warn "do_checkin() calling AddReturn($barcode, $branch)";
-    my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, $return_date);
+    my ($return, $messages, $issue, $borrower) = AddReturn($barcode, $branch, undef, dt_from_string($return_date));
     $self->alert(!$return);
     # ignoring messages: NotIssued, WasLost, WasTransfered
 
