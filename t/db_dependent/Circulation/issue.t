@@ -342,7 +342,7 @@ ok( $return->{return_date} eq $return->{today}, "Item returned with no return da
 
 $dbh->do("DELETE FROM old_issues");
 C4::Circulation::AddIssue( $borrower_1, $barcode_1, $daysago10, 0, $today );
-AddReturn($barcode_1, undef, undef, undef, '2014-04-01 23:42');
+AddReturn($barcode_1, undef, undef, dt_from_string('2014-04-01 23:42'));
 $return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
 ok( $return->{returndate} eq '2014-04-01 23:42:00', "Item returned with a return date of '2014-04-01 23:42' has that return date" );
 
