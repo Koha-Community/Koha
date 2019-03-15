@@ -2679,7 +2679,6 @@ CREATE TABLE `accountlines` (
   `accounttype` varchar(5) default NULL,
   `payment_type` varchar(80) default NULL, -- optional authorised value PAYMENT_TYPE
   `amountoutstanding` decimal(28,6) default NULL,
-  `lastincrement` decimal(28,6) default NULL,
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `note` MEDIUMTEXT NULL default NULL,
   `manager_id` int(11) NULL DEFAULT NULL,
