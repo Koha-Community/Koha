@@ -1284,30 +1284,17 @@ Returns a reference-to-hash describing the last order received for a subscriptio
 
 sub GetLastOrderReceivedFromSubscriptionid {
     my ( $subscriptionid ) = @_;
-    my $dbh                = C4::Context->dbh;
-    my $query              = qq|
-        SELECT * FROM aqorders
-        LEFT JOIN subscription
-            ON ( aqorders.subscriptionid = subscription.subscriptionid )
-        WHERE aqorders.subscriptionid = ?
-            AND aqorders.datereceived =
-                (
-                    SELECT MAX( aqorders.datereceived )
-                    FROM aqorders
-                    LEFT JOIN subscription
-                        ON ( aqorders.subscriptionid = subscription.subscriptionid )
-                        WHERE aqorders.subscriptionid = ?
-                            AND aqorders.datereceived IS NOT NULL
-                )
-        ORDER BY ordernumber DESC
-        LIMIT 1
-    |;
-    my $result_set =
-      $dbh->selectall_arrayref( $query, { Slice => {} }, $subscriptionid, $subscriptionid );
-
-    # result_set assumed to contain 1 match
-    return $result_set->[0];
-
+    my $lastOrderReceived = Koha::Acquisition::Orders->search(
+        {
+            subscriptionid => $subscriptionid,
+            datereceived   => { '!=' => undef }
+        },
+        {
+            order_by =>
+              [ { -desc => 'datereceived' }, { -desc => 'ordernumber' } ]
+        }
+    );
+    return $lastOrderReceived->count ? $lastOrderReceived->next->unblessed : undef;
 }
 
 #------------------------------------------------------------#
