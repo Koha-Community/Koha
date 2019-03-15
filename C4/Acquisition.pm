@@ -71,7 +71,6 @@ BEGIN {
         &SearchOrders &GetHistory &GetRecentAcqui
         &ModReceiveOrder &CancelReceipt
         &TransferOrder
-        &GetLastOrderNotReceivedFromSubscriptionid &GetLastOrderReceivedFromSubscriptionid
         &ModItemOrder
 
         &GetParcels
@@ -1247,57 +1246,6 @@ sub GetOrder {
     # result_set assumed to contain 1 match
     return $result_set->[0];
 }
-
-=head3 GetLastOrderNotReceivedFromSubscriptionid
-
-  $order = &GetLastOrderNotReceivedFromSubscriptionid($subscriptionid);
-
-Returns a reference-to-hash describing the last order not received for a subscription.
-
-=cut
-
-sub GetLastOrderNotReceivedFromSubscriptionid {
-    my ( $subscriptionid ) = @_;
-    my $dbh                = C4::Context->dbh;
-    my $query              = qq|
-        SELECT * FROM aqorders
-        LEFT JOIN subscription
-            ON ( aqorders.subscriptionid = subscription.subscriptionid )
-        WHERE aqorders.subscriptionid = ?
-            AND aqorders.datereceived IS NULL
-        LIMIT 1
-    |;
-    my $result_set =
-      $dbh->selectall_arrayref( $query, { Slice => {} }, $subscriptionid );
-
-    # result_set assumed to contain 1 match
-    return $result_set->[0];
-}
-
-=head3 GetLastOrderReceivedFromSubscriptionid
-
-  $order = &GetLastOrderReceivedFromSubscriptionid($subscriptionid);
-
-Returns a reference-to-hash describing the last order received for a subscription.
-
-=cut
-
-sub GetLastOrderReceivedFromSubscriptionid {
-    my ( $subscriptionid ) = @_;
-    my $lastOrderReceived = Koha::Acquisition::Orders->search(
-        {
-            subscriptionid => $subscriptionid,
-            datereceived   => { '!=' => undef }
-        },
-        {
-            order_by =>
-              [ { -desc => 'datereceived' }, { -desc => 'ordernumber' } ]
-        }
-    );
-    return $lastOrderReceived->count ? $lastOrderReceived->next->unblessed : undef;
-}
-
-#------------------------------------------------------------#
 
 =head3 ModOrder
 
