@@ -71,7 +71,11 @@ sub checkout {
 
 =head3 void
 
-$payment_accountline->void();
+  $payment_accountline->void();
+
+Used to 'void' (or reverse) a payment/credit. It will role back any offsets
+created by the application of this credit upon any debits and mark the credit
+as 'void' by updating it's status to "VOID".
 
 =cut
 
@@ -133,7 +137,7 @@ sub void {
 
             $self->set(
                 {
-                    accounttype       => 'VOID',
+                    status            => 'VOID',
                     amountoutstanding => 0,
                     amount            => 0,
                 }
