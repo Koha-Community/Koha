@@ -7,7 +7,7 @@
 -- SIMPLE BOOKS KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- *******************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'BKS', 'Books, Booklets, Workbooks' );
+		( 'BKS', 'Kirja' );
 
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
@@ -30,7 +30,7 @@ INSERT IGNORE INTO marc_subfield_structure (
 -- SIMPLE COMPUTER FILES KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- ****************************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'CF', 'CD-ROMs, DVD-ROMs, General Online Resources' );
+		( 'CF', 'CD-ROM, DVD-ROM, verkkojulkaisu' );
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
 	SELECT
@@ -53,7 +53,7 @@ INSERT IGNORE INTO marc_subfield_structure (
 -- SIMPLE SOUND RECORDINGS KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- *****************************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'SR', 'Audio Cassettes, CDs' );
+		( 'SR', 'Äänite, CD-levy' );
 
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
@@ -77,7 +77,7 @@ INSERT IGNORE INTO marc_subfield_structure (
 -- SIMPLE VIDEORECORDINGS KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- ****************************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'VR', 'DVDs, VHS' );
+		( 'VR', 'DVD-levy, VHS' );
 
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
@@ -101,7 +101,7 @@ INSERT IGNORE INTO marc_subfield_structure (
 -- SIMPLE 3D ARTIFACTS KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- **************************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'AR', 'Models' );
+		( 'AR', 'Esine' );
 
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
@@ -125,7 +125,7 @@ INSERT IGNORE INTO marc_subfield_structure (
 -- SIMPLE KITS KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- ******************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'KT', 'Kits' );
+		( 'KT', 'Moniviestin' );
 
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
@@ -149,7 +149,7 @@ INSERT IGNORE INTO marc_subfield_structure (
 -- SIMPLE INTEGRATING RESOURCES KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- **********************************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'IR', 'Binders' );
+		( 'IR', 'Koosteinen aineisto' );
 
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
@@ -173,7 +173,7 @@ INSERT IGNORE INTO marc_subfield_structure (
 -- SIMPLE SERIALS KOHA RECORD AND HOLDINGS MANAGEMENT FIELDS/SUBFIELDS.
 -- *********************************************************************
 INSERT IGNORE INTO biblio_framework VALUES
-		( 'SER', 'Serials' );
+		( 'SER', 'Kausijulkaisu' );
 
 INSERT IGNORE INTO marc_tag_structure (
 		tagfield, liblibrarian, libopac, repeatable, mandatory, authorised_value, frameworkcode)
