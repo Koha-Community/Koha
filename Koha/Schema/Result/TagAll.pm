@@ -45,7 +45,7 @@ __PACKAGE__->table("tags_all");
 
   data_type: 'varchar'
   is_nullable: 0
-  size: 255
+  size: 191
 
 =head2 language
 
@@ -68,7 +68,7 @@ __PACKAGE__->add_columns(
   "biblionumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 0 },
   "term",
-  { data_type => "varchar", is_nullable => 0, size => 255 },
+  { data_type => "varchar", is_nullable => 0, size => 191 },
   "language",
   { data_type => "integer", is_nullable => 1 },
   "date_created",
@@ -129,8 +129,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2016-03-04 19:32:39
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:gyjzwAoUL27c/7NqM8+RaA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-15 13:30:04
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3pY7wv0IRmQBSqr+EghQvw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
