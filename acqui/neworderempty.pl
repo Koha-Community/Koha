@@ -355,8 +355,19 @@ my @itemtypes;
 @itemtypes = Koha::ItemTypes->search unless C4::Context->preference('item-level_itypes');
 
 if ( defined $from_subscriptionid ) {
-    my $lastOrderReceived = GetLastOrderReceivedFromSubscriptionid $from_subscriptionid;
-    if ( defined $lastOrderReceived ) {
+    # Get the last received order for this subscription
+    my $lastOrderReceived = Koha::Acquisition::Orders->search(
+        {
+            subscriptionid => $from_subscriptionid,
+            datereceived   => { '!=' => undef }
+        },
+        {
+            order_by =>
+              [ { -desc => 'datereceived' }, { -desc => 'ordernumber' } ]
+        }
+    );
+    if ( $lastOrderReceived->count ) {
+        $lastOrderReceived = $lastOrderReceived->next->unblessed; # FIXME We should send the object to the template
         $budget_id              = $lastOrderReceived->{budgetid};
         $data->{listprice}      = $lastOrderReceived->{listprice};
         $data->{uncertainprice} = $lastOrderReceived->{uncertainprice};

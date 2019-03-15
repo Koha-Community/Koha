@@ -79,7 +79,7 @@ my $ordernumber = $order->ordernumber;
 my $is_currently_on_order = subscriptionCurrentlyOnOrder( $subscription->{subscriptionid} );
 is ( $is_currently_on_order, 1, "The subscription is currently on order");
 
-$order = GetLastOrderNotReceivedFromSubscriptionid( $subscription->{subscriptionid} );
+$order = Koha::Acquisition::Orders->search({ subscriptionid => $subscription->{subscriptionid}, datereceived => undef })->next->unblessed;
 is ( $order->{subscriptionid}, $subscription->{subscriptionid}, "test subscriptionid for the last order not received");
 ok( $order->{ecost} == $cost, "test cost for the last order not received");
 
@@ -99,12 +99,21 @@ my ( $datereceived, $new_ordernumber ) = ModReceiveOrder(
     }
 );
 
-$order = GetLastOrderReceivedFromSubscriptionid( $subscription->{subscriptionid} );
+$order = Koha::Acquisition::Orders->search(
+    {
+        subscriptionid => $subscriptionid,
+        datereceived   => { '!=' => undef }
+    },
+    {
+        order_by => [ { -desc => 'datereceived' }, { -desc => 'ordernumber' } ]
+    }
+)->next->unblessed;
+
 is ( $order->{subscriptionid}, $subscription->{subscriptionid}, "test subscriptionid for the last order received");
 ok( $order->{ecost} == $cost, "test cost for the last order received");
 
-$order = GetLastOrderNotReceivedFromSubscriptionid( $subscription->{subscriptionid} );
-is ( $order, undef, "test no not received order for a received order");
+$order = Koha::Acquisition::Orders->search({ subscriptionid => $subscription->{subscriptionid}, datereceived => undef });
+is ( $order->count, 0, "test no not received order for a received order");
 
 my @invoices = GetInvoices();
 my @invoices_linked_to_subscriptions = grep { $_->{is_linked_to_subscriptions} } @invoices;
