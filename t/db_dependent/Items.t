@@ -439,7 +439,7 @@ subtest 'SearchItems test' => sub {
     });
 
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $cpl_items_before = SearchItemsByField( 'homebranch', $library1->{branchcode});
+    my ($cpl_items_before) = SearchItems( { field => 'homebranch', query => $library1->{branchcode} } );
 
     my $biblio = $builder->build_sample_biblio({ title => 'Silence in the library' });
     $builder->build_sample_biblio({ title => 'Silence in the shadow' });
@@ -595,8 +595,8 @@ subtest 'SearchItems test' => sub {
     ($items, $total_results) = SearchItems($filter);
     ok(scalar @$items == 1, 'found 1 item with itemnotes = "foobar"');
 
-    my $cpl_items_after = SearchItemsByField( 'homebranch', $library1->{branchcode});
-    is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItemsByField should return something' );
+    my ($cpl_items_after) = SearchItems( { field => 'homebranch', query => $library1->{branchcode} } );
+    is( ( scalar( @$cpl_items_after ) - scalar ( @$cpl_items_before ) ), 1, 'SearchItems should return something' );
 
     # Issues count may be NULL
     $filter = {
