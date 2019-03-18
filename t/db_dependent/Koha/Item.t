@@ -44,7 +44,7 @@ subtest 'hidden_in_opac() tests' => sub {
 
     my $withdrawn = $item->withdrawn + 1; # make sure this attribute doesn't match
 
-    $rules = { withdrawn => $withdrawn, itype => [ $item->itype ] };
+    $rules = { withdrawn => [$withdrawn], itype => [ $item->itype ] };
 
     ok( $item->hidden_in_opac({ rules => $rules }), 'Rule matching itype passed, should hide' );
 
