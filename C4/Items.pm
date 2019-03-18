@@ -202,7 +202,6 @@ sub AddItem {
         $unlinked_item_subfields = shift;
     }
 
-    _set_derived_columns_for_add($item);
     $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
 
     my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );

@@ -28,6 +28,8 @@ use Koha::DateUtils qw( dt_from_string );
 use C4::Context;
 use C4::Circulation;
 use C4::Reserves;
+use C4::ClassSource; # FIXME We would like to avoid that
+
 use Koha::Checkouts;
 use Koha::CirculationRules;
 use Koha::Item::Transfer::Limits;
@@ -67,8 +69,8 @@ sub store {
         $self->itype($self->biblio->biblioitem->itemtype);
     }
 
+    my $today = dt_from_string;
     unless ( $self->in_storage ) { #AddItem
-        my $today = dt_from_string;
         unless ( $self->permanent_location ) {
             $self->permanent_location($self->location);
         }
@@ -79,6 +81,14 @@ sub store {
             $self->datelastseen($today);
         }
 
+        unless ( $self->dateaccessioned ) {
+            $self->dateaccessioned($today);
+        }
+
+        if ( $self->itemcallnumber ) { # This could be improved, we should recalculate it only if changed
+            my $cn_sort = GetClassSort($self->cn_source, $self->itemcallnumber, "");
+            $self->cn_sort($cn_sort);
+        }
     }
 
     unless ( $self->dateaccessioned ) {
