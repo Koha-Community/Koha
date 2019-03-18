@@ -741,7 +741,6 @@ CREATE TABLE `import_records` (
   `status` enum('error', 'staged', 'imported', 'reverted', 'items_reverted', 'ignored') NOT NULL default 'staged',
   `import_error` LONGTEXT,
   `encoding` varchar(40) NOT NULL default '',
-  `z3950random` varchar(40) default NULL,
   PRIMARY KEY (`import_record_id`),
   CONSTRAINT `import_records_ifbk_1` FOREIGN KEY (`import_batch_id`)
              REFERENCES `import_batches` (`import_batch_id`) ON DELETE CASCADE ON UPDATE CASCADE,
