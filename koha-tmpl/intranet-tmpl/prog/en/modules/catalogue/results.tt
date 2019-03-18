@@ -418,7 +418,7 @@
                                                     [% END %]
 
                                                     [% IF Koha.Preference('CustomCoverImages') && Koha.Preference('CustomCoverImagesURL') %]
-                                                        <a href="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]"><img alt="Cover image" src="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]" />
+                                                        <a class="custom_cover_image" href="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]"><img alt="Cover image" src="[% SEARCH_RESULT.biblio_object.custom_cover_image_url | url %]" />
                                                     [% END %]
                                                 </td>
                                             [% END # /IF( AmazonCoverImages || LocalCoverImages || AdlibrisEnabled || IntranetCoce )%]
