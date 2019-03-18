@@ -47,7 +47,6 @@ BEGIN {
         MoveItemFromBiblio
         CartToShelf
         GetAnalyticsCount
-        SearchItemsByField
         SearchItems
         PrepareItemrecordDisplay
     );
@@ -2052,29 +2051,6 @@ sub GetAnalyticsCount {
     my $searcher = Koha::SearchEngine::Search->new({index => $Koha::SearchEngine::BIBLIOS_INDEX});
     my ($err,$res,$result) = $searcher->simple_search_compat($query,0,10);
     return ($result);
-}
-
-=head2 SearchItemsByField
-
-    my $items = SearchItemsByField($field, $value);
-
-SearchItemsByField will search for items on a specific given field.
-For instance you can search all items with a specific stocknumber like this:
-
-    my $items = SearchItemsByField('stocknumber', $stocknumber);
-
-=cut
-
-sub SearchItemsByField {
-    my ($field, $value) = @_;
-
-    my $filters = {
-        field => $field,
-        query => $value,
-    };
-
-    my ($results) = SearchItems($filters);
-    return $results;
 }
 
 sub _SearchItems_build_where_fragment {
