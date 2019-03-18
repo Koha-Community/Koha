@@ -487,10 +487,10 @@ subtest "CanBookBeRenewed tests" => sub {
     is( $renewokay, 1, 'Can renew item 2, item-level hold is on item 1');
 
     # Items can't fill hold for reasons
-    ModItem({ notforloan => 1 }, $biblio->biblionumber, $item_1->itemnumber);
+    $item_1->notforloan(1)->store;
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_1->itemnumber, 1);
     is( $renewokay, 1, 'Can renew, item is marked not for loan, hold does not block');
-    ModItem({ notforloan => 0, itype => $itemtype }, $biblio->biblionumber, $item_1->itemnumber);
+    $item_1->set({notforloan => 0, itype => $itemtype })->store;
 
     # FIXME: Add more for itemtype not for loan etc.
 
@@ -1487,7 +1487,7 @@ subtest "AllowRenewalIfOtherItemsAvailable tests" => sub {
     is( $renewokay, 1, 'Bug 14337 - Verify the borrower can renew with a hold on the record if AllowRenewalIfOtherItemsAvailable and onshelfhold are enabled' );
 
     # Setting item not checked out to be not for loan but holdable
-    ModItem({ notforloan => -1 }, $biblio->biblionumber, $item_2->itemnumber);
+    $item_2->notforloan(-1)->store;
 
     ( $renewokay, $error ) = CanBookBeRenewed( $borrowernumber1, $item_1->itemnumber );
     is( $renewokay, 0, 'Bug 14337 - Verify the borrower can not renew with a hold on the record if AllowRenewalIfOtherItemsAvailable is enabled but the only available item is notforloan' );
@@ -2455,7 +2455,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         AddIssue( $patron->unblessed, $item->barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 3 }, $biblio->biblionumber, $item->itemnumber );
+        $item->itemlost(3)->store;
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2519,7 +2519,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         AddIssue( $patron->unblessed, $item->barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 1 }, $biblio->biblionumber, $item->itemnumber );
+        $item->itemlost(1)->store;
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2589,7 +2589,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         AddIssue( $patron->unblessed, $item->barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 3 }, $biblio->biblionumber, $item->itemnumber );
+        $item->itemlost(3)->store;
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2642,7 +2642,7 @@ subtest '_FixAccountForLostAndFound' => sub {
         AddIssue( $patron->unblessed, $item->barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 1 }, $biblio->biblionumber, $item->itemnumber );
+        $item->itemlost(1)->store;
         LostItem( $item->itemnumber, 1 );
 
         my $processing_fee_lines = Koha::Account::Lines->search(
@@ -2742,7 +2742,7 @@ subtest '_FixAccountForLostAndFound' => sub {
                 }
             }
         );
-        my $item_id = Koha::Item->new(
+        my $item = Koha::Item->new(
             {
                 biblionumber     => $biblio->biblionumber,
                 homebranch       => $library->branchcode,
@@ -2751,16 +2751,16 @@ subtest '_FixAccountForLostAndFound' => sub {
                 replacementprice => $replacement_amount,
                 itype            => $item_type->itemtype
             },
-        )->store->itemnumber;
+        )->store;
 
         AddIssue( $patron->unblessed, $barcode );
 
         # Simulate item marked as lost
-        ModItem( { itemlost => 1 }, $biblio->biblionumber, $item_id );
-        LostItem( $item_id, 1 );
+        $item->itemlost(1)->store;
+        LostItem( $item->itemnumber, 1 );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item_id, debit_type_code => 'LOST' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, debit_type_code => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right LOST amount is generated' );
@@ -2792,7 +2792,7 @@ subtest '_FixAccountForLostAndFound' => sub {
 
         t::lib::Mocks::mock_preference( 'AccountAutoReconcile', 1 );
 
-        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item_id, $patron->id );
+        my $credit_return_id = C4::Circulation::_FixAccountForLostAndFound( $item->itemnumber, $patron->id );
         my $credit_return = Koha::Account::Lines->find($credit_return_id);
 
         is( $account->balance, $manual_debit_amount - $payment_amount, 'Balance is PROCESSING - payment (LOST_FOUND)' );

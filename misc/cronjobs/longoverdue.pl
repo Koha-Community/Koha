@@ -383,7 +383,8 @@ foreach my $startrange (sort keys %$lost) {
             }
             printf ("Due %s: item %5s from borrower %5s to lost: %s\n", $row->{date_due}, $row->{itemnumber}, $row->{borrowernumber}, $lostvalue) if($verbose);
             if($confirm) {
-                ModItem({ itemlost => $lostvalue }, $row->{'biblionumber'}, $row->{'itemnumber'});
+                Koha::Items->find( $row->{itemnumber} )->itemlost($lostvalue)
+                  ->store;
                 if ( $charge && $charge eq $lostvalue ) {
                     LostItem( $row->{'itemnumber'}, 'cronjob', $mark_returned );
                 } elsif ( $mark_returned ) {

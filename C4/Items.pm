@@ -134,7 +134,7 @@ sub CartToShelf {
 
     my $item = Koha::Items->find($itemnumber);
     if ( $item->location eq 'CART' ) {
-        ModItem({ location => $item->permanent_location}, undef, $itemnumber);
+        $item->location($item->permanent_location)->store;
     }
 }
 
@@ -368,8 +368,10 @@ sub ModItemFromMarc {
     }
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
 
-    ModItem( $item, $biblionumber, $itemnumber, { unlinked_item_subfields => $unlinked_item_subfields } );
-    return $item;
+    my $item_object = Koha::Items->find($itemnumber);
+    $item_object->more_subfields_xml(_get_unlinked_subfields_xml($unlinked_item_subfields))->store;
+
+    return $item_object->get_from_storage->unblessed;
 }
 
 =head2 ModItem
@@ -498,7 +500,8 @@ sub ModItemTransfer {
         VALUES (?, ?, NOW(), ?, ?)");
     $sth->execute($itemnumber, $frombranch, $tobranch, $trigger);
 
-    ModItem({ holdingbranch => $frombranch }, undef, $itemnumber, { log_action => 0 });
+    # FIXME we are fetching the item twice in the 2 next statements!
+    Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store({ log_action => 0 });
     ModDateLastSeen($itemnumber);
     return;
 }
@@ -518,11 +521,10 @@ sub ModDateLastSeen {
 
     my $today = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
-    my $params;
-    $params->{datelastseen} = $today;
-    $params->{itemlost} = 0 unless $leave_item_lost;
-
-    ModItem( $params, undef, $itemnumber, { log_action => 0 } );
+    my $item = Koha::Items->find($itemnumber);
+    $item->datelastseen($today);
+    $item->itemlost(0) unless $leave_item_lost;
+    $item->store({ log_action => 0 });
 }
 
 =head2 DelItem
@@ -2508,13 +2510,16 @@ sub ToggleNewStatus {
         while ( my $values = $sth->fetchrow_hashref ) {
             my $biblionumber = $values->{biblionumber};
             my $itemnumber = $values->{itemnumber};
+            my $item = Koha::Items->find($itemnumber);
             for my $substitution ( @$substitutions ) {
+                my $field = $substitution->{item_field};
+                my $value = $substitution->{value};
                 next unless $substitution->{field};
                 next if ( defined $values->{ $substitution->{item_field} } and $values->{ $substitution->{item_field} } eq $substitution->{value} );
-                C4::Items::ModItem( { $substitution->{item_field} => $substitution->{value} }, $biblionumber, $itemnumber )
-                    unless $report_only;
+                $item->$field($value);
                 push @{ $report->{$itemnumber} }, $substitution;
             }
+            $item->store unless $report_only;
         }
     }
 

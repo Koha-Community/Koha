@@ -26,7 +26,7 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Auth;
 use C4::Debug;
-use C4::Items qw( ModItem ModItemTransfer );
+use C4::Items qw( ModItemTransfer );
 use C4::Reserves qw( ModReserveCancelAll );
 use Koha::Biblios;
 use Koha::DateUtils;
@@ -114,7 +114,10 @@ if ( $op eq 'cancel_reserve' and $reserve_id ) {
             }
             else {
                 eval {
-                    C4::Items::ModItem( $assignments, undef, $item->itemnumber );
+                    while ( my ( $f, $v ) = each( %$assignments ) ) {
+                        $item->$f($v);
+                    }
+                    $item->store;
                 };
                 warn "Unable to modify item itemnumber=" . $item->itemnumber . ": $@" if $@;
             }

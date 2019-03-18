@@ -85,7 +85,7 @@ t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
 my $bibnum = $builder->build_sample_biblio({frameworkcode => $frameworkcode})->biblionumber;
 
 # Create a helper item instance for testing
-my $itemnumber = $builder->build_sample_item({ biblionumber => $bibnum, library => $branch_1, itype => $itemtype })->itemnumber;
+my $item = $builder->build_sample_item({ biblionumber => $bibnum, library => $branch_1, itype => $itemtype });
 
 my $biblio_with_no_item = $builder->build({
     source => 'Biblio'
@@ -94,7 +94,7 @@ my $biblio_with_no_item = $builder->build({
 
 # Modify item; setting barcode.
 my $testbarcode = '97531';
-ModItem({ barcode => $testbarcode }, $bibnum, $itemnumber);
+$item->barcode($testbarcode)->store; # FIXME We should not hardcode a barcode! Also, what's the purpose of this?
 
 # Create a borrower
 my %data = (

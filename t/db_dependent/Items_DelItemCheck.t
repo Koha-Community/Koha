@@ -80,9 +80,9 @@ my $biblio = $builder->build(
     }
 );
 
-my $item = $builder->build(
+my $item = $builder->build_object(
     {
-        source => 'Item',
+        class => 'Koha::Items',
         value  => {
             biblionumber  => $biblio->{biblionumber},
             homebranch    => $branch->{branchcode},
@@ -95,41 +95,41 @@ my $item = $builder->build(
 
 # book_on_loan
 
-AddIssue( $patron, $item->{barcode} );
+AddIssue( $patron, $item->barcode );
 
 is(
-    ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
+    ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
     'book_on_loan',
     'ItemSafeToDelete reports item on loan',
 );
 
 is(
-    DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} ),
+    DelItemCheck( $biblio->{biblionumber}, $item->itemnumber ),
     'book_on_loan',
     'item that is on loan cannot be deleted',
 );
 
-AddReturn( $item->{barcode}, $branch->{branchcode} );
+AddReturn( $item->barcode, $branch->{branchcode} );
 
 # book_reserved is tested in t/db_dependent/Reserves.t
 
 # not_same_branch
 t::lib::Mocks::mock_preference('IndependentBranches', 1);
-ModItem( { homebranch => $branch2->{branchcode}, holdingbranch => $branch2->{branchcode} }, $biblio->{biblionumber}, $item->{itemnumber} );
+$item->set( { homebranch => $branch2->{branchcode}, holdingbranch => $branch2->{branchcode} })->store;
 
 is(
-    ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
+    ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
     'not_same_branch',
     'ItemSafeToDelete reports IndependentBranches restriction',
 );
 
 is(
-    DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} ),
+    DelItemCheck( $biblio->{biblionumber}, $item->itemnumber ),
     'not_same_branch',
     'IndependentBranches prevents deletion at another branch',
 );
 
-ModItem( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{branchcode} }, $biblio->{biblionumber}, $item->{itemnumber} );
+$item->set( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{branchcode} })->store;
 
 # linked_analytics
 
@@ -139,13 +139,13 @@ ModItem( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{branc
     $module->mock( GetAnalyticsCount => sub { return 1 } );
 
     is(
-        ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
+        ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
         'linked_analytics',
         'ItemSafeToDelete reports linked analytics',
     );
 
     is(
-        DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} ),
+        DelItemCheck( $biblio->{biblionumber}, $item->itemnumber ),
         'linked_analytics',
         'Linked analytics prevents deletion of item',
     );
@@ -153,14 +153,14 @@ ModItem( { homebranch => $branch->{branchcode}, holdingbranch => $branch->{branc
 }
 
 is(
-    ItemSafeToDelete( $biblio->{biblionumber}, $item->{itemnumber} ),
+    ItemSafeToDelete( $biblio->{biblionumber}, $item->itemnumber ),
     1,
     'ItemSafeToDelete shows item safe to delete'
 );
 
-DelItemCheck( $biblio->{biblionumber}, $item->{itemnumber} );
+DelItemCheck( $biblio->{biblionumber}, $item->itemnumber );
 
-my $test_item = Koha::Items->find( $item->{itemnumber} );
+my $test_item = Koha::Items->find( $item->itemnumber );
 
 is( $test_item, undef,
     "DelItemCheck should delete item if ItemSafeToDelete returns true"

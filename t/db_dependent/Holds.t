@@ -323,7 +323,7 @@ ok(
     is( $hold3->discard_changes->priority, 1, "After ModReserve, the 3rd reserve becomes the first on the waiting list" );
 }
 
-ModItem({ damaged => 1 }, $biblio->biblionumber, $itemnumber);
+Koha::Items->find($itemnumber)->damaged(1)->store; # FIXME The $itemnumber is a bit confusing here
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
@@ -346,7 +346,7 @@ ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for d
 
 # Regression test for bug 9532
 $biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
-$itemnumber = $builder->build_sample_item({ library => $branch_1, itype => 'CANNOT', biblionumber => $biblio->biblionumber})->itemnumber;
+$item = $builder->build_sample_item({ library => $branch_1, itype => 'CANNOT', biblionumber => $biblio->biblionumber});
 AddReserve(
     {
         branchcode     => $branch_1,
@@ -356,19 +356,20 @@ AddReserve(
     }
 );
 is(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'tooManyReserves',
+    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status}, 'tooManyReserves',
     "cannot request item if policy that matches on item-level item type forbids it"
 );
-ModItem({ itype => 'CAN' }, $biblio->biblionumber, $itemnumber);
+
+$item->itype('CAN')->store;
 ok(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'OK',
+    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status} eq 'OK',
     "can request item if policy that matches on item type allows it"
 );
 
 t::lib::Mocks::mock_preference('item-level_itypes', 0);
-ModItem({ itype => undef }, $biblio->biblionumber, $itemnumber);
+$item->itype(undef)->store;
 ok(
-    CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'tooManyReserves',
+    CanItemBeReserved( $borrowernumbers[0], $item->itemnumber)->{status} eq 'tooManyReserves',
     "cannot request item if policy that matches on bib-level item type forbids it (bug 9532)"
 );
 

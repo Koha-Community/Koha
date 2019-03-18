@@ -1,13 +1,8 @@
 #!/usr/bin/perl
 
-use strict;
-#use warnings; FIXME - Bug 2505
-
+use Modern::Perl;
 use Koha::Script;
-use C4::Context;
-use C4::Items;
-use C4::Biblio;
-
+use Koha::Items;
 #
 # the items.onloan field did not exist in koha 2.2
 # in koha 3.0, it's used to define item availability
@@ -15,16 +10,10 @@ use C4::Biblio;
 # and put it in the MARC::Record of the item
 #
 
-my $dbh=C4::Context->dbh;
+my $items = Koha::Items->({ onloan => { '!=' => undef } });
 
-# if (C4::Context->preference("marcflavour") ne "UNIMARC") {
-#     print "this script is for UNIMARC only\n";
-#     exit;
-# }
-my $rqbiblios=$dbh->prepare("SELECT biblionumber,itemnumber,onloan FROM items WHERE items.onloan IS NOT NULL");
-$rqbiblios->execute;
 $|=1;
-while (my ($biblionumber,$itemnumber,$onloan)= $rqbiblios->fetchrow){
-    ModItem({onloan => "$onloan"}, $biblionumber, $itemnumber);
-    print "Onloan : $onloan for $biblionumber / $itemnumber\n";
+while ( my $item = $items->next ) {
+    $item->store;
+    print sprintf "Onloan : %s for %s / %s\n", $item->onloan, $item->biblionumber, $item->itemnumber;
 }

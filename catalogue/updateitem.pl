@@ -45,7 +45,8 @@ my $confirm=$cgi->param('confirm');
 my $dbh = C4::Context->dbh;
 
 # get the rest of this item's information
-my $item_data_hashref = Koha::Items->find($itemnumber)->unblessed;
+my $item = Koha::Items->find($itemnumber);
+my $item_data_hashref = $item->unblessed;
 
 # make sure item statuses are set to 0 if empty or NULL
 for ($damaged,$itemlost,$withdrawn) {
@@ -55,31 +56,30 @@ for ($damaged,$itemlost,$withdrawn) {
 }
 
 # modify MARC item if input differs from items table.
-my $item_changes = {};
 if ( $op eq "set_non_public_note" ) {
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes_nonpublic'}) or $itemnotes_nonpublic ne $item_data_hashref->{'itemnotes_nonpublic'}) {
-        $item_changes->{'itemnotes_nonpublic'} = $itemnotes_nonpublic;
+        $item->itemnotes_nonpublic($itemnotes_nonpublic);
     }
 }
 elsif ( $op eq "set_public_note" ) { # i.e., itemnotes parameter passed from form
     checkauth($cgi, 0, {editcatalogue => 'edit_items'}, 'intranet');
     if ((not defined  $item_data_hashref->{'itemnotes'}) or $itemnotes ne $item_data_hashref->{'itemnotes'}) {
-        $item_changes->{'itemnotes'} = $itemnotes;
+        $item->itemnotes($itemnotes);
     }
 } elsif ( $op eq "set_lost" && $itemlost ne $item_data_hashref->{'itemlost'}) {
-    $item_changes->{'itemlost'} = $itemlost;
+    $item->itemlost($itemlost);
 } elsif ( $op eq "set_withdrawn" && $withdrawn ne $item_data_hashref->{'withdrawn'}) {
-    $item_changes->{'withdrawn'} = $withdrawn;
+    $item->withdrawn($withdrawn);
 } elsif ( $op eq "set_damaged" && $damaged ne $item_data_hashref->{'damaged'}) {
-    $item_changes->{'damaged'} = $damaged;
+    $item->damaged($damaged);
 } else {
     #nothings changed, so do nothing.
     print $cgi->redirect("moredetail.pl?biblionumber=$biblionumber&itemnumber=$itemnumber#item$itemnumber");
 	exit;
 }
 
-ModItem($item_changes, $biblionumber, $itemnumber);
+$item->store;
 
 LostItem($itemnumber, 'moredetail') if $op eq "set_lost";
 

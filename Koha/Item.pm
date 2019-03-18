@@ -21,6 +21,7 @@ use Modern::Perl;
 
 use Carp;
 use List::MoreUtils qw(any);
+use Data::Dumper;
 
 use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
@@ -58,7 +59,9 @@ Koha::Item - Koha Item object class
 =cut
 
 sub store {
-    my ($self) = @_;
+    my ($self, $params) = @_;
+
+    my $log_action = $params->{log_action} // 1;
 
     # We do not want to oblige callers to pass this value
     # Dev conveniences vs performance?
@@ -69,6 +72,11 @@ sub store {
     # See related changes from C4::Items::AddItem
     unless ( $self->itype ) {
         $self->itype($self->biblio->biblioitem->itemtype);
+    }
+
+    if ( $self->itemcallnumber ) { # This could be improved, we should recalculate it only if changed
+        my $cn_sort = GetClassSort($self->cn_source, $self->itemcallnumber, "");
+        $self->cn_sort($cn_sort);
     }
 
     my $today = dt_from_string;
@@ -87,15 +95,56 @@ sub store {
             $self->dateaccessioned($today);
         }
 
-        if ( $self->itemcallnumber ) { # This could be improved, we should recalculate it only if changed
-            my $cn_sort = GetClassSort($self->cn_source, $self->itemcallnumber, "");
-            $self->cn_sort($cn_sort);
-        }
-
         C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
 
         logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
-          if C4::Context->preference("CataloguingLog");
+          if $log_action && C4::Context->preference("CataloguingLog");
+
+        $self->_after_item_action_hooks({ action => 'create' });
+
+    } else { # ModItem
+
+        { # Update *_on  fields if needed
+          # Why not for AddItem as well?
+            my @fields = qw( itemlost withdrawn damaged );
+
+            # Only retrieve the item if we need to set an "on" date field
+            if ( $self->itemlost || $self->withdrawn || $self->damaged ) {
+                my $pre_mod_item = $self->get_from_storage;
+                for my $field (@fields) {
+                    if (    $self->$field
+                        and not $pre_mod_item->$field )
+                    {
+                        my $field_on = "${field}_on";
+                        $self->$field_on(
+                          DateTime::Format::MySQL->format_datetime( dt_from_string() )
+                        );
+                    }
+                }
+            }
+
+            # If the field is defined but empty, we are removing and,
+            # and thus need to clear out the 'on' field as well
+            for my $field (@fields) {
+                if ( defined( $self->$field ) && !$self->$field ) {
+                    my $field_on = "${field}_on";
+                    $self->$field_on(undef);
+                }
+            }
+        }
+
+        if ( defined $self->location and $self->location ne 'CART' and $self->location ne 'PROC' and not $self->permanent_location ) {
+            $self->permanent_location($self->location);
+        }
+
+        $self->timestamp(undef) if $self->timestamp; # Maybe move this to Koha::Object->store?
+
+        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
+
+        $self->_after_item_action_hooks({ action => 'modify' });
+
+        logaction( "CATALOGUING", "MODIFY", $self->itemnumber, "item " . Dumper($self->unblessed) )
+          if $log_action && C4::Context->preference("CataloguingLog");
 
     }
 

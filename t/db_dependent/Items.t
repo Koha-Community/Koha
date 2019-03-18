@@ -82,10 +82,10 @@ subtest 'General Add, Get and Del tests' => sub {
     # Do not modify anything, and do not explode!
     my $dbh = C4::Context->dbh;
     local $dbh->{RaiseError} = 1;
-    ModItem({}, $biblio->biblionumber, $itemnumber);
+    $getitem->set({})->store;
 
     # Modify item; setting barcode.
-    ModItem({ barcode => '987654321' }, $biblio->biblionumber, $itemnumber);
+    $getitem->barcode('987654321')->store;
     my $moditem = Koha::Items->find($itemnumber);
     cmp_ok($moditem->barcode, '==', '987654321', 'Modified item barcode successfully to: '.$moditem->barcode . '.');
 
@@ -107,12 +107,12 @@ subtest 'General Add, Get and Del tests' => sub {
     is( $getitem->location, $location, "The location should not have been modified" );
     is( $getitem->permanent_location, 'my permanent location', "The permanent_location should not have modified" );
 
-    ModItem({ location => $location }, $biblio->biblionumber, $itemnumber);
+    $getitem->location($location)->store;
     $getitem = Koha::Items->find($itemnumber);
     is( $getitem->location, $location, "The location should have been set to correct location" );
     is( $getitem->permanent_location, $location, "The permanent_location should have been set to location" );
 
-    ModItem({ location => 'CART' }, $biblio->biblionumber, $itemnumber);
+    $getitem->location('CART')->store;
     $getitem = Koha::Items->find($itemnumber);
     is( $getitem->location, 'CART', "The location should have been set to CART" );
     is( $getitem->permanent_location, $location, "The permanent_location should not have been set to CART" );
@@ -139,13 +139,11 @@ subtest 'ModItem tests' => sub {
     for my $field (@fields) {
         my $field_on = $field."_on";
 
-        $item->$field(1);
-        ModItem( $item->unblessed, $item->biblionumber, $item->itemnumber );
+        $item->$field(1)->store;
         $item->discard_changes;
         is( output_pref({ str => $item->$field_on, dateonly => 1 }), output_pref({ dt => dt_from_string(), dateonly => 1 }), "When updating $field, $field_on is updated" );
 
-        $item->$field(0);
-        ModItem( $item->unblessed, $item->biblionumber, $item->itemnumber );
+        $item->$field(0)->store;
         $item->discard_changes;
         is( $item->$field_on, undef, "When clearing $field, $field_on is cleared" );
     }
@@ -997,28 +995,28 @@ subtest 'Test logging for ModItem' => sub {
     my $biblio = $builder->build_sample_biblio();
 
     # Add an item.
-    my $itemnumber = $builder->build_sample_item(
+    my $item = $builder->build_sample_item(
         {
             biblionumber => $biblio->biblionumber,
             library      => $library->{homebranch},
             location     => $location,
             itype        => $itemtype->{itemtype}
         }
-    )->itemnumber;
+    );
 
     # False means no logging
     $schema->resultset('ActionLog')->search()->delete();
-    ModItem({ location => $location }, $biblio->biblionumber, $itemnumber, { log_action => 0 });
+    $item->location($location)->store({ log_action => 0 });
     is( $schema->resultset('ActionLog')->count(), 0, 'False value does not trigger logging' );
 
     # True means logging
     $schema->resultset('ActionLog')->search()->delete();
-    ModItem({ location => $location }, $biblio->biblionumber, $itemnumber, { log_action => 1 });
+    $item->location($location)->store({ log_action => 1 });
     is( $schema->resultset('ActionLog')->count(), 1, 'True value does trigger logging' );
 
     # Undefined defaults to true
     $schema->resultset('ActionLog')->search()->delete();
-    ModItem({ location => $location }, $biblio->biblionumber, $itemnumber);
+    $item->location($location)->store();
     is( $schema->resultset('ActionLog')->count(), 1, 'Undefined value defaults to true, triggers logging' );
 
     $schema->storage->txn_rollback;

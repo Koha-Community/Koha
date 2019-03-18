@@ -124,7 +124,7 @@ is( $marc_item->subfield($tagfield, $new_tagfield), 'updated_value', q|ToggleNew
 my $dt_today = dt_from_string;
 my $days5ago = $dt_today->add_duration( DateTime::Duration->new( days => -5 ) );
 
-C4::Items::ModItem( { dateaccessioned => $days5ago }, $biblionumber, $itemnumber );
+$modified_item->dateaccessioned($days5ago)->store;
 
 @rules = (
     {

@@ -32,6 +32,7 @@ use Getopt::Long;
 use Koha::Script;
 use C4::Context;
 use C4::Items;
+use Koha::Items;
 use Pod::Usage;
 
 
@@ -75,13 +76,14 @@ if (defined $outfile) {
    open(OUT, ">&STDOUT") || die ("Couldn't duplicate STDOUT: $!");
 }
 
+# FIXME Would be better to call Koha::Items->search here
 my $sth_fetch = $dbh->prepare("SELECT biblionumber, itemnumber, itemcallnumber FROM items $whereclause");
 $sth_fetch->execute();
 
 # fetch info from the search
 while (my ($biblionumber, $itemnumber, $itemcallnumber) = $sth_fetch->fetchrow_array){
    
-  eval { ModItem({itemcallnumber => $itemcallnumber}, $biblionumber, $itemnumber); };
+  eval { Koha::Items->find($itemnumber)->itemcallnumber($itemcallnumber)->store; };
   my $modok = $@ ? 0 : 1;
 
   if ($modok) {

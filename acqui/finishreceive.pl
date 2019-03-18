@@ -172,18 +172,13 @@ if ($quantityrec > $origquantityrec ) {
 my $new_order_object = Koha::Acquisition::Orders->find( $new_ordernumber ); # FIXME we should not need to refetch it
 my $items = $new_order_object->items;
 while ( my $item = $items->next )  {
-    ModItem(
-        {
-            booksellerid         => $booksellerid,
-            dateaccessioned      => $datereceived,
-            datelastseen         => $datereceived,
-            price                => $unitprice,
-            replacementprice     => $replacementprice,
-            replacementpricedate => $datereceived,
-        },
-        $biblionumber,
-        $item->itemnumber,
-    );
+    $item->booksellerid($booksellerid); # TODO This should be done using ->set, but bug 21761 is not resolved
+    $item->dateaccessioned($datereceived);
+    $item->datelastseen($datereceived);
+    $item->price($unitprice);
+    $item->replacementprice($replacementprice);
+    $item->replacementpricedate($datereceived);
+    $item->store;
 }
 
 print $input->redirect("/cgi-bin/koha/acqui/parcel.pl?invoiceid=$invoiceid&sticky_filters=1");

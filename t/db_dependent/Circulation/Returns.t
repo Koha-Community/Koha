@@ -335,7 +335,7 @@ subtest 'BlockReturnOfLostItems' => sub {
     my $checkout = AddIssue( $patron->unblessed, $item->barcode );
 
     # Mark the item as lost
-    ModItem({itemlost => 1}, $biblio->biblionumber, $item->itemnumber);
+    $item->itemlost(1)->store;
 
     t::lib::Mocks::mock_preference('BlockReturnOfLostItems', 1);
     my ( $doreturn, $messages, $issue ) = AddReturn($item->barcode);

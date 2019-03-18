@@ -20,7 +20,6 @@ use Modern::Perl;
 use List::MoreUtils qw(any);
 
 use C4::Context;
-use C4::Items qw(ModItem);
 use C4::Circulation qw(GetOpenIssue);
 
 use vars qw(@ISA @EXPORT @EXPORT_OK %EXPORT_TAGS $DEBUG @FIELDS);
@@ -538,7 +537,9 @@ sub _UpdateCourseItem {
           : ()
       } @FIELDS;
 
-    ModItem( \%mod_params, undef, $course_item->{'itemnumber'} );
+    Koha::Items->find( $course_item->{itemnumber} )
+               ->set( \%mod_params )
+               ->store;
 }
 
 =head2 _ModStoredFields
@@ -587,14 +588,12 @@ sub _RevertFields {
     return unless ($ci_id);
 
     my $course_item = GetCourseItem( ci_id => $params{'ci_id'} );
-
-    my $mod_item_params;
+    my $course_item_object;
     foreach my $field ( @FIELDS ) {
         next unless defined $course_item->{$field};
-        $mod_item_params->{$field} = $course_item->{$field};
+        $course_item->$field($course_item->{$field});
     }
-
-    ModItem( $mod_item_params, undef, $course_item->{'itemnumber'} ) if $mod_item_params && %$mod_item_params;
+    $course_item_object->store;
 }
 
 =head2 _SwapAllFields
@@ -610,16 +609,14 @@ sub _SwapAllFields {
     my $course_item = GetCourseItem( ci_id => $ci_id );
     my $item = Koha::Items->find($course_item->{'itemnumber'});
 
-    my %course_item_fields;
     my %item_fields;
     foreach (@FIELDS) {
         if ( defined( $course_item->{$_} ) ) {
-            $course_item_fields{$_} = $course_item->{$_};
             $item_fields{$_}        = $item->$_ || q{};
+            $item->$_($course_item->{$_});
         }
     }
-
-    ModItem( \%course_item_fields, undef, $course_item->{'itemnumber'} ) if %course_item_fields;
+    $item->store;
     _ModStoredFields( %item_fields, ci_id => $ci_id );
 }
 

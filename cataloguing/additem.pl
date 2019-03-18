@@ -76,19 +76,14 @@ sub set_item_default_location {
     my $itemnumber = shift;
     my $item       = Koha::Items->find($itemnumber);
     if ( C4::Context->preference('NewItemsDefaultLocation') ) {
-        ModItem(
-            {
-                permanent_location => $item->location,
-                location => C4::Context->preference('NewItemsDefaultLocation')
-            },
-            undef,
-            $itemnumber
-        );
+        $item->permanent_location($item->location);
+        $item->location(C4::Context->preference('NewItemsDefaultLocation'));
     }
     else {
-        ModItem( { permanent_location => $item->location }, undef, $itemnumber )
-          unless defined $item->permanent_location;
+        # It seems that we are dealing with that in too many places
+        $item->permanent_location($item->location) unless defined $item->permanent_location;
     }
+    $item->store;
 }
 
 # NOTE: This code is subject to change in the future with the implemenation of ajax based autobarcode code

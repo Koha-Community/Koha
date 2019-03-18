@@ -76,7 +76,7 @@ my $itemnumber = $item->itemnumber;
 
 # Modify item; setting barcode.
 my $testbarcode = '97531';
-ModItem( { barcode => $testbarcode }, $bibnum, $itemnumber );
+$item->barcode($testbarcode)->store;
 
 my $layout = C4::Labels::Layout->new( layout_name => 'TEST' );
 
@@ -103,7 +103,7 @@ my $dummy_template_values = {
 
 my $label_info = {
     batch_id         => $batch_id,
-    item_number      => $itemnumber,
+    item_number      => $item->itemnumber,
     llx              => $llx,
     lly              => $lly,
     width            => $dummy_template_values->{'label_width'},

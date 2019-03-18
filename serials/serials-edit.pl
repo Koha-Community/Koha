@@ -268,7 +268,12 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     my $subscriptioninfos = GetSubscription($subscriptionids[$i]);
 
                     # Changing the status to "available" and the itemtype according to the previousitemtype db field
-                    ModItem({notforloan => 0, itype => $subscriptioninfos->{'previousitemtype'} }, undef, $itemnumber);
+                    $serialitem->set(
+                        {
+                            notforloan => 0,
+                            itype => $subscriptioninfos->{'previousitemtype'}
+                        }
+                    )->store;
                 }
             }
         }

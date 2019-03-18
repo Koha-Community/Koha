@@ -1462,18 +1462,12 @@ sub AddIssue {
                 }
             }
 
-            ModItem(
-                {
-                    issues        => ( $item_object->issues || 0 ) + 1,
-                    holdingbranch => C4::Context->userenv->{'branch'},
-                    itemlost      => 0,
-                    onloan        => $datedue->ymd(),
-                    datelastborrowed => DateTime->now( time_zone => C4::Context->tz() )->ymd(),
-                },
-                $item_object->biblionumber,
-                $item_object->itemnumber,
-                { log_action => 0 }
-            );
+            $item_object->issues( ( $item_object->issues || 0 ) + 1);
+            $item_object->holdingbranch(C4::Context->userenv->{'branch'});
+            $item_object->itemlost(0);
+            $item_object->onloan($datedue->ymd());
+            $item_object->datelastborrowed(DateTime->now( time_zone => C4::Context->tz() )->ymd()); # FIXME we should use dt_from_string here
+            $item_object->store({log_action => 0});
             ModDateLastSeen( $item_object->itemnumber );
 
             # If it costs to borrow this book, charge it to the patron's account.
@@ -1883,7 +1877,8 @@ sub AddReturn {
                 . Dumper($issue->unblessed) . "\n";
     } else {
         $messages->{'NotIssued'} = $barcode;
-        ModItem({ onloan => undef }, $item->biblionumber, $item->itemnumber) if defined $item->onloan;
+        $item->onloan(undef)->store if defined $item->onloan;
+
         # even though item is not on loan, it may still be transferred;  therefore, get current branch info
         $doreturn = 0;
         # No issue, no borrowernumber.  ONLY if $doreturn, *might* you have a $borrower later.
@@ -1894,7 +1889,6 @@ sub AddReturn {
         }
     }
 
-    my $item_unblessed = $item->unblessed;
         # full item data, but no borrowernumber or checkout info (no issue)
     my $hbr = GetBranchItemRule($item->homebranch, $itemtype)->{'returnbranch'} || "homebranch";
         # get the proper branch to which to return the item
@@ -1913,7 +1907,7 @@ sub AddReturn {
             if ($update_loc_rules->{_ALL_} eq '_BLANK_') { $update_loc_rules->{_ALL_} = ''; }
             if ( $item->location ne $update_loc_rules->{_ALL_}) {
                 $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{_ALL_} };
-                ModItem( { location => $update_loc_rules->{_ALL_} }, undef, $itemnumber );
+                $item->location($update_loc_rules->{_ALL_})->store;
             }
         }
         else {
@@ -1922,7 +1916,7 @@ sub AddReturn {
                 if ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
                 if ( ($item->location eq $key && $item->location ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->location eq '' && $update_loc_rules->{$key} ne '') ) {
                     $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{$key} };
-                    ModItem( { location => $update_loc_rules->{$key} }, undef, $itemnumber );
+                    $item->location($update_loc_rules->{$key})->store;
                     last;
                 }
             }
@@ -1941,7 +1935,7 @@ sub AddReturn {
             foreach my $key ( keys %$rules ) {
                 if ( $item->notforloan eq $key ) {
                     $messages->{'NotForLoanStatusUpdated'} = { from => $item->notforloan, to => $rules->{$key} };
-                    ModItem( { notforloan => $rules->{$key} }, undef, $itemnumber, { log_action => 0 } );
+                    $item->notforloan($rules->{$key})->store({ log_action => 0 });
                     last;
                 }
             }
@@ -1949,7 +1943,7 @@ sub AddReturn {
     }
 
     # check if the return is allowed at this branch
-    my ($returnallowed, $message) = CanBookBeReturned($item_unblessed, $branch);
+    my ($returnallowed, $message) = CanBookBeReturned($item->unblessed, $branch);
     unless ($returnallowed){
         $messages->{'Wrongbranch'} = {
             Wrongbranch => $branch,
@@ -1979,7 +1973,7 @@ sub AddReturn {
             };
             unless ( $@ ) {
                 if ( C4::Context->preference('CalculateFinesOnReturn') && !$item->itemlost ) {
-                    _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed, return_date => $return_date } );
+                    _CalculateAndUpdateFine( { issue => $issue, item => $item->unblessed, borrower => $patron_unblessed, return_date => $return_date } );
                 }
             } else {
                 carp "The checkin for the following issue failed, Please go to the about page, section 'data corrupted' to know how to fix this problem ($@)" . Dumper( $issue->unblessed );
@@ -1992,7 +1986,7 @@ sub AddReturn {
 
         }
 
-        ModItem( { onloan => undef }, $item->biblionumber, $item->itemnumber, { log_action => 0 } );
+        $item->onloan(undef)->store({ log_action => 0 });
     }
 
     # the holdingbranch is updated if the document is returned to another location.
@@ -2000,7 +1994,7 @@ sub AddReturn {
     my $item_holding_branch = $item->holdingbranch;
     if ($item->holdingbranch ne $branch) {
         UpdateHoldingbranch($branch, $item->itemnumber);
-        $item_unblessed->{'holdingbranch'} = $branch; # update item data holdingbranch too # FIXME I guess this is for the _debar_user_on_return call later
+        $item->holdingbranch($branch); # update item data holdingbranch too # FIXME I guess this is for the _debar_user_on_return call later
     }
 
     my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
@@ -2054,7 +2048,7 @@ sub AddReturn {
 
         if ( $issue and $issue->is_overdue ) {
         # fix fine days
-            my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item_unblessed, dt_from_string($issue->date_due), $return_date );
+            my ($debardate,$reminder) = _debar_user_on_return( $patron_unblessed, $item->unblessed, dt_from_string($issue->date_due), $return_date );
             if ($reminder){
                 $messages->{'PrevDebarred'} = $debardate;
             } else {
@@ -2113,7 +2107,7 @@ sub AddReturn {
         if ($doreturn && $circulation_alert->is_enabled_for(\%conditions)) {
             SendCirculationAlert({
                 type     => 'CHECKIN',
-                item     => $item_unblessed,
+                item     => $item->unblessed,
                 borrower => $patron->unblessed,
                 branch   => $branch,
             });
@@ -2150,7 +2144,7 @@ sub AddReturn {
              ! IsBranchTransferAllowed($branch, $returnbranch, $item->$BranchTransferLimitsType )
            )) {
             $debug and warn sprintf "about to call ModItemTransfer(%s, %s, %s, %s)", $item->itemnumber,$branch, $returnbranch, $transfer_trigger;
-            $debug and warn "item: " . Dumper($item_unblessed);
+            $debug and warn "item: " . Dumper($item->unblessed);
             ModItemTransfer($item->itemnumber, $branch, $returnbranch, $transfer_trigger);
             $messages->{'WasTransfered'} = 1;
         } else {
@@ -2240,7 +2234,7 @@ sub MarkIssueReturned {
         # And finally delete the issue
         $issue->delete;
 
-        ModItem( { 'onloan' => undef }, undef, $itemnumber, { log_action => 0 } );
+        $issue->item->onloan(undef)->store({ log_action => 0 });
 
         if ( C4::Context->preference('StoreLastBorrower') ) {
             my $item = Koha::Items->find( $itemnumber );
@@ -2541,6 +2535,8 @@ sub _FixAccountForLostAndFound {
     # Update the account status
     $accountline->discard_changes->status('FOUND');
     $accountline->store;
+
+    $accountline->item->paidfor('')->store({ log_action => 0 });
 
     if ( defined $account and C4::Context->preference('AccountAutoReconcile') ) {
         $account->reconcile_balance;
@@ -3003,7 +2999,9 @@ sub AddRenewal {
 
         # Update the renewal count on the item, and tell zebra to reindex
         $renews = ( $item_object->renewals || 0 ) + 1;
-        ModItem( { renewals => $renews, onloan => $datedue->strftime('%Y-%m-%d %H:%M')}, $item_object->biblionumber, $itemnumber, { log_action => 0 } );
+        $item_object->renewals($renews);
+        $item_object->onloan($datedue);
+        $item_object->store({ log_action => 0 });
 
         # Charge a new rental fee, if applicable
         my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
@@ -3835,7 +3833,7 @@ sub LostItem{
 
     #When item is marked lost automatically cancel its outstanding transfers and set items holdingbranch to the transfer source branch (frombranch)
     if (my ( $datesent,$frombranch,$tobranch ) = GetTransfers($itemnumber)) {
-        ModItem({holdingbranch => $frombranch}, undef, $itemnumber);
+        Koha::Items->find($itemnumber)->holdingbranch($frombranch)->store;
     }
     my $transferdeleted = DeleteTransfer($itemnumber);
 }
@@ -3903,12 +3901,9 @@ sub ProcessOfflineReturn {
                 $itemnumber,
                 $operation->{timestamp},
             );
-            ModItem(
-                { renewals => 0, onloan => undef },
-                $issue->{'biblionumber'},
-                $itemnumber,
-                { log_action => 0 }
-            );
+            $item->renewals(0);
+            $item->onloan(undef);
+            $item->store({ log_action => 0 });
             return "Success.";
         } else {
             return "Item not issued.";

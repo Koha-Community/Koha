@@ -339,7 +339,7 @@ sub kocReturnItem {
             $patron->privacy
         );
 
-        ModItem({ onloan => undef }, $biblio->biblionumber, $item->itemnumber);
+        $item->onloadn(undef)->store;
         ModDateLastSeen( $item->itemnumber );
 
         push @output,
