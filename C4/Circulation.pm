@@ -1993,8 +1993,7 @@ sub AddReturn {
     # this is always done regardless of whether the item was on loan or not
     my $item_holding_branch = $item->holdingbranch;
     if ($item->holdingbranch ne $branch) {
-        UpdateHoldingbranch($branch, $item->itemnumber);
-        $item->holdingbranch($branch); # update item data holdingbranch too # FIXME I guess this is for the _debar_user_on_return call later
+        $item->holdingbranch($branch)->store;
     }
 
     my $leave_item_lost = C4::Context->preference("BlockReturnOfLostItems") ? 1 : 0;
@@ -3562,20 +3561,7 @@ sub updateWrongTransfer {
 	ModItemTransfer($itemNumber, $FromLibrary, $waitingAtLibrary);
 
 #third step changing holdingbranch of item
-	UpdateHoldingbranch($FromLibrary,$itemNumber);
-}
-
-=head2 UpdateHoldingbranch
-
-  $items = UpdateHoldingbranch($branch,$itmenumber);
-
-Simple methode for updating hodlingbranch in items BDD line
-
-=cut
-
-sub UpdateHoldingbranch {
-	my ( $branch,$itemnumber ) = @_;
-    ModItem({ holdingbranch => $branch }, undef, $itemnumber);
+    my $item = Koha::Items->find($itemNumber)->holdingbranch($FromLibrary)->store;
 }
 
 =head2 CalcDateDue
