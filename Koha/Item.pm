@@ -81,6 +81,10 @@ sub store {
 
     }
 
+    unless ( $self->dateaccessioned ) {
+        $self->dateaccessioned($today);
+    }
+
     return $self->SUPER::store;
 }
 

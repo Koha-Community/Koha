@@ -202,7 +202,6 @@ sub AddItem {
         $unlinked_item_subfields = shift;
     }
 
-    _set_defaults_for_add($item);
     _set_derived_columns_for_add($item);
     $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
 
@@ -304,7 +303,6 @@ sub AddItemBatchFromMarc {
             next ITEMFIELD;
         }
 
-        _set_defaults_for_add($item);
         _set_derived_columns_for_add($item);
         my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
         warn $error if $error;
@@ -1487,47 +1485,6 @@ sub _calc_items_cn_sort {
     my $source_values = shift;
 
     $item->{'items.cn_sort'} = GetClassSort($source_values->{'items.cn_source'}, $source_values->{'itemcallnumber'}, "");
-}
-
-=head2 _set_defaults_for_add 
-
-  _set_defaults_for_add($item_hash);
-
-Given an item hash representing an item to be added, set
-correct default values for columns whose default value
-is not handled by the DBMS.  This includes the following
-columns:
-
-=over 2
-
-=item * 
-
-C<items.dateaccessioned>
-
-=item *
-
-C<items.notforloan>
-
-=item *
-
-C<items.damaged>
-
-=item *
-
-C<items.itemlost>
-
-=item *
-
-C<items.withdrawn>
-
-=back
-
-=cut
-
-sub _set_defaults_for_add {
-    my $item = shift;
-    $item->{dateaccessioned} ||= output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
-    $item->{$_} ||= 0 for (qw( notforloan damaged itemlost withdrawn));
 }
 
 =head2 _koha_new_item
