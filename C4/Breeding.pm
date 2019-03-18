@@ -48,7 +48,7 @@ C4::Breeding : module to add biblios to import_records via
 =head1 SYNOPSIS
 
     Z3950Search($pars, $template);
-    ($count, @results) = &BreedingSearch($title,$isbn,$random);
+    ($count, @results) = &BreedingSearch($title,$isbn);
 
 =head1 DESCRIPTION
 
@@ -57,10 +57,9 @@ cataloguing reservoir features.
 
 =head2 BreedingSearch
 
-($count, @results) = &BreedingSearch($title,$isbn,$random);
+($count, @results) = &BreedingSearch($title,$isbn);
 C<$title> contains the title,
 C<$isbn> contains isbn or issn,
-C<$random> contains the random seed from a z3950 search.
 
 C<$count> is the number of items in C<@results>. C<@results> is an
 array of references-to-hash; the keys are the items from the C<import_records> and
@@ -69,7 +68,7 @@ C<import_biblios> tables of the Koha database.
 =cut
 
 sub BreedingSearch {
-    my ($search,$isbn,$z3950random) = @_;
+    my ($search,$isbn) = @_;
     my $dbh   = C4::Context->dbh;
     my $count = 0;
     my ($query,@bind);
@@ -84,25 +83,20 @@ sub BreedingSearch {
               JOIN import_records USING (import_record_id)
               JOIN import_batches USING (import_batch_id)
               WHERE ";
-    if ($z3950random) {
-        $query .= "z3950random = ?";
-        @bind=($z3950random);
-    } else {
-        @bind=();
-        if (defined($search) && length($search)>0) {
-            $search =~ s/(\s+)/\%/g;
-            $query .= "title like ? OR author like ?";
-            push(@bind,"%$search%", "%$search%");
-        }
-        if ($#bind!=-1 && defined($isbn) && length($isbn)>0) {
-            $query .= " and ";
-        }
-        if (defined($isbn) && length($isbn)>0) {
-            $query .= "isbn like ?";
-            push(@bind,"$isbn%");
-        }
+    @bind=();
+    if (defined($search) && length($search)>0) {
+        $search =~ s/(\s+)/\%/g;
+        $query .= "title like ? OR author like ?";
+        push(@bind,"%$search%", "%$search%");
     }
-    $sth   = $dbh->prepare($query);
+    if ($#bind!=-1 && defined($isbn) && length($isbn)>0) {
+        $query .= " and ";
+    }
+    if (defined($isbn) && length($isbn)>0) {
+        $query .= "isbn like ?";
+        push(@bind,"$isbn%");
+    }
+    $sth = $dbh->prepare($query);
     $sth->execute(@bind);
     while (my $data = $sth->fetchrow_hashref) {
             $results[$count] = $data;
@@ -307,9 +301,7 @@ sub _handle_one_result {
     ( $marcrecord, $error ) = _do_xslt_proc($marcrecord, $servhref, $xslh);
 
     my $batch_id = GetZ3950BatchId($servhref->{servername});
-    my $breedingid = AddBiblioToBatch($batch_id, $seq, $marcrecord, 'UTF-8', 0, 0);
-        #FIXME passing 0 for z3950random
-        #Will eliminate this unused field in a followup report
+    my $breedingid = AddBiblioToBatch($batch_id, $seq, $marcrecord, 'UTF-8', 0);
         #Last zero indicates: no update for batch record counts
 
 
@@ -491,7 +483,7 @@ sub _translate_query { #SRU query adjusted per server cf. srufields column
 
 =head2 ImportBreedingAuth
 
-ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random);
+ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding);
 
     ImportBreedingAuth imports MARC records in the reservoir (import_records table).
     ImportBreedingAuth is based on the ImportBreeding subroutine.
@@ -499,7 +491,7 @@ ImportBreedingAuth($marcrecords,$overwrite_auth,$filename,$encoding,$z3950random
 =cut
 
 sub ImportBreedingAuth {
-    my ($marcrecord,$overwrite_auth,$filename,$encoding,$z3950random) = @_;
+    my ($marcrecord,$overwrite_auth,$filename,$encoding) = @_;
     my $dbh = C4::Context->dbh;
 
     my $batch_id = GetZ3950BatchId($filename);
@@ -550,7 +542,7 @@ sub ImportBreedingAuth {
                     if ($breedingid && $overwrite_auth eq '1') {
                         ModAuthorityInBatch($breedingid, $marcrecord);
                     } else {
-                        my $import_id = AddAuthToBatch($batch_id, $imported, $marcrecord, $encoding, $z3950random);
+                        my $import_id = AddAuthToBatch($batch_id, $imported, $marcrecord, $encoding);
                         $breedingid = $import_id;
                     }
                     $imported++;
@@ -577,25 +569,15 @@ sub Z3950SearchAuth {
 
     my $dbh   = C4::Context->dbh;
     my @id= @{$pars->{id}};
-    my $random= $pars->{random};
     my $page= $pars->{page};
 
 
     my $show_next       = 0;
     my $total_pages     = 0;
-    my $attr = '';
-    my $host;
-    my $server;
-    my $database;
-    my $port;
-    my $marcdata;
     my @encoding;
     my @results;
-    my $count;
-    my $record;
     my @serverhost;
     my @breeding_loop = ();
-
     my @oConnection;
     my @oResult;
     my @errconn;
@@ -611,7 +593,7 @@ sub Z3950SearchAuth {
     foreach my $servid (@id) {
         my $sth = $dbh->prepare("select * from z3950servers where id=?");
         $sth->execute($servid);
-        while ( $server = $sth->fetchrow_hashref ) {
+        while ( my $server = $sth->fetchrow_hashref ) {
             $oConnection[$s] = _create_connection( $server );
 
             $oResult[$s] =
@@ -619,7 +601,7 @@ sub Z3950SearchAuth {
                 $oConnection[$s]->search_pqf( $zquery ):
                 $oConnection[$s]->search(new ZOOM::Query::CQL(
                     _translate_query( $server, $squery )));
-            $encoding[$s]   = ($server->{encoding}?$server->{encoding}:"iso-5426");
+            $encoding[$s]   = $server->{encoding} // "iso-5426";
             $servers[$s] = $server;
             $s++;
         }   ## while fetch
@@ -636,7 +618,7 @@ sub Z3950SearchAuth {
 
         if ( $k != 0 ) {
             $k--;
-            my ($error, $errmsg, $addinfo, $diagset)= $oConnection[$k]->error_x();
+            my ($error )= $oConnection[$k]->error_x(); #ignores errmsg, addinfo, diagset
             if ($error) {
                 if ($error =~ m/^(10000|10007)$/ ) {
                     push(@errconn, {'server' => $serverhost[$k]});
@@ -667,7 +649,7 @@ sub Z3950SearchAuth {
                             $heading_authtype_code = GuessAuthTypeCode($marcrecord);
                             $heading = C4::AuthoritiesMarc::GetAuthorizedHeading({ record => $marcrecord });
 
-                            my ($notmarcrecord, $alreadyindb, $alreadyinfarm, $imported, $breedingid)= ImportBreedingAuth( $marcrecord, 2, $serverhost[$k], $encoding[$k], $random);
+                            my ($notmarcrecord, $alreadyindb, $alreadyinfarm, $imported, $breedingid)= ImportBreedingAuth( $marcrecord, 2, $serverhost[$k], $encoding[$k]);
                             my %row_data;
                             $row_data{server}       = $servers[$k]->{'servername'};
                             $row_data{breedingid}   = $breedingid;

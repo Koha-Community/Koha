@@ -279,7 +279,7 @@ sub GetImportBatch {
 =head2 AddBiblioToBatch 
 
   my $import_record_id = AddBiblioToBatch($batch_id, $record_sequence, 
-                $marc_record, $encoding, $z3950random, $update_counts);
+                $marc_record, $encoding, $update_counts);
 
 =cut
 
@@ -288,10 +288,9 @@ sub AddBiblioToBatch {
     my $record_sequence = shift;
     my $marc_record = shift;
     my $encoding = shift;
-    my $z3950random = shift;
     my $update_counts = @_ ? shift : 1;
 
-    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'biblio', $encoding, $z3950random, C4::Context->preference('marcflavour'));
+    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'biblio', $encoding, C4::Context->preference('marcflavour'));
     _add_biblio_fields($import_record_id, $marc_record);
     _update_batch_record_counts($batch_id) if $update_counts;
     return $import_record_id;
@@ -314,7 +313,7 @@ sub ModBiblioInBatch {
 =head2 AddAuthToBatch
 
   my $import_record_id = AddAuthToBatch($batch_id, $record_sequence,
-                $marc_record, $encoding, $z3950random, $update_counts, [$marc_type]);
+                $marc_record, $encoding, $update_counts, [$marc_type]);
 
 =cut
 
@@ -323,13 +322,12 @@ sub AddAuthToBatch {
     my $record_sequence = shift;
     my $marc_record = shift;
     my $encoding = shift;
-    my $z3950random = shift;
     my $update_counts = @_ ? shift : 1;
     my $marc_type = shift || C4::Context->preference('marcflavour');
 
     $marc_type = 'UNIMARCAUTH' if $marc_type eq 'UNIMARC';
 
-    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'auth', $encoding, $z3950random, $marc_type);
+    my $import_record_id = _create_import_record($batch_id, $record_sequence, $marc_record, 'auth', $encoding, $marc_type);
     _add_auth_fields($import_record_id, $marc_record);
     _update_batch_record_counts($batch_id) if $update_counts;
     return $import_record_id;
@@ -1593,14 +1591,14 @@ sub RecordsFromMarcPlugin {
 # internal functions
 
 sub _create_import_record {
-    my ($batch_id, $record_sequence, $marc_record, $record_type, $encoding, $z3950random, $marc_type) = @_;
+    my ($batch_id, $record_sequence, $marc_record, $record_type, $encoding, $marc_type) = @_;
 
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("INSERT INTO import_records (import_batch_id, record_sequence, marc, marcxml, marcxml_old,
-                                                         record_type, encoding, z3950random)
-                                    VALUES (?, ?, ?, ?, ?, ?, ?, ?)");
+                                                         record_type, encoding)
+                                    VALUES (?, ?, ?, ?, ?, ?, ?)");
     $sth->execute($batch_id, $record_sequence, $marc_record->as_usmarc(), $marc_record->as_xml($marc_type), '',
-                  $record_type, $encoding, $z3950random);
+                  $record_type, $encoding);
     my $import_record_id = $dbh->{'mysql_insertid'};
     $sth->finish();
     return $import_record_id;
