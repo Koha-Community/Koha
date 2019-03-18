@@ -526,14 +526,6 @@
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
-        // Date format for datepickers
-        var dateMap = {
-            dmydot: 'dd.mm.yy',
-            iso: 'yy-mm-dd',
-            metric: 'dd/mm/yy',
-            us: 'mm/dd/yy'
-        };
-        var dateFormat = dateMap['[% Koha.Preference('dateformat') | html %]'];
         var prefilters = '[% prefilters | html %]';
         // Set column settings
         var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
