@@ -187,16 +187,15 @@ sub build_sample_item {
     my $barcode = delete $args->{barcode}
       || $self->_gen_text( { info => { size => SIZE_BARCODE } } );
 
-    my ( undef, undef, $itemnumber ) = C4::Items::AddItem(
+    return Koha::Item->new(
         {
+            biblionumber  => $biblionumber,
             homebranch    => $library,
             holdingbranch => $library,
             barcode       => $barcode,
             %$args,
-        },
-        $biblionumber
-    );
-    return Koha::Items->find($itemnumber);
+        }
+    )->store->get_from_storage;
 }
 
 # ------------------------------------------------------------------------------

@@ -159,64 +159,12 @@ sub AddItemFromMarc {
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $source_item_marc->field($itemtag) );
 
-#RMME
-    my $item = C4::Biblio::TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
-    my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
-    return AddItem( $item, $biblionumber, $dbh, $frameworkcode, $unlinked_item_subfields );
-
     my $item_values = C4::Biblio::TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+    my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
+    $item_values->{more_subfields_xml} = _get_unlinked_subfields_xml($unlinked_item_subfields);
     $item_values->{biblionumber} = $biblionumber;
-    # FIXME RM my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
-    my $item = Koha::Item->new( $item_values ); # FIXME Handle $unlinked_item_subfields
+    my $item = Koha::Item->new( $item_values )->store;
     return ( $item->biblionumber, $item->biblioitemnumber, $item->itemnumber );
-}
-
-=head2 AddItem
-
-  my ($biblionumber, $biblioitemnumber, $itemnumber) 
-      = AddItem($item, $biblionumber[, $dbh, $frameworkcode, $unlinked_item_subfields]);
-
-Given a hash containing item column names as keys,
-create a new Koha item record.
-
-The first two optional parameters (C<$dbh> and C<$frameworkcode>)
-do not need to be supplied for general use; they exist
-simply to allow them to be picked up from AddItemFromMarc.
-
-The final optional parameter, C<$unlinked_item_subfields>, contains
-an arrayref containing subfields present in the original MARC
-representation of the item (e.g., from the item editor) that are
-not mapped to C<items> columns directly but should instead
-be stored in C<items.more_subfields_xml> and included in 
-the biblio items tag for display and indexing.
-
-=cut
-
-sub AddItem {
-    my $item         = shift;
-    my $biblionumber = shift;
-
-    my $dbh           = @_ ? shift : C4::Context->dbh;
-    my $unlinked_item_subfields;
-    if (@_) {
-        $unlinked_item_subfields = shift;
-    }
-
-    $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
-
-    my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
-    return if $error;
-
-    $item->{'itemnumber'} = $itemnumber;
-
-    C4::Biblio::ModZebra( $item->{biblionumber}, "specialUpdate", "biblioserver" );
-
-    logaction( "CATALOGUING", "ADD", $itemnumber, "item" )
-      if C4::Context->preference("CataloguingLog");
-
-    _after_item_action_hooks({ action => 'create', item_id => $itemnumber });
-
-    return ( $item->{biblionumber}, $item->{biblioitemnumber}, $itemnumber );
 }
 
 =head2 AddItemBatchFromMarc

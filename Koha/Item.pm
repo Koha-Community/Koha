@@ -28,7 +28,9 @@ use Koha::DateUtils qw( dt_from_string );
 use C4::Context;
 use C4::Circulation;
 use C4::Reserves;
+use C4::Biblio qw( ModZebra ); # FIXME This is terrible, we should move the indexation code outside of C4::Biblio
 use C4::ClassSource; # FIXME We would like to avoid that
+use C4::Log qw( logaction );
 
 use Koha::Checkouts;
 use Koha::CirculationRules;
@@ -89,6 +91,12 @@ sub store {
             my $cn_sort = GetClassSort($self->cn_source, $self->itemcallnumber, "");
             $self->cn_sort($cn_sort);
         }
+
+        C4::Biblio::ModZebra( $self->biblionumber, "specialUpdate", "biblioserver" );
+
+        logaction( "CATALOGUING", "ADD", $self->itemnumber, "item" )
+          if C4::Context->preference("CataloguingLog");
+
     }
 
     unless ( $self->dateaccessioned ) {
