@@ -27,7 +27,6 @@ BEGIN {
 
     @EXPORT = qw(
         AddItemFromMarc
-        AddItem
         AddItemBatchFromMarc
         ModItemFromMarc
         Item2Marc
@@ -159,9 +158,17 @@ sub AddItemFromMarc {
 
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $source_item_marc->field($itemtag) );
+
+#RMME
     my $item = C4::Biblio::TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
     my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
     return AddItem( $item, $biblionumber, $dbh, $frameworkcode, $unlinked_item_subfields );
+
+    my $item_values = C4::Biblio::TransformMarcToKoha( $localitemmarc, $frameworkcode, 'items' );
+    $item_values->{biblionumber} = $biblionumber;
+    # FIXME RM my $unlinked_item_subfields = _get_unlinked_item_subfields( $localitemmarc, $frameworkcode );
+    my $item = Koha::Item->new( $item_values ); # FIXME Handle $unlinked_item_subfields
+    return ( $item->biblionumber, $item->biblioitemnumber, $item->itemnumber );
 }
 
 =head2 AddItem
@@ -190,28 +197,14 @@ sub AddItem {
     my $biblionumber = shift;
 
     my $dbh           = @_ ? shift : C4::Context->dbh;
-    my $frameworkcode = @_ ? shift : C4::Biblio::GetFrameworkCode($biblionumber);
     my $unlinked_item_subfields;
     if (@_) {
         $unlinked_item_subfields = shift;
     }
 
-    # needs old biblionumber and biblioitemnumber
-    $item->{'biblionumber'} = $biblionumber;
-    my $sth = $dbh->prepare("SELECT biblioitemnumber FROM biblioitems WHERE biblionumber=?");
-    $sth->execute( $item->{'biblionumber'} );
-    ( $item->{'biblioitemnumber'} ) = $sth->fetchrow;
-
     _set_defaults_for_add($item);
     _set_derived_columns_for_add($item);
     $item->{'more_subfields_xml'} = _get_unlinked_subfields_xml($unlinked_item_subfields);
-
-    # FIXME - checks here
-    unless ( $item->{itype} ) {    # default to biblioitem.itemtype if no itype
-        my $itype_sth = $dbh->prepare("SELECT itemtype FROM biblioitems WHERE biblionumber = ?");
-        $itype_sth->execute( $item->{'biblionumber'} );
-        ( $item->{'itype'} ) = $itype_sth->fetchrow_array;
-    }
 
     my ( $itemnumber, $error ) = _koha_new_item( $item, $item->{barcode} );
     return if $error;

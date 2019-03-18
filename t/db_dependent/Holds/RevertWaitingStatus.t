@@ -48,14 +48,15 @@ my $borrowers_count = 3;
 
 my $biblio = $builder->build_sample_biblio();
 my $item_barcode = 'my_barcode';
-my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
-    {   homebranch    => $branchcode,
+my $itemnumber = Koha::Item->new(
+    {
+        biblionumber  => $biblio->biblionumber,
+        homebranch    => $branchcode,
         holdingbranch => $branchcode,
         barcode       => $item_barcode,
         itype         => $itemtype
     },
-    $biblio->biblionumber,
-);
+)->store->itemnumber;
 
 # Create some borrowers
 my $patron_category = $builder->build({ source => 'Category' });

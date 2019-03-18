@@ -53,17 +53,15 @@ $record->append_fields(
 );
 my ($biblionumber, undef) = C4::Biblio::AddBiblio($record, $frameworkcode);
 
-my ($item_bibnum, $item_bibitemnum, $itemnumber) = C4::Items::AddItem(
+my $item = $builder->build_sample_item(
     {
-        homebranch => $library,
-        holdingbranch => $library,
-        new_status => 'new_value',
-        ccode => 'FIC',
-    },
-    $biblionumber
+        biblionumber => $biblionumber,
+        library      => $library,
+        new_status   => 'new_value',
+        ccode        => 'FIC',
+    }
 );
-
-my $item = Koha::Items->find( $itemnumber );
+my $itemnumber = $item->itemnumber;
 is ( $item->new_status, 'new_value', q|AddItem insert the 'new_status' field| );
 
 my ( $tagfield, undef ) = GetMarcFromKohaField( 'items.itemnumber' );

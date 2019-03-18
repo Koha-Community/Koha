@@ -59,14 +59,22 @@ subtest 'General Add, Get and Del tests' => sub {
     my $biblio = $builder->build_sample_biblio();
 
     # Add an item.
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $biblio->biblionumber);
-    cmp_ok($item_bibnum, '==', $biblio->biblionumber, "New item is linked to correct biblionumber.");
-    cmp_ok($item_bibitemnum, '==', $biblio->biblioitem->biblioitemnumber, "New item is linked to correct biblioitemnumber.");
+    my $item = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->{branchcode},
+            location     => $location,
+            itype        => $itemtype->{itemtype}
+        }
+    );
+    my $itemnumber = $item->itemnumber;
+    cmp_ok($item->biblionumber, '==', $biblio->biblionumber, "New item is linked to correct biblionumber.");
+    cmp_ok($item->biblioitemnumber, '==', $biblio->biblioitem->biblioitemnumber, "New item is linked to correct biblioitemnumber.");
 
     # Get item.
     my $getitem = Koha::Items->find($itemnumber);
     cmp_ok($getitem->itemnumber, '==', $itemnumber, "Retrieved item has correct itemnumber.");
-    cmp_ok($getitem->biblioitemnumber, '==', $item_bibitemnum, "Retrieved item has correct biblioitemnumber.");
+    cmp_ok($getitem->biblioitemnumber, '==', $item->biblioitemnumber, "Retrieved item has correct biblioitemnumber."); # We are not testing anything useful here
     is( $getitem->location, $location, "The location should not have been modified" );
     is( $getitem->permanent_location, $location, "The permanent_location should have been set to the location value" );
 
@@ -86,7 +94,15 @@ subtest 'General Add, Get and Del tests' => sub {
     my $getdeleted = Koha::Items->find($itemnumber);
     is($getdeleted, undef, "Item deleted as expected.");
 
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, permanent_location => 'my permanent location', itype => $itemtype->{itemtype} } , $biblio->biblionumber);
+    $itemnumber = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->{branchcode},
+            location     => $location,
+            permanent_location => 'my permanent location',
+            itype        => $itemtype->{itemtype}
+        }
+    )->itemnumber;
     $getitem = Koha::Items->find($itemnumber);
     is( $getitem->location, $location, "The location should not have been modified" );
     is( $getitem->permanent_location, 'my permanent location', "The permanent_location should not have modified" );
@@ -226,25 +242,22 @@ subtest 'GetHiddenItemnumbers tests' => sub {
     my $biblio = $builder->build_sample_biblio();
 
     # Add two items
-    my ( $item1_bibnum, $item1_bibitemnum, $item1_itemnumber ) = AddItem(
+    my $item1_itemnumber = $builder->build_sample_item(
         {
-            homebranch    => $library1->{branchcode},
-            holdingbranch => $library1->{branchcode},
-            withdrawn     => 1,
-            itype         => $itemtype->{itemtype},
-        },
-        $biblio->biblionumber
-    );
-    my ( $item2_bibnum, $item2_bibitemnum, $item2_itemnumber ) = AddItem(
+            biblionumber => $biblio->biblionumber,
+            library      => $library1->{branchcode},
+            withdrawn    => 1,
+            itype        => $itemtype->{itemtype}
+        }
+    )->itemnumber;
+    my $item2_itemnumber = $builder->build_sample_item(
         {
-            homebranch    => $library2->{branchcode},
-            holdingbranch => $library2->{branchcode},
-            withdrawn     => 0,
-            itype         => $itemtype->{itemtype},
-        },
-        $biblio->biblionumber
-    );
-
+            biblionumber => $biblio->biblionumber,
+            library      => $library2->{branchcode},
+            withdrawn    => 0,
+            itype        => $itemtype->{itemtype}
+        }
+    )->itemnumber;
     my $opachiddenitems;
     my @itemnumbers = ($item1_itemnumber,$item2_itemnumber);
     my @hidden;
@@ -333,15 +346,15 @@ subtest 'GetItemsInfo tests' => sub {
     # Add a biblio
     my $biblio = $builder->build_sample_biblio();
     # Add an item
-    my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+    my $itemnumber = $builder->build_sample_item(
         {
+            biblionumber  => $biblio->biblionumber,
             homebranch    => $library1->{branchcode},
             holdingbranch => $library2->{branchcode},
             itype         => $itemtype->{itemtype},
             restricted    => 1,
-        },
-        $biblio->biblionumber
-    );
+        }
+    )->itemnumber;
 
     my $library = Koha::Libraries->find( $library1->{branchcode} );
     $library->opac_info("homebranch OPAC info");
@@ -373,7 +386,7 @@ subtest 'GetItemsInfo tests' => sub {
     is( $results[0]->{ has_pending_hold }, "0",
         'Hold not marked as pending/unavailable if nothing in tmp_holdsqueue for item' );
 
-    $dbh->do(q{INSERT INTO tmp_holdsqueue (biblionumber, itemnumber, surname, borrowernumber ) VALUES (?, ?, "Zorro", 42)}, undef, $item_bibnum, $itemnumber);
+    $dbh->do(q{INSERT INTO tmp_holdsqueue (biblionumber, itemnumber, surname, borrowernumber ) VALUES (?, ?, "Zorro", 42)}, undef, $biblio->biblionumber, $itemnumber);
     @results = GetItemsInfo( $biblio->biblionumber );
     is( $results[0]->{ has_pending_hold }, "1",
         'Hold marked as pending/unavailable if tmp_holdsqueue is not empty for item' );
@@ -447,17 +460,20 @@ subtest 'SearchItems test' => sub {
     my (undef, $initial_items_count) = SearchItems(undef, {rows => 1});
 
     # Add two items
-    my (undef, undef, $item1_itemnumber) = AddItem({
-        homebranch => $library1->{branchcode},
-        holdingbranch => $library1->{branchcode},
-        itype => $itemtype->{itemtype},
-    }, $biblio->biblionumber);
-    my (undef, undef, $item2_itemnumber) = AddItem({
-        homebranch => $library2->{branchcode},
-        holdingbranch => $library2->{branchcode},
-        itype => $itemtype->{itemtype},
-        issues => 3,
-    }, $biblio->biblionumber);
+    my $item1_itemnumber = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library1->{branchcode},
+            itype        => $itemtype->{itemtype}
+        }
+    )->itemnumber;
+    my $item2_itemnumber = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library2->{branchcode},
+            itype        => $itemtype->{itemtype}
+        }
+    )->itemnumber;
 
     my ($items, $total_results);
 
@@ -639,15 +655,15 @@ subtest 'Koha::Item(s) tests' => sub {
 
     # Create a biblio and item for testing
     t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
-    my $biblio = $builder->build_sample_biblio({title => 'Silence in the library'});
-    my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
+    my $biblio = $builder->build_sample_biblio();
+    my $itemnumber = $builder->build_sample_item(
         {
+            biblionumber  => $biblio->biblionumber,
             homebranch    => $library1->{branchcode},
             holdingbranch => $library2->{branchcode},
-            itype         => $itemtype->{itemtype},
-        },
-        $biblio->biblionumber
-    );
+            itype         => $itemtype->{itemtype}
+        }
+    )->itemnumber;
 
     # Get item.
     my $item = Koha::Items->find( $itemnumber );
@@ -662,8 +678,8 @@ subtest 'Koha::Item(s) tests' => sub {
     is( $holdingbranch->branchcode(), $library2->{branchcode}, "Home branch code matches holdingbranch" );
 
     $biblio = $item->biblio();
-    is( ref($biblio), 'Koha::Biblio', "Got Koha::Biblio from biblio method" );
-    is( $biblio->title(), 'Silence in the library', 'Title matches biblio title' );
+    is( ref($item->biblio), 'Koha::Biblio', "Got Koha::Biblio from biblio method" );
+    is( $item->biblio->title(), $biblio->title, 'Title matches biblio title' );
 
     $schema->storage->txn_rollback;
 };
@@ -701,14 +717,15 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
 
     my @itemnumbers;
     for my $item_info (@$item_infos) {
-        my ( undef, undef, $itemnumber ) = AddItem(
+        my $itemnumber = $builder->build_sample_item(
             {
+                biblionumber  => $biblio->biblionumber,
                 homebranch    => $item_info->{homebranch},
-                holdingbranch => $item_info->{holdingbanch},
-                itype         => $itemtype->{itemtype},
-            },
-            $biblio->biblionumber
-        );
+                holdingbranch => $item_info->{holdingbranch},
+                itype         => $itemtype->{itemtype}
+            }
+        )->itemnumber;
+
         push @itemnumbers, $itemnumber;
     }
 
@@ -980,7 +997,14 @@ subtest 'Test logging for ModItem' => sub {
     my $biblio = $builder->build_sample_biblio();
 
     # Add an item.
-    my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $biblio->biblionumber);
+    my $itemnumber = $builder->build_sample_item(
+        {
+            biblionumber => $biblio->biblionumber,
+            library      => $library->{homebranch},
+            location     => $location,
+            itype        => $itemtype->{itemtype}
+        }
+    )->itemnumber;
 
     # False means no logging
     $schema->resultset('ActionLog')->search()->delete();

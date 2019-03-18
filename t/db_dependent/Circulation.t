@@ -2742,15 +2742,16 @@ subtest '_FixAccountForLostAndFound' => sub {
                 }
             }
         );
-        my ( undef, undef, $item_id ) = AddItem(
-            {   homebranch       => $library->branchcode,
+        my $item_id = Koha::Item->new(
+            {
+                biblionumber     => $biblio->biblionumber,
+                homebranch       => $library->branchcode,
                 holdingbranch    => $library->branchcode,
                 barcode          => $barcode,
                 replacementprice => $replacement_amount,
                 itype            => $item_type->itemtype
             },
-            $biblio->biblionumber
-        );
+        )->store->itemnumber;
 
         AddIssue( $patron->unblessed, $barcode );
 
@@ -3355,16 +3356,16 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     });
 
     my $biblio = $builder->build_sample_biblio({ title=> $title, author => $author });
-    my ( undef, undef, $item_id ) = AddItem(
+    my $item_id = Koha::Item->new(
         {
+            biblionumber     => $biblio->biblionumber,
             homebranch       => $library->id,
             holdingbranch    => $library->id,
             barcode          => $barcode,
             replacementprice => 23.00,
             itype            => $itemtype->id
         },
-        $biblio->biblionumber
-    );
+    )->store->itemnumber;
     my $item = Koha::Items->find( $item_id );
 
     my $context = Test::MockModule->new('C4::Context');

@@ -95,7 +95,7 @@ $dbh->do(q|
 |, {}, $quick_slip_content);
 
 my ( $title1, $title2 ) = ( 'My title 1', 'My title 2' );
-my ( $barcode1, $barcode2 ) = ('BC0101', 'BC0202' );
+my ( $barcode1, $barcode2 ) = ('BC0101', 'BC0202' ); # FIXME Must not be hardcoded, tests could fail
 my $record = MARC::Record->new;
 $record->append_fields(
     MARC::Field->new(
@@ -104,8 +104,7 @@ $record->append_fields(
     ),
 );
 my ($biblionumber1) = AddBiblio( $record, '' );
-my $itemnumber1 =
-  AddItem( { barcode => $barcode1, %item_infos }, $biblionumber1 );
+my $itemnumber1 = $builder->build_sample_item({ biblionumber => $biblionumber1, barcode => $barcode1, %item_infos })->itemnumber;
 
 $record = MARC::Record->new;
 $record->append_fields(
@@ -115,8 +114,7 @@ $record->append_fields(
     ),
 );
 my ($biblionumber2) = AddBiblio( $record, '' );
-my $itemnumber2 =
-  AddItem( { barcode => $barcode2, %item_infos }, $biblionumber2 );
+my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber2, barcode => $barcode2, %item_infos })->itemnumber;
 
 my $borrowernumber =
   Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;

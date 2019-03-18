@@ -182,8 +182,7 @@ sub build_sample_item {
     my $library = delete $args->{library}
       || $self->build_object( { class => 'Koha::Libraries' } )->branchcode;
 
-    my $itype = delete $args->{itype}
-      || $self->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
+    # If itype is not passed it will be picked from the biblio (see Koha::Item->store)
 
     my $barcode = delete $args->{barcode}
       || $self->_gen_text( { info => { size => SIZE_BARCODE } } );
@@ -193,7 +192,6 @@ sub build_sample_item {
             homebranch    => $library,
             holdingbranch => $library,
             barcode       => $barcode,
-            itype         => $itype,
             %$args,
         },
         $biblionumber

@@ -67,10 +67,10 @@ $check_valid_barcode = C4::Circulation::CheckValidBarcode($barcode3);
 is( $check_valid_barcode, 0, 'CheckValidBarcode with an invalid barcode returns true' );
 
 my ($biblionumber1) = AddBiblio(MARC::Record->new, '');
-AddItem({ barcode => $barcode1, %item_branch_infos }, $biblionumber1);
-AddItem({ barcode => $barcode2, %item_branch_infos }, $biblionumber1);
+Koha::Item->new({ barcode => $barcode1, %item_branch_infos, biblionumber => $biblionumber1})->store;
+Koha::Item->new({ barcode => $barcode2, %item_branch_infos, biblionumber => $biblionumber1})->store;
 my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
-AddItem({ barcode => $barcode3, %item_branch_infos }, $biblionumber2);
+Koha::Item->new({ barcode => $barcode3, %item_branch_infos, biblionumber =>$biblionumber2})->store;
 
 $check_valid_barcode = C4::Circulation::CheckValidBarcode();
 is( $check_valid_barcode, 0, 'CheckValidBarcode without barcode returns false' );

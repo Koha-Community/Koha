@@ -69,26 +69,26 @@ $record->append_fields(
     MARC::Field->new( '952', '0', '0', a => $branchcode_1 ) );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '', );
 
-my @sampleitem1 = C4::Items::AddItem(
-    {   barcode        => 1,
+my $item_id1 = Koha::Item->new(
+    {
+        biblionumber   => $biblionumber,
+        barcode        => 1,
         itemcallnumber => 'callnumber1',
         homebranch     => $branchcode_1,
         holdingbranch  => $branchcode_1,
         itype          => $itemtype
     },
-    $biblionumber
-);
-my $item_id1    = $sampleitem1[2];
-my @sampleitem2 = C4::Items::AddItem(
-    {   barcode        => 2,
+)->store->itemnumber;
+my $item_id2 = Koha::Item->new(
+    {
+        biblionumber   => $biblionumber,
+        barcode        => 2,
         itemcallnumber => 'callnumber2',
         homebranch     => $branchcode_1,
         holdingbranch  => $branchcode_1,
         itype          => $itemtype
     },
-    $biblionumber
-);
-my $item_id2 = $sampleitem2[2];
+)->store->itemnumber;
 
 #Add transfers
 ModItemTransfer(

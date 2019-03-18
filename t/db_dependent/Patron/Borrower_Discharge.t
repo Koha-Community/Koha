@@ -20,7 +20,6 @@ use Test::Warn;
 use MARC::Record;
 
 use C4::Circulation qw( AddIssue AddReturn );
-use C4::Items qw( AddItem );
 use C4::Biblio qw( AddBiblio );
 use C4::Context;
 
@@ -72,13 +71,13 @@ my $p3 = Koha::Patrons->find( $patron3->{borrowernumber} );
 # Discharge not possible with issues
 my ( $biblionumber ) = AddBiblio( MARC::Record->new, '');
 my $barcode = 'BARCODE42';
-my ( undef, undef, $itemnumber ) = AddItem(
-    {   homebranch    => $library->{branchcode},
-        holdingbranch => $library->{branchcode},
-        barcode       => $barcode,
-        itype         => $itemtype
-    },
-    $biblionumber
+$builder->build_sample_item(
+    {
+        biblionumber => $biblionumber,
+        library      => $library->{branchcode},
+        barcode      => $barcode,
+        itype        => $itemtype
+    }
 );
 
 AddIssue( $patron, $barcode );

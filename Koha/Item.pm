@@ -49,6 +49,41 @@ Koha::Item - Koha Item object class
 
 =cut
 
+=head3 store
+
+=cut
+
+sub store {
+    my ($self) = @_;
+
+    # We do not want to oblige callers to pass this value
+    # Dev conveniences vs performance?
+    unless ( $self->biblioitemnumber ) {
+        $self->biblioitemnumber( $self->biblio->biblioitem->biblioitemnumber );
+    }
+
+    # See related changes from C4::Items::AddItem
+    unless ( $self->itype ) {
+        $self->itype($self->biblio->biblioitem->itemtype);
+    }
+
+    unless ( $self->in_storage ) { #AddItem
+        my $today = dt_from_string;
+        unless ( $self->permanent_location ) {
+            $self->permanent_location($self->location);
+        }
+        unless ( $self->replacementpricedate ) {
+            $self->replacementpricedate($today);
+        }
+        unless ( $self->datelastseen ) {
+            $self->datelastseen($today);
+        }
+
+    }
+
+    return $self->SUPER::store;
+}
+
 =head3 effective_itemtype
 
 Returns the itemtype for the item based on whether item level itemtypes are set or not.

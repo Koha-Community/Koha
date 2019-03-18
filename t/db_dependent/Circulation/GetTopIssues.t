@@ -50,17 +50,19 @@ $c4_context->mock('userenv', sub {
 t::lib::Mocks::mock_preference('item-level_itypes', '0');
 
 my $biblionumber = create_biblio('Test 1', $itemtype);
-AddItem({
+Koha::Item->new({
+    biblionumber => $biblionumber,
     barcode => 'GTI_BARCODE_001',
     homebranch => $branch_1->{ branchcode },
     ccode => 'GTI_CCODE',
-}, $biblionumber);
+})->store;
 
 $biblionumber = create_biblio('Test 2', $itemtype);
-AddItem({
+Koha::Item->new({
+    biblionumber => $biblionumber,
     barcode => 'GTI_BARCODE_002',
     homebranch => $branch_2->{ branchcode },
-}, $biblionumber);
+})->store;
 
 my $borrowernumber = Koha::Patron->new({
     userid => 'gti.test',

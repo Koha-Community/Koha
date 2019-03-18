@@ -557,7 +557,7 @@ ok(($order4->{cancellationreason} eq "foobar"), "order has cancellation reason \
 ok((not defined Koha::Biblios->find( $order4->{biblionumber} )), "biblio does not exist anymore");
 
 my $order5 = GetOrder($ordernumbers[4]);
-C4::Items::AddItem( { barcode => '0102030405' }, $order5->{biblionumber} );
+Koha::Item->new({ barcode => '0102030405', biblionumber => $order5->{biblionumber} })->store;
 $error = DelOrder($order5->{biblionumber}, $order5->{ordernumber}, 1);
 $order5 = GetOrder($order5->{ordernumber});
 ok((defined $order5->{datecancellationprinted}), "order is cancelled");

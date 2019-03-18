@@ -41,13 +41,14 @@ my $itemtype = $builder->build(
 my $borrowers_count = 5;
 
 my $biblio = $builder->build_sample_biblio();
-my ( $item_bibnum, $item_bibitemnum, $itemnumber ) = AddItem(
-    {   homebranch    => $library4->{branchcode},
+my $itemnumber = Koha::Item->new(
+    {
+        biblionumber  => $biblio->biblionumber,
+        homebranch    => $library4->{branchcode},
         holdingbranch => $library3->{branchcode},
         itype         => $itemtype
     },
-    $biblio->biblionumber,
-);
+)->store->itemnumber;
 
 
 my @branchcodes = ( $library1->{branchcode}, $library2->{branchcode}, $library3->{branchcode}, $library4->{branchcode}, $library3->{branchcode}, $library4->{branchcode} );

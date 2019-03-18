@@ -17,13 +17,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 27;
+use Test::More tests => 26;
 
 use Koha::Database;
 use t::lib::TestBuilder;
 
 BEGIN {
-    use_ok('C4::Items', qw(AddItem));
     use_ok('C4::Biblio');
     use_ok('C4::CourseReserves', qw/:all/);
     use_ok('C4::Context');
@@ -50,13 +49,14 @@ foreach (1..10) {
 # Create the a record with an item
 my $record = MARC::Record->new;
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio($record, '');
-my ( undef, undef, $itemnumber ) = C4::Items::AddItem(
-    {   homebranch    => $branchcode,
+my $itemnumber = Koha::Item->new(
+    {
+        biblionumber  => $biblionumber,
+        homebranch    => $branchcode,
         holdingbranch => $branchcode,
         itype         => $itemtype
     },
-    $biblionumber
-);
+)->store->itemnumber;
 
 my $course_id = ModCourse(
     course_name => "Test Course",

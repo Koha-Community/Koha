@@ -12,6 +12,7 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::Acquisition::Booksellers;
 use Koha::Acquisition::Orders;
+use t::lib::TestBuilder;
 use MARC::Record;
 
 my $schema = Koha::Database->new()->schema();
@@ -19,6 +20,8 @@ $schema->storage->txn_begin();
 
 my $dbh = C4::Context->dbh;
 $dbh->{RaiseError} = 1;
+
+my $builder = t::lib::TestBuilder->new;
 
 my $bookseller1 = Koha::Acquisition::Bookseller->new(
     {
@@ -55,8 +58,9 @@ my $budgetid = C4::Budgets::AddBudget(
 
 my $budget = C4::Budgets::GetBudget( $budgetid );
 
-my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
-my $itemnumber = AddItem({}, $biblionumber);
+my $biblio = $builder->build_sample_biblio();
+my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+my $biblionumber = $biblio->biblionumber;
 
 my $order = Koha::Acquisition::Order->new(
     {
@@ -67,7 +71,7 @@ my $order = Koha::Acquisition::Order->new(
     }
 )->store;
 my $ordernumber = $order->ordernumber;
-$order->add_item( $itemnumber );
+$order->add_item( $item_1->itemnumber );
 
 # Begin tests
 is(scalar GetOrders($basketno1), 1, "1 order in basket1");

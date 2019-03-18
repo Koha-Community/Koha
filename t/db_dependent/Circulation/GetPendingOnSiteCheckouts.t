@@ -50,11 +50,11 @@ my %item_infos = (
 );
 
 my ($biblionumber1) = AddBiblio(MARC::Record->new, '');
-my $itemnumber1 = AddItem({ barcode => '0101', %item_infos }, $biblionumber1);
-my $itemnumber2 = AddItem({ barcode => '0102', %item_infos }, $biblionumber1);
+my $itemnumber1 = Koha::Item->new({ barcode => '0101', %item_infos, biblionumber => $biblionumber1})->store->itemnumber;
+my $itemnumber2 = Koha::Item->new({ barcode => '0102', %item_infos, biblionumber => $biblionumber1})->store->itemnumber;
 
 my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
-my $itemnumber3 = AddItem({ barcode => '0203', %item_infos }, $biblionumber2);
+my $itemnumber3 = Koha::Item->new({ barcode => '0203', %item_infos, biblionumber => $biblionumber2})->store->itemnumber;
 
 my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
 my $borrowernumber = $builder->build(
@@ -75,7 +75,7 @@ AddIssue($borrower, '0203');
 my $onsite_checkouts = GetPendingOnSiteCheckouts;
 is( scalar @$onsite_checkouts, 0, "No pending on-site checkouts" );
 
-my $itemnumber4 = AddItem({ barcode => '0104', %item_infos }, $biblionumber1);
+my $itemnumber4 = Koha::Item->new({ barcode => '0104', %item_infos, biblionumber => $biblionumber1})->store->itemnumber;
 AddIssue( $borrower, '0104', undef, undef, undef, undef, { onsite_checkout => 1 } );
 $onsite_checkouts = GetPendingOnSiteCheckouts;
 is( scalar @$onsite_checkouts, 1, "There is 1 pending on-site checkout" );

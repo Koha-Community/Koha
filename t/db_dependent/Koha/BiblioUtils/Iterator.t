@@ -50,7 +50,7 @@ t::lib::Mocks::mock_preference('marcflavour', 'MARC21');
 my $biblio = $builder->build_sample_biblio();
 
 # Add an item.
-my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode}, location => $location, itype => $itemtype->{itemtype} } , $biblio->biblionumber);
+$builder->build_sample_item({ biblionumber => $biblio->biblionumber });
 
 my $rs = $schema->resultset('Biblioitem')->search({});
 my $iterator = Koha::BiblioUtils::Iterator->new($rs, items => 1 );

@@ -66,7 +66,7 @@ my $budgetid = C4::Budgets::AddBudget(
 my $budget = C4::Budgets::GetBudget( $budgetid );
 
 my ($biblionumber, $biblioitemnumber) = AddBiblio(MARC::Record->new, '');
-my $itemnumber = AddItem( { itype => $itemtype }, $biblionumber );
+my $itemnumber = Koha::Item->new({ itype => $itemtype, biblionumber => $biblionumber })->store->itemnumber;
 
 my $order = Koha::Acquisition::Order->new(
     {
@@ -92,8 +92,8 @@ CancelReceipt($ordernumber);
 
 is($order->items->count, 0, "Create items on receiving: 0 item exist after cancelling a receipt");
 
-my $itemnumber1 = AddItem( { itype => $itemtype }, $biblionumber );
-my $itemnumber2 = AddItem( { itype => $itemtype }, $biblionumber );
+my $itemnumber1 = Koha::Item->new({ itype => $itemtype, biblionumber => $biblionumber })->store->itemnumber;
+my $itemnumber2 = Koha::Item->new({ itype => $itemtype, biblionumber => $biblionumber })->store->itemnumber;
 
 t::lib::Mocks::mock_preference('AcqCreateItem', 'ordering');
 t::lib::Mocks::mock_preference('AcqItemSetSubfieldsWhenReceiptIsCancelled', '7=9'); # notforloan is mapped with 952$7

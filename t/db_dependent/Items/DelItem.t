@@ -20,17 +20,24 @@ my $library = $builder->build({
 
 my $biblio = $builder->build_sample_biblio();
 
-my ( $item_bibnum, $item_bibitemnum, $itemnumber );
-( $item_bibnum, $item_bibitemnum, $itemnumber ) =
-  AddItem( { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode} }, $biblio->biblionumber );
+my $itemnumber = $builder->build_sample_item(
+    {
+        biblionumber => $biblio->biblionumber,
+        library      => $library->{branchcode}
+    }
+)->itemnumber;
 
 my $deleted = DelItem( { biblionumber => $biblio->biblionumber, itemnumber => $itemnumber } );
 is( $deleted, 1, "DelItem should return 1 if the item has been deleted" );
 my $deleted_item = Koha::Items->find($itemnumber);
 is( $deleted_item, undef, "DelItem with biblionumber parameter - the item should be deleted." );
 
-( $item_bibnum, $item_bibitemnum, $itemnumber ) =
-  AddItem( { homebranch => $library->{branchcode}, holdingbranch => $library->{branchcode} }, $biblio->biblionumber );
+$itemnumber = $builder->build_sample_item(
+    {
+        biblionumber => $biblio->biblionumber,
+        library      => $library->{branchcode}
+    }
+)->itemnumber;
 $deleted = DelItem( { biblionumber => $biblio->biblionumber, itemnumber => $itemnumber } );
 is( $deleted, 1, "DelItem should return 1 if the item has been deleted" );
 $deleted_item = Koha::Items->find($itemnumber);

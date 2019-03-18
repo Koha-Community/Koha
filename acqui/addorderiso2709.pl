@@ -220,22 +220,25 @@ if ($op eq ""){
         my @itemnumbers;
         for (my $i = 0; $i < $count; $i++) {
             $itemcreation = 1;
-            my ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({
-                homebranch => $homebranches[$i],
-                holdingbranch => $holdingbranches[$i],
-                itemnotes_nonpublic => $nonpublic_notes[$i],
-                itemnotes => $public_notes[$i],
-                location => $locs[$i],
-                ccode => $ccodes[$i],
-                itype => $itypes[$i],
-                notforloan => $notforloans[$i],
-                uri => $uris[$i],
-                copynumber => $copynos[$i],
-                price => $itemprices[$i],
-                replacementprice => $replacementprices[$i],
-                itemcallnumber => $itemcallnumbers[$i],
-            }, $biblionumber);
-            push( @itemnumbers, $itemnumber );
+            my $item = Koha::Item->new(
+                {
+                    biblionumber        => $biblionumber,
+                    homebranch          => $homebranches[$i],
+                    holdingbranch       => $holdingbranches[$i],
+                    itemnotes_nonpublic => $nonpublic_notes[$i],
+                    itemnotes           => $public_notes[$i],
+                    location            => $locs[$i],
+                    ccode               => $ccodes[$i],
+                    itype               => $itypes[$i],
+                    notforloan          => $notforloans[$i],
+                    uri                 => $uris[$i],
+                    copynumber          => $copynos[$i],
+                    price               => $itemprices[$i],
+                    replacementprice    => $replacementprices[$i],
+                    itemcallnumber      => $itemcallnumbers[$i],
+                }
+            );
+            push( @itemnumbers, $item->itemnumber );
         }
         if ($itemcreation == 1) {
             # Group orderlines from MarcItemFieldsToOrder

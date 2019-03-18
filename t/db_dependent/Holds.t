@@ -58,8 +58,7 @@ $insert_sth->execute('ONLY1');
 my $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
 
 # Create item instance for testing.
-my ($item_bibnum, $item_bibitemnum, $itemnumber)
-    = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
+my $itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber })->itemnumber;
 
 # Create some borrowers
 my @borrowernumbers;
@@ -148,7 +147,7 @@ is( $hold->suspend_until, '2013-01-01 00:00:00', "Test ModReserve, suspend until
 
 ModReserve({ # call without reserve_id
     rank          => '3',
-    biblionumber  => $item_bibnum,
+    biblionumber  => $biblio->biblionumber,
     itemnumber    => $itemnumber,
     borrowernumber => $borrowernumber,
 });
@@ -232,8 +231,7 @@ is( $hold->priority, '6', "Test AlterPriority(), move to bottom" );
 # IndependentBranches is OFF.
 
 my $foreign_biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
-my ($foreign_item_bibnum, $foreign_item_bibitemnum, $foreign_itemnumber)
-  = AddItem({ homebranch => $branch_2, holdingbranch => $branch_2 } , $foreign_biblio->biblionumber);
+my $foreign_itemnumber = $builder->build_sample_item({ library => $branch_2, biblionumber => $foreign_biblio->biblionumber })->itemnumber;
 Koha::CirculationRules->set_rules(
     {
         categorycode => undef,
@@ -287,7 +285,7 @@ ok(
 {
     # Regression test for bug 11336 # Test if ModReserve correctly recalculate the priorities
     $biblio = $builder->build_sample_biblio({ itemtype => 'DUMMY' });
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
+    $itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber })->itemnumber;
     my $reserveid1 = AddReserve(
         {
             branchcode     => $branch_1,
@@ -297,7 +295,7 @@ ok(
         }
     );
 
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
+    $itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber })->itemnumber;
     my $reserveid2 = AddReserve(
         {
             branchcode     => $branch_1,
@@ -307,7 +305,7 @@ ok(
         }
     );
 
-    ($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1 } , $biblio->biblionumber);
+    $itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber })->itemnumber;
     my $reserveid3 = AddReserve(
         {
             branchcode     => $branch_1,
@@ -325,7 +323,7 @@ ok(
     is( $hold3->discard_changes->priority, 1, "After ModReserve, the 3rd reserve becomes the first on the waiting list" );
 }
 
-ModItem({ damaged => 1 }, $item_bibnum, $itemnumber);
+ModItem({ damaged => 1 }, $biblio->biblionumber, $itemnumber);
 t::lib::Mocks::mock_preference( 'AllowHoldsOnDamagedItems', 1 );
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'OK', "Patron can reserve damaged item with AllowHoldsOnDamagedItems enabled" );
 ok( defined( ( CheckReserves($itemnumber) )[1] ), "Hold can be trapped for damaged item with AllowHoldsOnDamagedItems enabled" );
@@ -334,7 +332,7 @@ $hold = Koha::Hold->new(
     {
         borrowernumber => $borrowernumbers[0],
         itemnumber     => $itemnumber,
-        biblionumber   => $item_bibnum,
+        biblionumber   => $biblio->biblionumber,
     }
 )->store();
 is( CanItemBeReserved( $borrowernumbers[0], $itemnumber )->{status},
@@ -348,7 +346,7 @@ ok( !defined( ( CheckReserves($itemnumber) )[1] ), "Hold cannot be trapped for d
 
 # Regression test for bug 9532
 $biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem({ homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);
+$itemnumber = $builder->build_sample_item({ library => $branch_1, itype => 'CANNOT', biblionumber => $biblio->biblionumber})->itemnumber;
 AddReserve(
     {
         branchcode     => $branch_1,
@@ -361,14 +359,14 @@ is(
     CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status}, 'tooManyReserves',
     "cannot request item if policy that matches on item-level item type forbids it"
 );
-ModItem({ itype => 'CAN' }, $item_bibnum, $itemnumber);
+ModItem({ itype => 'CAN' }, $biblio->biblionumber, $itemnumber);
 ok(
     CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'OK',
     "can request item if policy that matches on item type allows it"
 );
 
 t::lib::Mocks::mock_preference('item-level_itypes', 0);
-ModItem({ itype => undef }, $item_bibnum, $itemnumber);
+ModItem({ itype => undef }, $biblio->biblionumber, $itemnumber);
 ok(
     CanItemBeReserved( $borrowernumbers[0], $itemnumber)->{status} eq 'tooManyReserves',
     "cannot request item if policy that matches on bib-level item type forbids it (bug 9532)"
@@ -410,14 +408,12 @@ Koha::CirculationRules->set_rules(
     }
 );
 $biblio = $builder->build_sample_biblio({ itemtype => 'CANNOT' });
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CANNOT' } , $biblio->biblionumber);
+$itemnumber = $builder->build_sample_item({ library => $branch_1, itype => 'CANNOT', biblionumber => $biblio->biblionumber})->itemnumber;
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'notReservable',
     "CanItemBeReserved should return 'notReservable'");
 
 t::lib::Mocks::mock_preference( 'ReservesControlBranch', 'PatronLibrary' );
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => $branch_2, holdingbranch => $branch_1, itype => 'CAN' } , $biblio->biblionumber);
+$itemnumber = $builder->build_sample_item({ library => $branch_2, itype => 'CAN', biblionumber => $biblio->biblionumber})->itemnumber;
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status},
     'cannotReserveFromOtherBranches',
     "CanItemBeReserved should use PatronLibrary rule when ReservesControlBranch set to 'PatronLibrary'");
@@ -426,8 +422,7 @@ is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status},
     'OK',
     "CanItemBeReserved should use item home library rule when ReservesControlBranch set to 'ItemsHomeLibrary'");
 
-($item_bibnum, $item_bibitemnum, $itemnumber) = AddItem(
-    { homebranch => $branch_1, holdingbranch => $branch_1, itype => 'CAN' } , $biblio->biblionumber);
+$itemnumber = $builder->build_sample_item({ library => $branch_1, itype => 'CAN', biblionumber => $biblio->biblionumber})->itemnumber;
 is(CanItemBeReserved($borrowernumbers[0], $itemnumber)->{status}, 'OK',
     "CanItemBeReserved should return 'OK'");
 
@@ -441,8 +436,7 @@ $dbh->do('DELETE FROM items');
 $dbh->do('DELETE FROM biblio');
 
 $biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
-( $item_bibnum, $item_bibitemnum, $itemnumber )
-    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
+$itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber})->itemnumber;
 
 Koha::CirculationRules->set_rules(
     {
@@ -483,9 +477,7 @@ subtest 'Test max_holds per library/patron category' => sub {
     $dbh->do('DELETE FROM reserves');
 
     $biblio = $builder->build_sample_biblio;
-    ( $item_bibnum, $item_bibitemnum, $itemnumber ) =
-      AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 },
-        $biblio->biblionumber );
+    $itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber})->itemnumber;
     Koha::CirculationRules->set_rules(
         {
             categorycode => undef,
@@ -562,8 +554,7 @@ subtest 'Pickup location availability tests' => sub {
     plan tests => 4;
 
     $biblio = $builder->build_sample_biblio({ itemtype => 'ONLY1' });
-    my ( $item_bibnum, $item_bibitemnum, $itemnumber )
-    = AddItem( { homebranch => $branch_1, holdingbranch => $branch_1 }, $biblio->biblionumber );
+    $itemnumber = $builder->build_sample_item({ library => $branch_1, biblionumber => $biblio->biblionumber})->itemnumber;
     #Add a default rule to allow some holds
 
     Koha::CirculationRules->set_rules(
@@ -625,26 +616,11 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
 
     # Create 3 biblios with items
     my $biblio_1 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype });
-    my ( undef, undef, $itemnumber_1 ) = AddItem(
-        {   homebranch    => $library->branchcode,
-            holdingbranch => $library->branchcode
-        },
-        $biblio_1->biblionumber
-    );
+    my $itemnumber_1 = $builder->build_sample_item({ library => $library->branchcode, biblionumber => $biblio_1->biblionumber})->itemnumber;
     my $biblio_2 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype });
-    my ( undef, undef, $itemnumber_2 ) = AddItem(
-        {   homebranch    => $library->branchcode,
-            holdingbranch => $library->branchcode
-        },
-        $biblio_2->biblionumber
-    );
+    my $itemnumber_2 = $builder->build_sample_item({ library => $library->branchcode, biblionumber => $biblio_2->biblionumber})->itemnumber;
     my $biblio_3 = $builder->build_sample_biblio({ itemtype => $itemtype->itemtype });
-    my ( undef, undef, $itemnumber_3 ) = AddItem(
-        {   homebranch    => $library->branchcode,
-            holdingbranch => $library->branchcode
-        },
-        $biblio_3->biblionumber
-    );
+    my $itemnumber_3 = $builder->build_sample_item({ library => $library->branchcode, biblionumber => $biblio_3->biblionumber})->itemnumber;
 
     Koha::CirculationRules->search->delete;
     Koha::CirculationRules->set_rules(

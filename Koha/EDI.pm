@@ -29,7 +29,6 @@ use C4::Context;
 use Koha::Database;
 use C4::Acquisition qw( NewBasket CloseBasket ModOrder);
 use C4::Suggestions qw( ModSuggestion );
-use C4::Items qw(AddItem);
 use C4::Biblio qw( AddBiblio TransformKohaToMarc GetMarcBiblio GetFrameworkCode GetMarcFromKohaField );
 use Koha::Edifact::Order;
 use Koha::Edifact;
@@ -718,9 +717,9 @@ sub quote_item {
 
             my $created = 0;
             while ( $created < $order_quantity ) {
-                my $itemnumber;
-                ( $bib->{biblionumber}, $bib->{biblioitemnumber}, $itemnumber )
-                  = AddItem( $item_hash, $bib->{biblionumber} );
+                $item_hash->{biblionumber} = $bib->{biblionumber};
+                my $item = Koha::Item->new( $item_hash );
+                my $itemnumber = $item->itemnumber;
                 $logger->trace("Added item:$itemnumber");
                 $schema->resultset('AqordersItem')->create(
                     {
@@ -809,9 +808,9 @@ sub quote_item {
                         $item_hash->{homebranch} = $new_item->{homebranch};
                     }
 
-                    my $itemnumber;
-                    ( undef, undef, $itemnumber ) =
-                      AddItem( $item_hash, $bib->{biblionumber} );
+                    $item_hash->{biblionumber} = $bib->{biblionumber};
+                    my $item = Koha::Item->new( $item_hash );
+                    my $itemnumber = $item->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
                         {
@@ -878,9 +877,9 @@ sub quote_item {
                           $item->girfield( 'branch', $occurrence ),
                         homebranch => $item->girfield( 'branch', $occurrence ),
                     };
-                    my $itemnumber;
-                    ( undef, undef, $itemnumber ) =
-                      AddItem( $new_item, $bib->{biblionumber} );
+                    $new_item->{biblionumber} = $bib->{biblionumber};
+                    my $item = Koha::Item->new( $new_item );
+                    my $itemnumber = $item->itemnumber;
                     $logger->trace("New item $itemnumber added");
                     $schema->resultset('AqordersItem')->create(
                         {

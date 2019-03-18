@@ -62,11 +62,13 @@ $record->append_fields(
 my ( $biblionumber ) = C4::Biblio::AddBiblio($record, '');
 
 for my $callnumber ( shuffle @callnumbers ) {
-    my ( $biblionumber, undef, $itemnumber ) = C4::Items::AddItem({
-        homebranch => $library->{branchcode},
-        holdingbranch => $library->{branchcode},
-        itemcallnumber => $callnumber,
-    }, $biblionumber);
+    my $itemnumber = $builder->build_sample_item(
+        {
+            biblionumber   => $biblionumber,
+            library        => $library->{branchcode},
+            itemcallnumber => $callnumber,
+        }
+    )->itemnumber;
     $cn->{$callnumber} = {
         biblionumber => $biblionumber,
         itemnumber => $itemnumber,

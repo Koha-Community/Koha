@@ -61,10 +61,10 @@ my %item_info = (
 
 my ($biblionumber1) = AddBiblio(MARC::Record->new, '');
 my $barcode1 = '0101';
-AddItem({ barcode => $barcode1, %item_info }, $biblionumber1);
+Koha::Item->new({ barcode => $barcode1, %item_info, biblionumber => $biblionumber1 })->store;
 my ($biblionumber2) = AddBiblio(MARC::Record->new, '');
 my $barcode2 = '0202';
-AddItem({ barcode => $barcode2, %item_info }, $biblionumber2);
+Koha::Item->new({ barcode => $barcode2, %item_info, biblionumber => $biblionumber2 })->store;
 
 my $borrowernumber1 = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode})->store->borrowernumber;
 my $borrowernumber2 = Koha::Patron->new({categorycode => $categorycode, branchcode => $branchcode})->store->borrowernumber;

@@ -6,7 +6,6 @@ use MARC::Field;
 use C4::Context;
 
 use C4::Circulation qw( AddIssue AddReturn );
-use C4::Items qw( AddItem );
 use C4::Biblio qw( AddBiblio );
 use Koha::Database;
 use Koha::DateUtils;
@@ -60,12 +59,13 @@ $record->append_fields(
 
 my $barcode = 'bc_maxsuspensiondays';
 my ($biblionumber, $biblioitemnumber) = AddBiblio($record, '');
-my (undef, undef, $itemnumber) = AddItem({
+my $itemnumber = Koha::Item->new({
+        biblionumber => $biblionumber,
         homebranch => $branchcode,
         holdingbranch => $branchcode,
         barcode => $barcode,
         itype => $itemtype
-    } , $biblionumber);
+    })->store->itemnumber;
 
 # clear any holidays to avoid throwing off the suspension day
 # calculations

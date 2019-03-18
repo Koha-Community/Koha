@@ -54,14 +54,13 @@ my %item_infos = (
 );
 
 my ($biblionumber1) = AddBiblio( MARC::Record->new, '' );
-my $itemnumber1 =
-  AddItem( { barcode => '0101', %item_infos }, $biblionumber1 );
-my $itemnumber2 =
-  AddItem( { barcode => '0102', %item_infos }, $biblionumber1 );
+
+# FIXME These tests will fail if the barcode exists in DB
+my $itemnumber1 = $builder->build_sample_item({ biblionumber => $biblionumber1, barcode => '0101', %item_infos })->itemnumber;
+my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber1, barcode => '0102', %item_infos })->itemnumber;
 
 my ($biblionumber2) = AddBiblio( MARC::Record->new, '' );
-my $itemnumber3 =
-  AddItem( { barcode => '0203', %item_infos }, $biblionumber2 );
+my $itemnumber2 = $builder->build_sample_item({ biblionumber => $biblionumber2, barcode => '0202', %item_infos })->itemnumber;
 
 my $borrowernumber1 =
   Koha::Patron->new({ categorycode => $categorycode, branchcode => $branchcode })->store->borrowernumber;

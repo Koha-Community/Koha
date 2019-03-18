@@ -21,7 +21,6 @@ use Test::MockModule;
 
 use C4::Context;
 use C4::Biblio qw(AddBiblio);
-use C4::Items qw(AddItem);
 use Koha::Database;
 
 use Clone qw(clone);

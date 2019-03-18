@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 10;
+use Test::More tests => 11;
 use Test::Exception;
 
 use C4::Circulation;
@@ -28,9 +28,11 @@ use Koha::Item;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Database;
+use Koha::DateUtils qw( dt_from_string );
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
+use t::lib::Dates;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
@@ -60,6 +62,27 @@ is( Koha::Items->search->count, $nb_of_items + 2, 'The 2 items should have been 
 
 my $retrieved_item_1 = Koha::Items->find( $new_item_1->itemnumber );
 is( $retrieved_item_1->barcode, $new_item_1->barcode, 'Find a item by id should return the correct item' );
+
+subtest 'store' => sub {
+    plan tests => 4;
+    my $biblio = $builder->build_sample_biblio;
+    my $today = dt_from_string->set( hour => 0, minute => 0, second => 0 );
+    my $item = Koha::Item->new(
+        {
+            homebranch    => $library->{branchcode},
+            holdingbranch => $library->{branchcode},
+            biblionumber  => $biblio->biblionumber,
+            location      => 'my_loc',
+        }
+    )->store
+    ->get_from_storage;
+
+    is( t::lib::Dates::compare($item->replacementpricedate, $today), 0, 'replacementpricedate must have been set to today if not given');
+    is( t::lib::Dates::compare($item->datelastseen,         $today), 0, 'datelastseen must have been set to today if not given');
+    is( $item->itype, $biblio->biblioitem->itemtype, 'items.itype must have been set to biblioitem.itemtype is not given');
+    is( $item->permanent_location, $item->location, 'permanent_location must have been set to location if not given' );
+    $item->delete;
+};
 
 subtest 'get_transfer' => sub {
     plan tests => 3;

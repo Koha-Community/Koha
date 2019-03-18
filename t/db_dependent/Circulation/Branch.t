@@ -98,43 +98,40 @@ $record->append_fields(
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
 
 # item 1 has home branch and holding branch samplebranch1
-my @sampleitem1 = C4::Items::AddItem(
+my $item_id1 = Koha::Item->new(
     {
+        biblionumber   => $biblionumber,
         barcode        => 'barcode_1',
         itemcallnumber => 'callnumber1',
         homebranch     => $samplebranch1->{branchcode},
         holdingbranch  => $samplebranch1->{branchcode},
         itype          => $no_circ_itemtype->{ itemtype }
-    },
-    $biblionumber
-);
-my $item_id1    = $sampleitem1[2];
+    }
+)->store->itemnumber;
 
 # item 2 has holding branch samplebranch2
-my @sampleitem2 = C4::Items::AddItem(
+my $item_id2 = Koha::Item->new(
     {
+        biblionumber   => $biblionumber,
         barcode        => 'barcode_2',
         itemcallnumber => 'callnumber2',
         homebranch     => $samplebranch2->{branchcode},
         holdingbranch  => $samplebranch1->{branchcode},
         itype          => $no_circ_itemtype->{ itemtype }
     },
-    $biblionumber
-);
-my $item_id2 = $sampleitem2[2];
+)->store->itemnumber;
 
 # item 3 has item type sampleitemtype2 with noreturn policy
-my @sampleitem3 = C4::Items::AddItem(
+my $item_id3 = Koha::Item->new(
     {
+        biblionumber   => $biblionumber,
         barcode        => 'barcode_3',
         itemcallnumber => 'callnumber3',
         homebranch     => $samplebranch2->{branchcode},
         holdingbranch  => $samplebranch2->{branchcode},
         itype          => $sampleitemtype2->{itemtype}
-    },
-    $biblionumber
-);
-my $item_id3 = $sampleitem3[2];
+    }
+)->store->itemnumber;
 
 #Add borrower
 my $borrower_id1 = Koha::Patron->new({

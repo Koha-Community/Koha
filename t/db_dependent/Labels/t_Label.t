@@ -62,8 +62,16 @@ t::lib::Mocks::mock_userenv({ branchcode => $branch_1 });
 
 my $bibnum = $builder->build_sample_biblio({ frameworkcode => $frameworkcode })->biblionumber;
 
+# Create a helper item instance for testing
 my $item = $builder->build_sample_item(
-    { library => $branch_1, itype => $itemtype, biblionumber => $bibnum, enumchron => "enum", copynumber => "copynum" } );
+    {
+        library      => $branch_1,
+        itype        => $itemtype,
+        biblionumber => $bibnum,
+        enumchron    => "enum",
+        copynumber   => "copynum"
+    }
+);
 my $itemnumber = $item->itemnumber;
 
 # Modify item; setting barcode.

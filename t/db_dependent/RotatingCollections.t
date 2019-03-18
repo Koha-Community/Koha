@@ -24,6 +24,8 @@ use C4::Biblio;
 use Koha::Database;
 use Koha::Library;
 
+use t::lib::TestBuilder;
+
 BEGIN {
 }
 
@@ -57,6 +59,8 @@ $dbh->do(q|DELETE FROM collections_tracking |);
 $dbh->do(q|DELETE FROM collections |);
 $dbh->do(q|DELETE FROM branches |);
 $dbh->do(q|DELETE FROM categories|);
+
+my $builder = t::lib::TestBuilder->new;
 
 #Test CreateCollection
 my $collections     = GetCollections();
@@ -218,26 +222,23 @@ $record->append_fields(
     )
 );
 my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '', );
-my @sampleitem1 = C4::Items::AddItem(
+my $item_id1 = $builder->build_sample_item(
     {
-        barcode        => 1,
+        biblionumber => $biblionumber,
+        library      => $samplebranch->{branchcode},
+        barcode        => 1,              # FIXME This must not be hardcoded!
         itemcallnumber => 'callnumber1',
-        homebranch     => $samplebranch->{branchcode},
-        holdingbranch  => $samplebranch->{branchcode}
-    },
-    $biblionumber
-);
-my $item_id1    = $sampleitem1[2];
-my @sampleitem2 = C4::Items::AddItem(
+    }
+)->itemnumber;
+my $item_id2 = $builder->build_sample_item(
     {
-        barcode        => 2,
+        biblionumber => $biblionumber,
+        library      => $samplebranch->{branchcode},
+        barcode        => 2,              # FIXME This must not be hardcoded!
         itemcallnumber => 'callnumber2',
-        homebranch     => $samplebranch->{branchcode},
-        holdingbranch  => $samplebranch->{branchcode}
-    },
-    $biblionumber
-);
-my $item_id2 = $sampleitem2[2];
+    }
+)->itemnumber;
+
 is( AddItemToCollection( $collection_id1, $item_id1 ),
     1, "Sampleitem1 has been added to Collection1" );
 is( AddItemToCollection( $collection_id1, $item_id2 ),

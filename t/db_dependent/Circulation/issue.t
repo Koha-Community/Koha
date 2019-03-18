@@ -131,32 +131,27 @@ my ( $biblionumber, $biblioitemnumber ) = C4::Biblio::AddBiblio( $record, '' );
 
 my $barcode_1 = 'barcode_1';
 my $barcode_2 = 'barcode_2';
-my @sampleitem1 = C4::Items::AddItem(
+my $item_id1 = Koha::Item->new(
     {
+        biblionumber   => $biblionumber,
         barcode        => $barcode_1,
         itemcallnumber => 'callnumber1',
         homebranch     => $branchcode_1,
         holdingbranch  => $branchcode_1,
-        issue          => 1,
-        reserve        => 1,
         itype          => $itemtype
     },
-    $biblionumber
-);
-my $item_id1    = $sampleitem1[2];
-my @sampleitem2 = C4::Items::AddItem(
+)->store->itemnumber;
+my $item_id2 = Koha::Item->new(
     {
+        biblionumber   => $biblionumber,
         barcode        => $barcode_2,
         itemcallnumber => 'callnumber2',
         homebranch     => $branchcode_2,
         holdingbranch  => $branchcode_2,
         notforloan     => 1,
-        issue          => 1,
         itype          => $itemtype
     },
-    $biblionumber
-);
-my $item_id2 = $sampleitem2[2];
+)->store->itemnumber;
 
 #Add borrower
 my $borrower_id1 = Koha::Patron->new({
@@ -353,9 +348,9 @@ AddReturn($barcode_1, undef, undef, dt_from_string('2014-04-01 23:42'));
 $return = $dbh->selectrow_hashref("SELECT * FROM old_issues LIMIT 1" );
 ok( $return->{returndate} eq '2014-04-01 23:42:00', "Item returned with a return date of '2014-04-01 23:42' has that return date" );
 
-my $itemnumber;
-($biblionumber, $biblioitemnumber, $itemnumber) = C4::Items::AddItem(
+my $itemnumber = Koha::Item->new(
     {
+        biblionumber   => $biblionumber,
         barcode        => 'barcode_3',
         itemcallnumber => 'callnumber3',
         homebranch     => $branchcode_1,
@@ -363,8 +358,7 @@ my $itemnumber;
         notforloan     => 1,
         itype          => $itemtype
     },
-    $biblionumber
-);
+)->store->itemnumber;
 
 t::lib::Mocks::mock_preference( 'UpdateNotForLoanStatusOnCheckin', q{} );
 AddReturn( 'barcode_3', $branchcode_1 );
@@ -380,18 +374,17 @@ AddReturn( 'barcode_3', $branchcode_1 );
 $item = Koha::Items->find( $itemnumber );
 ok( $item->notforloan eq 9, q{UpdateNotForLoanStatusOnCheckin does not update notforloan value from 9 with setting "1: 9"} );
 
-my $itemnumber2;
-($biblionumber, $biblioitemnumber, $itemnumber2) = C4::Items::AddItem(
+my $itemnumber2 = Koha::Item->new(
     {
+        biblionumber   => $biblionumber,
         barcode        => 'barcode_4',
         itemcallnumber => 'callnumber4',
         homebranch     => $branchcode_1,
         holdingbranch  => $branchcode_1,
-        location => 'FIC',
+        location       => 'FIC',
         itype          => $itemtype
-    },
-    $biblionumber
-);
+    }
+)->store->itemnumber;
 
 t::lib::Mocks::mock_preference( 'UpdateItemLocationOnCheckin', q{} );
 AddReturn( 'barcode_4', $branchcode_1 );
