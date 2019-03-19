@@ -143,7 +143,7 @@ elsif ( $op eq 'edit' ) {
 }
 elsif ( $op eq 'del' ) {
     my @ids = $cgi->multi_param('ids');
-    del_opac_new( join ",", @ids );
+    Koha::News->search({ idnew => @ids })->delete;
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
 }
 

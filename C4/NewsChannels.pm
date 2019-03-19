@@ -30,7 +30,7 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &GetNewsToDisplay
-        &add_opac_new &upd_opac_new &del_opac_new
+        &add_opac_new &upd_opac_new
     );
 }
 
@@ -121,28 +121,6 @@ sub upd_opac_new {
             logaction('NEWS', 'MODIFY' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
     }
     return $retval;
-}
-
-sub del_opac_new {
-    my ($ids) = @_;
-    if ($ids) {
-
-        #Log news deletion
-        if (C4::Context->preference("NewsLog")) {
-            foreach my $newsid ( split(/,/, $ids )) {
-                my $n = Koha::News->find( $newsid );
-                logaction('NEWS', 'DELETE', undef, $n->unblessed->{lang} . ' | ' . $n->unblessed->{content} );
-            }
-        }
-
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("DELETE FROM opac_news WHERE idnew IN ($ids)");
-        $sth->execute();
-        return 1;
-    } else {
-        return 0;
-    }
-
 }
 
 =head2 GetNewsToDisplay
