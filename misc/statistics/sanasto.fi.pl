@@ -28,6 +28,8 @@ my $kohaOrganization = 'KohaLand';
 my $year = DateTime->now(time_zone => C4::Context->tz)->subtract(years => 1)->year();
 my $testk;
 my $limit = 9999999999999; #Rather unlimited
+my $offset = 0;
+my $single_bib = 0;
 
 GetOptions(
     'h|help'           => \$help,
@@ -36,6 +38,8 @@ GetOptions(
     'y|year:s'         => \$year,
     't|test'           => \$testk,
     'l|limit:i'        => \$limit,
+    'offset:i'         => \$offset,
+    'bibnum:i'         => \$single_bib,
 );
 my $usage = << 'ENDUSAGE';
 
@@ -57,6 +61,9 @@ This script has the following parameters :
     -t --test       Run with selected test biblios
 
     -l --limit      Work through this many biblios
+       --offset     Allow paging with limit
+
+       --bibnum     Handle a single biblio
 
 EXAMPLES:
 
@@ -110,6 +117,11 @@ sub runReport {
 sub setColumns {
     my ($r, $totalCirculation, $hostRecord) = @_;
     my $biblionumber = $r->subfield('999','c');
+    if (!defined($biblionumber)) {
+        warn "No bibnum in 999c";
+        return;
+    }
+
     print "bn: '$biblionumber' - setColumn()\n" if $verbose;
 
 =head2    Tyyppi
@@ -141,18 +153,19 @@ Lainautun nimekkeen tunnus
             $hostDatabaseIdentifier = $hostRecord->subfield('999','c');
         };
         if ($@) {
-            warn "Biblionumber '".$r->subfield('999','c')."' claims to be a component part, but has items and is checked out? Skipping.";
-            return;
+            warn "Biblionumber '".$biblionumber."' claims to be a component part, but has items and is checked out? Skipping.";
+            $hostDatabaseIdentifier = $biblionumber;
+            $type = 1;
         }
     }
     else {
-        $hostDatabaseIdentifier = $r->subfield('999','c');
+        $hostDatabaseIdentifier = $biblionumber;
     }
 
 =head2 Tunnus
 Samakuin emotunnus jos emonimeke, muutoin osakohteen tunnus. Osakohderiveillä on myös lainamäärä, vaikka kyseessä ei ole itsessään lainattavissa oleva yksikkö.
 =cut
-    my $databaseIdentifier = $r->subfield('999','c');
+    my $databaseIdentifier = $biblionumber;
 
 =head2 Vuosi
 Vuosi, jonka lainoista on kyse
@@ -194,7 +207,7 @@ MARC 084
 =head2 Kustantaja
 MARC 260b
 =cut
-    my $publisher = _sanitate($r->subfield('260', 'b'));
+    my $publisher = _sanitate($r->subfield('260', 'b') || "");
 
 =head2 Asiasanasto
 MARC 650, mikäli sanastona YSA
@@ -258,8 +271,12 @@ sub getCirculatedBibliosAndTotals {
         ];
     }
 
-    my $sth = $dbh->prepare("SELECT i.biblionumber, count(s.type) FROM statistics s LEFT JOIN items i ON s.itemnumber = i.itemnumber WHERE type IN ('issue', 'renew') AND YEAR(datetime) = ? GROUP BY i.biblionumber LIMIT ?;");
-    $sth->execute($year, $limit);
+    my $sql = "SELECT i.biblionumber, count(s.type) FROM statistics s LEFT JOIN items i ON s.itemnumber = i.itemnumber WHERE type IN ('issue', 'renew') AND YEAR(datetime) = ?";
+    $sql .= " AND i.biblionumber = ".$single_bib if ($single_bib > 0);
+    $sql .= " GROUP BY i.biblionumber LIMIT ? OFFSET ?;";
+    my $sth = $dbh->prepare($sql);
+    $sth->execute($year, $limit, $offset);
+
     my $rows = $sth->fetchall_arrayref();
     my $err = $sth->err;
     die $err if $err;
@@ -270,6 +287,20 @@ sub getCirculatedBibliosAndTotals {
 
 sub getComponentParts {
     my ($r) = @_;
+    my $f001 = $r->field('001');
+    my $f003 = $r->field('003');
+
+    if (!defined($f001) || !defined($f003)) {
+        warn "Biblionumber ".$r->subfield('999', 'c').": No 001 or 003";
+        my @tmpret;
+        return \@tmpret;
+    }
+    if ($f003->data() eq '&#168') {
+        warn "Biblionumber ".$r->subfield('999', 'c').": 003 is illegal for zebra search";
+        my @tmpret;
+        return \@tmpret;
+    }
+
     my ($parentsField001, $parentsField003, $parentrecord, $error, $componentPartRecordXMLs, $resultSetSize) = C4::Biblio::_getComponentParts($r->field('001')->data(), $r->field('003')->data());
 
     my $marcflavour = C4::Context->preference('marcflavour');
@@ -277,7 +308,13 @@ sub getComponentParts {
     my @marcRecords;
     if ($resultSetSize && !$error) {
         foreach my $componentRecordXML (@$componentPartRecordXMLs) {
-            my $marcRecord = MARC::Record->new_from_xml( $componentRecordXML, 'UTF-8', $marcflavour );
+            my $marcRecord;
+            eval {
+               $marcRecord = MARC::Record->new_from_xml( $componentRecordXML, 'UTF-8', $marcflavour );
+            };
+            if ($@) {
+               die "new_from_xml error for biblionumber ".$f001->data();
+            }
             push @marcRecords, $marcRecord;
         }
     }
