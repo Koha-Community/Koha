@@ -52,38 +52,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
            <ol> <li>
             <label for="lang">Display location:</label>
             <select id="lang" name="lang">
-                [% IF ( default_lang == "" ) %]
-                <option value="" selected="selected">All</option>
-                [% ELSE %]
-                <option value=""                    >All</option>
-                [% END %]
-                [% IF ( default_lang == "koha" ) %]
-                <option value="koha" selected="selected">Librarian interface</option>
-                [% ELSE %]
-                <option value="koha"                    >Librarian interface</option>
-                [% END %]
-                [% IF ( default_lang == "slip" ) %]
-                <option value="slip" selected="selected">Slip</option>
-                [% ELSE %]
-                <option value="slip"                    >Slip</option>
-                [% END %]
-                [% FOREACH lang_lis IN lang_list %]
-                    <optgroup label="[% lang_lis.language | html %]">
-                        [% FOREACH location IN [ '', 'OpacNavRight' ] %]
-                            [% IF ( location == '' ) %]
-                                [% SET location_lang = lang_lis.language %]
-                                [% SET location = "OPAC news" %]
-                            [% ELSE %]
-                                [% SET location_lang = location _ "_" _ lang_lis.language %]
-                            [% END %]
-                            [% IF ( location_lang == default_lang ) %]
-                                <option value="[% location_lang | html %]" selected="selected">[% location | html %] ([% lang_lis.language | html %])</option>
-                            [% ELSE %]
-                                <option value="[% location_lang | html %]">[% location | html %] ([% lang_lis.language | html %])</option>
-                            [% END %]
-                        [% END %]
-                    </optgroup>
-                [% END %]
+                [% PROCESS lang_locations language => default_lang %]
             </select>
             </li>
             <li>
@@ -135,28 +104,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
         <form name="add_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl" >
             <label for="lang">Display location:</label>
             <select name="lang" id="lang">
-            [% IF ( lang == "" ) %]
-            <option value=""     selected="selected">All</option>
-            [% ELSE %]
-            <option value=""             >All</option>
-            [% END %]
-            [% IF ( lang == "koha" ) %]
-            <option value="koha" selected="selected">Librarian interface</option>
-            [% ELSE %]
-            <option value="koha"         >Librarian interface</option>
-            [% END %]
-            [% IF ( lang == "slip" ) %]
-            <option value="slip" selected="selected">Slip</option>
-            [% ELSE %]
-            <option value="slip"         >Slip</option>
-            [% END %]
-                [% FOREACH lang_lis IN lang_list %]
-                [% IF ( lang_lis.language == lang ) %]
-                    <option value="[% lang_lis.language | html %]" selected="selected">OPAC ([% lang_lis.language | html %])</option>
-                [% ELSE %]
-                    <option value="[% lang_lis.language | html %]"         >OPAC ([% lang_lis.language | html %])</option>
-                [% END %]
-                [% END %]
+                [% PROCESS lang_locations language => lang %]
             </select>
             <label for="branch">Library: </label>
             <select id="branch" name="branch">
@@ -310,6 +258,41 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             width : "700"
         });
     </script>
+[% END %]
+
+[% BLOCK lang_locations %]
+    [% IF ( language == "" ) %]
+        <option value="" selected="selected">All</option>
+    [% ELSE %]
+        <option value="">All</option>
+    [% END %]
+    [% IF ( language == "koha" ) %]
+        <option value="koha" selected="selected">Librarian interface</option>
+    [% ELSE %]
+        <option value="koha">Librarian interface</option>
+    [% END %]
+    [% IF ( language == "slip" ) %]
+        <option value="slip" selected="selected">Slip</option>
+    [% ELSE %]
+        <option value="slip">Slip</option>
+    [% END %]
+    [% FOREACH lang_lis IN lang_list %]
+        <optgroup label="[% lang_lis.language | html %]">
+            [% FOREACH location IN [ '', 'OpacNavRight' ] %]
+                [% IF ( location == '' ) %]
+                    [% SET location_lang = lang_lis.language %]
+                    [% SET location = "OPAC news" %]
+                [% ELSE %]
+                    [% SET location_lang = location _ "_" _ lang_lis.language %]
+                [% END %]
+                [% IF ( location_lang == language ) %]
+                    <option value="[% location_lang | html %]" selected="selected">[% location | html %] ([% lang_lis.language | html %])</option>
+                [% ELSE %]
+                    <option value="[% location_lang | html %]">[% location | html %] ([% lang_lis.language | html %])</option>
+                [% END %]
+            [% END %]
+        </optgroup>
+    [% END %]
 [% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
