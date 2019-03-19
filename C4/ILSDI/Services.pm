@@ -230,32 +230,36 @@ sub GetRecords {
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
         my $holds  = $biblio->current_holds->unblessed;
         my $issues           = GetBiblioIssues($biblionumber);
-        my $items            = $biblio->items->unblessed;
+        my @items            = $biblio->items;
+
+        $biblioitem->{items}->{item} = [];
 
         # We loop over the items to clean them
-        foreach my $item (@$items) {
+        foreach my $item (@items) {
+            my %item = %{ $item->unblessed };
 
             # This hides additionnal XML subfields, we don't need these info
-            delete $item->{'more_subfields_xml'};
+            delete $item{'more_subfields_xml'};
 
             # Display branch names instead of branch codes
-            my $home_library    = Koha::Libraries->find( $item->{homebranch} );
-            my $holding_library = Koha::Libraries->find( $item->{holdingbranch} );
-            $item->{'homebranchname'}    = $home_library    ? $home_library->branchname    : '';
-            $item->{'holdingbranchname'} = $holding_library ? $holding_library->branchname : '';
+            my $home_library    = $item->home_branch;
+            my $holding_library = $item->holding_branch;
+            $item{'homebranchname'}    = $home_library    ? $home_library->branchname    : '';
+            $item{'holdingbranchname'} = $holding_library ? $holding_library->branchname : '';
 
-            my ($transferDate, $transferFrom, $transferTo) = GetTransfers($item->{itemnumber});
-            if ($transferDate) {
-                $item->{transfer} = {
-                    datesent => $transferDate,
-                    frombranch => $transferFrom,
-                    tobranch => $transferTo,
+            my $transfer = $item->get_transfer;
+            if ($transfer) {
+                $item{transfer} = {
+                    datesent => $transfer->datesent,
+                    frombranch => $transfer->frombranch,
+                    tobranch => $transfer->tobranch,
                 };
             }
+
+            push @{ $biblioitem->{items}->{item} }, \%item;
         }
 
         # Hashref building...
-        $biblioitem->{'items'}->{'item'}       = $items;
         $biblioitem->{'reserves'}->{'reserve'} = $holds;
         $biblioitem->{'issues'}->{'issue'}     = $issues;
 

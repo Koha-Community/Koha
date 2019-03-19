@@ -25,7 +25,6 @@ use t::lib::Mocks;
 use t::lib::TestBuilder;
 
 use C4::Items qw( ModItemTransfer );
-use C4::Circulation qw( GetTransfers );
 
 use Koha::AuthUtils;
 
@@ -568,8 +567,8 @@ subtest 'GetRecords' => sub {
             biblionumber => $biblio->{biblionumber},
         },
     });
-    my $item = $builder->build({
-        source => 'Item',
+    my $item = $builder->build_object({
+        class => 'Koha::Items',
         value => {
             biblionumber => $biblio->{biblionumber},
             biblioitemnumber => $biblioitem->{biblioitemnumber},
@@ -578,7 +577,7 @@ subtest 'GetRecords' => sub {
         },
     });
 
-    ModItemTransfer($item->{itemnumber}, $branch1->{branchcode}, $branch2->{branchcode});
+    ModItemTransfer($item->itemnumber, $branch1->{branchcode}, $branch2->{branchcode});
 
     my $cgi = new CGI;
     $cgi->param(service => 'GetRecords');
@@ -586,11 +585,11 @@ subtest 'GetRecords' => sub {
 
     my $reply = C4::ILSDI::Services::GetRecords($cgi);
 
-    my ($datesent, $frombranch, $tobranch) = GetTransfers($item->{itemnumber});
+    my $transfer = $item->get_transfer;
     my $expected = {
-        datesent => $datesent,
-        frombranch => $frombranch,
-        tobranch => $tobranch,
+        datesent => $transfer->datesent,
+        frombranch => $transfer->frombranch,
+        tobranch => $transfer->tobranch,
     };
     is_deeply($reply->{record}->[0]->{items}->{item}->[0]->{transfer}, $expected,
         'GetRecords returns transfer informations');
