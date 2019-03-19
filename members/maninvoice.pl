@@ -78,7 +78,7 @@ if ($add){
         my $amount=$input->param('amount');
         my $type=$input->param('type');
         my $note    = $input->param('note');
-        my $error   = manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
+        my $error   = C4::Accounts::manualinvoice( $borrowernumber, $itemnum, $desc, $type, $amount, $note );
         if ($error) {
             if ( $error =~ /FOREIGN KEY/ && $error =~ /itemnumber/ ) {
                 $template->param( 'ITEMNUMBER' => 1 );
