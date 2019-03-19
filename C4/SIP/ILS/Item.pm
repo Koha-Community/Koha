@@ -174,7 +174,7 @@ sub hold_patron_name {
                 ($email or  $phone) ? " ($email$phone)"   :  # only 1 populated, we don't care which: no comma
                 "" ;                                         # neither populated, empty string
     my $name = $holder->{firstname} ? $holder->{firstname} . ' ' : '';
-    $name .= $holder->{surname} . $extra;
+    $name .= $holder->{surname}; # . $extra; KD-1700 Do not append non-standard "$extra".
     return $name;
 }
 
