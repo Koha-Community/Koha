@@ -108,18 +108,16 @@ if ( $op eq 'add_form' ) {
 }
 elsif ( $op eq 'add' ) {
     if ($title) {
-        add_opac_new(
-            {
-                title          => $title,
-                content        => $content,
-                lang           => $lang,
-                expirationdate => $expirationdate,
-                published_on=> $published_on,
-                number         => $number,
-                branchcode     => $branchcode,
-                borrowernumber => $borrowernumber,
-            }
-        );
+        my $new = Koha::NewsItem->new({
+            title          => $title,
+            content        => $content,
+            lang           => $lang,
+            expirationdate => $expirationdate,
+            timestamp      => $timestamp,
+            number         => $number,
+            branchcode     => $branchcode,
+            borrowernumber => $borrowernumber,
+        })->store;
         print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
     }
     else {

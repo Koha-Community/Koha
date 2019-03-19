@@ -30,7 +30,6 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &GetNewsToDisplay
-        &add_opac_new
     );
 }
 
@@ -45,39 +44,6 @@ This module provides the functions needed to mange OPAC and intranet news.
 =head1 FUNCTIONS
 
 =cut
-
-=head2 add_opac_new
-
-    $retval = add_opac_new($hashref);
-
-    $hashref should contains all the fields found in opac_news,
-    except idnew. The idnew field is auto-generated.
-
-=cut
-
-sub add_opac_new {
-    my ($href_entry) = @_;
-    my $retval = 0;
-
-    if ($href_entry) {
-        $href_entry->{number} = 0 if $href_entry->{number} !~ /^\d+$/;
-        my @fields = keys %{$href_entry};
-        my @values = values %{$href_entry};
-        my $field_string = join ',', @fields;
-        $field_string = $field_string // q{};
-        my $values_string = join(',', map { '?' } @fields);
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("INSERT INTO opac_news ( $field_string ) VALUES ( $values_string )");
-        $sth->execute(@values);
-        $retval = 1;
-
-        #Log new news entry
-        if (C4::Context->preference("NewsLog")) {
-                logaction('NEWS', 'ADD' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
-        }
-    }
-    return $retval;
-}
 
 =head2 GetNewsToDisplay
 
