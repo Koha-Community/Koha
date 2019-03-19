@@ -192,11 +192,11 @@ my $strsth =
             GROUP_CONCAT(DISTINCT items.location 
                     ORDER BY items.itemnumber SEPARATOR '|') l_location,
             GROUP_CONCAT(DISTINCT items.itemcallnumber 
-                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_itemcallnumber,
+                    ORDER BY items.itemnumber SEPARATOR '|') l_itemcallnumber,
             GROUP_CONCAT(DISTINCT items.enumchron
-                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_enumchron,
+                    ORDER BY items.itemnumber SEPARATOR '|') l_enumchron,
             GROUP_CONCAT(DISTINCT items.copynumber
-                    ORDER BY items.itemnumber SEPARATOR '<br/>') l_copynumber,
+                    ORDER BY items.itemnumber SEPARATOR '|') l_copynumber,
             biblio.title,
             biblio.author,
             count(DISTINCT items.itemnumber) as icount,
@@ -251,9 +251,9 @@ while ( my $data = $sth->fetchrow_hashref ) {
             biblionumber    => $data->{biblionumber},
             holdingbranches => [split('\|', $data->{l_holdingbranch})],
             branch          => $data->{l_branch},
-            itemcallnumber  => $data->{l_itemcallnumber},
-            enumchron       => $data->{l_enumchron},
-            copyno          => $data->{l_copynumber},
+            itemcallnumber  => [split('\|', $data->{l_itemcallnumber})],
+            enumchron       => [split('\|', $data->{l_enumchron})],
+            copyno          => [split('\|', $data->{l_copynumber})],
             count           => $data->{icount},
             rcount          => $data->{rcount},
             pullcount       => $data->{icount} <= $data->{rcount} ? $data->{icount} : $data->{rcount},
