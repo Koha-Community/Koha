@@ -47,7 +47,7 @@
 <h2>Holds to pull placed between [% from | $KohaDates %] and [% to | $KohaDates %]</h2>
 <h3>Reported on [% todaysdate | $KohaDates %]</h3>
 <p>The following holds have not been filled. Please retrieve them and check them in.</p>
-<div class="searchresults">
+<div id="searchresults">
     [% IF ( reserveloop ) %]
     <table id="holdst">
     <thead>
@@ -55,7 +55,7 @@
         <th>Pull this many items</th>
         <th>Items available</th>
         <th>Patrons with holds</th>
-        <th>First patron</td>
+        <th>First patron</th>
         <th class="anti-the">Title</th>
         <th class="string-sort">Libraries</th>
         <th>Available call numbers</th>
@@ -89,13 +89,49 @@
             <td>"</td>
         [% END %]
         <td>
-            [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
-                [% Branches.GetName ( holdingbranch ) | html %]
+            [% IF ( reserveloo.holdingbranches ) %]
+               <ul>
+                    [% FOREACH holdingbranch IN reserveloo.holdingbranches %]
+                        <li>
+                            [% Branches.GetName ( holdingbranch ) | html %]
+                        </li>
+                    [% END %]
+               </ul>
             [% END %]
         </td>
-        <td><p>[% reserveloo.itemcallnumber | html %]</p></td>
-        <td><p>[% reserveloo.copyno | html %]</p></td>
-        <td><p>[% reserveloo.enumchron | html %]</p></td>
+        <td>
+            [% IF ( reserveloo.itemcallnumber ) %]
+                <ul>
+                    [% FOREACH itemcallnumber IN reserveloo.itemcallnumber  %]
+                        <li>
+                            [% itemcallnumber | html %]
+                        </li>
+                    [% END %]
+                </ul>
+            [% END %]
+        </td>
+        <td>
+            [% IF ( reserveloo.copyno ) %]
+                <ul>
+                    [% FOREACH copyno IN reserveloo.copyno %]
+                        <li>
+                            [% copyno | html %]
+                        </li>
+                    [% END %]
+                </ul>
+            [% END %]
+        </td>
+        <td>
+            [% IF ( reserveloo.enumchron ) %]
+                <ul>
+                    [% FOREACH enumchron IN reserveloo.enumchron %]
+                        <li>
+                            [% enumchron | html %]
+                        </li>
+                    [% END %]
+                </ul>
+            [% END %]
+        </td>
         <td>
         [% FOREACH itemType IN reserveloo.itemTypes %]
             [% ItemTypes.GetDescription( itemType ) | html %]
@@ -136,6 +172,7 @@
                 <span>Biblio level hold.</span>
             [% END %]
         [% END %]
+            </td>
         </tr>
         [% END %]
     </tbody>
