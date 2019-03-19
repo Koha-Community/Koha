@@ -30,7 +30,7 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &GetNewsToDisplay
-        &add_opac_new &upd_opac_new &del_opac_new &get_opac_news
+        &add_opac_new &upd_opac_new &del_opac_new
     );
 }
 
@@ -143,46 +143,6 @@ sub del_opac_new {
         return 0;
     }
 
-}
-
-sub get_opac_news {
-    my ($limit, $lang, $branchcode) = @_;
-    my @values;
-    my $dbh = C4::Context->dbh;
-    my $query = q{
-                  SELECT opac_news.*, branches.branchname,
-                         published_on AS newdate,
-                         borrowers.title AS author_title,
-                         borrowers.firstname AS author_firstname,
-                         borrowers.surname AS author_surname
-                  FROM opac_news LEFT JOIN branches
-                      ON opac_news.branchcode=branches.branchcode
-                  LEFT JOIN borrowers on borrowers.borrowernumber = opac_news.borrowernumber
-                };
-    $query .= ' WHERE 1';
-    if ($lang) {
-        $query .= " AND (opac_news.lang='' OR opac_news.lang=?)";
-        push @values,$lang;
-    }
-    if ($branchcode) {
-        $query .= ' AND (opac_news.branchcode IS NULL OR opac_news.branchcode=?)';
-        push @values,$branchcode;
-    }
-    $query.= ' ORDER BY published_on DESC ';
-    #if ($limit) {
-    #    $query.= 'LIMIT 0, ' . $limit;
-    #}
-    my $sth = $dbh->prepare($query);
-    $sth->execute(@values);
-    my @opac_news;
-    my $count = 0;
-    while (my $row = $sth->fetchrow_hashref) {
-        if ((($limit) && ($count < $limit)) || (!$limit)) {
-            push @opac_news, $row;
-        }
-        $count++;
-    }
-    return ($count, \@opac_news);
 }
 
 =head2 GetNewsToDisplay

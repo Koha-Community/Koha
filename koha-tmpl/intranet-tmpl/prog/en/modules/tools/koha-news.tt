@@ -7,8 +7,6 @@
 [% INCLUDE 'doc-head-open.inc' %]
 <title>News &rsaquo; Tools &rsaquo; Koha</title>
 [% INCLUDE 'doc-head-close.inc' %]
-[% IF ( opac_news_count ) %]
-[% END %]
 [% UNLESS ( wysiwyg ) %]
     [% Asset.css("lib/codemirror/codemirror.css") | $raw %]
     [% Asset.css("lib/codemirror/lint.min.css") | $raw %]
@@ -140,7 +138,7 @@
                 <fieldset class="action"><input class="button" type="submit" value="Submit" /> <a class="cancel" href="/cgi-bin/koha/tools/koha-news.pl">Cancel</a></fieldset>
         </form>
     [% ELSE %]
-        [% IF ( opac_news_count ) %]
+        [% IF ( opac_news.count ) %]
         <form id="del_form" method="post" action="/cgi-bin/koha/tools/koha-news.pl">
                 <table id="newst">
                    <thead> <tr>
@@ -156,7 +154,7 @@
                         <th class="NoSort noExport">Actions</th>
                     </tr></thead>
                     <tbody>[% FOREACH opac_new IN opac_news %]
-                         [% IF ( opac_new.expired ) %]
+                         [% IF ( opac_new.is_expired ) %]
                             <tr class="expired">
                             [% ELSE %]
                             <tr>
@@ -177,13 +175,13 @@
                              </td>
                             <td>[% IF ( opac_new.branchcode == "" ) -%]
                                 All libraries
-                                [% ELSE %][% opac_new.branchname | html %]
+                                [% ELSE %][% opac_new.library.branchname | html %]
                                 [% END %]</td>
                             <td>[% opac_new.number | html %]</td>
-                            <td data-order="[% opac_new.newdate | html %]">[% opac_new.newdate | $KohaDates %]</td>
-                            <td data-order="[% opac_new.expirationdate | html %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.expired ) %](<span class="expired">expired</span>)[% END %]</td>
+                            <td data-order="[% opac_new.timestamp | html %]">[% opac_new.timestamp | $KohaDates %]</td>
+                            <td data-order="[% opac_new.expirationdate | html %]">[% opac_new.expirationdate | $KohaDates %] [% IF ( opac_new.is_expired ) %](<span class="expired">expired</span>)[% END %]</td>
                             <td>[% opac_new.title | html %]</td>
-                            <td>[% opac_new.author_title | html %] [% opac_new.author_firstname | html %] [% opac_new.author_surname | html %]</td>
+                            <td>[% IF ( opac_new.author) %][% INCLUDE 'patron-title.inc' patron=opac_new.author hide_patron_infos_if_needed=1 %][% END %]</td>
                             <td>
                                 <div class="btn-group">
                                     <a class="preview_news btn btn-default btn-xs" data-number="[% loop.count | html %]"><i class="fa fa-eye" aria-hidden="true"></i> Preview content</a>
@@ -289,7 +287,7 @@
 [% MACRO jsinclude BLOCK %]
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("js/tools-menu.js") | $raw %]
-    [% IF ( opac_news_count ) %]
+    [% IF ( opac_news.count ) %]
         [% INCLUDE 'datatables.inc' %]
         <script>
             $('.preview_news').click( function() {

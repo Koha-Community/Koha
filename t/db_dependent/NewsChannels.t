@@ -4,8 +4,9 @@ use Modern::Perl;
 use Koha::Database;
 use Koha::DateUtils;
 use Koha::Libraries;
+use Koha::News;
 
-use Test::More tests => 11;
+use Test::More tests => 9;
 
 BEGIN {
     use_ok('C4::NewsChannels');
@@ -134,43 +135,7 @@ $href_entry2->{idnew} = $idnew2;
 $rv                   = upd_opac_new($href_entry2);
 is( $rv, 1, 'Successfully updated second dummy news item!' );
 
-# Test get_opac_news (multiple news items)
-my ( $opac_news_count, $arrayref_opac_news ) = get_opac_news( 0, q{}, 'LIB1' );
-
-# using >= 2, because someone may have LIB1 news already.
-ok( $opac_news_count >= 2, 'Successfully tested get_opac_news for LIB1!' );
-
 # Test GetNewsToDisplay
-( $opac_news_count, $arrayref_opac_news ) = GetNewsToDisplay( q{}, 'LIB1' );
+my ( $opac_news_count, $arrayref_opac_news ) = GetNewsToDisplay( q{}, 'LIB1' );
 ok( $opac_news_count >= 2, 'Successfully tested GetNewsToDisplay for LIB1!' );
 
-# Regression test 14248 -- make sure author_title, author_firstname, and
-# author_surname exist.
-
-subtest 'Regression tests on author title, firstname, and surname.', sub {
-    my ( $opac_news_count, $opac_news ) = get_opac_news( 0, q{}, 'LIB1' );
-    my $check = 0; # bitwise flag to confirm NULL and not NULL borrowernumber.
-    ok($opac_news_count>0,'Data exists for regression testing');
-    foreach my $news_item (@$opac_news) {
-        ok(exists $news_item->{author_title},    'Author title exists');
-        ok(exists $news_item->{author_firstname},'Author first name exists');
-        ok(exists $news_item->{author_surname},  'Author surname exists');
-        if ($news_item->{borrowernumber}) {
-            ok(defined $news_item->{author_title} ||
-               defined $news_item->{author_firstname} ||
-               defined $news_item->{author_surname},  'Author data defined');
-            $check = $check | 2; # bitwise flag;
-        }
-        else {
-            ok(!defined $news_item->{author_title},
-               'Author title undefined as expected');
-            ok(!defined $news_item->{author_firstname},
-               'Author first name undefined as expected');
-            ok(!defined $news_item->{author_surname},
-               'Author surname undefined as expected');
-            $check = $check | 1; # bitwise flag;
-        }
-    }
-    ok($check==3,'Both with and without author data tested');
-    done_testing();
-};

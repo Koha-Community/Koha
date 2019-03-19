@@ -148,21 +148,15 @@ elsif ( $op eq 'del' ) {
 }
 
 else {
-
-    my ( $opac_news_count, $opac_news ) = &get_opac_news( undef, undef, undef );
-    
-    foreach my $new ( @$opac_news ) {
-        next unless $new->{'expirationdate'};
-        my @date = split (/-/,$new->{'expirationdate'});
-        if ($date[0]*$date[1]*$date[2]>0 && Date_to_Days( @date ) < Date_to_Days(&Today) ){
-			$new->{'expired'} = 1;
+    my $params;
+    $params->{lang} = $lang if $lang;
+    my $opac_news = Koha::News->search(
+        $params,
+        {
+            order_by => { -desc =>  'timestamp' },
         }
-    }
-    
-    $template->param(
-        opac_news       => $opac_news,
-        opac_news_count => $opac_news_count,
-		);
+    );
+    $template->param( opac_news => $opac_news );
 }
 $template->param(
     lang => $lang,
