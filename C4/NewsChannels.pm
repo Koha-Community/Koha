@@ -30,7 +30,7 @@ BEGIN {
     @ISA = qw(Exporter);
     @EXPORT = qw(
         &GetNewsToDisplay
-        &add_opac_new &upd_opac_new
+        &add_opac_new
     );
 }
 
@@ -75,50 +75,6 @@ sub add_opac_new {
         if (C4::Context->preference("NewsLog")) {
                 logaction('NEWS', 'ADD' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
         }
-    }
-    return $retval;
-}
-
-=head2 upd_opac_new
-
-    $retval = upd_opac_new($hashref);
-
-    $hashref should contains all the fields found in opac_news,
-    including idnew, since it is the key for the SQL UPDATE.
-
-=cut
-
-sub upd_opac_new {
-    my ($href_entry) = @_;
-    my $retval = 0;
-
-    if ($href_entry) {
-        $href_entry->{number} = 0 if $href_entry->{number} !~ /^\d+$/;
-        # take the keys of hash entry and make a list, but...
-        my @fields = keys %{$href_entry};
-        my @values;
-        $#values = -1;
-        my $field_string = q{};
-        foreach my $field_name (@fields) {
-            # exclude idnew
-            if ( $field_name ne 'idnew' ) {
-                $field_string = $field_string . "$field_name = ?,";
-                push @values,$href_entry->{$field_name};
-            }
-        }
-        # put idnew at the end, so we know which record to update
-        push @values,$href_entry->{'idnew'};
-        chop $field_string; # remove that excess ,
-
-        my $dbh = C4::Context->dbh;
-        my $sth = $dbh->prepare("UPDATE opac_news SET $field_string WHERE idnew = ?;");
-        $sth->execute(@values);
-        $retval = 1;
-    }
-
-    #Log news entry modification
-    if (C4::Context->preference("NewsLog")) {
-            logaction('NEWS', 'MODIFY' , undef, $href_entry->{lang} . ' | ' . $href_entry->{content});
     }
     return $retval;
 }

@@ -6,7 +6,7 @@ use Koha::DateUtils;
 use Koha::Libraries;
 use Koha::News;
 
-use Test::More tests => 9;
+use Test::More tests => 7;
 
 BEGIN {
     use_ok('C4::NewsChannels');
@@ -124,16 +124,6 @@ my ( $idnew2 ) = $dbh->selectrow_array( $query );
 $query =
 q{ SELECT idnew from opac_news WHERE published_on='2000-01-02'; };
 my ( $idnew3 ) = $dbh->selectrow_array( $query );
-
-# Test upd_opac_new
-$rv = upd_opac_new();    # intentionally bad parmeters
-is( $rv, 0, 'Correctly failed on no parameter!' );
-
-$new2                 = '<p>Update! There is no news!</p>';
-$href_entry2->{content}   = $new2;
-$href_entry2->{idnew} = $idnew2;
-$rv                   = upd_opac_new($href_entry2);
-is( $rv, 1, 'Successfully updated second dummy news item!' );
 
 # Test GetNewsToDisplay
 my ( $opac_news_count, $arrayref_opac_news ) = GetNewsToDisplay( q{}, 'LIB1' );

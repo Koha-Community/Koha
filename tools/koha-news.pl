@@ -127,9 +127,9 @@ elsif ( $op eq 'add' ) {
     }
 }
 elsif ( $op eq 'edit' ) {
-    upd_opac_new(
-        {
-            idnew          => $id,
+    my $news_item = Koha::News->find( $id );
+    if ( $news_item ) {
+        $news_item->set({
             title          => $title,
             content        => $content,
             lang           => $lang,
@@ -137,8 +137,8 @@ elsif ( $op eq 'edit' ) {
             published_on=> $published_on,
             number         => $number,
             branchcode     => $branchcode,
-        }
-    );
+        })->store;
+    }
     print $cgi->redirect("/cgi-bin/koha/tools/koha-news.pl");
 }
 elsif ( $op eq 'del' ) {
