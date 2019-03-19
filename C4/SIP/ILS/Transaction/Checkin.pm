@@ -99,9 +99,10 @@ sub do_checkin {
         $self->hold($messages->{ResFound});
         if ($branch eq $messages->{ResFound}->{branchcode}) {
             $self->alert_type('01');
+            my $settransit = C4::Context->preference('RequireSCCheckInBeforeNotifyingPickups');
+            $settransit = 0 unless $settransit;
             ModReserveAffect( $messages->{ResFound}->{itemnumber},
-                $messages->{ResFound}->{borrowernumber}, 0, $messages->{ResFound}->{reserve_id});
-
+                $messages->{ResFound}->{borrowernumber}, $settransit, $messages->{ResFound}->{reserve_id});
         } else {
             $self->alert_type('02');
             ModReserveAffect( $messages->{ResFound}->{itemnumber},
@@ -110,7 +111,6 @@ sub do_checkin {
                 $branch,
                 $messages->{ResFound}->{branchcode}
             );
-
         }
         $self->{item}->hold_patron_id( $messages->{ResFound}->{borrowernumber} );
         $self->{item}->destination_loc( $messages->{ResFound}->{branchcode} );

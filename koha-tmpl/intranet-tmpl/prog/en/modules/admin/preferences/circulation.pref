@@ -486,6 +486,13 @@ Circulation:
                   yes: Cumulate
                   no: "Don't cumulate"
             - the restriction periods.
+        -
+            - pref: RequireSCCheckInBeforeNotifyingPickups
+              choices:
+                  yes: Do
+                  no: "Don't"
+            - "require reserved items to be checked in with staff client before sending pickup notifications."
+            - "If set to 'Do', the items checked in with SCO/SIP will be 'in transit' until they're checked in again with staff client."
     Holds Policy:
         -
             - pref: AllowHoldItemTypeSelection
