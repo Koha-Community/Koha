@@ -32,6 +32,7 @@ use C4::NewsChannels;
 use C4::Languages qw(getTranslatedLanguages);
 use Date::Calc qw/Date_to_Days Today/;
 use Koha::DateUtils;
+use Koha::News;
 
 my $cgi = CGI->new;
 
@@ -58,7 +59,7 @@ if( $cgi->param('editmode') ){
 # NULL = All branches.
 $branchcode = undef if (defined($branchcode) && $branchcode eq '');
 
-my $new_detail = get_opac_new($id);
+my $new_detail = Koha::News->find( $id );
 
 my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
     {
@@ -81,7 +82,7 @@ foreach my $language ( @$tlangs ) {
         push @lang_list,
         {
             language => $sublanguage->{'rfc4646_subtag'},
-            selected => ( $new_detail->{lang} eq $sublanguage->{'rfc4646_subtag'} ? 1 : 0 ),
+            selected => ( $new_detail && $new_detail->lang eq $sublanguage->{'rfc4646_subtag'} ? 1 : 0 ),
         };
     }
 }
@@ -94,10 +95,10 @@ my $op = $cgi->param('op') // '';
 if ( $op eq 'add_form' ) {
     $template->param( add_form => 1 );
     if ($id) {
-        if($new_detail->{lang} eq "slip"){ $template->param( slip => 1); }
+        if($new_detail->lang eq "slip"){ $template->param( slip => 1); }
         $template->param( 
             op => 'edit',
-            id => $new_detail->{'idnew'}
+            id => $new_detail->idnew
         );
         $template->{VARS}->{'new_detail'} = $new_detail;
     }

@@ -5,7 +5,7 @@ use Koha::Database;
 use Koha::DateUtils;
 use Koha::Libraries;
 
-use Test::More tests => 14;
+use Test::More tests => 11;
 
 BEGIN {
     use_ok('C4::NewsChannels');
@@ -133,55 +133,6 @@ $href_entry2->{content}   = $new2;
 $href_entry2->{idnew} = $idnew2;
 $rv                   = upd_opac_new($href_entry2);
 is( $rv, 1, 'Successfully updated second dummy news item!' );
-
-# Test get_opac_new (single news item)
-$timestamp1      = output_pref( { dt => dt_from_string( $timestamp1 ), dateonly => 1 } );
-$expirationdate1 = output_pref( { dt => dt_from_string( $expirationdate1 ), dateonly => 1 } );
-$timestamp2      = output_pref( { dt => dt_from_string( $timestamp2 ), dateonly => 1 } );
-$expirationdate2 = output_pref( { dt => dt_from_string( $expirationdate2) , dateonly => 1 } );
-
-my $updated_on = %{get_opac_new($idnew1)}{updated_on};
-is_deeply(
-    get_opac_new($idnew1),
-    {
-        title          => $title1,
-        content        => $new1,
-        lang           => $lang1,
-        expirationdate => $expirationdate1,
-        published_on=> $timestamp1,
-        number         => $number1,
-        borrowernumber => undef,
-        idnew          => $idnew1,
-        branchname     => "$addbra branch",
-        branchcode     => $addbra,
-        updated_on     => $updated_on,
-    },
-    'got back expected news item via get_opac_new - ID 1'
-);
-
-# Test get_opac_new (single news item)
-$updated_on = %{get_opac_new($idnew2)}{updated_on};
-is_deeply(
-    get_opac_new($idnew2),
-    {  
-        title          => $title2,
-        content        => $new2,
-        lang           => $lang2,
-        expirationdate => $expirationdate2,
-        published_on=> $timestamp2,
-        number         => $number2,
-        borrowernumber => $brwrnmbr,
-        idnew          => $idnew2,
-        branchname     => "$addbra branch",
-        branchcode     => $addbra,
-        updated_on     => $updated_on,
-    },
-    'got back expected news item via get_opac_new - ID 2'
-);
-
-# Test get_opac_new (single news item without expiration date)
-my $news3 = get_opac_new($idnew3);
-is($news3->{ expirationdate }, undef, "Expiration date should be empty");
 
 # Test get_opac_news (multiple news items)
 my ( $opac_news_count, $arrayref_opac_news ) = get_opac_news( 0, q{}, 'LIB1' );
