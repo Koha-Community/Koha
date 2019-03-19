@@ -2680,7 +2680,7 @@ CREATE TABLE `accountlines` (
   `date` date default NULL,
   `amount` decimal(28,6) default NULL,
   `description` LONGTEXT,
-  `accounttype` varchar(5) default NULL,
+  `accounttype` varchar(16) default NULL,
   `status` varchar(16) default NULL,
   `payment_type` varchar(80) default NULL, -- optional authorised value PAYMENT_TYPE
   `amountoutstanding` decimal(28,6) default NULL,
