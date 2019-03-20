@@ -104,6 +104,7 @@
                         <td class="status">
                             <span class="tdlabel">Status:</span>
                             [% IF ( HOLD.is_waiting ) %]
+                                <i class="fa fa-exclamation-circle text-warning"></i>
                                 [% IF ( HOLD.is_at_destination ) %]
                                     [% IF ( HOLD.found ) %]
                                         Item waiting at <b> [% HOLD.branch.branchname | html %]</b>

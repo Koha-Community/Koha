@@ -283,6 +283,11 @@ if ($borrower) {
     my $accountlines = $account->lines;
 
     my $holds = $patron->holds;
+    my $waiting_holds_count = 0;
+
+    while(my $hold = $holds->next) {
+        $waiting_holds_count++ if $hold->is_waiting;
+    }
 
     $template->param(
         validuser => 1,
@@ -294,6 +299,7 @@ if ($borrower) {
         patronid => $patronid,
         patronlogin => $patronlogin,
         patronpw => $patronpw,
+        waiting_holds_count => $waiting_holds_count,
         noitemlinks => 1 ,
         borrowernumber => $borrower->{'borrowernumber'},
         SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
