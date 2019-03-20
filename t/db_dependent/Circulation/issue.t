@@ -418,7 +418,7 @@ $item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq 'PROC' , q{UpdateItemLocationOnCheckin updates location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
 ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not update permanent_location value from '' to 'PROC' with setting "_BLANK_: PROC"} );
 AddReturn( 'barcode_4', $branchcode_1 );
-$item2 = Koha::Items( $itemnumber2 );
+$item2 = Koha::Items->find( $itemnumber2 );
 ok( $item2->location eq '' , q{UpdateItemLocationOnCheckin updates location value from 'PROC' to '' with setting "PROC: _PERM_" } );
 ok( $item2->permanent_location eq '' , q{UpdateItemLocationOnCheckin does not update permanent_location from '' with setting "PROC: _PERM_" } );
 

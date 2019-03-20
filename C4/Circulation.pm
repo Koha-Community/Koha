@@ -1428,7 +1428,6 @@ sub AddIssue {
                     }
                 )->store;
             }
-
             if ( $item_object->location eq 'CART' && $item_object->permanent_location ne 'CART'  ) {
             ## Item was moved to cart via UpdateItemLocationOnCheckin, anything issued should be taken off the cart.
                 CartToShelf( $item_object->itemnumber );
@@ -1890,19 +1889,19 @@ sub AddReturn {
     map { $update_loc_rules->{$_} = $update_loc_rules->{$_}[0] } keys %$update_loc_rules; #We can only move to one location so we flatten the arrays
     if ($update_loc_rules) {
         if (defined $update_loc_rules->{_ALL_}) {
-            if ($update_loc_rules->{_ALL_} eq '_PERM_') { $update_loc_rules->{_ALL_} = $item->{permanent_location}; }
+            if ($update_loc_rules->{_ALL_} eq '_PERM_') { $update_loc_rules->{_ALL_} = $item->permanent_location; }
             if ($update_loc_rules->{_ALL_} eq '_BLANK_') { $update_loc_rules->{_ALL_} = ''; }
-            if ( $item->{location} ne $update_loc_rules->{_ALL_}) {
-                $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $update_loc_rules->{_ALL_} };
+            if ( $item->location ne $update_loc_rules->{_ALL_}) {
+                $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{_ALL_} };
                 ModItem( { location => $update_loc_rules->{_ALL_} }, undef, $itemnumber );
             }
         }
         else {
             foreach my $key ( keys %$update_loc_rules ) {
-                if ( $update_loc_rules->{$key} eq '_PERM_' ) { $update_loc_rules->{$key} = $item->{permanent_location}; }
+                if ( $update_loc_rules->{$key} eq '_PERM_' ) { $update_loc_rules->{$key} = $item->permanent_location; }
                 if ( $update_loc_rules->{$key} eq '_BLANK_') { $update_loc_rules->{$key} = '' ;}
-                if ( ($item->{location} eq $key && $item->{location} ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->{location} eq '' && $update_loc_rules->{$key} ne '') ) {
-                    $messages->{'ItemLocationUpdated'} = { from => $item->{location}, to => $update_loc_rules->{$key} };
+                if ( ($item->location eq $key && $item->location ne $update_loc_rules->{$key}) || ($key eq '_BLANK_' && $item->location eq '' && $update_loc_rules->{$key} ne '') ) {
+                    $messages->{'ItemLocationUpdated'} = { from => $item->location, to => $update_loc_rules->{$key} };
                     ModItem( { location => $update_loc_rules->{$key} }, undef, $itemnumber );
                     last;
                 }
