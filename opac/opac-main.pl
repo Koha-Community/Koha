@@ -70,15 +70,10 @@ if (defined $news_id){
         $template->param( single_news_error => 1 );
     }
 } else {
-    my $params;
-    $params->{lang} = [ $template->lang, '' ];
-    $params->{branchcode} = [ $homebranch, undef ] if $homebranch;
-    $params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
-                       expirationdate => undef ];
-    $koha_news = Koha::News->search(
-        $params,
-        {
-            order_by => 'number'
+    $koha_news = Koha::News->search_for_display({
+            type => 'opac',
+            lang => $template->lang,
+            library_id => $homebranch,
         });
 }
 

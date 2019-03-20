@@ -588,15 +588,10 @@ sub IssueSlip {
                 issues      => $all,
             };
         }
-        my $news = Koha::News->search({
-                lang => [ 'slip', '' ],
-                branchcode => [ $branch, undef ],
-                -or => [ expirationdate => { '>=' => \'NOW()' },
-                         expirationdate => undef ]
-            },{
-                order_by => 'number'
-            }
-        );
+        my $news = Koha::News->search_for_display({
+                type => 'slip',
+                library_id => $branch,
+            });
         my @news;
         while ( my $n = $news->next ) {
             my $all = $n->unblessed_all_relateds;

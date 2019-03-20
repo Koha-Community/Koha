@@ -49,13 +49,10 @@ my $homebranch;
 if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
 }
-my $koha_news = Koha::News->search({
-    lang => 'koha',
-    branchcode => [ $homebranch, undef ]
-},
-{
-    order_by => 'number'
-});
+my $koha_news = Koha::News->search_for_display({
+        type => 'koha',
+        library_id => $homebranch
+    });
 
 $template->param(
     koha_news   => $koha_news,

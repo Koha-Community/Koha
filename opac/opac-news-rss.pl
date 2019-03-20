@@ -43,15 +43,10 @@ my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Con
 
 my $branchcode = $input->param('branchcode');
 
-my $params;
-$params->{lang} = [ $news_lang, '' ];
-$params->{branchcode} = [ $branchcode, undef ] if $branchcode;
-$params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
-                   expirationdate => undef ];
-my $koha_news = Koha::News->search(
-    $params,
-    {
-        order_by => 'number'
+my $koha_news = Koha::News->search_for_display({
+        type => 'opac',
+        lang => $news_lang,
+        library_id => $branchcode,
     });
 
 $template->param( koha_news => $koha_news );

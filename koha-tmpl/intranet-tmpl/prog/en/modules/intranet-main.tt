@@ -27,9 +27,7 @@
                 [% IF ( koha_news.count ) %]
                     <div id="area-news">
                         <h3><span class="news_title">News</span></h3>
-                        [% SET show_author =
-                            Koha.Preference('NewsAuthorDisplay') == 'staff'
-                            || Koha.Preference('NewsAuthorDisplay') == 'both' %]
+                        [% SET show_author = Koha.Preference('NewsAuthorDisplay') == 'staff' || Koha.Preference('NewsAuthorDisplay') == 'both' %]
                         [% FOREACH koha_new IN koha_news %]
                             <div class="newsitem" id="news[% koha_new.idnew | html %]"><h4>[% koha_new.title | html %]</h4>
                                 <div class="newsbody">[% koha_new.content | $raw %]</div>

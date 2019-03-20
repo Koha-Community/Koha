@@ -22,7 +22,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
-
+use Koha::Exceptions;
 use Koha::NewsItem;
 
 use base qw(Koha::Objects);
@@ -36,6 +36,54 @@ Koha::News - Koha News object set class
 =head2 Class Methods
 
 =cut
+
+=head3 search_for_display
+
+my $news = Koha::News->search_for_display({
+    type => 'slip',
+    lang => 'en',
+    library_id => $branchcode
+})
+
+Return Koha::News set for display to user
+
+You can limit the results by type(lang) and library by optional params
+
+library_id should be valid branchcode of defined library
+
+type is one of this:
+- slip - for ISSUESLIP notice
+- koha - for intranet
+- opac - for online catalogue
+- OpanNavRight - Right column in the online catalogue
+
+lang is language code - it is used only when type is opac or OpacNavRight
+
+=cut
+
+sub search_for_display {
+    my ( $self, $params ) = @_;
+
+    my $search_params;
+    if ($params->{type} ) {
+        if ( $params->{type} eq 'slip' || $params->{type} eq 'koha') {
+            $search_params->{lang} = [ $params->{type}, '' ];
+        } elsif ( $params->{type} eq 'opac' && $params->{lang} ) {
+            $search_params->{lang} = [ $params->{lang}, '' ];
+        } elsif ( $params->{type} eq 'OpacNavRight' && $params->{lang} ) {
+            $search_params->{lang} = $params->{type} . '_' . $params->{lang};
+        } else {
+            Koha::Exceptions::BadParameter->throw("The type and lang parameters combination is not valid");
+        }
+    }
+
+    $search_params->{branchcode} = [ $params->{library_id}, undef ] if $params->{library_id};
+    $search_params->{timestamp} = { '<=' => \'NOW()' };
+    $search_params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
+                              expirationdate => undef ];
+
+    return $self->SUPER::search($search_params, { order_by => 'number' });
+}
 
 =head3 type
 

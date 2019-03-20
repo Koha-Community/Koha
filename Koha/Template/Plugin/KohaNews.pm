@@ -35,26 +35,15 @@ sub get {
     my $blocktitle = $params->{blocktitle};
     my $lang = $params->{lang};
     my $library = $params->{library};
-    my $news_lang;
 
-    if( !$display_location ){
-        $news_lang = $lang;
-    } else {
-        $news_lang = $display_location."_".$lang;
-    }
+    my $content = Koha::News->search_for_display({
+            type => $display_location,
+            lang => $lang,
+            library_id => $library,
+    });
 
-    my $search_params;
-    $search_params->{lang} = $news_lang;
-    $search_params->{branchcode} = [ $library, undef ] if $library;
-    $search_params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
-                              expirationdate => undef ];
-    my $content = Koha::News->search(
-        $search_params,
-        {
-            order_by => 'number'
-        });
 
-    if( @$content ){
+    if( $content ){
         return {
             content => $content,
             location => $display_location,
