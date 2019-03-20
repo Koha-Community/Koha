@@ -341,7 +341,7 @@
         [% END %]
         [% IF ( op_add && mandatoryfields ) %]
         {
-            var FldsRequired = [[% mandatoryfields | html %]];
+            var FldsRequired = [[% mandatoryfields | $raw %]];
             for (var i = 0; i < FldsRequired.length; i++) {
                 var rq_input = $('#' + FldsRequired[i]);
                 if (rq_input.length != 1) continue;
