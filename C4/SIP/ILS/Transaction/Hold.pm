@@ -54,7 +54,7 @@ sub do_hold {
         $self->ok(0);
         return $self;
     }
-    my $branch = ( $self->pickup_location || $self->{patron}->branchcode );
+    my $branch = ( $self->pickup_location || $self->{patron}->{branchcode} );
     unless ($branch) {
         $self->screen_msg('No branch specified (or found w/ patron).');
         $self->ok(0);

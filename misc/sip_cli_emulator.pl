@@ -52,6 +52,7 @@ my $currency_type;
 my $fee_amount;
 my $fee_identifier;
 my $transaction_id;
+my $pickup_location;
 
 my $terminator = q{};
 
@@ -73,12 +74,13 @@ GetOptions(
 
     "s|summary=s" => \$summary,
 
-    "fee-type=s"       => \$fee_type,
-    "payment-type=s"   => \$payment_type,
-    "currency-type=s"  => \$currency_type,
-    "fee-amount=s"     => \$fee_amount,
-    "fee-identifier=s" => \$fee_identifier,
-    "transaction-id=s" => \$transaction_id,
+    "fee-type=s"        => \$fee_type,
+    "payment-type=s"    => \$payment_type,
+    "currency-type=s"   => \$currency_type,
+    "fee-amount=s"      => \$fee_amount,
+    "fee-identifier=s"  => \$fee_identifier,
+    "transaction-id=s"  => \$transaction_id,
+    "pickup-location=s" => \$pickup_location,
 
     "t|terminator=s" => \$terminator,
 
@@ -265,7 +267,7 @@ my $handlers = {
             hold_mode           => '+',
             transaction_date    => $transaction_date,
             expiration_date     => undef,
-            pickup_location     => undef,
+            pickup_location     => $pickup_location,
             hold_type           => undef,
             institution_id      => $location_code,
             patron_identifier   => $patron_identifier,
@@ -636,6 +638,7 @@ Options:
   --fee-amount      Fee amount for Fee Paid message, required
   --fee-identifier  Fee identifier for Fee Paid message, optional
   --transaction-id  Transaction id for Fee Paid message, optional
+  --pickup-location Pickup location (branchcode) for Hold message, optional
 
   -m --message     SIP2 message to execute
 
