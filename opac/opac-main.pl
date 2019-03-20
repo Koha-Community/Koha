@@ -22,7 +22,6 @@ use Modern::Perl;
 use CGI qw ( -utf8 );
 use C4::Auth;    # get_template_and_user
 use C4::Output;
-use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
 use Koha::Quotes;
 use C4::Members;
@@ -61,17 +60,26 @@ elsif (C4::Context->userenv and defined $input->param('branch') and length $inpu
 }
 
 my $news_id = $input->param('news_id');
-my $all_koha_news;
+my $koha_news;
 
 if (defined $news_id){
-    $all_koha_news = Koha::News->search({ idnew => $news_id, lang => { '!=', 'koha' } }); # get news that is not staff-only news
-    if( $all_koha_news->count ) { # we only expect one btw
-        $template->param( news_item => $all_koha_news->next );
+    $koha_news = Koha::News->search({ idnew => $news_id, lang => { '!=', 'koha' } }); # get news that is not staff-only news
+    if ( $koha_news->count > 0){
+        $template->param( news_item => $koha_news->next );
     } else {
         $template->param( single_news_error => 1 );
     }
 } else {
-    $all_koha_news   = &GetNewsToDisplay( $template->lang, $homebranch);
+    my $params;
+    $params->{lang} = [ $template->lang, '' ];
+    $params->{branchcode} = [ $homebranch, undef ] if $homebranch;
+    $params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
+                       expirationdate => undef ];
+    $koha_news = Koha::News->search(
+        $params,
+        {
+            order_by => 'number'
+        });
 }
 
 # For dashboard
@@ -104,7 +112,7 @@ if ( $patron ) {
 }
 
 $template->param(
-    koha_news           => $all_koha_news,
+    koha_news           => $koha_news,
     branchcode          => $homebranch,
     daily_quote         => Koha::Quotes->get_daily_quote(),
 );

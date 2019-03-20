@@ -85,7 +85,7 @@
             [% END %]
         [% END %]
 
-        [% IF ( koha_news ) %]
+        [% IF koha_news.count %]
 
             [% IF single_news_error %]
 
@@ -96,7 +96,9 @@
             [% ELSE %]
 
                 <div id="news" class="newscontainer">
-                    [% SET newsdisp = ( Koha.Preference('NewsAuthorDisplay') ) %]
+                    [% SET show_author =
+                        Koha.Preference('NewsAuthorDisplay') == 'opac'
+                        || Koha.Preference('NewsAuthorDisplay') == 'both' %]
                     [% FOREACH koha_new IN koha_news %]
                         <div class="newsitem">
                             <h4 class="newsheader">
@@ -109,21 +111,16 @@
                             <div class="newsbody">[% koha_new.content | $raw %]</div>
                             <div class="newsfooter">
                                 Published on [% koha_new.published_on | $KohaDates %]
-                                [% IF ( (newsdisp == 'opac' || newsdisp == 'both') && koha_new.borrowernumber ) %]
-                                    [% IF news_item %]
-                                        [% SET author = koha_new.author %]
-                                        by <span class="newsauthor_title">[% author.title | html %] </span>[% author.firstname | html %] [% author.surname | html %]
-                                    [% ELSE %]
-                                        by <span class="newsauthor_title">[% koha_new.author_title | html %] </span>[% koha_new.author_firstname | html %] [% koha_new.author_surname | html %]
-                                    [% END %]
+                                [% IF ( show_author && koha_new.borrowernumber ) %]
+                                    by <span class="newsauthor_title">[% koha_new.author.title | html %] </span>[% koha_new.author.firstname | html %] [% koha_new.author.surname | html %]
                                 [% END %]
                                 [% IF ( news_item ) %]
                                     &bull; <a href="/cgi-bin/koha/opac-main.pl">Show all news</a>
                                 [% END %]
                             </div>
                         </div>
-
                     [% END %]
+
                     [% UNLESS news_item %]
                         <div id="rssnews-container">
                             <!-- Logged in users have a branch code or it could be explicitly set -->

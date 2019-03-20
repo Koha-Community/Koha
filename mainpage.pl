@@ -24,8 +24,8 @@ use CGI qw ( -utf8 );
 use C4::Output;
 use C4::Auth;
 use C4::Koha;
-use C4::NewsChannels; # GetNewsToDisplay
 use C4::Tags qw/get_count_by_tag_status/;
+use Koha::News;
 use Koha::Patron::Modifications;
 use Koha::Patron::Discharge;
 use Koha::Reviews;
@@ -49,13 +49,17 @@ my $homebranch;
 if (C4::Context->userenv) {
     $homebranch = C4::Context->userenv->{'branch'};
 }
-my $all_koha_news   = &GetNewsToDisplay("koha",$homebranch);
-my $koha_news_count = scalar @$all_koha_news;
+my $koha_news = Koha::News->search({
+    lang => 'koha',
+    branchcode => [ $homebranch, undef ]
+},
+{
+    order_by => 'number'
+});
 
 $template->param(
-    koha_news       => $all_koha_news,
-    koha_news_count => $koha_news_count,
-    daily_quote     => Koha::Quotes->get_daily_quote(),
+    koha_news   => $koha_news,
+    daily_quote => Koha::Quotes->get_daily_quote(),
 );
 
 my $branch =

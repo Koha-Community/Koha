@@ -26,7 +26,7 @@ use base qw( Template::Plugin );
 
 use C4::Koha;
 use C4::Context;
-use C4::NewsChannels; # GetNewsToDisplay
+use Koha::News;
 
 sub get {
     my ( $self, $params ) = @_;
@@ -34,7 +34,7 @@ sub get {
     my $display_location = $params->{location};
     my $blocktitle = $params->{blocktitle};
     my $lang = $params->{lang};
-    my $library = $params->{library} || "";
+    my $library = $params->{library};
     my $news_lang;
 
     if( !$display_location ){
@@ -43,7 +43,16 @@ sub get {
         $news_lang = $display_location."_".$lang;
     }
 
-    my $content = &GetNewsToDisplay( $news_lang, $library );
+    my $search_params;
+    $search_params->{lang} = $news_lang;
+    $search_params->{branchcode} = [ $library, undef ] if $library;
+    $search_params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
+                              expirationdate => undef ];
+    my $content = Koha::News->search(
+        $search_params,
+        {
+            order_by => 'number'
+        });
 
     if( @$content ){
         return {

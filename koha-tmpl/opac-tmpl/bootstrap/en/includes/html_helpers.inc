@@ -9,7 +9,7 @@
 [% END %]
 
 [% BLOCK koha_news_block %]
-    [% IF ( news.content.size > 0 ) %]
+    [% IF ( news.content.count > 0 ) %]
         <div id="[% news.location | html %]">
             [% FOREACH n IN news.content %]
                 <div class="[% n.lang | html %]_item">

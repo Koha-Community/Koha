@@ -22,8 +22,8 @@ use Modern::Perl;
 use CGI;
 use C4::Auth;    # get_template_and_user
 use C4::Output;
-use C4::NewsChannels;    # GetNewsToDisplay
 use C4::Languages qw(getTranslatedLanguages accept_language);
+use Koha::News;
 
 my $input = CGI->new;
 my $dbh   = C4::Context->dbh;
@@ -43,12 +43,17 @@ my ($theme, $news_lang, $availablethemes) = C4::Templates::themelanguage(C4::Con
 
 my $branchcode = $input->param('branchcode');
 
-my $all_koha_news   = GetNewsToDisplay( $news_lang, $branchcode );
-my $koha_news_count = scalar @$all_koha_news;
+my $params;
+$params->{lang} = [ $news_lang, '' ];
+$params->{branchcode} = [ $branchcode, undef ] if $branchcode;
+$params->{-or} = [ expirationdate => { '>=' => \'NOW()' },
+                   expirationdate => undef ];
+my $koha_news = Koha::News->search(
+    $params,
+    {
+        order_by => 'number'
+    });
 
-$template->param(
-    koha_news           => $all_koha_news,
-    koha_news_count     => $koha_news_count,
-);
+$template->param( koha_news => $koha_news );
 
 output_html_with_http_headers $input, $cookie, $template->output;

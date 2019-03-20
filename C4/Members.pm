@@ -33,7 +33,6 @@ use C4::Reserves;
 use C4::Accounts;
 use C4::Biblio;
 use C4::Letters;
-use C4::NewsChannels; #get slip news
 use DateTime;
 use Koha::Database;
 use Koha::DateUtils;
@@ -41,6 +40,7 @@ use Koha::AuthUtils qw(hash_password);
 use Koha::Database;
 use Koha::Holds;
 use Koha::List::Patron;
+use Koha::News;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 
@@ -588,11 +588,22 @@ sub IssueSlip {
                 issues      => $all,
             };
         }
-        my $news = GetNewsToDisplay( "slip", $branch );
-        my @news = map {
-            $_->{'timestamp'} = $_->{'newdate'};
-            { opac_news => $_ }
-        } @$news;
+        my $news = Koha::News->search({
+                lang => [ 'slip', '' ],
+                branchcode => [ $branch, undef ],
+                -or => [ expirationdate => { '>=' => \'NOW()' },
+                         expirationdate => undef ]
+            },{
+                order_by => 'number'
+            }
+        );
+        my @news;
+        while ( my $n = $news->next ) {
+            my $all = $n->unblessed_all_relateds;
+            push @news, {
+                opac_news => $all,
+            };
+        }
         $letter_code = 'ISSUESLIP';
         %repeat      = (
             checkedout => \@checkouts,
