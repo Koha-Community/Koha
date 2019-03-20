@@ -9,7 +9,7 @@ my $schema = Koha::Database->schema;
 $schema->storage->txn_begin();
 
 my $builder = t::lib::TestBuilder->new;
-my $biblio = $builder->build_sample_biblio;
+my $biblionumber = $builder->build({source=>'Biblio'})->{biblionumber};
 
 my $path = 'koha-tmpl/intranet-tmpl/prog/img/koha-logo.png';
 my $koha_logo = GD::Image->new($path);
@@ -17,9 +17,9 @@ my $koha_logo = GD::Image->new($path);
 {
     # True color == 0
     $koha_logo->trueColor(0);
-    C4::Images::PutImage( $biblio->biblionumber, $koha_logo );
+    C4::Images::PutImage( $biblionumber, $koha_logo );
 
-    my @imagenumbers = C4::Images::ListImagesForBiblio( $biblio->biblionumber );
+    my @imagenumbers = C4::Images::ListImagesForBiblio( $biblionumber );
     is( scalar(@imagenumbers), 1, "The image has been added to the biblio" );
     my $image = C4::Images::RetrieveImage($imagenumbers[0]);
     ok( length $image->{thumbnail} < length $image->{imagefile}, 'thumbnail should be shorter than the original image' );
@@ -29,9 +29,9 @@ my $koha_logo = GD::Image->new($path);
     # True color == 1
     # Note that we are cheating here, the original file is not a true color image
     $koha_logo->trueColor(1);
-    C4::Images::PutImage( $biblio->biblionumber, $koha_logo, 'replace' );
+    C4::Images::PutImage( $biblionumber, $koha_logo, 'replace' );
 
-    my @imagenumbers = C4::Images::ListImagesForBiblio( $biblio->biblionumber );
+    my @imagenumbers = C4::Images::ListImagesForBiblio( $biblionumber );
     is( scalar(@imagenumbers), 1 , "The image replaced the previous image on the biblio" );
     my $image = C4::Images::RetrieveImage($imagenumbers[0]);
     ok( length $image->{thumbnail} > length $image->{imagefile}, 'thumbnail should be bigger than the original image.' );
