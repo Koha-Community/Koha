@@ -1,16 +1,22 @@
 #!/usr/bin/perl;
 
 use Modern::Perl;
-use Test::More tests => 16;
+use Test::More tests => 17;
 
 use C4::Context;
 use Koha::Database;
 use Koha::Libraries;
+
+use t::lib::Mocks;
+use t::lib::TestBuilder;
+
 use_ok('C4::Overdues');
 can_ok('C4::Overdues', 'GetOverdueMessageTransportTypes');
 can_ok('C4::Overdues', 'GetBranchcodesWithOverdueRules');
 
 my $schema = Koha::Database->new->schema;
+my $builder = t::lib::TestBuilder->new;
+
 $schema->storage->txn_begin;
 my $dbh = C4::Context->dbh;
 
@@ -121,3 +127,181 @@ $dbh->do(q|
 
 @overdue_branches = C4::Overdues::GetBranchcodesWithOverdueRules();
 is_deeply( \@overdue_branches, ['CPL', 'MPL'] , 'If only 2 specific rules exist, 2 branches should be returned' );
+
+$schema->storage->txn_rollback;
+
+subtest 'UpdateFine tests' => sub {
+
+    plan tests => 25;
+
+    $schema->storage->txn_begin;
+
+    t::lib::Mocks::mock_preference( 'MaxFine', '100' );
+
+    my $patron    = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $item1     = $builder->build_sample_item();
+    my $item2     = $builder->build_sample_item();
+    my $checkout1 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { itemnumber => $item1->itemnumber }
+        }
+    );
+    my $checkout2 = $builder->build_object(
+        {
+            class => 'Koha::Checkouts',
+            value => { itemnumber => $item2->itemnumber }
+        }
+    );
+
+    # Try to add 0 amount fine
+    UpdateFine(
+        {
+            issue_id       => $checkout1->issue_id,
+            itemnumber     => $item1->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '0',
+            due            => $checkout1->date_due
+        }
+    );
+
+    my $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber } );
+    is( $fines->count, 0, "No fine added when amount is 0" );
+
+    # Add fine 1
+    UpdateFine(
+        {
+            issue_id       => $checkout1->issue_id,
+            itemnumber     => $item1->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '50',
+            due            => $checkout1->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber } );
+    is( $fines->count, 1, "Fine added when amount is greater than 0" );
+    my $fine = $fines->next;
+    is( $fine->amount, '50.000000', "Fine amount correctly set to 50" );
+    is( $fine->issue_id, $checkout1->issue_id, "Fine is associated with the correct issue" );
+    is( $fine->itemnumber, $checkout1->itemnumber, "Fine is associated with the correct item" );
+
+    # Increase fine 1
+    UpdateFine(
+        {
+            issue_id       => $checkout1->issue_id,
+            itemnumber     => $item1->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '80',
+            due            => $checkout1->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber } );
+    is( $fines->count, 1, "Existing fine updated" );
+    $fine = $fines->next;
+    is( $fine->amount, '80.000000', "Fine amount correctly updated to 80" );
+
+    # Add fine 2
+    UpdateFine(
+        {
+            issue_id       => $checkout2->issue_id,
+            itemnumber     => $item2->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '30',
+            due            => $checkout2->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        2,    "New fine added for second checkout" );
+    $fine = $fines->next;
+    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    my $fine2 = $fines->next;
+    is( $fine2->amount, '20.000000', "Second fine capped at '20' by MaxFine" );
+    is( $fine2->issue_id, $checkout2->issue_id, "Second fine is associated with the correct issue" );
+    is( $fine2->itemnumber, $checkout2->itemnumber, "Second fine is associated with the correct item" );
+
+    # Partial pay fine 1
+    $fine->amountoutstanding('50')->store;
+    UpdateFine(
+        {
+            issue_id       => $checkout2->issue_id,
+            itemnumber     => $item2->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '30',
+            due            => $checkout2->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        2,    "Still two fines after second checkout update" );
+    $fine = $fines->next;
+    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    $fine2 = $fines->next;
+    is( $fine2->amount, '30.000000', "Second fine increased after partial payment of first" );
+
+    # Fix fine 1, create third fine
+    $fine->accounttype('F')->store;
+    UpdateFine(
+        {
+            issue_id       => $checkout1->issue_id,
+            itemnumber     => $item1->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '30',
+            due            => $checkout1->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        3,    "Third fine added for overdue renewal" );
+    $fine = $fines->next;
+    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    $fine2 = $fines->next;
+    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
+    my $fine3 = $fines->next;
+    is( $fine3->amount, '20.000000', "Third fine amount capped due to MaxFine" );
+    is( $fine3->issue_id, $checkout1->issue_id, "Third fine is associated with the correct issue" );
+    is( $fine3->itemnumber, $checkout1->itemnumber, "Third fine is associated with the correct item" );
+
+    # FIXME: Add test to check whether sundry/manual charges are included within MaxFine.
+    # FIXME: Add test to ensure other charges are not included within MaxFine.
+
+    # Disable MaxFine
+    t::lib::Mocks::mock_preference( 'MaxFine', '0' );
+    UpdateFine(
+        {
+            issue_id       => $checkout1->issue_id,
+            itemnumber     => $item1->itemnumber,
+            borrowernumber => $patron->borrowernumber,
+            amount         => '30',
+            due            => $checkout1->date_due
+        }
+    );
+
+    $fines = Koha::Account::Lines->search(
+        { borrowernumber => $patron->borrowernumber },
+        { order_by       => { '-asc' => 'accountlines_id' } }
+    );
+    is( $fines->count,        3,    "Still only three fines after MaxFine cap removed" );
+    $fine = $fines->next;
+    is( $fine->amount, '80.000000', "First fine amount unchanged" );
+    $fine2 = $fines->next;
+    is( $fine2->amount, '30.000000', "Second fine amount unchanged" );
+    $fine3 = $fines->next;
+    is( $fine3->amount, '30.000000', "Third fine increased now MaxFine cap is disabled" );
+
+    $schema->storage->txn_rollback;
+};
