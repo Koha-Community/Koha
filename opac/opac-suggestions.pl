@@ -212,7 +212,10 @@ my @mandatoryfields;
 {
     last unless ($op eq 'add');
     my $fldsreq_sp = C4::Context->preference("OPACSuggestionMandatoryFields") || 'title';
-    @mandatoryfields = sort split(/\s*\,\s*/, $fldsreq_sp);
+    @mandatoryfields = split( ",", $fldsreq_sp );
+    foreach (@mandatoryfields) {
+        $template->param( $_."_required" => 1);
+    }
 }
 
 $template->param(
@@ -224,7 +227,6 @@ $template->param(
     messages              => \@messages,
     suggestionsview       => 1,
     suggested_by_anyone   => $suggested_by_anyone,
-    mandatoryfields       => \@mandatoryfields,
     patrons_pending_suggestions_count => $patrons_pending_suggestions_count,
 );
 

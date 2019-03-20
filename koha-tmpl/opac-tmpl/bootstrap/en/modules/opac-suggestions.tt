@@ -43,42 +43,145 @@
                             <form action="/cgi-bin/koha/opac-suggestions.pl" method="post" id="add_suggestion_form">
                                 <fieldset class="rows">
                                     <ol>
-                                        <li><label for="title">Title:</label><input type="text" id="title" name="title" class="span6" maxlength="255" /></li>
-                                        <li><label for="author">Author:</label><input type="text" id="author" name="author" class="span6" maxlength="80" /></li>
+                                        <li>
+                                            [% IF ( title_required ) %]
+                                                <label for="title" class="required">Title:</label>
+                                                <input type="text" id="title" name="title" class="span6" maxlength="255" required="required" />
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="title">Title:</label>
+                                                <input type="text" id="title" name="title" class="span6" maxlength="255" />
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            [% IF ( author_required ) %]
+                                                <label for="author" class="required">Author:</label>
+                                                <input type="text" id="author" name="author" class="span6" maxlength="80" required="required" />
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="author">Author:</label>
+                                                <input type="text" id="author" name="author" class="span6" maxlength="80" />
+                                            [% END %]
+                                        </li>
                                         <li>
                                             <div title="Copyright or publication year, for example: 2016">
-                                            <label for="copyrightdate">Copyright date:</label><input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" />
+                                                [% IF ( copyrightdate_required ) %]
+                                                    <label for="copyrightdate" class="required">Copyright date:</label>
+                                                    <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" required="required" />
+                                                <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="copyrightdate">Copyright date:</label>
+                                                    <input type="text" id="copyrightdate" name="copyrightdate" pattern="[12]\d{3}" size="4" maxlength="4" />
+                                                [% END %]
                                             </div>
                                         </li>
-                                        <li><label for="isbn">Standard number (ISBN, ISSN or other):</label><input type="text" id="isbn" name="isbn"  maxlength="80" /></li>
-                                        <li><label for="publishercode">Publisher:</label><input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" /></li>
-                                        <li><label for="collectiontitle">Collection title:</label><input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" /></li>
-                                        <li><label for="place">Publication place:</label><input type="text" id="place" name="place"  maxlength="80" /></li>
-                                        <li id="opac-suggestion-quantity"><label for="quantity">Quantity:</label><input type="text" id="quantity" name="quantity"  maxlength="4" size="4" /></li>
-                                        <li><label for="itemtype">Item type:</label>
-                                            [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
+                                        <li>
+                                            [% IF ( isbn_required ) %]
+                                                <label for="isbn" class="required">Standard number (ISBN, ISSN or other):</label>
+                                                <input type="text" id="isbn" name="isbn"  maxlength="80" required="required" />
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="isbn">Standard number (ISBN, ISSN or other):</label>
+                                                <input type="text" id="isbn" name="isbn"  maxlength="80" />
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            [% IF ( publishercode_required ) %]
+                                                <label for="publishercode" class="required">Publisher:</label>
+                                                <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" required="required" />
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="publishercode">Publisher:</label>
+                                                <input type="text" id="publishercode" name="publishercode" class="span6" maxlength="80" />
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            [% IF ( collectiontitle_required ) %]
+                                                <label for="collectiontitle" class="required">Collection title:</label>
+                                                <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" required="required" />
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="collectiontitle">Collection title:</label>
+                                                <input type="text" id="collectiontitle" name="collectiontitle" class="span6" maxlength="80" />
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            [% IF ( place_required ) %]
+                                                <label for="place" class="required">Publication place:</label>
+                                                <input type="text" id="place" name="place" required="required" maxlength="80" />
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="place">Publication place:</label>
+                                                <input type="text" id="place" name="place"  maxlength="80" />
+                                            [% END %]
+                                        </li>
+                                        <li id="opac-suggestion-quantity">
+                                            [% IF ( quantity_required ) %]
+                                                <label for="quantity" class="required">Quantity:</label>
+                                                <input type="text" id="quantity" name="quantity" required="required" maxlength="4" size="4" />
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="quantity">Quantity:</label>
+                                                <input type="text" id="quantity" name="quantity"  maxlength="4" size="4" />
+                                            [% END %]
+                                        </li>
+                                        <li>
+                                            [% IF ( itemtype_required ) %]
+                                                <label for="itemtype" class="required">Item type:</label>
+                                                [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="itemtype">Item type:</label>
+                                                [% PROCESS 'av-build-dropbox.inc' name="itemtype", category="SUGGEST_FORMAT", size = 20 %]
+                                            [% END %]
                                         </li>
                                         [% IF branchcode %]
-                                            <li><label for="branch">Library:</label>
-                                                <select name="branchcode" id="branch">
-                                                    [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
-                                                </select>
+                                            <li>
+                                                [% IF ( branchcode_required ) %]
+                                                    <label for="branch" class="required">Library:</label>
+                                                    <select name="branchcode" id="branch" required="required">
+                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                                                    </select>
+                                                    <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="branch">Library:</label>
+                                                    <select name="branchcode" id="branch">
+                                                        [% PROCESS options_for_libraries libraries => Branches.all( selected => branchcode ) %]
+                                                    </select>
+                                                [% END %]
                                             </li>
                                         [% END %]
                                         [% IF ( patron_reason_loop ) %]
                                             <li>
-                                                <label for="patronreason">Reason for suggestion: </label>
-                                                <select name="patronreason" id="patronreason">
-                                                    <option value="">-- Choose --</option>
-                                                    [% FOREACH patron_reason_loo IN patron_reason_loop %]
-                                                        <option value="[% patron_reason_loo.authorised_value | html %]">[% patron_reason_loo.lib | html %]</option>
-                                                    [% END %]
-                                                </select>
+                                                [% IF ( patronreason_required ) %]
+                                                    <label for="patronreason" class="required">Reason for suggestion: </label>
+                                                    <select name="patronreason" id="patronreason" required="required">
+                                                        <option value="">-- Choose --</option>
+                                                        [% FOREACH patron_reason_loo IN patron_reason_loop %]
+                                                            <option value="[% patron_reason_loo.authorised_value | html %]">[% patron_reason_loo.lib | html %]</option>
+                                                        [% END %]
+                                                    </select>
+                                                    <span class="required">Required</span>
+                                                [% ELSE %]
+                                                    <label for="patronreason">Reason for suggestion: </label>
+                                                    <select name="patronreason" id="patronreason">
+                                                        <option value="">-- Choose --</option>
+                                                        [% FOREACH patron_reason_loo IN patron_reason_loop %]
+                                                            <option value="[% patron_reason_loo.authorised_value | html %]">[% patron_reason_loo.lib | html %]</option>
+                                                        [% END %]
+                                                    </select>
+                                                [% END %]
                                             </li>
                                         [% END %]
                                         <li>
-                                            <label for="note">Notes:</label>
-                                            <textarea name="note" id="note" rows="5" cols="40"></textarea>
+                                            [% IF ( note_required ) %]
+                                                <label for="note" class="required">Notes:</label>
+                                                <textarea name="note" id="note" rows="5" cols="40" required="required"></textarea>
+                                                <span class="required">Required</span>
+                                            [% ELSE %]
+                                                <label for="note">Notes:</label>
+                                                <textarea name="note" id="note" rows="5" cols="40"></textarea>
+                                            [% END %]
                                         </li>
 
                                         <!--  Add a hidden 'negcap' field -->
@@ -338,19 +441,6 @@
           }
           return true;
         });
-        [% END %]
-        [% IF ( op_add && mandatoryfields.size ) %]
-        {
-            var FldsRequired = ['[% mandatoryfields.join("','") | html %]'];
-            for (var i = 0; i < FldsRequired.length; i++) {
-                var rq_input = $('#' + FldsRequired[i]);
-                if (rq_input.length != 1) continue;
-                $(rq_input).attr("required", "required");
-                var rq_label = $("label[for=" + rq_input.attr("id") + "]");
-                if (rq_label.length != 1) continue;
-                $(rq_label).addClass('required');
-            }
-        }
         [% END %]
     });
 //]]>
