@@ -32,6 +32,8 @@ use Koha::Patron::Category;
 use Koha::ItemTypes;
 use Koha::IssuingRule;
 use Koha::IssuingRules;
+use Koha::Auth::BorrowerPermissions;
+use Koha::Auth::PermissionManager;
 
 #Setting variables
 my $input = new CGI;
@@ -172,7 +174,6 @@ if ( $step == 3 ) {
                 privacy      => "default",
                 address      => "",
                 city         => "",
-                flags => 1,    # Will be superlibrarian
             };
 
             my $patron_category =
@@ -181,6 +182,9 @@ if ( $step == 3 ) {
               $patron_category->get_expiry_date( $patron_data->{dateenrolled} );
 
             my $borrowernumber = C4::Members::AddMember(%$patron_data);
+
+            my $permissionManager = Koha::Auth::PermissionManager->new();
+            $permissionManager->grantPermission($borrowernumber, 'superlibrarian', 'superlibrarian');
 
             #Error handling checking if the patron was created successfully
             if ($borrowernumber) {
@@ -192,7 +196,7 @@ if ( $step == 3 ) {
         }
     }
 
-    $step++ if Koha::Patrons->search( { flags => 1 } )->count;
+    $step++ if Koha::Auth::BorrowerPermissions->search( { permission_module_id => 1, permission_id => 1 } )->count;
 }
 if ( $step == 4 ) {
     if ( $op eq 'add_validate_itemtype' ) {
