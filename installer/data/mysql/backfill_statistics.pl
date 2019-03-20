@@ -24,9 +24,7 @@ sub get_counts() {
 	(SELECT count(*) FROM statistics WHERE branch="NO_LIBRARY"       ) AS NO_LIBRARY,
 	(SELECT count(*) FROM statistics WHERE branch             IS NULL) AS NULL_BRANCH,
 	(SELECT count(*) FROM statistics WHERE itemtype           IS NULL AND itemnumber IS NOT NULL) AS NULL_ITEMTYPE,
-	(SELECT count(*) FROM statistics WHERE usercode           IS NULL) AS NULL_USERCODE,
 	(SELECT count(*) FROM statistics WHERE borrowernumber     IS NULL) AS NULL_BORROWERNUMBER,
-	(SELECT count(*) FROM statistics WHERE associatedborrower IS NULL) AS NULL_ASSOCIATEDBORROWER,
 	(SELECT count(*) FROM statistics                                 ) AS Total
 	);
 	my $sth = $dbh->prepare($query);
