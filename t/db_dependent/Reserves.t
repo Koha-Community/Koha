@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 67;
+use Test::More tests => 68;
 use Test::MockModule;
 use Test::Warn;
 
@@ -188,6 +188,7 @@ Koha::CirculationRules->set_rules(
         rules        => {
             reservesallowed => 25,
             holds_per_record => 1,
+            onshelfholds => 1,
         }
     }
 );
@@ -987,7 +988,76 @@ subtest 'reserves.item_level_hold' => sub {
 
         $hold->delete;
     };
+};
 
+subtest 'OnShelfHoldAllowed test' => sub {
+    plan tests => 3;
+    $dbh->do('DELETE FROM circulation_rules');
+    my $biblio = $builder->build_sample_biblio({frameworkcode => $frameworkcode})->biblionumber;
+
+    # Create a helper item instance for testing
+    my $item = $builder->build_sample_item({ biblionumber => $biblio, library => $branch_1, itype => $itemtype });
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                reservesallowed => 25,
+                opacitemholds => 'Y',
+                onshelfholds => 1,
+            }
+        }
+        );
+
+    my $canreserve = C4::Reserves::CanItemBeReserved(
+        $patron->borrowernumber,
+        $item->itemnumber,
+        );
+
+    is( $canreserve->{status}, 'OK',
+        'item-level holds should be possible with onshelfholdallowed set to "Yes"' );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                reservesallowed => 25,
+                opacitemholds => 'Y',
+                onshelfholds => '0',
+            }
+        });
+
+    $canreserve = C4::Reserves::CanItemBeReserved(
+        $patron->borrowernumber,
+        $item->itemnumber,
+        );
+
+    is( $canreserve->{status}, 'onShelfHoldsNotAllowed',
+        'item-level holds should not be possible with onshelfholdallowed set to "If any unavailable"' );
+
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => undef,
+            categorycode => undef,
+            itemtype     => undef,
+            rules        => {
+                reservesallowed => 25,
+                opacitemholds => 'Y',
+                onshelfholds => '2',
+            }
+        });
+
+    $canreserve = C4::Reserves::CanItemBeReserved(
+        $patron->borrowernumber,
+        $item->itemnumber,
+        );
+
+    is( $canreserve->{status}, 'onShelfHoldsNotAllowed',
+        'item-level holds should not be possible with onshelfholdallowed set to "If all unavailable"' );
 };
 
 subtest 'MoveReserve additional test' => sub {
@@ -1164,6 +1234,17 @@ subtest 'AllowHoldOnPatronPossession test' => sub {
     my $item = $builder->build_sample_item({ biblionumber => $biblio->biblionumber,notforloan => 0, itype => $itype->itemtype });
     my $patron = $builder->build_object({ class => "Koha::Patrons",
                                           value => { branchcode => $item->homebranch }});
+
+    Koha::CirculationRules->set_rules(
+	{
+	    branchcode   => undef,
+	    categorycode => undef,
+	    itemtype     => undef,
+	    rules        => {
+		onshelfholds => 1,
+	    }
+	}
+    );
 
     C4::Circulation::AddIssue($patron->unblessed,
                               $item->barcode);
