@@ -192,7 +192,7 @@ END_OF_BODY
         $template->param( error => 1 );
     }
     $template->param( email_add => $email_add );
-    output_html_with_http_headers $query, $cookie, $template->output;
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 }
 else {
     my $new_session_id = $cookie->value;
@@ -204,5 +204,5 @@ else {
         csrf_token => Koha::Token->new->generate_csrf(
             { session_id => $new_session_id, } ),
     );
-    output_html_with_http_headers $query, $cookie, $template->output;
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 }

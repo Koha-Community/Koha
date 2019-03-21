@@ -71,11 +71,6 @@ for ( C4::Context->preference("OPACShowHoldQueueDetails") ) {
     m/priority/ and $show_priority = 1;
 }
 
-sub get_out {
-	output_html_with_http_headers(shift,shift,shift); # $query, $cookie, $template->output;
-	exit;
-}
-
 my $patron = Koha::Patrons->find( $borrowernumber );
 
 my $can_place_hold_if_available_at_pickup = C4::Context->preference('OPACHoldsIfAvailableAtPickup');
@@ -94,7 +89,7 @@ if ( $patron->category->effective_BlockExpiredPatronOpacActions ) {
 
         # cannot reserve, their card has expired and the rules set mean this is not allowed
         $template->param( message => 1, expired_patron => 1 );
-        get_out( $query, $cookie, $template->output );
+        output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
     }
 }
 
@@ -120,7 +115,7 @@ if (! $biblionumbers) {
 
 if ((! $biblionumbers) && (! $query->param('place_reserve'))) {
     $template->param(message=>1, no_biblionumber=>1);
-    &get_out($query, $cookie, $template->output);
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 }
 
 # Pass the numbers to the page so they can be fed back
@@ -132,7 +127,7 @@ my @biblionumbers = split /\//, $biblionumbers;
 if (($#biblionumbers < 0) && (! $query->param('place_reserve'))) {
     # TODO: New message?
     $template->param(message=>1, no_biblionumber=>1);
-    &get_out($query, $cookie, $template->output);
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 }
 
 
@@ -224,7 +219,7 @@ if ( $query->param('place_reserve') ) {
     my $selectionCount = @selectedItems;
     if (($selectionCount == 0) || (($selectionCount % 3) != 0)) {
         $template->param(message=>1, bad_data=>1);
-        &get_out($query, $cookie, $template->output);
+        output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
     }
 
     my $failed_holds = 0;
@@ -413,7 +408,7 @@ foreach my $biblioNum (@biblionumbers) {
     my $biblioData = $biblioDataHash{$biblioNum};
     if (! $biblioData) {
         $template->param(message=>1, bad_biblionumber=>$biblioNum);
-        &get_out($query, $cookie, $template->output);
+        output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
     }
 
     my @not_available_at = ();

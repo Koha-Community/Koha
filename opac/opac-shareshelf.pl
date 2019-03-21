@@ -54,8 +54,7 @@ if ( !$pvar->{errcode} ) {
     show_accept($pvar)    if $pvar->{op} eq 'accept';
 }
 load_template_vars($pvar);
-output_html_with_http_headers $pvar->{query}, $pvar->{cookie},
-  $pvar->{template}->output;
+output_html_with_http_headers $pvar->{query}, $pvar->{cookie}, $pvar->{template}->output, undef, { force_no_caching => 1 };
 
 #-------------------------------------------------------------------------------
 

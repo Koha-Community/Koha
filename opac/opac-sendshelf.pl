@@ -197,19 +197,19 @@ END_OF_BODY
         shelfid => $shelfid,
         email => $email,
     );
-    output_html_with_http_headers $query, $cookie, $template->output;
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 
 
 }else{
     $template->param( shelfid => $shelfid,
                       url     => "/cgi-bin/koha/opac-sendshelf.pl",
                     );
-    output_html_with_http_headers $query, $cookie, $template->output;
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 }
 
 } else {
     $template->param( invalidlist => 1,
                       url     => "/cgi-bin/koha/opac-sendshelf.pl",
     );
-    output_html_with_http_headers $query, $cookie, $template->output;
+    output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };
 }
