@@ -111,7 +111,7 @@ subtest 'scalar top level tests' => sub {
 
 subtest 'hashref top level AND tests' => sub {
 
-    plan tests => 15;
+    plan tests => 16;
 
     # Check top level permission for superlibrarian
     my $r =

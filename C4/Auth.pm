@@ -2066,6 +2066,7 @@ sub _dispatch {
         }
     } elsif ($ref eq 'HASH') {
         foreach my $key (keys %{$required}) {
+            next if $flags == 1;
             my $require = $required->{$key};
             my $rflags  = $flags->{$key};
             return 0 unless _dispatch($require, $rflags);
@@ -2089,7 +2090,6 @@ sub _dispatch {
 
 sub haspermission {
     my ( $userid, $flagsrequired ) = @_;
-
 
     #Koha::Exceptions::WrongParameter->throw('$flagsrequired should not be undef')
     #  unless defined($flagsrequired);
