@@ -17336,6 +17336,14 @@ if( CheckVersion( $DBversion ) ) {
     print "WARNING: (Bug 21846) You need to manually run $maintenance_script to fix possible issues with tags.\n";
 }
 
+$DBversion = '18.11.03.004';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('OrderPriceRounding',NULL,'Local preference for rounding orders before calculations to ensure correct calculations','|nearest_cent','Choice')" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18736 - Add syspref to control order rounding)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
