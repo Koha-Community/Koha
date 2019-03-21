@@ -40,12 +40,6 @@ __PACKAGE__->table("accountlines");
   is_foreign_key: 1
   is_nullable: 1
 
-=head2 accountno
-
-  data_type: 'smallint'
-  default_value: 0
-  is_nullable: 0
-
 =head2 itemnumber
 
   data_type: 'integer'
@@ -126,8 +120,6 @@ __PACKAGE__->add_columns(
   { data_type => "integer", is_nullable => 1 },
   "borrowernumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
-  "accountno",
-  { data_type => "smallint", default_value => 0, is_nullable => 0 },
   "itemnumber",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
   "date",
@@ -264,8 +256,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-01-03 16:10:04
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:BO7iSB+QzoJNuZ8Uttba6A
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-21 19:22:42
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hUtKezIBauLDzkRIq5ifTQ
 
 sub koha_objects_class {
     'Koha::Account::Lines';

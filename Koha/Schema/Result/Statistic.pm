@@ -35,12 +35,6 @@ __PACKAGE__->table("statistics");
   is_nullable: 1
   size: 10
 
-=head2 proccode
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 4
-
 =head2 value
 
   data_type: 'double precision'
@@ -108,8 +102,6 @@ __PACKAGE__->add_columns(
   },
   "branch",
   { data_type => "varchar", is_nullable => 1, size => 10 },
-  "proccode",
-  { data_type => "varchar", is_nullable => 1, size => 4 },
   "value",
   { data_type => "double precision", is_nullable => 1, size => [16, 4] },
   "type",
@@ -133,8 +125,8 @@ __PACKAGE__->add_columns(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-09-26 16:15:09
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OECp3uSP488L8TUoS1HseQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-21 19:22:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lnIllYjs9funehkB7Y4jjw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
