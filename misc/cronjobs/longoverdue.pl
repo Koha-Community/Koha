@@ -69,8 +69,8 @@ GetOptions(
     'category=s'      => $borrower_category,
     'skip-category=s' => $skip_borrower_category,
     'list-categories' => \$list_categories,
-    'itemtype=s'      => $itemtype,
-    'skip-itemtype=s' => $skip_itemtype,
+    'itemtype=s'      => \$itemtype,
+    'skip-itemtype=s' => \$skip_itemtype,
     'list-itemtypes'  => \$list_itemtypes,
 );
 
@@ -88,7 +88,7 @@ if ( $help ) {
 
 if ( scalar @$borrower_category && scalar @$skip_borrower_category) {
     pod2usage( -verbose => 1,
-               -message => "The options --category and --skip-category are mually exclusive.\n"
+               -message => "The options --category and --skip-category are mutually exclusive.\n"
                            . "Use one or the other.",
                -exitval => 1
             );
