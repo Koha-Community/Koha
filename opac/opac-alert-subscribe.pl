@@ -97,4 +97,4 @@ else {
         );
     }
 }
-output_html_with_http_headers $query, $cookie, $template->output;
+output_html_with_http_headers $query, $cookie, $template->output, undef, { force_no_caching => 1 };

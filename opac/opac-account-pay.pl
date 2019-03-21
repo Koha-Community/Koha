@@ -138,7 +138,7 @@ if ( $payment_method eq 'paypal' ) {
         $error = 1;
     }
 
-    output_html_with_http_headers( $cgi, $cookie, $template->output ) if $error;
+    output_html_with_http_headers( $cgi, $cookie, $template->output, undef, { force_no_caching => 1 } ) if $error;
 }
 else {
     Koha::Plugins::Handler->run(
