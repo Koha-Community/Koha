@@ -13,6 +13,7 @@ use Koha::Patrons;
 use Koha::Patrons;
 my $query = new CGI;
 use HTML::Entities;
+use Try::Tiny;
 
 my ( $template, $dummy, $cookie ) = get_template_and_user(
     {
