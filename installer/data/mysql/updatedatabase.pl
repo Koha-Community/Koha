@@ -17751,6 +17751,14 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21756 - Add 'Account Fee' and 'Hold Expired' to the account_offset_types table if missing)\n";
 }
 
+$DBversion = '18.12.00.029';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('OrderPriceRounding',NULL,'Local preference for rounding orders before calculations to ensure correct calculations','|nearest_cent','Choice')" );
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18736 - Add syspref to control order rounding)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
