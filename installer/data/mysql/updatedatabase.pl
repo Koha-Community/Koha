@@ -17759,6 +17759,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18736 - Add syspref to control order rounding)\n";
 }
 
+$DBversion = '18.12.00.030';
+if( CheckVersion( $DBversion ) ) {
+    if( column_exists( 'accountlines', 'accountno' ) ) {
+        $dbh->do( "ALTER TABLE accountlines DROP COLUMN accountno" );
+    }
+    if( column_exists( 'statistics', 'proccode' ) ) {
+        $dbh->do( "ALTER TABLE statistics DROP COLUMN proccode" );
+    }
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21683 - Remove accountlines.accountno and statistics.proccode fields)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
