@@ -66,7 +66,7 @@
                                     <label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" />
                                     <label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" />
                                 </fieldset>
-                                <fieldset class="action"><input type="submit" value="Submit changes" class="btn" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
+                                <fieldset class="action"><input type="submit" value="Change password" class="btn" /> <a href="/cgi-bin/koha/opac-user.pl" class="cancel">Cancel</a></fieldset>
                             </form>
                         [% END # /IF Ask_data %]
                     [% ELSE %]
@@ -80,7 +80,7 @@
                         </div>
                         <form action="/cgi-bin/koha/opac-user.pl" method="post" autocomplete="off">
                             <input type="hidden" name="borrowernumber" value="[% borrowernumber | html %]" />
-                            <p><input type="submit" class="btn" value="Return to your record" /></p>
+                            <p><input type="submit" class="btn" value="Return to my account" /></p>
                         </form>
                     [% END # /IF password_updated %]
                 </div> <!-- / #userpasswd -->
