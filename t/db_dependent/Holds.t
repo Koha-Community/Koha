@@ -518,7 +518,7 @@ subtest 'Pickup location availability tests' => sub {
         toBranch => $branch_to,
         itemtype => $item->effective_itemtype,
     })->store;
-    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to),
+    is(CanItemBeReserved($patron, $item->itemnumber, $branch_to)->{status},
        'cannotBeTransferred', 'Item cannot be transferred');
     $limit->delete;
 
