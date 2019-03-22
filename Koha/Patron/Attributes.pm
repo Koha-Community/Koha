@@ -56,7 +56,7 @@ sub search {
         $branchcode
         ? {
             join => {
-                'borrower_attribute_types' => 'borrower_attribute_types_branches'
+                'code' => 'borrower_attribute_types_branches'
             },
         } : {};
     $attributes //= {};
