@@ -31,7 +31,6 @@ use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
 use C4::Items;
-use Koha::Patrons;
 
 use Koha::Items;
 use Koha::Patrons;
