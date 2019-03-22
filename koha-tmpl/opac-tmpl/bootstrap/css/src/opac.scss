@@ -515,29 +515,41 @@ th {
 
 #news {
     margin: .5em 0;
+    padding: 1em;
+
+    .newsitem {
+        &:last-child {
+            .newsfooter {
+                border-bottom: 0;
+            }
+        }
+    }
 }
 
 .newscontainer {
     border: 1px solid #DDD;
-    border-bottom-width: 0;
 }
 
 .newsheader {
-    background-color: #f0f3f3;
-    border-bottom: 1px solid #DDD;
-    color: #727272;
     margin: 0;
-    padding: 8px;
+    padding: 8px 0;
 }
 
 .newsbody {
-    padding: 8px;
+    padding: 8px 0;
 }
 
 .newsfooter {
-    border-bottom: 1px solid #DDD;
-    font-style: italic;
-    padding: 4px 8px;
+    border-bottom: 1px solid #EEE;
+    color: #727272;
+    font-size: 90%;
+    margin-bottom: .5em;
+    padding-bottom: .5em;
+}
+
+#rssnews-container {
+    color: #727272;
+    font-size: 90%;
 }
 
 #rssnews-container {
