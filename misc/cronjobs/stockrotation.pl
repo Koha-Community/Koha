@@ -354,7 +354,7 @@ sub _report_per_branch {
         return {
             letter        => $letter,
             email_address => $branch->{email},
-            $status
+            status        => $status
         };
     }
     return;
@@ -470,6 +470,8 @@ sub emit {
                 }
             }
             else {
+		$addressee ||= q{};
+                $params->{admin_email} ||= q{};
                 my $email =
                   "-------- Email message --------" . "\n\n" . "To: "
                   . defined($addressee)               ? $addressee
