@@ -11,6 +11,35 @@ if ( CheckVersion($DBversion) ) {
         );
     }
 
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'OVERDUE',
+          status = 'UNRETURNED'
+        WHERE
+          accounttype = 'FU';
+    });
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'OVERDUE',
+          status = 'FORGIVEN'
+        WHERE
+          accounttype = 'FFOR';
+    });
+
+    $dbh->do(qq{
+        UPDATE
+          accountlines
+        SET
+          accounttype = 'OVERDUE',
+          status = 'RETURNED'
+        WHERE
+          accounttype = 'F';
+    });
     SetVersion($DBversion);
-    print "Upgrade to $DBversion done (Bug 22521 - Update accountlines.accounttype to varchar(16))\n";
+    print "Upgrade to $DBversion done (Bug 22521 - Update accountlines.accounttype to varchar(16), and map new statuses)\n";
 }
