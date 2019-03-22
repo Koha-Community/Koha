@@ -54,9 +54,14 @@
                     [% IF ( OpacPasswordChange ) %]
                         [% IF ( Ask_data ) %]
 
+
                             <form action="/cgi-bin/koha/opac-passwd.pl" name="mainform" id="mainform" method="post" autocomplete="off">
                                 <fieldset>
-                                    [% UNLESS ( ShortPass ) %]<div class="alert alert-info">Your password must be at least [% minPasswordLength | html %] characters long.</div>[% END %]
+                                    [% IF ( Koha.Preference('RequireStrongPassword') ) %]
+                                        <div class="alert alert-info">Your password must contain at least [% Koha.Preference('minPasswordLength') | html %] characters, including UPPERCASE, lowercase and numbers.</div>
+                                    [% ELSE %]
+                                        <div class="alert alert-info">Your password must be at least [% Koha.Preference('minPasswordLength') | html %] characters long.</div>
+                                    [% END %]
                                     <label for="Oldkey">Current password:</label> <input type="password" id="Oldkey" size="25"  name="Oldkey" />
                                     <label for="Newkey">New password:</label> <input type="password" id="Newkey"  size="25"  name="Newkey" />
                                     <label for="Confirm">Re-type new password:</label> <input type="password"  id="Confirm" size="25" name="Confirm" />
