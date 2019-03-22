@@ -39,16 +39,16 @@
                         [% CASE 'A' %]Account management fee
                         [% CASE 'M' %]Sundry
                         [% CASE 'L' %]Lost item
-                        [% CASE 'W' %]Writeoff
+                        [% CASE 'W' %]Writeoff[%- PROCESS account_status_description account=account -%]
                         [% CASE 'HE' %]Hold waiting too long
                         [% CASE 'Rent' %]Rental fee
-                        [% CASE 'FOR' %]Forgiven
-                        [% CASE 'LR' %]Lost item fee refund
+                        [% CASE 'FOR' %]Forgiven[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'LR' %]Lost item fee refund[%- PROCESS account_status_description account=account -%]
                         [% CASE 'PF' %]Lost item processing fee
-                        [% CASE 'PAY' %]Payment
-                        [% CASE 'WO' %]Writeoff
-                        [% CASE 'C' %]Credit
-                        [% CASE 'CR' %]Credit
+                        [% CASE 'PAY' %]Payment[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'WO' %]Writeoff[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'C' %]Credit[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'CR' %]Credit[%- PROCESS account_status_description account=account -%]
                         [%-CASE 'Res' %]Hold fee
                         [% CASE %][% ACCOUNT_LINE.accounttype | html %]
                         [%- END -%]
@@ -121,6 +121,7 @@
         [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
         [%- CASE 'REPLACED'   -%]<span> (Replaced)</span>
         [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
+        [%- CASE 'VOID'       -%]<span> (Voided)</span>
         [%- CASE              -%]
     [%- END -%]
 [%- END -%]

@@ -4,22 +4,21 @@
         [%- CASE 'Pay00'   -%]<span>Payment (cash via SIP2)</span>
         [%- CASE 'Pay01'   -%]<span>Payment (VISA via SIP2)</span>
         [%- CASE 'Pay02'   -%]<span>Payment (credit card via SIP2)</span>
-        [%- CASE 'VOID'    -%]<span>Voided</span>
         [%- CASE 'N'       -%]<span>New card</span>
         [%- CASE 'OVERDUE' -%]<span>Fine[%- PROCESS account_status_description account=account -%]</span>
         [%- CASE 'A'       -%]<span>Account management fee</span>
         [%- CASE 'M'       -%]<span>Sundry</span>
         [%- CASE 'L'       -%]<span>Lost item</span>
-        [%- CASE 'W'       -%]<span>Writeoff</span>
+        [%- CASE 'W'       -%]<span>Writeoff[%- PROCESS account_status_description account=account -%]</span>
         [%- CASE 'HE'      -%]<span>Hold waiting too long</span>
         [%- CASE 'Rent'    -%]<span>Rental fee</span>
-        [%- CASE 'FOR'     -%]<span>Forgiven</span>
-        [%- CASE 'LR'      -%]<span>Lost item fee refund</span>
-        [%- CASE 'PF'    -%]<span>Lost item processing fee</span>
-        [%- CASE 'PAY'     -%]<span>Payment</span>
-        [%- CASE 'WO'      -%]<span>Writeoff</span>
-        [%- CASE 'C'       -%]<span>Credit</span>
-        [%- CASE 'CR'      -%]<span>Credit</span>
+        [%- CASE 'FOR'     -%]<span>Forgiven[%- PROCESS account_status_description account=account -%]</span>
+        [%- CASE 'LR'      -%]<span>Lost item fee refund[%- PROCESS account_status_description account=account -%]</span>
+        [%- CASE 'PF'      -%]<span>Lost item processing fee[%- PROCESS account_status_description account=account -%]</span>
+        [%- CASE 'PAY'     -%]<span>Payment[%- PROCESS account_status_description account=account -%]</span>
+        [%- CASE 'WO'      -%]<span>Writeoff[%- PROCESS account_status_description account=account -%]</span>
+        [%- CASE 'C'       -%]<span>Credit[%- PROCESS account_status_description account=account -%]</span>
+        [%- CASE 'CR'      -%]<span>Credit[%- PROCESS account_status_description account=account -%]</span>
         [%- CASE 'Res'     -%]<span>Hold fee</span>
         [%- CASE           -%][% account.accounttype | html %]
     [%- END -%]
@@ -44,6 +43,7 @@
         [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
         [%- CASE 'REPLACED'   -%]<span> (Replaced)</span>
         [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
+        [%- CASE 'VOID'       -%]<span> (Voided)</span>
         [%- CASE              -%]
     [%- END -%]
 [%- END -%]
