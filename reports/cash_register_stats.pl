@@ -118,11 +118,11 @@ if ($do_it) {
             $row->{date} = dt_from_string($row->{date}, 'sql');
 
             push (@loopresult, $row);
-            if($transaction_type eq 'ACT' && ($row->{accounttype} !~ /^C$|^CR$|^LR$|^Pay$/)){
+            if($transaction_type eq 'ACT' && ($row->{accounttype} !~ /^C$|^CR$|^Pay$/)){
                 pop @loopresult;
                 next;
             }
-            if($row->{accounttype} =~ /^C$|^CR$|^LR$/){
+            if($row->{accounttype} =~ /^C$|^CR$/){
                 $grantotal -= abs($row->{amount});
                 $row->{amount} = '-' . $row->{amount};
             }elsif($row->{accounttype} eq 'FORW' || $row->{accounttype} eq 'W'){

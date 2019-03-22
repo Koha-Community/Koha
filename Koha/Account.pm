@@ -721,7 +721,7 @@ our $offset_type = {
 our $account_type_credit = {
     'credit'           => 'C',
     'forgiven'         => 'FOR',
-    'lost_item_return' => 'CR',
+    'lost_item_return' => 'LOST_RETURN',
     'payment'          => 'Pay',
     'writeoff'         => 'W'
 };

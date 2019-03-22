@@ -2390,7 +2390,9 @@ sub _FixOverduesOnReturn {
 
   &_FixAccountForLostAndReturned($itemnumber, [$borrowernumber, $barcode]);
 
-Calculates the charge for a book lost and returned.
+Finds the most recent lost item charge for this item and refunds the borrower
+appropriatly, taking into account any payments or writeoffs already applied
+against the charge.
 
 Internal function, not exported, called only by AddReturn.
 
@@ -2408,6 +2410,7 @@ sub _FixAccountForLostAndReturned {
         {
             itemnumber  => $itemnumber,
             accounttype => 'LOST',
+            status      => [ undef, { '<>' => 'RETURNED' } ]
         },
         {
             order_by => { -desc => [ 'date', 'accountlines_id' ] }
@@ -2458,8 +2461,8 @@ sub _FixAccountForLostAndReturned {
         $credit->apply( { debits => $accountlines->reset } );
     }
 
-    # Manually set the accounttype
-    $accountline->discard_changes->accounttype('LR');
+    # Update the account status
+    $accountline->discard_changes->status('RETURNED');
     $accountline->store;
 
     ModItem( { paidfor => '' }, undef, $itemnumber, { log_action => 0 } );
