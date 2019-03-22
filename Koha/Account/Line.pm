@@ -226,7 +226,7 @@ sub apply {
             if (   $debit->amountoutstanding == 0
                 && $debit->itemnumber
                 && $debit->accounttype
-                && $debit->accounttype eq 'L' )
+                && $debit->accounttype eq 'LOST' )
             {
                 C4::Circulation::ReturnLostItem( $self->borrowernumber, $debit->itemnumber );
             }

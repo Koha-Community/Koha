@@ -2208,7 +2208,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'L' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
@@ -2269,7 +2269,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'L' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
@@ -2338,7 +2338,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'L' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
@@ -2389,7 +2389,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
             $processfee_amount, 'The right PF amountoutstanding is generated' );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'L' } );
+            { borrowernumber => $patron->id, itemnumber => $item->itemnumber, accounttype => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );
@@ -2492,7 +2492,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
         LostItem( $item_id, 1 );
 
         my $lost_fee_lines = Koha::Account::Lines->search(
-            { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'L' } );
+            { borrowernumber => $patron->id, itemnumber => $item_id, accounttype => 'LOST' } );
         is( $lost_fee_lines->count, 1, 'Only one lost item fee produced' );
         my $lost_fee_line = $lost_fee_lines->next;
         is( $lost_fee_line->amount + 0, $replacement_amount, 'The right L amount is generated' );

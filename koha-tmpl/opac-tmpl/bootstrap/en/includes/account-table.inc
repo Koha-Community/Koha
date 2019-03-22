@@ -126,7 +126,7 @@
         [%- CASE 'OVERDUE' -%]<span>Fine
         [%- CASE 'A'       -%]<span>Account management fee
         [%- CASE 'M'       -%]<span>Sundry
-        [%- CASE 'L'       -%]<span>Lost item
+        [%- CASE 'LOST'    -%]<span>Lost item
         [%- CASE 'W'       -%]<span>Writeoff
         [%- CASE 'HE'      -%]<span>Hold waiting too long
         [%- CASE 'Rent'    -%]<span>Rental fee

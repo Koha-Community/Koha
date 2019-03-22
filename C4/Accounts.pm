@@ -91,7 +91,7 @@ sub chargelostitem{
     my $existing_charges = $account->lines->search(
         {
             itemnumber     => $itemnumber,
-            accounttype    => 'L',
+            accounttype    => 'LOST',
         }
     )->count();
 

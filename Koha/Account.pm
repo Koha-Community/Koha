@@ -109,7 +109,10 @@ sub pay {
         $balance_remaining = $balance_remaining - $amount_to_pay;
 
         # Same logic exists in Koha::Account::Line::apply
-        if ( $new_amountoutstanding == 0 && $fine->itemnumber && $fine->accounttype && ( $fine->accounttype eq 'L' ) )
+        if (   $new_amountoutstanding == 0
+            && $fine->itemnumber
+            && $fine->accounttype
+            && ( $fine->accounttype eq 'LOST' ) )
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
         }
@@ -165,7 +168,10 @@ sub pay {
         $fine->amountoutstanding( $old_amountoutstanding - $amount_to_pay );
         $fine->store();
 
-        if ( $fine->amountoutstanding == 0 && $fine->itemnumber && $fine->accounttype && ( $fine->accounttype eq 'L' ) )
+        if (   $fine->amountoutstanding == 0
+            && $fine->itemnumber
+            && $fine->accounttype
+            && ( $fine->accounttype eq 'LOST' ) )
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
         }
@@ -727,7 +733,7 @@ our $account_type_credit = {
 our $account_type_debit = {
     'account'       => 'A',
     'overdue'       => 'OVERDUE',
-    'lost_item'     => 'L',
+    'lost_item'     => 'LOST',
     'new_card'      => 'N',
     'sundry'        => 'M',
     'processing'    => 'PF',

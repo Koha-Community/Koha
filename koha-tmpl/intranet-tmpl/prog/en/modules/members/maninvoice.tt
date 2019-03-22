@@ -79,7 +79,7 @@
     [% INCLUDE 'str/members-menu.inc' %]
     [% Asset.js("js/members-menu.js") | $raw %]
     <script>
-        var type_fees = {'L':'','OVERDUE':'','A':'','N':'','M':''};
+        var type_fees = {'LOST':'','OVERDUE':'','A':'','N':'','M':''};
         [% FOREACH invoice_types_loo IN invoice_types_loop %]
             type_fees['[% invoice_types_loo.authorised_value | html %]'] = "[% invoice_types_loo.lib | html %]";
         [% END %]
