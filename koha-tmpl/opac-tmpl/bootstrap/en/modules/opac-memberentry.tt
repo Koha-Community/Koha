@@ -809,9 +809,13 @@
                     <fieldset class="rows" id="memberentry_password">
                         <legend id="contact_legend">Password</legend>
                         <div class="alert alert-info">
-                            <p>Your password must be at least [% Koha.Preference('minPasswordLength') | html %] characters long.</p>
+                            [% IF ( Koha.Preference('RequireStrongPassword') ) %]
+                                <p>Your password must contain at least [% Koha.Preference('minPasswordLength') | html %] characters, including UPPERCASE, lowercase and numbers.</p>
+                            [% ELSE %]
+                                <p>Your password must be at least [% Koha.Preference('minPasswordLength') | html %] characters long.</p>
+                            [% END %]
                             [% UNLESS mandatory.defined('password') %]
-                                <div>If you do not enter a password a system generated password will be created.</div>
+                                <p>If you do not enter a password a system generated password will be created.</p>
                             [% END %]
                         </div>
 
