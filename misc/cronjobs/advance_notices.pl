@@ -118,11 +118,11 @@ A patron could potentially have loans at several different branches
 There is no natural branch to set as the sender on the aggregated
 message in this situation so the default behavior is to use the
 borrowers home branch.  This could surprise to the borrower when
-message sender is a library where he or she has not borrowed anything.
+message sender is a library where they have not borrowed anything.
 
 Enabling this flag ensures that the issuing library is the sender of
 the digested message.  It has no effect unless the borrower has
-choosen 'Digests only' on the advance messages.
+chosen 'Digests only' on the advance messages.
 
 =back
 
