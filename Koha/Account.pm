@@ -108,7 +108,7 @@ sub pay {
         $fine->amountoutstanding($new_amountoutstanding)->store();
         $balance_remaining = $balance_remaining - $amount_to_pay;
 
-        if ( $fine->itemnumber && $fine->accounttype && ( $fine->accounttype eq 'Rep' || $fine->accounttype eq 'L' ) )
+        if ( $fine->itemnumber && $fine->accounttype && ( $fine->accounttype eq 'L' ) )
         {
             C4::Circulation::ReturnLostItem( $self->{patron_id}, $fine->itemnumber );
         }
