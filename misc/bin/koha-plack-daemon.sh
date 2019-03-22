@@ -291,6 +291,7 @@ while [ $# -gt 0 ]; do
             shift ;;
         trace)
             PERL_PARAMS="$PERL_PARAMS -d:Trace"
+            shift ;;
         listen)
             LISTEN="$2"
             shift; shift; ;;
