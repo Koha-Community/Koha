@@ -710,6 +710,21 @@ __PACKAGE__->has_many(
   { cascade_copy => 0, cascade_delete => 0 },
 );
 
+=head2 accountlines_managers
+
+Type: has_many
+
+Related object: L<Koha::Schema::Result::Accountline>
+
+=cut
+
+__PACKAGE__->has_many(
+  "accountlines_managers",
+  "Koha::Schema::Result::Accountline",
+  { "foreign.manager_id" => "self.borrowernumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 =head2 api_keys
 
 Type: has_many
@@ -1506,8 +1521,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:F/j4bsmnxc2Cja5DKfMseQ
+# Created by DBIx::Class::Schema::Loader v0.07042 @ 2019-03-22 20:06:37
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dbRPH4TDrnUkzbJdgM5XcQ
 
 __PACKAGE__->belongs_to(
     "guarantor",
