@@ -7,14 +7,14 @@
 <link rel="shortcut icon" href="[% IF ( OpacFavicon  ) %][% OpacFavicon | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% Asset.css("css/print.css") | $raw %]
 [% IF stylesheet %]
-<link rel="stylesheet" type="text/css" href="[% stylesheet | url %]" />
+<link rel="stylesheet" type="text/css" href="[% stylesheet | $raw %]" />
 [% END %]
 
 <!-- JavaScript includes -->
 [% Asset.js("lib/jquery/jquery.js") | $raw %]
 [% Asset.js("js/global.js") | $raw %]
 
-[% INCLUDE 'slip-print.inc' %]
+[% INCLUDE 'slip-print.inc' #printThenClose %]
 
 </head>
 
@@ -25,7 +25,7 @@
                 [% slip | html %]
             </pre>
         [% ELSE %]
-            [% slip | html %]
+            [% slip | $raw %]
         [% END %]
 
     </div>
