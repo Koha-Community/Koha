@@ -246,9 +246,9 @@ if ($op eq "show"){
 
         @contentlist = uniq @contentlist;
         if ($filecontent eq 'barcode_file') {
-            my $existing_items = Koha::Items->search({ itemnumber => \@contentlist });
+            my $existing_items = Koha::Items->search({ barcode => \@contentlist });
             @itemnumbers = $existing_items->get_column('itemnumber');
-            my %exists = map {$_=>1} @{$existing_items->get_column('barcode')};
+            my %exists = map {$_=>1} $existing_items->get_column('barcode');
             @notfoundbarcodes = grep { !$exists{$_} } @contentlist;
         }
         elsif ( $filecontent eq 'itemid_file') {
