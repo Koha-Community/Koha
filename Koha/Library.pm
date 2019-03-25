@@ -121,6 +121,57 @@ sub to_api_mapping {
     };
 }
 
+=head3 get_hold_libraries
+
+Return all libraries (including self) that belong to the same hold groups
+
+=cut
+
+sub get_hold_libraries {
+    my ( $self ) = @_;
+    my $library_groups = $self->library_groups;
+    my @hold_libraries;
+    while ( my $library_group = $library_groups->next ) {
+        my $root = Koha::Library::Groups->get_root_ancestor({id => $library_group->id});
+        if($root->ft_local_hold_group) {
+            push @hold_libraries, $root->all_libraries;
+        }
+    }
+
+    my %seen;
+    @hold_libraries =
+      grep { !$seen{ $_->id }++ } @hold_libraries;
+
+    return @hold_libraries;
+}
+
+=head3 validate_hold_sibling
+
+Return if given library is a valid hold group member
+
+=cut
+
+sub validate_hold_sibling {
+    my ( $self, $params ) = @_;
+    my @hold_libraries = $self->get_hold_libraries;
+
+    foreach (@hold_libraries) {
+        my $hold_library = $_;
+        my $is_valid = 1;
+        foreach my $key (keys %$params) {
+            unless($hold_library->$key eq $params->{$key}) {
+                $is_valid=0;
+                last;
+            }
+        }
+        if($is_valid) {
+            #Found one library that meets all search parameters
+            return 1;
+        }
+    }
+    return 0;
+}
+
 =head2 Internal methods
 
 =head3 _type

@@ -4,7 +4,7 @@ use Modern::Perl;
 
 use List::MoreUtils 'any';
 
-use Test::More tests => 20;
+use Test::More tests => 21;
 
 use t::lib::TestBuilder;
 use Koha::Database;
@@ -144,3 +144,22 @@ is( ref($groupX->libraries), 'Koha::Libraries', '->libraries should return a Koh
 @group_branchcodes = sort( map { $_->branchcode } $groupX->all_libraries );
 is_deeply( \@branchcodes, \@group_branchcodes, "Group all_libraries are returned correctly" );
 is( ref(($groupX->all_libraries)[0]), 'Koha::Library', '->all_libraries should return a list of Koha::Library - in the future it should be fixed to return a Koha::Libraries iterator instead'); # FIXME
+
+subtest 'Koha::Library::Groups->get_root_ancestor' => sub {
+    plan tests => 2;
+
+    my $groupY = Koha::Library::Group->new( { title => "Group Y" } )->store();
+    my $groupY_library1 = Koha::Library::Group->new({ parent_id => $groupY->id,  branchcode => $library1->{branchcode} })->store();
+    my $groupY1 = Koha::Library::Group->new( { parent_id => $groupY->id, title => "Group Y1" } )->store();
+    my $groupY1_library2 = Koha::Library::Group->new({ parent_id => $groupY1->id,  branchcode => $library2->{branchcode} })->store();
+    my $groupZ = Koha::Library::Group->new({ title => "Group Z" })->store();
+    my $groupZ1 = Koha::Library::Group->new({ parent_id => $groupZ->id,  title => "Group Z1" })->store();
+    my $groupZ2 = Koha::Library::Group->new({ parent_id => $groupZ1->id,  title => "Group Z2" })->store();
+    my $groupZ2_library2 = Koha::Library::Group->new({ parent_id => $groupZ2->id,  branchcode => $library2->{branchcode} })->store();
+
+    my $ancestor1 = Koha::Library::Groups->get_root_ancestor($groupY1_library2->unblessed);
+    my $ancestor2 = Koha::Library::Groups->get_root_ancestor($groupZ2_library2->unblessed);
+
+    is($ancestor1->id, $groupY->id, "Get root ancestor should return group's root ancestor");
+    ok($ancestor1->id ne $ancestor2->id, "Both root groups should have different ids");
+};

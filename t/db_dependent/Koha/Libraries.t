@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 8;
+use Test::More tests => 9;
 
 use C4::Biblio;
 use C4::Context;
@@ -467,4 +467,37 @@ subtest 'cash_registers' => sub {
     );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'get_hold_libraries and validate_hold_sibling' => sub {
+
+    plan tests => 5;
+
+    $schema->storage->txn_begin;
+
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library3 = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    my $root = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
+    my $g1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root->id, branchcode => $library1->branchcode } } );
+    my $g2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root->id, branchcode => $library2->branchcode } } );
+
+    my @hold_libraries = ($library1, $library2);
+
+    my @result = $library1->get_hold_libraries();
+
+    ok(scalar(@result) == 2, 'get_hold_libraries returns 2 libraries');
+
+    my %map = map {$_->branchcode, 1} @result;
+
+    foreach my $hold_library ( @hold_libraries ) {
+        ok(exists $map{$hold_library->branchcode}, 'library in hold group');
+    }
+
+    ok($library1->validate_hold_sibling( { branchcode => $library2->branchcode } ), 'Library 2 is a valid hold sibling');
+    ok(!$library1->validate_hold_sibling( { branchcode => $library3->branchcode } ), 'Library 3 is not a valid hold sibling');
+
+    $schema->storage->txn_rollback;
+
 };

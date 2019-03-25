@@ -65,6 +65,23 @@ sub get_search_groups {
     return $self->search( { $field => 1 } );
 }
 
+
+=head3 get_root_ancestor
+
+my $root_ancestor = $self->get_root_ancestor( {id => $group_id } )
+
+Retrieve root ancestor group for a specified id.
+
+=cut
+
+sub get_root_ancestor {
+    my ( $self, $params ) = @_;
+    my $row = $self->find($params);
+    return $row unless $row->parent_id;
+    return $self->get_root_ancestor( { id => $row->parent_id } );
+}
+
+
 =head3 type
 
 =cut
