@@ -50,6 +50,7 @@ if ( $action eq 'add' ) {
     my $ft_hide_patron_info    = $cgi->param('ft_hide_patron_info')    || 0;
     my $ft_search_groups_opac  = $cgi->param('ft_search_groups_opac')  || 0;
     my $ft_search_groups_staff = $cgi->param('ft_search_groups_staff') || 0;
+    my $ft_local_hold_group = $cgi->param('ft_local_hold_group') || 0;
 
     if ( !$branchcode && Koha::Library::Groups->search( { title => $title } )->count() ) {
         $template->param( error_duplicate_title => $title );
@@ -63,6 +64,7 @@ if ( $action eq 'add' ) {
                 ft_hide_patron_info    => $ft_hide_patron_info,
                 ft_search_groups_opac  => $ft_search_groups_opac,
                 ft_search_groups_staff => $ft_search_groups_staff,
+                ft_local_hold_group => $ft_local_hold_group,
                 branchcode  => $branchcode,
             }
         )->store();
@@ -77,6 +79,7 @@ elsif ( $action eq 'edit' ) {
     my $ft_hide_patron_info    = $cgi->param('ft_hide_patron_info')    || 0;
     my $ft_search_groups_opac  = $cgi->param('ft_search_groups_opac')  || 0;
     my $ft_search_groups_staff = $cgi->param('ft_search_groups_staff') || 0;
+    my $ft_local_hold_group = $cgi->param('ft_local_hold_group') || 0;
 
     if ($id) {
         my $group = Koha::Library::Groups->find($id);
@@ -88,6 +91,7 @@ elsif ( $action eq 'edit' ) {
                 ft_hide_patron_info      => $ft_hide_patron_info,
                 ft_search_groups_opac    => $ft_search_groups_opac,
                 ft_search_groups_staff   => $ft_search_groups_staff,
+                ft_local_hold_group   => $ft_local_hold_group,
             }
         )->store();
 
