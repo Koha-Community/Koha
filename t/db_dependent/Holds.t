@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 59;
+use Test::More tests => 60;
 use MARC::Record;
 
 use C4::Biblio;
@@ -24,6 +24,7 @@ use Koha::IssuingRules;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
 use Koha::Libraries;
+use Koha::Library::Groups;
 use Koha::Patrons;
 
 BEGIN {
@@ -263,6 +264,7 @@ t::lib::Mocks::mock_preference('item-level_itypes', 1);
 
 # if IndependentBranches is OFF, a $branch_1 patron can reserve an $branch_2 item
 t::lib::Mocks::mock_preference('IndependentBranches', 0);
+
 ok(
     CanItemBeReserved($borrowernumbers[0], $foreign_itemnumber)->{status} eq 'OK',
     '$branch_1 patron allowed to reserve $branch_2 item with IndependentBranches OFF (bug 2394)'
@@ -683,6 +685,397 @@ subtest 'CanItemBeReserved / holds_per_day tests' => sub {
         CanItemBeReserved( $patron->borrowernumber, $itemnumber_3 ),
         { status => 'tooManyReserves', limit => 3 },
         'Unlimited daily holds, but reached reservesallowed'
+    );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'CanItemBeReserved / branch_not_in_hold_group' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    # Cleanup database
+    Koha::Holds->search->delete;
+    $dbh->do('DELETE FROM issues');
+    $dbh->do('DELETE FROM issuingrules');
+    $dbh->do(
+        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
+        VALUES (?, ?, ?, ?)},
+        {},
+        '*', '*', '*', 25
+    );
+    $dbh->do('DELETE FROM branch_item_rules');
+    $dbh->do('DELETE FROM default_branch_circ_rules');
+    $dbh->do('DELETE FROM default_branch_item_rules');
+    $dbh->do('DELETE FROM default_circ_rules');
+
+    Koha::Items->search->delete;
+    Koha::Biblios->search->delete;
+
+    # Create item types
+    my $itemtype1 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $itemtype2 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
+    # Create libraries
+    my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library3  = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Create library groups hierarchy
+    my $rootgroup  = $builder->build_object( { class => 'Koha::Library::Groups', value => {ft_local_hold_group => 1} } );
+    my $group1  = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library1->branchcode}} );
+    my $group2  = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library2->branchcode} } );
+
+    # Create 2 patrons
+    my $patron1   = $builder->build_object( { class => 'Koha::Patrons', value => {branchcode => $library1->branchcode} } );
+    my $patron3   = $builder->build_object( { class => 'Koha::Patrons', value => {branchcode => $library3->branchcode} } );
+
+    # Create 3 biblios with items
+    my $biblio_1 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
+    my ( undef, undef, $itemnumber_1 ) = AddItem(
+        {   homebranch    => $library1->branchcode,
+            holdingbranch => $library1->branchcode
+        },
+        $biblio_1->biblionumber
+    );
+    my $biblio_2 = $builder->build_sample_biblio({ itemtype => $itemtype2->itemtype });
+    my ( undef, undef, $itemnumber_2 ) = AddItem(
+        {   homebranch    => $library2->branchcode,
+            holdingbranch => $library2->branchcode
+        },
+        $biblio_2->biblionumber
+    );
+    my $biblio_3 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
+    my ( undef, undef, $itemnumber_3 ) = AddItem(
+        {   homebranch    => $library1->branchcode,
+            holdingbranch => $library1->branchcode
+        },
+        $biblio_3->biblionumber
+    );
+
+    # Test 1: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'OK' },
+        'Patron can place hold if no circ_rules where defined'
+    );
+
+    # Insert default circ rule of holds allowed only from local hold group for all libraries
+    $dbh->do(
+        q{INSERT INTO default_circ_rules (holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?)},
+        {},
+        3, 'any', 'any'
+    );
+
+    # Test 2: Patron 1 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron1->borrowernumber, $itemnumber_2 ),
+        { status => 'OK' },
+        'Patron can place hold because patron\'s home library is part of hold group'
+    );
+
+    # Test 3: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'branchNotInHoldGroup' },
+        'Patron cannot place hold because patron\'s home library is not part of hold group'
+    );
+
+    # Cleanup default_cirt_rules
+    $dbh->do('DELETE FROM default_circ_rules');
+
+    # Insert default circ rule to "any" for library 2
+    $dbh->do(
+        q{INSERT INTO default_branch_circ_rules (branchcode, holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?,?)},
+        {},
+        $library2->branchcode, 2, 'any', 'any'
+    );
+
+    # Test 4: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'OK' },
+        'Patron can place hold if holdallowed is set to "any" for library 2'
+    );
+
+    # Update default circ rule to "hold group" for library 2
+    $dbh->do(
+        q{UPDATE default_branch_circ_rules set holdallowed = ?
+        WHERE branchcode = ?},
+        {},
+        3, $library2->branchcode
+    );
+
+    # Test 5: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'branchNotInHoldGroup' },
+        'Patron cannot place hold if holdallowed is set to "hold group" for library 2'
+    );
+
+    # Cleanup default_branch_cirt_rules
+    $dbh->do('DELETE FROM default_branch_circ_rules');
+
+    # Insert default item rule to "any" for itemtype 2
+    $dbh->do(
+        q{INSERT INTO default_branch_item_rules (itemtype, holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?,?)},
+        {},
+        $itemtype2->itemtype, 2, 'any', 'any'
+    );
+
+    # Test 6: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'OK' },
+        'Patron can place hold if holdallowed is set to "any" for itemtype 2'
+    );
+
+    # Update default item rule to "hold group" for itemtype 2
+    $dbh->do(
+        q{UPDATE default_branch_item_rules set holdallowed = ?
+        WHERE itemtype = ?},
+        {},
+        3, $itemtype2->itemtype
+    );
+
+    # Test 7: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'branchNotInHoldGroup' },
+        'Patron cannot place hold if holdallowed is set to "hold group" for itemtype 2'
+    );
+
+    # Cleanup default_branch_item_rules
+    $dbh->do('DELETE FROM default_branch_item_rules');
+
+    # Insert branch item rule to "any" for itemtype 2 and library 2
+    $dbh->do(
+        q{INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?,?,?)},
+        {},
+        $library2->branchcode, $itemtype2->itemtype, 2, 'any', 'any'
+    );
+
+    # Test 8: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'OK' },
+        'Patron can place hold if holdallowed is set to "any" for itemtype 2 and library 2'
+    );
+
+    # Update branch item rule to "hold group" for itemtype 2 and library 2
+    $dbh->do(
+        q{UPDATE branch_item_rules set holdallowed = ?
+        WHERE branchcode = ? and itemtype = ?},
+        {},
+        3, $library2->branchcode, $itemtype2->itemtype
+    );
+
+    # Test 9: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2 ),
+        { status => 'branchNotInHoldGroup' },
+        'Patron cannot place hold if holdallowed is set to "hold group" for itemtype 2 and library 2'
+    );
+
+    $schema->storage->txn_rollback;
+
+};
+
+subtest 'CanItemBeReserved / pickup_not_in_hold_group' => sub {
+    plan tests => 9;
+
+    $schema->storage->txn_begin;
+
+    # Cleanup database
+    Koha::Holds->search->delete;
+    $dbh->do('DELETE FROM issues');
+    $dbh->do('DELETE FROM issuingrules');
+    $dbh->do(
+        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
+        VALUES (?, ?, ?, ?)},
+        {},
+        '*', '*', '*', 25
+    );
+    $dbh->do('DELETE FROM branch_item_rules');
+    $dbh->do('DELETE FROM default_branch_circ_rules');
+    $dbh->do('DELETE FROM default_branch_item_rules');
+    $dbh->do('DELETE FROM default_circ_rules');
+
+    Koha::Items->search->delete;
+    Koha::Biblios->search->delete;
+
+    # Create item types
+    my $itemtype1 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+    my $itemtype2 = $builder->build_object( { class => 'Koha::ItemTypes' } );
+
+    # Create libraries
+    my $library1  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library2  = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $library3  = $builder->build_object( { class => 'Koha::Libraries' } );
+
+    # Create library groups hierarchy
+    my $rootgroup  = $builder->build_object( { class => 'Koha::Library::Groups', value => {ft_local_hold_group => 1} } );
+    my $group1  = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library1->branchcode}} );
+    my $group2  = $builder->build_object( { class => 'Koha::Library::Groups', value => {parent_id => $rootgroup->id, branchcode => $library2->branchcode} } );
+
+    # Create 2 patrons
+    my $patron1   = $builder->build_object( { class => 'Koha::Patrons', value => {branchcode => $library1->branchcode} } );
+    my $patron3   = $builder->build_object( { class => 'Koha::Patrons', value => {branchcode => $library3->branchcode} } );
+
+    # Create 3 biblios with items
+    my $biblio_1 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
+    my ( undef, undef, $itemnumber_1 ) = AddItem(
+        {   homebranch    => $library1->branchcode,
+            holdingbranch => $library1->branchcode
+        },
+        $biblio_1->biblionumber
+    );
+    my $biblio_2 = $builder->build_sample_biblio({ itemtype => $itemtype2->itemtype });
+    my ( undef, undef, $itemnumber_2 ) = AddItem(
+        {   homebranch    => $library2->branchcode,
+            holdingbranch => $library2->branchcode
+        },
+        $biblio_2->biblionumber
+    );
+    my $biblio_3 = $builder->build_sample_biblio({ itemtype => $itemtype1->itemtype });
+    my ( undef, undef, $itemnumber_3 ) = AddItem(
+        {   homebranch    => $library1->branchcode,
+            holdingbranch => $library1->branchcode
+        },
+        $biblio_3->biblionumber
+    );
+
+    # Test 1: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'OK' },
+        'Patron can place hold if no circ_rules where defined'
+    );
+
+    # Insert default circ rule of holds allowed only from local hold group for all libraries
+    $dbh->do(
+        q{INSERT INTO default_circ_rules (holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?)},
+        {},
+        2, 'holdgroup', 'any'
+    );
+
+    # Test 2: Patron 1 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library1->branchcode ),
+        { status => 'OK' },
+        'Patron can place hold because pickup location is part of hold group'
+    );
+
+    # Test 3: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'pickupNotInHoldGroup' },
+        'Patron cannot place hold because pickup location is not part of hold group'
+    );
+
+    # Cleanup default_cirt_rules
+    $dbh->do('DELETE FROM default_circ_rules');
+
+    # Insert default circ rule to "any" for library 2
+    $dbh->do(
+        q{INSERT INTO default_branch_circ_rules (branchcode, holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?,?)},
+        {},
+        $library2->branchcode, 2, 'any', 'any'
+    );
+
+    # Test 4: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'OK' },
+        'Patron can place hold if default_branch_circ_rules is set to "any" for library 2'
+    );
+
+    # Update default circ rule to "hold group" for library 2
+    $dbh->do(
+        q{UPDATE default_branch_circ_rules set hold_fulfillment_policy = ?
+        WHERE branchcode = ?},
+        {},
+        'holdgroup', $library2->branchcode
+    );
+
+    # Test 5: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'pickupNotInHoldGroup' },
+        'Patron cannot place hold if hold_fulfillment_policy is set to "hold group" for library 2'
+    );
+
+    # Cleanup default_branch_cirt_rules
+    $dbh->do('DELETE FROM default_branch_circ_rules');
+
+    # Insert default item rule to "any" for itemtype 2
+    $dbh->do(
+        q{INSERT INTO default_branch_item_rules (itemtype, holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?,?)},
+        {},
+        $itemtype2->itemtype, 2, 'any', 'any'
+    );
+
+    # Test 6: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'OK' },
+        'Patron can place hold if hold_fulfillment_policy is set to "any" for itemtype 2'
+    );
+
+    # Update default item rule to "hold group" for itemtype 2
+    $dbh->do(
+        q{UPDATE default_branch_item_rules set hold_fulfillment_policy = ?
+        WHERE itemtype = ?},
+        {},
+        'holdgroup', $itemtype2->itemtype
+    );
+
+    # Test 7: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'pickupNotInHoldGroup' },
+        'Patron cannot place hold if hold_fulfillment_policy is set to "hold group" for itemtype 2'
+    );
+
+    # Cleanup default_branch_item_rules
+    $dbh->do('DELETE FROM default_branch_item_rules');
+
+    # Insert branch item rule to "any" for itemtype 2 and library 2
+    $dbh->do(
+        q{INSERT INTO branch_item_rules (branchcode, itemtype, holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?,?,?)},
+        {},
+        $library2->branchcode, $itemtype2->itemtype, 2, 'any', 'any'
+    );
+
+    # Test 8: Patron 3 can place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'OK' },
+        'Patron can place hold if hold_fulfillment_policy is set to "any" for itemtype 2 and library 2'
+    );
+
+    # Update branch item rule to "hold group" for itemtype 2 and library 2
+    $dbh->do(
+        q{UPDATE branch_item_rules set hold_fulfillment_policy = ?
+        WHERE branchcode = ? and itemtype = ?},
+        {},
+        'holdgroup', $library2->branchcode, $itemtype2->itemtype
+    );
+
+    # Test 9: Patron 3 cannot place hold
+    is_deeply(
+        CanItemBeReserved( $patron3->borrowernumber, $itemnumber_2, $library3->branchcode ),
+        { status => 'pickupNotInHoldGroup' },
+        'Patron cannot place hold if hold_fulfillment_policy is set to "hold group" for itemtype 2 and library 2'
     );
 
     $schema->storage->txn_rollback;

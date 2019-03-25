@@ -314,11 +314,13 @@ sub CanBookBeReserved{
          { status => ageRestricted },   if the Item is age restricted for this borrower.
          { status => damaged },         if the Item is damaged.
          { status => cannotReserveFromOtherBranches }, if syspref 'canreservefromotherbranches' is OK.
+         { status => branchNotInHoldGroup }, if borrower home library is not in hold group, and holds are only allowed from hold groups.
          { status => tooManyReserves, limit => $limit }, if the borrower has exceeded their maximum reserve amount.
          { status => notReservable },   if holds on this item are not allowed
          { status => libraryNotFound },   if given branchcode is not an existing library
          { status => libraryNotPickupLocation },   if given branchcode is not configured to be a pickup location
          { status => cannotBeTransferred }, if branch transfer limit applies on given item and branchcode
+         { status => pickupNotInHoldGroup }, pickup location is not in hold group, and pickup locations are only allowed from hold groups.
 
 =cut
 
@@ -473,6 +475,15 @@ sub CanItemBeReserved {
         return { status => 'cannotReserveFromOtherBranches' };
     }
 
+    my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
+    my $itembranchcode = $branch_control eq 'holdingbranch' ? $item->holdingbranch : $item->homebranch;
+    my $item_library = Koha::Libraries->find( {branchcode => $itembranchcode} );
+    if ( $branchitemrule->{holdallowed} == 3) {
+        if($borrower->{branchcode} ne $itembranchcode && !$item_library->validate_hold_sibling( {branchcode => $borrower->{branchcode}} )) {
+            return { status => 'branchNotInHoldGroup' };
+        }
+    }
+
     # If reservecount is ok, we check item branch if IndependentBranches is ON
     # and canreservefromotherbranches is OFF
     if ( C4::Context->preference('IndependentBranches')
@@ -496,6 +507,9 @@ sub CanItemBeReserved {
         }
         unless ($item->can_be_transferred({ to => $destination })) {
             return { status => 'cannotBeTransferred' };
+        }
+        unless ($branchitemrule->{hold_fulfillment_policy} ne 'holdgroup' || $item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} )) {
+            return { status => 'pickupNotInHoldGroup' };
         }
     }
 
@@ -810,14 +824,12 @@ sub CheckReserves {
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$item->effective_itemtype);
                     next if ($branchitemrule->{'holdallowed'} == 0);
                     next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $patron->branchcode));
+                    my $library = Koha::Libraries->find({branchcode=>$branch});
+                    next if (($branchitemrule->{'holdallowed'} == 3) && (!$library->validate_hold_sibling({branchcode => $patron->branchcode}) ));
                     my $hold_fulfillment_policy = $branchitemrule->{hold_fulfillment_policy};
-                    next
-                      if $hold_fulfillment_policy ne 'any'
-                      && (
-                           $hold_fulfillment_policy eq ''
-                        || ( $res->{branchcode} ne
-                            $item->$hold_fulfillment_policy )
-                      );
+                    next if ( ($hold_fulfillment_policy eq 'holdgroup') && (!$library->validate_hold_sibling({branchcode => $res->{branchcode}})) );
+                    next if ( ($hold_fulfillment_policy eq 'homebranch') && ($res->{branchcode} ne $item->$hold_fulfillment_policy) );
+                    next if ( ($hold_fulfillment_policy eq 'holdingbranch') && ($res->{branchcode} ne $item->$hold_fulfillment_policy) );
                     next unless $item->can_be_transferred( { to => scalar Koha::Libraries->find( $res->{branchcode} ) } );
                     $priority = $res->{'priority'};
                     $highest  = $res;
@@ -1211,6 +1223,12 @@ sub IsAvailableForItemLevelRequest {
         return 0 unless $destination;
         return 0 unless $destination->pickup_location;
         return 0 unless $item->can_be_transferred( { to => $destination } );
+        my $reserves_control_branch =
+            GetReservesControlBranch( $item->unblessed(), $patron->unblessed() );
+        my $branchitemrule =
+            C4::Circulation::GetBranchItemRule( $reserves_control_branch, $item->itype );
+        my $home_library = Koka::Libraries->find( {branchcode => $item->homebranch} );
+        return 0 unless $branchitemrule->{hold_fulfillment_policy} ne 'holdgroup' || $home_library->validate_hold_sibling( {branchcode => $pickup_branchcode} );
     }
 
     if ( $on_shelf_holds == 1 ) {
@@ -1224,6 +1242,10 @@ sub IsAvailableForItemLevelRequest {
         foreach my $i (@items) {
             my $reserves_control_branch = GetReservesControlBranch( $i->unblessed(), $patron->unblessed );
             my $branchitemrule = C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
+            my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
+            my $itembranchcode = $branch_control eq 'holdingbranch' ? $item->holdingbranch : $item->homebranch;
+            my $item_library = Koha::Libraries->find( {branchcode => $itembranchcode} );
+
 
             $any_available = 1
               unless $i->itemlost
@@ -1234,7 +1256,8 @@ sub IsAvailableForItemLevelRequest {
               || ( $i->damaged
                 && !C4::Context->preference('AllowHoldsOnDamagedItems') )
               || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
-              || $branchitemrule->{holdallowed} == 1 && $patron->branchcode ne $i->homebranch;
+              || $branchitemrule->{holdallowed} == 1 && $patron->branchcode ne $i->homebranch
+              || $branchitemrule->{holdallowed} == 3 && !$item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} );
         }
 
         return $any_available ? 0 : 1;
