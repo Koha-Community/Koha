@@ -1456,8 +1456,12 @@ sub ModReceiveOrder {
         );
 
         if ( not $order->{subscriptionid} && defined $order->{order_internalnote} ) {
-            $dbh->do(q|UPDATE aqorders
-                SET order_internalnote = ?|, {}, $order->{order_internalnote});
+            $dbh->do(
+                q|UPDATE aqorders
+                SET order_internalnote = ?
+                WHERE ordernumber = ?|, {},
+                $order->{order_internalnote}, $order->{ordernumber}
+            );
         }
 
         # Recalculate tax_value
