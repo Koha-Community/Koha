@@ -916,6 +916,8 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     ( $renewokay, $error ) = CanBookBeRenewed($renewing_borrowernumber, $item_7->itemnumber);
     is( $renewokay, 0, '(Bug 8236), Cannot renew, one of the items is overdue');
 
+    my $manager = $builder->build_object({ class => "Koha::Patrons" });
+    t::lib::Mocks::mock_userenv({ patron => $manager,branchcode => $manager->branchcode });
     t::lib::Mocks::mock_preference('WhenLostChargeReplacementFee','1');
     $checkout = Koha::Checkouts->find( { itemnumber => $item_3->itemnumber } );
     LostItem( $item_3->itemnumber, 'test', 0 );
@@ -2004,6 +2006,8 @@ subtest '_FixAccountForLostAndReturned' => sub {
         plan tests => 10;
 
         my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+        my manager = $builder->build_object({ class => "Koha::Patrons" });
+        t::lib::Mocks::mock_userenv({ patron => $manager,branchcode => $manager->branchcode });
 
         my $item = $builder->build_sample_item(
             {

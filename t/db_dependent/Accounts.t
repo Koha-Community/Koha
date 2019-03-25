@@ -1093,6 +1093,14 @@ subtest "Payment notice tests" => sub {
         }
     )->store();
 
+    my $manager = $builder->build_object({ class => "Koha::Patrons" });
+    my $context = new Test::MockModule('C4::Context');
+    $context->mock( 'userenv', sub {
+        return {
+            number     => $manager->borrowernumber,
+            branch     => $manager->branchcode,
+        };
+    });
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
     my $line = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 27 })->store();
@@ -1102,7 +1110,6 @@ subtest "Payment notice tests" => sub {
     $letter->store();
 
     t::lib::Mocks::mock_preference('UseEmailReceipts', '0');
-
     my $id = $account->pay( { amount => 1 } );
     is( Koha::Notice::Messages->search()->count(), 0, 'Notice for payment not sent if UseEmailReceipts is disabled' );
 
