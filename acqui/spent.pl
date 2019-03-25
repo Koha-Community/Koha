@@ -135,7 +135,7 @@ while (my $data = $sth->fetchrow_hashref) {
 }
 $sth->finish;
 
-my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $bookfund, closedate => { '!=' => undef } }, { join => 'invoiceid' } );
+my $adjustments = Koha::Acquisition::Invoice::Adjustments->search({budget_id => $bookfund, closedate => { '!=' => undef } }, { prefetch => 'invoiceid' },  );
 while ( my $adj = $adjustments->next ){
     $total += $adj->adjustment;
 }
