@@ -77,7 +77,7 @@ WHERE
     (quantity > quantityreceived OR quantityreceived IS NULL)
     GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
              tleft,
-             ecost, budgetdate, entrydate,
+             ecost_tax_included, budgetdate, entrydate,
              aqbasket.booksellerid,
              aqbooksellers.name,
              itype,

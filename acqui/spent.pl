@@ -86,14 +86,14 @@ WHERE
     datereceived IS NOT NULL
     GROUP BY aqorders.biblionumber, aqorders.basketno, aqorders.ordernumber,
              tleft,
-             ecost, budgetdate, entrydate,
+             budgetdate, entrydate,
              aqbasket.booksellerid,
              itype,
              title,
              aqorders.invoiceid,
              aqinvoices.invoicenumber,
              quantityreceived,
-             unitprice,
+             unitprice_tax_included,
              datereceived,
              aqbooksellers.name
 
