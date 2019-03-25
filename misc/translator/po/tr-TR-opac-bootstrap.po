@@ -4,7 +4,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-02-17 17:46-0300\n"
+"POT-Creation-Date: 2019-03-19 10:30-0300\n"
 "PO-Revision-Date: 2018-12-06 10:38+0000\n"
 "Last-Translator: Onur Erdem <onurerdem@sdu.edu.tr>\n"
 "Language-Team: Koha Translation Team\n"
@@ -45,28 +45,6 @@ msgstr "%s %s %s%s%s Eseradı yok %s %s %s%s "
 #, c-format
 msgid "%s %s %s %s %s No title %s %s , %s %s"
 msgstr "%s %s %s%s%s Eseradı yok %s %s , %s %s"
-
-#. %1$s:  IF ( itemsloo.ITEM_RESULTS ) 
-#. %2$s:  FOREACH ITEM_RESULT IN itemsloo.ITEM_RESULTS 
-#. %3$s:  ITEM_RESULT.homebranch | html 
-#. %4$s:  IF ( ITEM_RESULT.location_opac ) 
-#. %5$s:  ITEM_RESULT.location_opac | html 
-#. %6$s:  END 
-#. %7$s:  IF ( ITEM_RESULT.itemcallnumber ) 
-#. %8$s:  ITEM_RESULT.itemcallnumber | html 
-#. %9$s:  IF ( loop.last ) 
-#. %10$s:  ELSE 
-#. %11$s:  END 
-#. %12$s:  END 
-#. %13$s:  END 
-#. %14$s:  ELSE 
-#. %15$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:413
-#, c-format
-msgid ""
-"%s %s %s %s , %s %s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
-msgstr ""
-"%s%s %s%s, %s%s %s (%s)%s.%s,%s %s %s%s Bu kayda bağlı bir materyal yok. %s "
 
 #. %1$s:  END 
 #. %2$s:  ELSE 
@@ -161,6 +139,22 @@ msgstr ""
 #, c-format
 msgid "%s %s %s%s%sNo title%s %s %s%s "
 msgstr "%s %s %s%s%sEseradı yok%s %s %s%s "
+
+#. %1$s:  END 
+#. %2$s:  IF ( ITEM_RESULT.itemcallnumber ) 
+#. %3$s:  ITEM_RESULT.itemcallnumber | html 
+#. %4$s:  IF ( loop.last ) 
+#. %5$s:  ELSE 
+#. %6$s:  END 
+#. %7$s:  END 
+#. %8$s:  END 
+#. %9$s:  ELSE 
+#. %10$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:418
+#, fuzzy, c-format
+msgid "%s %s (%s) %s.%s,%s %s %s %s This record has no items. %s "
+msgstr ""
+"%s%s %s%s, %s%s %s (%s)%s.%s,%s %s %s%s Bu kayda bağlı bir materyal yok. %s "
 
 #. %1$s:  ELSE 
 #. %2$s:  MY_TAG.term | html 
@@ -841,7 +835,7 @@ msgid "%s Self check-in"
 msgstr "%s Self check-in"
 
 #. %1$s:  LibraryName | html 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:37
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:38
 #, c-format
 msgid "%s Self checkout system"
 msgstr "%s Otomatik Ödünç & İade Sistemi"
@@ -886,7 +880,7 @@ msgstr "%s Şifreler eşleşmiyor. %s"
 #. %15$s:  ELSIF ( circ_error_GNA ) 
 #. %16$s:  ELSIF ( circ_error_INVALID_DATE ) 
 #. %17$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:47
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:48
 #, c-format
 msgid ""
 "%s The system does not recognize this barcode. %s You have checked out too "
@@ -919,7 +913,7 @@ msgstr "%s Bu pnn, idref servisinde bulunamadı. %s %s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:230
 #, c-format
 msgid "%s This record has no items. %s "
 msgstr "%s Bu kayda bağlı herhangi bir materyal yok. %s "
@@ -1178,7 +1172,7 @@ msgstr "%s%s%sKoha %s &rsaquo; Self check-in"
 #. %2$s:  LibraryNameTitle | html 
 #. %3$s:  ELSE 
 #. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:8
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:9
 #, c-format
 msgid "%s%s%sKoha %s &rsaquo; Self checkout "
 msgstr "%s%s%sKoha%s &rsaquo; Otomatik ödünç alma/verme "
@@ -2037,7 +2031,7 @@ msgstr "%sBu otorite hiç bir kayıtta kullanılmamış.%s"
 
 #. %1$s:  ELSE 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:284
 #, c-format
 msgid "%sThis record has no items.%s "
 msgstr "%sBu kayda bağlı bir materyal yok. %s "
@@ -2055,7 +2049,7 @@ msgstr "%sİletişim bilgilerinizi güncelleyin%sİletişim bilgilerinize gidin%
 #. %1$s:  IF ( ISSUE.charges ) 
 #. %2$s:  ELSE 
 #. %3$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:284
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:285
 #, c-format
 msgid "%sYes%sNo%s "
 msgstr "%sEvet%sHayır%s "
@@ -2097,7 +2091,7 @@ msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:779
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:780
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;CancelHold&gt; "
@@ -2107,7 +2101,7 @@ msgstr ""
 "&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:528
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetPatronInfo&gt; "
 "&lt;category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
@@ -2118,18 +2112,19 @@ msgid ""
 "enrolmentperiod&gt;12&lt;/enrolmentperiod&gt; &lt;charges&gt;6.00&lt;/"
 "charges&gt; &lt;dateenrolled&gt;2009-03-04&lt;/dateenrolled&gt; &lt;"
 "borrowernotes&gt;&lt;/borrowernotes&gt; &lt;dateexpiry&gt;2010-03-04&lt;/"
-"dateexpiry&gt; &lt;firstname&gt;Jean-André&lt;/firstname&gt; &lt;"
-"gonenoaddress&gt;0&lt;/gonenoaddress&gt; &lt;dateofbirth&gt;1984-06-08&lt;/"
-"dateofbirth&gt; &lt;debarred&gt;0&lt;/debarred&gt; &lt;branchname&gt;"
-"Bibliothèque Jean Prunier&lt;/branchname&gt; &lt;surname&gt;SANTONI&lt;/"
-"surname&gt; &lt;cardnumber&gt;815&lt;/cardnumber&gt; &lt;initials&gt;JAS&lt;/"
-"initials&gt; &lt;sort1&gt;CSP5&lt;/sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;"
-"loans&gt; &lt;loan&gt; &lt;lastreneweddate&gt;2009-04-03&lt;/"
-"lastreneweddate&gt; &lt;isbn&gt;2253003689&lt;/isbn&gt; &lt;"
-"borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/"
-"branchcode&gt; &lt;itemnumber&gt;4454&lt;/itemnumber&gt; &lt;"
-"date_due&gt;2009-05-06&lt;/date_due&gt; &lt;barcode&gt;4765476&lt;/"
-"barcode&gt; &lt;datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
+"dateexpiry&gt; &lt;is_expired&gt;0&lt;/is_expired&gt; &lt;firstname&gt;Jean-"
+"André&lt;/firstname&gt; &lt;gonenoaddress&gt;0&lt;/gonenoaddress&gt; &lt;"
+"dateofbirth&gt;1984-06-08&lt;/dateofbirth&gt; &lt;debarred&gt;0&lt;/"
+"debarred&gt; &lt;branchname&gt;Bibliothèque Jean Prunier&lt;/branchname&gt; "
+"&lt;surname&gt;SANTONI&lt;/surname&gt; &lt;cardnumber&gt;815&lt;/"
+"cardnumber&gt; &lt;initials&gt;JAS&lt;/initials&gt; &lt;sort1&gt;CSP5&lt;/"
+"sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;loans&gt; &lt;loan&gt; &lt;"
+"lastreneweddate&gt;2009-04-03&lt;/lastreneweddate&gt; &lt;"
+"isbn&gt;2253003689&lt;/isbn&gt; &lt;borrowernumber&gt;419&lt;/"
+"borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
+"itemnumber&gt;4454&lt;/itemnumber&gt; &lt;date_due&gt;2009-05-06&lt;/"
+"date_due&gt; &lt;barcode&gt;4765476&lt;/barcode&gt; &lt;"
+"datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
 "issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;L'Île au trésor&lt;/"
 "title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;Robert Louis "
 "Stevenson&lt;/author&gt; &lt;timestamp&gt;2009-04-03 14:46:10&lt;/"
@@ -2249,7 +2244,7 @@ msgstr ""
 "frameworkcode&gt; &lt;datelastborrowed&gt;2008-08-23&lt;/"
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:647
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:648
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
@@ -2481,7 +2476,7 @@ msgstr ""
 "dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
 "record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:670
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:671
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
@@ -2492,8 +2487,8 @@ msgstr ""
 "&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
 "AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:725
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:756
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:726
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:757
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
@@ -2515,7 +2510,7 @@ msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"UTF-8\" ?&gt; &lt;LookupPatron&gt; &lt;"
 "id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:694
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:695
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; &lt;"
@@ -2718,7 +2713,7 @@ msgstr "(Uzatma haklarından kalan %s, toplam hak sayısı %s)"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:474
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:598
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:804
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:222
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:223
 #, c-format
 msgid "(%s total)"
 msgstr "(%s toplam)"
@@ -2756,16 +2751,16 @@ msgstr ""
 "Materyal sistemden düşülür ve iade politika tarafından bloke edilir, lütfen "
 "yardım için kütüphane personeline danışın)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:816
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:817
 #, c-format
 msgid "(Not supported by Koha)"
 msgstr "(Koha tarafından desteklenmemektedir)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:801
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:802
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:820
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:803
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:821
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:822
 #, c-format
 msgid "(Not supported yet)"
 msgstr "(Henüz desteklenmemektedir)"
@@ -2775,12 +2770,12 @@ msgstr "(Henüz desteklenmemektedir)"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:197
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:402
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:458
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:715
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:746
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:714
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:716
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:718
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:747
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:749
 #, c-format
 msgid "(Optional)"
 msgstr "(İsteğe Bağlı)"
@@ -2816,20 +2811,20 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:486
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:488
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:510
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:639
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:660
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:662
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:682
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:684
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:686
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:707
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:709
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:738
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:740
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:769
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:771
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:640
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:661
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:663
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:683
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:685
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:710
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:712
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:739
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:741
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:770
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:772
 #, c-format
 msgid "(Required)"
 msgstr "(Gerekli)"
@@ -2860,21 +2855,21 @@ msgstr ""
 "(Bu materyalin iadesinde bir sorun oluştu, lütfen yardım için kütüphane "
 "personeline danışın)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:788
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:789
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:795
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:790
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
 #, c-format
 msgid "(Use OAI-PMH instead)"
 msgstr "(Bunun yerine OAI-PMH kullan)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:791
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:792
 #, c-format
 msgid "(Use OPAC instead)"
 msgstr "(Bunun yerine OPAC kullan)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:798
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:800
 #, c-format
 msgid "(Use SRU instead)"
 msgstr "(Bunun yerine SRU kullan)"
@@ -3092,7 +3087,7 @@ msgid "A confirmation email will be sent shortly to the email address "
 msgstr ""
 "Kısa bir süre sonra e-posta adresinize bir onay e-postası gönderilecektir"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:174
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:175
 #, c-format
 msgid "A hold fee was charged to your account for collecting this item."
 msgstr "Bu materyali alabilmeniz için hesabınıza bir ayırtma ücreti yazıldı."
@@ -3121,7 +3116,7 @@ msgstr "Özler/Özetler"
 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:92
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:31
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:145
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:146
 #, c-format
 msgid "Access denied"
 msgstr "Erişim engellendi"
@@ -3636,7 +3631,7 @@ msgstr "Ağustos"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:54
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:482
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:807
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:808
 #, c-format
 msgid "AuthenticatePatron"
 msgstr "AuthenticatePatron"
@@ -3657,7 +3652,7 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/opac-illrequests.tt:116
 #: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:67
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:81
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:248
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:190
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:810
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:213
@@ -3765,7 +3760,7 @@ msgstr "Kullanılabilirlik"
 msgid "Availability:"
 msgstr "Kullanılabilirlik:"
 
-#. %1$s:  IF restrictedopac 
+#. %1$s:  IF restrictedvalueopac 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:94
 #, c-format
 msgid "Available %s"
@@ -3953,7 +3948,7 @@ msgstr "Yer Numarası"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:198
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:433
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:482
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:228
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:229
 #, c-format
 msgid "Call no."
 msgstr "Yer no"
@@ -4030,7 +4025,7 @@ msgstr "Yer numarası: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:630
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:632
 #: opac-tmpl/bootstrap/en/modules/opac-shareshelf.tt:64
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:137
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:138
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:94
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:54
 #: opac-tmpl/bootstrap/en/modules/opac-addbybiblionumber.tt:68
@@ -4068,18 +4063,18 @@ msgid "Cancel:"
 msgstr "İptal et:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:75
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:765
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:814
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:766
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
 #, c-format
 msgid "CancelHold"
 msgstr "Ayırmayı iptal et"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:816
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:817
 #, c-format
 msgid "CancelRecall "
 msgstr "Geri almayı iptal et "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:766
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:767
 #, c-format
 msgid "Cancels an active hold request for the patron."
 msgstr "Kullanıcının aktif ayırma isteğini iptal eder."
@@ -4172,7 +4167,7 @@ msgid "Check in"
 msgstr "İade et"
 
 #. INPUT type=submit name=confirm
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:276
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:277
 msgid "Check in item"
 msgstr "Materyali iade al"
 
@@ -4183,7 +4178,7 @@ msgstr "Ödünç ver"
 
 #. %1$s:  IF ( Koha.Preference('AllowSelfCheckReturns') ) 
 #. %2$s:  END 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:190
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:191
 #, c-format
 msgid "Check out%s, return%s or renew an item: "
 msgstr "Ödünç ver%s, iade al%s ya da materyalin süresini uzat: "
@@ -4210,7 +4205,7 @@ msgstr "Ödünç verildi"
 msgid "Checked out (%s)"
 msgstr "Ödünç alındı (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:226
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:227
 #, c-format
 msgid "Checked out on"
 msgstr "Ödünç verildiği tarih"
@@ -4253,7 +4248,7 @@ msgid "Checkouts"
 msgstr "Ödünç alma işlemleri"
 
 #. %1$s:  borrowername | html 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:222
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:223
 #, c-format
 msgid "Checkouts for %s "
 msgstr "%s için ödünç alınanlar"
@@ -4680,7 +4675,7 @@ msgstr "Yeni bir talep oluştur"
 msgid "Create new list"
 msgstr "Yeni liste oluştur"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:704
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:705
 #, c-format
 msgid ""
 "Creates, for a patron, a title-level hold request on a given bibliographic "
@@ -4689,7 +4684,7 @@ msgstr ""
 "Kullanıcıya, Koha bibliyografik kaydında eser adı düzeyinde ayırtma isteği "
 "oluşturur."
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:735
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:736
 #, c-format
 msgid ""
 "Creates, for a patron, an item-level hold request on a specific item of a "
@@ -5079,7 +5074,7 @@ msgstr "Dublin Core"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:191
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:431
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:483
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:229
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:230
 #, c-format
 msgid "Due"
 msgstr "İade tarihi"
@@ -5322,14 +5317,14 @@ msgid "Errors: "
 msgstr "Hatalar: "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:205
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:720
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:751
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:721
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:752
 #, c-format
 msgid "Example Call"
 msgstr "Örnek çağrı"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:495
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:646
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:647
 #, c-format
 msgid "Example Response"
 msgstr "Örnek yanıt"
@@ -5339,10 +5334,10 @@ msgstr "Örnek yanıt"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:470
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:491
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:523
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:642
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:665
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:689
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:774
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:643
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:666
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:690
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:775
 #, c-format
 msgid "Example call"
 msgstr "Örnek çağrı"
@@ -5352,11 +5347,11 @@ msgstr "Örnek çağrı"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:413
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:474
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:527
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:669
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:693
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:724
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:755
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:778
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:670
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:694
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:725
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:756
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:779
 #, c-format
 msgid "Example response"
 msgstr "Örnek yanıt"
@@ -5397,7 +5392,7 @@ msgstr "Sona erme tarihi:"
 msgid "Expires on"
 msgstr "Sona erme tarihi:"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:821
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:822
 #, c-format
 msgid "Explain "
 msgstr "Açıkla "
@@ -5412,7 +5407,7 @@ msgstr "Dışa aktar"
 msgid "Exporting to Dublin Core..."
 msgstr "Dublin Core'a aktarılıyor..."
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:679
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:680
 #, c-format
 msgid "Extends the due date for a patron's existing loan."
 msgstr ""
@@ -5479,7 +5474,7 @@ msgstr "Ceza miktarı"
 
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:203
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:488
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:232
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:233
 #, c-format
 msgid "Fines"
 msgstr "Cezalar"
@@ -5506,7 +5501,7 @@ msgid "Fines:"
 msgstr "Cezalar:"
 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:125
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:203
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:204
 #, c-format
 msgid "Finish"
 msgstr "Bitir"
@@ -5667,42 +5662,42 @@ msgstr "İlişiğinizi kesin"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:48
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:394
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:800
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:801
 #, c-format
 msgid "GetAuthorityRecords"
 msgstr "GetAuthorityRecords"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:42
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:108
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:790
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:791
 #, c-format
 msgid "GetAvailability"
 msgstr "Kullanılabilirlik"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:57
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:503
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:808
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:809
 #, c-format
 msgid "GetPatronInfo"
 msgstr "GetPatronInfo"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:60
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:635
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:809
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:636
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:810
 #, c-format
 msgid "GetPatronStatus"
 msgstr "GetPatronStatus"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:45
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:184
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:798
 #, c-format
 msgid "GetRecords"
 msgstr "KayıtlarıAl"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:63
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:656
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:810
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:657
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:811
 #, c-format
 msgid "GetServices"
 msgstr "HizmetleriAl"
@@ -5769,7 +5764,7 @@ msgstr "Ayrıntılara git"
 msgid "Go to your account page"
 msgstr "Hesap sayfanıza gidin"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:791
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:792
 #, c-format
 msgid "GoToBibliographicRequestPage "
 msgstr "BibliyografikİstekSayfasınaGit "
@@ -5794,22 +5789,22 @@ msgstr "Kütüphane grupları"
 msgid "Handbooks"
 msgstr "El kitapları"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:795
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
 #, c-format
 msgid "HarvestAuthorityRecords "
 msgstr "HarvestOtoriteKayıtları "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:788
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:789
 #, c-format
 msgid "HarvestBibliographicRecords "
 msgstr "HarvestBibliyografikKayıtlar "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:789
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:790
 #, c-format
 msgid "HarvestExpandedRecords "
 msgstr "HarvestGenişletilmişKayıtlar "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
 #, c-format
 msgid "HarvestHoldingsRecords "
 msgstr "HarvestYerKayıtları "
@@ -5880,15 +5875,15 @@ msgid "Hold starts on date:"
 msgstr "Ayırma başlangıç tarihi:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:72
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:734
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:813
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:735
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:814
 #, c-format
 msgid "HoldItem"
 msgstr "Materyal ayır"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:69
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:703
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:812
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:704
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:813
 #, c-format
 msgid "HoldTitle"
 msgstr "Eser Adı ayır"
@@ -6040,7 +6035,7 @@ msgstr "ILL modülü yapılandırma problemi. Yöneticinize başvurun."
 msgid "ILS-DI"
 msgstr "ILS-DI"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:712
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
 #, c-format
 msgid "IP address where the end user request is being placed"
 msgstr "Son kullanıcının istek yaptığı IP adresi"
@@ -6408,7 +6403,7 @@ msgstr "Materyal URI'si"
 msgid "Item call number"
 msgstr "Materyal yer numarası"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:41
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:42
 #, c-format
 msgid "Item cannot be checked out."
 msgstr "Materyal ödünç verilemiyor."
@@ -6550,7 +6545,7 @@ msgstr "Koha Wiki"
 
 #: opac-tmpl/bootstrap/en/includes/doc-head-close.inc:5
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:26
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:11
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:7
 msgid "Koha [% Version | html %]"
 msgstr "Koha [% Version | html %]"
@@ -6646,22 +6641,22 @@ msgstr "Dava konu ve notları"
 msgid "Legislation"
 msgstr "Mevzuat"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:786
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:787
 #, c-format
 msgid "Level 1: Basic discovery interfaces"
 msgstr "Seviye 1: Temel keşif arayüzleri"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:793
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:794
 #, c-format
 msgid "Level 2: Elementary OPAC supplement"
 msgstr "Düzey 2: Temel OPAC eki"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:804
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:805
 #, c-format
 msgid "Level 3: Elementary OPAC alternative"
 msgstr "Düzey 3: Temel OPAC alternatif"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:818
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:819
 #, c-format
 msgid "Level 4: Robust/domain specific discovery platforms"
 msgstr "Düzey 4: Sağlam/etki alanı belirli keşif platformları"
@@ -6838,7 +6833,7 @@ msgstr "Yerel oturum açma"
 msgid "Location"
 msgstr "Yer"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:250
 #, c-format
 msgid "Location (Status)"
 msgstr "Yer (Durum)"
@@ -6866,7 +6861,7 @@ msgstr "Konumlar"
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:87
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:666
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:741
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:307
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:308
 #, c-format
 msgid "Log in"
 msgstr "Oturum aç"
@@ -6897,7 +6892,7 @@ msgstr "Kaydettiğiniz etiketlerinizi görebilmek için sistemde oturum açın."
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:301
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:43
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:964
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:301
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:302
 #, c-format
 msgid "Log in to your account"
 msgstr "Hesabınız ile oturum açın"
@@ -6946,7 +6941,7 @@ msgstr "Oturum açma sayfası"
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:93
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:122
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:74
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:302
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:303
 #, c-format
 msgid "Login:"
 msgstr "Oturum aç:"
@@ -6968,7 +6963,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:51
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:451
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:806
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:807
 #, c-format
 msgid "LookupPatron"
 msgstr "KullanıcıArama"
@@ -7484,7 +7479,7 @@ msgstr "Silinecek okuma geçmişi yok"
 msgid "No record was removed."
 msgstr "Hiçbir kayıt çıkarılmadı."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:273
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:274
 #, c-format
 msgid "No renewals allowed"
 msgstr "Daha fazla uzatma yapmanız mümkün değildir"
@@ -7584,7 +7579,7 @@ msgid "Not finding what you're looking for? "
 msgstr "Aradığınız şeyi bulamıyor musunuz?"
 
 #. For the first occurrence,
-#. %1$s:  IF ( item.restrictedopac ) 
+#. %1$s:  IF ( item.restrictedvalueopac ) 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:70
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:74
 #, c-format
@@ -7923,12 +7918,12 @@ msgstr "Diğer adı:"
 msgid "Other phone:"
 msgstr "Diğer telefon:"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:802
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:803
 #, c-format
 msgid "OutputIntermediateFormat "
 msgstr "ÇıkışOrtaFormat "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:801
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:802
 #, c-format
 msgid "OutputRewritablePage "
 msgstr "ÇıktıTekraryazılabilirSayfa "
@@ -7986,12 +7981,12 @@ msgstr "Sayfalar:"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:454
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:484
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:508
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:637
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:658
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:680
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:705
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:736
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:767
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:638
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:659
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:681
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:706
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:737
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:768
 #, c-format
 msgid "Parameters"
 msgstr "Paremetreler"
@@ -8054,7 +8049,7 @@ msgstr "Şifre güncellendi"
 #: opac-tmpl/bootstrap/en/modules/opac-main.tt:123
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:45
 #: opac-tmpl/bootstrap/en/modules/opac-registration-confirmation.tt:80
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:304
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:305
 #, c-format
 msgid "Password:"
 msgstr "Şifre:"
@@ -8245,7 +8240,7 @@ msgstr ""
 "Bu abonelikle ilgili yeni bir sayı geldiğinde e-posta mesajı almak "
 "istemediğinizi onaylayın."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:101
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:102
 #, c-format
 msgid "Please confirm the checkout:"
 msgstr "Lütfen ödünç alma işlemini onaylayın:"
@@ -8315,7 +8310,7 @@ msgstr "Lütfen yalnızca sayı girin."
 msgid "Please enter the same password as above"
 msgstr "Lütfen yukarıdaki ile aynı şifreyi giriniz"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:311
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:312
 #, c-format
 msgid "Please enter your card number:"
 msgstr "Lütfen kart numarasını giriniz:"
@@ -8742,7 +8737,7 @@ msgstr "Yeni parolayı tekrar yazın:"
 msgid "Reason for suggestion: "
 msgstr "Öneri nedeni: "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:816
 #, c-format
 msgid "RecallItem "
 msgstr "Materyali geri çağır "
@@ -8768,7 +8763,7 @@ msgstr "En son yorumlar"
 msgid "Record URL"
 msgstr "Kayıt URL'si"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:161
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:162
 #, c-format
 msgid "Record not found"
 msgstr "Kayıt bulunamadı"
@@ -8900,7 +8895,7 @@ msgstr "Paylaşımı kaldır"
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:295
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:485
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:565
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:230
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:231
 #, c-format
 msgid "Renew"
 msgstr "Süresini uzat"
@@ -8911,10 +8906,10 @@ msgstr "Süresini uzat"
 msgid "Renew all"
 msgstr "Tümünün süresini uzat"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:122
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:130
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:263
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:265
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:123
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:131
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:264
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:266
 #, c-format
 msgid "Renew item"
 msgstr "Materyalin süresini uzat"
@@ -8926,8 +8921,8 @@ msgid "Renew selected"
 msgstr "Seçilenlerin süresini uzat"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:66
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:678
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:811
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:679
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:812
 #, c-format
 msgid "RenewLoan"
 msgstr "SüreyiUzat"
@@ -9111,14 +9106,14 @@ msgstr "Tüm askıya alınan ayırmaları devam ettir"
 msgid "Resume your hold on "
 msgstr "Üzerindeki ayırma işleminize kaldığı yerden devam edin"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:87
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:112
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:88
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:113
 #, c-format
 msgid "Return this item"
 msgstr "Bu materyali iade et"
 
 #. INPUT type=submit name=confirm
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:95
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:96
 msgid "Return to account summary"
 msgstr "Hesap özetine dönün"
 
@@ -9159,12 +9154,12 @@ msgstr "Listelerinize dönün"
 msgid "Return to your record"
 msgstr "Kaydınıza dönün"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:636
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:637
 #, c-format
 msgid "Returns a patron's status information from Koha."
 msgstr "Koha üye durum bilgilerine dön."
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:657
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:658
 #, c-format
 msgid ""
 "Returns information about the services available on a particular item for a "
@@ -9289,12 +9284,12 @@ msgstr "Listelere kaydedin"
 msgid "Save to your lists"
 msgstr "Listelerinize ekleyin"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:800
 #, c-format
 msgid "Scan "
 msgstr "Tara "
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:192
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:193
 #, c-format
 msgid "Scan a new item or enter its barcode:"
 msgstr "Yeni bir materyalin barkodunu tara ya da tuşlayarak gir:"
@@ -9347,7 +9342,7 @@ msgstr "Materyali tarayın ya da barkodunu girin:"
 msgid "Search"
 msgstr "Ara"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:798
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
 #, c-format
 msgid "Search "
 msgstr "Ara "
@@ -9410,7 +9405,7 @@ msgstr "%s için tarama yap"
 msgid "Search:"
 msgstr "Ara:"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:820
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:821
 #, c-format
 msgid "SearchCourseReserves "
 msgstr "AraKursRezervleri "
@@ -9540,7 +9535,7 @@ msgstr "Aramak istediğiniz materyal(ler)'i seçiniz"
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:606
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:41
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:265
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:767
 #, c-format
@@ -9644,7 +9639,7 @@ msgid "Series:"
 msgstr "Seriler:"
 
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:98
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:153
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:154
 #, c-format
 msgid "Session lost"
 msgstr "Oturum kapandı"
@@ -9814,7 +9809,7 @@ msgstr ""
 msgid "Something went wrong. The note has not been saved"
 msgstr "Bir şeyler yanlış gitti. Not kaydedilmedi"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:180
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:181
 #, c-format
 msgid "Sorry"
 msgstr "Üzgünüz"
@@ -9889,7 +9884,7 @@ msgid ""
 msgstr ""
 "Üzgünüz, sistem kayıtlarına göre bu sayfaya giriş izniniz bulunmamaktadır. "
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:42
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:43
 #, c-format
 msgid "Sorry, this item cannot be checked out at this station."
 msgstr "Üzgünüz, bu materyal bu birimden ödünç alınamaz."
@@ -9903,7 +9898,7 @@ msgstr ""
 "Üzgünüz, bu self check-in istasyonu kimlik doğrulamasını kaybetti. Bu sorunu "
 "çözmek için lütfen yöneticiyle iletişime geçin."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:146
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:147
 #, c-format
 msgid ""
 "Sorry, this self-checkout station has lost authentication. Please contact "
@@ -10103,8 +10098,8 @@ msgstr "Konu: %s  "
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:98
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:114
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:936
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:194
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:313
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:195
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:314
 #, c-format
 msgid "Submit"
 msgstr "Gönder"
@@ -10337,7 +10332,7 @@ msgstr "Etiket tarayıcısı"
 msgid "Tag cloud"
 msgstr "Etiket bulutu"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:263
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:264
 #, c-format
 msgid "Tag status here."
 msgstr "Etiket durumu burada."
@@ -10719,7 +10714,7 @@ msgstr ""
 msgid "The transaction id '%s' for this payment is invalid."
 msgstr "Bu ödeme için hareket no '%s' geçersizdir."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:181
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:182
 #, c-format
 msgid "The userid "
 msgstr "Kullanıcı kimliği "
@@ -10824,7 +10819,7 @@ msgstr ""
 msgid "This email address already exists in our database."
 msgstr "Bu e-posta adresi veritabanımızda zaten var."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:271
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:272
 #, c-format
 msgid "This is a on-site checkout, it cannot be renewed."
 msgstr "Bu bir yerinde ödünç almadır, süresi uzatılamaz."
@@ -10839,14 +10834,14 @@ msgstr "Bu bir süreli yayındır"
 msgid "This item does not exist."
 msgstr "Bu materyal mevcut değildir."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:269
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:270
 #, c-format
 msgid ""
 "This item has been scheduled for automatic renewal and cannot be renewed"
 msgstr ""
 "Bu materyal otomatik süre uzatılması için programlandı ve süresi uzatılamaz"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:103
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:104
 #, c-format
 msgid "This item is already checked out to you."
 msgstr "Bu materyal zaten size ödünç verilmiştir."
@@ -10927,7 +10922,7 @@ msgid "Thursday"
 msgstr "Perşembe"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:336
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:337
 msgid "Timeout while waiting for print confirmation"
 msgstr "Yazdırma onay bekleme süresi aşıldı"
 
@@ -10941,7 +10936,7 @@ msgstr "Yazdırma onay bekleme süresi aşıldı"
 #: opac-tmpl/bootstrap/en/modules/opac-readingrecord.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-results-grouped.tt:79
 #: opac-tmpl/bootstrap/en/modules/opac-tags.tt:130
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:246
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:247
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:189
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:430
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:479
@@ -10951,7 +10946,7 @@ msgstr "Yazdırma onay bekleme süresi aşıldı"
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:221
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:574
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:576
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:227
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:228
 #, c-format
 msgid "Title"
 msgstr "Eser adı"
@@ -10986,7 +10981,7 @@ msgstr "Başlık deyimi"
 msgid "Title:"
 msgstr "Başlık:"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:44
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:45
 #, c-format
 msgid "Title: "
 msgstr "Başlık: "
@@ -11425,7 +11420,7 @@ msgstr "Seçili önerilerle: "
 #. For the first occurrence,
 #. SCRIPT
 #: opac-tmpl/bootstrap/en/modules/opac-results.tt:606
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:308
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:767
 msgid "With selected titles: "
 msgstr "Seçili eser adlarıyla: "
@@ -11436,7 +11431,7 @@ msgid "Wk"
 msgstr "Hafta"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:336
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:337
 msgid "Would you like to print a receipt?"
 msgstr "Makbuz yazdırmak ister misiniz?"
 
@@ -11447,7 +11442,7 @@ msgstr "Makbuz yazdırmak ister misiniz?"
 msgid "Written on %s by %s"
 msgstr "%s tarihinde %s tarafından yazılmış"
 
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:248
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:249
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:584
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:586
 #, c-format
@@ -11484,7 +11479,7 @@ msgstr ""
 "Selfcheck ödünç vermeye farklı bir IP adresinden ulaşıyorsunuz! Lütfen "
 "tekrar giriş yapınız."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:154
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:155
 #, c-format
 msgid ""
 "You are accessing self-checkout from a different IP address! please log in "
@@ -11504,7 +11499,7 @@ msgid "You are forbidden to view this page."
 msgstr "Bu sayfayı görme izniniz yok."
 
 #. %1$s:  borrowername | html 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:171
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:172
 #, c-format
 msgid "You are logged in as %s."
 msgstr "%s olarak oturum açtınız."
@@ -11614,7 +11609,7 @@ msgstr ""
 msgid "You cannot share a public list."
 msgstr "Genel bir listeyi paylaşamazsınız."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:293
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:294
 #, c-format
 msgid "You currently have nothing checked out."
 msgstr "Şu anda üzerinizde ödünç alınmış hiçbir materyal yoktur."
@@ -12203,7 +12198,7 @@ msgstr ""
 "Güncellemeleriniz gönderildi. Uygulamaya geçmeden önce bir kütüphaneci "
 "güncellemelerinizi gözden geçirecektir."
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:162
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:163
 #, c-format
 msgid "Your userid was not found in the database. Please try again."
 msgstr ""
@@ -12261,8 +12256,8 @@ msgstr "a an the"
 msgid "already in your cart"
 msgstr "zaten sepetinizde"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:714
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:715
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:746
 #, c-format
 msgid ""
 "an identifier indicating the location to which to deliver the item for pickup"
@@ -12304,8 +12299,8 @@ msgstr "ortalama derecelendirme: %s (%s oylar)"
 msgid "bib"
 msgstr "bib"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:709
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:740
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:710
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:741
 #, c-format
 msgid "bib_id"
 msgstr "bib_id"
@@ -12364,7 +12359,7 @@ msgstr "içerir"
 
 #. SPAN
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:75
-#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:261
+#: opac-tmpl/bootstrap/en/modules/opac-basket.tt:262
 msgid ""
 "ctx_ver=Z39.88-2004&rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&rft."
 "au=[% BIBLIO_RESULT.author | html %]&rft.btitle=[% BIBLIO_RESULT.title |url "
@@ -12382,14 +12377,14 @@ msgstr ""
 "BIBLIO_RESULT.publisher |url %]&rft.edition=[% BIBLIO_RESULT.edition | html "
 "%]&rft.series=[% BIBLIO_RESULT.series | html %]&rft.genre="
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:716
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:747
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
 #, c-format
 msgid "date after which hold request is no longer needed"
 msgstr "ayırma talebine olan gereksinim sona erdikten sonraki tarih"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:718
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:749
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:719
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:750
 #, c-format
 msgid "date after which item returned to shelf if item is not picked up"
 msgstr "materyal alınmadı ise materyal rafa döndükten sonraki tarih"
@@ -12401,7 +12396,7 @@ msgid ""
 "values: "
 msgstr "istekte kullanılan kayıt tanımlayıcı türünü belirler, olası değerler: "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:686
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
 #, c-format
 msgid "desired_due_date"
 msgstr "istenen_iade_tarihi"
@@ -12474,7 +12469,7 @@ msgid ""
 msgstr ""
 "ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:775
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:776
 #, c-format
 msgid "ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1 "
@@ -12498,7 +12493,7 @@ msgstr ""
 "ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;"
 "show_loans=1 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:643
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:644
 #, c-format
 msgid "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
 msgstr "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
@@ -12508,17 +12503,17 @@ msgstr "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
 msgid "ilsdi.pl?service=GetRecords&amp;id=1+2+99999 "
 msgstr "ilsdi.pl?service=GetRecords&amp;id=1+2+99999 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:666
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:667
 #, c-format
 msgid "ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:752
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:753
 #, c-format
 msgid "ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:721
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:722
 #, c-format
 msgid ""
 "ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;"
@@ -12532,7 +12527,7 @@ msgstr ""
 msgid "ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber "
 msgstr "ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:690
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:691
 #, c-format
 msgid "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
@@ -12569,10 +12564,10 @@ msgstr "materyal"
 msgid "item(s) added to your cart"
 msgstr "materyal sepetinize eklendi"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:662
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:684
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:771
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:663
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:685
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:772
 #, c-format
 msgid "item_id"
 msgstr "materyal_id"
@@ -12608,8 +12603,8 @@ msgstr "kayıt tanımlayıcıları sistem listesi"
 msgid "log in using a different account"
 msgstr "farklı bir hesap kullanarak oturum açın"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:715
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:746
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:716
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:747
 #, c-format
 msgid "needed_before_date"
 msgstr "gerekli_önce_tarih"
@@ -12646,24 +12641,24 @@ msgid "password"
 msgstr "parola"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:510
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:639
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:660
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:682
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:707
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:738
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:769
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:640
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:661
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:683
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:739
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:770
 #, c-format
 msgid "patron_id"
 msgstr "kullanıcı_id"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:718
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:749
 #, c-format
 msgid "pickup_expiry_date"
 msgstr "alma_sonaerdi_tarih"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:714
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
 #, c-format
 msgid "pickup_location"
 msgstr "alınacağı_servis_noktası"
@@ -12692,7 +12687,7 @@ msgstr "satın alma teklifi"
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "iDreamBooks.com adresindeki gözden geçirmelere göre derecelendirme"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:712
 #, c-format
 msgid "request_location"
 msgstr "istek_yeri"
@@ -12826,7 +12821,7 @@ msgstr "öneriler"
 msgid "surname"
 msgstr "soyadı"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:772
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:773
 #, c-format
 msgid ""
 "system hold identifier (returned by GetRecords and GetPatronInfo into "
@@ -12835,8 +12830,8 @@ msgstr ""
 "sistem ayırma tanımlayıcısı ('reserve_id' elemanına GetRecords ve "
 "GetPatronInfo tarafından döndürülen)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:663
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:685
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:664
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:686
 #, c-format
 msgid "system item identifier"
 msgstr "materyal tanımlayıcı sistem"
@@ -12857,32 +12852,32 @@ msgstr "tagsel_button"
 #: opac-tmpl/bootstrap/en/modules/opac-showmarc.tt:3
 #: opac-tmpl/bootstrap/en/modules/sci/sci-main.tt:25
 #: opac-tmpl/bootstrap/en/modules/opac-idref.tt:3
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:9
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:10
 #: opac-tmpl/bootstrap/en/modules/sco/help.tt:6
 #: opac-tmpl/bootstrap/en/modules/sco/printslip.tt:6
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:710
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:741
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
 #, c-format
 msgid ""
 "the ILS identifier for the bibliographic record on which the request is "
 "placed"
 msgstr "isteğin yer aldığı bibliyografik kayıt için ILS tanımlayıcı"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:739
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:709
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:740
 #, c-format
 msgid "the ILS identifier for the patron for whom the request is placed"
 msgstr "isteğin yer aldığı kullanıcı için ILS tanımlayıcı"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
 #, c-format
 msgid "the ILS identifier for the specific item on which the request is placed"
 msgstr "isteğin yer aldığı özel materyal için ILS tanımlayıcı"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:688
 #, c-format
 msgid "the date the patron would like the item returned by"
 msgstr "kullanıcının materyalin iadesini istediği tarih"
@@ -12893,10 +12888,10 @@ msgid "the type of the identifier, possible values: "
 msgstr "tanımlayıcının türü, olası değerler: "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:511
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:640
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:661
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:683
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:770
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:641
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:662
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:684
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:771
 #, c-format
 msgid ""
 "the unique patron identifier in the ILS; the same identifier returned by "
@@ -12978,7 +12973,7 @@ msgstr "düz görünüm"
 msgid "waiting holds:"
 msgstr "bekleyen ayırmalar:"
 
-#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:181
+#: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:182
 #, c-format
 msgid "was not found in the database. Please try again."
 msgstr "kullanıcı numaranız veri tabanında bulunamadı. Lütfen tekrar deneyin."
