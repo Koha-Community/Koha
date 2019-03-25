@@ -415,8 +415,7 @@ $order2->{order_internalnote} = "my notes";
         quantityreceived => 2,
         invoice          => $invoice,
     }
-)
-;
+);
 $order2 = GetOrder( $ordernumbers[1] );
 is( $order2->{'quantityreceived'},
     0, 'Splitting up order did not receive any on original order' );
@@ -425,6 +424,12 @@ is( $order2->{'budget_id'}, $budgetid,
     'Budget on original order is unchanged' );
 is( $order2->{order_internalnote}, "my notes",
     'ModReceiveOrder and GetOrder deal with internal notes' );
+my $order1 = GetOrder( $ordernumbers[0] );
+is(
+    $order1->{order_internalnote},
+    "internal note",
+    "ModReceiveOrder only changes the supplied orders internal notes"
+);
 
 $neworder = GetOrder($new_ordernumber);
 is( $neworder->{'quantity'}, 2, '2 items on new order' );
