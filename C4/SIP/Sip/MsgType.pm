@@ -336,12 +336,12 @@ sub handle {
     foreach my $key ( %ENV ) {
         delete $ENV{$key} if index($key, 'OVERRIDE_SYSPREF_') > 0;
     }
-    foreach my $key ( keys %{ $config->{'syspref-overrides'} } ) {
-        $ENV{"OVERRIDE_SYSPREF_$key"} = $config->{'syspref-overrides'}->{$key};
+    foreach my $key ( keys %{ $config->{'syspref_overrides'} } ) {
+        $ENV{"OVERRIDE_SYSPREF_$key"} = $config->{'syspref_overrides'}->{$key};
     }
-    foreach my $key ( keys %{ $server->{account}->{'syspref-overrides'} } ) {
+    foreach my $key ( keys %{ $server->{account}->{'syspref_overrides'} } ) {
         $ENV{"OVERRIDE_SYSPREF_$key"} =
-          $server->{account}->{'syspref-overrides'}->{$key};
+          $server->{account}->{'syspref_overrides'}->{$key};
     }
 
     #
