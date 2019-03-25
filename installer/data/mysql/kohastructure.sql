@@ -4274,7 +4274,8 @@ CREATE TABLE library_groups (
     description MEDIUMTEXT NULL DEFAULT NULL,    -- Longer explanation of the group, if necessary
     ft_hide_patron_info tinyint(1) NOT NULL DEFAULT 0, -- Turn on the feature "Hide patron's info" for this group
     ft_search_groups_opac tinyint(1) NOT NULL DEFAULT 0, -- Use this group for staff side search groups
-     ft_search_groups_staff tinyint(1) NOT NULL DEFAULT 0, -- Use this group for opac side search groups
+    ft_search_groups_staff tinyint(1) NOT NULL DEFAULT 0, -- Use this group for opac side search groups
+    ft_local_hold_group tinyint(1) NOT NULL DEFAULT 0, -- Use this group to identify libraries as pick up location for holds
     created_on TIMESTAMP NULL,             -- Date and time of creation
     updated_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP, -- Date and time of last
     PRIMARY KEY id ( id ),
