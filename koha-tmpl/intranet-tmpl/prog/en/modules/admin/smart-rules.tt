@@ -443,6 +443,14 @@
                                 From any library
                             </option>
 
+			    [% IF holdallowed == 3 %]
+                            <option value="3" selected="selected">
+                            [% ELSE %]
+                            <option value="3">
+                            [% END %]
+                                From local hold group
+                            </option>
+
                             [% IF holdallowed == 1 %]
                                 <option value="1" selected="selected">
                             [% ELSE %]
@@ -475,6 +483,16 @@
                             [% ELSE %]
                                 <option value="any">
                                     any library
+                                </option>
+                            [% END %]
+
+			    [% IF hold_fulfillment_policy == 'holdgroup' %]
+                                <option value="holdgroup" selected="selected">
+                                    item's hold group
+                                </option>
+                            [% ELSE %]
+                                <option value="holdgroup">
+                                    item's hold group
                                 </option>
                             [% END %]
 
@@ -619,11 +637,11 @@
     [% END %]
 
     <div id="refund-lost-item-fee-on-return" class="container">
-  [% IF current_branch == '*' %]
-    <h3>Default lost item fee refund on return policy</h3>
-  [% ELSE %]
-    <h3>Lost item fee refund on return policy for [% Branches.GetName(current_branch) | html %]</h3>
-  [% END %]
+        [% IF current_branch == '*' %]
+            <h3>Default lost item fee refund on return policy</h3>
+        [% ELSE %]
+            <h3>Lost item fee refund on return policy for [% Branches.GetName(current_branch) | html %]</h3>
+        [% END %]
         <p>Specify the default policy for lost item fees on return.
         </p>
         <form method="post" action="/cgi-bin/koha/admin/smart-rules.pl">
@@ -709,6 +727,7 @@
         </p>
         <ul>
             <li><strong>From any library:</strong> Patrons from any library may put this item on hold. <cite>(default if none is defined)</cite></li>
+            <li><strong>From local hold group:</strong> Only patrons from libraries in the same item's home library hold groups may put this book on hold.</li>
             <li><strong>From home library:</strong> Only patrons from the item's home library may put this book on hold.</li>
             <li><strong>No holds allowed:</strong> No patron may put this book on hold.</li>
         </ul>
@@ -740,6 +759,8 @@
                             <td>
                                 [% IF holdallowed == 2 %]
                                     <span>From any library</span>
+				[% ELSIF holdallowed == 3 %]
+                                    <span>From local hold group</span>
                                 [% ELSIF holdallowed == 1 %]
                                     <span>From home library</span>
                                 [% ELSE %]
@@ -751,6 +772,8 @@
                                     <span>any library</span>
                                 [% ELSIF hold_fulfillment_policy == 'homebranch' %]
                                     <span>item's home library</span>
+                                [% ELSIF hold_fulfillment_policy == 'holdgroup' %]
+                                    <span>item's hold group</span>
                                 [% ELSIF hold_fulfillment_policy == 'holdingbranch' %]
                                     <span>item's holding library</span>
                                 [% END %]
@@ -781,6 +804,7 @@
                     <td>
                         <select name="holdallowed">
                             <option value="2">From any library</option>
+                            <option value="3">From local hold group</option>
                             <option value="1">From home library</option>
                             <option value="0">No holds allowed</option>
                         </select>
@@ -789,6 +813,10 @@
                         <select name="hold_fulfillment_policy">
                             <option value="any">
                                 any library
+                            </option>
+
+                            <option value="holdgroup">
+                                item's hold group
                             </option>
 
                             <option value="homebranch">
