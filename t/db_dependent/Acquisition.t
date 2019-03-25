@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 74;
+use Test::More tests => 75;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::Acquisition::Basket;
@@ -511,7 +511,7 @@ $nonexistent_order = GetOrder( 424242424242 );
 is( $nonexistent_order, undef, 'GetOrder returns undef if a nonexistent ordernumber is given' );
 
 # Tests for DelOrder
-my $order1 = GetOrder($ordernumbers[0]);
+$order1 = GetOrder($ordernumbers[0]);
 my $error = DelOrder($order1->{biblionumber}, $order1->{ordernumber});
 ok((not defined $error), "DelOrder does not fail");
 $order1 = GetOrder($order1->{ordernumber});
