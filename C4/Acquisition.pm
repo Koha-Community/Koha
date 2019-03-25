@@ -1893,7 +1893,6 @@ cancelled.
 
 sub DelOrder {
     my ( $bibnum, $ordernumber, $delete_biblio, $reason ) = @_;
-
     my $error;
     my $dbh = C4::Context->dbh;
     my $query = "

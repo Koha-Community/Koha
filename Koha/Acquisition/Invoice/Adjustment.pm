@@ -20,6 +20,7 @@ use Modern::Perl;
 use Carp;
 
 use Koha::Database;
+use Koha::Acquisition::Invoice;
 
 use base qw(Koha::Object);
 
@@ -32,6 +33,20 @@ Koha::Acquisition::Invoice::Adjustment - Koha Invoice Adjustment class
 =head2 Class Methods
 
 =cut
+
+=head3 invoice
+
+my $invoice = $adjustment->invoice;
+
+Return the invoice for this adjustment
+
+=cut
+
+sub invoice {
+    my ( $self ) = @_;
+    my $invoice_rs = $self->_result->invoiceid;
+    return Koha::Acquisition::Invoice->_new_from_dbic( $invoice_rs );
+}
 
 =head3 type
 

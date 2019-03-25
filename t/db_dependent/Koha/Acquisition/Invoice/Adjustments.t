@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use Koha::Database;
 
@@ -63,5 +63,13 @@ is( $retrieved_adj->reason, $new_adj->reason, 'Find an adjustment by id should r
 
 $retrieved_adj->delete;
 is( Koha::Acquisition::Invoice::Adjustments->search->count, $nb_of_adjs + 1, 'Delete should have deleted the adjustment' );
+
+subtest 'invoice' => sub {
+    plan tests => 2;
+
+    my $invoice = $retrieved_adj->invoice;
+    is( ref( $invoice ), 'Koha::Acquisition::Invoice', 'Koha::Acquisition::Invoice::Adjustment->invoice should return a Koha::Acquisition::Invoice' );
+    is( $invoice->invoiceid, $retrieved_adj->invoiceid, 'Koha::Acquisition::Invoice::Adjustment->invoice should return the correct invoice' );
+};
 
 $schema->storage->txn_rollback;
