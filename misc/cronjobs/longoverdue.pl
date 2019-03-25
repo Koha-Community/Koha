@@ -33,6 +33,8 @@ BEGIN {
     use FindBin;
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
+
+use Koha::Cron;
 use C4::Context;
 use C4::Items;
 use C4::Circulation qw/LostItem MarkIssueReturned/;

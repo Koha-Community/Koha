@@ -28,6 +28,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
+use Koha::Cron;
 use C4::Context;
 use C4::Debug;
 use C4::Serials;

@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 use DBI;
-use Test::More tests => 26;
+use Test::More tests => 27;
 use Test::MockModule;
 
 BEGIN {
@@ -62,3 +62,4 @@ is(C4::Context->interface, 'opac', 'interface still opac');
 #Bug 14751
 is( C4::Context->interface( 'SiP' ), 'sip', 'interface SiP' );
 is( C4::Context->interface( 'COMMANDLINE' ), 'commandline', 'interface commandline uc' );
+is( C4::Context->interface( 'CRON' ), 'cron', 'interface cron uc' );

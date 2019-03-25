@@ -5,6 +5,7 @@ use Modern::Perl;
 use Pod::Usage;
 use Getopt::Long;
 
+use Koha::Cron;
 use C4::Budgets qw( GetBudget );
 use C4::Suggestions qw( GetUnprocessedSuggestions );
 use Koha::Libraries;

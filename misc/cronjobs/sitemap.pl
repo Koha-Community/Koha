@@ -23,6 +23,8 @@ use Modern::Perl;
 use utf8;
 use Pod::Usage;
 use Getopt::Long;
+
+use Koha::Cron;
 use C4::Biblio;
 use Koha::Sitemapper;
 

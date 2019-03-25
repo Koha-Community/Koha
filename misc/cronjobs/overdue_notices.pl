@@ -34,6 +34,7 @@ use Text::CSV_XS;
 use DateTime;
 use DateTime::Duration;
 
+use Koha::Cron;
 use C4::Context;
 use C4::Letters;
 use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes parse_overdues_letter);
@@ -325,7 +326,6 @@ GetOptions(
 ) or pod2usage(2);
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
-
 cronlogaction() unless $test_mode;
 
 if ( defined $csvfilename && $csvfilename =~ /^-/ ) {

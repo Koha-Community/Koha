@@ -109,6 +109,8 @@ database updates have been performed.").
 
 use Modern::Perl;
 use Getopt::Long qw/HelpMessage :config gnu_getopt/;
+
+use Koha::Cron;
 use C4::Context;
 use C4::Letters;
 use Koha::StockRotationRotas;

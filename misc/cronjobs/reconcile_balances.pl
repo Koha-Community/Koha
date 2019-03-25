@@ -62,6 +62,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
+use Koha::Cron;
 use C4::Log;
 
 use Koha::Account::Lines;
@@ -76,7 +77,6 @@ GetOptions(
 ) or pod2usage(2);
 
 pod2usage(1) if $help;
-
 cronlogaction();
 
 my @patron_ids = map { $_->borrowernumber } Koha::Account::Lines->search(

@@ -28,6 +28,8 @@
 use Modern::Perl;
 
 use Template;
+
+use Koha::Cron;
 use C4::Context;
 use Time::Local;
 use POSIX;

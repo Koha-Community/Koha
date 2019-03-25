@@ -10,6 +10,7 @@ BEGIN {
 }
 
 use CGI qw( utf8 ); # NOT a CGI script, this is just to keep C4::Templates::gettemplate happy
+use Koha::Cron;
 use C4::Context;
 use C4::Debug;
 use C4::Letters;

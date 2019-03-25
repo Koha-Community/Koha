@@ -28,6 +28,8 @@ BEGIN {
 
 use Getopt::Long;
 use Pod::Usage;
+
+use Koha::Cron;
 use C4::Suggestions;
 use C4::Log;
 use C4::Context;

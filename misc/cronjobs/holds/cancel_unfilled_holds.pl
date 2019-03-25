@@ -28,6 +28,7 @@ BEGIN {
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Cron;
 use C4::Reserves;
 use C4::Log;
 use Koha::Holds;

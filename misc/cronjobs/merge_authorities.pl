@@ -5,6 +5,7 @@ use Getopt::Long;
 use Pod::Usage;
 use Time::HiRes qw(gettimeofday);
 
+use Koha::Cron;
 use C4::AuthoritiesMarc;
 use Koha::Authority::MergeRequests;
 
@@ -19,8 +20,8 @@ GetOptions(
 );
 
 $|=1; # flushes output
-if( $params->{batch} ) {
-    handle_batch( $params );
+if ( $params->{batch} ) {
+    handle_batch($params);
 } else {
     pod2usage(1);
 }

@@ -2,6 +2,7 @@
 use strict;
 use warnings;
 
+use Koha::Cron;
 use C4::Context;
 
 # this script will remove those older than 5 days

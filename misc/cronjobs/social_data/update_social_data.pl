@@ -1,6 +1,8 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
+
+use Koha::Cron;
 use C4::Context;
 use C4::SocialData;
 

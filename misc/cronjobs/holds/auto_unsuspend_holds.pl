@@ -29,6 +29,7 @@ BEGIN {
 
 # cancel all expired hold requests
 
+use Koha::Cron;
 use C4::Reserves;
 use C4::Log;
 

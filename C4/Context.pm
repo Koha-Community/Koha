@@ -1032,6 +1032,7 @@ sub interface {
             || $interface eq 'opac'
             || $interface eq 'intranet'
             || $interface eq 'sip'
+            || $interface eq 'cron'
             || $interface eq 'commandline' )
         {
             $context->{interface} = $interface;

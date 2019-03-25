@@ -94,6 +94,8 @@ $|++;
 use DBI;
 use Getopt::Long;
 use Pod::Usage;
+
+use Koha::Cron;
 use C4::Context;
 use English qw(-no_match_vars);
 
@@ -117,7 +119,6 @@ GetOptions(
 
 pod2usage(1) if $help;
 pod2usage( -verbose => 2 ) if $man;
-
 
 my %wanted_borrowers_columns = map { $_ => 1 } qw/borrowernumber cardnumber surname  firstname address city phone dateofbirth/; 
 my %wanted_issues_columns    = map { $_ => 1 } qw/borrowernumber date_due itemcallnumber title itemtype/;

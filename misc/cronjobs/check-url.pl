@@ -78,6 +78,7 @@ use strict;
 use warnings;
 use LWP::UserAgent;
 use HTTP::Request;
+use Koha::Cron;
 use C4::Biblio;
 
 
@@ -147,6 +148,7 @@ use Carp;
 
 use Pod::Usage;
 use Getopt::Long;
+use Koha::Cron;
 use C4::Context;
 
 

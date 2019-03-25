@@ -5,6 +5,7 @@ use Modern::Perl;
 use Pod::Usage;
 use Getopt::Long;
 
+use Koha::Cron;
 use C4::Members;
 use Koha::DateUtils;
 use Koha::Patrons;

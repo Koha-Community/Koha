@@ -25,6 +25,8 @@ use Carp;
 use YAML::Syck;
 use Pod::Usage;
 use Getopt::Long;
+
+use Koha::Cron;
 use C4::Context;
 use C4::Log;
 
@@ -42,7 +44,7 @@ sub usage {
     exit;
 } 
 
-usage() if $help || !$conf;          
+usage() if $help || !$conf;
 
 cronlogaction();
 

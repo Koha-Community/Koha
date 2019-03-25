@@ -6,6 +6,7 @@ use Getopt::Long;
 use Pod::Usage;
 use JSON;
 
+use Koha::Cron;
 use C4::Context;
 use C4::Items;
 

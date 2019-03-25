@@ -30,6 +30,7 @@ use strict;
 use warnings;
 use 5.010;
 
+use Koha::Cron;
 use C4::Context;
 use C4::Overdues;
 use Getopt::Long;
