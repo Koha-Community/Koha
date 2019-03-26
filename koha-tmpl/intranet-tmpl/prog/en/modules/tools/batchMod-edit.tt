@@ -211,15 +211,19 @@ $(document).ready(function(){
 </div>
 [% END %]<!-- /item_loop -->
 
-[% IF ( simple_items_display ) %]
-    <p>The following items were modified:</p>
-    <ul>
-    [% FOREACH simple_items_displa IN simple_items_display %]
-  <li>
-      [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber | uri %]&amp;itemnumber=[% simple_items_displa.itemnumber | uri %]">[% simple_items_displa.barcode | html %]</a>[% ELSE %][% simple_items_displa.barcode | html %][% END %]
-  </li>
+[% IF ( simple_items_display || job_completed ) %]
+    [% IF ( too_many_items_display ) %]
+        <p>Too many items ([% too_many_items_display | html %]): You have edited more than [% Koha.Preference('MaxItemsToDisplayForBatchMod') | html %] items in a batch, items will not be shown.</p>
+    [% ELSE %]
+        <p>The following items were modified:</p>
+        <ul>
+        [% FOREACH simple_items_displa IN simple_items_display %]
+      <li>
+          [% IF ( CAN_user_editcatalogue_edit_items ) %]<a href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&amp;biblionumber=[% simple_items_displa.biblionumber | uri %]&amp;itemnumber=[% simple_items_displa.itemnumber | uri %]">[% simple_items_displa.barcode | html %]</a>[% ELSE %][% simple_items_displa.barcode | html %][% END %]
+      </li>
+        [% END %]
+        </ul>
     [% END %]
-    </ul>
 [% END %]<!-- /simple_items_display -->
 
 [% IF ( show ) %]

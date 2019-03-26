@@ -119,21 +119,27 @@ if ($op eq "action") {
     # Once the job is done
     if ($completedJobID) {
 	# If we have a reasonable amount of items, we display them
-    if (scalar(@itemnumbers) <= ( C4::Context->preference("MaxItemsToDisplayForBatchDel") // 1000 ) ) {
-	    $items_display_hashref=BuildItemsData(@itemnumbers);
-	} else {
-	    # Else, we only display the barcode
-        my @simple_items_display = map {
-            my $itemnumber = $_;
-            my $item = Koha::Items->find($itemnumber);
-            {
-                itemnumber   => $itemnumber,
-                barcode      => $item ? ( $item->barcode // q{} ) : q{},
-                biblionumber => $item ? $item->biblio->biblionumber : q{},
-            };
-        } @itemnumbers;
-	    $template->param("simple_items_display" => \@simple_items_display);
-	}
+    my $max_items = $del ? C4::Context->preference("MaxItemsToDisplayForBatchDel") : C4::Context->preference("MaxItemsToDisplayForBatchMod");
+    if (scalar(@itemnumbers) <= $max_items ){
+        if (scalar(@itemnumbers) <= 1000 ) {
+            $items_display_hashref=BuildItemsData(@itemnumbers);
+        } else {
+            # Else, we only display the barcode
+            my @simple_items_display = map {
+                my $itemnumber = $_;
+                my $item = Koha::Items->find($itemnumber);
+                {
+                    itemnumber   => $itemnumber,
+                    barcode      => $item ? ( $item->barcode // q{} ) : q{},
+                    biblionumber => $item ? $item->biblio->biblionumber : q{},
+                };
+            } @itemnumbers;
+            $template->param("simple_items_display" => \@simple_items_display);
+        }
+    } else {
+        $template->param( "too_many_items_display" => scalar(@itemnumbers) );
+        $template->param( "job_completed" => 1 );
+    }
 
 	# Setting the job as done
 	my $job = C4::BackgroundJob->fetch($sessionID, $completedJobID);
