@@ -106,7 +106,7 @@ if ( $op eq 'add_form' ) {
         eval { $itemtype->store; };
 
         if ($@) {
-            push @messages, { type => 'error', code => 'error_on_update' };
+            push @messages, { type => 'alert', code => 'error_on_update' };
         } else {
             push @messages, { type => 'message', code => 'success_on_update' };
         }
@@ -130,13 +130,13 @@ if ( $op eq 'add_form' ) {
         eval { $itemtype->store; };
 
         if ($@) {
-            push @messages, { type => 'error', code => 'error_on_insert' };
+            push @messages, { type => 'alert', code => 'error_on_insert' };
         } else {
             push @messages, { type => 'message', code => 'success_on_insert' };
         }
     } else {
         push @messages,
-          { type => 'error',
+          { type => 'alert',
             code => 'already_exists',
           };
     }
@@ -148,7 +148,7 @@ if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $can_be_deleted = $itemtype->can_be_deleted();
     if ($can_be_deleted == 0) {
-        push @messages, { type => 'error', code => 'cannot_be_deleted'};
+        push @messages, { type => 'alert', code => 'cannot_be_deleted'};
         $op = 'list';
     } else {
         $template->param( itemtype => $itemtype, );
@@ -159,7 +159,7 @@ if ( $op eq 'add_form' ) {
     my $itemtype = Koha::ItemTypes->find($itemtype_code);
     my $deleted = eval { $itemtype->delete };
     if ( $@ or not $deleted ) {
-        push @messages, { type => 'error', code => 'error_on_delete' };
+        push @messages, { type => 'alert', code => 'error_on_delete' };
     } else {
         push @messages, { type => 'message', code => 'success_on_delete' };
     }
