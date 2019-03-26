@@ -263,9 +263,9 @@
                             <input type="hidden" name="method" value="delete" />
                             <input type="hidden" name="confirmed" value="1" />
                             <input type="hidden" name="illrequest_id" value="[% request.id | html %]" />
-                            <button type="submit" class="btn btn-default btn-sm approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
+                            <button type="submit" class="btn btn-default approve"><i class="fa fa-fw fa-check"></i> Yes, delete</button>
                         </form>
-                        <a class="btn btn-default btn-sm deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-remove"></i>No, do not delete</a>
+                        <a class="btn btn-default deny" href="/cgi-bin/koha/ill/ill-requests.pl?method=illview&amp;illrequest_id=[% request.id | html %]"><i class="fa fa-fw fa-remove"></i>No, do not delete</a>
                     </div>
 
                 [% ELSIF query_type == 'illview' %]
@@ -281,7 +281,7 @@
 
                     <h1>Manage ILL request</h1>
                     <div id="request-toolbar" class="btn-toolbar">
-                        <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
+                        <a title="Edit request" id="ill-toolbar-btn-edit-action" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=edit_action&amp;illrequest_id=[% request.illrequest_id | html %]">
                         <span class="fa fa-pencil"></span>
                         Edit request
                         </a>
@@ -289,7 +289,7 @@
                             [% IF action.method == 'migrate' %]
                                 [% IF backends.size > 2 %]
                                     <div class="dropdown btn-group">
-                                        <button class="btn btn-sm btn-default dropdown-toggle" type="button" id="ill-migrate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                                        <button class="btn btn-default dropdown-toggle" type="button" id="ill-migrate-dropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
                                             <i class="fa [% action.ui_method_icon | html %]"></i> [% action.ui_method_name | html %] <span class="caret"></span>
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="ill-migrate-dropdown">
@@ -303,7 +303,7 @@
                                 [% ELSIF backends.size == 2 %]
                                     [% FOREACH backend IN backends %]
                                         [% IF backend != request.backend %]
-                                            <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">
+                                            <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]&amp;backend=[% backend | uri %]">
                                             <span class="fa [% action.ui_method_icon | html %]"></span>
                                             [% action.ui_method_name | html %]
                                             </a>
@@ -311,17 +311,17 @@
                                     [% END %]
                                 [% END %]
                             [% ELSIF action.method != 0 %]
-                                <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-sm btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]">
+                                <a title="[% action.ui_method_name | html %]" id="ill-toolbar-btn-[% action.id | lower | html %]" class="btn btn-default" href="/cgi-bin/koha/ill/ill-requests.pl?method=[% action.method | uri %]&amp;illrequest_id=[% request.illrequest_id | uri %]">
                                 <span class="fa [% action.ui_method_icon | html %]"></span>
                                 [% action.ui_method_name | html %]
                                 </a>
                             [% END %]
                         [% END %]
-                        <a title="Display supplier metadata" id="ill-request-display-metadata" class="btn btn-sm btn-default pull-right" href="#">
+                        <a title="Display supplier metadata" id="ill-request-display-metadata" class="btn btn-default pull-right" href="#">
                             <span class="fa fa-eye"></span>
                             Display supplier metadata
                         </a>
-                        <a title="ILL request log" id="ill-request-display-log" class="btn btn-sm btn-default pull-right" href="#">
+                        <a title="ILL request log" id="ill-request-display-log" class="btn btn-default pull-right" href="#">
                             <span class="fa fa-calendar"></span>
                             ILL request log
                         </a>

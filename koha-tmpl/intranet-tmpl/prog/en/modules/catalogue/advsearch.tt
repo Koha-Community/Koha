@@ -32,14 +32,14 @@
         </div>
         <div class="btn-group">
         [% IF ( expanded_options ) %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-sm btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=0" class="btn btn-link"><i class="fa fa-search-minus"></i> Fewer options</a>
         </div>
         [% ELSE %]
-            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-sm btn-link"><i class="fa fa-search-plus"></i> More options</a>
+            <a href="/cgi-bin/koha/catalogue/search.pl?expanded_options=1" class="btn btn-link"><i class="fa fa-search-plus"></i> More options</a>
         </div>
         [% END %]
         <div class="btn-group">
-            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-sm btn-link"><i class="fa fa-trash"></i> Clear fields</a>
+            <a href="/cgi-bin/koha/catalogue/search.pl?do=Clear&expanded_options=[% expanded_options | uri %]" class="btn btn-link"><i class="fa fa-trash"></i> Clear fields</a>
         </div>
     </fieldset>
 </div>

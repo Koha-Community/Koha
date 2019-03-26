@@ -13,12 +13,12 @@
             [% IF ( patron.image ) %]
                 <img src="/cgi-bin/koha/members/patronimage.pl?borrowernumber=[% patron.borrowernumber | uri %]" class="patronimage" alt="[% patron.firstname | html %] [% patron.surname | html %] ([% patron.cardnumber | html %])" />
                 <div class="patronimage-controls">
-                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default btn-sm edit-patronimage" title="Edit patron image" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
+                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default edit-patronimage" title="Edit patron image" href="#"><i class="fa fa-pencil"></i> Edit</a></div>
                 </div>
             [% ELSE %]
                 <div class="patronimage empty"></div>
                 <div class="patronimage-controls">
-                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default btn-sm edit-patronimage" title="Add patron image" href="#"><i class="fa fa-plus"></i> Add</a></div>
+                    <div class="patronimage-control"><a data-borrowernumber="[% patron.borrowernumber | uri %]" class="btn btn-default edit-patronimage" title="Add patron image" href="#"><i class="fa fa-plus"></i> Add</a></div>
                 </div>
             [% END %]
         </div>

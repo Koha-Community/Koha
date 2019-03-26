@@ -5,7 +5,7 @@
 
     [% IF ( can_add_biblios ) %]
         <div class="btn-group">
-            <button type="button" class="btn btn-default btn-sm" data-toggle="modal" data-target="#addToList">
+            <button type="button" class="btn btn-default" data-toggle="modal" data-target="#addToList">
                 <i class="fa fa-plus"></i> Add items
             </button>
         </div>
@@ -14,7 +14,7 @@
     [% IF shelf AND op == 'view' %]
         [% IF can_manage_shelf %]
         <div class="btn-group">
-            <button class="btn btn-default sm dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
+            <button class="btn btn-default dropdown-toggle" data-toggle="dropdown"><i class="fa fa-pencil"></i> Edit <span class="caret"></span></button>
             <ul class="dropdown-menu">
                 <li><a href="/cgi-bin/koha/virtualshelves/shelves.pl?op=edit_form&amp;shelfnumber=[% shelf.shelfnumber | uri %]&amp;referer=[% op | uri %]">Edit list</a></li>
                 <li><a id="deleteshelf" href="/cgi-bin/koha/virtualshelves/shelves.pl?op=delete&amp;shelfnumber=[% shelf.shelfnumber | html %]">Delete list</a></li>
