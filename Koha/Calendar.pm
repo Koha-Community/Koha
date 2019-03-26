@@ -217,14 +217,9 @@ sub addDays {
             if ( $self->is_holiday($base_date) ) {
                 my $dow = $base_date->day_of_week;
                 my $days = $days_duration->in_units('days');
-                my $push_amt = (
-                    # We're using Dayweek useDaysMode option
-                    $self->{days_mode} eq 'Dayweek' &&
-                    # It's period based on weeks
-                    $days % 7 == 0 &&
-                    # It's not a permanently closed day
-                    !$self->{weekly_closed_days}->[$dow] == 1
-                ) ? 7 : 1;
+                # Is it a period based on weeks
+                my $push_amt = $days_duration % 7 == 0 ?
+                    $self->get_push_amt($base_date) : 1;
                 if ( $days_duration->is_negative() ) {
                     $base_date = $self->prev_open_days($base_date, $push_amt);
                 } else {
@@ -235,6 +230,18 @@ sub addDays {
     }
 
     return $base_date;
+}
+
+sub get_push_amt {
+    my ( $self, $base_date) = @_;
+
+    my $dow = $base_date->day_of_week;
+    return (
+        # We're using Dayweek useDaysMode option
+        $self->{days_mode} eq 'Dayweek' &&
+        # It's not a permanently closed day
+        !$self->{weekly_closed_days}->[$dow] == 1
+    ) ? 7 : 1;
 }
 
 sub is_holiday {
@@ -285,7 +292,8 @@ sub next_open_days {
 
     $base_date->add(days => $to_add);
     while ($self->is_holiday($base_date)) {
-        $base_date->add(days => $to_add);
+        my $add_next = $self->get_push_amt($base_date);
+        $base_date->add(days => $add_next);
     }
     return $base_date;
 }
@@ -301,7 +309,8 @@ sub prev_open_days {
     $base_date->add(days => $to_sub);
 
     while ($self->is_holiday($base_date)) {
-        $base_date->add(days => $to_sub);
+        my $sub_next = $self->get_push_amt($base_date);
+        $base_date->add(days => $sub_next);
     }
 
     return $base_date;
