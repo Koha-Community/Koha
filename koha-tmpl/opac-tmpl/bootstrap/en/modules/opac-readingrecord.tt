@@ -108,7 +108,7 @@
                                                     [% END %]
                                                     [% IF  OPACAmazonCoverImages %]
                                                         [% IF  issue.normalized_isbn %]
-                                                            <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img border="0" src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
+                                                            <a href="http://www.amazon.com/gp/reader/[% issue.normalized_isbn | uri %][% AmazonAssocTag | uri %]#reader-link"><img src="https://images-na.ssl-images-amazon.com/images/P/[% issue.normalized_isbn | html %].01.THUMBZZZ.jpg" alt="" class="item-thumbnail" /></a>
                                                         [% ELSE %]
                                                              <span class="no-image">No cover image available</span>
                                                         [% END %]
@@ -143,7 +143,27 @@
                                                 [% ELSE %]
                                                      <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title | html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl.subfield | html %][% END %][% END %]</a>
                                                 [% END %]
-                                                <span class="item-details">[% issue.author | html %]</span>
+                                                <p class="results-summary item-details">[% issue.author | html %]</p>
+
+                                                    [% IF ( Koha.Preference( 'OpacStarRatings' ) == 'all' && issue.my_rating ) %]
+                                                        <div class="results_summary ratings">
+                                                            <div class="br-wrapper br-theme-fontawesome-stars">
+                                                                <div class="br-widget br-readonly">
+                                                                    [% FOREACH i IN [ 1 2 3 4 5  ] %]
+                                                                        [% IF issue.my_rating.rating_value == i %]
+                                                                            <a href="#" class="br-selected br-current"></a>
+                                                                        [% ELSIF issue.my_rating.rating_value > i %]
+                                                                            <a href="#" class="br-selected"></a>
+                                                                        [% ELSE %]
+                                                                            <a href="#"></a>
+                                                                        [% END %]
+                                                                    [% END %]
+                                                                </div>
+                                                            </div>
+                                                            Rated on [% issue.my_rating.timestamp | $KohaDates %]
+                                                        </div> <!-- / .results_summary -->
+                                                    [% END # / IF OpacStarRatings %]
+
                                                 </td>
                                                 <td>
                                                 [% UNLESS ( noItemTypeImages ) %]
@@ -188,7 +208,6 @@
 [% BLOCK jsinclude %]
 [% INCLUDE 'datatables.inc' %]
 <script>
-//<![CDATA[
     $(document).ready(function(){
         [% IF ( GoogleJackets ) %]KOHA.Google.GetCoverFromIsbn();[% END %]
             $('#sortsubmit').hide();
@@ -217,6 +236,5 @@
             }
         });
     });
-//]]>
 </script>
 [% END %]

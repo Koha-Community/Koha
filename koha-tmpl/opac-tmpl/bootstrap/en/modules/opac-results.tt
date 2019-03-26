@@ -618,7 +618,6 @@
 [% IF ( LibraryThingForLibrariesID ) %]
     <script src="https://ltfl.librarything.com/forlibraries/widget.js?id=[% LibraryThingForLibrariesID | html %]&amp;systype=koha"></script>
 [% END %]
-[% IF ( OpacStarRatings == 'all' || Koha.Preference('Babeltheque') ) %][% Asset.js("lib/jquery/plugins/jquery.rating.js") | $raw %][% END %]
 [% IF ( OverDriveEnabled ) %][% Asset.js("js/overdrive.js") | $raw %][% END %]
 [% IF ( RecordedBooksEnabled ) %][% Asset.js("js/recordedbooks.js") | $raw %][% END %]
 [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]

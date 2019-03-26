@@ -33,6 +33,7 @@ use C4::Charset qw(StripNonXmlChars);
 use Koha::Patrons;
 
 use Koha::ItemTypes;
+use Koha::Ratings;
 
 my $query = new CGI;
 
@@ -121,6 +122,12 @@ foreach my $issue ( @{$issues} ) {
           : $my_summary_html =~ s/{BIBLIONUMBER}//g;
         $issue->{MySummaryHTML} = $my_summary_html;
     }
+    # Star ratings
+    if ( C4::Context->preference('OpacStarRatings') eq 'all' ) {
+        my $ratings = Koha::Ratings->search({ biblionumber => $issue->{biblionumber} });
+        $issue->{ratings} = $ratings;
+        $issue->{my_rating} = $borrowernumber ? $ratings->search({ borrowernumber => $borrowernumber })->next : undef;
+    }
 }
 
 if (C4::Context->preference('BakerTaylorEnabled')) {
@@ -140,7 +147,7 @@ BEGIN {
 	}
 }
 
-for(qw(AmazonCoverImages GoogleJackets)) {	# BakerTaylorEnabled handled above
+for(qw(AmazonCoverImages GoogleJackets)) { # BakerTaylorEnabled handled above
 	C4::Context->preference($_) or next;
 	$template->param($_=>1);
 	$template->param(JacketImages=>1);
