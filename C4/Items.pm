@@ -546,7 +546,7 @@ sub ModItemTransfer {
     my ( $itemnumber, $frombranch, $tobranch ) = @_;
 
     my $dbh = C4::Context->dbh;
-    my $item = GetItem( $itemnumber );
+    my $item = Koha::Items->find( $itemnumber );
 
     # Remove the 'shelving cart' location status if it is being used.
     CartToShelf( $itemnumber ) if ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART' );

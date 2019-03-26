@@ -1029,7 +1029,7 @@ sub ModReserveStatus {
     my $sth_set = $dbh->prepare($query);
     $sth_set->execute( $newstatus, $itemnumber );
 
-    my $item = GetItem($itemnumber);
+    my $item = Koha::Items->find($itemnumber);
     if ( ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART'  ) && $newstatus ) {
       CartToShelf( $itemnumber );
     }
@@ -1082,7 +1082,7 @@ sub ModReserveAffect {
       if ( !$transferToDo && !$already_on_shelf );
 
     _FixPriority( { biblionumber => $biblionumber } );
-    my $item = GetItem($itemnumber);
+    my $item = Koha::Items->find($itemnumber);
     if ( ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART'  ) ) {
       CartToShelf( $itemnumber );
     }
