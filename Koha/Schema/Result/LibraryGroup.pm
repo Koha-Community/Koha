@@ -257,10 +257,11 @@ sub koha_objects_class {
 }
 
 __PACKAGE__->add_columns(
-    '+ft_hide_patron_info' => { is_boolean => 1 },
-    '+ft_search_groups_opac' => { is_boolean => 1 },
+    '+ft_hide_patron_info'    => { is_boolean => 1 },
+    '+ft_search_groups_opac'  => { is_boolean => 1 },
     '+ft_search_groups_staff' => { is_boolean => 1 },
-    '+ft_local_hold_group' => { is_boolean => 1 },
+    '+ft_local_hold_group'    => { is_boolean => 1 },
+    '+ft_limit_item_editing'  => { is_boolean => 1 },
 );
 
 1;
