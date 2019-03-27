@@ -309,6 +309,15 @@ $(document).ready(function(){
         write_age();
     }
 
+    $.validator.addMethod(
+        "phone",
+        function(value, element, phone) {
+            var e164 = "^\\+?[1-9]\\d{1,14}$";
+            var re = new RegExp(e164);
+            return this.optional(element) || re.test(value);
+        },
+        jQuery.validator.messages.phone);
+
     $("#entryform").validate({
         rules: {
             email: {
@@ -326,6 +335,9 @@ $(document).ready(function(){
             },
             password2: {
                password_match: true
+            },
+            SMSnumber: {
+               phone: true,
             }
         },
         submitHandler: function(form) {
