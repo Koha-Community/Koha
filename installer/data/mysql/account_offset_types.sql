@@ -12,8 +12,8 @@ INSERT INTO account_offset_types ( type ) VALUES
 ('Rental Fee'),
 ('Reserve Fee'),
 ('Hold Expired'),
-('fine_increase'),
-('fine_decrease'),
-('Fine'),
+('OVERDUE_INCREASE'),
+('OVERDUE_DECREASE'),
+('OVERDUE'),
 ('Void Payment'),
 ('Credit Applied');

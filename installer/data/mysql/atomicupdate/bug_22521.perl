@@ -1,6 +1,33 @@
 $DBversion = 'XXX';    # will be replaced by the RM
 if ( CheckVersion($DBversion) ) {
 
+    $dbh->do(qq{
+        UPDATE
+          `account_offset_types`
+        SET
+          type = 'OVERDUE'
+        WHERE
+          type = 'Fine';
+    });
+
+    $dbh->do(qq{
+        UPDATE
+          `account_offset_types`
+        SET
+          type = 'OVERDUE_INCREASE'
+        WHERE
+          type = 'fine_increase';
+    });
+
+    $dbh->do(qq{
+        UPDATE
+          `account_offset_types`
+        SET
+          type = 'OVERDUE_DECREASE'
+        WHERE
+          type = 'fine_decrease';
+    });
+
     if ( column_exists( 'accountlines', 'accounttype' ) ) {
         $dbh->do(
             qq{

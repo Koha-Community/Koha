@@ -286,8 +286,8 @@ sub adjust {
             my $difference                = $amount - $amount_before;
             my $new_outstanding           = $amount_outstanding_before + $difference;
 
-            my $offset_type = substr( $update_type, 0, index( $update_type, '_' ) );
-            $offset_type .= ( $difference > 0 ) ? "_increase" : "_decrease";
+            my $offset_type = $account_type;
+            $offset_type .= ( $difference > 0 ) ? "_INCREASE" : "_DECREASE";
 
             # Catch cases that require patron refunds
             if ( $new_outstanding < 0 ) {

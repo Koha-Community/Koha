@@ -564,7 +564,7 @@ sub UpdateFine {
             $accountline->adjust(
                 {
                     amount    => $amount,
-                    type      => 'fine_update',
+                    type      => 'overdue_update',
                     interface => C4::Context->interface
                 }
             );
@@ -587,7 +587,7 @@ sub UpdateFine {
                     user_id     => undef,
                     interface   => C4::Context->interface,
                     library_id  => undef, #FIXME: Should we grab the checkout or circ-control branch here perhaps?
-                    type        => 'fine',
+                    type        => 'overdue',
                     item_id     => $itemnum,
                     issue_id    => $issue_id,
                 }
