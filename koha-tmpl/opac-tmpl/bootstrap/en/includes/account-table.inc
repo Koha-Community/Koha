@@ -13,18 +13,6 @@
             </tr>
         </thead>
 
-        <tfoot>
-        <tr>
-            [%- IF ENABLE_OPAC_PAYMENTS -%]
-                [%- SET COLSPAN = 4 -%]
-            [%- ELSE -%]
-                [%- SET COLSPAN = 3 -%]
-            [%- END -%]
-            <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
-            <td class="sum">[% total | $Price %]</td>
-        </tr>
-        </tfoot>
-
         <tbody>
             [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
                 [% IF ( ACCOUNT_LINE.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
@@ -71,6 +59,18 @@
                 </tr>
             [% END %]
         </tbody>
+
+        <tfoot>
+            <tr>
+                [%- IF ENABLE_OPAC_PAYMENTS -%]
+                    [%- SET COLSPAN = 4 -%]
+                [%- ELSE -%]
+                    [%- SET COLSPAN = 3 -%]
+                [%- END -%]
+                <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
+                <td class="sum">[% total | $Price %]</td>
+            </tr>
+        </tfoot>
 
     </table>
 
