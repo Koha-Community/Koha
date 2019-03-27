@@ -1,7 +1,7 @@
 {
   "/checkouts": {
     "get": {
-      "x-mojo-to": "Checkout#list",
+      "x-mojo-to": "Checkouts#list",
       "operationId": "listCheckouts",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -35,7 +35,7 @@
   },
   "/checkouts/{checkout_id}": {
     "get": {
-      "x-mojo-to": "Checkout#get",
+      "x-mojo-to": "Checkouts#get",
       "operationId": "getCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
@@ -65,7 +65,7 @@
   },
   "/checkouts/{checkout_id}/renewal": {
     "post": {
-      "x-mojo-to": "Checkout#renew",
+      "x-mojo-to": "Checkouts#renew",
       "operationId": "renewCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
