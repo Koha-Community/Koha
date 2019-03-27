@@ -1030,7 +1030,7 @@ sub ModReserveStatus {
     $sth_set->execute( $newstatus, $itemnumber );
 
     my $item = Koha::Items->find($itemnumber);
-    if ( ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART'  ) && $newstatus ) {
+    if ( ( $item->location eq 'CART' && $item->permanent_location ne 'CART'  ) && $newstatus ) {
       CartToShelf( $itemnumber );
     }
 }
@@ -1083,7 +1083,7 @@ sub ModReserveAffect {
 
     _FixPriority( { biblionumber => $biblionumber } );
     my $item = Koha::Items->find($itemnumber);
-    if ( ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART'  ) ) {
+    if ( ( $item->location eq 'CART' && $item->permanent_location ne 'CART'  ) ) {
       CartToShelf( $itemnumber );
     }
 

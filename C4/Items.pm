@@ -549,7 +549,7 @@ sub ModItemTransfer {
     my $item = Koha::Items->find( $itemnumber );
 
     # Remove the 'shelving cart' location status if it is being used.
-    CartToShelf( $itemnumber ) if ( $item->{'location'} eq 'CART' && $item->{'permanent_location'} ne 'CART' );
+    CartToShelf( $itemnumber ) if ( $item->location eq 'CART' && $item->permanent_location ne 'CART' );
 
     $dbh->do("UPDATE branchtransfers SET datearrived = NOW(), comments = ? WHERE itemnumber = ? AND datearrived IS NULL", undef, "Canceled, new transfer from $frombranch to $tobranch created", $itemnumber);
 
