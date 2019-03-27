@@ -440,15 +440,15 @@ sub GetBudgetPeriods {
 }
 # -------------------------------------------------------------------
 sub GetBudgetPeriod {
-	my ($budget_period_id) = @_;
-	my $dbh = C4::Context->dbh;
-	my $sth = $dbh->prepare( qq|
+    my ($budget_period_id) = @_;
+    my $dbh = C4::Context->dbh;
+    my $sth = $dbh->prepare( qq|
         SELECT      *
         FROM aqbudgetperiods
         WHERE budget_period_id=? |
-	);
-	$sth->execute($budget_period_id);
-	return $sth->fetchrow_hashref;
+    );
+    $sth->execute($budget_period_id);
+    return $sth->fetchrow_hashref;
 }
 
 sub DelBudgetPeriod{
