@@ -1510,11 +1510,113 @@ sub can_see_patrons_from {
     );
 }
 
+=head3 can_edit_item
+
+my $can_edit = $patron->can_edit_item( $item );
+
+Return true if the patron (usually the logged in user) can edit the given item
+
+The parameter can be a Koha::Item, an item hashref, or a branchcode.
+
+=cut
+
+sub can_edit_item {
+    my ( $self, $item ) = @_;
+
+    my $userenv = C4::Context->userenv();
+
+    my $ref = ref($item);
+
+    my $branchcode =
+        $ref eq 'Koha::Item' ? $item->homebranch
+      : $ref eq 'HASH'       ? $item->{homebranch}
+      : $ref eq q{}          ? $item
+      :                        undef;
+
+    return unless $branchcode;
+
+    return 1 if C4::Context->IsSuperLibrarian();
+
+    if ( $userenv && C4::Context->preference('IndependentBranches') ) {
+        return $userenv->{branch} eq $branchcode;
+    }
+
+    return $self->can_edit_items_from($branchcode);
+}
+
+=head3 can_edit_items_from
+
+    my $can_edit = $patron->can_edit_items_from( $branchcode );
+
+Return true if the I<Koha::Patron> can edit items from the given branchcode
+
+=cut
+
+sub can_edit_items_from {
+    my ( $self, $branchcode ) = @_;
+
+    return $self->can_see_things_from(
+        {
+            branchcode    => $branchcode,
+            permission    => 'editcatalogue',
+            subpermission => 'edit_any_item',
+        }
+    );
+}
+
+=head3 libraries_where_can_edit_items
+
+    my $libraries = $patron->libraries_where_can_edit_items;
+
+Return the list of branchcodes(!) of libraries the patron is allowed to items for.
+The branchcodes are arbitrarily returned sorted.
+We are supposing here that the object is related to the logged in patron (use of C4::Context::only_my_library)
+
+An empty array means no restriction, the user can edit any item.
+
+=cut
+
+sub libraries_where_can_edit_items {
+    my ($self) = @_;
+
+    return $self->libraries_where_can_see_things(
+        {
+            permission    => 'editcatalogue',
+            subpermission => 'edit_any_item',
+            group_feature => 'ft_limit_item_editing',
+        }
+    );
+}
+
+=head3 libraries_where_can_see_patrons
+
+my $libraries = $patron->libraries_where_can_see_patrons;
+
+Return the list of branchcodes(!) of libraries the patron is allowed to see other patron's infos.
+The branchcodes are arbitrarily returned sorted.
+We are supposing here that the object is related to the logged in patron (use of C4::Context::only_my_library)
+
+An empty array means no restriction, the patron can see patron's infos from any libraries.
+
+=cut
+
+sub libraries_where_can_see_patrons {
+    my ($self) = @_;
+
+    return $self->libraries_where_can_see_things(
+        {
+            permission    => 'borrowers',
+            subpermission => 'view_borrower_infos_from_any_libraries',
+            group_feature => 'ft_hide_patron_info',
+        }
+    );
+}
+
 =head3 can_see_things_from
 
-my $can_see = $thing->can_see_things_from( $branchcode );
+my $can_see = $patron->can_see_things_from( $branchcode );
 
-Return true if this "patron" ( usually the logged in user ) can perform some action on the given thing
+Return true if the I<Koha::Patron> can perform some action on the given thing
 
 =cut
 
@@ -1567,35 +1669,11 @@ sub can_log_into {
    return $can;
 }
 
-=head3 libraries_where_can_see_patrons
-
-my $libraries = $patron-libraries_where_can_see_patrons;
-
-Return the list of branchcodes(!) of libraries the patron is allowed to see other patron's infos.
-The branchcodes are arbitrarily returned sorted.
-We are supposing here that the object is related to the logged in patron (use of C4::Context::only_my_library)
-
-An empty array means no restriction, the patron can see patron's infos from any libraries.
-
-=cut
-
-sub libraries_where_can_see_patrons {
-    my ($self) = @_;
-
-    return $self->libraries_where_can_see_things(
-        {
-            permission    => 'borrowers',
-            subpermission => 'view_borrower_infos_from_any_libraries',
-            group_feature => 'ft_hide_patron_info',
-        }
-    );
-}
-
 =head3 libraries_where_can_see_things
 
-my $libraries = $thing-libraries_where_can_see_things;
+    my $libraries = $patron->libraries_where_can_see_things;
 
-Returns a list of libraries where an aribitarary action is allowd to be taken by the logged in librarian
+Returns a list of libraries where an aribitarary action is allowed to be taken by the logged in librarian
 against an object based on some branchcode related to the object ( patron branchcode, item homebranch, etc ).
 
 We are supposing here that the object is related to the logged in librarian (use of C4::Context::only_my_library)
