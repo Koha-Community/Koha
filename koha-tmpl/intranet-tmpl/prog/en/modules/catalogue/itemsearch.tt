@@ -219,7 +219,7 @@
     [% Asset.js("lib/jquery/plugins/jquery.dataTables.columnFilter.js") | $raw %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     <script type="text/javascript">
-        var authorised_values = [% authorised_values_json | html %];
+        var authorised_values = [% authorised_values_json | $raw %];
 
         function loadAuthorisedValuesSelect(select) {
             var selected = select.find('option:selected');
