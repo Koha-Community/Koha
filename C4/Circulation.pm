@@ -3221,7 +3221,7 @@ sub AddIssuingCharge {
             amount      => $charge,
             description => $description,
             note        => undef,
-            user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+            user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
             library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
             type        => 'rent',
             item_id     => $checkout->itemnumber,

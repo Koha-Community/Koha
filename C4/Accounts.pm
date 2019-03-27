@@ -106,7 +106,7 @@ sub chargelostitem{
                     amount      => $processfee,
                     description => $description,
                     note        => $processingfeenote,
-                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                     library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
                     type        => 'processing',
                     item_id     => $itemnumber,
@@ -121,7 +121,7 @@ sub chargelostitem{
                     amount      => $replacementprice,
                     description => $description,
                     note        => undef,
-                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                    user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                     library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
                     type        => 'lost_item',
                     item_id     => $itemnumber,
@@ -146,8 +146,7 @@ sub manualinvoice {
 
     deprecated "C4::Accounts::manualinvoice is deprecated in favor of Koha::Account->add_debit";
 
-    my $manager_id = 0;
-    $manager_id = C4::Context->userenv->{'number'} if C4::Context->userenv;
+    my $manager_id = C4::Context->userenv ? C4::Context->userenv->{'number'} : undef;
     my $dbh      = C4::Context->dbh;
     my $insert;
     my $amountleft = $amount;

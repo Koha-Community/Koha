@@ -370,7 +370,7 @@ sub cancel {
                 $account->add_debit(
                     {
                         amount  => $charge,
-                        user_id => C4::Context->userenv ? C4::Context->userenv->{'number'} : 0,
+                        user_id => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                         library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
                         type    => 'hold_expired',
                         item_id => $self->itemnumber
