@@ -279,25 +279,10 @@ if ($borrower) {
     }
 
     my $total = $patron->account->balance;
-    my $accts = Koha::Account::Lines->search(
+    my @accts = Koha::Account::Lines->search(
         { borrowernumber => $borrower->{borrowernumber} },
         { order_by       => { -desc => 'accountlines_id' } }
     );
-
-    my @accountlines;
-    while ( my $line = $accts->next ) {
-        my $accountline = $line->unblessed;
-        $accountline->{'amount'} = sprintf( "%.2f", $accountline->{'amount'} || '0.00');
-        if ( $accountline->{'amount'} >= 0 ) {
-            $accountline->{'amountcredit'} = 1;
-        }
-        $accountline->{'amountoutstanding'} =
-        sprintf( "%.2f", $accountline->{'amountoutstanding'} || '0.00' );
-        if ( $accountline->{'amountoutstanding'} >= 0 ) {
-            $accountline->{'amountoutstandingcredit'} = 1;
-        }
-        push @accountlines, $accountline;
-    }
 
     my $holds = $patron->holds;
 
@@ -315,9 +300,9 @@ if ($borrower) {
         borrowernumber => $borrower->{'borrowernumber'},
         SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
         AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
-        showpriority   => $show_priority,
-        ACCOUNT_LINES => \@accountlines,
-        total => sprintf( "%.2f", $total ),
+        howpriority   => $show_priority,
+        ACCOUNT_LINES => \@accts,
+        total => $total,
     );
 
     my $patron_messages = Koha::Patron::Messages->search(

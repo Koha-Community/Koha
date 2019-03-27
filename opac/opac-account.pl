@@ -41,29 +41,14 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 
 my $patron = Koha::Patrons->find( $borrowernumber );
 my $total = $patron->account->balance;
-my $accts = Koha::Account::Lines->search(
+my @accts = Koha::Account::Lines->search(
     { borrowernumber => $patron->borrowernumber },
     { order_by       => { -desc => 'accountlines_id' } }
 );
 
-my @accountlines;
-while ( my $line = $accts->next ) {
-    my $accountline = $line->unblessed;
-    $accountline->{'amount'} = sprintf( "%.2f", $accountline->{'amount'} || '0.00');
-    if ( $accountline->{'amount'} >= 0 ) {
-        $accountline->{'amountcredit'} = 1;
-    }
-    $accountline->{'amountoutstanding'} =
-      sprintf( "%.2f", $accountline->{'amountoutstanding'} || '0.00' );
-    if ( $accountline->{'amountoutstanding'} >= 0 ) {
-        $accountline->{'amountoutstandingcredit'} = 1;
-    }
-    push @accountlines, $accountline;
-}
-
 $template->param(
-    ACCOUNT_LINES => \@accountlines,
-    total         => sprintf( "%.2f", $total ), # FIXME Use TT plugin Price
+    ACCOUNT_LINES => \@accts,
+    total         => $total,
     accountview   => 1,
     message       => scalar $query->param('message') || q{},
     message_value => scalar $query->param('message_value') || q{},

@@ -120,12 +120,6 @@ if ( $userdebarred || $borr->{'gonenoaddress'} || $borr->{'lost'} ) {
 }
 
 my $amountoutstanding = $patron->account->balance;
-if ( $amountoutstanding > 5 ) {
-    $borr->{'amountoverfive'} = 1;
-}
-if ( 5 >= $amountoutstanding && $amountoutstanding > 0 ) {
-    $borr->{'amountoverzero'} = 1;
-}
 my $no_renewal_amt = C4::Context->preference( 'OPACFineNoRenewals' );
 $no_renewal_amt = undef unless looks_like_number( $no_renewal_amt );
 
@@ -139,11 +133,6 @@ if (   C4::Context->preference('OpacRenewalAllowed')
         renewal_blocked_fines => $no_renewal_amt,
         renewal_blocked_fines_amountoutstanding => $amountoutstanding,
     );
-}
-
-if ( $amountoutstanding < 0 ) {
-    $borr->{'amountlessthanzero'} = 1;
-    $amountoutstanding = -1 * ( $amountoutstanding );
 }
 
 # Warningdate is the date that the warning starts appearing

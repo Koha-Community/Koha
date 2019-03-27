@@ -149,9 +149,8 @@
                             [% IF relatives %]<li><a href="#opac-user-relative-issues">Relatives' checkouts</a></li>[% END %]
                             [% IF ( overdues_count ) %]<li><a href="#opac-user-overdues">Overdue ([% overdues_count | html %])</a></li>[% END %]
                             [% IF ( OPACFinesTab ) %]
-                                [% IF ( borrower.amountoverfive ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
-                                [% IF ( borrower.amountoverzero ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
-                                [% IF ( borrower.amountlessthanzero ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding | $Price %])</a></li>[% END %]
+                            [% IF ( amountoutstanding > 0 ) %]<li><a href="#opac-user-fines">Fines ([% amountoutstanding | $Price %])</a></li>[% END %]
+                                [% IF ( amountoutstanding < 0 ) %]<li><a href="#opac-user-fines">Credits ([% amountoutstanding * -1 | $Price %])</a></li>[% END %]
                             [% END %]
 
                             [% IF borrower_club_enrollments.count || borrower_enrollable_clubs.count %]
@@ -386,7 +385,7 @@
 
                         [% IF ( OPACFinesTab ) %]
                             <!-- FINES BOX -->
-                            [% IF borrower.amountoverfive %]
+                            [% IF ( amountoutstanding > 0 ) %]
                                 <div id="opac-user-fines"> <h3>Fines and charges</h3>
                                     <table class="table table-bordered table-striped">
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
@@ -400,27 +399,13 @@
                                 </div>
                             [% END %]
 
-                            [% IF borrower.amountoverzero %]
-                               <div id="opac-user-fines"> <h3>Fines and charges</h3>
-                                    <table class="table table-bordered table-striped">
-                                        <thead><tr><th colspan="2">Amount</th></tr></thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>You currently owe fines and charges amounting to:</td>
-                                                <td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price %]</a></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            [% END %]
-
-                            [% IF borrower.amountlessthanzero %]
+                            [% IF ( amountoutstanding < 0 ) %]
                                 <div id="opac-user-fines">  <h3>Credits</h3>
                                     <table class="table table-bordered table-striped">
                                         <thead><tr><th colspan="2">Amount</th></tr></thead>
                                         <tbody>
                                             <tr>
-                                                <td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding | $Price %]</a></td>
+                                                <td>You have a credit of:</td><td><a href="/cgi-bin/koha/opac-account.pl">[% amountoutstanding * -1 | $Price %]</a></td>
                                             </tr>
                                         </tbody>
                                     </table>

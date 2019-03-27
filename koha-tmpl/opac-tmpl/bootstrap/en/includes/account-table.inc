@@ -16,7 +16,7 @@
 
         <tbody>
             [% FOREACH ACCOUNT_LINE IN ACCOUNT_LINES %]
-                [% IF ( ACCOUNT_LINE.odd ) %]<tr class="highlight">[% ELSE %]<tr>[% END %]
+                <tr>
                     [% IF ENABLE_OPAC_PAYMENTS %]
                         <td>
                             [% IF ACCOUNT_LINE.amountoutstanding > 0 %]
@@ -58,10 +58,10 @@
                     <td>
                         [%- IF ACCOUNT_LINE.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) | html %][% END %]
                         [%- IF ACCOUNT_LINE.description %][% ACCOUNT_LINE.description | html %][% END %]
-                        [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title | html %])[% END %]
+                        [% IF ACCOUNT_LINE.itemnumber %]([% ACCOUNT_LINE.item.biblio.title | html %])[% END %]
                     </td>
-                    [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price %]</td>
-                    [% IF ( ACCOUNT_LINE.amountoutstandingcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amountoutstanding | $Price %]</td>
+                    [% IF ( ACCOUNT_LINE.amount <= 0 ) %]<td class="credit">[% ACCOUNT_LINE.amount * -1 | $Price %][% ELSE %]<td class="debit">[% ACCOUNT_LINE.amount | $Price %][% END %]</td>
+                    [% IF ( ACCOUNT_LINE.amountoutstanding <= 0 ) %]<td class="credit">[% ACCOUNT_LINE.amountoutstanding * -1 | $Price %][% ELSE %]<td class="debit">[% ACCOUNT_LINE.amountoutstanding | $Price %][% END %]</td>
                 </tr>
             [% END %]
         </tbody>
