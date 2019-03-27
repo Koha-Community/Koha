@@ -188,7 +188,7 @@
                                 <form action="/cgi-bin/koha/opac-modrequest.pl" method="post">
                                 <input type="hidden" name="biblionumber" value="[% HOLD.biblionumber | html %]" />
                                 <input type="hidden" name="reserve_id" value="[% HOLD.reserve_id | html %]" />
-                                <button type="submit" name="submit" class="btn btn-xs btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="fa fa-remove"></i> Cancel</button></form>
+                                <button type="submit" name="submit" class="btn btn-mini btn-danger" onclick="return confirmDelete(MSG_CONFIRM_DELETE_HOLD);"><i class="fa fa-remove"></i> Cancel</button></form>
                             [% END %]
                         </td>
                     [% END # / IF onlyinfo %]
