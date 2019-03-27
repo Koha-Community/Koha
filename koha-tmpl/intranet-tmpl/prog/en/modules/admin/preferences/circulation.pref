@@ -527,17 +527,18 @@ Circulation:
             - pref: UpdateItemLocationOnCheckin
               type: textarea
               class: code
-            - This is is a list of value pairs, the first value is followed immediately by colon space then the second value i.e.:<br/>
-            - "PROC: FIC"
-            - <br/> When an item is checked in, if the location value on the left matches the items location value
-            - "it will be updated to the right-hand value.<br/> E.g. ''PROC: FIC'' will cause an item that was set to ''Processing Center'' to now be in the ''Fiction'' shelving location."
-            - <br/>Note that PROC and CART are special values, for these locations only can location and permanent_location differ, in all other cases an update will affect both.
-            - <br/>Items in the CART location will be returned to their permanent location on checkout.
-            - <br/>You can use the special term _BLANK_ on either side of a pair to update/remove items with no location assigned.
-            - <br>You can use the special term _ALL_ on the left side to affect all items.
-            - and the special term _PERM_ on the right side to return items to their permanent location.
-            - <br><b>Use of an _ALL_ rule will override/ignore any other values.</b>
-            - <br>Each pair of values should be on a separate line.
+            - "This a list of value pairs. the first value is followed immediately by colon space then the second value.<br/><br/>"
+            - "Examples:<br/>"
+            - "PROC: FIC - causes an item in the Processing Center location to be updated into the Fiction location on check in.<br/>"
+            - "FIC: GEN - causes an item in the Fiction location to be updated into the General stacks location on check in.<br/>"
+            - "_BLANK_: FIC - causes an item that has no location to be updated into the Fiction location on check in.<br/>"
+            - "FIC: _BLANK_ - causes an item in location FIC to be updated to a blank location on check in.<br/>"
+            - "_ALL_: FIC - causes all items to be updated into the Fiction location on check in.<br/>"
+            - "PROC: _PERM_ - causes an item that is in the Processing Center to be updated to it's permanent location.<br/><br/>"
+            - "General rule: if the location value on the left of the colon (:) matches the item's current location, it will be updated to match the location value on the right of the colon (:).<br/>"
+            - "Note: PROC and CART are special values, for these locations only can location and permanent_location differ, in all other cases an update will affect both. Items in the CART location will be returned to their permanent location on checkout.<br/>"
+            - "The special term _BLANK_ may be used on either side of a value pair to update or remove the location from items with no locaiton assigned.<br/>"
+            - "The special term _ALL_ is used on the left side of the colon (:) to affect all items, <strong>and overrides all other rules.</strong>"
         -
             - pref: UpdateNotForLoanStatusOnCheckin
               type: textarea
