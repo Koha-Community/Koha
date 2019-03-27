@@ -346,6 +346,11 @@
             Edit items
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'edit_any_item' -%]
+        <span class="sub_permission edit_items_subpermission">
+            Edit any item. If not set the logged in user can only edit items whose home library matches the logged in library.
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_items_restricted' -%]
         <span class="sub_permission edit_items_restricted_subpermission">
             Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)
