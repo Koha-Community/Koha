@@ -56,13 +56,6 @@ BEGIN {
       &parse_overdues_letter
     );
 
-    # subs to remove
-    push @EXPORT, qw(
-      &BorType
-    );
-
-    # check that an equivalent don't exist already before moving
-
     # subs to move to Circulation.pm
     push @EXPORT, qw(
       &GetIssuesIteminfo
@@ -616,31 +609,6 @@ sub UpdateFine {
             );
         }
     }
-}
-
-=head2 BorType
-
-    $borrower = &BorType($borrowernumber);
-
-Looks up a patron by borrower number.
-
-C<$borrower> is a reference-to-hash whose keys are all of the fields
-from the borrowers and categories tables of the Koha database. Thus,
-C<$borrower> contains all information about both the borrower and
-category they belong to.
-
-=cut
-
-sub BorType {
-    my ($borrowernumber) = @_;
-    my $dbh              = C4::Context->dbh;
-    my $sth              = $dbh->prepare(
-        "SELECT * from borrowers
-      LEFT JOIN categories ON borrowers.categorycode=categories.categorycode 
-      WHERE borrowernumber=?"
-    );
-    $sth->execute($borrowernumber);
-    return $sth->fetchrow_hashref;
 }
 
 =head2 GetFine

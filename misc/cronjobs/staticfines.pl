@@ -48,6 +48,7 @@ use C4::Log;
 use Getopt::Long;
 use List::MoreUtils qw/none/;
 use Koha::DateUtils;
+use Koha::Patrons;
 
 my $help    = 0;
 my $verbose = 0;
@@ -157,16 +158,16 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
         print STDERR "ERROR in Getoverdues line $i: issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
         next;    # Note: this doesn't solve everything.  After NULL borrowernumber, multiple issues w/ real borrowernumbers can pile up.
     }
-    my $borrower = BorType( $data->[$i]->{'borrowernumber'} );
+    my $patron = Koha::Patrons->find( $data->[$i]->{'borrowernumber'} );
 
     # Skipping borrowers that are not in @categories
-    $bigdebug and warn "Skipping borrower from category " . $borrower->{categorycode} if none { $borrower->{categorycode} eq $_ } @categories;
-    next if none { $borrower->{categorycode} eq $_ } @categories;
+    $bigdebug and warn "Skipping borrower from category " . $patron->categorycode if none { $patron->categorycode eq $_ } @categories;
+    next if none { $patron->categorycode eq $_ } @categories;
 
     my $branchcode =
-        ( $useborrowerlibrary )           ? $borrower->{branchcode}
+        ( $useborrowerlibrary )           ? $patron->branchcode
       : ( $control eq 'ItemHomeLibrary' ) ? $data->[$i]->{homebranch}
-      : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
+      : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
       :                                     $data->[$i]->{branchcode};
     # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
 
@@ -190,14 +191,14 @@ for ( my $i = 0 ; $i < scalar(@$data) ; $i++ ) {
     $overdueItemsCounted++;
     my ( $amount, $unitcounttotal, $unitcount ) = CalcFine(
         $data->[$i],
-        $borrower->{'categorycode'},
+        $patron->categorycode,
         $branchcode,
         $datedue,
         $today,
     );
 
     # Reassign fine's amount if specified in command-line
-    $amount = $catamounts{$borrower->{'categorycode'}} if (defined $catamounts{$borrower->{'categorycode'}});
+    $amount = $catamounts{$patron->categorycode} if (defined $catamounts{$patron->categorycode});
 
     # We check if there is already a fine for the given borrower
     my $fine = GetFine(undef, $data->[$i]->{'borrowernumber'});

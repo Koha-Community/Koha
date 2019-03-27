@@ -39,6 +39,7 @@ use File::Spec;
 
 use Koha::Calendar;
 use Koha::DateUtils;
+use Koha::Patrons;
 use C4::Log;
 
 my $help;
@@ -111,10 +112,10 @@ for my $overdue ( @{$overdues} ) {
 "ERROR in Getoverdues : issues.borrowernumber IS NULL.  Repair 'issues' table now!  Skipping record.\n";
         next;
     }
-    my $borrower = BorType( $overdue->{borrowernumber} );
+    my $patron = Koha::Patrons->find( $overdue->{borrowernumber} );
     my $branchcode =
         ( $control eq 'ItemHomeLibrary' ) ? $overdue->{homebranch}
-      : ( $control eq 'PatronLibrary' )   ? $borrower->{branchcode}
+      : ( $control eq 'PatronLibrary' )   ? $patron->branchcode
       :                                     $overdue->{branchcode};
 
 # In final case, CircControl must be PickupLibrary. (branchcode comes from issues table here).
@@ -129,7 +130,7 @@ for my $overdue ( @{$overdues} ) {
     ++$counted;
 
     my ( $amount, $unitcounttotal, $unitcount ) =
-      CalcFine( $overdue, $borrower->{categorycode},
+      CalcFine( $overdue, $patron->categorycode,
         $branchcode, $datedue, $today );
 
     # Don't update the fine if today is a holiday.
@@ -147,6 +148,7 @@ for my $overdue ( @{$overdues} ) {
             );
         }
     }
+    my $borrower = $patron->unblessed;
     if ($filename) {
         my @cells;
         push @cells,
