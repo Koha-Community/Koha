@@ -47,6 +47,8 @@ subtest 'cancel' => sub {
         itype            => $itemtype->itemtype,
     };
     my $item = $builder->build_object( { class => 'Koha::Items', value => $item_info } );
+    my $manager = $builder->build_object({ class => "Koha::Patrons" });
+    t::lib::Mocks::mock_userenv({ patron => $manager,branchcode => $manager->branchcode });
 
     my ( @patrons, @holds );
     for my $i ( 0 .. 2 ) {
