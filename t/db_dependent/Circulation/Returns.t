@@ -39,10 +39,19 @@ use MARC::Field;
 
 # Mock userenv, used by AddIssue
 my $branch;
+my $manager_id;
 my $context = Test::MockModule->new('C4::Context');
-$context->mock( 'userenv', sub {
-    return { branch => $branch, number => 1234, firstname => "Adam", surname => "Smaith" }
-});
+$context->mock(
+    'userenv',
+    sub {
+        return {
+            branch    => $branch,
+            number    => $manager_id,
+            firstname => "Adam",
+            surname   => "Smaith"
+        };
+    }
+);
 
 my $schema = Koha::Database->schema;
 $schema->storage->txn_begin;
@@ -58,6 +67,9 @@ my $rule = Koha::IssuingRule->new(
     }
 );
 $rule->store();
+
+my $manager = $builder->build({source => 'Borrower'});
+$manager_id = $manager->{borrowernumber};
 
 subtest "InProcessingToShelvingCart tests" => sub {
 
