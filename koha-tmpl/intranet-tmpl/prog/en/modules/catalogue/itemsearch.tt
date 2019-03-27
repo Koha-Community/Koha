@@ -329,16 +329,14 @@
                 .append(table);
 
             var params = [];
-            $form.find('select').not(':disabled').find('option:selected').each(function () {
-                var name = $(this).parents('select').first().attr('name');
-                var value = $(this).val();
-                params.push({ 'name': name, 'value': value });
-            });
-            $form.find('input[type="text"],input[type="hidden"]').not(':disabled').each(function () {
-                params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
-            });
-            $form.find('input[type="radio"]:checked').each(function() {
-                params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
+            $form.find('select:not(:disabled) option:selected,input[type="text"]:not(:disabled),input[type="hidden"]:not(:disabled),input[type="radio"]:checked').each(function() {
+                if ( $(this).prop('tagName').toLowerCase() == 'option' ) {
+                    var name = $(this).parents('select').first().attr('name');
+                    var value = $(this).val();
+                    params.push({ 'name': name, 'value': value });
+                } else {
+                    params.push({ 'name': $(this).attr('name'), 'value': $(this).val() });
+                }
             });
 
             $('#results').dataTable($.extend(true, {}, dataTablesDefaults, {
