@@ -470,6 +470,7 @@ sub GetPatronInfo {
         while ( my $c = $pending_checkouts->next ) {
             # FIXME We should only retrieve what is needed in the template
             my $issue = $c->unblessed_all_relateds;
+            delete $issue->{'more_subfields_xml'};
             push @checkouts, $issue
         }
         $borrower->{'loans'}->{'loan'} = \@checkouts;
