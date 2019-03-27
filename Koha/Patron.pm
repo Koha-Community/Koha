@@ -1500,10 +1500,34 @@ Return true if the patron (usually the logged in user) can see the patron's info
 
 sub can_see_patrons_from {
     my ( $self, $branchcode ) = @_;
+
+    return $self->can_see_things_from(
+        {
+            branchcode => $branchcode,
+            permission => 'borrowers',
+            subpermission => 'view_borrower_infos_from_any_libraries',
+        }
+    );
+}
+
+=head3 can_see_things_from
+
+my $can_see = $thing->can_see_things_from( $branchcode );
+
+Return true if this "patron" ( usually the logged in user ) can perform some action on the given thing
+
+=cut
+
+sub can_see_things_from {
+    my ( $self, $params ) = @_;
+    my $branchcode    = $params->{branchcode};
+    my $permission    = $params->{permission};
+    my $subpermission = $params->{subpermission};
+
     my $can = 0;
     if ( $self->branchcode eq $branchcode ) {
         $can = 1;
-    } elsif ( $self->has_permission( { borrowers => 'view_borrower_infos_from_any_libraries' } ) ) {
+    } elsif ( $self->has_permission( { $permission => $subpermission } ) ) {
         $can = 1;
     } elsif ( my $library_groups = $self->library->library_groups ) {
         while ( my $library_group = $library_groups->next ) {
@@ -1556,7 +1580,36 @@ An empty array means no restriction, the patron can see patron's infos from any 
 =cut
 
 sub libraries_where_can_see_patrons {
-    my ( $self ) = @_;
+    my ($self) = @_;
+
+    return $self->libraries_where_can_see_things(
+        {
+            permission    => 'borrowers',
+            subpermission => 'view_borrower_infos_from_any_libraries',
+            group_feature => 'ft_hide_patron_info',
+        }
+    );
+}
+
+=head3 libraries_where_can_see_things
+
+my $libraries = $thing-libraries_where_can_see_things;
+
+Returns a list of libraries where an aribitarary action is allowd to be taken by the logged in librarian
+against an object based on some branchcode related to the object ( patron branchcode, item homebranch, etc ).
+
+We are supposing here that the object is related to the logged in librarian (use of C4::Context::only_my_library)
+
+An empty array means no restriction, the thing can see thing's infos from any libraries.
+
+=cut
+
+sub libraries_where_can_see_things {
+    my ( $self, $params ) = @_;
+    my $permission    = $params->{permission};
+    my $subpermission = $params->{subpermission};
+    my $group_feature = $params->{group_feature};
+
     my $userenv = C4::Context->userenv;
 
     return () unless $userenv; # For tests, but userenv should be defined in tests...
@@ -1568,11 +1621,11 @@ sub libraries_where_can_see_patrons {
     else {
         unless (
             $self->has_permission(
-                { borrowers => 'view_borrower_infos_from_any_libraries' }
+                { $permission => $subpermission }
             )
           )
         {
-            my $library_groups = $self->library->library_groups({ ft_hide_patron_info => 1 });
+            my $library_groups = $self->library->library_groups({ $group_feature => 1 });
             if ( $library_groups->count )
             {
                 while ( my $library_group = $library_groups->next ) {
