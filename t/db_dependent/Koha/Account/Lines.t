@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 7;
+use Test::More tests => 8;
 use Test::Exception;
 
 use C4::Circulation qw/AddIssue AddReturn/;
@@ -491,7 +491,9 @@ subtest 'checkout() tests' => sub {
 
 subtest "void() tests" => sub {
 
-    plan tests => 15;
+    plan tests => 16;
+
+    $schema->storage->txn_begin;
 
     # Create a borrower
     my $categorycode = $builder->build({ source => 'Category' })->{ categorycode };
@@ -554,7 +556,9 @@ subtest "void() tests" => sub {
     $line1->_result->discard_changes();
     my $line1_post = $line1->unblessed();
     is( $ret, undef, 'Attempted void on non-credit returns undef' );
-    is_deeply( $line1_pre, $line1_post, 'Non-credit account line cannot be voided' )
+    is_deeply( $line1_pre, $line1_post, 'Non-credit account line cannot be voided' );
+
+    $schema->storage->txn_rollback;
 };
 
 1;
