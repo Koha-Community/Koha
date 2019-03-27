@@ -40,21 +40,24 @@ a.expandfield {
 
 .tag {
     border-bottom: 2px solid #D5E6E9;
+    clear: both;
     padding: .7em 0;
-}
-
-.tag .row {
-    margin-left: 0;
-    margin-right: 0;
 }
 
 div.subfield_line {
     padding-bottom: .3em;
+    float: left;
+    clear: left;
+    width: 100%;
 }
 
 div.subfield_line label {
     font-size:89%;
+    float: left;
+	 padding-right : .4em;
+    width: 16em;
     text-align: left;
+    clear:left;
 }
 
 .subfieldcode img {
@@ -83,12 +86,23 @@ a.tagnum {
 
 .subfield {
 	color : #00698a;
+	float: left;
+	width: 10em;
 	text-align:right;
 }
 
+.subfieldcode {
+	display: block;
+	float: left;
+}
+
+.labelsubfield {
+	float:left;
+}
+
 .input_marceditor {
-    float:left;
-    width: 70%;
+	float:left;
+	width:30em;
 }
 
 .indicator {
@@ -249,9 +263,29 @@ tbody tr.active td {
 }
 
 @media (min-width: 768px) {
+    div.subfield_line label {
+        width: 20em;
+    }
 
+    .input_marceditor {
+        width: 50em;
+    }
+
+    .subfield {
+        width: 14em;
+    }
 }
 
 @media (min-width: 1200px) {
+    div.subfield_line label {
+        width: 25em;
+    }
 
+    .input_marceditor {
+        width: 60em;
+    }
+
+    .subfield {
+        width: 16em;
+    }
 }

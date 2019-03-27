@@ -422,9 +422,7 @@ function Changefwk() {
 [% INCLUDE 'select2.inc' %]
 <script>
   $(document).ready(function() {
-    $('.subfield_line select').select2({
-        width: "70%"
-    });
+    $('.subfield_line select').select2();
   });
 </script>
 
@@ -632,9 +630,8 @@ function Changefwk() {
     [% END %]
     [% FOREACH innerloo IN BIG_LOO.innerloop %]
     [% IF ( innerloo.tag ) %]
-    <div class="tag" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
-        <div class="row">
-        <div class="tag_title col-sm-12" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+    <div class="tag clearfix" id="tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
+        <div class="tag_title" id="div_indicator_tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]">
             [% IF advancedMARCEditor %]
                 <a href="#" tabindex="1" class="tagnum" title="[% innerloo.tag_lib | html %] - Click to Expand this Tag" onclick="ExpandField('tag_[% innerloo.tag | html %]_[% innerloo.index | html %][% innerloo.random | html %]'); return false;">[% innerloo.tag | html %]</a>
             [% ELSE %]
@@ -689,21 +686,17 @@ function Changefwk() {
                     </a>
                 </span>
 
-        </div> <!-- /.tag_title col-sm-12 -->
-        </div> <!-- /.row -->
+        </div>
+
         [% FOREACH subfield_loo IN innerloo.subfield_loop %]
             <!--  One line on the marc editor -->
-            <div class="row">
             <div class="subfield_line" style="[% subfield_loo.visibility | html %]" id="subfield[% subfield_loo.tag | html %][% subfield_loo.subfield | html %][% subfield_loo.random | html %]">
 
-                <div class="col-sm-4">
-                [% UNLESS advasmedMARCEditor %]
+                [% UNLESS advancedMARCEditor %]
                     [% IF ( subfield_loo.fixedfield ) %]<label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" style="display:none;" class="labelsubfield">
                     [% ELSE %]<label for="tag_[% subfield_loo.tag | html %]_subfield_[% subfield_loo.subfield | html %]_[% subfield_loo.index | html %]_[% subfield_loo.index_subfield | html %]" class="labelsubfield">
                     [% END %]
                 [% END %]
-
-                    </label>
 
                 <span class="subfieldcode">
                     [% IF ( subfield_loo.fixedfield ) %]
@@ -727,21 +720,21 @@ function Changefwk() {
                         [% subfield_loo.marc_lib | $raw %]
                         [% IF ( subfield_loo.mandatory ) %]<span class="mandatory_marker" title="This field is mandatory">*</span>[% END %]
                     </span>
+                    </label>
                 [% END %]
-                </div> <!-- /.col-sm-4 -->
-                <div class="col-sm-8">
+                
                 [% SET mv = subfield_loo.marc_value %]
                 [% IF ( mv.type == 'text' ) %]
                     [% IF ( mv.readonly == 1 ) %]
-                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor readonly" tabindex="1" maxlength="[%- mv.maxlength | html -%]" readonly="readonly" />
+                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor readonly" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" readonly="readonly" />
                     [% ELSE %]
-                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" maxlength="[%- mv.maxlength | html -%]" />
+                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" />
                     [% END %]
                     [% IF ( mv.authtype ) %]
                     <span class="subfield_controls"><a href="#" class="buttonDot tag_editor" onclick="openAuth(this.parentNode.parentNode.getElementsByTagName('input')[1].id,'[%- mv.authtype | html -%]','biblio'); return false;" tabindex="1" title="Tag editor">Tag editor</a></span>
                     [% END %]
                 [% ELSIF ( mv.type == 'text_complex' ) %]
-                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor framework_plugin" tabindex="1" maxlength="[%- mv.maxlength | html -%]" />
+                    <input type="text" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" value="[%- mv.value | html -%]" class="input_marceditor framework_plugin" tabindex="1" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" />
                     <span class="subfield_controls">
                         [% IF mv.noclick %]
                             <a href="#" class="buttonDot tag_editor disabled" tabindex="-1" title="No popup"></a>
@@ -751,7 +744,7 @@ function Changefwk() {
                     </span>
                     [% mv.javascript | $raw %]
                 [% ELSIF ( mv.type == 'hidden' ) %]
-                    <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
+                    <input tabindex="1" type="hidden" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" size="[%- mv.size | html -%]" maxlength="[%- mv.maxlength | html -%]" value="[%- mv.value | html -%]" />
                 [% ELSIF ( mv.type == 'textarea' ) %]
                     <textarea cols="70" rows="4" id="[%- mv.id | html -%]" name="[%- mv.name | html -%]" class="input_marceditor" tabindex="1">[%- mv.value | html -%]</textarea>
                 [% ELSIF ( mv.type == 'select' ) %]
@@ -776,13 +769,12 @@ function Changefwk() {
                     </a>
                 [% END %]
                 </span>
-                </div> <!-- /.col-sm-8 -->
-            </div> <!-- /.subfield_line -->
-            </div> <!-- /.row -->
+                
+            </div>
             <!-- End of the line -->
         [% END %]
 
-    </div> <!-- /.tag -->
+    </div>
     [% END %]<!-- if innerloo.tag -->
     [% END %]<!-- BIG_LOO.innerloop -->
     </div>
