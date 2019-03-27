@@ -1,4 +1,4 @@
-package Koha::REST::V1::Checkout;
+package Koha::REST::V1::Checkouts;
 
 # This file is part of Koha.
 #
@@ -135,8 +135,8 @@ attribute names.
 sub _to_api {
     my $checkout = shift;
 
-    foreach my $column ( keys %{ $Koha::REST::V1::Checkout::to_api_mapping } ) {
-        my $mapped_column = $Koha::REST::V1::Checkout::to_api_mapping->{$column};
+    foreach my $column ( keys %{ $Koha::REST::V1::Checkouts::to_api_mapping } ) {
+        my $mapped_column = $Koha::REST::V1::Checkouts::to_api_mapping->{$column};
         if ( exists $checkout->{ $column } && defined $mapped_column )
         {
             $checkout->{ $mapped_column } = delete $checkout->{ $column };
@@ -158,8 +158,8 @@ attribute names.
 sub _to_model {
     my $checkout = shift;
 
-    foreach my $attribute ( keys %{ $Koha::REST::V1::Checkout::to_model_mapping } ) {
-        my $mapped_attribute = $Koha::REST::V1::Checkout::to_model_mapping->{$attribute};
+    foreach my $attribute ( keys %{ $Koha::REST::V1::Checkouts::to_model_mapping } ) {
+        my $mapped_attribute = $Koha::REST::V1::Checkouts::to_model_mapping->{$attribute};
         if ( exists $checkout->{ $attribute } && defined $mapped_attribute )
         {
             $checkout->{ $mapped_attribute } = delete $checkout->{ $attribute };
