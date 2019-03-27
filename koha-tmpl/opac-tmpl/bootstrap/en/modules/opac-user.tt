@@ -597,7 +597,7 @@
                             </div> <!-- / #opac-user-overdues -->
                         [% END # /overdues_count %]
 
-                        [% PROCESS 'holds-table.inc' HOLDS => RESERVES, SuspendHoldsOpac = SuspendHoldsOpac, showpriority = showpriority, AutoResumeSuspendedHolds = AutoResumeSuspendedHolds %]
+                        [% PROCESS 'holds-table.inc' HOLDS = RESERVES, SuspendHoldsOpac = SuspendHoldsOpac, showpriority = showpriority, AutoResumeSuspendedHolds = AutoResumeSuspendedHolds %]
 
                         [% IF Koha.Preference('ArticleRequests') %]
                             <div id="opac-user-article-requests">
