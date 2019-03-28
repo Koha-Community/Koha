@@ -59,6 +59,13 @@ what type of data this holds, relevant when storing it in the search engine
   is_nullable: 1
   size: [5,2]
 
+=head2 facet_order
+
+  data_type: 'tinyint'
+  is_nullable: 1
+
+the order place of the field in facet list if faceted
+
 =cut
 
 __PACKAGE__->add_columns(
@@ -78,6 +85,8 @@ __PACKAGE__->add_columns(
   },
   "weight",
   { data_type => "decimal", is_nullable => 1, size => [5, 2] },
+  "facet_order",
+  { data_type => "tinyint", is_nullable => 1 },
 );
 
 =head1 PRIMARY KEY
@@ -124,8 +133,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2018-11-07 22:22:22
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4Q+IXwF0hViF8+kpR96eLA
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-28 15:31:40
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:4Hc7O2fMCses1Bgfmk6Anw
 
 __PACKAGE__->many_to_many("search_marc_maps", "search_marc_to_fields", "search_marc_map");
 
