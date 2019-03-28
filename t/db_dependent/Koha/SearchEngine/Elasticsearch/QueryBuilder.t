@@ -47,7 +47,8 @@ $se->mock( 'get_elasticsearch_mappings', sub {
                     type => 'text'
                 },
                 subject => {
-                    type => 'text'
+                    type => 'text',
+                    facet => 1
                 },
                 itemnumber => {
                     type => 'integer'
@@ -192,7 +193,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 40;
+    plan tests => 48;
 
     my $qb;
 
@@ -439,6 +440,43 @@ subtest 'build_query tests' => sub {
     );
     is($query_cgi, 'idx=&q=title%3A%22donald%20duck%22', 'query cgi');
     is($query_desc, 'title:"donald duck"', 'query desc ok');
+
+    # Scan queries
+    ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat( undef, ['new'], ['au'], undef, undef, 1 );
+    is(
+        $query->{query}{query_string}{query},
+        '*',
+        "scan query is properly formed"
+    );
+    is_deeply(
+        $query->{aggregations}{'author'}{'terms'},
+        {
+            field => 'author__facet',
+            order => { '_term' => 'asc' },
+            include => '[nN][eE][wW].*'
+        },
+        "scan aggregation request is properly formed"
+    );
+    is($query_cgi, 'idx=au&q=new&scan=1', 'query cgi');
+    is($query_desc, 'new', 'query desc ok');
+
+    ( undef, $query, $simple_query, $query_cgi, $query_desc ) = $qb->build_query_compat( undef, ['new'], [], undef, undef, 1 );
+    is(
+        $query->{query}{query_string}{query},
+        '*',
+        "scan query is properly formed"
+    );
+    is_deeply(
+        $query->{aggregations}{'subject'}{'terms'},
+        {
+            field => 'subject__facet',
+            order => { '_term' => 'asc' },
+            include => '[nN][eE][wW].*'
+        },
+        "scan aggregation request is properly formed"
+    );
+    is($query_cgi, 'idx=&q=new&scan=1', 'query cgi');
+    is($query_desc, 'new', 'query desc ok');
 };
 
 

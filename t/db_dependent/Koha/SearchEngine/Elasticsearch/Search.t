@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 13;
 use t::lib::Mocks;
 
 use Koha::SearchEngine::Elasticsearch::QueryBuilder;
@@ -99,6 +99,16 @@ SKIP: {
     is (my $count = $searcher->count( $query ), 0 , 'Get a count of the results, without returning results ');
 
     ok ($results = $searcher->search_compat( $query ), 'Test search_compat' );
+
+    my ( undef, $scan_query ) = $builder->build_query_compat( undef, ['easy'], [], undef, undef, 1 );
+    ok ((undef, $results) = $searcher->search_compat( $scan_query, undef, [], [], 20, 0, undef, undef, undef, 1 ), 'Test search_compat scan query' );
+    my $expected = {
+        biblioserver => {
+            hits => 0,
+            RECORDS => []
+        }
+    };
+    is_deeply($results, $expected, 'Scan query results ok');
 
     ok (($results,$count) = $searcher->search_auth_compat ( $query ), 'Test search_auth_compat' );
 

@@ -85,7 +85,7 @@ sub search {
 
     my $params = $self->get_elasticsearch_params();
     # 20 is the default number of results per page
-    $query->{size} = $count || 20;
+    $query->{size} = $count // 20;
     # ES doesn't want pages, it wants a record to start from.
     if (exists $options{offset}) {
         $query->{from} = $options{offset};
@@ -132,8 +132,8 @@ sub count {
 
     my ( $error, $results, $facets ) = $search->search_compat(
         $query,            $simple_query, \@sort_by,       \@servers,
-        $results_per_page, $offset,       $branches,       $query_type,
-        $scan
+        $results_per_page, $offset,       undef,           $item_types,
+        $query_type,       $scan
       )
 
 A search interface somewhat compatible with L<C4::Search->getRecords>. Anything
@@ -144,10 +144,15 @@ get ignored here, along with some other things (like C<@servers>.)
 
 sub search_compat {
     my (
-        $self,     $query,            $simple_query, $sort_by,
-        $servers,  $results_per_page, $offset,       $branches,
-        $query_type,       $scan
+        $self,       $query,            $simple_query, $sort_by,
+        $servers,    $results_per_page, $offset,       $branches,
+        $item_types, $query_type,       $scan
     ) = @_;
+
+    if ( $scan ) {
+        return $self->_aggregation_scan( $query, $results_per_page, $offset );
+    }
+
     my %options;
     if ( !defined $offset or $offset < 0 ) {
         $offset = 0;
@@ -507,6 +512,69 @@ sub _convert_facets {
 
     @facets = sort { $a->{order} <=> $b->{order} } @facets;
     return \@facets;
+}
+
+=head2 _aggregation_scan
+
+    my $result = $self->_aggregration_scan($query, 10, 0);
+
+Perform an aggregation request for scan purposes.
+
+=cut
+
+sub _aggregation_scan {
+    my ($self, $query, $results_per_page, $offset) = @_;
+
+    if (!scalar(keys %{$query->{aggregations}})) {
+        my %result = {
+            biblioserver => {
+                hits => 0,
+                RECORDS => undef
+            }
+        };
+        return (undef, \%result, undef);
+    }
+    my ($field) = keys %{$query->{aggregations}};
+    $query->{aggregations}{$field}{terms}{size} = 1000;
+    my $results = $self->search($query, 1, 0);
+
+    # Convert each result into a MARC::Record
+    my (@records, $index);
+    # opac-search expects results to be put in the
+    # right place in the array, according to $offset
+    $index = $offset - 1;
+
+    my $count = scalar(@{$results->{aggregations}{$field}{buckets}});
+    for (my $index = $offset; $index - $offset < $results_per_page && $index < $count; $index++) {
+        my $bucket = $results->{aggregations}{$field}{buckets}->[$index];
+        # Scan values are expressed as:
+        # - MARC21: 100a (count) and 245a (term)
+        # - UNIMARC: 200f (count) and 200a (term)
+        my $marc = MARC::Record->new;
+        $marc->encoding('UTF-8');
+        if (C4::Context->preference('marcflavour') eq 'UNIMARC') {
+            $marc->append_fields(
+                MARC::Field->new((200, ' ',  ' ', 'f' => $bucket->{doc_count}))
+            );
+            $marc->append_fields(
+                MARC::Field->new((200, ' ',  ' ', 'a' => $bucket->{key}))
+            );
+        } else {
+            $marc->append_fields(
+                MARC::Field->new((100, ' ',  ' ', 'a' => $bucket->{doc_count}))
+            );
+            $marc->append_fields(
+                MARC::Field->new((245, ' ',  ' ', 'a' => $bucket->{key}))
+            );
+        }
+        $records[$index] = $marc->as_usmarc();
+    };
+    # consumers of this expect a namespaced result, we provide the default
+    # configuration.
+    my %result;
+    $result{biblioserver}{hits} = $count;
+    $result{biblioserver}{RECORDS} = \@records;
+    return (undef, \%result, undef);
 }
 
 1;

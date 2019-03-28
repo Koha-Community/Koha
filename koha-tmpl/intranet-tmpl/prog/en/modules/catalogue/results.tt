@@ -317,7 +317,7 @@
                                             [% ELSE %]<option value="ti">Title</option>[% END %]
                                             [% IF ( ms_ticommaphr ) %]<option selected="selected" value="ti,phr">Title phrase</option>
                                             [% ELSE %]<option value="ti,phr">Title phrase</option>[% END %]
-                                            [% IF ( ms_aucommaphr ) %]<option selected="selected" value="au,phr">Author</option>
+                                            [% IF ( ms_au || ms_aucommaphr ) %]<option selected="selected" value="au,phr">Author</option>
                                             [% ELSE %]<option value="au,phr">Author</option>[% END %]
                                             [% IF ( ms_su ) %]<option selected="selected" value="su">Subject</option>
                                             [% ELSE %]<option value="su">Subject</option>[% END %]
@@ -335,6 +335,7 @@
                                             [% ELSE %]<option value="ss">ISSN</option>[% END %]
                                         </select>
                                         <input type="hidden" name="scan" value="1" />
+                                        <input class="submit" type="submit" value="Submit" />
                                     </td>
                                 </tr>
                             </table>

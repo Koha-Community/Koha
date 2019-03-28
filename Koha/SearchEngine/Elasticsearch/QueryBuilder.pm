@@ -141,45 +141,6 @@ sub build_query {
     return $res;
 }
 
-=head2 build_browse_query
-
-    my $browse_query = $builder->build_browse_query($field, $query);
-
-This performs a "starts with" style query on a particular field. The field
-to be searched must have been indexed with an appropriate mapping as a
-"phrase" subfield, which pretty much everything has.
-
-=cut
-
-# XXX this isn't really a browse query like we want in the end
-sub build_browse_query {
-    my ( $self, $field, $query ) = @_;
-
-    my $fuzzy_enabled = C4::Context->preference("QueryFuzzy") || 0;
-
-    return { query => '*' } if !defined $query;
-
-    # TODO this should come from Koha::SearchEngine::Elasticsearch
-    my %field_whitelist = (
-        title  => 1,
-        author => 1,
-    );
-    $field = 'title' if !exists $field_whitelist{$field};
-    my $sort = $self->_sort_field($field);
-    my $res = {
-        query => {
-            match_phrase_prefix => {
-                "$field.phrase" => {
-                    query     => $query,
-                    operator  => 'or',
-                    fuzziness => $fuzzy_enabled ? 'auto' : '0',
-                }
-            }
-        },
-        sort => [ { $sort => { order => "asc" } } ],
-    };
-}
-
 =head2 build_query_compat
 
     my (
@@ -205,50 +166,58 @@ sub build_query_compat {
         $lang, $params )
       = @_;
 
-#die Dumper ( $self, $operators, $operands, $indexes, $orig_limits, $sort_by, $scan, $lang );
-    my @sort_params  = $self->_convert_sort_fields(@$sort_by);
-    my @index_params = $self->_convert_index_fields(@$indexes);
-    my $limits       = $self->_fix_limit_special_cases($orig_limits);
-    if ( $params->{suppress} ) { push @$limits, "suppress:0"; }
-    # Merge the indexes in with the search terms and the operands so that
-    # each search thing is a handy unit.
-    unshift @$operators, undef;    # The first one can't have an op
-    my @search_params;
-    my $truncate = C4::Context->preference("QueryAutoTruncate") || 0;
-    my $ea = each_array( @$operands, @$operators, @index_params );
-    while ( my ( $oand, $otor, $index ) = $ea->() ) {
-        next if ( !defined($oand) || $oand eq '' );
-        $oand = $self->_clean_search_term($oand);
-        $oand = $self->_truncate_terms($oand) if ($truncate);
-        push @search_params, {
-            operand => $oand,      # the search terms
-            operator => defined($otor) ? uc $otor : undef,    # AND and so on
-            $index ? %$index : (),
-        };
+    my $query;
+    my $query_str = '';
+    my $search_param_query_str = '';
+    my $limits = ();
+    if ( $scan ) {
+        ($query, $query_str) = $self->_build_scan_query( $operands, $indexes );
+        $search_param_query_str = $query_str;
+    } else {
+        my @sort_params  = $self->_convert_sort_fields(@$sort_by);
+        my @index_params = $self->_convert_index_fields(@$indexes);
+        my $limits       = $self->_fix_limit_special_cases($orig_limits);
+        if ( $params->{suppress} ) { push @$limits, "suppress:0"; }
+        # Merge the indexes in with the search terms and the operands so that
+        # each search thing is a handy unit.
+        unshift @$operators, undef;    # The first one can't have an op
+        my @search_params;
+        my $truncate = C4::Context->preference("QueryAutoTruncate") || 0;
+        my $ea = each_array( @$operands, @$operators, @index_params );
+        while ( my ( $oand, $otor, $index ) = $ea->() ) {
+            next if ( !defined($oand) || $oand eq '' );
+            $oand = $self->_clean_search_term($oand);
+            $oand = $self->_truncate_terms($oand) if ($truncate);
+            push @search_params, {
+                operand => $oand,      # the search terms
+                operator => defined($otor) ? uc $otor : undef,    # AND and so on
+                $index ? %$index : (),
+            };
+        }
+
+        # We build a string query from limits and the queries. An alternative
+        # would be to pass them separately into build_query and let it build
+        # them into a structured ES query itself. Maybe later, though that'd be
+        # more robust.
+        $search_param_query_str = join( ' ', $self->_create_query_string(@search_params) );
+        $query_str = join( ' AND ',
+            $search_param_query_str || (),
+            $self->_join_queries( $self->_convert_index_strings(@$limits) ) || () );
+
+        # If there's no query on the left, let's remove the junk left behind
+        $query_str =~ s/^ AND //;
+        my %options;
+        $options{sort} = \@sort_params;
+        $options{is_opac} = $params->{is_opac};
+        $options{weighted_fields} = $params->{weighted_fields};
+        $options{whole_record} = $params->{whole_record};
+        $query = $self->build_query( $query_str, %options );
     }
-
-    # We build a string query from limits and the queries. An alternative
-    # would be to pass them separately into build_query and let it build
-    # them into a structured ES query itself. Maybe later, though that'd be
-    # more robust.
-    my $search_param_query_str = join( ' ', $self->_create_query_string(@search_params) );
-    my $query_str = join( ' AND ',
-        $search_param_query_str || (),
-        $self->_join_queries( $self->_convert_index_strings(@$limits) ) || () );
-
-    # If there's no query on the left, let's remove the junk left behind
-    $query_str =~ s/^ AND //;
-    my %options;
-    $options{sort} = \@sort_params;
-    $options{is_opac} = $params->{is_opac};
-    $options{weighted_fields} = $params->{weighted_fields};
-    $options{whole_record} = $params->{whole_record};
-    my $query = $self->build_query( $query_str, %options );
 
     # We roughly emulate the CGI parameters of the zebra query builder
     my $query_cgi = '';
     shift @$operators; # Shift out the one we unshifted before
-    $ea = each_array( @$operands, @$operators, @$indexes );
+    my $ea = each_array( @$operands, @$operators, @$indexes );
     while ( my ( $oand, $otor, $index ) = $ea->() ) {
         $query_cgi .= '&' if $query_cgi;
         $query_cgi .= 'idx=' . uri_escape_utf8( $index // '') . '&q=' . uri_escape_utf8( $oand );
@@ -533,6 +502,70 @@ sub build_authorities_query_compat {
     return $query;
 }
 
+=head2 _build_scan_query
+
+    my ($query, $query_str) = $builder->_build_scan_query(\@operands, \@indexes)
+
+This will build an aggregation scan query that can be issued to elasticsearch from
+the provided string input.
+
+=cut
+
+our %scan_field_convert = (
+    'ti' => 'title',
+    'au' => 'author',
+    'su' => 'subject',
+    'se' => 'title-series',
+    'pb' => 'publisher',
+);
+
+sub _build_scan_query {
+    my ( $self, $operands, $indexes ) = @_;
+
+    my $term = scalar( @$operands ) == 0 ? '' : $operands->[0];
+    my $index = scalar( @$indexes ) == 0 ? 'subject' : $indexes->[0];
+
+    my ( $f, $d ) = split( /,/, $index);
+    $index = $scan_field_convert{$f} || $f;
+
+    my $res;
+    $res->{query} = {
+        query_string => {
+            query => '*'
+        }
+    };
+    $res->{aggregations} = {
+        $index => {
+            terms => {
+                field => $index . '__facet',
+                order => { '_term' => 'asc' },
+                include => $self->_create_regex_filter($self->_clean_search_term($term)) . '.*'
+            }
+        }
+    };
+    return ($res, $term);
+}
+
+=head2 _create_regex_filter
+
+    my $filter = $builder->_create_regex_filter('term')
+
+This will create a regex filter that can be used with an aggregation query.
+
+=cut
+
+sub _create_regex_filter {
+    my ($self, $term) = @_;
+
+    my $result = '';
+    foreach my $c (split(//, quotemeta($term))) {
+        my $lc = lc($c);
+        my $uc = uc($c);
+        $result .= $lc ne $uc ? '[' . $lc . $uc . ']' : $c;
+    }
+    return $result;
+}
+
 =head2 _convert_sort_fields
 
     my @sort_params = _convert_sort_fields(@sort_by)
@@ -779,7 +812,7 @@ sub _modify_string_by_type {
     return $str unless $str;    # Empty or undef, we can't use it.
 
     $str .= '*' if $type eq 'right-truncate';
-    $str = '"' . $str . '"' if $type eq 'phrase';
+    $str = '"' . $str . '"' if $type eq 'phrase' && $str !~ /^".*"$/;
     if ($type eq 'st-year') {
         if ($str =~ /^(.*)-(.*)$/) {
             my $from = $1 || '*';
