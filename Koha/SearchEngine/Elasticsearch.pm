@@ -285,7 +285,7 @@ sub reset_elasticsearch_mappings {
             my $field_label = $data->{label};
             my $mappings = $data->{mappings};
             my $facet_order = $data->{facet_order};
-            my $search_field = Koha::SearchFields->find_or_create({ 
+            my $search_field = Koha::SearchFields->find_or_create({
                 name  => $field_name,
                 label => $field_label,
                 type  => $field_type,

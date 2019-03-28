@@ -23,6 +23,7 @@ use t::lib::TestBuilder;
 use MARC::Record;
 
 use Koha::SearchFields;
+use Koha::SearchEngine::Elasticsearch;
 
 my $schema = Koha::Database->schema;
 my $builder = t::lib::TestBuilder->new;
