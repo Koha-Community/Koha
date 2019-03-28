@@ -17809,6 +17809,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18235 - Elastic search - make facets configurable)\n";
 }
 
+$DBversion = '18.12.00.033';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE search_field SET facet_order=10 WHERE name='ln'" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 18213 - Add language facets to Elasticsearch)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
