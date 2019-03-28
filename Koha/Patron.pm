@@ -849,10 +849,11 @@ sub add_enrolment_fee_if_needed {
     if ( $enrolment_fee && $enrolment_fee > 0 ) {
         $self->account->add_debit(
             {
-                amount  => $enrolment_fee,
-                user_id => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                amount     => $enrolment_fee,
+                user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                interface  => C4::Context->interface,
                 library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
-                type => 'account'
+                type       => 'account'
             }
         );
     }

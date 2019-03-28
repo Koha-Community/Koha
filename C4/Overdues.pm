@@ -573,8 +573,15 @@ sub UpdateFine {
 
     if ( $data ) {
         if ( $data->{'amount'} != $amount ) {
-            my $accountline = Koha::Account::Lines->find( $data->{accountlines_id} );
-            $accountline->adjust({ amount => $amount, type => 'fine_update' });
+            my $accountline =
+              Koha::Account::Lines->find( $data->{accountlines_id} );
+            $accountline->adjust(
+                {
+                    amount    => $amount,
+                    type      => 'fine_update',
+                    interface => C4::Context->interface
+                }
+            );
         }
     } else {
         if ( $amount ) { # Don't add new fines with an amount of 0
@@ -592,7 +599,8 @@ sub UpdateFine {
                     description => $desc,
                     note        => undef,
                     user_id     => undef,
-                    library_id  => undef,
+                    interface   => C4::Context->interface,
+                    library_id  => undef, #FIXME: Should we grab the checkout or circ-control branch here perhaps?
                     type        => 'fine',
                     item_id     => $itemnum,
                     issue_id    => $issue_id,

@@ -65,10 +65,11 @@ sub pay {
         if ( $fee ) {
             $account->pay(
                 {
-                    amount => $amt,
-                    sip    => $sip_type,
-                    type   => $type,
-                    lines  => [$fee],
+                    amount    => $amt,
+                    sip       => $sip_type,
+                    type      => $type,
+                    lines     => [$fee],
+                    interface => C4::Context->interface
                 }
             );
             return 1;
@@ -80,9 +81,10 @@ sub pay {
     else {
         $account->pay(
             {
-                amount => $amt,
-                sip    => $sip_type,
-                type   => $type,
+                amount    => $amt,
+                sip       => $sip_type,
+                type      => $type,
+                interface => C4::Context->interface
             }
         );
         return 1;

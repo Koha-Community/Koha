@@ -89,7 +89,8 @@ if ($add){
         library_id  => $library_id,
         note        => $note,
         type        => $type,
-        user_id     => $logged_in_user->id
+        user_id     => $logged_in_user->id,
+        interface   => C4::Context->interface
     });
 
     if ( C4::Context->preference('AccountAutoReconcile') ) {

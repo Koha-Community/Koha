@@ -2416,6 +2416,7 @@ sub _FixAccountForLostAndReturned {
             {   amount      => $credit_total,
                 description => 'Item Returned ' . $item_id,
                 type        => 'lost_item_return',
+                interface   => C4::Context->interface,
                 library_id  => $branchcode
             }
         );
@@ -3220,6 +3221,7 @@ sub AddIssuingCharge {
             note        => undef,
             user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
             library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+            interface   => C4::Context->interface,
             type        => 'rent',
             item_id     => $checkout->itemnumber,
             issue_id    => $checkout->issue_id,
@@ -3810,7 +3812,13 @@ sub ProcessOfflinePayment {
 
     my $patron = Koha::Patrons->find({ cardnumber => $operation->{cardnumber} });
 
-    $patron->account->pay({ amount => $operation->{amount}, library_id => $operation->{branchcode} });
+    $patron->account->pay(
+        {
+            amount     => $operation->{amount},
+            library_id => $operation->{branchcode},
+            interface  => 'koc'
+        }
+    );
 
     return "Success.";
 }

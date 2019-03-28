@@ -113,6 +113,7 @@ elsif ( $input->param('confirm_writeoff') ) {
                 lines      => [ scalar Koha::Account::Lines->find($accountlines_id) ],
                 type       => 'writeoff',
                 note       => $payment_note,
+                interface  => C4::Context->interface,
                 library_id => $branch,
             }
         );
@@ -216,6 +217,7 @@ sub writeoff_all {
                     lines  => [ scalar Koha::Account::Lines->find($accountlines_id) ],
                     type   => 'writeoff',
                     note   => $payment_note,
+                    interface  => C4::Context->interface,
                     library_id => $branch,
                 }
             );

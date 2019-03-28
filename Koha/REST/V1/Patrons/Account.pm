@@ -114,6 +114,7 @@ sub add_credit {
                 description  => $description,
                 note         => $note,
                 user_id      => $user->id,
+                interface    => 'api',
                 library_id   => $library_id
             }
         );

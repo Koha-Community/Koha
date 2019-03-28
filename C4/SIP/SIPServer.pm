@@ -11,6 +11,7 @@ use IO::Socket::INET;
 use Socket qw(:DEFAULT :crlf);
 require UNIVERSAL::require;
 
+use C4::Context;
 use C4::SIP::Sip::Constants qw(:all);
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
@@ -26,6 +27,9 @@ use constant LOG_SIP => "local6"; # Local alias for the logging facility
 # FIXME: Is this a module or a script?  
 # A script with no MAIN namespace?
 # A module that takes command line args?
+
+# Set interface to 'sip'
+C4::Context->interface('sip');
 
 my %transports = (
     RAW    => \&raw_transport,

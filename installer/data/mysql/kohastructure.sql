@@ -2683,6 +2683,7 @@ CREATE TABLE `accountlines` (
   `timestamp` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
   `note` MEDIUMTEXT NULL default NULL,
   `manager_id` int(11) NULL DEFAULT NULL,
+  `interface` VARCHAR(16) NOT NULL,
   `branchcode` VARCHAR( 10 ) NULL DEFAULT NULL, -- the branchcode of the library where a payment was made, a manual invoice created, etc.
   PRIMARY KEY (`accountlines_id`),
   KEY `acctsborridx` (`borrowernumber`),

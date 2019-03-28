@@ -86,6 +86,7 @@ sub pay {
     my $patron = Koha::Patrons->find( $self->{patron_id} );
 
     my $manager_id = $userenv ? $userenv->{number} : 0;
+    my $interface = $params ? ( $params->{interface} || C4::Context->interface ) : C4::Context->interface;
 
     my @fines_paid; # List of account lines paid on with this payment
 
@@ -135,7 +136,8 @@ sub pay {
                         manager_id            => $manager_id,
                         note                  => $note,
                     }
-                )
+                ),
+                $interface
             );
             push( @fines_paid, $fine->id );
         }
@@ -185,7 +187,8 @@ sub pay {
                         manager_id            => $manager_id,
                         note                  => $note,
                     }
-                )
+                ),
+                $interface
             );
             push( @fines_paid, $fine->id );
         }
@@ -211,6 +214,7 @@ sub pay {
             payment_type      => $payment_type,
             amountoutstanding => 0 - $balance_remaining,
             manager_id        => $manager_id,
+            interface         => $interface,
             branchcode        => $library_id,
             note              => $note,
         }
@@ -244,7 +248,8 @@ sub pay {
                     accountlines_paid => \@fines_paid,
                     manager_id        => $manager_id,
                 }
-            )
+            ),
+            $interface
         );
     }
 
@@ -289,6 +294,7 @@ my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
         description  => $description,
         note         => $note,
         user_id      => $user_id,
+        interface    => $interface,
         library_id   => $library_id,
         sip          => $sip,
         payment_type => $payment_type,
@@ -315,6 +321,7 @@ sub add_credit {
     my $description  = $params->{description} // q{};
     my $note         = $params->{note} // q{};
     my $user_id      = $params->{user_id};
+    my $interface    = $params->{interface};
     my $library_id   = $params->{library_id};
     my $sip          = $params->{sip};
     my $payment_type = $params->{payment_type};
@@ -344,6 +351,7 @@ sub add_credit {
                     payment_type      => $payment_type,
                     note              => $note,
                     manager_id        => $user_id,
+                    interface         => $interface,
                     branchcode        => $library_id,
                     itemnumber        => $item_id,
                 }
@@ -381,7 +389,8 @@ sub add_credit {
                             manager_id        => $user_id,
                             branchcode        => $library_id,
                         }
-                    )
+                    ),
+                    $interface
                 );
             }
         }
@@ -400,6 +409,7 @@ my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
         description  => $description,
         note         => $note,
         user_id      => $user_id,
+        interface    => $interface,
         library_id   => $library_id,
         type         => $debit_type,
         item_id      => $item_id,
@@ -436,6 +446,7 @@ sub add_debit {
     my $description  = $params->{description} // q{};
     my $note         = $params->{note} // q{};
     my $user_id      = $params->{user_id};
+    my $interface    = $params->{interface};
     my $library_id   = $params->{library_id};
     my $type         = $params->{type};
     my $item_id      = $params->{item_id};
@@ -467,6 +478,7 @@ sub add_debit {
                     payment_type      => undef,
                     note              => $note,
                     manager_id        => $user_id,
+                    interface         => $interface,
                     itemnumber        => $item_id,
                     issue_id          => $issue_id,
                     branchcode        => $library_id,
@@ -496,7 +508,8 @@ sub add_debit {
                             itemnumber        => $item_id,
                             manager_id        => $user_id,
                         }
-                    )
+                    ),
+                    $interface
                 );
             }
         }

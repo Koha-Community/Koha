@@ -103,7 +103,8 @@ if ( $response->is_success ) {
             {
                 amount => $amount,
                 lines  => \@lines,
-                note   => 'PayPal'
+                note   => 'PayPal',
+                interface => C4::Context->interface
             }
         );
     }

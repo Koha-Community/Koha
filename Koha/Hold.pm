@@ -369,11 +369,12 @@ sub cancel {
                   Koha::Account->new( { patron_id => $self->borrowernumber } );
                 $account->add_debit(
                     {
-                        amount  => $charge,
-                        user_id => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                        amount     => $charge,
+                        user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                        interface  => C4::Context->interface,
                         library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
-                        type    => 'hold_expired',
-                        item_id => $self->itemnumber
+                        type       => 'hold_expired',
+                        item_id    => $self->itemnumber
                     }
                 );
             }

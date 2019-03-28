@@ -371,7 +371,7 @@ sub kocMakePayment {
     my $patron = Koha::Patrons->find( { cardnumber => $cardnumber } );
 
     Koha::Account->new( { patron_id => $patron->id } )
-      ->pay( { amount => $amount } );
+      ->pay( { amount => $amount, interface => C4::Context->interface } );
 
     push @output,
       {

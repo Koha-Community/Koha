@@ -56,7 +56,7 @@ The functions in this module perform various functions in order to log all the o
 
 =item logaction
 
-  &logaction($modulename, $actionname, $objectnumber, $infos);
+  &logaction($modulename, $actionname, $objectnumber, $infos, $interface);
 
 Adds a record into action_logs table to report the different changes upon the database.
 Each log entry includes the number of the user currently logged in.  For batch
