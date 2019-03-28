@@ -531,8 +531,10 @@ if ($op eq "additem") {
 
         use C4::Barcodes;
         my $barcodeobj = C4::Barcodes->new;
+        my $copynumber = $addedolditem->{'copynumber'};
         my $oldbarcode = $addedolditem->{'barcode'};
         my ($tagfield,$tagsubfield) = &GetMarcFromKohaField("items.barcode",$frameworkcode);
+        my ($copytagfield,$copytagsubfield) = &GetMarcFromKohaField("items.copynumber",$frameworkcode);
 
     # If there is a barcode and we can't find their new values, we can't add multiple copies
 	my $testbarcode;
@@ -566,6 +568,10 @@ if ($op eq "additem") {
 		    # Checking if the barcode already exists
 		    $exist_itemnumber = get_item_from_barcode($barcodevalue);
 		}
+        # Updating record with the new copynumber
+        if ( $copynumber  ){
+            $record->field($copytagfield)->update($copytagsubfield => $copynumber);
+        }
 
 		# Adding the item
         if (!$exist_itemnumber) {
@@ -576,6 +582,8 @@ if ($op eq "additem") {
             # That way, all items are added, even if there was some already existing barcodes
             # FIXME : Please note that there is a risk of infinite loop here if we never find a suitable barcode
             $i++;
+            # Only increment copynumber if item was really added
+            $copynumber++  if ( $copynumber && $copynumber =~ m/^\d+$/ );
         }
 
 		# Preparing the next iteration
