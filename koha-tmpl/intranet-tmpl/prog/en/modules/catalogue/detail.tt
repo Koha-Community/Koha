@@ -381,7 +381,9 @@
                 <tr id="item_[% item.itemnumber | html %]" data-itemnumber="[% item.itemnumber | html %]" data-duedate="[% item.datedue | html %]">
                 [% IF (StaffDetailItemSelection) %]
                     <td style="text-align:center;vertical-align:middle">
-                        <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
+                        [% IF item.can_be_edited %]
+                            <input type="checkbox" value="[% item.itemnumber | html %]" name="itemnumber" />
+                        [% END %]
                     </td>
                 [% END %]
                     [% IF Koha.Preference('LocalCoverImages') && ( tab == 'holdings' && itemloop_has_images || tab == 'otherholdings' && otheritemloop_has_images ) %]
@@ -638,7 +640,7 @@ Note that permanent location is a code, and location may be an authval.
 
                 [% IF CAN_user_editcatalogue_edit_items %]
                     <td class="actions">
-                        [% UNLESS item.cannot_be_edited %]
+                        [% IF item.can_be_edited %]
                             [% IF Koha.Preference('LocalCoverImages') OR Koha.Preference('OPACLocalCoverImages') %]
                                 <div class="btn-group">
                                     <a  class="btn btn-default btn-xs" href="/cgi-bin/koha/cataloguing/additem.pl?op=edititem&biblionumber=[% item.biblionumber | html %]&itemnumber=[% item.itemnumber | html %]#edititem"><i class="fa fa-pencil"></i> Edit</a><a class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown"><span class="caret"></span></a>

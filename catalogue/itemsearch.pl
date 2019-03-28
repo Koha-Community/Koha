@@ -251,10 +251,11 @@ if ( defined $format ) {
     }
 
     $template->param(
-        filter => $filter,
+        filter        => $filter,
         search_params => $search_params,
-        results => $results,
-        total_rows => $total_rows,
+        results       => $results,
+        total_rows    => $total_rows,
+        user          => Koha::Patrons->find( $borrowernumber ),
     );
 
     if ($format eq 'csv') {

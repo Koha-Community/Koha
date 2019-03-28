@@ -115,10 +115,14 @@
                             [% IF item.biblionumber != biblio.biblionumber %] [%# Host item %]
                                 <li><a href="additem.pl?op=edititem&amp;biblionumber=[% item.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]#edititem">Edit in host</a> &nbsp; <a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delinkitem&amp;biblionumber=[% biblio.biblionumber | html %]&amp;hostitemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]">Delink</a></li>
                             [% ELSE %]
-                                <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
+                                [% UNLESS item.nomod %]
+                                    <li><a href="additem.pl?op=edititem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#edititem">Edit</a></li>
+                                [% END %]
                                 <li><a href="additem.pl?op=dupeitem&amp;biblionumber=[% biblio.biblionumber | uri %]&amp;itemnumber=[% item.itemnumber | uri %]&amp;searchid=[% searchid | uri %]#additema">Duplicate</a></li>
                                 <li class="print_label"><a href="/cgi-bin/koha/labels/label-edit-batch.pl?op=add&amp;number_type=itemnumber&amp;number_list=[% item.itemnumber | uri %]" target="_blank" >Print label</a></li>
-                                <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
+                                [% UNLESS item.nomod %]
+                                    <li><a class="delete" href="/cgi-bin/koha/cataloguing/additem.pl?op=delitem&amp;biblionumber=[% item.biblionumber | html %]&amp;itemnumber=[% item.itemnumber | html %]&amp;searchid=[% searchid | html %]" onclick="return confirm_deletion();">Delete</a></li>
+                                [% END %]
                             [% END %]
                                 [% IF ( OPACBaseURL ) %]
                                     <li class="view-in-opac"><a target="_blank" href="[% Koha.Preference('OPACBaseURL') | url %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]">OPAC view</a></li>
@@ -129,12 +133,13 @@
                         [% END %]
                     [% FOREACH header IN item_header_loop %]
                         [% SET attribute = header.attribute %]
+                        [% SET can_mod = item.nomod ? "nomod" : "canmod" %]
                         [% IF header.attribute AND date_fields.grep('^' _ attribute _ '$').size %]
-                            <td data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
+                            <td class="[% can_mod | html %]" data-order="[% item.$attribute | html %]">[% item.$attribute | $KohaDates %]</td>
                         [% ELSIF ( item.$attribute && ( attribute == 'price' || attribute == 'replacementprice' ) ) %]
-                            <td data-order="[% item.$attribute | html %]">[% item.$attribute | $Price %]</td>
+                            <td class="[% can_mod | html %]" data-order="[% item.$attribute | html %]">[% item.$attribute | $Price %]</td>
                         [% ELSE %]
-                            <td>[% item.$attribute | html %]</td>
+                            <td class="[% can_mod | html %]">[% item.$attribute | html %]</td>
                         [% END %]
                     [% END %]
                     </tr>

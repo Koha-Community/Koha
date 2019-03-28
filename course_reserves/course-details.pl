@@ -66,6 +66,7 @@ my $course_reserves = GetCourseReserves(
 $template->param(
     course          => $course,
     course_reserves => $course_reserves,
+    user            => Koha::Patrons->find( $loggedinuser ),
 );
 
 output_html_with_http_headers $cgi, $cookie, $template->output;

@@ -295,9 +295,8 @@ sub safe_to_delete {
 
     $error //= "not_same_branch"
       if defined C4::Context->userenv
-      && !C4::Context->IsSuperLibrarian()
-      && C4::Context->preference("IndependentBranches")
-      && ( C4::Context->userenv->{branch} ne $self->homebranch );
+      and defined C4::Context->userenv->{number}
+      and !Koha::Patrons->find( C4::Context->userenv->{number} )->can_edit_item( $self );
 
     # check it doesn't have a waiting reserve
     $error //= "book_reserved"

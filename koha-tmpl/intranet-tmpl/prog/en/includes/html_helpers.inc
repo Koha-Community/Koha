@@ -262,7 +262,7 @@
         </thead>
         <tbody>
             [% FOREACH item IN items %]
-                [% SET can_be_edited = ! ( Koha.Preference('IndependentBranches') && ! logged_in_user.is_superlibrarian && item.homebranch != Branches.GetLoggedInBranchname() ) %]
+                [% SET can_be_edited = !item.nomod && !( Koha.Preference('IndependentBranches') && ! logged_in_user && item.homebranch != Branches.GetLoggedInBranchname() ) %]
 
                 <tr>
                     <td>[% item.index + 1 | html %]</td>

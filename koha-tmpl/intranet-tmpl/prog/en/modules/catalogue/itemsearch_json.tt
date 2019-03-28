@@ -4,7 +4,7 @@
   "iTotalDisplayRecords": [% total_rows | html %],
   "aaData": [
   [%- FOREACH item IN results -%]
-    [%- INCLUDE 'catalogue/itemsearch_item.json.inc' item = item -%]
+    [%- INCLUDE 'catalogue/itemsearch_item.json.inc' item = item, user = user -%]
     [%- UNLESS loop.last %],[% END -%]
   [%- END -%]
   ]
