@@ -17816,6 +17816,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 18213 - Add language facets to Elasticsearch)\n";
 }
 
+$DBversion = '18.12.00.034';
+if( CheckVersion( $DBversion ) ) {
+
+    if ( column_exists( 'accountlines', 'lastincrement' ) ) {
+        $dbh->do("ALTER TABLE `accountlines` DROP COLUMN `lastincrement`");
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22516 - Drop deprecated accountlines.lastincrement field)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 

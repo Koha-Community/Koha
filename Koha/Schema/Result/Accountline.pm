@@ -81,12 +81,6 @@ __PACKAGE__->table("accountlines");
   is_nullable: 1
   size: [28,6]
 
-=head2 lastincrement
-
-  data_type: 'decimal'
-  is_nullable: 1
-  size: [28,6]
-
 =head2 timestamp
 
   data_type: 'timestamp'
@@ -134,8 +128,6 @@ __PACKAGE__->add_columns(
   "payment_type",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "amountoutstanding",
-  { data_type => "decimal", is_nullable => 1, size => [28, 6] },
-  "lastincrement",
   { data_type => "decimal", is_nullable => 1, size => [28, 6] },
   "timestamp",
   {
@@ -277,8 +269,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2019-03-22 20:06:37
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:Op6tRrWF4pGrLcunNiXO+g
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-28 18:01:31
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6TVweDBJR9SEra68zHn8fQ
 
 sub koha_objects_class {
     'Koha::Account::Lines';
