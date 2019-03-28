@@ -40,14 +40,12 @@ my ( $template, $borrowernumber, $cookie ) = get_template_and_user(
 );
 
 my $patron = Koha::Patrons->find( $borrowernumber );
-my $total = $patron->account->balance;
-my @accts = Koha::Account::Lines->search(
-    { borrowernumber => $patron->borrowernumber },
-    { order_by       => { -desc => 'accountlines_id' } }
-);
+my $account = $patron->account;
+my $total = $account->balance;
+my $accountlines = $account->lines;
 
 $template->param(
-    ACCOUNT_LINES => \@accts,
+    ACCOUNT_LINES => $accountlines,
     total         => $total,
     accountview   => 1,
     message       => scalar $query->param('message') || q{},

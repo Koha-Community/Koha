@@ -278,11 +278,9 @@ if ($borrower) {
         m/priority/ and $show_priority = 1;
     }
 
-    my $total = $patron->account->balance;
-    my @accts = Koha::Account::Lines->search(
-        { borrowernumber => $borrower->{borrowernumber} },
-        { order_by       => { -desc => 'accountlines_id' } }
-    );
+    my $account = $patron->account;
+    my $total = $account->balance;
+    my $accountlines = $account->lines;
 
     my $holds = $patron->holds;
 
@@ -301,7 +299,7 @@ if ($borrower) {
         SuspendHoldsOpac => C4::Context->preference('SuspendHoldsOpac'),
         AutoResumeSuspendedHolds => C4::Context->preference('AutoResumeSuspendedHolds'),
         howpriority   => $show_priority,
-        ACCOUNT_LINES => \@accts,
+        ACCOUNT_LINES => $accountlines,
         total => $total,
     );
 
