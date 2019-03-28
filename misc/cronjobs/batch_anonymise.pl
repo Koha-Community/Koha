@@ -29,7 +29,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use Koha::Patrons;
 use Date::Calc qw(

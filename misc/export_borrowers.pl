@@ -23,6 +23,7 @@ use Modern::Perl;
 use Text::CSV;
 use Getopt::Long qw(:config no_ignore_case);
 
+use Koha::Script;
 use C4::Context;
 use Koha::Patrons;
 

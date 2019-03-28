@@ -28,6 +28,8 @@ BEGIN {
 
 # possible modules to use
 use Getopt::Long;
+
+use Koha::Script;
 use C4::Context;
 use C4::Biblio;
 use Pod::Usage;

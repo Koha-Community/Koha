@@ -29,7 +29,7 @@ use utf8;
 # can be run as frequently as required
 # log messages are appended to logdir/editrace.log
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use Log::Log4perl qw(:easy);
 use Koha::Database;

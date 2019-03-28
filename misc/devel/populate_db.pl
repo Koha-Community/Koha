@@ -22,6 +22,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Script;
 use C4::Installer;
 use C4::Context;
 

@@ -22,6 +22,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Script;
 use Koha::Patrons::Import;
 my $Import = Koha::Patrons::Import->new();
 

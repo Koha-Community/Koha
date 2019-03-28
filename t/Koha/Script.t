@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use Test::More tests => 3;
 
-BEGIN { use_ok('Koha::Cron') }
+BEGIN { use_ok('Koha::Script') }
 
 use C4::Context;
 
@@ -27,11 +27,11 @@ my $userenv = C4::Context->userenv;
 is_deeply(
     $userenv,
     {
-        'surname'       => 'CRON',
+        'surname'       => 'CLI',
         'id'            => undef,
         'flags'         => undef,
         'cardnumber'    => undef,
-        'firstname'     => 'CRON',
+        'firstname'     => 'CLI',
         'branchname'    => undef,
         'branchprinter' => undef,
         'emailaddress'  => undef,
@@ -39,10 +39,10 @@ is_deeply(
         'shibboleth'    => undef,
         'branch'        => undef
     },
-    "Context userenv set correctly"
+    "Context userenv set correctly with no flags"
 );
 
 my $interface = C4::Context->interface;
-is($interface, 'cron', "Context interface set correctly");
+is( $interface, 'commandline', "Context interface set correctly with no flags" );
 
 1;

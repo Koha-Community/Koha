@@ -12,6 +12,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
+use Koha::Script;
 use C4::Biblio;
 
 sub process {

@@ -22,6 +22,7 @@ use List::MoreUtils qw(uniq);
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Script;
 use C4::Auth;
 use C4::Context;
 use C4::Record;

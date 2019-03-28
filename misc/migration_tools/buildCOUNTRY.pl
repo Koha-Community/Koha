@@ -6,6 +6,7 @@ use strict;
 #use warnings; FIXME - Bug 2505
 
 # Koha modules used
+use Koha::Script;
 use C4::Context;
 use C4::Biblio;
 use C4::AuthoritiesMarc;

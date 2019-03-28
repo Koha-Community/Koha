@@ -31,7 +31,7 @@ BEGIN {
 use Getopt::Long;
 use Pod::Usage;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use C4::Items;
 use C4::Letters;

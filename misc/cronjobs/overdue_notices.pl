@@ -34,7 +34,7 @@ use Text::CSV_XS;
 use DateTime;
 use DateTime::Duration;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use C4::Letters;
 use C4::Overdues qw(GetFine GetOverdueMessageTransportTypes parse_overdues_letter);

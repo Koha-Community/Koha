@@ -37,7 +37,7 @@ BEGIN {
 
 use Date::Calc qw/Date_to_Days/;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use C4::Circulation;
 use C4::Overdues;

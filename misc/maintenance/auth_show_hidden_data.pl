@@ -25,6 +25,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Script;
 use Koha::Authorities;
 use Koha::Authority::Subfields;
 use Koha::MetadataRecord::Authority;

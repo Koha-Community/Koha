@@ -5,7 +5,7 @@ use Getopt::Long;
 use Pod::Usage;
 use Time::HiRes qw(gettimeofday);
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::AuthoritiesMarc;
 use Koha::Authority::MergeRequests;
 

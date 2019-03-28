@@ -18,6 +18,8 @@
 # along with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
+
+use Koha::Script;
 use C4::Charset qw( SanitizeRecord );
 use C4::Context;
 use DBI;

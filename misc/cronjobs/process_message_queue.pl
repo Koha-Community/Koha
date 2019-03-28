@@ -26,7 +26,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Letters;
 use C4::Log;
 use Getopt::Long;

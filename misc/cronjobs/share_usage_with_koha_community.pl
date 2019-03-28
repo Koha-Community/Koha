@@ -5,7 +5,7 @@ use Modern::Perl;
 use Pod::Usage;
 use Getopt::Long;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use C4::UsageStats;
 use C4::Log;

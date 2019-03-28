@@ -22,6 +22,7 @@ use Modern::Perl;
 use C4::Context;
 use C4::Tags;
 
+use Koha::Script;
 use Koha::Database;
 use Koha::Tags;
 use Koha::Tags::Approvals;

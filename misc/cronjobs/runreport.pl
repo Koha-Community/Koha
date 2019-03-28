@@ -20,7 +20,7 @@
 
 use Modern::Perl;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Reports::Guided; # 0.12
 use Koha::Reports;
 use C4::Context;

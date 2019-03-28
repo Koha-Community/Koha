@@ -30,6 +30,7 @@ use open OUT => ':encoding(UTF-8)', ':std';
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Script;
 use C4::Context;
 my $dbh = C4::Context->dbh;
 

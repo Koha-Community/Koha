@@ -95,7 +95,7 @@ use DBI;
 use Getopt::Long;
 use Pod::Usage;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use English qw(-no_match_vars);
 

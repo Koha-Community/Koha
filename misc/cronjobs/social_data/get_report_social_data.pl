@@ -2,7 +2,7 @@
 
 use Modern::Perl;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::SocialData;
 
 my $results = C4::SocialData::get_report;

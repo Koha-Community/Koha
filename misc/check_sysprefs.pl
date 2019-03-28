@@ -10,6 +10,7 @@ use warnings;
 
 use File::Find;
 
+use Koha::Script;
 use C4::Context;
 
 @ARGV = qw(.) unless @ARGV;

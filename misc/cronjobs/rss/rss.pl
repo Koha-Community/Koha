@@ -29,7 +29,7 @@ use Modern::Perl;
 
 use Template;
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 use Time::Local;
 use POSIX;

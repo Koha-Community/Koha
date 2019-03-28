@@ -5,6 +5,7 @@ use Getopt::Long;
 use Pod::Usage;
 use IO::File;
 
+use Koha::Script;
 use C4::Biblio;
 
 my ($help, $files);

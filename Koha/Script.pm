@@ -1,4 +1,4 @@
-package Koha::Cron;
+package Koha::Script;
 
 # Copyright PTFS Europe 2019
 # Copyright 2019 Koha Development Team
@@ -22,29 +22,50 @@ use Modern::Perl;
 
 =head1 NAME
 
-Koha::Cron - Koha Cron scripts base class
+Koha::Script - Koha scripts base class
 
 =head1 SYNOPSIS
 
-    use Koha::Cron;
+    use Koha::Script
+    use Koha::Script -cron;
 
 =head1 DESCRIPTION
 
-This class should be used in all cronscripts. It sets the interface and userenv appropriately.
+This class should be used in all scripts. It sets the interface and userenv appropriately.
 
 =cut
 
 use C4::Context;
 
-# Set userenv
-C4::Context->_new_userenv(1);
-C4::Context->set_userenv(
-    undef, undef, undef, 'CRON', 'CRON', undef,
-    undef, undef, undef, undef,  undef
-);
+sub import {
+    my $class = shift;
+    my @flags = @_;
 
-# Set interface
-C4::Context->interface('cron');
+    C4::Context->_new_userenv(1);
+    if ( ( $flags[0] || '' ) eq '-cron' ) {
+
+        # Set userenv
+        C4::Context->_new_userenv(1);
+        C4::Context->set_userenv(
+            undef, undef, undef, 'CRON', 'CRON', undef,
+            undef, undef, undef, undef,  undef
+        );
+
+        # Set interface
+        C4::Context->interface('cron');
+
+    }
+    else {
+        # Set userenv
+        C4::Context->set_userenv(
+            undef, undef, undef, 'CLI', 'CLI', undef,
+            undef, undef, undef, undef,  undef
+        );
+
+        # Set interface
+        C4::Context->interface('commandline');
+    }
+}
 
 =head1 AUTHOR
 

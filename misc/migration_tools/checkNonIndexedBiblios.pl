@@ -33,6 +33,7 @@ BEGIN {
 
 # Koha modules used
 use MARC::Record;
+use Koha::Script;
 use C4::Context;
 use Getopt::Long;
 

@@ -13,6 +13,7 @@ BEGIN {
 }
 
 # Koha modules used
+use Koha::Script;
 use MARC::Record;
 use C4::Context;
 use C4::Biblio;

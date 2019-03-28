@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use Koha::Script;
 use C4::Context;
 use Getopt::Long;
 use Fcntl qw(:flock);

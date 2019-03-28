@@ -21,6 +21,7 @@ use Modern::Perl;
 use Getopt::Long;
 use Pod::Usage;
 
+use Koha::Script;
 use Koha::Patrons;
 
 my ( $help, $surname, $userid, $password, $branchcode, $categorycode, $cardnumber );

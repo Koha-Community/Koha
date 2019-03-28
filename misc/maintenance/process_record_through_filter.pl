@@ -6,6 +6,8 @@
 
 use strict;
 use warnings;
+
+use Koha::Script;
 use Koha::RecordProcessor;
 use Data::Dumper;
 use C4::Biblio;

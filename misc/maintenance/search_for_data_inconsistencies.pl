@@ -17,6 +17,7 @@
 
 use Modern::Perl;
 
+use Koha::Script;
 use Koha::Items;
 use Koha::Biblioitems;
 use Koha::ItemTypes;

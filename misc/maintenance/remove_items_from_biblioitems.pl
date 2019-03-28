@@ -22,6 +22,7 @@ use strict;
 use warnings;
 $|=1;
 
+use Koha::Script;
 use C4::Context;
 use C4::Biblio;
 use Getopt::Long;

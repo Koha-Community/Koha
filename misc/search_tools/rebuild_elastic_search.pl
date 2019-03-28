@@ -83,6 +83,7 @@ Full documentation.
 
 use autodie;
 use Getopt::Long;
+use Koha::Script;
 use C4::Context;
 use Koha::MetadataRecord::Authority;
 use Koha::BiblioUtils;

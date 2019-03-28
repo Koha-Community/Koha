@@ -42,6 +42,7 @@ use MARC::File::XML;
 use List::MoreUtils qw/uniq/;
 use Getopt::Std;
 
+use Koha::Script;
 use C4::Context;
 use C4::Charset qw/StripNonXmlChars/;
 use C4::Biblio;

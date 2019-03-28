@@ -23,6 +23,7 @@ use Getopt::Long;
 use List::MoreUtils qw/uniq/;
 use Pod::Usage;
 
+use Koha::Script;
 use C4::AuthoritiesMarc qw/AddAuthority DelAuthority GetAuthority merge/;
 
 my ( @authid, $confirm, $delete, $help, $merge, $reference, $renumber, $verbose );

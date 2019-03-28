@@ -15,7 +15,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::HoldsQueue qw(CreateQueue);
 use C4::Log;
 

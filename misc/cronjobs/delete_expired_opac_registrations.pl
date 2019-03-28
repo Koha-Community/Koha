@@ -28,7 +28,7 @@ BEGIN {
     eval { my $lib = "$FindBin::Bin/../kohalib.pl"; require $lib };
 }
 
-use Koha::Cron;
+use Koha::Script -cron;
 use C4::Context;
 
 my $help;
