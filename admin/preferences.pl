@@ -61,7 +61,9 @@ sub _get_chunk {
 
     my $name = $options{'pref'};
     my $chunk = { name => $name, value => $value, type => $options{'type'} || 'input', class => $options{'class'} };
-
+    if( $options{'syntax'} ){
+        $chunk->{'syntax'} = $options{'syntax'};
+    }
     if ( $options{'class'} && $options{'class'} eq 'password' ) {
         $chunk->{'input_type'} = 'password';
     } elsif ( $options{'class'} && $options{'class'} eq 'date' ) {

@@ -8,6 +8,7 @@
 [% Asset.css("css/preferences.css") | $raw %]
 [% Asset.css("lib/jquery/plugins/multiple-select/multiple-select.css") | $raw %]
 [% Asset.css("css/humanmsg.css") | $raw %]
+[% Asset.css("lib/codemirror/codemirror.css") | $raw %]
 </head>
 <body id="admin_preferences" class="admin">
 [% INCLUDE 'header.inc' %]
@@ -95,13 +96,13 @@
                     <select name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "choice" | html %]" multiple="multiple">
                         [% FOREACH CHOICE IN CHUNK.CHOICES %][% IF ( CHOICE.selected ) %]<option value="[% CHOICE.value | html %]" selected="selected">[% ELSE %]<option value="[% CHOICE.value | html %]">[% END %][% CHOICE.text | html %]</option>[% END %]
                     </select>
-                    [% ELSIF ( CHUNK.type_textarea ) || ( CHUNK.type_htmlarea )%]
-                        [% IF ( CHUNK.type_htmlarea ) && ( Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
-                        <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] mce" rows="20" cols="60">[% CHUNK.value | html %]</textarea>
+                    [% ELSIF ( CHUNK.type_textarea )%]
+                        [% IF ( CHUNK.syntax == "text/html" && Koha.Preference('UseWYSIWYGinSystemPreferences') ) %]
+                            <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] mce" rows="20" cols="60">[% CHUNK.value | html %]</textarea>
                         [% ELSE %]
-                        <a class="expand-textarea" style="display: none" href="#">Click to Edit</a>
-                        <textarea name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %]" rows="10" cols="40">[% CHUNK.value | html %]</textarea>
-                        <a class="collapse-textarea" style="display:none" href="#">Click to collapse</br></a>
+                            <a class="expand-textarea" id="expand_[% CHUNK.name | html %]" data-target="[% CHUNK.name | html %]" data-syntax="[% CHUNK.syntax | html %]" href="#">Click to edit</a>
+                            <textarea style="display:none" name="pref_[% CHUNK.name | html %]" id="pref_[% CHUNK.name | html %]" class="preference preference-[% CHUNK.class or "short" | html %] codemirror" rows="10" cols="40">[% CHUNK.value | html %]</textarea>
+                            <a class="collapse-textarea" id="collapse_[% CHUNK.name | html %]" data-target="[% CHUNK.name | html %]" data-syntax="[% CHUNK.syntax | html %]" style="display:none" href="#">Click to collapse</br></a>
                         [% END %]
                     [% ELSIF ( CHUNK.type_languages ) %]
                         <ul class="sortable">
@@ -166,6 +167,10 @@
     [% INCLUDE 'datatables.inc' %]
     [% Asset.js("lib/hc-sticky.js") | $raw %]
     [% Asset.js("lib/jquery/plugins/multiple-select/jquery.multiple.select.js") | $raw %]
+    [% Asset.js( "lib/codemirror/codemirror-compressed.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/css.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/javascript.min.js" ) | $raw %]
+    [% Asset.js( "lib/codemirror/xml.min.js" ) | $raw %]
     <script>
         var Sticky;
         $(document).ready(function(){
@@ -187,6 +192,7 @@
                 e.preventDefault();
                 window.location.reload(true);
             });
+
         });
         // This is here because of its dependence on template variables, everything else should go in js/pages/preferences.js - jpw
         var to_highlight = "[% searchfield |replace("'", "\'") |replace('"', '\"') |replace('\n', '\\n') |replace('\r', '\\r') | html %]";

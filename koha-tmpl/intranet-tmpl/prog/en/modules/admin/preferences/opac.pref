@@ -70,7 +70,8 @@ OPAC:
         -
             - "Show the following HTML when OpacMaintenance is enabled:"
             - pref: OpacMaintenanceNotice
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - By default, show bib records
@@ -197,6 +198,7 @@ OPAC:
             - "Include the following JavaScript on all pages in the OPAC:"
             - pref: OPACUserJS
               type: textarea
+              syntax: javascript
               class: code
         -
             - Include the additional CSS stylesheet
@@ -212,57 +214,68 @@ OPAC:
             - "Include the following CSS on all pages in the OPAC:"
             - pref: OPACUserCSS
               type: textarea
+              syntax: css
               class: code
         -
             - "Show the following HTML in its own column on the main page of the OPAC:"
             - pref: OpacMainUserBlock
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - "Show the following HTML on the left hand column of the main page and patron account on the OPAC (generally navigation links):"
             - pref: OpacNav
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - "Show the following HTML in the right hand column of the main page under the main login form:"
             - pref: OpacNavRight
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - "Show the following HTML on the left hand column of the main page and patron account on the OPAC, after OpacNav, and before patron account links if available:"
             - pref: OpacNavBottom
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - "Include the following HTML in the header of all pages in the OPAC:"
             - pref: opacheader
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - "Include the following HTML in the footer of all pages in the OPAC:"
             - pref: opaccredits
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - 'Include a "More Searches" box on the detail pages of items on the OPAC, with the following HTML (leave blank to disable):'
             - '<br />Note: The placeholders {BIBLIONUMBER}, {CONTROLNUMBER}, {TITLE}, {ISBN}, {ISSN} and {AUTHOR} will be replaced with information from the displayed record.'
             - pref: OPACSearchForTitleIn
               type: textarea
+              syntax: text/html
               class: code
         -
             - 'Include a "Links" column on the "my summary" and "my reading history" tabs when a user is logged in to the OPAC, with the following HTML (leave blank to disable):'
             - '<br />Note: The placeholders {BIBLIONUMBER}, {TITLE}, {ISBN} and {AUTHOR} will be replaced with information from the displayed record.'
             - pref: OPACMySummaryHTML
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - "Note to display on the patron summary page. This note only appears if the patron is logged in:"
             - pref: OPACMySummaryNote
               type: textarea
+              syntax: text/html
         -
             - "Include the following HTML under the facets in OPAC search results:"
             - pref: OPACResultsSidebar
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - pref: OpacAddMastheadLibraryPulldown
@@ -274,7 +287,8 @@ OPAC:
             - 'Display this HTML when no results are found for a search in the OPAC:'
             - '<br />Note: You can insert placeholders {QUERY_KW} that will be replaced with the keywords of the query.'
             - pref: OPACNoResultsFound
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - 'Display the URI in the 856u field as an image on: '
@@ -330,12 +344,14 @@ OPAC:
         -
             - "Show the following HTML on the OPAC login form when a patron is not logged in:"
             - pref: OpacLoginInstructions
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: code
         -
             - "Replace the search box at the top of OPAC pages with the following HTML:"
             - pref: OpacCustomSearch
               type: textarea
+              syntax: text/html
               class: code
         -
             - "Display language selector on "
@@ -516,6 +532,7 @@ OPAC:
             - "Use the following as the OPAC ISBD template:"
             - pref: OPACISBD
               type: textarea
+              syntax: text/html
               class: code
     Policy:
         -
@@ -682,6 +699,7 @@ OPAC:
             - "HTML content of your restricted page"
             - pref: RestrictedPageContent
               type: textarea
+              syntax: text/html
               class: HTML
         -
             - Use
@@ -761,7 +779,8 @@ OPAC:
         -
             - "Display the following additional instructions for patrons who self register via the OPAC ( HTML is allowed ):"
             - pref: PatronSelfRegistrationAdditionalInstructions
-              type: htmlarea
+              type: textarea
+              syntax: text/html
               class: html
         -
             - pref: PatronSelfRegistrationEmailMustBeUnique

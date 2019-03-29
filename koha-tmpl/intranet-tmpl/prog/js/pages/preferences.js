@@ -1,3 +1,4 @@
+/* global KOHA MSG_MADE_CHANGES CodeMirror MSG_CLICK_TO_EXPAND MSG_CLICK_TO_COLLAPSE to_highlight search_jumped humanMsg MSG_NOTHING_TO_SAVE MSG_MODIFIED MSG_SAVING MSG_SAVED_PREFERENCE dataTablesDefaults */
 // We can assume 'KOHA' exists, as we depend on KOHA.AJAX
 
 KOHA.Preferences = {
@@ -92,7 +93,7 @@ $( document ).ready( function () {
         if ( KOHA.Preferences.Modified ) {
             return MSG_MADE_CHANGES;
         }
-    }
+    };
 
     $( '.prefs-tab .action .cancel' ).click( function () { KOHA.Preferences.Modified = false } );
 
@@ -101,23 +102,41 @@ $( document ).ready( function () {
         return false;
     } );
 
-    $( '.prefs-tab .expand-textarea' ).show().click( function () {
-        $( this ).hide().nextAll( 'textarea, input[type=submit], a' )
-            .animate( { height: 'show', queue: false } )
-            .animate( { opacity: 1 } );
-
-        return false;
-    } ).nextAll( 'textarea, input[type=submit]' ).hide().css( { opacity: 0 } );
-
-    $( '.prefs-tab .collapse-textarea' ).hide().click( function () {
-        $( this ).show().prevAll( 'textarea, input[type=submit]' )
-            .animate( { height: 'hide', queue: false } )
-            .animate( { opacity: 0 } );
-
-        $( this ).hide().prevAll( 'a' ).show();
-        return false;
+    $( ".expand-textarea" ).on("click", function(e){
+        e.preventDefault();
+        $(this).hide();
+        var target = $(this).data("target");
+        var syntax = $(this).data("syntax");
+        $("#collapse_" + target ).show();
+        if( syntax ){
+            var editor = CodeMirror.fromTextArea( document.getElementById( "pref_" + target ), {
+                lineNumbers: true,
+                mode: syntax,
+                lineWrapping: true
+            });
+            editor.on("change", function(){
+                mark_modified.call( $("#pref_" + target )[0]);
+            });
+            editor.on("blur", function(){
+                editor.save();
+            });
+        } else {
+            $("#pref_" + target ).show();
+        }
     });
 
+    $( ".collapse-textarea" ).on("click", function(e){
+        e.preventDefault();
+        $(this).hide();
+        var target = $(this).data("target");
+        var syntax = $(this).data("syntax");
+        $("#expand_" + target ).show();
+        if( syntax ){
+            var editor = $("#pref_" + target ).next(".CodeMirror")[0].CodeMirror;
+            editor.toTextArea();
+        }
+        $("#pref_" + target ).hide();
+    });
 
     $("h3").attr("class","expanded").attr("title",MSG_CLICK_TO_EXPAND);
     var collapsible = $(".collapsed,.expanded");
