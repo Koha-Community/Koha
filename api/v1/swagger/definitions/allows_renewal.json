@@ -1,0 +1,21 @@
+{
+  "type": "object",
+  "properties": {
+    "allows_renewal": {
+      "type": "boolean",
+      "description": "Renewability status; true = renewable, false = not renewable"
+    },
+    "max_renewals": {
+      "type": "integer",
+      "description": "Maximum number of possible renewals"
+    },
+     "current_renewals": {
+      "type": "integer",
+      "description": "Current used renewals"
+    },
+    "error": {
+      "type": ["string", "null"],
+      "description": "Description on false allows_renewal."
+    }
+  }
+}

@@ -24,6 +24,7 @@ use C4::Auth qw( haspermission );
 use C4::Context;
 use C4::Circulation;
 use Koha::Checkouts;
+use Koha::IssuingRules;
 
 use Try::Tiny;
 
@@ -128,7 +129,13 @@ sub renew {
     );
 }
 
-sub renewability {
+=head3 allows_renewal
+
+Checks if the checkout could be renewed and return the related information.
+
+=cut
+
+sub allows_renewal {
     my $c = shift->openapi->valid_input or return;
 
     my $checkout_id = $c->validation->param('checkout_id');
@@ -146,9 +153,22 @@ sub renewability {
 
     my $renewable = Mojo::JSON->false;
     $renewable = Mojo::JSON->true if $can_renew;
+
+    my $rule = Koha::IssuingRules->get_effective_issuing_rule(
+        {
+            categorycode => $checkout->patron->categorycode,
+            itemtype     => $checkout->item->effective_itemtype,
+            branchcode   => $checkout->branchcode,
+        }
+    );
     return $c->render(
         status => 200,
-        openapi => { renewable => $renewable, error => $error }
+        openapi => {
+            allows_renewal => $renewable,
+            max_renewals => $rule->renewalsallowed,
+            current_renewals => $checkout->renewals,
+            error => $error
+        }
     );
 }
 

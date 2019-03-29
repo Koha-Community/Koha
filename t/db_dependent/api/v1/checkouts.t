@@ -169,9 +169,14 @@ $t->post_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->i
               required_permissions => { circulate => "circulate_remaining_permissions" }
             });
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewability")
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/allows_renewal")
   ->status_is(200)
-  ->json_is({ renewable => Mojo::JSON->true, error => undef });
+  ->json_is({
+        allows_renewal   => Mojo::JSON->true,
+        max_renewals     => 1,
+        current_renewals => 0,
+        error            => undef
+    });
 
 $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewal" )
   ->status_is(201)
@@ -183,6 +188,11 @@ $t->post_ok( "//$userid:$password@/api/v1/checkouts/" . $issue1->issue_id . "/re
   ->status_is(403)
   ->json_is({ error => 'Renewal not authorized (too_many)' });
 
-$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/renewability")
+$t->get_ok( "//$userid:$password@/api/v1/checkouts/" . $issue2->issue_id . "/allows_renewal")
   ->status_is(200)
-  ->json_is({ renewable => Mojo::JSON->false, error => 'too_many' });
+  ->json_is({
+        allows_renewal   => Mojo::JSON->false,
+        max_renewals     => 1,
+        current_renewals => 1,
+        error            => 'too_many'
+    });
