@@ -97,19 +97,19 @@
       }
     }
   },
-  "/checkouts/{checkout_id}/renewability": {
+  "/checkouts/{checkout_id}/allows_renewal": {
     "get": {
-      "x-mojo-to": "Checkout#renewability",
-      "operationId": "renewabilityCheckout",
+      "x-mojo-to": "Checkouts#allows_renewal",
+      "operationId": "allows_renewalCheckout",
       "tags": ["patrons", "checkouts"],
       "parameters": [{
-        "$ref": "../parameters.json#/checkoutIdPathParam"
+        "$ref": "../parameters.json#/checkout_id_pp"
       }],
       "produces": ["application/json"],
       "responses": {
         "200": {
-          "description": "Checkout renewability",
-          "schema": { "$ref": "../definitions.json#/renewability" }
+          "description": "Checkout renewability information",
+          "schema": { "$ref": "../definitions.json#/allows_renewal" }
         },
         "403": {
           "description": "Forbidden",
