@@ -1,16 +1,16 @@
 [% IF blocking_error %]
     [% SWITCH blocking_error %]
     [% CASE 'unknown_patron' %]
-        <div class="dialog message">This patron does not exist. <a href="/cgi-bin/koha/members/members-home.pl">Find another patron?</a></div>
-    [% CASE 'cannot_see_patron_infos' %]You are not allowed to see the information of this patron.
+        <div class="dialog message">Patron not found. <a href="/cgi-bin/koha/members/members-home.pl">Return to search</a></div>
+    [% CASE 'cannot_see_patron_infos' %]This account cannot view requested patron information.
     [% CASE 'unknown_biblio' %]
-        <div class="dialog message">This bibliographic record does not exist.</div>
+        <div class="dialog message">Bibliographic record not found.</div>
     [% CASE 'unknown_item' %]
-        <div class="dialog message">This item does not exist.</div>
+        <div class="dialog message">Item not found.</div>
     [% CASE 'unknown_subscription' %]
-        <div class="dialog message">This subscription does not exist.</div>
+        <div class="dialog message">Subscription not found.</div>
     [% CASE 'unknown_basket' %]
-        <div class="dialog message">This basket does not exist.</div>
+        <div class="dialog message">Basket not found.</div>
     [% CASE 'wrong_csrf_token' %]
         <div class="dialog message">The form submission failed (Wrong CSRF token). Try to come back, refresh the page, then try again.</div>
     [% CASE %][% blocking_error | html %]
