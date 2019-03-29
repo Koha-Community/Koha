@@ -42,6 +42,7 @@
     [%- SWITCH account.status -%]
         [%- CASE 'UNRETURNED' -%]<span> (Accruing)</span>
         [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
+        [%- CASE 'REPLACED'   -%]<span> (Replaced)</span>
         [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
         [%- CASE              -%]
     [%- END -%]
