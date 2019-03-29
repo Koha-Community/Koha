@@ -44,17 +44,17 @@ subtest 'total_outstanding() tests' => sub {
     my $amount_5 = 500;
 
     my $offset_1 = Koha::Account::Offset->new(
-        { type => 'Fine', amount => $amount_1, credit_id => $line->id } )->store;
+        { type => 'OVERDUE', amount => $amount_1, credit_id => $line->id } )->store;
     my $offset_2 = Koha::Account::Offset->new(
-        { type => 'Fine', amount => $amount_2, credit_id => $line->id } )->store;
+        { type => 'OVERDUE', amount => $amount_2, credit_id => $line->id } )->store;
     my $offset_3 = Koha::Account::Offset->new(
         { type => 'Payment', amount => $amount_3, credit_id => $line->id } )->store;
     my $offset_4 = Koha::Account::Offset->new(
         { type => 'Payment', amount => $amount_4, credit_id => $line->id } )->store;
     my $offset_5 = Koha::Account::Offset->new(
-        { type => 'Fine', amount => $amount_5, credit_id => $line->id } )->store;
+        { type => 'OVERDUE', amount => $amount_5, credit_id => $line->id } )->store;
 
-    my $debits = Koha::Account::Offsets->search( { type => 'Fine', credit_id => $line->id } );
+    my $debits = Koha::Account::Offsets->search( { type => 'OVERDUE', credit_id => $line->id } );
     is( $debits->total, $amount_1 + $amount_2 + $amount_5 );
 
     my $credits = Koha::Account::Offsets->search( { type => 'Payment', credit_id => $line->id } );
