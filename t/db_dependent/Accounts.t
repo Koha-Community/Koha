@@ -68,6 +68,7 @@ $context->mock( 'userenv', sub {
         branch => $branchcode,
     };
 });
+$context->mock( 'interface', sub { return "commandline" } );
 my $userenv_branchcode = $branchcode;
 
 # Test manualinvoice
@@ -109,9 +110,10 @@ my $sth = $dbh->prepare(
          borrowernumber,
          amountoutstanding,
          date,
-         description
+         description,
+         interface
      )
-     VALUES ( ?, ?, (select date_sub(CURRENT_DATE, INTERVAL ? DAY) ), ? )"
+     VALUES ( ?, ?, (select date_sub(CURRENT_DATE, INTERVAL ? DAY) ), ?, ? )"
 );
 
 my $days = 5;
@@ -133,7 +135,7 @@ my $categorycode = $builder->build({ source => 'Category' })->{categorycode};
 my $borrower = Koha::Patron->new( { firstname => 'Test', surname => 'Patron', categorycode => $categorycode, branchcode => $branchcode } )->store();
 
 for my $data ( @test_data ) {
-    $sth->execute($borrower->borrowernumber, $data->{amount}, $data->{days_ago}, $data->{description});
+    $sth->execute($borrower->borrowernumber, $data->{amount}, $data->{days_ago}, $data->{description}, 'commandline');
 }
 
 purge_zero_balance_fees( $days );
@@ -178,8 +180,8 @@ subtest "Koha::Account::pay tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 100 })->store();
-    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 200 })->store();
+    my $line1 = $account->add_debit({ type => 'account', amount => 100, interface => 'commandline' });
+    my $line2 = $account->add_debit({ type => 'account', amount => 200, interface => 'commandline' });
 
     $sth = $dbh->prepare("SELECT count(*) FROM accountlines");
     $sth->execute;
@@ -278,7 +280,7 @@ subtest "Koha::Account::pay tests" => sub {
     $note = $sth->fetchrow_array;
     is($note,'$200.00 payment note', '$200.00 payment note is registered');
 
-    my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42, accounttype => 'TEST' })->store();
+    my $line3 = $account->add_debit({ type => 'account', amount => 42, interface => 'commandline' });
     my $payment_id = $account->pay( { lines => [$line3], amount => 42 } );
     my $payment = Koha::Account::Lines->find( $payment_id );
     is( $payment->amount(), '-42.000000', "Payment paid the specified fine" );
@@ -306,10 +308,10 @@ subtest "Koha::Account::pay particular line tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 1 })->store();
-    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 2 })->store();
-    my $line3 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 3 })->store();
-    my $line4 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 4 })->store();
+    my $line1 = $account->add_debit({ type => 'account', amount => 1, interface => 'commandline' });
+    my $line2 = $account->add_debit({ type => 'account', amount => 2, interface => 'commandline' });
+    my $line3 = $account->add_debit({ type => 'account', amount => 3, interface => 'commandline' });
+    my $line4 = $account->add_debit({ type => 'account', amount => 4, interface => 'commandline' });
 
     is( $account->balance(), 10, "Account balance is 10" );
 
@@ -351,7 +353,7 @@ subtest "Koha::Account::pay writeoff tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 42 })->store();
+    my $line = $account->add_debit({ type => 'account', amount => 42, interface => 'commandline' });
 
     is( $account->balance(), 42, "Account balance is 42" );
 
@@ -747,29 +749,28 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     plan tests => 21;
 
     my $patron = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $account = $patron->account;
 
     my $today  = dt_from_string;
     my $res    = 3;
     my $rent   = 5;
     my $manual = 7;
-    Koha::Account::Line->new(
+    $account->add_debit(
         {
-            borrowernumber    => $patron->borrowernumber,
-            date              => $today,
-            description       => 'a Res fee',
-            accounttype       => 'Res',
-            amountoutstanding => $res,
+            description => 'a Res fee',
+            type        => 'reserve',
+            amount      => $res,
+            interface   => 'commandline'
         }
-    )->store;
-    Koha::Account::Line->new(
+    );
+    $account->add_debit(
         {
-            borrowernumber    => $patron->borrowernumber,
-            date              => $today,
-            description       => 'a Rental fee',
-            accounttype       => 'Rent',
-            amountoutstanding => $rent,
+            description => 'a Rental fee',
+            type        => 'rent',
+            amount      => $rent,
+            interface   => 'commandline'
         }
-    )->store;
+    );
     Koha::Account::Line->new(
         {
             borrowernumber    => $patron->borrowernumber,
@@ -777,6 +778,7 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
             description       => 'a Manual invoice fee',
             accounttype       => 'Copie',
             amountoutstanding => $manual,
+            interface         => 'commandline'
         }
     )->store;
     Koha::AuthorisedValue->new(
@@ -787,7 +789,6 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         }
     )->store;
 
-    my $account = $patron->account;
 
     t::lib::Mocks::mock_preference( 'HoldsInNoissuesCharge',   0 );
     t::lib::Mocks::mock_preference( 'RentalsInNoissuesCharge', 0 );
@@ -925,8 +926,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
         }
     );
 
-    my $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
-    my $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => -5 })->store();
+    my $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0, interface => 'commandline' })->store();
+    my $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => -5, interface => 'commandline' })->store();
     my $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment', amount => 0 })->store();
     purge_zero_balance_fees( 1 );
     my $debit_2 = Koha::Account::Lines->find( $debit->id );
@@ -935,8 +936,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     ok( $credit_2, 'Credit was correctly not deleted when credit has balance' );
     is( Koha::Account::Lines->count({ borrowernumber => $patron->id }), 2, "The 2 account lines still exists" );
 
-    $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 5 })->store();
-    $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
+    $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 5, interface => 'commanline' })->store();
+    $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0, interface => 'commandline' })->store();
     $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment', amount => 0 })->store();
     purge_zero_balance_fees( 1 );
     $debit_2 = $credit_2 = undef;
@@ -946,8 +947,8 @@ subtest "Koha::Account::non_issues_charges tests" => sub {
     ok( $credit_2, 'Credit was correctly not deleted when debit has balance' );
     is( Koha::Account::Lines->count({ borrowernumber => $patron->id }), 2 + 2, "The 2 + 2 account lines still exists" );
 
-    $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
-    $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0 })->store();
+    $debit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0, interface => 'commandline' })->store();
+    $credit = Koha::Account::Line->new({ borrowernumber => $patron->id, date => '1900-01-01', amountoutstanding => 0, interface => 'commandline' })->store();
     $offset = Koha::Account::Offset->new({ credit_id => $credit->id, debit_id => $debit->id, type => 'Payment', amount => 0 })->store();
     purge_zero_balance_fees( 1 );
     $debit_2 = Koha::Account::Lines->find( $debit->id );
@@ -976,8 +977,8 @@ subtest "Koha::Account::Line::void tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 10, amountoutstanding => 10 })->store();
-    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 20, amountoutstanding => 20 })->store();
+    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 10, amountoutstanding => 10, interface => 'commandline'  })->store();
+    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 20, amountoutstanding => 20, interface => 'commandline'  })->store();
 
     is( $account->balance(), 30, "Account balance is 30" );
     is( $line1->amountoutstanding, 10, 'First fee has amount outstanding of 10' );
@@ -1043,8 +1044,8 @@ subtest "Koha::Account::Offset credit & debit tests" => sub {
 
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 10, amountoutstanding => 10 })->store();
-    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 20, amountoutstanding => 20 })->store();
+    my $line1 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 10, amountoutstanding => 10, interface => 'commandline' })->store();
+    my $line2 = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amount => 20, amountoutstanding => 20, interface => 'commandline' })->store();
 
     my $id = $account->pay(
         {
@@ -1103,7 +1104,7 @@ subtest "Payment notice tests" => sub {
     });
     my $account = Koha::Account->new({ patron_id => $borrower->id });
 
-    my $line = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 27 })->store();
+    my $line = Koha::Account::Line->new({ borrowernumber => $borrower->borrowernumber, amountoutstanding => 27, interface => 'commandline' })->store();
 
     my $letter = Koha::Notice::Templates->find( { code => 'ACCOUNT_PAYMENT' } );
     $letter->content('[%- USE Price -%]A payment of [% credit.amount * -1 | $Price %] has been applied to your account.');

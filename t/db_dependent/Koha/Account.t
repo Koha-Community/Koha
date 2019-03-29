@@ -33,6 +33,7 @@ use t::lib::TestBuilder;
 
 my $schema  = Koha::Database->new->schema;
 my $builder = t::lib::TestBuilder->new;
+C4::Context->interface('commandline');
 
 subtest 'new' => sub {
 
@@ -59,10 +60,10 @@ subtest 'outstanding_debits() tests' => sub {
     my $account = $patron->account;
 
     my @generated_lines;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1, interface => 'commandline' })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2, interface => 'commandline' })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3, interface => 'commandline' })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4, interface => 'commandline' })->store;
 
     my $lines     = $account->outstanding_debits();
     my @lines_arr = $account->outstanding_debits();
@@ -79,9 +80,9 @@ subtest 'outstanding_debits() tests' => sub {
         $i++;
     }
     my $patron_2 = $builder->build_object({ class => 'Koha::Patrons' });
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -2 })->store;
-    my $just_one = Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 3, amountoutstanding =>  3 })->store;
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -6, amountoutstanding => -6 })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amountoutstanding => -2, interface => 'commandline' })->store;
+    my $just_one = Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 3, amountoutstanding =>  3, interface => 'commandline' })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -6, amountoutstanding => -6, interface => 'commandline' })->store;
     $lines = $patron_2->account->outstanding_debits();
     is( $lines->total_outstanding, 3, "Total if some outstanding debits and some credits is only debits" );
     is( $lines->count, 1, "With 1 outstanding debits, we get back a Lines object with 1 lines" );
@@ -89,9 +90,9 @@ subtest 'outstanding_debits() tests' => sub {
     is_deeply( $the_line->unblessed, $lines->next->unblessed, "We get back the one correct line");
 
     my $patron_3 = $builder->build_object({ class => 'Koha::Patrons' });
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -2,   amountoutstanding => -2 })->store;
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -20,  amountoutstanding => -20 })->store;
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -200, amountoutstanding => -200 })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -2,   amountoutstanding => -2, interface => 'commandline' })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -20,  amountoutstanding => -20, interface => 'commandline' })->store;
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => -200, amountoutstanding => -200, interface => 'commandline' })->store;
     $lines = $patron_3->account->outstanding_debits();
     is( $lines->total_outstanding, 0, "Total if no outstanding debits total is 0" );
     is( $lines->count, 0, "With 0 outstanding debits, we get back a Lines object with 0 lines" );
@@ -103,7 +104,7 @@ subtest 'outstanding_debits() tests' => sub {
     is( $lines->count, 0, "With no outstanding debits, we get back a Lines object with 0 lines" );
 
     # create a pathological credit with amountoutstanding > 0 (BZ 14591)
-    Koha::Account::Line->new({ borrowernumber => $patron_4->id, amount => -3, amountoutstanding => 3 })->store();
+    Koha::Account::Line->new({ borrowernumber => $patron_4->id, amount => -3, amountoutstanding => 3, interface => 'commandline' })->store();
     $lines = $account_4->outstanding_debits();
     is( $lines->count, 0, 'No credits are confused with debits because of the amountoutstanding value' );
 
@@ -120,10 +121,10 @@ subtest 'outstanding_credits() tests' => sub {
     my $account = $patron->account;
 
     my @generated_lines;
-    push @generated_lines, $account->add_credit({ amount => 1 });
-    push @generated_lines, $account->add_credit({ amount => 2 });
-    push @generated_lines, $account->add_credit({ amount => 3 });
-    push @generated_lines, $account->add_credit({ amount => 4 });
+    push @generated_lines, $account->add_credit({ amount => 1, interface => 'commandline' });
+    push @generated_lines, $account->add_credit({ amount => 2, interface => 'commandline' });
+    push @generated_lines, $account->add_credit({ amount => 3, interface => 'commandline' });
+    push @generated_lines, $account->add_credit({ amount => 4, interface => 'commandline' });
 
     my $lines     = $account->outstanding_credits();
     my @lines_arr = $account->outstanding_credits();
@@ -147,7 +148,7 @@ subtest 'outstanding_credits() tests' => sub {
     is( $lines->count, 0, "With no outstanding credits, we get back a Lines object with 0 lines" );
 
     # create a pathological debit with amountoutstanding < 0 (BZ 14591)
-    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 2, amountoutstanding => -3 })->store();
+    Koha::Account::Line->new({ borrowernumber => $patron_2->id, amount => 2, amountoutstanding => -3, interface => 'commandline' })->store();
     $lines = $account->outstanding_credits();
     is( $lines->count, 0, 'No debits are confused with credits because of the amountoutstanding value' );
 
@@ -178,7 +179,8 @@ subtest 'add_credit() tests' => sub {
             library_id  => $patron->branchcode,
             note        => 'not really important',
             type        => 'payment',
-            user_id     => $patron->id
+            user_id     => $patron->id,
+            interface   => 'commandline'
         }
     );
 
@@ -197,7 +199,8 @@ subtest 'add_credit() tests' => sub {
             library_id  => $patron->branchcode,
             note        => 'not really important',
             user_id     => $patron->id,
-            sip         => $sip_code
+            sip         => $sip_code,
+            interface   => 'commandline'
         }
     );
 
@@ -220,7 +223,8 @@ subtest 'add_credit() tests' => sub {
             description => 'Manual credit applied',
             library_id  => $patron->branchcode,
             user_id     => $patron->id,
-            type        => 'forgiven'
+            type        => 'forgiven',
+            interface   => 'commandline'
         }
     );
 
@@ -254,7 +258,8 @@ subtest 'add_debit() tests' => sub {
             library_id  => $patron->branchcode,
             note        => 'this should fail anyway',
             type        => 'rent',
-            user_id     => $patron->id
+            user_id     => $patron->id,
+            interface   => 'commandline'
         }
     ); } 'Koha::Exceptions::Account::AmountNotPositive', 'Expected validation exception thrown (amount)';
 
@@ -266,7 +271,8 @@ subtest 'add_debit() tests' => sub {
             library_id  => $patron->branchcode,
             note        => 'this should fail anyway',
             type        => 'failure',
-            user_id     => $patron->id
+            user_id     => $patron->id,
+            interface   => 'commandline'
         }
     ); } 'Koha::Exceptions::Account::UnrecognisedType', 'Expected validation exception thrown (type)';
 
@@ -280,7 +286,8 @@ subtest 'add_debit() tests' => sub {
             library_id  => $patron->branchcode,
             note        => 'not really important',
             type        => 'rent',
-            user_id     => $patron->id
+            user_id     => $patron->id,
+            interface   => 'commandline'
         }
     );
 
@@ -308,6 +315,7 @@ subtest 'add_debit() tests' => sub {
             note        => 'not really important',
             type        => 'rent',
             user_id     => $patron->id,
+            interface   => 'commandline'
         }
     );
 
@@ -349,20 +357,20 @@ subtest 'lines() tests' => sub {
     my @generated_lines;
 
     # Add Credits
-    push @generated_lines, $account->add_credit({ amount => 1 });
-    push @generated_lines, $account->add_credit({ amount => 2 });
-    push @generated_lines, $account->add_credit({ amount => 3 });
-    push @generated_lines, $account->add_credit({ amount => 4 });
+    push @generated_lines, $account->add_credit({ amount => 1, interface => 'commandline' });
+    push @generated_lines, $account->add_credit({ amount => 2, interface => 'commandline' });
+    push @generated_lines, $account->add_credit({ amount => 3, interface => 'commandline' });
+    push @generated_lines, $account->add_credit({ amount => 4, interface => 'commandline' });
 
     # Add Debits
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 1 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 2 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 3 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 4 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 1, interface => 'commandline' })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 2, interface => 'commandline' })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 3, interface => 'commandline' })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 4, interface => 'commandline' })->store;
 
     # Paid Off
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 0 })->store;
-    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 0 })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 0, interface => 'commandline' })->store;
+    push @generated_lines, Koha::Account::Line->new({ borrowernumber => $patron->id, amountoutstanding => 0, interface => 'commandline' })->store;
 
     my $lines = $account->lines;
     is( $lines->_resultset->count, 10, "All accountlines (debits, credits and paid off) were fetched");
@@ -384,21 +392,21 @@ subtest 'reconcile_balance' => sub {
         my $account = $patron->account;
 
         # Add Credits
-        $account->add_credit({ amount => 1 });
-        $account->add_credit({ amount => 2 });
-        $account->add_credit({ amount => 3 });
-        $account->add_credit({ amount => 4 });
-        $account->add_credit({ amount => 5 });
+        $account->add_credit({ amount => 1, interface => 'commandline' });
+        $account->add_credit({ amount => 2, interface => 'commandline' });
+        $account->add_credit({ amount => 3, interface => 'commandline' });
+        $account->add_credit({ amount => 4, interface => 'commandline' });
+        $account->add_credit({ amount => 5, interface => 'commandline' });
 
         # Add Debits TODO: replace for calls to add_debit when time comes
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4 })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4, interface => 'commandline' })->store;
 
         # Paid Off
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0 })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
 
         is( $account->balance(), -5, "Account balance is -5" );
         is( $account->outstanding_debits->total_outstanding, 10, 'Outstanding debits sum 10' );
@@ -423,20 +431,20 @@ subtest 'reconcile_balance' => sub {
         my $account = $patron->account;
 
         # Add Credits
-        $account->add_credit({ amount => 1 });
-        $account->add_credit({ amount => 2 });
-        $account->add_credit({ amount => 3 });
-        $account->add_credit({ amount => 4 });
+        $account->add_credit({ amount => 1, interface => 'commandline' });
+        $account->add_credit({ amount => 2, interface => 'commandline' });
+        $account->add_credit({ amount => 3, interface => 'commandline' });
+        $account->add_credit({ amount => 4, interface => 'commandline' });
 
         # Add Debits TODO: replace for calls to add_debit when time comes
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4 })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4, interface => 'commandline' })->store;
 
         # Paid Off
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0 })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
 
         is( $account->balance(), 0, "Account balance is 0" );
         is( $account->outstanding_debits->total_outstanding, 10, 'Outstanding debits sum 10' );
@@ -461,21 +469,21 @@ subtest 'reconcile_balance' => sub {
         my $account = $patron->account;
 
         # Add Credits
-        $account->add_credit({ amount => 1 });
-        $account->add_credit({ amount => 2 });
-        $account->add_credit({ amount => 3 });
-        $account->add_credit({ amount => 4 });
+        $account->add_credit({ amount => 1, interface => 'commandline' });
+        $account->add_credit({ amount => 2, interface => 'commandline' });
+        $account->add_credit({ amount => 3, interface => 'commandline' });
+        $account->add_credit({ amount => 4, interface => 'commandline' });
 
         # Add Debits TODO: replace for calls to add_debit when time comes
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 5, amountoutstanding => 5 })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 4, amountoutstanding => 4, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 5, amountoutstanding => 5, interface => 'commandline' })->store;
 
         # Paid Off
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0 })->store;
-        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0 })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
+        Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
 
         is( $account->balance(), 5, "Account balance is 5" );
         is( $account->outstanding_debits->total_outstanding, 15, 'Outstanding debits sum 15' );
@@ -500,13 +508,13 @@ subtest 'reconcile_balance' => sub {
         my $account = $patron->account;
 
         # Add Credits
-        $account->add_credit({ amount => 1 });
-        $account->add_credit({ amount => 3 });
+        $account->add_credit({ amount => 1, interface => 'commandline' });
+        $account->add_credit({ amount => 3, interface => 'commandline' });
 
         # Add Debits TODO: replace for calls to add_debit when time comes
-        my $debit_1 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1 })->store;
-        my $debit_2 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2 })->store;
-        my $debit_3 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3 })->store;
+        my $debit_1 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 1, interface => 'commandline' })->store;
+        my $debit_2 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 2, amountoutstanding => 2, interface => 'commandline' })->store;
+        my $debit_3 = Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 3, amountoutstanding => 3, interface => 'commandline' })->store;
 
         is( $account->balance(), 2, "Account balance is 2" );
         is( $account->outstanding_debits->total_outstanding, 6, 'Outstanding debits sum 6' );

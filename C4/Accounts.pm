@@ -166,6 +166,7 @@ sub manualinvoice {
             itemnumber        => $itemnum || undef,
             note              => $note,
             manager_id        => $manager_id,
+            interface         => C4::Context->interface,
             branchcode        => $branchcode,
         }
     )->store();
