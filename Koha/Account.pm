@@ -425,7 +425,7 @@ my $debit_line = Koha::Account->new({ patron_id => $patron_id })->add_debit(
 );
 
 $debit_type can be any of:
-  - fine
+  - overdue
   - lost_item
   - new_card
   - account
@@ -495,6 +495,7 @@ sub add_debit {
                     itemnumber        => $item_id,
                     issue_id          => $issue_id,
                     branchcode        => $library_id,
+                    ( $type eq 'overdue' ? ( status => 'UNRETURNED' ) : ()),
                 }
             )->store();
 
@@ -696,7 +697,7 @@ our $offset_type = {
     'processing'       => 'Processing Fee',
     'lost_item'        => 'Lost Item',
     'rent'             => 'Rental Fee',
-    'fine'             => 'Fine',
+    'overdue'          => 'OVERDUE',
     'manual_debit'     => 'Manual Debit',
     'hold_expired'     => 'Hold Expired'
 };
@@ -719,7 +720,7 @@ our $account_type_credit = {
 
 our $account_type_debit = {
     'account'       => 'A',
-    'fine'          => 'FU',
+    'overdue'       => 'OVERDUE',
     'lost_item'     => 'L',
     'new_card'      => 'N',
     'sundry'        => 'M',

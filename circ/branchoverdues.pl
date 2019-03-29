@@ -31,8 +31,10 @@ use Data::Dumper;
 
 =head1 branchoverdues.pl
 
- this module is a new interface, allow to the librarian to check all items on overdues (based on the acountlines type 'FU' )
- this interface is filtered by branches (automatically), and by location (optional) ....
+This view is used to display all overdue items to the librarian.
+
+It is automatically filtered by branch and can optionally be filtered
+by item location.
 
 =cut
 

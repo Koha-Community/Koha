@@ -251,7 +251,7 @@ subtest 'UpdateFine tests' => sub {
     is( $fine2->amount, '30.000000', "Second fine increased after partial payment of first" );
 
     # Fix fine 1, create third fine
-    $fine->accounttype('F')->store;
+    $fine->status('RETURNED')->store;
     UpdateFine(
         {
             issue_id       => $checkout1->issue_id,

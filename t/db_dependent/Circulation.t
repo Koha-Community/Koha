@@ -509,8 +509,8 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
 
     my $fines = Koha::Account::Lines->search( { borrowernumber => $renewing_borrower->{borrowernumber}, itemnumber => $item_7->itemnumber } );
     is( $fines->count, 2 );
-    is( $fines->next->accounttype, 'F', 'Fine on renewed item is closed out properly' );
-    is( $fines->next->accounttype, 'F', 'Fine on renewed item is closed out properly' );
+    isnt( $fines->next->status, 'UNRETURNED', 'Fine on renewed item is closed out properly' );
+    isnt( $fines->next->status, 'UNRETURNED', 'Fine on renewed item is closed out properly' );
     $fines->delete();
 
 
@@ -696,7 +696,7 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
                 item_id     => $item_to_auto_renew->{itemnumber},
                 description => "Some fines"
             }
-        )->accounttype('F')->store;
+        )->status('RETURNED')->store;
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
@@ -710,7 +710,7 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
                 item_id     => $item_to_auto_renew->{itemnumber},
                 description => "Some fines"
             }
-        )->accounttype('F')->store;
+        )->status('RETURNED')->store;
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
@@ -724,7 +724,7 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
                 item_id     => $item_to_auto_renew->{itemnumber},
                 description => "Some fines"
             }
-        )->accounttype('F')->store;
+        )->status('RETURNED')->store;
         ( $renewokay, $error ) =
           CanBookBeRenewed( $renewing_borrowernumber, $item_to_auto_renew->{itemnumber} );
         is( $renewokay, 0, 'Do not renew, renewal is automatic' );
@@ -858,7 +858,8 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     );
 
     my $line = Koha::Account::Lines->search({ borrowernumber => $renewing_borrower->{borrowernumber} })->next();
-    is( $line->accounttype, 'FU', 'Account line type is FU' );
+    is( $line->accounttype, 'OVERDUE', 'Account line type is OVERDUE' );
+    is( $line->status, 'UNRETURNED', 'Account line status is UNRETURNED' );
     is( $line->amountoutstanding, '15.000000', 'Account line amount outstanding is 15.00' );
     is( $line->amount, '15.000000', 'Account line amount is 15.00' );
     is( $line->issue_id, $issue->id, 'Account line issue id matches' );
@@ -873,7 +874,8 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
     LostItem( $item_1->itemnumber, 'test', 1 );
 
     $line = Koha::Account::Lines->find($line->id);
-    is( $line->accounttype, 'F', 'Account type correctly changed from FU to F' );
+    is( $line->accounttype, 'OVERDUE', 'Account type remains as OVERDUE' );
+    isnt( $line->status, 'UNRETURNED', 'Account status correctly changed from UNRETURNED to RETURNED' );
 
     my $item = Koha::Items->find($item_1->itemnumber);
     ok( !$item->onloan(), "Lost item marked as returned has false onloan value" );
@@ -2048,7 +2050,7 @@ subtest 'AddReturn | is_overdue' => sub {
     # specify dropbox date 5 days later => overdue, or... not
     AddIssue( $patron->unblessed, $item->{barcode}, $ten_days_ago ); # date due was 10d ago
     AddReturn( $item->{barcode}, $library->{branchcode}, $five_days_ago );
-    is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue in dropbox mode' ); # FIXME? This is weird, the FU fine is created ( _CalculateAndUpdateFine > C4::Overdues::UpdateFine ) then remove later (in _FixOverduesOnReturn). Looks like it is a feature
+    is( int($patron->account->balance()), 0, 'AddReturn: pass return_date => no overdue in dropbox mode' ); # FIXME? This is weird, the OVERDUE fine is created ( _CalculateAndUpdateFine > C4::Overdues::UpdateFine ) then remove later (in _FixOverduesOnReturn). Looks like it is a feature
     Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber })->delete;
 };
 
@@ -2430,7 +2432,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 
         is( $account->balance, $manual_debit_amount - $payment_amount, 'Balance is PF - payment (CR)' );
 
-        my $manual_debit = Koha::Account::Lines->search({ borrowernumber => $patron->id, accounttype => 'FU' })->next;
+        my $manual_debit = Koha::Account::Lines->search({ borrowernumber => $patron->id, accounttype => 'OVERDUE', status => 'UNRETURNED' })->next;
         is( $manual_debit->amountoutstanding + 0, $manual_debit_amount - $payment_amount, 'reconcile_balance was called' );
     };
 };
@@ -2457,7 +2459,8 @@ subtest '_FixOverduesOnReturn' => sub {
     my $accountline = Koha::Account::Line->new(
         {
             borrowernumber => $patron->{borrowernumber},
-            accounttype    => 'FU',
+            accounttype    => 'OVERDUE',
+            status         => 'UNRETURNED',
             itemnumber     => $item->itemnumber,
             amount => 99.00,
             amountoutstanding => 99.00,
@@ -2470,13 +2473,14 @@ subtest '_FixOverduesOnReturn' => sub {
     $accountline->_result()->discard_changes();
 
     is( $accountline->amountoutstanding, '99.000000', 'Fine has the same amount outstanding as previously' );
-    is( $accountline->accounttype, 'F', 'Open fine ( account type FU ) has been closed out ( account type F )');
+    is( $accountline->status, 'RETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status RETURNED )');
 
 
     ## Run again, with exemptfine enabled
     $accountline->set(
         {
-            accounttype    => 'FU',
+            accounttype    => 'OVERDUE',
+            status         => 'UNRETURNED',
             amountoutstanding => 99.00,
         }
     )->store();
@@ -2487,7 +2491,7 @@ subtest '_FixOverduesOnReturn' => sub {
     my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'Forgiven' })->next();
 
     is( $accountline->amountoutstanding + 0, 0, 'Fine has been reduced to 0' );
-    is( $accountline->accounttype, 'FFOR', 'Open fine ( account type FU ) has been set to fine forgiven ( account type FFOR )');
+    is( $accountline->status, 'FORGIVEN', 'Open fine ( account type OVERDUE ) has been set to fine forgiven ( status FORGIVEN )');
     is( ref $offset, "Koha::Account::Offset", "Found matching offset for fine reduction via forgiveness" );
     is( $offset->amount, '-99.000000', "Amount of offset is correct" );
 };

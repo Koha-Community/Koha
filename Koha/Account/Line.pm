@@ -236,7 +236,7 @@ This method allows updating a debit or credit on a patron's account
     );
 
 $update_type can be any of:
-  - fine_update
+  - overdue_update
 
 Authors Note: The intention here is that this method is only used
 to adjust accountlines where the final amount is not yet known/fixed.
@@ -259,11 +259,21 @@ sub adjust {
         );
     }
 
-    my $account_type = $self->accounttype;
-    unless ( $Koha::Account::Line::allowed_update->{$update_type} eq $account_type ) {
+    my $account_type   = $self->accounttype;
+    my $account_status = $self->status;
+    unless (
+        (
+            exists(
+                $Koha::Account::Line::allowed_update->{$update_type}
+                  ->{$account_type}
+            )
+            && ( $Koha::Account::Line::allowed_update->{$update_type}
+                ->{$account_type} eq $account_status )
+        )
+      )
+    {
         Koha::Exceptions::Account::UnrecognisedType->throw(
-            error => 'Update type not allowed on this accounttype'
-        );
+            error => 'Update type not allowed on this accounttype' );
     }
 
     my $schema = Koha::Database->new->schema;
@@ -289,7 +299,7 @@ sub adjust {
                         description => 'Overpayment refund',
                         type        => 'credit',
                         interface   => $interface,
-                        ( $update_type eq 'fine_update' ? ( item_id => $self->itemnumber ) : ()),
+                        ( $update_type eq 'overdue_update' ? ( item_id => $self->itemnumber ) : ()),
                     }
                 );
                 $new_outstanding = 0;
@@ -300,7 +310,7 @@ sub adjust {
                 {
                     date              => \'NOW()',
                     amount            => $amount,
-                    amountoutstanding => $new_outstanding
+                    amountoutstanding => $new_outstanding,
                 }
             )->store();
 
@@ -329,7 +339,7 @@ sub adjust {
                             manager_id        => undef,
                         }
                     )
-                ) if ( $update_type eq 'fine_update' );
+                ) if ( $update_type eq 'overdue_update' );
             }
         }
     );
@@ -381,7 +391,7 @@ sub _type {
 
 =cut
 
-our $allowed_update = { 'fine_update' => 'FU', };
+our $allowed_update = { 'overdue_update' => { 'OVERDUE' => 'UNRETURNED' } };
 
 =head1 AUTHORS
 

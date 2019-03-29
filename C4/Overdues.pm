@@ -520,46 +520,33 @@ sub UpdateFine {
     }
 
     my $dbh = C4::Context->dbh;
-    # FIXME - What exactly is this query supposed to do? It looks up an
-    # entry in accountlines that matches the given item and borrower
-    # numbers, where the description contains $due, and where the
-    # account type has one of several values, but what does this _mean_?
-    # Does it look up existing fines for this item?
-    # FIXME - What are these various account types? ("FU", "O", "F", "M")
-    #   "L"   is LOST item
-    #   "A"   is Account Management Fee
-    #   "N"   is New Card
-    #   "M"   is Sundry
-    #   "F"   is Fine ??
-    #   "FU"  is Fine UPDATE??
-    #   "Pay" is Payment
-    #   "REF" is Cash Refund
-    my $sth = $dbh->prepare(
-        "SELECT * FROM accountlines
-        WHERE borrowernumber=? AND
-        (( accounttype IN ('F','M') AND amountoutstanding<>0 ) OR
-           accounttype = 'FU' )"
+    my $overdues = Koha::Account::Lines->search(
+        {
+            borrowernumber    => $borrowernumber,
+            accounttype       => [ 'OVERDUE', 'M' ],
+            amountoutstanding => { '<>' => 0 }
+        }
     );
-    $sth->execute( $borrowernumber );
-    my $data;
+
+    my $accountline;
     my $total_amount_other = 0.00;
     my $due_qr = qr/$due/;
     # Cycle through the fines and
     # - find line that relates to the requested $itemnum
     # - accumulate fines for other items
     # so we can update $itemnum fine taking in account fine caps
-    while (my $rec = $sth->fetchrow_hashref) {
-        if ( $rec->{issue_id} == $issue_id && $rec->{accounttype} eq 'FU' ) {
-            if ($data) {
+    while (my $overdue = $overdues->next) {
+        if ( $overdue->issue_id == $issue_id && $overdue->status eq 'UNRETURNED' ) {
+            if ($accountline) {
                 $debug and warn "Not a unique accountlines record for issue_id $issue_id";
                 #FIXME Should we still count this one in total_amount ??
             }
             else {
-                $data = $rec;
+                $accountline = $overdue;
                 next;
             }
         }
-        $total_amount_other += $rec->{'amountoutstanding'};
+        $total_amount_other += $overdue->amountoutstanding;
     }
 
     if (my $maxfine = C4::Context->preference('MaxFine')) {
@@ -571,10 +558,9 @@ sub UpdateFine {
         }
     }
 
-    if ( $data ) {
-        if ( $data->{'amount'} != $amount ) {
-            my $accountline =
-              Koha::Account::Lines->find( $data->{accountlines_id} );
+
+    if ( $accountline ) {
+        if ( $accountline->amount != $amount ) {
             $accountline->adjust(
                 {
                     amount    => $amount,
@@ -593,7 +579,7 @@ sub UpdateFine {
             my $desc = "$title $due";
 
             my $account = Koha::Account->new({ patron_id => $borrowernumber });
-            my $accountline = $account->add_debit(
+            $accountline = $account->add_debit(
                 {
                     amount      => $amount,
                     description => $desc,
@@ -738,7 +724,8 @@ sub GetOverduesForBranch {
     LEFT JOIN itemtypes   ON itemtypes.itemtype       = $itype_link
     LEFT JOIN branches    ON  branches.branchcode     = issues.branchcode
     WHERE (accountlines.amountoutstanding  != '0.000000')
-      AND (accountlines.accounttype         = 'FU'      )
+      AND (accountlines.accounttype         = 'OVERDUE' )
+      AND (accountlines.status              = 'UNRETURNED' )
       AND (issues.branchcode =  ?   )
       AND (issues.date_due  < NOW())
     ";
