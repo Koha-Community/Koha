@@ -35,12 +35,11 @@
                         [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
                         [% CASE 'VOID' %]Voided
                         [% CASE 'N' %]New card
-                        [% CASE 'F' %]Fine
+                        [% CASE 'OVERDUE' %]Fine[%- PROCESS account_status_description account=account -%]
                         [% CASE 'A' %]Account management fee
                         [% CASE 'M' %]Sundry
                         [% CASE 'L' %]Lost item
                         [% CASE 'W' %]Writeoff
-                        [% CASE 'FU' %]Accruing fine
                         [% CASE 'HE' %]Hold waiting too long
                         [% CASE 'Rent' %]Rental fee
                         [% CASE 'FOR' %]Forgiven
@@ -116,3 +115,12 @@
 [% ELSE %]
     <h4>You have no fines or charges</h4>
 [% END %]
+
+[%- BLOCK account_status_description -%]
+    [%- SWITCH account.status -%]
+        [%- CASE 'UNRETURNED' -%]<span> (Accruing)</span>
+        [%- CASE 'RETURNED'   -%]<span> (Returned)</span>
+        [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
+        [%- CASE              -%]
+    [%- END -%]
+[%- END -%]

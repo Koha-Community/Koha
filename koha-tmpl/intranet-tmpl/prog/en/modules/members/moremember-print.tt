@@ -121,7 +121,7 @@
                           , [% account.description | html %]
                       [% END %]
                       &nbsp;
-                      [% IF ( account.itemnumber AND account.accounttype != 'F' AND account.accounttype != 'FU' ) %]
+                      [% IF ( account.itemnumber AND account.accounttype != 'OVERDUE' ) %]
                           <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>
                       [% END %]
                   </td>
