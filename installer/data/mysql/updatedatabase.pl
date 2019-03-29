@@ -17836,6 +17836,23 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19722 - Add a MaxItemsToDisplayForBatchMod preference)\n";
 }
 
+$DBversion = '18.12.00.036';
+if ( CheckVersion($DBversion) ) {
+
+    my $rows = $dbh->do(
+        qq{
+        UPDATE `accountlines`
+        SET
+          `accounttype` = 'FU'
+        WHERE
+          `accounttype` = 'O'
+      }
+    );
+
+    SetVersion($DBversion);
+    printf "Upgrade to $DBversion done (Bug 22518 - Fix accounttype 'O' to 'FU' - %d updated)\n", $rows;
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
