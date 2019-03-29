@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 44;
+use Test::More tests => 45;
 use Test::Warn;
 use Test::Exception;
 use Test::MockModule;
@@ -2458,7 +2458,81 @@ subtest 'filter_by_amount_owed' => sub {
     is( $filtered->_resultset->as_subselect_rs->count, 1,
 "filter_by_amount_owed({ more_than => 6.00, library => $library2->{branchcode} }) found one patron"
     );
+};
 
+subtest 'libraries_where_can_edit_items + can_edit_item' => sub {
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    my $dbh = $schema->storage->dbh;
+
+    $dbh->do("DELETE FROM library_groups");
+
+    # group1
+    #   library_1A
+    #   library_1B
+    # group2
+    #   library_2A
+    my $group_1 = Koha::Library::Group->new( { title => 'TEST Group 1', ft_limit_item_editing => 1 } )->store;
+    my $group_2 = Koha::Library::Group->new( { title => 'TEST Group 2', ft_limit_item_editing => 1 } )->store;
+    my $library_1A = $builder->build( { source => 'Branch' } );
+    my $library_1B = $builder->build( { source => 'Branch' } );
+    my $library_2A = $builder->build( { source => 'Branch' } );
+    $library_1A = Koha::Libraries->find( $library_1A->{branchcode} );
+    $library_1B = Koha::Libraries->find( $library_1B->{branchcode} );
+    $library_2A = Koha::Libraries->find( $library_2A->{branchcode} );
+    Koha::Library::Group->new( { branchcode => $library_1A->branchcode, parent_id => $group_1->id } )->store;
+    Koha::Library::Group->new( { branchcode => $library_1B->branchcode, parent_id => $group_1->id } )->store;
+    Koha::Library::Group->new( { branchcode => $library_2A->branchcode, parent_id => $group_2->id } )->store;
+
+    my $sth = C4::Context->dbh->prepare(q|INSERT INTO user_permissions( borrowernumber, module_bit, code ) VALUES (?, 9, ?)|); # 9 for editcatalogue
+    # 2 patrons from library_1A (group1)
+    # patron_1A_1 see patron's infos from outside its group
+    # Setting flags => undef to not be considered as superlibrarian
+    my $patron_1A_1 = $builder->build({ source => 'Borrower', value => { branchcode => $library_1A->branchcode, flags => undef, }});
+    $patron_1A_1 = Koha::Patrons->find( $patron_1A_1->{borrowernumber} );
+    $sth->execute( $patron_1A_1->borrowernumber, 'edit_items' );
+    $sth->execute( $patron_1A_1->borrowernumber, 'edit_any_item' );
+    # patron_1A_2 can only see patron's info from its group
+    my $patron_1A_2 = $builder->build({ source => 'Borrower', value => { branchcode => $library_1A->branchcode, flags => undef, }});
+    $patron_1A_2 = Koha::Patrons->find( $patron_1A_2->{borrowernumber} );
+    $sth->execute( $patron_1A_2->borrowernumber, 'edit_items' );
+    # 1 patron from library_1B (group1)
+    my $patron_1B = $builder->build({ source => 'Borrower', value => { branchcode => $library_1B->branchcode, flags => undef, }});
+    $patron_1B = Koha::Patrons->find( $patron_1B->{borrowernumber} );
+    # 1 patron from library_2A (group2) can only see patron's info from its group
+    my $patron_2A = $builder->build({ source => 'Borrower', value => { branchcode => $library_2A->branchcode, flags => undef, }});
+    $patron_2A = Koha::Patrons->find( $patron_2A->{borrowernumber} );
+    $sth->execute( $patron_2A->borrowernumber, 'edit_items' );
+
+    subtest 'libraries_where_can_edit_items' => sub {
+        plan tests => 3;
+
+        my @branchcodes;
+
+        @branchcodes = $patron_1A_1->libraries_where_can_edit_items;
+        is_deeply( \@branchcodes, [], "patron_1A_1 has edit_any_item => No restrictions" );
+
+        @branchcodes = $patron_1A_2->libraries_where_can_edit_items;
+        is_deeply( \@branchcodes, [ sort ( $library_1A->branchcode, $library_1B->branchcode ) ], "patron_1A_2 doesn't have edit_any_item => Can only edit items from its group" );
+
+        @branchcodes = $patron_2A->libraries_where_can_edit_items;
+        is_deeply( \@branchcodes, [$library_2A->branchcode], "patron_2A doesn't have edit_any_item => Can only see patron's from its group" );
+    };
+
+    subtest 'can_edit_item' => sub {
+        plan tests => 6;
+
+        t::lib::Mocks::mock_userenv({ patron => $patron_1A_1 });
+        is( $patron_1A_1->can_edit_item( $library_1A->id ), 1, "patron_1A_1 can see patron_1A_2, from its library" );
+        is( $patron_1A_1->can_edit_item( $library_1B->id ),   1, "patron_1A_1 can see patron_1B, from its group" );
+        is( $patron_1A_1->can_edit_item( $library_2A->id ),   1, "patron_1A_1 can see patron_1A_2, from another group" );
+
+        t::lib::Mocks::mock_userenv({ patron => $patron_1A_2 });
+        is( $patron_1A_2->can_edit_item( $library_1A->id ),   1, "patron_1A_2 can see patron_1A_1, from its library" );
+        is( $patron_1A_2->can_edit_item( $library_1B->id ),   1, "patron_1A_2 can see patron_1B, from its group" );
+        is( $patron_1A_2->can_edit_item( $library_2A->id ),   0, "patron_1A_2 can NOT see patron_2A, from another group" );
+    };
 };
 
 subtest 'filter_by_have_permission' => sub {

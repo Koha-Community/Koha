@@ -152,6 +152,7 @@ subtest 'superlibrarian tests' => sub {
         'CAN_user_editcatalogue_create_shared_macros'               => 1,
         'CAN_user_editcatalogue_delete_all_items'                   => 1,
         'CAN_user_editcatalogue_delete_shared_macros'               => 1,
+        'CAN_user_editcatalogue_edit_any_item'                      => 1,
         'CAN_user_editcatalogue_edit_catalogue'                     => 1,
         'CAN_user_editcatalogue_edit_items_restricted'              => 1,
         'CAN_user_editcatalogue_edit_items'                         => 1,
