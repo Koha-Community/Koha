@@ -1362,7 +1362,7 @@
                                             [% r.course.course_name | html %]
                                             <!--[% IF r.course.course_number %] [% r.course.course_number | html %] [% END %]-->
                                             [% IF r.course.section %] [% r.course.section | html %] [% END %]
-                                            [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) | html %] [% END %]
+                                            [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term, 1 ) | html %] [% END %]
                                             </a>
                                         </p>
                                     [% END %]

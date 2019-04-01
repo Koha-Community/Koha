@@ -30,8 +30,8 @@
                 <h2>Course reserves for <i>[% course.course_name | html %]</i></h2>
                 <div class="rows">
                     <ol>
-                        [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term ) | html %]</li>[% END %]
-                        <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department ) | html %]</li>
+                        [% IF ( course.term ) %]<li><span class="label">Term:</span> [% AuthorisedValues.GetByCode( 'TERM', course.term, 1 ) | html %]</li>[% END %]
+                        <li><span class="label">Department:</span> [% AuthorisedValues.GetByCode( 'DEPARTMENT', course.department, 1 ) | html %]</li>
                         [% IF ( course.course_number ) %]<li><span class="label">Course number:</span> [% course.course_number | html %]</li>[% END %]
                         [% IF ( course.section ) %]<li><span class="label">Section:</span> [% course.section | html %]</li>[% END %]
                         [% IF ( course.instructors ) %]
@@ -71,8 +71,8 @@
                                     <td><a href="opac-detail.pl?biblionumber=[% cr.biblio.biblionumber | uri %]">[% cr.biblio.title | html %]</a></td>
                                     <td>[% cr.biblio.author | html %]</td>
                                     <td>[% ItemTypes.GetDescription( cr.item.itype ) | html %]</td>
-                                    <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location ) | html %]</i></td>
-                                    <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode ) | html %]</td>
+                                    <td>[% Branches.GetName( cr.item.holdingbranch ) | html %] <br/> <i>[% AuthorisedValues.GetByCode( 'LOC', cr.item.location, 1 ) | html %]</i></td>
+                                    <td>[% AuthorisedValues.GetByCode( 'CCODE', cr.item.ccode, 1 ) | html %]</td>
                                     <td>[% cr.item.itemcallnumber | html %]</td>
                                     <td>[% cr.item.copynumber | html %]</td>
                                     <td>[% INCLUDE 'item-status.inc' item=cr.item issue=cr.issue %]</td>
