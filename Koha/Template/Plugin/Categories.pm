@@ -20,6 +20,7 @@ use Modern::Perl;
 use Template::Plugin;
 use base qw( Template::Plugin );
 
+use List::Util qw(any);
 use Koha::Patron::Categories;
 
 sub all {
@@ -34,7 +35,7 @@ sub GetName {
 }
 
 sub can_any_reset_password {
-    return ( grep { $_->effective_reset_password } @{ Koha::Patron::Categories->search->as_list } )
+    return ( any { $_->effective_reset_password } @{ Koha::Patron::Categories->search->as_list } )
         ? 1
         : 0;
 }
