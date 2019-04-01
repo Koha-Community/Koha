@@ -811,7 +811,7 @@
                                     <p class="subscription_closed">This subscription is closed.</p>
                                 [% END %]
                                 [% IF ( subscription.location ) %]
-                                  <p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location ) | html %]
+                                  <p class="subscription_location">Location: [% AuthorisedValues.GetByCode( 'LOC', subscription.location, 1 ) | html %]
                                 [% END %]
                                 [% IF ( subscription.callnumber ) %]
                                   <p class="subscription_callnumber">Call number: [% subscription.callnumber | html %]</p>
@@ -1368,7 +1368,7 @@
                                             [% r.course.course_name | html %]
                                             <!--[% IF r.course.course_number %] [% r.course.course_number | html %] [% END %]-->
                                             [% IF r.course.section %] [% r.course.section | html %] [% END %]
-                                            [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) | html %] [% END %]
+                                            [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term, 1 ) | html %] [% END %]
                                             </a>
                                         </p>
                                     [% END %]
