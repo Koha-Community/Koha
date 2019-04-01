@@ -10,6 +10,11 @@
         "$ref": "../parameters.json#/page"
       }, {
         "$ref": "../parameters.json#/per_page"
+      },{
+        "name": "checked_in",
+        "in": "query",
+        "description": "By default, current checkouts are returned, when this is true then checked in checkouts are returned as result.",
+        "type": "boolean"
       }],
       "produces": [
         "application/json"

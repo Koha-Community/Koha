@@ -25,6 +25,7 @@ use C4::Context;
 use C4::Circulation;
 use Koha::Checkouts;
 use Koha::IssuingRules;
+use Koha::Old::Checkouts;
 
 use Try::Tiny;
 
@@ -44,8 +45,14 @@ List Koha::Checkout objects
 
 sub list {
     my $c = shift->openapi->valid_input or return;
+    my $checked_in = $c->validation->param('checked_in');
     try {
-        my $checkouts_set = Koha::Checkouts->new;
+        my $checkouts_set;
+        if ( $checked_in ) {
+            $checkouts_set = Koha::Old::Checkouts->new;
+        } else {
+            my $checkouts_set = Koha::Checkouts->new;
+        }
         my $checkouts = $c->objects->search( $checkouts_set, \&_to_model, \&_to_api );
         return $c->render( status => 200, openapi => $checkouts );
     } catch {
@@ -72,7 +79,10 @@ get one checkout
 sub get {
     my $c = shift->openapi->valid_input or return;
 
-    my $checkout = Koha::Checkouts->find( $c->validation->param('checkout_id') );
+    my $checkout_id = $c->validation->param('checkout_id');
+    my $checkout = Koha::Checkouts->find( $checkout_id );
+    $checkout = Koha::Old::Checkouts->find( $checkout_id )
+        unless ($checkout);
 
     unless ($checkout) {
         return $c->render(
@@ -251,6 +261,7 @@ our $to_model_mapping = {
     last_renewed_date => 'lastreneweddate',
     checkout_date     => 'issuedate',
     note_date         => 'notedate',
+    checked_in        => undef,
 };
 
 1;
