@@ -558,6 +558,8 @@ sub quote_item {
     my $schema = Koha::Database->new()->schema();
     my $logger = Log::Log4perl->get_logger();
 
+    # $basketno is the return from AddBasket in the calling routine
+    # So this call should not fail unless that has
     my $basket = Koha::Acquisition::Baskets->find( $basketno );
     unless ( $basket ) {
         $logger->error('Skipping order creation no valid basketno');
@@ -810,7 +812,9 @@ sub quote_item {
                     );
                 }
 
-                if ( $basket->effective_create_item eq 'ordering' ) {
+                # Do not use the basket level value as it is always NULL
+                # See calling subs call to AddBasket
+                if ( C4::Context->preference('AcqCreateItem') eq 'ordering' ) {
                     my $new_item = {
                         notforloan       => -1,
                         cn_sort          => q{},
