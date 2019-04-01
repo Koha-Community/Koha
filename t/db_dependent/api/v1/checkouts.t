@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 79;
+use Test::More tests => 93;
 use Test::MockModule;
 use Test::Mojo;
 use t::lib::Mocks;
@@ -74,6 +74,7 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$notexisting_patron
 my $item1 = $builder->build_sample_item;
 my $item2 = $builder->build_sample_item;
 my $item3 = $builder->build_sample_item;
+my $item4 = $builder->build_sample_item;
 
 my $date_due = DateTime->now->add(weeks => 2);
 my $issue1 = C4::Circulation::AddIssue($patron->unblessed, $item1->barcode, $date_due);
@@ -82,6 +83,8 @@ my $issue2 = C4::Circulation::AddIssue($patron->unblessed, $item2->barcode, $dat
 my $date_due2 = Koha::DateUtils::dt_from_string( $issue2->date_due );
 my $issue3 = C4::Circulation::AddIssue($librarian->unblessed, $item3->barcode, $date_due);
 my $date_due3 = Koha::DateUtils::dt_from_string( $issue3->date_due );
+my $issue4 = C4::Circulation::AddIssue($patron->unblessed, $item4->barcode);
+C4::Circulation::AddReturn($item4->barcode, $branchcode);
 
 $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id" )
   ->status_is(200)
@@ -93,6 +96,23 @@ $t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id" )
   ->json_is('/1/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
   ->json_hasnt('/2');
 
+# Test checked_in parameter, zero means, the response is same as without it
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=0" )
+  ->status_is(200)
+  ->json_is('/0/patron_id' => $patron_id)
+  ->json_is('/0/item_id' => $item1->itemnumber)
+  ->json_is('/0/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due1 }) )
+  ->json_is('/1/patron_id' => $patron_id)
+  ->json_is('/1/item_id' => $item2->itemnumber)
+  ->json_is('/1/due_date' => output_pref({ dateformat => "rfc3339", dt => $date_due2 }) )
+  ->json_hasnt('/2');
+
+# Test checked_in parameter, one measn, the checked in checkout is in the response too
+$t->get_ok( "//$userid:$password@/api/v1/checkouts?patron_id=$patron_id&checked_in=1" )
+  ->status_is(200)
+  ->json_is('/0/patron_id' => $patron_id)
+  ->json_is('/0/item_id' => $item4->itemnumber)
+  ->json_hasnt('/1');
 
 $t->get_ok( "//$unauth_userid:$unauth_password@/api/v1/checkouts/" . $issue3->issue_id )
   ->status_is(403)
