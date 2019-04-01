@@ -1331,11 +1331,11 @@
                                 [% FOREACH r IN ITEM_RESULT.course_reserves %]
                                     [% IF r.course.enabled == 'yes' %]
                                         <p>
-                                            <a href="opac-course-details.pl?course_id=[% r.course.course_id %]">
-                                            [% r.course.course_name %]
-                                            <!--[% IF r.course.course_number %] [% r.course.course_number %] [% END %]-->
-                                            [% IF r.course.section %] [% r.course.section %] [% END %]
-                                            [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term ) %] [% END %]
+                                            <a href="opac-course-details.pl?course_id=[% r.course.course_id | uri %]">
+                                            [% r.course.course_name | html %]
+                                            <!--[% IF r.course.course_number %] [% r.course.course_number | html %] [% END %]-->
+                                            [% IF r.course.section %] [% r.course.section | html %] [% END %]
+                                            [% IF r.course.term %] [% AuthorisedValues.GetByCode( 'TERM', r.course.term, 1 ) | html %] [% END %]
                                             </a>
                                         </p>
                                     [% END %]
