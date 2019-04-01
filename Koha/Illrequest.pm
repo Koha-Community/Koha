@@ -718,7 +718,8 @@ Migrate a request from one backend to another.
 
 sub backend_migrate {
     my ( $self, $params ) = @_;
-
+    # Set the request's backend to be the destination backend
+    $self->load_backend($params->{backend});
     my $response = $self->_backend_capability('migrate',{
             request    => $self,
             other      => $params,

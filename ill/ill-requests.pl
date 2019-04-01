@@ -152,14 +152,12 @@ if ( $backends_available ) {
         my $request = Koha::Illrequests->find($params->{illrequest_id});
         my $backend_result;
         if ( $params->{backend} ) {
-            my $new_request = Koha::Illrequest->new->load_backend( $params->{backend} );
-            $backend_result = $new_request->backend_migrate($params);
+            $backend_result = $request->backend_migrate($params);
             if ($backend_result) {
                 $template->param(
                     whole   => $backend_result,
-                    request => $new_request
+                    request => $request
                 );
-                $request = $new_request;
             } else {
                 # Backend failure, redirect back to illview
                 print $cgi->redirect( '/cgi-bin/koha/ill/ill-requests.pl'

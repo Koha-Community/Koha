@@ -215,6 +215,10 @@ sub get_log_template {
     } else {
         # It's probably a backend log, so we need to get the path to the
         # template from the backend
+        #
+        # We need to load the backend that this log was made from, so we
+        # can get the template
+        $params->{request}->load_backend($origin);
         my $backend =$params->{request}->{_my_backend};
         return $backend->get_log_template_path($action);
     }
