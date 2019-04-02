@@ -230,12 +230,28 @@ if ($op eq "action") {
                     my $tag = $tags[$i];
                     my $subfield = $subfields[$i];
                     my $replace = $replaces[$i];
-                    my $mod = $modifiers[$i];
 
                     my $value = $localmarcitem->field( $tag )->subfield( $subfield );
                     my $old_value = $value;
-                    ## no critic (StringyEval)
-                    eval "\$value =~ s/$search/$replace/$mod";
+
+                    my @available_modifiers = qw( i g );
+                    my $retained_modifiers = q||;
+                    for my $modifier ( split //, $modifiers[$i] ) {
+                        $retained_modifiers .= $modifier
+                            if grep {/$modifier/} @available_modifiers;
+                    }
+                    if ( $retained_modifiers =~ m/^(ig|gi)$/ ) {
+                        $value =~ s/$search/$replace/ig;
+                    }
+                    elsif ( $retained_modifiers eq 'i' ) {
+                        $value =~ s/$search/$replace/i;
+                    }
+                    elsif ( $retained_modifiers eq 'g' ) {
+                        $value =~ s/$search/$replace/g;
+                    }
+                    else {
+                        $value =~ s/$search/$replace/;
+                    }
 
                     my @fields_to = $localmarcitem->field($tag);
                     foreach my $field_to_update ( @fields_to ) {
