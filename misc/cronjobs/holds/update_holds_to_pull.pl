@@ -197,7 +197,7 @@ sub check_issuingrules {
             next;
         }
         my $issuing_rule = Koha::IssuingRules->get_effective_issuing_rule(
-            {   categorycode => $borrower->{categorycode},
+            {   categorycode => $borrower->categorycode,
                 itemtype     => $item->itype,
                 branchcode   => $data->{l_branch},
                 ccode        => $item->ccode,
