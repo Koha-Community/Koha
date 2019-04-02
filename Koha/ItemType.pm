@@ -139,6 +139,20 @@ sub _library_limits {
     };
 }
 
+=head3 parent
+
+    Returns the ItemType object of the parent_type or undef.
+
+=cut
+
+sub parent {
+    my ( $self ) = @_;
+    my $parent_rs = $self->_result->parent_type;
+    return unless $parent_rs;
+    return Koha::ItemType->_new_from_dbic( $parent_rs );
+
+}
+
 =head3 type
 
 =cut

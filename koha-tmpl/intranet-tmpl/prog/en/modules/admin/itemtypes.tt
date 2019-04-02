@@ -116,6 +116,27 @@ Item types administration
                     </li>
                 [% END %]
                 <li>
+                    <label for="parent_type">Parent item type: </label>
+                    [% IF !is_a_parent && parent_types %]
+                    <select name="parent_type" id="parent_type">
+                        <option value="">None</option>
+                        [% FOREACH pt IN parent_types %]
+                            [% IF parent_type == pt.itemtype %]
+                                <option value="[% pt.itemtype | html %]" selected="selected">[% pt.description | html %]</option>
+                            [% ELSE %]
+                                <option value="[% pt.itemtype | html %]">[% pt.description | html %]</option>
+                            [% END %]
+                        [% END %]
+                    </select>
+                    [% ELSIF is_a_parent %]
+                    <input type="text" id="parent_type" value="[% parent_type | html %]" name="parent_type" size="10" maxlength="10" disabled/>
+                    <p>Is a parent to another type, cannot have a parent</p>
+                    [% ELSE %]
+                    <input type="text" id="parent_type" value="[% parent_type | html %]" name="parent_type" size="10" maxlength="10" disabled/>
+                    <p>No available parent types</p>
+                    [% END %]
+                </li>
+                <li>
                     <label for="description" class="required">Description: </label>
                     <input type="text" id="description" name="description" size="48" value="[% itemtype.description | html %]" required="required" /> <span class="required">Required</span>
                     [% IF can_be_translated %]
@@ -369,8 +390,9 @@ Item types administration
         <table id="table_item_type">
           <thead>
             [% UNLESS Koha.Preference('noItemTypeImages') && Koha.Preference('OpacNoItemTypeImages') %]<th class="noExport">Image</th>[% END %]
-            <th>Code</th>
             <th>Description</th>
+            <th>Code</th>
+            <th>Parent code</th>
             <th>Search category</th>
             <th>Not for loan</th>
             <th>Hide in OPAC</th>
@@ -392,24 +414,49 @@ Item types administration
                     </td>
                 [% END %]
             <td>
+                [% IF itemtype.parent_type %]
+                    [% IF itemtype.parent.translated_descriptions.size %]
+                        [% itemtype.parent.description | html %] (default)<br/>
+                    [% ELSE %]
+                        [% itemtype.parent.description | html %]
+                    [% END %]
+                    </br>
+                    [% IF itemtype.translated_descriptions.size %]
+                        [% itemtype.description | html %] (default)<br/>
+                        [% FOR description IN itemtype.translated_descriptions %]
+                            [% IF description.translation == itemtype.translated_description %]
+                            --    <b>[% description.translation | html %]</b>
+                            [% ELSE %]
+                            --    [% description.translation | html %] ([% description.lang | html %])
+                            [% END %]
+                            <br/>
+                        [% END %]
+                    [% ELSE %]
+                    --    [% itemtype.description | html %]
+                    [% END %]
+                [% ELSE %]
+                    [% IF itemtype.translated_descriptions.size %]
+                        [% itemtype.description | html %] (default)<br/>
+                        [% FOR description IN itemtype.translated_descriptions %]
+                            [% IF description.translation == itemtype.translated_description %]
+                                <b>[% description.translation | html %]</b>
+                            [% ELSE %]
+                                [% description.translation | html %] ([% description.lang | html %])
+                            [% END %]
+                            <br/>
+                        [% END %]
+                    [% ELSE %]
+                        [% itemtype.description | html %]
+                    [% END %]
+                [% END %]
+            </td>
+            <td>
               <a href="/cgi-bin/koha/admin/itemtypes.pl?op=add_form&amp;itemtype=[% itemtype.itemtype | uri %]">
                 [% itemtype.itemtype | html %]
               </a>
             </td>
             <td>
-                [% IF itemtype.translated_descriptions.size %]
-                    [% itemtype.description | html %] (default)<br/>
-                    [% FOR description IN itemtype.translated_descriptions %]
-                        [% IF description.translation == itemtype.translated_description %]
-                            <b>[% description.translation | html %]</b>
-                        [% ELSE %]
-                            [% description.translation | html %] ([% description.lang | html %])
-                        [% END %]
-                        <br/>
-                    [% END %]
-                [% ELSE %]
-                    [% itemtype.description | html %]
-                [% END %]
+                [% itemtype.parent_type | html %]
             </td>
             <td>[% itemtype.searchcategory | html %]</td>
             <td>[% IF ( itemtype.notforloan ) %]Yes[% ELSE %]&nbsp;[% END %]</td>
@@ -493,7 +540,7 @@ Item types administration
                     "aoColumnDefs": [
                         { "aTargets": [ -1 ], "bSortable": false, "bSearchable": false },
                     ],
-                "aaSorting": [[ 2, "asc" ]],
+                "aaSorting": [[ 1, "asc" ]],
                 "iDisplayLength": 10,
                 "sPaginationType": "full"
                 }, columns_settings);

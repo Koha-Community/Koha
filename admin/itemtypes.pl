@@ -71,11 +71,16 @@ if ( $op eq 'add_form' ) {
         };
     }
 
+    my $parent_type = $itemtype ? $itemtype->parent_type : undef;
+    my $parent_types = Koha::ItemTypes->search({parent_type=>undef,itemtype => {'!='=>$itemtype_code}});
     my $imagesets = C4::Koha::getImageSets( checked => ( $itemtype ? $itemtype->imageurl : undef ) );
     my $searchcategory = GetAuthorisedValues("ITEMTYPECAT");
     my $translated_languages = C4::Languages::getTranslatedLanguages( undef , C4::Context->preference('template') );
     $template->param(
         itemtype  => $itemtype,
+        parent_type => $parent_type,
+        parent_types => $parent_types,
+        is_a_parent => $itemtype ? Koha::ItemTypes->search({parent_type=>$itemtype_code})->count : 0,
         imagesets => $imagesets,
         searchcategory => $searchcategory,
         can_be_translated => ( scalar(@$translated_languages) > 1 ? 1 : 0 ),
@@ -84,6 +89,7 @@ if ( $op eq 'add_form' ) {
 } elsif ( $op eq 'add_validate' ) {
     my $is_a_modif   = $input->param('is_a_modif');
     my $itemtype     = Koha::ItemTypes->find($itemtype_code);
+    my $parent_type  = $input->param('parent_type') || undef;
     my $description  = $input->param('description');
     my $rentalcharge = $input->param('rentalcharge');
     my $rentalcharge_daily = $input->param('rentalcharge_daily');
@@ -110,6 +116,7 @@ if ( $op eq 'add_form' ) {
 
     if ( $itemtype and $is_a_modif ) {    # it's a modification
         $itemtype->description($description);
+        $itemtype->parent_type($parent_type);
         $itemtype->rentalcharge($rentalcharge);
         $itemtype->rentalcharge_daily($rentalcharge_daily);
         $itemtype->rentalcharge_hourly($rentalcharge_hourly);
@@ -141,6 +148,7 @@ if ( $op eq 'add_form' ) {
             {
                 itemtype            => $itemtype_code,
                 description         => $description,
+                parent_type         => $parent_type,
                 rentalcharge        => $rentalcharge,
                 rentalcharge_daily  => $rentalcharge_daily,
                 rentalcharge_hourly => $rentalcharge_hourly,
