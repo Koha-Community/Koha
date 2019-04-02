@@ -24,37 +24,38 @@ $(document).ready(function(){
       var row = $(this).attr("id");
       row = row.replace("row","hint");
       var todisable = $(this).parent().find("[name='field_value'],[name='tag'],[name='subfield'],[name='mandatory']");
-      var regex_input = $(this).parent().find("[name='field_regex']");
+      var regex_link = $(this).parent().find("[name='field_regex']");
       if ($(this).is(":checked")) {
           $(todisable).prop('disabled', true);
           $("#"+row).html(_("This subfield will be deleted"));
-          $(regex_input).prop('disabled', true);
+          $(regex_link).hide();
       } else {
           $(todisable).prop('disabled', false);
           $("#"+row).html("");
-          $(regex_input).prop('disabled', false);
+          $(regex_link).show();
       }
   });
     $("#mainformsubmit").on("click",function(){
         return submitBackgroundJob(this.form);
     });
-  $('input[name="field_regex"]').change(function() {
-    var id = $(this).attr('id');
-    var editor = $(this).parent().find("[name='field_value']");
-    var regex = $(this).parent().find("[name='regex_fields']");
-    var disable_input = $(this).parent().find("[name='disable_input']");
-    if ($(this).is(':checked')) {
-      $(editor).hide();
-      $(regex).show();
-      $(this).parent().find('.hint').html(_("Enter a regular expression for this subflied"));
-      $(disable_input).prop('disabled', true);
-    } else {
-      $(editor).show();
-      $(regex).hide();
-      $(this).parent().find('.hint').html(_(""));
-      $(disable_input).prop('disabled', false);
-    }
-  });
+    $('a[name="field_regex"]').click(function() {
+        var id = $(this).attr('id');
+        var editor = $(this).parent().find("[name='field_value']");
+        var regex = $(this).parent().find("[name='regex_fields']");
+        var disable_input = $(this).parent().find("[name='disable_input']");
+        if ($(this).html() == 'RegEx') {
+            $(editor).hide();
+            $(regex).show();
+            $(this).html('Text');
+            $(disable_input).prop('disabled', true);
+        } else {
+            $(editor).show();
+            $(regex).hide();
+            $(this).html('RegEx');
+            $(disable_input).prop('disabled', false);
+        }
+        return false;
+    });
 });
 //]]>
 </script>
@@ -306,9 +307,9 @@ $(document).ready(function(){
               [%- END -%]
 
               <span name="regex_fields" style="display: none;">
-                s/<input type="text" id="[% mv.id | html %]" name="regex_search" placeholder="regex pattern" />/
-                <input type="text" id="[% mv.id | html %]" name="regex_replace" placeholder="regex replacement" />/
-                <input type="text" id="[% mv.id | html %]" name="regex_modifiers" placeholder="ig" size="3" />
+                  s/<input type="text" id="[% mv.id | html %]" name="regex_search" placeholder="regex pattern" />/
+                  <input type="text" id="[% mv.id | html %]" name="regex_replace" placeholder="regex replacement" />/
+                  <input type="text" id="[% mv.id | html %]" name="regex_modifiers" placeholder="ig" size="3" />
               </span>
 
               [% UNLESS ( ite.mandatory ) %]
@@ -318,7 +319,7 @@ $(document).ready(function(){
               [% END %]
 
               [% IF (mv.type == 'text' || mv.type == 'textarea' ) %]
-                <input type="checkbox" name="field_regex" id="[% ite.id | html %]" title="Use regular expression">
+                  <a href="#" name="field_regex" id="[% ite.id | html %]" >RegEx</a>
               [% END %]
 
               <input type="hidden" name="tag"       value="[% ite.tag | html %]" />
