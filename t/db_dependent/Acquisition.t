@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 74;
+use Test::More tests => 76;
 use t::lib::Mocks;
 use Koha::Database;
 
@@ -759,4 +759,82 @@ subtest 'ModReceiveOrder and subscription' => sub {
     is( $order->get_from_storage->order_internalnote, $first_note );
 };
 
+subtest 'GetHistory with additional fields' => sub {
+    plan tests => 3;
+    my $builder = t::lib::TestBuilder->new;
+    my $order_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
+    my $orderinfo ={
+        basketno => $order_basket->{basketno},
+        rrp => 19.99,
+        replacementprice => undef,
+        quantity => 1,
+        quantityreceived => 0,
+        datereceived => undef,
+        datecancellationprinted => undef,
+    };
+    my $order =        $builder->build({ source => 'Aqorder', value => $orderinfo });
+    my $history = GetHistory(ordernumber => $order->{ordernumber});
+    is( scalar( @$history ), 1, 'GetHistory returns the one order');
+
+    my $additional_field = $builder->build({source => 'AdditionalField', value => {
+            tablename => 'aqbasket',
+            name => 'snakeoil',
+            authorised_value_category => "",
+        }
+    });
+    $history = GetHistory( ordernumber => $order->{ordernumber}, additional_fields => [{ id => $additional_field->{id}, value=>'delicious'}]);
+    is( scalar ( @$history ), 0, 'GetHistory returns no order for an unused additional field');
+    my $basket = Koha::Acquisition::Baskets->find({ basketno => $order_basket->{basketno} });
+    $basket->set_additional_fields([{
+        id => $additional_field->{id},
+        value => 'delicious',
+    }]);
+
+    $history = GetHistory( ordernumber => $order->{ordernumber}, additional_fields => [{ id => $additional_field->{id}, value=>'delicious'}]);
+    is( scalar( @$history ), 1, 'GetHistory returns the order when additional field is set');
+};
+
+subtest 'Tests for get_rounding_sql' => sub {
+
+    plan tests => 2;
+
+    my $value = '3.141592';
+
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{} );
+    my $no_rounding_result = C4::Acquisition::get_rounding_sql($value);
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{nearest_cent} );
+    my $rounding_result = C4::Acquisition::get_rounding_sql($value);
+
+    ok( $no_rounding_result eq $value, "Value ($value) not to be rounded" );
+    ok( $rounding_result =~ /CAST/,    "Value ($value) will be rounded" );
+
+};
+
+subtest 'Test for get_rounded_price' => sub {
+
+    plan tests => 6;
+
+    my $exact_price      = 3.14;
+    my $up_price         = 3.145592;
+    my $down_price       = 3.141592;
+    my $round_up_price   = sprintf( '%0.2f', $up_price );
+    my $round_down_price = sprintf( '%0.2f', $down_price );
+
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{} );
+    my $not_rounded_result1 = C4::Acquisition::get_rounded_price($exact_price);
+    my $not_rounded_result2 = C4::Acquisition::get_rounded_price($up_price);
+    my $not_rounded_result3 = C4::Acquisition::get_rounded_price($down_price);
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{nearest_cent} );
+    my $rounded_result1 = C4::Acquisition::get_rounded_price($exact_price);
+    my $rounded_result2 = C4::Acquisition::get_rounded_price($up_price);
+    my $rounded_result3 = C4::Acquisition::get_rounded_price($down_price);
+
+    is( $not_rounded_result1, $exact_price,      "Price ($exact_price) was correctly not rounded ($not_rounded_result1)" );
+    is( $not_rounded_result2, $up_price,         "Price ($up_price) was correctly not rounded ($not_rounded_result2)" );
+    is( $not_rounded_result3, $down_price,       "Price ($down_price) was correctly not rounded ($not_rounded_result3)" );
+    is( $rounded_result1,     $exact_price,      "Price ($exact_price) was correctly rounded ($rounded_result1)" );
+    is( $rounded_result2,     $round_up_price,   "Price ($up_price) was correctly rounded ($rounded_result2)" );
+    is( $rounded_result3,     $round_down_price, "Price ($down_price) was correctly rounded ($rounded_result3)" );
+
+};
 $schema->storage->txn_rollback();
