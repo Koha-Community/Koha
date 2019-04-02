@@ -19,7 +19,7 @@ use Modern::Perl;
 
 use POSIX qw(strftime);
 
-use Test::More tests => 75;
+use Test::More tests => 77;
 use t::lib::Mocks;
 use Koha::Database;
 use Koha::Acquisition::Basket;
@@ -795,4 +795,47 @@ subtest 'GetHistory with additional fields' => sub {
     is( scalar( @$history ), 1, 'GetHistory returns the order when additional field is set');
 };
 
+subtest 'Tests for get_rounding_sql' => sub {
+
+    plan tests => 2;
+
+    my $value = '3.141592';
+
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{} );
+    my $no_rounding_result = C4::Acquisition::get_rounding_sql($value);
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{nearest_cent} );
+    my $rounding_result = C4::Acquisition::get_rounding_sql($value);
+
+    ok( $no_rounding_result eq $value, "Value ($value) not to be rounded" );
+    ok( $rounding_result =~ /CAST/,    "Value ($value) will be rounded" );
+
+};
+
+subtest 'Test for get_rounded_price' => sub {
+
+    plan tests => 6;
+
+    my $exact_price      = 3.14;
+    my $up_price         = 3.145592;
+    my $down_price       = 3.141592;
+    my $round_up_price   = sprintf( '%0.2f', $up_price );
+    my $round_down_price = sprintf( '%0.2f', $down_price );
+
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{} );
+    my $not_rounded_result1 = C4::Acquisition::get_rounded_price($exact_price);
+    my $not_rounded_result2 = C4::Acquisition::get_rounded_price($up_price);
+    my $not_rounded_result3 = C4::Acquisition::get_rounded_price($down_price);
+    t::lib::Mocks::mock_preference( 'OrderPriceRounding', q{nearest_cent} );
+    my $rounded_result1 = C4::Acquisition::get_rounded_price($exact_price);
+    my $rounded_result2 = C4::Acquisition::get_rounded_price($up_price);
+    my $rounded_result3 = C4::Acquisition::get_rounded_price($down_price);
+
+    is( $not_rounded_result1, $exact_price,      "Price ($exact_price) was correctly not rounded ($not_rounded_result1)" );
+    is( $not_rounded_result2, $up_price,         "Price ($up_price) was correctly not rounded ($not_rounded_result2)" );
+    is( $not_rounded_result3, $down_price,       "Price ($down_price) was correctly not rounded ($not_rounded_result3)" );
+    is( $rounded_result1,     $exact_price,      "Price ($exact_price) was correctly rounded ($rounded_result1)" );
+    is( $rounded_result2,     $round_up_price,   "Price ($up_price) was correctly rounded ($rounded_result2)" );
+    is( $rounded_result3,     $round_down_price, "Price ($down_price) was correctly rounded ($rounded_result3)" );
+
+};
 $schema->storage->txn_rollback();
