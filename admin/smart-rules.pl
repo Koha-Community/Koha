@@ -164,9 +164,9 @@ elsif ($op eq 'add') {
     $holds_per_day = undef if $holds_per_day !~ /^\d+/;
     my $onshelfholds     = $input->param('onshelfholds') || 0;
     $maxissueqty =~ s/\s//g;
-    $maxissueqty = undef if $maxissueqty !~ /^\d+/;
+    $maxissueqty = '' if $maxissueqty !~ /^\d+/;
     $maxonsiteissueqty =~ s/\s//g;
-    $maxonsiteissueqty = undef if $maxonsiteissueqty !~ /^\d+/;
+    $maxonsiteissueqty = '' if $maxonsiteissueqty !~ /^\d+/;
     my $issuelength  = $input->param('issuelength');
     $issuelength = $issuelength eq q{} ? undef : $issuelength;
     my $lengthunit  = $input->param('lengthunit');
@@ -221,7 +221,6 @@ elsif ($op eq 'add') {
     } else {
         Koha::IssuingRule->new()->set($params)->store();
     }
-
     Koha::CirculationRules->set_rules(
         {
             categorycode => $bor,

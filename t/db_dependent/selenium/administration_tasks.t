@@ -23,9 +23,12 @@ use Modern::Perl;
 
 use C4::Context;
 
-use Test::More tests => 1;
+use Test::More tests => 3;
 
 use t::lib::Selenium;
+use t::lib::TestBuilder;
+
+my $builder = t::lib::TestBuilder->new;
 
 my $login = $ENV{KOHA_USER} || 'koha';
 
@@ -67,12 +70,23 @@ SKIP: {
     };
 
     { # Circulation/fine rules
+        my $itype = $builder->build_object({ class => "Koha::ItemTypes" });
         $driver->get($mainpage);
         $s->click( { href => '/admin/admin-home.pl', main => 'container-main' } )
           ;    # Koha administration
         $s->click( { href => '/admin/smart-rules.pl', main_class => 'main container-fluid' } )
           ;    # Circulation and fines rules
-               # TODO Create smart navigation here
+        my $elt = $driver->find_element('//tr[@id="edit_row"]/td/select[@id="matrixitemtype"]/option[@value="'.$itype->itemtype.'"]');
+        is( $elt->get_text(),$itype->description,"Our new itemtype is in the list");
+        $elt->click();
+        $elt = $driver->find_element('//tr[@id="edit_row"]/td[@class="actions"]/button[@type="submit"]');
+        $elt->click();
+        $elt = $driver->find_elements('//table[@id="default-circulation-rules"]/tbody/tr/td[contains(text(),"'.$itype->description.'")]/following-sibling::td/span[text() = "Unlimited"]');
+        is( @$elt,2,"We have unlimited checkouts");
+        #Clean up
+        Koha::IssuingRules->find({itemtype=>$itype->itemtype})->delete();
+        $itype->delete;
+               # TODO Create more smart rules navigation here
     };
 
     { # Biblio frameworks
