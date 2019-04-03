@@ -81,7 +81,8 @@
                         [% IF item_level_itypes %]<th>Item type</th>[% END %]
                         <th>Collection</th>
                         <th>Location</th>
-                        <th>Library</th>
+                        <th>Home Library</th>
+                        <th>Holding Library</th>
                         <th>Staff note</th>
                         <th>Public note</th>
                         <th>Link</th>
@@ -155,6 +156,26 @@
                                     <i>Unchanged</i>
                                     [% IF cr.item.permanent_location %]
                                         ([% AuthorisedValues.GetByCode( 'LOC', cr.item.permanent_location ) | html %])
+                                    [% END %]
+                                [% END %]
+                            </td>
+                            <td>
+                                [% IF cr.course_item.homebranch_enabled %]
+                                    [% IF cr.course_item.enabled == 'yes' %]
+                                        <strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>
+                                        [% IF cr.item.homebranch %]
+                                            ([% Branches.GetName( cr.course_item.homebranch ) | html %])
+                                        [% END %]
+                                    [% ELSE %]
+                                        [% Branches.GetName( cr.course_item.homebranch ) | html %]
+                                        [% IF cr.item.homebranch %]
+                                            (<strong>[% Branches.GetName( cr.item.homebranch ) | html %]</strong>)
+                                        [% END %]
+                                    [% END %]
+                                [% ELSE %]
+                                    <i>Unchanged</i>
+                                    [% IF cr.item.homebranch %]
+                                        ([% Branches.GetName( cr.item.homebranch ) | html %])
                                     [% END %]
                                 [% END %]
                             </td>

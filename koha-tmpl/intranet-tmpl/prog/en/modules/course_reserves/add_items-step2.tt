@@ -118,6 +118,32 @@
                     </li>
 
                     <li>
+                        <label class="required" for="homebranch">Home library:</label>
+
+                        [% IF course_item.homebranch_enabled %]
+                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="homebranch" name="homebranch_enabled" id="homebranch_enabled" checked />
+                        [% ELSE %]
+                            <input type="checkbox" value="1" class="field-toggle" data-pulldown="homebranch" name="homebranch_enabled" id="homebranch_enabled" />
+                        [% END %]
+
+                        [% IF course_item.homebranch_enabled %]
+                            <select id="homebranch" name="homebranch">
+                        [% ELSE %]
+                            <select id="homebranch" name="homebranch" disabled="disabled">
+                        [% END %]
+
+                            <option value=""></option>
+                            [% FOREACH b IN Branches.all() %]
+                                [% IF course_item.homebranch.defined && ( ( course.enabled == 'yes' && b.branchcode == item.homebranch ) || ( course.enabled == 'no' && b.branchcode == course_item.homebranch ) ) %]
+                                    <option value="[% b.branchcode | html %]" selected="selected">[% b.branchname | html %]</option>
+                                [% ELSE %]
+                                    <option value="[% b.branchcode | html %]">[% b.branchname | html %]</option>
+                                [% END %]
+                            [% END %]
+                        </select>
+                    </li>
+
+                    <li>
                         <label class="required" for="holdingbranch">Holding library:</label>
 
                         [% IF course_item.holdingbranch_enabled %]

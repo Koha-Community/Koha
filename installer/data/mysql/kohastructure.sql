@@ -3823,6 +3823,9 @@ CREATE TABLE `course_items` (
   `ccode` varchar(80) DEFAULT NULL, -- new category code for the item to have while on reserve (optional)
   `ccode_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if ccode should be changed while on course reserve
   `ccode_storage` varchar(80) DEFAULT NULL, -- a place to store the ccode when item is on course reserve
+  `homebranch` varchar(10) DEFAULT NULL, -- new home branch for the item to have while on reserve (optional)
+  `homebranch_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if homebranch should be changed while on course reserve
+  `homebranch_storage` varchar(10) DEFAULT NULL, -- a place to store the homebranch when item is on course reserve
   `holdingbranch` varchar(10) DEFAULT NULL, -- new holding branch for the item to have while on reserve (optional)
   `holdingbranch_enabled` tinyint(1) NOT NULL DEFAULT 0, -- indicates if itype should be changed while on course reserve
   `holdingbranch_storage` varchar(10) DEFAULT NULL, -- a place to store the holdingbranch when item is on course reserve
@@ -3841,7 +3844,9 @@ CREATE TABLE `course_items` (
 --
 ALTER TABLE `course_items`
   ADD CONSTRAINT `course_items_ibfk_2` FOREIGN KEY (`holdingbranch`) REFERENCES `branches` (`branchcode`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `course_items_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `course_items_ibfk_1` FOREIGN KEY (`itemnumber`) REFERENCES `items` (`itemnumber`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT fk_course_items_homebranch FOREIGN KEY (homebranch) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT fk_course_items_homebranch_storage FOREIGN KEY (homebranch_storage) REFERENCES branches (branchcode) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Table structure for table `course_reserves`

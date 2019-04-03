@@ -93,11 +93,13 @@ if ( $action eq 'lookup' and $item ) {
 } elsif ( $action eq 'add' ) {
     my $itype         = scalar $cgi->param('itype');
     my $ccode         = scalar $cgi->param('ccode');
+    my $homebranch    = $cgi->param('homebranch');
     my $holdingbranch = scalar $cgi->param('holdingbranch');
     my $location      = scalar $cgi->param('location');
 
     my $itype_enabled         = scalar $cgi->param('itype_enabled') ? 1 : 0;
     my $ccode_enabled         = scalar $cgi->param('ccode_enabled') ? 1 : 0;
+    my $homebranch_enabled    = $cgi->param('homebranch_enabled') ? 1 : 0;
     my $holdingbranch_enabled = scalar $cgi->param('holdingbranch_enabled') ? 1 : 0;
     my $location_enabled      = scalar $cgi->param('location_enabled') ? 1 : 0;
 
@@ -105,10 +107,12 @@ if ( $action eq 'lookup' and $item ) {
             itemnumber    => $itemnumber,
             itype         => $itype,
             ccode         => $ccode,
+            homebranch    => $homebranch,
             holdingbranch => $holdingbranch,
             location      => $location,
             itype_enabled         => $itype_enabled,
             ccode_enabled         => $ccode_enabled,
+            homebranch_enabled    => $homebranch_enabled,
             holdingbranch_enabled => $holdingbranch_enabled,
             location_enabled      => $location_enabled,
     );

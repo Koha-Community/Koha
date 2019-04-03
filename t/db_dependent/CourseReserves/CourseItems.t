@@ -23,7 +23,7 @@ use C4::CourseReserves qw/ModCourseItem ModCourseReserve DelCourseReserve GetCou
 use C4::Context;
 use Koha::Items;
 
-use Test::More tests => 29;
+use Test::More tests => 34;
 
 BEGIN {
     require_ok('C4::CourseReserves');
@@ -41,10 +41,12 @@ my $ci_id = ModCourseItem(
     itemnumber            => $itemnumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
+    homebranch_enabled    => 1,
     holdingbranch_enabled => 1,
     location_enabled      => 1,
     itype                 => 'BK_foo',
     ccode                 => 'BOOK',
+    homebranch            => 'B2',
     holdingbranch         => 'B2',
     location              => 'TH',
 );
@@ -67,12 +69,14 @@ my $cr_id = ModCourseReserve(
 my $course_item = GetCourseItem( ci_id => $ci_id );
 is($course_item->{itype_storage}, 'CD_foo', 'Course item itype storage should be CD_foo');
 is($course_item->{ccode_storage}, 'CD', 'Course item ccode storage should be CD');
+is($course_item->{homebranch_storage}, 'B1', 'Course item holding branch storage should be B1');
 is($course_item->{holdingbranch_storage}, 'B1', 'Course item holding branch storage should be B1');
 is($course_item->{location_storage}, 'HR', 'Course item location storage should be HR');
 
 my $item = Koha::Items->find($itemnumber);
 is($item->effective_itemtype, 'BK_foo', 'Item type in course should be BK_foo');
 is($item->ccode, 'BOOK', 'Item ccode in course should be BOOK');
+is($item->homebranch, 'B2', 'Item home branch in course should be B2');
 is($item->holdingbranch, 'B2', 'Item holding branch in course should be B2');
 is($item->location, 'TH', 'Item location in course should be TH');
 
@@ -80,10 +84,12 @@ ModCourseItem(
     itemnumber            => $itemnumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
+    homebranch_enabled    => 1,
     holdingbranch_enabled => 1,
     location_enabled      => 1,
     itype                 => 'BK_foo',
     ccode                 => 'DVD',
+    homebranch            => 'B3',
     holdingbranch         => 'B3',
     location              => 'TH',
 );
@@ -98,12 +104,14 @@ ModCourseReserve(
 $course_item = GetCourseItem( ci_id => $ci_id );
 is($course_item->{itype_storage}, 'CD_foo', 'Course item itype storage should be CD_foo');
 is($course_item->{ccode_storage}, 'CD', 'Course item ccode storage should be CD');
+is($course_item->{homebranch_storage}, 'B1', 'Course item home branch storage should be B1');
 is($course_item->{holdingbranch_storage}, 'B1', 'Course item holding branch storage should be B1');
 is($course_item->{location_storage}, 'HR', 'Course item location storage should be HR');
 
 $item = Koha::Items->find($itemnumber);
 is($item->effective_itemtype, 'BK_foo', 'Item type in course should be BK_foo');
 is($item->ccode, 'DVD', 'Item ccode in course should be DVD');
+is($item->homebranch, 'B3', 'Item home branch in course should be B3');
 is($item->holdingbranch, 'B3', 'Item holding branch in course should be B3');
 is($item->location, 'TH', 'Item location in course should be TH');
 
@@ -111,6 +119,7 @@ DelCourseReserve( cr_id => $cr_id );
 $item = Koha::Items->find($itemnumber);
 is($item->effective_itemtype, 'CD_foo', 'Item type removed from course should be set back to CD_foo');
 is($item->ccode, 'CD', 'Item ccode removed from course should be set back to CD');
+is($item->homebranch, 'B1', 'Item home branch removed from course should be set back B1');
 is($item->holdingbranch, 'B1', 'Item holding branch removed from course should be set back B1');
 is($item->location, 'HR', 'Item location removed from course should be TH');
 
@@ -124,10 +133,12 @@ my $ci_id2 = ModCourseItem(
     itemnumber            => $itemnumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
+    homebranch_enabled    => 1,
     holdingbranch_enabled => 1,
     location_enabled      => 1,
     itype                 => 'CD_foo',
     ccode                 => 'BOOK',
+    homebranch            => 'B1',
     holdingbranch         => 'B1',
     location              => 'HR',
 );
@@ -149,10 +160,12 @@ ModCourseItem(
     itemnumber            => $itemnumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
+    homebranch_enabled    => 1,
     holdingbranch_enabled => 1,
     location_enabled      => 1,
     itype                 => 'CD_foo',
     ccode                 => 'DVD',
+    homebranch            => 'B1',
     holdingbranch         => 'B1',
     location              => 'HR',
 );
@@ -171,6 +184,7 @@ ModCourseItem(
     itemnumber            => $itemnumber,
     itype_enabled         => 1,
     ccode_enabled         => 1,
+    homebranch_enabled    => 0,             # LEAVE UNCHANGED
     holdingbranch_enabled => 0,             # LEAVE UNCHANGED
     location_enabled      => 1,
     itype                 => 'BK',

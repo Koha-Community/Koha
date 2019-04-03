@@ -56,7 +56,7 @@ BEGIN {
     %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
 
     $DEBUG = 0;
-    @FIELDS = ( 'itype', 'ccode', 'holdingbranch', 'location' );
+    @FIELDS = ( 'itype', 'ccode', 'homebranch', 'holdingbranch', 'location' );
 }
 
 =head1 NAME
@@ -495,6 +495,7 @@ sub _AddCourseItem {
     my (%params) = @_;
     warn identify_myself(%params) if $DEBUG;
 
+    $params{homebranch} ||= undef; # Can't be empty string, FK constraint
     $params{holdingbranch} ||= undef; # Can't be empty string, FK constraint
 
     my %data = map { $_ => $params{$_} } @FIELDS;
@@ -524,6 +525,7 @@ sub _UpdateCourseItem {
     my $ci_id         = $params{'ci_id'};
     my $course_item   = $params{'course_item'};
 
+    $params{homebranch} ||= undef; # Can't be empty string, FK constraint
     $params{holdingbranch} ||= undef; # Can't be empty string, FK constraint
 
     return unless ( $ci_id || $course_item );
@@ -539,6 +541,7 @@ sub _UpdateCourseItem {
         $item_fields->{itype}         = $course_item->itype         if $course_item->itype_enabled;
         $item_fields->{ccode}         = $course_item->ccode         if $course_item->ccode_enabled;
         $item_fields->{location}      = $course_item->location      if $course_item->location_enabled;
+        $item_fields->{homebranch}    = $course_item->homebranch    if $course_item->homebranch_enabled;
         $item_fields->{holdingbranch} = $course_item->holdingbranch if $course_item->holdingbranch_enabled;
 
         Koha::Items->find( $course_item->itemnumber )
@@ -572,6 +575,7 @@ sub _RevertFields {
     $item_fields->{itype}         = $course_item->itype_storage         if $course_item->itype_enabled;
     $item_fields->{ccode}         = $course_item->ccode_storage         if $course_item->ccode_enabled;
     $item_fields->{location}      = $course_item->location_storage      if $course_item->location_enabled;
+    $item_fields->{homebranch} = $course_item->homebranch_storage if $course_item->homebranch_enabled;
     $item_fields->{holdingbranch} = $course_item->holdingbranch_storage if $course_item->holdingbranch_enabled;
 
     Koha::Items->find( $course_item->itemnumber )
@@ -582,6 +586,7 @@ sub _RevertFields {
     $course_item->itype_storage(undef);
     $course_item->ccode_storage(undef);
     $course_item->location_storage(undef);
+    $course_item->homebranch_storage(undef);
     $course_item->holdingbranch_storage(undef);
     $course_item->store();
 }
@@ -603,6 +608,7 @@ sub _SwapAllFields {
         $course_item->itype_storage( $item->effective_itemtype )    if $course_item->itype_enabled;
         $course_item->ccode_storage( $item->ccode )                 if $course_item->ccode_enabled;
         $course_item->location_storage( $item->location )           if $course_item->location_enabled;
+        $course_item->homebranch_storage( $item->homebranch )       if $course_item->homebranch_enabled;
         $course_item->holdingbranch_storage( $item->holdingbranch ) if $course_item->holdingbranch_enabled;
         $course_item->store();
 
@@ -610,6 +616,7 @@ sub _SwapAllFields {
         $item_fields->{itype}         = $course_item->itype         if $course_item->itype_enabled;
         $item_fields->{ccode}         = $course_item->ccode         if $course_item->ccode_enabled;
         $item_fields->{location}      = $course_item->location      if $course_item->location_enabled;
+        $item_fields->{homebranch}    = $course_item->homebranch    if $course_item->homebranch_enabled;
         $item_fields->{holdingbranch} = $course_item->holdingbranch if $course_item->holdingbranch_enabled;
 
         Koha::Items->find( $course_item->itemnumber )
@@ -622,6 +629,7 @@ sub _SwapAllFields {
         $item_fields->{itype}         = $course_item->itype_storage         if $course_item->itype_enabled;
         $item_fields->{ccode}         = $course_item->ccode_storage         if $course_item->ccode_enabled;
         $item_fields->{location}      = $course_item->location_storage      if $course_item->location_enabled;
+        $item_fields->{homebranch}    = $course_item->homebranch_storage    if $course_item->homebranch_enabled;
         $item_fields->{holdingbranch} = $course_item->holdingbranch_storage if $course_item->holdingbranch_enabled;
 
         Koha::Items->find( $course_item->itemnumber )
@@ -632,6 +640,7 @@ sub _SwapAllFields {
         $course_item->itype_storage(undef);
         $course_item->ccode_storage(undef);
         $course_item->location_storage(undef);
+        $course_item->homebranch_storage(undef);
         $course_item->holdingbranch_storage(undef);
         $course_item->store();
     }
