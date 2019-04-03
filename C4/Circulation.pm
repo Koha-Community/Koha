@@ -2842,7 +2842,7 @@ sub AddRenewal {
         $datedue = (C4::Context->preference('RenewalPeriodBase') eq 'date_due') ?
                                         dt_from_string( $issue->date_due, 'sql' ) :
                                         DateTime->now( time_zone => C4::Context->tz());
-        $datedue =  CalcDateDue($datedue, $itemtype, $circ_library, $patron_unblessed, 'is a renewal');
+        $datedue =  CalcDateDue($datedue, $itemtype, $circ_library->branchcode, $patron_unblessed, 'is a renewal');
     }
 
     my $fees = Koha::Charges::Fees->new(

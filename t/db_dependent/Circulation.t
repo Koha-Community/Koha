@@ -18,11 +18,12 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 125;
+use Test::More tests => 126;
 use Test::MockModule;
 
 use Data::Dumper;
 use DateTime;
+use Time::Fake;
 use POSIX qw( floor );
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -489,9 +490,13 @@ my ( $reused_itemnumber_1, $reused_itemnumber_2 );
         action => "ISSUE"
     );
     my $old_log_size = Koha::ActionLogs->count( \%params_renewal );
-    AddRenewal( $renewing_borrower->{borrowernumber}, $item_7->itemnumber, $branch );
+    my $dt = dt_from_string();
+    Time::Fake->offset( $dt->epoch );
+    my $datedue1 = AddRenewal( $renewing_borrower->{borrowernumber}, $item_7->itemnumber, $branch );
     my $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is ($new_log_size, $old_log_size, 'renew log not added because of the syspref RenewalLog');
+    isnt (DateTime->compare($datedue1, $dt), 0, "AddRenewal returned a good duedate");
+    Time::Fake->reset;
 
     t::lib::Mocks::mock_preference('RenewalLog', 1);
     $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
