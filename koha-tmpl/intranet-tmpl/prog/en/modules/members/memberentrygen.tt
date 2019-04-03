@@ -308,11 +308,11 @@ $(document).ready(function() {
             [% IF NOT Koha.Preference('LoginWithSSNProviderCredentials') %]
                 <li>
                     <label for="ssn_username" class="">Käyttäjätunnuksesi: </label>
-                    <input type="text" name="ssn_username" value="[% ssn_user %]" class="valid">
+                    <input type="text" name="ssn_username" class="valid">
                 </li>
                 <li>
                     <label for="ssn_password" class="">Salasanasi: </label>
-                    <input type="password" name="ssn_password" value="[% ssn_pass %]" class="valid">
+                    <input type="password" name="ssn_password" class="valid">
                 </li>
             [% ELSE %]
                 <li>
