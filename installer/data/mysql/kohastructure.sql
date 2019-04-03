@@ -4272,7 +4272,8 @@ CREATE TABLE `circulation_rules` (
 -- Table structure for table `stockrotationrotas`
 --
 
-CREATE TABLE IF NOT EXISTS stockrotationrotas (
+DROP TABLE IF EXISTS stockrotationrotas;
+CREATE TABLE stockrotationrotas (
     rota_id int(11) auto_increment,         -- Stockrotation rota ID
     title varchar(100) NOT NULL,            -- Title for this rota
     description text NOT NULL,              -- Description for this rota
@@ -4285,7 +4286,8 @@ CREATE TABLE IF NOT EXISTS stockrotationrotas (
 -- Table structure for table `stockrotationstages`
 --
 
-CREATE TABLE IF NOT EXISTS stockrotationstages (
+DROP TABLE IF EXISTS stockrotationstages;
+CREATE TABLE stockrotationstages (
     stage_id int(11) auto_increment,     -- Unique stage ID
     position int(11) NOT NULL,           -- The position of this stage within its rota
     rota_id int(11) NOT NULL,            -- The rota this stage belongs to
@@ -4306,7 +4308,8 @@ CREATE TABLE IF NOT EXISTS stockrotationstages (
 -- Table structure for table `stockrotationitems`
 --
 
-CREATE TABLE IF NOT EXISTS stockrotationitems (
+DROP TABLE IF EXISTS stockrotationitems;
+CREATE TABLE stockrotationitems (
     itemnumber_id int(11) NOT NULL,         -- Itemnumber to link to a stage & rota
     stage_id int(11) NOT NULL,              -- stage ID to link the item to
     indemand tinyint(1) NOT NULL default 0, -- Should this item be skipped for rotation?
