@@ -1,5 +1,10 @@
 body {
-    background-color: #EAEAE6;
+    background-color: #fcf9fc;
+}
+
+#wrap {
+    padding-right: 40px;
+    padding-left: 40px;
 }
 
 a, a:visited,
@@ -13,28 +18,30 @@ a.title {
 }
 
 h1 {
+    color: #727272;
     font-size : 140%;
     line-height: 150%;
 }
 h2 {
-
+    color: #727272;
     font-size : 130%;
     line-height: 150%;
 }
 h3 {
-
+    color: #727272;
     font-size : 120%;
     line-height: 150%;
 }
 h4 {
-
+    color: #727272;
     font-size : 110%;
 }
 h5 {
-
+    color: #727272;
     font-size : 100%;
 }
 caption {
+    color: #727272;
     font-size: 120%;
     font-weight: bold;
     margin : .5em 0;
@@ -45,8 +52,19 @@ input,
 textarea {
     width: auto;
 }
+/*Search bar border glow*/
+input[type="text"]:focus {
+   border-color: #85ca11;
+   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(194,228,136,.6)
+}
+
+input[type="password"]:focus {
+   border-color: #85ca11;
+   box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(194,228,136,.6)
+}
 
 legend {
+    color: #727272;
     font-size: 110%;
     font-weight: bold;
 }
@@ -55,21 +73,90 @@ th {
 }
 .main {
     background-color: #FFF;
-    border: 1px solid #D2D2CF;
-    border-radius: 8px 8px 8px 8px;
+    border-color: #f0f3f3;
     margin: 0.5em 20px;
     padding: 0.8em 0;
-    -webkit-box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, .2);
-    box-shadow: 0px 1px 1px 0px rgba(0, 0, 0, .2);
 }
+
+.navbar-inverse .navbar-inner {
+    background: #fcf9fc none;
+    border-color: #fcf9fc;
+    box-shadow: none;
+}
+
 .navbar-inverse .brand, .navbar-inverse .nav > li > a {
-    color: #9FE1FF;
+    color: #727272;
     font-weight: bold;
 }
 
+
+/*language menu font colour*/
+
+
+/*Dropdown menus in Header*/
+.dropdown-menu {
+   border-radius: 0px;
+}
+
+.dropdown-menu > li > a:hover {
+   background: #85ca11 none;
+   color: #FFFFFF;
+}
+
+.dropdown-menu > li > a:focus {
+   background: #85ca11 none;
+   color: #FFFFFF;
+}
+
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle .caret {
+   border-top-color: #85ca11;
+   border-bottom-color: #85ca11;
+}
+
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle .caret:hover {
+   border-top-color: #85ca11;
+   border-bottom-color: #85ca11;
+}
+
+.navbar-inverse .nav li.dropdown.open > .dropdown-toggle {
+   background-color: transparent;
+   color: #85ca11;
+}
+
+.navbar-inverse .nav li.dropdown > a:hover .caret {
+   border-top-color: #85ca11;
+   border-bottom-color: #85ca11;
+}
+
+.navbar .nav li.dropdown > a:focus .caret {
+   border-top-color: #85ca11;
+   border-bottom-color: #85ca11;
+}
+
+.navbar-inverse .nav li.dropdown > a:focus .caret {
+   border-top-color: #85ca11;
+   border-bottom-color: #85ca11;
+}
+
+.navbar .nav li.dropdown > a:hover .caret {
+   border-top-color: #85ca11;
+   border-bottom-color: #85ca11;
+}
+
+.navbar-inverse .nav > li > a {
+   color: #727272;
+}
+
+.navbar-inverse .nav > li > a:hover {
+   color: #85ca11;
+}
+
+.navbar-inverse .nav > li > a:focus {
+   color: #85ca11;
+}
 .table-striped tbody > tr:nth-child(odd) > td,
 .table-striped tbody > tr:nth-child(odd) > th {
-  background-color: #F4F4F4;
+  background-color: #f0f3f3;
 }
 /* Redefine a new style for Bootstrap's class "close" since we use that already */
 /* Use <a class="closebtn" href="#">&times;</a> */
@@ -123,19 +210,6 @@ button.closebtn{padding:0;cursor:pointer;background:transparent;border:0;-webkit
     border-color : #9FBA35;
     color: #333;
 }
-#members p {
-    color : #EEE;
-}
-
-#members a {
-    color: #A6D8ED;
-    font-weight: bold;
-}
-
-#members a.logout {
-    color : #E8583C;
-    padding : 0 .3em 0 .3em;
-}
 
 .inline {
     display: inline;
@@ -177,22 +251,42 @@ i.help {
 
 .table .sorting_asc {
     padding-right: 19px;
-    background: url("../images/asc.gif") no-repeat scroll right center #EEEEEE;
+    background: url("../images/asc.gif") no-repeat scroll right center #e2e8e8;
 }
 .table .sorting_desc {
     padding-right: 19px;
-    background: url("../images/desc.gif") no-repeat scroll right center #EEEEEE;
+    background: url("../images/desc.gif") no-repeat scroll right center #e2e8e8;
 }
 .table .sorting {
     padding-right: 19px;
-    background: url("../images/ascdesc.gif") no-repeat scroll right center #EEEEEE;
+    background: url("../images/ascdesc.gif") no-repeat scroll right center #e2e8e8;
 }
 .table .nosort,
 .table .nosort.sorting_asc,
 .table .nosort.sorting_desc,
 .table .nosort.sorting {
     padding-right: 19px;
-    background: #EEEEEE none;
+    background: #e2e8e8 none;
+}
+
+.table-bordered {
+    border-radius: 0px;
+}
+
+.table-bordered thead:first-child tr:first-child > th:last-child {
+   border-radius: 0px;
+}
+
+.table-bordered tbody:last-child tr:last-child > td:last-child {
+   border-radius: 0px;
+}
+
+.table-bordered tbody:last-child tr:last-child > td:first-child {
+   border-radius: 0px;
+}
+
+.table-bordered thead:first-child tr:first-child > th:first-child {
+   border-radius: 0px;
 }
 
 #sci_logout {
