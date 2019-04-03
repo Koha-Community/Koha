@@ -54,11 +54,11 @@ $(document).ready(function() {
                         "mDataProp": function( oObj ) {
                             var data = "";
                             if ( oObj.barcode ) {
-                                data += " <a href='/cgi-bin/koha/catalogue/detail.pl?biblionumber="
+                                data += " <a href='/cgi-bin/koha/catalogue/moredetail.pl?biblionumber="
                                   + oObj.biblionumber
                                   + "&itemnumber="
                                   + oObj.itemnumber
-                                  + "#"
+                                  + "#item"
                                   + oObj.itemnumber
                                   + "'>"
                                   + oObj.barcode.escapeHtml()
