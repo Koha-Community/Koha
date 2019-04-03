@@ -77,6 +77,8 @@ my $name = $plugin->NAME;
 
 =back
 
+=over
+
 =item get_suggestions(query)
 
 Sends in the search query and gets an XML with a suggestion
