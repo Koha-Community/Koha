@@ -260,7 +260,7 @@ __PAZPAR2_TOGGLE_XML_POST__
  <!-- Connection to ssn server for billing -->
  <ssnProvider>
     <url></url> <!-- base URL of ssn-service -->
-    <interface></interface> <!-- This is either directDB or FindSSN (recommended) for Outi billing, always directDB for Billing Manager  -->
+    <interface></interface> <!-- This is either directDB or findSSN (recommended) for Outi billing, always directDB for Billing Manager  -->
     <directDB>    
         <host></host>
         <port></port>
@@ -271,6 +271,10 @@ __PAZPAR2_TOGGLE_XML_POST__
         <user></user>
         <password></password>
     </findSSN>
+    <addSSN>
+        <user></user>
+        <password></password>
+    </addSSN>
  </ssnProvider>
 
 <!-- Secure patron ssn/data store connection. See https://github.com/kivilahtio/Hetula -->
