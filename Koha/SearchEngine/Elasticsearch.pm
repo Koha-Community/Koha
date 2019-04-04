@@ -277,11 +277,23 @@ sub _get_elasticsearch_field_config {
     return;
 }
 
-sub reset_elasticsearch_mappings {
-    my ( $reset_fields ) = @_;
+=head2 _load_elasticsearch_mappings
+
+Load Elasticsearch mappings in the format of mappings.yaml.
+
+$indexes = _load_elasticsearch_mappings();
+
+=cut
+
+sub _load_elasticsearch_mappings {
     my $mappings_yaml = C4::Context->config('elasticsearch_index_mappings');
     $mappings_yaml ||= C4::Context->config('intranetdir') . '/admin/searchengine/elasticsearch/mappings.yaml';
-    my $indexes = LoadFile( $mappings_yaml );
+    return LoadFile( $mappings_yaml );
+}
+
+sub reset_elasticsearch_mappings {
+    my ( $self ) = @_;
+    my $indexes = $self->_load_elasticsearch_mappings();
 
     while ( my ( $index_name, $fields ) = each %$indexes ) {
         while ( my ( $field_name, $data ) = each %$fields ) {
@@ -307,7 +319,7 @@ sub reset_elasticsearch_mappings {
                     facet => $mapping->{facet} || 0,
                     suggestible => $mapping->{suggestible} || 0,
                     sort => $mapping->{sort},
-                    search => $mapping->{search} || 1
+                    search => $mapping->{search} // 1
                 });
             }
         }

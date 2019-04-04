@@ -466,54 +466,94 @@ subtest 'build query from form subtests' => sub {
 };
 
 subtest 'build_query with weighted fields tests' => sub {
-    plan tests => 2;
+    plan tests => 4;
 
-    my $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'mydb' } );
-    my $db_builder = t::lib::TestBuilder->new();
+    $se->mock( '_load_elasticsearch_mappings', sub {
+        return {
+            biblios => {
+                abstract => {
+                    label => 'abstract',
+                    type => 'string',
+                    opac => 1,
+                    staff_client => 0,
+                    mappings => [{
+                        marc_field => '520',
+                        marc_type => 'marc21',
+                    }]
+                },
+                acqdate => {
+                    label => 'acqdate',
+                    type => 'string',
+                    opac => 0,
+                    staff_client => 1,
+                    mappings => [{
+                        marc_field => '952d',
+                        marc_type => 'marc21',
+                        search => 0,
+                    }, {
+                        marc_field => '9955',
+                        marc_type => 'marc21',
+                        search => 0,
+                    }]
+                },
+                title => {
+                    label => 'title',
+                    type => 'string',
+                    opac => 0,
+                    staff_client => 1,
+                    mappings => [{
+                        marc_field => '130',
+                        marc_type => 'marc21'
+                    }]
+                },
+                subject => {
+                    label => 'subject',
+                    type => 'string',
+                    opac => 0,
+                    staff_client => 1,
+                    mappings => [{
+                        marc_field => '600a',
+                        marc_type => 'marc21'
+                    }]
+                }
+            }
+        };
+    });
 
+    my $qb = Koha::SearchEngine::Elasticsearch::QueryBuilder->new( { index => 'biblios' } );
     Koha::SearchFields->search({})->delete;
+    Koha::SearchEngine::Elasticsearch->reset_elasticsearch_mappings();
+
+    my $search_field;
+    $search_field = Koha::SearchFields->find({ name => 'title' });
+    $search_field->update({ weight => 25.0 });
+    $search_field = Koha::SearchFields->find({ name => 'subject' });
+    $search_field->update({ weight => 15.5 });
     $clear_search_fields_cache->();
-
-    $db_builder->build({
-        source => 'SearchField',
-        value => {
-            name    => 'acqdate',
-            label   => 'acqdate',
-            weight  => undef,
-            staff_client => 1
-        }
-    });
-
-    $db_builder->build({
-        source => 'SearchField',
-        value => {
-            name    => 'title',
-            label   => 'title',
-            weight  => 25,
-            staff_client => 1
-        }
-    });
-
-    $db_builder->build({
-        source => 'SearchField',
-        value => {
-            name    => 'subject',
-            label   => 'subject',
-            weight  => 15,
-            staff_client => 1
-        }
-    });
 
     my ( undef, $query ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef,
     undef, undef, undef, { weighted_fields => 1 });
 
     my $fields = $query->{query}{query_string}{fields};
 
-    my @found = grep { $_ eq 'title^25.00' } @{$fields};
-    is(@found, 1, 'Search field is title has correct weight'); # Fails
+    is(@{$fields}, 2, 'Search field with no searchable mappings has been excluded');
 
-    @found = grep { $_ eq 'subject^15.00' } @{$fields};
-    is(@found, 1, 'Search field subject has correct weight'); # Fails
+    my @found = grep { $_ eq 'title^25.00' } @{$fields};
+    is(@found, 1, 'Search field title has correct weight');
+
+    @found = grep { $_ eq 'subject^15.50' } @{$fields};
+    is(@found, 1, 'Search field subject has correct weight');
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['title:"donald duck"'], undef, undef,
+    undef, undef, undef, { weighted_fields => 1, is_opac => 1 });
+
+    $fields = $query->{query}{query_string}{fields};
+
+    is_deeply(
+        $fields,
+        ['abstract'],
+        'Only OPAC search fields are used when opac search is performed'
+    );
 };
 
 subtest "_convert_sort_fields() tests" => sub {
