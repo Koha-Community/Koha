@@ -209,7 +209,20 @@
 
                   [%# Following on one line for translatability %]
                   [% IF ( ( OpacAdvSearchOptions and OpacAdvSearchOptions.grep('location').size > 0 and not expanded_options ) or ( OpacAdvSearchMoreOptions and OpacAdvSearchMoreOptions.grep('location').size > 0 and expanded_options ) ) %]
-                    [% UNLESS ( singleBranchMode ) %]
+                    [% IF ( singleBranchMode ) %]
+                        <div class="span3">
+                            <!-- AVAILABILITY LIMITS -->
+                            <div id="location">
+                                <fieldset>
+                                    <legend>Availability: </legend>
+                                    <div style="margin-top:.4em">
+                                        <label for="available-items"><input type="checkbox" id="available-items" name="limit" value="available" /> Only items currently available for loan or reference</label>
+                                    </div>
+                                </fieldset>
+                            </div> <!-- / #location -->
+                            <!-- /AVAILABILITY LIMITS -->
+                        </div> <!-- / .span3 -->
+                    [% ELSE %]
                         <div class="span3">
                             <!-- AVAILABILITY LIMITS -->
                             <div id="location">
@@ -243,7 +256,7 @@
                             </div> <!-- / #location -->
                             <!-- /AVAILABILITY LIMITS -->
                         </div> <!-- / .span3 -->
-                    [% END # / UNLESS singleBranchMode %]
+                    [% END # / IF singleBranchMode %]
                   [% END %]
 
                   [%# Following on one line for translatability %]
