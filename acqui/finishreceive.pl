@@ -154,12 +154,11 @@ if ($quantityrec > $origquantityrec ) {
 ModItem(
     {
         booksellerid         => $booksellerid,
-        dateaccessioned      => $datereceived,
         datelastseen         => $datereceived,
         price                => $unitprice,
         replacementprice     => $order->{rrp},
         replacementpricedate => $datereceived,
-        datereceived         => DateTime->now( time_zone => C4::Context->tz() )->iso8601(),
+        datereceived         => $datereceived
     },
     $biblionumber,
     $_
