@@ -236,7 +236,7 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
                         {
                             borrowernumber => $borrower->{borrowernumber},
                             accounttype    => 'Res',
-                            description    => 'Reserve Charge - ' . $item->biblio->title,
+                            description    => $item->biblio->title,
                             date           => $dtf->format_date(dt_from_string)
                         }
                       )->count,

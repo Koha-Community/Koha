@@ -7,6 +7,7 @@
 [% USE ColumnsSettings %]
 [% USE KohaDates %]
 [% SET footerjs = 1 %]
+[% PROCESS 'accounts.inc' %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Patrons &rsaquo; Make a payment for  [% patron.firstname | html %] [% patron.surname | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -44,13 +45,13 @@
 <tr>
     <th class="NoSort">&nbsp;</th>
     <th class="NoSort">Actions</th>
+    <th>Account type</th>
     <th>Description</th>
     <th class="title-string">Date</th>
     <th>Barcode</th>
     <th>Due date</th>
     <th>Return date</th>
     <th class="NoSort">Payment note</th>
-    <th>Account type</th>
     <th>Amount</th>
     <th>Amount outstanding</th>
 </tr>
@@ -80,30 +81,10 @@
     <input type="hidden" name="borrowernumber[% line.accountlines_id | html %]" value="[% line.borrowernumber | html %]" />
     </td>
     <td>
-        [% SWITCH line.accounttype %]
-          [% CASE 'Pay' %]Payment, thanks
-          [% CASE 'Pay00' %]Payment, thanks (cash via SIP2)
-          [% CASE 'Pay01' %]Payment, thanks (VISA via SIP2)
-          [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
-          [% CASE 'N' %]New card
-          [% CASE 'F' %]Fine
-          [% CASE 'A' %]Account management fee
-          [% CASE 'M' %]Sundry
-          [% CASE 'L' %]Lost item
-          [% CASE 'W' %]Writeoff
-          [% CASE 'FU' %]Accruing fine
-          [% CASE 'HE' %]Hold waiting too long
-          [% CASE 'Rent' %]Rental fee
-          [% CASE 'FOR' %]Forgiven
-          [% CASE 'LR' %]Lost item fee refund
-          [% CASE 'PF' %]Processing fee
-          [% CASE 'PAY' %]Payment
-          [% CASE 'WO' %]Writeoff
-          [% CASE 'C' %]Credit
-          [% CASE 'CR' %]Credit
-          [% CASE %][% line.accounttype | html %]
-        [%- END -%]
-        [%- IF line.description %], [% line.description | html %][% END %]
+        [% PROCESS account_type_description account=line %]
+    </td>
+    <td>
+        [%- IF line.description %][% line.description | html %][% END %]
         [% IF line.itemnumber %]([% line.item.biblio.title | html %])[% END %]
     </td>
     <td>
@@ -128,7 +109,6 @@
         <a href="#" class="add-note" data-accountlines_id="[% line.accountlines_id | html %]"><i class="fa fa-plus"></i> Add note</a>
         <span class="payment_note" id="payment_note_[% line.accountlines_id | html %]" style="display:none"><input type="text" size="10" name="payment_note_[% line.accountlines_id | html %]" value="" /> <a href="#" class="cancel-note"><i class="fa fa-remove"></i></a></span>
     </td>
-    <td>[% line.accounttype | html %]</td>
     <td class="debit" style="text-align: right;">[% line.amount | $Price %]</td>
     <td class="debit" style="text-align: right;">[% line.amountoutstanding | $Price %]</td>
 </tr>

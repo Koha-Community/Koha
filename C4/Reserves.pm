@@ -571,7 +571,7 @@ sub ChargeReserveFee {
     Koha::Account->new( { patron_id => $borrowernumber } )->add_debit(
         {
             amount       => $fee,
-            description  => "Reserve Charge - " . $title,
+            description  => $title,
             note         => undef,
             user_id      => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
             library_id   => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,

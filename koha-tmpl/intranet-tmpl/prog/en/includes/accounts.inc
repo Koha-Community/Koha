@@ -21,6 +21,7 @@
         [%- CASE 'WO'    -%]<span>Writeoff</span>
         [%- CASE 'C'     -%]<span>Credit</span>
         [%- CASE 'CR'    -%]<span>Credit</span>
+        [%- CASE 'Res'   -%]<span>Hold fee</span>
         [%- CASE         -%][% account.accounttype | html %]
     [%- END -%]
 [%- END -%]

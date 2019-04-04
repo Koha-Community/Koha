@@ -44,6 +44,7 @@
     <thead>
       <tr>
           <th class="title-string">Date</th>
+          <th>Account type</th>
           <th>Description of charges</th>
           <th>Barcode</th>
           <th>Due date</th>
@@ -61,10 +62,10 @@
 
    <tr>
    <td><span title="[% account.date | html %]">[% account.date |$KohaDates %]</span></td>
+        <td>[% PROCESS account_type_description account=account %]</td>
       <td>
-        [% PROCESS account_type_description account=account %]
-        [%- IF account.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
-        [%- IF account.description %], [% account.description | html %][% END %]
+        [%- IF account.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', account.payment_type) | html %][% END %]
+        [%- IF account.description %][% account.description | html %][% END %]
         &nbsp;[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% account.item.biblionumber | uri %]&amp;itemnumber=[% account.itemnumber | uri %]">[% account.item.biblio.title | html %]</a>[% END %]</td>
       <td>[% IF ( account.itemnumber ) %]<a href="/cgi-bin/koha/catalogue/moredetail.pl?itemnumber=[% account.itemnumber | uri %]&amp;biblionumber=[% account.item.biblionumber | uri %]#item[% account.itemnumber | uri %]">[% account.item.barcode | html %]</a>[% END %]</td>
       <td>[% IF ( account.issue_id ) %][% account.checkout.date_due | $KohaDates as_due_date => 1 %][% END %]</td>
@@ -89,7 +90,7 @@
   [% END %]
 <tfoot>
   <tr>
-    <td colspan="8">Total due</td>
+    <td colspan="9">Total due</td>
     [% IF ( totalcredit ) %]
         <td class="credit" style="text-align: right;">[% total | $Price %]</td>
     [% ELSE %]

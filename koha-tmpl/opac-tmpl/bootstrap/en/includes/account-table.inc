@@ -8,6 +8,7 @@
                 [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
                 <th class="title-string">Date</th>
                 <th>Description</th>
+                <th>Type</th>
                 <th>Fine amount</th>
                 <th>Amount outstanding</th>
             </tr>
@@ -48,10 +49,13 @@
                         [% CASE 'WO' %]Writeoff
                         [% CASE 'C' %]Credit
                         [% CASE 'CR' %]Credit
+                        [%-CASE 'Res' %]Hold fee
                         [% CASE %][% ACCOUNT_LINE.accounttype | html %]
                         [%- END -%]
-                        [%- IF ACCOUNT_LINE.payment_type %], [% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) | html %][% END %]
-                        [%- IF ACCOUNT_LINE.description %], [% ACCOUNT_LINE.description | html %][% END %]
+                    </td>
+                    <td>
+                        [%- IF ACCOUNT_LINE.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) | html %][% END %]
+                        [%- IF ACCOUNT_LINE.description %][% ACCOUNT_LINE.description | html %][% END %]
                         [% IF ACCOUNT_LINE.title %]([% ACCOUNT_LINE.title | html %])[% END %]
                     </td>
                     [% IF ( ACCOUNT_LINE.amountcredit ) %]<td class="credit">[% ELSE %]<td class="debit">[% END %][% ACCOUNT_LINE.amount | $Price %]</td>
@@ -63,9 +67,9 @@
         <tfoot>
             <tr>
                 [%- IF ENABLE_OPAC_PAYMENTS -%]
-                    [%- SET COLSPAN = 4 -%]
+                    [%- SET COLSPAN = 5 -%]
                 [%- ELSE -%]
-                    [%- SET COLSPAN = 3 -%]
+                    [%- SET COLSPAN = 4 -%]
                 [%- END -%]
                 <th class="sum" colspan="[% COLSPAN | html %]">Total due</th>
                 <td class="sum">[% total | $Price %]</td>
