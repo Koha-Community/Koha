@@ -1121,14 +1121,17 @@ subtest 'libraries_where_can_see_patrons + can_see_patron_infos + search_limited
 };
 
 subtest 'account_locked' => sub {
-    plan tests => 9;
+    plan tests => 13;
     my $patron = $builder->build({ source => 'Borrower', value => { login_attempts => 0 } });
     $patron = Koha::Patrons->find( $patron->{borrowernumber} );
     for my $value ( undef, '', 0 ) {
         t::lib::Mocks::mock_preference('FailedloginAttempts', $value);
+        $patron->login_attempts(0)->store;
         is( $patron->account_locked, 0, 'Feature is disabled, patron account should not be considered locked' );
         $patron->login_attempts(1)->store;
         is( $patron->account_locked, 0, 'Feature is disabled, patron account should not be considered locked' );
+        $patron->login_attempts(-1)->store;
+        is( $patron->account_locked, 1, 'Feature is disabled but administrative lockout has been triggered' );
     }
 
     t::lib::Mocks::mock_preference('FailedloginAttempts', 3);
@@ -1138,6 +1141,8 @@ subtest 'account_locked' => sub {
     is( $patron->account_locked, 1, 'Patron has 3 failed attempts, account should be considered locked yet' );
     $patron->login_attempts(4)->store;
     is( $patron->account_locked, 1, 'Patron could not have 4 failed attempts, but account should still be considered locked' );
+    $patron->login_attempts(-1)->store;
+    is( $patron->account_locked, 1, 'Administrative lockout triggered' );
 
     $patron->delete;
 };
