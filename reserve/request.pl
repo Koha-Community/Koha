@@ -298,7 +298,7 @@ foreach my $biblionumber (@biblionumbers) {
     my $force_hold_level;
     if ( $patron ) {
         { # CanBookBeReserved
-            my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber, $pickup );
+            my $canReserve = CanBookBeReserved( $patron->borrowernumber, $biblionumber );
             if ( $canReserve->{status} eq 'OK' ) {
 
                 #All is OK and we can continue
@@ -548,8 +548,8 @@ foreach my $biblionumber (@biblionumbers) {
 
                 $item->{'holdallowed'} = $branchitemrule->{'holdallowed'};
 
-                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber, $pickup )->{status};
-                $item->{not_holdable} = $can_item_be_reserved unless $can_item_be_reserved eq 'OK';
+                my $can_item_be_reserved = CanItemBeReserved( $patron->borrowernumber, $itemnumber )->{status};
+                $item->{not_holdable} = $can_item_be_reserved unless ( $can_item_be_reserved->{status} eq 'OK' );
 
                 $item->{item_level_holds} = Koha::IssuingRules->get_opacitemholds_policy( { item => $item_object, patron => $patron } );
 
@@ -562,6 +562,11 @@ foreach my $biblionumber (@biblionumbers) {
                 {
                     $item->{available} = 1;
                     $num_available++;
+                    if($branchitemrule->{'hold_fulfillment_policy'} eq 'any' ) {
+                        $item->{pickup_locations} = 'Any library';
+                    } else {
+                        $item->{pickup_locations} = join (', ', map { $_->{branchname} } Koha::Items->find($itemnumber)->pickup_locations());
+                    }
 
                     push( @available_itemtypes, $item->{itype} );
                 }
