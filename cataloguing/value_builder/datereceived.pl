@@ -29,8 +29,8 @@ my $builder = sub {
 
     my $date = output_pref({ dt => dt_from_string, dateformat => 'iso', dateonly => 1 });
 
-	# find the tag/subfield mapped to items.dateaccessioned
-	my ($tag,$subfield) =  GetMarcFromKohaField("items.dateaccessioned","");
+	# find the tag/subfield mapped to items.datereceived
+	my ($tag,$subfield) =  GetMarcFromKohaField("items.datereceived","");
 	my $res  = <<END_OF_JS;
 <script type="text/javascript">
 //<![CDATA[
