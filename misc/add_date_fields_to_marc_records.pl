@@ -29,7 +29,7 @@ use MARC::Field;
 use C4::Biblio;
 use Koha::DateUtils qw( dt_from_string );
 
-my ( $verbose, $help, $confirm, $where, @fields );
+my ( $verbose, $help, $confirm, $where, @fields, $unless_exists_field );
 my $dbh = C4::Context->dbh;
 
 GetOptions(
@@ -38,6 +38,7 @@ GetOptions(
     'confirm|c' => \$confirm,
     'where=s'   => \$where,
     'field=s@'  => \@fields,
+    'unless-exists=s' => \$unless_exists_field,
 ) || podusage(1);
 
 pod2usage(0) if $help;
@@ -51,7 +52,7 @@ for my $field (@fields) {
       MARC::Field->new( $tag, '', '', $subfield => $dt->strftime($value) );
 }
 
-say "Confirm flag not passed, running in dry-run mode...";
+say "Confirm flag not passed, running in dry-run mode..." unless $confirm;
 if ($verbose) {
     say "The following MARC fields will be added:";
     say "\t" . $_->as_formatted for @fields_to_add;
@@ -66,6 +67,10 @@ while ( my ( $biblionumber, $frameworkcode ) = $sth->fetchrow_array ) {
     my $marc_record =
       C4::Biblio::GetMarcBiblio( { biblionumber => $biblionumber } );
     next unless $marc_record;
+    if ( $unless_exists_field ) {
+        my ( $tag,  $subfield ) = split '\$', $unless_exists_field;
+        next if $marc_record->subfield($tag, $subfield);
+    }
     $marc_record->append_fields(@fields_to_add);
     if ($confirm) {
         my $modified =
@@ -86,7 +91,7 @@ add_date_fields_to_marc_records.pl
 
   perl add_date_fields_to_marc_records.pl --help
 
-  perl add_date_fields_to_marc_records.pl --field='905$a=0/%Y' --field='905$a=1/%Y/%b-%m' --field='905$a=2/%Y/%b-%m/%d' --verbose --confirm
+  perl add_date_fields_to_marc_records.pl --field='905$a=0/%Y' --field='905$a=1/%Y/%b-%m' --field='905$a=2/%Y/%b-%m/%d' --unless-exists='905$a' --verbose --confirm
 
 =head1 DESCRIPTION
 
@@ -122,6 +127,10 @@ For instance:
 905$a=0/%Y will add a new field 905$a with the value '0/2019' (if run in 2019)
 
 905$a=2/%Y/%b-%m/%d'will a a new field 905$a with the value '2/2019/Mar-03/13' if run on March 13th 2019
+
+=item B<--unless-exists>
+
+Will only create the new fields if this field does not exist
 
 =back
 
