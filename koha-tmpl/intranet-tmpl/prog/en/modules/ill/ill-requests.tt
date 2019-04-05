@@ -6,6 +6,7 @@
 [% SET footerjs = 1 %]
 [% USE AuthorisedValues %]
 [% USE ColumnsSettings %]
+[% USE Price %]
 
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; ILL requests</title>
@@ -224,7 +225,7 @@
                                 </li>
                                 <li class="cost">
                                     <label class="cost">Cost:</label>
-                                    [% IF request.cost %][% request.cost | html %][% ELSE %]<span>N/A</span>[% END %]
+                                    [% IF request.cost %][% request.cost | $Price %][% ELSE %]<span>N/A</span>[% END %]
                                 </li>
                                 <li class="price_paid">
                                     <label class="price_paid">Price paid:</label>
@@ -379,11 +380,11 @@
                                     </li>
                                     <li class="cost">
                                         <span class="label cost">Cost:</span>
-                                        [% IF request.cost %][% request.cost | html %][% ELSE %]<span>N/A</span>[% END %]
+                                        [% IF request.cost %][% request.cost | $Price %][% ELSE %]<span>N/A</span>[% END %]
                                     </li>
                                     <li class="price_paid">
                                         <span class="label price_paid">Price paid:</span>
-                                        [% IF request.price_paid %][% request.price_paid | html %][% ELSE %]<span>N/A</span>[% END %]
+                                        [% IF request.price_paid %][% request.price_paid | $Price %][% ELSE %]<span>N/A</span>[% END %]
                                     </li>
                                     <li class="req_id">
                                         <span class="label req_id">Request number:</span>
