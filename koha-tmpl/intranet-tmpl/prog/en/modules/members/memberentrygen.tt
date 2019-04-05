@@ -305,7 +305,7 @@ $(document).ready(function() {
         <div id="ssn_notifier" style="font-weight: bold"></div>
 
         <ol>
-            [% IF NOT Koha.Preference('LoginWithSSNProviderCredentials') %]
+            [% UNLESS Koha.Preference('LoginWithSSNProviderCredentials') AND ssn_user AND ssn_pass %]
                 <li>
                     <label for="ssn_username" class="">Käyttäjätunnuksesi: </label>
                     <input type="text" name="ssn_username" class="valid">

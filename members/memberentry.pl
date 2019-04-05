@@ -784,12 +784,22 @@ $template->param(
   modify          => $modify,
   nok     => $nok,#flag to know if an error
   NoUpdateLogin =>  $NoUpdateLogin,
-  hetula_url => C4::Context->config('hetula')->{'url'},
-  hetula_organization => C4::Context->config('hetula')->{'organization'},
-  ssn_url => C4::Context->config('ssnProvider')->{'url'} . '/ssn/addssn?ajax=1', #Feature #1132, config for ssn url + KD#1844, changes in koha-conf.xml
-  ssn_user => C4::Context->config('ssnProvider')->{'addSSN'}->{'user'}, # for KD-2571 (autologin)
-  ssn_pass => C4::Context->config('ssnProvider')->{'addSSN'}->{'password'}, # for KD-2571 (autologin)
   );
+
+if ( C4::Context->config('hetula') && C4::Context->config('hetula')->{'url'} && C4::Context->config('hetula')->{'organization'} ) {
+  $template->param(
+    hetula_url => C4::Context->config('hetula')->{'url'},
+    hetula_organization => C4::Context->config('hetula')->{'organization'}
+    );
+}
+
+if ( C4::Context->config('ssnProvider') && C4::Context->config('ssnProvider')->{'url'} && C4::Context->config('ssnProvider')->{'addSSN'}->{'user'} && C4::Context->config('ssnProvider')->{'addSSN'}->{'password'} ) {
+  $template->param(
+    ssn_url => C4::Context->config('ssnProvider')->{'url'} . '/ssn/addssn?ajax=1',
+    ssn_user => C4::Context->config('ssnProvider')->{'addSSN'}->{'user'},
+    ssn_pass => C4::Context->config('ssnProvider')->{'addSSN'}->{'password'}
+    );
+}
 
 # Generate CSRF token
 $template->param( csrf_token =>
