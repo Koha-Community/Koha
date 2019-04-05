@@ -41,8 +41,12 @@ my $id = $query->param('id');
 
 if ( $id ) {
     my $ar = Koha::ArticleRequests->find( $id );
-    if ( !$ar || $ar->borrowernumber != $borrowernumber ) {
+    if ( !$ar ) {
         print $query->redirect("/cgi-bin/koha/errors/404.pl");
+        exit;
+    }
+    elsif ( $ar->borrowernumber != $borrowernumber ) {
+        print $query->redirect("/cgi-bin/koha/errors/403.pl");
         exit;
     }
 
