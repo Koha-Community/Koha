@@ -44,6 +44,7 @@ use Encode;
 use Archive::Zip qw( :ERROR_CODES :CONSTANTS );
 use Net::FTP;
 use Data::Dumper;
+use XML::Simple;
 
 sub usage {
     print STDERR <<USAGE;
@@ -129,12 +130,12 @@ foreach my $message (@all_messages) {
     $xmlTemplate->param(CONTACT => Encode::encode( "iso-8859-1", $contact));
     $xmlTemplate->param(CUSTOMERID => $customerId);
     $xmlTemplate->param(CUSTOMERPASS => $customerPass);
-    $xmlTemplate->param(NAME => $borrower->{firstname});
-    $xmlTemplate->param(SURNAME => $borrower->{surname});
-    $xmlTemplate->param(ADDRESS1 => $borrower->{address});
-    $xmlTemplate->param(ADDRESS2 => $borrower->{address2});
-    $xmlTemplate->param(ZIPCODE => $borrower->{zipcode});
-    $xmlTemplate->param(CITY => $borrower->{city});
+    $xmlTemplate->param(NAME => XML::Simple->new()->escape_value($borrower->{firstname}));
+    $xmlTemplate->param(SURNAME => XML::Simple->new()->escape_value($borrower->{surname}));
+    $xmlTemplate->param(ADDRESS1 => XML::Simple->new()->escape_value($borrower->{address}));
+    $xmlTemplate->param(ADDRESS2 => XML::Simple->new()->escape_value($borrower->{address2});
+    $xmlTemplate->param(ZIPCODE => XML::Simple->new()->escape_value($borrower->{zipcode}));
+    $xmlTemplate->param(CITY => XML::Simple->new()->escape_value($borrower->{city}));
     $xmlTemplate->param(EXFILENAME => $pdfFile);
 
     open(my $fh, '>', $xmlFile);
