@@ -7,8 +7,8 @@
             <tr>
                 [% IF ENABLE_OPAC_PAYMENTS %]<th>&nbsp;</th>[% END %]
                 <th class="title-string">Date</th>
-                <th>Description</th>
                 <th>Type</th>
+                <th>Description</th>
                 <th>Fine amount</th>
                 <th>Amount outstanding</th>
             </tr>
