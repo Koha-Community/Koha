@@ -180,6 +180,11 @@
                                 [% ELSE %]
                                     <option value="nb">ISBN</option>
                                 [% END # /ms_nb%]
+                                [% IF ( ms_ns ) %]
+                                    <option selected="selected" value="ns">ISSN</option>
+                                [% ELSE %]
+                                    <option value="ns">ISSN</option>
+                                [% END # /ms_ns%]
                                 [% IF ( ms_se ) %]
                                     <option selected="selected" value="se">Series</option>
                                 [% ELSE %]
