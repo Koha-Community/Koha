@@ -1,5 +1,6 @@
 [%- USE Branches -%]
 [%- USE Koha -%]
+[%- USE ItemTypes -%]
 [% USE AuthorisedValues %]
 [%- biblio = item.biblio -%]
 [%- biblioitem = item.biblioitem -%]
@@ -17,6 +18,7 @@
   "[% Branches.GetName(item.homebranch) | html %]",
   "[% Branches.GetName(item.holdingbranch) | html %]",
   "[% item.location | html %]",
+  "[% ItemTypes.GetDescription(item.itype) | html %]",
   "[% item.stocknumber | html %]",
   "[% item.status | html %]",
   "[% (item.issues || 0) | html %]",

@@ -269,6 +269,7 @@
                 + '      <th id="items_homebranch">' + _("Home library") + '</th>'
                 + '      <th id="items_holdingbranch">' + _("Current location") + '</th>'
                 + '      <th id="items_location">' + _("Shelving location") + '</th>'
+                + '      <th id="items_itype">' + _("Itemtype") + '</th>'
                 + '      <th id="item_inventoryno">' + _("Inventory number") + '</th>'
                 + '      <th id="items_status">' + _("Status") + '</th>'
                 + '      <th id="items_checkouts">' + _("Checkouts") + '</th>'
@@ -370,6 +371,7 @@
                     { 'sName': 'homebranch' },
                     { 'sName': 'holdingbranch' },
                     { 'sName': 'location' },
+                    { 'sName': 'itype'},
                     { 'sName': 'stocknumber' },
                     { 'sName': 'notforloan' },
                     { 'sName': 'issues' },
@@ -393,6 +395,11 @@
                     { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => branches %] },
                     [% IF locations.size %]
                         { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => locations %] },
+                    [% ELSE %]
+                        null,
+                    [% END %]
+                    [% IF itemtypes.size %]
+                        { 'type': 'select', 'values': [% INCLUDE escape_html_value_label elts => itemtypes %] },
                     [% ELSE %]
                         null,
                     [% END %]
