@@ -317,7 +317,7 @@ elsif ($op eq "add-branch-cat") {
             my $sth_update = $dbh->prepare(q|
                 UPDATE default_circ_rules
                 SET maxissueqty = ?,
-                    maxonsiteissueqty = ?,
+                    maxonsiteissueqty = ?
             |);
 
             $sth_search->execute();
@@ -349,7 +349,7 @@ elsif ($op eq "add-branch-cat") {
             my $sth_update = $dbh->prepare(q|
                 UPDATE default_borrower_circ_rules
                 SET maxissueqty = ?,
-                    maxonsiteissueqty = ?,
+                    maxonsiteissueqty = ?
                 WHERE categorycode = ?
             |);
             $sth_search->execute($categorycode);
