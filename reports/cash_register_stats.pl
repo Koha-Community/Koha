@@ -143,17 +143,17 @@ if ($do_it) {
         my $format = 'csv';
         my $reportname = $input->param('basename');
         my $reportfilename = $reportname ? "$reportname.$format" : "reportresults.$format" ;
-        #my $reportfilename = "$reportname.html" ;
         my $delimiter = C4::Context->preference('delimiter') || ',';
             my @rows;
             foreach my $row (@loopresult) {
                 my @rowValues;
-                push @rowValues, $row->{mfirstname},
+                push @rowValues, $row->{mfirstname}. ' ' . $row->{msurname},
                         $row->{cardnumber},
-                        $row->{bfirstname},
+                        $row->{bfirstname} . ' ' . $row->{bsurname},
                         $row->{branchname},
                         $row->{date},
                         $row->{accounttype},
+                        $row->{note},
                         $row->{amount},
                         $row->{title},
                         $row->{barcode},
