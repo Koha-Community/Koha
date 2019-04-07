@@ -144,6 +144,13 @@ else {
             -charset    => 'utf-8',
             -attachment =>  "bib-$biblionumber.txt"
         );
+    }
+    elsif ( $format eq 'ris' ) {
+        print $query->header(
+            -type => 'text/plain',
+            -charset => 'utf-8',
+            -attachment => "bib-$biblionumber.$format"
+        );
     } else {
         binmode STDOUT, ':encoding(UTF-8)';
         print $query->header(
