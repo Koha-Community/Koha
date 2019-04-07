@@ -132,9 +132,6 @@ $(document).ready(function() {
                     {
                         "mDataProp": function( oObj ) {
                             var data = "";
-                            if ( oObj.suspend != 1 && !oObj.itemtype_limit) {
-                                data = _("Hold has been placed\n");
-                            }
 
                             if ( oObj.suspend == 1 ) {
                                 data += "<p>" + HOLD_IS_SUSPENDED;
