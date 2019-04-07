@@ -93,7 +93,7 @@ Installs the Koha database with everything that can be optionally installed, ski
 =cut
 
 sub install_default_database {
-    my ($verbose, $marcflavour) = @_;
+    my ($verbose, $marcflavour, $lang) = @_;
     $marcflavour = 'MARC21' unless $marcflavour;
     my @cc = caller(0);
     require C4::Languages;
@@ -113,7 +113,7 @@ sub install_default_database {
     Koha::AtomicUpdater->new->addAllAtomicUpdates();
 
     my $all_languages = C4::Languages::getAllLanguages();
-    my $lang = 'en';
+    $lang //= 'en';
 
     my @installList;
     my $frameworkList  = $installer->marc_framework_sql_list($lang, $marcflavour);

@@ -11,11 +11,13 @@ use Koha::SearchEngine::Elasticsearch;
 my $help;
 my $verbose;
 my $marcflavour = 'MARC21';
+my $lang = 'en';
 
 GetOptions(
     'h|help'        => \$help,
     'v|verbose'     => \$verbose,
-    'marcflavour=s' => \$marcflavour
+    'marcflavour=s' => \$marcflavour,
+    'lang=s'        => \$lang
 );
 
 if ( $help ) {
@@ -29,6 +31,8 @@ updatedatabase.pl-runs are logged into the Koha logdir
 
   --marcflavour MARC21
 
+  --lang en
+
   -h --help     This nice help
 
 HELP
@@ -36,7 +40,7 @@ HELP
 }
 
 
-C4::Installer::install_default_database($verbose, $marcflavour);
+C4::Installer::install_default_database($verbose, $marcflavour, $lang);
 
 C4::Installer::updatedatabase($verbose);
 
