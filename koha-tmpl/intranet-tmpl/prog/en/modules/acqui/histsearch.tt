@@ -66,11 +66,11 @@
                             [% CASE 'cancelled' %]Cancelled
                         [% END %]
                     </td>
-                    <td>[% order.basketname | html %] (<a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>
+                    <td><a href="basket.pl?basketno=[% order.basketno | uri %]">[% order.basketname | html %] ([% order.basketno | html %])</a></td>
                     <td>[% order.authorisedbyname | html %]</td>
                     <td>
                         [% IF ( order.basketgroupid ) %]
-                            [% order.groupname | html %] (<a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.basketgroupid | html %]</a>)
+                        <a href="basketgroup.pl?op=add&booksellerid=[% order.id | uri %]&basketgroupid=[% order.basketgroupid | uri %]">[% order.groupname | html %] ([% order.basketgroupid | html %])</a>
                         [% ELSE %]
                             &nbsp;
                         [% END %]
