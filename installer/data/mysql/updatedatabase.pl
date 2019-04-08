@@ -16128,7 +16128,8 @@ if( CheckVersion( $DBversion ) ) {
         unless ( foreign_key_exists('aqorders', 'aqorders_created_by') ) {
             $dbh->do( "ALTER TABLE aqorders ADD CONSTRAINT aqorders_created_by FOREIGN KEY (created_by) REFERENCES borrowers (borrowernumber) ON DELETE SET NULL ON UPDATE CASCADE;" );
         }
-        $dbh->do( "UPDATE aqorders, aqbasket SET aqorders.created_by = aqbasket.authorisedby  WHERE aqorders.basketno = aqbasket.basketno AND aqorders.created_by IS NULL;" );
+        $dbh->do( "UPDATE aqbasket LEFT JOIN borrowers ON ( aqbasket.authorisedby = borrowers.borrowernumber ) SET aqbasket.authorisedby = NULL WHERE borrowers.borrowernumber IS NULL;" );
+        $dbh->do( "UPDATE aqorders LEFT JOIN aqbasket ON ( aqorders.basketno = aqbasket.basketno ) SET aqorders.created_by = aqbasket.authorisedby WHERE aqorders.created_by IS NULL;" );
     }
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 12395 - Save order line's creator)\n";
