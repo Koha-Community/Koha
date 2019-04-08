@@ -9,7 +9,7 @@
             <th>Patron</th>
             <th>Home branch</th>
             <th>Current location</th>
-            <th>Available location</th>
+            <th>Shelving location</th>
             <th>Call number</th>
             <th>Copy number</th>
             <th>Enumeration</th>
