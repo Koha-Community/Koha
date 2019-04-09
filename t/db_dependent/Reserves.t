@@ -735,7 +735,7 @@ subtest 'ChargeReserveFee tests' => sub {
     is( $line->borrowernumber, $patron->id , 'generated line belongs to the passed patron');
     is( $line->amount, $fee , 'amount set correctly');
     is( $line->amountoutstanding, $fee , 'amountoutstanding set correctly');
-    is( $line->description, "Reserve Charge - $title" , 'Hardcoded description is generated');
+    is( $line->description, "$title" , 'description is title of reserved item');
     is( $line->branchcode, $library->id , "Library id is picked from userenv and stored correctly" );
 };
 
