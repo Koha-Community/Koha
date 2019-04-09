@@ -17,7 +17,7 @@
         [%- CASE 'FOR'   -%]<span>Forgiven</span>
         [%- CASE 'FFOR'  -%]<span>Fine forgiven</span>
         [%- CASE 'LR'    -%]<span>Lost item fee refund</span>
-        [%- CASE 'PF'    -%]<span>Processing fee</span>
+        [%- CASE 'PF'    -%]<span>Lost item processing fee</span>
         [%- CASE 'PAY'   -%]<span>Payment</span>
         [%- CASE 'WO'    -%]<span>Writeoff</span>
         [%- CASE 'C'     -%]<span>Credit</span>
