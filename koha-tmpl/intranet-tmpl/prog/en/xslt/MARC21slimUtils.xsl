@@ -409,9 +409,9 @@
 	  <span class="label"><xsl:value-of select="$langLabel"/></span>
           <xsl:for-each select="$langNode">
             <span>
-	      <xsl:attribute name="class">lang_name-<xsl:value-of select="translate(., ' .-;>&lt;|#', '_')"/></xsl:attribute>
+	      <xsl:attribute name="class">lang_name-<xsl:value-of select="substring(translate(., ' .-;>&lt;|#', '_'),1,3)"/></xsl:attribute>
 	      <xsl:call-template name="languageCodeText">
-		<xsl:with-param name="code" select="."/>
+		<xsl:with-param name="code" select="substring(.,1,3)"/>
 	      </xsl:call-template>
 	    </span>
 	  </xsl:for-each>
