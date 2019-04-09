@@ -153,6 +153,17 @@ sub parent {
 
 }
 
+=head3 children_with_localization
+
+    Returns the ItemType objects of the children of this type or undef.
+
+=cut
+
+sub children_with_localization {
+    my ( $self ) = @_;
+    return Koha::ItemTypes->search_with_localization({ parent_type => $self->itemtype });
+}
+
 =head3 type
 
 =cut

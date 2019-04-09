@@ -25,9 +25,12 @@ use base qw( Template::Plugin );
 use Koha::ItemTypes;
 
 sub GetDescription {
-    my ( $self, $itemtypecode ) = @_;
+    my ( $self, $itemtypecode, $want_parent ) = @_;
     my $itemtype = Koha::ItemTypes->find( $itemtypecode );
-    return $itemtype ? $itemtype->translated_description : q{};
+    return q{} unless $itemtype;
+    my $parent;
+    $parent = $itemtype->parent if $want_parent;
+    return $parent ? $parent->translated_description . "->" . $itemtype->translated_description : $itemtype->translated_description;
 }
 
 sub Get {

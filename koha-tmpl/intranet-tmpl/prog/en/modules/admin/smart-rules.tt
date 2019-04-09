@@ -57,6 +57,10 @@
             <li>default (all libraries), all patron categories, same item type</li>
             <li>default (all libraries), all patron categories, all item types</li>
         </ul>
+
+        <p>Where an itemtype has a parent, the rule will display as "Parent->Child" and the number of
+        current checkouts allowed will be limited to either the maximum for the parent (counting sibling types)
+        or the specific rule's type, whichever is less.</p>
         <p>To modify a rule, create a new one with the same patron category and item type.</p>
     </div>
     <div>
@@ -86,7 +90,9 @@
             <table id="default-circulation-rules">
             <thead>
             <tr>
+                <th>&nbsp;</th>
                 <th>Patron category</th>
+                <th>&nbsp;</th>
                 <th>Item type</th>
                 <th>Actions</th>
                 <th>Note</th>
@@ -162,6 +168,7 @@
                         [% IF show_rule %]
                             [% SET row_count = row_count + 1 %]
                             <tr row_countd="row_[% row_count | html %]">
+                                    <td>[% IF ( c == undef ) %]1[% ELSE %]0[% END %]</td>
                                     <td>
                                         [% IF c == undef %]
                                             <em>All</em>
@@ -169,11 +176,12 @@
                                             [% Categories.GetName(c) | html %]
                                         [% END %]
                                     </td>
+                                    <td>[% IF ( i == undef ) %]1[% ELSE %]0[% END %]</td>
                                     <td>
                                         [% IF i == undef %]
                                             <em>All</em>
                                         [% ELSE %]
-                                            [% ItemTypes.GetDescription(i) | html %]
+                                            [% ItemTypes.GetDescription(i,1) | html %]
                                         [% END %]
                                     </td>
                                     <td class="actions">
@@ -321,6 +329,7 @@
                     [% END %]
                 [% END %]
                 <tr id="edit_row">
+                    <td>2</td>
                     <td>
                         <select name="categorycode" id="categorycode">
                             <option value="*">All</option>
@@ -329,11 +338,21 @@
                         [% END %]
                         </select>
                     </td>
+                    <td>0</td>
                     <td>
                         <select name="itemtype" id="matrixitemtype" style="width:13em;">
                             <option value="*">All</option>
                         [% FOREACH itemtypeloo IN itemtypeloop %]
+                            [% NEXT IF itemtypeloo.parent_type %]
                             <option value="[% itemtypeloo.itemtype | html %]">[% itemtypeloo.translated_description | html %]</option>
+                            [% SET children = itemtypeloo.children_with_localization %]
+                            [% IF children %]
+                                <optgroup>
+                                [% FOREACH child IN children %]
+                                    <option value="[% child.itemtype | html %]">[% child.translated_description | html %]</option>
+                                [% END %]
+                                </optgroup>
+                            [% END %]
                         [% END %]
                         </select>
                     </td>
@@ -432,7 +451,9 @@
                 </tr>
                 <tfoot>
                     <tr>
+                      <th>&nbsp;</th>
                       <th>Patron category</th>
+                      <th>&nbsp;</th>
                       <th>Item type</th>
                       <th>&nbsp;</th>
                       <th>Note</th>
@@ -943,8 +964,20 @@
 
 [% MACRO jsinclude BLOCK %]
     [% Asset.js("js/admin-menu.js") | $raw %]
+    [% INCLUDE 'datatables.inc' %]
     [% INCLUDE 'calendar.inc' %]
     <script>
+        $(document).ready(function() {
+            $("#default-circulation-rules").dataTable($.extend(true,{},dataTablesDefaults, {
+                "aoColumnDefs": [
+                    { "bVisible": false, "aTargets": [ 0,2 ] },
+                    { "bSortable": false, "aTargets": ["_all"] }
+                ],
+                "aaSortingFixed": [ [0,'asc'], [1,'asc'], [2,'asc'], [3,'asc'] ],
+                "bPaginate": false,
+                "bAutoWidth": false
+            }));
+        });
 
         function clear_edit(){
             var cancel = confirm(_("Are you sure you want to cancel your changes?"));
@@ -1030,6 +1063,7 @@
                         // select the corresponding option
                         $(current_column).find("select option").each(function(){
                             opt = $(this).text().toLowerCase();
+                            itm = itm.replace(/.*->(.*)/,"$1"); //If item type is part of a group we need to clear the parent description
                             opt = opt.replace(/^\s*|\s*$/g,'');
                             if ( opt == itm.toLowerCase() ) {
                                 $(this).attr('selected', 'selected');

@@ -20,7 +20,7 @@
 use Modern::Perl;
 
 use Data::Dumper;
-use Test::More tests => 24;
+use Test::More tests => 13;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -40,54 +40,37 @@ BEGIN {
 my $database = Koha::Database->new();
 my $schema   = $database->schema();
 $schema->txn_begin;
-Koha::ItemTypes->delete;
 
-Koha::ItemType->new(
-    {
-        itemtype       => 'type1',
-        description    => 'description',
-        rentalcharge   => '0.00',
-        imageurl       => 'imageurl',
-        summary        => 'summary',
-        checkinmsg     => 'checkinmsg',
-        checkinmsgtype => 'checkinmsgtype',
-        processfee         => '0.00',
-        defaultreplacecost => '0.00',
-    }
-)->store;
+my $builder     = t::lib::TestBuilder->new;
+my $initial_count = Koha::ItemTypes->search->count;
 
-Koha::ItemType->new(
-    {
-        itemtype       => 'type2',
-        description    => 'description',
-        rentalcharge   => '0.00',
-        imageurl       => 'imageurl',
-        summary        => 'summary',
-        checkinmsg     => 'checkinmsg',
-        checkinmsgtype => 'checkinmsgtype',
-        processfee         => '0.00',
-        defaultreplacecost => '0.00',
-    }
-)->store;
-
-Koha::ItemType->new(
-    {
-        itemtype       => 'type3',
-        description    => 'description',
-        rentalcharge   => '0.00',
-        imageurl       => 'imageurl',
-        summary        => 'summary',
-        checkinmsg     => 'checkinmsg',
-        checkinmsgtype => 'checkinmsgtype',
-        processfee         => '0.00',
-        defaultreplacecost => '0.00',
-    }
-)->store;
+my $parent1 = $builder->build_object({ class => 'Koha::ItemTypes', value => { description => 'description' } });
+my $child1  = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            parent_type => $parent1->itemtype,
+            description => 'description',
+        }
+    });
+my $child2  = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            parent_type => $parent1->itemtype,
+            description => 'description',
+        }
+    });
+my $child3  = $builder->build_object({
+        class => 'Koha::ItemTypes',
+        value => {
+            parent_type => $parent1->itemtype,
+            description => 'description',
+        }
+    });
 
 Koha::Localization->new(
     {
         entity      => 'itemtypes',
-        code        => 'type1',
+        code        => $child1->itemtype,
         lang        => 'en',
         translation => 'b translated itemtype desc'
     }
@@ -95,7 +78,7 @@ Koha::Localization->new(
 Koha::Localization->new(
     {
         entity      => 'itemtypes',
-        code        => 'type2',
+        code        => $child2->itemtype,
         lang        => 'en',
         translation => 'a translated itemtype desc'
     }
@@ -103,36 +86,24 @@ Koha::Localization->new(
 Koha::Localization->new(
     {
         entity      => 'something_else',
-        code        => 'type2',
+        code        => $child2->itemtype,
         lang        => 'en',
         translation => 'another thing'
     }
 )->store;
 
-my $type = Koha::ItemTypes->find('type1');
+my $type = Koha::ItemTypes->find($child1->itemtype);
 ok( defined($type), 'first result' );
-is( $type->itemtype,       'type1',          'itemtype/code' );
-is( $type->description,    'description',    'description' );
-is( $type->rentalcharge+0, 0,                'rentalcharge' );
-is( $type->imageurl,       'imageurl',       'imageurl' );
-is( $type->summary,        'summary',        'summary' );
-is( $type->checkinmsg,     'checkinmsg',     'checkinmsg' );
-is( $type->checkinmsgtype, 'checkinmsgtype', 'checkinmsgtype' );
+is_deeply( $type->unblessed, $child1->unblessed, "We got back the same object" );
 
-$type = Koha::ItemTypes->find('type2');
+$type = Koha::ItemTypes->find($child2->itemtype);
 ok( defined($type), 'second result' );
-is( $type->itemtype,       'type2',          'itemtype/code' );
-is( $type->description,    'description',    'description' );
-is( $type->rentalcharge+0, 0,                'rentalcharge' );
-is( $type->imageurl,       'imageurl',       'imageurl' );
-is( $type->summary,        'summary',        'summary' );
-is( $type->checkinmsg,     'checkinmsg',     'checkinmsg' );
-is( $type->checkinmsgtype, 'checkinmsgtype', 'checkinmsgtype' );
+is_deeply( $type->unblessed, $child2->unblessed, "We got back the same object" );
 
 t::lib::Mocks::mock_preference('language', 'en');
 t::lib::Mocks::mock_preference('opaclanguages', 'en');
 my $itemtypes = Koha::ItemTypes->search_with_localization;
-is( $itemtypes->count, 3, 'There are 3 item types' );
+is( $itemtypes->count, $initial_count + 4, 'We added 4 item types' );
 my $first_itemtype = $itemtypes->next;
 is(
     $first_itemtype->translated_description,
@@ -140,7 +111,14 @@ is(
     'item types should be sorted by translated description'
 );
 
-my $builder = t::lib::TestBuilder->new;
+my $children = $parent1->children_with_localization;
+my $first_child = $children->next;
+is(
+    $first_child->translated_description,
+    'a translated itemtype desc',
+    'item types should be sorted by translated description'
+);
+
 my $item_type = $builder->build_object({ class => 'Koha::ItemTypes' });
 
 is( $item_type->can_be_deleted, 1, 'An item type that is not used can be deleted');
