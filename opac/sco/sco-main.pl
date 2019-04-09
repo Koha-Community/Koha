@@ -158,11 +158,12 @@ elsif ( $patron && ( $op eq 'checkout' || $op eq 'renew' ) ) {
     if (scalar keys %$impossible) {
 
         my $issue_error = (keys %$impossible)[0]; # FIXME This is wrong, we assume only one error and keys are not ordered
+        my $title = ( $item ) ? $item->biblio->title : '';
 
         $template->param(
             impossible                => $issue_error,
             "circ_error_$issue_error" => 1,
-            title                     => $item->biblio->title, # FIXME Need to be backport! GetItem did not return the biblio's title
+            title                     => $title,
             hide_main                 => 1,
         );
         if ($issue_error eq 'DEBT') {
