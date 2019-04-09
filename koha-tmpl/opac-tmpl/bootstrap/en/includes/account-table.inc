@@ -29,10 +29,10 @@
                     <td><span title="[% ACCOUNT_LINE.date | html %]">[% ACCOUNT_LINE.date | $KohaDates %]</span></td>
                     <td>
                         [% SWITCH ACCOUNT_LINE.accounttype %]
-                        [% CASE 'Pay' %]Payment, thanks
-                        [% CASE 'Pay00' %]Payment, thanks (cash via SIP2)
-                        [% CASE 'Pay01' %]Payment, thanks (VISA via SIP2)
-                        [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
+                        [% CASE 'Pay' %]Payment
+                        [% CASE 'Pay00' %]Payment (cash via SIP2)
+                        [% CASE 'Pay01' %]Payment (VISA via SIP2)
+                        [% CASE 'Pay02' %]Payment (credit card via SIP2)
                         [% CASE 'VOID' %]Voided
                         [% CASE 'N' %]New card
                         [% CASE 'OVERDUE' %]Fine[%- PROCESS account_status_description account=account -%]

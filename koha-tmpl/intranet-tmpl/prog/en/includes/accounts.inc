@@ -1,9 +1,9 @@
 [%- BLOCK account_type_description -%]
     [%- SWITCH account.accounttype -%]
-        [%- CASE 'Pay'     -%]<span>Payment, thanks</span>
-        [%- CASE 'Pay00'   -%]<span>Payment, thanks (cash via SIP2)</span>
-        [%- CASE 'Pay01'   -%]<span>Payment, thanks (VISA via SIP2)</span>
-        [%- CASE 'Pay02'   -%]<span>Payment, thanks (credit card via SIP2)</span>
+        [%- CASE 'Pay'     -%]<span>Payment</span>
+        [%- CASE 'Pay00'   -%]<span>Payment (cash via SIP2)</span>
+        [%- CASE 'Pay01'   -%]<span>Payment (VISA via SIP2)</span>
+        [%- CASE 'Pay02'   -%]<span>Payment (credit card via SIP2)</span>
         [%- CASE 'VOID'    -%]<span>Voided</span>
         [%- CASE 'N'       -%]<span>New card</span>
         [%- CASE 'OVERDUE' -%]<span>Fine[%- PROCESS account_status_description account=account -%]</span>
