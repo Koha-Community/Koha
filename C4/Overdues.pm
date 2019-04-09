@@ -551,7 +551,7 @@ sub UpdateFine {
     while (my $rec = $sth->fetchrow_hashref) {
         if ( $rec->{issue_id} == $issue_id && $rec->{accounttype} eq 'FU' ) {
             if ($data) {
-                warn "Not a unique accountlines record for issue_id $issue_id";
+                $debug and warn "Not a unique accountlines record for issue_id $issue_id";
                 #FIXME Should we still count this one in total_amount ??
             }
             else {
@@ -566,7 +566,7 @@ sub UpdateFine {
         if ($total_amount_other + $amount > $maxfine) {
             my $new_amount = $maxfine - $total_amount_other;
             return if $new_amount <= 0.00;
-            warn "Reducing fine for item $itemnum borrower $borrowernumber from $amount to $new_amount - MaxFine reached";
+            $debug and warn "Reducing fine for item $itemnum borrower $borrowernumber from $amount to $new_amount - MaxFine reached";
             $amount = $new_amount;
         }
     }
