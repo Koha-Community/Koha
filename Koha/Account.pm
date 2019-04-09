@@ -32,6 +32,7 @@ use Koha::Patrons;
 use Koha::Account::Lines;
 use Koha::Account::Offsets;
 use Koha::DateUtils qw( dt_from_string );
+use Koha::Exceptions;
 use Koha::Exceptions::Account;
 
 =head1 NAME
@@ -328,6 +329,12 @@ sub add_credit {
     my $type         = $params->{type} || 'payment';
     my $item_id      = $params->{item_id};
 
+    unless ( $interface ) {
+        Koha::Exceptions::MissingParameter->throw(
+            error => 'The interface parameter is mandatory'
+        );
+    }
+
     my $schema = Koha::Database->new->schema;
 
     my $account_type = $Koha::Account::account_type_credit->{$type};
@@ -451,6 +458,12 @@ sub add_debit {
     my $type         = $params->{type};
     my $item_id      = $params->{item_id};
     my $issue_id     = $params->{issue_id};
+
+    unless ( $interface ) {
+        Koha::Exceptions::MissingParameter->throw(
+            error => 'The interface parameter is mandatory'
+        );
+    }
 
     my $schema = Koha::Database->new->schema;
 
