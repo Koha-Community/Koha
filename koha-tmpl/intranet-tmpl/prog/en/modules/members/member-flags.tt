@@ -195,13 +195,17 @@
 
             $(".flag").on("change",function(e){
                 e.preventDefault();
-                var bit = $(this).data("bit");
-                if( $(this).is(":checked") ){
-                    $("#flag-" + bit + "-children").show().find(".flag").prop("checked", true);
-                    $(".toggle-" + bit + ".togglechildren_on").hide();
-                    $(".toggle-" + bit + ".togglechildren_off").show();
+                if( $(this).hasClass("child") ){
+                    $(this).closest(".parent").find(".flag.parent").prop("checked", false);
                 } else {
-                    $("#flag-" + bit + "-children").show().find(".flag").prop("checked", false);
+                    var bit = $(this).data("bit");
+                    if( $(this).is(":checked") ){
+                        $("#flag-" + bit + "-children").show().find(".flag").prop("checked", true);
+                        $(".toggle-" + bit + ".togglechildren_on").hide();
+                        $(".toggle-" + bit + ".togglechildren_off").show();
+                    } else {
+                        $("#flag-" + bit + "-children").show().find(".flag").prop("checked", false);
+                    }
                 }
             });
 
