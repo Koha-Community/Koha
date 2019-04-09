@@ -33,6 +33,7 @@
                         [% CASE 'Pay00' %]Payment, thanks (cash via SIP2)
                         [% CASE 'Pay01' %]Payment, thanks (VISA via SIP2)
                         [% CASE 'Pay02' %]Payment, thanks (credit card via SIP2)
+                        [% CASE 'VOID' %]Voided
                         [% CASE 'N' %]New card
                         [% CASE 'F' %]Fine
                         [% CASE 'A' %]Account management fee
@@ -43,6 +44,7 @@
                         [% CASE 'HE' %]Hold waiting too long
                         [% CASE 'Rent' %]Rental fee
                         [% CASE 'FOR' %]Forgiven
+                        [% CASE 'FFOR' %]Fine forgiven
                         [% CASE 'LR' %]Lost item fee refund
                         [% CASE 'PF' %]Processing fee
                         [% CASE 'PAY' %]Payment
