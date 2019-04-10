@@ -158,10 +158,14 @@ my $launcher = sub {
     } else {
         $errorXml = 'Can\'t read the xml file ' . $dir . 'marc21_field_008.xml';
     }
+
+    my $langs = $dbh->selectall_hashref("SELECT authorised_value, lib FROM authorised_values WHERE category='kielikoodit'", 'authorised_value');
+
     $template->param(tagfield => '008',
             index => $index,
             result => $result,
             errorXml => $errorXml,
+            languages => $langs,
             material_configuration => $material_configuration,
     );
     output_html_with_http_headers $input, $cookie, $template->output;

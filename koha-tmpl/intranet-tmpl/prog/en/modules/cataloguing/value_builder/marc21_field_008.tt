@@ -23,6 +23,7 @@
         [% END %]
         objXmlControlField.loadXmlValues();
         renderResult(tr_result, (form.result.value != "")?form.result.value:returnValueParam("result"));
+        lang_input_update();
         [% END %]
     }//loadXmlValues
 
@@ -32,6 +33,7 @@
             objXmlControlField.setIdMaterial(form.material_type.options[form.material_type.selectedIndex].value);
             objXmlControlField.renderTemplate();
             renderResult(tr_result, form.result.value, true);
+            lang_input_update();
         }
     }//changeTypeofMaterial
 </script>
@@ -65,6 +67,20 @@
 </table>
 <fieldset class="action"><input type="submit" value="OK" /> <a href="#" class="cancel close">Cancel</a></fieldset>
 </form>
+
+<datalist id="languagecodes">
+[% FOR lcode IN languages.keys.sort %]
+ <option value="[% lcode %]">[% languages.$lcode.lib %]</option>
+[% END %]
+ <option value="|||">||| - No attempt to code</option>
+</datalist>
+<script type="text/javascript">//<![CDATA[
+function lang_input_update() {
+      $('#f35-37').attr('list', 'languagecodes');
+      $('#f35-37').css('width', '25em'); /* otherwise datalist popup is not wide enough */
+}
+//]]></script>
+
 <script type="text/javascript">//<![CDATA[
 
 autofill_set();
