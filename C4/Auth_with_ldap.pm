@@ -223,11 +223,9 @@ sub checkpw_ldap {
     } elsif ($config{replicate}) { # A2, C2
         my @columns = Koha::Patrons->columns;
         my $patron = Koha::Patron->new(
-            map {
-                grep join( ' ', @columns ) =~ /$_/
-                  ? ( $_ => $data{$_} )
-                  : ()
-            } keys %borrower
+            {
+                map { defined( $borrower{$_} ) ? ( $_ => $borrower{$_} ) : () } @columns
+            }
         )->store;
         die "Insert of new patron failed" unless $patron;
         $borrowernumber = $patron->borrowernumber;
