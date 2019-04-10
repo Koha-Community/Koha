@@ -36,6 +36,7 @@
         url('fonts/NotoSans-BoldItalic-webfont.woff') format('woff');
 }
 
+$footer-height: 45px;
 
 body {
     background: #FCF9FC none;
@@ -80,10 +81,10 @@ body {
     height: auto !important;
     height: 100%;
     min-height: 100%;
-    padding-right: 40px;
     padding-left: 40px;
-    /* Negative indent footer by it's height */
-    // margin: 0 auto -60px;
+    padding-right: 40px;
+    /* Negative indent footer by its height */
+    margin: 0 auto -#{$footer-height + 1};
 }
 
 .fa.fa-icon-black,
@@ -92,8 +93,9 @@ body {
 }
 
 #changelanguage {
+    clear: both;
     /* Set the fixed height of the footer here */
-    // height: 60px;
+    min-height: $footer-height;
     .nav {
         > .active {
             > p {
@@ -809,11 +811,11 @@ input[type="text"]:focus {
 
 .navbar-fixed-bottom {
     &.navbar-static-bottom {
-        margin-top: .5em;
         position: static;
     }
     .navbar-inner {
         box-shadow: none;
+        min-height: $footer-height;
     }
 }
 
