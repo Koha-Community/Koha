@@ -261,7 +261,7 @@ Add our specific error handler to the driver.
 It will displayed a trace as well as capture a screenshot of the current screen.
 So only case you should need it is after you called remove_error_handler
 
-=head remove_error_handler
+=head2 remove_error_handler
     $c->remove_error_handler
 
 Do *not* call this method if you are not aware of what it will do!
