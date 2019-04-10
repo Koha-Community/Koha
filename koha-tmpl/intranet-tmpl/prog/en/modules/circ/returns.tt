@@ -10,7 +10,7 @@
 [% SET footerjs = 1 %]
 [% BLOCK display_bormessagepref %]
     [% IF ( bormessagepref ) %]
-        <li>Patron notification:
+        <li class="notification_method">Patron notification:
             [% FOREACH mtt IN bormessagepref.keys %]
                 [%~ IF ( mtt == 'email' ) %] Email[% END ~%]
                 [%~ IF ( mtt == 'phone' ) %] Phone[% END ~%]
@@ -19,7 +19,7 @@
             [% END %]
         </li>
            [% ELSE %]
-        <li>Patron is not notified.</li>
+        <li class="notification_method none">Patron is not notified.</li>
     [% END %]
 [% END %]
 
@@ -254,9 +254,10 @@
                     <h3>
                         Hold found (item is already waiting):
                         <br/>
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                            [% itembarcode | html %]: [% title | html %]
-                        </a>
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
+                        <div class="hold-found-barcode">
+                            <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | uri %]">[% itembarcode | html %]</a>
+                        </div>
                     </h3>
                 </div>
 
@@ -468,18 +469,23 @@
                     <h3>
                         Hold found:
                         <br/>
-                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">
-                            [% itembarcode | html %]: [% title | html %]
-                        </a>
+                        <a href="/cgi-bin/koha/catalogue/detail.pl?type=intra&amp;biblionumber=[% itembiblionumber | uri %]">[% title | html %]</a>
+                        <div class="hold-found-barcode">
+                            (<a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% itembiblionumber | uri %]&amp;itemnumber=[% itemnumber | html %]">[% itembarcode | html %]</a>)
+                        </div>
+                    </h3>
                 </div>
 
                 <div class="modal-body">
                     [% IF ( reservenotes ) %]
-                        <h4>Notes: [% reservenotes | html %]</h4>
+                        <h4>Notes:</h4>
+                        <p>[% reservenotes | html %]</p>
+                        <hr />
                     [% END %]
                     <h5>Hold for:</h5>
+                        <ul>
                         <li>
-                            <td>[% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]</td>
+                            [% INCLUDE 'patron-title.inc' patron=patron hide_patron_infos_if_needed=1 link_to="circulation_reserves" %]
                             <span class="patron-category"> - [% patron.category.description | html %]</span>
                         </li>
 
@@ -510,7 +516,7 @@
                         [% IF ( patron.gonenoaddress ) %]
                             <li class="error">Patron's address is in doubt</li>
                         [% END %]
-
+                        </ul>
                     [% IF ( transfertodo ) %]
                         <h4><strong>Transfer to:</strong> [% Branches.GetName( destbranch ) | html %]</h4>
                     [% ELSE %]

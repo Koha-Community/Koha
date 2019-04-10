@@ -371,7 +371,34 @@ form {
 
     &.confirm {
         display: block;
-        text-align: center;
+        font-size: 110%;
+        line-height: 130%;
+
+        ul {
+            padding: 1em 0;
+
+            li {
+                list-style-type: none;
+            }
+        }
+
+        .notification_method {
+            background-color: #FFE;
+            border: 1px solid #CCC;
+            border-radius: 5px;
+            display: inline-block;
+            margin: .5em 0;
+            padding: .1em .3em;
+
+            &.none {
+                background-color: #EEE;
+            }
+        }
+
+        .hold-found-barcode {
+            display: inline-block;
+            font-size: 90%;
+        }
     }
 }
 
