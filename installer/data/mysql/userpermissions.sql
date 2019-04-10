@@ -38,6 +38,7 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 6, 'modify_holds_priority', 'Modify holds priority'),
    ( 9, 'edit_catalogue', 'Edit catalog (Modify bibliographic/holdings data)'),
    ( 9, 'fast_cataloging', 'Fast cataloging'),
+   ( 9, 'advanced_editor', 'Use the advanced cataloging editor (requires edit_catalogue)'),
    ( 9, 'edit_items', 'Edit items'),
    ( 9, 'edit_items_restricted', 'Limit item modification to subfields defined in the SubfieldsToAllowForRestrictedEditing preference (please note that edit_item is still required)'),
    ( 9, 'delete_all_items', 'Delete all items at once'),
