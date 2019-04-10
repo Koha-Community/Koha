@@ -41,7 +41,7 @@
                                 <th>Instructors</th>
                                 <th>Staff note</th>
                                 <th>Public note</th>
-                                <th># of Students</th>
+                                <th># of students</th>
                                 <th>Enabled</th>
                             </tr>
                         </thead>
@@ -60,7 +60,7 @@
                                         [% END %]
                                     </td>
                                     <td>[% c.staff_note | html %]</td>
-                                    <td>[% c.public_note | html %]</td>
+                                    <td>[% c.public_note | $raw %]</td>
                                     <td>[% c.students_count | html %]</td>
                                     <td>
                                         [% IF c.enabled == 'yes' %]
