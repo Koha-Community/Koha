@@ -75,7 +75,7 @@
 [% END %]
 
 [% IF alert.RETURNED_FROM_ANOTHER %]
-    <div class="dialog alert">Item was checked out to [% INCLUDE 'patron-title.inc' patron=alert.RETURNED_FROM_ANOTHER.patron %]  ([% alert.RETURNED_FROM_ANOTHER.patron.cardnumber %]) and was returned automatically.</div>
+    <div class="dialog alert">Item was checked out to [% INCLUDE 'patron-title.inc' patron = alert.RETURNED_FROM_ANOTHER.patron %] and was returned automatically.</div>
 [% END %]
 
 [% IF ( nopermission ) %]
