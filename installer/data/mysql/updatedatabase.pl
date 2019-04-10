@@ -17867,6 +17867,25 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22607 - Set default value of issues.renewals to 0)\n";
 }
 
+$DBversion = '18.12.00.038';
+if ( CheckVersion($DBversion) ) {
+
+    if ( !column_exists( 'accountlines', 'status' ) ) {
+        $dbh->do(
+            qq{
+            ALTER TABLE `accountlines`
+            ADD
+              `status` varchar(16) DEFAULT NULL
+            AFTER
+              `accounttype`
+          }
+        );
+    }
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 22512 - Add status to accountlines)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
