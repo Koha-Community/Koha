@@ -379,6 +379,26 @@ get_max_record_size()
     fi
 }
 
+get_tmp_path()
+{
+    local instancename=$1
+    local retval=$(run_safe_xmlstarlet $instancename tmp_path)
+    if [ "$retval" != "" ]; then
+        echo "$retval"
+        return 0
+    fi
+}
+
+get_upload_path()
+{
+    local instancename=$1
+    local retval=$(run_safe_xmlstarlet $instancename upload_path)
+    if [ "$retval" != "" ]; then
+        echo "$retval"
+        return 0
+    fi
+}
+
 get_tmpdir()
 {
     if [ "$TMPDIR" != "" ]; then

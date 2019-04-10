@@ -48,6 +48,8 @@ $scriptname -h|--help
 
     --schema-only         Dump only the database schema
     --exclude-indexes     Include Zebra indexes on the backup
+    --uploaded_files      Include uploaded files.
+    --uploaded_temp_files Include temporary uploaded files.
     --quiet|-q            Make the script avoid printing to STDOUT
                           (useful for calling from another scripts)
     --help|-h             Display this help message
@@ -95,11 +97,22 @@ dump_instance()
 
         # Dump configs, logs, etc.
         metadump="$backupdir/$name-$date.tar.gz"
-        [ "$quiet" = "no" ] && echo "* configs, logs to $metadump"
+        [ "$quiet" = "no" ] && echo "* configs, files, logs to $metadump"
 
         if [ "$exclude_indexes" = "yes" ]; then
             excludes="--exclude=var/lib/koha/$name/biblios \
-                      --exclude=var/lib/koha/$name/authorities"
+                  --exclude=var/lib/koha/$name/authorities"
+        fi
+
+        if [ "$uploaded_files" = "yes" ]; then
+            # Remove leading /
+            uploaded_files_dir=$(echo $(get_upload_path $name) | cut -c 2-)
+        fi
+
+        if [ "$uploaded_temp_files" = "yes" ]; then
+            # Remove leading /
+            tempdir=$(echo $(get_tmp_path $name) | cut -c 2-)
+            uploaded_temp_files_dir="$tempdir/koha_${name}_upload"
         fi
 
         tar -czf "$metadump" -C / $excludes \
@@ -107,13 +120,14 @@ dump_instance()
             "etc/apache2/sites-available/$instancefile" \
             "etc/apache2/sites-enabled/$instancefile" \
             "var/lib/koha/$name" \
-            "var/log/koha/$name"
+            "var/log/koha/$name" \
+            $uploaded_files_dir \
+            $uploaded_temp_files_dir
 
         chown "root:$name-koha" "$metadump"
         chmod g+r "$metadump"
 
         [ "$quiet" = "no" ] && echo "Done."
-
     fi
 }
 
@@ -134,6 +148,12 @@ while [ $# -gt 0 ]; do
             shift ;;
         --without-db-name)
             without_db_name="yes"
+            shift ;;
+       --uploaded_files)
+            uploaded_files="yes"
+            shift ;;
+        --uploaded_temp_files)
+            uploaded_temp_files="yes"
             shift ;;
         -h|--help)
             usage ; exit 0 ;;
