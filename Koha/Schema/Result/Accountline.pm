@@ -69,6 +69,12 @@ __PACKAGE__->table("accountlines");
   is_nullable: 1
   size: 5
 
+=head2 status
+
+  data_type: 'varchar'
+  is_nullable: 1
+  size: 16
+
 =head2 payment_type
 
   data_type: 'varchar'
@@ -99,6 +105,12 @@ __PACKAGE__->table("accountlines");
   is_foreign_key: 1
   is_nullable: 1
 
+=head2 interface
+
+  data_type: 'varchar'
+  is_nullable: 0
+  size: 16
+
 =head2 branchcode
 
   data_type: 'varchar'
@@ -125,6 +137,8 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "accounttype",
   { data_type => "varchar", is_nullable => 1, size => 5 },
+  "status",
+  { data_type => "varchar", is_nullable => 1, size => 16 },
   "payment_type",
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "amountoutstanding",
@@ -140,6 +154,8 @@ __PACKAGE__->add_columns(
   { data_type => "mediumtext", is_nullable => 1 },
   "manager_id",
   { data_type => "integer", is_foreign_key => 1, is_nullable => 1 },
+  "interface",
+  { data_type => "varchar", is_nullable => 0, size => 16 },
   "branchcode",
   { data_type => "varchar", is_foreign_key => 1, is_nullable => 1, size => 10 },
 );
@@ -269,8 +285,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-28 18:01:31
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:6TVweDBJR9SEra68zHn8fQ
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-10 19:55:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:OaHSR4SeurCr7h6nizbtBg
 
 sub koha_objects_class {
     'Koha::Account::Lines';

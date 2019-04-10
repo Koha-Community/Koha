@@ -68,7 +68,8 @@ __PACKAGE__->table("issues");
 =head2 renewals
 
   data_type: 'tinyint'
-  is_nullable: 1
+  default_value: 0
+  is_nullable: 0
 
 =head2 auto_renew
 
@@ -147,7 +148,7 @@ __PACKAGE__->add_columns(
     is_nullable => 1,
   },
   "renewals",
-  { data_type => "tinyint", is_nullable => 1 },
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
   "auto_renew",
   { data_type => "tinyint", default_value => 0, is_nullable => 1 },
   "auto_renew_error",
@@ -248,8 +249,8 @@ __PACKAGE__->belongs_to(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-07-23 13:51:40
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:+mlcId4odhAFp3HHgV/+tg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-10 19:55:44
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:PUF5X7X9K44BC0d43Rat7w
 
 __PACKAGE__->add_columns(
     '+auto_renew'      => { is_boolean => 1 },
