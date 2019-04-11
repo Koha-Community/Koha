@@ -72,7 +72,6 @@ $(document).ready(function() {
         ],
         "sPaginationType": "four_button",
         "autoWidth": false,
-        "exportColumns": [0,1,2,3,4,5]
     }, stock_rotation_items_columns_settings);
 
     KohaTable("stock_rotation", {
@@ -82,7 +81,6 @@ $(document).ready(function() {
         ],
         "sPaginationType": "four_button",
         "autoWidth": false,
-        "exportColumns": [0,1,2,3,4]
     }, stock_rotation_columns_settings);
 
 });

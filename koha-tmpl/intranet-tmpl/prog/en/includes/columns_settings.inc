@@ -21,7 +21,7 @@ function KohaTable(id_selector, dt_parameters, columns_settings, add_filters) {
         counter++;
     });
 
-    var exportColumns = ":visible";
+    var exportColumns = ":visible:not(.noExport)";
     if( dt_parameters.hasOwnProperty("exportColumns") ){
         // A custom buttons configuration has been passed from the page
         exportColumns = dt_parameters["exportColumns"];
