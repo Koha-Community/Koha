@@ -1,0 +1,196 @@
+// Sticky footer styles
+html,
+body {
+    height: 100%;
+    // The html and body elements cannot have any padding or margin.
+}
+
+body {
+    background: #FCF9FC none;
+    font-family: sans-serif;
+    font-size: 16px;
+}
+
+.fonts-loaded {
+    body {
+        font-family: "NotoSans";
+    }
+}
+
+.navbar {
+    .divider-vertical {
+        border-left-color: #FCF9FC;
+        border-right-color: #FCF9FC;
+    }
+
+    .nav {
+        li {
+            &.dropdown {
+                > a {
+                    &:focus {
+                        .caret {
+                            border-bottom-color: #85CA11;
+                            border-top-color: #85CA11;
+                        }
+                    }
+
+                    &:hover {
+                        .caret {
+                            border-bottom-color: #85CA11;
+                            border-top-color: #85CA11;
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.navbar-inverse {
+    .brand {
+        color: #9FE1FF;
+        font-weight: bold;
+    }
+
+    .navbar-inner {
+        background: #FCF9FC none;
+        border-color: #FCF9FC;
+        box-shadow: none;
+
+        li {
+            > a {
+                color: #727272;
+                font-weight: bold;
+                text-shadow: none;
+
+                &:hover {
+                    color: #85CA11;
+                }
+
+                &:focus {
+                    color: #85CA11;
+                }
+            }
+
+            &.dropdown {
+                > a {
+                    &:hover {
+                        .caret {
+                            border-bottom-color: #85CA11;
+                            border-top-color: #85CA11;
+                        }
+                    }
+
+                    &:focus {
+                        .caret {
+                            border-bottom-color: #85CA11;
+                            border-top-color: #85CA11;
+                        }
+                    }
+                }
+
+                &.open {
+                    > .dropdown-toggle {
+                        background-color: transparent;
+                        color: #85CA11;
+
+                        .caret {
+                            border-bottom-color: #85CA11;
+                            border-top-color: #85CA11;
+
+                            &:hover {
+                                border-bottom-color: #85CA11;
+                                border-top-color: #85CA11;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+.navbar-inner {
+    background: #FCF9FC none;
+}
+
+.navbar-fixed-bottom {
+    &.navbar-static-bottom {
+        position: static;
+    }
+
+    .navbar-inner {
+        box-shadow: none;
+        min-height: $footer-height;
+    }
+}
+
+// Wrapper for page content to push down footer
+#wrap {
+    height: auto !important;
+    height: 100%;
+    margin: 0 auto -#{$footer-height + 1};
+    // Negative indent footer by its height
+    min-height: 100%;
+    padding-left: 40px;
+    padding-right: 40px;
+}
+
+#changelanguage {
+    clear: both;
+    // Set the fixed height of the footer here
+    min-height: $footer-height;
+
+    .nav {
+        > .active {
+            > p {
+                padding: 0 15px;
+            }
+        }
+    }
+}
+
+#i18nMenu {
+    margin-left: 1em;
+
+    li {
+        font-size: 85%;
+
+        li {
+            font-size: 100%;
+
+            > a {
+                font-size: 100%;
+            }
+
+            &:hover {
+                color: #FFF;
+            }
+        }
+
+        a {
+            color: $links;
+        }
+    }
+
+    .dropdown-menu {
+        li {
+            p {
+                clear: both;
+                display: block;
+                font-weight: normal;
+                line-height: 20px;
+                padding: 3px 20px;
+                white-space: nowrap;
+            }
+        }
+    }
+}
+
+#koha_url {
+    p {
+        color: #666666;
+        float: right;
+        margin: 0;
+    }
+}
