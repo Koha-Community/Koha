@@ -12,6 +12,7 @@
 <link rel="shortcut icon" href="[% IF ( Koha.Preference('OpacFavicon') ) %][% Koha.Preference('OpacFavicon') | url %][% ELSE %][% interface | html %]/[% theme | html %]/images/favicon.ico[% END %]" type="image/x-icon" />
 [% Asset.css("lib/bootstrap/css/bootstrap.min.css") | $raw %]
 [% Asset.css("lib/jquery/jquery-ui.css") | $raw %]
+[% Asset.css("lib/font-awesome/css/font-awesome.min.css") | $raw %]
 [% Asset.css("css/sco.css") | $raw %]
 [% IF ( Koha.Preference('OPACUserCSS') ) %]<style>[% Koha.Preference('OPACUserCSS') | $raw %]</style>[% END %]
 [% IF ( Koha.Preference('SCOUserCSS') ) %]<style>[% Koha.Preference('SCOUserCSS') | $raw %]</style>[% END %]
@@ -87,7 +88,7 @@
                                     <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" name="returnbook" class="btn"><i class="return"></i> Return this item</button>
+                                    <button type="submit" name="returnbook" class="btn"><i class="fa fa-undo"></i> Return this item</button>
                                 </form>
                             [% END %]
 
@@ -115,7 +116,7 @@
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" name="returnbook" class="btn"><i class="icon return"></i> Return this item</button>
+                                    <button type="submit" name="returnbook" class="btn"><i class="fa fa-undo"></i> Return this item</button>
                                 </form>
                             [% END %]
 
@@ -126,7 +127,7 @@
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" name="confirm" class="btn"><i class="icon renew"></i> Renew item</button>
+                                    <button type="submit" name="confirm" class="btn"><i class="fa fa-refresh"></i> Renew item</button>
                                   </form>
                             [% ELSE %]
                                 <form action="/cgi-bin/koha/sco/sco-main.pl" name="confirmForm" class="inline" method="post">
@@ -135,7 +136,7 @@
                                     <input type="hidden" name="barcode" value="[% barcode | html %]" />
                                     <input type="hidden" name="confirmed" value="1" />
                                     <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                    <button type="submit" class="btn"><i class="icon renew"></i> Renew item</button>
+                                    <button type="submit" class="btn"><i class="fa fa-refresh"></i> Renew item</button>
                                 </form>
                             [% END %]
 
@@ -143,7 +144,7 @@
                                 <input type="hidden" name="op" value="" />
                                 <input type="hidden" name="patronid" value="[% patronid | html %]" />
                                 <input type="hidden" name="newissues" value="[% newissues | html %]" />
-                                <button type="submit" class="btn"><i class="icon cancel"></i> Cancel</button>
+                                <button type="submit" class="btn"><i class="fa fa-cancel"></i> Cancel</button>
                             </form>
                         </div>
                     [% END # / IF confirm %]
@@ -235,14 +236,14 @@
 
                                 <div>
                                     <form method="post" action="#" id="logout_form">
-                                        <button type="submit" class="btn"><i class="icon finish"></i> Finish</button>
+                                        <button type="submit" class="btn"><i class="fa fa-check"></i> Finish</button>
                                     </form>
                                 </div>
                             </div> <!-- / #newcheckout -->
                 </div> <!-- / .span12/12 -->
                 [% IF ( display_patron_image ) %]
                     <div class="span2">
-                        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?borrowernumber=[% borrowernumber | html %]&csrf_token=[% csrf_token | html %]" alt="" />
+                        <img src="/cgi-bin/koha/sco/sco-patron-image.pl?borrowernumber=[% borrowernumber | uri %]&csrf_token=[% csrf_token | uri %]" alt="" />
                     </div>
                 [% END %]
             </div> <!-- / .row-fluid -->
