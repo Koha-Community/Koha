@@ -87,9 +87,6 @@ sub InIndependentBranchesMode {
 
 sub pickup_locations {
     my ( $self, $params ) = @_;
-    $params->{search_params} ||= {};
-    $params->{search_params}->{pickup_location} = 1;
-    return $self->all($params);
 
     my $selected  = $params->{selected};
     my $libraries = Koha::Libraries->pickup_locations($params);
