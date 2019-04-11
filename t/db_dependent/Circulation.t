@@ -18,7 +18,7 @@
 use Modern::Perl;
 use utf8;
 
-use Test::More tests => 128;
+use Test::More tests => 130;
 use Test::MockModule;
 
 use Data::Dumper;
