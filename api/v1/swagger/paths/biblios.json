@@ -1,0 +1,64 @@
+{
+  "/biblios/{biblio_id}": {
+    "delete": {
+      "x-mojo-to": "Biblios#delete",
+      "operationId": "deleteBiblio",
+      "tags": ["biblios"],
+      "parameters": [{
+        "$ref": "../parameters.json#/biblio_id_pp"
+      }],
+      "produces": [
+        "application/json"
+      ],
+      "responses": {
+        "200": {
+          "description": "Biblio deleted",
+          "schema": {
+            "type": "string"
+          }
+        },
+        "401": {
+          "description": "Authentication required",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "403": {
+          "description": "Access forbidden",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "404": {
+          "description": "Biblio not found",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "409": {
+          "description": "Unable to perform action on biblio",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "500": {
+          "description": "Internal error",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        },
+        "503": {
+          "description": "Under maintenance",
+          "schema": {
+            "$ref": "../definitions.json#/error"
+          }
+        }
+      },
+      "x-koha-authorization": {
+        "permissions": {
+          "parameters": "edit_catalogue"
+        }
+      }
+    }
+  }
+}
