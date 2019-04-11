@@ -17939,6 +17939,13 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 22600 - Add interface to accountlines)\n";
 }
 
+$DBversion = '18.12.00.040';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do("UPDATE accountlines SET description = REPLACE(description, 'Reserve Charge - ', '') WHERE description LIKE 'Reserve Charge - %'");
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 12166 - Remove 'Reserve Charge' text from accountlines description)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
