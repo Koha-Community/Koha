@@ -8,6 +8,7 @@
 </head>
 <body id="about_about" class="about">
 [% INCLUDE 'header.inc' %]
+[% PROCESS 'about-team.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; About Koha</div>
 
@@ -403,70 +404,23 @@
                 <li><a href="http://www.ashs.school.nz/">Albany Senior High School</a>, Auckland, New Zealand (OPAC 'star-ratings' sponsorship)</li>
             </ul>
 
-            <h2>Koha 18.11 release team</h2>
-            <ul>
-                <li><strong>Release manager:</strong>
-                    <a href="https://www.openhub.net/p/koha/contributors/6620692886191">Nick Clemens</a>
-                </li>
-                <li><strong>Release manager assistants:</strong>
-                    <ul>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618544730094">Tomás Cohen Arazi</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618545125093">Jonathan Druart</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618544661344">Brendan Gallagher</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6620692261494">Kyle Hall</a></li>
-                    </ul>
-                </li>
-                <li><strong>Documentation team:</strong>
-                    <ul>
-                        <li>Caroline Cyr La Rose</li>
-                        <li>Lee Jamison</li>
-                        <li>David Nind</li>
-                    </ul>
-                </li>
-                <li><strong>Translation manager:</strong>
-                    <a href="https://www.openhub.net/p/koha/contributors/6618544839606">Bernardo González Kriegel</a>
-                </li>
-                <li><strong>Quality assurance manager:</strong>
-                    <a href="https://www.openhub.net/p/koha/contributors/6618544670742">Katrin Fischer</a>
-                </li>
-                <li><strong>Quality assurance team:</strong>
-                    <ul>
-                        <li>Alex Arnaud</li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618544730094">Tomás Cohen Arazi</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618544609030">Chris Cormack</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618545125093">Jonathan Druart</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6620692261494">Kyle Hall</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6620692419690">Julian Maurice</a></li>
-                        <li>Josef Moravec</li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618544785220">Martin Renvoize</a></li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618544727712">Marcel de Rooy</a></li>
-                    </ul>
-                </li>
-                <li><strong>Release maintainers:</strong>
-                    <ul>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618544785220">Martin Renvoize</a> (18.05)</li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618545418525">Fridolin Somers</a> (17.11)</li>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6618545418525">Fridolin Somers</a> (17.05)</li>
-                    </ul>
-                </li>
-                <li><strong>Packaging manager:</strong>
-                    <ul>
-                        <li><a href="https://www.openhub.net/p/koha/contributors/6620692605913">Mirko Tietgen</a></li>
-                        <li><a href="https://www.openhub.net/accounts/kohaaloha">Mason James</a> (Assistant)</li>
-                    </ul>
-                </li>
-                <li><strong>Jenkins maintainer:</strong>
-                    <a href="https://www.openhub.net/p/koha/contributors/6618544730094">Tomás Cohen Arazi</a>
-                </li>
-                <li><strong>Bug wranglers:</strong>
-                    <ul>
-                        <li>Indranil Das Gupta</li>
-                        <li>Claire Gravely</li>
-                        <li>Amit Gupta</li>
-                        <li>Jon Knight</li>
-                    </ul>
-                </li>
-            </ul>
+            <h2>Koha release teams</h2>
+            <div class="row">
+                <div class="col-md-6">
+                    <h3>Koha [% short_version | html %] release team</h3>
+                    [% IF development_version %]
+                        <p>You are running a development version of Koha</p>
+                    [% ELSE %]
+                        [% INCLUDE team t=release_team %]
+                    [% END %]
+                </div>
+
+                <div class="col-md-6">
+                    <h3>Current maintainence team</h3>
+
+                    [% INCLUDE team t=maintenance_team %]
+                </div>
+            </div>
 
             <h2>Koha development team</h2>
             [% IF contributors.size %]
@@ -803,41 +757,3 @@
 [% END %]
 <!-- the main div is closed in intranet-bottom.inc -->
 [% INCLUDE 'intranet-bottom.inc' %]
-<!-- roles for translation -->
-[%- BLOCK role -%]
-  [%- SWITCH role.key -%]
-    [%- CASE 'manager'               -%]Release manager
-    [%- CASE 'manager_assistant'     -%]Release manager assistant
-    [%- CASE 'qa_manager'            -%]Quality assurance manager
-    [%- CASE 'qa'                    -%]Quality assurance team
-    [%- CASE 'documentation'         -%]Documentation manager
-    [%- CASE 'documentation_team'    -%]Documentation team
-    [%- CASE 'translation'           -%]Translation manager
-    [%- CASE 'translation_assistant' -%]Translation manager assistant
-    [%- CASE 'te'                    -%]Topic expert
-    [%- CASE 'bugwrangler'           -%]Bug wrangler
-    [%- CASE 'maintainer'            -%]Release maintainer
-    [%- CASE 'maintainer_assistant'  -%]Release maintainer assistant
-    [%- CASE 'wiki'                  -%]Wiki curator
-    [%- CASE 'ci'                    -%]Continuous integration manager
-    [%- CASE 'packaging'             -%]Packaging manager
-    [%- CASE 'packaging_assistant'   -%]Packaging manager assistant
-    [%- CASE 'chairperson'           -%]Meetings chairperson
-    [%- CASE 'newsletter'            -%]Newsletter editor
-    [%- CASE 'mm'                    -%]Module maintainer
-    [%- CASE 'vm'                    -%]Virtual machine maintainer
-    [%- CASE 'database'              -%]Documentation specialist
-    [%- CASE 'live_cd'               -%]Live CD maintainer
-  [%- END -%]
-[%- END -%]
-[%- BLOCK person -%]
-[% IF p.openhub %]<a href="[% p.openhub | url %]">[% p.name | html %]</a>[% ELSE %][% p.name | html %][% END %]
-[%- END -%]
-[%- BLOCK contributions -%]
-[%- IF p.roles || p.notes -%]
-<ul>
-    [% FOREACH r IN p.roles %]<li>[% INCLUDE role role=r %] ([% r.value.join(', ') | html %])</li>[% END %]
-    [% IF p.notes %]<li>[% p.notes | html %]</li>[% END %]
-</ul>
-[%- END -%]
-[%- END -%]

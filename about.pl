@@ -530,35 +530,53 @@ if ( defined C4::Context->config('docdir') ) {
     $docdir = C4::Context->config('intranetdir') . '/docs';
 }
 
+## Release teams
+my $teams = LoadFile("$docdir"."/teams.yaml");
+my $dev_team = (sort {$b <=> $a} (keys %{$teams->{team}}))[0];
+my $short_version = substr($versions{'kohaVersion'},0,5);
+my $minor = substr($versions{'kohaVersion'},3,2);
+my $development_version = ( $minor eq '05' || $minor eq '11' ) ? 0 : 1;
+$template->param( short_version => $short_version );
+$template->param( development_version => $development_version );
+
 ## Contributors
 my $contributors =
   -e "$docdir" . "/contributors.yaml"
   ? LoadFile( "$docdir" . "/contributors.yaml" )
   : {};
-my @people = map {
-    {
-        name => $_,
-        (
-            exists( $contributors->{$_}->{openhub} )
-            ? ( openhub => $contributors->{$_}->{openhub} )
-            : ()
-        ),
-        (
-            exists( $contributors->{$_}->{roles} )
-            ? ( roles => $contributors->{$_}->{roles} )
-            : ()
-        ),
-        (
-            exists( $contributors->{$_}->{commits} )
-            ? ( commits => $contributors->{$_}->{commits} )
-            : ()
-        ),
-        (
-            exists( $contributors->{$_}->{notes} )
-            ? ( notes => $contributors->{$_}->{notes} )
-            : ()
-        )
+for my $version ( sort { $a <=> $b } keys %{$teams->{team}} ) {
+    for my $role ( keys %{ $teams->{team}->{$version} } ) {
+        my $normalized_role = "$role";
+        $normalized_role =~ s/s$//;
+        if ( ref( $teams->{team}->{$version}->{$role} ) eq 'ARRAY' ) {
+            for my $contributor ( @{ $teams->{team}->{$version}->{$role} } ) {
+                my $name = $contributor->{name};
+                # Add role to contributors
+                push @{ $contributors->{$name}->{roles}->{$normalized_role} },
+                  $version;
+                # Add openhub to teams
+                if ( exists( $contributors->{$name}->{openhub} ) ) {
+                    $contributor->{openhub} = $contributors->{$name}->{openhub};
+                }
+            }
+        }
+        else {
+            my $name = $teams->{team}->{$version}->{$role}->{name};
+            # Add role to contributors
+            push @{ $contributors->{$name}->{roles}->{$normalized_role} },
+              $version;
+            # Add openhub to teams
+            if ( exists( $contributors->{$name}->{openhub} ) ) {
+                $teams->{team}->{$version}->{$role}->{openhub} =
+                  $contributors->{$name}->{openhub};
+            }
+        }
     }
+}
+
+## Create last name ordered array of people from contributors
+my @people = map {
+    { name => $_, ( $contributors->{$_} ? %{ $contributors->{$_} } : () ) }
 } sort {
     my ($alast) = $a =~ /(\S+)$/;
     my ($blast) = $b =~ /(\S+)$/;
@@ -566,6 +584,8 @@ my @people = map {
 } keys %{$contributors};
 
 $template->param( contributors => \@people );
+$template->param( maintenance_team => $teams->{team}->{$dev_team} );
+$template->param( release_team => $teams->{team}->{$short_version} );
 
 ## Timeline
 if ( open( my $file, "<:encoding(UTF-8)", "$docdir" . "/history.txt" ) ) {
