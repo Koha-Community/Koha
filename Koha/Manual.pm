@@ -19,7 +19,7 @@ sub _get_help_version {
 sub _get_base_url {
     my ( $preferred_language ) = @_;
 
-    my @available_languages = qw( en ar cs es fr it pt_BZ tz zh_TW );
+    my @available_languages = qw( en ar cs es fr it pt_BR tz zh_TW );
 
     my ( $language ) = grep {
         my $preferred_short = substr $preferred_language, 0, 2;
