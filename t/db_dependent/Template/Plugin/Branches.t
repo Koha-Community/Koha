@@ -16,9 +16,11 @@
 
 use Modern::Perl;
 
-use Test::More tests => 17;
+use Test::More tests => 18;
 
 use C4::Context;
+use C4::Biblio qw(AddBiblio);
+use C4::Items qw(AddItem);
 use Koha::Database;
 
 use t::lib::TestBuilder;
@@ -94,3 +96,80 @@ $libraries = $plugin->all();
 is( scalar(@$libraries), 1, 'If IndependentBranches is set, only 1 library should be returned' );
 $libraries = $plugin->all( { unfiltered => 1 } );
 ok( scalar(@$libraries) > 1, 'If IndependentBranches is set, all libraries should be returned if the unfiltered flag is set' );
+
+subtest 'UseBranchTransferLimits = OFF' => sub {
+    plan tests => 5;
+
+    my $from = Koha::Library->new({
+        branchcode => 'zzzfrom',
+        branchname => 'zzzfrom',
+        branchnotes => 'zzzfrom',
+    })->store;
+    my $to = Koha::Library->new({
+        branchcode => 'zzzto',
+        branchname => 'zzzto',
+        branchnotes => 'zzzto',
+    })->store;
+
+    my ($bibnum, $title, $bibitemnum) = create_helper_biblio('DUMMY');
+    # Create item instance for testing.
+    my ($item_bibnum1, $item_bibitemnum1, $itemnumber1)
+    = AddItem({ homebranch => $from->branchcode,
+                holdingbranch => $from->branchcode } , $bibnum);
+    my ($item_bibnum2, $item_bibitemnum2, $itemnumber2)
+    = AddItem({ homebranch => $from->branchcode,
+                holdingbranch => $from->branchcode } , $bibnum);
+    my ($item_bibnum3, $item_bibitemnum3, $itemnumber3)
+    = AddItem({ homebranch => $from->branchcode,
+                holdingbranch => $from->branchcode } , $bibnum);
+    my $biblio = Koha::Biblios->find($bibnum);
+
+    t::lib::Mocks::mock_preference('UseBranchTransferLimits', 0);
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    Koha::Item::Transfer::Limits->delete;
+    Koha::Item::Transfer::Limit->new({
+        fromBranch => $from->branchcode,
+        toBranch => $to->branchcode,
+        itemtype => $biblio->itemtype,
+    })->store;
+    my $total_pickup = Koha::Libraries->search({
+        pickup_location => 1
+    })->count;
+
+    # Test TT plugin
+    my $pickup = Koha::Template::Plugin::Branches::pickup_locations({ biblio => $bibnum });
+    is(C4::Context->preference('UseBranchTransferLimits'), 0, 'Given system '
+       .'preference UseBranchTransferLimits is switched OFF,');
+    is(@{$pickup}, $total_pickup, 'Then the total number of pickup locations '
+       .'equal number of libraries with pickup_location => 1');
+
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'itemtype');
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+    $pickup = Koha::Template::Plugin::Branches::pickup_locations({ biblio => $bibnum });
+    is(@{$pickup}, $total_pickup, '...when '
+       .'BranchTransferLimitsType = itemtype and item-level_itypes = 1');
+    t::lib::Mocks::mock_preference('item-level_itypes', 0);
+    $pickup = Koha::Template::Plugin::Branches::pickup_locations({ biblio => $bibnum });
+    is(@{$pickup}, $total_pickup, '...as well as when '
+       .'BranchTransferLimitsType = itemtype and item-level_itypes = 0');
+    t::lib::Mocks::mock_preference('BranchTransferLimitsType', 'ccode');
+    $pickup = Koha::Template::Plugin::Branches::pickup_locations({ biblio => $bibnum });
+    is(@{$pickup}, $total_pickup, '...as well as when '
+       .'BranchTransferLimitsType = ccode');
+
+    t::lib::Mocks::mock_preference('item-level_itypes', 1);
+};
+
+sub create_helper_biblio {
+    my $itemtype = shift;
+    my ($bibnum, $title, $bibitemnum);
+    my $bib = MARC::Record->new();
+    $title = 'Silence in the library';
+    $bib->append_fields(
+        MARC::Field->new('100', ' ', ' ', a => 'Moffat, Steven'),
+        MARC::Field->new('245', ' ', ' ', a => $title),
+        MARC::Field->new('942', ' ', ' ', c => $itemtype),
+    );
+    return ($bibnum, $title, $bibitemnum) = AddBiblio($bib, '');
+}
