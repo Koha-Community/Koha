@@ -32,7 +32,7 @@ use XML::Simple;
 use Config;
 use Search::Elasticsearch;
 use Try::Tiny;
-use YAML;
+use YAML::XS qw/LoadFile/;
 
 use C4::Output;
 use C4::Auth;
@@ -520,9 +520,7 @@ $template->param( table => $table );
 
 
 ## ------------------------------------------
-## Koha time line code
-
-#get file location
+## Koha contributions
 my $docdir;
 if ( defined C4::Context->config('docdir') ) {
     $docdir = C4::Context->config('docdir');
@@ -532,6 +530,41 @@ if ( defined C4::Context->config('docdir') ) {
     $docdir = C4::Context->config('intranetdir') . '/docs';
 }
 
+## Contributors
+my $contributors = LoadFile("$docdir"."/contributors.yaml");
+my @people = map {
+    {
+        name => $_,
+        (
+            exists( $contributors->{$_}->{openhub} )
+            ? ( openhub => $contributors->{$_}->{openhub} )
+            : ()
+        ),
+        (
+            exists( $contributors->{$_}->{roles} )
+            ? ( roles => $contributors->{$_}->{roles} )
+            : ()
+        ),
+        (
+            exists( $contributors->{$_}->{commits} )
+            ? ( commits => $contributors->{$_}->{commits} )
+            : ()
+        ),
+        (
+            exists( $contributors->{$_}->{notes} )
+            ? ( notes => $contributors->{$_}->{notes} )
+            : ()
+        )
+    }
+} sort {
+    my ($alast) = $a =~ /(\S+)$/;
+    my ($blast) = $b =~ /(\S+)$/;
+    lc($alast) cmp lc($blast)
+} keys %{$contributors};
+
+$template->param( contributors => \@people );
+
+## Timeline
 if ( open( my $file, "<:encoding(UTF-8)", "$docdir" . "/history.txt" ) ) {
 
     my $i = 0;
