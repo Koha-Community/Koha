@@ -74,9 +74,8 @@ Returns a Koha::Biblio::Metadata object
 sub metadata {
     my ( $self ) = @_;
 
-    $self->{_metadata} ||= Koha::Biblio::Metadatas->find( { biblionumber => $self->id } );
-
-    return $self->{_metadata};
+    my $metadata = $self->_result->metadata;
+    return Koha::Biblio::Metadata->_new_from_dbic($metadata);
 }
 
 =head3 subtitles

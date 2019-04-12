@@ -366,4 +366,11 @@ __PACKAGE__->has_many(
 # Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-11 12:56:41
 # DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ebn7Szfm8/HbrdAc7ekTnA
 
+__PACKAGE__->has_one(
+  "metadata",
+  "Koha::Schema::Result::BiblioMetadata",
+  { "foreign.biblionumber" => "self.biblionumber" },
+  { cascade_copy => 0, cascade_delete => 0 },
+);
+
 1;
