@@ -17990,6 +17990,21 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 21890 - Patron password reset by category)\n";
 }
 
+$DBversion = '18.12.00.045';
+if( CheckVersion( $DBversion ) ) {
+
+    if ( !column_exists( 'categories', 'change_password' ) ) {
+        $dbh->do(q{
+            ALTER TABLE categories
+                ADD COLUMN change_password TINYINT(1) NULL DEFAULT NULL
+                AFTER reset_password
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 10796 - Patron password change by category)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
