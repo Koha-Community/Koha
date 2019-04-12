@@ -17961,6 +17961,13 @@ if( CheckVersion( $DBversion ) ) {
 	print "Upgrade to $DBversion done (Bug 19670 - Change collation of marc_field to allow mixed case search field mappings)\n";
 }
 
+$DBversion = '18.12.00.042';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET value = 'default' WHERE variable = 'XSLTDetailsDisplay' AND value = ''" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 29891 - Remove non-XSLT detail view in the staff client)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
