@@ -53,7 +53,6 @@ use C4::Acquisition;
 use C4::Serials;    # uses getsubscriptionfrom biblionumber
 use C4::Koha;
 use Koha::IssuingRules;
-use Koha::Items;
 use Koha::ItemTypes;
 use Koha::Patrons;
 use Koha::RecordProcessor;
@@ -78,37 +77,33 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     }
 );
 
-my $patron = Koha::Patrons->find( $loggedinuser );
-my $borcat = q{};
-if ( $patron && C4::Context->preference('OpacHiddenItemsExceptions') ) {
-    $borcat = $patron->categorycode;
+
+my $biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'biblio_metadatas' ] } );
+my $patron = Koha::Patrons->find($loggedinuser);
+
+my $opachiddenitems_rules;
+eval {
+    my $yaml = C4::Context->preference('OpacHiddenItems') . "\n\n";
+    $opachiddenitems_rules = YAML::Load($yaml);
+};
+
+unless ( $patron and $patron->category->override_hidden_items ) {
+    # only skip this check if there's a logged in user
+    # and its category overrides OpacHiddenItems
+    if ( $biblio->hidden_in_opac({ rules => $opachiddenitems_rules }) ) {
+        print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
+        exit;
+    }
 }
 
-my $record = GetMarcBiblio({
-    biblionumber => $biblionumber,
-    embed_items  => 1,
-    opac         => 1,
-    borcat       => $borcat });
-if ( ! $record ) {
-    print $query->redirect("/cgi-bin/koha/errors/404.pl");
-    exit;
-}
-
-my @all_items = GetItemsInfo($biblionumber);
-my $biblio = Koha::Biblios->find( $biblionumber );
-my $framework = $biblio ? $biblio->frameworkcode : q{};
-my ($tag_itemnumber, $subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$framework);
-my @nonhiddenitems = $record->field($tag_itemnumber);
-if (scalar @all_items >= 1 && scalar @nonhiddenitems == 0) {
-    print $query->redirect('/cgi-bin/koha/errors/404.pl'); # escape early
-    exit;
-}
+my $record      = $biblio->metadata->record;
+my $marcflavour = C4::Context->preference("marcflavour");
 
 my $record_processor = Koha::RecordProcessor->new({
     filters => 'ViewPolicy',
     options => {
         interface => 'opac',
-        frameworkcode => $framework
+        frameworkcode => $biblio->frameworkcode
     }
 });
 $record_processor->process($record);
@@ -121,24 +116,22 @@ if(my $cart_list = $query->cookie("bib_list")){
     }
 }
 
-my $marcflavour      = C4::Context->preference("marcflavour");
-
 # some useful variables for enhanced content;
 # in each case, we're grabbing the first value we find in
 # the record and normalizing it
-my $upc = GetNormalizedUPC($record,$marcflavour);
-my $ean = GetNormalizedEAN($record,$marcflavour);
-my $oclc = GetNormalizedOCLCNumber($record,$marcflavour);
-my $isbn = GetNormalizedISBN(undef,$record,$marcflavour);
+my $upc  = GetNormalizedUPC( $record, $marcflavour );
+my $ean  = GetNormalizedEAN( $record, $marcflavour );
+my $oclc = GetNormalizedOCLCNumber( $record, $marcflavour );
+my $isbn = GetNormalizedISBN( undef, $record, $marcflavour );
 my $content_identifier_exists;
 if ( $isbn or $ean or $oclc or $upc ) {
     $content_identifier_exists = 1;
 }
 $template->param(
-    normalized_upc => $upc,
-    normalized_ean => $ean,
-    normalized_oclc => $oclc,
-    normalized_isbn => $isbn,
+    normalized_upc            => $upc,
+    normalized_ean            => $ean,
+    normalized_oclc           => $oclc,
+    normalized_isbn           => $isbn,
     content_identifier_exists => $content_identifier_exists,
 );
 
@@ -174,19 +167,18 @@ my $allow_onshelf_holds;
 my $res = GetISBDView({
     'record'    => $record,
     'template'  => 'opac',
-    'framework' => $framework
+    'framework' => $biblio->frameworkcode
 });
 
-my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search_with_localization->unblessed } };
-for my $itm (@all_items) {
-    my $item = Koha::Items->find( $itm->{itemnumber} );
+my $items = $biblio->items;
+while ( my $item = $items->next ) {
     $norequests = 0
       if $norequests
-        && !$itm->{'withdrawn'}
-        && !$itm->{'itemlost'}
-        && ($itm->{'itemnotforloan'}<0 || not $itm->{'itemnotforloan'})
-        && !$itemtypes->{$itm->{'itype'}}->{notforloan}
-        && $itm->{'itemnumber'};
+        && !$item->withdrawn
+        && !$item->itemlost
+        && ($item->notforloan < 0 || not $item->notforloan )
+        && !Koha::ItemTypes->find($item->effective_itemtype)->notforloan
+        && $item->itemnumber;
 
     $allow_onshelf_holds = Koha::IssuingRules->get_onshelfholds_policy( { item => $item, patron => $patron } )
       unless $allow_onshelf_holds;
