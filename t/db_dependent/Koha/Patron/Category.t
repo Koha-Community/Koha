@@ -19,7 +19,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -143,4 +143,26 @@ subtest 'effective_change_password() tests' => sub {
 
         $schema->storage->txn_rollback;
     };
+};
+
+subtest 'override_hidden_items() tests' => sub {
+
+    plan tests => 4;
+
+    $schema->storage->txn_begin;
+
+    my $category_1 = $builder->build_object({ class => 'Koha::Patron::Categories' });
+    my $category_2 = $builder->build_object({ class => 'Koha::Patron::Categories' });
+
+    t::lib::Mocks::mock_preference( 'OpacHiddenItemsExceptions', $category_1->categorycode . '|' . $category_2->categorycode . '|RANDOM' );
+
+    ok( $category_1->override_hidden_items, 'Category configured to override' );
+    ok( $category_2->override_hidden_items, 'Category configured to override' );
+
+    t::lib::Mocks::mock_preference( 'OpacHiddenItemsExceptions', 'RANDOM|' . $category_2->categorycode );
+
+    ok( !$category_1->override_hidden_items, 'Category not configured to override' );
+    ok( $category_2->override_hidden_items, 'Category configured to override' );
+
+    $schema->storage->txn_rollback;
 };
