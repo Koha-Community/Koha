@@ -792,6 +792,18 @@ sub merge_with {
 
                 $patron->move_to_deleted();
                 $patron->delete();
+
+                if ( C4::Context->preference("BorrowersLog") ) {
+                    my $info =
+                          $patron->firstname . " "
+                        . $patron->surname . " ("
+                        . $patron->cardnumber . ")"
+                        . " has been merged into "
+                        . $self->firstname . " "
+                        . $self->surname . " ("
+                        . $self->cardnumber . ")";
+                    logaction( "MEMBERS", "Merge", $self->id, $info );
+                }
             }
         }
     );
