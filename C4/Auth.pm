@@ -1786,6 +1786,7 @@ sub checkpw {
 
     my @return;
     my $patron = Koha::Patrons->find({ userid => $userid });
+    $patron = Koha::Patrons->find({ cardnumber => $userid }) unless $patron;
     my $check_internal_as_fallback = 0;
     my $passwd_ok = 0;
     # Note: checkpw_* routines returns:
