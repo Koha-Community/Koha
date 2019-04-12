@@ -17968,6 +17968,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 29891 - Remove non-XSLT detail view in the staff client)\n";
 }
 
+$DBversion = '18.12.00.043';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do("UPDATE accountlines SET description = REPLACE(description, 'Lost Item ', '') WHERE description LIKE 'Lost Item %'");
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 21953 - Remove 'Lost Item' text from accountlines description)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
