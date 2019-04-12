@@ -17,15 +17,39 @@ if( CheckVersion( $DBversion ) ) {
     my $marcflavour = C4::Context->preference('marcflavour');
 
     if ( $marcflavour eq 'UNIMARC' ) {
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.medium' WHERE frameworkcode='' AND tagfield='200' AND tagsubfield='b'" );
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.subtitle' WHERE frameworkcode='' AND tagfield='200' AND tagsubfield='e'" );
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.part_number' WHERE frameworkcode='' AND tagfield='200' AND tagsubfield='h'" );
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.part_name' WHERE frameworkcode='' AND tagfield='200' AND tagsubfield='i'" );
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.medium'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='200' AND tagsubfield='b'
+        });
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.subtitle'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='200' AND tagsubfield='e'
+        });
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.part_number'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='200' AND tagsubfield='h'
+        });
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.part_name'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='200' AND tagsubfield='i'
+        });
     } else {
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.medium' WHERE frameworkcode='' AND tagfield='245' AND tagsubfield='h'" );
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.subtitle' WHERE frameworkcode='' AND tagfield='245' AND tagsubfield='b'" );
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.part_number' WHERE frameworkcode='' AND tagfield='245' AND tagsubfield='n'" );
-        $dbh->do( "UPDATE marc_subfield_structure SET kohafield='biblio.part_name' WHERE frameworkcode='' AND tagfield='245' AND tagsubfield='p'" );
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.medium'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='245' AND tagsubfield='h'
+        });
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.subtitle'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='245' AND tagsubfield='b'
+        });
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.part_number'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='245' AND tagsubfield='n'
+        });
+        $dbh->do(qq{
+            UPDATE marc_subfield_structure SET kohafield='biblio.part_name'
+            WHERE (kohafield IS NULL OR kohafield='') AND frameworkcode='' AND tagfield='245' AND tagsubfield='p'
+        });
     }
 
     $dbh->do( "DROP TABLE IF EXISTS fieldmapping" );
