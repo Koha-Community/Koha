@@ -766,7 +766,7 @@ INSERT INTO  marc_subfield_structure (frameworkcode, authtypecode, tagfield, tag
  ('SR', '', '245', '6', 0, 0, 'Элемент связи', '',                      2, -6, '', '', '', NULL, '', '', NULL),
  ('SR', '', '245', '8', 0, 1, 'Связь поля и ее порядковый номер', '',   2, -6, '', '', '', NULL, '', '', NULL),
  ('SR', '', '245', 'a', 0, 0, 'Заглавие', '',                           2, 0, 'biblio.title', '', '', NULL, '\'245b\',\'245f\',\'245g\',\'245k\',\'245n\',\'245p\',\'245s\',\'245h\',\'246i\',\'246a\',\'246b\',\'246f\',\'246g\',\'246n\',\'246p\',\'246h\',\'242a\',\'242b\',\'242n\',\'242p\',\'242h\'', '', NULL),
- ('SR', '', '245', 'b', 0, 0, 'Продолж. заглавия', '',                  2, 0, 'bibliosubtitle.subtitle', '', '', NULL, '', '', NULL),
+ ('SR', '', '245', 'b', 0, 0, 'Продолж. заглавия', '',                  2, 0, 'biblio.subtitle', '', '', NULL, '', '', NULL),
  ('SR', '', '245', 'c', 0, 0, 'Ответственность', '',                    2, 0, '', '', '', NULL, '', '', NULL),
  ('SR', '', '245', 'd', 0, 0, 'Designation of section/part/series (SE) (устаревшее)', 'Designation of section section/part/series: (SE) (устаревшее)', 2, -6, '', '', '', NULL, '', '', NULL),
  ('SR', '', '245', 'e', 0, 0, 'Name of part/section/series (SE) (устаревшее)', 'Name of part/section/series (SE) (устаревшее)', 2, -6, '', '', '', NULL, '', '', NULL),
