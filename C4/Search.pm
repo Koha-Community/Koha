@@ -1910,9 +1910,15 @@ sub searchResults {
     my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
 
     # set stuff for XSLT processing here once, not later again for every record we retrieved
-    my $interface = $is_opac ? 'OPAC' : '';
-    my $xslsyspref = $interface . "XSLTResultsDisplay";
-    my $xslfile = C4::Context->preference($xslsyspref);
+    my $xslfile;
+    my $xslsyspref;
+    if( $is_opac ){
+        $xslsyspref = "OPACXSLTResultsDisplay";
+        $xslfile = C4::Context->preference( $xslsyspref );
+    } else {
+        $xslsyspref = "XSLTResultsDisplay";
+        $xslfile = C4::Context->preference( $xslsyspref ) || "default";
+    }
     my $lang   = $xslfile ? C4::Languages::getlanguage()  : undef;
     my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 

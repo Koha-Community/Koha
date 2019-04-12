@@ -400,48 +400,9 @@
                                     </div>
                                 [% END %]
 
-			    [% IF ( SEARCH_RESULT.XSLTResultsRecord ) %]
                 [% SEARCH_RESULT.result_number | html %].
                 [% SEARCH_RESULT.XSLTResultsRecord | $raw %]
-			    [% ELSE %]
-                                <p>[% SEARCH_RESULT.result_number | html %].
-                                 [% biblionumber = SEARCH_RESULT.biblionumber %]
 
-				[% INCLUDE 'biblio-default-view.inc' %]
-                                            <b>[% IF ( SEARCH_RESULT.title ) %][% SEARCH_RESULT.title | html %][% ELSE %]No title[% END %]</b>
-                                            </a>
-                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl.subfield | html %][% END %]
-                                        [% IF ( SEARCH_RESULT.seriestitle ) %][% SEARCH_RESULT.seriestitle | html %][% END %]
-                                        [% IF ( SEARCH_RESULT.volume ) %][% SEARCH_RESULT.volume | html %][% END %] [% IF ( SEARCH_RESULT.volumeddesc ) %], [% SEARCH_RESULT.volumeddesc | html %][% END %]
-                                </p>
-                                [% IF ( SEARCH_RESULT.summary ) %]
-                                        [% IF ( SEARCH_RESULT.author ) %]
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author | html %]</a>
-                                        [% ELSE %]
-                                            &nbsp;
-                                        [% END %]
-                                    <p>[% SEARCH_RESULT.summary | html %]</p>
-                                [% ELSE %]
-                                    <p>
-                                        [% IF ( SEARCH_RESULT.author ) %]
-                                            <a href="/cgi-bin/koha/catalogue/search.pl?idx=au&amp;q=[% SEARCH_RESULT.author |url %]" title="Search for this Author">[% SEARCH_RESULT.author | html %]</a>
-                                        [% ELSE %]
-                                            &nbsp;
-                                        [% END %]
-                                        Description:
-                                        <span class="results_imprint">[% IF ( SEARCH_RESULT.place ) %][% SEARCH_RESULT.place | html %] [% END %]
-                                        [% IF ( SEARCH_RESULT.publishercode ) %][% SEARCH_RESULT.publishercode | html %][% END %] [% IF ( SEARCH_RESULT.publicationyear ) %] [% SEARCH_RESULT.publicationyear | html %] [% ELSIF ( SEARCH_RESULT.copyrightdate ) %] [% SEARCH_RESULT.copyrightdate | html %][% END %]</span>
-										[% IF ( SEARCH_RESULT.edition ) %]<span class="results_edition">Edition: [% SEARCH_RESULT.edition | html %]</span>[% END %]
-                                        <span class="results_physicaldesc">[% IF ( SEARCH_RESULT.pages ) %]: [% SEARCH_RESULT.pages | html %][% END %]
-                                        [% IF ( SEARCH_RESULT.size ) %] ; [% SEARCH_RESULT.size | html %][% END %]</span> [% IF ( SEARCH_RESULT.isbn ) %]<span class="results_isbn">ISBN: [% SEARCH_RESULT.isbn | replace('\s\|', ', ') | html %]</span>[% END %]
-                                        <span class="results_itemtype">[% SEARCH_RESULT.description | html %]</span>
-                                        [% IF ( SEARCH_RESULT.timestamp ) %] <i>(modified on [% SEARCH_RESULT.timestamp | html %])</i>[% END %]
-                                        [% IF ( SEARCH_RESULT.cn_class ) %][<a href="/cgi-bin/koha/catalogue/search.pl?idx=callnum&amp;q=%22[% SEARCH_RESULT.cn_class |uri %]%22">[% SEARCH_RESULT.cn_class | html %]</a>][% END %]
-                                    </p>
-                                    [% IF ( SEARCH_RESULT.searchhighlightblob ) %]<p class="searchhighlightblob">[% SEARCH_RESULT.searchhighlightblob | html %]</p>[% END %]
-
-                                [% END %]
-                                [% END %]
                                   <p class="hold">
 
                             [% IF ( SEARCH_RESULT.norequests ) %]
