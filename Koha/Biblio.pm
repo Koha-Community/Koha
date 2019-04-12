@@ -350,11 +350,9 @@ sub article_requests_finished {
 
 =head3 items
 
-my @items = $biblio->items();
 my $items = $biblio->items();
 
-Returns the related Koha::Items object for this biblio in scalar context,
-or list of Koha::Item objects in list context.
+Returns the related Koha::Items object for this biblio
 
 =cut
 
@@ -363,10 +361,7 @@ sub items {
 
     my $items_rs = $self->_result->items;
 
-    return
-        wantarray
-        ? Koha::Items->_new_from_dbic($items_rs)->as_list
-        : Koha::Items->_new_from_dbic($items_rs);
+    return Koha::Items->_new_from_dbic( $items_rs );
 }
 
 =head3 itemtype

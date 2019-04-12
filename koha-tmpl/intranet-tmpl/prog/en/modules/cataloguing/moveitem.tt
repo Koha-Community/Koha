@@ -1,3 +1,4 @@
+[% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Cataloging &rsaquo; Attach an item to [% bibliotitle | html %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -51,6 +52,19 @@
 
 	[% ELSE %]
 	    [% IF ( success ) %]
+            [% IF from_biblio.items.count == 0 %]
+                <div class="dialog alert">
+                    The record <em>[% from_biblio.title | html %]</em> has [% from_biblio.items.count | html %] attached items.
+                    <p>
+                        <button id="delete-biblio-btn" data-biblionumber="[% from_biblio.id | html %]"><i id="del-bib-spn" class="fa fa-spinner fa-pulse fa-fw" style="display:none"></i><i class="fa fa-fw fa-trash"></i> Delete record
+                        </button>
+                        <span id="del-bib-success" style="display:none">Record deleted</span>
+                        <span id="del-bib-failure" style="display:none">Attempt to delete record failed.</span>
+                    </p>
+                </div>
+                <br/>
+            [% END %]
+
             <div class="dialog message">The item has successfully been attached to [% INCLUDE 'biblio-default-view.inc' %]<i>[% bibliotitle | html %]</i></a>.
 			<p>
 			[% INCLUDE actions %]
@@ -62,6 +76,7 @@
                                 <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
                         </form>
 	                </p>
+
 			</div>
     [% ELSE %]
 	[% IF ( missingparameter ) %]
@@ -96,5 +111,29 @@
 
     </div>
 </div>
+
+[% MACRO jsinclude BLOCK %]
+    <script type="text/javascript">
+        $("#delete-biblio-btn").on("click", function(){
+            if ( confirm(_("Are you sure you want to delete this record?")) ) {
+                let btn = $(this);
+                $("#del-bib-spn").show();
+                let biblionumber = $(this).data('biblionumber');
+                $.ajax({
+                    url: '/api/v1/biblios/' + biblionumber,
+                    type: 'DELETE',
+                    success: function(result) {
+                        btn.hide();
+                        $('#del-bib-success').show();
+                    },
+                    error: function(result) {
+                        btn.hide();
+                        $('#del-bib-failure').show();
+                    }
+                });
+            }
+        });
+    </script>
+[% END %]
 
 [% INCLUDE 'intranet-bottom.inc' %]
