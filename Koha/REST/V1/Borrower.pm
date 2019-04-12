@@ -209,7 +209,7 @@ sub status {
         my $kp = GetMember(userid=>$borrower->userid);
         my $flags = C4::Members::patronflags( $kp );
         my $fines_amount = $flags->{CHARGES}->{amount};
-        my $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
+        $fines_amount = ($fines_amount and $fines_amount > 0) ? $fines_amount : 0;
         my $fee_limit = C4::Context->preference('noissuescharge') || 5;
         my $fine_blocked = $fines_amount > $fee_limit;
         my $card_lost = $kp->{lost} || $kp->{gonenoaddress} || $flags->{LOST};
