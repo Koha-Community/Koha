@@ -14,7 +14,6 @@
         [%- CASE 'HE'      -%]<span>Hold waiting too long</span>
         [%- CASE 'Rent'    -%]<span>Rental fee</span>
         [%- CASE 'FOR'     -%]<span>Forgiven</span>
-        [%- CASE 'FFOR'  -%]<span>Fine forgiven</span>
         [%- CASE 'LR'      -%]<span>Lost item fee refund</span>
         [%- CASE 'PF'    -%]<span>Lost item processing fee</span>
         [%- CASE 'PAY'     -%]<span>Payment</span>

@@ -43,7 +43,6 @@
                         [% CASE 'HE' %]Hold waiting too long
                         [% CASE 'Rent' %]Rental fee
                         [% CASE 'FOR' %]Forgiven
-                        [% CASE 'FFOR' %]Fine forgiven
                         [% CASE 'LR' %]Lost item fee refund
                         [% CASE 'PF' %]Lost item processing fee
                         [% CASE 'PAY' %]Payment
