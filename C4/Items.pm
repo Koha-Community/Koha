@@ -2610,7 +2610,7 @@ sub ToggleNewStatus {
         my @params;
 
         my $query = q|
-            SELECT items.biblionumber, items.itemnumber
+            SELECT items.*
             FROM items
             LEFT JOIN biblioitems ON biblioitems.biblionumber = items.biblionumber
             WHERE 1
@@ -2643,7 +2643,7 @@ sub ToggleNewStatus {
             my $itemnumber = $values->{itemnumber};
             for my $substitution ( @$substitutions ) {
                 next unless $substitution->{field};
-                next if ( $item->{ $substitution->{item_field} } eq $substitution->{value} );
+                next if ( $values->{ $substitution->{item_field} } eq $substitution->{value} );
                 C4::Items::ModItem( { $substitution->{item_field} => $substitution->{value} }, $biblionumber, $itemnumber )
                     unless $report_only;
                 push @{ $report->{$itemnumber} }, $substitution;
