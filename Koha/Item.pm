@@ -26,7 +26,7 @@ use Koha::Database;
 use Koha::DateUtils qw( dt_from_string );
 
 use C4::Context;
-
+use C4::Circulation;
 use Koha::Checkouts;
 use Koha::IssuingRules;
 use Koha::Item::Transfer::Limits;
@@ -292,6 +292,59 @@ sub can_be_transferred {
         $limittype => $limittype eq 'itemtype'
                         ? $self->effective_itemtype : $self->ccode
     })->count ? 0 : 1;
+}
+
+=head3 pickup_locations
+
+@pickup_locations = $item->pickup_locations( {patron => $patron } )
+
+Returns possible pickup locations for this item, according to patron's home library (if patron is defined and holds are allowed only from hold groups)
+and if item can be transfered to each pickup location.
+
+=cut
+
+sub pickup_locations {
+    my ($self, $params) = @_;
+
+    my $patron = $params->{patron};
+
+    my $circ_control_branch =
+      C4::Circulation::_GetCircControlBranch( $self->unblessed(), $patron );
+    my $branchitemrule =
+      C4::Circulation::GetBranchItemRule( $circ_control_branch, $self->itype );
+
+    my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
+    my $library = $branch_control eq 'holdingbranch' ? $self->holding_branch : $self->home_branch;
+
+    #warn $branch_control.' '.$branchitemrule->{holdallowed}.' '.$library->branchcode.' '.$patron->branchcode;
+
+    my @libs;
+    if(defined $patron) {
+        return @libs if $branchitemrule->{holdallowed} == 3 && !$library->validate_hold_sibling( {branchcode => $patron->branchcode} );
+        return @libs if $branchitemrule->{holdallowed} == 1 && $library->branchcode ne $patron->branchcode;
+    }
+
+    if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {
+        @libs  = $library->get_hold_libraries;
+    } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'homebranch') {
+        push @libs, $self->home_branch;
+    } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'holdingbranch') {
+        push @libs, $self->holding_branch;
+    } else {
+        @libs = Koha::Libraries->search({
+            pickup_location => 1
+        }, {
+            order_by => ['branchname']
+        })->as_list;
+    }
+
+    my @pickup_locations;
+    foreach my $library (@libs) {
+        if ($library->pickup_location && $self->can_be_transferred({ to => $library })) {
+            push @pickup_locations, $library->unblessed;
+        }
+    }
+    return wantarray ? @pickup_locations : \@pickup_locations;
 }
 
 =head3 article_request_type

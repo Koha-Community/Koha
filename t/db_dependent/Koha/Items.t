@@ -23,6 +23,7 @@ use Test::More tests => 10;
 use Test::Exception;
 
 use C4::Circulation;
+use C4::Context;
 use Koha::Item;
 use Koha::Item::Transfer::Limits;
 use Koha::Items;
@@ -33,6 +34,8 @@ use t::lib::Mocks;
 
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
+
+my $dbh     = C4::Context->dbh;
 
 my $builder     = t::lib::TestBuilder->new;
 my $library     = $builder->build( { source => 'Branch' } );
@@ -175,3 +178,313 @@ is( Koha::Items->search->count, $nb_of_items + 1, 'Delete should have deleted th
 
 $schema->storage->txn_rollback;
 
+subtest 'pickup_locations' => sub {
+    plan tests => 33;
+
+    $schema->storage->txn_begin;
+
+    # Cleanup database
+    Koha::Holds->search->delete;
+    Koha::Patrons->search->delete;
+    Koha::Items->search->delete;
+    Koha::Libraries->search->delete;
+    $dbh->do('DELETE FROM issues');
+    $dbh->do('DELETE FROM issuingrules');
+    $dbh->do(
+        q{INSERT INTO issuingrules (categorycode, branchcode, itemtype, reservesallowed)
+        VALUES (?, ?, ?, ?)},
+        {},
+        '*', '*', '*', 25
+    );
+    $dbh->do('DELETE FROM branch_item_rules');
+    $dbh->do('DELETE FROM default_branch_circ_rules');
+    $dbh->do('DELETE FROM default_branch_item_rules');
+    $dbh->do('DELETE FROM default_circ_rules');
+
+    my $root1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
+    my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
+
+    my $library1 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $library2 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+    my $library3 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 0 } } );
+    my $library4 = $builder->build_object( { class => 'Koha::Libraries', value => { pickup_location => 1 } } );
+
+    my $group1_1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library1->branchcode } } );
+    my $group1_2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root1->id, branchcode => $library2->branchcode } } );
+
+    my $group2_1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library3->branchcode } } );
+    my $group2_2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { parent_id => $root2->id, branchcode => $library4->branchcode } } );
+
+    my $biblioitem  = $builder->build( { source => 'Biblioitem' } );
+
+    my $item1  = Koha::Item->new({
+        biblionumber     => $biblioitem->{biblionumber},
+        biblioitemnumber => $biblioitem->{biblioitemnumber},
+        homebranch       => $library1->branchcode,
+        holdingbranch    => $library2->branchcode,
+        itype            => 'test',
+        barcode          => "item1barcode",
+    })->store;
+
+    my $item3  = Koha::Item->new({
+        biblionumber     => $biblioitem->{biblionumber},
+        biblioitemnumber => $biblioitem->{biblioitemnumber},
+        homebranch       => $library3->branchcode,
+        holdingbranch    => $library4->branchcode,
+        itype            => 'test',
+        barcode          => "item3barcode",
+    })->store;
+
+    my $patron1 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library1->branchcode } } );
+    my $patron4 = $builder->build_object( { class => 'Koha::Patrons', value => { branchcode => $library4->branchcode } } );
+
+    t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'homebranch');
+
+    #Case 1: holdallowed any, hold_fulfillment_policy any
+    $dbh->do(
+        q{INSERT INTO default_circ_rules (holdallowed, hold_fulfillment_policy, returnbranch)
+        VALUES (?,?,?)},
+        {},
+        2, 'any', 'any'
+    );
+
+    my @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    my @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    my @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    my @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == scalar(@pl_1_4) && scalar(@pl_1_1) == scalar(@pl_3_1) && scalar(@pl_1_1) == scalar(@pl_3_4), 'All combinations of patron/item renders the same number of locations');
+
+    #Case 2: holdallowed homebranch, hold_fulfillment_policy any, HomeOrHoldingBranch 'homebranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'any'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 3, 'Pickup location for patron 1 and item 1 renders all libraries that are pickup_locations');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
+
+    #Case 3: holdallowed holdgroup, hold_fulfillment_policy any
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        3, 'any'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 3, 'Pickup location for patron 1 and item 1 renders all libraries that are pickup_locations');
+    ok(scalar(@pl_3_4) == 3, 'Pickup location for patron 4 and item 3 renders all libraries that are pickup_locations');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0, 'Any other combination renders no locations');
+
+    #Case 4: holdallowed any, hold_fulfillment_policy holdgroup
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        2, 'holdgroup'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 2 && scalar(@pl_1_4) == 2, 'Pickup locations for item 1 renders all libraries in items\'s holdgroup that are pickup_locations');
+    ok(scalar(@pl_3_1) == 1 && scalar(@pl_3_4) == 1, 'Pickup locations for item 3 renders all libraries in items\'s holdgroup that are pickup_locations');
+
+    #Case 5: holdallowed homebranch, hold_fulfillment_policy holdgroup, HomeOrHoldingBranch 'homebranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'holdgroup'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 2, 'Pickup location for patron 1 and item 1 renders all libraries in holdgroup that are pickup_locations');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
+
+    #Case 6: holdallowed holdgroup, hold_fulfillment_policy holdgroup
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        3, 'holdgroup'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 2, 'Pickup location for patron 1 and item 1 renders all libraries that are pickup_locations');
+    ok(scalar(@pl_3_4) == 1, 'Pickup location for patron 4 and item 3 renders all libraries that are pickup_locations');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0, 'Any other combination renders no locations');
+
+    #Case 7: holdallowed any, hold_fulfillment_policy homebranch
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        2, 'homebranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 1 && scalar(@pl_1_4) == 1 && $pl_1_1[0]->{branchcode} eq $library1->branchcode && $pl_1_4[0]->{branchcode} eq $library1->id, 'Pickup locations for item 1 renders item\'s homelibrary');
+    ok(scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations, because library3 is not pickup_location');
+
+    #Case 8: holdallowed homebranch, hold_fulfillment_policy homebranch, HomeOrHoldingBranch 'homebranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'homebranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 1 && $pl_1_1[0]->{branchcode} eq $library1->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s homebranch');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
+
+    #Case 9: holdallowed holdgroup, hold_fulfillment_policy homebranch
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        3, 'homebranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 1, 'Pickup location for patron 1 and item 1 renders item\'s homebranch');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
+
+    #Case 10: holdallowed any, hold_fulfillment_policy holdingbranch
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        2, 'holdingbranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 1 && scalar(@pl_1_4) == 1 && $pl_1_1[0]->{branchcode} eq $library2->branchcode && $pl_1_4[0]->{branchcode} eq $library2->branchcode, 'Pickup locations for item 1 renders item\'s holding branch');
+    ok(scalar(@pl_3_1) == 1 && scalar(@pl_3_4) == 1 && $pl_3_1[0]->{branchcode} eq $library4->branchcode && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup locations for item 3 renders item\'s holding branch');
+
+
+    #Case 11: holdallowed homebranch, hold_fulfillment_policy holdingbranch, HomeOrHoldingBranch 'homebranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'holdingbranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 1 && $pl_1_1[0]->{branchcode} eq $library2->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s holding branch');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_3_4) == 0, 'Any other combination renders no locations');
+
+    #Case 12: holdallowed holdgroup, hold_fulfillment_policy holdingbranch
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        3, 'holdingbranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_1_1) == 1 && $pl_1_1[0]->{branchcode} eq $library2->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s holding branch');
+    ok(scalar(@pl_3_4) == 1 && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup location for patron 4 and item 3 renders item\'s holding branch');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0, 'Any other combination renders no locations');
+
+    t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'holdingbranch');
+
+    #Case 13: holdallowed homebranch, hold_fulfillment_policy any, HomeOrHoldingBranch 'holdingbranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'any'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_3_4) == 3, 'Pickup location for patron 4 and item 3 renders all libraries that are pickup_locations');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any other combination renders no locations');
+
+    #Case 14: holdallowed homebranch, hold_fulfillment_policy holdgroup, HomeOrHoldingBranch 'holdingbranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'holdgroup'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_3_4) == 1, 'Pickup location for patron 4 and item 3 renders all libraries in holdgroup that are pickup_locations');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any other combination renders no locations');
+
+    #Case 15: holdallowed homebranch, hold_fulfillment_policy homebranch, HomeOrHoldingBranch 'holdingbranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'homebranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    #ok(scalar(@pl_3_4) == 1 && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup location for patron 4 and item 3 renders item\'s holding branch');
+    ok(scalar(@pl_3_4) == 0 && scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any combination of patron/item renders no locations');
+
+    #Case 16: holdallowed homebranch, hold_fulfillment_policy holdingbranch, HomeOrHoldingBranch 'holdingbranch'
+    $dbh->do(
+        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
+        {},
+        1, 'holdingbranch'
+    );
+
+    @pl_1_1 = $item1->pickup_locations( { patron => $patron1 } );
+    @pl_1_4 = $item1->pickup_locations( { patron => $patron4 } );
+    @pl_3_1 = $item3->pickup_locations( { patron => $patron1 } );
+    @pl_3_4 = $item3->pickup_locations( { patron => $patron4 } );
+
+    ok(scalar(@pl_3_4) == 1 && $pl_3_4[0]->{branchcode} eq $library4->branchcode, 'Pickup location for patron 1 and item 1 renders item\'s holding branch');
+    ok(scalar(@pl_1_4) == 0 && scalar(@pl_3_1) == 0 && scalar(@pl_1_1) == 0, 'Any other combination renders no locations');
+
+    $schema->storage->txn_rollback;
+};

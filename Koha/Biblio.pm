@@ -169,6 +169,33 @@ sub can_be_transferred {
     return 0;
 }
 
+
+=head3 pickup_locations
+
+@pickup_locations = $biblio->pickup_locations( {patron => $patron } )
+
+Returns possible pickup locations for this biblio items, according to patron's home library (if patron is defined and holds are allowed only from hold groups)
+and if item can be transfered to each pickup location.
+
+=cut
+
+sub pickup_locations {
+    my ($self, $params) = @_;
+
+    my $patron = $params->{patron};
+
+    my @pickup_locations;
+    foreach my $item_of_bib ($self->items) {
+        push @pickup_locations, $item_of_bib->pickup_locations( {patron => $patron} );
+    }
+
+    my %seen;
+    @pickup_locations =
+      grep { !$seen{ $_->{branchcode} }++ } @pickup_locations;
+
+    return wantarray ? @pickup_locations : \@pickup_locations;
+}
+
 =head3 hidden_in_opac
 
 my $bool = $biblio->hidden_in_opac({ [ rules => $rules ] })
