@@ -138,6 +138,30 @@ subtest 'no_set_userenv parameter tests' => sub {
     isnt( C4::Context->userenv->{branch}, $library->branchcode, 'Userenv branch is overwritten if no_set_userenv is false' );
 };
 
+subtest 'checkpw lockout tests' => sub {
+
+    plan tests => 5;
+
+    my $library = $builder->build_object( { class => 'Koha::Libraries' } );
+    my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
+    my $password = 'password';
+    t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
+    t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 1 );
+    $patron->set_password({ password => $password });
+
+    my ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->cardnumber, $password, undef, undef, 1 );
+    ok( $checkpw, 'checkpw returns true with right password when logging in via cardnumber' );
+    ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->userid, "wrong_password", undef, undef, 1 );
+    is( $checkpw, 0, 'checkpw returns false when given wrong password' );
+    $patron = $patron->get_from_storage;
+    is( $patron->account_locked, 1, "Account is locked from failed login");
+    ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->userid, $password, undef, undef, 1 );
+    is( $checkpw, undef, 'checkpw returns undef with right password when account locked' );
+    ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->cardnumber, $password, undef, undef, 1 );
+    is( $checkpw, undef, 'checkpw returns undefwith right password when logging in via cardnumber if account locked' );
+
+};
+
 # get_template_and_user tests
 
 {   # Tests for the language URL parameter
