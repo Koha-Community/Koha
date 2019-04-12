@@ -218,7 +218,7 @@ sub addDays {
                 my $dow = $base_date->day_of_week;
                 my $days = $days_duration->in_units('days');
                 # Is it a period based on weeks
-                my $push_amt = $days_duration % 7 == 0 ?
+                my $push_amt = $days % 7 == 0 ?
                     $self->get_push_amt($base_date) : 1;
                 if ( $days_duration->is_negative() ) {
                     $base_date = $self->prev_open_days($base_date, $push_amt);
