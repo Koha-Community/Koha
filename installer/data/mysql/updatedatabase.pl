@@ -17975,6 +17975,21 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 21953 - Remove 'Lost Item' text from accountlines description)\n";
 }
 
+$DBversion = '18.12.00.044';
+if( CheckVersion( $DBversion ) ) {
+
+    if ( !column_exists( 'categories', 'reset_password' ) ) {
+        $dbh->do(q{
+            ALTER TABLE categories
+                ADD COLUMN reset_password TINYINT(1) NULL DEFAULT NULL
+                AFTER checkprevcheckout
+        });
+    }
+
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21890 - Patron password reset by category)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
