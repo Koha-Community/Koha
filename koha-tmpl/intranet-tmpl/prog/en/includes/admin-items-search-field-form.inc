@@ -25,7 +25,7 @@
     [% IF field && field.tagfield == tagfield %]
         <input type="text" id="tagfield" name="tagfield" maxlength="3" size="3" class="required" pattern="[a-zA-Z0-9]+" required="required" value="[% tagfield | html %]" />
     [% ELSE %]
-        <input type="text" id="tagfield" name="tagfield" maxlenght="3" size="3" class="required" pattern="[a-zA-Z0-9]+" required="required" />
+        <input type="text" id="tagfield" name="tagfield" maxlength="3" size="3" class="required" pattern="[a-zA-Z0-9]+" required="required" />
     [% END %]
     <span class="required">Required</span>
   </li>
