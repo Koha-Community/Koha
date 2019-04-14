@@ -491,7 +491,7 @@ sub build_tabs {
     my @tab_data; # all tags to display
 
     my $max_num_tab=-1;
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", scalar $input->param('frameworkcode') );
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
     foreach my $used ( @$usedTagsLib ){
 
         push @tab_data,$used->{tagfield} if not $seen{$used->{tagfield}};
