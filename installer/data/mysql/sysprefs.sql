@@ -312,7 +312,7 @@ INSERT INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `
 ('noissuescharge','5','','Define maximum amount withstanding before check outs are blocked','Integer'),
 ('NoIssuesChargeGuarantees','','','Define maximum amount withstanding before check outs are blocked','Integer'),
 ('noItemTypeImages','0',NULL,'If ON, disables item-type images','YesNo'),
-('NoRenewalBefore','exact_time','date|exact_time','Calculate NoRenewalBefore based on date only or exact time of due date','Choice'),
+('NoRenewalBeforePrecision','exact_time','date|exact_time','Calculate NoRenewalBefore based on date only or exact time of due date','Choice'),
 ('NotesBlacklist','',NULL,'List of notes fields that should not appear in the title notes/description separator of details','free'),
 ('NotHighlightedWords','and|or|not',NULL,'List of words to NOT highlight when OpacHitHighlight is enabled','free'),
 ('NoticeBcc','','','Email address to bcc outgoing notices sent by email','free'),
