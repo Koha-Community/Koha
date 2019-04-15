@@ -759,41 +759,6 @@ subtest 'ModReceiveOrder and subscription' => sub {
     is( $order->get_from_storage->order_internalnote, $first_note );
 };
 
-subtest 'GetHistory with additional fields' => sub {
-    plan tests => 3;
-    my $builder = t::lib::TestBuilder->new;
-    my $order_basket = $builder->build({ source => 'Aqbasket', value => { is_standing => 0 } });
-    my $orderinfo ={
-        basketno => $order_basket->{basketno},
-        rrp => 19.99,
-        replacementprice => undef,
-        quantity => 1,
-        quantityreceived => 0,
-        datereceived => undef,
-        datecancellationprinted => undef,
-    };
-    my $order =        $builder->build({ source => 'Aqorder', value => $orderinfo });
-    my $history = GetHistory(ordernumber => $order->{ordernumber});
-    is( scalar( @$history ), 1, 'GetHistory returns the one order');
-
-    my $additional_field = $builder->build({source => 'AdditionalField', value => {
-            tablename => 'aqbasket',
-            name => 'snakeoil',
-            authorised_value_category => "",
-        }
-    });
-    $history = GetHistory( ordernumber => $order->{ordernumber}, additional_fields => [{ id => $additional_field->{id}, value=>'delicious'}]);
-    is( scalar ( @$history ), 0, 'GetHistory returns no order for an unused additional field');
-    my $basket = Koha::Acquisition::Baskets->find({ basketno => $order_basket->{basketno} });
-    $basket->set_additional_fields([{
-        id => $additional_field->{id},
-        value => 'delicious',
-    }]);
-
-    $history = GetHistory( ordernumber => $order->{ordernumber}, additional_fields => [{ id => $additional_field->{id}, value=>'delicious'}]);
-    is( scalar( @$history ), 1, 'GetHistory returns the order when additional field is set');
-};
-
 subtest 'Tests for get_rounding_sql' => sub {
 
     plan tests => 2;
