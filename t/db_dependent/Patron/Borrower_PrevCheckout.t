@@ -6,7 +6,7 @@ use C4::Circulation;
 use Koha::Database;
 use Koha::Patrons;
 
-use Test::More tests => 59;
+use Test::More tests => 60;
 
 use_ok('Koha::Patron');
 
@@ -234,10 +234,16 @@ map {
 # $patron, $different_patron, $items (same bib number), $different_item
 my $patron = $builder->build({source => 'Borrower'});
 my $patron_d = $builder->build({source => 'Borrower'});
-my $item_1 = $builder->build({source => 'Item'});
+
+my $biblio = $builder->build_sample_biblio;
+$biblio->serial(0)->store;
+my $item_1 = $builder->build({
+    source => 'Item',
+    value => { biblionumber => $biblio->biblionumber }
+});
 my $item_2 = $builder->build({
     source => 'Item',
-    value => { biblionumber => $item_1->{biblionumber} },
+    value => { biblionumber => $biblio->biblionumber },
 });
 my $item_d = $builder->build({source => 'Item'});
 
@@ -440,3 +446,30 @@ map {
 
 $schema->storage->txn_rollback;
 
+subtest 'Check previous checkouts for serial' => sub {
+    plan tests => 2;
+    $schema->storage->txn_begin;
+
+    my $library = $builder->build_object({ class => 'Koha::Libraries'});
+
+    my $patron = $builder->build_object({
+            class => 'Koha::Patrons',
+            value => {
+                branchcode => $library->branchcode
+            }
+        });
+    t::lib::Mocks::mock_userenv({ patron => $patron });
+
+    my $biblio = $builder->build_sample_biblio;
+    $biblio->serial(1)->store;
+
+    my $item1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    AddIssue($patron->unblessed, $item1->barcode);
+
+    is($patron->do_check_for_previous_checkout($item1->unblessed), 1, 'Check only one item if bibliographic record is serial');
+    is($patron->do_check_for_previous_checkout($item2->unblessed), 0, 'Check only one item if bibliographic record is serial');
+
+    $schema->storage->txn_rollback;
+}
