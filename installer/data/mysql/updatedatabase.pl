@@ -18012,6 +18012,18 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22695 - Remove non-XSLT search results view from the staff client)\n";
 }
 
+$DBversion = '18.12.00.047';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('LibrisKey', '', 'This key must be obtained at http://api.libris.kb.se/. It is unique for the IP of the server.', NULL, 'Free');
+    |);
+    $dbh->do(q|
+        INSERT IGNORE INTO systempreferences (variable,value,explanation,options,type) VALUES ('LibrisURL', 'http://api.libris.kb.se/bibspell/', 'This is the base URL for the Libris spellchecking API.',NULL,'Free');
+    |);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 14557: Add Libris spellchecking system preferences)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
