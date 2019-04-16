@@ -620,7 +620,7 @@ sub _convert_index_fields {
     my ( $self, @indexes ) = @_;
 
     my %index_type_convert =
-      ( __default => undef, phr => 'phrase', rtrn => 'right-truncate' );
+      ( __default => undef, phr => 'phrase', rtrn => 'right-truncate', 'st-year' => 'st-year' );
 
     # Convert according to our table, drop anything that doesn't convert.
     # If a field starts with mc- we save it as it's used (and removed) later
@@ -727,6 +727,13 @@ sub _modify_string_by_type {
 
     $str .= '*' if $type eq 'right-truncate';
     $str = '"' . $str . '"' if $type eq 'phrase';
+    if ($type eq 'st-year') {
+        if ($str =~ /^(.*)-(.*)$/) {
+            my $from = $1 || '*';
+            my $until = $2 || '*';
+            $str = "[$from TO $until]";
+        }
+    }
     return $str;
 }
 
@@ -799,7 +806,7 @@ sub _create_query_string {
         my $field = $_->{field}    ? $_->{field} . ':'    : '';
 
         my $oand = $self->_modify_string_by_type(%$_);
-        $oand = "($oand)" if $field && scalar(split(/\s+/, $oand)) > 1;
+        $oand = "($oand)" if $field && scalar(split(/\s+/, $oand)) > 1 && (!defined $_->{type} || $_->{type} ne 'st-year');
         "$otor($field$oand)";
     } @queries;
 }
@@ -867,6 +874,7 @@ sub _fix_limit_special_cases {
         elsif ( $l =~ /^yr,st-numeric=/ ) {
             my ($date) = ( $l =~ /^yr,st-numeric=(.*)$/ );
             next unless defined($date);
+            $date = $self->_modify_string_by_type(type => 'st-year', operand => $date);
             push @new_lim, "copydate:$date";
         }
         elsif ( $l =~ /^available$/ ) {
