@@ -18005,6 +18005,13 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 10796 - Patron password change by category)\n";
 }
 
+$DBversion = '18.12.00.046';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET value = 'default' WHERE variable = 'XSLTResultsDisplay' AND value = ''" );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 22695 - Remove non-XSLT search results view from the staff client)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
