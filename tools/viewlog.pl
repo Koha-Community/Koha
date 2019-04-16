@@ -126,7 +126,7 @@ if ($do_it) {
             '<=' => $dtf->format_datetime( $dateto_endday )
         };
     }
-    # Circulation uses RENEWAL, but Patorns uses RENEW, this helps to find both
+    # Circulation uses RENEWAL, but Patrons uses RENEW, this helps to find both
     if ( grep { $_ eq 'RENEW'} @actions ) { push @actions, 'RENEWAL' };
 
     $search_params{user} = $user if $user;
