@@ -169,7 +169,7 @@ subtest 'build_authorities_query_compat() tests' => sub {
 };
 
 subtest 'build_query tests' => sub {
-    plan tests => 33;
+    plan tests => 38;
 
     my $qb;
 
@@ -243,6 +243,42 @@ subtest 'build_query tests' => sub {
     is($query_cgi, 'idx=ti&q=%22donald%20duck%22&idx=au&q=walt%20disney', 'query cgi ok for multiterm query');
     is($query_desc, '(title:("donald duck")) (author:(walt disney))', 'query desc ok for multiterm query');
 
+    ( undef, $query ) = $qb->build_query_compat( undef, ['2019'], ['yr,st-year'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(date-of-publication:2019)',
+        'Year in an st-year search is handled properly'
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['2018-2019'], ['yr,st-year'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(date-of-publication:[2018 TO 2019])',
+        'Year range in an st-year search is handled properly'
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['-2019'], ['yr,st-year'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(date-of-publication:[* TO 2019])',
+        'Open start year in year range of an st-year search is handled properly'
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['2019-'], ['yr,st-year'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(date-of-publication:[2019 TO *])',
+        'Open end year in year range of an st-year search is handled properly'
+    );
+
+    ( undef, $query ) = $qb->build_query_compat( undef, ['2019-'], ['yr,st-year'], ['yr,st-numeric=-2019'] );
+    is(
+        $query->{query}{query_string}{query},
+        '(date-of-publication:[2019 TO *]) AND copydate:[* TO 2019]',
+        'Open end year in year range of an st-year search is handled properly'
+    );
+
+    # Enable auto-truncation
     t::lib::Mocks::mock_preference( 'QueryAutoTruncate', '1' );
 
     ( undef, $query ) = $qb->build_query_compat( undef, ['donald duck'] );
