@@ -436,6 +436,7 @@ if ((!$nok) and $nodouble and ($op eq 'insert' or $op eq 'save')){
             warn "Patron creation failed! - $@"; # Maybe we must die instead of just warn
         } else {
             $borrowernumber = $patron->borrowernumber;
+            $newdata{'borrowernumber'} = $borrowernumber;
         }
 
         # If 'AutoEmailOpacUser' syspref is on, email user their account details from the 'notice' that matches the user's branchcode.
