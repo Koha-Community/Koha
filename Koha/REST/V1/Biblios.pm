@@ -54,7 +54,7 @@ sub delete {
             );
         }
         else {
-            return $c->render( status => 200, openapi => "" );
+            return $c->render( status => 204, openapi => "" );
         }
     }
     catch {

@@ -62,7 +62,8 @@ subtest 'delete() tests' => sub {
 
     # Bibs with no items can be deleted
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
-      ->status_is(200)->content_is(q{""});
+      ->status_is(204, 'SWAGGER3.2.4')
+      ->content_is('', 'SWAGGER3.3.4');
 
     $t->delete_ok("//$userid:$password@/api/v1/biblios/$biblio_id")
       ->status_is(404);
