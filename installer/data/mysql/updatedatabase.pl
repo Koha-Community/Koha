@@ -18037,8 +18037,19 @@ if( CheckVersion( $DBversion ) ) {
 
 $DBversion = '18.12.00.049';
 if( CheckVersion( $DBversion ) ) {
-    $dbh->do( "ALTER TABLE borrowers ADD COLUMN flgAnonymized tinyint DEFAULT 0" ) if !column_exists('borrowers', 'flgAnonymized');
-    $dbh->do( "ALTER TABLE deletedborrowers ADD COLUMN flgAnonymized tinyint DEFAULT 0" ) if !column_exists('deletedborrowers', 'flgAnonymized');
+
+    $dbh->do(q{
+        ALTER TABLE borrowers
+            ADD COLUMN flgAnonymized tinyint DEFAULT 0
+            AFTER overdrive_auth_token
+    }) if !column_exists('borrowers', 'flgAnonymized');
+
+    $dbh->do(q{
+        ALTER TABLE deletedborrowers
+            ADD COLUMN flgAnonymized tinyint DEFAULT 0
+            AFTER overdrive_auth_token
+    }) if !column_exists('deletedborrowers', 'flgAnonymized');
+
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 21336 - Add field flgAnonymized)\n";
 }
