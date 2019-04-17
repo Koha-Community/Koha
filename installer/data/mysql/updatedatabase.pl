@@ -18035,6 +18035,34 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22044 - Set a default value for NoRenewalBeforePrecision)\n";
 }
 
+$DBversion = '18.12.00.049';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "ALTER TABLE borrowers ADD COLUMN flgAnonymized tinyint DEFAULT 0" ) if !column_exists('borrowers', 'flgAnonymized');
+    $dbh->do( "ALTER TABLE deletedborrowers ADD COLUMN flgAnonymized tinyint DEFAULT 0" ) if !column_exists('deletedborrowers', 'flgAnonymized');
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21336 - Add field flgAnonymized)\n";
+}
+
+$DBversion = '18.12.00.050';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q|
+INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+VALUES
+('UnsubscribeReflectionDelay','',NULL,'Delay for locking unsubscribers', 'Integer'),
+('PatronAnonymizeDelay','',NULL,'Delay for anonymizing patrons', 'Integer'),
+('PatronRemovalDelay','',NULL,'Delay for removing anonymized patrons', 'Integer')
+    |);
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21336 - Add preferences)\n";
+}
+
+$DBversion = '18.12.00.051';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE borrowers SET login_attempts = ? WHERE login_attempts > ?", undef, C4::Context->preference('FailedLoginAttempts'), C4::Context->preference('FailedLoginAttempts') );
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 21336 - Reset login_attempts)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
