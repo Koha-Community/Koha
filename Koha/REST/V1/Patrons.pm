@@ -400,7 +400,6 @@ our $to_api_mapping = {
     debarredcomment     => undef, # calculated, API consumers will use /restrictions instead
     emailpro            => 'secondary_email',
     flags               => undef, # permissions manipulation handled in /permissions
-    flgAnonymized       => 'anonymized',
     gonenoaddress       => 'incorrect_address',
     guarantorid         => 'guarantor_id',
     lastseen            => 'last_seen',
@@ -444,7 +443,6 @@ our $to_api_mapping = {
 
 our $to_model_mapping = {
     altaddress_notes         => 'contactnote',
-    anonymized               => 'flgAnonymized',
     category_id              => 'categorycode',
     check_previous_checkout  => 'checkprevcheckout',
     date_enrolled            => 'dateenrolled',
