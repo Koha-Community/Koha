@@ -1545,7 +1545,8 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->add_columns(
-    '+lost' => { is_boolean => 1 },
+    '+flgAnonymized' => { is_boolean => 1 },
+    '+lost'          => { is_boolean => 1 },
     '+gonenoaddress' => { is_boolean => 1 }
 );
 

@@ -143,6 +143,7 @@ subtest 'add() tests' => sub {
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
+        delete $newpatron->{anonymized};
 
         # Create a library just to make sure its ID doesn't exist on the DB
         my $library_to_delete = $builder->build_object({ class => 'Koha::Libraries' });
@@ -189,6 +190,7 @@ subtest 'add() tests' => sub {
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
+        delete $newpatron->{anonymized};
         $patron_to_delete->delete;
 
         $tx = $t->ua->build_tx(POST => "/api/v1/patrons" => json => $newpatron);
@@ -235,6 +237,7 @@ subtest 'update() tests' => sub {
         # delete RO attributes
         delete $newpatron->{patron_id};
         delete $newpatron->{restricted};
+        delete $newpatron->{anonymized};
 
         my $tx = $t->ua->build_tx(PUT => "/api/v1/patrons/-1" => json => $newpatron );
         $tx->req->cookies({name => 'CGISESSID', value => $session_id});
