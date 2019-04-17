@@ -129,10 +129,10 @@
         <tbody class="filterclass">
         [% FOREACH loop_order IN loop_orders %]
             <tr>
-                <td class="basketfilterclass">[% loop_order.basketname | html %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno | uri %]">[% loop_order.basketno | html %]</a>)</td>
+                <td class="basketfilterclass"><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% loop_order.basketno | uri %]">[% loop_order.basketname | html %] ([% loop_order.basketno | html %])</a></td>
                 <td>
                   [% IF loop_order.basketgroupid %]
-                    [% loop_order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid | uri %]&amp;basketgroupid=[% loop_order.basketgroupid | uri %]">[% loop_order.basketgroupid | html %]</a>)
+                  <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid | uri %]&amp;basketgroupid=[% loop_order.basketgroupid | uri %]">[% loop_order.basketgroupname | html %] ([% loop_order.basketgroupid | html %])</a>
                   [% ELSE %]
                     No basket group
                   [% END %]
@@ -150,8 +150,7 @@
                 [% END %]
                 [% IF ( loop_order.suggestionid ) %]
                     <br/>
-                    Suggested by: [% loop_order.surnamesuggestedby | html %][% IF ( loop_order.firstnamesuggestedby ) %], [% loop_order.firstnamesuggestedby | html %] [% END %]
-                    (<a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid | uri %]&amp;op=show">suggestion #[% loop_order.suggestionid | html %]</a>)
+                    Suggested by: <a href="/cgi-bin/koha/suggestion/suggestion.pl?suggestionid=[% loop_order.suggestionid | uri %]&amp;op=show">[% loop_order.surnamesuggestedby | html %][% IF ( loop_order.firstnamesuggestedby ) %], [% loop_order.firstnamesuggestedby | html %] [% END %]( #[% loop_order.suggestionid | html %])</a>
                 [% END %]
                 <br />
                 [% IF ( loop_order.order_internalnote ) %]
@@ -276,10 +275,10 @@
     <tbody class="filterclass">
         [% FOREACH order IN loop_received %]
             <tr>
-                <td>[% order.basketname | html %] (<a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno | uri %]">[% order.basketno | html %]</a>)</td>
+                <td><a href="/cgi-bin/koha/acqui/basket.pl?basketno=[% order.basketno | uri %]"> [% order.basketname | html %] ([% order.basketno | html %])</a></td>
                 <td>
                   [% IF order.basketgroupid %]
-                    [% order.basketgroupname | html %] (<a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid | uri %]&amp;basketgroupid=[% order.basketgroupid | uri %]">[% order.basketgroupid | html %]</a>)
+                  <a href="/cgi-bin/koha/acqui/basketgroup.pl?op=add&amp;booksellerid=[% booksellerid | uri %]">[% order.basketgroupname | html %] ([% order.basketgroupid | html %])</a>
                   [% ELSE %]
                     No basket group
                   [% END %]
