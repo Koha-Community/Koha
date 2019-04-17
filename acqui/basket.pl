@@ -467,9 +467,6 @@ sub get_order_infos {
     $line{tax_value} = $line{tax_value_on_ordering};
     $line{tax_rate} = $line{tax_rate_on_ordering};
 
-    if ( $line{uncertainprice} ) {
-        $line{rrp_tax_excluded} .= ' (Uncertain)';
-    }
     if ( $line{'title'} ) {
         my $volume      = $order->{'volume'};
         my $seriestitle = $order->{'seriestitle'};

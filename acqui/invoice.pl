@@ -256,9 +256,6 @@ sub get_infos {
     $line{order_received} = ( $qty == $order->{'quantityreceived'} );
     $line{budget_name}    = $budget->{budget_name};
 
-    if ( $line{uncertainprice} ) {
-        $line{rrp} .= ' (Uncertain)';
-    }
     if ( $line{'title'} ) {
         my $volume      = $order->{'volume'};
         my $seriestitle = $order->{'seriestitle'};
