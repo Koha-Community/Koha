@@ -53,7 +53,7 @@ my $fh = IO::File->new($input_marc_file); # don't let MARC::Batch open the file,
 my $batch = MARC::Batch->new( 'USMARC', $fh );
 $batch->warnings_off();
 $batch->strict_off();
-my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField("biblio.biblionumber","");
+my ($tagfield,$biblionumtagsubfield) = &GetMarcFromKohaField( "biblio.biblionumber" );
 
 my $i=0;
 while ( my $record = $batch->next() ) {

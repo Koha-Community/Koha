@@ -21,7 +21,7 @@ $dbh->do(qq|
     INSERT INTO marc_subfield_structure(frameworkcode,kohafield,tagfield,tagsubfield)
     VALUES ('$frameworkcode', 'biblioitems.url', '856', 'u')
 |);
-my ( $url_field, $url_subfield ) = C4::Biblio::GetMarcFromKohaField('biblioitems.url', $frameworkcode);
+my ( $url_field, $url_subfield ) = C4::Biblio::GetMarcFromKohaField( 'biblioitems.url' );
 
 my $title = q|My title & a word & another word|;
 my $url = q|http://www.example.org/index.pl?arg1=val1&amp;arg2=val2|;

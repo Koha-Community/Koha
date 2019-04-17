@@ -487,7 +487,7 @@ subtest 'SearchItems test' => sub {
     ok($found, "item1 found");
 
     my $frameworkcode = q||;
-    my ($itemfield) = GetMarcFromKohaField('items.itemnumber', $frameworkcode);
+    my ($itemfield) = GetMarcFromKohaField( 'items.itemnumber' );
 
     # Create item subfield 'z' without link
     $dbh->do('DELETE FROM marc_subfield_structure WHERE tagfield=? AND tagsubfield="z" AND frameworkcode=?', undef, $itemfield, $frameworkcode);
@@ -640,7 +640,7 @@ subtest 'C4::Biblio::EmbedItemsInMarcBiblio' => sub {
     t::lib::Mocks::mock_preference( 'OpacHiddenItems', '' );
 
     my ($itemfield) =
-      C4::Biblio::GetMarcFromKohaField( 'items.itemnumber', '' );
+      C4::Biblio::GetMarcFromKohaField( 'items.itemnumber' );
     my $record = C4::Biblio::GetMarcBiblio({ biblionumber => $biblio->biblionumber });
     warning_is { C4::Biblio::EmbedItemsInMarcBiblio() }
     { carped => 'EmbedItemsInMarcBiblio: No MARC record passed' },

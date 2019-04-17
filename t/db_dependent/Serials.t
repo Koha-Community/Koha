@@ -145,8 +145,8 @@ subtest 'Values should not be erased on editing' => sub {
 
     my $biblio = $builder->build_sample_biblio();
     my $biblionumber = $biblio->biblionumber;
-    my ( $icn_tag, $icn_sf ) = GetMarcFromKohaField( 'items.itemcallnumber', '' );
-    my ( $it_tag, $it_sf )   = GetMarcFromKohaField( 'items.itype', '' );
+    my ( $icn_tag, $icn_sf ) = GetMarcFromKohaField( 'items.itemcallnumber' );
+    my ( $it_tag, $it_sf )   = GetMarcFromKohaField( 'items.itype' );
 
     my $itemtype = $builder->build( { source => 'Itemtype' } )->{itemtype};
     my $itemcallnumber = 'XXXmy itemcallnumberXXX';

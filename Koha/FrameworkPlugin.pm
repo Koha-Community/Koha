@@ -115,7 +115,6 @@ use Modern::Perl;
 use base qw(Class::Accessor);
 
 use C4::Context;
-use C4::Biblio qw/GetMarcFromKohaField/;
 
 __PACKAGE__->mk_ro_accessors( qw|
     name path errstr javascript noclick

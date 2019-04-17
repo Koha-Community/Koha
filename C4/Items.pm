@@ -157,7 +157,7 @@ sub AddItemFromMarc {
 
     # parse item hash from MARC
     my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
-    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
 
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $source_item_marc->field($itemtag) );
@@ -287,7 +287,7 @@ sub AddItemBatchFromMarc {
     $record = $record->clone();
     # loop through the item tags and start creating items
     my @bad_item_fields = ();
-    my ($itemtag, $itemsubfield) = C4::Biblio::GetMarcFromKohaField("items.itemnumber",'');
+    my ($itemtag, $itemsubfield) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
     my $item_sequence_num = 0;
     ITEMFIELD: foreach my $item_field ($record->field($itemtag)) {
         $item_sequence_num++;
@@ -420,7 +420,7 @@ sub ModItemFromMarc {
     my $itemnumber = shift;
 
     my $frameworkcode = C4::Biblio::GetFrameworkCode($biblionumber);
-    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
 
     my $localitemmarc = MARC::Record->new;
     $localitemmarc->append_fields( $item_marc->field($itemtag) );
@@ -1916,7 +1916,7 @@ sub _marc_from_item_hash {
 
     my $item_marc = MARC::Record->new();
     foreach my $item_field ( keys %{$mungeditem} ) {
-        my ( $tag, $subfield ) = C4::Biblio::GetMarcFromKohaField( $item_field, $frameworkcode );
+        my ( $tag, $subfield ) = C4::Biblio::GetMarcFromKohaField( $item_field );
         next unless defined $tag and defined $subfield;    # skip if not mapped to MARC field
         my @values = split(/\s?\|\s?/, $mungeditem->{$item_field}, -1);
         foreach my $value (@values){
@@ -2338,7 +2338,7 @@ sub PrepareItemrecordDisplay {
 
     my $dbh = C4::Context->dbh;
     $frameworkcode = C4::Biblio::GetFrameworkCode($bibnum) if $bibnum;
-    my ( $itemtagfield, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my ( $itemtagfield, $itemtagsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
 
     # Note: $tagslib obtained from GetMarcStructure() in 'unsafe' mode is
     # a shared data structure. No plugin (including custom ones) should change

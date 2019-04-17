@@ -240,7 +240,7 @@ if ($authorities){
 }
 else {
    ( $tagid, $subfieldid ) =
-            GetMarcFromKohaField( "biblio.biblionumber", $framework );
+            GetMarcFromKohaField( "biblio.biblionumber" );
 	$tagid||="001";
 }
 
@@ -506,7 +506,7 @@ RECORD: while (  ) {
 			}
             if ($dedup_barcode && grep { exists $_->{error_code} && $_->{error_code} eq 'duplicate_barcode' } @$errors_ref) {
                 # Find the record called 'barcode'
-                my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField('items.barcode', $framework);
+                my ($tag, $sub) = C4::Biblio::GetMarcFromKohaField( 'items.barcode' );
                 # Now remove any items that didn't have a duplicate_barcode error,
                 # erase the barcodes on items that did, and re-add those items.
                 my %dupes;

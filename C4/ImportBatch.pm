@@ -195,7 +195,7 @@ sub GetRecordFromImportBiblio {
 
 sub EmbedItemsInImportBiblio {
     my ( $record, $import_record_id ) = @_;
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField("items.itemnumber", '');
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
     my $dbh = C4::Context->dbh;
     my $import_items = $dbh->selectall_arrayref(q|
         SELECT import_items.marcxml
@@ -457,7 +457,7 @@ sub AddItemsToImportBiblio {
     my @import_items_ids = ();
    
     my $dbh = C4::Context->dbh; 
-    my ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
+    my ($item_tag,$item_subfield) = &GetMarcFromKohaField( "items.itemnumber" );
     foreach my $item_field ($marc_record->field($item_tag)) {
         my $item_marc = MARC::Record->new();
         $item_marc->leader("00000    a              "); # must set Leader/09 to 'a'
@@ -616,7 +616,7 @@ sub BatchCommitRecords {
 
         if ($record_type eq 'biblio') {
             # remove any item tags - rely on BatchCommitItems
-            ($item_tag,$item_subfield) = &GetMarcFromKohaField("items.itemnumber",'');
+            ($item_tag,$item_subfield) = &GetMarcFromKohaField( "items.itemnumber" );
             foreach my $item_field ($marc_record->field($item_tag)) {
                 $marc_record->delete_field($item_field);
             }
@@ -741,7 +741,7 @@ sub BatchCommitItems {
         my $item_marc = MARC::Record->new_from_xml( StripNonXmlChars( $row->{'marcxml'} ), 'UTF-8', $row->{'encoding'} );
 
         # Delete date_due subfield as to not accidentally delete item checkout due dates
-        my ( $MARCfield, $MARCsubfield ) = GetMarcFromKohaField( 'items.onloan', GetFrameworkCode($biblionumber) );
+        my ( $MARCfield, $MARCsubfield ) = GetMarcFromKohaField( 'items.onloan' );
         $item_marc->field($MARCfield)->delete_subfield( code => $MARCsubfield );
 
         my $item = TransformMarcToKoha( $item_marc );

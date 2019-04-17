@@ -82,7 +82,7 @@ if ($quantityrec > $origquantityrec ) {
         my @affects = split q{\|}, C4::Context->preference("AcqItemSetSubfieldsWhenReceived");
         if ( @affects ) {
             my $frameworkcode = GetFrameworkCode($biblionumber);
-            my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber', $frameworkcode );
+            my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber' );
             for my $in ( @received_items ) {
                 my $item = C4::Items::GetMarcItem( $biblionumber, $in );
                 for my $affect ( @affects ) {

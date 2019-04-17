@@ -40,7 +40,7 @@ subtest 'EmbedItemsAvailability tests' => sub {
 
     my $biblio = Test::MockModule->new('C4::Biblio');
     $biblio->mock( 'GetMarcFromKohaField', sub {
-        my ( $kohafield, $frameworkcode ) = @_;
+        my ( $kohafield ) = @_;
         if ( $kohafield eq 'biblio.biblionumber' ) {
             if ( C4::Context->preference('marcflavour') eq 'UNIMARC' ) {
                 return ( '001', '@' );
@@ -51,7 +51,7 @@ subtest 'EmbedItemsAvailability tests' => sub {
         }
         else {
             my $func_ref = $biblio->original( 'GetMarcFromKohaField' );
-            &$func_ref( $kohafield, $frameworkcode );
+            &$func_ref( $kohafield );
         }
     });
 

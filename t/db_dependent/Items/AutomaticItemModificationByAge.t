@@ -66,7 +66,7 @@ my ($item_bibnum, $item_bibitemnum, $itemnumber) = C4::Items::AddItem(
 my $item = Koha::Items->find( $itemnumber );
 is ( $item->new_status, 'new_value', q|AddItem insert the 'new_status' field| );
 
-my ( $tagfield, undef ) = GetMarcFromKohaField('items.itemnumber', $frameworkcode);
+my ( $tagfield, undef ) = GetMarcFromKohaField( 'items.itemnumber' );
 my $marc_item = C4::Items::GetMarcItem( $biblionumber, $itemnumber );
 is( $marc_item->subfield($tagfield, $new_tagfield), 'new_value', q|Koha mapping is correct|);
 

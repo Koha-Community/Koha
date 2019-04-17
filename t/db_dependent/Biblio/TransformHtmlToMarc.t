@@ -7,7 +7,7 @@ use Test::More tests => 2;
 
 use C4::Biblio;
 
-my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber", '' );
+my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
 subtest 'Biblio record' => sub {
     plan tests => 10;
     my $leader = '00203nam a2200097   4500';

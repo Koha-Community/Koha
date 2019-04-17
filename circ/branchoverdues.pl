@@ -66,7 +66,7 @@ my @overduesloop;
 my @getoverdues = GetOverduesForBranch( $default, $location );
 $debug and warn "HERE : $default / $location" . Dumper(@getoverdues);
 # search for location authorised value
-my ($tag,$subfield) = GetMarcFromKohaField('items.location','');
+my ($tag,$subfield) = GetMarcFromKohaField( 'items.location' );
 my $tagslib = &GetMarcStructure(1,'');
 if ($tagslib->{$tag}->{$subfield}->{authorised_value}) {
     my $values= GetAuthorisedValues($tagslib->{$tag}->{$subfield}->{authorised_value});

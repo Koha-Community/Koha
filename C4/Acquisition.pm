@@ -1675,7 +1675,7 @@ sub CancelReceipt {
             for my $in ( @itemnumbers ) {
                 my $item = Koha::Items->find( $in ); # FIXME We do not need that, we already have Koha::Items from $order_obj->items
                 my $biblio = $item->biblio;
-                my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber', $biblio->frameworkcode );
+                my ( $itemfield ) = GetMarcFromKohaField( 'items.itemnumber' );
                 my $item_marc = C4::Items::GetMarcItem( $biblio->biblionumber, $in );
                 for my $affect ( @affects ) {
                     my ( $sf, $v ) = split q{=}, $affect, 2;
@@ -3239,7 +3239,7 @@ sub FillWithDefaultValues {
     my $tagslib = C4::Biblio::GetMarcStructure( 1, 'ACQ', { unsafe => 1 } );
     if ($tagslib) {
         my ($itemfield) =
-          C4::Biblio::GetMarcFromKohaField( 'items.itemnumber', '' );
+          C4::Biblio::GetMarcFromKohaField( 'items.itemnumber' );
         for my $tag ( sort keys %$tagslib ) {
             next unless $tag;
             next if $tag == $itemfield;

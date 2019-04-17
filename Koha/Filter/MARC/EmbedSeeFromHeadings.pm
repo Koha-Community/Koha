@@ -72,7 +72,7 @@ sub filter {
 sub _processrecord {
     my $record = shift;
 
-    my ($item_tag) = GetMarcFromKohaField("items.itemnumber", '');
+    my ($item_tag) = GetMarcFromKohaField( "items.itemnumber" );
     $item_tag ||= '';
 
     foreach my $field ( $record->fields() ) {

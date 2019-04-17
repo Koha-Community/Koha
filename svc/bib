@@ -98,7 +98,7 @@ sub update_bib {
     } else {
         my $fullrecord = $record->clone();
         my ( $itemtag, $itemsubfield ) =
-          GetMarcFromKohaField( "items.itemnumber", '' );
+          GetMarcFromKohaField( "items.itemnumber" );
 
         # delete any item tags
         foreach my $field ( $record->field($itemtag) ) {

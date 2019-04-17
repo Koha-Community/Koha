@@ -29,9 +29,9 @@ my $errors;
 my $context = C4::Context->new;
 
 my ( $biblionumber_tag, $biblionumber_subfield ) =
-  GetMarcFromKohaField( 'biblio.biblionumber', '' );
+  GetMarcFromKohaField( 'biblio.biblionumber' );
 my ( $isbn_tag, $isbn_subfield ) =
-  GetMarcFromKohaField( 'biblioitems.isbn', '' );
+  GetMarcFromKohaField( 'biblioitems.isbn' );
 
 # Harry Potter and the Sorcerer's Stone, 1st American ed. 1997
 my $isbn1 = '0590353403';

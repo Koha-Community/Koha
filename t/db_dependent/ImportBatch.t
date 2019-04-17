@@ -86,7 +86,7 @@ my $record = MARC::Record->new;
 my $original_record = MARC::Record->new;
 $record->leader('03174nam a2200445 a 4500');
 $original_record->leader('03174nam a2200445 a 4500');
-my ($item_tag, $item_subfield) = C4::Biblio::GetMarcFromKohaField('items.itemnumber','');
+my ($item_tag, $item_subfield) = C4::Biblio::GetMarcFromKohaField( 'items.itemnumber' );
 my @fields = (
     MARC::Field->new(
         100, '1', ' ',

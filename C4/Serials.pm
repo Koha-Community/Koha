@@ -1457,7 +1457,7 @@ sub NewSubscription {
     my $biblio = Koha::Biblios->find( $biblionumber );
     if ( $biblio and !$biblio->serial ) {
         my $record = GetMarcBiblio({ biblionumber => $biblionumber });
-        my ( $tag, $subf ) = GetMarcFromKohaField( 'biblio.serial', $biblio->frameworkcode );
+        my ( $tag, $subf ) = GetMarcFromKohaField( 'biblio.serial' );
         if ($tag) {
             eval { $record->field($tag)->update( $subf => 1 ); };
         }

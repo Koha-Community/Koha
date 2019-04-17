@@ -105,7 +105,7 @@ my @all_items = GetItemsInfo($biblionumber);
 my $biblio = Koha::Biblios->find( $biblionumber );
 my $framework = $biblio ? $biblio->frameworkcode : q{};
 my $tagslib = &GetMarcStructure( 0, $framework );
-my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField('items.itemnumber',$framework);
+my ($tag_itemnumber,$subtag_itemnumber) = &GetMarcFromKohaField( 'items.itemnumber' );
 my @nonhiddenitems = $record->field($tag_itemnumber);
 if (scalar @all_items >= 1 && scalar @nonhiddenitems == 0) {
     print $query->redirect("/cgi-bin/koha/errors/404.pl");
@@ -129,7 +129,7 @@ if(my $cart_list = $query->cookie("bib_list")){
     }
 }
 
-my ($bt_tag,$bt_subtag) = GetMarcFromKohaField('biblio.title',$framework);
+my ($bt_tag,$bt_subtag) = GetMarcFromKohaField( 'biblio.title' );
 $template->param(
     bibliotitle => $biblio->title,
 ) if $tagslib->{$bt_tag}->{$bt_subtag}->{hidden} <= 0 && # <=0 OPAC visible.
@@ -307,7 +307,7 @@ foreach my $field (@fields) {
     push @item_loop, $item if $item;
 }
 my ( $holdingbrtagf, $holdingbrtagsubf ) =
-  &GetMarcFromKohaField( "items.holdingbranch", $framework );
+  &GetMarcFromKohaField( "items.holdingbranch" );
 @item_loop =
   sort { ($a->{$holdingbrtagsubf}||'') cmp ($b->{$holdingbrtagsubf}||'') } @item_loop;
 

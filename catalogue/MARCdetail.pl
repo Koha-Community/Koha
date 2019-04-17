@@ -280,7 +280,7 @@ foreach my $field (@fields) {
     push @item_loop, $item if $item;
 }
 
-my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField("items.holdingbranch",$frameworkcode);
+my ($holdingbrtagf,$holdingbrtagsubf) = &GetMarcFromKohaField( "items.holdingbranch" );
 @item_loop = sort {$a->{$holdingbrtagsubf} cmp $b->{$holdingbrtagsubf}} @item_loop;
 
 @item_subfield_codes = uniq @item_subfield_codes;

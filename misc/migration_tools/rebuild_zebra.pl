@@ -171,8 +171,8 @@ my $authorityserverdir = C4::Context->zebraconfig('authorityserver')->{directory
 
 my $kohadir = C4::Context->config('intranetdir');
 
-my ($biblionumbertagfield,$biblionumbertagsubfield) = C4::Biblio::GetMarcFromKohaField("biblio.biblionumber","");
-my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = C4::Biblio::GetMarcFromKohaField("biblioitems.biblioitemnumber","");
+my ($biblionumbertagfield,$biblionumbertagsubfield) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
+my ($biblioitemnumbertagfield,$biblioitemnumbertagsubfield) = C4::Biblio::GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
 
 my $marcxml_open = q{<?xml version="1.0" encoding="UTF-8"?>
 <collection xmlns="http://www.loc.gov/MARC21/slim">
@@ -495,7 +495,7 @@ sub export_marc_records_from_sth {
     print {$fh} $marcxml_open;
 
     my $i = 0;
-    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField("items.itemnumber",'');
+    my ( $itemtag, $itemsubfield ) = C4::Biblio::GetMarcFromKohaField( "items.itemnumber" );
     while (my ($record_number) = $sth->fetchrow_array) {
         print "." if ( $verbose_logging );
         print "\r$i" unless ($i++ %100 or !$verbose_logging);

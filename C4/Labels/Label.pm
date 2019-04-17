@@ -159,7 +159,7 @@ sub _get_barcode_data {
         elsif ( $f =~ /^([0-9a-z]{3})(\w)(\W?).*?/ ) {
             my ($field,$subf,$ws) = ($1,$2,$3);
             my $subf_data;
-            my ($itemtag, $itemsubfieldcode) = &GetMarcFromKohaField("items.itemnumber",'');
+            my ($itemtag, $itemsubfieldcode) = &GetMarcFromKohaField( "items.itemnumber" );
             my @marcfield = $record->field($field);
             if(@marcfield) {
                 if($field eq $itemtag) {  # item-level data, we need to get the right item.

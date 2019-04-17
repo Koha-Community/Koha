@@ -177,7 +177,7 @@ if ( $ordernumber eq '' and defined $params->{'breedingid'}){
 
 my ( @order_user_ids, @order_users, @catalog_details );
 our $tagslib = GetMarcStructure(1, 'ACQ', { unsafe => 1 } );
-my ( $itemnumber_tag, $itemnumber_subtag ) = GetMarcFromKohaField( 'items.itemnumber', 'ACQ' );
+my ( $itemnumber_tag, $itemnumber_subtag ) = GetMarcFromKohaField( 'items.itemnumber' );
 if ( not $ordernumber ) {    # create order
     $new = 'yes';
 
@@ -388,7 +388,7 @@ if ( defined $from_subscriptionid ) {
 }
 
 # Find the items.barcode subfield for barcode validations
-my (undef, $barcode_subfield) = GetMarcFromKohaField('items.barcode', '');
+my (undef, $barcode_subfield) = GetMarcFromKohaField( 'items.barcode' );
 
 # fill template
 $template->param(
@@ -491,7 +491,7 @@ sub MARCfindbreeding {
     # remove the - in isbn, koha store isbn without any -
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
-        my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField('biblioitems.isbn','');
+        my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField( 'biblioitems.isbn' );
         if ( $record->field($isbnfield) ) {
             foreach my $field ( $record->field($isbnfield) ) {
                 foreach my $subfield ( $field->subfield($isbnsubfield) ) {
@@ -523,7 +523,7 @@ sub MARCfindbreeding {
             if (    C4::Context->preference("z3950NormalizeAuthor")
                 and C4::Context->preference("z3950AuthorAuthFields") )
             {
-                my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author", '');
+                my ( $tag, $subfield ) = GetMarcFromKohaField( "biblio.author" );
 
                 my $auth_fields =
                 C4::Context->preference("z3950AuthorAuthFields");

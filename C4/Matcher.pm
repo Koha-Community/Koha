@@ -621,7 +621,6 @@ sub get_matches {
     my ($source_record, $max_matches) = @_;
 
     my $matches = {};
-    my $marcframework_used = ''; # use the default framework
 
     my $QParser;
     $QParser = C4::Context->queryparser if (C4::Context->preference('UseQueryParser'));
@@ -677,7 +676,7 @@ sub get_matches {
             else {
                 foreach my $matched ( @{$searchresults} ) {
                     my $target_record = C4::Search::new_record_from_zebra( 'biblioserver', $matched );
-                    my ( $biblionumber_tag, $biblionumber_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber", $marcframework_used );
+                    my ( $biblionumber_tag, $biblionumber_subfield ) = C4::Biblio::GetMarcFromKohaField( "biblio.biblionumber" );
                     my $id = ( $biblionumber_tag > 10 ) ?
                         $target_record->field($biblionumber_tag)->subfield($biblionumber_subfield) :
                         $target_record->field($biblionumber_tag)->data();

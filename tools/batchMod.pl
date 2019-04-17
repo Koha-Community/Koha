@@ -160,7 +160,7 @@ if ($op eq "action") {
 	}
 
 	#initializing values for updates
-	my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
+    my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
 	if ($values_to_modify){
 	    my $xml = TransformHtmlToXml(\@tags,\@subfields,\@values,\@indicator,\@ind_tag, 'ITEM');
 	    $marcitem = MARC::Record::new_from_xml($xml, 'UTF-8');
@@ -536,8 +536,8 @@ sub BuildItemsData{
 		my %witness; #---- stores the list of subfields used at least once, with the "meaning" of the code
 		my @big_array;
 		#---- finds where items.itemnumber is stored
-		my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
-		my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField("items.homebranch", "");
+    my (  $itemtagfield,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
+    my ($branchtagfield, $branchtagsubfield) = &GetMarcFromKohaField( "items.homebranch" );
 		foreach my $itemnumber (@itemnumbers){
             my $itemdata = Koha::Items->find($itemnumber);
             next unless $itemdata; # Should have been tested earlier, but just in case...
@@ -622,7 +622,7 @@ sub BuildItemsData{
 # And $tag>10
 sub UpdateMarcWith {
   my ($marcfrom,$marcto)=@_;
-    my (  $itemtag,   $itemtagsubfield) = &GetMarcFromKohaField("items.itemnumber", "");
+    my (  $itemtag,   $itemtagsubfield) = &GetMarcFromKohaField( "items.itemnumber" );
     my $fieldfrom=$marcfrom->field($itemtag);
     my @fields_to=$marcto->field($itemtag);
     my $modified = 0;

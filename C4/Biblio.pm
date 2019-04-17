@@ -345,7 +345,7 @@ sub _strip_item_fields {
     my $record = shift;
     my $frameworkcode = shift;
     # get the items before and append them to the biblio before updating the record, atm we just have the biblio
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
 
     # delete any item fields from incoming record to avoid
     # duplication or incorrect data - use AddItem() or ModItem()
@@ -738,7 +738,7 @@ sub GetISBDView {
     my $sysprefname = $template eq 'opac' ? 'opacisbd' : 'isbd';
     my $framework = $params->{framework};
     my $itemtype  = $framework;
-    my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch", $itemtype );
+    my ( $holdingbrtagf, $holdingbrtagsubf ) = &GetMarcFromKohaField( "items.holdingbranch" );
     my $tagslib = GetMarcStructure( 1, $itemtype, { unsafe => 1 } );
 
     my $ISBD = C4::Context->preference($sysprefname);
@@ -2654,7 +2654,7 @@ sub EmbedItemsInMarcBiblio {
     my $dbh = C4::Context->dbh;
     my $sth = $dbh->prepare("SELECT itemnumber FROM items WHERE biblionumber = ?");
     $sth->execute($biblionumber);
-    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber", $frameworkcode );
+    my ( $itemtag, $itemsubfield ) = GetMarcFromKohaField( "items.itemnumber" );
 
     my @item_fields; # Array holding the actual MARC data for items to be included.
     my @items;       # Array holding items which are both in the list (sitenumbers)
@@ -2706,9 +2706,9 @@ the MARC XML.
 sub _koha_marc_update_bib_ids {
     my ( $record, $frameworkcode, $biblionumber, $biblioitemnumber ) = @_;
 
-    my ( $biblio_tag,     $biblio_subfield )     = GetMarcFromKohaField( "biblio.biblionumber",          $frameworkcode );
+    my ( $biblio_tag,     $biblio_subfield )     = GetMarcFromKohaField( "biblio.biblionumber" );
     die qq{No biblionumber tag for framework "$frameworkcode"} unless $biblio_tag;
-    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
+    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
     die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;
 
     if ( $biblio_tag < 10 ) {
@@ -2737,7 +2737,7 @@ sub _koha_marc_update_biblioitem_cn_sort {
     my $biblioitem    = shift;
     my $frameworkcode = shift;
 
-    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.cn_sort", $frameworkcode );
+    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.cn_sort" );
     return unless $biblioitem_tag;
 
     my ($cn_sort) = GetClassSort( $biblioitem->{'biblioitems.cn_source'}, $biblioitem->{'cn_class'}, $biblioitem->{'cn_item'} );
@@ -3375,7 +3375,7 @@ sub UpdateTotalIssues {
         return;
     }
     my $biblioitem = $biblio->biblioitem;
-    my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField('biblioitems.totalissues', $biblio->frameworkcode);
+    my ($totalissuestag, $totalissuessubfield) = GetMarcFromKohaField( 'biblioitems.totalissues' );
     unless ($totalissuestag) {
         return 1; # There is nothing to do
     }

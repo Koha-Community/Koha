@@ -68,7 +68,7 @@ extract_biblionumber method of the specific search engine.
 sub extract_biblionumber {
     my ( $record ) = @_;
     return if ref($record) ne 'MARC::Record';
-    my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( 'biblio.biblionumber', '' );
+    my ( $biblionumbertagfield, $biblionumbertagsubfield ) = C4::Biblio::GetMarcFromKohaField( 'biblio.biblionumber' );
     if( $biblionumbertagfield < 10 ) {
         my $controlfield = $record->field( $biblionumbertagfield );
         return $controlfield ? $controlfield->data : undef;

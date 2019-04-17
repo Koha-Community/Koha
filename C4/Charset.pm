@@ -440,7 +440,7 @@ sub SanitizeRecord {
     my $record_modified = 0;
     my $frameworkcode   = C4::Biblio::GetFrameworkCode($biblionumber);
     my ( $url_field, $url_subfield ) =
-      C4::Biblio::GetMarcFromKohaField( 'biblioitems.url', $frameworkcode );
+      C4::Biblio::GetMarcFromKohaField( 'biblioitems.url' );
     foreach my $field ( $record->fields() ) {
         if ( $field->is_control_field() ) {
             my $value           = $field->data();

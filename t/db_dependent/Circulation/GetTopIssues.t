@@ -117,8 +117,8 @@ $schema->storage->txn_rollback();
 sub create_biblio {
     my ($title, $itemtype) = @_;
 
-    my ($title_tag, $title_subfield) = GetMarcFromKohaField('biblio.title', '');
-    my ($it_tag, $it_subfield) = GetMarcFromKohaField('biblioitems.itemtype', '');
+    my ($title_tag, $title_subfield) = GetMarcFromKohaField( 'biblio.title' );
+    my ($it_tag, $it_subfield) = GetMarcFromKohaField( 'biblioitems.itemtype' );
 
     my $record = MARC::Record->new();
     $record->append_fields(

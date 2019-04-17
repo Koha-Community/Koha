@@ -340,13 +340,7 @@ if ( $op and $op eq 'serialchangestatus' ) {
                     #New Item
 
                   # if autoBarcode is set to 'incremental', calculate barcode...
-                    my ( $barcodetagfield, $barcodetagsubfield ) =
-                      GetMarcFromKohaField(
-                        'items.barcode',
-                        GetFrameworkCode(
-                            $serialdatalist[0]->{'biblionumber'}
-                        )
-                      );
+                    my ( $barcodetagfield, $barcodetagsubfield ) = GetMarcFromKohaField( 'items.barcode' );
                     if ( C4::Context->preference('autoBarcode') eq
                         'incremental' )
                     {

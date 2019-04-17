@@ -70,7 +70,7 @@ sub add_bib {
 
         # delete any item tags
         my ( $itemtag, $itemsubfield ) =
-          GetMarcFromKohaField( "items.itemnumber", '' );
+          GetMarcFromKohaField( "items.itemnumber" );
         foreach my $field ( $record->field($itemtag) ) {
             $record->delete_field($field);
         }

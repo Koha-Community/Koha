@@ -182,7 +182,7 @@ if ($op eq ""){
             my $bibitemnum;
 
             # remove ISBN -
-            my ( $isbnfield, $isbnsubfield ) = GetMarcFromKohaField( 'biblioitems.isbn', '' );
+            my ( $isbnfield, $isbnsubfield ) = GetMarcFromKohaField( 'biblioitems.isbn' );
             if ( $marcrecord->field($isbnfield) ) {
                 foreach my $field ( $marcrecord->field($isbnfield) ) {
                     foreach my $subfield ( $field->subfield($isbnsubfield) ) {

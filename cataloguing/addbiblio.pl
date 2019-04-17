@@ -72,7 +72,7 @@ sub MARCfindbreeding {
     # remove the - in isbn, koha store isbn without any -
     if ($marc) {
         my $record = MARC::Record->new_from_usmarc($marc);
-        my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField('biblioitems.isbn','');
+        my ($isbnfield,$isbnsubfield) = GetMarcFromKohaField( 'biblioitems.isbn' );
         if ( $record->field($isbnfield) ) {
             foreach my $field ( $record->field($isbnfield) ) {
                 foreach my $subfield ( $field->subfield($isbnsubfield) ) {
@@ -105,7 +105,7 @@ sub MARCfindbreeding {
                 and C4::Context->preference("z3950AuthorAuthFields")
                 and C4::Context->preference("marcflavour") eq 'UNIMARC' )
             {
-                my ( $tag, $subfield ) = GetMarcFromKohaField("biblio.author", '');
+                my ( $tag, $subfield ) = GetMarcFromKohaField( "biblio.author" );
 
                 my $auth_fields =
                   C4::Context->preference("z3950AuthorAuthFields");
@@ -249,11 +249,11 @@ sub CreateKey {
 
 sub GetMandatoryFieldZ3950 {
     my $frameworkcode = shift;
-    my @isbn   = GetMarcFromKohaField('biblioitems.isbn',$frameworkcode);
-    my @title  = GetMarcFromKohaField('biblio.title',$frameworkcode);
-    my @author = GetMarcFromKohaField('biblio.author',$frameworkcode);
-    my @issn   = GetMarcFromKohaField('biblioitems.issn',$frameworkcode);
-    my @lccn   = GetMarcFromKohaField('biblioitems.lccn',$frameworkcode);
+    my @isbn   = GetMarcFromKohaField( 'biblioitems.isbn' );
+    my @title  = GetMarcFromKohaField( 'biblio.title' );
+    my @author = GetMarcFromKohaField( 'biblio.author' );
+    my @issn   = GetMarcFromKohaField( 'biblioitems.issn' );
+    my @lccn   = GetMarcFromKohaField( 'biblioitems.lccn' );
     
     return {
         $isbn[0].$isbn[1]     => 'isbn',
@@ -808,10 +808,10 @@ if ($biblionumber) {
 
     # if it's a modif, retrieve bibli and biblioitem numbers for the future modification of old-DB.
     ( $biblionumbertagfield, $biblionumbertagsubfield ) =
-	&GetMarcFromKohaField( "biblio.biblionumber", $frameworkcode );
+        &GetMarcFromKohaField( "biblio.biblionumber" );
     ( $biblioitemnumtagfield, $biblioitemnumtagsubfield ) =
-	&GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
-	    
+        &GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
+
     # search biblioitems value
     my $sth =  $dbh->prepare("select biblioitemnumber from biblioitems where biblionumber=?");
     $sth->execute($biblionumber);

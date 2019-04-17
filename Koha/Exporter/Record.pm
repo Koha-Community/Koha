@@ -131,7 +131,7 @@ sub _get_biblio_for_export {
             item_numbers => $itemnumbers });
         if ($only_export_items_for_branches && @$only_export_items_for_branches) {
             my %export_items_for_branches = map { $_ => 1 } @$only_export_items_for_branches;
-            my ( $homebranchfield, $homebranchsubfield ) = GetMarcFromKohaField( 'items.homebranch', '' );    # Should be GetFrameworkCode( $biblionumber )?
+            my ( $homebranchfield, $homebranchsubfield ) = GetMarcFromKohaField( 'items.homebranch' );
 
             for my $itemfield ( $record->field($homebranchfield) ) {
                 my $homebranch = $itemfield->subfield($homebranchsubfield);

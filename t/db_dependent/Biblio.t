@@ -319,7 +319,7 @@ sub run_tests {
         biblionumber => $biblionumber,
         embed_items  => 0 });
     my $frameworkcode = GetFrameworkCode($biblionumber);
-    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber", $frameworkcode );
+    my ( $biblioitem_tag, $biblioitem_subfield ) = GetMarcFromKohaField( "biblioitems.biblioitemnumber" );
     die qq{No biblioitemnumber tag for framework "$frameworkcode"} unless $biblioitem_tag;
     my $biblioitemnumbertotest;
     if ( $biblioitem_tag < 10 ) {

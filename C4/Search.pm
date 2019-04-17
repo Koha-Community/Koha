@@ -1864,14 +1864,14 @@ sub searchResults {
     my %itemtypes = map { $_->{itemtype} => $_ } @{ $itemtypes->unblessed };
 
     #search item field code
-    my ($itemtag, undef) = &GetMarcFromKohaField( "items.itemnumber", "" );
+    my ($itemtag, undef) = &GetMarcFromKohaField( "items.itemnumber" );
 
     ## find column names of items related to MARC
     my %subfieldstosearch;
     my @columns = Koha::Database->new()->schema()->resultset('Item')->result_source->columns;
     for my $column ( @columns ) {
         my ( $tagfield, $tagsubfield ) =
-          &GetMarcFromKohaField( "items." . $column, "" );
+          &GetMarcFromKohaField( "items." . $column );
         if ( defined $tagsubfield ) {
             $subfieldstosearch{$column} = $tagsubfield;
         }
@@ -1888,7 +1888,7 @@ sub searchResults {
 
     my $marcflavour = C4::Context->preference("marcflavour");
     # We get the biblionumber position in MARC
-    my ($bibliotag,$bibliosubf)=GetMarcFromKohaField('biblio.biblionumber','');
+    my ($bibliotag,$bibliosubf)=GetMarcFromKohaField( 'biblio.biblionumber' );
 
     # set stuff for XSLT processing here once, not later again for every record we retrieved
     my $xslfile;
@@ -2017,7 +2017,7 @@ sub searchResults {
                     my $hostbiblio = GetMarcBiblio({
                         biblionumber => $hostbiblionumber,
                         embed_items  => 1 });
-                    my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber', GetFrameworkCode($hostbiblionumber) );
+                    my ($itemfield, undef) = GetMarcFromKohaField( 'items.itemnumber' );
                     if( $hostbiblio ) {
                         my @hostitems = $hostbiblio->field($itemfield);
                         foreach my $hostitem (@hostitems){

@@ -287,7 +287,7 @@ sub OldWay { # FIXME Do we really still need so much code to check results ??
         # Auth values
         foreach my $field (sort keys %$row) {
             # If the koha field is mapped to a marc field
-            my ($f, $sf) = C4::Biblio::GetMarcFromKohaField("items.$field", $row->{'frameworkcode'});
+            my ($f, $sf) = C4::Biblio::GetMarcFromKohaField( "items.$field" );
             if (defined($f) and defined($sf)) {
                 # We replace the code with it's description
                 my $avs;
