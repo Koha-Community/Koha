@@ -33,6 +33,7 @@ Authority data.
 
 use strict;
 use warnings;
+use Carp;
 use C4::Context;
 use MARC::Record;
 use MARC::File::XML;
@@ -183,7 +184,7 @@ sub get_all_authorities_iterator {
                 )
             );
         };
-        confess $@ if ($@);
+        confess "$@" if ($@);
         $record->encoding('UTF-8');
 
         # I'm not sure why we don't use the authtypecode from the database,
