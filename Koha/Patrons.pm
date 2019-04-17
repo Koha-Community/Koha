@@ -293,7 +293,7 @@ sub search_anonymize_candidates {
     my $dt = dt_from_string()->subtract( days => $delay );
     my $str = $parser->format_datetime($dt);
     $cond->{dateexpiry} = { '<=' => $str };
-    $cond->{flgAnonymized} = [ undef, 0 ]; # not yet done
+    $cond->{anonymized} = 0; # not yet done
     if( $params->{locked} ) {
         my $fails = C4::Context->preference('FailedLoginAttempts');
         $cond->{login_attempts} = [ -and => { '!=' => undef }, { -not_in => [0, 1..$fails-1 ] } ]; # -not_in does not like undef
@@ -324,7 +324,7 @@ sub search_anonymized {
     my $dt = dt_from_string()->subtract( days => $delay );
     my $str = $parser->format_datetime($dt);
     $cond->{dateexpiry} = { '<=' => $str };
-    $cond->{flgAnonymized} = 1;
+    $cond->{anonymized} = 1;
     return $class->search( $cond );
 }
 

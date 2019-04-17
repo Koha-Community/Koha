@@ -1663,9 +1663,9 @@ subtest 'search_anonymize_candidates' => sub {
     plan tests => 5;
     my $patron1 = $builder->build_object({ class => 'Koha::Patrons' });
     my $patron2 = $builder->build_object({ class => 'Koha::Patrons' });
-    $patron1->flgAnonymized(0);
+    $patron1->anonymized(0);
     $patron1->dateexpiry( dt_from_string->add(days => 1) )->store;
-    $patron2->flgAnonymized(undef);
+    $patron2->anonymized(0);
     $patron2->dateexpiry( dt_from_string->add(days => 1) )->store;
 
     t::lib::Mocks::mock_preference( 'PatronAnonymizeDelay', q{} );
@@ -1713,9 +1713,9 @@ subtest 'search_anonymized' => sub {
 
     t::lib::Mocks::mock_preference( 'PatronRemovalDelay', 1 );
     $patron1->dateexpiry( dt_from_string );
-    $patron1->flgAnonymized(0)->store;
+    $patron1->anonymized(0)->store;
     my $cnt = Koha::Patrons->search_anonymized->count;
-    $patron1->flgAnonymized(1)->store;
+    $patron1->anonymized(1)->store;
     is( Koha::Patrons->search_anonymized->count, $cnt, 'Number unchanged' );
     $patron1->dateexpiry( dt_from_string->subtract(days => 1) )->store;
     is( Koha::Patrons->search_anonymized->count, $cnt+1, 'Found patron1' );
@@ -1775,7 +1775,7 @@ subtest 'anonymize' => sub {
     my $surname = $patron1->surname; # expect change, no clear
     my $branchcode = $patron1->branchcode; # expect skip
     $patron1->anonymize;
-    is($patron1->flgAnonymized, 1, 'Check flag' );
+    is($patron1->anonymized, 1, 'Check flag' );
 
     is( $patron1->dateofbirth, undef, 'Birth date cleared' );
     is( $patron1->firstname, undef, 'First name cleared' );
