@@ -609,7 +609,7 @@ CREATE TABLE `deletedborrowers` ( -- stores data related to the patrons/borrower
   `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
   `login_attempts` int(4) default 0, -- number of failed login attemps
   `overdrive_auth_token` MEDIUMTEXT default NULL, -- persist OverDrive auth token
-  `flgAnonymized` tinyint DEFAULT 0, -- flag for data anonymization
+  `anonymized` TINYINT(1) NOT NULL DEFAULT 0, -- flag for data anonymization
   KEY borrowernumber (borrowernumber),
   KEY `cardnumber` (`cardnumber`),
   KEY `sms_provider_id` (`sms_provider_id`)
@@ -1643,7 +1643,7 @@ CREATE TABLE `borrowers` ( -- this table includes information about your patrons
   `lang` varchar(25) NOT NULL default 'default', -- lang to use to send notices to this patron
   `login_attempts` int(4) default 0, -- number of failed login attemps
   `overdrive_auth_token` MEDIUMTEXT default NULL, -- persist OverDrive auth token
-  `flgAnonymized` tinyint DEFAULT 0, -- flag for data anonymization
+  `anonymized` TINYINT(1) NOT NULL DEFAULT 0, -- flag for data anonymization
   UNIQUE KEY `cardnumber` (`cardnumber`),
   PRIMARY KEY `borrowernumber` (`borrowernumber`),
   KEY `categorycode` (`categorycode`),
