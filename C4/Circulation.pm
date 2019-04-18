@@ -2339,29 +2339,35 @@ sub _FixOverduesOnReturn {
     }
 
     # check for overdue fine
-    my $accountline = Koha::Account::Lines->search(
+    my $accountlines = Koha::Account::Lines->search(
         {
             borrowernumber => $borrowernumber,
             itemnumber     => $item,
             accounttype    => 'OVERDUE',
             status         => 'UNRETURNED'
         }
-    )->next();
-    return 0 unless $accountline;    # no warning, there's just nothing to fix
+    );
+    return 0 unless $accountlines->count; # no warning, there's just nothing to fix
 
+    my $accountline = $accountlines->next;
     if ($exemptfine) {
         my $amountoutstanding = $accountline->amountoutstanding;
 
-        $accountline->status('FORGIVEN');
-        $accountline->amountoutstanding(0);
-
-        Koha::Account::Offset->new(
+        my $account = Koha::Account->new({patron_id => $borrowernumber});
+        my $credit = $account->add_credit(
             {
-                debit_id => $accountline->id,
-                type => 'Forgiven',
-                amount => $amountoutstanding * -1,
+                amount     => $amountoutstanding,
+                user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+                interface  => C4::Context->interface,
+                type       => 'forgiven',
+                item_id    => $item
             }
-        )->store();
+        );
+
+        $credit->apply({ debits => $accountlines->reset, offset_type => 'Forgiven' });
+
+        $accountline->status('FORGIVEN');
 
         if (C4::Context->preference("FinesLog")) {
             &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
