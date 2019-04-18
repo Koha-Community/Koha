@@ -44,6 +44,7 @@
         [%- CASE 'REPLACED'   -%]<span> (Replaced)</span>
         [%- CASE 'FORGIVEN'   -%]<span> (Forgiven)</span>
         [%- CASE 'VOID'       -%]<span> (Voided)</span>
+        [%- CASE 'LOST'       -%]<span> (Lost)</span>
         [%- CASE              -%]
     [%- END -%]
 [%- END -%]

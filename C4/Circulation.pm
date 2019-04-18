@@ -2030,7 +2030,7 @@ sub AddReturn {
 
     # fix up the overdues in accounts...
     if ($borrowernumber) {
-        my $fix = _FixOverduesOnReturn( $borrowernumber, $item->itemnumber, $exemptfine );
+        my $fix = _FixOverduesOnReturn( $borrowernumber, $item->itemnumber, $exemptfine, 'RETURNED' );
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $item->itemnumber...) failed!";  # zero is OK, check defined
 
         if ( $issue and $issue->is_overdue ) {
@@ -2314,7 +2314,7 @@ sub _debar_user_on_return {
 
 =head2 _FixOverduesOnReturn
 
-   &_FixOverduesOnReturn($borrowernumber, $itemnumber, $exemptfine);
+   &_FixOverduesOnReturn($borrowernumber, $itemnumber, $exemptfine, $status);
 
 C<$borrowernumber> borrowernumber
 
@@ -2322,18 +2322,24 @@ C<$itemnumber> itemnumber
 
 C<$exemptfine> BOOL -- remove overdue charge associated with this issue. 
 
+C<$status> ENUM -- reason for fix [ RETURNED, RENEWED, LOST, FORGIVEN ]
+
 Internal function
 
 =cut
 
 sub _FixOverduesOnReturn {
-    my ( $borrowernumber, $item, $exemptfine ) = @_;
+    my ( $borrowernumber, $item, $exemptfine, $status ) = @_;
     unless( $borrowernumber ) {
         warn "_FixOverduesOnReturn() not supplied valid borrowernumber";
         return;
     }
     unless( $item ) {
         warn "_FixOverduesOnReturn() not supplied valid itemnumber";
+        return;
+    }
+    unless( $status ) {
+        warn "_FixOverduesOnReturn() not supplied valid status";
         return;
     }
 
@@ -2376,7 +2382,7 @@ sub _FixOverduesOnReturn {
                     &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
                 }
             } else {
-                $accountline->status('RETURNED');
+                $accountline->status($status);
             }
 
             return $accountline->store();
@@ -2867,7 +2873,7 @@ sub AddRenewal {
     if ( C4::Context->preference('CalculateFinesOnReturn') && $issue->is_overdue ) {
         _CalculateAndUpdateFine( { issue => $issue, item => $item_unblessed, borrower => $patron_unblessed } );
     }
-    _FixOverduesOnReturn( $borrowernumber, $itemnumber );
+    _FixOverduesOnReturn( $borrowernumber, $itemnumber, undef, 'RENEWED' );
 
     # If the due date wasn't specified, calculate it by adding the
     # book's loan length to today's date or the current due date
@@ -3712,7 +3718,7 @@ sub LostItem{
     if ( my $borrowernumber = $issues->{borrowernumber} ){
         my $patron = Koha::Patrons->find( $borrowernumber );
 
-        my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, C4::Context->preference('WhenLostForgiveFine'), 0); # 1, 0 = exemptfine, no-dropbox
+        my $fix = _FixOverduesOnReturn($borrowernumber, $itemnumber, C4::Context->preference('WhenLostForgiveFine'), 'LOST');
         defined($fix) or warn "_FixOverduesOnReturn($borrowernumber, $itemnumber...) failed!";  # zero is OK, check defined
 
         if (C4::Context->preference('WhenLostChargeReplacementFee')){
