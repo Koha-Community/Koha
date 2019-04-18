@@ -13,29 +13,17 @@
   </li>
   <li>
     <label class="required" for="label">Label: </label>
-    [% IF field %]
         <input type="text" name="label" id="label" value="[% field.label | html %]" class="required" required="required" />
-    [% ELSE %]
-        <input type="text" name="label" id="label" class="required" required="required" />
-    [% END %]
           <span class="required">Required</span>
   </li>
   <li>
     <label class="required" for="tagfield">MARC field: </label>
-    [% IF field && field.tagfield == tagfield %]
-        <input type="text" id="tagfield" name="tagfield" maxlength="3" size="3" class="required" pattern="[a-zA-Z0-9]+" required="required" value="[% tagfield | html %]" />
-    [% ELSE %]
-        <input type="text" id="tagfield" name="tagfield" maxlength="3" size="3" class="required" pattern="[a-zA-Z0-9]+" required="required" />
-    [% END %]
-    <span class="required">Required</span>
+        <input type="text" id="tagfield" name="tagfield" maxlength="3" size="3" class="required" pattern="[a-zA-Z0-9]+" required="required" value="[% field.tagfield | html %]" />
+        <span class="required">Required</span>
   </li>
   <li>
     <label for="tagsubfield">MARC subfield: </label>
-    [% IF field && field.tagsubfield == tagsubfield %]
-        <input type="text" id="tagsubfield" name="tagsubfield" pattern="[a-zA-Z0-9]+" maxlength="1" size="1" value="[% tagsubfield | html %]" />
-    [% ELSE %]
-        <input type="text" id="tagsubfield" name="tagsubfield" pattern="[a-zA-Z0-9]+" maxlength="1" size="1" />
-    [% END %]
+        <input type="text" id="tagsubfield" name="tagsubfield" pattern="[a-zA-Z0-9]+" maxlength="1" size="1" value="[% field.tagsubfield | html %]" />
   </li>
   <li>
     <label for="authorised_values_category">Authorised values category: </label>
