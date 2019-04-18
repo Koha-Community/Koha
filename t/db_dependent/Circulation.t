@@ -1988,6 +1988,8 @@ subtest 'AddReturn | is_overdue' => sub {
 
     my $library = $builder->build( { source => 'Branch' } );
     my $patron  = $builder->build( { source => 'Borrower', value => { categorycode => $patron_category->{categorycode} } } );
+    my $manager = $builder->build_object({ class => "Koha::Patrons" });
+    t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
 
     my $biblioitem = $builder->build( { source => 'Biblioitem' } );
     my $item = $builder->build(
@@ -2438,7 +2440,10 @@ subtest '_FixAccountForLostAndReturned' => sub {
 };
 
 subtest '_FixOverduesOnReturn' => sub {
-    plan tests => 6;
+    plan tests => 9;
+
+    my $manager = $builder->build_object({ class => "Koha::Patrons" });
+    t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
 
     my $biblio = $builder->build_sample_biblio({ author => 'Hall, Kylie' });
 
@@ -2475,7 +2480,6 @@ subtest '_FixOverduesOnReturn' => sub {
     is( $accountline->amountoutstanding, '99.000000', 'Fine has the same amount outstanding as previously' );
     is( $accountline->status, 'RETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status RETURNED )');
 
-
     ## Run again, with exemptfine enabled
     $accountline->set(
         {
@@ -2494,6 +2498,10 @@ subtest '_FixOverduesOnReturn' => sub {
     is( $accountline->status, 'FORGIVEN', 'Open fine ( account type OVERDUE ) has been set to fine forgiven ( status FORGIVEN )');
     is( ref $offset, "Koha::Account::Offset", "Found matching offset for fine reduction via forgiveness" );
     is( $offset->amount, '-99.000000', "Amount of offset is correct" );
+    my $credit = $offset->credit;
+    is( ref $credit, "Koha::Account::Line", "Found matching credit for fine forgiveness" );
+    is( $credit->amount, '-99.000000', "Credit amount is set correctly" );
+    is( $credit->amountoutstanding + 0, 0, "Credit amountoutstanding is correctly set to 0" );
 };
 
 subtest 'Set waiting flag' => sub {
