@@ -18186,6 +18186,13 @@ if ( CheckVersion($DBversion) ) {
     print "Upgrade to $DBversion done (Bug 22521 - Update accountlines.accounttype to varchar(16), and map new statuses)\n";
 }
 
+$DBversion = '18.12.00.056';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( "UPDATE systempreferences SET explanation = 'This syspref allows to define custom rules for hiding specific items at the OPAC. See http://wiki.koha-community.org/wiki/OpacHiddenItems for more information.' WHERE variable = 'OpacHiddenItems'");
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 8701 - Update OpacHiddenItems system preference description)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
