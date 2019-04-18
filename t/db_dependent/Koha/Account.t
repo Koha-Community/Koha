@@ -60,10 +60,10 @@ subtest 'outstanding_debits() tests' => sub {
     my $account = $patron->account;
 
     my @generated_lines;
-    push @generated_lines, $account->add_debit({ amount => 1, interface => 'commandline', type => 'fine' });
-    push @generated_lines, $account->add_debit({ amount => 2, interface => 'commandline', type => 'fine' });
-    push @generated_lines, $account->add_debit({ amount => 3, interface => 'commandline', type => 'fine' });
-    push @generated_lines, $account->add_debit({ amount => 4, interface => 'commandline', type => 'fine' });
+    push @generated_lines, $account->add_debit({ amount => 1, interface => 'commandline', type => 'overdue' });
+    push @generated_lines, $account->add_debit({ amount => 2, interface => 'commandline', type => 'overdue' });
+    push @generated_lines, $account->add_debit({ amount => 3, interface => 'commandline', type => 'overdue' });
+    push @generated_lines, $account->add_debit({ amount => 4, interface => 'commandline', type => 'overdue' });
 
     my $lines     = $account->outstanding_debits();
     my @lines_arr = $account->outstanding_debits();
@@ -387,10 +387,10 @@ subtest 'lines() tests' => sub {
     $account->add_credit({ amount => 4, interface => 'commandline' });
 
     # Add Debits
-    $account->add_debit({ amount => 1, interface => 'commandline', type => 'fine' });
-    $account->add_debit({ amount => 2, interface => 'commandline', type => 'fine' });
-    $account->add_debit({ amount => 3, interface => 'commandline', type => 'fine' });
-    $account->add_debit({ amount => 4, interface => 'commandline', type => 'fine' });
+    $account->add_debit({ amount => 1, interface => 'commandline', type => 'overdue' });
+    $account->add_debit({ amount => 2, interface => 'commandline', type => 'overdue' });
+    $account->add_debit({ amount => 3, interface => 'commandline', type => 'overdue' });
+    $account->add_debit({ amount => 4, interface => 'commandline', type => 'overdue' });
 
     # Paid Off
     $account->add_credit( { amount => 1, interface => 'commandline' } )
@@ -423,10 +423,10 @@ subtest 'reconcile_balance' => sub {
         $account->add_credit({ amount => 5, interface => 'commandline' });
 
         # Add Debits
-        $account->add_debit({ amount => 1, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 2, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 3, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 4, interface => 'commandline', type => 'fine' });
+        $account->add_debit({ amount => 1, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 2, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 3, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 4, interface => 'commandline', type => 'overdue' });
 
         # Paid Off
         Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
@@ -461,10 +461,10 @@ subtest 'reconcile_balance' => sub {
         $account->add_credit({ amount => 4, interface => 'commandline' });
 
         # Add Debits
-        $account->add_debit({ amount => 1, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 2, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 3, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 4, interface => 'commandline', type => 'fine' });
+        $account->add_debit({ amount => 1, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 2, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 3, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 4, interface => 'commandline', type => 'overdue' });
 
         # Paid Off
         Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
@@ -499,11 +499,11 @@ subtest 'reconcile_balance' => sub {
         $account->add_credit({ amount => 4, interface => 'commandline' });
 
         # Add Debits
-        $account->add_debit({ amount => 1, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 2, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 3, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 4, interface => 'commandline', type => 'fine' });
-        $account->add_debit({ amount => 5, interface => 'commandline', type => 'fine' });
+        $account->add_debit({ amount => 1, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 2, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 3, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 4, interface => 'commandline', type => 'overdue' });
+        $account->add_debit({ amount => 5, interface => 'commandline', type => 'overdue' });
 
         # Paid Off
         Koha::Account::Line->new({ borrowernumber => $patron->id, amount => 1, amountoutstanding => 0, interface => 'commandline' })->store;
@@ -536,9 +536,9 @@ subtest 'reconcile_balance' => sub {
         $account->add_credit({ amount => 3, interface => 'commandline' });
 
         # Add Debits
-        my $debit_1 = $account->add_debit({ amount => 1, interface => 'commandline', type => 'fine' });
-        my $debit_2 = $account->add_debit({ amount => 2, interface => 'commandline', type => 'fine' });
-        my $debit_3 = $account->add_debit({ amount => 3, interface => 'commandline', type => 'fine' });
+        my $debit_1 = $account->add_debit({ amount => 1, interface => 'commandline', type => 'overdue' });
+        my $debit_2 = $account->add_debit({ amount => 2, interface => 'commandline', type => 'overdue' });
+        my $debit_3 = $account->add_debit({ amount => 3, interface => 'commandline', type => 'overdue' });
 
         is( $account->balance(), 2, "Account balance is 2" );
         is( $account->outstanding_debits->total_outstanding, 6, 'Outstanding debits sum 6' );
