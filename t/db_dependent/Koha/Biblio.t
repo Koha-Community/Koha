@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 6;
+use Test::More tests => 7;
 
 use C4::Biblio;
 use Koha::Database;
@@ -143,6 +143,30 @@ subtest 'get_coins and get_openurl' => sub {
         'https://koha.example.com/?client_id=ci1&amp;ctx_ver=Z39.88-2004&amp;rft_val_fmt=info%3Aofi%2Ffmt%3Akev%3Amtx%3Abook&amp;rft.genre=book&amp;rft.btitle=Title%201&amp;rft.au=Author%201',
         'Koha::Biblio->get_openurl returned right URL'
     );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'is_serial() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+
+    $biblio->serial( 1 )->store->discard_changes;
+    ok( $biblio->is_serial, 'Bibliographic record is serial' );
+
+    $biblio->serial( 0 )->store->discard_changes;
+    ok( !$biblio->is_serial, 'Bibliographic record is not serial' );
+
+    my $record = $biblio->metadata->record;
+    $record->leader('00142nas a22     7a 4500');
+    ModBiblio($record, $biblio->biblionumber );
+    $biblio = Koha::Biblios->find($biblio->biblionumber);
+
+    ok( $biblio->is_serial, 'Bibliographic record is serial' );
 
     $schema->storage->txn_rollback;
 };

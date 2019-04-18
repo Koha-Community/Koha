@@ -640,6 +640,25 @@ sub get_openurl {
     return $OpenURLResolverURL;
 }
 
+=head3 is_serial
+
+my $serial = $biblio->is_serial
+
+Return boolean true if this bibbliographic record is continuing resource
+
+=cut
+
+sub is_serial {
+    my ( $self ) = @_;
+
+    return 1 if $self->serial;
+
+    my $record = $self->metadata->record;
+    return 1 if substr($record->leader, 7, 1) eq 's';
+
+    return 0;
+}
+
 =head3 type
 
 =cut
