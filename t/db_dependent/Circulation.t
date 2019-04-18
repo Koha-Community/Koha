@@ -2542,7 +2542,7 @@ subtest '_FixAccountForLostAndReturned' => sub {
 };
 
 subtest '_FixOverduesOnReturn' => sub {
-    plan tests => 9;
+    plan tests => 11;
 
     my $manager = $builder->build_object({ class => "Koha::Patrons" });
     t::lib::Mocks::mock_userenv({ patron => $manager, branchcode => $manager->branchcode });
@@ -2575,12 +2575,13 @@ subtest '_FixOverduesOnReturn' => sub {
         }
     )->store();
 
-    C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $item->itemnumber );
+    C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $item->itemnumber, undef, 'RETURNED' );
 
     $accountline->_result()->discard_changes();
 
     is( $accountline->amountoutstanding, '99.000000', 'Fine has the same amount outstanding as previously' );
-    is( $accountline->status, 'RETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status RETURNED )');
+    isnt( $accountline->status, 'UNRETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status not UNRETURNED )');
+    is( $accountline->status, 'RETURNED', 'Passed status has been used to set as RETURNED )');
 
     ## Run again, with exemptfine enabled
     $accountline->set(
@@ -2591,18 +2592,19 @@ subtest '_FixOverduesOnReturn' => sub {
         }
     )->store();
 
-    C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $item->itemnumber, 1 );
+    C4::Circulation::_FixOverduesOnReturn( $patron->{borrowernumber}, $item->itemnumber, 1, 'RETURNED' );
 
     $accountline->_result()->discard_changes();
     my $offset = Koha::Account::Offsets->search({ debit_id => $accountline->id, type => 'Forgiven' })->next();
 
-    is( $accountline->amountoutstanding + 0, 0, 'Fine has been reduced to 0' );
+    is( $accountline->amountoutstanding + 0, 0, 'Fine amountoutstanding has been reduced to 0' );
+    isnt( $accountline->status, 'UNRETURNED', 'Open fine ( account type OVERDUE ) has been closed out ( status not UNRETURNED )');
     is( $accountline->status, 'FORGIVEN', 'Open fine ( account type OVERDUE ) has been set to fine forgiven ( status FORGIVEN )');
     is( ref $offset, "Koha::Account::Offset", "Found matching offset for fine reduction via forgiveness" );
-    is( $offset->amount, '-99.000000', "Amount of offset is correct" );
+    is( $offset->amount + 0, -99, "Amount of offset is correct" );
     my $credit = $offset->credit;
     is( ref $credit, "Koha::Account::Line", "Found matching credit for fine forgiveness" );
-    is( $credit->amount, '-99.000000', "Credit amount is set correctly" );
+    is( $credit->amount + 0, -99, "Credit amount is set correctly" );
     is( $credit->amountoutstanding + 0, 0, "Credit amountoutstanding is correctly set to 0" );
 };
 
