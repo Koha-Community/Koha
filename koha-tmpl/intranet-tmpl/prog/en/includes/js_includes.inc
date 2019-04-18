@@ -108,7 +108,7 @@
                         }
                         var itemString = "<a href=\"" + item.link + "\">" + item.surname + ", " + item.firstname + cardnumber + " <small>";
                         if( item.dateofbirth ) {
-                            itemString += item.dateofbirth + " (" + item.age + " " +  _("years") + "), ";
+                            itemString += item.dateofbirth + "<span class=\"age_years\"> (" + item.age + " " +  _("years") + ")</span>, ";
                         }
                         itemString += item.address + " " + item.city + " " + item.zipcode + " " + item.country + "</small></a>";
                         return $( "<li></li>" )
