@@ -18193,6 +18193,38 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 8701 - Update OpacHiddenItems system preference description)\n";
 }
 
+$DBversion = '18.12.00.057';
+if( CheckVersion( $DBversion ) ) {
+    if( column_exists('statistics', 'associatedborrower') ) {
+        $dbh->do(q{ ALTER TABLE statistics DROP COLUMN associatedborrower });
+    }
+    if( column_exists('statistics', 'usercode') ) {
+        $dbh->do(q{ ALTER TABLE statistics DROP COLUMN usercode });
+    }
+
+    SetVersion($DBversion);
+    print "Upgrade to $DBversion done (Bug 13795 - Delete unused fields from statistics table)\n";
+}
+
+$DBversion = '18.12.00.058';
+if( CheckVersion( $DBversion ) ) {
+    my $opaclang = C4::Context->preference("opaclanguages");
+    my @langs;
+    push @langs, split ( '\,', $opaclang );
+    # Get any existing value from the OpacNavRight system preference
+    my ($OpacNavRight) = $dbh->selectrow_array( q|
+        SELECT value FROM systempreferences WHERE variable='OpacNavRight';
+    |);
+    if( $OpacNavRight ){
+        # If there is a value in the OpacNavRight preference, insert it into opac_news
+        $dbh->do("INSERT INTO opac_news (branchcode, lang, title, content ) VALUES (NULL, 'OpacNavRight_$langs[0]', '', '$OpacNavRight')");
+    }
+    # Remove the OpacNavRight system preference
+    $dbh->do("DELETE FROM systempreferences WHERE variable='OpacNavRight'");
+    SetVersion ($DBversion);
+    print "Upgrade to $DBversion done (Bug 22318: Move contents of OpacNavRight preference to Koha news system)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 

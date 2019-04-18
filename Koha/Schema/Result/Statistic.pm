@@ -52,12 +52,6 @@ __PACKAGE__->table("statistics");
   data_type: 'longtext'
   is_nullable: 1
 
-=head2 usercode
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 10
-
 =head2 itemnumber
 
   data_type: 'integer'
@@ -76,11 +70,6 @@ __PACKAGE__->table("statistics");
   size: 80
 
 =head2 borrowernumber
-
-  data_type: 'integer'
-  is_nullable: 1
-
-=head2 associatedborrower
 
   data_type: 'integer'
   is_nullable: 1
@@ -108,8 +97,6 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 16 },
   "other",
   { data_type => "longtext", is_nullable => 1 },
-  "usercode",
-  { data_type => "varchar", is_nullable => 1, size => 10 },
   "itemnumber",
   { data_type => "integer", is_nullable => 1 },
   "itemtype",
@@ -118,15 +105,13 @@ __PACKAGE__->add_columns(
   { data_type => "varchar", is_nullable => 1, size => 80 },
   "borrowernumber",
   { data_type => "integer", is_nullable => 1 },
-  "associatedborrower",
-  { data_type => "integer", is_nullable => 1 },
   "ccode",
   { data_type => "varchar", is_nullable => 1, size => 80 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-21 19:22:43
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:lnIllYjs9funehkB7Y4jjw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-18 10:07:43
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:dzoFXsATo16GZERh8LYT2A
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
