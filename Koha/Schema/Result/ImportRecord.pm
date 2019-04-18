@@ -108,12 +108,6 @@ __PACKAGE__->table("import_records");
   is_nullable: 0
   size: 40
 
-=head2 z3950random
-
-  data_type: 'varchar'
-  is_nullable: 1
-  size: 40
-
 =cut
 
 __PACKAGE__->add_columns(
@@ -176,8 +170,6 @@ __PACKAGE__->add_columns(
   { data_type => "longtext", is_nullable => 1 },
   "encoding",
   { data_type => "varchar", default_value => "", is_nullable => 0, size => 40 },
-  "z3950random",
-  { data_type => "varchar", is_nullable => 1, size => 40 },
 );
 
 =head1 PRIMARY KEY
@@ -270,8 +262,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07042 @ 2018-02-16 17:54:53
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:yCx/kRJXjPIB5Uuv40TB7g
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-18 10:50:48
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:bqIAQzhgioWtBWU8zFdtjw
 
 
 # You can replace this text with custom content, and it will be preserved on regeneration
