@@ -33,6 +33,12 @@ use constant LOG_SIP => "local6"; # Local alias for the logging facility
 # A script with no MAIN namespace?
 # A module that takes command line args?
 
+=head1 NAME
+
+C4::SIP::SIPServer
+
+=cut
+
 # Set interface to 'sip'
 C4::Context->interface('sip');
 
@@ -432,7 +438,7 @@ sub get_timeout {
 sub get_SIPServer {
     unless($activeSIPServer) {
         my @cc = caller(1);
-        die "$cc[3]() asks for \$activeSIPServer, but he is not defined yet";
+        die "$cc[3]() asks for \$activeSIPServer, but it is not defined yet";
     }
     return $activeSIPServer;
 }
@@ -458,7 +464,7 @@ sub _set_SIPServer {
 sub get_logger {
     unless($activeLogger) {
         my @cc = caller(1);
-        die "$cc[3]() asks for \$activeLogger, but he is not defined yet";
+        die "$cc[3]() asks for \$activeLogger, but it is not defined yet";
     }
     return $activeLogger;
 }
