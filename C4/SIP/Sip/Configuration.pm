@@ -10,8 +10,6 @@ use strict;
 use warnings;
 use XML::Simple qw(:strict);
 
-use C4::SIP::Sip qw(syslog);
-
 my $parser = new XML::Simple(
     KeyAttr => {
         login       => '+id',
@@ -65,7 +63,7 @@ sub find_service {
     my $portstr;
     foreach my $addr ( '', '*:', "$sockaddr:", "[$sockaddr]:" ) {
         $portstr = sprintf( "%s%s/%s", $addr, $port, lc $proto );
-        syslog( "LOG_DEBUG",
+        Sys::Syslog::syslog( "LOG_DEBUG",
             "Configuration::find_service: Trying $portstr" );
         last if ( exists( ( $self->{listeners} )->{$portstr} ) );
     }

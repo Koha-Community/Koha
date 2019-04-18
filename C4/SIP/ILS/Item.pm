@@ -9,7 +9,7 @@ package C4::SIP::ILS::Item;
 use strict;
 use warnings;
 
-use C4::SIP::Sip qw(syslog);
+use Sys::Syslog qw(syslog);
 use Carp;
 use Template;
 

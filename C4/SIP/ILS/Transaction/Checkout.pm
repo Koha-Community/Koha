@@ -8,7 +8,7 @@ use warnings;
 use strict;
 
 use POSIX qw(strftime);
-use C4::SIP::Sip qw(syslog);
+use Sys::Syslog qw(syslog);
 use Data::Dumper;
 use CGI qw ( -utf8 );
 

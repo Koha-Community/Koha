@@ -8,6 +8,7 @@ use strict;
 use warnings;
 use Exporter;
 use Encode;
+use Sys::Syslog qw(syslog);
 use POSIX qw(strftime);
 use Socket qw(:crlf);
 use IO::Handle;
@@ -20,13 +21,13 @@ use base qw(Exporter);
 our @EXPORT_OK = qw(y_or_n timestamp add_field maybe_add add_count
     denied sipbool boolspace write_msg
     $error_detection $protocol_version $field_delimiter
-    $last_response syslog);
+    $last_response);
 
 our %EXPORT_TAGS = (
     all => [qw(y_or_n timestamp add_field maybe_add
         add_count denied sipbool boolspace write_msg
         $error_detection $protocol_version
-        $field_delimiter $last_response syslog)]);
+        $field_delimiter $last_response)]);
 
 our $error_detection = 0;
 our $protocol_version = 1;
@@ -190,21 +191,6 @@ sub write_msg {
     }
 
     $last_response = $msg;
-}
-
-sub syslog {
-    my ( $level, $mask, @args ) = @_;
-
-    my $method =
-        $level eq 'LOG_ERR'     ? 'error'
-      : $level eq 'LOG_DEBUG'   ? 'debug'
-      : $level eq 'LOG_INFO'    ? 'info'
-      : $level eq 'LOG_WARNING' ? 'warn'
-      :                           'error';
-
-    my $message = @args ? sprintf($mask, @args) : $mask;
-
-    C4::SIP::SIPServer::get_logger()->$method($message);
 }
 
 1;

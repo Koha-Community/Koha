@@ -12,7 +12,7 @@ use warnings;
 use Exporter;
 use Carp;
 
-use C4::SIP::Sip qw(syslog);
+use Sys::Syslog qw(syslog);
 use Data::Dumper;
 
 use C4::SIP::Sip qw(add_field);
