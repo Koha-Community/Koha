@@ -558,7 +558,7 @@ sub do_check_for_previous_checkout {
 
     my @item_nos;
     my $biblio = Koha::Biblios->find( $item->{biblionumber} );
-    if ( $biblio->serial ) {
+    if ( $biblio->is_serial ) {
         push @item_nos, $item->{itemnumber};
     } else {
         # Get all itemnumbers for given bibliographic record.
