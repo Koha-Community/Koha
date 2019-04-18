@@ -53,9 +53,20 @@ BEGIN {
 my $input = CGI->new;
 $debug or $debug = $input->param('debug') || 0;
 
+
+my $print = $input->param('print');
+
+my $template_name;
+
+if (defined $print and $print eq "brief") {
+        $template_name = "members/moremember-brief.tt";
+} else {
+        $template_name = "members/moremember.tt";
+}
+
 my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
     {
-        template_name   => "members/moremember.tt",
+        template_name   => $template_name,
         query           => $input,
         type            => "intranet",
         authnotrequired => 0,

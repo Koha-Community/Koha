@@ -1,0 +1,84 @@
+[% USE Koha %]
+[% USE KohaDates %]
+[% SET footerjs = 1 %]
+[% INCLUDE 'doc-head-open.inc' %]
+<title>Koha &rsaquo; Check duplicate patron</title>
+[% INCLUDE 'doc-head-close.inc' %]
+</head>
+
+<body id="pat_moremember-brief" class="pat">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-xs-12">
+                <h3>[% INCLUDE 'patron-title.inc' %]</h3>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-6">
+                <div id="patron-information">
+
+        [% IF ( patron.othernames ) %]&ldquo;[% patron.othernames | html %]&rdquo;[% END %]
+        <div class = "address">
+            <ul>
+                [% IF Koha.Preference( 'AddressFormat' ) %]
+                    [% INCLUDE "member-display-address-style-${ Koha.Preference( 'AddressFormat' ) }.inc" %]
+                [% ELSE %]
+                    [% INCLUDE 'member-display-address-style-us.inc' %]
+                [% END %]
+            </ul>
+        </div>
+    <div class="rows">
+        <ol>
+            [% IF ( patron.phone ) %]<li><span class="label">Primary phone: </span>[% patron.phone | html %]</li>[% END %]
+            [% IF ( patron.phonepro ) %]<li><span class="label">Secondary phone: </span>[% patron.phonepro | html %]</li>[% END %]
+            [% IF ( patron.mobile ) %]<li><span class="label">Other phone: </span>[% patron.mobile | html %]</li>[% END %]
+            [% IF ( patron.fax ) %]<li><span class="label">Fax: </span>[% patron.fax | html %]</li>[% END %]
+            [% IF ( patron.email ) %]<li class="email"><span class="label">Primary email:</span><a href="mailto:[% email | uri %]">[% patron.email | html %]</a></li>[% END %]
+            [% IF ( patron.emailpro ) %]<li class="email"><span class="label">Secondary email: </span><a href="mailto:[% emailpro | uri %]">[% patron.emailpro | html %]</a></li>[% END %]
+            [% UNLESS ( I ) %]
+                [% IF ( patron.initials ) %]<li><span class="label">Initials: </span>[% patron.initials | html %]</li>[% END %]
+                [% IF ( patron.dateofbirth ) %]<li><span class="label">Date of birth:</span>[% patron.dateofbirth | $KohaDates %]</li>[% END %]
+                [% IF ( patron.sex ) %]<li><span class="label">Gender:</span>[% IF ( patron.sex == 'F' ) %]Female[% ELSIF ( patron.sex == 'M' ) %]Male[% ELSE %][% patron.sex | html %][% END %]</li>[% END %]
+            [% END %]
+            [% IF ( guarantees ) %]
+                <li><span class="label">Guarantees:</span><ul>[% FOREACH guarantee IN guarantees %]<li><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantee.borrowernumber | uri %]">[% INCLUDE 'patron-title.inc' patron=guarantee %]</a></li>[% END %]</ul></li>
+            [% END %]
+            [% IF ( guarantor ) %]
+                <li><span class="label">Guarantor:</span><a href="/cgi-bin/koha/members/moremember.pl?borrowernumber=[% guarantor.borrowernumber | uri %]">[% guarantor.surname | html %], [% guarantor.firstname | html %]</a></li>
+            [% END %]
+        </ol>
+    </div>
+</div>
+</div>
+
+    <div class="col-xs-6">
+    <div id="patron-library-details">
+    <h3>Library use</h3>
+    <div class="rows">
+        <ol>
+            <li><span class="label">Card number: </span>[% patron.cardnumber | html %]</li>
+            <li><span class="label">Borrowernumber: </span> [% patron.borrowernumber | html %]</li>
+            <li><span class="label">Category: </span>[% patron.category.description | html %] ([% patron.category.categorycode | html %])</li>
+            <li><span class="label">Registration date: </span>[% patron.dateenrolled | $KohaDates %]</li>
+            <li><span class="label">Expiration date: </span>
+            [% IF ( was_renewed ) %]
+                <strong class="reregistrinfo">[% patron.dateexpiry | $KohaDates %]</strong>
+            [% ELSE %]
+                [% patron.dateexpiry | $KohaDates %]
+            [% END %]
+            </li>
+            <li><span class="label">Library: </span>[% patron.library.branchname | html %]</li>
+            [% IF ( patron.sort1 ) %]<li><span class="label">Sort field 1:</span>[% AuthorisedValues.GetByCode('Bsort1', patron.sort1) | html %]</li>[% END %]
+            [% IF ( patron.sort2 ) %]<li><span class="label">Sort field 2:</span>[% AuthorisedValues.GetByCode('Bsort2', patron.sort2) | html %]</li>[% END %]
+        </ol>
+    </div>
+    </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-xs-12">
+        <fieldset class="action"><input type="button" class="close" value="Close window" /></fieldset>
+    </div>
+</div>
+
+[% INCLUDE 'intranet-bottom.inc' popup_window=1 %]
