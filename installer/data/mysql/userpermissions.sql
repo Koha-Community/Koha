@@ -18,7 +18,6 @@ INSERT INTO permissions (module_bit, code, description) VALUES
    ( 3, 'manage_item_circ_alerts', 'Manage item circulation alerts'),
    ( 3, 'manage_cities', 'Manage cities and towns'),
    ( 3, 'manage_marc_frameworks', 'Manage MARC bibliographic and authority frameworks'),
-   ( 3, 'manage_keywords2koha_mappings', 'Manage keywords to Koha mappings'),
    ( 3, 'manage_classifications', 'Manage classification sources'),
    ( 3, 'manage_matching_rules', 'Manage record matching rules'),
    ( 3, 'manage_oai_sets', 'Manage OAI sets'),

@@ -171,11 +171,6 @@
             Manage MARC bibliographic and authority frameworks and test them
         </span>
         <span class="permissioncode">([% name | html %])</span>
-    [%- CASE 'manage_keywords2koha_mappings' -%]
-        <span class="sub_permission manage_keywords2koha_mappings_subpermission">
-            Manage keywords to Koha mappings
-        </span>
-        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'manage_classifications' -%]
         <span class="sub_permission manage_classifications_subpermission">
             Manage classification sources and filing rules

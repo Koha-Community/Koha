@@ -54,6 +54,10 @@ if( CheckVersion( $DBversion ) ) {
 
     $dbh->do( "DROP TABLE IF EXISTS fieldmapping" );
 
+    $dbh->do( "DELETE FROM user_permissions WHERE code='manage_keywords2koha_mappings'" );
+
+    $dbh->do( "DELETE FROM permissions WHERE code='manage_keywords2koha_mappings'" );
+
     # Always end with this (adjust the bug info)
     SetVersion( $DBversion );
     print "Upgrade to $DBversion done (Bug 11529 - Add medium, subtitle and part information to biblio table)\n";
