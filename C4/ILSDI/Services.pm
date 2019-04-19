@@ -637,7 +637,7 @@ sub RenewLoan {
     # Hashref building
     my $out;
     $out->{'renewals'} = $issue->renewals;
-    $out->{date_due}   = dt_from_string($issue->date_due)->strftime('%Y-%m-%d %H:%S');
+    $out->{date_due}   = dt_from_string($issue->date_due)->strftime('%Y-%m-%d %H:%M');
     $out->{'success'}  = $renewal[0];
     $out->{'error'}    = $renewal[1];
 
