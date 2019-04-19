@@ -45,7 +45,6 @@ use C4::Auth;
 use C4::Context;
 use C4::Output;
 use CGI qw ( -utf8 );
-use MARC::Record;
 use C4::Biblio;
 use C4::Items;
 use C4::Reserves;
@@ -78,7 +77,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 
-my $biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'biblio_metadatas' ] } );
+my $biblio = Koha::Biblios->find( $biblionumber, { prefetch => 'metadata' } );
 my $patron = Koha::Patrons->find($loggedinuser);
 
 my $opachiddenitems_rules;
