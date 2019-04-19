@@ -18236,6 +18236,24 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22532 - Remove import_records z3950random column)\n";
 }
 
+$DBversion = '18.12.00.060';
+if ( CheckVersion($DBversion) ) {
+
+    my $rows = $dbh->do(
+        qq{
+        UPDATE `accountlines`
+        SET
+          `accounttype` = 'L',
+          `status`      = 'REPLACED'
+        WHERE
+          `accounttype` = 'Rep'
+      }
+    );
+
+    SetVersion($DBversion);
+    printf "Upgrade to $DBversion done (Bug 22564 - Fix accounttype 'Rep' - %d updated)\n", $rows;
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
