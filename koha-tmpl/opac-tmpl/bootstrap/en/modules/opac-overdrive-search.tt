@@ -57,7 +57,12 @@
         </div> <!-- / .container-fluid -->
     </div> <!-- / .main -->
 
-[% INCLUDE 'overdrive-checkout.inc' %]
+[% IF ( Koha.Preference('OverDriveCirculation') ) %]
+    [% INCLUDE 'overdrive-checkout.inc' %]
+    [% IF ( Koha.Preference('OverDrivePasswordRequired') ) %]
+        [% INCLUDE 'overdrive-login.inc' %]
+    [% END %]
+[% END %]
 
 [% INCLUDE 'opac-bottom.inc' %]
 [% BLOCK jsinclude %]
@@ -172,7 +177,6 @@ function search( offset ) {
 
         if ( pages.length > 1 ) $( '#top-pages, #bottom-pages' ).find( '.pagination' ).html( '<ul>' + pages.join( '' ) + '</ul>');
 
-        $( '#overdrive-results-list input.star' ).rating();
     } );
 }
 
