@@ -349,6 +349,16 @@ if (my $search_for_title = C4::Context->preference('OPACSearchForTitleIn')){
     $template->param('OPACSearchForTitleIn' => $search_for_title);
 }
 
+if( C4::Context->preference('ArticleRequests') ) {
+    my $itemtype = Koha::ItemTypes->find($biblio->itemtype);
+    my $artreqpossible = $patron
+        ? $biblio->can_article_request( $patron )
+        : $itemtype
+        ? $itemtype->may_article_request
+        : q{};
+    $template->param( artreqpossible => $artreqpossible );
+}
+
 $template->param(
     item_loop           => \@item_loop,
     item_header_loop    => \@item_header_loop,
