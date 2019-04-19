@@ -13,5 +13,5 @@ if ( CheckVersion($DBversion) ) {
     );
 
     SetVersion($DBversion);
-    printf "Upgrade to $DBversion done (Bug 22564 - Fix accounttype 'O' to 'FU' - %d updated)\n", $rows;
+    printf "Upgrade to $DBversion done (Bug 22564 - Fix accounttype 'Rep' - %d updated)\n", $rows;
 }
