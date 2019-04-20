@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 4;
+use Test::More tests => 5;
 
 use t::lib::TestBuilder;
 
@@ -85,4 +85,25 @@ subtest 'hidden_in_opac() tests' => sub {
     ok( $biblio->hidden_in_opac({ rules => { withdrawn => [ 2 ] } }), 'Biblio hidden' );
 
     $schema->storage->txn_rollback;
+};
+
+subtest 'items() tests' => sub {
+
+    plan tests => 3;
+
+    $schema->storage->txn_begin;
+
+    my $biblio = $builder->build_sample_biblio();
+    my $item_1 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+    my $item_2 = $builder->build_sample_item({ biblionumber => $biblio->biblionumber });
+
+    my $items = $biblio->items;
+    is( ref($items), 'Koha::Items', 'Returns a Koha::Items resultset' );
+    is( $items->count, 2, 'Two items in resultset' );
+
+    my @items = $biblio->items;
+    is( scalar @items, 2, 'Same result, but in list context' );
+
+    $schema->storage->txn_rollback;
+
 };
