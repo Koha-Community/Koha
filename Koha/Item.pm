@@ -214,6 +214,10 @@ sub hidden_in_opac {
 
     my $rules = $params->{rules} // {};
 
+    return 1
+        if C4::Context->preference('hidelostitems') and
+           $self->itemlost > 0;
+
     my $hidden_in_opac = 0;
 
     foreach my $field ( keys %{$rules} ) {
