@@ -361,9 +361,12 @@ or list of Koha::Item objects in list context.
 sub items {
     my ($self) = @_;
 
-    $self->{_items} ||= Koha::Items->search( { biblionumber => $self->biblionumber() } );
+    my $items_rs = $self->_result->items;
 
-    return wantarray ? $self->{_items}->as_list : $self->{_items};
+    return
+        wantarray
+        ? Koha::Items->_new_from_dbic($items_rs)->as_list
+        : Koha::Items->_new_from_dbic($items_rs);
 }
 
 =head3 itemtype
