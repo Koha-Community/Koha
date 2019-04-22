@@ -812,6 +812,18 @@
                             <xsl:with-param name="subdivDelimiter">-- </xsl:with-param>
                         </xsl:call-template>
                         </a>
+                        <xsl:if test="marc:subfield[@code=9]">
+                            <xsl:text> </xsl:text>
+                            <a class='authlink'>
+                                <xsl:attribute name="href">/cgi-bin/koha/opac-authoritiesdetail.pl?authid=<xsl:value-of select="str:encode-uri(marc:subfield[@code=9], true())"/></xsl:attribute>
+                                <xsl:element name="img">
+                                    <xsl:attribute name="src">/opac-tmpl/<xsl:value-of select="$theme"/>/images/filefind.png</xsl:attribute>
+                                    <xsl:attribute name="alt"></xsl:attribute>
+                                    <xsl:attribute name="height">15</xsl:attribute>
+                                    <xsl:attribute name="width">15</xsl:attribute>
+                                </xsl:element>
+                            </a>
+                        </xsl:if>
                         <xsl:if test="position()!=last()"><span class="separator"> | </span></xsl:if>
                     </xsl:for-each>
                 </span>
