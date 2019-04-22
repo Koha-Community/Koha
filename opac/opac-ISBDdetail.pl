@@ -77,7 +77,7 @@ my ( $template, $loggedinuser, $cookie ) = get_template_and_user(
 );
 
 
-my $biblio = Koha::Biblios->find( $biblionumber, { prefetch => 'metadata' } );
+my $biblio = Koha::Biblios->find( $biblionumber, { prefetch => [ 'metadata', 'items' ] } );
 my $patron = Koha::Patrons->find($loggedinuser);
 
 my $opachiddenitems_rules;
