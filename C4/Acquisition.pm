@@ -684,7 +684,8 @@ sub GetBasketsInfosByBookseller {
               AND (aqorders.datecancellationprinted IS NULL OR aqorders.datecancellationprinted='0000-00-00')
             , aqorders.quantity
             , 0)
-          ) AS expected_items
+          ) AS expected_items,
+	  SUM( aqorders.uncertainprice ) AS uncertainprices
         FROM aqbasket
           LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
         WHERE booksellerid = ?};

@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 40;
+use Test::More tests => 43;
 use Data::Dumper;
 
 use C4::Acquisition qw( NewBasket GetBasketsInfosByBookseller );
@@ -71,6 +71,20 @@ is( $basket->{total_biblios}, 2, 'Start with 2 biblios' );
 is( $basket->{total_items_cancelled}, 0, 'Start with 0 item cancelled' );
 is( $basket->{expected_items}, 6, 'Start with 6 items expected' );
 is( $basket->{total_biblios_cancelled}, 0, 'Start with 0 biblio cancelled' );
+
+$order1->uncertainprice(1)->store;
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+$basket = $baskets->[0];
+is( $basket->{uncertainprices}, 1, "Uncertain prcies returns number of uncertain items");
+$order2->uncertainprice(1)->store;
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+$basket = $baskets->[0];
+is( $basket->{uncertainprices}, 2, "Uncertain prcies returns number of uncertain items");
+$order1->uncertainprice(0)->store;
+$order2->uncertainprice(0)->store;
+$baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );
+$basket = $baskets->[0];
+is( $basket->{uncertainprices}, 0, "Uncertain prcies returns number of uncertain items");
 
 C4::Acquisition::DelOrder( $biblionumber2, $ordernumber2 );
 $baskets = C4::Acquisition::GetBasketsInfosByBookseller( $supplierid );

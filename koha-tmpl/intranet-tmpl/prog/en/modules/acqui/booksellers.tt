@@ -150,8 +150,10 @@
                                                     <a class="btn btn-default btn-xs" role="button" href="/cgi-bin/koha/acqui/basket.pl?basketno=[% basket.basketno | html %]"><i class="fa fa-eye"></i> View</a><a class="btn btn-default btn-xs dropdown-toggle" id="basketactions[% basket.basknetno | html %]" role="button" data-toggle="dropdown" href="#"><b class="caret"></b></a>
                                                     <ul class="dropdown-menu pull-right" role="menu" aria-labelledby="basketactions[% basketn.basketno | html %]">
                                                         <li><a id="addtoBasketLabel[% basket.basketno | html %]" href="#addtoBasket[% basket.basketno | html %]" role="button" data-toggle="modal"><i class="fa fa-plus"></i> Add to basket</a></li>
-                                                        [% IF basket.total_items %]
-                                                        <li><a href="/cgi-bin/koha/acqui/basket.pl?op=close&basketno=[% basket.basketno | html %]&booksellerid=[% supplier.id | html %]"><i class="fa fa-times-circle"></i> Close this basket</a></li>
+                                                        [% IF basket.uncertainprices %]
+                                                        <li><a href="/cgi-bin/koha/acqui/uncertainprice.pl?booksellerid=[% basket.booksellerid | html %]&owner=1"><i class="fa fa-usd"></i> Uncertain prices</a></li>
+                                                        [% ELSIF basket.total_items && !basket.is_standing %]
+                                                        <li><a href="/cgi-bin/koha/acqui/basket.pl?op=close&basketno=[% basket.basketno | html %]&booksellerid=[% basket.booksellerid | html %]"><i class="fa fa-times-circle"></i> Close this basket</a></li>
                                                         [% END %]
                                                     </ul>
                                                     <!-- Modal -->
