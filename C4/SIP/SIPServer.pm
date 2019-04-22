@@ -17,6 +17,8 @@ use C4::SIP::Sip::Constants qw(:all);
 use C4::SIP::Sip::Configuration;
 use C4::SIP::Sip::Checksum qw(checksum verify_cksum);
 use C4::SIP::Sip::MsgType qw( handle login_core );
+use C4::SIP::Logger qw(set_logger);
+
 use Koha::Caches;
 
 use Koha::Logger;
@@ -86,9 +88,6 @@ __PACKAGE__ ->run(@parms);
 # Child
 #
 
-my $activeSIPServer;
-my $activeLogger;
-
 # process_request is the callback used by Net::Server to handle
 # an incoming connection request.
 
@@ -104,7 +103,7 @@ sub process_request {
     Koha::Caches->flush_L1_caches();
 
     $self->{account} = undef;  # Clear out the account from the last request, it may be different
-    $self->{logger} = _set_logger( Koha::Logger->get( { interface => 'sip' } ) );
+    $self->{logger} = set_logger( Koha::Logger->get( { interface => 'sip' } ) );
 
     # Flush previous MDCs to prevent accidentally leaking incorrect MDC-entries
     Log::Log4perl::MDC->put( "accountid", undef );
@@ -175,7 +174,7 @@ sub raw_transport {
     }
     alarm 0;
 
-    $self->{logger} = _set_logger(
+    $self->{logger} = set_logger(
         Koha::Logger->get(
             {
                 interface => 'sip',
@@ -423,58 +422,6 @@ sub get_timeout {
     } else {
         return $fallback;
     }
-}
-
-=head2 get_SIPServer
-
-    my $sipServer = C4::SIP::SIPServer::get_SIPServer()
-
-@RETURNS C4::SIP::SIPServer, the current server's child-process used to handle this SIP-transaction
-
-=cut
-
-sub get_SIPServer {
-    unless($activeSIPServer) {
-        my @cc = caller(1);
-        die "$cc[3]() asks for \$activeSIPServer, but he is not defined yet";
-    }
-    return $activeSIPServer;
-}
-
-sub _set_SIPServer {
-    my ($sipServer) = @_;
-    unless (blessed($sipServer) && $sipServer->isa('C4::SIP::SIPServer')) {
-        my @cc = caller(0);
-        die "$cc[3]():> \$sipServer '$sipServer' is not a C4::SIP::SIPServer-object";
-    }
-    $activeSIPServer = $sipServer;
-    return $activeSIPServer;
-}
-
-=head2 get_logger
-
-    my $logger = C4::SIP::SIPServer::get_logger()
-
-@RETURNS Koha::Logger, the logger used to log this SIP-transaction
-
-=cut
-
-sub get_logger {
-    unless($activeLogger) {
-        my @cc = caller(1);
-        die "$cc[3]() asks for \$activeLogger, but he is not defined yet";
-    }
-    return $activeLogger;
-}
-
-sub _set_logger {
-    my ($logger) = @_;
-    unless (blessed($logger) && $logger->isa('Koha::Logger')) {
-        my @cc = caller(0);
-        die "$cc[3]():> \$logger '$logger' is not a Koha::Logger-object";
-    }
-    $activeLogger = $logger;
-    return $activeLogger;
 }
 
 1;

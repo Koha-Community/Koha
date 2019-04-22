@@ -15,6 +15,7 @@ use List::Util qw(first);
 
 use C4::SIP::Sip::Constants qw(SIP_DATETIME FID_SCREEN_MSG);
 use C4::SIP::Sip::Checksum qw(checksum);
+use C4::SIP::Logger qw(get_logger);
 
 use base qw(Exporter);
 
@@ -215,7 +216,8 @@ sub syslog {
 
     my $message = @args ? sprintf($mask, @args) : $mask;
 
-    C4::SIP::SIPServer::get_logger()->$method($message);
+    my $logger = C4::SIP::Logger::get_logger();
+    $logger->$method($message) if $logger;
 }
 
 1;
