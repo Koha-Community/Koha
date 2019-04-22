@@ -32,21 +32,32 @@ my $builder = t::lib::TestBuilder->new;
 
 subtest 'hidden_in_opac() tests' => sub {
 
-    plan tests => 3;
+    plan tests => 4;
 
     $schema->storage->txn_begin;
 
-    my $item  = $builder->build_sample_item;
+    my $item  = $builder->build_sample_item({ itemlost => 2 });
     my $rules = {};
+
+    # disable hidelostitems as it interteres with OpachiddenItems for the calculation
+    t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
 
     ok( !$item->hidden_in_opac, 'No rules passed, shouldn\'t hide' );
     ok( !$item->hidden_in_opac({ rules => $rules }), 'Empty rules passed, shouldn\'t hide' );
 
+    # enable hidelostitems to verify correct behaviour
+    t::lib::Mocks::mock_preference( 'hidelostitems', 1 );
+    ok( $item->hidden_in_opac, 'Even with no rules, item should hide because of hidelostitems syspref' );
+
+    # disable hidelostitems
+    t::lib::Mocks::mock_preference( 'hidelostitems', 0 );
     my $withdrawn = $item->withdrawn + 1; # make sure this attribute doesn't match
 
     $rules = { withdrawn => [$withdrawn], itype => [ $item->itype ] };
 
     ok( $item->hidden_in_opac({ rules => $rules }), 'Rule matching itype passed, should hide' );
+
+
 
     $schema->storage->txn_rollback;
 };
