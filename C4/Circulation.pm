@@ -458,15 +458,15 @@ sub TooMany {
         $count_query .= " AND borrowernumber = ? ";
         push @bind_params, $borrower->{'borrowernumber'};
         my $rule_branch = $maxissueqty_rule->branchcode;
-        unless ($rule_branch) {
+        if ($rule_branch) {
             if (C4::Context->preference('CircControl') eq 'PickupLibrary') {
                 $count_query .= " AND issues.branchcode = ? ";
-                push @bind_params, $branch;
+                push @bind_params, $rule_branch;
             } elsif (C4::Context->preference('CircControl') eq 'PatronLibrary') {
                 ; # if branch is the patron's home branch, then count all loans by patron
             } else {
                 $count_query .= " AND items.homebranch = ? ";
-                push @bind_params, $branch;
+                push @bind_params, $rule_branch;
             }
         }
 
