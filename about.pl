@@ -396,7 +396,8 @@ my @yaml_prefs = (
     "UpdateItemWhenLostFromHoldList",
     "MarcFieldsToOrder",
     "MarcItemFieldsToOrder",
-    "UpdateitemLocationOnCheckin"
+    "UpdateitemLocationOnCheckin",
+    "ItemsDeniedRenewal"
 );
 my @bad_yaml_prefs;
 foreach my $syspref (@yaml_prefs) {
