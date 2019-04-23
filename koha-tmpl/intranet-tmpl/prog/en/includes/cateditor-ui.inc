@@ -234,6 +234,21 @@ require( [ 'koha-backend', 'search', 'macros', 'marc-editor', 'marc-record', 'pr
                 callback( record );
             },
         },
+        'duplicate': {
+            titleForRecord: _("Editing duplicate record of #{ID}"),
+            get: function( id, callback ) {
+                if ( !id ) return false;
+
+                KohaBackend.GetRecord( id, callback );
+            },
+            save: function( id, record, done ) {
+                function finishCb( data ) {
+                    done( { error: data.error, newRecord: data.marcxml && data.marcxml[0], newId: data.biblionumber && [ 'catalog', data.biblionumber ] } );
+                }
+
+                KohaBackend.CreateRecord( record, finishCb );
+            }
+        },
         'catalog': {
             titleForRecord: _("Editing catalog record #{ID}"),
             links: [

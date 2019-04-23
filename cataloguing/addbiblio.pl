@@ -737,11 +737,15 @@ if ($frameworkcode eq 'FA'){
         'stickyduedate'      => $fa_stickyduedate,
         'duedatespec'        => $fa_duedatespec,
     );
-} elsif ( $op ne "delete" && C4::Context->preference('EnableAdvancedCatalogingEditor') && C4::Auth::haspermission(C4::Context->userenv->{id},{'editcatalogue'=>'advanced_editor'}) && $input->cookie( 'catalogue_editor_' . $loggedinuser ) eq 'advanced' && !$breedingid ) {
+} elsif ( $op ne "delete" &&
+            C4::Context->preference('EnableAdvancedCatalogingEditor') &&
+            C4::Auth::haspermission(C4::Context->userenv->{id},{'editcatalogue'=>'advanced_editor'}) &&
+            $input->cookie( 'catalogue_editor_' . $loggedinuser ) eq 'advanced' &&
+            !$breedingid ) {
     # Only use the advanced editor for non-fast-cataloging.
     # breedingid is not handled because those would only come off a Z39.50
     # search initiated by the basic editor.
-    print $input->redirect( '/cgi-bin/koha/cataloguing/editor.pl' . ( $biblionumber ? ( '#catalog/' . $biblionumber ) : '' ) );
+    print $input->redirect( '/cgi-bin/koha/cataloguing/editor.pl' . ( $biblionumber ? ( ($op eq 'duplicate'?'#duplicate/':'#catalog/') . $biblionumber ) : '' ) );
     exit;
 }
 
