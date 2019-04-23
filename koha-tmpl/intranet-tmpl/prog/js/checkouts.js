@@ -787,7 +787,7 @@ $(document).ready(function() {
         });
     }
 
-    if ( AllowRenewalLimitOverride ) {
+    if ( AllowRenewalLimitOverride || AllowRenewalOnHoldOverride ) {
         $( '#override_limit' ).click( function () {
             if ( this.checked ) {
                 $( '.renewals-allowed' ).show(); $( '.renewals-disabled' ).hide();
