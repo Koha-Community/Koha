@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 7;
+use Test::More tests => 8;
 use C4::Context;
 
 use C4::Members;
@@ -467,6 +467,200 @@ subtest '1 BranchBorrowerCircRule exist: 1 CO allowed, 1 OSCO allowed' => sub {
     );
 
     teardown();
+};
+
+subtest 'General vs specific rules limit quantity correctly' => sub {
+    plan tests => 9;
+
+    t::lib::Mocks::mock_preference('CircControl', 'ItemHomeLibrary');
+    my $branch   = $builder->build({source => 'Branch',});
+    my $category = $builder->build({source => 'Category',});
+    my $itemtype = $builder->build({
+        source => 'Itemtype',
+        value => {
+            rentalcharge => 0,
+            rentalcharge_daily => 0,
+            rentalcharge_hourly => 0,
+            notforloan => 0,
+        }
+    });
+    my $patron = $builder->build({
+        source => 'Borrower',
+        value => {
+            categorycode => $category->{categorycode},
+            branchcode => $branch->{branchcode},
+        }
+    });
+
+    # Set up an issuing rule
+    my $rule = $builder->build({
+        source => 'Issuingrule',
+        value => {
+            categorycode => '*',
+            itemtype     => $itemtype->{itemtype},
+            branchcode   => '*',
+            issuelength  => 1,
+            firstremind  => 1,        # 1 day of grace
+            finedays     => 2,        # 2 days of fine per day of overdue
+            lengthunit   => 'days',
+        }
+    });
+
+    # Set an All->All for an itemtype
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => $itemtype->{itemtype},
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => 1,
+            }
+        }
+    );
+
+    # Create an item
+    my $item = $builder->build_sample_item({
+        itype => $itemtype->{itemtype}
+    });
+    my $branch_item = $builder->build_sample_item({
+        itype => $itemtype->{itemtype},
+        homebranch => $branch->{branchcode},
+        holdingbranch => $branch->{branchcode}
+    });
+
+
+    t::lib::Mocks::mock_userenv({ branchcode => $branch->{branchcode} });
+    my $issue = C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string() );
+    # We checkout one item
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 1,
+            max_allowed => 1,
+        },
+        'We are only allowed one, and we have one'
+    );
+
+
+    # Set a branch specific rule
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => $itemtype->{itemtype},
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => 1,
+            }
+        }
+    );
+
+    is(
+        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        undef,
+        'We are allowed one from the branch specifically now'
+    );
+
+    # If circcontrol is PatronLibrary we count all the patron's loan, regardless of branch
+    t::lib::Mocks::mock_preference('CircControl', 'PatronLibrary');
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 1,
+            max_allowed => 1,
+        },
+        'We are allowed one from the branch specifically, but have one'
+    );
+    t::lib::Mocks::mock_preference('CircControl', 'ItemHomeLibrary');
+
+    $issue = C4::Circulation::AddIssue( $patron, $branch_item->barcode, dt_from_string() );
+    # We issue that one
+    # And make another
+    my $branch_item_2 = $builder->build_sample_item({
+        itype => $itemtype->{itemtype},
+        homebranch => $branch->{branchcode},
+        holdingbranch => $branch->{branchcode}
+    });
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $branch_item_2->biblionumber, $branch_item_2->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 1,
+            max_allowed => 1,
+        },
+        'We are only allowed one from that branch, and have one'
+    );
+
+    # Now we make anothe from a different branch
+    my $item_2 = $builder->build_sample_item({
+        itype => $itemtype->{itemtype},
+    });
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 2,
+            max_allowed => 1,
+        },
+        'We are only allowed one for general rule, and have two'
+    );
+    t::lib::Mocks::mock_preference('CircControl', 'PatronLibrary');
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 2,
+            max_allowed => 1,
+        },
+        'We are only allowed one for general rule, and have two'
+    );
+
+    t::lib::Mocks::mock_preference('CircControl', 'PickupLibrary');
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 2,
+            max_allowed => 1,
+        },
+        'We are only allowed one for general rule, and have checked out two at this branch'
+    );
+
+    my $branch2   = $builder->build({source => 'Branch',});
+    t::lib::Mocks::mock_userenv({ branchcode => $branch2->{branchcode} });
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item_2->biblionumber, $item_2->unblessed ),
+        {
+            reason => 'TOO_MANY_CHECKOUTS',
+            count => 2,
+            max_allowed => 1,
+        },
+        'We are only allowed one for general rule, and have two total (no rule for specific branch)'
+    );
+    # Set a branch specific rule for new branch
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => $branch2->{branchcode},
+            categorycode => $category->{categorycode},
+            itemtype     => $itemtype->{itemtype},
+            rules        => {
+                maxissueqty       => 1,
+                maxonsiteissueqty => 1,
+            }
+        }
+    );
+
+    is(
+        C4::Circulation::TooMany( $patron, $branch_item->biblionumber, $branch_item->unblessed ),
+        undef,
+        'We are allowed one from the branch specifically now'
+    );
+
+
+
 };
 
 $schema->storage->txn_rollback;
