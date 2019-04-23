@@ -56,14 +56,11 @@ sub list {
 
     # Get all requests
     # If necessary, only get those from a specified patron
-    my @requests;
-    if ($args->{borrowernumber}) {
-        @requests = Koha::Illrequests->search(
-            { borrowernumber => $args->{borrowernumber} }
-        );
-    } else {
-        @requests = Koha::Illrequests->as_list;
-    }
+    my @requests = Koha::Illrequests->search({
+        args->{borrowernumber}
+        ? ( borrowernumber => $args->{borrowernumber} )
+        : ()
+    })->as_list;
 
     # Identify patrons & branches that
     # we're going to need and get them
