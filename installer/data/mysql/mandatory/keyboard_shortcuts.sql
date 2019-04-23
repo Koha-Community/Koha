@@ -21,15 +21,15 @@
 -- 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA.
 
 -- keyboard shortcuts
-INSERT INTO keyboard_shortcuts (shortcut_name, shortcut_keys, shortcut_desc) VALUES
-    ("insert_copyright","Alt-C","Insert copyright symbol (©)"),
-    ("insert_copyright_sound","Alt-P","Insert copyright symbol (℗) (sound recordings)"),
-    ("insert_delimiter","Ctrl-D","Insert delimiter (‡)"),
-    ("subfield_help","Ctrl-H","Get help on current subfield"),
-    ("link_authorities","Shift-Ctrl-L","Link field to authorities"),
-    ("delete_field","Ctrl-X","Delete current field"),
-    ("delete_subfield","Shift-Ctrl-X","Delete current subfield"),
-    ("new_line","Enter","New field on next line"),
-    ("line_break","Shift-Enter","Insert line break"),
-    ("next_position","Tab","Move to next position"),
-    ("prev_position","Shift-Tab","Move to previous position");
+INSERT INTO keyboard_shortcuts (shortcut_name, shortcut_keys) VALUES
+    ("insert_copyright","Alt-C"),
+    ("insert_copyright_sound","Alt-P"),
+    ("insert_delimiter","Ctrl-D"),
+    ("subfield_help","Ctrl-H"),
+    ("link_authorities","Shift-Ctrl-L"),
+    ("delete_field","Ctrl-X"),
+    ("delete_subfield","Shift-Ctrl-X"),
+    ("new_line","Enter"),
+    ("line_break","Shift-Enter"),
+    ("next_position","Tab"),
+    ("prev_position","Shift-Tab");

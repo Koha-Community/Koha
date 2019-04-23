@@ -211,6 +211,10 @@
                     <dt><a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a></dt>
                     <dd>Add additional fields to certain tables</dd>
                     [% END %]
+                    [% IF ( CAN_user_parameters_manage_keyboard_shortcuts ) %]
+                        <dt><a href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Keyboard shortcuts</a></dt>
+                        <dd>Define which keys trigger actions in the advanced cataloging editor</dd>
+                    [% END %]
                 </dl>
             [% END %]
             </div>

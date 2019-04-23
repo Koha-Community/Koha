@@ -2,17 +2,18 @@
 [% USE Asset %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Tools &rsaquo; Advanced editor shortcuts</title>
+<title>Koha &rsaquo; Administration &rsaquo; Advanced editor shortcuts</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
-<body id="adveditor_shortcuts" class="tools">
+<body id="adveditor_shortcuts" class="admin">
     [% INCLUDE 'header.inc' %]
-    [% INCLUDE 'cat-search.inc' %]
+    [% INCLUDE 'prefs-admin-search.inc' %]
+    [% PROCESS 'keyboard_shortcuts.inc' %]
 
 <div id="breadcrumbs">
     <a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo;
-    <a href="/cgi-bin/koha/tools/tools-home.pl">Tools</a> &rsaquo;
-    <a href="/cgi-bin/koha/tools/adveditorshortcuts.pl">Advanced editor shortcuts</a>
+    <a href="/cgi-bin/koha/admin/admin-home.pl">Administration</a> &rsaquo;
+    <a href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Advanced editor shortcuts</a>
 </div>
 
 <div class="main container-fluid">
@@ -25,11 +26,12 @@
                     <li>Control key is "Ctrl"</li>
                     <li>Alt key is "Alt"</li>
                     <li>Shift is "Shift"</li>
-                    <li>If combing multiple keys they must be in specified order: Shift-Cmd-Ctrl-Alt</li>
+                    <li>If combining multiple keys they must be in specified order: Shift-Cmd-Ctrl-Alt</li>
                     <li><a href="https://codemirror.net/doc/manual.html#keymaps">More documentation on defining key maps</a></li>
                 </ul>
 
-                <form id="adveditor_shortcuts" method="post" action="/cgi-bin/koha/tools/adveditorshortcuts.pl">
+                <form id="adveditor_shortcuts" method="post" action="/cgi-bin/koha/admin/adveditorshortcuts.pl">
+                    <fieldset>
                     <input type=hidden name="op" value="save" />
 
                     <table id="adv_editor_keyboard_shortcuts">
@@ -40,7 +42,7 @@
                         <tbody>
                            [% FOREACH shortcut IN shortcuts %]
                         <tr>
-                            <td><label for="shortcut_keys">[% shortcut.shortcut_desc | html %]</label></td>
+                            <td><label for="shortcut_keys">[% PROCESS keyboard_shortcut_descriptions shortcut_name=shortcut.shortcut_name %]</label></td>
                             <td>
                                 <input type="hidden" name="shortcut_name" value="[% shortcut.shortcut_name | html %]">
                                 <input type="text" name="shortcut_keys" value="[% shortcut.shortcut_keys | html %]">
@@ -48,7 +50,8 @@
                         </tr>
                    [% END %]
                    </table>
-                   <input type="submit" value="Save shortcuts">
+                   </fieldset>
+                   </fieldset class="action"><input type="submit" value="Save shortcuts"></fieldset>
                </form>
 
            </main>
@@ -56,7 +59,7 @@
 
         <div class="col-sm-2 col-sm-pull-10">
             <aside>
-                [% INCLUDE 'tools-menu.inc' %]
+                [% INCLUDE 'admin-menu.inc' %]
             </aside>
         </div> <!-- /.col-sm-2.col-sm-pull-10 -->
     </div> <!-- /.row -->

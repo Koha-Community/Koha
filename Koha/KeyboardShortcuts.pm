@@ -35,13 +35,17 @@ Koha::KeyboardShortcuts - Koha KeyboardShortcut Object set class
 
 =cut
 
-=head3 type
+=head3 _type (internal)
 
 =cut
 
 sub _type {
     return 'KeyboardShortcut';
 }
+
+=head3 object_class (internal)
+
+=cut
 
 sub object_class {
     return 'Koha::KeyboardShortcut';

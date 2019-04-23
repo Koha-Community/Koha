@@ -138,6 +138,9 @@
             [% IF ( CAN_user_parameters_manage_additional_fields ) %]
                 <li><a href="/cgi-bin/koha/admin/additional-fields.pl">Additional fields</a></li>
             [% END %]
+            [% IF ( CAN_user_parameters_manage_keyboard_shortcuts ) %]
+                <li><a href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Keyboard shortcuts</a></li>
+            [% END %]
         </ul>
     [% END %]
 </div>

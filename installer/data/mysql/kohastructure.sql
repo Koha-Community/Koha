@@ -4332,7 +4332,6 @@ DROP TABLE IF EXISTS `keyboard_shortcuts`;
 CREATE TABLE keyboard_shortcuts (
 shortcut_name varchar(80) NOT NULL,
 shortcut_keys varchar(80) NOT NULL,
-shortcut_desc varchar(200) NOT NULL,
 PRIMARY KEY (shortcut_name)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 

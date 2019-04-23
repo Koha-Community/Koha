@@ -241,6 +241,11 @@
             Manage Mana KB content sharing
         </span>
         <span class="permissioncode">([% name | html %])</span>
+    [%- CASE 'manage_keyboard_shortcuts' -%]
+        <span class="sub_permission manage_keyboard_shortcuts_subpermission">
+            Manage keyboard shortcuts for the advanced cataloging editor
+        </span>
+        <span class="permissioncode">([% name | html %])</span>
     [%- CASE 'edit_borrowers' -%]
         <span class="sub_permission edit_borrowers_subpermission">
             Add, modify and view patron information

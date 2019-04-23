@@ -16,6 +16,7 @@
    </div>
 
 [% INCLUDE 'header.inc' %]
+[% PROCESS 'keyboard_shortcuts.inc' %]
 
 <div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/cataloguing/addbooks.pl">Cataloging</a> &rsaquo; Editor</div>
 
@@ -268,7 +269,7 @@
 </div>
 
 <div id="shortcuts-contents" style="display: none">
-<a id="redefine_shortcuts" href="/cgi-bin/koha/tools/adveditorshortcuts.pl">Redefine shortcuts</a>
+<a id="redefine_shortcuts" href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Redefine shortcuts</a>
 <table class="table table-condensed">
     <thead>
         <tr>
@@ -280,7 +281,7 @@
         [% FOREACH shortcut IN shortcuts %]
             <tr>
                 <td>[% shortcut.shortcut_keys | html %]</td>
-                <td>[% shortcut.shortcut_desc | html %]</td>
+                <td>[% PROCESS keyboard_shortcut_descriptions shortcut_name=shortcut.shortcut_name %]</td>
             </tr>
         [% END %]
         <tr>
