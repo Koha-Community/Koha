@@ -18,6 +18,10 @@
 <body id="pat_printfeercpt" class="pat">
 
 <div id="receipt">
+
+[% IF letter %]
+    [% letter.content | evaltt %]
+[% ELSE %]
 <!-- The table with the account items -->
 <table>
 [% IF ( LibraryName ) %]
@@ -69,6 +73,9 @@
   </tr>
   </tfoot>
 </table>
+<!-- / The table with the account items -->
+[% END %]
+
 </div>
 
 [% MACRO jsinclude BLOCK %]

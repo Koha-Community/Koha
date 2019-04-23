@@ -29,6 +29,7 @@ use C4::Output;
 use CGI qw ( -utf8 );
 use C4::Members;
 use C4::Accounts;
+use C4::Letters;
 use Koha::Account::Lines;
 use Koha::DateUtils;
 use Koha::Patrons;
@@ -59,7 +60,8 @@ my $total = $patron->account->balance;
 
 # FIXME This whole stuff is ugly and should be rewritten
 # FIXME We should pass the $accts iterator to the template and do this formatting part there
-my $accountline = Koha::Account::Lines->find($accountlines_id)->unblessed;
+my $accountline_object = Koha::Account::Lines->find($accountlines_id);
+my $accountline = $accountline_object->unblessed;
 my $totalcredit;
 if($total <= 0){
         $totalcredit = 1;
@@ -75,24 +77,21 @@ if ( $accountline->{'amountoutstanding'} <= 0 ) {
     $accountline->{'amountoutstandingcredit'} = 1;
 }
 
-my %row = (
-    'date'                    => dt_from_string( $accountline->{'date'} ),
-    'amountcredit'            => $accountline->{'amountcredit'},
-    'amountoutstandingcredit' => $accountline->{'amountoutstandingcredit'},
-    'description'             => $accountline->{'description'},
-    'amount'                  => $accountline->{'amount'},
-    'amountoutstanding'       => $accountline->{'amountoutstanding'},
-    accounttype => $accountline->{accounttype},
-    'note'      => $accountline->{'note'},
-);
+my $letter = C4::Letters::getletter( 'circulation', 'ACCOUNT_CREDIT', C4::Context::mybranch, 'print', $patron->lang );
 
+my @account_offsets = Koha::Account::Offsets->search( { credit_id => $accountline_object->id } );
 
 $template->param(
-    patron               => $patron,
-    finesview           => 1,
-    total               => $total,
-    totalcredit         => $totalcredit,
-    accounts            => [$accountline], # FIXME There is always only 1 row!
+    letter      => $letter,
+    patron      => $patron,
+    library     => C4::Context::mybranch,
+    offsets     => \@account_offsets,
+    credit      => $accountline_object,
+
+    finesview   => 1,
+    total       => $total,
+    totalcredit => $totalcredit,
+    accounts    => [$accountline],        # FIXME There is always only 1 row!
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
