@@ -20,7 +20,11 @@
         [% IF SuspendHoldsIntranet %]<th>&nbsp;</th><!-- Suspend Holds Column Header -->[% END %]
     </tr>
 
+    [% SET first_priority = 0 %]
+    [% SET last_priority  = holds.last.priority %]
+
     [% FOREACH hold IN holds %]
+    [% IF !hold.found && first_priority == 0 %][% first_priority = hold.priority %][% END %]
         <tr>
             <td>
                 <input type="hidden" name="reserve_id" value="[% hold.reserve_id | html %]" />
@@ -70,29 +74,31 @@
             </td>
 
             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-                [% SET first_priority = holds.first.priority %]
-                [% SET last_priority  = holds.last.priority %]
-                [% SET prev_priority  = loop.prev.priority %]
-                [% SET next_priority  = loop.next.priority %]
-                [% holds.index | html %]
+	        [% UNLESS hold.found %]
+                    [% SET prev_priority  = loop.prev.priority %]
+                    [% SET next_priority  = loop.next.priority %]
+                    [% holds.index | html %]
 
-                <td style="white-space:nowrap;">
-                    <a title="Move hold up" href="request.pl?action=move&amp;where=up&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                        <img src="[% interface | html %]/[% theme | html %]/img/go-up.png" alt="Go up" />
-                    </a>
+                    <td style="white-space:nowrap;">
+                        <a title="Move hold up" href="request.pl?action=move&amp;where=up&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <img src="[% interface | html %]/[% theme | html %]/img/go-up.png" alt="Go up" />
+                        </a>
 
-                    <a title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                        <img src="[% interface | html %]/[% theme | html %]/img/go-top.png" alt="Go top" />
-                    </a>
+                        <a title="Move hold to top" href="request.pl?action=move&amp;where=top&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <img src="[% interface | html %]/[% theme | html %]/img/go-top.png" alt="Go top" />
+                        </a>
 
-                    <a title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                        <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Go bottom" />
-                    </a>
+                        <a title="Move hold to bottom" href="request.pl?action=move&amp;where=bottom&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Go bottom" />
+                        </a>
 
-                    <a title="Move hold down" href="request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                        <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Go down" />
-                    </a>
-                </td>
+                        <a title="Move hold down" href="request.pl?action=move&amp;where=down&amp;first_priority=[% first_priority | html %]&amp;last_priority=[% last_priority | html %]&amp;prev_priority=[% prev_priority | html %]&amp;next_priority=[% next_priority | html %]&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Go down" />
+                        </a>
+                    </td>
+		[% ELSE %]
+		    <td></td>
+		[% END %]
             [% END %]
 
             <td>
@@ -161,15 +167,19 @@
             </td>
 
             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-                <td>
-                    <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
-                        [% IF ( hold.lowestPriority ) %]
-                            <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Unset lowest priority" />
-                        [% ELSE %]
-                            <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Set to lowest priority" />
-                        [% END %]
-                    </a>
-                </td>
+	        [% UNLESS hold.found %]
+                    <td>
+                        <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
+                            [% IF ( hold.lowestPriority ) %]
+                                <img src="[% interface | html %]/[% theme | html %]/img/go-bottom.png" alt="Unset lowest priority" />
+                            [% ELSE %]
+                                <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Set to lowest priority" />
+                            [% END %]
+                        </a>
+                    </td>
+		[% ELSE %]
+		    <td></td>
+		[% END %]
             [% END %]
 
             <td>
