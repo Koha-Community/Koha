@@ -74,7 +74,7 @@
         </table>
     </div>
     <div id="new_mana_comment" style="display:none">
-        <h4 id="mana_submit_comment"> Please enter a new comment (max 35 caracters)</h4>
+        <h4 id="mana_submit_comment"> Please enter a new comment (max 35 characters)</h4>
         <form id="mana_comment_form" action="/cgi-bin/koha/serials/subscription-detail.pl" method="get">
             <input type="hidden" id="mana-resource" value="subscription" />
             <input type="hidden" id="mana-resource-id" value="[% mana_id | html %]" />

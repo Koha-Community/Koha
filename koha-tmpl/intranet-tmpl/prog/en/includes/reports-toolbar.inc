@@ -69,7 +69,7 @@
                     <div class="modal-content">
                         <div class="modal-header">
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                            <h3 id="mana_submit_comment">Enter a new commment (max 35 caracters)</h3>
+                            <h3 id="mana_submit_comment">Enter a new comment (max 35 characters)</h3>
                         </div>
                         <div class="modal-body">
                             <input hidden id="mana-resource" value="report">
