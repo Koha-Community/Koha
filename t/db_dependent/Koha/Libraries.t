@@ -38,6 +38,10 @@ use t::lib::TestBuilder;
 my $schema = Koha::Database->new->schema;
 $schema->storage->txn_begin;
 
+# Cleanup default_branch_item_rules
+my $dbh     = C4::Context->dbh;
+$dbh->do('DELETE FROM circulation_rules');
+
 my $builder = t::lib::TestBuilder->new;
 my $nb_of_libraries = Koha::Libraries->search->count;
 my $new_library_1 = Koha::Library->new({

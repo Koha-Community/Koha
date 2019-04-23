@@ -475,11 +475,9 @@ sub CanItemBeReserved {
         return { status => 'cannotReserveFromOtherBranches' };
     }
 
-    my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
-    my $itembranchcode = $branch_control eq 'holdingbranch' ? $item->holdingbranch : $item->homebranch;
-    my $item_library = Koha::Libraries->find( {branchcode => $itembranchcode} );
+    my $item_library = Koha::Libraries->find( {branchcode => $item->homebranch} );
     if ( $branchitemrule->{holdallowed} == 3) {
-        if($borrower->{branchcode} ne $itembranchcode && !$item_library->validate_hold_sibling( {branchcode => $borrower->{branchcode}} )) {
+        if($borrower->{branchcode} ne $item->homebranch && !$item_library->validate_hold_sibling( {branchcode => $borrower->{branchcode}} )) {
             return { status => 'branchNotInHoldGroup' };
         }
     }
@@ -824,7 +822,7 @@ sub CheckReserves {
                     my $branchitemrule = C4::Circulation::GetBranchItemRule($branch,$item->effective_itemtype);
                     next if ($branchitemrule->{'holdallowed'} == 0);
                     next if (($branchitemrule->{'holdallowed'} == 1) && ($branch ne $patron->branchcode));
-                    my $library = Koha::Libraries->find({branchcode=>$branch});
+                    my $library = Koha::Libraries->find({branchcode=>$item->homebranch});
                     next if (($branchitemrule->{'holdallowed'} == 3) && (!$library->validate_hold_sibling({branchcode => $patron->branchcode}) ));
                     my $hold_fulfillment_policy = $branchitemrule->{hold_fulfillment_policy};
                     next if ( ($hold_fulfillment_policy eq 'holdgroup') && (!$library->validate_hold_sibling({branchcode => $res->{branchcode}})) );
@@ -1242,9 +1240,7 @@ sub IsAvailableForItemLevelRequest {
         foreach my $i (@items) {
             my $reserves_control_branch = GetReservesControlBranch( $i->unblessed(), $patron->unblessed );
             my $branchitemrule = C4::Circulation::GetBranchItemRule( $reserves_control_branch, $i->itype );
-            my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
-            my $itembranchcode = $branch_control eq 'holdingbranch' ? $item->holdingbranch : $item->homebranch;
-            my $item_library = Koha::Libraries->find( {branchcode => $itembranchcode} );
+            my $item_library = Koha::Libraries->find( {branchcode => $i->homebranch} );
 
 
             $any_available = 1
@@ -1257,7 +1253,7 @@ sub IsAvailableForItemLevelRequest {
                 && !C4::Context->preference('AllowHoldsOnDamagedItems') )
               || Koha::ItemTypes->find( $i->effective_itemtype() )->notforloan
               || $branchitemrule->{holdallowed} == 1 && $patron->branchcode ne $i->homebranch
-              || $branchitemrule->{holdallowed} == 3 && !$item_library->validate_hold_sibling( {branchcode => $pickup_branchcode} );
+              || $branchitemrule->{holdallowed} == 3 && !$item_library->validate_hold_sibling( {branchcode => $patron->branchcode} );
         }
 
         return $any_available ? 0 : 1;

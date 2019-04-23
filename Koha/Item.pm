@@ -316,8 +316,6 @@ sub pickup_locations {
     my $branch_control = C4::Context->preference('HomeOrHoldingBranch');
     my $library = $branch_control eq 'holdingbranch' ? $self->holding_branch : $self->home_branch;
 
-    #warn $branch_control.' '.$branchitemrule->{holdallowed}.' '.$library->branchcode.' '.$patron->branchcode;
-
     my @libs;
     if(defined $patron) {
         return @libs if $branchitemrule->{holdallowed} == 3 && !$library->validate_hold_sibling( {branchcode => $patron->branchcode} );

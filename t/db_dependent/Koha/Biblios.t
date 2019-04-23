@@ -237,10 +237,7 @@ subtest 'pickup_locations' => sub {
         {},
         '*', '*', '*', 25
     );
-    $dbh->do('DELETE FROM branch_item_rules');
-    $dbh->do('DELETE FROM default_branch_circ_rules');
-    $dbh->do('DELETE FROM default_branch_item_rules');
-    $dbh->do('DELETE FROM default_circ_rules');
+    $dbh->do('DELETE FROM circulation_rules');
 
     my $root1 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
     my $root2 = $builder->build_object( { class => 'Koha::Library::Groups', value => { ft_local_hold_group => 1 } } );
@@ -318,11 +315,17 @@ subtest 'pickup_locations' => sub {
     t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'homebranch');
 
     #Case 1: holdallowed any, hold_fulfillment_policy any
-    $dbh->do(
-        q{INSERT INTO default_circ_rules (holdallowed, hold_fulfillment_policy, returnbranch)
-        VALUES (?,?,?)},
-        {},
-        2, 'any', 'any'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 2,
+                hold_fulfillment_policy => 'any',
+                returnbranch => 'any'
+            }
+        }
     );
 
     my @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -334,10 +337,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 5 && scalar(@pl_1_4) == 5 && scalar(@pl_2_1) == 5 && scalar(@pl_2_4) == 5, 'Returns all libraries that are pickup locations');
 
     #Case 2: holdallowed homebranch, hold_fulfillment_policy any, HomeOrHoldingBranch 'homebranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'any'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'any',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -349,10 +359,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_4) == 0 && scalar(@pl_2_1) == 0, 'Returns no pickup locations');
 
     #Case 3: holdallowed holdgroup, hold_fulfillment_policy any
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        3, 'any'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 3,
+                hold_fulfillment_policy => 'any',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -363,10 +380,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 5 && scalar(@pl_2_4) == 5 && scalar(@pl_1_4) == 5 && scalar(@pl_2_1) == 5, 'Returns all libraries that are pickup_locations, when item\'s hombebranch is in patron\' holdgroup');
 
     #Case 4: holdallowed any, hold_fulfillment_policy holdgroup
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        2, 'holdgroup'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 2,
+                hold_fulfillment_policy => 'holdgroup',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -377,10 +401,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 3 && scalar(@pl_2_4) == 3 && scalar(@pl_1_4) == 3 && scalar(@pl_2_1) == 3, 'Returns libraries in item\'s holdgroup, and that are pickup_locations');
 
     #Case 5: holdallowed homebranch, hold_fulfillment_policy holdgroup, HomeOrHoldingBranch 'homebranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'holdgroup'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'holdgroup',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -392,10 +423,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_4) == 0 && scalar(@pl_2_1) == 0, 'Returns no pickup locations');
 
     #Case 6: holdallowed holdgroup, hold_fulfillment_policy holdgroup
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        3, 'holdgroup'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 3,
+                hold_fulfillment_policy => 'holdgroup',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -406,10 +444,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 2 && scalar(@pl_2_1) == 2 && scalar(@pl_2_4) == 1 && scalar(@pl_1_4) == 1, 'Returns libraries in item\'s holdgroup whose homebranch is included patron\'s holdgroup, and that are pickup_locations');
 
     #Case 7: holdallowed any, hold_fulfillment_policy homebranch
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        2, 'homebranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 2,
+                hold_fulfillment_policy => 'homebranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -420,10 +465,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 1 && scalar(@pl_1_4) == 1 && scalar(@pl_2_1) == 2 && scalar(@pl_2_4) == 2, 'Returns homebranch of items in biblio, that are pickup_locations');
 
     #Case 8: holdallowed homebranch, hold_fulfillment_policy homebranch, HomeOrHoldingBranch 'homebranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'homebranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'homebranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -435,10 +487,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_4) == 0 && scalar(@pl_2_1) == 0, 'No pickup locations returned');
 
     #Case 9: holdallowed holdgroup, hold_fulfillment_policy homebranch
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        3, 'homebranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 3,
+                hold_fulfillment_policy => 'homebranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -450,10 +509,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_4) == 0, 'No pickup locations returned');
 
     #Case 10: holdallowed any, hold_fulfillment_policy holdingbranch
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        2, 'holdingbranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 2,
+                hold_fulfillment_policy => 'holdingbranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -464,10 +530,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 2 && scalar(@pl_1_4) == 2 && scalar(@pl_2_1) == 2 && scalar(@pl_2_4) == 2, 'Returns holdingbranch of items in biblio, that are pickup_locations');
 
     #Case 11: holdallowed homebranch, hold_fulfillment_policy holdingbranch, HomeOrHoldingBranch 'homebranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'holdingbranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'holdingbranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -479,10 +552,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_4) == 0 && scalar(@pl_2_1) == 0, 'No pickup locations returned');
 
     #Case 12: holdallowed holdgroup, hold_fulfillment_policy holdingbranch
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        3, 'holdingbranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 3,
+                hold_fulfillment_policy => 'holdingbranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -495,10 +575,17 @@ subtest 'pickup_locations' => sub {
     t::lib::Mocks::mock_preference('HomeOrHoldingBranch', 'holdingbranch');
 
     #Case 13: holdallowed homebranch, hold_fulfillment_policy any, HomeOrHoldingBranch 'holdingbranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'any'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'any',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -510,10 +597,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 0, 'No pickup locations returned');
 
     #Case 14: holdallowed homebranch, hold_fulfillment_policy holdgroup, HomeOrHoldingBranch 'holdingbranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'holdgroup'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'holdgroup',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -525,10 +619,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 0, 'No pickup locations returned');
 
     #Case 15: holdallowed homebranch, hold_fulfillment_policy homebranch, HomeOrHoldingBranch 'holdingbranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'homebranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'homebranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );
@@ -541,10 +642,17 @@ subtest 'pickup_locations' => sub {
     ok(scalar(@pl_1_1) == 0 && scalar(@pl_1_4) == 0, 'No pickup locations returned');
 
     #Case 16: holdallowed homebranch, hold_fulfillment_policy holdingbranch, HomeOrHoldingBranch 'holdingbranch'
-    $dbh->do(
-        q{UPDATE default_circ_rules set holdallowed = ?, hold_fulfillment_policy = ?},
-        {},
-        1, 'holdingbranch'
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode => undef,
+            itemtype   => undef,
+            categorycode => undef,
+            rules => {
+                holdallowed => 1,
+                hold_fulfillment_policy => 'holdingbranch',
+                returnbranch => 'any'
+            }
+        }
     );
 
     @pl_1_1 = $biblio1->pickup_locations( { patron => $patron1 } );

@@ -443,7 +443,7 @@
                                 From any library
                             </option>
 
-			    [% IF holdallowed == 3 %]
+                            [% IF holdallowed == 3 %]
                             <option value="3" selected="selected">
                             [% ELSE %]
                             <option value="3">
@@ -486,7 +486,7 @@
                                 </option>
                             [% END %]
 
-			    [% IF hold_fulfillment_policy == 'holdgroup' %]
+                            [% IF hold_fulfillment_policy == 'holdgroup' %]
                                 <option value="holdgroup" selected="selected">
                                     item's hold group
                                 </option>
@@ -759,7 +759,7 @@
                             <td>
                                 [% IF holdallowed == 2 %]
                                     <span>From any library</span>
-				[% ELSIF holdallowed == 3 %]
+                                [% ELSIF holdallowed == 3 %]
                                     <span>From local hold group</span>
                                 [% ELSIF holdallowed == 1 %]
                                     <span>From home library</span>
