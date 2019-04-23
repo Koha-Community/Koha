@@ -741,7 +741,7 @@ if ($frameworkcode eq 'FA'){
     # Only use the advanced editor for non-fast-cataloging.
     # breedingid is not handled because those would only come off a Z39.50
     # search initiated by the basic editor.
-    print $input->redirect( '/cgi-bin/koha/cataloguing/editor.pl' . ( $biblionumber ? ( '#catalog/' . $biblionumber ) : '' ) );
+    print $input->redirect( '/cgi-bin/koha/cataloguing/editor.pl' . ( $biblionumber ? ( ($op eq 'duplicate'?'#duplicate/':'#catalog/') . $biblionumber ) : '' ) );
     exit;
 }
 
