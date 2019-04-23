@@ -31,6 +31,27 @@ Koha::Hold - Koha Hold object class
 
 =cut
 
+=head3 delete
+
+=cut
+
+sub delete {
+    my ($self) = @_;
+
+    my $branchcode = $self->branchcode eq '*' ? undef : $self->branchcode;
+    my $categorycode = $self->categorycode eq '*' ? undef : $self->categorycode;
+    my $itemtype = $self->itemtype eq '*' ? undef : $self->itemtype;
+
+    Koha::CirculationRules->search({
+        branchcode   => $branchcode,
+        itemtype     => $itemtype,
+        categorycode => $categorycode,
+    })->delete;
+
+    $self->SUPER::delete;
+
+}
+
 =head3 type
 
 =cut

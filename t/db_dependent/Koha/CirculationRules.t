@@ -33,7 +33,7 @@ $schema->storage->txn_begin;
 my $builder = t::lib::TestBuilder->new;
 
 subtest 'set_rule + get_effective_rule' => sub {
-    plan tests => 11;
+    plan tests => 13;
 
     my $categorycode = $builder->build_object( { class => 'Koha::Patron::Categories' } )->categorycode;
     my $itemtype     = $builder->build_object( { class => 'Koha::ItemTypes' } )->itemtype;
@@ -232,6 +232,13 @@ subtest 'set_rule + get_effective_rule' => sub {
     is( $rule->rule_value, 8,
         'More specific rule is returned when branchcode, categorycode and itemtype exist'
     );
+
+    my $our_branch_rules = Koha::CirculationRules->search({branchcode => $branchcode});
+    is( $our_branch_rules->count, 4, "We added 8 rules");
+    $our_branch_rules->delete;
+    is( $our_branch_rules->count, 0, "We deleted 8 rules");
+
+
 };
 
 $schema->storage->txn_rollback;

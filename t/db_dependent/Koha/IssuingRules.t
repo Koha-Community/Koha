@@ -19,11 +19,12 @@
 
 use Modern::Perl;
 
-use Test::More tests => 3;
+use Test::More tests => 4;
 
 use Benchmark;
 
 use Koha::IssuingRules;
+use Koha::CirculationRules;
 
 use t::lib::TestBuilder;
 use t::lib::Mocks;
@@ -304,6 +305,44 @@ subtest 'get_onshelfholds_policy' => sub {
     is( Koha::IssuingRules->get_onshelfholds_policy({ item => $item, patron => $patron }), 0, 'Should be zero' );
     Koha::IssuingRule->new({ categorycode => $patron->categorycode, itemtype => $item->itype, branchcode => $item->holdingbranch, onshelfholds => "2" })->store;
     is( Koha::IssuingRules->get_onshelfholds_policy({ item => $item, patron => $patron }), 2, 'Should be two now' );
+};
+
+subtest 'delete' => sub {
+    plan tests => 1;
+
+    my $itemtype = $builder->build_object({ class => 'Koha::ItemTypes' });
+    my $library  = $builder->build_object({ class => 'Koha::Libraries' });
+    my $category = $builder->build_object({ class => 'Koha::Patron::Categories' });
+
+    # We make an issuing rule
+    my $issue_rule = $builder->build_object({ class => 'Koha::IssuingRules', value => {
+            categorycode => $category->categorycode,
+            itemtype     => $itemtype->itemtype,
+            branchcode   => $library->branchcode
+        }
+    });
+
+    my $count = Koha::CirculationRules->search()->count;
+    # Note how many circulation rules we start with
+
+    # We make some circulation rules for the same thing
+    $builder->build_object({ class => 'Koha::CirculationRules', value => {
+            categorycode => $category->categorycode,
+            itemtype     => $itemtype->itemtype,
+            branchcode   => $library->branchcode
+        }
+    });
+    $builder->build_object({ class => 'Koha::CirculationRules', value => {
+            categorycode => $category->categorycode,
+            itemtype     => $itemtype->itemtype,
+            branchcode   => $library->branchcode
+        }
+    });
+
+    # Now we delete the issuing rule
+    $issue_rule->delete;
+    is( Koha::CirculationRules->search()->count ,$count, "We remove related circ rules with our issuing rule");
+
 };
 
 sub _row_match {

@@ -162,6 +162,21 @@ sub set_rules {
     return $rule_objects;
 }
 
+=head3 delete
+
+Delete a set of circulation rules, needed for cleaning up when deleting issuingrules
+
+=cut
+
+sub delete {
+    my ( $self ) = @_;
+
+    while ( my $rule = $self->next ){
+        $rule->delete;
+    }
+
+}
+
 =head3 type
 
 =cut

@@ -82,8 +82,12 @@ if ($op eq 'delete') {
     my $categorycode = $input->param('categorycode');
     $debug and warn "deleting $1 $2 $branch";
 
-    my $sth_Idelete = $dbh->prepare("delete from issuingrules where branchcode=? and categorycode=? and itemtype=?");
-    $sth_Idelete->execute($branch, $categorycode, $itemtype);
+    Koha::IssuingRules->find({
+        branchcode   => $branch,
+        categorycode => $categorycode,
+        itemtype     => $itemtype
+    })->delete;
+
 }
 elsif ($op eq 'delete-branch-cat') {
     my $categorycode  = $input->param('categorycode');
