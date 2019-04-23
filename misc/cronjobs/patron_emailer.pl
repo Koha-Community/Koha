@@ -25,6 +25,7 @@ BEGIN {
     eval { require "$FindBin::Bin/../kohalib.pl" };
 }
 
+use Koha::Script -cron;
 use Getopt::Long;
 use Pod::Usage;
 
