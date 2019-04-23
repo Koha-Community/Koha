@@ -527,7 +527,7 @@
     [% INCLUDE 'calendar.inc' %]
     [% Asset.js("lib/jquery/plugins/jquery.checkboxes.min.js") | $raw %]
     <script>
-        var prefilters = '[% prefilters | html %]';
+        var prefilters = '[% prefilters %]';
         // Set column settings
         var columns_settings = [% ColumnsSettings.GetColumns( 'illrequests', 'ill-requests', 'ill-requests', 'json' ) %];
     </script>
