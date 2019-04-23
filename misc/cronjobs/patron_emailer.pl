@@ -54,7 +54,7 @@ patron_emailer.pl
     --verbose                    increased verbosity, will print notices and errors
     --commit                     send emails, without this script will only report
 
-head1 OPTIONS
+=head1 OPTIONS
 
 =over 8
 
