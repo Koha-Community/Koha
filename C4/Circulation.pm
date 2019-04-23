@@ -1470,15 +1470,14 @@ sub AddIssue {
             # If it costs to borrow this book, charge it to the patron's account.
             my ( $charge, $itemtype ) = GetIssuingCharges( $item_object->itemnumber, $borrower->{'borrowernumber'} );
             if ( $charge > 0 ) {
-                my $description = "Rental";
-                AddIssuingCharge( $issue, $charge, $description );
+                AddIssuingCharge( $issue, $charge, 'rent' );
             }
 
             my $itemtype_object = Koha::ItemTypes->find( $item_object->effective_itemtype );
             if ( $itemtype_object ) {
                 my $accumulate_charge = $fees->accumulate_rentalcharge();
                 if ( $accumulate_charge > 0 ) {
-                    AddIssuingCharge( $issue, $accumulate_charge, 'Daily rental' ) if $accumulate_charge > 0;
+                    AddIssuingCharge( $issue, $accumulate_charge, 'rent_daily' ) if $accumulate_charge > 0;
                     $charge += $accumulate_charge;
                     $item_unblessed->{charge} = $charge;
                 }
@@ -2912,8 +2911,7 @@ sub AddRenewal {
     # Charge a new rental fee, if applicable
     my ( $charge, $type ) = GetIssuingCharges( $itemnumber, $borrowernumber );
     if ( $charge > 0 ) {
-        my $description = "Renewal of Rental Item " . $biblio->title . " " .$item_object->barcode;
-        AddIssuingCharge($issue, $charge, $description);
+        AddIssuingCharge($issue, $charge, 'rent_renew');
     }
 
     # Charge a new accumulate rental fee, if applicable
@@ -2921,8 +2919,7 @@ sub AddRenewal {
     if ( $itemtype_object ) {
         my $accumulate_charge = $fees->accumulate_rentalcharge();
         if ( $accumulate_charge > 0 ) {
-            my $type_desc = "Renewal of Daily Rental Item " . $biblio->title . " $item_unblessed->{'barcode'}";
-            AddIssuingCharge( $issue, $accumulate_charge, $type_desc )
+            AddIssuingCharge( $issue, $accumulate_charge, 'rent_daily_renew' )
         }
         $charge += $accumulate_charge;
     }
@@ -3244,12 +3241,12 @@ sub _get_discount_from_rule {
 
 =head2 AddIssuingCharge
 
-  &AddIssuingCharge( $checkout, $charge, [$description] )
+  &AddIssuingCharge( $checkout, $charge, $type )
 
 =cut
 
 sub AddIssuingCharge {
-    my ( $checkout, $charge, $description ) = @_;
+    my ( $checkout, $charge, $type ) = @_;
 
     # FIXME What if checkout does not exist?
 
@@ -3257,12 +3254,11 @@ sub AddIssuingCharge {
     my $accountline = $account->add_debit(
         {
             amount      => $charge,
-            description => $description,
             note        => undef,
             user_id     => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
             library_id  => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
             interface   => C4::Context->interface,
-            type        => 'rent',
+            type        => $type,
             item_id     => $checkout->itemnumber,
             issue_id    => $checkout->issue_id,
         }

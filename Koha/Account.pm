@@ -444,6 +444,9 @@ $debit_type can be any of:
   - sundry
   - processing
   - rent
+  - rent_daily
+  - rent_renewal
+  - rent_daily_renewal
   - reserve
   - manual
 
@@ -709,6 +712,9 @@ our $offset_type = {
     'processing'       => 'Processing Fee',
     'lost_item'        => 'Lost Item',
     'rent'             => 'Rental Fee',
+    'rent_daily'       => 'Rental Fee',
+    'rent_renew'       => 'Rental Fee',
+    'rent_daily_renew' => 'Rental Fee',
     'overdue'          => 'OVERDUE',
     'manual_debit'     => 'Manual Debit',
     'hold_expired'     => 'Hold Expired'
@@ -731,16 +737,19 @@ our $account_type_credit = {
 =cut
 
 our $account_type_debit = {
-    'account'       => 'A',
-    'overdue'       => 'OVERDUE',
-    'lost_item'     => 'LOST',
-    'new_card'      => 'N',
-    'sundry'        => 'M',
-    'processing'    => 'PF',
-    'rent'          => 'Rent',
-    'reserve'       => 'Res',
-    'manual_debit'  => 'M',
-    'hold_expired'  => 'HE'
+    'account'          => 'A',
+    'overdue'          => 'OVERDUE',
+    'lost_item'        => 'LOST',
+    'new_card'         => 'N',
+    'sundry'           => 'M',
+    'processing'       => 'PF',
+    'rent'             => 'RENT',
+    'rent_daily'       => 'RENT_DAILY',
+    'rent_renew'       => 'RENT_RENEW',
+    'rent_daily_renew' => 'RENT_DAILY_RENEW',
+    'reserve'          => 'Res',
+    'manual_debit'     => 'M',
+    'hold_expired'     => 'HE'
 };
 
 =head1 AUTHORS
