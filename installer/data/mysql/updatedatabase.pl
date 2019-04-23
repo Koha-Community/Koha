@@ -16355,7 +16355,7 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 22607 - Set default value of issues.renewals to 0)\n";
 }
 
-$DBversion = '18.05.11.002'; 
+$DBversion = '18.05.11.002';
 if( CheckVersion( $DBversion ) ) {
     my $table_sth = $dbh->prepare('SHOW CREATE TABLE `search_marc_map`');
     $table_sth->execute();
