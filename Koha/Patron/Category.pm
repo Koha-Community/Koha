@@ -18,6 +18,7 @@ package Koha::Patron::Category;
 use Modern::Perl;
 
 use Carp;
+use List::MoreUtils qw(any);
 
 use C4::Members::Messaging;
 
@@ -252,6 +253,24 @@ sub effective_change_password {
     return ( defined $self->change_password )
         ? $self->change_password
         : C4::Context->preference('OpacPasswordChange');
+}
+
+=head3 override_hidden_items
+
+    if ( $patron->category->override_hidden_items ) {
+        ...
+    }
+
+Returns a boolean that if patrons of this category are exempt from the OPACHiddenItems policies
+
+TODO: Remove on bug 22547
+
+=cut
+
+sub override_hidden_items {
+    my ($self) = @_;
+    return any { $_ eq $self->categorycode }
+    split( /\|/, C4::Context->preference('OpacHiddenItemsExceptions') );
 }
 
 =head2 Internal methods
