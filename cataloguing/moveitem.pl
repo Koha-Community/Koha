@@ -61,7 +61,7 @@ my ($template, $loggedinuser, $cookie) = get_template_and_user(
 
 
 my $biblio = Koha::Biblios->find( $biblionumber );
-$template->param(bibliotitle => $biblio->title);
+$template->param(biblio => $biblio);
 $template->param(biblionumber => $biblionumber);
 
 # If we already have the barcode of the item to move and the biblionumber to move the item to

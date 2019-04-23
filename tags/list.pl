@@ -61,7 +61,6 @@ else {
         my $taglist = get_tag_rows( { term => $tag } );
         for ( @{$taglist} ) {
             my $dat    = &GetBiblioData( $_->{biblionumber} );
-            $dat->{'subtitle'} = C4::Biblio::SplitKohaFields($dat->{'subtitle'}),
             my @items = GetItemsInfo( $_->{biblionumber} );
             $dat->{biblionumber} = $_->{biblionumber};
             $dat->{tag_id}       = $_->{tag_id};

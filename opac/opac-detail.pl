@@ -767,7 +767,6 @@ if (!C4::Context->preference("OPACXSLTDetailsDisplay") ) {
 }
 
 my $marcnotesarray   = GetMarcNotes   ($record,$marcflavour);
-my $subtitle         = GetRecordValue('subtitle', $record);
 
 if( C4::Context->preference('ArticleRequests') ) {
     my $patron = $borrowernumber ? Koha::Patrons->find($borrowernumber) : undef;
@@ -790,7 +789,6 @@ if( C4::Context->preference('ArticleRequests') ) {
                      itemdata_copynumber     => $itemfields{copynumber},
                      itemdata_itemnotes      => $itemfields{itemnotes},
                      itemdata_location       => $itemfields{location_description},
-                     subtitle                => $subtitle,
                      OpacStarRatings         => C4::Context->preference("OpacStarRatings"),
     );
 

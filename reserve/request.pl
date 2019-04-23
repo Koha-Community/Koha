@@ -630,12 +630,8 @@ foreach my $biblionumber (@biblionumbers) {
                      date              => $date,
                      biblionumber      => $biblionumber,
                      findborrower      => $findborrower,
-                     title             => $biblio->title,
-                     subtitle          => $biblio->subtitle,
-                     part_number       => $biblio->part_number,
-                     part_name         => $biblio->part_name,
-                     author            => $biblio->author,
-                     holdsview => 1,
+                     biblio            => $biblio,
+                     holdsview         => 1,
                      C4::Search::enabled_staff_search_views,
                     );
 

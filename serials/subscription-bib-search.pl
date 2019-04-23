@@ -124,6 +124,9 @@ if ( $op eq "do_search" && $query ) {
         $resultsloop{highlight}       = ( $i % 2 ) ? (1) : (0);
         $resultsloop{title}           = $biblio->{'title'};
         $resultsloop{subtitle}        = $biblio->{'subtitle'};
+        $resultsloop{medium}          = $biblio->{'medium'};
+        $resultsloop{part_number}     = $biblio->{'part_number'};
+        $resultsloop{part_name}       = $biblio->{'part_name'};
         $resultsloop{biblionumber}    = $biblio->{'biblionumber'};
         $resultsloop{author}          = $biblio->{'author'};
         $resultsloop{publishercode}   = $biblio->{'publishercode'};

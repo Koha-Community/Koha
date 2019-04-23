@@ -32,11 +32,12 @@ Your list : [% shelfname | $raw %]
         <li>
             <span>
                 [% BIBLIO_RESULT.title | $raw %]
-                [% IF ( BIBLIO_RESULT.subtitle.size ) %]
-                  [% FOREACH subtitle IN BIBLIO_RESULT.subtitle %]
+                [% IF ( BIBLIO_RESULT.subtitle ) %]
+                  [% FOREACH subtitle IN BIBLIO_RESULT.subtitle.split(' | ') %]
                     [% subtitle | $raw %]
                   [% END %]
                 [% END %]
+                [% BIBLIO_RESULT.part_number | $raw %] [% BIBLIO_RESULT.part_name | $raw %]
             </span>
 
             <p>

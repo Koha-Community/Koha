@@ -110,7 +110,7 @@ if (@hostitems){
         push (@items,@hostitems);
 }
 
-my $subtitle = GetRecordValue('subtitle', $record);
+my $biblio = Koha::Biblios->find( $biblionumber );
 
 my $totalcount=@all_items;
 my $showncount=@items;
@@ -258,7 +258,7 @@ $template->param(
     biblioitemnumber    => $bi,
     itemnumber          => $itemnumber,
     z3950_search_params => C4::Search::z3950_search_args(GetBiblioData($biblionumber)),
-    subtitle            => $subtitle,
+    biblio              => $biblio->unblessed,
 );
 $template->param(ONLY_ONE => 1) if ( $itemnumber && $showncount != @items );
 $template->{'VARS'}->{'searchid'} = $query->param('searchid');
@@ -291,7 +291,6 @@ $template->param (countorders => $count_orders_using_biblio);
 my $count_deletedorders_using_biblio = scalar @deletedorders_using_biblio ;
 $template->param (countdeletedorders => $count_deletedorders_using_biblio);
 
-my $biblio = Koha::Biblios->find( $biblionumber );
 my $holds = $biblio->holds;
 $template->param( holdcount => $holds->count );
 

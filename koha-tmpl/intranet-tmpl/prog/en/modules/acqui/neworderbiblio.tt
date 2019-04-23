@@ -49,8 +49,7 @@
       [% FOREACH biblio IN resultsloop %]
         <tr>
             <td>
-                <p><span class="title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% biblio.title | html %]</a></span>
-                [% FOREACH subtitle IN biblio.subtitles %] <span class="subtitle">[% subtitle | html %]</span>[% END %]
+                <p><span class="title"><a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]">[% INCLUDE 'biblio-title.inc' %]</a></span>
                 [% IF ( biblio.author ) %]  by <span class="author">[% biblio.author | html %]</span>,[% END %]</p>
                 <p>[% IF ( biblio.isbn ) %] [% biblio.isbn | html %][% END %]
                 [% IF ( biblio.pages ) %] - [% biblio.pages | html %][% END %]

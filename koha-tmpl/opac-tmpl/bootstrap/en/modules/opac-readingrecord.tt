@@ -137,11 +137,11 @@
                                                 </td>
                                                 <td>
                                                 [% IF  issue.BiblioDefaultViewmarc %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title | html %] [% IF  issue.subtitle  %][% FOREACH subtitl IN issue.subtitle %][% subtitl | html %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% INCLUDE 'biblio-title.inc' biblio=issue %]</a>
                                                 [% ELSIF issue.BiblioDefaultViewisbd %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title | html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl | html %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% issue.biblionumber |url %]">[% INCLUDE 'biblio-title.inc' biblio=issue %]</a>
                                                 [% ELSE %]
-                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% issue.title | html %] [% IF issue.subtitle %][% FOREACH subtitl IN issue.subtitle %][% subtitl | html %][% END %][% END %]</a>
+                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% issue.biblionumber |url %]">[% INCLUDE 'biblio-title.inc' biblio=issue %]</a>
                                                 [% END %]
                                                 <p class="results-summary item-details">[% issue.author | html %]</p>
 

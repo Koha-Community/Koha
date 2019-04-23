@@ -6,7 +6,7 @@
 [% USE Price %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Item details for [% title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl | html %][% END %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Item details for [% INCLUDE 'biblio-title-head.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 <style>h3{padding-top: 1em; border-top: 2px solid #CCCCCC;}#exportLabelexportModal_{border-top: 0px;}</style>
 </head>
@@ -15,7 +15,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item details for <i>[% title | html %] [% FOREACH subtitl IN subtitle %] [% subtitl | html %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Item details for <i>[% INCLUDE 'biblio-title.inc' %]</i></div>
 
 <div class="main container-fluid">
     <div class="row">

@@ -37,7 +37,7 @@
      <atom:link rel="search" type="application/opensearchdescription+xml" href="[% OPACBaseURL | url %]/cgi-bin/koha/opac-search.pl?[% SEARCH_RESULT.query_cgi | $raw %][% SEARCH_RESULT.limit_cgi | url %]&amp;sort_by=[% SEARCH_RESULT.sort_by |uri %]&amp;format=opensearchdescription"/>
      <opensearch:Query role="request" searchTerms="[% SEARCH_RESULT.query_desc |uri %][% SEARCH_RESULT.limit_desc |uri %]" startPage="[% SEARCH_RESULT.page | html %]" />
      <item>
-       <title>[% SEARCH_RESULT.title | html %] [% FOREACH subtitl IN SEARCH_RESULT.subtitle %], [% subtitl | html %][% END %]</title>
+       <title>[% INCLUDE 'biblio-title-head.inc' biblio=SEARCH_RESULT %]</title>
        <dc:identifier>ISBN [% SEARCH_RESULT.isbn | html %]</dc:identifier>
        <link>[% IF ( SEARCH_RESULT.BiblioDefaultViewmarc ) %][% OPACBaseURL | html %]/cgi-bin/koha/opac-MARCdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% ELSE %][% IF ( SEARCH_RESULT.BiblioDefaultViewisbd ) %][% OPACBaseURL | html %]/cgi-bin/koha/opac-ISBDdetail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% ELSE %][% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% SEARCH_RESULT.biblionumber | html %][% END %][% END %]</link>
        <description><![CDATA[

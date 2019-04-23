@@ -99,7 +99,7 @@ while ( my $library = $libraries->next ) {
             %getransf = (
                 %getransf,
                 title          => $biblio->title,
-                subtitle       => C4::Biblio::SplitKohaField($biblio->{'subtitle'}),
+                subtitle       => $biblio->subtitle,
                 medium         => $biblio->medium,
                 part_number    => $biblio->part_number,
                 part_name      => $biblio->part_name,

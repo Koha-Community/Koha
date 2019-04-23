@@ -295,7 +295,6 @@ if ( $op eq 'view' ) {
                     $this_item->{notforloan}        = $itemtype->notforloan;
                 }
                 $this_item->{'coins'}           = $biblio->get_coins;
-                $this_item->{'subtitle'}        = GetRecordValue( 'subtitle', $record ),
                 $this_item->{'normalized_upc'}  = GetNormalizedUPC( $record, $marcflavour );
                 $this_item->{'normalized_ean'}  = GetNormalizedEAN( $record, $marcflavour );
                 $this_item->{'normalized_oclc'} = GetNormalizedOCLCNumber( $record, $marcflavour );

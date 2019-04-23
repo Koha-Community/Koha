@@ -248,7 +248,7 @@
                                                 </td>[% END # / IF JacketImages %]
 
                                                 <td class="title">
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% ISSUE.title | html %] [% FOREACH subtitl IN ISSUE.subtitle %] [% subtitl | html %][% END %]</a>
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ISSUE.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=ISSUE %]</a>
                                                     [% IF ( ISSUE.enumchron ) %] [% ISSUE.enumchron | html %][% END %]
                                                 </td>
 
@@ -520,9 +520,9 @@
                                                 [% END # /IF jacketcell %]
 
                                                 <td>
-                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber | html %]">[% OVERDUE.title | html %] [% FOREACH subtitl IN OVERDUE.subtitle %] [% subtitl | html %][% END %]
-                                                    </a>
-                                                    <span class="item-details">[% OVERDUE.author | html %]</span></td>
+                                                    <a class="title" href="/cgi-bin/koha/opac-detail.pl?bib=[% OVERDUE.biblionumber | html %]">[% INCLUDE 'biblio-title.inc' biblio=OVERDUE %]</a>
+                                                    <span class="item-details">[% OVERDUE.author | html %]</span>
+                                                </td>
 
                                                 [% UNLESS ( item_level_itypes ) %]
                                                     <td>
@@ -611,7 +611,7 @@
                                         [% FOREACH ar IN logged_in_user.article_requests_current %]
                                                 <td class="article-request-record-title">
                                                     <a class="article-request-title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% ar.biblionumber | html %]">
-                                                        [% ar.biblio.title | html %]
+                                                        [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
                                                         [% ar.item.enumchron | html %]
                                                     </a>
                                                     [% ar.biblio.author | html %]

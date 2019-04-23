@@ -77,7 +77,8 @@
             <td>
             <p>
                 [% INCLUDE 'biblio-default-view.inc' biblionumber = reserveloo.biblionumber %]
-                [% reserveloo.title | html %] [% FOREACH s IN reserveloo.subtitle %] [% s | html %][% END %] [% reserveloo.part_number | html %] [% reserveloo.part_name | html %]</a></p>
+                    [% INCLUDE 'biblio-title.inc' biblio=reserveloo %]
+                </a></p>
                 [% IF ( reserveloo.author ) %]<p> by [% reserveloo.author | html %]</p>[% END %]
             </td>
         [% ELSE %]

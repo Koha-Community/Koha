@@ -96,7 +96,7 @@ for my $result (@$reviews){
 	$result->{normalized_oclc} = GetNormalizedOCLCNumber($record,$marcflavour);
 	$result->{normalized_isbn} = GetNormalizedISBN(undef,$record,$marcflavour);
     $result->{title} = $biblio->title;
-    $result->{subtitle} = GetRecordValue('subtitle', $record );
+    $result->{subtitle} = $biblio->subtitle;
     $result->{medium} = $biblio->medium;
     $result->{part_number} = $biblio->part_number;
     $result->{part_name} = $biblio->part_name;

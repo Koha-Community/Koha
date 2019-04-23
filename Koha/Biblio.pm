@@ -80,21 +80,6 @@ sub metadata {
     return Koha::Biblio::Metadata->_new_from_dbic($metadata);
 }
 
-=head3 subtitles
-
-my @subtitles = $biblio->subtitles();
-
-Returns list of subtitles for a record according to the framework.
-
-=cut
-
-sub subtitles {
-    my ( $self ) = @_;
-
-    my @subtitles = split( / \| /, $self->subtitle // '' );
-    return @subtitles;
-}
-
 =head3 can_article_request
 
 my $bool = $biblio->can_article_request( $borrower );

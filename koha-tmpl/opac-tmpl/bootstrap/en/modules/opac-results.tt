@@ -351,15 +351,7 @@
                                                         [% END %]
                                                     [% END %]
 
-                                                    [% IF ( SEARCH_RESULT.title ) %]
-                                                        [% SEARCH_RESULT.title | html %]
-                                                    [% ELSE %]
-                                                        No title
-                                                    [% END %]
-
-                                                    [% FOREACH subtitl IN SEARCH_RESULT.subtitle %]
-                                                        , [% subtitl | html %]
-                                                    [% END %]</a>
+                                                    [% INCLUDE 'biblio-title.inc' biblio=SEARCH_RESULT %]
 
                                                     [% IF ( SEARCH_RESULT.author ) %]
                                                         by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% SEARCH_RESULT.author |url %]" title="Search for works by this author" class="author">[% SEARCH_RESULT.author | html %]</a>

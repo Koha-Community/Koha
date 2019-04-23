@@ -51,12 +51,6 @@ warning_is { $ret = BiblioAutoLink(undef, q{}) }
 
 is( $ret, 0, 'BiblioAutoLink returns zero if not passed rec');
 
-warning_is { $ret = GetRecordValue('100', undef) }
-           { carped => 'GetRecordValue called with undefined record'},
-           "GetRecordValue returns carped warning on undef record";
-
-ok( !defined $ret, 'GetRecordValue returns undef if not passed rec');
-
 warning_is { @arr = LinkBibHeadingsToAuthorities(q{}, q{}) }
            { carped => 'LinkBibHeadingsToAuthorities called on undefined bib record'},
            "LinkBibHeadingsToAuthorities returns carped warning on undef record";

@@ -62,7 +62,6 @@ foreach my $biblionumber ( @bibs ) {
     my $dat              = &GetBiblioData($biblionumber);
     next unless $dat;
     my $record           = &GetMarcBiblio({ biblionumber => $biblionumber });
-    $dat->{subtitle}     = GetRecordValue('subtitle', $record);
     my $marcnotesarray   = GetMarcNotes( $record, $marcflavour );
     my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
     my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );

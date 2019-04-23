@@ -140,6 +140,7 @@ $template->param (
     ocoins => $biblio->get_coins,
     C4::Search::enabled_staff_search_views,
     searchid            => scalar $query->param('searchid'),
+    biblio              => $biblio,
 );
 
 my @allorders_using_biblio = GetOrdersByBiblionumber ($biblionumber);

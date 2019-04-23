@@ -101,7 +101,6 @@ if ( $email ) {
 
         my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
         my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
-        my $subtitle         = GetRecordValue('subtitle', $record);
 
         my @items = GetItemsInfo( $biblionumber );
 
@@ -110,7 +109,6 @@ if ( $email ) {
         $dat->{MARCAUTHORS}    = $marcauthorsarray;
         $dat->{'biblionumber'} = $biblionumber;
         $dat->{ITEM_RESULTS}   = \@items;
-        $dat->{subtitle}       = $subtitle;
         $dat->{HASAUTHORS}     = $dat->{'author'} || @$marcauthorsarray;
 
         $iso2709 .= $record->as_usmarc();

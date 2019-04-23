@@ -21,7 +21,8 @@
     </tr>
     [% FOREACH resultsloo IN resultsloop %]
         <tr>
-            <td class="title">[% resultsloo.title | html %] [% resultsloo.subtitle | html %]
+            <td class="title">
+                [% INCLUDE 'biblio-title.inc' biblio=resultsloo %]
             </td>
             <td>
                 [% resultsloo.author | html %]

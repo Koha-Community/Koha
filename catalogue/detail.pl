@@ -141,8 +141,7 @@ my $marcauthorsarray = GetMarcAuthors( $record, $marcflavour );
 my $marcsubjctsarray = GetMarcSubjects( $record, $marcflavour );
 my $marcseriesarray  = GetMarcSeries($record,$marcflavour);
 my $marcurlsarray    = GetMarcUrls    ($record,$marcflavour);
-my $marchostsarray  = GetMarcHosts($record,$marcflavour);
-my $subtitle         = GetRecordValue('subtitle', $record);
+my $marchostsarray   = GetMarcHosts($record,$marcflavour);
 
 my $itemtypes = { map { $_->{itemtype} => $_ } @{ Koha::ItemTypes->search->unblessed } };
 
@@ -378,7 +377,6 @@ $template->param(
     MARCURLS => $marcurlsarray,
     MARCISBNS => $marcisbnsarray,
     MARCHOSTS => $marchostsarray,
-    subtitle    => $subtitle,
     itemdata_ccode      => $itemfields{ccode},
     itemdata_enumchron  => $itemfields{enumchron},
     itemdata_uri        => $itemfields{uri},

@@ -149,12 +149,7 @@
                                                 [% ELSE %]
                                                     <span class="tdlabel">Title:</span>
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% MY_TAG.biblionumber | html %]">
-                                                        [% MY_TAG.title | html %]
-                                                        [% IF ( MY_TAG.subtitle ) %]
-                                                            [% FOREACH subtitle IN MY_TAG.subtitle %]
-                                                                [% subtitle | html %]
-                                                            [% END %]
-                                                        [% END %]
+                                                        [% INCLUDE 'biblio-title.inc' biblio=MY_TAG %]
                                                     </a>
                                                     [% IF ( MY_TAG.author ) %]
                                                         by [% MY_TAG.author | html %]

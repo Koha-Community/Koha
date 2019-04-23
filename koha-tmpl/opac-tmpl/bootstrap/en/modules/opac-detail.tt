@@ -6,6 +6,7 @@
 [% USE Branches %]
 [% USE ColumnsSettings %]
 [% USE AuthorisedValues %]
+[% USE Stash %]
 [% SET TagsShowEnabled = ( ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsShowOnDetail ) %]
 [% SET TagsInputEnabled = ( ( Koha.Preference( 'opacuserlogin' ) == 1 ) && ( Koha.Preference( 'TagsEnabled' ) == 1 ) && TagsInputOnDetail ) %]
 [% IF Koha.Preference('AmazonAssocTag') %]
@@ -30,7 +31,7 @@
 [% END %]
 
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% title | html %][% FOREACH subtitl IN subtitle %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %] [% subtitl | html %][% END %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Details for: [% INCLUDE 'biblio-title-head.inc' biblio=Stash.stash() %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
     [% Asset.css("lib/emoji-picker/css/emoji.css") | $raw %]
 </head>
@@ -41,7 +42,7 @@
 <div class="main">
     <ul class="breadcrumb">
         <li><a href="/cgi-bin/koha/opac-main.pl">Home</a> <span class="divider">&rsaquo;</span></li>
-        <li><a href="#"><span>Details for: </span>[% title | html %][% FOREACH subtitl IN subtitle %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %] [% subtitl | html %][% END %]</a></li>
+        <li><a href="#"><span>Details for: </span>[% INCLUDE 'biblio-title.inc' biblio=Stash.stash() %]</a></li>
     </ul>
 
     <div class="container-fluid">
@@ -112,7 +113,7 @@
                     [% IF ( OPACXSLTDetailsDisplay ) %]
                         [% XSLTBloc | $raw %]
                     [% ELSE %]
-                        <h1 class="title">[% title | html %][% IF ( subtitle ) %] <span class="subtitle">[% FOREACH subtitl IN subtitle %][% subtitl | html %] [% END %]</span>[% END %]</h1>
+                        <h1 class="title">[% INCLUDE 'biblio-title.inc' biblio=Stash.stash() %]</h1>
                         [% IF ( author ) %]<h5 class="author">by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% author |url %]">[% author | html %]</a></h5>[% END %]
 
                         <span class="results_summary">[% UNLESS ( item_level_itypes ) %]

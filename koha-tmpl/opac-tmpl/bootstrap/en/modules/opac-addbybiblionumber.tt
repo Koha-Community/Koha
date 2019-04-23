@@ -18,7 +18,7 @@
                                 [% END %]
                                 <ul>
                                     [% FOREACH biblio IN biblios %]
-                                        <li> <span class="title">[% biblio.title | html %]</span>
+                                        <li> <span class="title">[% INCLUDE 'biblio-title.inc' %]</span>
                                             [% IF ( biblio.author ) %]<span class="author"> [% biblio.author | html %] </span>[% END %]
                                         </li>
                                     [% END %]

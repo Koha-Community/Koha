@@ -107,12 +107,13 @@
                                                 [% FOREACH SEARCH_RESULT IN SEARCH_RESULTS %]
                                                 <tr>
                                                     <td>
-                                                        <a href="/cgi-bin/koha/opac-search.pl?q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title |url %]&quot;">[% SEARCH_RESULT.title | html %]</a>
+                                                        <a href="/cgi-bin/koha/opac-search.pl?q=[% SEARCH_RESULT.scan_use |url %]&quot;[% SEARCH_RESULT.title |url %]&quot;"><span class="biblio-title">[% SEARCH_RESULT.title | html %]</span></a>
                                                     </td>
                                                     <td>
-                                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle %]
-                                                            [% subtitl | html %]
+                                                        [% FOREACH subtitl IN SEARCH_RESULT.subtitle.split(' | ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %]
+                                                            <span class="subtitle">[% subtitl | html %]</span>
                                                         [% END %]
+                                                        <span class="part-number">[% SEARCH_RESULT.part_number | html %]</span> <span class="part-name">[% SEARCH_RESULT.part_name | html %]</span>
                                                     </td>
                                                 </tr>
                                                 [% END %]

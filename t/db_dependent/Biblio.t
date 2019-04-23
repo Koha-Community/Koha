@@ -382,15 +382,14 @@ sub run_tests {
     # Automatic authority creation
     t::lib::Mocks::mock_preference('BiblioAddsAuthorities', 1);
     t::lib::Mocks::mock_preference('AutoCreateAuthorities', 1);
-    my $authorities_mod = Test::MockModule->new( 'C4::Heading' );
+    my $authorities_mod = Test::MockModule->new( 'C4::AuthoritiesMarc' );
     $authorities_mod->mock(
-        'authorities',
+        'SearchAuthorities',
         sub {
             my @results;
-            return \@results;
+            return \@results, 0;
         }
     );
-
     $success = 0;
     $field = create_author_field('Author Name');
     eval {

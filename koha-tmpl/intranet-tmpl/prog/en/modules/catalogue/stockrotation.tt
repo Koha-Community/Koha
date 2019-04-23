@@ -4,7 +4,7 @@
 [% USE Branches %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>Koha &rsaquo; Catalog &rsaquo; Stock rotation details for [% biblio.title | html %]</title>
+<title>Koha &rsaquo; Catalog &rsaquo; Stock rotation details for [% INCLUDE 'biblio-title-head.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 </head>
 <body id="catalog_stockrotation" class="catalog">
@@ -12,7 +12,7 @@
 [% INCLUDE 'header.inc' %]
 [% INCLUDE 'cat-search.inc' %]
 
-<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Stock rotation details for <i>[% biblio.title | html %][% FOREACH subtitle IN biblio.subtitles %][% subtitle | html %][% END %]</i></div>
+<div id="breadcrumbs"><a href="/cgi-bin/koha/mainpage.pl">Home</a> &rsaquo; <a href="/cgi-bin/koha/catalogue/search.pl">Catalog</a>  &rsaquo; Stock rotation details for <i>[% INCLUDE 'biblio-title.inc' %]</i></div>
 
 <div class="main container-fluid">
     <div class="row">
@@ -22,7 +22,7 @@
 <div id="catalogue_detail_biblio">
 
     [% IF no_op_set %]
-        <h1 class="title">Stock rotation details for [% biblio.title | html %]</h1>
+        <h1 class="title">Stock rotation details for [% INCLUDE 'biblio-title.inc' %]</h1>
         [% IF rotas.count > 0 && items.size > 0 %]
 
             <table class="items_table dataTable no-footer" role="grid">

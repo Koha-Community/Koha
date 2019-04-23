@@ -108,8 +108,6 @@ foreach my $biblionumber ( @bibs ) {
         }
     }
 
-    my $subtitle         = GetRecordValue('subtitle', $record);
-
     my $hasauthors = 0;
     if($dat->{'author'} || @$marcauthorsarray) {
       $hasauthors = 1;
@@ -150,7 +148,6 @@ foreach my $biblionumber ( @bibs ) {
     $dat->{MARCSERIES}  = $marcseriesarray;
     $dat->{MARCURLS}    = $marcurlsarray;
     $dat->{HASAUTHORS}  = $hasauthors;
-    $dat->{subtitle} = $subtitle;
 
     if ( C4::Context->preference("BiblioDefaultView") eq "normal" ) {
         $dat->{dest} = "opac-detail.pl";

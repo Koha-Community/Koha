@@ -129,8 +129,7 @@
                                         <td class="ar-title">
                                             <p>
                                                 <a href="/cgi-bin/koha/circ/request-article.pl?biblionumber=[% ar.biblionumber | uri %]">
-                                                    <strong>[% ar.biblio.title | html %]</strong>
-                                                    [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]
+                                                    [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
                                                 </a>
                                             </p>
 
@@ -237,8 +236,7 @@
                                         <td class="ar-title">
                                             <p>
                                                 <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% ar.biblionumber | uri %]">
-                                                    <strong>[% ar.biblio.title | html %]</strong>
-                                                    [% FOREACH s IN itemsloo.subtitle %] [% s | html %][% END %]
+                                                    [% INCLUDE 'biblio-title.inc' biblio=ar.biblio %]
                                                 </a>
                                             </p>
 

@@ -46,8 +46,7 @@
                                                     <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber |url %]#comments" title="View details for this title">
                                                 [% END %]
                                             [% END %]
-                                            [% IF ( review.title ) %][% review.title | html %][% ELSE %]No title[% END %]
-                                            [% FOREACH subtitl IN review.subtitle %] [% subtitl | html %][% END %]
+                                            [% INCLUDE 'biblio-title.inc' biblio=review %]
                                             </a>
                                             [% IF ( review.author ) %]
                                                 by <a href="/cgi-bin/koha/opac-search.pl?q=au:[% review.author |url %]" title="Search for works by this author" class="author">[% review.author | html %]</a>

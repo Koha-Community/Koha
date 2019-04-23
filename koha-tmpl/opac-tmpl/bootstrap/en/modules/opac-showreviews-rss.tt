@@ -10,7 +10,7 @@
      [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 	 [% FOREACH review IN reviews %]
      <item>
-       <title>New comment on [% review.title | html %] [% FOREACH subtitl IN review.subtitle %], [% subtitl | html %][% END %]</title>
+       <title>New comment on [% INCLUDE 'biblio-title-head.inc' biblio=review %]</title>
        <link>[% OPACBaseURL | html %]/cgi-bin/koha/opac-detail.pl?biblionumber=[% review.biblionumber | html %]#comments</link>
        <description><![CDATA[
 [% IF ( AdlibrisEnabled && review.normalized_isbn ) %]

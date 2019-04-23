@@ -134,8 +134,8 @@ sub GetHoldsQueueItems {
     my @bind_params = ();
     my $query = q/SELECT tmp_holdsqueue.*, biblio.author, items.ccode, items.itype, biblioitems.itemtype, items.location,
                          items.enumchron, items.cn_sort, biblioitems.publishercode,
-                         biblio.copyrightdate, biblio.subtitle, biblio.part_number,
-                         biblio.part_name,
+                         biblio.copyrightdate, biblio.subtitle, biblio.medium,
+                         biblio.part_number, biblio.part_name
                          biblioitems.publicationyear, biblioitems.pages, biblioitems.size,
                          biblioitems.isbn, items.copynumber
                   FROM tmp_holdsqueue
@@ -157,9 +157,6 @@ sub GetHoldsQueueItems {
             $row->{itype} = $row->{itemtype};
         }
         delete $row->{itemtype};
-
-        my @subtitles = split(/ \| /, $row->{'subtitle'} // '' );
-        $row->{'subtitle'} = \@subtitles;
 
         push @$items, $row;
     }

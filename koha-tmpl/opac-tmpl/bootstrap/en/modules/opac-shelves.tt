@@ -375,15 +375,7 @@
                                                             [% END %]
                                                         [% END %]
 
-                                                        [% IF ( itemsloo.title ) %]
-                                                            [% itemsloo.title | html %]
-                                                        [% ELSE %]
-                                                            No title
-                                                        [% END %]
-
-                                                        [% FOREACH subtitl IN itemsloo.subtitle %]
-                                                            [% subtitl | html %]
-                                                        [% END %]
+                                                        [% INCLUDE 'biblio-title.inc' biblio=itemsloo %]
                                                         </a>
 
                                                         [% IF ( itemsloo.author ) %]

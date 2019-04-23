@@ -6,7 +6,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    MARC details for [% bibliotitle | html %]
+    MARC details for [% INCLUDE 'biblio-title-head.inc' %]
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -21,7 +21,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    MARC details for <i>[% bibliotitle | html %]</i>
+    MARC details for <i>[% INCLUDE 'biblio-title.inc' %]</i>
   [% END %]
 </div>
 

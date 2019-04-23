@@ -78,11 +78,7 @@
                         <td class="top">
                             [% item.itemcallnumber | html %]
                             <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% item.biblionumber | uri %]&amp;shelfbrowse_itemnumber=[% item.itemnumber | uri %]#shelfbrowser">
-                                [% item.title | html %]
-                                [% FOREACH subtitl IN item.subtitle %]
-                                    [% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %]
-                                    [% subtitl | html %]
-                                [% END %]
+                                [% INCLUDE 'biblio-title.inc' biblio=item %]
                             </a>
                         </td>
                     [% END %]

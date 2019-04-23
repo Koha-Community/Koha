@@ -30,7 +30,6 @@ BEGIN {
         AddBiblio
         GetBiblioData
         GetMarcBiblio
-        GetRecordValue
         GetISBDView
         GetMarcControlnumber
         GetMarcNotes
@@ -641,38 +640,6 @@ sub _check_valid_auth_link {
     my $authorized_heading =
       C4::AuthoritiesMarc::GetAuthorizedHeading( { 'authid' => $authid } ) || '';
    return ($field->as_string('abcdefghijklmnopqrstuvwxyz') eq $authorized_heading);
-}
-
-=head2 GetRecordValue
-
-  my $values = GetRecordValue($field, $record);
-
-Get MARC fields from the record using the framework mappings for biblio fields.
-
-=cut
-
-sub GetRecordValue {
-    my ( $field, $record ) = @_;
-
-    if (!$record) {
-        carp 'GetRecordValue called with undefined record';
-        return;
-    }
-
-    my @result;
-    my @mss = GetMarcSubfieldStructureFromKohaField("biblio.$field");
-    foreach my $fldhash ( @mss ) {
-        my $tag = $fldhash->{tagfield};
-        my $sub = $fldhash->{tagsubfield};
-        foreach my $fld ( $record->field($tag) ) {
-            if( $sub eq '@' || $fld->is_control_field ) {
-                push @result, $fld->data if $fld->data;
-            } else {
-                push @result, grep { $_ } $fld->subfield($sub);
-            }
-        }
-    }
-    return \@result;
 }
 
 =head2 GetBiblioData

@@ -148,6 +148,10 @@ if ($authorized) {
             @biblios,
             {   biblionumber => $biblionumber,
                 title        => $biblio->title,
+                subtitle     => $biblio->subtitle,
+                medium       => $biblio->medium,
+                part_number  => $biblio->part_number,
+                part_name    => $biblio->part_name,
                 author       => $biblio->author,
             }
         );

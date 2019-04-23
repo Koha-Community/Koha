@@ -1,6 +1,6 @@
 [% USE Koha %]
 [% INCLUDE 'doc-head-open.inc' %]
-<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Images for: [% biblio.title | html %]</title>
+<title>[% IF ( LibraryNameTitle ) %][% LibraryNameTitle | html %][% ELSE %]Koha online[% END %] catalog &rsaquo; Images for: [% INCLUDE 'biblio-title-head.inc' %]</title>
 [% INCLUDE 'doc-head-close.inc' %]
 [% BLOCK cssinclude %]
     <style>
@@ -47,7 +47,7 @@
                     [% ELSE %]
                         <a href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]">
                     [% END %]
-                [% END %][% biblio.title | html %]</a> <span class="divider">&rsaquo;</span>
+                [% END %][% INCLUDE 'biblio-title.inc' %]</a> <span class="divider">&rsaquo;</span>
             </li>
             <li><a href="#">Images</a></li>
         </ul>
@@ -75,7 +75,7 @@
                                     [% ELSE %]
                                         <a class="title" href="/cgi-bin/koha/opac-detail.pl?biblionumber=[% biblionumber |url %]" title="View details for this title">
                                     [% END %]
-                                [% END %][% biblio.title | html %]</a> [% biblio.author | html %]
+                                [% END %][% INCLUDE 'biblio-title.inc' %]</a> [% biblio.author | html %]
                             </h1>
                         </div> <!-- / .span9 -->
                     </div> <!-- / .row-fluid -->

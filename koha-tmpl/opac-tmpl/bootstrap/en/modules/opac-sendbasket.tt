@@ -32,7 +32,12 @@ Your cart
         <li>
             <span>
                 [% BIBLIO_RESULT.title | $raw %]
-                [% IF ( BIBLIO_RESULT.subtitle ) %] [% BIBLIO_RESULT.subtitle | $raw %][% END %]
+                [% IF ( BIBLIO_RESULT.subtitle ) %]
+                  [% FOREACH subtitle IN BIBLIO_RESULT.subtitle.split(' | ') %]
+                    [% subtitle | $raw %]
+                  [% END %]
+                [% END %]
+                [% BIBLIO_RESULT.part_number | $raw %] [% BIBLIO_RESULT.part_name | $raw %]
             </span>
 
             <p>
