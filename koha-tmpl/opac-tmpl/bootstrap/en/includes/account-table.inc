@@ -119,9 +119,6 @@
 [%- BLOCK account_type_description -%]
     [%- SWITCH account.accounttype -%]
         [%- CASE 'Pay'              -%]<span>Payment
-        [%- CASE 'Pay00'            -%]<span>Payment (cash via SIP2)
-        [%- CASE 'Pay01'            -%]<span>Payment (VISA via SIP2)
-        [%- CASE 'Pay02'            -%]<span>Payment (credit card via SIP2)
         [%- CASE 'VOID'             -%]<span>Voided
         [%- CASE 'N'                -%]<span>New card
         [%- CASE 'OVERDUE'          -%]<span>Fine

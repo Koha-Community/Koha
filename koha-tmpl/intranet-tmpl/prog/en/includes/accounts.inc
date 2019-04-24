@@ -1,9 +1,6 @@
 [%- BLOCK account_type_description -%]
     [%- SWITCH account.accounttype -%]
         [%- CASE 'Pay'              -%]<span>Payment
-        [%- CASE 'Pay00'            -%]<span>Payment (cash via SIP2)
-        [%- CASE 'Pay01'            -%]<span>Payment (VISA via SIP2)
-        [%- CASE 'Pay02'            -%]<span>Payment (credit card via SIP2)
         [%- CASE 'N'                -%]<span>New card
         [%- CASE 'OVERDUE'          -%]<span>Fine
         [%- CASE 'A'                -%]<span>Account management fee
@@ -22,7 +19,7 @@
         [%- CASE 'C'                -%]<span>Credit
         [%- CASE 'LOST_RETURN'      -%]<span>Lost item fee refund
         [%- CASE 'Res'              -%]<span>Hold fee
-        [%- CASE                    -%][% account.accounttype | html %]
+        [%- CASE                    -%]<span>[% account.accounttype | html %]
     [%- END -%]
     [%- PROCESS account_status_description account=account -%]</span>
 [%- END -%]

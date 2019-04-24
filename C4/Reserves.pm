@@ -577,7 +577,6 @@ sub ChargeReserveFee {
             user_id      => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
             library_id   => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
             interface    => C4::Context->interface,
-            sip          => undef,
             invoice_type => undef,
             type         => 'reserve',
             item_id      => undef

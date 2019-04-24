@@ -56,7 +56,6 @@ This method allows payments to be made against fees/fines
 Koha::Account->new( { patron_id => $borrowernumber } )->pay(
     {
         amount      => $amount,
-        sip         => $sipmode,
         note        => $note,
         description => $description,
         library_id  => $branchcode,
@@ -72,7 +71,6 @@ sub pay {
     my ( $self, $params ) = @_;
 
     my $amount       = $params->{amount};
-    my $sip          = $params->{sip};
     my $description  = $params->{description};
     my $note         = $params->{note} || q{};
     my $library_id   = $params->{library_id};
@@ -211,9 +209,9 @@ sub pay {
     }
 
     $account_type ||=
-        $type eq 'writeoff' ? 'W'
-      : defined($sip)       ? "Pay$sip"
-      :                       'Pay';
+      $type eq 'writeoff'
+      ? 'W'
+      : 'Pay';
 
     $description ||= $type eq 'writeoff' ? 'Writeoff' : q{};
 
@@ -309,7 +307,6 @@ my $credit_line = Koha::Account->new({ patron_id => $patron_id })->add_credit(
         user_id      => $user_id,
         interface    => $interface,
         library_id   => $library_id,
-        sip          => $sip,
         payment_type => $payment_type,
         type         => $credit_type,
         item_id      => $item_id
@@ -336,7 +333,6 @@ sub add_credit {
     my $user_id      = $params->{user_id};
     my $interface    = $params->{interface};
     my $library_id   = $params->{library_id};
-    my $sip          = $params->{sip};
     my $payment_type = $params->{payment_type};
     my $type         = $params->{type} || 'payment';
     my $item_id      = $params->{item_id};
@@ -350,10 +346,6 @@ sub add_credit {
     my $schema = Koha::Database->new->schema;
 
     my $account_type = $Koha::Account::account_type_credit->{$type};
-    $account_type .= $sip
-        if defined $sip &&
-           $type eq 'payment';
-
     my $line;
 
     $schema->txn_do(

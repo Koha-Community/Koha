@@ -50,7 +50,7 @@ sub pay {
     my $is_writeoff          = shift;
     my $disallow_overpayment = shift;
 
-    my $type = $is_writeoff ? 'writeoff' : undef;
+    my $type = $is_writeoff ? 'writeoff' : 'payment';
 
     warn("RECORD:$borrowernumber::$amt");
 
@@ -65,11 +65,11 @@ sub pay {
         if ( $fee ) {
             $account->pay(
                 {
-                    amount    => $amt,
-                    sip       => $sip_type,
-                    type      => $type,
-                    lines     => [$fee],
-                    interface => C4::Context->interface
+                    amount       => $amt,
+                    type         => $type,
+                    payment_type => 'SIP' . $sip_type,
+                    lines        => [$fee],
+                    interface    => C4::Context->interface
                 }
             );
             return 1;
@@ -81,10 +81,10 @@ sub pay {
     else {
         $account->pay(
             {
-                amount    => $amt,
-                sip       => $sip_type,
-                type      => $type,
-                interface => C4::Context->interface
+                amount       => $amt,
+                type         => $type,
+                payment_type => 'SIP' . $sip_type,
+                interface    => C4::Context->interface
             }
         );
         return 1;
