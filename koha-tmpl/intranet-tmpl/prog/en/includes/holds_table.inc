@@ -74,7 +74,7 @@
             </td>
 
             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-	        [% UNLESS hold.found %]
+            [% UNLESS hold.found %]
                     [% SET prev_priority  = loop.prev.priority %]
                     [% SET next_priority  = loop.next.priority %]
                     [% holds.index | html %]
@@ -96,9 +96,9 @@
                             <img src="[% interface | html %]/[% theme | html %]/img/go-down.png" alt="Go down" />
                         </a>
                     </td>
-		[% ELSE %]
-		    <td></td>
-		[% END %]
+        [% ELSE %]
+            <td></td>
+        [% END %]
             [% END %]
 
             <td>
@@ -167,7 +167,7 @@
             </td>
 
             [% IF ( CAN_user_reserveforothers_modify_holds_priority ) %]
-	        [% UNLESS hold.found %]
+            [% UNLESS hold.found %]
                     <td>
                         <a title="Toggle lowest priority" href="request.pl?action=setLowestPriority&amp;borrowernumber=[% hold.borrowernumber | html %]&amp;biblionumber=[% hold.biblionumber | html %]&amp;reserve_id=[% hold.reserve_id | html %]&amp;date=[% hold.date | html %]">
                             [% IF ( hold.lowestPriority ) %]
@@ -177,9 +177,9 @@
                             [% END %]
                         </a>
                     </td>
-		[% ELSE %]
-		    <td></td>
-		[% END %]
+        [% ELSE %]
+            <td></td>
+        [% END %]
             [% END %]
 
             <td>
