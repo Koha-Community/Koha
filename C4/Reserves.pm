@@ -834,7 +834,7 @@ sub CancelExpiredReserves {
 
     my $dtf = Koha::Database->new->schema->storage->datetime_parser;
     my $params = { expirationdate => { '<', $dtf->format_date($today) } };
-    $params->{found} = undef unless $expireWaiting;
+    $params->{found} = [ { '!=', 'W' }, undef ]  unless $expireWaiting;
 
     # FIXME To move to Koha::Holds->search_expired (?)
     my $holds = Koha::Holds->search( $params );
