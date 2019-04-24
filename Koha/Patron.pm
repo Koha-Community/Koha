@@ -236,7 +236,7 @@ sub store {
 
                 $self = $self->SUPER::store;
 
-                $self->add_enrolment_fee_if_needed;
+                $self->add_enrolment_fee_if_needed(0);
 
                 logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
                   if C4::Context->preference("BorrowersLog");
@@ -258,7 +258,7 @@ sub store {
                     and $self->category->categorycode ne
                     $self_from_storage->category->categorycode )
                 {
-                    $self->add_enrolment_fee_if_needed;
+                    $self->add_enrolment_fee_if_needed(1);
                 }
 
                 # Actionlogs
@@ -751,7 +751,7 @@ sub renew_account {
     $self->date_renewed( dt_from_string() );
     $self->store();
 
-    $self->add_enrolment_fee_if_needed;
+    $self->add_enrolment_fee_if_needed(1);
 
     logaction( "MEMBERS", "RENEW", $self->borrowernumber, "Membership renewed" ) if C4::Context->preference("BorrowersLog");
     return dt_from_string( $expiry_date )->truncate( to => 'day' );
@@ -875,23 +875,26 @@ sub article_requests_finished {
 
 =head3 add_enrolment_fee_if_needed
 
-my $enrolment_fee = $patron->add_enrolment_fee_if_needed;
+my $enrolment_fee = $patron->add_enrolment_fee_if_needed($renewal);
 
 Add enrolment fee for a patron if needed.
+
+$renewal - boolean denoting whether this is an account renewal or not
 
 =cut
 
 sub add_enrolment_fee_if_needed {
-    my ($self) = @_;
+    my ($self, $renewal) = @_;
     my $enrolment_fee = $self->category->enrolmentfee;
     if ( $enrolment_fee && $enrolment_fee > 0 ) {
+        my $type = $renewal ? 'account_renew' : 'account';
         $self->account->add_debit(
             {
                 amount     => $enrolment_fee,
                 user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
                 interface  => C4::Context->interface,
                 library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
-                type       => 'account'
+                type       => $type
             }
         );
     }

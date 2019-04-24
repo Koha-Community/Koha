@@ -433,6 +433,7 @@ $debit_type can be any of:
   - lost_item
   - new_card
   - account
+  - account_renew
   - sundry
   - processing
   - rent
@@ -700,6 +701,7 @@ our $offset_type = {
     'payment'          => 'Payment',
     'writeoff'         => 'Writeoff',
     'account'          => 'Account Fee',
+    'account_renew'    => 'Account Fee',
     'reserve'          => 'Reserve Fee',
     'processing'       => 'Processing Fee',
     'lost_item'        => 'Lost Item',
@@ -729,7 +731,8 @@ our $account_type_credit = {
 =cut
 
 our $account_type_debit = {
-    'account'          => 'A',
+    'account'          => 'ACCOUNT',
+    'account_renew'    => 'ACCOUNT_RENEW',
     'overdue'          => 'OVERDUE',
     'lost_item'        => 'LOST',
     'new_card'         => 'N',

@@ -162,7 +162,8 @@
         [%- CASE 'VOID'             -%]<span>Voided
         [%- CASE 'N'                -%]<span>New card
         [%- CASE 'OVERDUE'          -%]<span>Fine
-        [%- CASE 'A'                -%]<span>Account management fee
+        [%- CASE 'ACCOUNT'          -%]<span>Account creation fee
+        [%- CASE 'ACCOUNT_RENEW'    -%]<span>Account renewal fee
         [%- CASE 'M'                -%]<span>Sundry
         [%- CASE 'LOST'             -%]<span>Lost item
         [%- CASE 'W'                -%]<span>Writeoff
