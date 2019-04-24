@@ -4,7 +4,7 @@
     var biblionumber = '[% biblionumber | html %]';
     var frameworkcode = '[% frameworkcode | html %]';
     var popup = '[% popup | html %]';
-    var opisadd = '[% opisadd | html %]';
+    var op = '[% op | html %]';
     var LABEL_EDIT_ITEM = _("Edit item");
     var LABEL_DELETE_ITEM = _("Delete item");
     var MSG_FORM_NOT_SUBMITTED = _("Form not submitted because of the following problem(s)");

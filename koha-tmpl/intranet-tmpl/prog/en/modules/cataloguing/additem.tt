@@ -127,7 +127,7 @@
         <input type="hidden" name="popup" value="1" />
     [% END %]
     <input type="hidden" name="biblionumber" value="[% biblionumber | html %]" />
-    [% IF ( opisadd ) %]
+    [% IF op != 'saveitem' %]
         <h2 id="additema">Add item [% IF (circborrowernumber) %]<em>(fast cataloging)</em>[% END %]</h2>
     [% ELSE %]
         <h2 id="edititem">Edit Item #[% itemnumber | html %][% IF ( barcode ) %] / Barcode [% barcode | html %][% END %]</h2>
@@ -210,7 +210,7 @@
     <input type="hidden" name="indicator" value=" " />
     <input type="hidden" name="itemnumber" value="[% itemnumber | html %]" />
 
-<fieldset class="action">    [% IF ( opisadd ) %]
+<fieldset class="action">    [% IF op != 'saveitem' %]
     <input type="submit" name="phony_submit" value="phony_submit" id="phony_submit" style="display:none;" onclick="return false;" />
     <!-- Note : We use here a false submit button because we have several submit buttons and we don't want the user to believe they validated the adding of multiple items
 		when pressing the enter key, while in fact it is the first submit button that is validated, in our case the "add (single) item" button.

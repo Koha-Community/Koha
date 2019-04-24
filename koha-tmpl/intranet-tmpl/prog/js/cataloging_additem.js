@@ -1,4 +1,4 @@
-/* global KOHA searchid biblionumber frameworkcode popup opisadd LABEL_EDIT_ITEM LABEL_DELETE_ITEM MSG_FORM_NOT_SUBMITTED MSG_MANDATORY_FIELDS_EMPTY MSG_ADD_MULTIPLE_ITEMS MSG_ENTER_NUM_ITEMS MSG_CONFIRM_DELETE_ITEM MSG_CONFIRM_ADD_ITEM columns_settings CheckMandatorySubfields CheckMultipleAdd */
+/* global KOHA searchid biblionumber frameworkcode popup op LABEL_EDIT_ITEM LABEL_DELETE_ITEM MSG_FORM_NOT_SUBMITTED MSG_MANDATORY_FIELDS_EMPTY MSG_ADD_MULTIPLE_ITEMS MSG_ENTER_NUM_ITEMS MSG_CONFIRM_DELETE_ITEM MSG_CONFIRM_ADD_ITEM columns_settings CheckMandatorySubfields CheckMultipleAdd */
 
 var browser = KOHA.browser(searchid, parseInt(biblionumber, 10));
 browser.show();
@@ -9,10 +9,8 @@ $(document).ready(function(){
     // otherwise the deletion confirmation will not work correctly
     $('a[href*="biblionumber="]').off('click');
 
-    if( popup ){
-        if( opisadd ){
-            window.close();
-        }
+    if( popup && op != 'saveitem' ){
+        window.close();
     }
 
     $("fieldset.rows input, fieldset.rows select").addClass("noEnterSubmit");
