@@ -74,10 +74,20 @@
 [% END %]
  <option value="|||">||| - No attempt to code</option>
 </datalist>
+<datalist id="countrycodes">
+[% FOR lcode IN countries.keys.sort %]
+ <option value="[% lcode %]">[% countries.$lcode.lib %]</option>
+[% END %]
+</datalist>
 <script type="text/javascript">//<![CDATA[
 function lang_input_update() {
       $('#f35-37').attr('list', 'languagecodes');
       $('#f35-37').css('width', '25em'); /* otherwise datalist popup is not wide enough */
+      $('#f35-37').on('input', function() { $(this).trigger("onkeyup"); return false; });
+
+      $('#f15-17').attr('list', 'countrycodes');
+      $('#f15-17').css('width', '25em'); /* otherwise datalist popup is not wide enough */
+      $('#f15-17').on('input', function() { $(this).trigger("onkeyup"); return false; });
 }
 //]]></script>
 
