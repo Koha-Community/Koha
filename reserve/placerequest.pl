@@ -93,9 +93,12 @@ if ( $type eq 'str8' && $borrower ) {
             if ( $item->biblionumber ne $biblionumber ) {
                 $biblionumber = $item->biblionumber;
             }
-        }
-
-        if ($multi_hold) {
+            if ( CanItemBeReserved($borrower->{'borrowernumber'}, $item->itemnumber, $branch)->{status} eq 'OK' ) {
+                AddReserve( $branch, $borrower->{'borrowernumber'},
+                    $biblionumber, \@realbi, $rank[0], $startdate, $expirationdate, $notes, $title,
+                    $checkitem, $found, $itemtype );
+            }
+        } elsif ($multi_hold) {
             my $bibinfo = $bibinfos{$biblionumber};
             if ( CanBookBeReserved($borrower->{'borrowernumber'}, $biblionumber)->{status} eq 'OK' ) {
                 AddReserve($branch,$borrower->{'borrowernumber'},$biblionumber,[$biblionumber],
