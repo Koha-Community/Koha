@@ -57,7 +57,7 @@ sub list {
     # Get all requests
     # If necessary, only get those from a specified patron
     my @requests = Koha::Illrequests->search({
-        args->{borrowernumber}
+        $args->{borrowernumber}
         ? ( borrowernumber => $args->{borrowernumber} )
         : ()
     })->as_list;

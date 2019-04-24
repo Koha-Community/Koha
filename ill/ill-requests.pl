@@ -280,8 +280,8 @@ if ( $backends_available ) {
                     uri_escape_utf8(scalar $params->{$filter});
             }
         }
+        my @tpl_arr = ();
         if (keys %{$active_filters}) {
-            my @tpl_arr;
             foreach my $key (keys %{$active_filters}) {
                 push @tpl_arr, $key . "=" . $active_filters->{$key};
             }
