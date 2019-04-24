@@ -68,17 +68,19 @@
       <tfoot>
         <tr>
           <td></td>
-          <td><input type="text" class="dt-filter" data-column_num="0" placeholder="Search ISSN" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search title" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search notes" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search library" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search location" /></td>
-          <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search callnumber" /></td>
+          <td><input type="text" class="dt-filter" data-column_num="1" placeholder="Search ISSN" /></td>
+          <td><input type="text" class="dt-filter" data-column_num="2" placeholder="Search title" /></td>
+          <td><input type="text" class="dt-filter" data-column_num="3" placeholder="Search notes" /></td>
+          <td><input type="text" class="dt-filter" data-column_num="4" placeholder="Search library" /></td>
+          <td><input type="text" class="dt-filter" data-column_num="5" placeholder="Search location" /></td>
+          <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search callnumber" /></td>
+          [% SET column_num = 6 %]
           [% UNLESS closed %]
-              <td><input type="text" class="dt-filter" data-column_num="6" placeholder="Search expiration date" /></td>
+              <td><input type="text" class="dt-filter" data-column_num="7" placeholder="Search expiration date" /></td>
+              [% SET column_num = column_num + 1 %]
           [% END %]
           [% FOR field IN additional_fields_for_subscription %]
-            <td><input type="text" class="dt-filter" data-column_num="[% loop.count + 6 | html %]" placeholder="Search [% field.name | html %]" /></td>
+            <td><input type="text" class="dt-filter" data-column_num="[% loop.count + column_num | html %]" placeholder="Search [% field.name | html %]" /></td>
           [% END %]
           <td></td>
         </tr>
