@@ -104,6 +104,7 @@ elsif ($op eq 'delete-branch-cat') {
                          holdallowed             => undef,
                          hold_fulfillment_policy => undef,
                          returnbranch            => undef,
+                         max_holds               => undef,
                      }
                  }
              );
@@ -133,6 +134,7 @@ elsif ($op eq 'delete-branch-cat') {
                     holdallowed             => undef,
                     hold_fulfillment_policy => undef,
                     returnbranch            => undef,
+                    max_holds               => undef,
                 }
             }
         );
