@@ -52,8 +52,8 @@
     [% IF ( ONLY_ONE ) %]
         <div class="dialog message">You are only viewing one item.  <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblionumber | uri %]&amp;bi=[% biblioitemnumber | uri %]#item[% itemnumber | uri %]">View All</a></div>
     [% END %]
+
     [% FOREACH ITEM_DAT IN ITEM_DATA %]
-    <div class="yui-g">
         <h3 id="item[% ITEM_DAT.itemnumber | html %]">Barcode [% ITEM_DAT.barcode | html %]  [% IF ( ITEM_DAT.notforloantext ) %][% ITEM_DAT.notforloantext | html %] [% END %]</h3>
         <div class="listgroup"><h4>Item information [% IF ( CAN_user_editcatalogue_edit_catalogue ) %][% UNLESS ( ITEM_DAT.nomod ) %]
          [% IF ( CAN_user_editcatalogue_edit_items ) %]
@@ -271,7 +271,6 @@
                 </li>
             </ol>
             </div>
-        </div>
 </div>
 [% END %]
 

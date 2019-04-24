@@ -57,6 +57,7 @@
     <div class="row">
         <div class="col-sm-10 col-sm-push-2">
             <main>
+                <div class="row">
 
 [% IF ( unknownbiblionumber ) %]
   <div class="dialog message">The record you requested does not exist ([% biblionumber | html %]).</div>
@@ -69,11 +70,9 @@
     [% END %]
 
     [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled ) %]
-        <div class="yui-gc">
-            <div id="catalogue_detail_biblio" class="yui-u first">
+        <div id="catalogue_detail_biblio" class="col-xs-9">
     [% ELSE %]
-        <div class="yui-g">
-            <div id="catalogue_detail_biblio">
+        <div id="catalogue_detail_biblio" class="col-xs-12">
     [% END %]
 
         [% XSLTBloc | $raw %]
@@ -123,7 +122,7 @@
         [% END %]
 
         [% IF ( AmazonCoverImages  || LocalCoverImages || AdlibrisEnabled ) %]
-        </div><div class="yui-u" id="bookcoverimg">
+        </div><div class="col-xs-3" id="bookcoverimg">
         [% IF ( LocalCoverImages ) %]
             <div title="[% biblionumber |url %]" class="[% biblionumber | html %]" id="local-thumbnail-preview"></div>
         [% END %]
@@ -493,7 +492,6 @@
 
 [% IF ( subscriptionsnumber ) %]
 <div id="subscriptions">
-<div class="yui-g">
 <div id="catalogue_detail_subscriptions">
     <h2>This is a serial subscription</h2>
     <p> (There are [% subscriptionsnumber | html %] subscriptions associated with this title).</p> 
@@ -543,7 +541,6 @@
             [% END %]
             <a href="/cgi-bin/koha/serials/subscription-detail.pl?subscriptionid=[% subscription.subscriptionid | uri %]">Subscription details</a>
     [% END %]
-</div>
 </div>
 </div>
 [% END %]
@@ -703,17 +700,17 @@
 
 </div><!-- /bibliodetails -->
 
-<div class="yui-g" id="export" style="margin-top: 1em;">
+<div id="export" style="margin-top: 1em;">
 <form method="get" action="/cgi-bin/koha/catalogue/export.pl">
 <table>  <tr>
-      <th>Save Record</th>   </tr>
+      <th>Save record</th>   </tr>
     <tr><td> Select download format:    <select name="format">
         <option value="mods">MODS (XML)</option>
         <option data-toggle="modal" data-target="#exportModal_">Dublin Core</option>
         <option value="marcxml">MARCXML</option>
         <option value="marc8">MARC (non-Unicode/MARC-8)</option>
         <option value="utf8">MARC (Unicode/UTF-8)</option>    </select>
-        <input type="submit" name="save" value="Download Record" /></td>
+        <input type="submit" name="save" value="Download record" /></td>
   </tr>
   <tr><td>
     <input type="hidden" name="op" value="export" /><input type="hidden" name="bib" value="[% biblionumber | html %]" />
@@ -767,10 +764,10 @@
                         h = this.height;
                         if ((w == 1) || (h == 1)) {
                             $("#amazon-bookcoverimg").remove();
-                            $(".yui-gb").attr("class","yui-g");
+                            $("#catalogue_detail_biblio").attr("class","col-xs-12");
                         } else if ((this.complete != null) && (!this.complete)) {
                             $("#amazon-bookcoverimg").remove();
-                            $(".yui-gb").attr("class","yui-g");
+                            $("#catalogue_detail_biblio").attr("class","col-xs-12");
                         }
                     }
                 });
