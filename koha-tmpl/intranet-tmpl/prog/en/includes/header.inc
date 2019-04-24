@@ -69,7 +69,8 @@
                         <i class="fa fa-user"></i>
                     </span>
                     <span id="logged-in-info-full">
-                        <span class="loggedinusername">[% logged_in_user.userid | html %]</span>
+                        [% SET is_superlibrarian = CAN_user_superlibrarian ? 'is_superlibrarian' : '' %]
+                        <span class="loggedinusername [% is_superlibrarian | html %]">[% logged_in_user.userid | html %]</span>
                         <span class="separator">|</span>
                         [% IF ( AutoLocation ) %]
                             <brand>
