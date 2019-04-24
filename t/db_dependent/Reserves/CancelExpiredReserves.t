@@ -1,7 +1,7 @@
 #!/usr/bin/perl
 
 use Modern::Perl;
-use Test::More tests => 2;
+use Test::More tests => 3;
 
 use t::lib::Mocks;
 use t::lib::TestBuilder;
@@ -161,6 +161,44 @@ subtest 'Test handling of waiting reserves by CancelExpiredReserves' => sub {
     CancelExpiredReserves();
     my $count2 = Koha::Holds->search->count;
     is( $count2, 1, 'Also the waiting expired hold should be cancelled now');
+
+};
+
+subtest 'Test handling of in transit reserves by CancelExpiredReserves' => sub {
+    plan tests => 2;
+
+    my $builder = t::lib::TestBuilder->new();
+
+    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelay', 1 );
+    my $expdate = dt_from_string->add( days => -2 );
+    my $reserve = $builder->build({
+        source => 'Reserve',
+        value  => {
+            expirationdate => '2018-01-01',
+            found => 'T',
+            cancellationdate => undef,
+            suspend => 0,
+            suspend_until => undef
+        }
+    });
+    my $count = Koha::Holds->search->count;
+    CancelExpiredReserves();
+    is(Koha::Holds->search->count, $count-1, "Transit hold is cancelled if ExpireReservesMaxPickUpDelay set");
+
+    t::lib::Mocks::mock_preference( 'ExpireReservesMaxPickUpDelay', 0 );
+    my $reserve2 = $builder->build({
+        source => 'Reserve',
+        value  => {
+            expirationdate => '2018-01-01',
+            found => 'T',
+            cancellationdate => undef,
+            suspend => 0,
+            suspend_until => undef
+        }
+    });
+    CancelExpiredReserves();
+    is(Koha::Holds->search->count, $count-1, "Transit hold is cancelled if ExpireReservesMaxPickUpDelay unset");
+
 };
 
 $schema->storage->txn_rollback;
