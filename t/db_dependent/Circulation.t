@@ -3093,7 +3093,7 @@ subtest 'AddReturn should clear items.onloan for unissued items' => sub {
 
 subtest 'AddRenewal and AddIssuingCharge tests' => sub {
 
-    plan tests => 13;
+    plan tests => 10;
 
 
     t::lib::Mocks::mock_preference('item-level_itypes', 1);
@@ -3152,34 +3152,29 @@ subtest 'AddRenewal and AddIssuingCharge tests' => sub {
     # The following will fail if run on 00:00:00
     unlike ( $checkouts->next->lastreneweddate, qr/00:00:00/, 'AddRenewal should set the renewal date with the time part');
 
+    my $lines = Koha::Account::Lines->search({
+        borrowernumber => $patron->id,
+        itemnumber     => $item->id
+    });
+
+    is( $lines->count, 2 );
+
+    my $line = $lines->next;
+    is( $line->accounttype, 'RENT',       'The issue of item with issueing charge generates an accountline of the correct type' );
+    is( $line->branchcode,  $library->id, 'AddIssuingCharge correctly sets branchcode' );
+    is( $line->description, '',     'AddIssue does not set a hardcoded description for the accountline' );
+
+    $line = $lines->next;
+    is( $line->accounttype, 'RENT_RENEW', 'The renewal of item with issuing charge generates an accountline of the correct type' );
+    is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
+    is( $line->description, '', 'AddRenewal does not set a hardcoded description for the accountline' );
+
     t::lib::Mocks::mock_preference( 'RenewalLog', 1 );
     $date = output_pref( { dt => dt_from_string(), dateonly => 1, dateformat => 'iso' } );
     $old_log_size = Koha::ActionLogs->count( \%params_renewal );
     AddRenewal( $patron->id, $item->id, $library->id );
     $new_log_size = Koha::ActionLogs->count( \%params_renewal );
     is( $new_log_size, $old_log_size + 1, 'renew log successfully added' );
-
-    my $lines = Koha::Account::Lines->search({
-        borrowernumber => $patron->id,
-        itemnumber     => $item->id
-    });
-
-    is( $lines->count, 3 );
-
-    my $line = $lines->next;
-    is( $line->accounttype, 'Rent',       'The issuing charge generates an accountline' );
-    is( $line->branchcode,  $library->id, 'AddIssuingCharge correctly sets branchcode' );
-    is( $line->description, 'Rental',     'AddIssuingCharge set a hardcoded description for the accountline' );
-
-    $line = $lines->next;
-    is( $line->accounttype, 'Rent', 'Fine on renewed item is closed out properly' );
-    is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
-    is( $line->description, "Renewal of Rental Item $title $barcode", 'AddRenewal set a hardcoded description for the accountline' );
-
-    $line = $lines->next;
-    is( $line->accounttype, 'Rent', 'Fine on renewed item is closed out properly' );
-    is( $line->branchcode,  $library->id, 'AddRenewal correctly sets branchcode' );
-    is( $line->description, "Renewal of Rental Item $title $barcode", 'AddRenewal set a hardcoded description for the accountline' );
 
 };
 

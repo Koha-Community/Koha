@@ -277,7 +277,7 @@ subtest 'Handle ids duplication' => sub {
     my $issue_id = $original_checkout->issue_id;
     my $account_lines = Koha::Account::Lines->search({ borrowernumber => $patron->borrowernumber, issue_id => $issue_id });
     is( $account_lines->count, 1, '1 account line should exist for this issue_id' );
-    is( $account_lines->next->description, 'Rental', 'patron has been charged the rentalcharge' );
+    is( $account_lines->next->accounttype, 'RENT', 'patron has been charged the rentalcharge' );
     $account_lines->delete;
 
     # Create an existing entry in old_issue
