@@ -66,7 +66,7 @@ if($itemnumber) {
     $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.location', authorised_value => $item->{location} });
     $item->{location} = $descriptions->{lib} // '';
 
-    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.collection', authorised_value => $item->{collection} });
+    $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.ccode', authorised_value => $item->{ccode} });
     $item->{collection} = $descriptions->{lib} // '';
 
     $descriptions = Koha::AuthorisedValues->get_description_by_koha_field({ frameworkcode => $fw, kohafield => 'items.materials', authorised_value => $item->{materials} });
