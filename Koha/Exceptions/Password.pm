@@ -38,7 +38,11 @@ use Exception::Class (
     'Koha::Exceptions::Password::WhitespaceCharacters' => {
         isa => 'Koha::Exceptions::Password',
         description => 'Password contains leading/trailing whitespace character(s)'
-    }
+    },
+    'Koha::Exceptions::Password::Plugin' => {
+        isa => 'Koha::Exceptions::Password',
+        description => 'The password was rejected by a plugin'
+    },
 );
 
 sub full_message {

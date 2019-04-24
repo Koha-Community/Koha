@@ -91,6 +91,9 @@ if ( $newpassword and not @errors) {
         elsif ( $_->isa('Koha::Exceptions::Password::TooWeak') ) {
             push @errors, 'ERROR_password_too_weak';
         }
+        elsif ( $_->isa('Koha::Exceptions::Password::Plugin') ) {
+            push @errors, 'ERROR_from_plugin';
+        }
         else {
             push( @errors, 'BADUSERID' );
         }

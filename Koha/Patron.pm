@@ -43,6 +43,8 @@ use Koha::Patron::HouseboundRole;
 use Koha::Patron::Images;
 use Koha::Patron::Relationships;
 use Koha::Patrons;
+use Koha::Plugins;
+use Koha::Plugins::Handler;
 use Koha::Subscription::Routinglists;
 use Koha::Token;
 use Koha::Virtualshelves;
@@ -223,9 +225,34 @@ sub store {
                   :                                                   undef;
                 $self->privacy($default_privacy);
 
-
                 # Make a copy of the plain text password for later use
                 $self->plain_text_password( $self->password );
+
+                logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
+                  if C4::Context->preference("BorrowersLog");
+
+                if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+                    # Call any check_password plugins
+                    my @plugins = Koha::Plugins->new()->GetPlugins({
+                        method => 'check_password',
+                    });
+                    foreach my $plugin ( @plugins ) {
+                        # This plugin hook will also be used by a plugin for the Norwegian national
+                        # patron database. This is why we need to pass both the password and the
+                        # borrowernumber to the plugin.
+                        my $ret = Koha::Plugins::Handler->run({
+                            class  => ref $plugin,
+                            method => 'check_password',
+                            params => {
+                                password       => $self->plain_text_password,
+                                borrowernumber => $self->borrowernumber,
+                            },
+                        });
+                        if ( $ret->{'error'} == 1 ) {
+                            Koha::Exceptions::Password::Plugin->throw();
+                        }
+                    }
+                }
 
                 # Create a disabled account if no password provided
                 $self->password( $self->password
@@ -238,8 +265,6 @@ sub store {
 
                 $self->add_enrolment_fee_if_needed(0);
 
-                logaction( "MEMBERS", "CREATE", $self->borrowernumber, "" )
-                  if C4::Context->preference("BorrowersLog");
             }
             else {    #ModMember
 
@@ -689,6 +714,8 @@ Exceptions are thrown if the password is not good enough.
 
 =item Koha::Exceptions::Password::TooWeak
 
+=item Koha::Exceptions::Password::Plugin (if a "check password" plugin is enabled)
+
 =back
 
 =cut
@@ -715,6 +742,32 @@ sub set_password {
             }
             elsif ( $error eq 'too_weak' ) {
                 Koha::Exceptions::Password::TooWeak->throw();
+            }
+        }
+    }
+
+    if ( C4::Context->preference('UseKohaPlugins') && C4::Context->config("enable_plugins") ) {
+        # Call any check_password plugins
+        my @plugins = Koha::Plugins->new()->GetPlugins({
+            method => 'check_password',
+        });
+        foreach my $plugin ( @plugins ) {
+            # This plugin hook will also be used by a plugin for the Norwegian national
+            # patron database. This is why we need to pass both the password and the
+            # borrowernumber to the plugin.
+            my $ret = Koha::Plugins::Handler->run({
+                class  => ref $plugin,
+                method => 'check_password',
+                params => {
+                    password       => $password,
+                    borrowernumber => $self->borrowernumber,
+                },
+            });
+            # This plugin hook will also be used by a plugin for the Norwegian national
+            # patron database. This is why we need to call the actual plugins and then
+            # check skip_validation afterwards.
+            if ( $ret->{'error'} == 1 && !$args->{skip_validation} ) {
+                Koha::Exceptions::Password::Plugin->throw();
             }
         }
     }
