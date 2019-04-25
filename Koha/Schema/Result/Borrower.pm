@@ -1539,7 +1539,7 @@ __PACKAGE__->belongs_to(
 );
 
 __PACKAGE__->add_columns(
-    '+flgAnonymized' => { is_boolean => 1 },
+    '+anonymized' => { is_boolean => 1 },
     '+lost'          => { is_boolean => 1 },
     '+gonenoaddress' => { is_boolean => 1 }
 );
