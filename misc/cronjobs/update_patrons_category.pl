@@ -31,7 +31,7 @@ use Koha::Logger;
 use Koha::Patrons;
 use Koha::Patron::Categories;
 use Koha::DateUtils;
-use Data::Dumper;
+use Koha::Script -cron;
 
 =head1 NAME
 
