@@ -31,7 +31,7 @@
                 "dt_fines":
                     "<span style='text-align: right; display: block;'>[% IF data.fines < 0 %]<span class='credit'>[% data.fines | $Price %]</span> [% ELSIF data.fines > 0 %] <span class='debit'><strong>[% data.fines | $Price %]</strong></span> [% ELSE %] [% data.fines | $Price %] [% END %]</span>",
                 "dt_borrowernotes":
-                    "[% data.borrowernotes | html_line_break | collapse | html | $To %]",
+                    "[% data.borrowernotes | html_line_break | collapse | $To %]",
                 "dt_action":
                     "<a href='/cgi-bin/koha/members/memberentry.pl?op=modify&amp;destination=circ&amp;borrowernumber=[% data.borrowernumber | html %]' class='btn btn-default btn-xs'><i class='fa fa-pencil'></i> Edit</a>",
                 "borrowernumber":
