@@ -528,10 +528,11 @@ sub ModSuggestion {
     };
     return 0 if $@;
 
-    if ( $suggestion->{STATUS} ) {
+    if ( $suggestion->{STATUS} && $suggestion_object->suggestedby ) {
 
         # fetch the entire updated suggestion so that we can populate the letter
         my $full_suggestion = GetSuggestion( $suggestion->{suggestionid} );
+
         my $patron = Koha::Patrons->find( $full_suggestion->{suggestedby} );
 
         my $transport = (C4::Context->preference("FallbackToSMSIfNoEmail")) && ($patron->smsalertnumber) && (!$patron->email) ? 'sms' : 'email';
