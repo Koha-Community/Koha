@@ -35,23 +35,24 @@
                         [% CASE 'Pay02' %]Payment (credit card via SIP2)
                         [% CASE 'VOID' %]Voided
                         [% CASE 'N' %]New card
-                        [% CASE 'OVERDUE' %]Fine[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'OVERDUE' %]Fine
                         [% CASE 'A' %]Account management fee
                         [% CASE 'M' %]Sundry
                         [% CASE 'L' %]Lost item
-                        [% CASE 'W' %]Writeoff[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'W' %]Writeoff
                         [% CASE 'HE' %]Hold waiting too long
                         [% CASE 'Rent' %]Rental fee
-                        [% CASE 'FOR' %]Forgiven[%- PROCESS account_status_description account=account -%]
-                        [% CASE 'LR' %]Lost item fee refund[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'FOR' %]Forgiven
+                        [% CASE 'LR' %]Lost item fee refund
                         [% CASE 'PF' %]Lost item processing fee
-                        [% CASE 'PAY' %]Payment[%- PROCESS account_status_description account=account -%]
-                        [% CASE 'WO' %]Writeoff[%- PROCESS account_status_description account=account -%]
-                        [% CASE 'C' %]Credit[%- PROCESS account_status_description account=account -%]
-                        [% CASE 'CR' %]Credit[%- PROCESS account_status_description account=account -%]
+                        [% CASE 'PAY' %]Payment
+                        [% CASE 'WO' %]Writeoff
+                        [% CASE 'C' %]Credit
+                        [% CASE 'CR' %]Credit
                         [%-CASE 'Res' %]Hold fee
                         [% CASE %][% ACCOUNT_LINE.accounttype | html %]
                         [%- END -%]
+                        [%- PROCESS account_status_description account=ACCOUNT_LINE -%]
                     </td>
                     <td>
                         [%- IF ACCOUNT_LINE.payment_type %][% AuthorisedValues.GetByCode('PAYMENT_TYPE', ACCOUNT_LINE.payment_type, 1) | html %][% END %]

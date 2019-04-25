@@ -1,27 +1,28 @@
 [%- BLOCK account_type_description -%]
     [%- SWITCH account.accounttype -%]
-        [%- CASE 'Pay'     -%]<span>Payment</span>
-        [%- CASE 'Pay00'   -%]<span>Payment (cash via SIP2)</span>
-        [%- CASE 'Pay01'   -%]<span>Payment (VISA via SIP2)</span>
-        [%- CASE 'Pay02'   -%]<span>Payment (credit card via SIP2)</span>
-        [%- CASE 'N'       -%]<span>New card</span>
-        [%- CASE 'OVERDUE' -%]<span>Fine[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'A'       -%]<span>Account management fee</span>
-        [%- CASE 'M'       -%]<span>Sundry</span>
-        [%- CASE 'L'       -%]<span>Lost item</span>
-        [%- CASE 'W'       -%]<span>Writeoff[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'HE'      -%]<span>Hold waiting too long</span>
-        [%- CASE 'Rent'    -%]<span>Rental fee</span>
-        [%- CASE 'FOR'     -%]<span>Forgiven[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'LR'      -%]<span>Lost item fee refund[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'PF'      -%]<span>Lost item processing fee[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'PAY'     -%]<span>Payment[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'WO'      -%]<span>Writeoff[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'C'       -%]<span>Credit[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'CR'      -%]<span>Credit[%- PROCESS account_status_description account=account -%]</span>
-        [%- CASE 'Res'     -%]<span>Hold fee</span>
-        [%- CASE           -%][% account.accounttype | html %]
+        [%- CASE 'Pay'     -%]<span>Payment
+        [%- CASE 'Pay00'   -%]<span>Payment (cash via SIP2)
+        [%- CASE 'Pay01'   -%]<span>Payment (VISA via SIP2)
+        [%- CASE 'Pay02'   -%]<span>Payment (credit card via SIP2)
+        [%- CASE 'N'       -%]<span>New card
+        [%- CASE 'OVERDUE' -%]<span>Fine
+        [%- CASE 'A'       -%]<span>Account management fee
+        [%- CASE 'M'       -%]<span>Sundry
+        [%- CASE 'L'       -%]<span>Lost item
+        [%- CASE 'W'       -%]<span>Writeoff
+        [%- CASE 'HE'      -%]<span>Hold waiting too long
+        [%- CASE 'Rent'    -%]<span>Rental fee
+        [%- CASE 'FOR'     -%]<span>Forgiven
+        [%- CASE 'LR'      -%]<span>Lost item fee refund
+        [%- CASE 'PF'      -%]<span>Lost item processing fee
+        [%- CASE 'PAY'     -%]<span>Payment
+        [%- CASE 'WO'      -%]<span>Writeoff
+        [%- CASE 'C'       -%]<span>Credit
+        [%- CASE 'CR'      -%]<span>Credit
+        [%- CASE 'Res'     -%]<span>Hold fee
+        [%- CASE           -%]<span>[% account.accounttype | html %]
     [%- END -%]
+    [%- PROCESS account_status_description account=account -%]</span>
 [%- END -%]
 
 [%- BLOCK offset_type_description -%]
