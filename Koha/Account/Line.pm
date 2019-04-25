@@ -73,7 +73,7 @@ sub checkout {
 
   $payment_accountline->void();
 
-Used to 'void' (or reverse) a payment/credit. It will role back any offsets
+Used to 'void' (or reverse) a payment/credit. It will roll back any offsets
 created by the application of this credit upon any debits and mark the credit
 as 'void' by updating it's status to "VOID".
 
