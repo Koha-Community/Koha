@@ -31,7 +31,7 @@ $.fn.tabIndex = function () {
     return $(this).parent().children('div').index(this);
 };
 $.fn.selectTabByID = function (tabID) {
-    $(this).tabs("option", "active", $( "#" + tabID ).tabIndex());
+    $(this).tabs("option", "active", $( tabID ).tabIndex());
 };
 
  $(document).ready(function() {

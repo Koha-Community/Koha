@@ -28,7 +28,8 @@
         });
 
         [% IF tab %]
-          $('#addbibliotabs').selectTabByID("tab[% tab | html %]");
+            link = $("a[href='#[% tab | html %]']");
+            selectTab( link );
         [% END %]
 
         Sticky = $("#toolbar");
@@ -136,12 +137,7 @@
 
         $(".toolbar-tabs a").on("click",function(e){
             e.preventDefault();
-            $(".toolbar-tabs li").removeClass("selected");
-            $(this).parent().addClass("selected");
-            var tabid = $(this).data("tabid");
-            $('#addbibliotabs').selectTabByID("tab" + tabid + "XX");
-            $(".tag_anchors").removeClass("tab_selected").hide();
-            $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
+            selectTab( $(this ) );
         });
 
         $(".tag_anchor").on("click", function(e){
@@ -157,6 +153,15 @@
         });
 
     });
+
+    function selectTab( tablink ){
+        $(".toolbar-tabs li").removeClass("selected");
+        tablink.parent().addClass("selected");
+        var tabid = tablink.data("tabid");
+        $('#addbibliotabs').selectTabByID("#tab" + tabid + "XX");
+        $(".tag_anchors").removeClass("tab_selected").hide();
+        $(".tag_anchors_" + tabid ).addClass("tab_selected").show();
+    }
 
     function redirect(dest){
         $("#redirect").attr("value",dest);
