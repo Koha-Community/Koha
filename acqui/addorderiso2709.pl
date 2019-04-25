@@ -242,6 +242,7 @@ if ($op eq ""){
             for (my $i = 0; $i < $count; $i++) {
                 $budget_hash->{$budget_codes[$i]}->{quantity} += 1;
                 $budget_hash->{$budget_codes[$i]}->{price} = $itemprices[$i];
+                $budget_hash->{$budget_codes[$i]}->{replacementprice} = $replacementprices[$i];
                 $budget_hash->{$budget_codes[$i]}->{itemnumbers} //= [];
                 push @{ $budget_hash->{$budget_codes[$i]}->{itemnumbers} }, $itemnumbers[$i];
             }
