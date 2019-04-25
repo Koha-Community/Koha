@@ -448,12 +448,11 @@ __PACKAGE__->table("deletedborrowers");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 flgAnonymized
+=head2 anonymized
 
-  accessor: 'flg_anonymized'
   data_type: 'tinyint'
   default_value: 0
-  is_nullable: 1
+  is_nullable: 0
 
 =cut
 
@@ -645,18 +644,13 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "overdrive_auth_token",
   { data_type => "mediumtext", is_nullable => 1 },
-  "flgAnonymized",
-  {
-    accessor      => "flg_anonymized",
-    data_type     => "tinyint",
-    default_value => 0,
-    is_nullable   => 1,
-  },
+  "anonymized",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-17 11:11:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:9XbNY+E7YqzsiUldTFg6Zg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-25 10:08:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:hzKeGjtecf3VyEvaBhDmUg
 
 
 # You can replace this text with custom code or comments, and it will be preserved on regeneration

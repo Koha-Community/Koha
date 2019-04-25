@@ -451,12 +451,11 @@ __PACKAGE__->table("borrowers");
   data_type: 'mediumtext'
   is_nullable: 1
 
-=head2 flgAnonymized
+=head2 anonymized
 
-  accessor: 'flg_anonymized'
   data_type: 'tinyint'
   default_value: 0
-  is_nullable: 1
+  is_nullable: 0
 
 =cut
 
@@ -660,13 +659,8 @@ __PACKAGE__->add_columns(
   { data_type => "integer", default_value => 0, is_nullable => 1 },
   "overdrive_auth_token",
   { data_type => "mediumtext", is_nullable => 1 },
-  "flgAnonymized",
-  {
-    accessor      => "flg_anonymized",
-    data_type     => "tinyint",
-    default_value => 0,
-    is_nullable   => 1,
-  },
+  "anonymized",
+  { data_type => "tinyint", default_value => 0, is_nullable => 0 },
 );
 
 =head1 PRIMARY KEY
@@ -1535,8 +1529,8 @@ Composing rels: L</aqorder_users> -> ordernumber
 __PACKAGE__->many_to_many("ordernumbers", "aqorder_users", "ordernumber");
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-17 11:11:33
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:ZkPU/EUsZVXiRoQ1E8NMbw
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-25 10:08:38
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:3qd/l8OkObSn8gTKTsHrkA
 
 __PACKAGE__->belongs_to(
     "guarantor",
