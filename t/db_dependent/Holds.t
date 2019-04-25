@@ -7,7 +7,7 @@ use t::lib::TestBuilder;
 
 use C4::Context;
 
-use Test::More tests => 58;
+use Test::More tests => 59;
 use MARC::Record;
 
 use C4::Biblio;
