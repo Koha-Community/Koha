@@ -1,5 +1,7 @@
 [%- USE Branches -%]
 [%- USE Koha -%]
+[%- USE To -%]
+[%- USE ItemTypes -%]
 [% USE AuthorisedValues %]
 [%- biblio = item.biblio -%]
 [%- biblioitem = item.biblioitem -%]
@@ -8,7 +10,7 @@
     <a href="/cgi-bin/koha/catalogue/detail.pl?biblionumber=[% biblio.biblionumber | uri %]" title="Go to record detail page">[% biblio.title | html %]</a>[% IF ( Koha.Preference( 'marcflavour' ) == 'UNIMARC' && biblio.author ) %] by[% END %] [% biblio.author | html %]
   [%~ END %]",
   "[% (biblioitem.publicationyear || biblio.copyrightdate) | html %]",
-  "[% biblioitem.publishercode | html %]",
+  "[% biblioitem.publishercode | html | $To %]",
   "[% AuthorisedValues.GetByCode( 'CCODE', item.ccode ) | html %]",
   "[% FILTER escape_quotes ~%]
     <a href="/cgi-bin/koha/catalogue/moredetail.pl?biblionumber=[% biblio.biblionumber | uri %]#item[% item.itemnumber | uri %]" title="Go to item details">[% item.barcode | html %]</a>
