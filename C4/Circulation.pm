@@ -2338,45 +2338,53 @@ sub _FixOverduesOnReturn {
         return;
     }
 
-    # check for overdue fine
-    my $accountlines = Koha::Account::Lines->search(
-        {
-            borrowernumber => $borrowernumber,
-            itemnumber     => $item,
-            accounttype    => 'OVERDUE',
-            status         => 'UNRETURNED'
+    my $schema = Koha::Database->schema;
+
+    my $result = $schema->txn_do(
+        sub {
+            # check for overdue fine
+            my $accountlines = Koha::Account::Lines->search(
+                {
+                    borrowernumber => $borrowernumber,
+                    itemnumber     => $item,
+                    accounttype    => 'OVERDUE',
+                    status         => 'UNRETURNED'
+                }
+            );
+            return 0 unless $accountlines->count; # no warning, there's just nothing to fix
+
+            my $accountline = $accountlines->next;
+            if ($exemptfine) {
+                my $amountoutstanding = $accountline->amountoutstanding;
+
+                my $account = Koha::Account->new({patron_id => $borrowernumber});
+                my $credit = $account->add_credit(
+                    {
+                        amount     => $amountoutstanding,
+                        user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
+                        library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
+                        interface  => C4::Context->interface,
+                        type       => 'forgiven',
+                        item_id    => $item
+                    }
+                );
+
+                $credit->apply({ debits => $accountlines->reset, offset_type => 'Forgiven' });
+
+                $accountline->status('FORGIVEN');
+
+                if (C4::Context->preference("FinesLog")) {
+                    &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
+                }
+            } else {
+                $accountline->status('RETURNED');
+            }
+
+            return $accountline->store();
         }
     );
-    return 0 unless $accountlines->count; # no warning, there's just nothing to fix
 
-    my $accountline = $accountlines->next;
-    if ($exemptfine) {
-        my $amountoutstanding = $accountline->amountoutstanding;
-
-        my $account = Koha::Account->new({patron_id => $borrowernumber});
-        my $credit = $account->add_credit(
-            {
-                amount     => $amountoutstanding,
-                user_id    => C4::Context->userenv ? C4::Context->userenv->{'number'} : undef,
-                library_id => C4::Context->userenv ? C4::Context->userenv->{'branch'} : undef,
-                interface  => C4::Context->interface,
-                type       => 'forgiven',
-                item_id    => $item
-            }
-        );
-
-        $credit->apply({ debits => $accountlines->reset, offset_type => 'Forgiven' });
-
-        $accountline->status('FORGIVEN');
-
-        if (C4::Context->preference("FinesLog")) {
-            &logaction("FINES", 'MODIFY',$borrowernumber,"Overdue forgiven: item $item");
-        }
-    } else {
-        $accountline->status('RETURNED');
-    }
-
-    return $accountline->store();
+    return $result;
 }
 
 =head2 _FixAccountForLostAndReturned
