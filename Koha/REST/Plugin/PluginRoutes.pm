@@ -50,11 +50,11 @@ sub register {
     {
         @plugins = Koha::Plugins->new()->GetPlugins(
             {
-                method => 'api_routes',
+                method => 'api_namespace',
             }
         );
         # plugin needs to define a namespace
-        @plugins = grep { $_->api_namespace } @plugins;
+        #@plugins = grep { $_->api_namespace } @plugins;
     }
 
     foreach my $plugin ( @plugins ) {
@@ -98,21 +98,38 @@ sub inject_routes {
 sub merge_spec {
     my ( $spec, $plugin ) = @_;
 
-    my $plugin_spec = $plugin->api_routes;
+    if($plugin->can('api_routes')) {
+        my $plugin_spec = $plugin->api_routes;
 
-    foreach my $route ( keys %{ $plugin_spec } ) {
+        foreach my $route ( keys %{ $plugin_spec } ) {
+            my $THE_route = '/contrib/' . $plugin->api_namespace . $route;
+            if ( exists $spec->{ $THE_route } ) {
+                # Route exists, overwriting is forbidden
+                Koha::Exceptions::Plugin::ForbiddenAction->throw(
+                    "Attempted to overwrite $THE_route"
+                );
+            }
 
-        my $THE_route = '/contrib/' . $plugin->api_namespace . $route;
-        if ( exists $spec->{ $THE_route } ) {
-            # Route exists, overwriting is forbidden
-            Koha::Exceptions::Plugin::ForbiddenAction->throw(
-                "Attempted to overwrite $THE_route"
-            );
+            $spec->{'paths'}->{ $THE_route } = $plugin_spec->{ $route };
         }
-
-        $spec->{'paths'}->{ $THE_route } = $plugin_spec->{ $route };
     }
 
+    if($plugin->can('static_routes')) {
+        my $plugin_spec = $plugin->static_routes;
+
+        foreach my $route ( keys %{ $plugin_spec } ) {
+
+            my $THE_route = '/contrib/' . $plugin->api_namespace . '/static'.$route;
+            if ( exists $spec->{ $THE_route } ) {
+                # Route exists, overwriting is forbidden
+                Koha::Exceptions::Plugin::ForbiddenAction->throw(
+                    "Attempted to overwrite $THE_route"
+                );
+            }
+
+            $spec->{'paths'}->{ $THE_route } = $plugin_spec->{ $route };
+        }
+    }
     return $spec;
 }
 
