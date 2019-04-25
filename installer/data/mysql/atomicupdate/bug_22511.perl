@@ -15,7 +15,7 @@ if ( CheckVersion($DBversion) ) {
     $sth->execute();
     while (my $row = $sth->fetchrow_hashref) {
         $sth2->execute($row->{accountlines_id});
-        my $result = $sth2->fetchrow;
+        my $result = $sth2->fetchrow_hashref;
         my $type = $types_map->{$result->{'type'}} // 'Pay';
         $sth3->execute($type,$row->{accountlines_id});
     }
