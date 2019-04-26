@@ -29,6 +29,7 @@ use Koha::AuthUtils;
 use t::lib::Mocks;
 use t::lib::Selenium;
 use t::lib::TestBuilder;
+use t::lib::Mocks;
 
 eval { require Selenium::Remote::Driver; };
 skip "Selenium::Remote::Driver is needed for selenium tests.", 1 if $@;
