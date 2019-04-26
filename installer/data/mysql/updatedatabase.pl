@@ -18384,6 +18384,17 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 14576: Add UpdateItemLocationOnCheckin syspref)\n";
 }
 
+$DBversion = '18.12.00.065';
+if( CheckVersion( $DBversion ) ) {
+    $dbh->do( q{
+        INSERT IGNORE INTO systempreferences ( `variable`, `value`, `options`, `explanation`, `type` )
+        SELECT 'IndependentBranchesTransfers', value, NULL, 'Allow non-superlibrarians to transfer items between libraries','YesNo'
+        FROM systempreferences WHERE variable = 'IndependentBranches'
+    });
+    SetVersion( $DBversion );
+    print "Upgrade to $DBversion done (Bug 10300 - Allow transferring of items to be have separate IndependentBranches syspref)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
