@@ -154,7 +154,7 @@ sub can_be_transferred {
     my $limittype = C4::Context->preference('BranchTransferLimitsType');
 
     my $items;
-    foreach my $item_of_bib ($self->items) {
+    foreach my $item_of_bib ($self->items->as_list) {
         next unless $item_of_bib->holdingbranch;
         next if $from && $from->branchcode ne $item_of_bib->holdingbranch;
         return 1 if $item_of_bib->holdingbranch eq $to->branchcode;
@@ -207,7 +207,7 @@ sub hidden_in_opac {
 
     my $rules = $params->{rules} // {};
 
-    return !(any { !$_->hidden_in_opac({ rules => $rules }) } $self->items);
+    return !(any { !$_->hidden_in_opac({ rules => $rules }) } $self->items->as_list);
 }
 
 =head3 article_request_type
@@ -457,7 +457,7 @@ sub has_items_waiting_or_intransit {
         return 1;
     }
 
-    foreach my $item ( $self->items ) {
+    foreach my $item ( $self->items->as_list ) {
         return 1 if $item->get_transfer;
     }
 

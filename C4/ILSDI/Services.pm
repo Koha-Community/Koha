@@ -230,7 +230,7 @@ sub GetRecords {
         my $biblioitemnumber = $biblioitem->{'biblioitemnumber'};
         my $holds  = $biblio->current_holds->unblessed;
         my $issues           = GetBiblioIssues($biblionumber);
-        my @items            = $biblio->items;
+        my @items            = $biblio->items->as_list;
 
         $biblioitem->{items}->{item} = [];
 

@@ -101,7 +101,7 @@ subtest 'items() tests' => sub {
     is( ref($items), 'Koha::Items', 'Returns a Koha::Items resultset' );
     is( $items->count, 2, 'Two items in resultset' );
 
-    my @items = $biblio->items;
+    my @items = $biblio->items->as_list;
     is( scalar @items, 2, 'Same result, but in list context' );
 
     $schema->storage->txn_rollback;
