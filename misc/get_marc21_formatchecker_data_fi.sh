@@ -13,7 +13,7 @@ function getfiles() {
  FILES=$@
  for x in $FILES; do
     FNAME="$DATADIR/$SDIR-${x}.xml"
-    wget "http://marc21.kansalliskirjasto.fi/$SDIR/${x}.xml" -O "$FNAME"
+    wget "https://marc21.kansalliskirjasto.fi/$SDIR/${x}.xml" -O "$FNAME"
  done
 }
 
