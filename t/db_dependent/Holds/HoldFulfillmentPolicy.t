@@ -143,7 +143,7 @@ Koha::Holds->find( $reserve_id )->cancel;
 t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '1' );
 t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
 Koha::Holds->search()->delete();
-my ($item) = Koha::Biblios->find($biblionumber)->items;
+my ($item) = Koha::Biblios->find($biblionumber)->items->as_list;
 my $limit = Koha::Item::Transfer::Limit->new(
     {
         toBranch   => $library_C,

@@ -527,7 +527,7 @@ ok( C4::Reserves::IsAvailableForItemLevelRequest($item, $borrower), "Reserving a
 my $pickup_branch = $builder->build({ source => 'Branch' })->{ branchcode };
 t::lib::Mocks::mock_preference( 'UseBranchTransferLimits',  '1' );
 t::lib::Mocks::mock_preference( 'BranchTransferLimitsType', 'itemtype' );
-my ($item_object) = Koha::Biblios->find($biblionumber)->items;
+my ($item_object) = Koha::Biblios->find($biblionumber)->items->as_list;
 my $limit = Koha::Item::Transfer::Limit->new(
     {
         toBranch   => $pickup_branch,

@@ -1210,7 +1210,7 @@ sub checkHighHolds {
             # dynamic means X more than the number of holdable items on the record
 
             # let's get the items
-            my @items = $holds->next()->biblio()->items();
+            my @items = $holds->next()->biblio()->items()->as_list;
 
             # Remove any items with status defined to be ignored even if the would not make item unholdable
             foreach my $status (@decreaseLoanHighHoldsIgnoreStatuses) {
