@@ -99,7 +99,7 @@ while ( my $data = $sth->fetchrow_hashref ) {
         $left = $data->{'quantity'};
     }
     if ( $left && $left > 0 ) {
-        my $subtotal = get_rounded_price( $left * $data->{'ecost_tax_included'} );
+        my $subtotal = $left * get_rounded_price( $data->{'ecost_tax_included'} );
         $data->{subtotal} = sprintf( "%.2f", $subtotal );
         $data->{'left'} = $left;
         push @ordered, $data;
