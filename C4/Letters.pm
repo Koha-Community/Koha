@@ -1324,7 +1324,7 @@ sub _send_message_by_email {
 
     $sendmail_params{'Auth'} = {user => $username, pass => $password, method => $method} if $username;
 
-    _update_message_to_address($message->{'message_id'},$sendmail_params{To}) if $message->{to_address} ne $sendmail_params{To}; #if initial message address was empty, coming here means that a to address was found and queue should be updated; same if to address was overriden by create_message_headers
+    _update_message_to_address($message->{'message_id'},$sendmail_params{To}) if !$message->{to_address} || $message->{to_address} ne $sendmail_params{To}; #if initial message address was empty, coming here means that a to address was found and queue should be updated; same if to address was overriden by create_message_headers
 
     if ( Mail::Sendmail::sendmail( %sendmail_params ) ) {
         _set_message_status( { message_id => $message->{'message_id'},
