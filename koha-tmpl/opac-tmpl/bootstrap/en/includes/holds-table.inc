@@ -32,7 +32,11 @@
                 </tr>
             </thead>
             <tbody>
+                [% SET all_holds_waiting = 1 %]
                 [% FOREACH HOLD IN HOLDS %]
+                    [% UNLESS ( HOLD.is_waiting || HOLD.is_in_transit ) %]
+                        [% SET all_holds_waiting = 0 %]
+                    [% END %]
                     [% IF ( HOLD.is_waiting ) %]
                         [% IF ( HOLD.is_at_destination ) %]
                             [% IF ( HOLD.is_found ) %]
@@ -127,7 +131,7 @@
                                     Item in transit from <b> [% Branches.GetName( transfer.frombranch ) | html %]</b> since
                                     [% transfer.datesent | $KohaDates %]
                                 [% ELSIF ( HOLD.suspend ) %]
-                                    Suspended [% IF ( HOLD.suspend_until ) %] until [% HOLD.suspend_until | html %] [% END %]
+                                    Suspended [% IF ( HOLD.suspend_until ) %] until [% HOLD.suspend_until | $KohaDates %] [% END %]
                                 [% ELSE %]
                                     [% IF HOLD.itemtype %]
                                         Pending for next available item of item type '[% ItemTypes.GetDescription( HOLD.itemtype ) | html %]'
@@ -199,25 +203,27 @@
         </table>
 
         [% IF SuspendHoldsOpac and ! onlyinfo %]
-            <div>
-                <form class="form-inline" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                    <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_SUSPEND_HOLDS);"><i class="fa fa-pause"></i> Suspend all holds</button>
-                    <input type="hidden" name="suspend" value="1" />
+            [% UNLESS ( all_holds_waiting ) %]
+                <div>
+                    <form class="form-inline" id="suspend_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                        <button type="submit" id="suspend_all_submit" class="btn"><i class="fa fa-pause"></i> Suspend all holds</button>
+                        <input type="hidden" name="suspend" value="1" />
 
-                    [% IF AutoResumeSuspendedHolds %]
-                        <label for="suspend_until"> until </label>
-                        <input type="text" name="suspend_until" id="suspend_until" class="suspend-until" readonly="readonly" size="10" />
-                        <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date to suspend indefinitely</a>
-                    [% END %]
-                </form>
-            </div>
-            <br/>
-            <div>
-                <form action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
-                    <button type="submit" name="submit" class="btn" onclick="return confirmDelete(MSG_CONFIRM_RESUME_HOLDS);"><i class="fa fa-play"></i> Resume all suspended holds</button>
-                    <input type="hidden" name="suspend" value="0" />
-                </form>
-            </div>
+                        [% IF AutoResumeSuspendedHolds %]
+                            <label for="suspend_until"> until </label>
+                            <input type="text" name="suspend_until" id="suspend_until" class="suspend-until" readonly="readonly" size="10" />
+                            <a href="#" style="font-size:85%;text-decoration:none;" onclick="document.getElementById('suspend_until').value='';return false;">Clear date to suspend indefinitely</a>
+                        [% END %]
+                    </form>
+                </div>
+                <br/>
+                <div>
+                    <form id="resume_all_holds" action="/cgi-bin/koha/opac-modrequest-suspend.pl" method="post">
+                        <button type="submit" id="resume_all_submit" class="btn"><i class="fa fa-play"></i> Resume all suspended holds</button>
+                        <input type="hidden" name="suspend" value="0" />
+                    </form>
+                </div>
+            [% END %]
         [% END %]
     </div> <!-- / #opac-user-holds -->
 [% END # / #HOLDS.count %]
