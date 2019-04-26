@@ -281,7 +281,7 @@ Edit news item[% ELSE %]Add news item[% END %][% ELSE %]News[% END %]</div>
             [% FOREACH location IN [ '', 'OpacNavRight' ] %]
                 [% IF ( location == '' ) %]
                     [% SET location_lang = lang_lis.language %]
-                    [% SET location = "OPAC news" %]
+                    [% SET location = BLOCK %]OPAC news[% END %]
                 [% ELSE %]
                     [% SET location_lang = location _ "_" _ lang_lis.language %]
                 [% END %]
