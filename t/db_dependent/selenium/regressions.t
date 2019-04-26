@@ -196,7 +196,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
             {
                 class => 'Koha::Virtualshelves',
                 value => {
-                    category                 => 1,
+                    category                 => 2,
                     allow_change_from_owner  => 1,
                     allow_change_from_others => 0,
                     owner                    => $patron->borrowernumber
@@ -210,7 +210,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     $patron->set_password({ password => $password });
     $s->opac_auth( $patron->userid, $password );
 
-    my $public_lists = $s->opac_base_url . q|opac-shelves.pl?op=list&category=1|;
+    my $public_lists = $s->opac_base_url . q|opac-shelves.pl?op=list&category=2|;
     $driver->get($public_lists);
 
     $s->remove_error_handler;
@@ -219,7 +219,7 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     is( $alert_text, undef, 'No alert box displayed' );
 
     my $booh_alert = 'booh!';
-    $public_lists = $s->opac_base_url . qq|opac-shelves.pl?op=list&category=1"><script>alert('$booh_alert')</script>|;
+    $public_lists = $s->opac_base_url . qq|opac-shelves.pl?op=list&category=2"><script>alert('$booh_alert')</script>|;
     $driver->get($public_lists);
 
     $s->remove_error_handler;
