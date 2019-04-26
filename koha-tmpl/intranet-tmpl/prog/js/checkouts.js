@@ -413,7 +413,7 @@ $(document).ready(function() {
                                     + "</span>";
 
                             span_style = "display: none";
-                            span_class = "renewals-allowed";
+                            span_class = "renewals-allowed-on_reserve";
                         } else if ( oObj.can_renew_error == "too_many" ) {
                             msg += "<span class='renewals-disabled'>"
                                     + NOT_RENEWABLE
@@ -790,9 +790,17 @@ $(document).ready(function() {
     if ( AllowRenewalLimitOverride || AllowRenewalOnHoldOverride ) {
         $( '#override_limit' ).click( function () {
             if ( this.checked ) {
-                $( '.renewals-allowed' ).show(); $( '.renewals-disabled' ).hide();
+                if ( AllowRenewalLimitOverride ) {
+                    $( '.renewals-allowed' ).show();
+                    $( '.renewals-disabled' ).hide();
+                }
+                if ( AllowRenewalOnHoldOverride ) {
+                    $( '.renewals-allowed-on_reserve' ).show();
+                }
             } else {
-                $( '.renewals-allowed' ).hide(); $( '.renewals-disabled' ).show();
+                $( '.renewals-allowed' ).hide();
+                $( '.renewals-allowed-on_reserve' ).hide();
+                $( '.renewals-disabled' ).show();
             }
         } ).prop('checked', false);
     }
