@@ -224,7 +224,7 @@ sub checkpw_ldap {
         my @columns = Koha::Patrons->columns;
         my $patron = Koha::Patron->new(
             {
-                map { defined( $borrower{$_} ) ? ( $_ => $borrower{$_} ) : () } @columns
+                map { exists( $borrower{$_} ) ? ( $_ => $borrower{$_} ) : () } @columns
             }
         )->store;
         die "Insert of new patron failed" unless $patron;
