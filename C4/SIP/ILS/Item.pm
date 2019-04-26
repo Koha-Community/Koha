@@ -75,7 +75,7 @@ use Koha::Holds;
 sub new {
     my ($class, $item_id) = @_;
     my $type = ref($class) || $class;
-    my $item = Koha::Items->find( { barcode => $item_id } );
+    my $item = Koha::Items->find( { barcode => barcodedecode( $item_id ) } );
     unless ( $item ) {
         syslog("LOG_DEBUG", "new ILS::Item('%s'): not found", $item_id);
         warn "new ILS::Item($item_id) : No item '$item_id'.";
