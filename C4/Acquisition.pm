@@ -685,7 +685,7 @@ sub GetBasketsInfosByBookseller {
             , aqorders.quantity
             , 0)
           ) AS expected_items,
-	  SUM( aqorders.uncertainprice ) AS uncertainprices
+        SUM( aqorders.uncertainprice ) AS uncertainprices
         FROM aqbasket
           LEFT JOIN aqorders ON aqorders.basketno = aqbasket.basketno
         WHERE booksellerid = ?};
