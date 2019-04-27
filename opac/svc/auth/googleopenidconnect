@@ -196,7 +196,7 @@ elsif ( defined $query->param('code') ) {
                     if (defined $patron_category && defined $library) {
                         my $password = undef;
                         # TODO errors handling!
-                        my $borrower = Koha::Patron->new(
+                        my $borrower = Koha::Patron->new({
                             firstname    => $firstname,
                             surname      => $surname,
                             email        => $email,
@@ -204,7 +204,7 @@ elsif ( defined $query->param('code') ) {
                             branchcode   => $branchcode,
                             userid       => $userid,
                             password     => $password
-                        )->store;
+                        })->store;
                     } else {
                         $error_feedback = 'The GoogleOpenIDConnectDefaultBranch or GoogleOpenIDConnectDefaultCategory system preferences are not configured properly. Please contact the library with this error message.';
                     }
