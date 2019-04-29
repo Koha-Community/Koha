@@ -229,7 +229,7 @@
                 <th>Home library</th>
                 [% IF ( itemdata_ccode ) %]<th>Collection</th>[% END %]
                 <th>Call number</th>
-                [% IF ( volinfo ) %]<th>Serial enumeration / chronology</th>[% END %]
+                [% IF volinfo %]<th class="title-string">Serial enumeration / chronology</th>[% END %]
                 <th>Status</th>
                 <th class="title-string">Last seen</th>
                 <th class="title-string">Date accessioned</th>
@@ -286,6 +286,7 @@ Note that permanent location is a code, and location may be an authval.
                     <td class="itemcallnumber">[% IF ( item.itemcallnumber ) %] [% item.itemcallnumber | html %][% END %]</td>
                     [% IF ( volinfo ) %]
                         <td class="enumchron">
+                            <span title="[% item.publisheddate | html %]">
                             [% IF ( itemdata_enumchron ) %]
                                 [% IF item.enumchron && item.serialseq %]
                                     <span class="enum">[% item.enumchron | html %]</span>
@@ -302,6 +303,7 @@ Note that permanent location is a code, and location may be an authval.
                                     <span class="pubdate">([% item.publisheddate | $KohaDates %])</span>
                                 [% END %]
                             [% END %]
+                            </span>
                         </td>
                     [% END %]
                     <td class="status">
