@@ -1722,58 +1722,40 @@ Neither C<$branchcode> nor C<$itemtype> should be '*'.
 sub GetBranchItemRule {
     my ( $branchcode, $itemtype ) = @_;
 
-    # Set search precedences
-    my @params = (
+    # Search for rules!
+    my $holdallowed_rule = Koha::CirculationRules->get_effective_rule(
         {
-            branchcode   => $branchcode,
-            categorycode => undef,
-            itemtype     => $itemtype,
-        },
+            branchcode => $branchcode,
+            itemtype => $itemtype,
+            rule_name => 'holdallowed',
+        }
+    );
+    my $hold_fulfillment_policy_rule = Koha::CirculationRules->get_effective_rule(
         {
-            branchcode   => $branchcode,
-            categorycode => undef,
-            itemtype     => undef,
-        },
+            branchcode => $branchcode,
+            itemtype => $itemtype,
+            rule_name => 'hold_fulfillment_policy',
+        }
+    );
+    my $returnbranch_rule = Koha::CirculationRules->get_effective_rule(
         {
-            branchcode   => undef,
-            categorycode => undef,
-            itemtype     => $itemtype,
-        },
-        {
-            branchcode   => undef,
-            categorycode => undef,
-            itemtype     => undef,
-        },
+            branchcode => $branchcode,
+            itemtype => $itemtype,
+            rule_name => 'returnbranch',
+        }
     );
 
-    # Initialize default values
-    my $rules = {
-        holdallowed             => undef,
-        hold_fulfillment_policy => undef,
-        returnbranch            => undef,
-    };
-
-    # Search for rules!
-    foreach my $rule_name (qw( holdallowed hold_fulfillment_policy returnbranch )) {
-        foreach my $params (@params) {
-            my $rule = Koha::CirculationRules->search(
-                {
-                    rule_name => $rule_name,
-                    %$params,
-                }
-            )->next();
-
-            if ( $rule ) {
-                $rules->{$rule_name} = $rule->rule_value;
-                last;
-            }
-        }
-    }
-
     # built-in default circulation rule
-    $rules->{holdallowed} = 2                 unless ( defined $rules->{holdallowed} );
-    $rules->{hold_fulfillment_policy} = 'any' unless ( defined $rules->{hold_fulfillment_policy} );
-    $rules->{returnbranch} = 'homebranch'     unless ( defined $rules->{returnbranch} );
+    my $rules;
+    $rules->{holdallowed} = defined $holdallowed_rule
+        ? $holdallowed_rule->rule_value
+        : 2;
+    $rules->{hold_fulfillment_policy} = defined $hold_fulfillment_policy_rule
+        ? $hold_fulfillment_policy_rule->rule_value
+        : 'any';
+    $rules->{returnbranch} = defined $returnbranch_rule
+        ? $returnbranch_rule->rule_value
+        : 'homebranch';
 
     return $rules;
 }
