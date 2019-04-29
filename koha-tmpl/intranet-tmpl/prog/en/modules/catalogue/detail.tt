@@ -148,6 +148,10 @@
           </span>
         [% END %]
 
+        [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
+            <span id="catalogue_detail_elastic_record" class="results_summary"><span class="label">Elasticsearch Record :</span> <a href="/cgi-bin/koha/catalogue/showelastic.pl?id=[% biblionumber | uri %]" title="ELASTIC" class="previewElastic">Show</a></span>
+        [% END %]
+
         [% IF ( holdcount ) %]
             <span class="results_summary">
                 <span class="label">Holds:</span>
@@ -1118,6 +1122,23 @@ Note that permanent location is a code, and location may be an authval.
     </div>
 </div>
 
+<div id="elasticPreview" class="modal" tabindex="-1" role="dialog" aria-labelledby="elasticPreviewLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+    <div class="modal-header">
+        <button type="button" class="closebtn" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="elasticPreviewLabel">Elastic record</h3>
+    </div>
+    <div class="modal-body">
+        <div id="loading"> <img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /> Loading </div>
+    </div>
+    <div class="modal-footer">
+        <button class="btn btn-default" data-dismiss="modal" aria-hidden="true">Close</button>
+    </div>
+    </div>
+    </div>
+</div>
+
             </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 
@@ -1710,10 +1731,18 @@ Note that permanent location is a code, and location may be an authval.
                 var page = $(this).attr("href");
                 $("#marcPreview .modal-body").load(page + " table");
                 $('#marcPreview').modal({show:true});
+
             });
-            $("#marcPreview").on("hidden.bs.modal", function(){
-                $("#marcPreview .modal-body").html("<div id=\"loading\"><img src=\"[% interface | html %]/[% theme | html %]/img/spinner-small.gif\" alt=\"\" /> "+_("Loading")+"</div>");
+
+           [% IF ( Koha.Preference('SearchEngine') == 'Elasticsearch' ) %]
+            $("body").on("click",".previewElastic", function(e){
+                e.preventDefault();
+                var pageElastic = $(this).attr("href");
+                $("#elasticPreview .modal-body").load(pageElastic);
+                $('#elasticPreview').modal({show:true});
             });
+           [% END %]
+
             [% IF ( Koha.Preference('NovelistSelectStaffEnabled') && Koha.Preference('NovelistSelectStaffProfile') && ( normalized_isbn || normalized_upc ) ) %]
                 novSelect.loadContentForQuery({
                     ClientIdentifier : '[% IF normalized_isbn %][% normalized_isbn | html %][% ELSE %][% normalized_upc | html %][% END %]',
@@ -2421,5 +2450,6 @@ Note that permanent location is a code, and location may be an authval.
             });
         [% END %]
     </script>
+
 [% END %]
 [% INCLUDE 'intranet-bottom.inc' %]

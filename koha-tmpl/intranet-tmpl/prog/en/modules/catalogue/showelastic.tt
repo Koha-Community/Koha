@@ -1,0 +1,35 @@
+[% INCLUDE 'doc-head-open.inc' %]
+[% USE raw %]
+<title>Koha &rsaquo; Cataloging &rsaquo; MARC import</title>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+</head>
+<body id="catalog_showelastic" class="catalog">
+    <pre id="main" style="direction: ltr;">
+
+    </pre>
+</body>
+<footer>
+    <style>
+        textarea
+        {
+            width: 100%;
+            min-height: 40em;
+            background-color : white;
+            resize:none;
+        }
+    </style>
+    <script>
+        display();
+
+        function display() {
+            let myJSON = JSON.stringify([% esrecord | $raw %], null, '\t');
+            let decode = decodeURIComponent(escape(myJSON));
+            let para = document.createElement('textarea');
+            para.disabled="yes";
+            para.textContent = decode;
+            document.getElementById('main').appendChild(para);
+        }
+
+    </script>
+</footer>
+</html>
