@@ -166,21 +166,6 @@ __PACKAGE__->set_primary_key("itemtype");
 
 =head1 RELATIONS
 
-=head2 branch_item_rules
-
-Type: has_many
-
-Related object: L<Koha::Schema::Result::BranchItemRule>
-
-=cut
-
-__PACKAGE__->has_many(
-  "branch_item_rules",
-  "Koha::Schema::Result::BranchItemRule",
-  { "foreign.itemtype" => "self.itemtype" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
 =head2 circulation_rules
 
 Type: has_many
@@ -192,21 +177,6 @@ Related object: L<Koha::Schema::Result::CirculationRule>
 __PACKAGE__->has_many(
   "circulation_rules",
   "Koha::Schema::Result::CirculationRule",
-  { "foreign.itemtype" => "self.itemtype" },
-  { cascade_copy => 0, cascade_delete => 0 },
-);
-
-=head2 default_branch_item_rule
-
-Type: might_have
-
-Related object: L<Koha::Schema::Result::DefaultBranchItemRule>
-
-=cut
-
-__PACKAGE__->might_have(
-  "default_branch_item_rule",
-  "Koha::Schema::Result::DefaultBranchItemRule",
   { "foreign.itemtype" => "self.itemtype" },
   { cascade_copy => 0, cascade_delete => 0 },
 );
@@ -242,8 +212,8 @@ __PACKAGE__->has_many(
 );
 
 
-# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-03-07 17:30:46
-# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:CDIOU6LmF7suaujk1NQOeg
+# Created by DBIx::Class::Schema::Loader v0.07046 @ 2019-04-29 15:02:52
+# DO NOT MODIFY THIS OR ANYTHING ABOVE! md5sum:X7Py35p8kotheBvJjuwDcA
 
 # Use the ItemtypeLocalization view to create the join on localization
 our $LANGUAGE;
