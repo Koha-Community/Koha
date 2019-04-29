@@ -16368,6 +16368,12 @@ if( CheckVersion( $DBversion ) ) {
     print "Upgrade to $DBversion done (Bug 19670 - Change collation of marc_field to allow mixed case search field mappings)\n";
 }
 
+$DBversion = "18.05.12.000";
+if ( CheckVersion($DBversion) ) {
+        print "Upgrade to $DBversion done (18.05.12 release)\n";
+            SetVersion ($DBversion);
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
