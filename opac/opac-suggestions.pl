@@ -208,11 +208,11 @@ if ( C4::Context->preference("AllowPurchaseSuggestionBranchChoice") ) {
     $template->param( branchcode => $branchcode );
 }
 
-my $mandatoryfields = '';
+my @mandatoryfields;
 {
     last unless ($op eq 'add');
     my $fldsreq_sp = C4::Context->preference("OPACSuggestionMandatoryFields") || 'title';
-    $mandatoryfields = join(', ', (map { '"'.$_.'"'; } sort split(/\s*\,\s*/, $fldsreq_sp)));
+    @mandatoryfields = sort split(/\s*\,\s*/, $fldsreq_sp);
 }
 
 $template->param(
@@ -224,7 +224,7 @@ $template->param(
     messages              => \@messages,
     suggestionsview       => 1,
     suggested_by_anyone   => $suggested_by_anyone,
-    mandatoryfields       => $mandatoryfields,
+    mandatoryfields       => \@mandatoryfields,
     patrons_pending_suggestions_count => $patrons_pending_suggestions_count,
 );
 

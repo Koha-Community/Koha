@@ -339,9 +339,9 @@
           return true;
         });
         [% END %]
-        [% IF ( op_add && mandatoryfields ) %]
+        [% IF ( op_add && mandatoryfields.size ) %]
         {
-            var FldsRequired = [[% mandatoryfields | $raw %]];
+            var FldsRequired = ['[% mandatoryfields.join("','") | html %]'];
             for (var i = 0; i < FldsRequired.length; i++) {
                 var rq_input = $('#' + FldsRequired[i]);
                 if (rq_input.length != 1) continue;
