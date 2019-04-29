@@ -188,7 +188,7 @@ subtest 'Display circulation table correctly' => sub {
 };
 
 subtest 'XSS vulnerabilities in pagination' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my $patron = $builder->build_object({ class => 'Koha::Patrons' });
     for ( 1 .. 30 ) { # We want the pagination to be displayed
@@ -228,7 +228,8 @@ subtest 'XSS vulnerabilities in pagination' => sub {
     is( $alert_text, undef, 'No alert box displayed, even if evil intent' );
 
     my $second_page = $driver->find_element('//div[@class="pages"]/span[@class="currentPage"]/following-sibling::a');
-    like( $second_page->get_attribute('href'), qr{category=1%22%3E%3Cscript%3Ealert%28%27booh%21%27%29%3C%2Fscript%3E}, 'The second patch should displayed the variables and attributes correctly URI escaped' );
+    unlike( $second_page->get_attribute('href'), qr{%22%3E%3Cscript%3Ealert%28%27booh%21%27%29%3C%2Fscript%3E}, 'The second page link should not contain any script tags (escaped or otherwise)' );
+    unlike( $second_page->get_attribute('href'), qr{"<script>alert('booh!')</script>}, 'The second page link should not contain any script tags (escaped or otherwise)' );
 
     push @cleanup, $patron, $patron->category, $patron->library;
 };
