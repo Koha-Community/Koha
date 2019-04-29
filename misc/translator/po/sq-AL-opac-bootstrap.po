@@ -6,7 +6,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
-"POT-Creation-Date: 2019-03-19 11:06-0300\n"
+"POT-Creation-Date: 2019-04-20 13:40-0300\n"
 "PO-Revision-Date: 2016-09-06 13:39+0000\n"
 "Last-Translator: Erjon <it@uart.edu.al>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1055,19 +1055,6 @@ msgstr ""
 msgid "%s%s %sitem%sitems%s%sEmpty%s"
 msgstr "%s%s %stitulli%stitujt%s%sBosh%s"
 
-#. %1$s:  IF ( LibraryNameTitle ) 
-#. %2$s:  LibraryNameTitle 
-#. %3$s:  ELSE 
-#. %4$s:  END 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:3
-#, c-format
-msgid ""
-"%s%s - Forgotten password recovery%sKoha online%s catalog - Forgotten "
-"password recovery"
-msgstr ""
-"%s%s - Rikuperimi i fjalëkalimit të harruar%sKatalogu online%s Koha - "
-"Rikuperimi i fjalëkalimit të harruar"
-
 #. %1$s:  INCLUDE 'doc-head-open.inc' 
 #. %2$s:  IF ( LibraryNameTitle ) 
 #. %3$s:  LibraryNameTitle 
@@ -1453,6 +1440,15 @@ msgstr "%s%s%sKatalogu online%s koha &rsaquo; Shkarko listat %s"
 #, c-format
 msgid "%s%s%sKoha online%s catalog &rsaquo; Entry %s"
 msgstr "%s%s%sKatalogu online%s koha &rsaquo; Hyrje %s"
+
+#. %1$s:  IF ( LibraryNameTitle ) 
+#. %2$s:  LibraryNameTitle | html 
+#. %3$s:  ELSE 
+#. %4$s:  END 
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:3
+#, fuzzy, c-format
+msgid "%s%s%sKoha online%s catalog &rsaquo; Forgotten password recovery"
+msgstr "%s%s%sKatalogu online%s koha &rsaquo; Ndërroni fjalëkalimin"
 
 #. %1$s:  IF ( LibraryNameTitle ) 
 #. %2$s:  LibraryNameTitle 
@@ -1998,7 +1994,7 @@ msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
 "AuthenticatePatron&gt; &lt;id&gt;419&lt;/id&gt; &lt;/AuthenticatePatron&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:779
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:780
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;CancelHold&gt; "
@@ -2008,7 +2004,7 @@ msgstr ""
 "&lt;message&gt;Canceled&lt;/message&gt; &lt;/CancelHold&gt;"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:528
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetPatronInfo&gt; "
 "&lt;category_type&gt;A&lt;/category_type&gt; &lt;categorycode&gt;ADUEXT&lt;/"
@@ -2019,18 +2015,19 @@ msgid ""
 "enrolmentperiod&gt;12&lt;/enrolmentperiod&gt; &lt;charges&gt;6.00&lt;/"
 "charges&gt; &lt;dateenrolled&gt;2009-03-04&lt;/dateenrolled&gt; &lt;"
 "borrowernotes&gt;&lt;/borrowernotes&gt; &lt;dateexpiry&gt;2010-03-04&lt;/"
-"dateexpiry&gt; &lt;firstname&gt;Jean-André&lt;/firstname&gt; &lt;"
-"gonenoaddress&gt;0&lt;/gonenoaddress&gt; &lt;dateofbirth&gt;1984-06-08&lt;/"
-"dateofbirth&gt; &lt;debarred&gt;0&lt;/debarred&gt; &lt;branchname&gt;"
-"Bibliothèque Jean Prunier&lt;/branchname&gt; &lt;surname&gt;SANTONI&lt;/"
-"surname&gt; &lt;cardnumber&gt;815&lt;/cardnumber&gt; &lt;initials&gt;JAS&lt;/"
-"initials&gt; &lt;sort1&gt;CSP5&lt;/sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;"
-"loans&gt; &lt;loan&gt; &lt;lastreneweddate&gt;2009-04-03&lt;/"
-"lastreneweddate&gt; &lt;isbn&gt;2253003689&lt;/isbn&gt; &lt;"
-"borrowernumber&gt;419&lt;/borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/"
-"branchcode&gt; &lt;itemnumber&gt;4454&lt;/itemnumber&gt; &lt;"
-"date_due&gt;2009-05-06&lt;/date_due&gt; &lt;barcode&gt;4765476&lt;/"
-"barcode&gt; &lt;datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
+"dateexpiry&gt; &lt;is_expired&gt;0&lt;/is_expired&gt; &lt;firstname&gt;Jean-"
+"André&lt;/firstname&gt; &lt;gonenoaddress&gt;0&lt;/gonenoaddress&gt; &lt;"
+"dateofbirth&gt;1984-06-08&lt;/dateofbirth&gt; &lt;debarred&gt;0&lt;/"
+"debarred&gt; &lt;branchname&gt;Bibliothèque Jean Prunier&lt;/branchname&gt; "
+"&lt;surname&gt;SANTONI&lt;/surname&gt; &lt;cardnumber&gt;815&lt;/"
+"cardnumber&gt; &lt;initials&gt;JAS&lt;/initials&gt; &lt;sort1&gt;CSP5&lt;/"
+"sort1&gt; &lt;sex&gt;M&lt;/sex&gt; &lt;loans&gt; &lt;loan&gt; &lt;"
+"lastreneweddate&gt;2009-04-03&lt;/lastreneweddate&gt; &lt;"
+"isbn&gt;2253003689&lt;/isbn&gt; &lt;borrowernumber&gt;419&lt;/"
+"borrowernumber&gt; &lt;branchcode&gt;BIB&lt;/branchcode&gt; &lt;"
+"itemnumber&gt;4454&lt;/itemnumber&gt; &lt;date_due&gt;2009-05-06&lt;/"
+"date_due&gt; &lt;barcode&gt;4765476&lt;/barcode&gt; &lt;"
+"datelastseen&gt;2008-08-23&lt;/datelastseen&gt; &lt;"
 "issuedate&gt;2008-08-23&lt;/issuedate&gt; &lt;title&gt;L'Île au trésor&lt;/"
 "title&gt; &lt;itemtype&gt;LITT&lt;/itemtype&gt; &lt;author&gt;Robert Louis "
 "Stevenson&lt;/author&gt; &lt;timestamp&gt;2009-04-03 14:46:10&lt;/"
@@ -2150,7 +2147,7 @@ msgstr ""
 "frameworkcode&gt; &lt;datelastborrowed&gt;2008-08-23&lt;/"
 "datelastborrowed&gt; &lt;/loan&gt; &lt;/loans&gt; &lt;/GetPatronInfo&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:647
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:648
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;"
@@ -2382,7 +2379,7 @@ msgstr ""
 "dateaccessioned&gt; &lt;/item&gt; &lt;/items&gt; &lt;/record&gt; &lt;"
 "record&gt;RecordNotFound&lt;/record&gt; &lt;/GetRecords&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:670
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:671
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;GetServices&gt; "
@@ -2393,8 +2390,8 @@ msgstr ""
 "&lt;AvailableFor&gt;title level hold&lt;/AvailableFor&gt; &lt;"
 "AvailableFor&gt;item level hold&lt;/AvailableFor&gt; &lt;/GetServices&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:725
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:756
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:726
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:757
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;HoldTitle&gt; &lt;"
@@ -2416,7 +2413,7 @@ msgstr ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;LookupPatron&gt; "
 "&lt;id&gt;419&lt;/id&gt; &lt;/LookupPatron&gt;"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:694
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:695
 #, c-format
 msgid ""
 "&lt;?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?&gt; &lt;RenewLoan&gt; &lt;"
@@ -2653,16 +2650,16 @@ msgid ""
 "for assistance)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:816
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:817
 #, c-format
 msgid "(Not supported by Koha)"
 msgstr "(Nuk suportohet)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:801
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:802
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:820
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:803
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:821
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:822
 #, c-format
 msgid "(Not supported yet)"
 msgstr "(Nuk suportohet akoma)"
@@ -2672,12 +2669,12 @@ msgstr "(Nuk suportohet akoma)"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:197
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:402
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:458
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:715
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:746
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:714
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:716
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:718
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:747
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:749
 #, c-format
 msgid "(Optional)"
 msgstr "(Opsionale)"
@@ -2713,20 +2710,20 @@ msgstr ""
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:486
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:488
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:510
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:639
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:660
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:662
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:682
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:684
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:686
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:707
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:709
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:738
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:740
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:769
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:771
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:640
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:661
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:663
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:683
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:685
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:710
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:712
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:739
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:741
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:770
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:772
 #, c-format
 msgid "(Required)"
 msgstr "(Fushë e kërkuar)"
@@ -2751,21 +2748,21 @@ msgid ""
 "assistance)"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:788
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:789
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:795
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:790
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
 #, c-format
 msgid "(Use OAI-PMH instead)"
 msgstr "(Përdor OAI-PMH)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:791
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:792
 #, c-format
 msgid "(Use OPAC instead)"
 msgstr "(Përdor OPAC)"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:798
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:800
 #, c-format
 msgid "(Use SRU instead)"
 msgstr "(Përdor SRU)"
@@ -2852,7 +2849,7 @@ msgstr "-- Zgjidh --"
 msgid "-- Choose format --"
 msgstr "-- Zgjidh formatin --"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:231
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:244
 #, c-format
 msgid "-- none -- "
 msgstr "-- asnjë -- "
@@ -3006,7 +3003,7 @@ msgstr "Një titull specifik"
 msgid "About the author"
 msgstr "Rreth autorit"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:339
 #, c-format
 msgid "Abstracts/summaries"
 msgstr "Abstraktet/përmbledhjet"
@@ -3129,12 +3126,12 @@ msgstr "Shto tek %s"
 msgid "Additional authors:"
 msgstr "Autorë të tjerë:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:323
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:336
 #, c-format
 msgid "Additional content types for books/printed materials"
 msgstr "Përmbajtje shtesë për libra/materiale të printuara"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:848
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:852
 #, c-format
 msgid "Additional information"
 msgstr "Informacion shtesë"
@@ -3159,12 +3156,12 @@ msgstr "%s Adresa e 2-të:"
 msgid "Address:"
 msgstr "%s Adresa:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:279
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
 #, c-format
 msgid "Adolescent"
 msgstr "Adoleshent"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:280
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
 #, c-format
 msgid "Adult"
 msgstr "I/e rritur"
@@ -3199,7 +3196,7 @@ msgstr "Të gjithë tipet"
 
 #: opac-tmpl/bootstrap/en/includes/masthead.inc:223
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:23
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:218
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:231
 #, c-format
 msgid "All libraries"
 msgstr "Të gjitha bibliotekat"
@@ -3297,22 +3294,22 @@ msgstr ""
 msgid "An invitation to share list "
 msgstr "Ftesë për të ndarë listën "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:325
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:338
 #, c-format
 msgid "Any"
 msgstr "Çdo"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:275
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:288
 #, c-format
 msgid "Any audience"
 msgstr "E gjithë audienca"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:292
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:305
 #, c-format
 msgid "Any content"
 msgstr "Çdo përmbajtje"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:319
 #, c-format
 msgid "Any format"
 msgstr "Çdo format"
@@ -3480,7 +3477,7 @@ msgstr ""
 msgid "At library: %s"
 msgstr "Tek biblioteka: %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:273
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:286
 #, c-format
 msgid "Audience"
 msgstr "Publiku"
@@ -3502,7 +3499,7 @@ msgstr "Gusht"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:54
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:482
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:807
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:808
 #, c-format
 msgid "AuthenticatePatron"
 msgstr "AuthenticatePatron"
@@ -3631,6 +3628,11 @@ msgstr "Disponueshmëria "
 msgid "Availability:"
 msgstr "Disponueshmëria:"
 
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:215
+#, fuzzy, c-format
+msgid "Availability: "
+msgstr "Disponueshmëria:"
+
 #. %1$s:  IF restrictedvalueopac 
 #: opac-tmpl/bootstrap/en/includes/item-status.inc:94
 #, c-format
@@ -3713,12 +3715,12 @@ msgstr "BibTeX"
 msgid "Biblio records"
 msgstr "Rekordet mbi titujt"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:327
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:340
 #, c-format
 msgid "Bibliographies"
 msgstr "Bibliografitë"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:295
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
 #, c-format
 msgid "Biography"
 msgstr "Biografia"
@@ -3738,7 +3740,7 @@ msgstr "Rekord i bllokuar"
 msgid "Book reviews by critics ( XXX )"
 msgstr "Recensionet e librit nga kritika ( XXX )"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:322
 #, c-format
 msgid "Braille"
 msgstr "Braille"
@@ -3787,12 +3789,12 @@ msgstr "Shfleto raftin"
 msgid "CAS login"
 msgstr "CAS login"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:311
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:324
 #, c-format
 msgid "CD audio"
 msgstr "Audio CD"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:315
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:328
 #, c-format
 msgid "CD software"
 msgstr "Software CD"
@@ -3884,7 +3886,7 @@ msgstr "Numri i regjistrit: %s"
 #: opac-tmpl/bootstrap/en/modules/opac-downloadcart.tt:27
 #: opac-tmpl/bootstrap/en/modules/opac-sendshelfform.tt:47
 #: opac-tmpl/bootstrap/en/modules/opac-issue-note.tt:42
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-basket.tt:57
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:729
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:748
@@ -3934,18 +3936,18 @@ msgid "Cancel:"
 msgstr "Anullo"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:75
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:765
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:814
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:766
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
 #, c-format
 msgid "CancelHold"
 msgstr "CancelHold"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:816
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:817
 #, c-format
 msgid "CancelRecall "
 msgstr "CancelRecall "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:766
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:767
 #, c-format
 msgid "Cancels an active hold request for the patron."
 msgstr "Anullon një kërkesë aktive rezervimi për përdoruesin."
@@ -3986,7 +3988,7 @@ msgstr "Numri i kartës:"
 msgid "Cart"
 msgstr "Shporta"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:312
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:325
 #, c-format
 msgid "Cassette recording"
 msgstr "Regjistrim audio-kasete"
@@ -3996,7 +3998,7 @@ msgstr "Regjistrim audio-kasete"
 msgid "Catalog"
 msgstr "Katalog"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:328
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:341
 #, c-format
 msgid "Catalogs"
 msgstr "Katalogët"
@@ -4146,7 +4148,7 @@ msgstr "Klasifikimi: %s "
 
 #. INPUT type=reset
 #: opac-tmpl/bootstrap/en/modules/opac-full-serial-issues.tt:37
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:877
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:881
 #, c-format
 msgid "Clear"
 msgstr "Pastro"
@@ -4187,7 +4189,7 @@ msgstr "Pastro datën dhe pezullo pa afat"
 msgid "Click here if you're not %s %s"
 msgstr "Kliko këtu nëse nuk je %s %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:130
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:136
 #, c-format
 msgid "Click here to login."
 msgstr "Kliko këtu për t'u kyçur."
@@ -4389,13 +4391,13 @@ msgstr "Konfirmo fjalëkalimin"
 msgid "Confirm holds for:%s %s (%s)"
 msgstr "Konfirmo rezervimin për:%s %s (%s)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:109
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:114
 #, c-format
 msgid "Confirm new password:"
 msgstr "Konfirmo fjalëkalimin e ri:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:823
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:833
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:827
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:837
 #, c-format
 msgid "Confirm password"
 msgstr "Konfirmo fjalëkalimin"
@@ -4417,7 +4419,7 @@ msgstr "Informacion kontakti: "
 msgid "Contact note:"
 msgstr "%s Shënim kontakti:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:303
 #, c-format
 msgid "Content"
 msgstr "Përmbajtja"
@@ -4538,7 +4540,7 @@ msgstr "Krijo një listë të re"
 msgid "Create new list"
 msgstr "Krijo listë të re"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:704
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:705
 #, c-format
 msgid ""
 "Creates, for a patron, a title-level hold request on a given bibliographic "
@@ -4546,7 +4548,7 @@ msgid ""
 msgstr ""
 "Krijon, për një përdorues, një kërkesë rezervimi mbi një rekord bibliografik."
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:735
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:736
 #, c-format
 msgid ""
 "Creates, for a patron, an item-level hold request on a specific item of a "
@@ -4571,7 +4573,7 @@ msgstr "Falenderime (%s)"
 msgid "Current location"
 msgstr "Vendndodhja aktuale"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:59
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:64
 #, c-format
 msgid "Current password:"
 msgstr "Fjalëkalimi aktual:"
@@ -4602,7 +4604,7 @@ msgstr "Aktualisht në përdorim të lokalizuar nga %s %s %s(%s)%s"
 msgid "Curriculum"
 msgstr "Kurrikulum"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:314
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:327
 #, c-format
 msgid "DVD video / Videodisc"
 msgstr "DVD video / Videodisc"
@@ -4825,7 +4827,7 @@ msgstr "Dewey"
 msgid "Dewey: %s "
 msgstr "Dewey: %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:329
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:342
 #, c-format
 msgid "Dictionaries"
 msgstr "Fjalorët"
@@ -4840,7 +4842,7 @@ msgstr "Nënkuptuat:"
 msgid "Digests only "
 msgstr "Vetëm materiale të shkurtra "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:342
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:355
 #, c-format
 msgid "Directories"
 msgstr "Direktoritë"
@@ -4851,7 +4853,7 @@ msgstr "Direktoritë"
 msgid "Discharge"
 msgstr "Mbyll kartelën"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:335
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:348
 #, c-format
 msgid "Discographies"
 msgstr "Diskografitë"
@@ -5034,7 +5036,7 @@ msgstr "Email:"
 msgid "Empty and close"
 msgstr "Zbraz dhe mbyll"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:330
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:343
 #, c-format
 msgid "Encyclopedias "
 msgstr "Enciklopeditë "
@@ -5180,14 +5182,14 @@ msgid "Errors: "
 msgstr "Gabimet: "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:205
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:720
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:751
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:721
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:752
 #, c-format
 msgid "Example Call"
 msgstr "Shembull të dhënash"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:495
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:646
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:647
 #, c-format
 msgid "Example Response"
 msgstr "Shembull përgjigje"
@@ -5197,10 +5199,10 @@ msgstr "Shembull përgjigje"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:470
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:491
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:523
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:642
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:665
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:689
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:774
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:643
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:666
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:690
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:775
 #, c-format
 msgid "Example call"
 msgstr "Shembull të dhënash"
@@ -5210,11 +5212,11 @@ msgstr "Shembull të dhënash"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:413
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:474
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:527
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:669
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:693
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:724
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:755
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:778
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:670
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:694
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:725
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:756
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:779
 #, c-format
 msgid "Example response"
 msgstr "Shembull përgjigjeje"
@@ -5255,7 +5257,7 @@ msgstr "Skadenca:"
 msgid "Expires on"
 msgstr "Skadon më"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:821
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:822
 #, c-format
 msgid "Explain "
 msgstr "Sqaro "
@@ -5270,7 +5272,7 @@ msgstr "Eksporto"
 msgid "Exporting to Dublin Core..."
 msgstr "Duke eksportuar në standartin Dublin Core..."
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:679
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:680
 #, c-format
 msgid "Extends the due date for a patron's existing loan."
 msgstr "Zgjat afatin e vlefshmërisë për një huazim ekzistues."
@@ -5308,12 +5310,12 @@ msgstr ""
 msgid "Female:"
 msgstr "Femër:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:389
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:402
 #, c-format
 msgid "Fewer options"
 msgstr "Më pak opsione"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:293
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:306
 #, c-format
 msgid "Fiction"
 msgstr "Fiksion"
@@ -5323,7 +5325,7 @@ msgstr "Fiksion"
 msgid "Fiction notes:"
 msgstr "Shënime:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:341
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:354
 #, c-format
 msgid "Filmographies"
 msgstr "Filmografitë"
@@ -5440,7 +5442,7 @@ msgstr "Harruat fjalëkalimin?"
 msgid "Forgotten password recovery"
 msgstr "Rikuperimi i fjalëkalimit të harruar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:304
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:317
 #, c-format
 msgid "Format"
 msgstr "Formati"
@@ -5494,7 +5496,7 @@ msgstr "Historiku i plotë i regjistrimeve"
 msgid "Full subscription history for %s"
 msgstr "Historiku i plotë i regjistrimeve për %s"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:282
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:295
 #, c-format
 msgid "General"
 msgstr "Të përgjithshme"
@@ -5512,42 +5514,42 @@ msgstr "Merr vërtetimin për mbyllje të kartelës"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:48
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:394
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:800
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:801
 #, c-format
 msgid "GetAuthorityRecords"
 msgstr "GetAuthorityRecords"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:42
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:108
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:790
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:791
 #, c-format
 msgid "GetAvailability"
 msgstr "GetAvailability"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:57
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:503
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:808
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:809
 #, c-format
 msgid "GetPatronInfo"
 msgstr "GetPatronInfo"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:60
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:635
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:809
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:636
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:810
 #, c-format
 msgid "GetPatronStatus"
 msgstr "GetPatronStatus"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:45
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:184
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:798
 #, c-format
 msgid "GetRecords"
 msgstr "GetRecords"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:63
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:656
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:810
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:657
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:811
 #, c-format
 msgid "GetServices"
 msgstr "GetServices"
@@ -5615,7 +5617,7 @@ msgstr "Shko tek detajet"
 msgid "Go to your account page"
 msgstr "Shko tek faqja e llogarisë personale"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:791
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:792
 #, c-format
 msgid "GoToBibliographicRequestPage "
 msgstr "GoToBibliographicRequestPage "
@@ -5630,32 +5632,32 @@ msgstr "Kyçu nëpërmjet google"
 msgid "Groups"
 msgstr "Grupet"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:229
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:242
 #, c-format
 msgid "Groups of libraries"
 msgstr "Grupet e bibliotekave"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:331
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:344
 #, c-format
 msgid "Handbooks"
 msgstr "Broshura"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:795
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
 #, c-format
 msgid "HarvestAuthorityRecords "
 msgstr "HarvestAuthorityRecords "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:788
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:789
 #, c-format
 msgid "HarvestBibliographicRecords "
 msgstr "HarvestBibliographicRecords "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:789
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:790
 #, c-format
 msgid "HarvestExpandedRecords "
 msgstr "HarvestExpandedRecords "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:796
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:797
 #, c-format
 msgid "HarvestHoldingsRecords "
 msgstr "HarvestHoldingsRecords "
@@ -5731,15 +5733,15 @@ msgid "Hold starts on date:"
 msgstr "Aktivizimi fillon në datën:"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:72
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:734
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:813
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:735
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:814
 #, c-format
 msgid "HoldItem"
 msgstr "HoldItem"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:69
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:703
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:812
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:704
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:813
 #, c-format
 msgid "HoldTitle"
 msgstr "HoldTitle"
@@ -5874,7 +5876,7 @@ msgstr ""
 msgid "ILS-DI"
 msgstr "ILS-DI"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:712
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
 #, c-format
 msgid "IP address where the end user request is being placed"
 msgstr "Adresa IP e lidhur me kërkesën e përdoruesit"
@@ -5995,7 +5997,7 @@ msgstr ""
 "Nëse nuk klikoni butonin 'Përfundo' , seanca juaj do të skadojë "
 "automatikisht për %s sekonda."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:813
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:817
 #, fuzzy, c-format
 msgid ""
 "If you do not enter a password a system generated password will be created."
@@ -6144,7 +6146,7 @@ msgstr "Në shportën tuaj"
 msgid "Indexed in:"
 msgstr "Indeksuar në:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:333
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:346
 #, c-format
 msgid "Indexes"
 msgstr "Indekset"
@@ -6342,7 +6344,7 @@ msgstr "Qer"
 msgid "June"
 msgstr "Qershor"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:283
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:296
 #, c-format
 msgid "Juvenile"
 msgstr "Fëminor"
@@ -6415,7 +6417,7 @@ msgstr "Gjuhët"
 msgid "Languages:&nbsp;"
 msgstr "Gjuhët:&nbsp;"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:308
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:321
 #, c-format
 msgid "Large print"
 msgstr "Print me gërma të mëdha"
@@ -6448,42 +6450,42 @@ msgstr "Lista u përditësua."
 msgid "Late"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:346
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:359
 #, c-format
 msgid "Law reports and digests"
 msgstr "Raporte dhe përmbledhje ligjore"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:332
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:345
 #, c-format
 msgid "Legal articles"
 msgstr "Shkrime ligjore"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:345
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:358
 #, c-format
 msgid "Legal cases and case notes"
 msgstr "Çështje ligjore dhe shënime"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:336
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:349
 #, c-format
 msgid "Legislation"
 msgstr "Legjislacioni"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:786
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:787
 #, c-format
 msgid "Level 1: Basic discovery interfaces"
 msgstr "Niveli 1: Ndërfaqet bazë të punës"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:793
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:794
 #, c-format
 msgid "Level 2: Elementary OPAC supplement"
 msgstr "Niveli 2: Shtojcë bazike e OPAC"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:804
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:805
 #, c-format
 msgid "Level 3: Elementary OPAC alternative"
 msgstr "Niveli 3: Alternativë e thjeshtuar e OPAC"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:818
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:819
 #, c-format
 msgid "Level 4: Robust/domain specific discovery platforms"
 msgstr "Niveli 4: Platforma të bazuara në domain"
@@ -6512,7 +6514,7 @@ msgstr "%s Karta e bibliotekës me numër: "
 msgid "Library catalog"
 msgstr "Katalogu i bibliotekës"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:216
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:229
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:61
 #, c-format
 msgid "Library:"
@@ -6666,7 +6668,7 @@ msgstr "Vendndodhja"
 msgid "Location (Status)"
 msgstr "Vendndodhja (Status)"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:215
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:228
 #, c-format
 msgid "Location and availability: "
 msgstr "Vendndodhja dhe disponueshmëria: "
@@ -6789,7 +6791,7 @@ msgstr ""
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:51
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:451
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:806
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:807
 #, c-format
 msgid "LookupPatron"
 msgstr "LookupPatron"
@@ -6976,7 +6978,7 @@ msgstr "Detaje të mëtejshme"
 msgid "More lists"
 msgstr "Lista të tjera"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:391
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:404
 #, c-format
 msgid "More options"
 msgstr "Më shumë opsione"
@@ -6996,7 +6998,7 @@ msgstr "Më të kërkuarat"
 msgid "Most popular titles"
 msgstr "Titujt më të kërkuar"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:296
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:309
 #, c-format
 msgid "Musical recording"
 msgstr "Regjistrim muzikor"
@@ -7039,7 +7041,7 @@ msgstr ""
 "fshijë të gjitha të dhënat e titullit që u dha në dorëzim gjatë marrjes "
 "mbrapsht."
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:879
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:883
 #, c-format
 msgid "New"
 msgstr ""
@@ -7067,8 +7069,8 @@ msgstr ""
 msgid "New list"
 msgstr "Listë e re"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:60
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:107
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:65
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:112
 #, c-format
 msgid "New password:"
 msgstr "Fjalëkalimi i ri:"
@@ -7079,7 +7081,7 @@ msgstr "Fjalëkalimi i ri:"
 msgid "New purchase suggestion"
 msgstr "Sugjerim blerjeje i ri"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:395
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:408
 #, c-format
 msgid "New search"
 msgstr "Kërkim i ri"
@@ -7321,12 +7323,12 @@ msgstr "Nuk ka tags nga kjo bibliotekë për këtë titull."
 msgid "Nobody"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:294
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
 #, c-format
 msgid "Non-fiction"
 msgstr "Jo-fiksion"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:297
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:310
 #, c-format
 msgid "Non-musical recording"
 msgstr "Regjistrim jo-muzikor"
@@ -7580,7 +7582,7 @@ msgstr "OAI-DC"
 msgid "OK"
 msgstr "OK"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:228
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:241
 #, c-format
 msgid "OR"
 msgstr "OSE"
@@ -7642,7 +7644,8 @@ msgstr ""
 "cilën ju kërkoni. Fusha \"Shënime\" mund të përdoret për të vendosur "
 "çfarëdolloj informacioni shtesë."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:238
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:217
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:251
 #, c-format
 msgid "Only items currently available for loan or reference"
 msgstr "Vetëm titujt aktualisht në gjendje për huazim ose referencë"
@@ -7700,12 +7703,12 @@ msgstr "%s Emra të tjerë:"
 msgid "Other phone:"
 msgstr "%s Tel. tjetër:"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:802
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:803
 #, c-format
 msgid "OutputIntermediateFormat "
 msgstr "OutputIntermediateFormat "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:801
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:802
 #, c-format
 msgid "OutputRewritablePage "
 msgstr "OutputRewritablePage "
@@ -7763,20 +7766,20 @@ msgstr "Pamjet"
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:454
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:484
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:508
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:637
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:658
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:680
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:705
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:736
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:767
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:638
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:659
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:681
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:706
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:737
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:768
 #, c-format
 msgid "Parameters"
 msgstr "Parametrat"
 
 #: opac-tmpl/bootstrap/en/modules/opac-auth.tt:166
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:809
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:819
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:830
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:823
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:834
 #, c-format
 msgid "Password"
 msgstr "Fjalëkalimi"
@@ -7822,7 +7825,7 @@ msgstr "Fjalëkalimi duhet të përmbajë të paktën %s karaktere."
 msgid "Password must not contain leading or trailing whitespaces."
 msgstr "Fjalëkalimi përmban hapësira përpara dhe/ose pas tij! "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:72
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:77
 #, c-format
 msgid "Password updated"
 msgstr "Fjalëkalimi u përditësua"
@@ -7842,7 +7845,7 @@ msgstr "Fjalëkalimi:"
 msgid "Passwords do not match! "
 msgstr "Fjalëkalimet nuk përputhen! "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:334
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:347
 #, c-format
 msgid "Patent document"
 msgstr "Patento dokumentin"
@@ -8006,7 +8009,7 @@ msgstr "Ju lutemi zgjidhni kushtet tuaja të privatësisë:"
 msgid "Please click here to log in."
 msgstr "Klikoni këtu për të hyrë në sistem."
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:122
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:128
 #, c-format
 msgid ""
 "Please click the link in this email to finish the process of resetting your "
@@ -8207,7 +8210,7 @@ msgid "Please try again with plain text. %sUnrecognized error. %s "
 msgstr ""
 "Ju lutemi të provoni përsëri me tekst të thjeshtë. %sGabim sistemi. %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:906
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:910
 #, c-format
 msgid "Please type the following characters into the preceding box: "
 msgstr "Ju lutemi të shtypni karakteret më poshtë në kutinë e paraqitur: "
@@ -8252,7 +8255,7 @@ msgstr "Posto ose modifiko komentin mbi këtë titull. "
 msgid "Powered by %s "
 msgstr "Mundësuar nga %s "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:278
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:291
 #, c-format
 msgid "Pre-adolescent"
 msgstr "Para-adoleshent"
@@ -8262,7 +8265,7 @@ msgstr "Para-adoleshent"
 msgid "Preferred form: "
 msgstr "Forma e preferuar: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:276
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:289
 #, c-format
 msgid "Preschool"
 msgstr "Parashkollor"
@@ -8291,7 +8294,7 @@ msgstr "Kthehu"
 msgid "Previous sessions"
 msgstr "Dhëniet në dorëzim të mëparshme"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:277
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:290
 #, c-format
 msgid "Primary"
 msgstr "Parësore"
@@ -8356,7 +8359,7 @@ msgstr "Listat private të bashkëndara me mua"
 msgid "Processing..."
 msgstr "Në procesim..."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:340
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:353
 #, c-format
 msgid "Programmed texts"
 msgstr "Tekste të programuara"
@@ -8507,7 +8510,7 @@ msgstr "Më vlerëso"
 msgid "Rating based on reviews of "
 msgstr "Vlerësimi i bazuar në recensionin e "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:61
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:66
 #, c-format
 msgid "Re-type new password:"
 msgstr "Shkruaj përsëri fjalëkalimin:"
@@ -8517,7 +8520,7 @@ msgstr "Shkruaj përsëri fjalëkalimin:"
 msgid "Reason for suggestion: "
 msgstr "Arsyeja për sugjerimin: "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:815
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:816
 #, c-format
 msgid "RecallItem "
 msgstr "RecallItem "
@@ -8589,7 +8592,7 @@ msgstr "Regjistrimi u përfundua"
 msgid "Registration invalid!"
 msgstr "Regjistrimi është i pa-vlefshëm!"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:307
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:320
 #, c-format
 msgid "Regular print"
 msgstr "Print i thjeshtë"
@@ -8688,8 +8691,8 @@ msgid "Renew selected"
 msgstr "Rinovo të përzgjedhurat"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:66
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:678
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:811
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:679
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:812
 #, c-format
 msgid "RenewLoan"
 msgstr "RenewLoan"
@@ -8804,8 +8807,8 @@ msgstr "Kërko lloj materiali specifik:"
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:774
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:787
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:800
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:821
 #: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:825
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:829
 #: opac-tmpl/bootstrap/en/modules/opac-shelves.tt:560
 #, c-format
 msgid "Required"
@@ -8889,7 +8892,7 @@ msgstr "Kthehu tek faqja e parë e katalogut."
 msgid "Return to the last advanced search"
 msgstr "Kthehu tek kërkimi i avancuar i fundit"
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:125
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:131
 #, c-format
 msgid "Return to the main page"
 msgstr "Kthehu tek faqja kryesore"
@@ -8906,16 +8909,16 @@ msgid "Return to your lists"
 msgstr "Kthehu tek listat"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:77
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:82
 msgid "Return to your record"
 msgstr "Kthehu tek rekordi"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:636
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:637
 #, c-format
 msgid "Returns a patron's status information from Koha."
 msgstr "Shfaq informacion mbi statusin e një përdoruesi nga Koha."
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:657
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:658
 #, c-format
 msgid ""
 "Returns information about the services available on a particular item for a "
@@ -8946,7 +8949,7 @@ msgstr "Data e shqyrtimit: "
 msgid "Review result: "
 msgstr "Shqyrto rezultatin: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:339
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:352
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:553
 #, c-format
 msgid "Reviews"
@@ -9041,7 +9044,7 @@ msgstr "Ruaj tek Listat"
 msgid "Save to your lists"
 msgstr "Ruaj tek listat "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:800
 #, c-format
 msgid "Scan "
 msgstr "Skano "
@@ -9086,7 +9089,7 @@ msgid "Scan the item or enter its barcode:"
 msgstr "Skano një titull të ri ose shtyp barkodin:"
 
 #. INPUT type=submit name=do
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:385
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:398
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:163
 #: opac-tmpl/bootstrap/en/modules/opac-detail.tt:288
 #: opac-tmpl/bootstrap/en/modules/opac-search-history.tt:64
@@ -9097,7 +9100,7 @@ msgstr "Skano një titull të ri ose shtyp barkodin:"
 msgid "Search"
 msgstr "Kërko"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:798
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:799
 #, c-format
 msgid "Search "
 msgstr "Kërko "
@@ -9160,7 +9163,7 @@ msgstr "Kërko në %s"
 msgid "Search:"
 msgstr "Kërko:"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:820
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:821
 #, c-format
 msgid "SearchCourseReserves "
 msgstr "SearchCourseReserves "
@@ -9721,7 +9724,7 @@ msgstr ""
 "Na vjen keq, seanca juaj ka përfunduar. Ju lutemi të kyçeni përseri në "
 "sistem."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:254
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:267
 #, c-format
 msgid "Sort by:"
 msgstr "Rendit sipas:"
@@ -9736,12 +9739,12 @@ msgstr "Rendit sipas: "
 msgid "Sort this list by: "
 msgstr "Rendit listën sipas: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:253
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:266
 #, c-format
 msgid "Sorting: "
 msgstr "Renditja: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:281
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:294
 #, c-format
 msgid "Specialized"
 msgstr "Specializuar"
@@ -9767,7 +9770,7 @@ msgstr "Identifikues standart (USBN, ISSN ose tjetër):"
 msgid "State:"
 msgstr "%s Gjendja:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:343
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:356
 #, c-format
 msgid "Statistics"
 msgstr "Statistikat"
@@ -9868,8 +9871,8 @@ msgstr "Subjekti: %s "
 #: opac-tmpl/bootstrap/en/includes/opac-topissues.inc:90
 #: opac-tmpl/bootstrap/en/modules/opac-authorities-home.tt:80
 #: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:98
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:114
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:923
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:119
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:927
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:193
 #: opac-tmpl/bootstrap/en/modules/sco/sco-main.tt:312
 #, c-format
@@ -9882,7 +9885,7 @@ msgid "Submit and close this window"
 msgstr "Dërgo dhe mbyll dritaren"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:63
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:68
 #: opac-tmpl/bootstrap/en/modules/opac-user.tt:902
 #: opac-tmpl/bootstrap/en/modules/opac-messaging.tt:160
 msgid "Submit changes"
@@ -9903,7 +9906,7 @@ msgid "Submit note"
 msgstr "Dërgo ndryshimet"
 
 #. INPUT type=submit
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:917
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:921
 msgid "Submit update request"
 msgstr "Dërgo kërkesën për përditësim"
 
@@ -10038,7 +10041,7 @@ msgstr "E Dielë"
 msgid "Surname:"
 msgstr "%s Mbiemër:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:338
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:351
 #, c-format
 msgid "Surveys"
 msgstr "Studime"
@@ -10146,7 +10149,7 @@ msgstr "Tags nga kjo bibliotekë:"
 msgid "Tags:"
 msgstr "Tags:"
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:344
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:357
 #, c-format
 msgid "Technical reports"
 msgstr "Raportet teknike"
@@ -10440,16 +10443,10 @@ msgid "The operation results will be displayed for each entered barcode."
 msgstr ""
 
 #. %1$s:  username 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:129
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:135
 #, c-format
 msgid "The password has been changed for user \"%s\"."
 msgstr "Fjalëkalimi u ndryshua për përdoruesin \"%s\"."
-
-#. %1$s:  minPasswordLength 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:106
-#, c-format
-msgid "The password must contain at least %s characters."
-msgstr "Fjalëkalimi duhet të përmbajë të paktën %s karaktere."
 
 #: opac-tmpl/bootstrap/en/modules/opac-suggestions.tt:126
 #, c-format
@@ -10562,7 +10559,7 @@ msgstr ""
 "Ka probleme në lidhje regjistrimin tuaj. Ju lutemi të kontaktoni me "
 "personelin e bibliotekës."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:337
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:350
 #, c-format
 msgid "Theses"
 msgstr "Teza"
@@ -10625,7 +10622,7 @@ msgstr "Ky titull ju është dhënë tashmë në dorëzim."
 msgid "This item is on hold for another borrower."
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:123
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:129
 #, c-format
 msgid "This link is valid for 2 days starting now. "
 msgstr "Ky link është i vlefshëm për 2 ditë duke filluar nga tani. "
@@ -10821,7 +10818,7 @@ msgstr "Vlera totale"
 msgid "Total holds: %s"
 msgstr ""
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:347
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:360
 #, c-format
 msgid "Treaties "
 msgstr "Marrëveshjet "
@@ -10915,7 +10912,7 @@ msgid "Unable to create enrollment!"
 msgstr "Përditësimi i parametrit nuk u krye!"
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:940
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:944
 msgid "Unable to update your setting!"
 msgstr "Përditësimi i parametrit nuk u krye!"
 
@@ -11021,7 +11018,7 @@ msgstr ""
 "gjobat. Nëse këto të dhëna nuk ju shfaqen në llogari, ju lutemi të "
 "kontaktoni me bibliotekën."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:313
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:326
 #, c-format
 msgid "VHS tape / Videocassette"
 msgstr "VHS / Videokasetë"
@@ -11032,7 +11029,7 @@ msgstr "VHS / Videokasetë"
 msgid "Value is already in use (%s)"
 msgstr "paraprakisht në shportë"
 
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:901
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:905
 #, c-format
 msgid "Verification:"
 msgstr "Verifikimi:"
@@ -11129,7 +11126,7 @@ msgstr ""
 "Ne kujdesemi për privatësinë tuaj. Në këtë pamje, ju mund të përcaktoni "
 "gjatësinë kohore për ruatjen e historikut tuaj të leximit."
 
-#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:316
+#: opac-tmpl/bootstrap/en/modules/opac-advsearch.tt:329
 #, c-format
 msgid "Website"
 msgstr "Website"
@@ -11333,7 +11330,7 @@ msgstr "Mund të përdorni OAI-PMH ListRecords në vend të këtij shërbimi."
 msgid "You can use the menu and links at the top of the page"
 msgstr "Mund të përdorni menunë dhe links në krye të faqes"
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:67
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:72
 #, c-format
 msgid "You can't change your password."
 msgstr "Nuk mund ta ndryshoni fjalëkalimin."
@@ -11609,7 +11606,7 @@ msgstr ""
 "Do ju dërgohet njoftim nëpërmjet email nëse dikush pranon bashkëndarjen tuaj "
 "brenda dy javësh."
 
-#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:120
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:126
 #, c-format
 msgid "You will receive an email shortly. "
 msgstr ""
@@ -11830,18 +11827,30 @@ msgstr "Nuk u hoq asnjë rekord."
 msgid "Your options are: "
 msgstr "Opsionet tuaja janë: "
 
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:72
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:77
 #, c-format
 msgid "Your password has been changed "
 msgstr "Fjalëkalimi juaj është ndryshuar "
 
 #. For the first occurrence,
-#. %1$s:  minPasswordLength
-#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:58
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:811
+#. %1$s:  Koha.Preference('minPasswordLength') | html 
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:62
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:110
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:814
 #, c-format
 msgid "Your password must be at least %s characters long."
 msgstr "Fjalëkalimi juaj duhet të jetë të paktën %s karaktere në gjatësi."
+
+#. For the first occurrence,
+#. %1$s:  Koha.Preference('minPasswordLength') | html 
+#: opac-tmpl/bootstrap/en/modules/opac-passwd.tt:60
+#: opac-tmpl/bootstrap/en/modules/opac-password-recovery.tt:108
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:812
+#, fuzzy, c-format
+msgid ""
+"Your password must contain at least %s characters, including UPPERCASE, "
+"lowercase and numbers."
+msgstr "Fjalëkalimi duhet të përmbajë të paktën %s karaktere."
 
 #: opac-tmpl/bootstrap/en/modules/opac-account-pay-error.tt:13
 #, c-format
@@ -11915,7 +11924,7 @@ msgid "Your search returned %s results."
 msgstr "Kërkimi juaj ktheu %s rezultate."
 
 #. SCRIPT
-#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:940
+#: opac-tmpl/bootstrap/en/modules/opac-memberentry.tt:944
 msgid "Your setting has been updated!"
 msgstr "Parametrat u përditësuan!"
 
@@ -11999,8 +12008,8 @@ msgstr "një"
 msgid "already in your cart"
 msgstr "paraprakisht në shportë"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:714
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:715
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:746
 #, c-format
 msgid ""
 "an identifier indicating the location to which to deliver the item for pickup"
@@ -12038,8 +12047,8 @@ msgstr "vlerësimi mesatar: %s (%s vota)"
 msgid "bib"
 msgstr "bib"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:709
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:740
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:710
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:741
 #, c-format
 msgid "bib_id"
 msgstr "bib_id"
@@ -12116,14 +12125,14 @@ msgstr ""
 "%]&rft.edition=[% BIBLIO_RESULT.edition %]&rft.series=[% BIBLIO_RESULT."
 "series %]&rft.genre="
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:716
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:747
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
 #, c-format
 msgid "date after which hold request is no longer needed"
 msgstr "data pas së cilës kërkesa për rezervim nuk është më e nevojshme"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:718
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:749
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:719
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:750
 #, c-format
 msgid "date after which item returned to shelf if item is not picked up"
 msgstr "data pas të cilës titulli kthehet në raft nëse nuk është tërhequr"
@@ -12137,7 +12146,7 @@ msgstr ""
 "përcakton tipin e identifikuesit të rekordit që po përdoret në kërkesë, "
 "vlerat e mundshme: "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:686
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
 #, c-format
 msgid "desired_due_date"
 msgstr "desired_due_date"
@@ -12211,7 +12220,7 @@ msgid ""
 msgstr ""
 "ilsdi.pl?service=AuthenticatePatron&amp;username=john9&amp;password=soul "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:775
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:776
 #, c-format
 msgid "ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=CancelHold&amp;patron_id=1&amp;item_id=1 "
@@ -12235,7 +12244,7 @@ msgstr ""
 "ilsdi.pl?service=GetPatronInfo&amp;patron_id=1&amp;show_contact=0&amp;"
 "show_loans=1 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:643
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:644
 #, c-format
 msgid "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
 msgstr "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
@@ -12245,17 +12254,17 @@ msgstr "ilsdi.pl?service=GetPatronStatus&amp;patron_id=1 "
 msgid "ilsdi.pl?service=GetRecords&amp;id=1+2+99999 "
 msgstr "ilsdi.pl?service=GetRecords&amp;id=1+2+99999 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:666
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:667
 #, c-format
 msgid "ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=GetServices&amp;patron_id=1&amp;item_id=1 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:752
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:753
 #, c-format
 msgid "ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=HoldItem&amp;patron_id=1&amp;bib_id=1&amp;item_id=1 "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:721
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:722
 #, c-format
 msgid ""
 "ilsdi.pl?service=HoldTitle&amp;patron_id=1&amp;bib_id=1&amp;"
@@ -12269,7 +12278,7 @@ msgstr ""
 msgid "ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber "
 msgstr "ilsdi.pl?service=LookupPatron&amp;id=815&amp;id_type=cardnumber "
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:690
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:691
 #, c-format
 msgid "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
 msgstr "ilsdi.pl?service=RenewLoan&amp;patron_id=1&amp;item_id=1 "
@@ -12315,10 +12324,10 @@ msgstr "titulli"
 msgid "item(s) added to your cart"
 msgstr "titulli(titujt) u shtuan në shportë"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:662
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:684
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:771
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:663
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:685
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:772
 #, c-format
 msgid "item_id"
 msgstr "item_id"
@@ -12355,8 +12364,8 @@ msgstr "listë e identifikuesve të rekordeve të sistemit"
 msgid "log in using a different account"
 msgstr "hyr në sistem duke përdorur llogari tjetër"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:715
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:746
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:716
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:747
 #, c-format
 msgid "needed_before_date"
 msgstr "needed_before_date"
@@ -12393,24 +12402,24 @@ msgid "password"
 msgstr "fjalëkalimi"
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:510
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:639
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:660
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:682
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:707
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:738
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:769
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:640
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:661
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:683
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:739
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:770
 #, c-format
 msgid "patron_id"
 msgstr "patron_id"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:717
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:748
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:718
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:749
 #, c-format
 msgid "pickup_expiry_date"
 msgstr "pickup_expiry_date"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:713
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:714
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:745
 #, c-format
 msgid "pickup_location"
 msgstr "pickup_location"
@@ -12433,7 +12442,7 @@ msgstr "sugjerime blerjeje"
 msgid "rating based on reviews at iDreamBooks.com"
 msgstr "vlerësimi i bazuar në recensionet e iDreamBooks.com"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:712
 #, c-format
 msgid "request_location"
 msgstr "request_location"
@@ -12574,7 +12583,7 @@ msgstr "sugjerimet"
 msgid "surname"
 msgstr "mbiemri"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:772
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:773
 #, c-format
 msgid ""
 "system hold identifier (returned by GetRecords and GetPatronInfo into "
@@ -12583,8 +12592,8 @@ msgstr ""
 "identifikuesi i kopjes në sistem (i nxjerrë nga GetRecords dhe GetPatronInfo "
 "brenda elementit 'reserve_id')"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:663
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:685
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:664
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:686
 #, c-format
 msgid "system item identifier"
 msgstr "identifikuesi i titullit në sistem"
@@ -12611,8 +12620,8 @@ msgstr "tagsel_button"
 msgid "text/html; charset=utf-8"
 msgstr "text/html; charset=utf-8"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:710
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:741
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:711
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:742
 #, c-format
 msgid ""
 "the ILS identifier for the bibliographic record on which the request is "
@@ -12620,19 +12629,19 @@ msgid ""
 msgstr ""
 "identifikuesi ILS për rekordin bibliografik mbi të cilin është kryer kërkesa"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:708
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:739
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:709
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:740
 #, c-format
 msgid "the ILS identifier for the patron for whom the request is placed"
 msgstr "identifikuesi ILS për përdoruesin për të cilin është kryer kërkesa"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:743
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:744
 #, c-format
 msgid "the ILS identifier for the specific item on which the request is placed"
 msgstr ""
 "identifikuesi ILS për titullin specifik për të cilin është kryer kërkesa"
 
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:687
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:688
 #, c-format
 msgid "the date the patron would like the item returned by"
 msgstr "data në të cilën përdoruesi duhet të ktheje titullin"
@@ -12643,10 +12652,10 @@ msgid "the type of the identifier, possible values: "
 msgstr "tipi i identifikuesit, vlerat e mundëshme: "
 
 #: opac-tmpl/bootstrap/en/modules/ilsdi.tt:511
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:640
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:661
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:683
-#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:770
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:641
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:662
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:684
+#: opac-tmpl/bootstrap/en/modules/ilsdi.tt:771
 #, c-format
 msgid ""
 "the unique patron identifier in the ILS; the same identifier returned by "
