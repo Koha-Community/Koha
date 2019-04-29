@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 11;
+use Test::More tests => 12;
 use Test::MockModule;
 use List::MoreUtils qw( uniq );
 use MARC::Record;
