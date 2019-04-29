@@ -241,7 +241,7 @@ sub checkpw_ldap {
             if ( $patron ) { # Should not be needed, but we are in C4::Auth LDAP...
                 eval {
                     my $attribute = Koha::Patron::Attribute->new({code => $code, attribute => $borrower{$code}});
-                    $patron->extended_attributes([$attribute]);
+                    $patron->extended_attributes([$attribute->unblessed]);
                 };
                 if ($@) { # FIXME Test if Koha::Exceptions::Patron::Attribute::NonRepeatable
                     warn "ERROR_extended_unique_id_failed $code $borrower{$code}";
