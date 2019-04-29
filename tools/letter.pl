@@ -255,14 +255,17 @@ sub add_form {
             push @{$field_selection}, add_fields('issues');
         }
 
-        if ( $module eq 'circulation' and $code =~ /^AR_/  ) {
+        if ( $module eq 'circulation' and $code and $code =~ /^AR_/  ) {
             push @{$field_selection}, add_fields('article_requests');
         }
     }
 
-    my $preview_is_available = grep {/^$code$/} qw(
-        CHECKIN CHECKOUT HOLD_SLIP
-    );
+    my $preview_is_available = 0;
+
+    if ($code) {
+        $preview_is_available = grep {/^$code$/} qw( CHECKIN CHECKOUT HOLD_SLIP );
+    }
+
     $template->param(
         module     => $module,
         SQLfieldnames => $field_selection,

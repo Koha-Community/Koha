@@ -47,7 +47,9 @@ Used to get letters with a given letter code.
 our ( $query, $response ) = C4::Service->init( tools => 'edit_notices' );
 
 sub get_letters {
-    my $letters = GetLetters({ code => $query->param('code'), branchcode => $query->param('branchcode') });
+    my $code = scalar $query->param('code');
+    my $branchcode = scalar $query->param('branchcode');
+    my $letters = GetLetters({ code => $code, branchcode => $branchcode });
     $response->param( letters => $letters );
     C4::Service->return_success( $response );
 }
