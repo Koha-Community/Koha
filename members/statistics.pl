@@ -207,7 +207,10 @@ sub merge {
         for my $ch ( @r ) {
             $exists = 1;
             for my $cn ( @statistic_column_names ) {
-                if ( $ch->{$cn} and not $ch->{$cn} eq $h->{$cn} ) {
+                if (   ( not defined $ch->{$cn} && defined $h->{$cn} )
+                    || ( defined $ch->{$cn} && not defined $h->{$cn} )
+                    || ( $ch->{$cn} ne $h->{$cn} ) )
+                {
                     $exists = 0;
                     last;
                 }
