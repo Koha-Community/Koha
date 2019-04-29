@@ -259,7 +259,7 @@
                       <div id="importing_[% loo.frameworkcode | html %]" style="display:none" class="importing"><img src="[% interface | html %]/[% theme | html %]/img/spinner-small.gif" alt="" /><span class="importing_msg"></span></div>
                     </div>
                     <div class="modal-footer">
-                      <button type="submit" class="btn btn-default">Import</button>
+                      <button type="submit" class="btn btn-default" title="[% loo.frameworkcode | html %]">Import</button>
                       <button class="btn btn-link" data-dismiss="modal" aria-hidden="true">Close</button>
                     </div>
                   </form>
@@ -292,7 +292,6 @@
         /* Set some variable needed in biblio_framework.js */
         var MSG_IMPORT_ERROR = _("Error importing the framework");
         var MSG_SELECT_FILE_FORMAT = _("Please select a CSV (.csv), ODS (.ods) or XML (.xml) spreadsheet file.");
-        var MSG_OVERWRITE_WARNING = _("Do you really want to import the framework fields and subfields? This will overwrite the current configuration. For safety reasons please use the export option to make a backup");
         var MSG_IMPORTING_TO_FRAMEWORK = _("Importing to framework: %s. Importing from file: %s.");
         var template_path = "[% interface | html %]/[% theme | html %]";
     </script>

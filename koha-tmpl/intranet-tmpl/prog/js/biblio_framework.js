@@ -52,8 +52,9 @@
             var id = $(this).attr('id');
             var obj = $('#' + id + ' input:file');
             if (/(?:\.csv|\.ods|\.xml)$/.test(obj.val())) {
+                var frameworkcode = $('#' + id + ' input:hidden[name=frameworkcode]').val();
+                var MSG_OVERWRITE_WARNING = _("Are you sure you want to import the " + frameworkcode + " framework structure? This will overwrite the current configuration. For safety reasons, it is recommended to use the export option to make a backup first.");
                 if (confirm( MSG_OVERWRITE_WARNING )) {
-                    var frameworkcode = $('#' + id + ' input:hidden[name=frameworkcode]').val();
                     $('#importing_' + frameworkcode).find("span").html(MSG_IMPORTING_TO_FRAMEWORK.format("<strong>" + frameworkcode + "</strong>", "<i>" + obj.val().replace(new RegExp("^.+[/\\\\]"),"") + "</i>"));
                     if (navigator.userAgent.toLowerCase().indexOf('msie') != -1) {
                         var timestamp = new Date().getTime();
