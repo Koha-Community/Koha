@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2013-05-16 03:30+0200\n"
-"PO-Revision-Date: 2019-03-21 17:37+0000\n"
+"PO-Revision-Date: 2019-04-13 15:24+0000\n"
 "Last-Translator: Ricardo Quaglio <ricardoquaglio@hotmail.com>\n"
 "Language-Team: Portuguese/Brazil <koha-br@lists.koha.org>\n"
 "Language: pt_BR\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1553189831.703855\n"
+"X-POOTLE-MTIME: 1555169042.386310\n"
 "X-Pootle-Path: /pt_BR/18.05/pt-BR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -183,6 +183,22 @@ msgstr "Use o"
 # Acquisitions > Printing
 msgid "acquisitions.pref#OrderPdfFormat# layout when printing basket groups."
 msgstr "layout quando imprime grupos de cestos."
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#OrderPriceRounding# Determines whether full precision values or rounded values should be used in price calculations"
+msgstr "Determina se valores completos de precisão ou valores arredondados devem ser usados em cálculos de preço"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#OrderPriceRounding# Don't round"
+msgstr "Não arredonda"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#OrderPriceRounding# Round"
+msgstr "Arredondar"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#OrderPriceRounding# to nearest cent.<br>"
+msgstr "ao centavo mais próximo. <br>"
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/purge_suggestions.pl</code> cronjob. Ask your system administrator to schedule it."
@@ -2486,7 +2502,7 @@ msgstr "Não permitir"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# staff to override hold policies when placing holds."
-msgstr "que a equipe desconsidere as políticas de reserva quando reservarem."
+msgstr "que a equipe desconsidere as políticas de suspensão quando reservarem."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Allow"
@@ -2582,7 +2598,7 @@ msgstr "Não permitir"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# a patron to renew an item with unfilled holds if other available items can fill that hold."
-msgstr "um usuário para renovar um item não preenchido com vale se outros itens disponíveis pode preencher essa espera."
+msgstr "um usuário para renovar um item com reservas não preenchidas se outros itens disponíveis puderem preencher essa retenção."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowRenewalLimitOverride# Allow"
@@ -2894,11 +2910,11 @@ msgstr "a barra lateral de navegação em todas as páginas de Circulação."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# Confirm future hold requests (starting no later than"
-msgstr "Confirmar pedidos de reservas futuras (começando não depois de"
+msgstr "Confirmar os pedidos de reserva no futuro (a partir de, no máximo"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ConfirmFutureHolds# days from now) at checkin time. Note that this number of days will be used too in calculating the default end date for the Holds to pull-report. But it does not interfere with issuing, renewing or transferring books."
-msgstr "no momento do empréstimo. Observe que este número de dias também será utilizado para calcular a data final padrão de emissão do relatório de reservas. No entanto, isso não interfere na saída, renovação ou transferência de livros."
+msgstr "no momento do devolução. Observe que esse número de dias também será usado no cálculo da data de término padrão para as Reservas ao puxar o relatório. Mas isso não interfere na emissão, renovação ou transferência de livros."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ConsiderOnSiteCheckoutsAsNormalCheckouts# Consider"
@@ -3194,11 +3210,11 @@ msgstr "a prioridade real, que pode estar fora de ordem"
 
 # Circulation > Interface
 msgid "circulation.pref#HoldsToPullStartDate# Set the default start date for the Holds to pull list to"
-msgstr "Configure a data padrão de início para a lista de reservas"
+msgstr "Defina a data de início padrão para as Reservas para"
 
 # Circulation > Interface
 msgid "circulation.pref#HoldsToPullStartDate# day(s) ago. Note that the default end date is controlled by preference ConfirmFutureHolds."
-msgstr "dia(s) atrás. Observe que a data final padrão é controlada pela preferência ConfirmFutureHolds."
+msgstr "dia(s) antes. Observe que a data final padrão é controlada pela preferência ConfirmFutureHolds."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HomeOrHoldingBranch# Use the checkout and fines rules of"
@@ -3343,7 +3359,7 @@ msgstr "biblioteca de recebimento"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#LocalHoldsPriority# priority for filling holds to patrons whose"
-msgstr "prioridade para o enchimento detém a clientes cujas"
+msgstr "prioridade para o preenchimento detém aos usuários cujas"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ManInvInNoissuesCharge# Don't include"
@@ -3423,7 +3439,7 @@ msgstr "Não permitir"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACAllowUserToChooseBranch# a user to choose the library to pick up a hold from."
-msgstr "um usuário para escolher uma biblioteca para realizar uma reserva."
+msgstr "que o usuário escolha a biblioteca que deseja retirar a reserva."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OPACFineNoRenewalsBlockAutoRenew# Allow"
@@ -3451,15 +3467,15 @@ msgstr "Não permitir"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickup# to pickup up holds at libraries where the item is available."
-msgstr "para pegar detém em bibliotecas onde o item está disponível."
+msgstr "pegar item em bibliotecas onde o item está disponível."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# (list of patron categories separated with a pipe '|')"
-msgstr "(lista de categorias de patrono separadas por um pipe '|')"
+msgstr "(lista de categorias de usuários separadas por um pipe '|')"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#OPACHoldsIfAvailableAtPickupExceptions# Patron categories not affected by OPACHoldsIfAvailableAtPickup"
-msgstr "Categorias de patrono não afetadas pelo OPACHoldsIfAvailableAtPickup"
+msgstr "Categorias de usuários não afetadas pelo OPACHoldsIfAvailableAtPickup"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#OnSiteCheckouts# Disable"
@@ -3855,7 +3871,7 @@ msgstr "a biblioteca, o item é realizado por"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# (as branchcodes, separated by commas; if empty, uses all libraries)"
-msgstr "(como códigos de bibliotecas, separados por vírgula; se vazio, considerar todas as bibliotecas)"
+msgstr "(usar os códigos das bibliotecas, separados por vírgulas; se vazio, usa todas as bibliotecas)"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask your system administrator to schedule it."
@@ -3863,11 +3879,11 @@ msgstr "<br><strong>NOTA:</strong> Esta preferência de sistema requer a inclus�
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# Satisfy holds using items from the libraries"
-msgstr "Satisfazer detém usando itens das bibliotecas"
+msgstr "Satisfazer reservas usando itens das bibliotecas"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# in random order."
-msgstr "aleatoriamente."
+msgstr "em ordem aleatória."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# in that order."
@@ -3943,7 +3959,7 @@ msgstr "Transferir"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#TransferWhenCancelAllWaitingHolds# items when cancelling all waiting holds."
-msgstr "itens quando cancelar todoas as reservas em espera."
+msgstr "itens ao cancelar todas as reservas em espera."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#TransfersMaxDaysWarning# Show a warning on the \"Transfers to Receive\" screen if the transfer has not been received"
@@ -7263,6 +7279,10 @@ msgid "patrons.pref#FeeOnChangePatronCategory# charge a fee when a patron change
 msgstr "cobrar uma taxa quando um usuário mude para uma categoria com uma taxa de inscrição."
 
 # Patrons > Privacy
+msgid "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
+msgstr ""
+
+# Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
 msgstr "Desativar"
 
@@ -7329,6 +7349,10 @@ msgstr "Por padrão, exiba"
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "resultados por página na interface administrativa."
+
+# Patrons > Privacy
+msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
+msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
@@ -8677,3 +8701,4 @@ msgstr "Retornar somente"
 # Web services > Reporting
 msgid "web_services.pref#SvcMaxReportRows# rows of a report requested via the reports web service."
 msgstr "linhas de um relatório solicitado através dos relatórios do serviço web."
+

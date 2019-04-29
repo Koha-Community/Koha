@@ -2,7 +2,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Koha 18.05\n"
 "POT-Creation-Date: 2013-05-07 08:52+0200\n"
-"PO-Revision-Date: 2019-03-20 21:02+0000\n"
+"PO-Revision-Date: 2019-04-28 10:02+0000\n"
 "Last-Translator: ManuB. <e.betemps@ville-caluire.fr>\n"
 "Language-Team: French (France) "
 "(http://www.transifex.com/projects/p/koha/language/fr_FR/)\n"
@@ -12,7 +12,7 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 "X-Generator: Pootle 2.8\n"
-"X-POOTLE-MTIME: 1553115750.321887\n"
+"X-POOTLE-MTIME: 1556445732.872295\n"
 "X-Pootle-Path: /fr/18.05/fr-FR-pref.po\n"
 "X-Pootle-Revision: 1\n"
 
@@ -185,17 +185,32 @@ msgid "acquisitions.pref#OrderPdfFormat# layout when printing basket groups."
 msgstr "pour l'impression des groupes de paniers."
 
 # Acquisitions > Policy
-msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/purge_suggestions.pl</code> cronjob. Ask your system administrator to schedule it."
+msgid "acquisitions.pref#OrderPriceRounding# Determines whether full precision values or rounded values should be used in price calculations"
 msgstr ""
-"<br><strong>NOTE&nbsp;:</strong> Cette préférence système nécessite le "
-"cronjob <code>misc/cronjobs/purge_suggestions.pl</code>. Demandez à votre "
-"administrateur système de le planifier."
+"Détermine si ce sont les valeurs exactes ou les valeurs arrondies qui sont "
+"utilisées dans les calculs de prix"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#OrderPriceRounding# Don't round"
+msgstr "Ne pas arrondir"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#OrderPriceRounding# Round"
+msgstr "Arrondir"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#OrderPriceRounding# to nearest cent.<br>"
+msgstr "au centime près.<br>"
+
+# Acquisitions > Policy
+msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/purge_suggestions.pl</code> cronjob. Ask your system administrator to schedule it."
+msgstr "<br><strong>NOTE&nbsp;:</strong> Cette préférence système nécessite le cronjob <code>misc/cronjobs/purge_suggestions.pl</code>. Demandez à votre administrateur système de le planifier."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#PurgeSuggestionsOlderThan# <br><strong>WARNING:</strong> Leave this field empty if you don't want to activate this automatic feature."
 msgstr ""
-"**ATTENTION&nbsp;:** Laissez ce champ vide si vous ne voulez pas activer "
-"cette fonctionnalité."
+"<br><strong>ATTENTION&nbsp;:</strong> Laissez ce champ vide si vous ne "
+"voulez pas activer cette fonctionnalité."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#PurgeSuggestionsOlderThan# Keep accepted or rejected purchase suggestions for a period of"
@@ -203,9 +218,7 @@ msgstr "Garder les suggestions d'achat acceptées ou refusées pour une période
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#PurgeSuggestionsOlderThan# days. Example: [30] Sets purgation of suggestions for those older than 30 days."
-msgstr ""
-" jours. Exemple&nbsp;: [30] définit la purge des suggestions de plus de 30 "
-"jours."
+msgstr " jours. Exemple&nbsp;: [30] définit la purge des suggestions de plus de 30 jours."
 
 # Acquisitions > Policy
 msgid "acquisitions.pref#UniqueItemFields# (separated by a space)"
@@ -502,17 +515,19 @@ msgstr "Fichiers temporaires"
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# . Website where usage statistics are published: <a href=\"http://hea.koha-community.org\">Hea Koha community website</a>."
 msgstr ""
+". Les données statistiques sont publiées sur le site&nbsp;: <a href=\""
+"http://hea.koha-community.org\">site communautaire Hea Koha</a>."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> The other \"UsageStats\" preferences have no effect if this preference is set to \"No\"."
-msgstr "admin.pref#UsageStats# <br><strong>NOTE&nbsp::</strong> Les autres préférences système «&nbsp;UsageStats&nbsp;» n'ont aucun effet si cette préférence système est paramétrée sur «&nbsp;Non&nbsp;»."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Les autres préférences système "
+"«&nbsp;UsageStats&nbsp;» n'ont aucun effet si cette préférence système est "
+"paramétrée sur «&nbsp;Non&nbsp;»."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/share_usage_with_koha_community.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTE&nbsp;:</strong> Cette préférence systeme nécessite le "
-"cronjob <code>misc/cronjobs/share_usage_with_koha_community.pl</code>. "
-"Demandez à votre administrateur système de le planifier."
+msgstr "<br><strong>NOTE&nbsp;:</strong> Cette préférence systeme nécessite le cronjob <code>misc/cronjobs/share_usage_with_koha_community.pl</code>. Demandez à votre administrateur système de le planifier."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStats# No"
@@ -532,7 +547,9 @@ msgstr " "
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
-msgstr "admin.pref#UsageStatsCountry# <br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la "
+"préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsCountry# Afghanistan"
@@ -1320,7 +1337,9 @@ msgstr "Zimbabwe"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
-msgstr "admin.pref#UsageStatsGeolocation# <br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la "
+"préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsGeolocation# Geolocation of the main library: "
@@ -1328,7 +1347,9 @@ msgstr "Géolocalisation de la bibliothèque principale&nbsp;: "
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
-msgstr "admin.pref#UsageStatsLibrariesInfo# <br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la "
+"préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibrariesInfo# Do not Share"
@@ -1344,7 +1365,9 @@ msgstr "informations des bibliothèques (nom, URL, pays)"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
-msgstr "admin.pref#UsageStatsLibraryName# <br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la "
+"préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryName# If this field is empty data will be sent anonymously."
@@ -1360,7 +1383,9 @@ msgstr " "
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
-msgstr "admin.pref#UsageStatsLibraryType# <br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la "
+"préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryType# The library type to be shown on the Hea Community website: "
@@ -1408,7 +1433,9 @@ msgstr "avec abonnement"
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE:</strong> This value has no effect if the UsageStats system preference is set to \"Don't share\"."
-msgstr "admin.pref#UsageStatsLibraryUrl# <br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette valeur n'a aucun effet si la "
+"préférence système UsageStats est paramétrée sur «&nbsp;Non&nbsp;»."
 
 # Administration > Share anonymous usage statistics
 msgid "admin.pref#UsageStatsLibraryUrl# The library URL to be shown on the Hea Community website: "
@@ -1544,11 +1571,16 @@ msgstr "Utiliser le texte suivant pour modifier comment les notices d'autorité 
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# <br><strong>NOTE:</strong> This system preference requires the <code>misc/migration_tools/merge_authority.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr "<br><strong>NOTE:</strong> Cette préférence système requiert le cronjob <code>misc/migration_tools/merge_authority.pl</code>. Demandez à votre administrateur système de le paramétrer."
+msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette préférence système requiert le "
+"cronjob <code>misc/migration_tools/merge_authority.pl</code>. Demandez à "
+"votre administrateur système de le paramétrer."
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# When modifying an authority record, do not update attached bibliographic records if the number exceeds"
-msgstr "Lors de la modification d'une notice d'autorité, ne pas mettre à jour les notices bibliographiques rattachées si le nombre dépasse"
+msgstr ""
+"Lors de la modification d'une notice d'autorité, ne pas mettre à jour les "
+"notices bibliographiques rattachées si leur nombre dépasse"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeLimit# records. (Above this limit, the merge_authority cron job will merge them.)"
@@ -1556,10 +1588,7 @@ msgstr "notices. (Au-delà de cette limite, le cron job merge_authority les fusi
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# When updating bibliographic records from an attached authority record (\"merging\"), handle subfields of relevant bibliographic record fields in"
-msgstr ""
-"Lors de la mise à jour des notices bibliographiques à partir d'une notice "
-"autorité liée (\"fusion\"), modifie les sous-champs des champs de la notice "
-"bibliographique correspondante dans"
+msgstr "Lors de la mise à jour des notices bibliographiques à partir d'une notice autorité liée (\"fusion\"), modifie les sous-champs des champs de la notice bibliographique correspondante dans"
 
 # Authorities > General
 msgid "authorities.pref#AuthorityMergeMode# loose"
@@ -1727,16 +1756,11 @@ msgstr "Ne pas afficher"
 
 # Cataloging > Display
 msgid "cataloguing.pref#AcquisitionDetails# acquisition details on the bibliographic record detail page."
-msgstr ""
-"les informations d'acquisition sur la page de détail de la notice "
-"bibliographique."
+msgstr "les informations d'acquisition sur la page de détail de la notice bibliographique."
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AdditionalFieldsInZ3950ResultSearch#  in the 'Additional fields' column of Z39.50 search results (use comma as delimiter e.g.: \"<code>001, 082$ab, 090$ab</code>\")"
-msgstr ""
-"  dans la colonne «&nbsp;Sous-champs supplémentaires&nbsp;» des résultats "
-"d'une recherche Z39.50 (utiliser la virgule comme séparateur -par "
-"exemple&nbsp;: «<code>001, 082$ab, 090$ab</code>»)"
+msgstr "  dans la colonne «&nbsp;Sous-champs supplémentaires&nbsp;» des résultats d'une recherche Z39.50 (utiliser la virgule comme séparateur -par exemple&nbsp;: «<code>001, 082$ab, 090$ab</code>»)"
 
 # Cataloging > Importing
 msgid "cataloguing.pref#AdditionalFieldsInZ3950ResultSearch# Display the MARC field/subfields"
@@ -1942,21 +1966,15 @@ msgstr "comme URL pour la documentation MARC."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MarcFieldForCreatorId# <br/>NOTE: Use a dollar sign between field and subfield like 123$a."
-msgstr ""
-"<br/>NOTE&nbsp;: Utiliser le caractère Dollar entre le champ et les sous-"
-"champs, comme dans 123$a."
+msgstr "<br/>NOTE&nbsp;: Utiliser le caractère Dollar entre le champ et les sous-champs, comme dans 123$a."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MarcFieldForCreatorId# Store record's creator borrowernumber in MARC subfield"
-msgstr ""
-"Stocker le numéro de notice (borrowernumber) du créateur de la notice dans "
-"le sous-champ MARC"
+msgstr "Stocker le numéro de notice (borrowernumber) du créateur de la notice dans le sous-champ MARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MarcFieldForCreatorId# Store record's last modifier borrowernumber in MARC subfield"
-msgstr ""
-"Stocker le numéro de notice (borrowernumber) du dernier modificateur de la "
-"notice dans le sous-champ MARC"
+msgstr "Stocker le numéro de notice (borrowernumber) du dernier modificateur de la notice dans le sous-champ MARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#MarcFieldForCreatorId# and record's creator name in MARC subfield"
@@ -2000,10 +2018,7 @@ msgstr "(doit être un code de localisation valide ou bien laissé vide pour dé
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
-msgstr ""
-"<br><strong>NOTE&nbsp;:</strong> Cette préférence système nécessite le "
-"cronjob <code>misc/cronjobs/cart_to_shelf.pl</code>. Demandez à votre "
-"administrateur système de le planifier."
+msgstr "<br><strong>NOTE&nbsp;:</strong> Cette préférence système nécessite le cronjob <code>misc/cronjobs/cart_to_shelf.pl</code>. Demandez à votre administrateur système de le planifier."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#NewItemsDefaultLocation# When items are created, give them the temporary location of"
@@ -2024,6 +2039,8 @@ msgstr "(Laisser vide si inutilisé. Définir une plage comme <code>192.168.</co
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Display the following message on the redirect page for suppressed bibliographic records"
 msgstr ""
+"<br/>Afficher le message suivant sur la page de redirection des notices "
+"bibliographiques supprimées"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# <br />Redirect the opac detail page for suppressed records to"
@@ -2047,9 +2064,7 @@ msgstr "une page d'explication (Notice bloquée)"
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# bibliographic records marked as suppressed from OPAC search results."
-msgstr ""
-"les notices bibliographiques marquées comme supprimées sur les résultats de "
-"recherche à l'OPAC."
+msgstr "les notices bibliographiques marquées comme supprimées sur les résultats de recherche à l'OPAC."
 
 # Cataloging > Display
 msgid "cataloguing.pref#OpacSuppression# the 404 error page ('Not found')."
@@ -2163,9 +2178,7 @@ msgstr "Exemple&nbsp;:"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# If the pref is empty, no fields are restricted."
-msgstr ""
-"Si la préférence système est laissée vide, aucune restriction n'est "
-"appliquée."
+msgstr "Si la préférence système est laissée vide, aucune restriction n'est appliquée."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedBatchmod# MARC21: \"952$a 952$b 952$c\""
@@ -2189,9 +2202,7 @@ msgstr "Exemples&nbsp;:"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# If the pref is empty, no fields are restricted."
-msgstr ""
-"Si la préférence système est laissée vide, aucune restriction n'est "
-"appliquée."
+msgstr "Si la préférence système est laissée vide, aucune restriction n'est appliquée."
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#SubfieldsToAllowForRestrictedEditing# MARC21: \"952$a 952$b 952$c\""
@@ -2307,13 +2318,7 @@ msgstr "Recopier les sous-champs MARC"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#itemcallnumber# to an item's callnumber. (This can contain multiple subfields to look in; for instance <code>082ab</code> would look in 082 subfields a and b.)<br />Examples (for MARC21 records): <strong>Dewey</strong>: <code>082ab</code> or <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> or <code>090ab</code>; <strong>from the item record</strong>: <code>852hi</code>"
-msgstr ""
-"dans la cote des exemplaires. Il peut y avoir plusieurs sous-champs "
-"examinés. Par exemple: <code>082ab</code> pour le champ 082 et ses sous-"
-"champ a et b.<br/> Exemples (en MARC21)&nbsp;: <strong>Dewey</strong>: "
-"<code>082ab</code> ou <code>092ab</code>; <strong>LOC</strong>: "
-"<code>050ab</code> ou <code>090ab</code>; <strong>de la notice "
-"exemplaire</strong>: <code>852hi</code>"
+msgstr "dans la cote des exemplaires. Il peut y avoir plusieurs sous-champs examinés. Par exemple: <code>082ab</code> pour le champ 082 et ses sous-champ a et b.<br/> Exemples (en MARC21)&nbsp;: <strong>Dewey</strong>: <code>082ab</code> ou <code>092ab</code>; <strong>LOC</strong>: <code>050ab</code> ou <code>090ab</code>; <strong>de la notice exemplaire</strong>: <code>852hi</code>"
 
 # Cataloging > Record Structure
 msgid "cataloguing.pref#marcflavour# Interpret and store MARC records in the"
@@ -2357,7 +2362,7 @@ msgstr "Circulation"
 
 # Circulation > Accounts
 msgid "circulation.pref Accounts"
-msgstr ""
+msgstr "circulation.pref Comptes"
 
 # Circulation > Article Requests
 msgid "circulation.pref Article Requests"
@@ -2409,19 +2414,21 @@ msgstr "Module d'auto-retour"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref Stockrotation module"
-msgstr ""
+msgstr "circulation.pref Rotation des exemplaires"
 
 # Circulation > Accounts
 msgid "circulation.pref#AccountAutoReconcile# Do"
-msgstr ""
+msgstr "Rapprocher"
 
 # Circulation > Accounts
 msgid "circulation.pref#AccountAutoReconcile# Do not"
-msgstr ""
+msgstr "Ne pas rapprocher"
 
 # Circulation > Accounts
 msgid "circulation.pref#AccountAutoReconcile# reconcile patron balances automatically on each transaction adding debits or credits."
 msgstr ""
+"automatiquement le solde de l'adhérent à chaque transaction de débits ou "
+"crédits."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AgeRestrictionMarker# E.g. enter target audience keyword(s) split by | (bar) FSK|PEGI|Age| (No white space near |). Be sure to map agerestriction in Koha to MARC mapping (e.g. 521$a). A MARC field value of FSK 12 or PEGI 12 would mean: Borrower must be 12 years old. Leave empty to not apply an age restriction."
@@ -2526,6 +2533,8 @@ msgstr "Interdire"
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldPolicyOverride# staff to override hold policies when placing holds."
 msgstr ""
+"au personnel d'outrepasser la politique de réservation au moment de faire "
+"une réservation."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowHoldsOnDamagedItems# Allow"
@@ -2586,6 +2595,9 @@ msgstr "Interdire"
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowMultipleIssuesOnABiblio# patrons to check out multiple items from the same record.  (<strong>NOTE:</strong> This will only affect records without a subscription attached.)"
 msgstr ""
+"aux adhérents d'emprunter plusieurs exemplaires du même document  "
+"(<strong>NOTE&nbsp;:</strong> Cela ne concernera que les notices sans "
+"abonnement.)"
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#AllowNotForLoanOverride# Allow"
@@ -2610,6 +2622,9 @@ msgstr "Activer"
 # Circulation > Interface
 msgid "circulation.pref#AllowOfflineCirculation# offline circulation on regular circulation computers. (<strong>NOTE:</strong> This system preference does not affect the Firefox plugin or the desktop application)"
 msgstr ""
+"le prêt secouru sur les postes dédiés à la circulation "
+"(<strong>NOTE&nbsp;:</strong> Cette préférence système n'affecte ni le "
+"plugin Firefox ni l'application de bureau)"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AllowRenewalIfOtherItemsAvailable# Allow"
@@ -2693,15 +2708,15 @@ msgstr "adhérents à faire des demandes d'article."
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsLinkControl# Always show"
-msgstr ""
+msgstr "Toujours afficher"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsLinkControl# Use algorithm to show or hide"
-msgstr ""
+msgstr "Utiliser l'algorithme pour afficher ou masquer"
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsLinkControl# article request link on search results."
-msgstr ""
+msgstr "le lien de la demande d'article dans les résultats de recherche."
 
 # Circulation > Article Requests
 msgid "circulation.pref#ArticleRequestsMandatoryFields# For records that are record level or item level requestable, make the following fields mandatory"
@@ -2730,6 +2745,9 @@ msgstr "que les suspensions de retard déclenchées par l'envoi de messages soie
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette préférence système requiert le "
+"cronjob <code>misc/cronjobs/holds/auto_unsuspend_holds.pl</code>. Demander à "
+"votre administrateur système de le paramétrer."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#AutoResumeSuspendedHolds# Allow"
@@ -2838,6 +2856,8 @@ msgstr "le retour des exemplaires qui ont été retirés des collections."
 # Circulation > Checkin Policy
 msgid "circulation.pref#CalculateFinesOnReturn# <br /><strong>NOTE: If you are doing hourly loans then you should have this on.</strong>"
 msgstr ""
+"<br /><strong>NOTE&nbsp;: Activez la préférence si vous pratiquez les prêts "
+"horaires.</strong>"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#CalculateFinesOnReturn# Do"
@@ -2978,6 +2998,9 @@ msgstr "<br>(Utilisé quand le script longoverdue.pl est appelé sans le paramè
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette préférence système requiert le "
+"cronjob <code>misc/cronjobs/longoverdue.pl</code>. Demander à votre "
+"administrateur système de le paramétrer."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueChargeValue# <br>Leave this field empty if you don't want to charge the user for lost items."
@@ -2994,6 +3017,9 @@ msgstr "<br>(Utilisé quand le script longoverdue.pl est appelé sans le paramè
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/longoverdue.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette préférence système requiert le "
+"cronjob <code>misc/cronjobs/longoverdue.pl</code>. Demander à votre "
+"administrateur système de le paramétrer."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#DefaultLongOverdueLostValue# <br>Example: [1] [30] Sets an item to the LOST value 1 when it has been overdue for more than 30 days."
@@ -3038,6 +3064,8 @@ msgstr "Activer"
 # Circulation > Holds Policy
 msgid "circulation.pref#DisplayMultiPlaceHold# the ability to place holds on multiple bibliographic records from the search results"
 msgstr ""
+"la possibilité de réserver plusieurs notices bibliographiques à partir des "
+"résultats de recherche"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExcludeHolidaysFromMaxPickUpDelay# Allow"
@@ -3062,6 +3090,11 @@ msgstr "Ne pas permettre"
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelay# holds to expire automatically if they have not been picked by within the time period specified in ReservesMaxPickUpDelay.<br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/cancel_expired_holds.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"que les réservations soient annulées automatiquement si elles n'ont pas été "
+"retirées dans le délai spécifié dans ReservesMaxPickUpDelay. "
+"<br><strong>NOTE&nbsp;:</strong> Cette préférence système requiert le "
+"cronjob <code>misc/cronjobs/holds/cancel_expired_holds.pl</code>. Demander à "
+"votre administrateur système de le paramétrer."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#ExpireReservesMaxPickUpDelayCharge# If using ExpireReservesMaxPickUpDelay, charge a borrower who allows his or her waiting hold to expire a fee of"
@@ -3098,6 +3131,8 @@ msgstr "(séparer les champs avec un espace, par ex. 100a 200b 300c)"
 # Circulation > Interface
 msgid "circulation.pref#ExportRemoveFields# The following fields should be excluded from the patron checkout history CSV or MARC (ISO 2709) export"
 msgstr ""
+"Les champs suivants doivent être exclus de l'historique des emprunts du "
+"lecteur lors de l'export CSV ou MARC (ISO 2709)"
 
 # Circulation > Interface
 msgid "circulation.pref#FilterBeforeOverdueReport# Don't require"
@@ -3137,15 +3172,17 @@ msgstr "la période de grâce lors du calcul des amendes pour un document en ret
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HidePersonalPatronDetailOnCirculation# Don't hide"
-msgstr ""
+msgstr "Ne pas cacher"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HidePersonalPatronDetailOnCirculation# Hide"
-msgstr ""
+msgstr "Cacher"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HidePersonalPatronDetailOnCirculation# patrons phone number, email address, street address and city on the circulation page."
 msgstr ""
+"le numéro de téléphone, l'adresse électronique, l'adresse postale et la "
+"ville des adhérents sur la page de circulation."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#HoldFeeMode# Charge a hold fee"
@@ -3165,27 +3202,27 @@ msgstr "seulement si tous les exemplaires sont en prêt et que la notice a déj�
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HoldsAutoFill# Do"
-msgstr "circulation.pref#HoldsAutoFill# Faire"
+msgstr "Remplir"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HoldsAutoFill# Don't"
-msgstr "circulation.pref#HoldsAutoFill# Ne pas faire"
+msgstr "Ne pas remplir"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HoldsAutoFill# automatically fill holds instead of asking the librarian."
-msgstr "circulation.pref#HoldsAutoFill# Remplir automatiquement les réservations au lieu de demander au bibliothécaire."
+msgstr "automatiquement les réservations au lieu de demander au bibliothécaire."
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HoldsAutoFillPrintSlip# Do"
-msgstr "circulation.pref#HoldsAutoFillPrintSlip# Faire"
+msgstr "Afficher"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HoldsAutoFillPrintSlip# Don't"
-msgstr "circulation.pref#HoldsAutoFillPrintSlip# Ne pas faire"
+msgstr "Ne pas afficher"
 
 # Circulation > Checkin Policy
 msgid "circulation.pref#HoldsAutoFillPrintSlip# automatically display the hold slip dialog for auto-filled holds."
-msgstr ""
+msgstr "circulation.pref#HoldsAutoFillPrintSlip# automatiquement la boîte de dialogue des réservations pour les réservations remplies automatiquement."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#HoldsInNoissuesCharge# Don't include"
@@ -3201,11 +3238,13 @@ msgstr "les frais de réservation au calcul des montants dûs utilisés par la p
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueue# In the staff client, split the holds queue into separate tables by"
-msgstr "circulation.pref#HoldsSplitQueue# Dans l'interface professionnel, divisez la file d'attente des réservations en tableau séparées par"
+msgstr ""
+"Dans l'interface professionnel, divisez la file d'attente des réservations "
+"en tableau séparés par"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueue# hold itemtype"
-msgstr "circulation.pref#HoldsSplitQueue# réservation itemtype"
+msgstr "type de document"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueue# nothing"
@@ -3213,11 +3252,11 @@ msgstr "circulation.pref#HoldsSplitQueue# Aucun"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueue# pickup library"
-msgstr "circulation.pref#HoldsSplitQueue# bibliothèque de récupération"
+msgstr "bibliothèque de récupération"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueue# pickup library & itemtype"
-msgstr "circulation.pref#HoldsSplitQueue# bibliothèque de récupération & itemtype"
+msgstr "bibliothèque de récupération & type de document"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueueNumbering# 'virtual' priorities, where each group is numbered separately"
@@ -3225,11 +3264,12 @@ msgstr "circulation.pref#HoldsSplitQueueNumbering# priorités «virtuelles», o�
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueueNumbering# If the holds queue is split, show librarians"
-msgstr "circulation.pref#HoldsSplitQueueNumbering# Si la file des réservations est fractionnée, affichez les bibliothécaires"
+msgstr ""
+"Si la file des réservations est fractionnée, montrez aux bibliothécaires"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#HoldsSplitQueueNumbering# the actual priority, which may be out of order"
-msgstr "circulation.pref#HoldsSplitQueueNumbering# la priorité réelle, qui peut ne pas être disponible"
+msgstr "la priorité réelle, qui peut ne pas être disponible"
 
 # Circulation > Interface
 msgid "circulation.pref#HoldsToPullStartDate# Set the default start date for the Holds to pull list to"
@@ -3282,6 +3322,9 @@ msgstr "Ajouter du texte activera l'étape d'obtention des droits d'auteurs lors
 # Circulation > Checkout Policy
 msgid "circulation.pref#InProcessingToShelvingCart# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE&nbsp:</strong> Cette préférence système requiert le cronjob "
+"<code>misc/cronjobs/cart_to_shelf.pl</code>. Demander à votre administrateur "
+"système de le paramétrer."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#InProcessingToShelvingCart# Don't move"
@@ -3727,6 +3770,9 @@ msgstr "aux adhérents de rendre leurs documents avant la date d'expiration de l
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnToShelvingCart# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/cart_to_shelf.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE&nbsp:</strong> Cette préférence système requiert le cronjob "
+"<code>misc/cronjobs/cart_to_shelf.pl</code>. Demander à votre administrateur "
+"système de le paramétrer."
 
 # Circulation > Checkout Policy
 msgid "circulation.pref#ReturnToShelvingCart# Don't move"
@@ -3742,15 +3788,15 @@ msgstr "tous les exemplaires à la localisation CART quand ils sont rendus."
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#RotationPreventTransfers# Allow"
-msgstr ""
+msgstr "Autoriser"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#RotationPreventTransfers# Disallow"
-msgstr ""
+msgstr "Ne pas autoriser"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#RotationPreventTransfers# library transfers on items in stockrotation rotas"
-msgstr ""
+msgstr "le transfert des exemplaires des listes ordonnées de rotation de stock "
 
 # Circulation > Self Checkout
 msgid "circulation.pref#SCOMainUserBlock# Include the following HTML on the the web-based self checkout screen:"
@@ -3899,6 +3945,9 @@ msgstr "(leurs codes séparés par des virgules; toutes si vide)"
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/holds/build_holds_queue.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette préférence système requiert le "
+"cronjob <code>misc/cronjobs/holds/build_holds_queue.pl</code>. Demander à "
+"votre administrateur système de le paramétrer."
 
 # Circulation > Holds Policy
 msgid "circulation.pref#StaticHoldsQueueWeight# Satisfy holds using items from the libraries"
@@ -3926,15 +3975,15 @@ msgstr "lorsqu'elles sont"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#StockRotation# Disable"
-msgstr ""
+msgstr "Ne pas autoriser"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#StockRotation# Enable"
-msgstr ""
+msgstr "Autoriser"
 
 # Circulation > Stockrotation module
 msgid "circulation.pref#StockRotation# the stock rotation module"
-msgstr ""
+msgstr "le module de Rotation de stock"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#SuspendHoldsIntranet# Allow"
@@ -4150,7 +4199,7 @@ msgstr "Activer"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# days for high demand items with more than"
-msgstr ""
+msgstr "jours pour les exemplaires très demandés avec plus de"
 
 # Circulation > Holds Policy
 msgid "circulation.pref#decreaseLoanHighHolds# holds"
@@ -4195,10 +4244,15 @@ msgstr "en excluant les jours de fermeture"
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> Fines can also be charged by the CalculateFinesOnReturn system preference."
 msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Les amendes peuvent aussi être calculées "
+"par la préférence système CalculateFinesOnReturn."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# <br><strong>NOTE:</strong> This system preference requires the <code>misc/cronjobs/fines.pl</code> cronjob. Ask your system administrator to schedule it."
 msgstr ""
+"<br><strong>NOTE&nbsp;:</strong> Cette préférence système requiert le "
+"cronjob <code>misc/cronjobs/fines.pl</code>. Demander à votre administrateur "
+"système de le paramétrer."
 
 # Circulation > Fines Policy
 msgid "circulation.pref#finesMode# Calculate (but only for mailing to the admin)"
@@ -4354,7 +4408,7 @@ msgstr "Contenus enrichis"
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref Adlibris"
-msgstr ""
+msgstr "Adlibris"
 
 # Enhanced Content > All
 msgid "enhanced_content.pref All"
@@ -4398,7 +4452,7 @@ msgstr "Images de couverture locales"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref Manual"
-msgstr ""
+msgstr "Manuel"
 
 # Enhanced Content > Novelist Select
 msgid "enhanced_content.pref Novelist Select"
@@ -4418,7 +4472,7 @@ msgstr "Plugins"
 
 # Enhanced Content > RecordedBooks
 msgid "enhanced_content.pref RecordedBooks"
-msgstr ""
+msgstr "RecordedBooks"
 
 # Enhanced Content > Syndetics
 msgid "enhanced_content.pref Syndetics"
@@ -4439,18 +4493,23 @@ msgstr "<strong>Note :</strong> Vous ne pouvez choisir qu'une source pour les im
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref## for the <a href=\"https://www.adlibris.com/se\">Adlibris</a> cover service."
 msgstr ""
+"pour le service de couverture <a href=\"https://www.adlibris.com/se\""
+">Adlibris</a>."
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Don't show"
-msgstr ""
+msgstr "Ne pas afficher"
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# Show"
-msgstr ""
+msgstr "Afficher"
 
 # Enhanced Content > Adlibris
 msgid "enhanced_content.pref#AdlibrisCoversEnabled# cover images in OPAC results and detail listing from Swedish retailer <a href=\"https://www.adlibris.com/se\">Adlibris</a>."
 msgstr ""
+"dans les listes de résultats et l'affichage détaillé de l'OPAC les images de "
+"couverture du fournisseur suédois <a href=\"https://www.adlibris.com/se\""
+">Adlibris</a>."
 
 # Enhanced Content > Local Cover Images
 msgid "enhanced_content.pref#AllowMultipleCovers# Allow"
@@ -4506,7 +4565,7 @@ msgstr "allemand"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AmazonLocale# Indian"
-msgstr ""
+msgstr "indien"
 
 # Enhanced Content > Amazon
 msgid "enhanced_content.pref#AmazonLocale# Japanese"
@@ -4698,39 +4757,43 @@ msgstr ""
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualBaseURL# Location of the Koha manual"
-msgstr ""
+msgstr "Adresse du manuel Koha"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualBaseURL# Note that it will be suffixed by the version / the language / the format (/17.11/en/html)"
 msgstr ""
+"Notez qu'elle sera suivie de la version / du langage / du format "
+"(/17.11/en/html)"
 
-# Enhanced Content > Manual
+# Vous pouvez préciser l'adresse du manuel Koha à utiliser. Par défaut c'est https://koha-community.org/manual/
 msgid "enhanced_content.pref#KohaManualBaseURL# You can specify the location of the Koha manual to use. By default it is https://koha-community.org/manual/"
 msgstr ""
+"Vous pouvez préciser l'emplacement du manuel Koha à utiliser. Par défaut "
+"c'est https://koha-community.org/manual/"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Arabic"
-msgstr ""
+msgstr "arabe"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Chinese – Taiwan"
-msgstr ""
+msgstr "chinois - Taïwan"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Czech"
-msgstr ""
+msgstr "tchèque"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# English"
-msgstr ""
+msgstr "anglais"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# French"
-msgstr ""
+msgstr "français"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# German"
-msgstr ""
+msgstr "allemand"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# It will be used as a fallback value if the language used by the interface does not have an online manual version."
@@ -4738,23 +4801,23 @@ msgstr ""
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Italian"
-msgstr ""
+msgstr "italien"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Language of the online manual"
-msgstr ""
+msgstr "Langue du manuel en ligne"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Portuguese – Brazil"
-msgstr ""
+msgstr "portugais - Brésil"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Spanish"
-msgstr ""
+msgstr "espagnol"
 
 # Enhanced Content > Manual
 msgid "enhanced_content.pref#KohaManualLanguage# Turkish"
-msgstr ""
+msgstr "turc"
 
 # Enhanced Content > Library Thing
 msgid "enhanced_content.pref#LibraryThingForLibrariesEnabled# <a href=\"https://www.librarything.com/forlibraries/\">sign up</a>, then enter in your ID below."
@@ -4966,7 +5029,7 @@ msgstr ""
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# A password is"
-msgstr ""
+msgstr "Un mot de passe est"
 
 # Enhanced Content > OverDrive
 msgid "enhanced_content.pref#OverDriveCirculation# Don't enable"
@@ -7302,6 +7365,10 @@ msgid "patrons.pref#FeeOnChangePatronCategory# charge a fee when a patron change
 msgstr "Facturez des frais quand un adhérent passe à une catégorie avec des frais d'inscription."
 
 # Patrons > Privacy
+msgid "patrons.pref#GDPR_Policy# <br><strong>NOTE:</strong> If you enable this you will also have to set the URL of your public privacy policy with the PrivacyPolicyURL setting."
+msgstr ""
+
+# Patrons > Privacy
 msgid "patrons.pref#GDPR_Policy# Disabled"
 msgstr ""
 
@@ -7368,6 +7435,10 @@ msgstr "Afficher par défaut"
 # Patrons > General
 msgid "patrons.pref#PatronsPerPage# results per page in the staff client."
 msgstr "adhérents par page en résultat d'une recherche."
+
+# Patrons > Privacy
+msgid "patrons.pref#PrivacyPolicyURL# <br><strong>NOTE:</strong> The URL will only be displayed if GDPR_Policy is set."
+msgstr ""
 
 # Patrons > Privacy
 msgid "patrons.pref#PrivacyPolicyURL# Use the following URL"
