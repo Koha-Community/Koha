@@ -300,6 +300,8 @@ sub disable {
     my ($self) = @_;
 
     $self->store_data( {'__ENABLED__' => 0}  );
+
+    return $self;
 }
 
 1;

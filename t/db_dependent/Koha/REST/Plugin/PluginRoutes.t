@@ -17,7 +17,7 @@
 
 use Modern::Perl;
 
-use Test::More tests => 1;
+use Test::More tests => 2;
 use Test::Mojo;
 use Test::Warn;
 
@@ -35,18 +35,28 @@ BEGIN {
     t::lib::Mocks::mock_config( 'pluginsdir', $path );
 }
 
+use Koha::Database;
+use Koha::Plugins;
+
+my $schema = Koha::Database->new->schema;
+
 subtest 'Bad plugins tests' => sub {
 
     plan tests => 3;
+
+    $schema->storage->txn_begin;
 
     # enable plugins
     t::lib::Mocks::mock_config( 'enable_plugins', 1 );
     t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
 
-    # initialize Koha::REST::V1 after mocking
-    my $remote_address = '127.0.0.1';
-    my $t;
+    my @plugins = Koha::Plugins->new->GetPlugins( { all => 1 } );
+    foreach my $plugin (@plugins) {
+        $plugin->enable;
+    }
 
+    # initialize Koha::REST::V1 after mocking
+    my $t;
     warning_is
         { $t = Test::Mojo->new('Koha::REST::V1'); }
         'The resulting spec is invalid. Skipping Bad API Route Plugin',
@@ -56,6 +66,44 @@ subtest 'Bad plugins tests' => sub {
     ok( !exists $routes->{'/contrib/badass/patrons/(:patron_id)/bother_wrong'}, 'Route doesn\'t exist' );
     ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'}, 'Route exists' );
 
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Disabled plugins tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+
+    # enable plugins
+    t::lib::Mocks::mock_config( 'enable_plugins', 1 );
+    t::lib::Mocks::mock_preference( 'UseKohaPlugins', 1 );
+
+    my $good_plugin;
+
+    my @plugins = Koha::Plugins->new->GetPlugins( { all => 1 } );
+    foreach my $plugin (@plugins) {
+        $plugin->disable;
+        $good_plugin = $plugin
+            if $plugin->{metadata}->{description} eq 'Test plugin';
+    }
+
+    # initialize Koha::REST::V1 after mocking
+    my $t = Test::Mojo->new('Koha::REST::V1');
+
+    my $routes = get_defined_routes($t);
+    ok( !exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'},
+        'Plugin disabled, route not defined' );
+
+    $good_plugin->enable;
+
+    $t      = Test::Mojo->new('Koha::REST::V1');
+    $routes = get_defined_routes($t);
+
+    ok( exists $routes->{'/contrib/testplugin/patrons/(:patron_id)/bother'},
+        'Plugin enabled, route defined' );
+
+    $schema->storage->txn_rollback;
 };
 
 sub get_defined_routes {

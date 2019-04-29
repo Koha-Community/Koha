@@ -9,7 +9,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 44;
+use Test::More tests => 46;
 
 use C4::Context;
 use Koha::Database;
@@ -77,7 +77,8 @@ close $fh;
 my $classname = ref($plugin);
 like( $plugin->test_template($fn), qr/^I am $fn/, 'Template works' );
 
-$plugin->enable;
+my $result = $plugin->enable;
+is( ref($result), 'Koha::Plugin::Test' );
 
 # testing GetPlugins
 my @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
@@ -99,7 +100,8 @@ my @plugins2 = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins({
 });
 isnt( scalar @plugins2, scalar @plugins, 'GetPlugins with two metadata conditions' );
 
-$plugin->disable;
+$result = $plugin->disable;
+is( ref($result), 'Koha::Plugin::Test' );
 
 @plugins = Koha::Plugins->new({ enable_plugins => 1 })->GetPlugins();
 @names = map { $_->get_metadata()->{'name'} } @plugins;
