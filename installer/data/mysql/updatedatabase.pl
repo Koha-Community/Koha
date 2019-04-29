@@ -18411,6 +18411,17 @@ if ( CheckVersion($DBversion) ) {
 "Upgrade to $DBversion done (Bug 8995 - Add new preferences for OpenURLResolvers)\n";
 }
 
+$DBversion = '18.12.00.067';
+if ( CheckVersion($DBversion) ) {
+    $dbh->do(q{
+        INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type)
+        VALUES ('SendAllEmailsTo','',NULL,'All emails will be redirected to this email if it is not empty','free');
+    });
+    SetVersion($DBversion);
+    print
+"Upgrade to $DBversion done (Bug 8000 - Add new preferences for SendAllEmailsTo)\n";
+}
+
 # SEE bug 13068
 # if there is anything in the atomicupdate, read and execute it.
 
