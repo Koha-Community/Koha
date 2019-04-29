@@ -692,8 +692,9 @@ sub get_saved_reports {
         }
     }
     $query .= " WHERE ".join( " AND ", map "($_)", @cond ) if @cond;
+    $query .= " GROUP BY s.id, s.borrowernumber, s.date_created, s.last_modified, s.savedsql, s.last_run, s.report_name, s.type, s.notes, s.cache_expiry, s.public, s.report_area, s.report_group, s.report_subgroup, s.mana_id, av_g.lib, av_sg.lib, b.firstname, b.surname";
     $query .= " ORDER by date_created";
-    
+
     my $result = $dbh->selectall_arrayref($query, {Slice => {}}, @args);
 
     return $result;
