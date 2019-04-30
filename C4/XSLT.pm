@@ -252,7 +252,7 @@ sub XSLTParse4Display {
         if (C4::Context->preference('item-level_itypes')) {
             @biblio_itemtypes = $biblio->items->get_column("itype");
         } else {
-            push @biblio_itemtypes, $biblio->biblioitem->itemtype;
+            push @biblio_itemtypes, $biblio->itemtype;
         }
         my @itypes = split( /\s/, C4::Context->preference('OPACOpenURLItemTypes') );
         my %original = ();
