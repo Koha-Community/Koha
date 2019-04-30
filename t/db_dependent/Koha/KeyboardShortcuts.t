@@ -37,7 +37,6 @@ my $nb_of_shortcuts = Koha::KeyboardShortcuts->search->count;
 my $shortcut_hash = {
     shortcut_name => 'this_cut',
     shortcut_keys => 'Ctrl-D',
-    shortcut_desc => 'DOES_THE_THING'
 };
 
 my $new_shortcut = Koha::KeyboardShortcut->new($shortcut_hash)->store;
