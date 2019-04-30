@@ -64,6 +64,8 @@ if ( $email_add ) {
         'basket/sendbasket.tt', 'intranet', $query,
     );
 
+    $template2->param( FinnaBaseURL => $template->{VARS}->{'FinnaBaseURL'} );
+
     my @bibs = split( /\//, $bib_list );
     my @results;
     my $iso2709;
