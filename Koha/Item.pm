@@ -326,6 +326,8 @@ sub pickup_locations {
 
     if ($branchitemrule->{hold_fulfillment_policy} eq 'holdgroup') {
         @libs  = $library->get_hold_libraries;
+        my $circ_control_library = Koha::Libraries->find($circ_control_branch);
+        push @libs, $circ_control_library unless scalar(@libs) > 0;
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'homebranch') {
         push @libs, $self->home_branch;
     } elsif ($branchitemrule->{hold_fulfillment_policy} eq 'holdingbranch') {
