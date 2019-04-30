@@ -18,7 +18,7 @@
 use Modern::Perl;
 
 use DateTime::Duration;
-use Test::More tests => 106;
+use Test::More tests => 107;
 use Test::Warn;
 
 use t::lib::Mocks;
@@ -61,6 +61,7 @@ $dbh->do(q|DELETE FROM borrowers|);
 $dbh->do(q|DELETE FROM letter|);
 $dbh->do(q|DELETE FROM message_queue|);
 $dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'CHECKED', 'my content')|);
+$dbh->do(q|INSERT INTO letter(module, code, content) VALUES ('suggestions', 'NEW_SUGGESTION', 'Content for new suggestion')|);
 
 # Add CPL if missing.
 if (not defined Koha::Libraries->find('CPL')) {
@@ -95,6 +96,7 @@ my $my_suggestion = {
     publishercode => 'my publishercode',
     suggestedby   => $borrowernumber,
     biblionumber  => $biblionumber1,
+    branchcode    => 'CPL',
     managedby     => '',
     manageddate   => '',
     accepteddate  => dt_from_string,
@@ -190,6 +192,7 @@ is( $suggestion->{note}, 'my note', 'ModSuggestion should not erase data if not 
 
 my $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber,
+    letter_code => 'CHECKED',
 });
 is( @$messages, 0, 'ModSuggestions does not send an email if the status is not updated' );
 
@@ -217,6 +220,7 @@ $suggestion = GetSuggestion($my_suggestionid);
 is( $suggestion->{STATUS}, $mod_suggestion3->{STATUS}, 'ModSuggestion modifies the status correctly' );
 $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber,
+    letter_code => 'CHECKED',
 });
 is( @$messages, 1, 'ModSuggestion sends an email if the status is updated' );
 is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEmail syspref is disabled the suggestion message_transport_type is always email');
@@ -227,6 +231,7 @@ t::lib::Mocks::mock_preference( 'FallbackToSMSIfNoEmail', 1 );
 ModSuggestion($mod_suggestion3);
 $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber,
+    letter_code => 'CHECKED',
 });
 is ($messages->[1]->{message_transport_type}, 'sms', 'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is sms if the borrower has no email');
 
@@ -242,6 +247,7 @@ my $mod_suggestion4 = {
 ModSuggestion($mod_suggestion4);
 $messages = C4::Letters::GetQueuedMessages({
     borrowernumber => $borrowernumber2,
+    letter_code => 'CHECKED',
 });
 is ($messages->[0]->{message_transport_type}, 'email', 'When FallbackToSMSIfNoEmail syspref is enabled the suggestion message_transport_type is email if the borrower has an email');
 
@@ -460,6 +466,55 @@ subtest 'DelSuggestionsOlderThan' => sub {
     is( Koha::Suggestions->count, 3, '1 suggestions>3d deleted' );
     C4::Suggestions::DelSuggestionsOlderThan(1);
     is( Koha::Suggestions->count, 2, '1 suggestions>1d deleted' );
+};
+
+subtest 'EmailPurchaseSuggestions' => sub {
+    plan tests => 5;
+
+    $dbh->do(q|DELETE FROM message_queue|);
+
+    Koha::Libraries->find('CPL')->update({ branchemail => 'branchemail@b.c' });
+    t::lib::Mocks::mock_preference( "KohaAdminEmailAddress", 'root@localhost');
+    t::lib::Mocks::mock_preference( "EmailAddressForSuggestions", 'a@b.c');
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "KohaAdminEmailAddress"); # EmailAddressForSuggestions or BranchEmailAddress or KohaAdminEmailAddress
+
+    NewSuggestion($my_suggestion);
+    my $newsuggestions_messages = C4::Letters::GetQueuedMessages({
+            borrowernumber => $borrowernumber,
+            letter_code => 'NEW_SUGGESTION',
+        });
+
+    is( @$newsuggestions_messages, 1, 'NewSuggestions sends an email' );
+    my $message1 = C4::Letters::GetMessage( $newsuggestions_messages->[0]->{message_id});
+    is ($message1->{to_address}, 'root@localhost', 'to_address is KohaAdminEmailAddress');
+
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "EmailAddressForSuggestions");
+    NewSuggestion($my_suggestion);
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages({
+            borrowernumber => $borrowernumber,
+            letter_code => 'NEW_SUGGESTION',
+        });
+    my $message2 = C4::Letters::GetMessage( $newsuggestions_messages->[1]->{message_id});
+    is ($message2->{to_address}, 'a@b.c', 'to_address is EmailAddressForSuggestions');
+
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "BranchEmailAddress");
+    NewSuggestion($my_suggestion);
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages({
+            borrowernumber => $borrowernumber,
+            letter_code => 'NEW_SUGGESTION',
+        });
+    my $message3 = C4::Letters::GetMessage( $newsuggestions_messages->[2]->{message_id});
+    is ($message3->{to_address}, 'branchemail@b.c', 'to_address is BranchEmailAddress');
+
+    Koha::Libraries->find('CPL')->update({ branchemail => undef });
+    NewSuggestion($my_suggestion);
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages({
+            borrowernumber => $borrowernumber,
+            letter_code => 'NEW_SUGGESTION',
+        });
+    my $message4 = C4::Letters::GetMessage( $newsuggestions_messages->[3]->{message_id});
+    isnt ($message4->{to_address}, 'branchemail@b.c', 'to_address is KohaAdminEmailAddress. Because branchemail is undef');
+
 };
 
 $schema->storage->txn_rollback;

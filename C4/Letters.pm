@@ -1081,6 +1081,11 @@ ENDSQL
         push @query_params, $params->{'borrowernumber'};
     }
 
+    if ( exists $params->{'letter_code'} ) {
+        push @whereclauses, ' letter_code = ? ';
+        push @query_params, $params->{'letter_code'};
+    }
+
     if ( @whereclauses ) {
         $statement .= ' WHERE ' . join( 'AND', @whereclauses );
     }
