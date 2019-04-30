@@ -9,7 +9,7 @@ use File::Temp qw( tempdir tempfile );
 use FindBin qw($Bin);
 use Module::Load::Conditional qw(can_load);
 use Test::MockModule;
-use Test::More tests => 46;
+use Test::More tests => 47;
 
 use C4::Context;
 use Koha::Database;
@@ -208,4 +208,18 @@ subtest 'Test _version_compare' => sub {
     is( Koha::Plugins::Base::_version_compare( '1.01.001', '1.1.1' ),    0, "1.01.001 is equal to 1.1.1" );
     is( Koha::Plugins::Base::_version_compare( '1',        '1.0.0' ),    0, "1 is equal to 1.0.0" );
     is( Koha::Plugins::Base::_version_compare( '1.0',      '1.0.0' ),    0, "1.0 is equal to 1.0.0" );
+};
+
+subtest 'new() tests' => sub {
+
+    plan tests => 2;
+
+    t::lib::Mocks::mock_config( 'pluginsdir', [ C4::Context->temporary_directory ] );
+    t::lib::Mocks::mock_config( 'enable_plugins', 0 );
+
+    my $result = Koha::Plugins->new();
+    is( $result, undef, 'calling new() on disabled plugins returns undef' );
+
+    $result = Koha::Plugins->new({ enable_plugins => 1 });
+    is( ref($result), 'Koha::Plugins', 'calling new with enable_plugins makes it override the config' );
 };
