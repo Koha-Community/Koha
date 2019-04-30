@@ -2492,7 +2492,7 @@ sub PrepareItemrecordDisplay {
                         push @authorised_values, "" unless ( $tagslib->{$tag}->{$subfield}->{mandatory} );
 
                         my $class_sources = GetClassSources();
-                        my $default_source = C4::Context->preference("DefaultClassificationSource");
+                        my $default_source = $defaultvalue || C4::Context->preference("DefaultClassificationSource");
 
                         foreach my $class_source (sort keys %$class_sources) {
                             next unless $class_sources->{$class_source}->{'used'} or
