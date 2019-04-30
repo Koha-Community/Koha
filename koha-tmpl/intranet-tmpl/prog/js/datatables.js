@@ -32,9 +32,38 @@ var dataTablesDefaults = {
         }
     },
     "dom": '<"top pager"ilpfB>tr<"bottom pager"ip>',
-    "buttons": [],
+    "buttons": [{
+        fade: 100,
+        className: "dt_button_clear_filter",
+        titleAttr: _("Clear filter"),
+        enabled: false,
+        text: '<i class="fa fa-lg fa-remove"></i> <span class="dt-button-text">' + _("Clear filter") + '</span>',
+        available: function ( dt ) {
+            // The "clear filter" button is made available if this test returns true
+            if( dt.settings()[0].aanFeatures.f ){ // aanFeatures.f is null if there is no search form
+                return true;
+            }
+        },
+        action: function ( e, dt, node ) {
+            dt.search( "" ).draw("page");
+            node.addClass("disabled");
+        }
+    }],
     "aLengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, window.MSG_DT_ALL || "All"]],
-    "iDisplayLength": 20
+    "iDisplayLength": 20,
+    initComplete: function( settings) {
+        var tableId = settings.nTable.id
+        // When the DataTables search function is triggered,
+        // enable or disable the "Clear filter" button based on
+        // the presence of a search string
+        $("#" + tableId ).on( 'search.dt', function ( e, settings ) {
+            if( settings.oPreviousSearch.sSearch == "" ){
+                $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").addClass("disabled");
+            } else {
+                $("#" + tableId + "_wrapper").find(".dt_button_clear_filter").removeClass("disabled");
+            }
+        });
+    }
 };
 
 
@@ -566,4 +595,12 @@ function footer_column_sum( api, column_numbers ) {
         // Update footer
         $( api.column( column_number ).footer() ).html(total.format_price());
     };
+}
+
+function filterDataTable( table, column, term ){
+    if( column ){
+        table.column( column ).search( term ).draw("page");
+    } else {
+        table.search( term ).draw("page");
+    }
 }
