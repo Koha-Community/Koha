@@ -196,6 +196,7 @@ t::lib::Selenium - Selenium helper module
 
 The goal of this module is to group the different actions we need
 when we use automation test using Selenium
+
 =head1 METHODS
 
 =head2 new
