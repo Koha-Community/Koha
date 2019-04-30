@@ -24,6 +24,32 @@ INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, m
 ('suggestions','ORDERED','','Suggestion d\'achat commandée',0,'Suggestion d\'achat commandée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nVous nous avez suggéré l\'achat du document <<suggestions.title>> par <<suggestions.author>>.\r\n\r\nNous avons le plaisir de vous informer que le document a été commandé.\r\n\r\nVous recevrez une nouvelle notification quand le document sera disponible à bibliothèque.\r\n\r\nPour toute question, veuillez nous contacter à l\'adresse suivante : <<branches.branchemail>>.\r\n\r\nMerci.\r\n\r\n<<branches.branchname>>','email'),
 ('suggestions','REJECTED','','Suggestion d\'achat rejetée',0,'Suggestion d\'achat rejetée','Bonjour <<borrowers.firstname>> <<borrowers.surname>>,\r\n\r\nVous nous avez suggéré l\'achat du document <<suggestions.title>> par <<suggestions.author>>.\r\n\r\nNous avons évalué votre suggestion aujourd\'hui et décidé de ne pas l\'acheter cette fois.\r\n\r\nLa raison de notre refus est : <<suggestions.reason>>\r\n\r\nPour toute question, veuillez nous contacter à l\'adresse suivante : <<branches.branchemail>>.\r\n\r\nMerci.\r\n\r\n<<branches.branchname>>','email');
 
+INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
+VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
+    <p><h4>Suggested by</h4>
+    <ul>
+    <li><<borrowers.firstname>> <<borrowers.surname>></li>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li><<borrowers.email>></li>
+    </ul>
+    </p>
+    <p><h4>Title suggested</h4>
+    <ul>
+    <li><b>Library:</b> <<branches.branchname>></li>
+    <li><b>Title:</b> <<suggestions.title>></li>
+    <li><b>Author:</b> <<suggestions.author>></li>
+    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>
+    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>
+    <li><b>Publisher:</b> <<suggestions.publishercode>></li>
+    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>
+    <li><b>Publication place:</b> <<suggestions.place>></li>
+    <li><b>Quantity:</b> <<suggestions.quantity>></li>
+    <li><b>Item type:</b>  <<suggestions.itemtype>></li>
+    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>
+    <li><b>Notes:</b> <<suggestions.note>></li>
+    </ul>
+    </p>',1, 'email');
 INSERT INTO `letter` (module, code, branchcode, name, is_html, title, content, message_transport_type) VALUES
 ('members','DISCHARGE','','Quittance',0,'Quittance pour <<borrowers.firstname>> <<borrowers.surname>>','Quittance\r\n\r\nLa bibliothèque <<borrowers.branchcode>> certifie que l\'utilisateur suivant :\r\n\r\n<<borrowers.firstname>> <<borrowers.surname>>\r\nCardnumber : <<borrowers.cardnumber>>\r\n\r\na rendu tous ses documents.','email');
 

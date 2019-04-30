@@ -22,6 +22,32 @@ VALUES ('circulation','ODUE','Overdue Notice','Item Overdue','Dear <<borrowers.f
 ('suggestions','TO_PROCESS','Notify fund owner', 'A suggestion is ready to be processed','Dear <<borrowers.firstname>> <<borrowers.surname>>,\n\nA new suggestion is ready to be processed: <<suggestions.title>> by <<suggestions.author>>.\n\nThank you,\n\n<<branches.branchname>>', 'email');
 
 INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
+VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
+    <p><h4>Suggested by</h4>
+    <ul>
+    <li><<borrowers.firstname>> <<borrowers.surname>></li>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li><<borrowers.email>></li>
+    </ul>
+    </p>
+    <p><h4>Title suggested</h4>
+    <ul>
+    <li><b>Library:</b> <<branches.branchname>></li>
+    <li><b>Title:</b> <<suggestions.title>></li>
+    <li><b>Author:</b> <<suggestions.author>></li>
+    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>
+    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>
+    <li><b>Publisher:</b> <<suggestions.publishercode>></li>
+    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>
+    <li><b>Publication place:</b> <<suggestions.place>></li>
+    <li><b>Quantity:</b> <<suggestions.quantity>></li>
+    <li><b>Item type:</b>  <<suggestions.itemtype>></li>
+    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>
+    <li><b>Notes:</b> <<suggestions.note>></li>
+    </ul>
+    </p>',1, 'email');
+INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
 VALUES ('members', 'DISCHARGE', 'Discharge confirmation', 'Discharge for <<borrowers.firstname>> <<borrowers.surname>>', '
 <<today>>
 <h1>Discharge confirmation</h1>

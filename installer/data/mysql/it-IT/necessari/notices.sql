@@ -28,6 +28,32 @@ biblio.title>>\r\n----\r\nGrazie per aver visitaro <<branches.branchname>>.', 'e
 ('suggestions','TO_PROCESS','Notifica al proprietario del fondo', 'Un suggeerimento è pronto per essere lavorato','Caro bibliotecario <<borrowers.firstname>> <<borrowers.surname>>,\n\n c\'è un nuovo suggerimento pronto per essere lavorato: <<suggestions.title>> by <<suggestions.author>>.\n\n Grazie dell\'attenzione,\n\n<<branches.branchname>>', 'email'),
 ('members', 'DISCHARGE', 'Liberatoria', 'Liberatoria per <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Liberatoria</h1>\r\n\r\nLa biblioteca  <<borrowers.branchcode>> certifica che il seguente utente :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Numero tessera : <<borrowers.cardnumber>>\r\n\r\nha restituito tutti i documenti ricevuti.', 'email');
 
+INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
+VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
+    <p><h4>Suggested by</h4>
+    <ul>
+    <li><<borrowers.firstname>> <<borrowers.surname>></li>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li><<borrowers.email>></li>
+    </ul>
+    </p>
+    <p><h4>Title suggested</h4>
+    <ul>
+    <li><b>Library:</b> <<branches.branchname>></li>
+    <li><b>Title:</b> <<suggestions.title>></li>
+    <li><b>Author:</b> <<suggestions.author>></li>
+    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>
+    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>
+    <li><b>Publisher:</b> <<suggestions.publishercode>></li>
+    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>
+    <li><b>Publication place:</b> <<suggestions.place>></li>
+    <li><b>Quantity:</b> <<suggestions.quantity>></li>
+    <li><b>Item type:</b>  <<suggestions.itemtype>></li>
+    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>
+    <li><b>Notes:</b> <<suggestions.note>></li>
+    </ul>
+    </p>',1, 'email');
 INSERT INTO letter (module, code, name, title, content, is_html)
 VALUES ('circulation','ISSUESLIP','Ricevuta di prestito','Ricevuta di prestito', '<h3><<branches.branchname>></h3>
 Prestito a <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />

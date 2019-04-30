@@ -23,6 +23,32 @@ VALUES
 ('suggestions','TO_PROCESS','Avis au propriétaire du poste budgétaire', 'Une suggestion est prête à être traitée','<<borrowers.firstname>> <<borrowers.surname>>,\n\nUne nouvelle suggestion est prête à être traitée : <<suggestions.title>> / <<suggestions.author>>.\n\nMerci,\n\n<<branches.branchname>>', 'email'),
 ('members', 'DISCHARGE', 'Quitus', 'Quitus pour <<borrowers.firstname>> <<borrowers.surname>>', '<h1>Quitus</h1>\r\n\r\nLa librairie <<borrowers.branchcode>> certifies que lecteur suivant :\r\n\r\n    <<borrowers.firstname>> <<borrowers.surname>>\r\n   Numéro de carte : <<borrowers.cardnumber>>\r\n\r\na bien retourné tous ses documents.', 'email');
 
+INSERT INTO `letter` (module, code, name, title, content, is_html, message_transport_type)
+VALUES ('suggestions','NEW_SUGGESTION','New suggestion','New suggestion','<h3>Suggestion pendin    g approval</h3>
+    <p><h4>Suggested by</h4>
+    <ul>
+    <li><<borrowers.firstname>> <<borrowers.surname>></li>
+    <li><<borrowers.cardnumber>></li>
+    <li><<borrowers.phone>></li>
+    <li><<borrowers.email>></li>
+    </ul>
+    </p>
+    <p><h4>Title suggested</h4>
+    <ul>
+    <li><b>Library:</b> <<branches.branchname>></li>
+    <li><b>Title:</b> <<suggestions.title>></li>
+    <li><b>Author:</b> <<suggestions.author>></li>
+    <li><b>Copyright date:</b> <<suggestions.copyrightdate>></li>
+    <li><b>Standard number (ISBN, ISSN or other):</b> <<suggestions.isbn>></li>
+    <li><b>Publisher:</b> <<suggestions.publishercode>></li>
+    <li><b>Collection title:</b> <<suggestions.collectiontitle>></li>
+    <li><b>Publication place:</b> <<suggestions.place>></li>
+    <li><b>Quantity:</b> <<suggestions.quantity>></li>
+    <li><b>Item type:</b>  <<suggestions.itemtype>></li>
+    <li><b>Reason for suggestion:</b> <<suggestions.patronreason>></li>
+    <li><b>Notes:</b> <<suggestions.note>></li>
+    </ul>
+    </p>',1, 'email');
 INSERT INTO `letter` (module, code, name, title, content, is_html)
 VALUES ('circulation','ISSUESLIP','Ticket de de prêt','Ticket de prêt', '<h3><<branches.branchname>></h3>
 Prêts à <<borrowers.title>> <<borrowers.firstname>> <<borrowers.initials>> <<borrowers.surname>> <br />
