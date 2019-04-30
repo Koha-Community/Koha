@@ -55,7 +55,8 @@ output_and_exit_if_error( $input, $cookie, $template, { module => 'members', log
 
 #get account details
 my $total = $patron->account->balance;
-my $accountline = Koha::Account::Lines->find($accountlines_id)->unblessed;
+my $accountline_object = Koha::Account::Lines->find($accountlines_id);
+my $accountline = $accountline_object->unblessed;
 
 my $totalcredit;
 if ( $total <= 0 ) {
@@ -85,12 +86,21 @@ my %row = (
     'note'      => $accountline->{'note'},
 );
 
+my @account_offsets = Koha::Account::Offsets->search( { debit_id => $accountline_object->id } );
+
+my $letter = C4::Letters::getletter( 'circulation', 'ACCOUNT_DEBIT', C4::Context::mybranch, 'print', $patron->lang );
+
 $template->param(
-    patron         => $patron,
-    finesview      => 1,
-    total          => sprintf( "%.2f", $total ),
-    totalcredit    => $totalcredit,
-    accounts       => [$accountline], # FIXME There is always only 1 row!
+    letter  => $letter,
+    patron  => $patron,
+    library => C4::Context::mybranch,
+    offsets => \@account_offsets,
+    debit   => $accountline_object,
+
+    finesview   => 1,
+    total       => sprintf( "%.2f", $total ),
+    totalcredit => $totalcredit,
+    accounts    => [$accountline],           # FIXME There is always only 1 row!
 );
 
 output_html_with_http_headers $input, $cookie, $template->output;
