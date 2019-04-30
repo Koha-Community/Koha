@@ -1923,10 +1923,11 @@ sub searchResults {
     my $sysxml = $xslfile ? C4::XSLT::get_xslt_sysprefs() : undef;
 
     my $userenv = C4::Context->userenv;
-    my $patron  = ( defined $userenv and $userenv->{number} )
-                    ? Koha::Patrons->find( $userenv->{number} )
-                    : undef;
-    my $patron_category_hide_lost_items = ($patron) ? $patron->category->hidelostitems : 0;
+    my $logged_in_user
+        = ( defined $userenv and $userenv->{number} )
+        ? Koha::Patrons->find( $userenv->{number} )
+        : undef;
+    my $patron_category_hide_lost_items = ($logged_in_user) ? $logged_in_user->category->hidelostitems : 0;
 
     # loop through all of the records we've retrieved
     for ( my $i = $offset ; $i <= $times - 1 ; $i++ ) {
@@ -2119,6 +2120,7 @@ sub searchResults {
 			my $prefix = $item->{$hbranch} . '--' . $item->{location} . $item->{itype} . $item->{itemcallnumber};
 # For each grouping of items (onloan, available, unavailable), we build a key to store relevant info about that item
             if ( $item->{onloan}
+                and $logged_in_user
                 and !( $patron_category_hide_lost_items and $item->{itemlost} ) )
             {
                 $onloan_count++;
