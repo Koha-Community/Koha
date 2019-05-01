@@ -1058,10 +1058,10 @@ sub GetPrintMessages {
 
   my $messages = GetQueuedMessage( { borrowernumber => '123', limit => 20 } );
 
-fetches messages out of the message queue.
+Fetches a list of messages from the message queue optionally filtered by borrowernumber
+and limited to specified limit.
 
-returns:
-list of hashes, each has represents a message in the message queue.
+Return is an arrayref of hashes, each has represents a message in the message queue.
 
 =cut
 
@@ -1079,11 +1079,6 @@ ENDSQL
     if ( exists $params->{'borrowernumber'} ) {
         push @whereclauses, ' borrowernumber = ? ';
         push @query_params, $params->{'borrowernumber'};
-    }
-
-    if ( exists $params->{'letter_code'} ) {
-        push @whereclauses, ' letter_code = ? ';
-        push @query_params, $params->{'letter_code'};
     }
 
     if ( @whereclauses ) {
