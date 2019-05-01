@@ -456,33 +456,38 @@ sub NewSuggestion {
     my $rs = Koha::Database->new->schema->resultset('Suggestion');
     my $new_id = $rs->create($suggestion)->id;
 
-    my $full_suggestion = GetSuggestion( $new_id );
-    if (
-        my $letter = C4::Letters::GetPreparedLetter(
-            module      => 'suggestions',
-            letter_code => 'NEW_SUGGESTION',
-            tables      => {
-                'branches'    => $full_suggestion->{branchcode},
-                'borrowers'   => $full_suggestion->{suggestedby},
-                'suggestions' => $full_suggestion,
-            },
-        )
-    ){
-        my $emailpurchasesuggestions = C4::Context->preference("EmailPurchaseSuggestions");
+    my $emailpurchasesuggestions = C4::Context->preference("EmailPurchaseSuggestions");
+    if ($emailpurchasesuggestions) {
+        my $full_suggestion = GetSuggestion( $new_id );
+        if (
+            my $letter = C4::Letters::GetPreparedLetter(
+                module      => 'suggestions',
+                letter_code => 'NEW_SUGGESTION',
+                tables      => {
+                    'branches'    => $full_suggestion->{branchcode},
+                    'borrowers'   => $full_suggestion->{suggestedby},
+                    'suggestions' => $full_suggestion,
+                },
+            )
+        ){
 
-        my $toaddress = ( $emailpurchasesuggestions eq "BranchEmailAddress" )
-                ? ( Koha::Libraries->find($full_suggestion->{branchcode})->branchemail || C4::Context->preference('KohaAdminEmailAddress') )
-                : C4::Context->preference( $emailpurchasesuggestions ) ;
+            my $toaddress =
+              ( $emailpurchasesuggestions eq "BranchEmailAddress" )
+              ? ( Koha::Libraries->find( $full_suggestion->{branchcode} )
+                  ->branchemail
+                  || C4::Context->preference('KohaAdminEmailAddress') )
+              : C4::Context->preference($emailpurchasesuggestions);
 
-        C4::Letters::EnqueueLetter(
-            {
-                letter         => $letter,
-                borrowernumber => $full_suggestion->{suggestedby},
-                suggestionid   => $full_suggestion->{suggestionid},
-                to_address     => $toaddress,
-                message_transport_type => 'email',
-            }
-        ) or warn "can't enqueue letter $letter";
+            C4::Letters::EnqueueLetter(
+                {
+                    letter         => $letter,
+                    borrowernumber => $full_suggestion->{suggestedby},
+                    suggestionid   => $full_suggestion->{suggestionid},
+                    to_address     => $toaddress,
+                    message_transport_type => 'email',
+                }
+            ) or warn "can't enqueue letter $letter";
+        }
     }
 
     return $new_id;

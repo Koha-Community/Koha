@@ -469,15 +469,24 @@ subtest 'DelSuggestionsOlderThan' => sub {
 };
 
 subtest 'EmailPurchaseSuggestions' => sub {
-    plan tests => 5;
+    plan tests => 6;
 
     $dbh->do(q|DELETE FROM message_queue|);
 
     Koha::Libraries->find('CPL')->update({ branchemail => 'branchemail@b.c' });
     t::lib::Mocks::mock_preference( "KohaAdminEmailAddress", 'root@localhost');
     t::lib::Mocks::mock_preference( "EmailAddressForSuggestions", 'a@b.c');
-    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "KohaAdminEmailAddress"); # EmailAddressForSuggestions or BranchEmailAddress or KohaAdminEmailAddress
 
+    # EmailAddressForSuggestions or BranchEmailAddress or KohaAdminEmailAddress or 0
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "0");
+    NewSuggestion($my_suggestion);
+    my $newsuggestions_messages = C4::Letters::GetQueuedMessages({
+            borrowernumber => $borrowernumber
+        });
+
+    is( @$newsuggestions_messages, 0, 'NewSuggestions does not send an email when disabled' );
+
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "KohaAdminEmailAddress");
     NewSuggestion($my_suggestion);
     my $newsuggestions_messages = C4::Letters::GetQueuedMessages({
             borrowernumber => $borrowernumber,

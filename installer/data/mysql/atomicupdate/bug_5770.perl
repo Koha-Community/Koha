@@ -2,7 +2,7 @@ $DBversion = '18.12.00.XXX'; # will be replaced by the RM
 if( CheckVersion( $DBversion ) ) {
     $dbh->do( q{
             INSERT IGNORE INTO systempreferences (variable,value,options,explanation,type) VALUES
-            ('EmailPurchaseSuggestions','KohaAdminEmailAddress','EmailAddressForSuggestions|BranchEmailAddress|KohaAdminEmailAddress','Choose email address that will be sent new purchase suggestions','Choice'),
+            ('EmailPurchaseSuggestions','0','0|EmailAddressForSuggestions|BranchEmailAddress|KohaAdminEmailAddress','Choose email address that will be sent new purchase suggestions','Choice'),
             ('EmailAddressForSuggestions','','','If you choose EmailAddressForSuggestions you should enter a valid email address','free')
     });
 
