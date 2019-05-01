@@ -310,6 +310,8 @@ sub prev_open_days {
 
     while ($self->is_holiday($base_date)) {
         my $sub_next = $self->get_push_amt($base_date);
+        # Ensure we're subtracting when we need to be
+        $sub_next = $sub_next > 0 ? 0 - $sub_next : $sub_next;
         $base_date->add(days => $sub_next);
     }
 
