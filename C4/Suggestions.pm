@@ -471,12 +471,26 @@ sub NewSuggestion {
             )
         ){
 
-            my $toaddress =
-              ( $emailpurchasesuggestions eq "BranchEmailAddress" )
-              ? ( Koha::Libraries->find( $full_suggestion->{branchcode} )
-                  ->branchemail
-                  || C4::Context->preference('KohaAdminEmailAddress') )
-              : C4::Context->preference($emailpurchasesuggestions);
+            my $toaddress;
+            if ( $emailpurchasesuggestions eq "BranchEmailAddress" ) {
+                my $library =
+                  Koha::Libraries->find( $full_suggestion->{branchcode} );
+                $toaddress =
+                     $library->branchreplyto
+                  || $library->branchemail
+                  || C4::Context->preference('ReplytoDefault')
+                  || C4::Context->preference('KohaAdminEmailAddress');
+            }
+            elsif ( $emailpurchasesuggestions eq "KohaAdminEmailAddress" ) {
+                $toaddress = C4::Context->preference('ReplytoDefault')
+                  || C4::Context->preference('KohaAdminEmailAddress');
+            }
+            else {
+                $toaddress =
+                     C4::Context->preference($emailpurchasesuggestions)
+                  || C4::Context->preference('ReplytoDefault')
+                  || C4::Context->preference('KohaAdminEmailAddress');
+            }
 
             C4::Letters::EnqueueLetter(
                 {

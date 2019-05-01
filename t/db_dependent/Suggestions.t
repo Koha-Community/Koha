@@ -467,57 +467,122 @@ subtest 'DelSuggestionsOlderThan' => sub {
 };
 
 subtest 'EmailPurchaseSuggestions' => sub {
-    plan tests => 6;
+    plan tests => 11;
 
     $dbh->do(q|DELETE FROM message_queue|);
 
-    Koha::Libraries->find('CPL')->update({ branchemail => 'branchemail@b.c' });
-    t::lib::Mocks::mock_preference( "KohaAdminEmailAddress", 'root@localhost');
-    t::lib::Mocks::mock_preference( "EmailAddressForSuggestions", 'a@b.c');
+    t::lib::Mocks::mock_preference( "KohaAdminEmailAddress",
+        'noreply@hosting.com' );
 
-    # EmailAddressForSuggestions or BranchEmailAddress or KohaAdminEmailAddress or 0
-    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "0");
+    # EmailPurchaseSuggestions set to disabled
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "0" );
     NewSuggestion($my_suggestion);
-    my $newsuggestions_messages = C4::Letters::GetQueuedMessages({
+    my $newsuggestions_messages = C4::Letters::GetQueuedMessages(
+        {
             borrowernumber => $borrowernumber
-        });
+        }
+    );
+    is( @$newsuggestions_messages, 0,
+        'NewSuggestions does not send an email when disabled' );
 
-    is( @$newsuggestions_messages, 0, 'NewSuggestions does not send an email when disabled' );
-
-    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "KohaAdminEmailAddress");
+    # EmailPurchaseSuggestions set to BranchEmailAddress
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions",
+        "BranchEmailAddress" );
     NewSuggestion($my_suggestion);
-    my $newsuggestions_messages = C4::Letters::GetQueuedMessages({
-            borrowernumber => $borrowernumber
-        });
 
-    is( @$newsuggestions_messages, 1, 'NewSuggestions sends an email' );
-    my $message1 = C4::Letters::GetMessage( $newsuggestions_messages->[0]->{message_id});
-    is ($message1->{to_address}, 'root@localhost', 'to_address is KohaAdminEmailAddress');
-
-    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "EmailAddressForSuggestions");
+    t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
     NewSuggestion($my_suggestion);
-    $newsuggestions_messages = C4::Letters::GetQueuedMessages({
-            borrowernumber => $borrowernumber
-        });
-    my $message2 = C4::Letters::GetMessage( $newsuggestions_messages->[1]->{message_id});
-    is ($message2->{to_address}, 'a@b.c', 'to_address is EmailAddressForSuggestions');
 
-    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions", "BranchEmailAddress");
+    Koha::Libraries->find('CPL')->update( { branchemail => 'branchemail@hosting.com' } );
     NewSuggestion($my_suggestion);
-    $newsuggestions_messages = C4::Letters::GetQueuedMessages({
-            borrowernumber => $borrowernumber
-        });
-    my $message3 = C4::Letters::GetMessage( $newsuggestions_messages->[2]->{message_id});
-    is ($message3->{to_address}, 'branchemail@b.c', 'to_address is BranchEmailAddress');
 
-    Koha::Libraries->find('CPL')->update({ branchemail => undef });
+    Koha::Libraries->find('CPL')->update( { branchreplyto => 'branchemail@b.c' } );
     NewSuggestion($my_suggestion);
-    $newsuggestions_messages = C4::Letters::GetQueuedMessages({
-            borrowernumber => $borrowernumber
-        });
-    my $message4 = C4::Letters::GetMessage( $newsuggestions_messages->[3]->{message_id});
-    isnt ($message4->{to_address}, 'branchemail@b.c', 'to_address is KohaAdminEmailAddress. Because branchemail is undef');
 
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages(
+        {
+            borrowernumber => $borrowernumber
+        }
+    );
+    isnt( @$newsuggestions_messages, 0, 'NewSuggestions sends an email' );
+    my $message1 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[0]->{message_id} );
+    is( $message1->{to_address}, 'noreply@hosting.com',
+'BranchEmailAddress falls back to KohaAdminEmailAddress if branchreplyto, branchemail and ReplytoDefault are not set'
+    );
+    my $message2 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[1]->{message_id} );
+    is( $message2->{to_address}, 'library@b.c',
+'BranchEmailAddress falls back to ReplytoDefault if neither branchreplyto or branchemail are set'
+    );
+    my $message3 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[2]->{message_id} );
+    is( $message3->{to_address}, 'branchemail@hosting.com',
+'BranchEmailAddress uses branchemail if branch_replto is not set'
+    );
+    my $message4 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[3]->{message_id} );
+    is( $message4->{to_address}, 'branchemail@b.c',
+'BranchEmailAddress uses branchreplyto in preference to branchemail when set'
+    );
+
+    # EmailPurchaseSuggestions set to KohaAdminEmailAddress
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions",
+        "KohaAdminEmailAddress" );
+
+    t::lib::Mocks::mock_preference( "ReplytoDefault", undef );
+    NewSuggestion($my_suggestion);
+
+    t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
+    NewSuggestion($my_suggestion);
+
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages(
+        {
+            borrowernumber => $borrowernumber
+        }
+    );
+    my $message5 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[4]->{message_id} );
+    is( $message5->{to_address},
+        'noreply@hosting.com', 'KohaAdminEmailAddress uses KohaAdminEmailAddress when ReplytoDefault is not set' );
+    my $message6 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[5]->{message_id} );
+    is( $message6->{to_address},
+        'library@b.c', 'KohaAdminEmailAddress uses ReplytoDefualt when ReplytoDefault is set' );
+
+    # EmailPurchaseSuggestions set to EmailAddressForSuggestions
+    t::lib::Mocks::mock_preference( "EmailPurchaseSuggestions",
+        "EmailAddressForSuggestions" );
+
+    t::lib::Mocks::mock_preference( "ReplytoDefault", undef );
+    NewSuggestion($my_suggestion);
+
+    t::lib::Mocks::mock_preference( "ReplytoDefault", 'library@b.c' );
+    NewSuggestion($my_suggestion);
+
+    t::lib::Mocks::mock_preference( "EmailAddressForSuggestions",
+        'suggestions@b.c' );
+    NewSuggestion($my_suggestion);
+
+    $newsuggestions_messages = C4::Letters::GetQueuedMessages(
+        {
+            borrowernumber => $borrowernumber
+        }
+    );
+    my $message7 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[6]->{message_id} );
+    is( $message7->{to_address},
+        'noreply@hosting.com', 'EmailAddressForSuggestions uses KohaAdminEmailAddress when neither EmailAddressForSuggestions or ReplytoDefault are set' );
+
+    my $message8 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[7]->{message_id} );
+    is( $message8->{to_address},
+        'library@b.c', 'EmailAddressForSuggestions uses ReplytoDefault when EmailAddressForSuggestions is not set' );
+
+    my $message9 =
+      C4::Letters::GetMessage( $newsuggestions_messages->[8]->{message_id} );
+    is( $message9->{to_address},
+        'suggestions@b.c', 'EmailAddressForSuggestions uses EmailAddressForSuggestions when set' );
 };
 
 $schema->storage->txn_rollback;
