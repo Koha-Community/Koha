@@ -1452,7 +1452,8 @@
                 { "targets": [ -1 ], "sortable": false, "searchable": false },
                 { "type": "title-string", "targets" : [ "title-string" ] }
                 ],
-            "bKohaColumnsUseNames": true
+            "bKohaColumnsUseNames": true,
+            "autoWidth": false
         }, columns_settings);
 
         KohaTable("#otherholdingst", {
@@ -1461,7 +1462,8 @@
                 { "targets": [ -1 ], "sortable": false, "searchable": false },
                 { "type": "title-string", "targets" : [ "title-string" ] }
                 ],
-            "bKohaColumnsUseNames": true
+            "bKohaColumnsUseNames": true,
+            "autoWidth": false
         }, columns_settings);
 
         var serial_column_settings = [% ColumnsSettings.GetColumns( 'opac', 'biblio-detail', 'subscriptionst', 'json' ) | $raw %];
