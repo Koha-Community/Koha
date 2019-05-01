@@ -1,5 +1,6 @@
 [% USE raw %]
 [% USE Asset %]
+[% USE Koha %]
 [% SET footerjs = 1 %]
 [% INCLUDE 'doc-head-open.inc' %]
 <title>Koha &rsaquo; Administration &rsaquo; Advanced editor shortcuts</title>
@@ -21,39 +22,42 @@
         <div class="col-sm-10 col-sm-push-2">
             <main>
                 <h1>Advanced editor keyboard shortcuts</h1>
-                <ul>
-                    <li>Separate keys using a hyphen "-"</li>
-                    <li>Control key is "Ctrl"</li>
-                    <li>Alt key is "Alt"</li>
-                    <li>Shift is "Shift"</li>
-                    <li>If combining multiple keys they must be in specified order: Shift-Cmd-Ctrl-Alt</li>
-                    <li><a href="https://codemirror.net/doc/manual.html#keymaps">More documentation on defining key maps</a></li>
-                </ul>
+                [% IF Koha.Preference('EnableAdvancedCatalogingEditor') %]
+                    <ul>
+                        <li>Separate keys using a hyphen "-"</li>
+                        <li>Control key is "Ctrl"</li>
+                        <li>Alt key is "Alt"</li>
+                        <li>Shift is "Shift"</li>
+                        <li>If combining multiple keys they must be in specified order: Shift-Cmd-Ctrl-Alt</li>
+                        <li><a href="https://codemirror.net/doc/manual.html#keymaps">More documentation on defining key maps</a></li>
+                    </ul>
 
-                <form id="adveditor_shortcuts" method="post" action="/cgi-bin/koha/admin/adveditorshortcuts.pl">
-                    <fieldset>
-                    <input type=hidden name="op" value="save" />
+                    <form id="adveditor_shortcuts" method="post" action="/cgi-bin/koha/admin/adveditorshortcuts.pl">
+                        <fieldset>
+                        <input type=hidden name="op" value="save" />
 
-                    <table id="adv_editor_keyboard_shortcuts">
-                        <thead>
-                            <th>Description</th>
-                            <th>Shortcut keys</th>
-                        </thead>
-                        <tbody>
-                           [% FOREACH shortcut IN shortcuts %]
-                        <tr>
-                            <td><label for="shortcut_keys">[% PROCESS keyboard_shortcut_descriptions shortcut_name=shortcut.shortcut_name %]</label></td>
-                            <td>
-                                <input type="hidden" name="shortcut_name" value="[% shortcut.shortcut_name | html %]">
-                                <input type="text" name="shortcut_keys" value="[% shortcut.shortcut_keys | html %]">
-                           </td>
-                        </tr>
-                   [% END %]
-                   </table>
-                   </fieldset>
-                   </fieldset class="action"><input type="submit" value="Save shortcuts"></fieldset>
-               </form>
-
+                        <table id="adv_editor_keyboard_shortcuts">
+                            <thead>
+                                <th>Description</th>
+                                <th>Shortcut keys</th>
+                            </thead>
+                            <tbody>
+                               [% FOREACH shortcut IN shortcuts %]
+                            <tr>
+                                <td><label for="shortcut_keys">[% PROCESS keyboard_shortcut_descriptions shortcut_name=shortcut.shortcut_name %]</label></td>
+                                <td>
+                                    <input type="hidden" name="shortcut_name" value="[% shortcut.shortcut_name | html %]">
+                                    <input type="text" name="shortcut_keys" value="[% shortcut.shortcut_keys | html %]">
+                               </td>
+                            </tr>
+                       [% END %]
+                       </table>
+                       </fieldset>
+                       </fieldset class="action"><input type="submit" value="Save shortcuts"></fieldset>
+                   </form>
+               [% ELSE %]
+                   <p>Enable the advanced cataloging editor ( EnableAdvancedCatalogingEditor system preference) to define keyboard shortcuts</p>
+               [% END %]
            </main>
         </div> <!-- /.col-sm-10.col-sm-push-2 -->
 

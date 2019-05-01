@@ -2,8 +2,7 @@
 -- Default keyboard shortcuts
 -- for Koha.
 --
--- Copyright (C) 2007 LiblimeA
--- Copyright 2018 Koha Development Team
+-- Copyright 2019 Koha Development Team
 --
 -- This file is part of Koha.
 --

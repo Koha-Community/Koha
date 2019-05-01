@@ -269,7 +269,9 @@
 </div>
 
 <div id="shortcuts-contents" style="display: none">
-<a id="redefine_shortcuts" href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Redefine shortcuts</a>
+[% IF ( CAN_user_parameters_manage_keyboard_shortcuts ) %]
+    <a id="redefine_shortcuts" href="/cgi-bin/koha/admin/adveditorshortcuts.pl">Redefine shortcuts</a>
+[% END %]
 <table class="table table-condensed">
     <thead>
         <tr>
