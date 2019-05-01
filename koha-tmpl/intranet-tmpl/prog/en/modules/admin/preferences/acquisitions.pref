@@ -1,4 +1,3 @@
-# Broken, omitted: acquisitions, emailPurchaseSuggestions
 Acquisitions:
     Policy:
         -
@@ -100,6 +99,18 @@ Acquisitions:
                 yes: "Use"
                 no: "Don't use"
             - " the framework 'ACQ' for bibliographic records fields"
+        -
+            - "Choose email address that new purchase suggestions will be sent to: "
+            - pref: EmailPurchaseSuggestions
+              default: 0
+              choices:
+                  0: None
+                  EmailAddressForSuggestions: EmailAddressForSuggestions
+                  BranchEmailAddress: email address of branch
+                  KohaAdminEmailAddress: KohaAdminEmailAddress
+            - "If you choose EmailAddressForSuggestions you have to enter a valid email address: "
+            - pref: EmailAddressForSuggestions
+              class: email
     Printing:
         -
             - Use the

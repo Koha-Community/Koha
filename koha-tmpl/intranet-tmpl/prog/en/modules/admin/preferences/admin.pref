@@ -7,18 +7,6 @@ Administration:
               class: email
             - "(This is the default From: address for emails unless there is one for the particular library, and is referred to when an internal error occurs.)"
         -
-            - "Choose email address that new purchase suggestions will be sent to: "
-            - pref: EmailPurchaseSuggestions
-              default: 0
-              choices:
-                  0: None
-                  EmailAddressForSuggestions: EmailAddressForSuggestions
-                  BranchEmailAddress: email address of branch
-                  KohaAdminEmailAddress: KohaAdminEmailAddress
-            - "If you choose EmailAddressForSuggestions you have to enter a valid email address: "
-            - pref: EmailAddressForSuggestions
-              class: email
-        -
             - "Email address to be set as the replyto in emails: "
             - pref: ReplytoDefault
               class: email
