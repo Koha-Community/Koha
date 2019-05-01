@@ -15,7 +15,7 @@
 # with Koha; if not, see <http://www.gnu.org/licenses>.
 
 use Modern::Perl;
-use Test::More tests => 9;
+use Test::More tests => 10;
 use C4::Context;
 
 use C4::Members;
@@ -707,6 +707,268 @@ subtest 'empty string means unlimited' => sub {
         C4::Circulation::TooMany( $patron, $item_object, { onsite_checkout => 1 } ),
         undef,
         'maxonsiteissueqty="" should mean unlimited'
+      );
+};
+
+subtest 'itemtype group tests' => sub {
+    plan tests => 13;
+
+    t::lib::Mocks::mock_preference( 'CircControl', 'ItemHomeLibrary' );
+    Koha::CirculationRules->set_rules(
+        {
+            branchcode   => '*',
+            categorycode => '*',
+            itemtype     => '*',
+            rules        => {
+                maxissueqty       => '',
+                maxonsiteissueqty => '',
+                issuelength       => 1,
+                firstremind       => 1,      # 1 day of grace
+                finedays          => 2,      # 2 days of fine per day of overdue
+                lengthunit        => 'days',
+            }
+        },
+    );
+
+    my $parent_itype = $builder->build(
+        {
+            source => 'Itemtype',
+            value  => {
+                parent_type         => undef,
+                rentalcharge        => undef,
+                rentalcharge_daily  => undef,
+                rentalcharge_hourly => undef,
+                notforloan          => 0,
+            }
+        }
+    );
+    my $child_itype_1 = $builder->build(
+        {
+            source => 'Itemtype',
+            value  => {
+                parent_type         => $parent_itype->{itemtype},
+                rentalcharge        => 0,
+                rentalcharge_daily  => 0,
+                rentalcharge_hourly => 0,
+                notforloan          => 0,
+            }
+        }
+    );
+    my $child_itype_2 = $builder->build(
+        {
+            source => 'Itemtype',
+            value  => {
+                parent_type         => $parent_itype->{itemtype},
+                rentalcharge        => 0,
+                rentalcharge_daily  => 0,
+                rentalcharge_hourly => 0,
+                notforloan          => 0,
+            }
+        }
+    );
+
+    my $branch   = $builder->build( { source => 'Branch', } );
+    my $category = $builder->build( { source => 'Category', } );
+    my $patron   = $builder->build(
+        {
+            source => 'Borrower',
+            value  => {
+                categorycode => $category->{categorycode},
+                branchcode   => $branch->{branchcode},
+            },
+        }
+    );
+    my $item = $builder->build_sample_item(
+        {
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch->{branchcode},
+            itype         => $child_itype_1->{itemtype}
+        }
+    );
+
+    my $all_iq_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => $branch->{branchcode},
+                categorycode => $category->{categorycode},
+                itemtype     => undef,
+                rule_name    => 'maxissueqty',
+                rule_value   => 1
+            }
+        }
+    );
+    is( C4::Circulation::TooMany( $patron, $item ),
+        undef, 'Checkout allowed, using all rule of 1' );
+
+    #Checkout an item
+    my $issue =
+      C4::Circulation::AddIssue( $patron, $item->barcode, dt_from_string() );
+    like( $issue->issue_id, qr|^\d+$|, 'The issue should have been inserted' );
+
+    #Patron has 1 checkout of child itype1
+
+    my $parent_iq_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => $branch->{branchcode},
+                categorycode => $category->{categorycode},
+                itemtype     => $parent_itype->{itemtype},
+                rule_name    => 'maxissueqty',
+                rule_value   => 2
+            }
+        }
+    );
+
+    is( C4::Circulation::TooMany( $patron, $item ),
+        undef, 'Checkout allowed, using parent type rule of 2' );
+
+    my $child1_iq_rule = $builder->build_object(
+        {
+            class => 'Koha::CirculationRules',
+            value => {
+                branchcode   => $branch->{branchcode},
+                categorycode => $category->{categorycode},
+                itemtype     => $child_itype_1->{itemtype},
+                rule_name    => 'maxissueqty',
+                rule_value   => 1
+            }
+        }
+    );
+
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item ),
+        {
+            reason      => 'TOO_MANY_CHECKOUTS',
+            count       => 1,
+            max_allowed => 1,
+        },
+        'Checkout not allowed, using specific type rule of 1'
+    );
+
+    my $item_1 = $builder->build_sample_item(
+        {
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch->{branchcode},
+            itype         => $child_itype_2->{itemtype}
+        }
+    );
+
+    my $child2_iq_rule = $builder->build(
+        {
+            source => 'CirculationRule',
+            value  => {
+                branchcode   => $branch->{branchcode},
+                categorycode => $category->{categorycode},
+                itemtype     => $child_itype_2->{itemtype},
+                rule_name    => 'maxissueqty',
+                rule_value   => 3
+            }
+        }
+    );
+
+    is( C4::Circulation::TooMany( $patron, $item_1 ),
+        undef, 'Checkout allowed' );
+
+    #checkout an item
+    $issue =
+      C4::Circulation::AddIssue( $patron, $item_1->barcode, dt_from_string() );
+    like( $issue->issue_id, qr|^\d+$|, 'the issue should have been inserted' );
+
+    #patron has 1 checkout of childitype1 and 1 checkout of childitype2
+
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item ),
+        {
+            reason      => 'TOO_MANY_CHECKOUTS',
+            count       => 2,
+            max_allowed => 2,
+        },
+'Checkout not allowed, using parent type rule of 2, checkout of sibling itemtype counted'
+    );
+
+    my $parent_item = $builder->build_sample_item(
+        {
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch->{branchcode},
+            itype         => $parent_itype->{itemtype}
+        }
+    );
+
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $parent_item ),
+        {
+            reason      => 'TOO_MANY_CHECKOUTS',
+            count       => 2,
+            max_allowed => 2,
+        },
+'Checkout not allowed, using parent type rule of 2, checkout of child itemtypes counted'
+    );
+
+    #increase parent type to greater than specific
+    my $circ_rule_object =
+      Koha::CirculationRules->find( $parent_iq_rule->{id} );
+    $circ_rule_object->rule_value(4)->store();
+
+    is( C4::Circulation::TooMany( $patron, $item_1 ),
+        undef, 'Checkout allowed, using specific type rule of 3' );
+
+    my $item_2 = $builder->build_sample_item(
+        {
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch->{branchcode},
+            itype         => $child_itype_2->{itemtype}
+        }
+    );
+
+    #checkout an item
+    $issue =
+      C4::Circulation::AddIssue( $patron, $item_2->barcode, dt_from_string(),
+        undef, undef, undef );
+    like( $issue->issue_id, qr|^\d+$|, 'the issue should have been inserted' );
+
+    #patron has 1 checkoout of childitype1 and 2 of childitype2
+
+    is(
+        C4::Circulation::TooMany( $patron, $item_2 ),
+        undef,
+'Checkout allowed, using specific type rule of 3, checkout of sibling itemtype not counted'
+    );
+
+    $child1_iq_rule->rule_value(2)->store(); #Allow 2 checkouts for child type 1
+
+    my $item_3 = $builder->build_sample_item(
+        {
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch->{branchcode},
+            itype         => $child_itype_1->{itemtype}
+        }
+    );
+    my $item_4 = $builder->build_sample_item(
+        {
+            homebranch    => $branch->{branchcode},
+            holdingbranch => $branch->{branchcode},
+            itype         => $child_itype_2->{itemtype}
+        }
+    );
+
+    #checkout an item
+    $issue =
+      C4::Circulation::AddIssue( $patron, $item_4->barcode, dt_from_string(),
+        undef, undef, undef );
+    like( $issue->issue_id, qr|^\d+$|, 'the issue should have been inserted' );
+
+    #patron has 1 checkout of childitype 1 and 3 of childitype2
+
+    is_deeply(
+        C4::Circulation::TooMany( $patron, $item_3 ),
+        {
+            reason      => 'TOO_MANY_CHECKOUTS',
+            max_allowed => 4,
+            count       => 4,
+        },
+'Checkout not allowed, using specific type rule of 2, checkout of sibling itemtype not counted, but parent rule (4) prevents another'
     );
 
     teardown();

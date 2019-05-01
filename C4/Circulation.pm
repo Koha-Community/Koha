@@ -386,8 +386,26 @@ sub TooMany {
     $branch = _GetCircControlBranch($item_object->unblessed,$borrower);
     my $type = $item_object->effective_itemtype;
 
+    my ($type_object, $parent_type, $parent_maxissueqty_rule);
+    $type_object = Koha::ItemTypes->find( $type );
+    $parent_type = $type_object->parent_type if $type_object;
+    my $child_types = Koha::ItemTypes->search({ parent_type => $type });
+    # Find any children if we are a parent_type;
+
     # given branch, patron category, and item type, determine
     # applicable issuing rule
+
+    $parent_maxissueqty_rule = Koha::CirculationRules->get_effective_rule(
+        {
+            categorycode => $cat_borrower,
+            itemtype     => $parent_type,
+            branchcode   => $branch,
+            rule_name    => 'maxissueqty',
+        }
+    ) if $parent_type;
+    # If the parent rule is for default type we discount it
+    $parent_maxissueqty_rule = undef if $parent_maxissueqty_rule && !defined $parent_maxissueqty_rule->itemtype;
+
     my $maxissueqty_rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $cat_borrower,
@@ -396,6 +414,8 @@ sub TooMany {
             rule_name    => 'maxissueqty',
         }
     );
+
+
     my $maxonsiteissueqty_rule = Koha::CirculationRules->get_effective_rule(
         {
             categorycode => $cat_borrower,
@@ -409,10 +429,18 @@ sub TooMany {
     # if a rule is found and has a loan limit set, count
     # how many loans the patron already has that meet that
     # rule
-    if (defined($maxissueqty_rule) and $maxissueqty_rule->rule_value ne '') {
+    if (defined($maxissueqty_rule) and defined($maxissueqty_rule->rule_value)) {
+
         my @bind_params;
-        my $count_query = q|
-            SELECT COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts
+        my $count_query = "";
+
+        if (C4::Context->preference('item-level_itypes')) {
+            $count_query .= q|SELECT COALESCE( SUM( IF(items.itype = '| .$type . q|',1,0) ), 0) as type_total, COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts|;
+        } else{
+            $count_query .= q|SELECT COALESCE(SUM( IF(biblioitems.itemtype = '| .$type . q|',1,0) ), 0) as type_total, COUNT(*) AS total, COALESCE(SUM(onsite_checkout), 0) AS onsite_checkouts|;
+        }
+
+        $count_query .= q|
             FROM issues
             JOIN items USING (itemnumber)
         |;
@@ -422,37 +450,43 @@ sub TooMany {
             # matching rule has the default item type, so count only
             # those existing loans that don't fall under a more
             # specific rule
+            my $issuing_itemtypes_query  = q{
+                SELECT itemtype FROM circulation_rules
+                WHERE branchcode = ?
+                AND   (categorycode = ? OR categorycode = ?)
+                AND   itemtype IS NOT NULL
+                AND   rule_name = 'maxissueqty'
+            };
             if (C4::Context->preference('item-level_itypes')) {
-                $count_query .= " WHERE items.itype NOT IN (
-                                    SELECT itemtype FROM circulation_rules
-                                    WHERE branchcode = ?
-                                    AND   (categorycode = ? OR categorycode = ?)
-                                    AND   itemtype IS NOT NULL
-                                    AND   rule_name = 'maxissueqty'
-                                  ) ";
+                $count_query .= " WHERE items.itype NOT IN ( $issuing_itemtypes_query )";
             } else {
-                $count_query .= " JOIN  biblioitems USING (biblionumber)
-                                  WHERE biblioitems.itemtype NOT IN (
-                                    SELECT itemtype FROM circulation_rules
-                                    WHERE branchcode = ?
-                                    AND   (categorycode = ? OR categorycode = ?)
-                                    AND   itemtype IS NOT NULL
-                                    AND   rule_name = 'maxissueqty'
-                                  ) ";
+                $count_query .= " WHERE biblioitems.itemtype NOT IN ( $issuing_itemtypes_query )";
             }
             push @bind_params, $maxissueqty_rule->branchcode;
             push @bind_params, $maxissueqty_rule->categorycode;
             push @bind_params, $cat_borrower;
         } else {
-            # rule has specific item type, so count loans of that
-            # specific item type
+            my @types;
+            if ( $parent_maxissueqty_rule ) {
+            # if we have a parent item type then we count loans of the
+            # specific item type or its siblings or parent
+                my $children = Koha::ItemTypes->search({ parent_type => $parent_type });
+                @types = $children->get_column('itemtype');
+                push @types, $parent_type;
+            } elsif ( $child_types ) {
+            # If we are a parent type, we need to count all child types and our own type
+                @types = $child_types->get_column('itemtype');
+                push @types, $type; # And don't forget to count our own types
+            } else { push @types, $type; } # Otherwise only count the specific itemtype
+            my $types_param = ( '?,' ) x @types;
+            $types_param =~ s/,$//;
             if (C4::Context->preference('item-level_itypes')) {
-                $count_query .= " WHERE items.itype = ? ";
+                $count_query .= " WHERE items.itype IN (" . $types_param . ")";
             } else { 
                 $count_query .= " JOIN  biblioitems USING (biblionumber) 
-                                  WHERE biblioitems.itemtype= ? ";
+                                  WHERE biblioitems.itemtype IN (" . $types_param . ")";
             }
-            push @bind_params, $type;
+            push @bind_params, @types;
         }
 
         $count_query .= " AND borrowernumber = ? ";
@@ -470,38 +504,53 @@ sub TooMany {
             }
         }
 
-        my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $count_query, {}, @bind_params );
+        my ( $checkout_count_type, $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $count_query, {}, @bind_params );
 
-        my $max_checkouts_allowed = $maxissueqty_rule ? $maxissueqty_rule->rule_value : undef;
         my $max_onsite_checkouts_allowed = $maxonsiteissueqty_rule ? $maxonsiteissueqty_rule->rule_value : undef;
 
-        if ( $onsite_checkout and $max_onsite_checkouts_allowed ne '' ) {
-            if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
-                return {
-                    reason => 'TOO_MANY_ONSITE_CHECKOUTS',
-                    count => $onsite_checkout_count,
-                    max_allowed => $max_onsite_checkouts_allowed,
-                }
-            }
+        # If parent rules exists
+        if ( defined($parent_maxissueqty_rule) and defined($parent_maxissueqty_rule->rule_value) ){
+            my $max_checkouts_allowed = $parent_maxissueqty_rule->rule_value;
+
+            my $qty_over = _check_max_qty({
+                checkout_count => $checkout_count,
+                onsite_checkout_count => $onsite_checkout_count,
+                onsite_checkout => $onsite_checkout,
+                max_checkouts_allowed => $max_checkouts_allowed,
+                max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
+                switch_onsite_checkout       => $switch_onsite_checkout
+            });
+            return $qty_over if defined $qty_over;
+
+
+           # If the parent rule is less than or equal to the child, we only need check the parent
+           if( $maxissueqty_rule->rule_value < $parent_maxissueqty_rule->rule_value && defined($maxissueqty_rule->itemtype) ) {
+               my $max_checkouts_allowed = $maxissueqty_rule->rule_value;
+               my $qty_over = _check_max_qty({
+                   checkout_count => $checkout_count_type,
+                   onsite_checkout_count => $onsite_checkout_count,
+                   onsite_checkout => $onsite_checkout,
+                   max_checkouts_allowed => $max_checkouts_allowed,
+                   max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
+                   switch_onsite_checkout       => $switch_onsite_checkout
+               });
+               return $qty_over if defined $qty_over;
+           }
+
+        } else {
+            my $max_checkouts_allowed = $maxissueqty_rule->rule_value;
+            my $qty_over = _check_max_qty({
+                checkout_count => $checkout_count,
+                onsite_checkout_count => $onsite_checkout_count,
+                onsite_checkout => $onsite_checkout,
+                max_checkouts_allowed => $max_checkouts_allowed,
+                max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
+                switch_onsite_checkout       => $switch_onsite_checkout
+            });
+            return $qty_over if defined $qty_over;
         }
-        if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
-            my $delta = $switch_onsite_checkout ? 1 : 0;
-            if ( $checkout_count >= $max_checkouts_allowed + $delta ) {
-                return {
-                    reason => 'TOO_MANY_CHECKOUTS',
-                    count => $checkout_count,
-                    max_allowed => $max_checkouts_allowed,
-                };
-            }
-        } elsif ( not $onsite_checkout ) {
-            if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )  {
-                return {
-                    reason => 'TOO_MANY_CHECKOUTS',
-                    count => $checkout_count - $onsite_checkout_count,
-                    max_allowed => $max_checkouts_allowed,
-                };
-            }
-        }
+
+
     }
 
     # Now count total loans against the limit for the branch
@@ -527,35 +576,18 @@ sub TooMany {
         }
         my ( $checkout_count, $onsite_checkout_count ) = $dbh->selectrow_array( $branch_count_query, {}, @bind_params );
         my $max_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxissueqty};
-        my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxonsiteissueqty};
+        my $max_onsite_checkouts_allowed = $branch_borrower_circ_rule->{patron_maxonsiteissueqty} || undef;
 
-        if ( $onsite_checkout and $max_onsite_checkouts_allowed ne '' ) {
-            if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
-                return {
-                    reason => 'TOO_MANY_ONSITE_CHECKOUTS',
-                    count => $onsite_checkout_count,
-                    max_allowed => $max_onsite_checkouts_allowed,
-                }
-            }
-        }
-        if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
-            my $delta = $switch_onsite_checkout ? 1 : 0;
-            if ( $checkout_count >= $max_checkouts_allowed + $delta ) {
-                return {
-                    reason => 'TOO_MANY_CHECKOUTS',
-                    count => $checkout_count,
-                    max_allowed => $max_checkouts_allowed,
-                };
-            }
-        } elsif ( not $onsite_checkout ) {
-            if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )  {
-                return {
-                    reason => 'TOO_MANY_CHECKOUTS',
-                    count => $checkout_count - $onsite_checkout_count,
-                    max_allowed => $max_checkouts_allowed,
-                };
-            }
-        }
+        my $qty_over = _check_max_qty({
+            checkout_count => $checkout_count,
+            onsite_checkout_count => $onsite_checkout_count,
+            onsite_checkout => $onsite_checkout,
+            max_checkouts_allowed => $max_checkouts_allowed,
+            max_onsite_checkouts_allowed => $max_onsite_checkouts_allowed,
+            switch_onsite_checkout       => $switch_onsite_checkout
+        });
+        return $qty_over if defined $qty_over;
+
     }
 
     if ( not defined( $maxissueqty_rule ) and not defined($branch_borrower_circ_rule->{patron_maxissueqty}) ) {
@@ -563,6 +595,49 @@ sub TooMany {
     }
 
     # OK, the patron can issue !!!
+    return;
+}
+
+sub _check_max_qty {
+    my $params = shift;
+    my $checkout_count = $params->{checkout_count};
+    my $onsite_checkout_count = $params->{onsite_checkout_count};
+    my $onsite_checkout = $params->{onsite_checkout};
+    my $max_checkouts_allowed = $params->{max_checkouts_allowed};
+    my $max_onsite_checkouts_allowed = $params->{max_onsite_checkouts_allowed};
+    my $switch_onsite_checkout = $params->{switch_onsite_checkout};
+
+    if ( $onsite_checkout and defined $max_onsite_checkouts_allowed ) {
+        if( $max_onsite_checkouts_allowed eq '' ){ return;}
+        if ( $onsite_checkout_count >= $max_onsite_checkouts_allowed )  {
+            return {
+                reason => 'TOO_MANY_ONSITE_CHECKOUTS',
+                count => $onsite_checkout_count,
+                max_allowed => $max_onsite_checkouts_allowed,
+            }
+        }
+    }
+    if ( C4::Context->preference('ConsiderOnSiteCheckoutsAsNormalCheckouts') ) {
+        if( $max_checkouts_allowed eq '' ){ return;}
+        my $delta = $switch_onsite_checkout ? 1 : 0;
+        if ( $checkout_count >= $max_checkouts_allowed + $delta ) {
+            return {
+                reason => 'TOO_MANY_CHECKOUTS',
+                count => $checkout_count,
+                max_allowed => $max_checkouts_allowed,
+            };
+        }
+    } elsif ( not $onsite_checkout ) {
+        if( $max_checkouts_allowed eq '' ){ return;}
+        if ( $checkout_count - $onsite_checkout_count >= $max_checkouts_allowed )  {
+            return {
+                reason => 'TOO_MANY_CHECKOUTS',
+                count => $checkout_count - $onsite_checkout_count,
+                max_allowed => $max_checkouts_allowed,
+            };
+        }
+    }
+
     return;
 }
 
