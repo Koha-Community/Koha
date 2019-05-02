@@ -1,5 +1,19 @@
 #!/usr/bin/perl
 
+# This file is part of Koha.
+#
+# Koha is free software; you can redistribute it and/or modify it under the
+# terms of the GNU General Public License as published by the Free Software
+# Foundation; either version 3 of the License, or (at your option) any later
+# version.
+#
+# Koha is distributed in the hope that it will be useful, but WITHOUT ANY
+# WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR
+# A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License along
+# with Koha; if not, see <http://www.gnu.org/licenses>.
+
 use Modern::Perl;
 
 use Archive::Extract;
@@ -18,7 +32,9 @@ use Koha::Plugins::Methods;
 use t::lib::Mocks;
 
 BEGIN {
-    push( @INC, dirname(__FILE__) . '/../lib' );
+    # Mock pluginsdir before loading Plugins module
+    my $path = dirname(__FILE__) . '/../lib';
+    t::lib::Mocks::mock_config( 'pluginsdir', $path );
 
     use_ok('Koha::Plugins');
     use_ok('Koha::Plugins::Handler');
@@ -27,6 +43,53 @@ BEGIN {
 }
 
 my $schema = Koha::Database->new->schema;
+
+subtest 'GetPlugins() tests' => sub {
+
+    plan tests => 2;
+
+    $schema->storage->txn_begin;
+    # Temporarily remove any installed plugins data
+    Koha::Plugins::Methods->delete;
+
+    my $plugins = Koha::Plugins->new({ enable_plugins => 1 });
+    $plugins->InstallPlugins;
+
+    my @plugins = $plugins->GetPlugins({ method => 'report' });
+
+    my @names = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar grep( /^Test Plugin$/, @names), 1, "Koha::Plugins::GetPlugins functions correctly" );
+
+    @plugins = $plugins->GetPlugins({ metadata => { my_example_tag  => 'find_me' } });
+    @names = map { $_->get_metadata()->{'name'} } @plugins;
+    is( scalar @names, 2, "Only two plugins found via a metadata tag" );
+
+    $schema->storage->txn_rollback;
+};
+
+subtest 'Version upgrade tests' => sub {
+
+    plan tests => 1;
+
+    $schema->storage->txn_begin;
+
+    my $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+
+    # make sure there's no version on the DB
+    $schema->resultset('PluginData')
+        ->search( { plugin_class => $plugin->{class}, plugin_key => '__INSTALLED_VERSION__' } )
+        ->delete;
+
+    $plugin = Koha::Plugin::Test->new( { enable_plugins => 1, cgi => CGI->new } );
+    my $version = $plugin->retrieve_data('__INSTALLED_VERSION__');
+
+    is( $version, $plugin->get_metadata->{version}, 'Version has been populated correctly' );
+
+    $schema->storage->txn_rollback;
+};
+
+$schema->storage->txn_begin;
+Koha::Plugins::Methods->delete;
 
 Koha::Plugins->new( { enable_plugins => 1 } )->InstallPlugins();
 
