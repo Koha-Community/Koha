@@ -52,20 +52,4 @@ sub _koha_marc_update_bib_ids_control {
     is($r->field('004')->data(), 20, 'Biblioitemnumber to control field');
 }
 
-subtest 'SplitKohaField' => sub {
-    plan tests => 4;
-
-    my $res = C4::Biblio::SplitKohaField(undef);
-    is_deeply($res, [], 'undef returned as an array');
-
-    $res = C4::Biblio::SplitKohaField('');
-    is_deeply($res, [], 'Empty string returned as an array');
-
-    $res = C4::Biblio::SplitKohaField('Single');
-    is_deeply($res, ['Single'], 'Single subtitle returned as an array');
-
-    $res = C4::Biblio::SplitKohaField('First | Second');
-    is_deeply($res, ['First', 'Second'], 'Two subtitles returned as an array');
-};
-
 done_testing();

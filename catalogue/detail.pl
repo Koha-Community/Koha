@@ -78,6 +78,7 @@ my $biblionumber = $query->param('biblionumber');
 $biblionumber = HTML::Entities::encode($biblionumber);
 my $record       = GetMarcBiblio({ biblionumber => $biblionumber });
 my $biblio = Koha::Biblios->find( $biblionumber );
+$template->param( 'biblio', $biblio );
 
 if ( not defined $record ) {
     # biblionumber invalid -> report and exit

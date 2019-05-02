@@ -21,7 +21,7 @@ use Test::More;
 use Test::MockModule;
 use Test::Warn;
 
-plan tests => 45;
+plan tests => 43;
 
 use_ok('C4::Biblio');
 

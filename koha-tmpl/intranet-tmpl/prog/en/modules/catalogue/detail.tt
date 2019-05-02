@@ -6,7 +6,6 @@
 [% USE Branches %]
 [% USE Biblio %]
 [% USE ColumnsSettings %]
-[% USE Stash %]
 [% SET AdlibrisEnabled = Koha.Preference('AdlibrisCoversEnabled') %]
 [% SET AdlibrisURL = Koha.Preference('AdlibrisCoversURL') %]
 
@@ -35,7 +34,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for [% INCLUDE 'biblio-title-head.inc' biblio=Stash.stash() %]
+    Details for [% INCLUDE 'biblio-title-head.inc' %]
   [% END %]
 </title>
 [% INCLUDE 'doc-head-close.inc' %]
@@ -50,7 +49,7 @@
   [% IF ( unknownbiblionumber ) %]
     Unknown record
   [% ELSE %]
-    Details for <i>[% INCLUDE 'biblio-title.inc' biblio=Stash.stash() %]</i>
+    Details for <i>[% INCLUDE 'biblio-title.inc' %]</i>
   [% END %]
 </div>
 

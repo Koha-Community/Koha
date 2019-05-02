@@ -23,7 +23,6 @@ use CGI;
 use JSON qw(to_json);
 
 use C4::Auth qw(check_cookie_auth);
-use C4::Biblio qw(SplitKohaField);
 use C4::Charset;
 use C4::Circulation qw(GetTransfers);
 use C4::Context;
@@ -86,11 +85,12 @@ while ( my $h = $holds_rs->next() ) {
     }
 
     my $biblio = $h->biblio();
+    my @subtitles = split(/ \| /, $biblio->subtitle() // '');
     my $hold = {
         DT_RowId       => $h->reserve_id(),
         biblionumber   => $biblionumber,
         title          => $biblio->title(),
-        subtitle       => C4::Biblio::SplitKohaField($biblio->subtitle()),
+        subtitle       => \@subtitles,
         medium         => $biblio->medium() // '',
         part_number    => $biblio->part_number() // '',
         part_name      => $biblio->part_name() // '',

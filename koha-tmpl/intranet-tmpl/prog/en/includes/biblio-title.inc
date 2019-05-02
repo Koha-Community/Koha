@@ -9,9 +9,15 @@
 [% FOREACH subtitle IN biblio.subtitle.split(' \\| ') %][% IF Koha.Preference('marcflavour')=='UNIMARC' %],[% END %]
     <span class="subtitle">[% subtitle | html %]</span>
 [% END %]
-[% IF ( biblio.part_number ) %]
-    <span class="part-number">[% biblio.part_number | html %]</span>
-[% END %]
-[% IF ( biblio.part_name ) %]
-    <span class="part-name">[% biblio.part_name | html %]</span>
+[% part_numbers = biblio.part_number.split(' \\| ') %]
+[% part_names = biblio.part_name.split(' \\| ') %]
+[% i = 0 %]
+[% WHILE ( part_numbers.$i.defined || part_names.$i.defined ) %]
+    [% IF ( part_numbers.$i.defined ) %]
+        <span class="part-number">[% part_numbers.$i | html %]</span>
+    [% END %]
+    [% IF ( part_names.$i.defined ) %]
+        <span class="part-name">[% part_names.$i | html %]</span>
+    [% END %]
+    [% i = i + 1 %]
 [% END %]
