@@ -20,6 +20,7 @@ package Koha::Plugins;
 use Modern::Perl;
 
 use Class::Inspector;
+use List::MoreUtils qw(any);
 use Module::Load::Conditional qw(can_load);
 use Module::Load qw(load);
 use Module::Pluggable search_path => ['Koha::Plugin'], except => qr/::Edifact(|::Line|::Message|::Order|::Segment|::Transport)$/;
@@ -76,8 +77,14 @@ sub GetPlugins {
     my $plugin_classes = $dbh->selectcol_arrayref('SELECT DISTINCT(plugin_class) FROM plugin_methods');
     my @plugins;
 
+    # Loop through all plugins that implement at least a method
     foreach my $plugin_class (@$plugin_classes) {
-        next if $method && !Koha::Plugins::Methods->search({ plugin_class => $plugin_class, plugin_method => $method })->count;
+        # filter the plugin out by method
+        next
+            if $method
+            && !Koha::Plugins::Methods->search(
+            { plugin_class => $plugin_class, plugin_method => $method } )->count;
+
         load $plugin_class;
         my $plugin = $plugin_class->new({ enable_plugins => $self->{'enable_plugins'} });
 
@@ -91,8 +98,17 @@ sub GetPlugins {
 
         next unless $plugin_enabled;
 
+        # filter the plugin out by metadata
+        my $plugin_metadata = $plugin->get_metadata;
+        next
+            if $plugin_metadata
+            and %$req_metadata
+            and any { !$plugin_metadata->{$_} || $plugin_metadata->{$_} ne $req_metadata->{$_} } keys %$req_metadata;
+
         push @plugins, $plugin;
+
     }
+
     return @plugins;
 }
 
