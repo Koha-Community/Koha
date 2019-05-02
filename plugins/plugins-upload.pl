@@ -20,7 +20,6 @@ use Modern::Perl;
 
 use Archive::Extract;
 use CGI qw ( -utf8 );
-use Class::Inspector;
 use File::Copy;
 use File::Temp;
 

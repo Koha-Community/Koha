@@ -3539,7 +3539,8 @@ CREATE TABLE patron_consent (
 -- Table structure for table 'plugin_data'
 --
 
-CREATE TABLE IF NOT EXISTS plugin_methods (
+DROP TABLE IF EXISTS plugin_methods;
+CREATE TABLE plugin_methods (
   plugin_class varchar(255) NOT NULL,
   plugin_method varchar(255) NOT NULL,
   PRIMARY KEY ( `plugin_class` (191), `plugin_method` (191) )
