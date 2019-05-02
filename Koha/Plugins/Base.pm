@@ -69,6 +69,8 @@ sub new {
         $self->store_data({ '__INSTALLED_VERSION__' => $plugin_version });
     }
 
+    $self->{_bundle_path} = abs_path($self->mbf_dir);
+
     return $self;
 }
 
@@ -208,6 +210,20 @@ Note: this is a wrapper function for C4::Output::output_with_http_headers
 sub output_html {
     my ( $self, $data, $status, $extra_options ) = @_;
     output_with_http_headers( $self->{cgi}, undef, $data, 'html', $status, $extra_options );
+}
+
+=head2 bundle_path
+
+    my $bundle_path = $self->bundle_path
+
+Returns the directory in which bundled files are.
+
+=cut
+
+sub bundle_path {
+    my ($self) = @_;
+
+    return $self->{_bundle_path};
 }
 
 =head2 output
