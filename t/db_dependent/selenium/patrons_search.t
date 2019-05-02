@@ -40,12 +40,13 @@ my $builder       = t::lib::TestBuilder->new;
 
 our @cleanup;
 subtest 'Search patrons' => sub {
-    plan tests => 3;
+    plan tests => 4;
 
     my @patrons;
     my $borrowernotes           = q|<strong>just 'a" note</strong> \123 ❤|;
     my $borrowernotes_displayed = q|just 'a" note \123 ❤|;
-    my $branchname      = q|<strong>just 'another" library</strong> \123 ❤|;
+    my $branchname = q|<strong>just 'another" library</strong> \123 ❤|;
+    my $firstname  = q|<strong>fir's"tname</strong> \123 ❤|;
     my $patron_category = $builder->build_object(
         { class => 'Koha::Patron::Categories', category_type => 'A' } );
     my $library = $builder->build_object(
@@ -58,6 +59,7 @@ subtest 'Search patrons' => sub {
                 class => 'Koha::Patrons',
                 value => {
                     surname       => "test_patron_" . $i++,
+                    firstname     => $firstname,
                     categorycode  => $patron_category->categorycode,
                     branchcode    => $library->branchcode,
                     borrowernotes => $borrowernotes,
@@ -73,6 +75,9 @@ subtest 'Search patrons' => sub {
     my $first_patron = $patrons[0];
 
     my @td = $driver->find_elements('//table[@id="memberresultst"]/tbody/tr/td');
+    like ($td[2]->get_text, qr[\Q$firstname\E],
+        'Column "Name" should be the 3rd and contain the firstname correctly filtered'
+    );
     is( $td[5]->get_text, $branchname,
         'Column "Library" should be the 6th and contain the html tags - they have been html filtered'
     );
