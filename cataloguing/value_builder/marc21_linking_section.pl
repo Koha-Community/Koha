@@ -213,7 +213,7 @@ my $launcher = sub {
         }
         my @arrayresults;
         my @field_data = ($search);
-        for ( my $i = 0 ; $i < $resultsperpage ; $i++ ) {
+        for ( my $i = 0 ; $i < $total && $i < $resultsperpage ; $i++ ) {
             my $record = C4::Search::new_record_from_zebra( 'biblioserver', $results->[$i] );
             my $rechash = TransformMarcToKoha( $record );
             my $pos;
