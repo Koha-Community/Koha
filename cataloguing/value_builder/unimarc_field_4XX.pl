@@ -399,7 +399,7 @@ sub plugin {
         my @field_data = ($search);
          for (
              my $i = 0 ;
-             $i < $resultsperpage ;
+             $i < $total && $i < $resultsperpage ;
              $i++
            )
          {
