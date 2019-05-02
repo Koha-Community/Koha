@@ -201,6 +201,8 @@ if ($slice_index == 0) {
     }
 }
 
+=head1 INTERNAL METHODS
+
 =head2 _verify_index_state
 
     _verify_index_state($Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX, 1);
@@ -236,6 +238,7 @@ sub _verify_index_state {
     _do_reindex($callback, $Koha::SearchEngine::Elasticsearch::BIBLIOS_INDEX);
 
 Does the actual reindexing. $callback is a function that always returns the next record.
+For each index we iterate through the records, committing at specified count
 
 =cut
 
@@ -261,7 +264,8 @@ sub _do_reindex {
         push @commit_buffer, $record;
         if ( !( --$commit_count ) ) {
             _log( 1, "Committing $commit records...\n" );
-            $indexer->update_index( \@id_buffer, \@commit_buffer );
+            my $response = $indexer->update_index( \@id_buffer, \@commit_buffer );
+            _handle_response($response);
             $commit_count  = $commit;
             @id_buffer     = ();
             @commit_buffer = ();
@@ -271,7 +275,8 @@ sub _do_reindex {
 
     # There are probably uncommitted records
     _log( 1, "Committing final records...\n" );
-    $indexer->update_index( \@id_buffer, \@commit_buffer );
+    my $response = $indexer->update_index( \@id_buffer, \@commit_buffer );
+    _handle_response($response);
     _log( 1, "Total $count records indexed\n" );
 }
 
@@ -287,6 +292,27 @@ sub _sanity_check {
     # Do we have an elasticsearch block defined?
     my $conf = C4::Context->config('elasticsearch');
     die "No 'elasticsearch' block is defined in koha-conf.xml.\n" if ( !$conf );
+}
+
+=head2 _handle_response
+
+Parse the return from update_index and display errors depending on verbosity of the script
+
+=cut
+
+sub _handle_response {
+    my ($response) = @_;
+    if( $response->{errors} eq 'true' ){
+        _log( 1, "There were errors during indexing\n" );
+        if ( $verbose > 1 ){
+            foreach my $item (@{$response->{items}}){
+                next unless defined $item->{index}->{error};
+                print "Record #" . $item->{index}->{_id} . " " .
+                      $item->{index}->{error}->{reason} . " (" . $item->{index}->{error}->{type} . ") : " .
+                      $item->{index}->{error}->{caused_by}->{type} . " (" . $item->{index}->{error}->{caused_by}->{reason} . ")\n";
+            }
+        }
+    }
 }
 
 =head2 _log
