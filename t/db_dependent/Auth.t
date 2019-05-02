@@ -145,9 +145,12 @@ subtest 'checkpw lockout tests' => sub {
     my $library = $builder->build_object( { class => 'Koha::Libraries' } );
     my $patron  = $builder->build_object( { class => 'Koha::Patrons' } );
     my $password = 'password';
+    my $dbh   = C4::Context->dbh;
+    my $sth =  $dbh->prepare("UPDATE borrowers SET password = ? WHERE borrowernumber=?");
     t::lib::Mocks::mock_preference( 'RequireStrongPassword', 0 );
     t::lib::Mocks::mock_preference( 'FailedLoginAttempts', 1 );
-    $patron->set_password({ password => $password });
+    my $clave = hash_password( $password );
+    $sth->execute( $clave, $patron->borrowernumber );
 
     my ( $checkpw, undef, undef ) = checkpw( $dbh, $patron->cardnumber, $password, undef, undef, 1 );
     ok( $checkpw, 'checkpw returns true with right password when logging in via cardnumber' );
