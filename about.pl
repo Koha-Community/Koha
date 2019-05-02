@@ -32,7 +32,7 @@ use XML::Simple;
 use Config;
 use Search::Elasticsearch;
 use Try::Tiny;
-use YAML::XS qw/LoadFile/;
+use YAML qw/LoadFile/;
 
 use C4::Output;
 use C4::Auth;
