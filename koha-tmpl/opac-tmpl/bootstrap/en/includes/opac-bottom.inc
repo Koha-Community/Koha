@@ -134,7 +134,7 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
     var MSG_CHECKOUTS = _("Checkouts");
     var MSG_NO_CHECKOUTS = _("No checkouts");
     var MSG_CHECK_OUT = _("Check out");
-    var MSG_CHECK_OUT_CONFIRM = _("Are you sure you want to checkout this item?");
+    var MSG_CHECK_OUT_CONFIRM = _("Are you sure you want to check out this item?");
     var MSG_CHECKED_OUT_UNTIL = _("Checked out until %s");
     var MSG_CHECK_IN = _("Check in");
     var MSG_CHECK_IN_CONFIRM = _("Are you sure you want to return this item?");
@@ -175,6 +175,15 @@ $.widget.bridge('uitooltip', $.ui.tooltip);
         var MSG_TAGS_ERRORS = _("Errors: ");
         var MSG_MULTI_ADD_TAG_FAILED = _("Unable to add one or more tags.");
         var MSG_NO_TAG_SPECIFIED = _("No tag was specified.");
+    [% END %]
+    [% IF ( Koha.Preference('OverDriveClientKey') && Koha.Preference('OverDriveClientSecret') ) %]
+        var MSG_OVERDRIVE_LOGIN = _("Log in to your OverDrive account");
+        var MSG_OVERDRIVE_LINK = _( "OverDrive account page" );
+        var MSG_OVERDRIVE_LOGOUT = _("Log out from your OverDrive account");
+        var MSG_OVERDRIVE_CHECKEDOUT_UNTIL = _( "Checked out until: " );
+        var MSG_OVERDRIVE_ACCESS_ONLINE = _("Access online");
+        var MSG_OVERDRIVE_DOWNLOAD_AS = _( "Download as: " );
+        var MSG_OVERDRIVE_CANNOT_CHECKOUT = _("Item cannot be checked out. There are no available formats");
     [% END %]
     [% IF ( OPACAmazonCoverImages || SyndeticsCoverImages ) %]
         $(window).load(function() {
